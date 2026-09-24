@@ -35,6 +35,9 @@ evidence of implemented capabilities.
   property-oriented. Axon may evolve to be more graph-like, and that outcome
   must not be ruled out.
 - PostgreSQL is the initial backing SQL implementation.
+- Property definitions are lifted out into a catalog, so property values can be
+  stored as JSON per object in many if not all cases, with one row per value
+  reserved for where indexing or atomic updates need it.
 - Implement in TypeScript first, and extend into Rust only if that is
   determined to be necessary. The owner first raised Rust with Python and Node
   bindings, because the query compiler must be fast and memory-safe and Rust
@@ -47,7 +50,7 @@ evidence of implemented capabilities.
 | --- | --- | --- |
 | Relationship to UMF | truss is a **reference consumer** of UMF, not UMF's reference implementation. It depends on UMF; UMF never depends on truss. | UMF NFR-50 and its PRD non-goals place query execution and storage services in consuming systems. FR-30 and NFR-48 forbid a runtime from becoming UMF's semantic authority. |
 | Claims | truss may claim bounded conformance, such as enforcing named UMF core ideals on named PostgreSQL versions, backed by fixture evidence. | Matches UMF's rule that every support claim names versions, subset and evidence. |
-| Unit of storage | The individual property value and edge are canonical. Anything shaped like a document (per-object JSON caches, "document views") is derived. | Property orientation is the boundary with Axon. |
+| Unit of storage | The individual property value and edge are the logical unit of identity, typing, indexing, mutation and enforcement. Physically, values are packed into one flat JSON map per object keyed by property-definition id; nested records become child objects linked by composition edges, never nested JSON. Author-shaped documents are only derived views. | Property orientation is the boundary with Axon: the JSON map is packing, whereas Axon's document is the unit of meaning. |
 | Document view | A root object plus its composition-edge subtree can be materialized as a document view. | Leaves room for Axon, if it grows graph features, to use truss as its property and edge layer instead of duplicating one. |
 | Aggregate consistency | truss reports aggregate consistency boundaries as unenforced unless explicitly modeled. | Foreign keys and edges do not enforce DDD aggregates; honest reporting is a reason to choose Axon for aggregate-shaped workloads. |
 | Query language | Adopt ISO GQL (ISO/IEC 39075:2024) or SQL/PGQ (ISO/IEC 9075-16:2023) semantics and compile to SQL, using UMF for typing. | UMF defines no query semantics; inventing a language adds risk. |
@@ -68,22 +71,43 @@ for `02-design`, not decisions.
    (exact, approximated, not-expressible, unknown) and who enforces it
    (database, engine, none).
 3. **Instance graph** — a fixed table set: graph objects (nodes and edges share
-   one id space), edges with endpoints and order, one row per property value
-   with typed value columns (absent = no row; explicit null = a flagged row;
-   array position and map key as slots), a key table using canonical byte
-   encodings for exact equality, a table retaining values with no bound field,
-   and a mutation journal.
+   one id space), edges with endpoints and order, and per object a flat JSONB
+   map from property-definition id to value (a missing key is absent; JSON
+   `null` is an explicit null; arrays and maps are JSON arrays and objects).
+   Data matching no definition sits in a separate retained map. Value rows exist
+   only for properties whose storage home is `row`. A mutation journal records
+   per-property history and provenance. Generated per-type views give named
+   columns for plain-SQL readers.
+
+Proposed refinements from discussion (not yet approved):
+
+- Each property has exactly one storage home, `json` or `row`, recorded in the
+  binding; moving between homes is a recorded migration.
+- PostgreSQL partial expression indexes on JSON values cover most indexing,
+  including unique keys (`COLLATE "C"`). Value rows are for range queries on
+  array elements, per-element uniqueness and very large multi-valued
+  properties.
+- Contention, not atomicity, justifies value rows: a single-statement
+  `jsonb_set` update is atomic under READ COMMITTED, but hot properties with
+  many writers suffer row-lock waits and whole-row rewrites.
+- Hazards: `pg` and `Bun.sql` parse jsonb with `JSON.parse`, rounding large
+  integers and decimals, so truss must fetch jsonb as text and parse it
+  losslessly; jsonb rejects `\u0000` and normalizes key order; index expressions
+  must be immutable, so timestamps need a sortable text or numeric encoding.
 
 Hot types can later move to a `shaped` strategy: a generated typed table with
 native NOT NULL, CHECK and UNIQUE constraints. Differential tests must show both
 strategies answer the same queries identically.
 
-Prior-art input for design (see [competitive analysis](competitive-analysis.md)):
-covering indexes on the property table in the style of Datomic's index orders
-(entity-attribute-value and attribute-value-entity), per-type projections as in
-Sqlg, and a benchmark against a hand-designed schema before the layout is
-committed, since Apache Jena SDB's generic triple table lost to native storage
-on performance.
+Prior-art input for design (see [competitive analysis](competitive-analysis.md),
+the component profiles and [OSv2 design lessons](design-lessons-palantir-osv2.md)):
+rebuildable indexes and per-type tables derived from durable data (OSv2); one
+source per property and a declared conflict policy (OSv2); transactions as
+provenance-carrying records and as-of reads (Datomic); `NONE` versus `NULL` and
+per-table strictness (SurrealDB); Neo4j's graph types and documented MERGE
+concurrency rules; and a benchmark against a hand-designed schema before the
+layout is committed, since Apache Jena SDB's generic triple table lost to native
+storage on performance.
 
 Known hazards: collation-sensitive equality (SQL Server's common
 case-insensitive collations), `timestamptz` dropping the original offset,

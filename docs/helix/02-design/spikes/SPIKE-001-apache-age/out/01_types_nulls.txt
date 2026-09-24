@@ -1,0 +1,313 @@
+Pager usage is off.
+LOAD 'age';
+LOAD
+SET search_path = ag_catalog, "$user", public;
+SET
+SELECT drop_graph('fid', true) FROM ag_graph WHERE name = 'fid';
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/01_types_nulls.sql:7: NOTICE:  drop cascades to 3 other objects
+DETAIL:  drop cascades to table fid._ag_label_vertex
+drop cascades to table fid._ag_label_edge
+drop cascades to table fid."V"
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/01_types_nulls.sql:7: NOTICE:  graph "fid" has been dropped
+ drop_graph 
+------------
+ 
+(1 row)
+
+SELECT create_graph('fid');
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/01_types_nulls.sql:8: NOTICE:  graph "fid" has been created
+ create_graph 
+--------------
+ 
+(1 row)
+
+==== C2.1 int64 boundaries
+SELECT * FROM cypher('fid', $$ CREATE (n:V {k:'int', max: 9223372036854775807, min: -9223372036854775808}) RETURN n.max, n.min $$) AS (max agtype, min agtype);
+         max         |         min          
+---------------------+----------------------
+ 9223372036854775807 | -9223372036854775808
+(1 row)
+
+SELECT * FROM cypher('fid', $$ RETURN 9223372036854775808 $$) AS (overflow_literal agtype);
+   overflow_literal    
+-----------------------
+ 9.223372036854776e+18
+(1 row)
+
+SELECT * FROM cypher('fid', $$ RETURN 9223372036854775807 + 1 $$) AS (overflow_arith agtype);
+    overflow_arith    
+----------------------
+ -9223372036854775808
+(1 row)
+
+SELECT * FROM cypher('fid', $$ MATCH (n:V {k:'int'}) RETURN n.max = 9223372036854775807, n.min = -9223372036854775808, n.max - 1 $$) AS (eq_max agtype, eq_min agtype, max_minus_1 agtype);
+ eq_max | eq_min |     max_minus_1     
+--------+--------+---------------------
+ true   | true   | 9223372036854775806
+(1 row)
+
+==== C2.2 decimals: plain literal vs ::numeric, and scale
+SELECT * FROM cypher('fid', $$ CREATE (n:V {k:'dec', d_plain: 12345678901234567890.123456789, d_num: 12345678901234567890.123456789::numeric, s_plain: 0.10, s_num: 0.10::numeric, s_num2: 1.500::numeric}) RETURN n.d_plain, n.d_num, n.s_plain, n.s_num, n.s_num2 $$) AS (d_plain agtype, d_num agtype, s_plain agtype, s_num agtype, s_num2 agtype);
+        d_plain         |             d_num             | s_plain |    s_num     |    s_num2    
+------------------------+-------------------------------+---------+--------------+--------------
+ 1.2345678901234567e+19 | 12345678901234600000::numeric | 0.1     | 0.1::numeric | 1.5::numeric
+(1 row)
+
+SELECT * FROM cypher('fid', $$ MATCH (n:V {k:'dec'}) RETURN n.s_num = 0.1::numeric, n.s_num + 0.20::numeric, n.d_num * 1 $$) AS (eq agtype, sum agtype, times_int agtype);
+  eq  |     sum      |           times_int           
+------+--------------+-------------------------------
+ true | 0.3::numeric | 12345678901234600000::numeric
+(1 row)
+
+-- decimals passed as a parameter map (text agtype input): JSON number vs ::numeric annotation
+SELECT '{"d": 12345678901234567890.123456789}'::agtype AS json_number_input;
+       json_number_input       
+-------------------------------
+ {"d": 1.2345678901234567e+19}
+(1 row)
+
+SELECT '{"d": 12345678901234567890.123456789::numeric}'::agtype AS annotated_input;
+                annotated_input                 
+------------------------------------------------
+ {"d": 12345678901234567890.123456789::numeric}
+(1 row)
+
+SELECT '12345678901234567890'::agtype AS int_over_range_input;
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/01_types_nulls.sql:22: ERROR:  value "12345678901234567890" is out of range for type bigint
+LINE 1: SELECT '12345678901234567890'::agtype AS int_over_range_inpu...
+               ^
+PREPARE put_dec(agtype) AS SELECT * FROM cypher('fid', $$ CREATE (n:V {k:'decparam', d: $d, s: $s}) RETURN n.d, n.s $$, $1) AS (d agtype, s agtype);
+PREPARE
+EXECUTE put_dec('{"d": 12345678901234567890.123456789, "s": 0.10}');
+           d            |  s  
+------------------------+-----
+ 1.2345678901234567e+19 | 0.1
+(1 row)
+
+EXECUTE put_dec('{"d": 12345678901234567890.123456789::numeric, "s": 0.10::numeric}');
+                    d                    |       s       
+-----------------------------------------+---------------
+ 12345678901234567890.123456789::numeric | 0.10::numeric
+(1 row)
+
+==== C2.3 floats and special values
+SELECT * FROM cypher('fid', $$ CREATE (n:V {k:'flt', a: 0.1, b: 1.7976931348623157e308, c: 5e-324, d: -0.0, e: 'NaN'::float, f: '-Infinity'::float, g: 0.1 + 0.2}) RETURN n.a, n.b, n.c, n.d, n.e, n.f, n.g $$) AS (a agtype, b agtype, c agtype, d agtype, e agtype, f agtype, g agtype);
+  a  |            b            |   c    |  d   |  e  |     f     |          g          
+-----+-------------------------+--------+------+-----+-----------+---------------------
+ 0.1 | 1.7976931348623157e+308 | 5e-324 | -0.0 | NaN | -Infinity | 0.30000000000000004
+(1 row)
+
+==== C2.4 Unicode strings: emoji, combining vs precomposed, U+0000
+SELECT * FROM cypher('fid', $$ CREATE (n:V {k:'str', emoji: 'thumbs 👍🏽 ok', comb: 'é', pre: 'é'}) RETURN n.emoji, n.comb, n.pre, n.comb = n.pre, size(n.comb), size(n.pre) $$) AS (emoji agtype, comb agtype, pre agtype, same agtype, len_comb agtype, len_pre agtype);
+      emoji       | comb | pre | same  | len_comb | len_pre 
+------------------+------+-----+-------+----------+---------
+ "thumbs 👍🏽 ok" | "é"  | "é" | false | 3        | 2
+(1 row)
+
+SELECT * FROM cypher('fid', $$ CREATE (n:V {k:'nul', s: 'a\u0000b'}) RETURN n.s $$) AS (s agtype);
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/01_types_nulls.sql:32: ERROR:  unsupported Unicode escape value at or near "\u0000"
+LINE 1: ... FROM cypher('fid', $$ CREATE (n:V {k:'nul', s: 'a\u0000b'})...
+                                                             ^
+DETAIL:  Unicode code point value 0000 is not allowed in quoted strings.
+SELECT '{"s": "a\u0000b"}'::agtype AS nul_via_text_input;
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/01_types_nulls.sql:33: ERROR:  unsupported Unicode escape sequence
+LINE 1: SELECT '{"s": "a\u0000b"}'::agtype AS nul_via_text_input;
+               ^
+DETAIL:  \u0000 cannot be converted to text.
+CONTEXT:  agtype data, line 1: {"s":...
+==== C2.5 binary data: is there a bytes type?
+SELECT * FROM cypher('fid', $$ RETURN '\x00ff'::bytea $$) AS (b agtype);
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/01_types_nulls.sql:36: ERROR:  invalid escape sequence at or near "\x"
+LINE 1: SELECT * FROM cypher('fid', $$ RETURN '\x00ff'::bytea $$) AS...
+                                               ^
+DETAIL:  Valid escape sequences are \", \', \/, \\, \b, \f, \n, \r, \t, \uXXXX, and \UXXXXXXXX.
+SELECT * FROM cypher('fid', $$ RETURN '\x00ff'::bytes $$) AS (b agtype);
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/01_types_nulls.sql:37: ERROR:  invalid escape sequence at or near "\x"
+LINE 1: SELECT * FROM cypher('fid', $$ RETURN '\x00ff'::bytes $$) AS...
+                                               ^
+DETAIL:  Valid escape sequences are \", \', \/, \\, \b, \f, \n, \r, \t, \uXXXX, and \UXXXXXXXX.
+SELECT '\x00ff'::bytea::agtype AS bytea_to_agtype;
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/01_types_nulls.sql:38: ERROR:  cannot cast type bytea to agtype
+LINE 1: SELECT '\x00ff'::bytea::agtype AS bytea_to_agtype;
+                              ^
+==== C2.6 temporal: date / time / timestamp types or functions?
+SELECT * FROM cypher('fid', $$ RETURN date('2026-09-24') $$) AS (d agtype);
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/01_types_nulls.sql:41: ERROR:  function date does not exist
+LINE 1: SELECT * FROM cypher('fid', $$ RETURN date('2026-09-24') $$)...
+                                     ^
+HINT:  If the function is from an external extension, make sure the extension is installed and the function is in the search path.
+SELECT * FROM cypher('fid', $$ RETURN datetime('2026-09-24T10:00:00+02:00') $$) AS (d agtype);
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/01_types_nulls.sql:42: ERROR:  function datetime does not exist
+LINE 1: SELECT * FROM cypher('fid', $$ RETURN datetime('2026-09-24T1...
+                                     ^
+HINT:  If the function is from an external extension, make sure the extension is installed and the function is in the search path.
+SELECT * FROM cypher('fid', $$ RETURN localtime('10:00:00') $$) AS (d agtype);
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/01_types_nulls.sql:43: ERROR:  function localtime does not exist
+LINE 1: SELECT * FROM cypher('fid', $$ RETURN localtime('10:00:00') ...
+                                     ^
+HINT:  If the function is from an external extension, make sure the extension is installed and the function is in the search path.
+SELECT * FROM cypher('fid', $$ RETURN '2026-09-24'::date $$) AS (d agtype);
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/01_types_nulls.sql:44: ERROR:  cannot cast type date to agtype for column "d"
+LINE 1: SELECT * FROM cypher('fid', $$ RETURN '2026-09-24'::date $$)...
+                      ^
+SELECT * FROM cypher('fid', $$ RETURN timestamp() > 0 $$) AS (timestamp_fn_is_epoch_ms agtype);
+ timestamp_fn_is_epoch_ms 
+--------------------------
+ true
+(1 row)
+
+SELECT now()::agtype AS timestamptz_to_agtype;
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/01_types_nulls.sql:46: ERROR:  cannot cast type timestamp with time zone to agtype
+LINE 1: SELECT now()::agtype AS timestamptz_to_agtype;
+                    ^
+SELECT to_jsonb(now())::agtype AS via_jsonb_becomes_string;
+      via_jsonb_becomes_string      
+------------------------------------
+ "2026-09-24T05:20:50.315778+00:00"
+(1 row)
+
+==== C8 nested maps, lists and arbitrary (unknown) keys
+SELECT * FROM cypher('fid', $$ CREATE (n:V {k:'nest', unknown_key_1: {a: {b: {c: [1, {d: 'x'}, [2, 3]]}}}, `key with spaces`: 1, `ключ`: 'v', `👍`: true}) RETURN properties(n) $$) AS (p agtype);
+                                                              p                                                              
+-----------------------------------------------------------------------------------------------------------------------------
+ {"k": "nest", "👍": true, "ключ": "v", "unknown_key_1": {"a": {"b": {"c": [1, {"d": "x"}, [2, 3]]}}}, "key with spaces": 1}
+(1 row)
+
+SELECT * FROM cypher('fid', $$ MATCH (n:V {k:'nest'}) RETURN keys(n) $$) AS (keys agtype);
+                          keys                           
+---------------------------------------------------------
+ ["k", "👍", "ключ", "unknown_key_1", "key with spaces"]
+(1 row)
+
+==== C3.1 absent vs explicit null
+SELECT * FROM cypher('fid', $$ CREATE (n:V {k:'nul1', p: null, q: 1}) RETURN properties(n), keys(n) $$) AS (props agtype, keys agtype);
+         props         |    keys    
+-----------------------+------------
+ {"k": "nul1", "q": 1} | ["k", "q"]
+(1 row)
+
+SELECT * FROM cypher('fid', $$ MATCH (n:V {k:'nul1'}) SET n.q = null RETURN properties(n), keys(n) $$) AS (props agtype, keys agtype);
+     props     | keys  
+---------------+-------
+ {"k": "nul1"} | ["k"]
+(1 row)
+
+SELECT * FROM cypher('fid', $$ MATCH (n:V {k:'nul1'}) RETURN n.p IS NULL, n.never_set IS NULL, exists(n.p), exists(n.never_set) $$) AS (p_null agtype, never_null agtype, p_exists agtype, never_exists agtype);
+ p_null | never_null | p_exists | never_exists 
+--------+------------+----------+--------------
+ true   | true       | false    | false
+(1 row)
+
+SELECT * FROM cypher('fid', $$ MATCH (n:V {k:'nul1'}) SET n += {r: null, s: 2} RETURN properties(n) $$) AS (props agtype);
+         props         
+-----------------------
+ {"k": "nul1", "s": 2}
+(1 row)
+
+SELECT * FROM cypher('fid', $$ MATCH (n:V {k:'nul1'}) SET n = {k:'nul1', t: null} RETURN properties(n) $$) AS (props agtype);
+     props     
+---------------
+ {"k": "nul1"}
+(1 row)
+
+PREPARE put_null(agtype) AS SELECT * FROM cypher('fid', $$ CREATE (n:V {k:'nulparam', p: $p}) RETURN properties(n) $$, $1) AS (props agtype);
+PREPARE
+EXECUTE put_null('{"p": null}');
+       props       
+-------------------
+ {"k": "nulparam"}
+(1 row)
+
+SELECT * FROM cypher('fid', $$ MATCH (n:V) WHERE n.k IN ['nul1','nulparam'] RETURN n.k, properties(n) $$) AS (k agtype, props agtype);
+     k      |       props       
+------------+-------------------
+ "nul1"     | {"k": "nul1"}
+ "nulparam" | {"k": "nulparam"}
+(2 rows)
+
+==== C3.2 lists (order, duplicates, null elements) and maps with null values
+SELECT * FROM cypher('fid', $$ CREATE (n:V {k:'lst', l: [3, 1, 3, null, 1, 'x', [1,1]], empty_l: [], m: {a: null, b: 1, c: [null]}, empty_m: {}}) RETURN n.l, n.empty_l, n.m, n.empty_m, keys(n.m) $$) AS (l agtype, empty_l agtype, m agtype, empty_m agtype, mkeys agtype);
+                l                | empty_l |                m                 | empty_m |      mkeys      
+---------------------------------+---------+----------------------------------+---------+-----------------
+ [3, 1, 3, null, 1, "x", [1, 1]] | []      | {"a": null, "b": 1, "c": [null]} | {}      | ["a", "b", "c"]
+(1 row)
+
+==== raw stored agtype text in the label table (what plain SQL sees)
+SELECT id, properties::text FROM fid."V" ORDER BY id;
+       id        |                                                                       properties                                                                       
+-----------------+--------------------------------------------------------------------------------------------------------------------------------------------------------
+ 844424930131969 | {"k": "int", "max": 9223372036854775807, "min": -9223372036854775808}
+ 844424930131970 | {"k": "dec", "d_num": 12345678901234600000::numeric, "s_num": 0.1::numeric, "s_num2": 1.5::numeric, "d_plain": 1.2345678901234567e+19, "s_plain": 0.1}
+ 844424930131971 | {"d": 1.2345678901234567e+19, "k": "decparam", "s": 0.1}
+ 844424930131972 | {"d": 12345678901234567890.123456789::numeric, "k": "decparam", "s": 0.10::numeric}
+ 844424930131973 | {"a": 0.1, "b": 1.7976931348623157e+308, "c": 5e-324, "d": -0.0, "e": NaN, "f": -Infinity, "g": 0.30000000000000004, "k": "flt"}
+ 844424930131974 | {"k": "str", "pre": "é", "comb": "é", "emoji": "thumbs 👍🏽 ok"}
+ 844424930131975 | {"k": "nest", "👍": true, "ключ": "v", "unknown_key_1": {"a": {"b": {"c": [1, {"d": "x"}, [2, 3]]}}}, "key with spaces": 1}
+ 844424930131976 | {"k": "nul1"}
+ 844424930131977 | {"k": "nulparam"}
+ 844424930131978 | {"k": "lst", "l": [3, 1, 3, null, 1, "x", [1, 1]], "m": {"a": null, "b": 1, "c": [null]}, "empty_l": [], "empty_m": {}}
+(10 rows)
+
+==== C2 follow-up probes
+-- numeric from a string literal cast inside Cypher (avoids the float literal path?)
+SELECT * FROM cypher('fid', $$ RETURN '12345678901234567890.123456789'::numeric, '0.10'::numeric $$) AS (a agtype, b agtype);
+                    a                    |       b       
+-----------------------------------------+---------------
+ 12345678901234567890.123456789::numeric | 0.10::numeric
+(1 row)
+
+-- integer overflow on stored values
+SELECT * FROM cypher('fid', $$ MATCH (n:V {k:'int'}) RETURN n.max + 1 $$) AS (r agtype);
+          r           
+----------------------
+ -9223372036854775808
+(1 row)
+
+SELECT * FROM cypher('fid', $$ MATCH (n:V {k:'int'}) RETURN n.max * 2 $$) AS (r agtype);
+ r  
+----
+ -2
+(1 row)
+
+SELECT * FROM cypher('fid', $$ MATCH (n:V {k:'int'}) RETURN n.min - 1 $$) AS (r agtype);
+          r          
+---------------------
+ 9223372036854775807
+(1 row)
+
+SELECT * FROM cypher('fid', $$ MATCH (n:V {k:'int'}) RETURN -n.min $$) AS (r agtype);
+          r           
+----------------------
+ -9223372036854775808
+(1 row)
+
+SELECT * FROM cypher('fid', $$ MATCH (n:V {k:'int'}) RETURN abs(n.min) $$) AS (r agtype);
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/01_types_nulls.sql:77: ERROR:  bigint out of range
+SELECT * FROM cypher('fid', $$ MATCH (n:V {k:'int'}) RETURN n.max + 1.0 $$) AS (r agtype);
+           r           
+-----------------------
+ 9.223372036854776e+18
+(1 row)
+
+SELECT * FROM cypher('fid', $$ MATCH (n:V {k:'int'}) RETURN 9223372036854775807 * 2 $$) AS (r agtype);
+ r  
+----
+ -2
+(1 row)
+
+SELECT * FROM cypher('fid', $$ MATCH (n:V {k:'int'}) SET n.wrapped = n.max + 1 RETURN n.wrapped $$) AS (stored agtype);
+        stored        
+----------------------
+ -9223372036854775808
+(1 row)
+
+-- SQL side: same arithmetic on bigint errors
+SELECT 9223372036854775807::bigint + 1;
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/01_types_nulls.sql:82: ERROR:  bigint out of range
+-- toInteger / toFloat on big values
+SELECT * FROM cypher('fid', $$ RETURN toInteger('9223372036854775807'), toInteger('9223372036854775808'), toFloat(9007199254740993) $$) AS (a agtype, b agtype, c agtype);
+          a          |          b          |           c           
+---------------------+---------------------+-----------------------
+ 9223372036854775807 | 9223372036854775807 | 9.007199254740992e+15
+(1 row)
+

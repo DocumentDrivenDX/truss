@@ -1,0 +1,264 @@
+Pager usage is off.
+LOAD 'age';
+LOAD
+SET search_path = ag_catalog, "$user", public;
+SET
+SELECT drop_graph('con', true) FROM ag_graph WHERE name = 'con';
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/02_constraints.sql:6: NOTICE:  drop cascades to 5 other objects
+DETAIL:  drop cascades to table con._ag_label_vertex
+drop cascades to table con._ag_label_edge
+drop cascades to table con."Person"
+drop cascades to table con."Order"
+drop cascades to table con."PLACED"
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/02_constraints.sql:6: NOTICE:  graph "con" has been dropped
+ drop_graph 
+------------
+ 
+(1 row)
+
+SELECT create_graph('con');
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/02_constraints.sql:7: NOTICE:  graph "con" has been created
+ create_graph 
+--------------
+ 
+(1 row)
+
+DROP TABLE IF EXISTS public.trigger_log;
+DROP TABLE
+DROP FUNCTION IF EXISTS public.log_person();
+DROP FUNCTION
+SELECT create_vlabel('con', 'Person');
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/02_constraints.sql:9: NOTICE:  VLabel "Person" has been created
+ create_vlabel 
+---------------
+ 
+(1 row)
+
+SELECT create_vlabel('con', 'Order');
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/02_constraints.sql:10: NOTICE:  VLabel "Order" has been created
+ create_vlabel 
+---------------
+ 
+(1 row)
+
+SELECT create_elabel('con', 'PLACED');
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/02_constraints.sql:11: NOTICE:  ELabel "PLACED" has been created
+ create_elabel 
+---------------
+ 
+(1 row)
+
+==== DDL on label tables
+CREATE UNIQUE INDEX person_email_uq ON con."Person" (agtype_access_operator(VARIADIC ARRAY[properties, '"email"'::agtype]));
+CREATE INDEX
+ALTER TABLE con."Person" ADD CONSTRAINT person_name_required CHECK (properties ? 'name'::text);
+ALTER TABLE
+ALTER TABLE con."Person" ADD CONSTRAINT person_age_range CHECK (NOT properties ? 'age'::text OR ((properties -> 'age'::text)::int BETWEEN 0 AND 150));
+ALTER TABLE
+CREATE TABLE public.trigger_log(at timestamptz default now(), tg_op text, props text);
+CREATE TABLE
+CREATE FUNCTION public.log_person() RETURNS trigger LANGUAGE plpgsql AS $f$
+BEGIN INSERT INTO public.trigger_log(tg_op, props) VALUES (TG_OP, NEW.properties::text); RETURN NEW; END $f$;
+CREATE FUNCTION
+CREATE TRIGGER person_row_trg BEFORE INSERT OR UPDATE ON con."Person" FOR EACH ROW EXECUTE FUNCTION public.log_person();
+CREATE TRIGGER
+ALTER TABLE con."PLACED" ADD CONSTRAINT placed_start_fk FOREIGN KEY (start_id) REFERENCES con."Person"(id);
+ALTER TABLE
+ALTER TABLE con."PLACED" ADD CONSTRAINT placed_end_fk FOREIGN KEY (end_id) REFERENCES con."Order"(id);
+ALTER TABLE
+                                                                Table "con.Person"
+   Column   |  Type   | Collation | Nullable |                                               Default                                               
+------------+---------+-----------+----------+-----------------------------------------------------------------------------------------------------
+ id         | graphid |           | not null | _graphid(_label_id('con'::name, 'Person'::name)::integer, nextval('con."Person_id_seq"'::regclass))
+ properties | agtype  |           | not null | agtype_build_map()
+Indexes:
+    "Person_pkey" PRIMARY KEY, btree (id)
+    "person_email_uq" UNIQUE, btree (agtype_access_operator(VARIADIC ARRAY[properties, '"email"'::agtype]))
+Check constraints:
+    "person_age_range" CHECK (NOT properties ? 'age'::text OR (properties -> 'age'::text)::integer >= 0 AND (properties -> 'age'::text)::integer <= 150)
+    "person_name_required" CHECK (properties ? 'name'::text)
+Referenced by:
+    TABLE "con."PLACED"" CONSTRAINT "placed_start_fk" FOREIGN KEY (start_id) REFERENCES con."Person"(id)
+Triggers:
+    _age_cache_invalidate AFTER INSERT OR DELETE OR UPDATE OR TRUNCATE ON con."Person" FOR EACH STATEMENT EXECUTE FUNCTION age_invalidate_graph_cache()
+    person_row_trg BEFORE INSERT OR UPDATE ON con."Person" FOR EACH ROW EXECUTE FUNCTION log_person()
+Inherits: con._ag_label_vertex
+
+                                                                Table "con.PLACED"
+   Column   |  Type   | Collation | Nullable |                                               Default                                               
+------------+---------+-----------+----------+-----------------------------------------------------------------------------------------------------
+ id         | graphid |           | not null | _graphid(_label_id('con'::name, 'PLACED'::name)::integer, nextval('con."PLACED_id_seq"'::regclass))
+ start_id   | graphid |           | not null | 
+ end_id     | graphid |           | not null | 
+ properties | agtype  |           | not null | agtype_build_map()
+Indexes:
+    "PLACED_end_id_idx" btree (end_id)
+    "PLACED_start_id_idx" btree (start_id)
+Foreign-key constraints:
+    "placed_end_fk" FOREIGN KEY (end_id) REFERENCES con."Order"(id)
+    "placed_start_fk" FOREIGN KEY (start_id) REFERENCES con."Person"(id)
+Triggers:
+    _age_cache_invalidate AFTER INSERT OR DELETE OR UPDATE OR TRUNCATE ON con."PLACED" FOR EACH STATEMENT EXECUTE FUNCTION age_invalidate_graph_cache()
+Inherits: con._ag_label_edge
+
+==== C4.1 CREATE honours unique / required / range?
+SELECT * FROM cypher('con', $$ CREATE (p:Person {name: 'Ann', email: 'a@x.com', age: 30}) RETURN p.email $$) AS (e agtype);
+     e     
+-----------
+ "a@x.com"
+(1 row)
+
+SELECT * FROM cypher('con', $$ CREATE (p:Person {name: 'Dup', email: 'a@x.com'}) RETURN p.email $$) AS (e agtype);
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/02_constraints.sql:33: ERROR:  duplicate key value violates unique constraint "person_email_uq"
+DETAIL:  Key (agtype_access_operator(VARIADIC ARRAY[properties, '"email"'::agtype]))=("a@x.com") already exists.
+SELECT * FROM cypher('con', $$ CREATE (p:Person {email: 'noname@x.com'}) RETURN p.email $$) AS (e agtype);
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/02_constraints.sql:34: ERROR:  invalid perminfoindex 0 in RTE with relid 0
+SELECT * FROM cypher('con', $$ CREATE (p:Person {name: 'Old', email: 'old@x.com', age: 200}) RETURN p.email $$) AS (e agtype);
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/02_constraints.sql:35: ERROR:  invalid perminfoindex 0 in RTE with relid 0
+SELECT * FROM cypher('con', $$ CREATE (p:Person {name: 'Str', email: 'str@x.com', age: 'thirty'}) RETURN p.email $$) AS (e agtype);
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/02_constraints.sql:36: ERROR:  invalid input syntax for type agtype
+DETAIL:  Expected agtype value, but found "thirty".
+CONTEXT:  agtype data, line 1: thirty
+==== C4.2 binary equality of the unique key: case and Unicode normalization
+SELECT * FROM cypher('con', $$ CREATE (p:Person {name: 'Upper', email: 'A@x.com'}) RETURN p.email $$) AS (e agtype);
+     e     
+-----------
+ "A@x.com"
+(1 row)
+
+SELECT * FROM cypher('con', $$ CREATE (p:Person {name: 'Pre', email: 'josé@x.com'}) RETURN p.email $$) AS (e agtype);
+      e       
+--------------
+ "josé@x.com"
+(1 row)
+
+SELECT * FROM cypher('con', $$ CREATE (p:Person {name: 'Comb', email: 'josé@x.com'}) RETURN p.email $$) AS (e agtype);
+      e       
+--------------
+ "josé@x.com"
+(1 row)
+
+-- same number, different agtype numeric kinds: does 1 = 1.0 = 1::numeric collide in the unique index?
+SELECT * FROM cypher('con', $$ CREATE (p:Person {name: 'I1', email: 1}) RETURN p.email $$) AS (e agtype);
+ e 
+---
+ 1
+(1 row)
+
+SELECT * FROM cypher('con', $$ CREATE (p:Person {name: 'F1', email: 1.0}) RETURN p.email $$) AS (e agtype);
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/02_constraints.sql:44: ERROR:  duplicate key value violates unique constraint "person_email_uq"
+DETAIL:  Key (agtype_access_operator(VARIADIC ARRAY[properties, '"email"'::agtype]))=(1.0) already exists.
+SELECT * FROM cypher('con', $$ CREATE (p:Person {name: 'N1', email: 1::numeric}) RETURN p.email $$) AS (e agtype);
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/02_constraints.sql:45: ERROR:  duplicate key value violates unique constraint "person_email_uq"
+DETAIL:  Key (agtype_access_operator(VARIADIC ARRAY[properties, '"email"'::agtype]))=(1::numeric) already exists.
+==== C4.3 MERGE against the unique key
+SELECT * FROM cypher('con', $$ MERGE (p:Person {email: 'a@x.com'}) RETURN p.name $$) AS (n agtype);
+   n   
+-------
+ "Ann"
+(1 row)
+
+SELECT * FROM cypher('con', $$ MERGE (p:Person {email: 'a@x.com', name: 'Different'}) RETURN p.name $$) AS (n agtype);
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/02_constraints.sql:49: ERROR:  duplicate key value violates unique constraint "person_email_uq"
+DETAIL:  Key (agtype_access_operator(VARIADIC ARRAY[properties, '"email"'::agtype]))=("a@x.com") already exists.
+SELECT * FROM cypher('con', $$ MERGE (p:Person {email: 'm@x.com'}) ON CREATE SET p.name = 'Merged' RETURN p.name $$) AS (n agtype);
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/02_constraints.sql:50: ERROR:  new row for relation "Person" violates check constraint "person_name_required"
+DETAIL:  Failing row contains (844424930131981, {"email": "m@x.com"}).
+==== C4.4 SET / REMOVE honour the constraints?
+SELECT * FROM cypher('con', $$ MATCH (p:Person {name: 'Upper'}) SET p.email = 'a@x.com' RETURN p.email $$) AS (e agtype);
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/02_constraints.sql:53: ERROR:  duplicate key value violates unique constraint "person_email_uq"
+DETAIL:  Key (agtype_access_operator(VARIADIC ARRAY[properties, '"email"'::agtype]))=("a@x.com") already exists.
+SELECT * FROM cypher('con', $$ MATCH (p:Person {name: 'Ann'}) SET p.age = -1 RETURN p.age $$) AS (a agtype);
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/02_constraints.sql:54: ERROR:  new row for relation "Person" violates check constraint "person_age_range"
+DETAIL:  Failing row contains (844424930131969, {"age": -1, "name": "Ann", "email": "a@x.com"}).
+SELECT * FROM cypher('con', $$ MATCH (p:Person {name: 'Ann'}) REMOVE p.name RETURN p $$) AS (p agtype);
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/02_constraints.sql:55: ERROR:  new row for relation "Person" violates check constraint "person_name_required"
+DETAIL:  Failing row contains (844424930131969, {"age": 30, "email": "a@x.com"}).
+SELECT * FROM cypher('con', $$ MATCH (p:Person {email: 'a@x.com'}) SET p.name = null RETURN p $$) AS (p agtype);
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/02_constraints.sql:56: ERROR:  new row for relation "Person" violates check constraint "person_name_required"
+DETAIL:  Failing row contains (844424930131969, {"age": 30, "email": "a@x.com"}).
+==== C4.5 did the BEFORE ROW trigger fire for Cypher writes?
+SELECT tg_op, props FROM public.trigger_log ORDER BY at;
+ tg_op | props 
+-------+-------
+(0 rows)
+
+SELECT * FROM cypher('con', $$ MATCH (p:Person) RETURN p.name, p.email ORDER BY p.name $$) AS (name agtype, email agtype);
+  name   |    email     
+---------+--------------
+ "Ann"   | "a@x.com"
+ "Comb"  | "josé@x.com"
+ "I1"    | 1
+ "Pre"   | "josé@x.com"
+ "Upper" | "A@x.com"
+(5 rows)
+
+==== C4.6 edge endpoints: foreign keys (trigger-based) under Cypher CREATE
+SELECT * FROM cypher('con', $$ CREATE (o:Order {no: 1}) RETURN o.no $$) AS (o agtype);
+ o 
+---
+ 1
+(1 row)
+
+SELECT * FROM cypher('con', $$ MATCH (p:Person {email: 'a@x.com'}), (o:Order {no: 1}) CREATE (p)-[r:PLACED]->(o) RETURN type(r) $$) AS (r agtype);
+    r     
+----------
+ "PLACED"
+(1 row)
+
+SELECT * FROM cypher('con', $$ MATCH (p:Person {email: 'a@x.com'}), (o:Order {no: 1}) CREATE (o)-[r:PLACED]->(p) RETURN type(r) $$) AS (r agtype);
+    r     
+----------
+ "PLACED"
+(1 row)
+
+SELECT _label_name((SELECT graphid FROM ag_graph WHERE name='con'), start_id) AS start_label, _label_name((SELECT graphid FROM ag_graph WHERE name='con'), end_id) AS end_label FROM con."PLACED";
+ start_label | end_label 
+-------------+-----------
+ "Person"    | "Order"
+ "Order"     | "Person"
+(2 rows)
+
+-- same wrong edge through plain SQL INSERT (PostgreSQL enforces the FK here)
+INSERT INTO con."PLACED"(start_id, end_id) SELECT o.id, p.id FROM con."Order" o, con."Person" p WHERE p.properties @> '{"email":"a@x.com"}' LIMIT 1;
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/02_constraints.sql:70: ERROR:  insert or update on table "PLACED" violates foreign key constraint "placed_start_fk"
+DETAIL:  Key (start_id)=(1125899906842625) is not present in table "Person".
+-- delete the Order vertex that an edge references (FK should block)
+SELECT * FROM cypher('con', $$ MATCH (o:Order {no: 1}) DELETE o $$) AS (x agtype);
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/02_constraints.sql:72: ERROR:  Cannot delete a vertex that has edge(s). Delete the edge(s) first, or try DETACH DELETE.
+SELECT * FROM cypher('con', $$ MATCH (o:Order {no: 1}) DETACH DELETE o $$) AS (x agtype);
+ x 
+---
+(0 rows)
+
+==== C4.7 edge endpoints, variant 2: CHECK on the label id encoded in the graphid
+ALTER TABLE con."PLACED" DROP CONSTRAINT placed_start_fk, DROP CONSTRAINT placed_end_fk;
+ALTER TABLE
+DO $d$ BEGIN
+  EXECUTE format('ALTER TABLE con."PLACED" ADD CONSTRAINT placed_endpoint_labels CHECK (_extract_label_id(start_id) = %s AND _extract_label_id(end_id) = %s)',
+                 _label_id('con','Person'), _label_id('con','Order'));
+END $d$;
+DO
+DELETE FROM con."PLACED";
+DELETE 0
+SELECT * FROM cypher('con', $$ CREATE (o:Order {no: 2}) RETURN o.no $$) AS (o agtype);
+ o 
+---
+ 2
+(1 row)
+
+SELECT * FROM cypher('con', $$ MATCH (p:Person {email: 'a@x.com'}), (o:Order {no: 2}) CREATE (p)-[r:PLACED]->(o) RETURN type(r) $$) AS (r agtype);
+    r     
+----------
+ "PLACED"
+(1 row)
+
+SELECT * FROM cypher('con', $$ MATCH (p:Person {email: 'a@x.com'}), (o:Order {no: 2}) CREATE (o)-[r:PLACED]->(p) RETURN type(r) $$) AS (r agtype);
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/02_constraints.sql:84: ERROR:  new row for relation "PLACED" violates check constraint "placed_endpoint_labels"
+DETAIL:  Failing row contains (1407374883553285, 1125899906842626, 844424930131969, {}).
+SELECT count(*) AS placed_edges FROM con."PLACED";
+ placed_edges 
+--------------
+            1
+(1 row)
+

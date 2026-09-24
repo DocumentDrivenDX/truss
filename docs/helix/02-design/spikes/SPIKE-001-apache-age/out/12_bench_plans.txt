@@ -1,0 +1,128 @@
+== age_hop3 plan (u=4242)
+                                                                QUERY PLAN                                                                
+------------------------------------------------------------------------------------------------------------------------------------------
+ Nested Loop (actual rows=98.00 loops=1)
+   Buffers: shared hit=578
+   ->  Nested Loop (actual rows=98.00 loops=1)
+         Join Filter: _ag_enforce_edge_uniqueness3(_age_default_alias_0.id, _age_default_alias_2.id, _age_default_alias_4.id)
+         Buffers: shared hit=284
+         ->  Nested Loop (actual rows=23.00 loops=1)
+               Buffers: shared hit=117
+               ->  Nested Loop (actual rows=23.00 loops=1)
+                     Buffers: shared hit=70
+                     ->  Nested Loop (actual rows=6.00 loops=1)
+                           Buffers: shared hit=29
+                           ->  Nested Loop (actual rows=6.00 loops=1)
+                                 Buffers: shared hit=16
+                                 ->  Index Scan using person_uid_btree on "Person" a (actual rows=1.00 loops=1)
+                                       Index Cond: (agtype_access_operator(VARIADIC ARRAY[properties, '"uid"'::agtype]) = '4242'::agtype)
+                                       Index Searches: 1
+                                       Buffers: shared hit=7
+                                 ->  Bitmap Heap Scan on "KNOWS" _age_default_alias_0 (actual rows=6.00 loops=1)
+                                       Recheck Cond: (a.id = start_id)
+                                       Heap Blocks: exact=6
+                                       Buffers: shared hit=9
+                                       ->  Bitmap Index Scan on "KNOWS_start_id_idx" (actual rows=6.00 loops=1)
+                                             Index Cond: (start_id = a.id)
+                                             Index Searches: 1
+                                             Buffers: shared hit=3
+                           ->  Append (actual rows=1.00 loops=6)
+                                 Buffers: shared hit=13
+                                 ->  Seq Scan on _ag_label_vertex _age_default_alias_1_1 (actual rows=0.00 loops=6)
+                                       Filter: (id = _age_default_alias_0.end_id)
+                                 ->  Index Only Scan using "Person_pkey" on "Person" _age_default_alias_1_2 (actual rows=1.00 loops=6)
+                                       Index Cond: (id = _age_default_alias_0.end_id)
+                                       Heap Fetches: 0
+                                       Index Searches: 6
+                                       Buffers: shared hit=13
+                     ->  Index Scan using "KNOWS_start_id_idx" on "KNOWS" _age_default_alias_2 (actual rows=3.83 loops=6)
+                           Index Cond: (start_id = _age_default_alias_0.end_id)
+                           Index Searches: 6
+                           Buffers: shared hit=41
+               ->  Append (actual rows=1.00 loops=23)
+                     Buffers: shared hit=47
+                     ->  Seq Scan on _ag_label_vertex _age_default_alias_3_1 (actual rows=0.00 loops=23)
+                           Filter: (id = _age_default_alias_2.end_id)
+                     ->  Index Only Scan using "Person_pkey" on "Person" _age_default_alias_3_2 (actual rows=1.00 loops=23)
+                           Index Cond: (id = _age_default_alias_2.end_id)
+                           Heap Fetches: 0
+                           Index Searches: 23
+                           Buffers: shared hit=47
+         ->  Index Scan using "KNOWS_start_id_idx" on "KNOWS" _age_default_alias_4 (actual rows=4.26 loops=23)
+               Index Cond: (start_id = _age_default_alias_2.end_id)
+               Index Searches: 23
+               Buffers: shared hit=167
+   ->  Index Scan using "Person_pkey" on "Person" d (actual rows=1.00 loops=98)
+         Index Cond: (id = _age_default_alias_4.end_id)
+         Index Searches: 98
+         Buffers: shared hit=294
+ Planning:
+   Buffers: shared hit=419
+ Planning Time: 8.219 ms
+ Execution Time: 4.485 ms
+(59 rows)
+
+== rel_hop3 plan (u=4242)
+                                             QUERY PLAN                                             
+----------------------------------------------------------------------------------------------------
+ Nested Loop (actual rows=98.00 loops=1)
+   Buffers: shared hit=393
+   ->  Nested Loop (actual rows=98.00 loops=1)
+         Buffers: shared hit=99
+         ->  Nested Loop (actual rows=23.00 loops=1)
+               Buffers: shared hit=29
+               ->  Nested Loop (actual rows=6.00 loops=1)
+                     Buffers: shared hit=10
+                     ->  Index Scan using person_uid_key on person a (actual rows=1.00 loops=1)
+                           Index Cond: (uid = 4242)
+                           Index Searches: 1
+                           Buffers: shared hit=6
+                     ->  Index Only Scan using knows_src_dst on knows k1 (actual rows=6.00 loops=1)
+                           Index Cond: (src = a.id)
+                           Heap Fetches: 0
+                           Index Searches: 1
+                           Buffers: shared hit=4
+               ->  Index Only Scan using knows_src_dst on knows k2 (actual rows=3.83 loops=6)
+                     Index Cond: (src = k1.dst)
+                     Heap Fetches: 0
+                     Index Searches: 6
+                     Buffers: shared hit=19
+         ->  Index Only Scan using knows_src_dst on knows k3 (actual rows=4.26 loops=23)
+               Index Cond: (src = k2.dst)
+               Heap Fetches: 0
+               Index Searches: 23
+               Buffers: shared hit=70
+   ->  Index Scan using person_pkey on person d (actual rows=1.00 loops=98)
+         Index Cond: (id = k3.dst)
+         Index Searches: 98
+         Buffers: shared hit=294
+ Planning:
+   Buffers: shared hit=287
+ Planning Time: 1.272 ms
+ Execution Time: 1.050 ms
+(35 rows)
+
+== age_vle13 plan (u=4242)
+                                                    QUERY PLAN                                                    
+------------------------------------------------------------------------------------------------------------------
+ Nested Loop (actual rows=127.00 loops=1)
+   Buffers: shared hit=6247
+   ->  Nested Loop (actual rows=127.00 loops=1)
+         Buffers: shared hit=5863
+         ->  Index Scan using person_uid_btree on "Person" a (actual rows=1.00 loops=1)
+               Index Cond: (agtype_access_operator(VARIADIC ARRAY[properties, '"uid"'::agtype]) = '4242'::agtype)
+               Index Searches: 1
+               Buffers: shared hit=7
+         ->  Function Scan on age_vle _age_default_alias_0 (actual rows=127.00 loops=1)
+               Filter: (a.id = start_id)
+               Buffers: shared hit=5856
+   ->  Index Scan using "Person_pkey" on "Person" d (actual rows=1.00 loops=127)
+         Index Cond: (id = _age_default_alias_0.end_id)
+         Index Searches: 127
+         Buffers: shared hit=384
+ Planning:
+   Buffers: shared hit=247
+ Planning Time: 0.879 ms
+ Execution Time: 645.339 ms
+(19 rows)
+

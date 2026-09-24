@@ -1,0 +1,97 @@
+==== C7.1 overlapping transactions SET different properties of one vertex (READ COMMITTED)
+NOTICE:  graph "ccy" has been created
+[B] LOAD 'age'; SET search_path = ag_catalog, "$user", public;
+[B] BEGIN ISOLATION LEVEL READ COMMITTED;
+[B] SELECT * FROM cypher('ccy', $$ MATCH (n:Acc {k: 1}) SET n.b = 2 RETURN properties(n) $$) AS (p agtype);
+[B] ERROR:  Entity failed to be updated: 3
+[B] COMMIT;
+[A] LOAD 'age'; SET search_path = ag_catalog, "$user", public;
+[A] BEGIN ISOLATION LEVEL READ COMMITTED;
+[A] SELECT * FROM cypher('ccy', $$ MATCH (n:Acc {k: 1}) SET n.a = 1 RETURN properties(n) $$) AS (p agtype);
+[A] {"a": 1, "k": 1, "cnt": 0}
+[A] SELECT pg_sleep(3);
+[A] 
+[A] COMMIT;
+final properties: {"a": 1, "k": 1, "cnt": 0}
+
+==== C7.1 overlapping transactions SET different properties of one vertex (REPEATABLE READ)
+NOTICE:  drop cascades to 3 other objects
+DETAIL:  drop cascades to table ccy._ag_label_vertex
+drop cascades to table ccy._ag_label_edge
+drop cascades to table ccy."Acc"
+NOTICE:  graph "ccy" has been dropped
+NOTICE:  graph "ccy" has been created
+[A] LOAD 'age'; SET search_path = ag_catalog, "$user", public;
+[A] BEGIN ISOLATION LEVEL REPEATABLE READ;
+[A] SELECT * FROM cypher('ccy', $$ MATCH (n:Acc {k: 1}) SET n.a = 1 RETURN properties(n) $$) AS (p agtype);
+[A] {"a": 1, "k": 1, "cnt": 0}
+[A] SELECT pg_sleep(3);
+[A] 
+[A] COMMIT;
+[B] LOAD 'age'; SET search_path = ag_catalog, "$user", public;
+[B] BEGIN ISOLATION LEVEL REPEATABLE READ;
+[B] SELECT * FROM cypher('ccy', $$ MATCH (n:Acc {k: 1}) SET n.b = 2 RETURN properties(n) $$) AS (p agtype);
+[B] ERROR:  Entity failed to be updated: 3
+[B] COMMIT;
+final properties: {"a": 1, "k": 1, "cnt": 0}
+
+==== C7.1b same overlap, plain SQL UPDATE on the label table for comparison (READ COMMITTED)
+NOTICE:  drop cascades to 3 other objects
+DETAIL:  drop cascades to table ccy._ag_label_vertex
+drop cascades to table ccy._ag_label_edge
+drop cascades to table ccy."Acc"
+NOTICE:  graph "ccy" has been dropped
+NOTICE:  graph "ccy" has been created
+[A] BEGIN;
+[A] UPDATE ccy."Acc" SET properties = properties WHERE true;
+[A] SELECT pg_sleep(3);
+[A] 
+[A] COMMIT;
+[B] LOAD 'age'; SET search_path = ag_catalog, "$user", public;
+[B] BEGIN;
+[B] SELECT * FROM cypher('ccy', $$ MATCH (n:Acc {k: 1}) SET n.b = 2 RETURN properties(n) $$) AS (p agtype);
+[B] ERROR:  Entity failed to be updated: 3
+[B] COMMIT;
+final properties: {"k": 1, "cnt": 0}
+
+==== C7.2 8 clients x 100 autocommit increments of one counter: SET n.cnt = n.cnt + 1
+NOTICE:  drop cascades to 3 other objects
+DETAIL:  drop cascades to table ccy._ag_label_vertex
+drop cascades to table ccy._ag_label_edge
+drop cascades to table ccy."Acc"
+NOTICE:  graph "ccy" has been dropped
+NOTICE:  graph "ccy" has been created
+attempted=800 errors=649 final={"k": 1, "cnt": 151}
+sample error text:
+      3 psql:<stdin>:1: ERROR:  Entity failed to be updated: 3
+      1 psql:<stdin>:6: ERROR:  Entity failed to be updated: 3
+
+==== C7.3 relational baseline: 8 clients x 100 UPDATE t SET cnt = cnt + 1
+attempted=800 errors=0 final cnt=800
+
+==== C7.4 concurrent MERGE of the same keys, no unique index (8 clients, 10 keys)
+NOTICE:  drop cascades to 3 other objects
+DETAIL:  drop cascades to table ccy._ag_label_vertex
+drop cascades to table ccy._ag_label_edge
+drop cascades to table ccy."Acc"
+NOTICE:  graph "ccy" has been dropped
+NOTICE:  graph "ccy" has been created
+NOTICE:  VLabel "U" has been created
+[no index] MERGE attempts=800 over 10 keys; errors=0
+0|2 1|2 2|1 3|1 4|1 5|1 6|1 7|1 8|1 9|2 
+vertices per key shown as key|count; any count > 1 is a duplicate
+
+==== C7.5 concurrent MERGE with a unique expression index on U.key
+NOTICE:  drop cascades to 4 other objects
+DETAIL:  drop cascades to table ccy._ag_label_vertex
+drop cascades to table ccy._ag_label_edge
+drop cascades to table ccy."Acc"
+drop cascades to table ccy."U"
+NOTICE:  graph "ccy" has been dropped
+NOTICE:  graph "ccy" has been created
+NOTICE:  VLabel "U" has been created
+[unique index] MERGE attempts=800 over 10 keys; errors=7
+      7 ERROR:  duplicate key value violates unique constraint "u_key_uq"
+0|1 1|1 2|1 3|1 4|1 5|1 6|1 7|1 8|1 9|1 
+ERROR:  XX000: Entity failed to be updated: 3
+LOCATION:  update_entity_tuple, cypher_set.c:228

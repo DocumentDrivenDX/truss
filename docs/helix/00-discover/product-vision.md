@@ -30,8 +30,8 @@ PostgreSQL and describe it with UMF (the DocumentDrivenDX machine-readable
 metamodel and schema interchange fabric), truss is a property-oriented graph
 engine that stores and queries that data in their own database. Unlike Apache
 AGE (a Cypher extension for PostgreSQL), Sqlg (a Gremlin layer over relational
-databases) or a hand-built per-type schema, truss types each property value from
-an external UMF schema and reports, for every rule, whether PostgreSQL enforces
+databases) or tables generated from UMF, truss keeps every value exact without
+per-type migrations and reports, for every rule, whether PostgreSQL enforces
 it, truss enforces it, or nothing does.
 
 ## Vision

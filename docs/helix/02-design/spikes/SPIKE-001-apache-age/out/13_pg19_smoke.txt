@@ -1,0 +1,83 @@
+start 2026-09-24T05:34:26Z
+Note: switching to 'b73d13c32c834a2c8e1c60cb92f79530376cedf1'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+postgres b73d13c32c834a2c8e1c60cb92f79530376cedf1 Mon Sep 21 15:15:09 2026 -0400
+Note: switching to 'd03d1cb07aab5919bb6b6019863143d0e46db024'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+age d03d1cb07aab5919bb6b6019863143d0e46db024 Mon Jul 6 15:30:35 2026 -0700 Advance PG19 branch to Apache AGE version 1.8.0 (#2455) (#2463)
+built 2026-09-24T05:36:19Z
+initdb: warning: enabling "trust" authentication for local connections
+initdb: hint: You can change this by editing pg_hba.conf or using the option -A, or --auth-local and --auth-host, the next time you run initdb.
+SELECT version();
+                                                  version                                                   
+------------------------------------------------------------------------------------------------------------
+ PostgreSQL 19beta4 on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, 64-bit
+(1 row)
+
+CREATE EXTENSION age;
+CREATE EXTENSION
+SELECT extversion FROM pg_extension WHERE extname='age';
+ extversion 
+------------
+ 1.8.0
+(1 row)
+
+SET search_path = ag_catalog, public;
+SET
+SELECT create_graph('smoke');
+NOTICE:  graph "smoke" has been created
+ create_graph 
+--------------
+ 
+(1 row)
+
+SELECT * FROM cypher('smoke', $$ CREATE (a:P {n: 1})-[:K]->(b:P {n: 2})-[:K]->(c:P {n: 3}) $$) AS (x agtype);
+ x 
+---
+(0 rows)
+
+SELECT * FROM cypher('smoke', $$ MATCH (a:P {n: 1})-[:K*1..2]->(x) RETURN x.n ORDER BY x.n $$) AS (n agtype);
+ n 
+---
+ 2
+ 3
+(2 rows)
+
+SELECT * FROM cypher('smoke', $$ MERGE (p:P {n: 9}) ON CREATE SET p.created = true RETURN properties(p) $$) AS (p agtype);
+             p             
+---------------------------
+ {"n": 9, "created": true}
+(1 row)
+
+done 2026-09-24T05:36:22Z
+exit 0

@@ -1,0 +1,252 @@
+Pager usage is off.
+LOAD 'age';
+LOAD
+SET search_path = ag_catalog, "$user", public;
+SET
+DROP INDEX IF EXISTS bench.person_props_gin;
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/03_indexes.sql:6: NOTICE:  index "person_props_gin" does not exist, skipping
+DROP INDEX
+DROP INDEX IF EXISTS bench.person_uid_btree;
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/03_indexes.sql:7: NOTICE:  index "person_uid_btree" does not exist, skipping
+DROP INDEX
+DROP INDEX IF EXISTS bench.person_age_btree;
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/03_indexes.sql:8: NOTICE:  index "person_age_btree" does not exist, skipping
+DROP INDEX
+==== C5.0 no property indexes (only AGE 1.8 automatic id / endpoint indexes)
+                                                                 Table "bench.Person"
+   Column   |  Type   | Collation | Nullable |                                                 Default                                                 
+------------+---------+-----------+----------+---------------------------------------------------------------------------------------------------------
+ id         | graphid |           | not null | _graphid(_label_id('bench'::name, 'Person'::name)::integer, nextval('bench."Person_id_seq"'::regclass))
+ properties | agtype  |           | not null | agtype_build_map()
+Indexes:
+    "Person_pkey" PRIMARY KEY, btree (id)
+Triggers:
+    _age_cache_invalidate AFTER INSERT OR DELETE OR UPDATE OR TRUNCATE ON bench."Person" FOR EACH STATEMENT EXECUTE FUNCTION age_invalidate_graph_cache()
+Inherits: bench._ag_label_vertex
+
+EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY ON) SELECT * FROM cypher('bench', $$ MATCH (p:Person {uid: 4242}) RETURN p $$) AS (p agtype);
+                    QUERY PLAN                     
+---------------------------------------------------
+ Seq Scan on "Person" p (actual rows=1.00 loops=1)
+   Filter: (properties @> '{"uid": 4242}'::agtype)
+   Rows Removed by Filter: 99999
+   Buffers: shared hit=2109
+ Planning:
+   Buffers: shared hit=38
+ Planning Time: 0.236 ms
+ Execution Time: 26.599 ms
+(8 rows)
+
+==== C5.1 GIN on properties
+CREATE INDEX person_props_gin ON bench."Person" USING gin (properties);
+CREATE INDEX
+ANALYZE bench."Person";
+ANALYZE
+-- map-pattern equality (compiled to @> containment)
+EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY ON) SELECT * FROM cypher('bench', $$ MATCH (p:Person {uid: 4242}) RETURN p $$) AS (p agtype);
+                               QUERY PLAN                               
+------------------------------------------------------------------------
+ Bitmap Heap Scan on "Person" p (actual rows=1.00 loops=1)
+   Recheck Cond: (properties @> '{"uid": 4242}'::agtype)
+   Heap Blocks: exact=1
+   Buffers: shared hit=12
+   ->  Bitmap Index Scan on person_props_gin (actual rows=1.00 loops=1)
+         Index Cond: (properties @> '{"uid": 4242}'::agtype)
+         Index Searches: 1
+         Buffers: shared hit=9
+ Planning:
+   Buffers: shared hit=32 dirtied=1
+ Planning Time: 0.292 ms
+ Execution Time: 0.136 ms
+(12 rows)
+
+-- WHERE equality (compiled to agtype_access_operator = ...)
+EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY ON) SELECT * FROM cypher('bench', $$ MATCH (p:Person) WHERE p.uid = 4242 RETURN p $$) AS (p agtype);
+                                            QUERY PLAN                                            
+--------------------------------------------------------------------------------------------------
+ Seq Scan on "Person" p (actual rows=1.00 loops=1)
+   Filter: (agtype_access_operator(VARIADIC ARRAY[properties, '"uid"'::agtype]) = '4242'::agtype)
+   Rows Removed by Filter: 99999
+   Buffers: shared hit=2072
+ Planning:
+   Buffers: shared hit=3
+ Planning Time: 0.058 ms
+ Execution Time: 51.009 ms
+(8 rows)
+
+==== C5.2 BTREE on property expressions
+CREATE INDEX person_uid_btree ON bench."Person" (agtype_access_operator(VARIADIC ARRAY[properties, '"uid"'::agtype]));
+CREATE INDEX
+CREATE INDEX person_age_btree ON bench."Person" (agtype_access_operator(VARIADIC ARRAY[properties, '"age"'::agtype]));
+CREATE INDEX
+ANALYZE bench."Person";
+ANALYZE
+-- WHERE equality
+EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY ON) SELECT * FROM cypher('bench', $$ MATCH (p:Person) WHERE p.uid = 4242 RETURN p $$) AS (p agtype);
+                                              QUERY PLAN                                              
+------------------------------------------------------------------------------------------------------
+ Index Scan using person_uid_btree on "Person" p (actual rows=1.00 loops=1)
+   Index Cond: (agtype_access_operator(VARIADIC ARRAY[properties, '"uid"'::agtype]) = '4242'::agtype)
+   Index Searches: 1
+   Buffers: shared hit=3 read=3
+ Planning:
+   Buffers: shared hit=21 read=2
+ Planning Time: 0.256 ms
+ Execution Time: 0.073 ms
+(8 rows)
+
+-- WHERE range on uid (selective)
+EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY ON) SELECT * FROM cypher('bench', $$ MATCH (p:Person) WHERE p.uid >= 1000 AND p.uid < 1010 RETURN p.uid $$) AS (u agtype);
+                                                                                             QUERY PLAN                                                                                             
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Index Scan using person_uid_btree on "Person" p (actual rows=9.00 loops=1)
+   Index Cond: ((agtype_access_operator(VARIADIC ARRAY[properties, '"uid"'::agtype]) >= '1000'::agtype) AND (agtype_access_operator(VARIADIC ARRAY[properties, '"uid"'::agtype]) < '1010'::agtype))
+   Index Searches: 1
+   Buffers: shared hit=3 read=1
+ Planning:
+   Buffers: shared hit=10 read=1
+ Planning Time: 0.198 ms
+ Execution Time: 0.036 ms
+(8 rows)
+
+-- WHERE range on age (about 1/90 of rows per value)
+EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY ON) SELECT * FROM cypher('bench', $$ MATCH (p:Person) WHERE p.age > 88 RETURN count(*) $$) AS (c agtype);
+                                                   QUERY PLAN                                                   
+----------------------------------------------------------------------------------------------------------------
+ Aggregate (actual rows=1.00 loops=1)
+   Buffers: shared hit=1111 read=14
+   ->  Bitmap Heap Scan on "Person" p (actual rows=1111.00 loops=1)
+         Recheck Cond: (agtype_access_operator(VARIADIC ARRAY[properties, '"age"'::agtype]) > '88'::agtype)
+         Heap Blocks: exact=1111
+         Buffers: shared hit=1111 read=14
+         ->  Bitmap Index Scan on person_age_btree (actual rows=1111.00 loops=1)
+               Index Cond: (agtype_access_operator(VARIADIC ARRAY[properties, '"age"'::agtype]) > '88'::agtype)
+               Index Searches: 1
+               Buffers: shared read=14
+ Planning:
+   Buffers: shared hit=12
+ Planning Time: 0.106 ms
+ Execution Time: 1.347 ms
+(14 rows)
+
+-- map-pattern equality with GIN and BTREE both present
+EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY ON) SELECT * FROM cypher('bench', $$ MATCH (p:Person {uid: 4242}) RETURN p $$) AS (p agtype);
+                               QUERY PLAN                               
+------------------------------------------------------------------------
+ Bitmap Heap Scan on "Person" p (actual rows=1.00 loops=1)
+   Recheck Cond: (properties @> '{"uid": 4242}'::agtype)
+   Heap Blocks: exact=1
+   Buffers: shared hit=10
+   ->  Bitmap Index Scan on person_props_gin (actual rows=1.00 loops=1)
+         Index Cond: (properties @> '{"uid": 4242}'::agtype)
+         Index Searches: 1
+         Buffers: shared hit=9
+ Planning:
+   Buffers: shared hit=1
+ Planning Time: 0.059 ms
+ Execution Time: 0.065 ms
+(12 rows)
+
+-- parameterised equality through a prepared statement
+PREPARE by_uid(agtype) AS SELECT * FROM cypher('bench', $$ MATCH (p:Person) WHERE p.uid = $u RETURN p.name $$, $1) AS (n agtype);
+PREPARE
+EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY ON) EXECUTE by_uid('{"u": 4242}');
+                                              QUERY PLAN                                              
+------------------------------------------------------------------------------------------------------
+ Index Scan using person_uid_btree on "Person" p (actual rows=1.00 loops=1)
+   Index Cond: (agtype_access_operator(VARIADIC ARRAY[properties, '"uid"'::agtype]) = '4242'::agtype)
+   Index Searches: 1
+   Buffers: shared hit=4
+ Planning Time: 0.066 ms
+ Execution Time: 0.019 ms
+(6 rows)
+
+-- age.enable_containment = off turns map patterns into -> access
+SET age.enable_containment = off;
+SET
+EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY ON) SELECT * FROM cypher('bench', $$ MATCH (p:Person {uid: 4242}) RETURN p $$) AS (p agtype);
+                                              QUERY PLAN                                              
+------------------------------------------------------------------------------------------------------
+ Index Scan using person_uid_btree on "Person" p (actual rows=1.00 loops=1)
+   Index Cond: (agtype_access_operator(VARIADIC ARRAY[properties, '"uid"'::agtype]) = '4242'::agtype)
+   Index Searches: 1
+   Buffers: shared hit=4
+ Planning Time: 0.046 ms
+ Execution Time: 0.023 ms
+(6 rows)
+
+RESET age.enable_containment;
+RESET
+==== C5.3 one-hop traversal from an indexed start vertex: are the edge endpoint indexes used?
+EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY ON) SELECT * FROM cypher('bench', $$ MATCH (a:Person)-[:KNOWS]->(b:Person) WHERE a.uid = 4242 RETURN b.uid $$) AS (u agtype);
+                                                    QUERY PLAN                                                    
+------------------------------------------------------------------------------------------------------------------
+ Nested Loop (actual rows=6.00 loops=1)
+   Buffers: shared hit=31
+   ->  Nested Loop (actual rows=6.00 loops=1)
+         Buffers: shared hit=13
+         ->  Index Scan using person_uid_btree on "Person" a (actual rows=1.00 loops=1)
+               Index Cond: (agtype_access_operator(VARIADIC ARRAY[properties, '"uid"'::agtype]) = '4242'::agtype)
+               Index Searches: 1
+               Buffers: shared hit=4
+         ->  Bitmap Heap Scan on "KNOWS" _age_default_alias_0 (actual rows=6.00 loops=1)
+               Recheck Cond: (a.id = start_id)
+               Heap Blocks: exact=6
+               Buffers: shared hit=9
+               ->  Bitmap Index Scan on "KNOWS_start_id_idx" (actual rows=6.00 loops=1)
+                     Index Cond: (start_id = a.id)
+                     Index Searches: 1
+                     Buffers: shared hit=3
+   ->  Index Scan using "Person_pkey" on "Person" b (actual rows=1.00 loops=6)
+         Index Cond: (id = _age_default_alias_0.end_id)
+         Index Searches: 6
+         Buffers: shared hit=18
+ Planning:
+   Buffers: shared hit=132
+ Planning Time: 0.936 ms
+ Execution Time: 0.243 ms
+(24 rows)
+
+==== C5.4 relational baseline plans for the same predicates
+EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY ON) SELECT * FROM rel.person WHERE uid = 4242;
+                              QUERY PLAN                              
+----------------------------------------------------------------------
+ Index Scan using person_uid_key on person (actual rows=1.00 loops=1)
+   Index Cond: (uid = 4242)
+   Index Searches: 1
+   Buffers: shared hit=6
+ Planning:
+   Buffers: shared hit=50
+ Planning Time: 0.202 ms
+ Execution Time: 0.058 ms
+(8 rows)
+
+EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY ON) SELECT b.uid FROM rel.person a JOIN rel.knows k ON k.src = a.id JOIN rel.person b ON b.id = k.dst WHERE a.uid = 4242;
+                                     QUERY PLAN                                     
+------------------------------------------------------------------------------------
+ Nested Loop (actual rows=6.00 loops=1)
+   Buffers: shared hit=29 read=1
+   ->  Nested Loop (actual rows=6.00 loops=1)
+         Buffers: shared hit=11 read=1
+         ->  Index Scan using person_uid_key on person a (actual rows=1.00 loops=1)
+               Index Cond: (uid = 4242)
+               Index Searches: 1
+               Buffers: shared hit=3
+         ->  Bitmap Heap Scan on knows k (actual rows=6.00 loops=1)
+               Recheck Cond: (a.id = src)
+               Heap Blocks: exact=6
+               Buffers: shared hit=8 read=1
+               ->  Bitmap Index Scan on knows_src_dst (actual rows=6.00 loops=1)
+                     Index Cond: (src = a.id)
+                     Index Searches: 1
+                     Buffers: shared hit=2 read=1
+   ->  Index Scan using person_pkey on person b (actual rows=1.00 loops=6)
+         Index Cond: (id = k.dst)
+         Index Searches: 6
+         Buffers: shared hit=18
+ Planning:
+   Buffers: shared hit=73 read=10
+ Planning Time: 0.717 ms
+ Execution Time: 0.318 ms
+(24 rows)
+

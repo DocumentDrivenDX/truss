@@ -1,0 +1,159 @@
+Pager usage is off.
+LOAD 'age';
+LOAD
+SET search_path = ag_catalog, "$user", public;
+SET
+==== C10.1 available casts from agtype (pg_cast)
+SELECT castsource::regtype AS source, casttarget::regtype AS target, castcontext AS context FROM pg_cast WHERE castsource = 'agtype'::regtype ORDER BY 2::text;
+ source |      target      | context 
+--------+------------------+---------
+ agtype | graphid          | i
+ agtype | text             | e
+ agtype | boolean          | i
+ agtype | double precision | e
+ agtype | bigint           | a
+ agtype | integer          | e
+ agtype | smallint         | e
+ agtype | integer[]        | e
+ agtype | json             | e
+ agtype | jsonb            | e
+(10 rows)
+
+==== C10.2 plain SQL over the label table: operators ->, ->> and casts
+SELECT properties ->> 'k'::text AS k_text, (properties -> 'max'::text)::bigint AS max_bigint, (properties -> 'min'::text)::bigint AS min_bigint
+FROM fid."V" WHERE properties @> '{"k": "int"}';
+ k_text |     max_bigint      |      min_bigint      
+--------+---------------------+----------------------
+ int    | 9223372036854775807 | -9223372036854775808
+(1 row)
+
+SELECT (properties -> 'emoji'::text)::text AS string_via_text_cast, properties ->> 'emoji'::text AS string_via_arrow_text FROM fid."V" WHERE properties @> '{"k": "str"}';
+ string_via_text_cast | string_via_arrow_text 
+----------------------+-----------------------
+ thumbs 👍🏽 ok       | thumbs 👍🏽 ok
+(1 row)
+
+SELECT (properties -> 'a'::text)::float8 AS f, (properties -> 'e'::text)::float8 AS nan, (properties -> 'f'::text)::float8 AS neg_inf FROM fid."V" WHERE properties @> '{"k": "flt"}';
+  f  | nan |  neg_inf  
+-----+-----+-----------
+ 0.1 | NaN | -Infinity
+(1 row)
+
+==== C10.3 exact decimals: there is no agtype -> numeric cast
+SELECT (properties -> 'd'::text)::numeric AS direct_numeric FROM fid."V" WHERE properties @> '{"k": "decparam"}' AND properties ->> 'd'::text LIKE '%123456789%';
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/07_casts.sql:17: ERROR:  cannot cast type agtype to numeric
+LINE 1: SELECT (properties -> 'd'::text)::numeric AS direct_numeric ...
+                                        ^
+SELECT (properties -> 'd'::text)::text AS as_text, properties ->> 'd'::text AS arrow_text FROM fid."V" WHERE properties @> '{"k": "decparam"}';
+            as_text             |           arrow_text           
+--------------------------------+--------------------------------
+ 1.2345678901234567e+19         | 1.2345678901234567e+19
+ 12345678901234567890.123456789 | 12345678901234567890.123456789
+(2 rows)
+
+SELECT rtrim(properties ->> 's'::text, ':numeric')::numeric AS workaround_strip_suffix FROM fid."V" WHERE properties @> '{"k": "decparam"}';
+ workaround_strip_suffix 
+-------------------------
+                     0.1
+                    0.10
+(2 rows)
+
+SELECT (properties -> 'd'::text)::jsonb AS via_jsonb, ((properties -> 'd'::text)::jsonb)::numeric AS jsonb_then_numeric,
+       ((properties -> 's'::text)::jsonb)::numeric AS scale_via_jsonb FROM fid."V" WHERE properties @> '{"k": "decparam"}';
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/07_casts.sql:21: ERROR:  cannot cast agtype float to json
+SELECT properties::jsonb AS whole_map_as_jsonb FROM fid."V" WHERE properties @> '{"k": "int"}';
+                                           whole_map_as_jsonb                                           
+--------------------------------------------------------------------------------------------------------
+ {"k": "int", "max": 9223372036854775807, "min": -9223372036854775808, "wrapped": -9223372036854775808}
+(1 row)
+
+==== C10.4 lossy or surprising conversions
+SELECT '1.9'::agtype::int AS float_to_int, '1.5'::agtype::bigint AS half_to_bigint, '-1.5'::agtype::bigint AS neg_half;
+ float_to_int | half_to_bigint | neg_half 
+--------------+----------------+----------
+            2 |              2 |       -2
+(1 row)
+
+SELECT '9223372036854775807'::agtype::int AS bigint_to_int_overflow;
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/07_casts.sql:26: ERROR:  integer out of range
+SELECT '"42"'::agtype::int AS string_to_int;
+ string_to_int 
+---------------
+            42
+(1 row)
+
+SELECT '"true"'::agtype::boolean AS string_to_bool;
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/07_casts.sql:28: ERROR:  cannot cast agtype string to type boolean
+SELECT '9007199254740993'::agtype::float8 AS big_int_to_float8;
+   big_int_to_float8   
+-----------------------
+ 9.007199254740992e+15
+(1 row)
+
+SELECT 'null'::agtype::int IS NULL AS agtype_null_to_sql_null;
+ agtype_null_to_sql_null 
+-------------------------
+ t
+(1 row)
+
+==== C10.6 exact decimal via ->> text then ::numeric, and type ambiguity of the text path
+SELECT (properties ->> 'd'::text)::numeric AS exact_numeric, (properties ->> 's'::text)::numeric AS exact_scale FROM fid."V" WHERE properties @> '{"k": "decparam"}' AND properties ->> 's'::text = '0.10';
+         exact_numeric          | exact_scale 
+--------------------------------+-------------
+ 12345678901234567890.123456789 |        0.10
+(1 row)
+
+SELECT '{"a": "0.10", "b": 0.10::numeric, "c": 0.1}'::agtype ->> 'a'::text AS string_val, '{"a": "0.10", "b": 0.10::numeric, "c": 0.1}'::agtype ->> 'b'::text AS numeric_val, '{"a": "0.10", "b": 0.10::numeric, "c": 0.1}'::agtype ->> 'c'::text AS float_val;
+ string_val | numeric_val | float_val 
+------------+-------------+-----------
+ 0.10       | 0.10        | 0.1
+(1 row)
+
+SELECT '0.10::numeric'::agtype::jsonb AS numeric_to_jsonb;
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/07_casts.sql:36: ERROR:  cannot cast agtype numeric to json
+CONTEXT:  SQL function "agtype_to_jsonb" statement 1
+SELECT '0.1'::agtype::jsonb AS float_to_jsonb;
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/07_casts.sql:37: ERROR:  cannot cast agtype float to json
+CONTEXT:  SQL function "agtype_to_jsonb" statement 1
+SELECT '{"f": 0.1}'::agtype::jsonb AS map_with_float_to_jsonb;
+ map_with_float_to_jsonb 
+-------------------------
+ {"f": 0.1}
+(1 row)
+
+SELECT '{"n": 12345678901234567890.123456789::numeric, "s": 0.10::numeric}'::agtype::jsonb AS map_with_numeric_to_jsonb;
+            map_with_numeric_to_jsonb             
+--------------------------------------------------
+ {"n": 12345678901234567890.123456789, "s": 0.10}
+(1 row)
+
+==== C10.5 a typed relational view over the graph for other tools
+CREATE OR REPLACE VIEW public.v_fid_int AS
+SELECT id::text AS vertex_id, properties ->> 'k'::text AS k, (properties -> 'max'::text)::bigint AS max_value
+FROM fid."V" WHERE properties ? 'max'::text;
+CREATE VIEW
+SELECT * FROM public.v_fid_int;
+    vertex_id    |  k  |      max_value      
+-----------------+-----+---------------------
+ 844424930131969 | int | 9223372036854775807
+(1 row)
+
+-- the same view read by a role with SELECT only on the view (no AGE search_path, no LOAD)
+DROP ROLE IF EXISTS reader;
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/07_casts.sql:47: ERROR:  role "reader" cannot be dropped because some objects depend on it
+DETAIL:  privileges for schema public
+privileges for view v_fid_int
+CREATE ROLE reader LOGIN;
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/sql/07_casts.sql:47: ERROR:  role "reader" already exists
+GRANT USAGE ON SCHEMA public TO reader;
+GRANT
+GRANT SELECT ON public.v_fid_int TO reader;
+GRANT
+You are now connected to database "postgres" as user "reader".
+SELECT * FROM public.v_fid_int;
+    vertex_id    |  k  |      max_value      
+-----------------+-----+---------------------
+ 844424930131969 | int | 9223372036854775807
+(1 row)
+
+You are now connected to database "postgres" as user "postgres".

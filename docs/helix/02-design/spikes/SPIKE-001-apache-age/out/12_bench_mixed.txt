@@ -1,0 +1,8 @@
+rel vle1..3 read n=904 p50=0.631ms p95=1.116ms mean=0.676ms
+rel write       n=96 p50=0.689ms p95=1.015ms mean=0.755ms
+age vle1..3 read n=900 p50=1.139ms p95=577.003ms mean=55.067ms
+age write       n=100 p50=1.201ms p95=1.626ms mean=1.208ms
+ x 
+---
+(0 rows)
+

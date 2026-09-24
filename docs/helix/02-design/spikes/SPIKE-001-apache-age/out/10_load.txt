@@ -1,0 +1,157 @@
+Pager usage is off.
+Timing is on.
+LOAD 'age';
+LOAD
+Time: 0.216 ms
+SET search_path = ag_catalog, "$user", public;
+SET
+Time: 0.114 ms
+DROP SCHEMA IF EXISTS rel CASCADE;
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/bench/00_load.sql:10: NOTICE:  drop cascades to 2 other objects
+DETAIL:  drop cascades to table rel.person
+drop cascades to table rel.knows
+DROP SCHEMA
+Time: 17.060 ms
+CREATE SCHEMA rel;
+CREATE SCHEMA
+Time: 22.228 ms
+CREATE TABLE rel.person (id bigint PRIMARY KEY, uid bigint NOT NULL UNIQUE, name text NOT NULL, age int NOT NULL);
+CREATE TABLE
+Time: 3.238 ms
+CREATE TABLE rel.knows (src bigint NOT NULL REFERENCES rel.person(id), dst bigint NOT NULL REFERENCES rel.person(id));
+CREATE TABLE
+Time: 1.630 ms
+SELECT setseed(0.42);
+ setseed 
+---------
+ 
+(1 row)
+
+Time: 0.339 ms
+INSERT INTO rel.person SELECT i, i, 'person-' || i, i % 90 FROM generate_series(1, 100000) i;
+INSERT 0 100000
+Time: 457.649 ms
+INSERT INTO rel.knows
+SELECT s, CASE WHEN d >= s THEN d + 1 ELSE d END
+FROM (SELECT 1 + floor(random() * 100000)::bigint AS s, 1 + floor(random() * 99999)::bigint AS d FROM generate_series(1, 500000)) x;
+INSERT 0 500000
+Time: 6409.965 ms (00:06.410)
+CREATE INDEX knows_src_dst ON rel.knows (src, dst);
+CREATE INDEX
+Time: 449.658 ms
+CREATE INDEX knows_dst ON rel.knows (dst);
+CREATE INDEX
+Time: 348.350 ms
+ANALYZE rel.person;
+ANALYZE
+Time: 61.753 ms
+ANALYZE rel.knows;
+ANALYZE
+Time: 43.243 ms
+COPY (SELECT id, uid, name, age FROM rel.person ORDER BY id) TO '/tmp/age/person.csv' WITH (FORMAT csv, HEADER true);
+COPY 100000
+Time: 34.271 ms
+COPY (SELECT src AS start_id, 'Person' AS start_vertex_type, dst AS end_id, 'Person' AS end_vertex_type FROM rel.knows) TO '/tmp/age/knows.csv' WITH (FORMAT csv, HEADER true);
+COPY 500000
+Time: 151.789 ms
+SELECT drop_graph('bench', true) FROM ag_graph WHERE name = 'bench';
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/bench/00_load.sql:28: NOTICE:  drop cascades to 4 other objects
+DETAIL:  drop cascades to table bench._ag_label_vertex
+drop cascades to table bench._ag_label_edge
+drop cascades to table bench."Person"
+drop cascades to table bench."KNOWS"
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/bench/00_load.sql:28: NOTICE:  graph "bench" has been dropped
+ drop_graph 
+------------
+ 
+(1 row)
+
+Time: 6.188 ms
+SELECT create_graph('bench');
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/bench/00_load.sql:29: NOTICE:  graph "bench" has been created
+ create_graph 
+--------------
+ 
+(1 row)
+
+Time: 8.262 ms
+SELECT create_vlabel('bench', 'Person');
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/bench/00_load.sql:30: NOTICE:  VLabel "Person" has been created
+ create_vlabel 
+---------------
+ 
+(1 row)
+
+Time: 2.319 ms
+SELECT create_elabel('bench', 'KNOWS');
+psql:/tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/age-eval/spike/bench/00_load.sql:31: NOTICE:  ELabel "KNOWS" has been created
+ create_elabel 
+---------------
+ 
+(1 row)
+
+Time: 2.576 ms
+SELECT load_labels_from_file('bench', 'Person', 'person.csv', true, true);
+ load_labels_from_file 
+-----------------------
+ 
+(1 row)
+
+Time: 748.889 ms
+SELECT load_edges_from_file('bench', 'KNOWS', 'knows.csv', true);
+ load_edges_from_file 
+----------------------
+ 
+(1 row)
+
+Time: 3112.212 ms (00:03.112)
+ANALYZE bench."Person";
+ANALYZE
+Time: 38.977 ms
+ANALYZE bench."KNOWS";
+ANALYZE
+Time: 81.383 ms
+SELECT count(*) AS rel_persons FROM rel.person;
+ rel_persons 
+-------------
+      100000
+(1 row)
+
+Time: 4.513 ms
+SELECT count(*) AS rel_edges FROM rel.knows;
+ rel_edges 
+-----------
+    500000
+(1 row)
+
+Time: 16.924 ms
+SELECT * FROM cypher('bench', $$ MATCH (p:Person) RETURN count(p) $$) AS (age_persons agtype);
+ age_persons 
+-------------
+ 100000
+(1 row)
+
+Time: 31.712 ms
+SELECT * FROM cypher('bench', $$ MATCH ()-[k:KNOWS]->() RETURN count(k) $$) AS (age_edges agtype);
+ age_edges 
+-----------
+ 500000
+(1 row)
+
+Time: 426.900 ms
+SELECT * FROM cypher('bench', $$ MATCH (p:Person) RETURN p ORDER BY p.uid LIMIT 2 $$) AS (sample agtype);
+                                                              sample                                                              
+----------------------------------------------------------------------------------------------------------------------------------
+ {"id": 844424930131969, "label": "Person", "properties": {"id": 1, "age": 1, "uid": 1, "name": "person-1", "__id__": 1}}::vertex
+ {"id": 844424930131970, "label": "Person", "properties": {"id": 2, "age": 2, "uid": 2, "name": "person-2", "__id__": 2}}::vertex
+(2 rows)
+
+Time: 85.058 ms
+SELECT pg_size_pretty(pg_total_relation_size('rel.person')) AS rel_person_size, pg_size_pretty(pg_total_relation_size('rel.knows')) AS rel_knows_size,
+       pg_size_pretty(pg_total_relation_size('bench."Person"')) AS age_person_size, pg_size_pretty(pg_total_relation_size('bench."KNOWS"')) AS age_knows_size;
+ rel_person_size | rel_knows_size | age_person_size | age_knows_size 
+-----------------+----------------+-----------------+----------------
+ 11 MB           | 42 MB          | 18 MB           | 59 MB
+(1 row)
+
+Time: 0.896 ms

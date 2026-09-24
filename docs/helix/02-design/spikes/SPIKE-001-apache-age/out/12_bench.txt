@@ -1,0 +1,22 @@
+NOTICE:  relation "person_uid_btree" already exists, skipping
+== result-size parity check (sum of result rows over start keys 1..200)
+rel_hop1 rows=984
+age_hop1 rows=984
+rel_hop2 rows=5012
+age_hop2 rows=5012
+rel_hop3 rows=24985
+age_hop3 rows=24985
+rel_vle13 rows=30981
+age_vle13 rows=30981
+== latency (ms), single client, simple protocol, N=3000 after 300 warm-up
+query           p50      p95      p99     mean      tps
+rel_fetch     0.103    0.146    0.212    0.105     9312  (n=3000 failed=0)
+age_fetch     0.142    0.207    0.330    0.168     5879  (n=3000 failed=0)
+rel_hop1      0.294    0.403    0.649    0.321     3091  (n=3000 failed=0)
+age_hop1      0.434    0.522    0.807    0.448     2218  (n=3000 failed=0)
+rel_hop2      0.546    0.713    1.107    0.575     1729  (n=3000 failed=0)
+age_hop2      1.082    1.408    2.459    1.147      868  (n=3000 failed=0)
+rel_hop3      1.047    1.517    2.032    1.093      912  (n=3000 failed=0)
+age_hop3      4.797    6.322    9.011    4.999      199  (n=3000 failed=0)
+rel_vle13     0.695    1.212    1.994    0.747     1332  (n=3000 failed=0)
+age_vle13     0.994    1.683    2.428    1.248      798  (n=3000 failed=0)

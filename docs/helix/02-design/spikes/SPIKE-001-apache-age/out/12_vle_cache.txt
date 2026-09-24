@@ -1,0 +1,13 @@
+== VLE first-query cost per new session (graph cache build), 3 fresh sessions, each runs the same query 3 times
+-- session 1
+127 Time: 592.258 ms 127 Time: 1.353 ms 127 Time: 1.222 ms
+-- session 2
+127 Time: 577.820 ms 127 Time: 1.289 ms 127 Time: 1.029 ms
+-- session 3
+127 Time: 577.792 ms 127 Time: 1.609 ms 127 Time: 1.003 ms
+== after a write in another session (per-graph version counter should invalidate caches)
+127 Time: 569.241 ms Time: 5.285 ms 127 Time: 599.951 ms 127 Time: 1.003 ms
+ x 
+---
+(0 rows)
+
