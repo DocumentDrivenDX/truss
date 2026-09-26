@@ -1,0 +1,181 @@
+== PostgreSQL 17.11 on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, 64-bit
+C-db: added 52 conditional CHECK constraints to c.object (validating 542508 existing rows) in 6.7 s
+
+[N1] nullability required: Customer.name absent
+  A        violating: rejected | ERR_POSTGRES_SERVER_ERROR null value in column "name" of relation "customers" violates not-null constraint
+  A        control:   accepted | accepted
+  C-engine violating: rejected | ENGINE Customer.name:required (Customer.name: absent)
+  C-engine control:   accepted | accepted by engine and database
+  C-db     violating: rejected | ERR_POSTGRES_SERVER_ERROR new row for relation "object" violates check constraint "ck_t1_p3_required"
+  C-db     control:   accepted | accepted
+
+[N2] nullability required: Customer.name explicit null
+  A        violating: rejected | ERR_POSTGRES_SERVER_ERROR null value in column "name" of relation "customers" violates not-null constraint
+  A        control:   accepted | accepted
+  C-engine violating: rejected | ENGINE Customer.name:required (Customer.name: explicit null)
+  C-engine control:   accepted | accepted by engine and database
+  C-db     violating: rejected | ERR_POSTGRES_SERVER_ERROR new row for relation "object" violates check constraint "ck_t1_p3_required"
+  C-db     control:   accepted | accepted
+
+[L1] length max 100 Unicode scalars: Customer.name 101 (control: 100 incl. combining marks)
+  A        violating: rejected | ERR_POSTGRES_SERVER_ERROR value too long for type character varying(100)
+  A        control:   accepted | accepted
+  C-engine violating: rejected | ENGINE Customer.name:value (Customer.name: length 101 > 100 Unicode scalars)
+  C-engine control:   accepted | accepted by engine and database
+  C-db     violating: rejected | ERR_POSTGRES_SERVER_ERROR new row for relation "object" violates check constraint "ck_t1_p3_value"
+  C-db     control:   accepted | accepted
+
+[L2] length on array items: Customer.tags item max 30 (31 chars)
+  A        violating: ACCEPTED | accepted
+  A        control:   accepted | accepted
+  C-engine violating: rejected | ENGINE Customer.tags:array (Customer.tags[0]: length 31 > 30 Unicode scalars)
+  C-engine control:   accepted | accepted by engine and database
+  C-db     violating: rejected | ERR_POSTGRES_SERVER_ERROR new row for relation "object" violates check constraint "ck_t1_p6_array"
+  C-db     control:   accepted | accepted
+
+[P1] decimal precision 14: Order.total 1000000000000.00 (13 integer digits)
+  A        violating: rejected | ERR_POSTGRES_SERVER_ERROR numeric field overflow
+  A        control:   accepted | accepted
+  C-engine violating: rejected | ENGINE Order.total:value (Order.total: precision 14 exceeded)
+  C-engine control:   accepted | accepted by engine and database
+  C-db     violating: rejected | ERR_POSTGRES_SERVER_ERROR new row for relation "object" violates check constraint "ck_t3_p16_value"
+  C-db     control:   accepted | accepted
+
+[P2] decimal scale 2, no implicit rounding: Order.total 10.005
+  A        violating: rejected | SILENT (accepted; stored as 10.01)
+  A        control:   accepted | accepted
+  C-engine violating: rejected | ENGINE Order.total:value (Order.total: scale 3 > 2 (no implicit rounding))
+  C-engine control:   accepted | accepted by engine and database
+  C-db     violating: rejected | ERR_POSTGRES_SERVER_ERROR new row for relation "object" violates check constraint "ck_t3_p16_value"
+  C-db     control:   accepted | accepted
+
+[W1] integer width 16-bit signed: OrderLine.lineNo 32768
+  A        violating: rejected | ERR_POSTGRES_SERVER_ERROR smallint out of range
+  A        control:   accepted | accepted
+  C-engine violating: rejected | ENGINE OrderLine.lineNo:value (OrderLine.lineNo: outside signed 16-bit range)
+  C-engine control:   accepted | accepted by engine and database
+  C-db     violating: rejected | ERR_POSTGRES_SERVER_ERROR new row for relation "object" violates check constraint "ck_t4_p18_value"
+  C-db     control:   accepted | accepted
+
+[W2] integer width 64-bit signed: Customer.id 9223372036854775808
+  A        violating: rejected | ERR_POSTGRES_SERVER_ERROR bigint out of range
+  A        control:   accepted | accepted
+  C-engine violating: rejected | ENGINE Customer.id:value (Customer.id: outside signed 64-bit range)
+  C-engine control:   accepted | accepted by engine and database
+  C-db     violating: rejected | ERR_POSTGRES_SERVER_ERROR new row for relation "object" violates check constraint "ck_t1_p1_value"
+  C-db     control:   accepted | accepted
+
+[S1] scalar family: Order.status (string) given the number 42
+  A        violating: rejected | SILENT (accepted; stored as text '42')
+  A        control:   accepted | accepted
+  C-engine violating: rejected | ENGINE Order.status:value (Order.status: not a string)
+  C-engine control:   accepted | accepted by engine and database
+  C-db     violating: rejected | ERR_POSTGRES_SERVER_ERROR new row for relation "object" violates check constraint "ck_t3_p14_value"
+  C-db     control:   accepted | accepted
+
+[K1] primary key Customer.identity: duplicate id 1
+  A        violating: rejected | ERR_POSTGRES_SERVER_ERROR duplicate key value violates unique constraint "customers_pkey"
+  A        control:   accepted | accepted
+  C-engine violating: rejected | DB (after engine accepted) ERR_POSTGRES_SERVER_ERROR duplicate key value violates unique constraint "obj_key_t1_identity"
+  C-engine control:   accepted | accepted by engine and database
+  C-db     violating: rejected | ERR_POSTGRES_SERVER_ERROR duplicate key value violates unique constraint "obj_key_t1_identity"
+  C-db     control:   accepted | accepted
+
+[K2] alternate key Customer.account-code: duplicate code C0000001 (control: c0000001)
+  A        violating: rejected | ERR_POSTGRES_SERVER_ERROR duplicate key value violates unique constraint "customers_code_unique"
+  A        control:   accepted | accepted
+  C-engine violating: rejected | DB (after engine accepted) ERR_POSTGRES_SERVER_ERROR duplicate key value violates unique constraint "obj_key_t1_account_code"
+  C-engine control:   accepted | accepted by engine and database
+  C-db     violating: rejected | ERR_POSTGRES_SERVER_ERROR duplicate key value violates unique constraint "obj_key_t1_account_code"
+  C-db     control:   accepted | accepted
+
+[R1] relationship endpoint: Order.customer must reference an existing Customer (violating: a Product / missing key)
+  A        violating: rejected | ERR_POSTGRES_SERVER_ERROR insert or update on table "orders" violates foreign key constraint "orders_customer_fk"
+  A        control:   accepted | accepted
+  C-engine violating: rejected | ENGINE rel:2:endpoint (2: no Customer with key 999999999)
+  C-engine control:   accepted | accepted by engine and database
+  C-db     violating: rejected | ERR_POSTGRES_SERVER_ERROR insert or update on table "edge" violates foreign key constraint "edge_endpoint_types_fk"
+  C-db     control:   accepted | accepted
+
+[R2] multiplicity Order.customer max 1: second customer for one order
+  A        violating: rejected | ERR_POSTGRES_SERVER_ERROR column "customerId" specified more than once
+  A        control:   accepted | accepted
+  C-engine violating: rejected | ENGINE rel:order-customer:target-max (Order 900001 has 2 (max 1)); rel:order-lines:target-min (Order 900001 has 0 (min 1))
+  C-engine control:   accepted | accepted by engine and database
+  C-db     violating: rejected | ERR_POSTGRES_SERVER_ERROR duplicate key value violates unique constraint "edge_max_src_r2"
+  C-db     control:   accepted | accepted
+
+[R3] multiplicity Order.customer min 1: order without customer
+  A        violating: rejected | ERR_POSTGRES_SERVER_ERROR null value in column "customerId" of relation "orders" violates not-null constraint
+  A        control:   accepted | accepted
+  C-engine violating: rejected | ENGINE rel:order-customer:target-min (Order 900001 has 0 (min 1))
+  C-engine control:   accepted | accepted by engine and database
+  C-db     violating: rejected | ERR_POSTGRES_SERVER_ERROR relationship order-customer: object 1461692 has 0 out edge(s) (min 1)
+  C-db     control:   accepted | accepted
+
+[R4] multiplicity Order.lines min 1: order without any OrderLine
+  A        violating: rejected | ERR_POSTGRES_SERVER_ERROR relationship order-lines: Order 900001 has 0 OrderLine (min 1)
+  A        control:   accepted | accepted
+  C-engine violating: rejected | ENGINE rel:order-lines:target-min (Order 900001 has 0 (min 1))
+  C-engine control:   accepted | accepted by engine and database
+  C-db     violating: rejected | ERR_POSTGRES_SERVER_ERROR relationship order-lines: object 1461706 has 0 out edge(s) (min 1)
+  C-db     control:   accepted | accepted
+
+[R5] multiplicity OrderLine<-Order max 1 (a line in two orders)
+  A        violating: rejected | ERR_POSTGRES_SERVER_ERROR column "orderId" is of type bigint but expression is of type integer[]
+  A        control:   accepted | accepted
+  C-engine violating: rejected | ENGINE rel:order-lines:source-max (OrderLine 900001 has 2 (max 1))
+  C-engine control:   accepted | accepted by engine and database
+  C-db     violating: rejected | ERR_POSTGRES_SERVER_ERROR duplicate key value violates unique constraint "edge_max_tgt_r3"
+  C-db     control:   accepted | accepted
+
+[R6] multiplicity OrderLine.product min 1: line without product
+  A        violating: rejected | ERR_POSTGRES_SERVER_ERROR null value in column "productId" of relation "order_lines" violates not-null constraint
+  A        control:   accepted | accepted
+  C-engine violating: rejected | ENGINE rel:line-product:target-min (OrderLine 900001 has 0 (min 1))
+  C-engine control:   accepted | accepted by engine and database
+  C-db     violating: rejected | ERR_POSTGRES_SERVER_ERROR relationship line-product: object 1461736 has 0 out edge(s) (min 1)
+  C-db     control:   accepted | accepted
+
+[I1] record invariant OrderLine.line-total: lineTotal = quantity * unitPrice (violating 2 x 5.00 = 11.00)
+  A        violating: rejected | ERR_POSTGRES_SERVER_ERROR new row for relation "order_lines" violates check constraint "order_lines_line_total_ck"
+  A        control:   accepted | accepted
+  C-engine violating: rejected | ENGINE OrderLine:invariant:line-total (OrderLine: invariant false)
+  C-engine control:   accepted | accepted by engine and database
+  C-db     violating: rejected | ERR_POSTGRES_SERVER_ERROR new row for relation "object" violates check constraint "ck_t4_inv_line_total"
+  C-db     control:   accepted | accepted
+
+[U1] undeclared data: Customer with unknown field legacyScore (C-db: undeclared id "99" inside props)
+  A        violating: rejected | ERR_POSTGRES_SERVER_ERROR column "legacyScore" of relation "customers" does not exist
+  A        control:   accepted | accepted
+  C-engine violating: ACCEPTED | accepted by engine and database; retained={"legacyScore":7}
+  C-engine control:   accepted | accepted by engine and database
+  C-db     violating: rejected | ERR_POSTGRES_SERVER_ERROR new row for relation "object" violates check constraint "ck_t1_declared_only"
+  C-db     control:   accepted | accepted
+
+== matrix (violating write rejected by; "none" = violating write accepted; every control write accepted unless marked)
+id | A | C-engine | C-db
+N1 | database | engine | database
+N2 | database | engine | database
+L1 | database | engine | database
+L2 | none | engine | database
+P1 | database | engine | database
+P2 | none (silent change) | engine | database
+W1 | database | engine | database
+W2 | database | engine | database
+S1 | none (silent change) | engine | database
+K1 | database | database | database
+K2 | database | database | database
+R1 | database | engine | database
+R2 | structural (not expressible) | engine | database
+R3 | database | engine | database
+R4 | database | engine | database
+R5 | structural (not expressible) | engine | database
+R6 | database | engine | database
+I1 | database | engine | database
+U1 | database | retained (by design) | database
+
+== concurrency: order with 2 lines; T1 and T2 each delete a different line; both fire deferred checks before either commits (READ COMMITTED)
+  A (HAND-12 deferred trigger): T1 checks passed -> T1 committed -> T2 checks passed -> T2 commit issued -> lines left for order: 0
+  C-db (generic deferred trigger): T1 checks passed -> T1 committed -> T2 checks passed -> T2 commit issued -> lines left for order: 0
+  C-engine (locks parent FOR NO KEY UPDATE, then counts): T1 checks passed -> T1 committed -> T2 ENGINE ENGINE rel:order-lines:target-min (order 1461768 would have 0 lines) -> T2 ERR_POSTGRES_SERVER_ERROR relationship order-lines: object 1461768 has 0 out edge(s) (min 1) -> lines left for order: 1

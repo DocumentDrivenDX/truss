@@ -1,0 +1,241 @@
+== result parity: sum of rows over sample keys (A vs C)
+a q1_fetch rows=9
+c q1_fetch rows=9
+a q2_hop1 rows=45
+c q2_hop1 rows=45
+a q3_hop2 rows=5499
+c q3_hop2 rows=5499
+a q4_hop3 rows=5499
+c q4_hop3 rows=5499
+a q5_range rows=301
+c q5_range rows=301
+== EXPLAIN (ANALYZE, BUFFERS): heaviest customer k=1 for hops; order k=4242; range lo=5000
+---- a_q1_fetch
+Index Scan using customers_pkey on customers (actual time=0.020..0.021 rows=1 loops=1)
+  Index Cond: (id = 1)
+  Buffers: shared hit=6
+Planning:
+  Buffers: shared hit=134
+Planning Time: 0.393 ms
+Execution Time: 0.048 ms
+---- c_q1_fetch
+Index Scan using obj_key_t1_identity on object o (actual time=0.039..0.039 rows=1 loops=1)
+  Index Cond: (((props ->> '1'::text))::bigint = 1)
+  Buffers: shared hit=6
+Planning:
+  Buffers: shared hit=246
+Planning Time: 0.568 ms
+Execution Time: 0.050 ms
+---- a_q2_hop1
+Index Scan using order_lines_order_idx on order_lines (actual time=0.038..0.039 rows=3 loops=1)
+  Index Cond: ("orderId" = 4242)
+  Buffers: shared hit=7
+Planning:
+  Buffers: shared hit=96
+Planning Time: 0.334 ms
+Execution Time: 0.068 ms
+---- c_q2_hop1
+Nested Loop (actual time=0.094..0.100 rows=3 loops=1)
+  Buffers: shared hit=22
+  ->  Nested Loop (actual time=0.052..0.054 rows=3 loops=1)
+        Buffers: shared hit=10
+        ->  Index Scan using obj_key_t3_identity on object s (actual time=0.034..0.035 rows=1 loops=1)
+              Index Cond: (((props ->> '12'::text))::bigint = 4242)
+              Buffers: shared hit=6
+        ->  Index Only Scan using edge_source_idx on edge e0 (actual time=0.016..0.017 rows=3 loops=1)
+              Index Cond: ((source_id = s.id) AND (rel_type_id = 3))
+              Heap Fetches: 0
+              Buffers: shared hit=4
+  ->  Index Scan using object_pkey on object x (actual time=0.012..0.012 rows=1 loops=3)
+        Index Cond: (id = e0.target_id)
+        Buffers: shared hit=12
+Planning:
+  Buffers: shared hit=538
+Planning Time: 1.227 ms
+Execution Time: 0.141 ms
+---- a_q3_hop2
+Nested Loop (actual time=0.139..5.225 rows=2782 loops=1)
+  Buffers: shared hit=3456
+  ->  Bitmap Heap Scan on orders o (actual time=0.130..1.023 rows=728 loops=1)
+        Recheck Cond: ("customerId" = 1)
+        Heap Blocks: exact=516
+        Buffers: shared hit=521
+        ->  Bitmap Index Scan on orders_customer_idx (actual time=0.074..0.075 rows=728 loops=1)
+              Index Cond: ("customerId" = 1)
+              Buffers: shared hit=5
+  ->  Index Scan using order_lines_order_idx on order_lines l (actual time=0.004..0.005 rows=4 loops=728)
+        Index Cond: ("orderId" = o.id)
+        Buffers: shared hit=2935
+Planning:
+  Buffers: shared hit=279
+Planning Time: 0.640 ms
+Execution Time: 5.414 ms
+---- c_q3_hop2
+Nested Loop (actual time=0.071..11.628 rows=2782 loops=1)
+  Buffers: shared hit=13335
+  ->  Nested Loop (actual time=0.039..2.741 rows=2782 loops=1)
+        Buffers: shared hit=2207
+        ->  Nested Loop (actual time=0.031..0.171 rows=728 loops=1)
+              Buffers: shared hit=13
+              ->  Index Scan using obj_key_t1_identity on object s (actual time=0.017..0.017 rows=1 loops=1)
+                    Index Cond: (((props ->> '1'::text))::bigint = 1)
+                    Buffers: shared hit=6
+              ->  Index Only Scan using edge_target_idx on edge e0 (actual time=0.013..0.087 rows=728 loops=1)
+                    Index Cond: ((target_id = s.id) AND (rel_type_id = 2))
+                    Heap Fetches: 0
+                    Buffers: shared hit=7
+        ->  Index Only Scan using edge_source_idx on edge e1 (actual time=0.003..0.003 rows=4 loops=728)
+              Index Cond: ((source_id = e0.source_id) AND (rel_type_id = 3))
+              Heap Fetches: 0
+              Buffers: shared hit=2194
+  ->  Index Scan using object_pkey on object x (actual time=0.002..0.002 rows=1 loops=2782)
+        Index Cond: (id = e1.target_id)
+        Buffers: shared hit=11128
+Planning:
+  Buffers: shared hit=561
+Planning Time: 1.255 ms
+Execution Time: 11.780 ms
+---- a_q4_hop3
+Hash Join (actual time=1.075..5.897 rows=2782 loops=1)
+  Hash Cond: (l."productId" = p.id)
+  Buffers: shared hit=3510
+  ->  Nested Loop (actual time=0.142..4.344 rows=2782 loops=1)
+        Buffers: shared hit=3456
+        ->  Bitmap Heap Scan on orders o (actual time=0.132..0.901 rows=728 loops=1)
+              Recheck Cond: ("customerId" = 1)
+              Heap Blocks: exact=516
+              Buffers: shared hit=521
+              ->  Bitmap Index Scan on orders_customer_idx (actual time=0.078..0.078 rows=728 loops=1)
+                    Index Cond: ("customerId" = 1)
+                    Buffers: shared hit=5
+        ->  Index Scan using order_lines_order_idx on order_lines l (actual time=0.004..0.004 rows=4 loops=728)
+              Index Cond: ("orderId" = o.id)
+              Buffers: shared hit=2935
+  ->  Hash (actual time=0.897..0.897 rows=5000 loops=1)
+        Buckets: 8192  Batches: 1  Memory Usage: 496kB
+        Buffers: shared hit=54
+        ->  Seq Scan on products p (actual time=0.005..0.325 rows=5000 loops=1)
+              Buffers: shared hit=54
+Planning:
+  Buffers: shared hit=342
+Planning Time: 0.820 ms
+Execution Time: 6.084 ms
+---- c_q4_hop3
+Nested Loop (actual time=0.118..13.157 rows=2782 loops=1)
+  Buffers: shared hit=21682
+  ->  Nested Loop (actual time=0.077..7.875 rows=2782 loops=1)
+        Buffers: shared hit=10554
+        ->  Nested Loop (actual time=0.054..2.616 rows=2782 loops=1)
+              Buffers: shared hit=2207
+              ->  Nested Loop (actual time=0.033..0.186 rows=728 loops=1)
+                    Buffers: shared hit=13
+                    ->  Index Scan using obj_key_t1_identity on object s (actual time=0.015..0.016 rows=1 loops=1)
+                          Index Cond: (((props ->> '1'::text))::bigint = 1)
+                          Buffers: shared hit=6
+                    ->  Index Only Scan using edge_target_idx on edge e0 (actual time=0.017..0.092 rows=728 loops=1)
+                          Index Cond: ((target_id = s.id) AND (rel_type_id = 2))
+                          Heap Fetches: 0
+                          Buffers: shared hit=7
+              ->  Index Only Scan using edge_source_idx on edge e1 (actual time=0.003..0.003 rows=4 loops=728)
+                    Index Cond: ((source_id = e0.source_id) AND (rel_type_id = 3))
+                    Heap Fetches: 0
+                    Buffers: shared hit=2194
+        ->  Index Only Scan using edge_source_idx on edge e2 (actual time=0.002..0.002 rows=1 loops=2782)
+              Index Cond: ((source_id = e1.target_id) AND (rel_type_id = 4))
+              Heap Fetches: 0
+              Buffers: shared hit=8347
+  ->  Index Scan using object_pkey on object x (actual time=0.001..0.001 rows=1 loops=2782)
+        Index Cond: (id = e2.target_id)
+        Buffers: shared hit=11128
+Planning:
+  Buffers: shared hit=579
+Planning Time: 1.409 ms
+Execution Time: 13.328 ms
+---- a_q5_range
+Bitmap Heap Scan on orders (actual time=0.041..0.209 rows=62 loops=1)
+  Recheck Cond: ((total >= '5000'::numeric) AND (total <= '5010'::numeric))
+  Heap Blocks: exact=59
+  Buffers: shared hit=62
+  ->  Bitmap Index Scan on orders_total_btree (actual time=0.027..0.028 rows=62 loops=1)
+        Index Cond: ((total >= '5000'::numeric) AND (total <= '5010'::numeric))
+        Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=117
+Planning Time: 0.336 ms
+Execution Time: 0.239 ms
+---- c_q5_range
+Bitmap Heap Scan on object (actual time=0.049..0.363 rows=62 loops=1)
+  Recheck Cond: ((((props ->> '16'::text))::numeric >= '5000'::numeric) AND (((props ->> '16'::text))::numeric <= '5010'::numeric) AND (type_id = 3))
+  Heap Blocks: exact=60
+  Buffers: shared hit=63
+  ->  Bitmap Index Scan on obj_idx_t3_orders_total_btree (actual time=0.028..0.029 rows=62 loops=1)
+        Index Cond: ((((props ->> '16'::text))::numeric >= '5000'::numeric) AND (((props ->> '16'::text))::numeric <= '5010'::numeric))
+        Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=238
+Planning Time: 0.512 ms
+Execution Time: 0.382 ms
+== sizes (MB): table heap, indexes, total incl. TOAST
+        rel        | heap_mb | idx_mb | total_mb 
+-------------------+---------+--------+----------
+ c.edge            |    67.1 |  111.0 |    178.1
+ c.journal         |     7.8 |    2.1 |      9.9
+ c.key_def         |     0.0 |    0.0 |      0.0
+ c.object          |    85.0 |   77.5 |    162.6
+ c.prop_def        |     0.0 |    0.0 |      0.1
+ c.rel_def         |     0.0 |    0.0 |      0.0
+ c.rel_endpoint    |     0.0 |    0.0 |      0.0
+ c.schema_rev      |     0.0 |    0.0 |      0.0
+ c.type_def        |     0.0 |    0.0 |      0.0
+ sales.customers   |     4.6 |    1.1 |      5.7
+ sales.order_lines |    29.6 |   13.6 |     43.3
+ sales.orders      |     7.6 |    6.8 |     14.4
+ sales.products    |     0.4 |    4.6 |      5.1
+(13 rows)
+
+ schema | total_mb 
+--------+----------
+ c      |    350.9
+ sales  |     68.5
+(2 rows)
+
+ schemaname |         indexrelname          |  mb  
+------------+-------------------------------+------
+ c          | edge_max_src_r1               |  0.4
+ c          | edge_max_src_r2               |  2.2
+ c          | edge_max_src_r4               |  8.6
+ c          | edge_max_tgt_r1               |  0.4
+ c          | edge_max_tgt_r3               |  8.6
+ c          | edge_pkey                     | 19.7
+ c          | edge_source_idx               | 35.6
+ c          | edge_target_idx               | 35.6
+ c          | journal_object_idx            |  0.5
+ c          | journal_pkey                  |  1.6
+ c          | key_def_pkey                  |  0.0
+ c          | obj_idx_t3_orders_total_btree |  5.5
+ c          | obj_key_t1_account_code       |  0.6
+ c          | obj_key_t1_identity           |  0.4
+ c          | obj_key_t3_identity           |  2.2
+ c          | obj_key_t4_identity           |  8.6
+ c          | obj_key_t5_identity           |  9.5
+ c          | object_id_type_id_key         | 29.5
+ c          | object_pkey                   | 21.0
+ c          | prop_def_element_key          |  0.0
+ c          | prop_def_pkey                 |  0.0
+ c          | prop_def_type_id_name_key     |  0.0
+ c          | rel_def_module_rel_id_key     |  0.0
+ c          | rel_def_pkey                  |  0.0
+ c          | rel_endpoint_pkey             |  0.0
+ c          | schema_rev_pkey               |  0.0
+ c          | type_def_module_element_key   |  0.0
+ c          | type_def_pkey                 |  0.0
+ sales      | customers_code_unique         |  0.6
+ sales      | customers_pkey                |  0.4
+ sales      | order_lines_order_idx         |  5.0
+ sales      | order_lines_pkey              |  8.6
+ sales      | orders_customer_idx           |  1.1
+ sales      | orders_pkey                   |  2.2
+ sales      | orders_total_btree            |  3.5
+ sales      | products_pkey                 |  4.6
+(36 rows)
+

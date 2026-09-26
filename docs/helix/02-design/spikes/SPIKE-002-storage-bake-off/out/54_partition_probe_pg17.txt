@@ -1,0 +1,15 @@
+== PostgreSQL 17.11 on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, 64-bit
+parity (rows for k=1, 42, 777): 2782/249/56 2782/249/56
+-- 105 types: c.object has 208 indexes; cp.object has 105 partitions
+shape     c plan ms cp plan ms
+fetch         5.171      0.965
+hop1          5.759      1.576
+hop3          6.700      1.870
+-- prepared latency, 3000 tx after 300 warm-up (ms): p50 p95
+c_fetch     0.038    0.051
+cp_fetch    0.039    0.053
+c_hop1      0.060    0.078
+cp_hop1     0.062    0.083
+c_hop3      0.114    0.283
+cp_hop3     0.115    0.271
+-- sizes (MB): cp.object partitions total 117.5

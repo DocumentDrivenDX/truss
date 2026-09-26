@@ -1,0 +1,286 @@
+{
+ "umf": "0.1.0",
+ "id": "truss-spike-002-sales-postgresql",
+ "vocabularies": {
+  "umf.binding": {
+   "version": "0.1.0"
+  }
+ },
+ "modules": [],
+ "extensions": {
+  "umf.binding": {
+   "profile": "umf-binding-1",
+   "logical": {
+    "documentId": "truss-spike-002-sales",
+    "coreVersion": "0.7.0"
+   },
+   "target": {
+    "system": "postgresql",
+    "version": "17.4",
+    "subset": "ddd-tables-jsonb-list-partition"
+   },
+   "elements": [
+    {
+     "module": "sales",
+     "element": "Customer",
+     "table": "sales.customers"
+    },
+    {
+     "module": "sales",
+     "element": "Order",
+     "table": "sales.orders"
+    },
+    {
+     "module": "sales",
+     "element": "OrderLine",
+     "table": "sales.order_lines"
+    },
+    {
+     "module": "sales",
+     "element": "Product",
+     "table": "sales.products"
+    }
+   ],
+   "fields": [
+    {
+     "module": "sales",
+     "element": "Customer",
+     "field": "id",
+     "storage": "column",
+     "column": "id"
+    },
+    {
+     "module": "sales",
+     "element": "Customer",
+     "field": "code",
+     "storage": "column",
+     "column": "code"
+    },
+    {
+     "module": "sales",
+     "element": "Customer",
+     "field": "name",
+     "storage": "column",
+     "column": "name"
+    },
+    {
+     "module": "sales",
+     "element": "Customer",
+     "field": "email",
+     "storage": "column",
+     "column": "email"
+    },
+    {
+     "module": "sales",
+     "element": "Customer",
+     "field": "createdAt",
+     "storage": "column",
+     "column": "createdAt"
+    },
+    {
+     "module": "sales",
+     "element": "Customer",
+     "field": "tags",
+     "storage": "embedded",
+     "documentColumn": "payload",
+     "path": [
+      "tags"
+     ]
+    },
+    {
+     "module": "sales",
+     "element": "Customer",
+     "field": "attributes",
+     "storage": "embedded",
+     "documentColumn": "payload",
+     "path": [
+      "attributes"
+     ]
+    },
+    {
+     "module": "sales",
+     "element": "Customer",
+     "field": "address",
+     "storage": "embedded",
+     "documentColumn": "payload",
+     "path": [
+      "address"
+     ]
+    },
+    {
+     "module": "sales",
+     "element": "Order",
+     "field": "id",
+     "storage": "column",
+     "column": "id"
+    },
+    {
+     "module": "sales",
+     "element": "Order",
+     "field": "placedAt",
+     "storage": "column",
+     "column": "placedAt"
+    },
+    {
+     "module": "sales",
+     "element": "Order",
+     "field": "status",
+     "storage": "column",
+     "column": "status"
+    },
+    {
+     "module": "sales",
+     "element": "Order",
+     "field": "channel",
+     "storage": "column",
+     "column": "channel"
+    },
+    {
+     "module": "sales",
+     "element": "Order",
+     "field": "total",
+     "storage": "column",
+     "column": "total"
+    },
+    {
+     "module": "sales",
+     "element": "Order",
+     "field": "customerId",
+     "storage": "column",
+     "column": "customerId"
+    },
+    {
+     "module": "sales",
+     "element": "OrderLine",
+     "field": "id",
+     "storage": "column",
+     "column": "id"
+    },
+    {
+     "module": "sales",
+     "element": "OrderLine",
+     "field": "lineNo",
+     "storage": "column",
+     "column": "lineNo"
+    },
+    {
+     "module": "sales",
+     "element": "OrderLine",
+     "field": "quantity",
+     "storage": "column",
+     "column": "quantity"
+    },
+    {
+     "module": "sales",
+     "element": "OrderLine",
+     "field": "unitPrice",
+     "storage": "column",
+     "column": "unitPrice"
+    },
+    {
+     "module": "sales",
+     "element": "OrderLine",
+     "field": "lineTotal",
+     "storage": "column",
+     "column": "lineTotal"
+    },
+    {
+     "module": "sales",
+     "element": "OrderLine",
+     "field": "orderId",
+     "storage": "column",
+     "column": "orderId"
+    },
+    {
+     "module": "sales",
+     "element": "OrderLine",
+     "field": "productId",
+     "storage": "column",
+     "column": "productId"
+    },
+    {
+     "module": "sales",
+     "element": "Product",
+     "field": "id",
+     "storage": "column",
+     "column": "id"
+    },
+    {
+     "module": "sales",
+     "element": "Product",
+     "field": "sku",
+     "storage": "column",
+     "column": "sku"
+    },
+    {
+     "module": "sales",
+     "element": "Product",
+     "field": "name",
+     "storage": "column",
+     "column": "name"
+    },
+    {
+     "module": "sales",
+     "element": "Product",
+     "field": "price",
+     "storage": "column",
+     "column": "price"
+    },
+    {
+     "module": "sales",
+     "element": "Product",
+     "field": "image",
+     "storage": "column",
+     "column": "image"
+    }
+   ],
+   "relationships": [
+    {
+     "module": "sales",
+     "name": "customer",
+     "storage": "foreign_key"
+    },
+    {
+     "module": "sales",
+     "name": "lines",
+     "storage": "foreign_key"
+    },
+    {
+     "module": "sales",
+     "name": "product",
+     "storage": "foreign_key"
+    }
+   ],
+   "indexes": [
+    {
+     "name": "orders_total_btree",
+     "kind": "btree",
+     "on": [
+      {
+       "field": {
+        "module": "sales",
+        "element": "Order",
+        "field": "total"
+       }
+      }
+     ],
+     "unique": false
+    },
+    {
+     "name": "customers_code_unique",
+     "kind": "unique",
+     "on": [
+      {
+       "field": {
+        "module": "sales",
+        "element": "Customer",
+        "field": "code"
+       }
+      }
+     ],
+     "unique": true
+    }
+   ]
+  }
+ }
+}

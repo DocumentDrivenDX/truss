@@ -1,0 +1,15 @@
+== PostgreSQL 17.11 on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, 64-bit; prepared; start customers 1..1000
+orders per start customer: 11..1546 (median 36)
+query       run      p50      p95      p99
+a_q3_hop2     1    0.259    0.884    2.453
+a_q3_hop2     2    0.268    0.691    1.310
+a_q3_hop2     3    0.236    0.798    1.518
+c_q3_hop2     1    0.535    1.511    4.041
+c_q3_hop2     2    0.493    1.506    3.741
+c_q3_hop2     3    0.548    1.692    3.420
+a_q4_hop3     1    0.472    1.368    2.715
+a_q4_hop3     2    0.410    1.093    2.988
+a_q4_hop3     3    0.414    1.233    3.235
+c_q4_hop3     1    0.747    2.347    3.946
+c_q4_hop3     2    0.720    2.229    5.522
+c_q4_hop3     3    0.682    1.810    3.530

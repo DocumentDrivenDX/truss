@@ -1,0 +1,71 @@
+NOTICE:  relation "key_seq" already exists, skipping
+== PostgreSQL 17.11 on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, 64-bit
+A sales.products (typed columns, PK)                 latency avg 0.166 ms  tps 6033.218903
+C c.object, 1 CHECK constraints                      latency avg 0.216 ms  tps 4621.289913
+adding the 52 generated CHECKs to c.object (764508 rows, validated): 8.062498398 s
+C c.object, 53 CHECK constraints                     latency avg 1.057 ms  tps 945.671190
+C c.object, 53 CHECKs, 100 rows per INSERT           latency avg 4.555 ms  tps 219.518534
+A sales.products, 100 rows per INSERT                latency avg 0.461 ms  tps 2167.288679
+C c.object, 553 CHECK constraints                    latency avg 7.911 ms  tps 126.403921
+C c.object, 553 CHECKs, 100 rows per INSERT          latency avg 11.992 ms  tps 83.390205
+psql:/home/user/truss/docs/helix/02-design/spikes/SPIKE-002-storage-bake-off/sql/c_validate_trigger.sql:67: NOTICE:  trigger "object_validate" for relation "c.object" does not exist, skipping
+C c.object, catalog-driven validation trigger        latency avg 0.413 ms  tps 2420.252674
+== trigger variant: violating and control writes (each rolled back), then detection for a tightened rule
+BEGIN;
+BEGIN
+INSERT INTO c.object (type_id, props, rev) VALUES (5, '{"22":990001,"23":"T","25":1.00}', 0);
+psql:/home/user/truss/docs/helix/02-design/spikes/SPIKE-002-storage-bake-off/bench/trigger_probe.sql:3: ERROR:  rule Product.name:required violated (object 1900349)
+ROLLBACK;
+ROLLBACK
+BEGIN;
+BEGIN
+INSERT INTO c.object (type_id, props, rev) VALUES (5, '{"22":990001,"23":"T","24":"n","25":1.005}', 0);
+psql:/home/user/truss/docs/helix/02-design/spikes/SPIKE-002-storage-bake-off/bench/trigger_probe.sql:4: ERROR:  rule Product.price:one violated (object 1900350): scale 3 > 2
+ROLLBACK;
+ROLLBACK
+BEGIN;
+BEGIN
+INSERT INTO c.object (type_id, props, rev) VALUES (5, '{"22":990001,"23":"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx","24":"n","25":1.00}', 0);
+psql:/home/user/truss/docs/helix/02-design/spikes/SPIKE-002-storage-bake-off/bench/trigger_probe.sql:5: ERROR:  rule Product.sku:one violated (object 1900351): length 33 > 32
+ROLLBACK;
+ROLLBACK
+BEGIN;
+BEGIN
+INSERT INTO c.object (type_id, props, rev) VALUES (5, '{"22":990001,"23":"T","24":"n","25":1.00,"99":1}', 0);
+psql:/home/user/truss/docs/helix/02-design/spikes/SPIKE-002-storage-bake-off/bench/trigger_probe.sql:6: ERROR:  rule type 5:declared-properties violated (object 1900352)
+ROLLBACK;
+ROLLBACK
+BEGIN;
+BEGIN
+INSERT INTO c.object (type_id, props, rev) VALUES (5, '{"22":990001,"23":"T","24":"n","25":1.00,"26":"not base64!"}', 0);
+psql:/home/user/truss/docs/helix/02-design/spikes/SPIKE-002-storage-bake-off/bench/trigger_probe.sql:7: ERROR:  rule Product.image:one violated (object 1900353): not canonical base64
+ROLLBACK;
+ROLLBACK
+BEGIN;
+BEGIN
+INSERT INTO c.object (type_id, props, rev) VALUES (1, '{"1":990001,"2":"T990001","3":"n","5":"2026-09-25T10:00:00Z","6":["ok","tttttttttttttttttttttttttttttttt"]}', 0);
+psql:/home/user/truss/docs/helix/02-design/spikes/SPIKE-002-storage-bake-off/bench/trigger_probe.sql:8: ERROR:  rule Customer.tags:array violated (object 1900354): length 32 > 30
+ROLLBACK;
+ROLLBACK
+BEGIN;
+BEGIN
+INSERT INTO c.object (type_id, props, rev) VALUES (5, '{"22":990001,"23":"T","24":"n","25":1.00}', 0);
+INSERT 0 1
+SELECT 'control accepted' AS result;
+      result      
+------------------
+ control accepted
+(1 row)
+
+ROLLBACK;
+ROLLBACK
+Timing is on.
+SELECT count(*) AS customers_violating_name_len_60 FROM c.object o JOIN c.prop_def p ON p.type_id = o.type_id AND p.element = 'Customer.name'
+ WHERE c.validate_scalar(p.scalar_type, '{"length":{"max":60}}', o.props -> p.prop_id::text) IS NOT NULL;
+ customers_violating_name_len_60 
+---------------------------------
+                             100
+(1 row)
+
+Time: 108.417 ms
+Terminated

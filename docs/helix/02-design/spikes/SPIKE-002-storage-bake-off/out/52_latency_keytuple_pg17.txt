@@ -1,0 +1,24 @@
+== PostgreSQL 17.11 on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, 64-bit; prepared; N=3000 REPS=3
+parity: 1,1,1
+query       run      p50      p95      p99
+a_pk          1    0.037    0.049    0.071
+a_pk          2    0.037    0.049    0.102
+a_pk          3    0.037    0.048    0.075
+c_expr        1    0.037    0.046    0.067
+c_expr        2    0.037    0.048    0.075
+c_expr        3    0.037    0.049    0.072
+c_tuple       1    0.047    0.061    0.102
+c_tuple       2    0.047    0.061    0.098
+c_tuple       3    0.048    0.070    0.129
+Nested Loop (actual time=0.051..0.052 rows=1 loops=1)
+  Buffers: shared hit=8
+  ->  Index Scan using object_key_pkey on object_key k (actual time=0.029..0.029 rows=1 loops=1)
+        Index Cond: ((type_id = 1) AND (key_id = 'identity'::text) AND (key_bytes = (((convert_to('UMFK1'::text, 'UTF8'::name) || '\x0102'::bytea) || '\x04'::bytea) || convert_to('4242'::text, 'UTF8'::name))))
+        Buffers: shared hit=4
+  ->  Index Scan using object_id_type_id_key on object o (actual time=0.014..0.014 rows=1 loops=1)
+        Index Cond: (id = k.object_id)
+        Buffers: shared hit=4
+Planning:
+  Buffers: shared hit=410
+Planning Time: 0.860 ms
+Execution Time: 0.081 ms

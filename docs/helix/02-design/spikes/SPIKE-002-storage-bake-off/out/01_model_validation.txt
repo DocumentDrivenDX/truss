@@ -1,0 +1,88 @@
+UMF export: /tmp/claude-0/-home-user-umf/17d0a505-26dc-5cde-af2f-77c0c0b97b5b/scratchpad/bakeoff/umf-master
+[rev0] umf=0.7.0 core.valid=true errors=0 warnings=6; ddd.valid=true errors=0 warnings=6
+    warning EXPERIMENTAL_CORE_NULLABILITY /umf Nullability envelope is experimental; no native absence encoding or default execution is implied
+    warning EXPERIMENTAL_CORE_CARDINALITY /umf Cardinality envelope is experimental; native shape and item semantics require explicit bindings
+    warning EXPERIMENTAL_CORE_FACETS /umf Facet envelope is experimental; bounds do not establish native enforcement or value conversion
+    warning UNKNOWN_EXTENSION /vocabularies/umf.ddd Exact extension version unavailable; content retained
+    warning EXPERIMENTAL_CORE_KEYS /umf Candidate key profile; native uniqueness and author provenance are not inferred
+    warning EXPERIMENTAL_CORE_RELATIONSHIPS /umf Candidate authored relationship profile; native enforcement and storage are not inferred
+    warning DDD_INVARIANT_OPAQUE /modules/0/elements/22/extensions/umf.ddd/invariants/0 Invariant expression is preserved with its language/version; it is not interpreted or enforced
+   inspectCoreRelationships: state=known count=3 uninterpreted=[]
+   inspectCoreKeys(Customer): state=known keys=identity*,account-code
+   inspectCoreKeys(Order): state=known keys=identity*
+   inspectCoreKeys(OrderLine): state=known keys=identity*
+   inspectCoreKeys(Product): state=known keys=identity*
+[rev1] umf=0.7.0 core.valid=true errors=0 warnings=6; ddd.valid=true errors=0 warnings=6
+    warning EXPERIMENTAL_CORE_NULLABILITY /umf Nullability envelope is experimental; no native absence encoding or default execution is implied
+    warning EXPERIMENTAL_CORE_CARDINALITY /umf Cardinality envelope is experimental; native shape and item semantics require explicit bindings
+    warning EXPERIMENTAL_CORE_FACETS /umf Facet envelope is experimental; bounds do not establish native enforcement or value conversion
+    warning UNKNOWN_EXTENSION /vocabularies/umf.ddd Exact extension version unavailable; content retained
+    warning EXPERIMENTAL_CORE_KEYS /umf Candidate key profile; native uniqueness and author provenance are not inferred
+    warning EXPERIMENTAL_CORE_RELATIONSHIPS /umf Candidate authored relationship profile; native enforcement and storage are not inferred
+    warning DDD_INVARIANT_OPAQUE /modules/0/elements/23/extensions/umf.ddd/invariants/0 Invariant expression is preserved with its language/version; it is not interpreted or enforced
+[rev2] umf=0.7.0 core.valid=true errors=0 warnings=6; ddd.valid=true errors=0 warnings=6
+    warning EXPERIMENTAL_CORE_NULLABILITY /umf Nullability envelope is experimental; no native absence encoding or default execution is implied
+    warning EXPERIMENTAL_CORE_CARDINALITY /umf Cardinality envelope is experimental; native shape and item semantics require explicit bindings
+    warning EXPERIMENTAL_CORE_FACETS /umf Facet envelope is experimental; bounds do not establish native enforcement or value conversion
+    warning UNKNOWN_EXTENSION /vocabularies/umf.ddd Exact extension version unavailable; content retained
+    warning EXPERIMENTAL_CORE_KEYS /umf Candidate key profile; native uniqueness and author provenance are not inferred
+    warning EXPERIMENTAL_CORE_RELATIONSHIPS /umf Candidate authored relationship profile; native enforcement and storage are not inferred
+    warning DDD_INVARIANT_OPAQUE /modules/0/elements/23/extensions/umf.ddd/invariants/0 Invariant expression is preserved with its language/version; it is not interpreted or enforced
+[rev3] umf=0.7.0 core.valid=true errors=0 warnings=6; ddd.valid=true errors=0 warnings=6
+    warning EXPERIMENTAL_CORE_NULLABILITY /umf Nullability envelope is experimental; no native absence encoding or default execution is implied
+    warning EXPERIMENTAL_CORE_CARDINALITY /umf Cardinality envelope is experimental; native shape and item semantics require explicit bindings
+    warning EXPERIMENTAL_CORE_FACETS /umf Facet envelope is experimental; bounds do not establish native enforcement or value conversion
+    warning UNKNOWN_EXTENSION /vocabularies/umf.ddd Exact extension version unavailable; content retained
+    warning EXPERIMENTAL_CORE_KEYS /umf Candidate key profile; native uniqueness and author provenance are not inferred
+    warning EXPERIMENTAL_CORE_RELATIONSHIPS /umf Candidate authored relationship profile; native enforcement and storage are not inferred
+    warning DDD_INVARIANT_OPAQUE /modules/0/elements/23/extensions/umf.ddd/invariants/0 Invariant expression is preserved with its language/version; it is not interpreted or enforced
+   inspectCoreRelationships: state=known count=4 uninterpreted=[]
+   inspectCoreKeys(Customer): state=known keys=identity*,account-code
+   inspectCoreKeys(Order): state=known keys=identity*
+   inspectCoreKeys(OrderLine): state=known keys=identity*
+   inspectCoreKeys(Product): state=known keys=identity*
+[rev4] umf=0.7.0 core.valid=true errors=0 warnings=6; ddd.valid=true errors=0 warnings=6
+    warning EXPERIMENTAL_CORE_NULLABILITY /umf Nullability envelope is experimental; no native absence encoding or default execution is implied
+    warning EXPERIMENTAL_CORE_CARDINALITY /umf Cardinality envelope is experimental; native shape and item semantics require explicit bindings
+    warning EXPERIMENTAL_CORE_FACETS /umf Facet envelope is experimental; bounds do not establish native enforcement or value conversion
+    warning UNKNOWN_EXTENSION /vocabularies/umf.ddd Exact extension version unavailable; content retained
+    warning EXPERIMENTAL_CORE_KEYS /umf Candidate key profile; native uniqueness and author provenance are not inferred
+    warning EXPERIMENTAL_CORE_RELATIONSHIPS /umf Candidate authored relationship profile; native enforcement and storage are not inferred
+    warning DDD_INVARIANT_OPAQUE /modules/0/elements/24/extensions/umf.ddd/invariants/0 Invariant expression is preserved with its language/version; it is not interpreted or enforced
+[rev5] umf=0.7.0 core.valid=true errors=0 warnings=6; ddd.valid=true errors=0 warnings=6
+    warning EXPERIMENTAL_CORE_NULLABILITY /umf Nullability envelope is experimental; no native absence encoding or default execution is implied
+    warning EXPERIMENTAL_CORE_CARDINALITY /umf Cardinality envelope is experimental; native shape and item semantics require explicit bindings
+    warning EXPERIMENTAL_CORE_FACETS /umf Facet envelope is experimental; bounds do not establish native enforcement or value conversion
+    warning UNKNOWN_EXTENSION /vocabularies/umf.ddd Exact extension version unavailable; content retained
+    warning EXPERIMENTAL_CORE_KEYS /umf Candidate key profile; native uniqueness and author provenance are not inferred
+    warning EXPERIMENTAL_CORE_RELATIONSHIPS /umf Candidate authored relationship profile; native enforcement and storage are not inferred
+    warning DDD_INVARIANT_OPAQUE /modules/0/elements/24/extensions/umf.ddd/invariants/0 Invariant expression is preserved with its language/version; it is not interpreted or enforced
+[binding] valid=true
+[generator tables strict] status=blocked residuals=39 mappings=28 candidate=no
+[generator tables report] status=reported residuals=39 mappings=28 candidate=yes
+    residual x9: PostgreSQL finite integer domain narrows unbounded DDD integer
+    residual x7: PostgreSQL text/varchar storage and collation do not establish unrestricted DDD string semantics
+    residual x3: SQL NULL is the selected absence carrier, not an implication of DDD optionality
+    residual x2: DDD date-time does not declare instant/civil, precision or offset semantics
+    residual x3: JSONB normalizes document representation and does not enforce embedded path presence or value type
+    residual x4: DDD identity is retained; this table slice does not emit a primary or unique key
+    residual x4: PostgreSQL numeric precision and scale narrow unqualified DDD decimal
+    residual x1: DDD invariant is retained but not interpreted or enforced
+    residual x1: PostgreSQL bytea storage has a finite size bound outside DDD bytes meaning
+    residual x3: Relationship storage is handled by the relationship-dependent generator
+    residual x2: Index storage is handled by the separate index generator
+[generator tables+indexes strict] status=blocked residuals=37 mappings=28 candidate=no
+[generator tables+indexes report] status=reported residuals=37 mappings=28 candidate=yes
+    residual x9: PostgreSQL finite integer domain narrows unbounded DDD integer
+    residual x7: PostgreSQL text/varchar storage and collation do not establish unrestricted DDD string semantics
+    residual x3: SQL NULL is the selected absence carrier, not an implication of DDD optionality
+    residual x2: DDD date-time does not declare instant/civil, precision or offset semantics
+    residual x3: JSONB normalizes document representation and does not enforce embedded path presence or value type
+    residual x4: DDD identity is retained; this table slice does not emit a primary or unique key
+    residual x4: PostgreSQL numeric precision and scale narrow unqualified DDD decimal
+    residual x1: DDD invariant is retained but not interpreted or enforced
+    residual x1: PostgreSQL bytea storage has a finite size bound outside DDD bytes meaning
+    residual x3: Relationship storage is handled by the relationship-dependent generator
+[facet probe] policy Customer.name=varchar(10) (core length max 100), Order.total=numeric(5,4) (core precision 14 scale 2): status=reported residuals=37 (baseline 37); residual paths+reasons identical to baseline: true; candidate contains "name" varchar(10): true and "total" numeric(5,4): true
+[key-tuple] encodeCoreKeyTuple Customer.identity(9223372036854775807) -> 554d464b3101021339323233333732303336383534373735383037; 200 calls in 1227 ms (163 keys/s; validates the whole document per call)
+[key-tuple] refused {"decimalToken":"1.201"} for integer key: KEY_TUPLE_VALUE

@@ -1,0 +1,536 @@
+{
+ "status": "reported",
+ "target": {
+  "system": "postgresql",
+  "version": "17.4",
+  "subset": "ddd-tables-jsonb-list-partition"
+ },
+ "residuals": [
+  {
+   "path": "/extensions/umf.binding/fields/0",
+   "reason": "PostgreSQL finite integer domain narrows unbounded DDD integer",
+   "choice": {
+    "module": "sales",
+    "element": "Customer",
+    "field": "id",
+    "storage": "column",
+    "column": "id"
+   }
+  },
+  {
+   "path": "/extensions/umf.binding/fields/1",
+   "reason": "PostgreSQL text/varchar storage and collation do not establish unrestricted DDD string semantics",
+   "choice": {
+    "module": "sales",
+    "element": "Customer",
+    "field": "code",
+    "storage": "column",
+    "column": "code"
+   }
+  },
+  {
+   "path": "/extensions/umf.binding/fields/2",
+   "reason": "PostgreSQL text/varchar storage and collation do not establish unrestricted DDD string semantics",
+   "choice": {
+    "module": "sales",
+    "element": "Customer",
+    "field": "name",
+    "storage": "column",
+    "column": "name"
+   }
+  },
+  {
+   "path": "/extensions/umf.binding/fields/3",
+   "reason": "PostgreSQL text/varchar storage and collation do not establish unrestricted DDD string semantics",
+   "choice": {
+    "module": "sales",
+    "element": "Customer",
+    "field": "email",
+    "storage": "column",
+    "column": "email"
+   }
+  },
+  {
+   "path": "/extensions/umf.binding/fields/3",
+   "reason": "SQL NULL is the selected absence carrier, not an implication of DDD optionality",
+   "choice": {
+    "module": "sales",
+    "element": "Customer",
+    "field": "email",
+    "storage": "column",
+    "column": "email"
+   }
+  },
+  {
+   "path": "/extensions/umf.binding/fields/4",
+   "reason": "DDD date-time does not declare instant/civil, precision or offset semantics",
+   "choice": {
+    "module": "sales",
+    "element": "Customer",
+    "field": "createdAt",
+    "storage": "column",
+    "column": "createdAt"
+   }
+  },
+  {
+   "path": "/extensions/umf.binding/fields/5",
+   "reason": "JSONB normalizes document representation and does not enforce embedded path presence or value type",
+   "choice": {
+    "module": "sales",
+    "element": "Customer",
+    "field": "tags",
+    "storage": "embedded",
+    "documentColumn": "payload",
+    "path": [
+     "tags"
+    ]
+   }
+  },
+  {
+   "path": "/extensions/umf.binding/fields/6",
+   "reason": "JSONB normalizes document representation and does not enforce embedded path presence or value type",
+   "choice": {
+    "module": "sales",
+    "element": "Customer",
+    "field": "attributes",
+    "storage": "embedded",
+    "documentColumn": "payload",
+    "path": [
+     "attributes"
+    ]
+   }
+  },
+  {
+   "path": "/extensions/umf.binding/fields/7",
+   "reason": "JSONB normalizes document representation and does not enforce embedded path presence or value type",
+   "choice": {
+    "module": "sales",
+    "element": "Customer",
+    "field": "address",
+    "storage": "embedded",
+    "documentColumn": "payload",
+    "path": [
+     "address"
+    ]
+   }
+  },
+  {
+   "path": "/extensions/umf.binding/elements/0",
+   "reason": "DDD identity is retained; this table slice does not emit a primary or unique key",
+   "choice": {
+    "fields": [
+     "id"
+    ],
+    "scope": "context"
+   }
+  },
+  {
+   "path": "/extensions/umf.binding/fields/8",
+   "reason": "PostgreSQL finite integer domain narrows unbounded DDD integer",
+   "choice": {
+    "module": "sales",
+    "element": "Order",
+    "field": "id",
+    "storage": "column",
+    "column": "id"
+   }
+  },
+  {
+   "path": "/extensions/umf.binding/fields/9",
+   "reason": "DDD date-time does not declare instant/civil, precision or offset semantics",
+   "choice": {
+    "module": "sales",
+    "element": "Order",
+    "field": "placedAt",
+    "storage": "column",
+    "column": "placedAt"
+   }
+  },
+  {
+   "path": "/extensions/umf.binding/fields/10",
+   "reason": "PostgreSQL text/varchar storage and collation do not establish unrestricted DDD string semantics",
+   "choice": {
+    "module": "sales",
+    "element": "Order",
+    "field": "status",
+    "storage": "column",
+    "column": "status"
+   }
+  },
+  {
+   "path": "/extensions/umf.binding/fields/11",
+   "reason": "PostgreSQL text/varchar storage and collation do not establish unrestricted DDD string semantics",
+   "choice": {
+    "module": "sales",
+    "element": "Order",
+    "field": "channel",
+    "storage": "column",
+    "column": "channel"
+   }
+  },
+  {
+   "path": "/extensions/umf.binding/fields/11",
+   "reason": "SQL NULL is the selected absence carrier, not an implication of DDD optionality",
+   "choice": {
+    "module": "sales",
+    "element": "Order",
+    "field": "channel",
+    "storage": "column",
+    "column": "channel"
+   }
+  },
+  {
+   "path": "/extensions/umf.binding/fields/12",
+   "reason": "PostgreSQL numeric precision and scale narrow unqualified DDD decimal",
+   "choice": {
+    "module": "sales",
+    "element": "Order",
+    "field": "total",
+    "storage": "column",
+    "column": "total"
+   }
+  },
+  {
+   "path": "/extensions/umf.binding/fields/13",
+   "reason": "PostgreSQL finite integer domain narrows unbounded DDD integer",
+   "choice": {
+    "module": "sales",
+    "element": "Order",
+    "field": "customerId",
+    "storage": "column",
+    "column": "customerId"
+   }
+  },
+  {
+   "path": "/extensions/umf.binding/elements/1",
+   "reason": "DDD identity is retained; this table slice does not emit a primary or unique key",
+   "choice": {
+    "fields": [
+     "id"
+    ],
+    "scope": "context"
+   }
+  },
+  {
+   "path": "/extensions/umf.binding/fields/14",
+   "reason": "PostgreSQL finite integer domain narrows unbounded DDD integer",
+   "choice": {
+    "module": "sales",
+    "element": "OrderLine",
+    "field": "id",
+    "storage": "column",
+    "column": "id"
+   }
+  },
+  {
+   "path": "/extensions/umf.binding/fields/15",
+   "reason": "PostgreSQL finite integer domain narrows unbounded DDD integer",
+   "choice": {
+    "module": "sales",
+    "element": "OrderLine",
+    "field": "lineNo",
+    "storage": "column",
+    "column": "lineNo"
+   }
+  },
+  {
+   "path": "/extensions/umf.binding/fields/16",
+   "reason": "PostgreSQL finite integer domain narrows unbounded DDD integer",
+   "choice": {
+    "module": "sales",
+    "element": "OrderLine",
+    "field": "quantity",
+    "storage": "column",
+    "column": "quantity"
+   }
+  },
+  {
+   "path": "/extensions/umf.binding/fields/17",
+   "reason": "PostgreSQL numeric precision and scale narrow unqualified DDD decimal",
+   "choice": {
+    "module": "sales",
+    "element": "OrderLine",
+    "field": "unitPrice",
+    "storage": "column",
+    "column": "unitPrice"
+   }
+  },
+  {
+   "path": "/extensions/umf.binding/fields/18",
+   "reason": "PostgreSQL numeric precision and scale narrow unqualified DDD decimal",
+   "choice": {
+    "module": "sales",
+    "element": "OrderLine",
+    "field": "lineTotal",
+    "storage": "column",
+    "column": "lineTotal"
+   }
+  },
+  {
+   "path": "/extensions/umf.binding/fields/19",
+   "reason": "PostgreSQL finite integer domain narrows unbounded DDD integer",
+   "choice": {
+    "module": "sales",
+    "element": "OrderLine",
+    "field": "orderId",
+    "storage": "column",
+    "column": "orderId"
+   }
+  },
+  {
+   "path": "/extensions/umf.binding/fields/20",
+   "reason": "PostgreSQL finite integer domain narrows unbounded DDD integer",
+   "choice": {
+    "module": "sales",
+    "element": "OrderLine",
+    "field": "productId",
+    "storage": "column",
+    "column": "productId"
+   }
+  },
+  {
+   "path": "/extensions/umf.binding/elements/2",
+   "reason": "DDD identity is retained; this table slice does not emit a primary or unique key",
+   "choice": {
+    "fields": [
+     "id"
+    ],
+    "scope": "context"
+   }
+  },
+  {
+   "path": "/modules/0/elements/22/extensions/umf.ddd/invariants/0",
+   "reason": "DDD invariant is retained but not interpreted or enforced",
+   "choice": {
+    "id": "line-total",
+    "scope": "definition",
+    "language": "postgresql",
+    "version": "17",
+    "expression": "\"lineTotal\" = \"quantity\" * \"unitPrice\"",
+    "references": [
+     {
+      "module": "sales",
+      "element": "OrderLine"
+     }
+    ]
+   }
+  },
+  {
+   "path": "/extensions/umf.binding/fields/21",
+   "reason": "PostgreSQL finite integer domain narrows unbounded DDD integer",
+   "choice": {
+    "module": "sales",
+    "element": "Product",
+    "field": "id",
+    "storage": "column",
+    "column": "id"
+   }
+  },
+  {
+   "path": "/extensions/umf.binding/fields/22",
+   "reason": "PostgreSQL text/varchar storage and collation do not establish unrestricted DDD string semantics",
+   "choice": {
+    "module": "sales",
+    "element": "Product",
+    "field": "sku",
+    "storage": "column",
+    "column": "sku"
+   }
+  },
+  {
+   "path": "/extensions/umf.binding/fields/23",
+   "reason": "PostgreSQL text/varchar storage and collation do not establish unrestricted DDD string semantics",
+   "choice": {
+    "module": "sales",
+    "element": "Product",
+    "field": "name",
+    "storage": "column",
+    "column": "name"
+   }
+  },
+  {
+   "path": "/extensions/umf.binding/fields/24",
+   "reason": "PostgreSQL numeric precision and scale narrow unqualified DDD decimal",
+   "choice": {
+    "module": "sales",
+    "element": "Product",
+    "field": "price",
+    "storage": "column",
+    "column": "price"
+   }
+  },
+  {
+   "path": "/extensions/umf.binding/fields/25",
+   "reason": "PostgreSQL bytea storage has a finite size bound outside DDD bytes meaning",
+   "choice": {
+    "module": "sales",
+    "element": "Product",
+    "field": "image",
+    "storage": "column",
+    "column": "image"
+   }
+  },
+  {
+   "path": "/extensions/umf.binding/fields/25",
+   "reason": "SQL NULL is the selected absence carrier, not an implication of DDD optionality",
+   "choice": {
+    "module": "sales",
+    "element": "Product",
+    "field": "image",
+    "storage": "column",
+    "column": "image"
+   }
+  },
+  {
+   "path": "/extensions/umf.binding/elements/3",
+   "reason": "DDD identity is retained; this table slice does not emit a primary or unique key",
+   "choice": {
+    "fields": [
+     "id"
+    ],
+    "scope": "context"
+   }
+  },
+  {
+   "path": "/extensions/umf.binding/relationships/0",
+   "reason": "Relationship storage is handled by the relationship-dependent generator",
+   "choice": {
+    "module": "sales",
+    "name": "customer",
+    "storage": "foreign_key"
+   }
+  },
+  {
+   "path": "/extensions/umf.binding/relationships/1",
+   "reason": "Relationship storage is handled by the relationship-dependent generator",
+   "choice": {
+    "module": "sales",
+    "name": "lines",
+    "storage": "foreign_key"
+   }
+  },
+  {
+   "path": "/extensions/umf.binding/relationships/2",
+   "reason": "Relationship storage is handled by the relationship-dependent generator",
+   "choice": {
+    "module": "sales",
+    "name": "product",
+    "storage": "foreign_key"
+   }
+  }
+ ],
+ "mappings": [
+  {
+   "sourcePath": "/extensions/umf.binding/fields/0",
+   "target": "sales.customers.id"
+  },
+  {
+   "sourcePath": "/extensions/umf.binding/fields/1",
+   "target": "sales.customers.code"
+  },
+  {
+   "sourcePath": "/extensions/umf.binding/fields/2",
+   "target": "sales.customers.name"
+  },
+  {
+   "sourcePath": "/extensions/umf.binding/fields/3",
+   "target": "sales.customers.email"
+  },
+  {
+   "sourcePath": "/extensions/umf.binding/fields/4",
+   "target": "sales.customers.createdAt"
+  },
+  {
+   "sourcePath": "/extensions/umf.binding/fields/5",
+   "target": "sales.customers.payload"
+  },
+  {
+   "sourcePath": "/extensions/umf.binding/elements/0",
+   "target": "sales.customers"
+  },
+  {
+   "sourcePath": "/extensions/umf.binding/fields/8",
+   "target": "sales.orders.id"
+  },
+  {
+   "sourcePath": "/extensions/umf.binding/fields/9",
+   "target": "sales.orders.placedAt"
+  },
+  {
+   "sourcePath": "/extensions/umf.binding/fields/10",
+   "target": "sales.orders.status"
+  },
+  {
+   "sourcePath": "/extensions/umf.binding/fields/11",
+   "target": "sales.orders.channel"
+  },
+  {
+   "sourcePath": "/extensions/umf.binding/fields/12",
+   "target": "sales.orders.total"
+  },
+  {
+   "sourcePath": "/extensions/umf.binding/fields/13",
+   "target": "sales.orders.customerId"
+  },
+  {
+   "sourcePath": "/extensions/umf.binding/elements/1",
+   "target": "sales.orders"
+  },
+  {
+   "sourcePath": "/extensions/umf.binding/fields/14",
+   "target": "sales.order_lines.id"
+  },
+  {
+   "sourcePath": "/extensions/umf.binding/fields/15",
+   "target": "sales.order_lines.lineNo"
+  },
+  {
+   "sourcePath": "/extensions/umf.binding/fields/16",
+   "target": "sales.order_lines.quantity"
+  },
+  {
+   "sourcePath": "/extensions/umf.binding/fields/17",
+   "target": "sales.order_lines.unitPrice"
+  },
+  {
+   "sourcePath": "/extensions/umf.binding/fields/18",
+   "target": "sales.order_lines.lineTotal"
+  },
+  {
+   "sourcePath": "/extensions/umf.binding/fields/19",
+   "target": "sales.order_lines.orderId"
+  },
+  {
+   "sourcePath": "/extensions/umf.binding/fields/20",
+   "target": "sales.order_lines.productId"
+  },
+  {
+   "sourcePath": "/extensions/umf.binding/elements/2",
+   "target": "sales.order_lines"
+  },
+  {
+   "sourcePath": "/extensions/umf.binding/fields/21",
+   "target": "sales.products.id"
+  },
+  {
+   "sourcePath": "/extensions/umf.binding/fields/22",
+   "target": "sales.products.sku"
+  },
+  {
+   "sourcePath": "/extensions/umf.binding/fields/23",
+   "target": "sales.products.name"
+  },
+  {
+   "sourcePath": "/extensions/umf.binding/fields/24",
+   "target": "sales.products.price"
+  },
+  {
+   "sourcePath": "/extensions/umf.binding/fields/25",
+   "target": "sales.products.image"
+  },
+  {
+   "sourcePath": "/extensions/umf.binding/elements/3",
+   "target": "sales.products"
+  }
+ ]
+}

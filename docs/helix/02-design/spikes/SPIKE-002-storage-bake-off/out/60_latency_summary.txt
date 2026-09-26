@@ -1,0 +1,60 @@
+== 51_latency_heavy_prepared_pg17.txt: median of per-run p50 / p95 (ms); ratio = C / A
+shape                    A p50   A p95   C p50   C p95  p50 C/A  p95 C/A  within 2x (p95)
+q3_hop2                  0.197   0.571   0.431   1.322     2.19     2.32  NO
+q4_hop3                  0.336   0.920   0.589   1.865     1.75     2.03  NO
+
+== 51_latency_heavy_prepared_pg17_scale5.txt: median of per-run p50 / p95 (ms); ratio = C / A
+shape                    A p50   A p95   C p50   C p95  p50 C/A  p95 C/A  within 2x (p95)
+q3_hop2                  0.259   0.798   0.535   1.511     2.07     1.89  yes
+q4_hop3                  0.414   1.233   0.720   2.229     1.74     1.81  yes
+
+== 51_latency_prepared_pg17.txt: median of per-run p50 / p95 (ms); ratio = C / A
+shape                    A p50   A p95   C p50   C p95  p50 C/A  p95 C/A  within 2x (p95)
+q1_fetch                 0.037   0.048   0.038   0.053     1.03     1.10  yes
+q2_hop1                  0.041   0.056   0.058   0.078     1.41     1.39  yes
+q3_hop2                  0.063   0.117   0.092   0.199     1.46     1.70  yes
+q4_hop3                  0.079   0.157   0.109   0.255     1.38     1.62  yes
+q5_range                 0.111   0.144   0.105   0.138     0.95     0.96  yes
+q6_update                0.248   0.348   0.260   0.463     1.05     1.33  yes
+q6_update_nojournal      0.248   0.348   0.255   0.383     1.03     1.10  yes
+
+== 51_latency_prepared_pg17_scale5.txt: median of per-run p50 / p95 (ms); ratio = C / A
+shape                    A p50   A p95   C p50   C p95  p50 C/A  p95 C/A  within 2x (p95)
+q1_fetch                 0.039   0.052   0.040   0.051     1.03     0.98  yes
+q2_hop1                  0.044   0.059   0.068   0.089     1.55     1.51  yes
+q3_hop2                  0.073   0.153   0.123   0.313     1.68     2.05  NO
+q4_hop3                  0.094   0.231   0.140   0.334     1.49     1.45  yes
+q5_range                 0.362   0.485   0.491   0.709     1.36     1.46  yes
+q6_update                0.365   0.478   0.260   0.474     0.71     0.99  yes
+q6_update_nojournal      0.365   0.478   0.229   0.332     0.63     0.69  yes
+
+== 51_latency_prepared_pg17_with_checks.txt: median of per-run p50 / p95 (ms); ratio = C / A
+shape                    A p50   A p95   C p50   C p95  p50 C/A  p95 C/A  within 2x (p95)
+q1_fetch                 0.037   0.051   0.037   0.048     1.00     0.94  yes
+q2_hop1                  0.040   0.055   0.061   0.094     1.52     1.71  yes
+q3_hop2                  0.061   0.106   0.097   0.228     1.59     2.15  NO
+q4_hop3                  0.080   0.163   0.118   0.291     1.47     1.79  yes
+q5_range                 0.113   0.150   0.099   0.131     0.88     0.87  yes
+q6_update                0.224   0.346   1.031   1.575     4.60     4.55  NO
+q6_update_nojournal      0.224   0.346   0.955   1.285     4.26     3.71  NO
+
+== 51_latency_simple_pg17.txt: median of per-run p50 / p95 (ms); ratio = C / A
+shape                    A p50   A p95   C p50   C p95  p50 C/A  p95 C/A  within 2x (p95)
+q1_fetch                 0.052   0.069   0.082   0.108     1.58     1.57  yes
+q2_hop1                  0.055   0.073   0.337   0.484     6.13     6.63  NO
+q3_hop2                  0.136   0.204   0.468   0.648     3.44     3.18  NO
+q4_hop3                  0.208   0.352   0.731   0.985     3.51     2.80  NO
+q5_range                 0.115   0.150   0.161   0.288     1.40     1.92  yes
+q6_update                0.244   0.358   0.556   0.856     2.28     2.39  NO
+q6_update_nojournal      0.244   0.358   0.309   0.510     1.27     1.42  yes
+
+== 51_latency_simple_pg17_with_checks.txt: median of per-run p50 / p95 (ms); ratio = C / A
+shape                    A p50   A p95   C p50   C p95  p50 C/A  p95 C/A  within 2x (p95)
+q1_fetch                 0.051   0.064   0.080   0.101     1.57     1.58  yes
+q2_hop1                  0.055   0.069   0.350   0.512     6.36     7.42  NO
+q3_hop2                  0.136   0.198   0.460   0.628     3.38     3.17  NO
+q4_hop3                  0.198   0.302   0.719   0.976     3.63     3.23  NO
+q5_range                 0.116   0.170   0.154   0.250     1.33     1.47  yes
+q6_update                0.214   0.354   1.346   1.954     6.29     5.52  NO
+q6_update_nojournal      0.214   0.354   1.090   1.584     5.09     4.47  NO
+

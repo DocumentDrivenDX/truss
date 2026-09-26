@@ -1,0 +1,143 @@
+{
+ "fieldTypes": [
+  {
+   "module": "sales",
+   "element": "Customer",
+   "field": "id",
+   "sqlType": "bigint"
+  },
+  {
+   "module": "sales",
+   "element": "Customer",
+   "field": "code",
+   "sqlType": "varchar(20)"
+  },
+  {
+   "module": "sales",
+   "element": "Customer",
+   "field": "name",
+   "sqlType": "varchar(100)"
+  },
+  {
+   "module": "sales",
+   "element": "Customer",
+   "field": "email",
+   "sqlType": "varchar(200)"
+  },
+  {
+   "module": "sales",
+   "element": "Customer",
+   "field": "createdAt",
+   "sqlType": "timestamptz(6)"
+  },
+  {
+   "module": "sales",
+   "element": "Order",
+   "field": "id",
+   "sqlType": "bigint"
+  },
+  {
+   "module": "sales",
+   "element": "Order",
+   "field": "placedAt",
+   "sqlType": "timestamptz(6)"
+  },
+  {
+   "module": "sales",
+   "element": "Order",
+   "field": "status",
+   "sqlType": "varchar(20)"
+  },
+  {
+   "module": "sales",
+   "element": "Order",
+   "field": "channel",
+   "sqlType": "varchar(20)"
+  },
+  {
+   "module": "sales",
+   "element": "Order",
+   "field": "total",
+   "sqlType": "numeric(14,2)"
+  },
+  {
+   "module": "sales",
+   "element": "Order",
+   "field": "customerId",
+   "sqlType": "bigint"
+  },
+  {
+   "module": "sales",
+   "element": "OrderLine",
+   "field": "id",
+   "sqlType": "bigint"
+  },
+  {
+   "module": "sales",
+   "element": "OrderLine",
+   "field": "lineNo",
+   "sqlType": "smallint"
+  },
+  {
+   "module": "sales",
+   "element": "OrderLine",
+   "field": "quantity",
+   "sqlType": "integer"
+  },
+  {
+   "module": "sales",
+   "element": "OrderLine",
+   "field": "unitPrice",
+   "sqlType": "numeric(12,2)"
+  },
+  {
+   "module": "sales",
+   "element": "OrderLine",
+   "field": "lineTotal",
+   "sqlType": "numeric(14,2)"
+  },
+  {
+   "module": "sales",
+   "element": "OrderLine",
+   "field": "orderId",
+   "sqlType": "bigint"
+  },
+  {
+   "module": "sales",
+   "element": "OrderLine",
+   "field": "productId",
+   "sqlType": "bigint"
+  },
+  {
+   "module": "sales",
+   "element": "Product",
+   "field": "id",
+   "sqlType": "bigint"
+  },
+  {
+   "module": "sales",
+   "element": "Product",
+   "field": "sku",
+   "sqlType": "varchar(32)"
+  },
+  {
+   "module": "sales",
+   "element": "Product",
+   "field": "name",
+   "sqlType": "varchar(200)"
+  },
+  {
+   "module": "sales",
+   "element": "Product",
+   "field": "price",
+   "sqlType": "numeric(12,2)"
+  },
+  {
+   "module": "sales",
+   "element": "Product",
+   "field": "image",
+   "sqlType": "bytea"
+  }
+ ],
+ "partitionFamilies": []
+}

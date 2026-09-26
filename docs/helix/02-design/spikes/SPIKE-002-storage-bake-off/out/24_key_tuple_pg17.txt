@@ -1,0 +1,11 @@
+normative vectors: 10 match, 0 differ; refusals: 4/4 refused by the local encoder (UMF's encoder also checks facets/domains the local one does not)
+Customer.identity [{"integerToken":"9223372036854775807"}]: UMF 554d464b3101021339323233333732303336383534373735383037 local 554d464b3101021339323233333732303336383534373735383037 equal
+Customer.identity [{"integerToken":"-42"}]: UMF 554d464b310102032d3432 local 554d464b310102032d3432 equal
+Customer.account-code [{"string":"C0000001"}]: UMF 554d464b310104084330303030303031 local 554d464b310104084330303030303031 equal
+Customer.account-code [{"string":"é"}]: UMF 554d464b3101040365cc81 local 554d464b3101040365cc81 equal
+== PostgreSQL 17.11 on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, 64-bit
+encoded 546568 key tuples (read + encode in TS) in 2860 ms; loaded with COPY
+cross-check TS bytes vs SQL recomputation: 0 mismatches
+size: c.object_key heap+pk = 63.2 MB
+size: expression key indexes (obj_key_*) = 12.0 MB
+duplicate account-code tuple insert: duplicate key value violates unique constraint "object_key_pkey"

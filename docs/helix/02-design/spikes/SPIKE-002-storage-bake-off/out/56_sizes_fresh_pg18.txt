@@ -1,0 +1,37 @@
+== fresh load (setup.sh), after the enforcement and fidelity suites only (their writes roll back); PostgreSQL 18.6 on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, 64-bit
+        rel        |  rows  | heap_mb | idx_mb | total_mb 
+-------------------+--------+---------+--------+----------
+ c.edge            | 919076 |    67.1 |  111.0 |    178.1
+ c.object          | 542508 |    83.7 |   42.5 |    126.3
+ sales.customers   |  20000 |     4.6 |    1.1 |      5.7
+ sales.order_lines | 401568 |    29.6 |   13.6 |     43.3
+ sales.orders      | 100000 |     7.6 |    6.8 |     14.4
+ sales.products    |   5000 |     0.4 |    0.1 |      0.6
+(6 rows)
+
+ schema | total_mb 
+--------+----------
+ c      |    304.7
+ sales  |     64.0
+(2 rows)
+
+         indexrelname          |  mb  
+-------------------------------+------
+ edge_source_idx               | 35.6
+ edge_target_idx               | 35.6
+ edge_pkey                     | 19.7
+ object_id_type_id_key         | 16.3
+ object_pkey                   | 11.6
+ edge_max_src_r4               |  8.6
+ edge_max_tgt_r3               |  8.6
+ obj_key_t4_identity           |  8.6
+ obj_idx_t3_orders_total_btree |  2.6
+ obj_key_t3_identity           |  2.2
+ edge_max_src_r2               |  2.2
+ obj_key_t1_account_code       |  0.6
+ edge_max_tgt_r1               |  0.4
+ edge_max_src_r1               |  0.4
+ obj_key_t1_identity           |  0.4
+ obj_key_t5_identity           |  0.1
+(16 rows)
+

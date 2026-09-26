@@ -1,0 +1,13 @@
+== PostgreSQL 17.11 on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, 64-bit
+-- current model (5 types) (c.object indexes: 8, c.edge indexes: 8)
+  q1_fetch  planning ms  A  0.345   C  0.523
+  q2_hop1   planning ms  A  0.272   C  1.104
+  q3_hop2   planning ms  A  0.571   C  1.214
+  q4_hop3   planning ms  A  0.744   C  1.436
+  q5_range  planning ms  A  0.322   C  0.538
+-- after 100 synthetic types (+200 object, +100 edge partial indexes) (c.object indexes: 208, c.edge indexes: 108)
+  q1_fetch  planning ms  A  0.349   C  4.699
+  q2_hop1   planning ms  A  0.262   C  7.555
+  q3_hop2   planning ms  A  0.586   C  8.237
+  q4_hop3   planning ms  A  0.737   C  7.986
+  q5_range  planning ms  A  0.319   C  4.743

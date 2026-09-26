@@ -1,0 +1,8 @@
+shape	A lines (SQL)	C lines (instantiated SQL)	C generic template	template lines (TS)
+q1_fetch	1	2	cFetch	2
+q2_hop1	1	4	cPath	5
+q3_hop2	3	5	cPath	5
+q4_hop3	4	6	cPath	5
+q5_range	1	2	cRange	2
+q6_update	1	4	cUpdate	7
+C shared helpers (prop/typeOf/relId/keyExpr + catalog.valueExpr): 5 lines

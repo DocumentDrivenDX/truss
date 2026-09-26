@@ -135,11 +135,10 @@ complex part; in truss, UMF supplies that metadata. Their paper has not been
 read directly; this rests on a search summary.
 
 **Follow-up research:**
-- Bake-off between UMF-generated per-type tables and a minimal truss on one UMF
-  model plus a schema revision, measuring revision cost, enforced assertions,
-  data loss, traversal effort and latency. SPIKE-001 already answers the AGE
-  option: building on AGE would still require most of truss, on a base that
-  loses data.
+- Done 2026-09-25: the bake-off between UMF-generated per-type tables and a
+  minimal truss ran as [SPIKE-002](../02-design/spikes/SPIKE-002-storage-bake-off.md)
+  and recommends generic catalog storage; SPIKE-001 had already answered the
+  AGE option.
 - Read managed providers' extension lists from an unblocked network.
 - Validate the target segment and name the first consumer.
 

@@ -1,0 +1,39 @@
+== PostgreSQL 17.11 on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, 64-bit; variant=a
+
+### R1 add optional Customer.phone [a]
+  step ALTER ADD COLUMN: ok in 4 ms
+  elapsed: 4 ms; rows changed: 0; table rewrites (new relfilenode): none
+  strongest locks held by the revision session: sales.customers=AccessExclusiveLock
+  writer: 2514 tx total, 4 overlapping the revision; p50 before 0.82 ms; max latency (incl. schedule lag) while revising 3.4 ms; pgbench exit 0
+  violation detection before acceptance: n/a or none found
+
+### R2 tighten Customer.name 100 -> 60 [a]
+  step attempt ALTER TYPE varchar(60): REJECTED (detected before acceptance) in 5 ms: value too long for type character varying(60)
+  step list violators: ok in 6 ms
+  step remediate (truncate) + ALTER TYPE: ok in 57 ms
+  elapsed: 68 ms; rows changed: list violators: 100 violating rows listed (first: {"id":"121","char_length":90}); remediate (truncate) + ALTER TYPE: 100 rows (UPDATE); table rewrites (new relfilenode): customers
+  strongest locks held by the revision session: sales.customers=AccessExclusiveLock
+  writer: 2487 tx total, 14 overlapping the revision; p50 before 0.84 ms; max latency (incl. schedule lag) while revising 95.9 ms; pgbench exit 0
+  violation detection before acceptance: DDL refused: value too long for type character varying(60) (first error only)
+
+### R3 add Customer -> Customer referredBy [a]
+  step ADD COLUMN + FK + index: ok in 10 ms
+  elapsed: 10 ms; rows changed: 0; table rewrites (new relfilenode): none
+  strongest locks held by the revision session: sales.customers=AccessExclusiveLock
+  writer: 2536 tx total, 6 overlapping the revision; p50 before 0.80 ms; max latency (incl. schedule lag) while revising 6.8 ms; pgbench exit 0
+  violation detection before acceptance: n/a or none found
+
+### R4 Customer.email one -> array [a]
+  step ALTER TYPE varchar(200)[] USING: ok in 62 ms
+  elapsed: 62 ms; rows changed: 0; table rewrites (new relfilenode): customers
+  strongest locks held by the revision session: sales.customers=AccessExclusiveLock
+  writer: 2566 tx total, 8 overlapping the revision; p50 before 0.93 ms; max latency (incl. schedule lag) while revising 59.2 ms; pgbench exit 0
+  violation detection before acceptance: n/a or none found
+
+### R5 Order.channel -> required, backfill [a]
+  step backfill UPDATE: ok in 451 ms
+  step SET NOT NULL: ok in 14 ms
+  elapsed: 465 ms; rows changed: backfill UPDATE: 29870 rows (UPDATE); table rewrites (new relfilenode): none
+  strongest locks held by the revision session: sales.orders=AccessExclusiveLock
+  writer: 2511 tx total, 51 overlapping the revision; p50 before 0.87 ms; max latency (incl. schedule lag) while revising 44.6 ms; pgbench exit 0
+  violation detection before acceptance: n/a or none found

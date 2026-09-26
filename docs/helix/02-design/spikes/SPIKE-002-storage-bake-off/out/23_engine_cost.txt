@@ -1,0 +1,4 @@
+Bun 1.3.11
+Product: 200000 parse+encode+validate+render in 1552 ms = 7.76 us/record (128873 records/s, violations=0)
+OrderLine: 200000 parse+encode+validate+render in 3521 ms = 17.60 us/record (56810 records/s, violations=0)
+Customer: 200000 parse+encode+validate+render in 3859 ms = 19.29 us/record (51827 records/s, violations=0)

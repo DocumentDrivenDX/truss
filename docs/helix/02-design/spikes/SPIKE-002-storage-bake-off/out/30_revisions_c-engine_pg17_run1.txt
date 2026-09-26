@@ -1,0 +1,49 @@
+== PostgreSQL 17.11 on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, 64-bit; variant=c-engine
+  [plan rev1] catalog statements=45; changed rules=ck_t1_p27_value,ck_t1_declared_only; dropped=ck_t1_declared_only; new indexes=0; transforms=0
+
+### R1 add optional Customer.phone [c-engine]
+  step accept: catalog rows + detection: ok in 27 ms
+  step verify: count violators of changed rules: ok in 13 ms
+  elapsed: 41 ms; rows changed: accept: catalog rows + detection: 32 catalog rows inserted/updated; table rewrites (new relfilenode): none
+  strongest locks held by the revision session: c.prop_def=RowExclusiveLock, c.rel_def=RowExclusiveLock, c.object=AccessShareLock
+  writer: 2524 tx total, 3 overlapping the revision; p50 before 1.29 ms; max latency (incl. schedule lag) while revising 21.4 ms; pgbench exit 0
+  violation detection before acceptance: n/a or none found
+  [plan rev2] catalog statements=45; changed rules=ck_t1_p3_value; dropped=ck_t1_p3_value; new indexes=0; transforms=0
+
+### R2 tighten Customer.name 100 -> 60 [c-engine]
+  step attempt: catalog + detection: REJECTED (detected before acceptance) in 26 ms: REJECT 100 stored objects violate the new rule (first ids: 299,1300,2434,3071,3117)
+  step remediate (generic truncate transform): ok in 61 ms
+  step accept: catalog rows + detection: ok in 23 ms
+  step verify: count violators of changed rules: ok in 17 ms
+  elapsed: 127 ms; rows changed: attempt: catalog + detection: 32 catalog rows inserted/updated; remediate (generic truncate transform): 100 rows (INSERT); accept: catalog rows + detection: 32 catalog rows inserted/updated; table rewrites (new relfilenode): none
+  strongest locks held by the revision session: c.prop_def=RowExclusiveLock, c.rel_def=RowExclusiveLock, c.object=RowExclusiveLock, c.journal=RowExclusiveLock
+  writer: 2554 tx total, 23 overlapping the revision; p50 before 1.23 ms; max latency (incl. schedule lag) while revising 4.4 ms; pgbench exit 0
+  violation detection before acceptance: 100 stored objects violate the new rule (first ids: 299,1300,2434,3071,3117)
+  [plan rev3] catalog statements=47; changed rules=none; dropped=none; new indexes=1; transforms=0
+
+### R3 add Customer -> Customer referredBy [c-engine]
+  step accept: catalog rows + detection: ok in 7 ms
+  elapsed: 7 ms; rows changed: accept: catalog rows + detection: 34 catalog rows inserted/updated; table rewrites (new relfilenode): none
+  strongest locks held by the revision session: c.rel_def=RowExclusiveLock, c.prop_def=RowExclusiveLock
+  writer: 2526 tx total, 6 overlapping the revision; p50 before 1.20 ms; max latency (incl. schedule lag) while revising 1.4 ms; pgbench exit 0
+  violation detection before acceptance: n/a or none found
+  [plan rev4] catalog statements=47; changed rules=ck_t1_p4_array; dropped=ck_t1_p4_value; new indexes=0; transforms=1
+
+### R4 Customer.email one -> array [c-engine]
+  step accept: catalog rows + detection: ok in 6 ms
+  step generic data transform + journal: ok in 399 ms
+  step verify: count violators of changed rules: ok in 251 ms
+  elapsed: 657 ms; rows changed: accept: catalog rows + detection: 33 catalog rows inserted/updated; generic data transform + journal: 16059 rows (INSERT); table rewrites (new relfilenode): none
+  strongest locks held by the revision session: c.rel_def=RowExclusiveLock, c.prop_def=RowExclusiveLock, c.journal=ExclusiveLock, c.object=RowExclusiveLock
+  writer: 2520 tx total, 58 overlapping the revision; p50 before 1.16 ms; max latency (incl. schedule lag) while revising 3.5 ms; pgbench exit 0
+  violation detection before acceptance: n/a or none found
+  [plan rev5] catalog statements=47; changed rules=ck_t3_p15_required; dropped=none; new indexes=0; transforms=1
+
+### R5 Order.channel -> required, backfill [c-engine]
+  step accept: catalog rows + detection: ok in 7 ms
+  step generic data transform + journal: ok in 802 ms
+  step verify: count violators of changed rules: ok in 76 ms
+  elapsed: 886 ms; rows changed: accept: catalog rows + detection: 33 catalog rows inserted/updated; generic data transform + journal: 29870 rows (INSERT); table rewrites (new relfilenode): none
+  strongest locks held by the revision session: c.prop_def=RowExclusiveLock, c.rel_def=RowExclusiveLock, c.journal=RowExclusiveLock, c.object=ExclusiveLock
+  writer: 2441 tx total, 99 overlapping the revision; p50 before 1.21 ms; max latency (incl. schedule lag) while revising 39.9 ms; pgbench exit 0
+  violation detection before acceptance: n/a or none found

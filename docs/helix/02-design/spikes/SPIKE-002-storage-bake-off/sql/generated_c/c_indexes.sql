@@ -1,0 +1,11 @@
+CREATE UNIQUE INDEX IF NOT EXISTS obj_key_t1_identity ON c.object (((props->>'1')::bigint)) WHERE type_id = 1;
+CREATE UNIQUE INDEX IF NOT EXISTS obj_key_t1_account_code ON c.object (((props->>'2') COLLATE "C")) WHERE type_id = 1;
+CREATE UNIQUE INDEX IF NOT EXISTS obj_key_t3_identity ON c.object (((props->>'12')::bigint)) WHERE type_id = 3;
+CREATE UNIQUE INDEX IF NOT EXISTS obj_key_t4_identity ON c.object (((props->>'17')::bigint)) WHERE type_id = 4;
+CREATE UNIQUE INDEX IF NOT EXISTS obj_key_t5_identity ON c.object (((props->>'22')::bigint)) WHERE type_id = 5;
+CREATE INDEX IF NOT EXISTS obj_idx_t3_orders_total_btree ON c.object (((props->>'16')::numeric)) WHERE type_id = 3;
+CREATE UNIQUE INDEX IF NOT EXISTS edge_max_src_r1 ON c.edge (source_id) WHERE rel_type_id = 1;
+CREATE UNIQUE INDEX IF NOT EXISTS edge_max_tgt_r1 ON c.edge (target_id) WHERE rel_type_id = 1;
+CREATE UNIQUE INDEX IF NOT EXISTS edge_max_src_r2 ON c.edge (source_id) WHERE rel_type_id = 2;
+CREATE UNIQUE INDEX IF NOT EXISTS edge_max_tgt_r3 ON c.edge (target_id) WHERE rel_type_id = 3;
+CREATE UNIQUE INDEX IF NOT EXISTS edge_max_src_r4 ON c.edge (source_id) WHERE rel_type_id = 4;

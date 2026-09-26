@@ -1,0 +1,53 @@
+== PostgreSQL 17.11 on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, 64-bit
+== dataset
+{
+ "seed": "0x5eed2002",
+ "scale": 5,
+ "customers": 100000,
+ "products": 25000,
+ "orders": 500000,
+ "lines": 2001089,
+ "longNamesOver60": 483,
+ "ordersPerCustomer": {
+  "min": 0,
+  "p50": 4,
+  "p95": 12,
+  "p99": 26,
+  "max": 1546,
+  "customersWithZero": 3283
+ }
+}
+== option A: UMF-generated tables+indexes
+{"customers":100000,"products":25000,"orders":500000,"lines":2001089}
+A: copy 3.969772613 s; hand-written keys/FKs/indexes/checks 2.427345881 s
+== option C: fixed schema + loader
+UMF validateDocument(rev0): valid
+catalog: 5 types, 26 props, 5 keys, 4 relationships; 52 CHECK constraints; 11 indexes
+{"records":{"Customer":100000,"Product":25000,"Order":500000,"OrderLine":2001089},"objects":2706007,"edges":4582096,"engineViolations":0,"encodeMs":25796,"validateMs":28418,"validatePerSec":92411}
+C loader (UMF validate, catalog, encode+validate all records, write CSV): 97.829432489 s
+ setval  
+---------
+ 7288104
+(1 row)
+
+psql:/home/user/truss/docs/helix/02-design/spikes/SPIKE-002-storage-bake-off/sql/c_triggers.sql:30: NOTICE:  trigger "object_min_multiplicity" for relation "c.object" does not exist, skipping
+psql:/home/user/truss/docs/helix/02-design/spikes/SPIKE-002-storage-bake-off/sql/c_triggers.sql:31: NOTICE:  trigger "edge_min_multiplicity" for relation "c.edge" does not exist, skipping
+C: copy 87.776560294 s; generic + generated indexes/triggers 10.389551762 s
+== row counts
+        t        |  count  
+-----------------+---------
+ A customers     |  100000
+ A order_lines   | 2001089
+ A orders        |  500000
+ A products      |   25000
+ C edge rel 1    |   79918
+ C edge rel 2    |  500000
+ C edge rel 3    | 2001089
+ C edge rel 4    | 2001089
+ C object type 1 |  100000
+ C object type 2 |   79918
+ C object type 3 |  500000
+ C object type 4 | 2001089
+ C object type 5 |   25000
+(13 rows)
+

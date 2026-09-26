@@ -1,0 +1,1014 @@
+{
+ "umf": "0.7.0",
+ "id": "truss-spike-002-sales",
+ "vocabularies": {
+  "umf.ddd": {
+   "version": "0.1.0"
+  }
+ },
+ "modules": [
+  {
+   "id": "sales",
+   "namespace": "sales",
+   "extensions": {
+    "umf.ddd": {
+     "kind": "bounded-context",
+     "terms": []
+    }
+   },
+   "elements": [
+    {
+     "id": "Customer",
+     "kind": "record",
+     "members": [
+      {
+       "module": "sales",
+       "element": "Customer.id"
+      },
+      {
+       "module": "sales",
+       "element": "Customer.code"
+      },
+      {
+       "module": "sales",
+       "element": "Customer.name"
+      },
+      {
+       "module": "sales",
+       "element": "Customer.email"
+      },
+      {
+       "module": "sales",
+       "element": "Customer.createdAt"
+      },
+      {
+       "module": "sales",
+       "element": "Customer.tags"
+      },
+      {
+       "module": "sales",
+       "element": "Customer.attributes"
+      },
+      {
+       "module": "sales",
+       "element": "Customer.address"
+      },
+      {
+       "module": "sales",
+       "element": "Customer.phone"
+      }
+     ],
+     "extensions": {
+      "umf.ddd": {
+       "kind": "entity",
+       "fields": {
+        "id": {
+         "type": {
+          "kind": "scalar",
+          "name": "integer"
+         },
+         "cardinality": "one"
+        },
+        "code": {
+         "type": {
+          "kind": "scalar",
+          "name": "string"
+         },
+         "cardinality": "one"
+        },
+        "name": {
+         "type": {
+          "kind": "scalar",
+          "name": "string"
+         },
+         "cardinality": "one"
+        },
+        "email": {
+         "type": {
+          "kind": "scalar",
+          "name": "string"
+         },
+         "cardinality": "optional"
+        },
+        "createdAt": {
+         "type": {
+          "kind": "scalar",
+          "name": "date-time"
+         },
+         "cardinality": "one"
+        },
+        "tags": {
+         "type": {
+          "kind": "scalar",
+          "name": "string"
+         },
+         "cardinality": "many"
+        },
+        "attributes": {
+         "type": {
+          "kind": "scalar",
+          "name": "string"
+         },
+         "cardinality": "optional",
+         "description": "core: map<string,string>; DDD has no map cardinality (truss-local stand-in)"
+        },
+        "address": {
+         "type": {
+          "kind": "concept",
+          "target": {
+           "module": "sales",
+           "element": "Address"
+          }
+         },
+         "cardinality": "optional"
+        },
+        "phone": {
+         "type": {
+          "kind": "scalar",
+          "name": "string"
+         },
+         "cardinality": "optional"
+        }
+       },
+       "identity": {
+        "fields": [
+         "id"
+        ],
+        "scope": "context"
+       }
+      }
+     },
+     "keys": [
+      {
+       "id": "identity",
+       "name": "Identity",
+       "fields": [
+        {
+         "module": "sales",
+         "element": "Customer.id"
+        }
+       ],
+       "primary": true
+      },
+      {
+       "id": "account-code",
+       "name": "Account code",
+       "fields": [
+        {
+         "module": "sales",
+         "element": "Customer.code"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "Customer.id",
+     "kind": "field",
+     "nullability": "required",
+     "cardinality": "one",
+     "extensions": {},
+     "scalarType": "integer",
+     "facets": {
+      "integerWidth": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    },
+    {
+     "id": "Customer.code",
+     "kind": "field",
+     "nullability": "required",
+     "cardinality": "one",
+     "extensions": {},
+     "scalarType": "string",
+     "facets": {
+      "length": {
+       "max": 20,
+       "unit": "unicode-scalar"
+      }
+     }
+    },
+    {
+     "id": "Customer.name",
+     "kind": "field",
+     "nullability": "required",
+     "cardinality": "one",
+     "extensions": {},
+     "scalarType": "string",
+     "facets": {
+      "length": {
+       "max": 100,
+       "unit": "unicode-scalar"
+      }
+     }
+    },
+    {
+     "id": "Customer.email",
+     "kind": "field",
+     "nullability": "absent-allowed",
+     "cardinality": "one",
+     "extensions": {},
+     "scalarType": "string",
+     "facets": {
+      "length": {
+       "max": 200,
+       "unit": "unicode-scalar"
+      }
+     }
+    },
+    {
+     "id": "Customer.createdAt",
+     "kind": "field",
+     "nullability": "required",
+     "cardinality": "one",
+     "extensions": {},
+     "scalarType": "timestamp"
+    },
+    {
+     "id": "Customer.tags",
+     "kind": "field",
+     "nullability": "absent-allowed",
+     "cardinality": "array",
+     "extensions": {},
+     "itemType": {
+      "module": "sales",
+      "element": "Customer.tags.item"
+     }
+    },
+    {
+     "id": "Customer.tags.item",
+     "kind": "field",
+     "scalarType": "string",
+     "nullability": "required",
+     "cardinality": "one",
+     "extensions": {},
+     "facets": {
+      "length": {
+       "max": 30,
+       "unit": "unicode-scalar"
+      }
+     }
+    },
+    {
+     "id": "Customer.attributes",
+     "kind": "field",
+     "nullability": "absent-allowed",
+     "cardinality": "map",
+     "extensions": {},
+     "itemType": {
+      "module": "sales",
+      "element": "Customer.attributes.item"
+     }
+    },
+    {
+     "id": "Customer.attributes.item",
+     "kind": "field",
+     "scalarType": "string",
+     "nullability": "required",
+     "cardinality": "one",
+     "extensions": {},
+     "facets": {
+      "length": {
+       "max": 100,
+       "unit": "unicode-scalar"
+      }
+     }
+    },
+    {
+     "id": "Customer.address",
+     "kind": "field",
+     "nullability": "absent-allowed",
+     "cardinality": "one",
+     "extensions": {},
+     "references": [
+      {
+       "role": "record-type",
+       "module": "sales",
+       "element": "Address"
+      }
+     ]
+    },
+    {
+     "id": "Customer.phone",
+     "kind": "field",
+     "nullability": "absent-allowed",
+     "cardinality": "one",
+     "extensions": {},
+     "scalarType": "string",
+     "facets": {
+      "length": {
+       "max": 30,
+       "unit": "unicode-scalar"
+      }
+     }
+    },
+    {
+     "id": "Address",
+     "kind": "record",
+     "members": [
+      {
+       "module": "sales",
+       "element": "Address.street"
+      },
+      {
+       "module": "sales",
+       "element": "Address.city"
+      },
+      {
+       "module": "sales",
+       "element": "Address.postalCode"
+      },
+      {
+       "module": "sales",
+       "element": "Address.country"
+      }
+     ],
+     "extensions": {
+      "umf.ddd": {
+       "kind": "value",
+       "fields": {
+        "street": {
+         "type": {
+          "kind": "scalar",
+          "name": "string"
+         },
+         "cardinality": "one"
+        },
+        "city": {
+         "type": {
+          "kind": "scalar",
+          "name": "string"
+         },
+         "cardinality": "one"
+        },
+        "postalCode": {
+         "type": {
+          "kind": "scalar",
+          "name": "string"
+         },
+         "cardinality": "optional"
+        },
+        "country": {
+         "type": {
+          "kind": "scalar",
+          "name": "string"
+         },
+         "cardinality": "one"
+        }
+       },
+       "equality": {
+        "fields": [
+         "street",
+         "city",
+         "postalCode",
+         "country"
+        ]
+       }
+      }
+     }
+    },
+    {
+     "id": "Address.street",
+     "kind": "field",
+     "nullability": "required",
+     "cardinality": "one",
+     "extensions": {},
+     "scalarType": "string",
+     "facets": {
+      "length": {
+       "max": 200,
+       "unit": "unicode-scalar"
+      }
+     }
+    },
+    {
+     "id": "Address.city",
+     "kind": "field",
+     "nullability": "required",
+     "cardinality": "one",
+     "extensions": {},
+     "scalarType": "string",
+     "facets": {
+      "length": {
+       "max": 100,
+       "unit": "unicode-scalar"
+      }
+     }
+    },
+    {
+     "id": "Address.postalCode",
+     "kind": "field",
+     "nullability": "absent-allowed",
+     "cardinality": "one",
+     "extensions": {},
+     "scalarType": "string",
+     "facets": {
+      "length": {
+       "max": 20,
+       "unit": "unicode-scalar"
+      }
+     }
+    },
+    {
+     "id": "Address.country",
+     "kind": "field",
+     "nullability": "required",
+     "cardinality": "one",
+     "extensions": {},
+     "scalarType": "string",
+     "facets": {
+      "length": {
+       "max": 2,
+       "unit": "unicode-scalar"
+      }
+     }
+    },
+    {
+     "id": "Order",
+     "kind": "record",
+     "members": [
+      {
+       "module": "sales",
+       "element": "Order.id"
+      },
+      {
+       "module": "sales",
+       "element": "Order.placedAt"
+      },
+      {
+       "module": "sales",
+       "element": "Order.status"
+      },
+      {
+       "module": "sales",
+       "element": "Order.channel"
+      },
+      {
+       "module": "sales",
+       "element": "Order.total"
+      }
+     ],
+     "extensions": {
+      "umf.ddd": {
+       "kind": "entity",
+       "fields": {
+        "id": {
+         "type": {
+          "kind": "scalar",
+          "name": "integer"
+         },
+         "cardinality": "one"
+        },
+        "placedAt": {
+         "type": {
+          "kind": "scalar",
+          "name": "date-time"
+         },
+         "cardinality": "one"
+        },
+        "status": {
+         "type": {
+          "kind": "scalar",
+          "name": "string"
+         },
+         "cardinality": "one"
+        },
+        "channel": {
+         "type": {
+          "kind": "scalar",
+          "name": "string"
+         },
+         "cardinality": "optional"
+        },
+        "total": {
+         "type": {
+          "kind": "scalar",
+          "name": "decimal"
+         },
+         "cardinality": "one"
+        },
+        "customerId": {
+         "type": {
+          "kind": "scalar",
+          "name": "integer"
+         },
+         "cardinality": "one",
+         "description": "FK carrier stand-in for a core relationship"
+        }
+       },
+       "identity": {
+        "fields": [
+         "id"
+        ],
+        "scope": "context"
+       }
+      }
+     },
+     "keys": [
+      {
+       "id": "identity",
+       "name": "Identity",
+       "fields": [
+        {
+         "module": "sales",
+         "element": "Order.id"
+        }
+       ],
+       "primary": true
+      }
+     ]
+    },
+    {
+     "id": "Order.id",
+     "kind": "field",
+     "nullability": "required",
+     "cardinality": "one",
+     "extensions": {},
+     "scalarType": "integer",
+     "facets": {
+      "integerWidth": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    },
+    {
+     "id": "Order.placedAt",
+     "kind": "field",
+     "nullability": "required",
+     "cardinality": "one",
+     "extensions": {},
+     "scalarType": "timestamp"
+    },
+    {
+     "id": "Order.status",
+     "kind": "field",
+     "nullability": "required",
+     "cardinality": "one",
+     "extensions": {},
+     "scalarType": "string",
+     "facets": {
+      "length": {
+       "max": 20,
+       "unit": "unicode-scalar"
+      }
+     }
+    },
+    {
+     "id": "Order.channel",
+     "kind": "field",
+     "nullability": "absent-allowed",
+     "cardinality": "one",
+     "extensions": {},
+     "scalarType": "string",
+     "facets": {
+      "length": {
+       "max": 20,
+       "unit": "unicode-scalar"
+      }
+     }
+    },
+    {
+     "id": "Order.total",
+     "kind": "field",
+     "nullability": "required",
+     "cardinality": "one",
+     "extensions": {},
+     "scalarType": "decimal",
+     "facets": {
+      "precision": 14,
+      "scale": 2
+     }
+    },
+    {
+     "id": "OrderLine",
+     "kind": "record",
+     "members": [
+      {
+       "module": "sales",
+       "element": "OrderLine.id"
+      },
+      {
+       "module": "sales",
+       "element": "OrderLine.lineNo"
+      },
+      {
+       "module": "sales",
+       "element": "OrderLine.quantity"
+      },
+      {
+       "module": "sales",
+       "element": "OrderLine.unitPrice"
+      },
+      {
+       "module": "sales",
+       "element": "OrderLine.lineTotal"
+      }
+     ],
+     "extensions": {
+      "umf.ddd": {
+       "kind": "entity",
+       "fields": {
+        "id": {
+         "type": {
+          "kind": "scalar",
+          "name": "integer"
+         },
+         "cardinality": "one"
+        },
+        "lineNo": {
+         "type": {
+          "kind": "scalar",
+          "name": "integer"
+         },
+         "cardinality": "one"
+        },
+        "quantity": {
+         "type": {
+          "kind": "scalar",
+          "name": "integer"
+         },
+         "cardinality": "one"
+        },
+        "unitPrice": {
+         "type": {
+          "kind": "scalar",
+          "name": "decimal"
+         },
+         "cardinality": "one"
+        },
+        "lineTotal": {
+         "type": {
+          "kind": "scalar",
+          "name": "decimal"
+         },
+         "cardinality": "one"
+        },
+        "orderId": {
+         "type": {
+          "kind": "scalar",
+          "name": "integer"
+         },
+         "cardinality": "one",
+         "description": "FK carrier stand-in for a core relationship"
+        },
+        "productId": {
+         "type": {
+          "kind": "scalar",
+          "name": "integer"
+         },
+         "cardinality": "one",
+         "description": "FK carrier stand-in for a core relationship"
+        }
+       },
+       "identity": {
+        "fields": [
+         "id"
+        ],
+        "scope": "context"
+       },
+       "invariants": [
+        {
+         "id": "line-total",
+         "scope": "definition",
+         "language": "postgresql",
+         "version": "17",
+         "expression": "\"lineTotal\" = \"quantity\" * \"unitPrice\"",
+         "references": [
+          {
+           "module": "sales",
+           "element": "OrderLine"
+          }
+         ]
+        }
+       ]
+      }
+     },
+     "keys": [
+      {
+       "id": "identity",
+       "name": "Identity",
+       "fields": [
+        {
+         "module": "sales",
+         "element": "OrderLine.id"
+        }
+       ],
+       "primary": true
+      }
+     ]
+    },
+    {
+     "id": "OrderLine.id",
+     "kind": "field",
+     "nullability": "required",
+     "cardinality": "one",
+     "extensions": {},
+     "scalarType": "integer",
+     "facets": {
+      "integerWidth": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    },
+    {
+     "id": "OrderLine.lineNo",
+     "kind": "field",
+     "nullability": "required",
+     "cardinality": "one",
+     "extensions": {},
+     "scalarType": "integer",
+     "facets": {
+      "integerWidth": {
+       "bits": 16,
+       "signed": true
+      }
+     }
+    },
+    {
+     "id": "OrderLine.quantity",
+     "kind": "field",
+     "nullability": "required",
+     "cardinality": "one",
+     "extensions": {},
+     "scalarType": "integer",
+     "facets": {
+      "integerWidth": {
+       "bits": 32,
+       "signed": true
+      }
+     }
+    },
+    {
+     "id": "OrderLine.unitPrice",
+     "kind": "field",
+     "nullability": "required",
+     "cardinality": "one",
+     "extensions": {},
+     "scalarType": "decimal",
+     "facets": {
+      "precision": 12,
+      "scale": 2
+     }
+    },
+    {
+     "id": "OrderLine.lineTotal",
+     "kind": "field",
+     "nullability": "required",
+     "cardinality": "one",
+     "extensions": {},
+     "scalarType": "decimal",
+     "facets": {
+      "precision": 14,
+      "scale": 2
+     }
+    },
+    {
+     "id": "Product",
+     "kind": "record",
+     "members": [
+      {
+       "module": "sales",
+       "element": "Product.id"
+      },
+      {
+       "module": "sales",
+       "element": "Product.sku"
+      },
+      {
+       "module": "sales",
+       "element": "Product.name"
+      },
+      {
+       "module": "sales",
+       "element": "Product.price"
+      },
+      {
+       "module": "sales",
+       "element": "Product.image"
+      }
+     ],
+     "extensions": {
+      "umf.ddd": {
+       "kind": "entity",
+       "fields": {
+        "id": {
+         "type": {
+          "kind": "scalar",
+          "name": "integer"
+         },
+         "cardinality": "one"
+        },
+        "sku": {
+         "type": {
+          "kind": "scalar",
+          "name": "string"
+         },
+         "cardinality": "one"
+        },
+        "name": {
+         "type": {
+          "kind": "scalar",
+          "name": "string"
+         },
+         "cardinality": "one"
+        },
+        "price": {
+         "type": {
+          "kind": "scalar",
+          "name": "decimal"
+         },
+         "cardinality": "one"
+        },
+        "image": {
+         "type": {
+          "kind": "scalar",
+          "name": "bytes"
+         },
+         "cardinality": "optional"
+        }
+       },
+       "identity": {
+        "fields": [
+         "id"
+        ],
+        "scope": "context"
+       }
+      }
+     },
+     "keys": [
+      {
+       "id": "identity",
+       "name": "Identity",
+       "fields": [
+        {
+         "module": "sales",
+         "element": "Product.id"
+        }
+       ],
+       "primary": true
+      }
+     ]
+    },
+    {
+     "id": "Product.id",
+     "kind": "field",
+     "nullability": "required",
+     "cardinality": "one",
+     "extensions": {},
+     "scalarType": "integer",
+     "facets": {
+      "integerWidth": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    },
+    {
+     "id": "Product.sku",
+     "kind": "field",
+     "nullability": "required",
+     "cardinality": "one",
+     "extensions": {},
+     "scalarType": "string",
+     "facets": {
+      "length": {
+       "max": 32,
+       "unit": "unicode-scalar"
+      }
+     }
+    },
+    {
+     "id": "Product.name",
+     "kind": "field",
+     "nullability": "required",
+     "cardinality": "one",
+     "extensions": {},
+     "scalarType": "string",
+     "facets": {
+      "length": {
+       "max": 200,
+       "unit": "unicode-scalar"
+      }
+     }
+    },
+    {
+     "id": "Product.price",
+     "kind": "field",
+     "nullability": "required",
+     "cardinality": "one",
+     "extensions": {},
+     "scalarType": "decimal",
+     "facets": {
+      "precision": 12,
+      "scale": 2
+     }
+    },
+    {
+     "id": "Product.image",
+     "kind": "field",
+     "nullability": "absent-allowed",
+     "cardinality": "one",
+     "extensions": {},
+     "scalarType": "binary",
+     "facets": {
+      "length": {
+       "max": 65536,
+       "unit": "byte"
+      }
+     }
+    }
+   ],
+   "relationships": [
+    {
+     "id": "order-customer",
+     "name": "customer",
+     "source": [
+      {
+       "module": "sales",
+       "element": "Order"
+      }
+     ],
+     "target": [
+      {
+       "module": "sales",
+       "element": "Customer",
+       "key": "identity"
+      }
+     ],
+     "sourceMultiplicity": {
+      "min": 0,
+      "max": "*"
+     },
+     "targetMultiplicity": {
+      "min": 1,
+      "max": 1
+     },
+     "targetLifecycle": "independent",
+     "directed": true,
+     "inverse": "orders"
+    },
+    {
+     "id": "order-lines",
+     "name": "lines",
+     "source": [
+      {
+       "module": "sales",
+       "element": "Order"
+      }
+     ],
+     "target": [
+      {
+       "module": "sales",
+       "element": "OrderLine",
+       "key": "identity"
+      }
+     ],
+     "sourceMultiplicity": {
+      "min": 1,
+      "max": 1
+     },
+     "targetMultiplicity": {
+      "min": 1,
+      "max": "*"
+     },
+     "targetLifecycle": "owned",
+     "directed": true,
+     "inverse": "order"
+    },
+    {
+     "id": "line-product",
+     "name": "product",
+     "source": [
+      {
+       "module": "sales",
+       "element": "OrderLine"
+      }
+     ],
+     "target": [
+      {
+       "module": "sales",
+       "element": "Product",
+       "key": "identity"
+      }
+     ],
+     "sourceMultiplicity": {
+      "min": 0,
+      "max": "*"
+     },
+     "targetMultiplicity": {
+      "min": 1,
+      "max": 1
+     },
+     "targetLifecycle": "independent",
+     "directed": true,
+     "inverse": "orderLines"
+    }
+   ]
+  }
+ ],
+ "extensions": {}
+}
