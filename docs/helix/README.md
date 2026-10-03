@@ -12,7 +12,7 @@ drafts exist; requirements, design and implementation do not.
 | --- | --- | --- |
 | 00 Discover | Drafts | [Product vision](00-discover/product-vision.md), [competitive analysis](00-discover/competitive-analysis.md), [discovery input](00-discover/vision-input.md), [naming research](00-discover/naming-research.md), 11 [component profiles](00-discover/README.md) |
 | 01 Frame | In progress | [Concerns](01-frame/concerns.md), [research plan](01-frame/research-plan.md) (storage bake-off); PRD not started |
-| 02 Design | Spikes only | [SPIKE-001](02-design/spikes/SPIKE-001-apache-age.md) (Apache AGE), [SPIKE-002](02-design/spikes/SPIKE-002-storage-bake-off.md) (storage bake-off); storage ADR and ADR-001 pending |
+| 02 Design | Spikes; ADR-002 proposed | [SPIKE-001](02-design/spikes/SPIKE-001-apache-age.md) (Apache AGE), [SPIKE-002](02-design/spikes/SPIKE-002-storage-bake-off.md) (storage bake-off), [storage layout review](02-design/storage-layout-review.md), [ADR-002](02-design/adr/ADR-002-storage-strategy.md) (storage, proposed, owner decision pending); ADR-001 pending |
 | 03 Test | Not started | — |
 | 04 Build | Not started | No work tracker initialized |
 | 05 Deploy | Not started | — |
