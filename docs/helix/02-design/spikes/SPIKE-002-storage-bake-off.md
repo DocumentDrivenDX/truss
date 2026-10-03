@@ -19,7 +19,7 @@ ddx:
 
 # SPIKE-002: Storage bake-off on PostgreSQL: UMF-generated per-type tables (A) versus generic catalog storage (C)
 
-**Spike ID**: SPIKE-002 | **Lead**: Claude Code agent for the project owner | **Time Budget**: about 7 hours of agent work (one sandbox session) | **Status**: Completed as evidence; owner review and the storage ADR are pending
+**Spike ID**: SPIKE-002 | **Lead**: Claude Code agent for the project owner | **Time Budget**: about 7 hours of agent work (one sandbox session) | **Status**: Completed as evidence; decision recorded in [ADR-002](../adr/ADR-002-storage-strategy.md) (accepted 2026-10-03)
 
 Executed evidence for the [research plan](../../01-frame/research-plan.md). Everything here was run on
 2026-09-25 in one cloud sandbox. Each finding quotes raw output from
@@ -791,4 +791,4 @@ sources, build trees and per-transaction latency logs stayed in the scratch area
 - [x] Every hand-written substitute for missing UMF generator output is listed (FINDING 2)
 - [x] Findings documented in SPIKE-002 with scripts and raw outputs beside it (committing is the owner's step)
 - [x] Recommendation names a storage strategy and the conditions that would reverse it
-- [ ] Owner has reviewed SPIKE-002 and recorded the storage decision in an ADR (**not yet met**)
+- [x] Owner has reviewed SPIKE-002 and recorded the storage decision in an ADR ([ADR-002](../adr/ADR-002-storage-strategy.md), accepted 2026-10-03)

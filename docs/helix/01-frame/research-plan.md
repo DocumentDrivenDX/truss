@@ -24,7 +24,7 @@ ddx:
 **Research Lead**: Project owner (DocumentDrivenDX); execution by Claude Code agents under owner review
 **Time Budget**: One working day of agent execution in one sandbox session, plus owner review of the findings
 **Created**: 2026-09-25
-**Status**: Executed as [SPIKE-002](../02-design/spikes/SPIKE-002-storage-bake-off.md) on 2026-09-25; awaiting owner review
+**Status**: Executed as [SPIKE-002](../02-design/spikes/SPIKE-002-storage-bake-off.md) on 2026-09-25; decision recorded in [ADR-002](../02-design/adr/ADR-002-storage-strategy.md) (accepted 2026-10-03)
 
 ## Research Objectives
 
@@ -162,4 +162,4 @@ outcomes the [product vision](../00-discover/product-vision.md) promises.
 - [x] Every hand-written substitute for missing UMF generator output is listed
 - [x] Findings documented in SPIKE-002 with scripts and raw outputs committed beside it
 - [x] Recommendation names a storage strategy and the conditions that would reverse it
-- [ ] Owner has reviewed SPIKE-002 and recorded the storage decision in an ADR
+- [x] Owner has reviewed SPIKE-002 and recorded the storage decision in an ADR ([ADR-002](../02-design/adr/ADR-002-storage-strategy.md), 2026-10-03)

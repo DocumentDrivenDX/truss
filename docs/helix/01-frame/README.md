@@ -14,5 +14,6 @@ feed a storage ADR and the scope of the PRD.
 
 Status: bake-off executed as
 [SPIKE-002](../02-design/spikes/SPIKE-002-storage-bake-off.md), which
-recommends option C; the owner's storage decision (ADR) is pending. The PRD,
+recommends option C; the owner accepted that recommendation in
+[ADR-002](../02-design/adr/ADR-002-storage-strategy.md) on 2026-10-03. The PRD,
 feature specifications, user stories and principles have not been written.
