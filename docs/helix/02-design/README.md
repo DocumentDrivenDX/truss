@@ -21,8 +21,9 @@ impose. Its storage-home thresholds, composition rule, edge ids and edge index
 shape are provisional until validation measurements V1–V3, V5 and V7 report.
 
 Status: ADR-002 accepted; no architecture document yet. Pending decisions that
-design must record: ADR-001
+design must record: [ADR-001](adr/ADR-001-language-and-portable-core.md)
 (TypeScript on Bun first, a portable core free of I/O and host-specific APIs,
-and the measurable triggers for a Rust core), supported PostgreSQL versions,
+and the measurable triggers for a Rust core; **proposed**, awaiting the owner's
+decision), supported PostgreSQL versions,
 and the query language. The draft storage layers in
 [discovery input](../00-discover/vision-input.md) are design input, not decisions.
