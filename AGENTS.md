@@ -10,13 +10,56 @@ This repository uses HELIX. Read `.helix.yml` and engage the installed
 - Preserve artifact IDs, frontmatter, and deliberate `ddx.links` traceability.
 - Record unknowns explicitly as open questions, assumptions or risks.
 
-Start with `docs/helix/README.md`. truss is in discovery: the product vision,
-competitive analysis, naming research and discovery input exist; no
-requirements, design or implementation exist yet. The next HELIX action is
-`frame`. Owner direction: PostgreSQL is the initial backing SQL engine, and
-truss is implemented in TypeScript first (Bun for development and testing),
-moving to Rust only if a measured need arises. ADR-001 must confirm this, and
-the portable-core split, before any code lands.
+Start with `docs/helix/README.md`. truss has discovery artifacts (product
+vision, competitive analysis, naming research, discovery input, component
+profiles), a storage research plan, two spikes, a storage layout review and two
+accepted ADRs. No PRD, feature specifications or implementation exist yet. The
+next HELIX action is `frame`: write the PRD and feature specifications.
+Implementation must trace to framed requirements.
+
+## Accepted decisions
+
+Follow these unless a later ADR supersedes them. Points an ADR marks
+provisional may change when its validation measurements report.
+
+- [ADR-001](docs/helix/02-design/adr/ADR-001-language-and-portable-core.md):
+  TypeScript (strict, ES modules), with Bun for development, tests and tooling.
+  The library supports Bun and Node 22 and later LTS lines (Node provisional
+  until check L1).
+  - The core is its own package with no I/O, no `node:*` or `bun` imports and
+    no host globals. Database adapters (`Bun.sql`, `pg`) and tooling are
+    separate packages and may use host APIs.
+  - Never hold a stored integer, decimal or timestamp in a JavaScript `number`
+    or `Date`. Adapters return text that the core parses exactly. Decimal
+    arithmetic uses truss's `bigint`-based implementation.
+  - Consume UMF through its TypeScript library at a pinned version.
+  - The conformance corpus is language-neutral data. Expected results and
+    enforcement reports are normative; expected SQL is informative.
+  - Move the core to Rust only when an ADR-001 D6 trigger fires and a new ADR
+    records the evidence.
+- [ADR-002](docs/helix/02-design/adr/ADR-002-storage-strategy.md): generic
+  catalog storage on PostgreSQL. Adding a type, property or relationship adds
+  catalog rows, never columns or table rewrites.
+  - Objects are LIST-partitioned by type and keyed on `(id, type_id)`. Values
+    sit in one flat JSONB map per object keyed by catalog property id: a
+    missing key is absent, JSON `null` is explicit null. Unknown data goes in
+    the `retained` map.
+  - Edges carry typed endpoints, enforced by foreign keys against
+    `rel_endpoint`, and their own properties column.
+  - The object row is canonical; the journal records per-property history in
+    the same transaction.
+  - Database enforcement only in forms that need no DDL per revision. No
+    per-type CHECK constraints on shared tables. Cross-row rules lock the
+    parent (`FOR NO KEY UPDATE`) or run SERIALIZABLE; never `FOR UPDATE` on
+    objects.
+  - Prepared statements are mandatory. Indexes and statistics exist only where
+    the binding declares them.
+  - Provisional until measured: storage-home thresholds, value records stored
+    as structured values with `root_id` on composed objects, edge ids, and the
+    `target_type` edge-index include.
+
+Still open: supported PostgreSQL versions, the query language, how a future
+Rust core would read UMF, and first users.
 
 ## Boundaries
 
@@ -26,7 +69,8 @@ the portable-core split, before any code lands.
   fork UMF meaning. truss is a UMF consumer, not UMF's reference implementation.
 - truss is property-oriented: the individual property value and edge are the
   canonical unit of storage, identity and mutation. Document-shaped views are
-  derived. truss is distinct from Axon, which is document-oriented; do not
+  derived. This is the logical model; ADR-002 packs a property's value into
+  its object's JSONB map, and the journal keeps per-property history. truss is distinct from Axon, which is document-oriented; do not
   describe truss as part of Axon, and do not rule out Axon using truss.
 - Never silently lose meaning. Retain UMF documents verbatim, retain data that
   binds to no known field, and report for every UMF assertion whether the
