@@ -20,10 +20,12 @@ option C partitioned by type, with the constraints SPIKE-002 and the review
 impose. Its storage-home thresholds, composition rule, edge ids and edge index
 shape are provisional until validation measurements V1–V3, V5 and V7 report.
 
-Status: ADR-002 accepted; no architecture document yet. Pending decisions that
-design must record: [ADR-001](adr/ADR-001-language-and-portable-core.md)
-(TypeScript on Bun first, a portable core free of I/O and host-specific APIs,
-and the measurable triggers for a Rust core; **proposed**, awaiting the owner's
-decision), supported PostgreSQL versions,
+[ADR-001](adr/ADR-001-language-and-portable-core.md), **accepted** 2026-10-03,
+confirms TypeScript with Bun for development, a host-neutral core in its own
+package with Bun and `pg` adapters, exact value handling, and four recorded
+triggers for a Rust core; Node support is provisional until check L1.
+
+Status: ADR-001 and ADR-002 accepted; no architecture document yet. Pending
+decisions that design must record: supported PostgreSQL versions,
 and the query language. The draft storage layers in
 [discovery input](../00-discover/vision-input.md) are design input, not decisions.

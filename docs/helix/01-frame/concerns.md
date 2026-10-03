@@ -24,7 +24,7 @@ and [discovery input](../00-discover/vision-input.md); `frame` refines them.
 
 | Concern | Source | Areas | Why Active | Key Practices |
 |---------|--------|-------|------------|---------------|
-| `typescript-bun` | library; slot `language-runtime`; source `shipped-default`, matching owner direction 2026-09-24 (TypeScript first, Rust only if necessary) | `area:*` | truss reuses UMF's TypeScript library and toolchain. | Library practices, with the portable-core override below. ADR-001 confirms the choice and the triggers for a Rust core. |
+| `typescript-bun` | library; slot `language-runtime`; source `shipped-default`, matching owner direction 2026-09-24 (TypeScript first, Rust only if necessary) | `area:*` | truss reuses UMF's TypeScript library and toolchain. | Library practices, with the portable-core override below. [ADR-001](../02-design/adr/ADR-001-language-and-portable-core.md) (accepted 2026-10-03) confirms the choice, Node 22+ and Bun support, separate core and adapter packages, and the triggers for a Rust core. |
 | `postgresql` | project-local; slot `datastore`; source `operator-override` (owner direction 2026-09-24) | `area:storage`, `area:catalog`, `area:query`, `area:mutation`, `area:constraints`, `area:dialects` | PostgreSQL is the initial backing SQL implementation; the library has no `datastore` members. | Supported PostgreSQL versions named in every claim; evidence from real PostgreSQL instances; PostgreSQL-specific SQL confined to `area:dialects`. Per [ADR-002](../02-design/adr/ADR-002-storage-strategy.md): prepared statements (or an equivalent plan cache) in every adapter, and deployments that cannot prepare are refused; objects partitioned by type; indexes and extended statistics only where the binding declares them, with a reported index budget per partition. |
 | `relational-data-modeling` | library | `area:storage`, `area:catalog` | truss's own fixed table set and any generated per-type tables are relational schemas that must stay correct across releases. | Keys, constraints, indexing strategy and migration discipline for truss's own tables. |
 | `scope-discipline` | library | `area:*` | "Universal tables" invites gold-plating ahead of framed requirements. | Build only what governing acceptance criteria request; no hollow placeholders. |
@@ -36,14 +36,14 @@ and [discovery input](../00-discover/vision-input.md); `frame` refines them.
 Slots not filled: `architecture-style` (no signal yet). `frontend-framework`,
 `e2e-framework`, `auth-provider` and `deploy-target` do not apply to a library
 with no UI or hosted service. Not active yet: a Rust core with Python and Node
-bindings (`rust-cargo`), which becomes a candidate only when an ADR-001 trigger
+bindings (`rust-cargo`), which becomes a candidate only when an ADR-001 (D6) trigger
 fires; SQL Server as a second backing engine.
 
 ## Project Overrides
 
 | Concern | Practice | Override | Authority |
 |---------|----------|----------|-----------|
-| `typescript-bun` | Use Bun-native APIs (`Bun.sql`, `Bun.file`, …) | The compiler and catalog core stay free of I/O and of Bun- or Node-specific APIs so Node applications can embed truss; Bun-native APIs are allowed in database adapters, tooling and tests. Follows the split in UMF's ADR-002. | Needs ADR (ADR-001) |
+| `typescript-bun` | Use Bun-native APIs (`Bun.sql`, `Bun.file`, …) | The compiler and catalog core stay free of I/O and of Bun- or Node-specific APIs so Node applications can embed truss; Bun-native APIs are allowed in database adapters, tooling and tests. Follows the split in UMF's ADR-002. | [ADR-001](../02-design/adr/ADR-001-language-and-portable-core.md) D2 (accepted 2026-10-03) |
 
 ## Area Labels
 

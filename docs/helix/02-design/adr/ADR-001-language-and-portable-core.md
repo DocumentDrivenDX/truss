@@ -3,7 +3,7 @@ ddx:
   id: ADR-001
   type: adr
   activity: design
-  status: draft
+  status: accepted
   authoring:
     home: repo
   links:
@@ -23,14 +23,15 @@ ddx:
 
 | Field | Value |
 |-------|-------|
-| Status | **Proposed**: drafted for owner review; not accepted |
-| Date | 2026-10-03 |
+| Status | **Accepted** with the drafted recommendations. Node support (D1) is provisional until check L1 (see §Owner decisions) |
+| Date | Proposed 2026-10-03; accepted 2026-10-03 |
 | Decider | Project owner |
 | Drafted by | Claude Code agent |
 | Evidence | [discovery input](../../00-discover/vision-input.md) §Language Analysis, [concerns](../../01-frame/concerns.md), [SPIKE-001](../spikes/SPIKE-001-apache-age.md) C9, [SPIKE-002](../spikes/SPIKE-002-storage-bake-off.md), [ADR-002](ADR-002-storage-strategy.md) |
 
 AGENTS.md requires this ADR to confirm the language choice and the portable-core
-split before any implementation code lands.
+split before any implementation code lands. With its acceptance, that condition
+is met.
 
 ## Context
 
@@ -82,7 +83,7 @@ language: prepared statements in every adapter, an exact text read path, and
 row-lock and transaction control (`FOR NO KEY UPDATE`, SERIALIZABLE where
 needed).
 
-## Decision (proposed)
+## Decision
 
 Implement truss in TypeScript, structured so the core can later be ported to
 Rust and verified against the same conformance corpus. Each point carries a
@@ -95,7 +96,10 @@ confidence: **evidence** (a spike measured it), **inferred** or **choice**.
 - Bun is the development, test and tooling runtime. *(choice; owner direction)*
 - The published library supports both Bun and Node. Node support starts with
   the maintained LTS lines, beginning with Node 22 (SPIKE-001 exercised Node
-  22). *(choice)*
+  22). *(choice; provisional until L1)*
+- The core, the Bun adapter and the `pg` adapter are separate packages in one
+  workspace, so the core package can be compiled with no host type definitions
+  (D2). *(choice)*
 
 ### D2. Portable core
 
@@ -121,8 +125,10 @@ it. *(choice)*
   JavaScript `number` or `Date`. Values travel as source tokens, with the same
   tree shape as UMF's NativeJson. `bigint` is used for integer arithmetic.
   Decimal arithmetic (for example invariants such as `lineTotal = quantity *
-  unitPrice`) uses an exact decimal implementation with no floating point.
-  *(evidence: SPIKE-002 FINDING 5; choice for the implementation)*
+  unitPrice`) uses a small truss implementation over `bigint` (scaled integers)
+  with no floating point and no third-party dependency. Conformance tests check
+  it against PostgreSQL `numeric` results. *(evidence: SPIKE-002 FINDING 5;
+  choice for the implementation)*
 - Every adapter returns JSONB, `numeric`, `bigint` and temporal columns as text,
   and the core parses them exactly. An adapter that cannot do this is not
   supported. *(evidence: SPIKE-001 C9, SPIKE-002 FINDING 5)*
@@ -208,9 +214,9 @@ measured limits. *(choice)*
   limited to adapters and tooling.
 - Supporting both Node and Bun doubles the adapter and conformance matrix.
 
-**Effect on concerns.** On acceptance, the `typescript-bun` override in
-[concerns](../../01-frame/concerns.md) changes from "Needs ADR (ADR-001)" to
-"ADR-001". The `rust-cargo` concern stays inactive until a D6 trigger fires.
+**Effect on concerns.** Recorded in [concerns](../../01-frame/concerns.md) on
+acceptance: the `typescript-bun` override's authority changes from "Needs ADR
+(ADR-001)" to ADR-001. The `rust-cargo` concern stays inactive until a D6 trigger fires.
 
 ## Alternatives considered
 
@@ -229,7 +235,7 @@ measured limits. *(choice)*
 3. Keeping the core host-neutral costs more than the embedding benefit, for
    example if Node support finds no consumer.
 
-## Validation before acceptance
+## Validation after acceptance
 
 | ID | Check | Decides |
 |----|-------|---------|
@@ -248,15 +254,16 @@ measured limits. *(choice)*
 The throughput figures are single-process measurements of spike code, not of
 truss.
 
-## Open questions for the owner
+## Owner decisions (2026-10-03)
 
-1. Which Node versions to support first: Node 22 and later LTS lines (D1), or
-   also earlier ones?
-2. Publish the core and adapters as separate packages, or as one package with
-   subpath exports?
-3. Exact decimal arithmetic: a truss implementation or a pinned dependency
-   (D3)?
-4. Are the proposed T2 and T3 figures acceptable as PRD targets (D6)?
-5. Is expected SQL informative rather than normative in the corpus (D5)?
-6. Are L1–L3 required before acceptance, or may the ADR be accepted now with D1
-   Node support provisional on L1?
+The owner accepted this ADR with the drafted recommendation for each open
+question.
+
+| # | Question | Decision |
+|---|----------|----------|
+| 1 | Which Node versions to support first? | Node 22 and later LTS lines (D1). Provisional until L1 runs the fidelity suite on Node 22 with `pg` |
+| 2 | Separate packages, or one package with subpath exports? | Separate packages in one workspace: core, Bun adapter, `pg` adapter (D1), so D2's no-host-types rule is enforceable |
+| 3 | Exact decimal arithmetic: truss implementation or pinned dependency? | A small truss implementation over `bigint`, checked against PostgreSQL `numeric` in conformance tests (D3); the core keeps no dependency other than UMF |
+| 4 | Are the proposed T2 and T3 figures acceptable as PRD targets? | Yes, as proposed PRD targets; the PRD may revise them (D6) |
+| 5 | Is expected SQL informative rather than normative in the corpus? | Yes, informative (D5) |
+| 6 | Require L1–L3 before acceptance, or accept now? | Accept now. L1 confirms or amends Node support; L2 is the first build task; L3 sets the T2 baseline |
