@@ -11,6 +11,9 @@ the [research plan](../01-frame/research-plan.md) on PostgreSQL 17.11 and 18.6,
 with evidence in [`spikes/SPIKE-002-storage-bake-off/`](spikes/SPIKE-002-storage-bake-off/);
 it recommends generic catalog storage (option C), with generated per-type tables
 as a later optimization.
+The [storage layout review](storage-layout-review.md) checks that layout
+against graph-on-SQL practice, records which concerns SPIKE-002 settled, and
+lists decisions and follow-up measurements for the storage ADR.
 
 Status: no architecture or ADRs yet. Pending decisions: a storage ADR
 ratifying or rejecting SPIKE-002's recommendation, and that design must record: ADR-001
