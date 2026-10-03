@@ -3,7 +3,7 @@ ddx:
   id: ADR-002
   type: adr
   activity: design
-  status: draft
+  status: accepted
   authoring:
     home: repo
   links:
@@ -25,8 +25,8 @@ ddx:
 
 | Field | Value |
 |-------|-------|
-| Status | **Proposed**: drafted for owner review; not accepted |
-| Date | 2026-10-03 |
+| Status | **Accepted** with the drafted recommendations. D4, D5 and parts of D6 are provisional until measured (see §Owner decisions) |
+| Date | Proposed 2026-10-03; accepted 2026-10-03 |
 | Decider | Project owner |
 | Drafted by | Claude Code agent |
 | Evidence | [SPIKE-001](../spikes/SPIKE-001-apache-age.md), [SPIKE-002](../spikes/SPIKE-002-storage-bake-off.md), [storage layout review](../storage-layout-review.md) |
@@ -63,7 +63,7 @@ SPIKE-002 did not measure: object-level write cost, the cost of storing every
 nested record as a child object, the canonical store, and property identity
 across revisions.
 
-## Decision (proposed)
+## Decision
 
 Adopt generic catalog storage (option C) as truss's storage of record on
 PostgreSQL, with the constraints below. Per-type ("shaped") tables are a later,
@@ -119,7 +119,7 @@ callers.
   `props` stays, so a SQL NULL from `jsonb_set` fails instead of erasing the
   map. *(inferred)*
 
-### D4. Storage homes
+### D4. Storage homes (provisional thresholds)
 
 Each property has exactly one home, `json` (default) or `row`, recorded in the
 binding. Moving a property between homes is a recorded catalog migration. A
@@ -135,7 +135,7 @@ inferred, to be set by measurement V1–V2)*:
 Value-row tables use typed columns per scalar family, so native B-tree ordering
 applies.
 
-### D5. Composition
+### D5. Composition (provisional)
 
 *(choice, pending measurement V3)*
 
@@ -143,13 +143,13 @@ applies.
   with owned lifecycle.
 - Every composed object carries `root_id`, its aggregate root, so a document
   view is one index range scan.
-- **Proposed change from the discovery draft:** records without identity (UMF
+- **Change from the discovery draft:** records without identity (UMF
   value records such as an address) are stored as structured values inside the
   owner's map, typed and validated through the catalog. If V3 shows no material
   cost to child objects, keep the draft rule (child objects for all nested
   records) and keep `root_id`.
 
-### D6. Edges
+### D6. Edges (edge identity and the `target_type` include provisional)
 
 - `edge` carries `rel_type_id`, `(source_id, source_type)` and
   `(target_id, target_type)`. Composite FKs reference `object (id, type_id)`,
@@ -275,7 +275,7 @@ view.
   JavaScript numbers lose precision.
 - Global `id` uniqueness rests on the sequence, not a constraint.
 
-**Effect on concerns.** On acceptance, update [concerns](../../01-frame/concerns.md):
+**Effect on concerns.** Recorded in [concerns](../../01-frame/concerns.md) on acceptance:
 
 - `postgresql`: prepared statements are mandatory; there is an index budget per
   partition.
@@ -310,11 +310,13 @@ From SPIKE-002, plus the review:
 6. V1–V2 show object-level write cost that `row` homes cannot contain for the
    target workloads.
 
-## Validation before acceptance
+## Validation of provisional points
 
 The follow-up spike named in SPIKE-002 (C partitioned by type, realistic type
 counts, data larger than memory, a pooler, Node `pg`, generated read views)
-should also measure:
+must also measure the following. Each provisional point is confirmed or amended
+in this ADR, with evidence, before the code that depends on it is treated as
+final:
 
 | ID | Measurement | Decides |
 |----|-------------|---------|
@@ -341,17 +343,17 @@ Every claim in this ADR is bounded by these conditions:
 Latency figures are ratios, not absolute performance claims. Nothing here
 supports a claim for SQL Server, PostgreSQL 19 or managed PostgreSQL services.
 
-## Open questions for the owner
+## Owner decisions (2026-10-03)
 
-1. Accept option C as the storage of record (D1–D3)?
-2. Partition objects by type in the first build (D2), or start unpartitioned and
-   partition at a type-count threshold?
-3. Store value records as structured values (D5), or keep every nested record
-   as a child object as the discovery draft proposed?
-4. Object row canonical with the journal as history (D7), or journal canonical
-   from the start?
-5. Give edges their own ids and properties (D6), accepting the disk cost?
-6. Refuse deployments without prepared statements (D11), or support them with a
-   reported performance downgrade?
-7. Is V1–V7 required before acceptance, or may the ADR be accepted now with
-   D4–D6 marked provisional?
+The owner accepted this ADR with the drafted recommendation for each open
+question.
+
+| # | Question | Decision |
+|---|----------|----------|
+| 1 | Accept option C as the storage of record (D1–D3)? | Yes |
+| 2 | Partition objects by type in the first build, or start unpartitioned? | Partition in the first build (D2) |
+| 3 | Value records as structured values, or every nested record as a child object? | Structured values for records without identity, with `root_id` on composed objects (D5). Provisional: if V3 shows child objects cost little, revert to child objects and keep `root_id` |
+| 4 | Object row canonical, or journal canonical? | Object row canonical; the journal is history, written in the same transaction (D7). A journal-canonical design stays a later option |
+| 5 | Give edges their own ids and properties, accepting the disk cost? | Yes (D6). Edge ids are provisional on V7 |
+| 6 | Refuse deployments without prepared statements, or support them with a reported downgrade? | Refuse (D11) |
+| 7 | Require V1–V7 before acceptance, or accept now with points marked provisional? | Accept now. D4 thresholds, D5, D6 edge ids and the `target_type` include are provisional until V1–V3, V5 and V7 report |

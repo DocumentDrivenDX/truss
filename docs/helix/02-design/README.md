@@ -15,12 +15,13 @@ The [storage layout review](storage-layout-review.md) checks that layout
 against graph-on-SQL practice, records which concerns SPIKE-002 settled, and
 lists decisions and follow-up measurements for the storage ADR.
 
-[ADR-002](adr/ADR-002-storage-strategy.md) proposes adopting option C,
-partitioned by type, with the constraints SPIKE-002 and the review impose; it
-is **proposed**, awaiting the owner's decision and validation measurements V1–V7.
+[ADR-002](adr/ADR-002-storage-strategy.md), **accepted** 2026-10-03, adopts
+option C partitioned by type, with the constraints SPIKE-002 and the review
+impose. Its storage-home thresholds, composition rule, edge ids and edge index
+shape are provisional until validation measurements V1–V3, V5 and V7 report.
 
-Status: no architecture or accepted ADRs yet. Pending decisions: the owner's
-decision on ADR-002, and that design must record: ADR-001
+Status: ADR-002 accepted; no architecture document yet. Pending decisions that
+design must record: ADR-001
 (TypeScript on Bun first, a portable core free of I/O and host-specific APIs,
 and the measurable triggers for a Rust core), supported PostgreSQL versions,
 and the query language. The draft storage layers in
