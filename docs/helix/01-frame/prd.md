@@ -252,7 +252,6 @@ This section records current decisions; it does not make them.
 - [ ] Are the proposed absolute latency targets (1 ms read, 3 ms write, 20 ms enumeration) the right bar? — blocks FR-29 to FR-32 acceptance, ask the owner.
 - [ ] Which PostgreSQL versions are supported: minimum 16, and 18? — blocks FR-40, ask the owner.
 - [ ] Is the unexplained read tail on the edge-limit table at 1,000 relationships a defect? — blocks the multiplicity design in FR-14 being final; re-run SPIKE-003 E1b.
-- [ ] Should a key stay reserved after its object is deleted, as an option? — blocks nothing now; revisit if a second user needs it.
 - [ ] How are `json`-like properties represented in UMF core? — blocks FR-10 for that value family, ask the UMF maintainers.
 
 ## Success Criteria
