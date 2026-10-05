@@ -254,6 +254,16 @@ projection of the journal.
 - An acceptance waits for current writers and, under continuous writer load,
   can wait seconds, so it sets a lock timeout and retries. *(evidence: SPIKE-003,
   median 0.5 s and worst 5.5 s with sixteen continuous writers)*
+- A deployment whose writers are busy enough to starve acceptances MAY add a
+  fair queue in front: writers take `pg_advisory_xact_lock_shared` on a fixed
+  key before the head-row read, and an acceptance takes `pg_advisory_xact_lock`
+  on the same key before updating the head. The head row stays the authority, so
+  correctness is that of the head row under both isolation levels. Under
+  sixteen continuous writers, acceptances waited 5 to 45 ms and 42 completed in
+  the window, against 3 to 4 with waits up to 11 s without it; write throughput
+  fell 6 to 25%. *(evidence: SPIKE-003 mechanism E, PostgreSQL 16.2 and 17.9. That
+  a queued acceptance and an unqueued writer, or the reverse, still serialize
+  through the head row follows from the lock modes and has not been run.)*
 - Revision acceptance runs the generated violator queries and lists every
   violating object before accepting a tightened rule.
 
