@@ -52,7 +52,7 @@ evidence of implemented capabilities.
 | Claims | truss may claim bounded conformance, such as enforcing named UMF core ideals on named PostgreSQL versions, backed by fixture evidence. | Matches UMF's rule that every support claim names versions, subset and evidence. |
 | Unit of storage | The individual property value and edge are the logical unit of identity, typing, indexing, mutation and enforcement. Physically, values are packed into one flat JSON map per object keyed by property-definition id; nested records become child objects linked by composition edges, never nested JSON. Author-shaped documents are only derived views. | Property orientation is the boundary with Axon: the JSON map is packing, whereas Axon's document is the unit of meaning. |
 | Document view | A root object plus its composition-edge subtree can be materialized as a document view. | Leaves room for Axon, if it grows graph features, to use truss as its property and edge layer instead of duplicating one. |
-| Aggregate consistency | truss reports aggregate consistency boundaries as unenforced unless explicitly modeled. | Foreign keys and edges do not enforce DDD aggregates; honest reporting is a reason to choose Axon for aggregate-shaped workloads. |
+| Aggregate consistency | truss reports aggregate consistency boundaries as unenforced unless explicitly modeled. | Foreign keys and edges do not enforce domain-driven design (DDD) aggregates, the consistency boundaries of that modeling approach; honest reporting is a reason to choose Axon for aggregate-shaped workloads. |
 | Query language | Adopt ISO GQL (ISO/IEC 39075:2024) or SQL/PGQ (ISO/IEC 9075-16:2023) semantics and compile to SQL, using UMF for typing. | UMF defines no query semantics; inventing a language adds risk. |
 | Language | TypeScript on Bun first, with a core free of I/O and host-specific APIs and a language-neutral conformance corpus, so a later Rust core can be verified against the same corpus. ADR-001 records the choice and the measurable triggers for Rust. | See the language analysis below. |
 
@@ -139,9 +139,11 @@ Keeping that move cheap:
 - Express the conformance corpus as data: UMF documents, graph data, queries,
   expected SQL and expected results. A Rust core must pass the same corpus.
 
-Conflict to settle in ADR-001: the HELIX `typescript-bun` concern prefers
+The original conflict was that HELIX's `typescript-bun` concern prefers
 Bun-native APIs, while a library embedded by Node applications cannot depend
-on them.
+on them. [ADR-001](../02-design/adr/ADR-001-language-and-portable-core.md) D2,
+accepted 2026-10-03, resolves it: host APIs belong in adapters and tooling;
+the core uses ECMAScript built-ins only.
 
 ## UMF Gaps Handed to UMF (2026-09-24)
 
@@ -168,13 +170,17 @@ items were observed for gaps 3 to 6.
 
 ## Open Decisions
 
-- ADR-001: confirm TypeScript on Bun, the portable-core split, and the
-  measurable triggers for a Rust core.
+- Language and portable core: settled by
+  [ADR-001](../02-design/adr/ADR-001-language-and-portable-core.md), accepted
+  2026-10-03. TypeScript first; Bun for development and testing; a portable
+  core; Rust considered only after a D6 trigger. Node support remains
+  provisional until L1.
 - PostgreSQL versions to support first. Whether and when to add SQL Server,
   which UMF already has qualified bindings for.
 - Query language: GQL, SQL/PGQ, or a subset.
-- Whether truss reads UMF through its own implementation or through
-  pre-validated artifacts produced by UMF tooling.
+- UMF reading: ADR-001 D4 selects UMF's pinned TypeScript library for parsing
+  and validation, with cached revision-level results. Pre-validated artifacts
+  remain an open option mainly for a future Rust core.
 - First users and workloads; audience validation has not started.
 - Work tracker: the DDx tracker workspace has not been initialized in this
   repository.

@@ -15,10 +15,17 @@ ddx:
 
 # Project Concerns
 
-Project Concerns declare active cross-cutting context for downstream work. They
-are not principles, requirements, ADRs, test plans, or implementation tasks.
-These are the initial selections implied by the [product vision](../00-discover/product-vision.md)
-and [discovery input](../00-discover/vision-input.md); `frame` refines them.
+TypeScript on Bun and PostgreSQL are the active language-runtime and datastore
+selections. [ADR-001](../02-design/adr/ADR-001-language-and-portable-core.md)
+and [ADR-002](../02-design/adr/ADR-002-storage-strategy.md) govern their practices.
+The [product vision](../00-discover/product-vision.md) and
+[discovery input](../00-discover/vision-input.md) supply the product context.
+
+UMF is DocumentDrivenDX's metamodel and schema interchange fabric. SQL is
+Structured Query Language; JSON is JavaScript Object Notation; JSONB is
+PostgreSQL's binary JSON storage type. An architecture decision record (ADR)
+records a technical choice. Input/output (I/O) and application programming
+interfaces (APIs) mark the portable-core boundary below.
 
 ## Active Concerns
 
@@ -26,7 +33,7 @@ and [discovery input](../00-discover/vision-input.md); `frame` refines them.
 |---------|--------|-------|------------|---------------|
 | `typescript-bun` | library; slot `language-runtime`; source `shipped-default`, matching owner direction 2026-09-24 (TypeScript first, Rust only if necessary) | `area:*` | truss reuses UMF's TypeScript library and toolchain. | Library practices, with the portable-core override below. [ADR-001](../02-design/adr/ADR-001-language-and-portable-core.md) (accepted 2026-10-03) confirms the choice, Node 22+ and Bun support, separate core and adapter packages, and the triggers for a Rust core. |
 | `postgresql` | project-local; slot `datastore`; source `operator-override` (owner direction 2026-09-24) | `area:storage`, `area:catalog`, `area:query`, `area:mutation`, `area:constraints`, `area:dialects` | PostgreSQL is the initial backing SQL implementation; the library has no `datastore` members. | Supported PostgreSQL versions named in every claim; evidence from real PostgreSQL instances; PostgreSQL-specific SQL confined to `area:dialects`. Per [ADR-002](../02-design/adr/ADR-002-storage-strategy.md): prepared statements (or an equivalent plan cache) in every adapter, and deployments that cannot prepare are refused; objects partitioned by type; indexes and extended statistics only where the binding declares them, with a reported index budget per partition. |
-| `relational-data-modeling` | library | `area:storage`, `area:catalog` | truss's own fixed table set and any generated per-type tables are relational schemas that must stay correct across releases. | Keys, constraints, indexing strategy and migration discipline for truss's own tables. |
+| `relational-data-modeling` | library | `area:storage`, `area:catalog` | truss's fixed table set and any later shaped tables must preserve keys and integrity across releases. | Keys, constraints, indexing strategy and migration discipline for truss's own tables. |
 | `scope-discipline` | library | `area:*` | "Universal tables" invites gold-plating ahead of framed requirements. | Build only what governing acceptance criteria request; no hollow placeholders. |
 | `testing` | library | `area:*` | Every storage, query and constraint behavior needs executable evidence. | Tests trace to acceptance criteria; never skip failing tests. |
 | `verification` | library | `area:*` | Claims about database behavior must come from running real engines. | Observed evidence against real PostgreSQL instances before a claim. |
@@ -43,14 +50,16 @@ fires; SQL Server as a second backing engine.
 
 | Concern | Practice | Override | Authority |
 |---------|----------|----------|-----------|
-| `typescript-bun` | Use Bun-native APIs (`Bun.sql`, `Bun.file`, …) | The compiler and catalog core stay free of I/O and of Bun- or Node-specific APIs so Node applications can embed truss; Bun-native APIs are allowed in database adapters, tooling and tests. Follows the split in UMF's ADR-002. | [ADR-001](../02-design/adr/ADR-001-language-and-portable-core.md) D2 (accepted 2026-10-03) |
+| `typescript-bun` | Target Bun only and prefer Bun-native APIs (`Bun.sql`, `Bun.file`, …) | The compiler and catalog core stay free of I/O and of Bun- or Node-specific APIs so Node applications can embed truss; Bun-native APIs are allowed in database adapters, tooling and tests. The published library targets Bun and Node 22 and later LTS (long-term support) lines; Node support remains provisional until L1. | [ADR-001](../02-design/adr/ADR-001-language-and-portable-core.md) D1–D2 (accepted 2026-10-03) |
+| `relational-data-modeling` | Normalize by default and enforce integrity with database constraints | Store values in an object JSONB map; enforce per-type rules through the engine or catalog-driven database validation. No per-type `CHECK` constraints on shared tables. Report the enforcement layer for each assertion. | [ADR-002](../02-design/adr/ADR-002-storage-strategy.md) D3, D9 |
+| `testing` | Prefer generated data over static fixtures | Keep the language-neutral conformance corpus as data with normative expected results and enforcement reports. Seeded generated cases may supplement it. | [ADR-001](../02-design/adr/ADR-001-language-and-portable-core.md) D5 |
 
 ## Area Labels
 
 This project uses the following area labels for concern scoping:
 
 - `area:catalog` — UMF schema storage, revisions and derived catalog rows
-- `area:storage` — the fixed instance tables and generated per-type tables
+- `area:storage` — the fixed instance tables and later shaped storage
 - `area:query` — query compilation and result shaping
 - `area:mutation` — writes, transactions and the mutation journal
 - `area:constraints` — enforcement of UMF assertions and enforcement reporting

@@ -27,6 +27,14 @@ website and pricing pages were blocked by this session's egress proxy, so
 several findings rest on the maker's GitHub repositories and Docker Hub
 listing, and others on search-engine summaries, each labelled where used.
 
+UMF is DocumentDrivenDX's machine-readable metamodel and schema interchange
+fabric. SQL is the relational database query language; PostgreSQL's JSONB
+type stores binary JSON (JavaScript Object Notation).
+
+The findings retain the research dates and versions in Scope. The storage
+choice is governed by [ADR-002](../02-design/adr/ADR-002-storage-strategy.md),
+the architecture decision record; candidate assessments below remain desk research.
+
 ## Scope
 
 - Component: PuppyGraph 1.x (image `puppygraph/puppygraph`, 1.0.0 released
