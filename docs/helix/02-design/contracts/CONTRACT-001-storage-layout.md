@@ -118,7 +118,7 @@ No table other than `journal` is partitioned, and no operation adds a table, par
 - Indexes other than those in `storage-layout.sql` exist only where the binding declares them; the engine never creates them in response to queries. A declared index on `object` is a partial expression index on one type. *(ADR-002 D11)*
 - Planning cost grows with the number of indexes on `object`. Measured on PostgreSQL 16.2 and 17.9 with one partial index per type: planning a key lookup took about 0.1 ms with 111 indexes and about 90 to 105 ms with 1011, while a layout with no per-type indexes planned in 0.02 ms at every size (SPIKE-003). The deployment sets a budget for declared indexes per table; the default is 100, and the report lists the count. *(Proposed; default from SPIKE-003)*
 - A declared index MUST be built with `CREATE INDEX CONCURRENTLY`, outside the acceptance transaction. The implementation MUST then check that the index is valid and drop and report it if not; the acceptance report lists indexes still pending. *(Proposed)*
-- `edge` carries two traversal indexes: `(source_id, rel_type_id) INCLUDE (target_id, target_type)` and the reverse. *(ADR-002 D6; the `target_type` include is provisional)*
+- `edge` carries two traversal indexes: `(source_id, rel_type_id, target_id) INCLUDE (target_type)`, which is unique, and `(target_id, rel_type_id) INCLUDE (source_id, source_type)`. The unique index makes an edge unique by relationship, source and target: a second kind of link between the same two objects is a second relationship, and a repeated link of one kind needs an association object. A traversal from a source uses the index by its first two columns, and no table or index is added for the rule. *(ADR-002 D6; SPIKE-003 F9; the `target_type` include is provisional)*
 - A maximum multiplicity of one is enforced by `edge_limit`, whose primary key `(rel_type_id, side, endpoint_id)` refuses a second edge: side `s` holds one row per edge of a relationship that allows one edge per source, side `t` one per target. The engine writes the row in the same transaction as the edge; the row goes with the edge by the foreign key. A maximum above one is enforced by the engine under the parent lock. No index is created per relationship, because that costs a table-wide index per relationship: at 1,000 relationships, 1,003 edge indexes made planning take about 110 ms and inserts 5 times slower, while `edge_limit` kept both at the baseline. *(ADR-002 D9; SPIKE-003 E1b)*
 
 **Concurrency**
@@ -183,6 +183,7 @@ Errors are classified by SQLSTATE and the relation concerned, never by constrain
 
 | Condition | SQLSTATE | Meaning to the engine |
 |-----------|----------|------------------------|
+| A second edge with the same relationship, source and target | `unique_violation` on `edge` | `edge_exists` |
 | Edge to a disallowed endpoint type or a missing object | `foreign_key_violation` on `edge` | `endpoint_violation` |
 | Delete of an object that has an edge | `foreign_key_violation` on `object` | `has_edges` |
 | Key value already held by another object of the type | `unique_violation` on `object_key` | `key_conflict` |

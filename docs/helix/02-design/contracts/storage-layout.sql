@@ -183,7 +183,9 @@ CREATE TABLE truss.edge (
   CONSTRAINT edge_endpoint_types_fk FOREIGN KEY (rel_type_id, source_type, target_type)
     REFERENCES truss.rel_endpoint (rel_type_id, source_type, target_type)
 );
-CREATE INDEX edge_out ON truss.edge (source_id, rel_type_id) INCLUDE (target_id, target_type);
+-- Unique: one edge per relationship, source and target, whatever the relationship. Two kinds of link between
+-- the same records are two relationships. The index still serves traversal by its (source_id, rel_type_id) prefix.
+CREATE UNIQUE INDEX edge_out ON truss.edge (source_id, rel_type_id, target_id) INCLUDE (target_type);
 CREATE INDEX edge_in  ON truss.edge (target_id, rel_type_id) INCLUDE (source_id, source_type);
 
 -- Maximum multiplicity of one, enforced without a per-relationship index. A relationship that allows

@@ -53,6 +53,17 @@ BEGIN
     RAISE EXCEPTION 'a second edge_limit row for one source was accepted';
   EXCEPTION WHEN unique_violation THEN NULL; END;
 
+  -- one edge per relationship, source and target; a second relationship between the same records is allowed
+  BEGIN
+    INSERT INTO truss.edge (rel_type_id, source_id, source_type, target_id, target_type, rev) VALUES (1, s, 1, u, 2, 1);
+    RAISE EXCEPTION 'a second edge for one relationship, source and target was accepted';
+  EXCEPTION WHEN unique_violation THEN NULL; END;
+  INSERT INTO truss.rel_def (rel_type_id, module, rel_id, name, source_min, source_max, target_min, target_max,
+                             lifecycle, directed, since_rev, doc_ord)
+    VALUES (2, 'm', 'supersedes', 'supersedes', 0, NULL, 0, NULL, 'independent', true, 1, 0);
+  INSERT INTO truss.rel_endpoint VALUES (2, 1, 2);
+  INSERT INTO truss.edge (rel_type_id, source_id, source_type, target_id, target_type, rev) VALUES (2, s, 1, u, 2, 1);
+
   -- endpoint types are enforced by the database
   BEGIN
     INSERT INTO truss.edge (rel_type_id, source_id, source_type, target_id, target_type, rev) VALUES (1, s, 1, p, 3, 1);
@@ -69,7 +80,7 @@ BEGIN
   EXCEPTION WHEN foreign_key_violation THEN NULL; END;
   -- the same id with another type is a different key and is not an object
   BEGIN
-    INSERT INTO truss.edge (rel_type_id, source_id, source_type, target_id, target_type, rev) VALUES (1, s, 2, u, 2, 1);
+    INSERT INTO truss.edge (rel_type_id, source_id, source_type, target_id, target_type, rev) VALUES (1, s, 2, p, 3, 1);
     RAISE EXCEPTION 'edge with a wrong source type was accepted';
   EXCEPTION WHEN foreign_key_violation THEN NULL; END;
 

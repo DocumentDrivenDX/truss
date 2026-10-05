@@ -1,0 +1,8 @@
+none {"insert_edge_ms": {"n": 2000, "p50": 0.106, "p95": 2.47, "p99": 5.218, "mean": 0.599}, "race_pairs_with_duplicate_edges_of_300": 300, "race_refusals": 0}
+unique_out {"insert_edge_ms": {"n": 1922, "p50": 0.104, "p95": 2.139, "p99": 5.485, "mean": 0.542}, "race_pairs_with_duplicate_edges_of_300": 0, "race_refusals": 310}
+pair_table {"insert_edge_ms": {"n": 1922, "p50": 0.154, "p95": 2.153, "p99": 5.499, "mean": 0.48}, "race_pairs_with_duplicate_edges_of_300": 0, "race_refusals": 310}
+engine_lock {"insert_edge_ms": {"n": 1922, "p50": 0.205, "p95": 2.375, "p99": 4.657, "mean": 0.7}, "race_pairs_with_duplicate_edges_of_300": 0, "race_refusals": 310}
+none {"insert_edge_ms": {"n": 2000, "p50": 0.123, "p95": 2.071, "p99": 8.371, "mean": 0.607}, "race_pairs_with_duplicate_edges_of_300": 300, "race_refusals": 0}
+unique_out {"insert_edge_ms": {"n": 1922, "p50": 0.135, "p95": 2.093, "p99": 3.594, "mean": 0.556}, "race_pairs_with_duplicate_edges_of_300": 0, "race_refusals": 310}
+pair_table {"insert_edge_ms": {"n": 1922, "p50": 0.168, "p95": 2.329, "p99": 3.75, "mean": 0.44}, "race_pairs_with_duplicate_edges_of_300": 0, "race_refusals": 310}
+engine_lock {"insert_edge_ms": {"n": 1922, "p50": 0.202, "p95": 2.661, "p99": 5.755, "mean": 0.632}, "race_pairs_with_duplicate_edges_of_300": 0, "race_refusals": 310}

@@ -183,8 +183,13 @@ applies.
   and a FK on `(rel_type_id, source_type, target_type)` references
   `rel_endpoint`. Endpoint types are therefore enforced by the database with no
   DDL per relationship. *(evidence: FINDING 4, R1)*
-- Traversal indexes are `(source_id, rel_type_id) INCLUDE (target_id,
-  target_type)` and the reverse. *(evidence for index-only traversal; the
+- Traversal indexes are `(source_id, rel_type_id, target_id) INCLUDE
+  (target_type)`, unique, and `(target_id, rel_type_id) INCLUDE (source_id,
+  source_type)`. The unique one makes an edge unique by relationship, source and
+  target, which makes an edge's identity in an import well defined and stops
+  concurrent creates committing a duplicate. *(evidence: SPIKE-003 F9: without it
+  300 of 300 concurrent creates of one pair committed two edges; with it none
+  did, at no measured insert cost)* *(evidence for index-only traversal; the
   `target_type` include is SPIKE-002's proposed fix for the two-hop tail,
   unmeasured)*
 - Edges take ids from the shared sequence so they can be journaled and carry

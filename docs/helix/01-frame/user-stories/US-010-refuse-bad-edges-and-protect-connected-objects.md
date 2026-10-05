@@ -45,6 +45,7 @@ ddx:
 - [ ] **US-010-AC2** — Given an edge to an object that does not exist, when it is created, then it is refused.
 - [ ] **US-010-AC3** — Given an object with an edge, when it is deleted, then the delete is refused, including when attempted with plain SQL.
 - [ ] **US-010-AC4** — Given the edge is deleted first, when the object is deleted, then the delete succeeds.
+- [ ] **US-010-AC5** — Given an edge of one relationship between two objects, when two sessions create it again at the same moment, then at most one edge exists and the other session is refused as `edge_exists`; a second relationship between the same objects is accepted.
 
 ## Edge Cases
 
@@ -59,6 +60,7 @@ ddx:
 | Missing | US-010-AC2 | No target | Create | Refused |
 | Protected | US-010-AC3 | Object with edge | Delete (plain SQL) | Refused |
 | After edge | US-010-AC4 | Edge deleted | Delete object | Succeeds |
+| Duplicate | US-010-AC5 | Edge exists | Two sessions create it again | One edge; `edge_exists`; second relationship accepted |
 
 ## Dependencies
 

@@ -82,6 +82,7 @@ An operation SHOULD use prepared statements and MUST give the same results witho
 | `endpoint_violation` | The relationship does not allow these endpoint types, or an endpoint does not exist | no |
 | `has_edges` | The object is still referred to by an edge that is not owned by it | after removing the edges |
 | `key_conflict` | The key value already belongs to another object of the type (a unique violation on `object_key`) | no |
+| `edge_exists` | An edge with this relationship, source and target already exists (a unique violation on `edge`) | no |
 | `key_reserved` | The key value is in `key_tombstone` and `setting.key_reuse` is `"forbid"` | no |
 | `version_conflict` | `expected_ver` differs from the stored `ver` | after re-reading |
 | `catalog_changed` | The head revision differs from the one the write validated against | yes |
