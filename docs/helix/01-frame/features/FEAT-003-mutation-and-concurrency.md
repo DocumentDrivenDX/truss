@@ -19,7 +19,7 @@ ddx:
 **Status**: Draft
 **Priority**: P0
 **Covered PRD Subsystem(s)**: Mutation and concurrency
-**Covered PRD Requirements**: FR-16 to FR-21
+**Covered PRD Requirements**: FR-16 to FR-21, FR-51
 **Cross-Subsystem Rationale**: None; single subsystem.
 
 ## Overview
@@ -67,6 +67,10 @@ MUT-05. Errors are of defined kinds, each with a stated retry rule (FR-20).
 
 MUT-06. Cross-row rules lock the parent or run serializable; a deferred trigger under READ COMMITTED alone is never reported as database enforcement (FR-21).
 
+#### Groups
+
+MUT-07. A caller can apply several operations as one atomic group, with one origin and one catalog check, that commits or fails as a whole and names the failing operation (FR-51).
+
 ### Non-Functional Requirements
 
 - **Correctness**: tested against the stale-write cases of SPIKE-003 (head row detects under both isolation levels; advisory-only and new-row-per-revision do not).
@@ -78,6 +82,7 @@ MUT-06. Cross-row rules lock the parent or run serializable; a deferred trigger 
 - [US-012 — Write with one protocol and report every violation](../user-stories/US-012-write-with-one-protocol-and-report-every-violation.md)
 - [US-013 — Refuse a write against a stale catalog](../user-stories/US-013-refuse-a-write-against-a-stale-catalog.md)
 - [US-014 — Keep cross-row rules honest](../user-stories/US-014-keep-cross-row-rules-honest.md)
+- [US-040 — Apply several operations as one atomic group](../user-stories/US-040-apply-operations-as-one-atomic-group.md)
 
 ## Edge Cases and Error Handling
 

@@ -242,6 +242,16 @@ CREATE TABLE truss.record_source (
 );
 CREATE INDEX record_source_load ON truss.record_source (load_id);
 
+-- ---- Change feed consumers ----------------------------------------------------------------
+-- The position each registered consumer of the journal has reached (CONTRACT-006). A consumer reports its own
+-- position; retention never drops a journal partition that holds rows past the lowest reported position.
+CREATE TABLE truss.feed_consumer (
+  consumer    text PRIMARY KEY,
+  xid         xid8   NOT NULL,                       -- last journal row delivered, in (xid, seq) order
+  seq         bigint NOT NULL,
+  updated_at  timestamptz NOT NULL DEFAULT clock_timestamp()
+);
+
 -- ---- History -----------------------------------------------------------------------------
 CREATE SEQUENCE truss.journal_seq;
 CREATE TABLE truss.journal (
