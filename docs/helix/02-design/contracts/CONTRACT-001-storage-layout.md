@@ -29,7 +29,7 @@ ddx:
 
 **Contract ID**: CONTRACT-001
 **Type**: schema
-**Version**: layout 0.1 (draft)
+**Version**: layout 0.2 (draft)
 **Status**: draft
 **Related**: ADR-002 (storage strategy), ADR-001 (language and portable core), SPIKE-002, SPIKE-003, the storage layout review, CONTRACT-002 (journal), CONTRACT-003 (catalog), CONTRACT-004 (mutation and conformance)
 
@@ -54,7 +54,7 @@ MUST, MUST NOT, SHOULD and MAY are used as in RFC 2119. The schema name is a dep
 
 | Table | Rules | Source |
 |-------|-------|--------|
-| `setting` | Key/value deployment settings. `journal_mode` is `"engine"` or `"trigger"` (CONTRACT-002). | Proposed |
+| `setting` | Key/value deployment settings. `journal_mode` is `"engine"` or `"trigger"` (CONTRACT-002); `key_reuse` is `"forbid"` or `"allow"` (CONTRACT-004). | Proposed |
 | `schema_rev` | One row per accepted catalog revision: `rev` (primary key), `accepted_at`, `report`. Revision 0 is the empty catalog and exists from the start. Immutable. | ADR-002 D1; Proposed |
 | `schema_head` | One row (`id` = 1) holding the current revision. Updated in place by every acceptance. | ADR-002 D10; SPIKE-003 |
 | `schema_doc` | The UMF documents of a revision, verbatim: `(rev, ord)`, `doc_id`, `doc_revision`, `umf_version`, `content_sha256`, `document`, `validation`. A revision MAY hold several documents. Immutable. | ADR-002 D1; Proposed |
@@ -67,6 +67,8 @@ MUST, MUST NOT, SHOULD and MAY are used as in RFC 2119. The schema name is a dep
 | `object` | One table for every type. Primary key `(id, type_id)`. `props`, `retained`, `root_id` and `root_type`, `rev`, `ver`, `created_at`, `updated_at`. Index `(type_id, id)` serves keyset listing of one type. | ADR-002 D2, D3; D5 (provisional); Proposed |
 | `object_key` | One row per object per key: `(type_id, key_num, k)` is the primary key, `(object_id, type_id, key_num)` is unique, and `(object_id, type_id)` references `object` with `ON DELETE CASCADE`. | ADR-002 D2, D9; SPIKE-003 |
 | `edge` | `id`, `rel_type_id`, `(source_id, source_type)`, `(target_id, target_type)`, `props`, `order_key` (text, `COLLATE "C"`), `rev`, `ver`, `created_at`, `updated_at`. | ADR-002 D6; Proposed |
+| `key_tombstone` | A key value an object has held, or the endpoints of a deleted imported edge, written in the transaction that deletes or re-keys the record and never changed. `(entity_kind, type_id, key_num, k)` is the primary key. | Proposed |
+| `record_source` | One row per imported record: `(entity_kind, entity_id)` is the primary key, with the `load_id` and a `source` JSON object whose defined optional keys are `author`, `at` and `system`. Written by the import that created the record, never changed. | Proposed |
 | `journal` | RANGE-partitioned by `at`, with no default partition. See CONTRACT-002. | ADR-002 D7; Proposed |
 | `id_seq` | One sequence for object and edge ids. | ADR-002 D6 (edge ids provisional, V7) |
 | `journal_seq` | The sequence for `journal.seq`. An explicit sequence, not an identity column. | Proposed |
@@ -81,6 +83,7 @@ No table other than `journal` is partitioned, and no operation adds a table, par
 | `edge.(rel_type_id, source_type, target_type)` MUST reference `rel_endpoint`. | ADR-002 D6 |
 | `object.(root_id, root_type)` MUST reference `object (id, type_id)` with `ON DELETE RESTRICT`; `root_id` and `root_type` are both set or both NULL. Every reference carries both columns. | ADR-002 D2, D5 (provisional); Proposed (`root_type`) |
 | `object_key.(type_id, key_num)` MUST reference `key_def`. | Proposed |
+| A `key_tombstone` for an edge has `key_num` 0; `source` of a `record_source` row is a JSON object. | Proposed |
 | `props`, `edge.props` and `journal.origin` MUST be JSON objects; `retained` MUST be a JSON object or NULL. `props` is NOT NULL, so a SQL NULL from `jsonb_set` fails instead of erasing the map. | ADR-002 D3 |
 | No per-type CHECK constraints on `object`. | ADR-002 D9 |
 | `rev` columns of `object`, `edge` and the catalog tables reference `schema_rev`. `journal.rev` is not enforced. | Proposed |
@@ -99,6 +102,7 @@ No table other than `journal` is partitioned, and no operation adds a table, par
 - An object that lacks a key component has no `object_key` row for that key. It is not reachable by that key and the engine reports it.
 - `object_key` rows are written, updated and deleted by the same operation, in the same transaction, as the object (the engine, or a host's trigger). A change to a key component changes `k`. Deleting an object deletes its key rows by the foreign key. *(ADR-002 D9; SPIKE-003)*
 - A key lookup is `object_key` joined to `object` on `(object_id, type_id)`.
+- A key value an object has held is written to `key_tombstone` in the same transaction as the delete, and also when a change of key component frees the old value. With `setting.key_reuse` `"forbid"` the value then stays reserved: an import skips it and a direct create is refused (CONTRACT-004). With `"allow"` the tombstone is still written and a create may reuse the value. The database cannot enforce a reservation by a constraint, so it is engine enforcement, and a delete by plain SQL without a host trigger leaves no tombstone, which the enforcement report lists. *(Proposed)*
 
 **Values**
 

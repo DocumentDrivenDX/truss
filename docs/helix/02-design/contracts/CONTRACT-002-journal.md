@@ -21,7 +21,7 @@ ddx:
 
 **Contract ID**: CONTRACT-002
 **Type**: schema
-**Version**: layout 0.1 (draft)
+**Version**: layout 0.2 (draft)
 **Status**: draft
 **Related**: ADR-002 D7, CONTRACT-001 (storage layout), CONTRACT-004 (mutation)
 

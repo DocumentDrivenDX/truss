@@ -296,6 +296,24 @@ projection of the journal.
   SPIKE-003). *(evidence for index-count planning cost;
   choice for the rule)*
 
+### D13. Import identity and provenance
+
+*(choice; layout 0.2)*
+
+- A record is imported by its identity: an object by its type and primary key,
+  an edge by its relationship and its two endpoint ids. Repeating an import
+  creates nothing that is already held and nothing that was deleted.
+- A key value an object has held is written to `key_tombstone` in the
+  transaction that deletes the object or changes the key component. The
+  deployment setting `key_reuse` is `forbid` by default, which reserves the value
+  against a direct create and against an import, and `allow`, which does not.
+  The reservation is engine enforcement, not database enforcement.
+- An imported record has one `record_source` row naming the load and carrying
+  the source's own facts (`author`, `at`, `system`), written once and never
+  changed. The actor and database role stay in the journal's `origin`.
+- Both tables are written only on delete, re-key and import, so a create, an
+  update and a read pay nothing for them.
+
 ### D12. UMF boundary
 
 The storage strategy, storage homes, index and statistics declarations, and

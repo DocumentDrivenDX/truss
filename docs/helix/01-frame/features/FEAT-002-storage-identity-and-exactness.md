@@ -19,7 +19,7 @@ ddx:
 **Status**: Draft
 **Priority**: P0
 **Covered PRD Subsystem(s)**: Storage, identity and exactness
-**Covered PRD Requirements**: FR-9 to FR-15
+**Covered PRD Requirements**: FR-9 to FR-15, FR-45, FR-46
 **Cross-Subsystem Rationale**: None; single subsystem.
 
 ## Overview
@@ -45,6 +45,7 @@ An engineer writes values of every UMF scalar family and reads them back unchang
 | Retained data | What happens to data the schema does not know? | Retain, report, re-bind later |
 | Keys | Can I find an object by its business key? | Database-enforced keys per type |
 | Edges | Can a relationship be wrong? | Typed endpoints, protected deletion, multiplicity |
+| Import | Can I re-run an import safely? | Idempotent import, reserved keys, source facts |
 
 ## Requirements
 
@@ -72,6 +73,11 @@ STO-05. An edge joins two existing objects of types its relationship allows; the
 STO-06. A maximum multiplicity of one is enforced by the database without a per-relationship index; larger maxima are enforced in the write protocol (FR-14).
 STO-07. Object and edge identifiers come from one sequence and are never reused (FR-15).
 
+#### Import
+
+STO-08. Importing the same records again changes nothing: a record is identified by its type and primary key (an edge by its relationship and endpoints), a record already held or deleted is skipped, and what was created, skipped and rejected is reported (FR-45).
+STO-09. An imported record keeps the load it came from and the source's own facts (author, time, system), recorded once and never changed (FR-46).
+
 ### Non-Functional Requirements
 
 - **Performance**: point reads by id or key and one-hop reads stay at 0.02 to 0.04 ms at 1,000 types because the plans do not depend on the number of types (SPIKE-003).
@@ -85,6 +91,8 @@ STO-07. Object and edge identifiers come from one sequence and are never reused 
 - [US-009 — Find an object by its key](../user-stories/US-009-find-an-object-by-its-key.md)
 - [US-010 — Refuse bad edges and protect connected objects](../user-stories/US-010-refuse-bad-edges-and-protect-connected-objects.md)
 - [US-011 — Limit an edge's multiplicity without an index per relationship](../user-stories/US-011-limit-an-edges-multiplicity.md)
+- [US-034 — Repeat an import and change nothing](../user-stories/US-034-repeat-an-import-and-change-nothing.md)
+- [US-035 — Keep the source facts of an imported record](../user-stories/US-035-keep-the-source-facts-of-an-imported-record.md)
 
 ## Edge Cases and Error Handling
 
@@ -92,6 +100,8 @@ STO-07. Object and edge identifiers come from one sequence and are never reused 
 - **Two timestamps differ only in offset**: different keys.
 - **`1.0` and `1.00` as a decimal key**: the same key.
 - **Delete of an object with an edge**: refused by the database.
+- **A deleted key and a later import or create**: the value is reserved while `key_reuse` is `forbid`; an import skips it and a direct create is refused.
+- **A type with no primary key**: its records cannot be imported idempotently and are rejected with that reason.
 - **Explicit null written to a property**: stored as null, distinct from absent.
 
 ## Success Metrics

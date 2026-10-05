@@ -128,6 +128,27 @@ BEGIN
   SELECT count(*) INTO n FROM truss.object WHERE id = s AND (props ->> '10') = '9007199254740993';
   IF n <> 1 THEN RAISE EXCEPTION 'integer beyond 2^53 changed'; END IF;
 
+  -- a tombstone reserves a key text and cannot be written twice; a tombstone for an edge has key_num 0
+  INSERT INTO truss.key_tombstone (entity_kind, type_id, key_num, k, entity_id, ver) VALUES ('o', 1, 1, 'gone', s, 2);
+  BEGIN
+    INSERT INTO truss.key_tombstone (entity_kind, type_id, key_num, k, entity_id, ver) VALUES ('o', 1, 1, 'gone', s, 3);
+    RAISE EXCEPTION 'a second tombstone for one key was accepted';
+  EXCEPTION WHEN unique_violation THEN NULL; END;
+  BEGIN
+    INSERT INTO truss.key_tombstone (entity_kind, type_id, key_num, k, entity_id, ver) VALUES ('e', 1, 1, '["1","2"]', e, 2);
+    RAISE EXCEPTION 'an edge tombstone with key_num 1 was accepted';
+  EXCEPTION WHEN check_violation THEN NULL; END;
+  -- record_source holds one row per record and a JSON object
+  INSERT INTO truss.record_source (entity_kind, entity_id, load_id, source) VALUES ('o', s, 'load-1', '{"author":"a","at":"2026-08-14"}');
+  BEGIN
+    INSERT INTO truss.record_source (entity_kind, entity_id, load_id) VALUES ('o', s, 'load-2');
+    RAISE EXCEPTION 'a second record_source row for one record was accepted';
+  EXCEPTION WHEN unique_violation THEN NULL; END;
+  BEGIN
+    INSERT INTO truss.record_source (entity_kind, entity_id, load_id, source) VALUES ('o', 99999, 'load-1', '[]');
+    RAISE EXCEPTION 'a non-object source was accepted';
+  EXCEPTION WHEN check_violation THEN NULL; END;
+
   -- the journal accepts rows, routes by time, and refuses a time no partition covers
   INSERT INTO truss.journal (entity_kind, entity_id, entity_type, ver, op, rev, origin)
     VALUES ('o', s, 1, 1, 'create', 1, '{"actor":"t"}'), ('o', s, 1, 2, 'update', 1, '{}');
@@ -144,6 +165,8 @@ BEGIN
   EXCEPTION WHEN check_violation THEN NULL; END;
 
   -- settings and the type listing index
+  SELECT count(*) INTO n FROM truss.setting WHERE key = 'key_reuse' AND value = '"forbid"';
+  IF n <> 1 THEN RAISE EXCEPTION 'key_reuse setting missing'; END IF;
   SELECT count(*) INTO n FROM truss.setting WHERE key = 'journal_mode' AND value = '"engine"';
   IF n <> 1 THEN RAISE EXCEPTION 'journal_mode setting missing'; END IF;
   SELECT count(*) INTO n FROM pg_indexes WHERE schemaname = 'truss' AND tablename = 'object' AND indexname = 'object_type_id';

@@ -134,6 +134,8 @@ Deferred items are tracked in `docs/helix/parking-lot.md` when it exists.
 - **FR-13** — An edge connects two existing objects of types its relationship allows, and the database refuses any other. An object that still has edges cannot be deleted.
 - **FR-14** — A maximum multiplicity of one on a relationship is enforced by the database, without a per-relationship index; larger maxima are enforced in the write protocol under the parent lock.
 - **FR-15** — Every identifier of an object or an edge comes from one sequence and is never reused.
+- **FR-45** — Importing the same records again changes nothing: a record is identified by its type and primary key (an edge by its relationship and endpoints); one that is held or was deleted is skipped; and the import reports what was created, skipped and rejected. A deployment chooses whether a key an object has held stays reserved against a direct create.
+- **FR-46** — An imported record keeps the load it came from and the source's own facts (author, time, system), recorded once and never changed, apart from the actor recorded in the journal.
 
 ### Subsystem: Mutation and concurrency
 
@@ -191,6 +193,7 @@ Deferred items are tracked in `docs/helix/parking-lot.md` when it exists.
 | FR-5 | Tightened rule | A revision shortening a text limit, with 3 objects over it | Rejected; the 3 objects listed |
 | FR-7 | No DDL | Accept a revision that adds a type, a property and a relationship, with sixteen writers running | No table, partition or index created; writers not blocked beyond the head-row wait |
 | FR-10, FR-11 | Exact values and retention | The value corpus plus a field the schema does not define | Every value reads back exactly; the extra field is retained and reported |
+| FR-45, FR-46 | Repeat an import | Import 51 records with source facts, correct one, delete one, import again | Nothing changes, the deleted record stays deleted, each imported record still names its load and source facts |
 | FR-12, FR-13 | Keys and endpoints | A second object with the same key; an edge to a missing or wrongly typed object; delete of an object with an edge | Each refused by the database with its error kind |
 | FR-17 | Stale writer | A write that read revision N while revision N+1 is accepted, under READ COMMITTED and REPEATABLE READ | Never accepted against N; reported as catalog changed or retry |
 | FR-22, FR-23 | Journal | Change two properties of one object as role `w` with actor `a` | Two rows with old and new values, the same version, origin actor `a` and role `w`; a forced journal failure leaves the change unmade |
