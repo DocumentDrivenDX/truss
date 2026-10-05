@@ -18,16 +18,22 @@ ddx:
 
 # Storage Layout Review: generic catalog storage against graph-storage practice
 
-Design input for the storage ADR, not a decision. It reviews the draft storage
+Design input for [ADR-002](adr/ADR-002-storage-strategy.md), accepted on
+2026-10-03 with provisional points. The review evaluates the draft storage
 layers in [discovery input](../00-discover/vision-input.md) §Draft Storage
-Layers, as built for
-[SPIKE-002](spikes/SPIKE-002-storage-bake-off.md) option C
+Layers, as built for [SPIKE-002](spikes/SPIKE-002-storage-bake-off.md) option C
 (`spikes/SPIKE-002-storage-bake-off/sql/c_schema.sql`), against published
-graph-on-SQL practice. For each concern it records whether SPIKE-002 settled it,
-and lists what the ADR should decide and what the follow-up spike should
-measure. Written 2026-10-03; nothing here has been run beyond what SPIKE-002
-reports. Claims marked "inferred" come from PostgreSQL documentation or source
-and were not executed in this project.
+graph-on-SQL practice. The candidate positions below preserve the review's
+recommendations; ADR-002 owns the accepted decision and V1–V7 follow-up checks.
+Written 2026-10-03. Nothing here has been run beyond what SPIKE-002 reports. Claims marked
+"inferred" come from PostgreSQL documentation or source and were not executed
+in this project.
+
+Terminology: UMF is DocumentDrivenDX's machine-readable metamodel and schema
+interchange fabric. SQL is Structured Query Language; PostgreSQL JSONB is its
+binary JSON storage type. EAV means entity-attribute-value storage, FK means
+foreign key, and p95 is the 95th percentile. TAO is Facebook's distributed
+object and association store [1].
 
 Concern 3 (a shared objects table growing with type count) is settled by
 [SPIKE-003](spikes/SPIKE-003-partitioning-locks-and-prepared-statements.md): the

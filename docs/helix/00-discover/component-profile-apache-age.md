@@ -23,6 +23,14 @@ the bake-off options lives in a later ADR that cites this profile; what the
 record cannot settle is routed below. Executed evidence is kept out of this
 profile and recorded separately in [SPIKE-001](../02-design/spikes/SPIKE-001-apache-age.md).
 
+UMF is DocumentDrivenDX's machine-readable metamodel and schema interchange
+fabric. SQL is the relational database query language; PostgreSQL's JSONB
+type stores binary JSON (JavaScript Object Notation).
+
+The findings retain the research dates and versions in Scope. The storage
+choice is governed by [ADR-002](../02-design/adr/ADR-002-storage-strategy.md),
+the architecture decision record; candidate assessments below remain desk research.
+
 ## Scope
 
 - Component: Apache AGE 1.8.0, the release line published for PostgreSQL 18

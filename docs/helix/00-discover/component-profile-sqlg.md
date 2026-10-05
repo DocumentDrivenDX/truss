@@ -24,6 +24,14 @@ for the build-or-adopt decision; the choice among candidates belongs to a
 later ADR, and what the public record cannot settle is routed below. No
 hands-on testing was done.
 
+UMF is DocumentDrivenDX's machine-readable metamodel and schema interchange
+fabric. SQL is the relational database query language; PostgreSQL's JSONB
+type stores binary JSON (JavaScript Object Notation).
+
+The findings retain the research dates and versions in Scope. The storage
+choice is governed by [ADR-002](../02-design/adr/ADR-002-storage-strategy.md),
+the architecture decision record; candidate assessments below remain desk research.
+
 ## Scope
 
 - Component: Sqlg 3.1.6 (released 1 February 2026), the `sqlg-postgres`

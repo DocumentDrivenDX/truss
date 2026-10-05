@@ -25,6 +25,14 @@ truss and adopting an existing system lives in a later decision record
 that cites the profiles; anything the public record cannot settle is a
 [[tech-spike]].
 
+UMF is DocumentDrivenDX's machine-readable metamodel and schema interchange
+fabric. SQL is the relational database query language; PostgreSQL's JSONB
+type stores binary JSON (JavaScript Object Notation).
+
+The findings retain the research dates and versions in Scope. The storage
+choice is governed by [ADR-002](../02-design/adr/ADR-002-storage-strategy.md),
+the architecture decision record; candidate assessments below remain desk research.
+
 ## Scope
 
 - Component: LadybugDB (repository `LadybugDB/ladybug`, engine library

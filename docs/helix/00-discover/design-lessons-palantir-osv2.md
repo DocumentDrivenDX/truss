@@ -14,6 +14,12 @@ ddx:
 
 # Design Lessons for truss from Palantir Foundry Object Storage V2
 
+Palantir Foundry Object Storage V2 (OSv2) is the storage backend for Foundry's
+Ontology, its object and relationship model. UMF is DocumentDrivenDX's
+machine-readable metamodel and schema interchange fabric. SQL is the relational
+database query language; SDK means software development kit, and API means
+application programming interface.
+
 Status: draft research note, 2026-09-25. Companion to
 [component-profile-palantir-osv2.md](component-profile-palantir-osv2.md), which scores OSv2 against
 truss's required capabilities; OSv2 scored No fit as a component. This note

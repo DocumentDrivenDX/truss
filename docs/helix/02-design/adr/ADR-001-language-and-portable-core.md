@@ -33,6 +33,15 @@ AGENTS.md requires this ADR to confirm the language choice and the portable-core
 split before any implementation code lands. With its acceptance, that condition
 is met.
 
+Terminology: UMF is DocumentDrivenDX's machine-readable metamodel and schema
+interchange fabric. SQL is Structured Query Language; PostgreSQL JSONB is its
+binary JSON storage type. DDL means data definition language, FK means foreign
+key, and p95 is the 95th percentile. PRD means product requirements document;
+the project PRD has not yet been authored.
+Node LTS means Node.js long-term support releases. CLI means command-line
+interface; I/O means input and output. C ABI means C application binary
+interface; Node-API is Node.js's native addon interface.
+
 ## Context
 
 The owner directed on 2026-09-24 that truss is implemented in TypeScript first,
@@ -48,11 +57,11 @@ weighed:
 | Go | Simple language; good concurrency | A Go runtime per embedded library; cgo overhead; awkward Python and Node bindings |
 | TypeScript on Bun | Reuses UMF's TypeScript library directly; same toolchain as UMF; PostgreSQL does the heavy execution | No native Python embedding; single-threaded runtime; slower compile path |
 
-A conflict is open in [concerns](../../01-frame/concerns.md). The `typescript-bun`
+[Concern practice](../../01-frame/concerns.md) requires a portable-core override. The `typescript-bun`
 concern prefers Bun-native APIs (`Bun.sql`, `Bun.file`), but a library that Node
 applications embed cannot depend on them. The concerns document records a
-project override, a core free of I/O and host-specific APIs, marked "Needs ADR
-(ADR-001)". It follows the split in UMF's own ADR-002.
+project override under ADR-001: the core stays free of I/O and host-specific
+APIs. It follows the split in UMF's own ADR-002.
 
 What the spikes observed about the TypeScript path:
 
@@ -200,8 +209,8 @@ measured limits. *(choice)*
 - Direct reuse of UMF's TypeScript library and toolchain; no second UMF reader.
 - One language for the core, adapters, tests and tooling during the period of
   fastest design change.
-- The portable-core boundary keeps a Rust port mechanical: the core already has
-  no I/O and the corpus already defines correct behaviour.
+- The portable-core boundary limits a future Rust port to host-neutral code;
+  the planned conformance corpus defines the required behavior.
 
 **Negative**
 
@@ -214,11 +223,13 @@ measured limits. *(choice)*
   limited to adapters and tooling.
 - Supporting both Node and Bun doubles the adapter and conformance matrix.
 
-**Effect on concerns.** Recorded in [concerns](../../01-frame/concerns.md) on
+## Concern Impact
+
+Recorded in [concerns](../../01-frame/concerns.md) on
 acceptance: the `typescript-bun` override's authority changes from "Needs ADR
 (ADR-001)" to ADR-001. The `rust-cargo` concern stays inactive until a D6 trigger fires.
 
-## Alternatives considered
+## Alternatives
 
 | Alternative | Why not chosen |
 |-------------|----------------|
@@ -235,7 +246,15 @@ acceptance: the `typescript-bun` override's authority changes from "Needs ADR
 3. Keeping the core host-neutral costs more than the embedding benefit, for
    example if Node support finds no consumer.
 
-## Validation after acceptance
+## Risks
+
+| Risk | Likelihood | Impact | Mitigation |
+|------|------------|--------|------------|
+| Node adapter changes values that Bun preserves | Unmeasured until L1 | Loss of D3 fidelity | Run L1 before confirming Node support; reject adapters without exact text results |
+| Host APIs enter the core | Unmeasured until L2 | Node embedding or a Rust port needs extra work | Enforce no host types and reject host imports under D2; verify with L2 |
+| Compilation or validation misses product targets | Targets pending PRD | D6 may require a Rust core | Profile and cache first; measure L3 and apply D6 triggers |
+
+## Validation
 
 | ID | Check | Decides |
 |----|-------|---------|
