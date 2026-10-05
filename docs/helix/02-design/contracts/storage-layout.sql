@@ -22,7 +22,9 @@ INSERT INTO truss.setting VALUES ('key_reuse', '"forbid"');
 CREATE TABLE truss.schema_rev (
   rev          int PRIMARY KEY,
   accepted_at  timestamptz NOT NULL DEFAULT now(),
-  report       jsonb NOT NULL                 -- acceptance and enforcement report (CONTRACT-003)
+  report       jsonb NOT NULL,                -- acceptance and enforcement report (CONTRACT-003)
+  origin       jsonb NOT NULL DEFAULT '{}'::jsonb,   -- who accepted it: actor, db_role, reason, x-* (CONTRACT-002, origin)
+  CONSTRAINT schema_rev_origin_is_object CHECK (jsonb_typeof(origin) = 'object')
 );
 INSERT INTO truss.schema_rev VALUES (0, now(), '{}');   -- revision 0 is the empty catalog
 

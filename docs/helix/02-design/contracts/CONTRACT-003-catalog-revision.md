@@ -46,6 +46,7 @@ Defines how a set of UMF documents becomes an accepted catalog revision: the ord
 |---------|-------|
 | `documents` | One or more UMF documents as received bytes. Each has an identity `doc_id` and an owner-issued `doc_revision`. |
 | `binding` | Optional truss binding vocabulary (storage home, indexes, statistics). |
+| `origin` | The caller's `actor` and `reason`, and any `x-*` keys, as for a journal row (CONTRACT-002). The implementation adds `db_role` from the database and ignores any `db_role` the caller sends. |
 | `policy.unknown_endpoint` | What to do with a relationship endpoint that no document in the set and no earlier revision defines: `reject` (default), `provisional` or `skip`. |
 
 **Acceptance steps.** An implementation MUST perform these in order. Acceptance is all-or-nothing: if any step rejects, nothing is written and the report says why.
@@ -57,7 +58,7 @@ Defines how a set of UMF documents becomes an accepted catalog revision: the ord
 4. **Resolve unknown endpoints** by `policy.unknown_endpoint` (below).
 5. **Keep identity** (below). Two documents in one set that define the same `(module, element)` reject the set as `duplicate_definition`, unless their bytes are identical. Each catalog row records the document that defined it (`doc_ord`). A catalog id is the current maximum plus 1, never reused (CONTRACT-001).
 6. **Check tightened rules.** For a rule a revision tightens or adds, run the generated violator queries over existing objects and list every violating object. If any violation exists the set is rejected. Nothing is accepted on the first violation alone.
-7. **Persist** in the same transaction, still under the lock: insert `schema_rev` at head + 1 and the `schema_doc` rows; insert catalog rows, with new catalog ids and key numbers allocated as the current maximum plus 1 (CONTRACT-001); update in place only the rows this contract permits, recording the before and after in `schema_change`; apply declared total transforms and write `transform` journal rows; write `rebind` journal rows (CONTRACT-002); and update `schema_head` to the new revision. Accepting a type adds catalog rows only: no table, partition, column or index is created. Because the acceptance holds the lock, the revision number it inserts cannot conflict with another acceptance.
+7. **Persist** in the same transaction, still under the lock: insert `schema_rev` at head + 1 with its `origin` and the `schema_doc` rows; insert catalog rows, with new catalog ids and key numbers allocated as the current maximum plus 1 (CONTRACT-001); update in place only the rows this contract permits, recording the before and after in `schema_change`; apply declared total transforms and write `transform` journal rows; write `rebind` journal rows (CONTRACT-002); and update `schema_head` to the new revision. Accepting a type adds catalog rows only: no table, partition, column or index is created. Because the acceptance holds the lock, the revision number it inserts cannot conflict with another acceptance.
 8. **Build indexes** declared by the binding after commit if they cannot run in the transaction. The report lists them as pending until built.
 9. **Report** (below). The report is stored in `schema_rev.report`.
 

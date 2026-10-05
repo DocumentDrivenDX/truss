@@ -124,6 +124,7 @@ Deferred items are tracked in `docs/helix/parking-lot.md` when it exists.
 - **FR-6** — A revision that changes a property's type or cardinality is accepted only with a declared total transform applied in the same acceptance.
 - **FR-7** — Accepting a revision creates no table, partition, column or index. Its cost is catalog rows only.
 - **FR-8** — Every acceptance produces a report of the UMF versions seen, the elements added, retired and provisional, the data re-bound, and the enforcement layer of every assertion.
+- **FR-47** — Every accepted catalog revision records who or what accepted it: the actor the caller asserted and the database role, which comes from the database and never from the caller.
 
 ### Subsystem: Storage, identity and exactness
 
@@ -188,6 +189,7 @@ Deferred items are tracked in `docs/helix/parking-lot.md` when it exists.
 
 | Requirement | Scenario | Input | Expected Output |
 |-------------|----------|-------|-----------------|
+| FR-47 | Revision origin | Accept a revision as role `w` with actor `a` | The revision records actor `a` and role `w`; a role sent by the caller is ignored |
 | FR-1, FR-8 | Reject a bad set | Two documents, one failing UMF validation | Neither accepted; the report names the failure; no row written |
 | FR-3 | Unknown endpoint | A relationship naming a type no document defines, under each policy | Reject; provisional type reported; or relationship skipped and reported as a loss |
 | FR-5 | Tightened rule | A revision shortening a text limit, with 3 objects over it | Rejected; the 3 objects listed |

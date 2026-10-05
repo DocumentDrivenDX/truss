@@ -55,7 +55,7 @@ MUST, MUST NOT, SHOULD and MAY are used as in RFC 2119. The schema name is a dep
 | Table | Rules | Source |
 |-------|-------|--------|
 | `setting` | Key/value deployment settings. `journal_mode` is `"engine"` or `"trigger"` (CONTRACT-002); `key_reuse` is `"forbid"` or `"allow"` (CONTRACT-004). | Proposed |
-| `schema_rev` | One row per accepted catalog revision: `rev` (primary key), `accepted_at`, `report`. Revision 0 is the empty catalog and exists from the start. Immutable. | ADR-002 D1; Proposed |
+| `schema_rev` | One row per accepted catalog revision: `rev` (primary key), `accepted_at`, `report`, and `origin`, a JSON object that records who or what accepted it, with the keys and rules of the journal's `origin` (CONTRACT-002). Revision 0 is the empty catalog and exists from the start. Immutable. | ADR-002 D1; Proposed |
 | `schema_head` | One row (`id` = 1) holding the current revision. Updated in place by every acceptance. | ADR-002 D10; SPIKE-003 |
 | `schema_doc` | The UMF documents of a revision, verbatim: `(rev, ord)`, `doc_id`, `doc_revision`, `umf_version`, `content_sha256`, `document`, `validation`. A revision MAY hold several documents. Immutable. | ADR-002 D1; Proposed |
 | `schema_change` | The prior and new form of a catalog row that a revision changed in place (CONTRACT-003). Append-only. | Proposed |

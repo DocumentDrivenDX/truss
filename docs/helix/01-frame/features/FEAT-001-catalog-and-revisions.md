@@ -19,7 +19,7 @@ ddx:
 **Status**: Draft
 **Priority**: P0
 **Covered PRD Subsystem(s)**: Catalog and revisions
-**Covered PRD Requirements**: FR-1 to FR-8
+**Covered PRD Requirements**: FR-1 to FR-8, FR-47
 **Cross-Subsystem Rationale**: None; single subsystem.
 
 ## Overview
@@ -45,6 +45,7 @@ A platform engineer publishes a UMF revision that adds an entity, a property and
 | Identity | Do my identifiers survive a revision? | Stable, never-reused catalog identifiers |
 | Tightening | Will this revision break my data? | List every violator before accepting |
 | Report | What did the revision do, and what is enforced? | One report per acceptance |
+| Origin | Who published this revision? | Asserted actor plus the database role |
 
 ## Requirements
 
@@ -76,6 +77,10 @@ CAT-07. Accepting a revision creates no table, partition, column or index (FR-7)
 
 CAT-08. Every acceptance produces a report of the UMF versions seen, elements added, retired and provisional, data re-bound, and the enforcement layer of every assertion (FR-8).
 
+#### Origin
+
+CAT-09. Every accepted revision records who or what accepted it: the asserted actor and the database role, which the caller cannot set (FR-47).
+
 ### Non-Functional Requirements
 
 - **Performance**: acceptance cost is catalog rows; adding five types took 0 to 3 ms on the adopted layout against 6 to 163 ms on partitioned layouts (SPIKE-003).
@@ -91,6 +96,7 @@ CAT-08. Every acceptance produces a report of the UMF versions seen, elements ad
 - [US-004 — Keep identifiers stable across revisions](../user-stories/US-004-keep-identifiers-stable-across-revisions.md)
 - [US-005 — See every violator before a tightening is accepted](../user-stories/US-005-see-every-violator-before-a-tightening-is-accepted.md)
 - [US-006 — Add a type without DDL](../user-stories/US-006-add-a-type-without-ddl.md)
+- [US-036 — Record who accepted a revision](../user-stories/US-036-record-who-accepted-a-revision.md)
 
 ## Edge Cases and Error Handling
 

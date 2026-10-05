@@ -69,7 +69,7 @@ STO-04. A key value is unique within its type, enforced by the database, and fou
 
 #### Edges
 
-STO-05. An edge joins two existing objects of types its relationship allows; the database refuses anything else, at most one edge exists for a relationship, a source and a target even under concurrent creates, and an object that still has edges cannot be deleted (FR-13).
+STO-05. An edge joins two existing objects of types its relationship allows; the database refuses anything else, and an object that still has edges cannot be deleted (FR-13).
 STO-06. A maximum multiplicity of one is enforced by the database without a per-relationship index; larger maxima are enforced in the write protocol (FR-14).
 STO-07. Object and edge identifiers come from one sequence and are never reused (FR-15).
 

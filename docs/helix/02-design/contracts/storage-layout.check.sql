@@ -139,6 +139,12 @@ BEGIN
   SELECT count(*) INTO n FROM truss.object WHERE id = s AND (props ->> '10') = '9007199254740993';
   IF n <> 1 THEN RAISE EXCEPTION 'integer beyond 2^53 changed'; END IF;
 
+  -- a revision records who accepted it, as a JSON object
+  BEGIN
+    INSERT INTO truss.schema_rev (rev, report, origin) VALUES (90, '{}', '[]');
+    RAISE EXCEPTION 'a non-object revision origin was accepted';
+  EXCEPTION WHEN check_violation THEN NULL; END;
+
   -- a tombstone reserves a key text and cannot be written twice; a tombstone for an edge has key_num 0
   INSERT INTO truss.key_tombstone (entity_kind, type_id, key_num, k, entity_id, ver) VALUES ('o', 1, 1, 'gone', s, 2);
   BEGIN

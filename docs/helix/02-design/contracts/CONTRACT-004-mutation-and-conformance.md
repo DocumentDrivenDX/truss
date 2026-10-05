@@ -101,7 +101,7 @@ An operation SHOULD use prepared statements and MUST give the same results witho
 | `expected.results` | The result or error kind, and for `invalid` the full set of violations, of each operation. **Normative.** |
 | `expected.state` | The objects and edges after the case, in canonical form (properties by UMF element name, exact values as source tokens). **Normative.** |
 | `expected.journal` | The journal rows per record in `(entity alias, ver)` order: `op`, `prop`, `old`, `new`, and the defined `origin` keys. `seq`, `at` and `xid` are not compared. **Normative.** |
-| `expected.report` | For catalog acceptance cases, the acceptance and enforcement report (CONTRACT-003). **Normative.** |
+| `expected.report` | For catalog acceptance cases, the acceptance and enforcement report (CONTRACT-003) and the revision's recorded `origin`, with `db_role` compared as the role the harness used. **Normative.** |
 | `expected.sql` | Informative only. An implementation may generate different, equivalent SQL. |
 
 *Pass rule.* An implementation passes a corpus version on one engine version when every case yields the expected results, state, journal and report. A pass is reported with the engine, the layout and UMF versions and the corpus version, and no claim is made beyond them.
