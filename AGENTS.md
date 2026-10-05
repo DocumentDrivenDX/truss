@@ -12,8 +12,9 @@ This repository uses HELIX. Read `.helix.yml` and engage the installed
 
 Start with `docs/helix/README.md`. truss has discovery artifacts (product
 vision, competitive analysis, naming research, discovery input, component
-profiles), a storage research plan, two spikes, a storage layout review and two
-accepted ADRs. No PRD, feature specifications or implementation exist yet. The
+profiles), a storage research plan, two spikes, a storage layout review, two
+accepted ADRs, one proposed ADR and four draft contracts. No PRD, feature
+specifications or implementation exist yet. The
 next HELIX action is `frame`: write the PRD and feature specifications.
 Implementation must trace to framed requirements.
 
@@ -38,27 +39,36 @@ provisional may change when its validation measurements report.
   - Move the core to Rust only when an ADR-001 D6 trigger fires and a new ADR
     records the evidence.
 - [ADR-002](docs/helix/02-design/adr/ADR-002-storage-strategy.md): generic
-  catalog storage on PostgreSQL. Adding a type, property or relationship adds
-  catalog rows, never columns or table rewrites.
-  - Objects are LIST-partitioned by type and keyed on `(id, type_id)`. Values
-    sit in one flat JSONB map per object keyed by catalog property id: a
-    missing key is absent, JSON `null` is explicit null. Unknown data goes in
-    the `retained` map.
+  catalog storage on PostgreSQL. Adding a type, property, key or relationship
+  adds catalog rows, never columns, tables, partitions or per-type indexes.
+  - Objects are one table keyed on `(id, type_id)`; business identity (UMF keys)
+    is in a key table, `object_key`. Values sit in one flat JSONB map per object
+    keyed by catalog property id: a missing key is absent, JSON `null` is
+    explicit null. Unknown data goes in the `retained` map. SPIKE-003 measured
+    a partition per type and a partial index per type against this layout.
   - Edges carry typed endpoints, enforced by foreign keys against
     `rel_endpoint`, and their own properties column.
   - The object row is canonical; the journal records per-property history in
     the same transaction.
   - Database enforcement only in forms that need no DDL per revision. No
     per-type CHECK constraints on shared tables. Cross-row rules lock the
-    parent (`FOR NO KEY UPDATE`) or run SERIALIZABLE; never `FOR UPDATE` on
-    objects.
-  - Prepared statements are mandatory. Indexes and statistics exist only where
+    parent (`FOR NO KEY UPDATE`) or run SERIALIZABLE; a delete uses
+    `FOR UPDATE`. Writers read the catalog head row `FOR SHARE` first.
+  - Prepared statements are recommended, not required. Indexes and statistics exist only where
     the binding declares them.
   - Provisional until measured: storage-home thresholds, value records stored
     as structured values with `root_id` on composed objects, edge ids, and the
     `target_type` edge-index include.
 
-Still open: supported PostgreSQL versions, the query language, how a future
+Draft contracts (layout 0.1) specify the storage layout and DDL
+([CONTRACT-001](docs/helix/02-design/contracts/CONTRACT-001-storage-layout.md),
+`storage-layout.sql` and its check), the journal (CONTRACT-002), catalog revision
+and unknown entity types (CONTRACT-003), and the mutation protocol and
+conformance corpus (CONTRACT-004). [ADR-003](docs/helix/02-design/adr/ADR-003-conforming-implementations-and-shared-contracts.md)
+(proposed) lets implementations in other languages conform to them. The layout DDL
+and its check pass on PostgreSQL 16.2 and 17.9; PostgreSQL 18 is untested for it.
+
+Still open: supported PostgreSQL versions (16 and 17 verified for the layout DDL), the query language, how a future
 Rust core would read UMF, and first users.
 
 ## Boundaries

@@ -21,15 +21,15 @@ ddx:
       kind: informed_by
 ---
 
-# ADR-002: Storage strategy on PostgreSQL — generic catalog storage, partitioned by type
+# ADR-002: Storage strategy on PostgreSQL — generic catalog storage, one object table with a key table
 
 | Field | Value |
 |-------|-------|
 | Status | **Accepted** with the drafted recommendations. D4, D5 and parts of D6 are provisional until measured (see §Owner decisions) |
-| Date | Proposed 2026-10-03; accepted 2026-10-03 |
+| Date | Proposed 2026-10-03; accepted 2026-10-03; layout (D1, D2, D9, D10) decided 2026-10-04 on SPIKE-003 |
 | Decider | Project owner |
 | Drafted by | Claude Code agent |
-| Evidence | [SPIKE-001](../spikes/SPIKE-001-apache-age.md), [SPIKE-002](../spikes/SPIKE-002-storage-bake-off.md), [storage layout review](../storage-layout-review.md) |
+| Evidence | [SPIKE-001](../spikes/SPIKE-001-apache-age.md), [SPIKE-002](../spikes/SPIKE-002-storage-bake-off.md), [SPIKE-003](../spikes/SPIKE-003-partitioning-locks-and-prepared-statements.md), [storage layout review](../storage-layout-review.md) |
 
 [ADR-001](ADR-001-language-and-portable-core.md) accepts TypeScript first, a
 portable core and measured triggers for a Rust core. Its Node support remains
@@ -86,27 +86,44 @@ here) or **choice** (a judgement the owner may reasonably make differently).
 ### D1. Fixed table set
 
 Truss owns a fixed set of tables. Adding a type, property or relationship adds
-catalog rows and, where declared, indexes and partitions; it never adds columns
-or rewrites tables. *(evidence: FINDING 3)*
+catalog rows and, where declared, indexes; it never adds columns, tables or
+partitions and never rewrites tables. *(evidence: FINDING 3; SPIKE-003)*
 
 | Layer | Tables | Notes |
 |-------|--------|-------|
-| Schema catalog | `schema_rev` | UMF documents verbatim and immutable per revision: content hash, exact UMF core version, validation result |
+| Schema catalog | `schema_rev`, `schema_doc`, `schema_head`, `schema_change` | UMF documents verbatim and immutable per revision: content hash, exact UMF core version, validation result; the current revision in one row updated in place; prior definitions of rows a revision changed |
 | Binding catalog | `type_def`, `prop_def`, `key_def`, `rel_def`, `rel_endpoint`, plus index and statistics declarations | Derived from UMF and the binding; rebuildable |
-| Instance graph | `object` (LIST-partitioned by `type_id`), `edge`, value-row tables for `row` homes | See D2–D6 |
+| Instance graph | `object`, `object_key`, `edge`, value-row tables for `row` homes | See D2–D6 |
 | History | `journal`, RANGE-partitioned by time | See D7 |
 
-### D2. Objects partitioned by type
+### D2. One object table, with a key table
 
-`object` is LIST-partitioned by `type_id`, one partition per type with a default
-partition for long-tail types. The primary key is `(id, type_id)`. Every
-reference carries both columns. *(evidence: the partition probe kept planning at
-1.0–1.9 ms with 105 types at equal latency; inferred: per-partition statistics,
-vacuum and index builds)*
+`object` is one table for every type, with primary key `(id, type_id)`. Every
+reference carries both columns. Business identity, the UMF keys, lives in
+`object_key`: one row per object per key, with the primary key `(type_id,
+key_num, k)`, where `k` is a canonical key text, and a cascading foreign key to
+`object`. Adding a type, a property or a key never adds a table, a partition or
+an index. *(evidence: SPIKE-003)*
 
-Consequence: PostgreSQL cannot enforce `id` uniqueness across partitions, so it
-rests on the single shared sequence. This is accepted; ids are never supplied by
-callers.
+Why not an index per type, or a partition per type. SPIKE-003 built four
+layouts at 10, 100 and 1000 types (200,000 objects, 400,000 edges) on
+PostgreSQL 16.2 and 17.9:
+
+| Layout at 1000 types | Plan, key lookup | Plan, one hop | Fresh connection, first query | Add a type |
+|----------------------|------------------|---------------|-------------------------------|------------|
+| One table, a partial unique key index per type | 89–105 ms | 108–204 ms | 100–111 ms | index build |
+| One partition per type | 0.008 ms | 329–330 ms | 5.5–8.8 ms | `ACCESS EXCLUSIVE` lock; stalls of 186–274 ms for writers |
+| Hot-type partitions plus a default partition | 1.0–1.3 ms | 88–104 ms | 3.3–4.2 ms | `ACCESS EXCLUSIVE` lock; edge inserts take 16–17 ms at the median |
+| **One table, key table (this decision)** | 0.02 ms | 0.04 ms | 2.0–2.3 ms | catalog rows only |
+
+The per-type indexes, not the shared table, are what grow planning cost, and a
+partition per type only moves them. A key table replaces them with one index.
+The cost is disk, about 70% more than the partitioned layouts because every key
+is stored twice, and the key row's consistency with `props`, which the engine
+or a host trigger maintains (D9).
+
+Global uniqueness of `id` across objects and edges rests on the shared
+sequence. Ids are never supplied by callers.
 
 ### D3. Values: one flat JSONB map per object
 
@@ -213,39 +230,70 @@ projection of the journal.
 - **The engine is the reporting layer.** It validates every write against the
   catalog and names the UMF rule it enforces.
 - **Database enforcement only in DDL-free forms:**
-  - unique partial expression indexes per partition for keys, cast to the
-    declared type, with text keys `COLLATE "C"`;
+  - uniqueness of key rows in `object_key`, with exact `COLLATE "C"` text, and
+    the removal of an object's key rows with it;
   - the typed endpoint FKs of D6;
-  - partial unique edge indexes for maximum multiplicity;
+  - the `edge_limit` table for a maximum multiplicity of one, which needs no
+    per-relationship index *(evidence: SPIKE-003 E1b; 1,000 per-relationship
+    partial indexes cost 110 ms of planning and 5× insert time)*;
   - optionally, the catalog-driven validation trigger, at about 0.2 ms per row.
-- No per-type CHECK constraints on shared tables. Per-partition CHECKs are
-  deferred until measured.
+- The database does not check that a key row matches the object's key
+  components; the engine, or a host trigger, writes both in one transaction. A
+  write that bypasses them can leave the two inconsistent, and the report says
+  so. The key text is canonical (CONTRACT-001, Key identity).
+- No per-type CHECK constraints on shared tables.
 - Cross-row rules, such as minimum multiplicity and aggregate invariants, lock
   the parent object `FOR NO KEY UPDATE` or run SERIALIZABLE. A deferred trigger
   alone under READ COMMITTED is never reported as database enforcement.
-- The write path uses `FOR NO KEY UPDATE`, never `FOR UPDATE`, on objects.
+- The write path uses `FOR NO KEY UPDATE` on objects; a delete uses `FOR UPDATE`, so the lock does not escalate.
 
 ### D10. Catalog revisions
 
 *(choice; SPIKE-002 risk, untested)*
 
 - Engines cache the compiled catalog keyed by schema revision.
-- Every write transaction confirms the revision it validated against, for
-  example with `FOR SHARE` on the current `schema_rev` row, so a revision cannot
-  be accepted while a writer is using the previous one.
+- Every write transaction reads the current revision first with `FOR SHARE` on
+  the single `schema_head` row, which an acceptance updates in place, so a
+  revision cannot be accepted while a writer is using the previous one.
+  *(evidence: SPIKE-003. A `FOR SHARE` read of a head tuple that each revision
+  replaces with a new row locked a stale row and accepted a stale write under
+  READ COMMITTED and REPEATABLE READ. Advisory locks accepted a stale write
+  under REPEATABLE READ, because the snapshot is taken before the lock wait.
+  An in-place head row detected the stale writer under READ COMMITTED and failed
+  it with a serialization failure under REPEATABLE READ.)*
+- An acceptance waits for current writers and, under continuous writer load,
+  can wait seconds, so it sets a lock timeout and retries. *(evidence: SPIKE-003,
+  median 0.5 s and worst 5.5 s with sixteen continuous writers)*
+- A deployment whose writers are busy enough to starve acceptances MAY add a
+  fair queue in front: writers take `pg_advisory_xact_lock_shared` on a fixed
+  key before the head-row read, and an acceptance takes `pg_advisory_xact_lock`
+  on the same key before updating the head. The head row stays the authority, so
+  correctness is that of the head row under both isolation levels. Under
+  sixteen continuous writers, acceptances waited 5 to 45 ms and 42 completed in
+  the window, against 3 to 4 with waits up to 11 s without it; write throughput
+  fell 6 to 25%. *(evidence: SPIKE-003 mechanism E, PostgreSQL 16.2 and 17.9. That
+  a queued acceptance and an unqueued writer, or the reverse, still serialize
+  through the head row follows from the lock modes and has not been run.)*
 - Revision acceptance runs the generated violator queries and lists every
   violating object before accepting a tightened rule.
 
 ### D11. Execution, indexes and statistics
 
-- Every adapter uses prepared statements or an equivalent plan cache. *(evidence:
-  C misses 2× by 2.8–6.6× without them)*
-- Truss refuses to run in a deployment that cannot prepare statements (for
-  example, a transaction-mode pooler without prepared-statement support) rather
-  than silently degrading. *(choice)*
+- Adapters SHOULD use prepared statements or an equivalent plan cache, and
+  MUST work correctly without them. The layout has one table per kind with fixed
+  query shapes, so its plans are stable and planning is cheap: with 1,000 types
+  an unprepared point read costs 0.025 to 0.047 ms against 0.015 to 0.020 ms
+  prepared, and eight-thread throughput differs by under 10%. Forcing generic
+  plans costs nothing. *(evidence: SPIKE-003 E3, flat layout, PostgreSQL 16.2 and
+  17.9. The earlier rule to refuse deployments that cannot prepare was drawn from
+  a layout with per-type partial indexes, where an unprepared query planned in
+  about 90 ms at 1,000 types; that layout is not used.)*
+- A deployment behind a transaction-mode pooler without prepared-statement
+  support therefore runs, unprepared, and reports that it does. *(choice)*
 - Indexes and extended statistics exist only where the binding declares them.
-  The engine never creates them in response to queries, and the per-partition
-  index count is a reported budget. *(evidence for index-count planning cost;
+  The engine never creates them in response to queries, and the per-table
+  index count is a reported budget (default 100; planning cost grows with it,
+  SPIKE-003). *(evidence for index-count planning cost;
   choice for the rule)*
 
 ### D12. UMF boundary
@@ -289,8 +337,8 @@ view.
 
 Recorded in [concerns](../../01-frame/concerns.md) on acceptance:
 
-- `postgresql`: prepared statements are mandatory; there is an index budget per
-  partition.
+- `postgresql`: prepared statements are recommended, not required; there is an index budget per
+  table.
 - `sql-exactness`: the text read path; `FOR NO KEY UPDATE`; no implicit decimal
   rounding; parent locks for cross-row rules.
 - `umf-fidelity`: the retained map and re-binding report.
@@ -301,7 +349,8 @@ Recorded in [concerns](../../01-frame/concerns.md) on acceptance:
 |-------------|----------------|
 | A: runtime over UMF-generated per-type tables | The generator covers only the table stage; truss would generate keys, relationships, invariants, migrations and queries per type itself; table locks and rewrites on revision; silent value changes from column types (SPIKE-002) |
 | B: Apache AGE | Silent value loss, bypassed triggers and FKs, write conflicts as internal errors, variable-length traversal cache cost (SPIKE-001) |
-| C without partitioning (as built in SPIKE-002) | Planning cost and per-type CHECK cost grow with every type in one shared table (SPIKE-002 FINDINGS 4 and 7) |
+| C with a partial unique key index per type on one table (as built in SPIKE-002) | Planning cost grows with every index and per-type CHECK on the shared table (SPIKE-002 FINDINGS 4 and 7); 89–105 ms to plan a key lookup at 1000 types (SPIKE-003) |
+| C partitioned by type (the first accepted form) | One-hop planning of 329–330 ms at 1000 types, `ACCESS EXCLUSIVE` locks when a type is added, runtime DDL at acceptance, and a default partition that cannot be promoted once edges refer to its rows (SPIKE-003) |
 | One row per value with Datomic-style covering indexes | Real per-property versioning and locking, but object fetch must rebuild rows; Apache Jena SDB's generic triple table lost to native storage. Not measured here |
 | Typed columns plus a JSONB overflow map per type | Kept as the future `shaped` strategy, not the storage of record |
 | Adjacency lists on the node row | Write contention on high-degree nodes, no foreign keys |
@@ -311,10 +360,10 @@ Recorded in [concerns](../../01-frame/concerns.md) on acceptance:
 From SPIKE-002, plus the review:
 
 1. On the project's benchmark corpus at production scale, with prepared
-   statements and a pooler, C's p95 for 1–3 hops exceeds 2× and partitioning or
-   covering indexes do not recover it. Then move hot types to shaped tables, or
+   statements and a pooler, C's p95 for 1–3 hops exceeds 2× and covering
+   indexes do not recover it. Then move hot types to shaped tables, or
    reconsider A.
-2. Target deployments cannot use prepared statements or plan caching.
+2. On the project's benchmark corpus at production scale, unprepared execution of the one-to-three-hop queries misses the latency target while prepared execution meets it.
 3. Users will not accept a 4–5× disk footprint.
 4. UMF's generator gains key, relationship and migration stages and
    facet-driven types, and users need typed tables as the storage of record.
@@ -327,15 +376,15 @@ From SPIKE-002, plus the review:
 | Risk | Likelihood | Impact | Mitigation |
 |------|------------|--------|------------|
 | Object-level writes dominate cost | Unmeasured at target workloads | Contention and whole-map rewrites | Measure V1–V2 and set D4 storage-home thresholds |
-| Traversal exceeds the 2× target | Observed for some SPIKE-002 shapes | Product performance target missed | Measure V5 with partitioning and covering indexes; apply reversal condition 1 |
-| Revision acceptance races across engine instances | Unmeasured | Writes use the wrong catalog revision | Implement the D10 revision check and measure V6 before confirming safety |
+| Traversal exceeds the 2× target | Observed for some SPIKE-002 shapes | Product performance target missed | Measure V5 with covering indexes; apply reversal condition 1 |
+| Revision acceptance races across engine instances | Measured in SPIKE-003 on the single in-place head row | Writes use the wrong catalog revision | Follow the D10 protocol; acceptance can starve under sustained writes, so it sets a lock timeout and MAY use the advisory queue |
 | Disk footprint is unacceptable | 4.8× observed in SPIKE-002 | Deployment cost prevents adoption | Measure V7 and apply reversal condition 3 |
 
 ## Validation
 
-The follow-up spike named in SPIKE-002 (C partitioned by type, realistic type
-counts, data larger than memory, a pooler, Node `pg`, generated read views)
-must also measure the following. Each provisional point is confirmed or amended
+SPIKE-003 settled partitioning and the catalog lock. The follow-up spike named
+in SPIKE-002 must still cover data larger than memory, a pooler, Node `pg` and
+generated read views, and must also measure the following. Each provisional point is confirmed or amended
 in this ADR, with evidence, before the code that depends on it is treated as
 final:
 
@@ -353,7 +402,9 @@ final:
 
 Every claim in this ADR is bounded by these conditions:
 
-- PostgreSQL 17.11 (all suites) and 18.6 (fidelity and enforcement only);
+- PostgreSQL 17.11 (all SPIKE-002 suites) and 18.6 (fidelity and enforcement only);
+  PostgreSQL 16.2 and 17.9 for SPIKE-003, on embedded servers, with Python and
+  psycopg 3 and one laptop that carried other load during the runs;
 - UMF core 0.7.0 at UMF `master` `24d3bf3c`;
 - one five-type sales model with five revisions, synthetic data at 1× and 5×
   (up to 2,001,089 order lines);
@@ -372,9 +423,9 @@ question.
 | # | Question | Decision |
 |---|----------|----------|
 | 1 | Accept option C as the storage of record (D1–D3)? | Yes |
-| 2 | Partition objects by type in the first build, or start unpartitioned? | Partition in the first build (D2) |
+| 2 | Partition objects by type, or keep one table? | One object table with a key table and no per-type DDL (D2), decided 2026-10-04 on SPIKE-003 |
 | 3 | Value records as structured values, or every nested record as a child object? | Structured values for records without identity, with `root_id` on composed objects (D5). Provisional: if V3 shows child objects cost little, revert to child objects and keep `root_id` |
 | 4 | Object row canonical, or journal canonical? | Object row canonical; the journal is history, written in the same transaction (D7). A journal-canonical design stays a later option |
 | 5 | Give edges their own ids and properties, accepting the disk cost? | Yes (D6). Edge ids are provisional on V7 |
-| 6 | Refuse deployments without prepared statements, or support them with a reported downgrade? | Refuse (D11) |
+| 6 | Refuse deployments without prepared statements, or support them with a reported downgrade? | Support them with a reported downgrade (D11), decided 2026-10-04 on SPIKE-003 E3 |
 | 7 | Require V1–V7 before acceptance, or accept now with points marked provisional? | Accept now. D4 thresholds, D5, D6 edge ids and the `target_type` include are provisional until V1–V3, V5 and V7 report |

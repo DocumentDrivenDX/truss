@@ -35,6 +35,12 @@ binary JSON storage type. EAV means entity-attribute-value storage, FK means
 foreign key, and p95 is the 95th percentile. TAO is Facebook's distributed
 object and association store [1].
 
+Concern 3 (a shared objects table growing with type count) is settled by
+[SPIKE-003](spikes/SPIKE-003-partitioning-locks-and-prepared-statements.md): the
+layout in [ADR-002](adr/ADR-002-storage-strategy.md) D2 is one table with a key
+table, not a partition per type, and the partitioning proposals below are not
+adopted.
+
 ## Summary
 
 Option C is a well-established shape: a typed object table plus a typed
