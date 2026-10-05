@@ -32,7 +32,7 @@ Executed evidence for three questions ADR-002 left provisional. The scripts, the
 - **Engines.** PostgreSQL 16.2 (`pgserver` 0.1.4, Python 3.11) and 17.9 (`pgembed` 0.2.0, Python 3.12), each a fresh embedded server per run. Both were exercised on every question. No managed PostgreSQL service was tested.
 - **Data.** 200,000 objects and 400,000 edges spread over 10, 100 and 1,000 types, generated with a fixed seed ([`common.py`](SPIKE-003-partitioning-locks-and-prepared-statements/common.py)).
 - **Layouts.** L0: one `object` table with a partial index per type. L1: `object` list-partitioned by type. L2: one flat `object` table with a separate `object_key` table (the layout adopted). L3: 20 hot types in their own partitions plus a default partition.
-- **Experiments.** E1 layouts ([`e1_layout.py`](SPIKE-003-partitioning-locks-and-prepared-statements/e1_layout.py)); E1b follow-ups on L2 ([`e1b_followups.py`](SPIKE-003-partitioning-locks-and-prepared-statements/e1b_followups.py)); E2 catalog-lock mechanisms A to E ([`e2_catalog_lock.py`](SPIKE-003-partitioning-locks-and-prepared-statements/e2_catalog_lock.py)); E3 prepared-statement modes ([`e3_prepared.py`](SPIKE-003-partitioning-locks-and-prepared-statements/e3_prepared.py)). Run scripts: `run_e1.sh`, `run_e1b.sh`, `run_e2_e3.sh`, `run_e2e.sh`, `run_e3_n1000.sh`.
+- **Experiments.** E1 layouts ([`e1_layout.py`](SPIKE-003-partitioning-locks-and-prepared-statements/e1_layout.py)); E1b follow-ups on L2 ([`e1b_followups.py`](SPIKE-003-partitioning-locks-and-prepared-statements/e1b_followups.py)); E2 catalog-lock mechanisms A to E ([`e2_catalog_lock.py`](SPIKE-003-partitioning-locks-and-prepared-statements/e2_catalog_lock.py)); E3 prepared-statement modes ([`e3_prepared.py`](SPIKE-003-partitioning-locks-and-prepared-statements/e3_prepared.py)). Run scripts: `run_e1.sh`, `run_e1b.sh`, `run_e2_e3.sh`, `run_e2e.sh`, `run_e3_n1000.sh`, `run_e4.sh`.
 - **Limits of the environment.** One machine (18 cores, 128 GB) under other load: endpoint-protection daemons and other sessions' PostgreSQL servers kept the load average between 7 and 15. Timings are single runs, not repeats. Treat DDL and index-build durations as upper bounds and differences under about 30% as noise. Latencies are in milliseconds on a local socket, so they exclude network time.
 
 ## Findings
@@ -135,6 +135,24 @@ Point reads and edge operations at 1,000 types on L2, ms, p50, PostgreSQL 16.2 (
 - On **L0** at 1,000 types an unprepared read took 86 to 92 ms, and a key lookup took 88 to 92 ms even when prepared on first use, because a generic plan cannot use per-type partial indexes (50-operation samples). On **L1** with prepared statements, reads were 0.05 to 0.4 ms in samples of 50 operations; I did not measure L1 unprepared beyond that sample.
 - The earlier rule to refuse deployments that cannot prepare came from L0-shaped data. On L2 the penalty is 0.01 to 0.05 ms per operation.
 
+### F8. Row-level security keyed on the type's module costs little (E4)
+
+A host can isolate groups of types by row-level security on the adopted layout, deciding from the `module` that `type_def` records. One transaction per operation: set the role, run the statement, commit. 1,000 types, 10 groups, 200,000 objects; p50 in ms, PostgreSQL 16.2 / 17.9 ([`e4_rls.py`](SPIKE-003-partitioning-locks-and-prepared-statements/e4_rls.py)):
+
+| | Read by id | One hop | List 50 |
+|---|---|---|---|
+| No role, no security | 0.054 / 0.069 | 0.062 / 0.075 | 0.88 / 1.27 |
+| Role only (grants) | 0.070 / 0.088 | 0.079 / 0.098 | 0.86 / 1.33 |
+| Policy through a mapping table | 0.073 / 0.110 | 0.094 / 0.135 | 0.99 / 1.45 |
+| Policy through `type_def.module` | 0.077 / 0.083 | 0.122 / 0.129 | 1.06 / 1.32 |
+| Policy through a security-definer function | 0.165 / 0.142 | 0.156 / 0.188 | 1.88 / 2.48 |
+
+- A role from one group saw 0 rows of another group's types under every policy variant, on both engines.
+- Assuming the role costs about 0.02 ms; a policy through `type_def.module` adds at most 0.03 ms to a read by id and 0.015 to 0.043 ms to a one-hop read. A separate mapping table is no faster.
+- A policy that calls a security-definer function is 2 to 3 times slower.
+- A policy that reads `type_def` runs with the caller's privileges, so the role needs SELECT on the catalog tables; to keep it from listing other groups' type names the catalog tables need policies of their own. This run did not apply policies to `type_def`; the extra cost of doing so is unmeasured.
+- Single runs on a loaded machine, edge and object tables only; policies on `object_key` and the journal were not measured.
+
 ## Decisions
 
 | Question | Decision | Recorded in |
@@ -153,6 +171,7 @@ Point reads and edge operations at 1,000 types on L2, ms, p50, PostgreSQL 16.2 (
 - A mixed E and B deployment (F6) is untested.
 - Everything ran on embedded PostgreSQL 16.2 and 17.9 on one noisy machine, over a local socket, without a pooler, and on no managed PostgreSQL service and not on PostgreSQL 18. Latency targets for a hosted deployment need a rerun there.
 - L1 unprepared performance beyond a 50-operation sample was not measured.
+- Row-level security was measured on `object` and `edge`, not on `object_key`, the journal or the catalog tables (F8).
 
 ## Reproduce
 

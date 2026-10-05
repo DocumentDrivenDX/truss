@@ -150,7 +150,7 @@ A host that builds on these tables names four roles. The roles are a convention;
 | Writer | Writes objects and edges, through the engine or host write functions. |
 | Reader | Reads. |
 
-- A host MAY add its own tables, functions, roles and privileges in its own schema; MAY `ENABLE` and `FORCE ROW LEVEL SECURITY` and add policies on `object`, `object_key` and `edge`; and MAY add triggers on truss tables, including triggers that write the journal (CONTRACT-002) and keep `object_key` current. `FORCE` is needed because the owner and `SECURITY DEFINER` functions it owns bypass row-level security otherwise.
+- A host MAY add its own tables, functions, roles and privileges in its own schema; MAY `ENABLE` and `FORCE ROW LEVEL SECURITY` and add policies on any truss table, including the catalog tables and the journal, which can decide from the `module` that `type_def` and `rel_def` record; and MAY add triggers on truss tables, including triggers that write the journal (CONTRACT-002) and keep `object_key` current. `FORCE` is needed because the owner and `SECURITY DEFINER` functions it owns bypass row-level security otherwise.
 - A host MUST NOT add, drop or alter columns, change a primary key, foreign key or check constraint, or write the catalog tables except through a catalog revision.
 - Foreign-key and unique checks run regardless of row-level security, so a key conflict or an object that still has edges can reveal that a hidden row exists. A host that must hide this decides how to report it.
 - Keys in `origin` that begin `x-` are reserved for hosts.
