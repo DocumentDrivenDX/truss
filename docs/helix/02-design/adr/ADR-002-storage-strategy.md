@@ -336,6 +336,20 @@ projection of the journal.
   endpoint types' modules.
 - truss does not authenticate people or choose which role a person gets.
 
+### D15. Change feed and grouped operations
+
+*(choice; layout 0.2)*
+
+- The journal is the feed to any downstream copy. CONTRACT-006 states what a
+  publisher must preserve: every committed change once in `(xid, seq)` order below
+  the safe watermark, deletes carrying the old record, catalog revisions before
+  the first change that uses them, at-least-once delivery applied idempotently,
+  and an observable lag. It chooses no transport.
+- Consumers register a position in `feed_consumer`, and retention does not drop a
+  journal partition that holds rows past the lowest position.
+- A caller may apply several operations as one atomic group (`apply_group`,
+  CONTRACT-004): one catalog check, one origin, ordered locks, all or nothing.
+
 ### D12. UMF boundary
 
 The storage strategy, storage homes, index and statistics declarations, and

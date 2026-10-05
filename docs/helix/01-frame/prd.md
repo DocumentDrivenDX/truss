@@ -58,6 +58,7 @@ Software that sits on the same database has further needs the first three do not
 | Singleton latency (proposed) | p95 read of one object by id or key at most 1 ms; p95 write of one object, with its journal rows, at most 3 ms; both on a local connection at 1,000,000 objects and 1,000 types, with prepared statements | The benchmark harness; baseline in SPIKE-003: 0.02 ms and 0.09 to 0.17 ms at 200,000 objects |
 | Type enumeration (proposed) | p95 listing of all types in the catalog at most 20 ms at 1,000 types | The benchmark harness; not yet measured |
 | Catalog independence (proposed) | Planning cost of a read does not change with the number of types: p95 plan time at 1,000 types within 2× of the figure at 10 | SPIKE-003 method; baseline: 0.02 ms for a key lookup and 0.04 ms for a one-hop query at both 10 and 1,000 types |
+| Feed freshness (proposed) | A downstream copy reflects a committed change within 10 s at p95 under normal load, and its lag is always readable | End-to-end measurement through a real publisher; the figure is the transport's and has not been measured |
 | Adoption | At least 1 production consumer outside the truss maintainers | Reported by the consumer |
 
 The proposed targets are for the owner to agree. Measured baselines come from embedded PostgreSQL 16.2 and 17.9 on a loaded development machine over a local socket (SPIKE-003), so they are indicative, not a guarantee.
@@ -109,7 +110,7 @@ Deferred items are tracked in `docs/helix/parking-lot.md` when it exists.
 ### Nice to Have (P2)
 
 1. Declared indexes and extended statistics, within a reported index budget.
-2. A journal consumer that publishes to a warehouse.
+2. A turnkey publisher for a particular warehouse; the feed contract itself is P1 (FR-52).
 3. Typed views over the graph for tools that expect tables.
 
 ## Functional Requirements
@@ -146,6 +147,7 @@ Deferred items are tracked in `docs/helix/parking-lot.md` when it exists.
 - **FR-19** — A writer may pass an expected version and the write is refused if it differs; a change that alters no value writes nothing and does not raise the version.
 - **FR-20** — Errors are of defined kinds (invalid, endpoint violation, has edges, key conflict, version conflict, catalog changed, retry, not found, unavailable), each with a stated retry rule.
 - **FR-21** — Cross-row rules lock the parent object or run serializable; a deferred trigger under READ COMMITTED alone is never reported as database enforcement.
+- **FR-51** — A caller can apply several operations as one atomic group that commits or fails as a whole, with one origin and one catalog check; a failure names the failing operation. *(P1)*
 
 ### Subsystem: Journal and history
 
@@ -155,6 +157,8 @@ Deferred items are tracked in `docs/helix/parking-lot.md` when it exists.
 - **FR-25** — A consumer can read the journal incrementally, in a stable order, without missing a row that commits late.
 - **FR-26** — A record can be reconstructed as of any version from its journal, interpreting each value with the definition in force when it was written.
 - **FR-27** — The journal is append-only for every role truss or a host recognizes, is partitioned by time with no default partition, and is trimmed only by dropping whole partitions.
+- **FR-52** — Any publisher of the journal to a downstream copy preserves the change feed contract: every committed change once, in a stable order, deletes carrying the old record, catalog revisions before the changes that use them, repeatable delivery, and retention that waits for registered consumers. *(P1)*
+- **FR-53** — The lag of a downstream copy is observable: each consumer's position is recorded, and the age of the oldest change it has not applied can be read. *(P1)*
 
 ### Subsystem: Reads and traversal
 
@@ -198,6 +202,8 @@ Deferred items are tracked in `docs/helix/parking-lot.md` when it exists.
 | FR-5 | Tightened rule | A revision shortening a text limit, with 3 objects over it | Rejected; the 3 objects listed |
 | FR-7 | No DDL | Accept a revision that adds a type, a property and a relationship, with sixteen writers running | No table, partition or index created; writers not blocked beyond the head-row wait |
 | FR-10, FR-11 | Exact values and retention | The value corpus plus a field the schema does not define | Every value reads back exactly; the extra field is retained and reported |
+| FR-51 | Atomic group | Apply a create, an update and an edge as one group where the edge's target is invalid | Nothing in the group takes effect and the error names the edge's index |
+| FR-52, FR-53 | Feed | Publish through a consumer, restart it from an earlier position, delete a record, accept a revision | Every change once in order; the delete carries the old record; the revision arrives before the first change that uses it; the consumer's lag is readable |
 | FR-50 | UMF reading | Run the corpus's UMF cases through a second implementation's reader | Same validity and the same diagnostics, by severity, code and path, as the reference |
 | FR-48, FR-49 | Module access | Give role `a` module `sales` and role `b` module `billing`, with a link between them | Each sees only its module; the link is seen only by a role that reads both |
 | FR-45, FR-46 | Repeat an import | Import 51 records with source facts, correct one, delete one, import again | Nothing changes, the deleted record stays deleted, each imported record still names its load and source facts |

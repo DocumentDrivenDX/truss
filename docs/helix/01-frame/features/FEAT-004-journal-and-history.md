@@ -19,7 +19,7 @@ ddx:
 **Status**: Draft
 **Priority**: P0
 **Covered PRD Subsystem(s)**: Journal and history
-**Covered PRD Requirements**: FR-22 to FR-27
+**Covered PRD Requirements**: FR-22 to FR-27, FR-52, FR-53
 **Cross-Subsystem Rationale**: None; single subsystem.
 
 ## Overview
@@ -67,6 +67,11 @@ JNL-05. A record is reconstructed as of a version from its journal, with each va
 
 JNL-06. The journal is append-only, time-partitioned with no default partition, and trimmed only by dropping whole partitions (FR-27).
 
+#### Feed
+
+JNL-07. Any publisher of the journal to a downstream copy preserves the change feed contract: every committed change once in order, deletes carrying the old record, catalog revisions first, repeatable delivery, retention that waits for registered consumers (FR-52).
+JNL-08. The lag of a downstream copy is observable from each consumer's recorded position (FR-53).
+
 ### Non-Functional Requirements
 
 - **Correctness**: a committed row is withheld while an older transaction is open and both appear in order afterwards (verified on PostgreSQL 16.2 and 17.9).
@@ -80,6 +85,8 @@ JNL-06. The journal is append-only, time-partitioned with no default partition, 
 - [US-017 — Read the journal incrementally without missing a change](../user-stories/US-017-read-the-journal-incrementally-without-missing-a-change.md)
 - [US-018 — Reconstruct a record as of a version](../user-stories/US-018-reconstruct-a-record-as-of-a-version.md)
 - [US-019 — Trim the journal by dropping partitions](../user-stories/US-019-trim-the-journal-by-dropping-partitions.md)
+- [US-041 — Publish the journal without losing or reordering a change](../user-stories/US-041-publish-the-journal-without-losing-or-reordering-a-change.md)
+- [US-042 — Read how far behind a downstream copy is](../user-stories/US-042-read-how-far-behind-a-downstream-copy-is.md)
 
 ## Edge Cases and Error Handling
 

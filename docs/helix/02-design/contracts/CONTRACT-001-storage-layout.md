@@ -70,6 +70,7 @@ MUST, MUST NOT, SHOULD and MAY are used as in RFC 2119. The schema name is a dep
 | `edge` | `id`, `rel_type_id`, `(source_id, source_type)`, `(target_id, target_type)`, `props`, `order_key` (text, `COLLATE "C"`), `rev`, `ver`, `created_at`, `updated_at`. | ADR-002 D6; Proposed |
 | `key_tombstone` | A key value an object has held, or the endpoints of a deleted imported edge, written in the transaction that deletes or re-keys the record and never changed. `(entity_kind, type_id, key_num, k)` is the primary key. | Proposed |
 | `record_source` | One row per imported record: `(entity_kind, entity_id)` is the primary key, with the `load_id` and a `source` JSON object whose defined optional keys are `author`, `at` and `system`. Written by the import that created the record, never changed. | Proposed |
+| `feed_consumer` | One row per registered consumer of the journal: `consumer` (primary key) and the position `(xid, seq)` it has delivered through, with `updated_at`. Written by the consumer. | Proposed |
 | `journal` | RANGE-partitioned by `at`, with no default partition. See CONTRACT-002. | ADR-002 D7; Proposed |
 | `id_seq` | One sequence for object and edge ids. | ADR-002 D6 (edge ids provisional, V7) |
 | `journal_seq` | The sequence for `journal.seq`. An explicit sequence, not an identity column. | Proposed |

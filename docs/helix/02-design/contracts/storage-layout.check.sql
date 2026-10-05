@@ -139,6 +139,13 @@ BEGIN
   SELECT count(*) INTO n FROM truss.object WHERE id = s AND (props ->> '10') = '9007199254740993';
   IF n <> 1 THEN RAISE EXCEPTION 'integer beyond 2^53 changed'; END IF;
 
+  -- a feed consumer has one position
+  INSERT INTO truss.feed_consumer VALUES ('c1', '0'::xid8, 0);
+  BEGIN
+    INSERT INTO truss.feed_consumer VALUES ('c1', '1'::xid8, 1);
+    RAISE EXCEPTION 'a second position for one consumer was accepted';
+  EXCEPTION WHEN unique_violation THEN NULL; END;
+
   -- a revision records who accepted it, as a JSON object
   BEGIN
     INSERT INTO truss.schema_rev (rev, report, origin) VALUES (90, '{}', '[]');
