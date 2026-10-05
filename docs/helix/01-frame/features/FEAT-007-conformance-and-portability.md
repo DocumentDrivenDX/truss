@@ -97,7 +97,7 @@ CNF-05. The layout DDL and its check pass on every supported PostgreSQL version 
 ## Dependencies
 
 - **Other features**: all features, whose behavior the corpus tests.
-- **External services**: PostgreSQL versions under test; interfaces in CONTRACT-001 to CONTRACT-004.
+- **External services**: PostgreSQL versions under test; interfaces in CONTRACT-001 to CONTRACT-005.
 
 ## Out of Scope
 

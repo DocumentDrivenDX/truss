@@ -19,7 +19,7 @@ ddx:
 **Status**: Draft
 **Priority**: P1
 **Covered PRD Subsystem(s)**: Host integration
-**Covered PRD Requirements**: FR-41 to FR-44
+**Covered PRD Requirements**: FR-41 to FR-44, FR-48, FR-49
 **Cross-Subsystem Rationale**: None; single subsystem.
 
 ## Overview
@@ -44,6 +44,7 @@ A host adds its own schema, triggers, row-level security and role grants. It ass
 | Roles | Can writes be governed by grants? | Role per transaction, recorded in the journal |
 | Pooling | Does it work behind a pooler? | No session state; prepared statements optional |
 | Embedded | Can tests run without a server? | Same DDL on an embedded PostgreSQL |
+| Module access | Can teams own modules? | Optional module isolation by role |
 
 ## Requirements
 
@@ -65,6 +66,11 @@ HST-03. truss keeps no session state and works through a transaction-mode pooler
 
 HST-04. The layout and protocols work on an embedded PostgreSQL with the same DDL as a server (FR-44).
 
+#### Module access
+
+HST-05. A deployment can give database roles read or write access per UMF module, enforced by the database, optionally and without changing the layout's tables or constraints (FR-48).
+HST-06. A relationship may name a type in another module; the edge is visible only to a role that can read the relationship's module and both endpoints' modules (FR-49).
+
 ### Non-Functional Requirements
 
 - **Pooling**: unprepared reads cost 0.01 to 0.05 ms more on the adopted layout (SPIKE-003).
@@ -73,6 +79,8 @@ HST-04. The layout and protocols work on an embedded PostgreSQL with the same DD
 
 ## User Stories
 
+- [US-037 — Give roles access to modules and nothing else](../user-stories/US-037-give-roles-access-to-modules-only.md)
+- [US-038 — Link modules and see the link only with access to both](../user-stories/US-038-link-modules-and-see-the-link-only-with-both.md)
 - [US-030 — Extend the layout from a host](../user-stories/US-030-extend-the-layout-from-a-host.md)
 - [US-031 — Govern writes by role grants](../user-stories/US-031-govern-writes-by-role-grants.md)
 - [US-032 — Work behind a transaction-mode pooler](../user-stories/US-032-work-behind-a-transaction-mode-pooler.md)

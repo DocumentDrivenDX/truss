@@ -55,6 +55,7 @@ MUST, MUST NOT, SHOULD and MAY are used as in RFC 2119. The schema name is a dep
 | Table | Rules | Source |
 |-------|-------|--------|
 | `setting` | Key/value deployment settings. `journal_mode` is `"engine"` or `"trigger"` (CONTRACT-002); `key_reuse` is `"forbid"` or `"allow"` (CONTRACT-004). | Proposed |
+| `module_access` | Optional. The reader and writer role of each UMF module, `module` the primary key. Empty by default and used only by the isolation layer (CONTRACT-005). | Proposed |
 | `schema_rev` | One row per accepted catalog revision: `rev` (primary key), `accepted_at`, `report`, and `origin`, a JSON object that records who or what accepted it, with the keys and rules of the journal's `origin` (CONTRACT-002). Revision 0 is the empty catalog and exists from the start. Immutable. | ADR-002 D1; Proposed |
 | `schema_head` | One row (`id` = 1) holding the current revision. Updated in place by every acceptance. | ADR-002 D10; SPIKE-003 |
 | `schema_doc` | The UMF documents of a revision, verbatim: `(rev, ord)`, `doc_id`, `doc_revision`, `umf_version`, `content_sha256`, `document`, `validation`. A revision MAY hold several documents. Immutable. | ADR-002 D1; Proposed |
@@ -154,7 +155,7 @@ A host that builds on these tables names four roles. The roles are a convention;
 | Writer | Writes objects and edges, through the engine or host write functions. |
 | Reader | Reads. |
 
-- A host MAY add its own tables, functions, roles and privileges in its own schema; MAY `ENABLE` and `FORCE ROW LEVEL SECURITY` and add policies on any truss table, including the catalog tables and the journal, which can decide from the `module` that `type_def` and `rel_def` record; and MAY add triggers on truss tables, including triggers that write the journal (CONTRACT-002) and keep `object_key` current. `FORCE` is needed because the owner and `SECURITY DEFINER` functions it owns bypass row-level security otherwise.
+- A host MAY add its own tables, functions, roles and privileges in its own schema; MAY `ENABLE` and `FORCE ROW LEVEL SECURITY` and add policies on any truss table, including the catalog tables and the journal, which can decide from the `module` that `type_def` and `rel_def` record (CONTRACT-005 is one such set, shipped as `module-isolation.sql`); and MAY add triggers on truss tables, including triggers that write the journal (CONTRACT-002) and keep `object_key` current. `FORCE` is needed because the owner and `SECURITY DEFINER` functions it owns bypass row-level security otherwise.
 - A host MUST NOT add, drop or alter columns, change a primary key, foreign key or check constraint, or write the catalog tables except through a catalog revision.
 - Foreign-key and unique checks run regardless of row-level security, so a key conflict or an object that still has edges can reveal that a hidden row exists. A host that must hide this decides how to report it.
 - Keys in `origin` that begin `x-` are reserved for hosts.

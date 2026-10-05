@@ -65,7 +65,7 @@ The proposed targets are for the owner to agree. Measured baselines come from em
 ### Non-Goals
 
 - truss does not define UMF semantics. It consumes UMF and never extends it.
-- truss does not authenticate people or manage accounts. It records an asserted actor and the database role.
+- truss does not authenticate people or manage accounts. It records an asserted actor and the database role, and an optional layer lets a deployment give roles access per UMF module.
 - truss does not provide a user interface or a hosted service.
 - truss does not generate per-type tables, and does not make a document the unit of storage.
 - truss does not support a second backing database engine in this version; PostgreSQL only.
@@ -184,6 +184,8 @@ Deferred items are tracked in `docs/helix/parking-lot.md` when it exists.
 - **FR-42** — Writes can be governed by database role grants: a host can assume a role per transaction, and truss records the assumed role in the journal.
 - **FR-43** — truss keeps no session state and works through a transaction-mode pooler, with or without prepared statements.
 - **FR-44** — The layout and its protocols work on an embedded PostgreSQL for development and tests, with the same DDL as a server.
+- **FR-48** — A deployment can give database roles read or write access per UMF module, enforced by the database, without changing the layout's tables or constraints; with the layer unused, truss behaves as without it. *(P1)*
+- **FR-49** — A relationship may name a type in another module. Such an edge is visible only to a role that can read the relationship's module and both endpoints' modules. *(P1)*
 
 ## Acceptance Test Sketches
 
@@ -195,6 +197,7 @@ Deferred items are tracked in `docs/helix/parking-lot.md` when it exists.
 | FR-5 | Tightened rule | A revision shortening a text limit, with 3 objects over it | Rejected; the 3 objects listed |
 | FR-7 | No DDL | Accept a revision that adds a type, a property and a relationship, with sixteen writers running | No table, partition or index created; writers not blocked beyond the head-row wait |
 | FR-10, FR-11 | Exact values and retention | The value corpus plus a field the schema does not define | Every value reads back exactly; the extra field is retained and reported |
+| FR-48, FR-49 | Module access | Give role `a` module `sales` and role `b` module `billing`, with a link between them | Each sees only its module; the link is seen only by a role that reads both |
 | FR-45, FR-46 | Repeat an import | Import 51 records with source facts, correct one, delete one, import again | Nothing changes, the deleted record stays deleted, each imported record still names its load and source facts |
 | FR-12, FR-13 | Keys and endpoints | A second object with the same key; an edge to a missing or wrongly typed object; delete of an object with an edge | Each refused by the database with its error kind |
 | FR-17 | Stale writer | A write that read revision N while revision N+1 is accepted, under READ COMMITTED and REPEATABLE READ | Never accepted against N; reported as catalog changed or retry |

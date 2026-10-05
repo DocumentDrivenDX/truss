@@ -18,6 +18,16 @@ INSERT INTO truss.setting VALUES ('journal_mode', '"engine"');
 -- create is refused) or 'allow' (a tombstone is still written but a create may reuse the value). See CONTRACT-004.
 INSERT INTO truss.setting VALUES ('key_reuse', '"forbid"');
 
+-- ---- Module access (optional; see module-isolation.sql and CONTRACT-005) ----------------------
+-- Which database roles may read and write the types and relationships of a UMF module. Empty by default.
+-- A role may appear in several rows, for example one reader role shared by two linked modules.
+CREATE TABLE truss.module_access (
+  module      text PRIMARY KEY,
+  reader_role text NOT NULL,
+  writer_role text NOT NULL,
+  CONSTRAINT module_access_roles_differ CHECK (reader_role <> writer_role)
+);
+
 -- ---- Schema catalog: UMF documents verbatim and immutable per catalog revision --------
 CREATE TABLE truss.schema_rev (
   rev          int PRIMARY KEY,

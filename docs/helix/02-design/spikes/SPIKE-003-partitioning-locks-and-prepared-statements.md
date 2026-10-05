@@ -150,6 +150,15 @@ A host can isolate groups of types by row-level security on the adopted layout, 
 - A role from one group saw 0 rows of another group's types under every policy variant, on both engines.
 - Assuming the role costs about 0.02 ms; a policy through `type_def.module` adds at most 0.03 ms to a read by id and 0.015 to 0.043 ms to a one-hop read. A separate mapping table is no faster.
 - A policy that calls a security-definer function is 2 to 3 times slower.
+- The shipped form of the policy (CONTRACT-005) was measured separately, p50 in ms, PostgreSQL 16.2 / 17.9, with the role granted and set:
+
+  | | Read by id | One hop | List 50 |
+  |---|---|---|---|
+  | Role only (grants) | 0.052 / 0.051 | 0.062 / 0.059 | 0.77 / 1.06 |
+  | Set-based `EXISTS` policy through `type_def` and `module_access`, acting role from `current_setting('role')` | 0.058 / 0.058 | 0.074 / 0.080 | 0.83 / 1.12 |
+  | The same policies written as chains of inlinable SQL functions | 0.095 / 0.088 | 0.163 / 0.208 | 1.78 / 2.04 |
+
+  The function chains double the cost of a page because the planner evaluates them per row; the set-based form becomes a semi-join. The measured edge policy checked the endpoint types, not the relationship's module.
 - A policy that reads `type_def` runs with the caller's privileges, so the role needs SELECT on the catalog tables; to keep it from listing other groups' type names the catalog tables need policies of their own. This run did not apply policies to `type_def`; the extra cost of doing so is unmeasured.
 - Single runs on a loaded machine, edge and object tables only; policies on `object_key` and the journal were not measured.
 

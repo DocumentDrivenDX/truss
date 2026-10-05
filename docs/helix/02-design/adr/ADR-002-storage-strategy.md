@@ -319,6 +319,23 @@ projection of the journal.
 - Both tables are written only on delete, re-key and import, so a create, an
   update and a read pay nothing for them.
 
+### D14. Module isolation (optional)
+
+*(choice; layout 0.2)*
+
+- A UMF module is the unit of ownership, and `type_def` and `rel_def` already
+  record it. A deployment may give database roles read or write access per
+  module through `module_access` and the policy set `module-isolation.sql`
+  (CONTRACT-005). With neither applied, truss behaves as before.
+- Policies are set-based `EXISTS` over the catalog and `module_access`, keyed on
+  the acting role (the role set for the transaction, else the session user).
+  *(evidence: SPIKE-003 F8; policies as function chains cost about twice as much
+  on a page of 50, and a security-definer function 2 to 3 times as much)*
+- A relationship may name a type in another module, as UMF allows. Such an edge
+  is visible only to a role that can read the relationship's module and both
+  endpoint types' modules.
+- truss does not authenticate people or choose which role a person gets.
+
 ### D12. UMF boundary
 
 The storage strategy, storage homes, index and statistics declarations, and
