@@ -29,15 +29,15 @@ ddx:
 
 ## Context
 
-ADR-001 chose TypeScript first and named four triggers for a Rust core. Trigger T1 fires when "a named consumer needs truss inside a Python (or other non-JavaScript) process, and an out-of-process service does not meet that consumer's needs". A consumer now exists: Hohfeld, an application-specific mutable sub-graph that must run inside a Python 3.11 Databricks app and wants to share truss's tables rather than design its own. ADR-001 D6 requires that firing T1 be recorded with evidence in a new ADR, and D7 describes only one response: port the core to Rust and call it from the host. ADR-001's consequences also say there is no in-process Python use until a Rust core exists.
+ADR-001 chose TypeScript first and named four triggers for a Rust core. Trigger T1 fires when "a named consumer needs truss inside a Python (or other non-JavaScript) process, and an out-of-process service does not meet that consumer's needs". A consumer now exists: an application-specific mutable sub-graph store that must run inside a Python 3.11 application deployed as one unit on a managed platform, and wants to share truss's tables rather than design its own. ADR-001 D6 requires that firing T1 be recorded with evidence in a new ADR, and D7 describes only one response: port the core to Rust and call it from the host. ADR-001's consequences also say there is no in-process Python use until a Rust core exists.
 
-The out-of-process alternative does not meet this consumer's needs: the host is a Databricks App deployed as one unit, so a second runtime and service per deployment is a second app to build, deploy and secure, and the host's database connection, credentials and role model would have to cross a process boundary (Hohfeld ADR-006 and ADR-012).
+The out-of-process alternative does not meet this consumer's needs: the host is deployed as one unit, so a second runtime and service per deployment is a second application to build, deploy and secure, and the host's database connection, credentials and role model would have to cross a process boundary.
 
 ADR-001 D5 already makes the conformance corpus language-neutral data with normative expected results and informative expected SQL, so that a Rust core could be verified against the same cases. The storage layout, the journal, the catalog revision steps and the mutation protocol are now written as contracts (CONTRACT-001 to CONTRACT-004), independent of any language.
 
 ## Decision
 
-We will treat the contracts and the corpus as the interface to truss, and accept **a second implementation in another language when it passes the corpus**, as a response to T1 alongside the Rust-core route of ADR-001 D7. The first such implementation is a Python implementation for the Hohfeld consumer. It need not wait for, or become, a Rust core.
+We will treat the contracts and the corpus as the interface to truss, and accept **a second implementation in another language when it passes the corpus**, as a response to T1 alongside the Rust-core route of ADR-001 D7. The first such implementation is a Python implementation for that consumer. It need not wait for, or become, a Rust core.
 
 **Key Points**: A conforming implementation reads and writes the tables of CONTRACT-001 and follows CONTRACT-002 to CONTRACT-004 | It passes the corpus on each engine version it claims, and the interchange check against the TypeScript engine (CONTRACT-004) | It declares the layout version it was built against and refuses a different major version | It may add host-owned objects in its own schema and may add triggers on truss tables, under the extension rules of CONTRACT-001, and may not change truss's columns or constraints | It reads UMF through its own reader or an adapter, so ADR-001 D4's "UMF through its TypeScript library" applies to the TypeScript core only | The Rust route of ADR-001 D7 stays open and, when taken, is one more conforming implementation
 
@@ -46,7 +46,7 @@ We will treat the contracts and the corpus as the interface to truss, and accept
 | Option | Pros | Cons | Evaluation |
 |--------|------|------|------------|
 | Port the core to Rust with Python bindings (ADR-001 D7) | One engine; memory-safe | Not built; per-platform binary builds; waits on a measured need beyond T1's wording | Kept open, not required for T1 |
-| Run the TypeScript engine as a service for Python callers | Reuses code | A second runtime and service; the trigger text already excludes it where it does not meet the consumer's needs | Rejected for the Hohfeld consumer |
+| Run the TypeScript engine as a service for Python callers | Reuses code | A second runtime and service; the trigger text already excludes it where it does not meet the consumer's needs | Rejected for this consumer |
 | A Python implementation with its own table design | Fast to start | Not interchangeable with truss; a second storage design | Rejected |
 | **A Python implementation conforming to the shared contracts and corpus** | Interchangeable over one database; verified by data; no Rust dependency | Two implementations to keep in step; the contracts and corpus must exist first | **Proposed** |
 

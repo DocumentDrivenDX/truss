@@ -162,7 +162,7 @@ A host that builds on these tables names four roles. The roles are a convention;
 |---------|--------|
 | 16.2, 17.9 | The layout and the check pass (embedded servers) |
 | 17.11, 18.6 | SPIKE-002 ran generic catalog storage on these; this exact DDL is untested there |
-| 18 on Databricks Lakebase | Unverified for this DDL |
+| 18, and managed PostgreSQL services | Unverified for this DDL |
 
 The layout uses `xid8`, `INCLUDE` indexes and explicit sequences, and no extension.
 

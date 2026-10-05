@@ -29,7 +29,7 @@ Executed evidence for three questions ADR-002 left provisional. The scripts, the
 
 ## Method
 
-- **Engines.** PostgreSQL 16.2 (`pgserver` 0.1.4, Python 3.11) and 17.9 (`pgembed` 0.2.0, Python 3.12), each a fresh embedded server per run. Both were exercised on every question. Lakebase itself was not tested.
+- **Engines.** PostgreSQL 16.2 (`pgserver` 0.1.4, Python 3.11) and 17.9 (`pgembed` 0.2.0, Python 3.12), each a fresh embedded server per run. Both were exercised on every question. No managed PostgreSQL service was tested.
 - **Data.** 200,000 objects and 400,000 edges spread over 10, 100 and 1,000 types, generated with a fixed seed ([`common.py`](SPIKE-003-partitioning-locks-and-prepared-statements/common.py)).
 - **Layouts.** L0: one `object` table with a partial index per type. L1: `object` list-partitioned by type. L2: one flat `object` table with a separate `object_key` table (the layout adopted). L3: 20 hot types in their own partitions plus a default partition.
 - **Experiments.** E1 layouts ([`e1_layout.py`](SPIKE-003-partitioning-locks-and-prepared-statements/e1_layout.py)); E1b follow-ups on L2 ([`e1b_followups.py`](SPIKE-003-partitioning-locks-and-prepared-statements/e1b_followups.py)); E2 catalog-lock mechanisms A to E ([`e2_catalog_lock.py`](SPIKE-003-partitioning-locks-and-prepared-statements/e2_catalog_lock.py)); E3 prepared-statement modes ([`e3_prepared.py`](SPIKE-003-partitioning-locks-and-prepared-statements/e3_prepared.py)). Run scripts: `run_e1.sh`, `run_e1b.sh`, `run_e2_e3.sh`, `run_e2e.sh`, `run_e3_n1000.sh`.
@@ -151,7 +151,7 @@ Point reads and edge operations at 1,000 types on L2, ms, p50, PostgreSQL 16.2 (
 - The `Exclusive` lock sampled on `object` during L2 type adds (F2) is unattributed.
 - The `edge_limit` read tail at 1,000 relationships (F3) is unexplained.
 - A mixed E and B deployment (F6) is untested.
-- Everything ran on embedded PostgreSQL 16.2 and 17.9 on one noisy machine, over a local socket, without a pooler, and on neither Lakebase nor PostgreSQL 18. Latency targets for a hosted deployment need a rerun there.
+- Everything ran on embedded PostgreSQL 16.2 and 17.9 on one noisy machine, over a local socket, without a pooler, and on no managed PostgreSQL service and not on PostgreSQL 18. Latency targets for a hosted deployment need a rerun there.
 - L1 unprepared performance beyond a 50-operation sample was not measured.
 
 ## Reproduce
