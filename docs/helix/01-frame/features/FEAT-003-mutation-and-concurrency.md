@@ -19,7 +19,7 @@ ddx:
 **Status**: Draft
 **Priority**: P0
 **Covered PRD Subsystem(s)**: Mutation and concurrency
-**Covered PRD Requirements**: FR-16 to FR-21, FR-51
+**Covered PRD Requirements**: FR-16 to FR-21, FR-51, FR-54
 **Cross-Subsystem Rationale**: None; single subsystem.
 
 ## Overview
@@ -70,6 +70,7 @@ MUT-06. Cross-row rules lock the parent or run serializable; a deferred trigger 
 #### Groups
 
 MUT-07. A caller can apply several operations as one atomic group, with one origin and one catalog check, that commits or fails as a whole and names the failing operation (FR-51).
+MUT-08. A caller can give a group a request identifier so that applying it again returns the original results and changes nothing, including when two identical requests arrive at once, and reuse with different inputs is refused (FR-54).
 
 ### Non-Functional Requirements
 
@@ -83,6 +84,7 @@ MUT-07. A caller can apply several operations as one atomic group, with one orig
 - [US-013 — Refuse a write against a stale catalog](../user-stories/US-013-refuse-a-write-against-a-stale-catalog.md)
 - [US-014 — Keep cross-row rules honest](../user-stories/US-014-keep-cross-row-rules-honest.md)
 - [US-040 — Apply several operations as one atomic group](../user-stories/US-040-apply-operations-as-one-atomic-group.md)
+- [US-043 — Make a group safe to repeat](../user-stories/US-043-make-a-group-safe-to-repeat.md)
 
 ## Edge Cases and Error Handling
 

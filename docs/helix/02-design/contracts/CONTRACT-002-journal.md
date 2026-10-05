@@ -76,6 +76,7 @@ A record's history is ordered by `ver`, then `seq`. All rows of one change share
 | `db_role` | The database role the change ran as, taken from the database, never from the caller. |
 | `load` | For a bulk load, `{id, initiated_by}`. When present, `actor` SHOULD be absent. |
 | `reason` | Free text. |
+| `request` | `{id, hash}` of an idempotent group (CONTRACT-004, `apply_group`): the caller's request identifier and a hash of the group's inputs. Written on every journal row of the group. |
 | `x-*` | Reserved for hosts. truss preserves and ignores them. |
 
 An implementation MUST NOT set `db_role` from a value the caller supplied.

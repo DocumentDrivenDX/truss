@@ -274,3 +274,6 @@ CREATE TABLE truss.journal (
 -- No default partition: a deployment creates RANGE partitions ahead of time (CONTRACT-002).
 CREATE INDEX journal_entity ON truss.journal (entity_kind, entity_id, ver);
 CREATE INDEX journal_feed   ON truss.journal (xid, seq);
+-- Finds the rows of an earlier group by the request id it carried (CONTRACT-004, apply_group). Partial, so it
+-- holds an entry only for rows of a group that carried one; the other rows pay nothing for it.
+CREATE INDEX journal_request ON truss.journal ((origin #>> '{request,id}')) WHERE origin ? 'request';

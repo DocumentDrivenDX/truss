@@ -348,7 +348,10 @@ projection of the journal.
 - Consumers register a position in `feed_consumer`, and retention does not drop a
   journal partition that holds rows past the lowest position.
 - A caller may apply several operations as one atomic group (`apply_group`,
-  CONTRACT-004): one catalog check, one origin, ordered locks, all or nothing.
+  CONTRACT-004): one catalog check, one origin, ordered locks, all or nothing. A
+  request id in the origin makes a group idempotent with no table of its own: a
+  partial index finds the rows of an earlier group, and an advisory lock serializes
+  concurrent duplicates *(evidence: SPIKE-003 F10)*.
 
 ### D12. UMF boundary
 

@@ -139,6 +139,14 @@ BEGIN
   SELECT count(*) INTO n FROM truss.object WHERE id = s AND (props ->> '10') = '9007199254740993';
   IF n <> 1 THEN RAISE EXCEPTION 'integer beyond 2^53 changed'; END IF;
 
+  -- a request id in the journal origin is found by its partial index, and rows without one are not indexed
+  INSERT INTO truss.journal (entity_kind, entity_id, entity_type, ver, op, rev, origin)
+    VALUES ('o', 777777, 1, 3, 'update', 1, '{"request":{"id":"r-1","hash":"h"}}');
+  SELECT count(*) INTO n FROM truss.journal WHERE origin ? 'request' AND origin #>> '{request,id}' = 'r-1';
+  IF n <> 1 THEN RAISE EXCEPTION 'request id lookup found % rows', n; END IF;
+  SELECT count(*) INTO n FROM pg_indexes WHERE schemaname = 'truss' AND tablename = 'journal' AND indexname = 'journal_request';
+  IF n <> 1 THEN RAISE EXCEPTION 'journal_request index missing'; END IF;
+
   -- a feed consumer has one position
   INSERT INTO truss.feed_consumer VALUES ('c1', '0'::xid8, 0);
   BEGIN
