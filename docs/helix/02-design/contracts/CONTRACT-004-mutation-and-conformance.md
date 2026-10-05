@@ -45,9 +45,9 @@ Defines, in a way that does not depend on a programming language, what each read
 
 | Operation | Effect |
 |-----------|--------|
-| `create_object(type, props, origin)` | Inserts an object and one `object_key` row for each key whose components are all present, returns its `ref` and `ver` 1. A key already held by another object fails as `key_conflict`. Writes a `create` journal row. |
-| `update_object(ref, set, unset, expected_ver?, origin)` | Changes the named properties, returns the new `ver`. A change to a key component also updates that key's `object_key` row, or inserts or deletes it when a component becomes present or absent; a conflict fails as `key_conflict`. A change that alters no value writes nothing and does not raise `ver`. |
-| `delete_object(ref, expected_ver?, origin)` | Deletes the object and its composed children and owned objects, in one transaction; their key rows go with them by the foreign key. Refuses when any other edge refers to it. |
+| `create_object(type, props, origin)` | Inserts an object and one `object_key` row for each key whose components are all present, returns its `ref` and `ver` 1. A key already held by another object fails as `key_conflict`; a key in `key_tombstone` fails as `key_reserved` when `setting.key_reuse` is `"forbid"`. Writes a `create` journal row. |
+| `update_object(ref, set, unset, expected_ver?, origin)` | Changes the named properties, returns the new `ver`. A change to a key component also updates that key's `object_key` row, or inserts or deletes it when a component becomes present or absent; a conflict fails as `key_conflict` or `key_reserved`, and the old value is written to `key_tombstone`. A change that alters no value writes nothing and does not raise `ver`. |
+| `delete_object(ref, expected_ver?, origin)` | Deletes the object and its composed children and owned objects, in one transaction; their key rows go with them by the foreign key, and each key value is written to `key_tombstone`. Refuses when any other edge refers to it. |
 | `create_edge(rel_type, source, target, props, order_key?, origin)` | Inserts an edge between two existing objects of allowed types. |
 | `update_edge(id, set, unset, expected_ver?, origin)` | As `update_object`, for an edge. |
 | `delete_edge(id, expected_ver?, origin)` | Deletes an edge. |
@@ -55,6 +55,7 @@ Defines, in a way that does not depend on a programming language, what each read
 | `find_by_key(type, key_id, values)` | Returns the object holding that key value, or `not_found`: the canonical key text is built from `values` (CONTRACT-001, Key identity) and looked up in `object_key`. An incomplete key is `invalid`. |
 | `list_objects(type, limit, after?)` | Keyset pages ordered by `id`, served by the `(type_id, id)` index; `limit` required. Returns the items and a marker that says whether more remain. |
 | `list_edges(object, direction, rel_type?, limit, after?)` | As above, for the edges of one object, ordered by `order_key` (NULLs last) then `id`; the paging marker is the pair `(order_key, id)`. An ordered relationship's binding declares the index that serves this order. |
+| `import_batch(records, load_id, origin)` | Applies imported records so that repeating the same import changes nothing. An object record is identified by its type and primary key, an edge record by its relationship and the two endpoint ids. A record whose identity is held by a live record, or is in `key_tombstone`, is skipped and reported. Any other record is created as `create_object` or `create_edge` would, and a `record_source` row is written with the `load_id` and the record's `source` facts. A record that fails validation or names a missing endpoint is rejected and stored nowhere. Objects are applied before edges across the whole input. Each record commits with its journal rows, in batches, so an interrupted import is completed by running it again. Returns counts of created, skipped and rejected records. A type with no primary key cannot be imported idempotently; its records are rejected as `invalid` with that reason. |
 
 A deployment sets the maximum `limit`. A call above it is refused as `invalid`.
 
@@ -81,6 +82,8 @@ An operation SHOULD use prepared statements and MUST give the same results witho
 | `endpoint_violation` | The relationship does not allow these endpoint types, or an endpoint does not exist | no |
 | `has_edges` | The object is still referred to by an edge that is not owned by it | after removing the edges |
 | `key_conflict` | The key value already belongs to another object of the type (a unique violation on `object_key`) | no |
+| `edge_exists` | An edge with this relationship, source and target already exists (a unique violation on `edge`) | no |
+| `key_reserved` | The key value is in `key_tombstone` and `setting.key_reuse` is `"forbid"` | no |
 | `version_conflict` | `expected_ver` differs from the stored `ver` | after re-reading |
 | `catalog_changed` | The head revision differs from the one the write validated against | yes |
 | `retry` | The database reported `deadlock_detected` or `serialization_failure`; no change was made | yes, the whole operation |
@@ -92,16 +95,17 @@ An operation SHOULD use prepared statements and MUST give the same results witho
 | Element | Rules |
 |---------|-------|
 | `manifest.json` | `corpus_version`, the `layout_version` and `umf_version` it targets, and the list of case files. |
+| `umf/` | UMF documents, each with the UMF version it targets and its expected validation result: valid or not, and every diagnostic's severity, code and path. Message text is not compared. **Normative.** Seeded from UMF's own fixtures and the SPIKE-002 models. |
 | `models/` | UMF documents and truss bindings the cases import. |
 | Case file | `id`, `description`, `tags`, `setup` (import sets to accept and prior data), `operations` (each `{op, args, alias?}`), and `expected`. |
 | Aliases | Cases name records symbolically (`$a`, `$b`); real ids are assigned by the database and are never compared. |
 | `expected.results` | The result or error kind, and for `invalid` the full set of violations, of each operation. **Normative.** |
 | `expected.state` | The objects and edges after the case, in canonical form (properties by UMF element name, exact values as source tokens). **Normative.** |
 | `expected.journal` | The journal rows per record in `(entity alias, ver)` order: `op`, `prop`, `old`, `new`, and the defined `origin` keys. `seq`, `at` and `xid` are not compared. **Normative.** |
-| `expected.report` | For catalog acceptance cases, the acceptance and enforcement report (CONTRACT-003). **Normative.** |
+| `expected.report` | For catalog acceptance cases, the acceptance and enforcement report (CONTRACT-003) and the revision's recorded `origin`, with `db_role` compared as the role the harness used. **Normative.** |
 | `expected.sql` | Informative only. An implementation may generate different, equivalent SQL. |
 
-*Pass rule.* An implementation passes a corpus version on one engine version when every case yields the expected results, state, journal and report. A pass is reported with the engine, the layout and UMF versions and the corpus version, and no claim is made beyond them.
+*Pass rule.* An implementation passes a corpus version on one engine version when every case yields the expected results, state, journal and report, and its UMF reader gives the expected result and diagnostics for every `umf` case. A pass is reported with the engine, the layout and UMF versions and the corpus version, and no claim is made beyond them.
 
 *Interchange check.* For each case, implementation A runs it against one database and implementation B reads the resulting state and journal, then the reverse. The two must agree. A divergence is a defect in one implementation or in this contract.
 

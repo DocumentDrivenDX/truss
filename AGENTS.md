@@ -60,7 +60,7 @@ provisional may change when its validation measurements report.
     as structured values with `root_id` on composed objects, edge ids, and the
     `target_type` edge-index include.
 
-Draft contracts (layout 0.1) specify the storage layout and DDL
+Draft contracts (layout 0.2) specify the storage layout and DDL
 ([CONTRACT-001](docs/helix/02-design/contracts/CONTRACT-001-storage-layout.md),
 `storage-layout.sql` and its check), the journal (CONTRACT-002), catalog revision
 and unknown entity types (CONTRACT-003), and the mutation protocol and

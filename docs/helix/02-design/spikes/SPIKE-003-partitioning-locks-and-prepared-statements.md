@@ -29,10 +29,10 @@ Executed evidence for three questions ADR-002 left provisional. The scripts, the
 
 ## Method
 
-- **Engines.** PostgreSQL 16.2 (`pgserver` 0.1.4, Python 3.11) and 17.9 (`pgembed` 0.2.0, Python 3.12), each a fresh embedded server per run. Both were exercised on every question. Lakebase itself was not tested.
+- **Engines.** PostgreSQL 16.2 (`pgserver` 0.1.4, Python 3.11) and 17.9 (`pgembed` 0.2.0, Python 3.12), each a fresh embedded server per run. Both were exercised on every question. No managed PostgreSQL service was tested.
 - **Data.** 200,000 objects and 400,000 edges spread over 10, 100 and 1,000 types, generated with a fixed seed ([`common.py`](SPIKE-003-partitioning-locks-and-prepared-statements/common.py)).
 - **Layouts.** L0: one `object` table with a partial index per type. L1: `object` list-partitioned by type. L2: one flat `object` table with a separate `object_key` table (the layout adopted). L3: 20 hot types in their own partitions plus a default partition.
-- **Experiments.** E1 layouts ([`e1_layout.py`](SPIKE-003-partitioning-locks-and-prepared-statements/e1_layout.py)); E1b follow-ups on L2 ([`e1b_followups.py`](SPIKE-003-partitioning-locks-and-prepared-statements/e1b_followups.py)); E2 catalog-lock mechanisms A to E ([`e2_catalog_lock.py`](SPIKE-003-partitioning-locks-and-prepared-statements/e2_catalog_lock.py)); E3 prepared-statement modes ([`e3_prepared.py`](SPIKE-003-partitioning-locks-and-prepared-statements/e3_prepared.py)). Run scripts: `run_e1.sh`, `run_e1b.sh`, `run_e2_e3.sh`, `run_e2e.sh`, `run_e3_n1000.sh`.
+- **Experiments.** E1 layouts ([`e1_layout.py`](SPIKE-003-partitioning-locks-and-prepared-statements/e1_layout.py)); E1b follow-ups on L2 ([`e1b_followups.py`](SPIKE-003-partitioning-locks-and-prepared-statements/e1b_followups.py)); E2 catalog-lock mechanisms A to E ([`e2_catalog_lock.py`](SPIKE-003-partitioning-locks-and-prepared-statements/e2_catalog_lock.py)); E3 prepared-statement modes ([`e3_prepared.py`](SPIKE-003-partitioning-locks-and-prepared-statements/e3_prepared.py)). Run scripts: `run_e1.sh`, `run_e1b.sh`, `run_e2_e3.sh`, `run_e2e.sh`, `run_e3_n1000.sh`, `run_e4.sh`, `run_e5.sh`.
 - **Limits of the environment.** One machine (18 cores, 128 GB) under other load: endpoint-protection daemons and other sessions' PostgreSQL servers kept the load average between 7 and 15. Timings are single runs, not repeats. Treat DDL and index-build durations as upper bounds and differences under about 30% as noise. Latencies are in milliseconds on a local socket, so they exclude network time.
 
 ## Findings
@@ -135,6 +135,48 @@ Point reads and edge operations at 1,000 types on L2, ms, p50, PostgreSQL 16.2 (
 - On **L0** at 1,000 types an unprepared read took 86 to 92 ms, and a key lookup took 88 to 92 ms even when prepared on first use, because a generic plan cannot use per-type partial indexes (50-operation samples). On **L1** with prepared statements, reads were 0.05 to 0.4 ms in samples of 50 operations; I did not measure L1 unprepared beyond that sample.
 - The earlier rule to refuse deployments that cannot prepare came from L0-shaped data. On L2 the penalty is 0.01 to 0.05 ms per operation.
 
+### F8. Row-level security keyed on the type's module costs little (E4)
+
+A host can isolate groups of types by row-level security on the adopted layout, deciding from the `module` that `type_def` records. One transaction per operation: set the role, run the statement, commit. 1,000 types, 10 groups, 200,000 objects; p50 in ms, PostgreSQL 16.2 / 17.9 ([`e4_rls.py`](SPIKE-003-partitioning-locks-and-prepared-statements/e4_rls.py)):
+
+| | Read by id | One hop | List 50 |
+|---|---|---|---|
+| No role, no security | 0.054 / 0.069 | 0.062 / 0.075 | 0.88 / 1.27 |
+| Role only (grants) | 0.070 / 0.088 | 0.079 / 0.098 | 0.86 / 1.33 |
+| Policy through a mapping table | 0.073 / 0.110 | 0.094 / 0.135 | 0.99 / 1.45 |
+| Policy through `type_def.module` | 0.077 / 0.083 | 0.122 / 0.129 | 1.06 / 1.32 |
+| Policy through a security-definer function | 0.165 / 0.142 | 0.156 / 0.188 | 1.88 / 2.48 |
+
+- A role from one group saw 0 rows of another group's types under every policy variant, on both engines.
+- Assuming the role costs about 0.02 ms; a policy through `type_def.module` adds at most 0.03 ms to a read by id and 0.015 to 0.043 ms to a one-hop read. A separate mapping table is no faster.
+- A policy that calls a security-definer function is 2 to 3 times slower.
+- The shipped form of the policy (CONTRACT-005) was measured separately, p50 in ms, PostgreSQL 16.2 / 17.9, with the role granted and set:
+
+  | | Read by id | One hop | List 50 |
+  |---|---|---|---|
+  | Role only (grants) | 0.052 / 0.051 | 0.062 / 0.059 | 0.77 / 1.06 |
+  | Set-based `EXISTS` policy through `type_def` and `module_access`, acting role from `current_setting('role')` | 0.058 / 0.058 | 0.074 / 0.080 | 0.83 / 1.12 |
+  | The same policies written as chains of inlinable SQL functions | 0.095 / 0.088 | 0.163 / 0.208 | 1.78 / 2.04 |
+
+  The function chains double the cost of a page because the planner evaluates them per row; the set-based form becomes a semi-join. The measured edge policy checked the endpoint types, not the relationship's module.
+- A policy that reads `type_def` runs with the caller's privileges, so the role needs SELECT on the catalog tables; to keep it from listing other groups' type names the catalog tables need policies of their own. This run did not apply policies to `type_def`; the extra cost of doing so is unmeasured.
+- Single runs on a loaded machine, edge and object tables only; policies on `object_key` and the journal were not measured.
+
+### F9. A unique `edge_out` index stops duplicate edges at no cost (E5)
+
+Two connections created the same new edge (same relationship, source and target) at the same moment, 300 times, on the adopted layout at 1,000 types and 200,000 objects ([`e5_pairs.py`](SPIKE-003-partitioning-locks-and-prepared-statements/e5_pairs.py)); p50 insert in ms, PostgreSQL 16.2 / 17.9:
+
+| Option | Pairs with a duplicate edge, of 300 | Insert p50 | Guarantee |
+|---|---|---|---|
+| Nothing | **300 on both engines** | 0.106 / 0.123 | none |
+| `edge_out` made unique on `(source_id, rel_type_id, target_id)` | 0 | 0.104 / 0.135 | database |
+| A pair table with a primary key per pair, deleted with the edge | 0 | 0.154 / 0.168 | database |
+| Lock the source object, check, insert | 0 | 0.205 / 0.202 | engine only |
+
+- Making the existing traversal index unique adds no table and no index and no measured insert cost, and traversal still uses it by its first two columns.
+- The price is that one relationship cannot have two edges between the same two objects; a second kind of link is a second relationship.
+- Single run on a loaded machine; p95 insert latency (about 2 ms, mean 0.5 to 0.6 ms) was dominated by noise and is not reported per option.
+
 ## Decisions
 
 | Question | Decision | Recorded in |
@@ -151,8 +193,9 @@ Point reads and edge operations at 1,000 types on L2, ms, p50, PostgreSQL 16.2 (
 - The `Exclusive` lock sampled on `object` during L2 type adds (F2) is unattributed.
 - The `edge_limit` read tail at 1,000 relationships (F3) is unexplained.
 - A mixed E and B deployment (F6) is untested.
-- Everything ran on embedded PostgreSQL 16.2 and 17.9 on one noisy machine, over a local socket, without a pooler, and on neither Lakebase nor PostgreSQL 18. Latency targets for a hosted deployment need a rerun there.
+- Everything ran on embedded PostgreSQL 16.2 and 17.9 on one noisy machine, over a local socket, without a pooler, and on no managed PostgreSQL service and not on PostgreSQL 18. Latency targets for a hosted deployment need a rerun there.
 - L1 unprepared performance beyond a 50-operation sample was not measured.
+- Row-level security was measured on `object` and `edge`, not on `object_key`, the journal or the catalog tables (F8).
 
 ## Reproduce
 

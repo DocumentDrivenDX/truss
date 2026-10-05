@@ -183,8 +183,13 @@ applies.
   and a FK on `(rel_type_id, source_type, target_type)` references
   `rel_endpoint`. Endpoint types are therefore enforced by the database with no
   DDL per relationship. *(evidence: FINDING 4, R1)*
-- Traversal indexes are `(source_id, rel_type_id) INCLUDE (target_id,
-  target_type)` and the reverse. *(evidence for index-only traversal; the
+- Traversal indexes are `(source_id, rel_type_id, target_id) INCLUDE
+  (target_type)`, unique, and `(target_id, rel_type_id) INCLUDE (source_id,
+  source_type)`. The unique one makes an edge unique by relationship, source and
+  target, which makes an edge's identity in an import well defined and stops
+  concurrent creates committing a duplicate. *(evidence: SPIKE-003 F9: without it
+  300 of 300 concurrent creates of one pair committed two edges; with it none
+  did, at no measured insert cost)* *(evidence for index-only traversal; the
   `target_type` include is SPIKE-002's proposed fix for the two-hop tail,
   unmeasured)*
 - Edges take ids from the shared sequence so they can be journaled and carry
@@ -295,6 +300,41 @@ projection of the journal.
   index count is a reported budget (default 100; planning cost grows with it,
   SPIKE-003). *(evidence for index-count planning cost;
   choice for the rule)*
+
+### D13. Import identity and provenance
+
+*(choice; layout 0.2)*
+
+- A record is imported by its identity: an object by its type and primary key,
+  an edge by its relationship and its two endpoint ids. Repeating an import
+  creates nothing that is already held and nothing that was deleted.
+- A key value an object has held is written to `key_tombstone` in the
+  transaction that deletes the object or changes the key component. The
+  deployment setting `key_reuse` is `forbid` by default, which reserves the value
+  against a direct create and against an import, and `allow`, which does not.
+  The reservation is engine enforcement, not database enforcement.
+- An imported record has one `record_source` row naming the load and carrying
+  the source's own facts (`author`, `at`, `system`), written once and never
+  changed. The actor and database role stay in the journal's `origin`.
+- Both tables are written only on delete, re-key and import, so a create, an
+  update and a read pay nothing for them.
+
+### D14. Module isolation (optional)
+
+*(choice; layout 0.2)*
+
+- A UMF module is the unit of ownership, and `type_def` and `rel_def` already
+  record it. A deployment may give database roles read or write access per
+  module through `module_access` and the policy set `module-isolation.sql`
+  (CONTRACT-005). With neither applied, truss behaves as before.
+- Policies are set-based `EXISTS` over the catalog and `module_access`, keyed on
+  the acting role (the role set for the transaction, else the session user).
+  *(evidence: SPIKE-003 F8; policies as function chains cost about twice as much
+  on a page of 50, and a security-definer function 2 to 3 times as much)*
+- A relationship may name a type in another module, as UMF allows. Such an edge
+  is visible only to a role that can read the relationship's module and both
+  endpoint types' modules.
+- truss does not authenticate people or choose which role a person gets.
 
 ### D12. UMF boundary
 

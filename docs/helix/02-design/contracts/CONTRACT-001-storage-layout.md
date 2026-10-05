@@ -29,7 +29,7 @@ ddx:
 
 **Contract ID**: CONTRACT-001
 **Type**: schema
-**Version**: layout 0.1 (draft)
+**Version**: layout 0.2 (draft)
 **Status**: draft
 **Related**: ADR-002 (storage strategy), ADR-001 (language and portable core), SPIKE-002, SPIKE-003, the storage layout review, CONTRACT-002 (journal), CONTRACT-003 (catalog), CONTRACT-004 (mutation and conformance)
 
@@ -54,8 +54,9 @@ MUST, MUST NOT, SHOULD and MAY are used as in RFC 2119. The schema name is a dep
 
 | Table | Rules | Source |
 |-------|-------|--------|
-| `setting` | Key/value deployment settings. `journal_mode` is `"engine"` or `"trigger"` (CONTRACT-002). | Proposed |
-| `schema_rev` | One row per accepted catalog revision: `rev` (primary key), `accepted_at`, `report`. Revision 0 is the empty catalog and exists from the start. Immutable. | ADR-002 D1; Proposed |
+| `setting` | Key/value deployment settings. `journal_mode` is `"engine"` or `"trigger"` (CONTRACT-002); `key_reuse` is `"forbid"` or `"allow"` (CONTRACT-004). | Proposed |
+| `module_access` | Optional. The reader and writer role of each UMF module, `module` the primary key. Empty by default and used only by the isolation layer (CONTRACT-005). | Proposed |
+| `schema_rev` | One row per accepted catalog revision: `rev` (primary key), `accepted_at`, `report`, and `origin`, a JSON object that records who or what accepted it, with the keys and rules of the journal's `origin` (CONTRACT-002). Revision 0 is the empty catalog and exists from the start. Immutable. | ADR-002 D1; Proposed |
 | `schema_head` | One row (`id` = 1) holding the current revision. Updated in place by every acceptance. | ADR-002 D10; SPIKE-003 |
 | `schema_doc` | The UMF documents of a revision, verbatim: `(rev, ord)`, `doc_id`, `doc_revision`, `umf_version`, `content_sha256`, `document`, `validation`. A revision MAY hold several documents. Immutable. | ADR-002 D1; Proposed |
 | `schema_change` | The prior and new form of a catalog row that a revision changed in place (CONTRACT-003). Append-only. | Proposed |
@@ -67,6 +68,8 @@ MUST, MUST NOT, SHOULD and MAY are used as in RFC 2119. The schema name is a dep
 | `object` | One table for every type. Primary key `(id, type_id)`. `props`, `retained`, `root_id` and `root_type`, `rev`, `ver`, `created_at`, `updated_at`. Index `(type_id, id)` serves keyset listing of one type. | ADR-002 D2, D3; D5 (provisional); Proposed |
 | `object_key` | One row per object per key: `(type_id, key_num, k)` is the primary key, `(object_id, type_id, key_num)` is unique, and `(object_id, type_id)` references `object` with `ON DELETE CASCADE`. | ADR-002 D2, D9; SPIKE-003 |
 | `edge` | `id`, `rel_type_id`, `(source_id, source_type)`, `(target_id, target_type)`, `props`, `order_key` (text, `COLLATE "C"`), `rev`, `ver`, `created_at`, `updated_at`. | ADR-002 D6; Proposed |
+| `key_tombstone` | A key value an object has held, or the endpoints of a deleted imported edge, written in the transaction that deletes or re-keys the record and never changed. `(entity_kind, type_id, key_num, k)` is the primary key. | Proposed |
+| `record_source` | One row per imported record: `(entity_kind, entity_id)` is the primary key, with the `load_id` and a `source` JSON object whose defined optional keys are `author`, `at` and `system`. Written by the import that created the record, never changed. | Proposed |
 | `journal` | RANGE-partitioned by `at`, with no default partition. See CONTRACT-002. | ADR-002 D7; Proposed |
 | `id_seq` | One sequence for object and edge ids. | ADR-002 D6 (edge ids provisional, V7) |
 | `journal_seq` | The sequence for `journal.seq`. An explicit sequence, not an identity column. | Proposed |
@@ -81,6 +84,7 @@ No table other than `journal` is partitioned, and no operation adds a table, par
 | `edge.(rel_type_id, source_type, target_type)` MUST reference `rel_endpoint`. | ADR-002 D6 |
 | `object.(root_id, root_type)` MUST reference `object (id, type_id)` with `ON DELETE RESTRICT`; `root_id` and `root_type` are both set or both NULL. Every reference carries both columns. | ADR-002 D2, D5 (provisional); Proposed (`root_type`) |
 | `object_key.(type_id, key_num)` MUST reference `key_def`. | Proposed |
+| A `key_tombstone` for an edge has `key_num` 0; `source` of a `record_source` row is a JSON object. | Proposed |
 | `props`, `edge.props` and `journal.origin` MUST be JSON objects; `retained` MUST be a JSON object or NULL. `props` is NOT NULL, so a SQL NULL from `jsonb_set` fails instead of erasing the map. | ADR-002 D3 |
 | No per-type CHECK constraints on `object`. | ADR-002 D9 |
 | `rev` columns of `object`, `edge` and the catalog tables reference `schema_rev`. `journal.rev` is not enforced. | Proposed |
@@ -99,6 +103,7 @@ No table other than `journal` is partitioned, and no operation adds a table, par
 - An object that lacks a key component has no `object_key` row for that key. It is not reachable by that key and the engine reports it.
 - `object_key` rows are written, updated and deleted by the same operation, in the same transaction, as the object (the engine, or a host's trigger). A change to a key component changes `k`. Deleting an object deletes its key rows by the foreign key. *(ADR-002 D9; SPIKE-003)*
 - A key lookup is `object_key` joined to `object` on `(object_id, type_id)`.
+- A key value an object has held is written to `key_tombstone` in the same transaction as the delete, and also when a change of key component frees the old value. With `setting.key_reuse` `"forbid"` the value then stays reserved: an import skips it and a direct create is refused (CONTRACT-004). With `"allow"` the tombstone is still written and a create may reuse the value. The database cannot enforce a reservation by a constraint, so it is engine enforcement, and a delete by plain SQL without a host trigger leaves no tombstone, which the enforcement report lists. *(Proposed)*
 
 **Values**
 
@@ -114,7 +119,7 @@ No table other than `journal` is partitioned, and no operation adds a table, par
 - Indexes other than those in `storage-layout.sql` exist only where the binding declares them; the engine never creates them in response to queries. A declared index on `object` is a partial expression index on one type. *(ADR-002 D11)*
 - Planning cost grows with the number of indexes on `object`. Measured on PostgreSQL 16.2 and 17.9 with one partial index per type: planning a key lookup took about 0.1 ms with 111 indexes and about 90 to 105 ms with 1011, while a layout with no per-type indexes planned in 0.02 ms at every size (SPIKE-003). The deployment sets a budget for declared indexes per table; the default is 100, and the report lists the count. *(Proposed; default from SPIKE-003)*
 - A declared index MUST be built with `CREATE INDEX CONCURRENTLY`, outside the acceptance transaction. The implementation MUST then check that the index is valid and drop and report it if not; the acceptance report lists indexes still pending. *(Proposed)*
-- `edge` carries two traversal indexes: `(source_id, rel_type_id) INCLUDE (target_id, target_type)` and the reverse. *(ADR-002 D6; the `target_type` include is provisional)*
+- `edge` carries two traversal indexes: `(source_id, rel_type_id, target_id) INCLUDE (target_type)`, which is unique, and `(target_id, rel_type_id) INCLUDE (source_id, source_type)`. The unique index makes an edge unique by relationship, source and target: a second kind of link between the same two objects is a second relationship, and a repeated link of one kind needs an association object. A traversal from a source uses the index by its first two columns, and no table or index is added for the rule. *(ADR-002 D6; SPIKE-003 F9; the `target_type` include is provisional)*
 - A maximum multiplicity of one is enforced by `edge_limit`, whose primary key `(rel_type_id, side, endpoint_id)` refuses a second edge: side `s` holds one row per edge of a relationship that allows one edge per source, side `t` one per target. The engine writes the row in the same transaction as the edge; the row goes with the edge by the foreign key. A maximum above one is enforced by the engine under the parent lock. No index is created per relationship, because that costs a table-wide index per relationship: at 1,000 relationships, 1,003 edge indexes made planning take about 110 ms and inserts 5 times slower, while `edge_limit` kept both at the baseline. *(ADR-002 D9; SPIKE-003 E1b)*
 
 **Concurrency**
@@ -150,7 +155,7 @@ A host that builds on these tables names four roles. The roles are a convention;
 | Writer | Writes objects and edges, through the engine or host write functions. |
 | Reader | Reads. |
 
-- A host MAY add its own tables, functions, roles and privileges in its own schema; MAY `ENABLE` and `FORCE ROW LEVEL SECURITY` and add policies on `object`, `object_key` and `edge`; and MAY add triggers on truss tables, including triggers that write the journal (CONTRACT-002) and keep `object_key` current. `FORCE` is needed because the owner and `SECURITY DEFINER` functions it owns bypass row-level security otherwise.
+- A host MAY add its own tables, functions, roles and privileges in its own schema; MAY `ENABLE` and `FORCE ROW LEVEL SECURITY` and add policies on any truss table, including the catalog tables and the journal, which can decide from the `module` that `type_def` and `rel_def` record (CONTRACT-005 is one such set, shipped as `module-isolation.sql`); and MAY add triggers on truss tables, including triggers that write the journal (CONTRACT-002) and keep `object_key` current. `FORCE` is needed because the owner and `SECURITY DEFINER` functions it owns bypass row-level security otherwise.
 - A host MUST NOT add, drop or alter columns, change a primary key, foreign key or check constraint, or write the catalog tables except through a catalog revision.
 - Foreign-key and unique checks run regardless of row-level security, so a key conflict or an object that still has edges can reveal that a hidden row exists. A host that must hide this decides how to report it.
 - Keys in `origin` that begin `x-` are reserved for hosts.
@@ -162,7 +167,7 @@ A host that builds on these tables names four roles. The roles are a convention;
 |---------|--------|
 | 16.2, 17.9 | The layout and the check pass (embedded servers) |
 | 17.11, 18.6 | SPIKE-002 ran generic catalog storage on these; this exact DDL is untested there |
-| 18 on Databricks Lakebase | Unverified for this DDL |
+| 18, and managed PostgreSQL services | Unverified for this DDL |
 
 The layout uses `xid8`, `INCLUDE` indexes and explicit sequences, and no extension.
 
@@ -179,6 +184,7 @@ Errors are classified by SQLSTATE and the relation concerned, never by constrain
 
 | Condition | SQLSTATE | Meaning to the engine |
 |-----------|----------|------------------------|
+| A second edge with the same relationship, source and target | `unique_violation` on `edge` | `edge_exists` |
 | Edge to a disallowed endpoint type or a missing object | `foreign_key_violation` on `edge` | `endpoint_violation` |
 | Delete of an object that has an edge | `foreign_key_violation` on `object` | `has_edges` |
 | Key value already held by another object of the type | `unique_violation` on `object_key` | `key_conflict` |

@@ -4,7 +4,7 @@
 -- The schema name is a parameter of the deployment; `truss` is the default.
 
 CREATE SCHEMA IF NOT EXISTS truss;
-COMMENT ON SCHEMA truss IS 'truss-layout 0.1';
+COMMENT ON SCHEMA truss IS 'truss-layout 0.2';
 
 -- ---- Deployment settings ---------------------------------------------------------------
 -- journal_mode: 'engine' (the engine writes the journal and maintains ver and updated_at)
@@ -14,12 +14,27 @@ CREATE TABLE truss.setting (
   value jsonb NOT NULL
 );
 INSERT INTO truss.setting VALUES ('journal_mode', '"engine"');
+-- key_reuse: 'forbid' (a key value an object has held stays reserved, so an import skips it and a direct
+-- create is refused) or 'allow' (a tombstone is still written but a create may reuse the value). See CONTRACT-004.
+INSERT INTO truss.setting VALUES ('key_reuse', '"forbid"');
+
+-- ---- Module access (optional; see module-isolation.sql and CONTRACT-005) ----------------------
+-- Which database roles may read and write the types and relationships of a UMF module. Empty by default.
+-- A role may appear in several rows, for example one reader role shared by two linked modules.
+CREATE TABLE truss.module_access (
+  module      text PRIMARY KEY,
+  reader_role text NOT NULL,
+  writer_role text NOT NULL,
+  CONSTRAINT module_access_roles_differ CHECK (reader_role <> writer_role)
+);
 
 -- ---- Schema catalog: UMF documents verbatim and immutable per catalog revision --------
 CREATE TABLE truss.schema_rev (
   rev          int PRIMARY KEY,
   accepted_at  timestamptz NOT NULL DEFAULT now(),
-  report       jsonb NOT NULL                 -- acceptance and enforcement report (CONTRACT-003)
+  report       jsonb NOT NULL,                -- acceptance and enforcement report (CONTRACT-003)
+  origin       jsonb NOT NULL DEFAULT '{}'::jsonb,   -- who accepted it: actor, db_role, reason, x-* (CONTRACT-002, origin)
+  CONSTRAINT schema_rev_origin_is_object CHECK (jsonb_typeof(origin) = 'object')
 );
 INSERT INTO truss.schema_rev VALUES (0, now(), '{}');   -- revision 0 is the empty catalog
 
@@ -180,7 +195,9 @@ CREATE TABLE truss.edge (
   CONSTRAINT edge_endpoint_types_fk FOREIGN KEY (rel_type_id, source_type, target_type)
     REFERENCES truss.rel_endpoint (rel_type_id, source_type, target_type)
 );
-CREATE INDEX edge_out ON truss.edge (source_id, rel_type_id) INCLUDE (target_id, target_type);
+-- Unique: one edge per relationship, source and target, whatever the relationship. Two kinds of link between
+-- the same records are two relationships. The index still serves traversal by its (source_id, rel_type_id) prefix.
+CREATE UNIQUE INDEX edge_out ON truss.edge (source_id, rel_type_id, target_id) INCLUDE (target_type);
 CREATE INDEX edge_in  ON truss.edge (target_id, rel_type_id) INCLUDE (source_id, source_type);
 
 -- Maximum multiplicity of one, enforced without a per-relationship index. A relationship that allows
@@ -194,6 +211,36 @@ CREATE TABLE truss.edge_limit (
   PRIMARY KEY (rel_type_id, side, endpoint_id)
 );
 CREATE INDEX edge_limit_edge ON truss.edge_limit (edge_id);
+
+-- ---- Import identity and provenance -------------------------------------------------------
+-- A key value an object has held, or the endpoints of an imported edge that was deleted, written in the
+-- transaction that deletes or re-keys the record, never updated or removed. For an object, type_id is its
+-- type and k its canonical key text (CONTRACT-001, Key identity); for an edge, type_id is its relationship,
+-- key_num is 0, and k is the compact JSON array of the endpoint ids as decimal strings, source first.
+CREATE TABLE truss.key_tombstone (
+  entity_kind char(1) NOT NULL CHECK (entity_kind IN ('o', 'e')),
+  type_id     int     NOT NULL,
+  key_num     smallint NOT NULL,
+  k           text COLLATE "C" NOT NULL,
+  entity_id   bigint  NOT NULL,                      -- the object or edge that held it
+  ver         bigint  NOT NULL,                      -- the version at which it stopped holding it
+  at          timestamptz NOT NULL DEFAULT clock_timestamp(),
+  PRIMARY KEY (entity_kind, type_id, key_num, k),
+  CONSTRAINT key_tombstone_edge_key CHECK (entity_kind = 'o' OR key_num = 0)
+);
+
+-- One row per imported record, written by the import that created it and never updated: the load, and the
+-- source's own facts. source is a JSON object; the defined optional keys are author, at and system.
+CREATE TABLE truss.record_source (
+  entity_kind char(1) NOT NULL CHECK (entity_kind IN ('o', 'e')),
+  entity_id   bigint  NOT NULL,
+  load_id     text    NOT NULL,
+  source      jsonb   NOT NULL DEFAULT '{}'::jsonb,
+  imported_at timestamptz NOT NULL DEFAULT clock_timestamp(),
+  PRIMARY KEY (entity_kind, entity_id),
+  CONSTRAINT record_source_is_object CHECK (jsonb_typeof(source) = 'object')
+);
+CREATE INDEX record_source_load ON truss.record_source (load_id);
 
 -- ---- History -----------------------------------------------------------------------------
 CREATE SEQUENCE truss.journal_seq;
