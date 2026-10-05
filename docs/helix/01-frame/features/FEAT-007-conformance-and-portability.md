@@ -19,7 +19,7 @@ ddx:
 **Status**: Draft
 **Priority**: P0
 **Covered PRD Subsystem(s)**: Conformance and portability
-**Covered PRD Requirements**: FR-36 to FR-40
+**Covered PRD Requirements**: FR-36 to FR-40, FR-50
 **Cross-Subsystem Rationale**: None; single subsystem.
 
 ## Overview
@@ -44,6 +44,7 @@ An implementer in another language reads the contracts, runs the corpus on a nam
 | Corpus | Can I test against it? | Language-neutral cases with normative expectations |
 | Interchange | Do two implementations agree? | Cross-read check |
 | Versioning | Which layout is this database? | A declared version, refused on major mismatch |
+| UMF reading | Does my reader agree with UMF's? | Corpus cases of documents and expected diagnostics |
 
 ## Requirements
 
@@ -66,6 +67,10 @@ CNF-03. An implementation passes a corpus version on a named PostgreSQL version,
 CNF-04. The layout declares a version and an implementation refuses a database of a different major version (FR-39).
 CNF-05. The layout DDL and its check pass on every supported PostgreSQL version (FR-40).
 
+#### UMF reading
+
+CNF-06. An implementation reads UMF so that it accepts and rejects the same documents, with the same diagnostics (severity, code and path), as the reference validator; the corpus carries documents and their expected diagnostics (FR-50).
+
 ### Non-Functional Requirements
 
 - **Reproducibility**: the DDL and its check run on PostgreSQL 16.2 and 17.9 today.
@@ -74,6 +79,7 @@ CNF-05. The layout DDL and its check pass on every supported PostgreSQL version 
 
 ## User Stories
 
+- [US-039 — Read UMF the same way as the reference validator](../user-stories/US-039-read-umf-the-same-way-as-the-reference.md)
 - [US-027 — Build an implementation from the contracts](../user-stories/US-027-build-an-implementation-from-the-contracts.md)
 - [US-028 — Pass the corpus and the interchange check](../user-stories/US-028-pass-the-corpus-and-the-interchange-check.md)
 - [US-029 — Declare the layout version and check the DDL on every version](../user-stories/US-029-declare-the-layout-version-and-check-the-ddl.md)
@@ -97,7 +103,7 @@ CNF-05. The layout DDL and its check pass on every supported PostgreSQL version 
 ## Dependencies
 
 - **Other features**: all features, whose behavior the corpus tests.
-- **External services**: PostgreSQL versions under test; interfaces in CONTRACT-001 to CONTRACT-005.
+- **External services**: PostgreSQL versions under test; interfaces in CONTRACT-001 to CONTRACT-004.
 
 ## Out of Scope
 

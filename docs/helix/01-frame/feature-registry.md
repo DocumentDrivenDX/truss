@@ -26,7 +26,7 @@ ddx:
 | FEAT-004 | Journal and History | The journal is the append-only record of every change, written in the transaction that made it | Draft | P0 | Project owner | PRD: Journal and history (FR-22–FR-27) | 2026-10-05 |
 | FEAT-005 | Reads and Traversal | This feature is how stored data is read: one object by identifier or key, a type's objects in pages, an object's edges, a short traversal, and the catalog's own types | Draft | P0 | Project owner | PRD: Reads and traversal (FR-28–FR-32) | 2026-10-05 |
 | FEAT-006 | Enforcement Reporting | This feature makes enforcement a visible, verified fact: for every UMF assertion, who enforces it, with the evidence, and no overclaiming | Draft | P0 | Project owner | PRD: Enforcement reporting (FR-33–FR-35) | 2026-10-05 |
-| FEAT-007 | Conformance and Portability | This feature makes truss a specification as well as a program: contracts and a corpus that let another implementation share the same tables and prove it | Draft | P0 | Project owner | PRD: Conformance and portability (FR-36–FR-40) | 2026-10-05 |
+| FEAT-007 | Conformance and Portability | This feature makes truss a specification as well as a program: contracts and a corpus that let another implementation share the same tables and prove it | Draft | P0 | Project owner | PRD: Conformance and portability (FR-36–FR-40, FR-50) | 2026-10-05 |
 | FEAT-008 | Host Integration | This feature is how an application that owns a database adds its own structure and policy around truss's tables without changing them | Draft | P1 | Project owner | PRD: Host integration (FR-41–FR-44, FR-48, FR-49) | 2026-10-05 |
 
 ## Dependencies

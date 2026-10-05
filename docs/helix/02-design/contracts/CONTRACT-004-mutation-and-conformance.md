@@ -95,6 +95,7 @@ An operation SHOULD use prepared statements and MUST give the same results witho
 | Element | Rules |
 |---------|-------|
 | `manifest.json` | `corpus_version`, the `layout_version` and `umf_version` it targets, and the list of case files. |
+| `umf/` | UMF documents, each with the UMF version it targets and its expected validation result: valid or not, and every diagnostic's severity, code and path. Message text is not compared. **Normative.** Seeded from UMF's own fixtures and the SPIKE-002 models. |
 | `models/` | UMF documents and truss bindings the cases import. |
 | Case file | `id`, `description`, `tags`, `setup` (import sets to accept and prior data), `operations` (each `{op, args, alias?}`), and `expected`. |
 | Aliases | Cases name records symbolically (`$a`, `$b`); real ids are assigned by the database and are never compared. |
@@ -104,7 +105,7 @@ An operation SHOULD use prepared statements and MUST give the same results witho
 | `expected.report` | For catalog acceptance cases, the acceptance and enforcement report (CONTRACT-003) and the revision's recorded `origin`, with `db_role` compared as the role the harness used. **Normative.** |
 | `expected.sql` | Informative only. An implementation may generate different, equivalent SQL. |
 
-*Pass rule.* An implementation passes a corpus version on one engine version when every case yields the expected results, state, journal and report. A pass is reported with the engine, the layout and UMF versions and the corpus version, and no claim is made beyond them.
+*Pass rule.* An implementation passes a corpus version on one engine version when every case yields the expected results, state, journal and report, and its UMF reader gives the expected result and diagnostics for every `umf` case. A pass is reported with the engine, the layout and UMF versions and the corpus version, and no claim is made beyond them.
 
 *Interchange check.* For each case, implementation A runs it against one database and implementation B reads the resulting state and journal, then the reverse. The two must agree. A divergence is a defect in one implementation or in this contract.
 

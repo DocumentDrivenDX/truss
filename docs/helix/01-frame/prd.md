@@ -177,6 +177,7 @@ Deferred items are tracked in `docs/helix/parking-lot.md` when it exists.
 - **FR-38** — An implementation passes a corpus version on a named PostgreSQL version, and an interchange check shows two implementations can read what the other wrote.
 - **FR-39** — The layout declares a version, and an implementation refuses a database of a different major version.
 - **FR-40** — The layout DDL and its check pass on every supported PostgreSQL version.
+- **FR-50** — An implementation reads UMF so that it accepts and rejects the same documents, with the same diagnostics, as the reference validator, shown by corpus cases that give each document's expected diagnostics.
 
 ### Subsystem: Host integration
 
@@ -197,6 +198,7 @@ Deferred items are tracked in `docs/helix/parking-lot.md` when it exists.
 | FR-5 | Tightened rule | A revision shortening a text limit, with 3 objects over it | Rejected; the 3 objects listed |
 | FR-7 | No DDL | Accept a revision that adds a type, a property and a relationship, with sixteen writers running | No table, partition or index created; writers not blocked beyond the head-row wait |
 | FR-10, FR-11 | Exact values and retention | The value corpus plus a field the schema does not define | Every value reads back exactly; the extra field is retained and reported |
+| FR-50 | UMF reading | Run the corpus's UMF cases through a second implementation's reader | Same validity and the same diagnostics, by severity, code and path, as the reference |
 | FR-48, FR-49 | Module access | Give role `a` module `sales` and role `b` module `billing`, with a link between them | Each sees only its module; the link is seen only by a role that reads both |
 | FR-45, FR-46 | Repeat an import | Import 51 records with source facts, correct one, delete one, import again | Nothing changes, the deleted record stays deleted, each imported record still names its load and source facts |
 | FR-12, FR-13 | Keys and endpoints | A second object with the same key; an edge to a missing or wrongly typed object; delete of an object with an edge | Each refused by the database with its error kind |
