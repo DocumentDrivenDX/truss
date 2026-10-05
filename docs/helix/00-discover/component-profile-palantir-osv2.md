@@ -24,6 +24,14 @@ system and an alternative to building truss, not as something truss could run
 on. The build-versus-adopt decision this informs has no ADR yet; what the record
 cannot settle is routed below.
 
+UMF is DocumentDrivenDX's machine-readable metamodel and schema interchange
+fabric. SQL is the relational database query language; PostgreSQL's JSONB
+type stores binary JSON (JavaScript Object Notation).
+
+The findings retain the research dates and versions in Scope. The storage
+choice is governed by [ADR-002](../02-design/adr/ADR-002-storage-strategy.md),
+the architecture decision record; candidate assessments below remain desk research.
+
 ## Scope
 
 - Component: Palantir Foundry Object Storage V2 ("OSv2"), as publicly documented

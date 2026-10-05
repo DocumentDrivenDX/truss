@@ -24,6 +24,14 @@ schema-as-data ideas truss could borrow. This profile makes no choice among
 candidates; the build-versus-adopt decision belongs to an ADR that cites the
 profiles, and what reading cannot settle is routed below.
 
+UMF is DocumentDrivenDX's machine-readable metamodel and schema interchange
+fabric. SQL is the relational database query language; PostgreSQL's JSONB
+type stores binary JSON (JavaScript Object Notation).
+
+The findings retain the research dates and versions in Scope. The storage
+choice is governed by [ADR-002](../02-design/adr/ADR-002-storage-strategy.md),
+the architecture decision record; candidate assessments below remain desk research.
+
 ## Scope
 
 - Component: Datomic Pro, release 1.0.7705 (published 10 July 2026), with

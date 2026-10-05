@@ -13,6 +13,11 @@ ddx:
 
 # Competitive Analysis
 
+UMF is DocumentDrivenDX's machine-readable metamodel and schema interchange
+fabric. SQL is the relational database query language; PostgreSQL's JSONB
+type stores binary JSON (JavaScript Object Notation). DDL means data definition
+language, the SQL statements that define tables and constraints.
+
 Scope: graph storage and querying on PostgreSQL, the initial backing engine,
 plus adjacent graph and fact stores that teams use instead. Survey date
 2026-09-24; revised 2026-09-25 with eleven component profiles and one
@@ -90,8 +95,10 @@ retired because native storage was faster; secondary).
 | Data with no matching definition retained | Planned | Full (subject to value losses) | Partial (adds a column or refuses) | None | None | Partial (scalars kept; maps not storable) |
 | Open-source licence | Full (Apache-2.0) | Full | Full | Full | Full (maker defunct) | Partial (GPLv3 Community) |
 
-**Legend**: Full | Partial | Planned | None. Every truss cell is Planned: no
-truss code exists. Cells cite the profiles above and SPIKE-001.
+**Legend**: Full | Partial | Planned | None. truss capability cells describe
+product intent; the licence row records the repository licence. Cells cite
+the profiles above and SPIKE-001. The comparison retains its survey dates;
+[ADR-002](../02-design/adr/ADR-002-storage-strategy.md) governs the storage choice.
 
 ## Differentiation Strategy
 
@@ -101,10 +108,9 @@ truss code exists. Cells cite the profiles above and SPIKE-001.
 | Runtime enforcement of UMF rules that DDL cannot express, with a report on stored data | UMF's projection reports cover what generated DDL enforces at design time; nothing enforces and reports the remainder at runtime | M: depends on UMF's fidelity model and on getting concurrency right |
 | Nothing silently dropped, including data that fits no definition | Rivals drop nulls (AGE, Neo4j, Memgraph, Gel), refuse unknown fields (Gel, Sqlg) or have dropped data silently in past releases (SurrealDB) | M |
 
-Removed on 2026-09-25: "writable graph with standards-aligned reads" (Apache
-AGE already writes through openCypher) and the claim that the per-assertion
-enforcement report is unique (UMF already reports design-time enforcement for
-generated DDL).
+Apache AGE already supports writes through openCypher, and UMF reports
+design-time enforcement for generated DDL. truss's proposed differentiation
+depends on exact values and runtime enforcement.
 
 **Positioning**: For PostgreSQL teams who model connected, evolving data with
 UMF schemas, truss is a property-oriented graph engine that stores and queries

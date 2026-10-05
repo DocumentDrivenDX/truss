@@ -27,6 +27,14 @@ was done. The documentation was read from its sources in the Gel repository,
 because docs.geldata.com and geldata.com were blocked by this session's egress
 proxy.
 
+UMF is DocumentDrivenDX's machine-readable metamodel and schema interchange
+fabric. SQL is the relational database query language; PostgreSQL's JSONB
+type stores binary JSON (JavaScript Object Notation).
+
+The findings retain the research dates and versions in Scope. The storage
+choice is governed by [ADR-002](../02-design/adr/ADR-002-storage-strategy.md),
+the architecture decision record; candidate assessments below remain desk research.
+
 ## Scope
 
 - Component: Gel server 7.1 (tagged 3 December 2025), self-hosted with an

@@ -31,8 +31,18 @@ ddx:
 | Drafted by | Claude Code agent |
 | Evidence | [SPIKE-001](../spikes/SPIKE-001-apache-age.md), [SPIKE-002](../spikes/SPIKE-002-storage-bake-off.md), [storage layout review](../storage-layout-review.md) |
 
-ADR-001 (TypeScript on Bun first, a portable core and the triggers for a Rust
-core) is still pending. This ADR is independent of it except where noted.
+[ADR-001](ADR-001-language-and-portable-core.md) accepts TypeScript first, a
+portable core and measured triggers for a Rust core. Its Node support remains
+provisional until L1; this storage decision applies across supported runtimes.
+
+Terminology: UMF is DocumentDrivenDX's machine-readable metamodel and schema
+interchange fabric. SQL is Structured Query Language; PostgreSQL JSONB is its
+binary JSON storage type. DDL means data definition language, FK means foreign
+key, and p95 is the 95th percentile. PRD means product requirements document;
+the project PRD has not yet been authored.
+HOT means PostgreSQL heap-only tuple updates; WAL is PostgreSQL's write-ahead
+log. RFC 3339 is the IETF date and time format used by D3. DDD means
+domain-driven design; `umf.ddd` is UMF's semantic projection.
 
 ## Context
 
@@ -275,7 +285,9 @@ view.
   JavaScript numbers lose precision.
 - Global `id` uniqueness rests on the sequence, not a constraint.
 
-**Effect on concerns.** Recorded in [concerns](../../01-frame/concerns.md) on acceptance:
+## Concern Impact
+
+Recorded in [concerns](../../01-frame/concerns.md) on acceptance:
 
 - `postgresql`: prepared statements are mandatory; there is an index budget per
   partition.
@@ -283,7 +295,7 @@ view.
   rounding; parent locks for cross-row rules.
 - `umf-fidelity`: the retained map and re-binding report.
 
-## Alternatives considered
+## Alternatives
 
 | Alternative | Why not chosen |
 |-------------|----------------|
@@ -310,7 +322,16 @@ From SPIKE-002, plus the review:
 6. V1–V2 show object-level write cost that `row` homes cannot contain for the
    target workloads.
 
-## Validation of provisional points
+## Risks
+
+| Risk | Likelihood | Impact | Mitigation |
+|------|------------|--------|------------|
+| Object-level writes dominate cost | Unmeasured at target workloads | Contention and whole-map rewrites | Measure V1–V2 and set D4 storage-home thresholds |
+| Traversal exceeds the 2× target | Observed for some SPIKE-002 shapes | Product performance target missed | Measure V5 with partitioning and covering indexes; apply reversal condition 1 |
+| Revision acceptance races across engine instances | Unmeasured | Writes use the wrong catalog revision | Implement the D10 revision check and measure V6 before confirming safety |
+| Disk footprint is unacceptable | 4.8× observed in SPIKE-002 | Deployment cost prevents adoption | Measure V7 and apply reversal condition 3 |
+
+## Validation
 
 The follow-up spike named in SPIKE-002 (C partitioned by type, realistic type
 counts, data larger than memory, a pooler, Node `pg`, generated read views)

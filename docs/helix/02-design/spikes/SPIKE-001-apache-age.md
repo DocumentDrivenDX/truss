@@ -22,7 +22,17 @@ Executed evidence for bake-off option B. Everything here was run on
 [component-profile-apache-age.md](../../00-discover/component-profile-apache-age.md) and is not repeated as evidence here. Each
 finding quotes raw output from [`SPIKE-001-apache-age/out/`](SPIKE-001-apache-age/out/); scripts are in [`SPIKE-001-apache-age/`](SPIKE-001-apache-age/).
 
+Terminology: UMF is DocumentDrivenDX's machine-readable metamodel and schema
+interchange fabric. SQL is Structured Query Language; PostgreSQL JSONB is its
+binary JSON storage type. DDL means data definition language, FK means foreign
+key, and p95 is the 95th percentile. The probes below qualify support by
+version and tested subset.
+Apache AGE is the Apache Software Foundation's graph extension for PostgreSQL;
+Cypher is its graph query language, and `agtype` is AGE's property value type.
+
 ## Objective
+
+**Lead**: Not recorded in the execution evidence. **Status**: Completed investigation; frontmatter remains draft pending artifact review.
 
 Settle, by running AGE, the capabilities the public record left Unknown or
 only described (C1–C12 of the profile), with emphasis on value fidelity (C2,
@@ -44,6 +54,10 @@ updates, waits instead of errors at READ COMMITTED). H5. Fetch and one-to-three
 hop traversal stay within 2× p95 of a hand-designed relational schema.
 
 ## Approach
+
+**Method**: Build from source, execute value and constraint probes, inspect
+query plans, run concurrent writes, and compare traversal latency with a
+hand-designed relational schema.
 
 Environment (raw: `out/00_environment.txt`):
 
@@ -80,6 +94,10 @@ paths relative to their own location; `PGRT` in `env.sh` names the runtime direc
 Status words: **confirmed** (the spike shows the capability as the row
 defines it), **contradicted**, **partial** (some parts hold, some fail).
 "Desk status" is the profile's status from the public record.
+
+**FINDING 1**: AGE supports the tested Cypher paths but fails truss's exact-value
+and enforcement requirements. C1–C12 below contain the probes, raw outputs and
+limits behind this finding.
 
 ### C1. PostgreSQL 17/18, path to 19, managed services
 
@@ -542,8 +560,15 @@ over an opaque `agtype` map instead of ordinary PostgreSQL types.
 
 ## Recommendations
 
-Next steps for the bake-off, not a choice among options (that belongs to the
-ADR):
+**RECOMMENDATION**: Compare option A and option C on the same fidelity,
+enforcement and traversal probes before choosing storage. AGE requires the
+extra encoding, enforcement and concurrency layers identified in Conclusions.
+
+The recommendation was made for the bake-off; SPIKE-002 supplies the later
+comparison and [ADR-002](../adr/ADR-002-storage-strategy.md) records the accepted
+storage direction. Remaining AGE-specific checks apply if that option is reopened.
+
+Next steps:
 
 1. Run the same scripts against the option A and option C prototypes so that
    C2–C4, C7, C9, C10 and C12 compare on identical probes; `sql/01`, `02`,

@@ -19,9 +19,10 @@ ddx:
 
 ## Mission Statement
 
-truss lets teams store, query and constrain connected data inside the PostgreSQL
-databases they already run, with every property value typed by a UMF schema and
-every enforcement claim explicit.
+truss lets data platform teams store, query and constrain connected data in
+their PostgreSQL databases. Every property value is typed by a UMF schema,
+DocumentDrivenDX's machine-readable metamodel and schema interchange fabric,
+and every enforcement claim is explicit.
 
 ## Positioning
 
@@ -60,7 +61,7 @@ schema does not define; truss keeps those values and lists them. They query
 customers whose orders include a given product, two hops away, and inspect the
 SQL truss generated. Later they publish a schema revision that shortens a text
 limit, and truss lists the stored values that would violate it before accepting
-the revision. This scenario describes intended behavior; nothing is implemented.
+the revision. This scenario describes intended behavior.
 
 ## Target Market
 
@@ -95,17 +96,16 @@ yet agreed with the owner.
 
 ## Why Now
 
-UMF's experimental core 0.5.0 carries field, nullability, cardinality and facet
-ideals, with qualified PostgreSQL bindings for the first three, and UMF's tracker
-opened relationship and physical-binding work (FEAT-006, TD-045 to TD-049) on
-2026-09-24. A consumer can now type storage from UMF instead of inventing a
-schema language. PostgreSQL reverted native SQL/PGQ graph queries from
-PostgreSQL 19 on 2026-09-07, so no built-in standard graph layer can ship before
-PostgreSQL 20. Prior graph-on-SQL efforts have thinned: Gel's company shut down
-in December 2025 and Kuzu was archived in October 2025. Evidence is in the
-[competitive analysis](competitive-analysis.md).
+The discovery record dated 2026-09-24 identifies UMF's experimental core 0.5.0
+and qualified PostgreSQL bindings as a basis for a schema-driven consumer.
+It also records PostgreSQL's 2026-09-07 removal of native SQL/PGQ (the SQL
+standard's property graph queries) from PostgreSQL 19, Gel's December 2025
+shutdown and Kuzu's October 2025 archive. These changes leave PostgreSQL teams
+with connected data evaluating extensions, generated tables or a separate
+database. Versions, source limitations and follow-up research are recorded in
+the [competitive analysis](competitive-analysis.md).
 
-## Review Checklist
+### Review Checklist
 
 - [x] Mission statement is specific — names the user, the problem, and the approach
 - [x] Positioning statement differentiates from the current alternative
