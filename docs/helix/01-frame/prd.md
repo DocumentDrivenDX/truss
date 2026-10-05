@@ -149,6 +149,7 @@ Deferred items are tracked in `docs/helix/parking-lot.md` when it exists.
 - **FR-21** — Cross-row rules lock the parent object or run serializable; a deferred trigger under READ COMMITTED alone is never reported as database enforcement.
 - **FR-51** — A caller can apply several operations as one atomic group that commits or fails as a whole, with one origin and one catalog check; a failure names the failing operation. *(P1)*
 - **FR-54** — A caller can give a group a request identifier so that applying it again returns the original results and changes nothing, even when two identical requests arrive at once, and so that reusing the identifier with different inputs is refused. *(P1)*
+- **FR-55** — A caller can run any operation or group inside a transaction it controls, see its effects there, and roll it back; a rolled-back operation leaves no object, edge, key, journal row, tombstone, request record or lock. *(P1)*
 
 ### Subsystem: Journal and history
 
@@ -203,6 +204,7 @@ Deferred items are tracked in `docs/helix/parking-lot.md` when it exists.
 | FR-5 | Tightened rule | A revision shortening a text limit, with 3 objects over it | Rejected; the 3 objects listed |
 | FR-7 | No DDL | Accept a revision that adds a type, a property and a relationship, with sixteen writers running | No table, partition or index created; writers not blocked beyond the head-row wait |
 | FR-10, FR-11 | Exact values and retention | The value corpus plus a field the schema does not define | Every value reads back exactly; the extra field is retained and reported |
+| FR-55 | Roll back | Apply a group inside a caller's transaction, read its effects, roll back | The effects were visible inside the transaction; afterwards no row, journal row, tombstone, request record or lock remains |
 | FR-54 | Idempotent group | Apply a group with request id `r`, then again, then concurrently twice, then with different inputs | The repeat returns the original results; the concurrent pair applies once; different inputs are refused |
 | FR-51 | Atomic group | Apply a create, an update and an edge as one group where the edge's target is invalid | Nothing in the group takes effect and the error names the edge's index |
 | FR-52, FR-53 | Feed | Publish through a consumer, restart it from an earlier position, delete a record, accept a revision | Every change once in order; the delete carries the old record; the revision arrives before the first change that uses it; the consumer's lag is readable |

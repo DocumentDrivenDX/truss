@@ -352,6 +352,9 @@ projection of the journal.
   request id in the origin makes a group idempotent with no table of its own: a
   partial index finds the rows of an earlier group, and an advisory lock serializes
   concurrent duplicates *(evidence: SPIKE-003 F10)*.
+- Any operation or group may run inside a transaction the caller controls and
+  leaves nothing if the caller rolls it back, so a caller can inspect the effects of
+  a change before deciding to keep it.
 
 ### D12. UMF boundary
 

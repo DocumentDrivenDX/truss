@@ -60,7 +60,7 @@ Defines, in a way that does not depend on a programming language, what each read
 
 A deployment sets the maximum `limit`. A call above it is refused as `invalid`.
 
-**Write protocol.** Every write operation MUST follow these steps in one transaction.
+**Write protocol.** Every write operation and every group MUST follow these steps in one transaction. The transaction is the engine's own, or, when the caller passes one, the caller's (see Caller-controlled transactions).
 
 1. Read the catalog head as the first statement, `SELECT rev FROM schema_head WHERE id = 1 FOR SHARE`, and compare it with the revision being validated against. If they differ, fail as `catalog_changed` (MAY be retried). The share lock is held to the end of the transaction, so no revision is accepted while the write runs. Under REPEATABLE READ or SERIALIZABLE a head changed since the snapshot fails as `retry`. *(CONTRACT-001; ADR-002 D10)*
 2. Lock the target row `FOR NO KEY UPDATE`; for `delete_object` and `delete_edge` lock it `FOR UPDATE`. Lock composed children after their parent, in ascending `(type_id, id)`. *(ADR-002 D9; delete lock Proposed)*
@@ -69,9 +69,11 @@ A deployment sets the maximum `limit`. A call above it is refused as `invalid`.
 5. Apply the change. Values the catalog does not define go to `retained` and are reported, never dropped. A property set to explicit null is stored as `'null'::jsonb`; a property in `unset` is removed.
 6. In `engine` journal mode, increase `ver` by 1, set `updated_at`, and set `rev` to the validated revision. In `trigger` mode, set `rev` and pass `origin` with `set_config('truss.origin', ..., true)`; the triggers maintain `ver` and `updated_at`.
 7. In `engine` mode write the journal rows (CONTRACT-002) with the `origin` the caller gave and `db_role` from the database. In `trigger` mode write none: the triggers do, and writing them here would duplicate them. Read `setting.journal_mode` before step 1 and do not change behavior mid-transaction.
-8. Commit. If any step fails the transaction rolls back and nothing is visible.
+8. Commit, when the transaction is the engine's. If any step fails the transaction rolls back and nothing is visible. In a caller's transaction the operation returns to the caller after step 7, who commits or rolls back.
 
 An operation SHOULD use prepared statements and MUST give the same results without them. *(ADR-002 D11)*
+
+**Caller-controlled transactions.** An implementation MUST let a caller run any operation, or `apply_group`, inside a transaction the caller controls, and MUST NOT commit or end that transaction itself. The caller then sees the operation's results and effects inside the transaction, and may commit or roll back. A rolled-back operation leaves nothing: no object, edge or key row, no journal row, no tombstone, no request record, and no lock. Identifier and sequence values it consumed are not reused, so ids may have gaps. An operation inside a caller's transaction holds its row locks and the catalog head's share lock until the caller ends the transaction, so a caller keeps such a transaction short.
 
 **Cross-row rules.** Minimum multiplicity and aggregate invariants are checked in step 4 under the parent lock (`FOR NO KEY UPDATE`) or in a SERIALIZABLE transaction. A deferred trigger under READ COMMITTED alone is never reported as database enforcement. *(ADR-002 D9)*
 
