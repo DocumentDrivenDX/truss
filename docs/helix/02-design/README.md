@@ -16,8 +16,8 @@ against graph-on-SQL practice, records which concerns SPIKE-002 settled, and
 lists decisions and follow-up measurements for the storage ADR.
 
 [ADR-002](adr/ADR-002-storage-strategy.md), **accepted** 2026-10-03, adopts
-option C partitioned by type, with the constraints SPIKE-002 and the review
-impose. Its storage-home thresholds, composition rule, edge ids and edge index
+option C with one object table and a key table, with the constraints
+SPIKE-002, SPIKE-003 and the review impose. Its storage-home thresholds, composition rule, edge ids and edge index
 shape are provisional until validation measurements V1–V3, V5 and V7 report.
 
 [ADR-001](adr/ADR-001-language-and-portable-core.md), **accepted** 2026-10-03,

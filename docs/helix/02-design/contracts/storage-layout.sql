@@ -1,9 +1,7 @@
 -- truss storage layout, version 0.1 (draft). Normative DDL for CONTRACT-001.
--- A fixed set of tables: adding a type, property or relationship adds catalog rows
--- (plus the declared partition and indexes), never columns or table rewrites.
+-- A fixed set of tables. Adding a type, property, key or relationship adds catalog rows only;
+-- it never adds columns, tables, partitions or per-type indexes.
 -- The schema name is a parameter of the deployment; `truss` is the default.
--- Source tags are in CONTRACT-001: each element is accepted (ADR-002), derived
--- from SPIKE-002, or proposed by this contract.
 
 CREATE SCHEMA IF NOT EXISTS truss;
 COMMENT ON SCHEMA truss IS 'truss-layout 0.1';
@@ -23,6 +21,15 @@ CREATE TABLE truss.schema_rev (
   accepted_at  timestamptz NOT NULL DEFAULT now(),
   report       jsonb NOT NULL                 -- acceptance and enforcement report (CONTRACT-003)
 );
+INSERT INTO truss.schema_rev VALUES (0, now(), '{}');   -- revision 0 is the empty catalog
+
+-- The current revision, one row, updated in place by every acceptance (CONTRACT-001, Concurrency).
+CREATE TABLE truss.schema_head (
+  id   int PRIMARY KEY CHECK (id = 1),
+  rev  int NOT NULL REFERENCES truss.schema_rev (rev)
+);
+INSERT INTO truss.schema_head VALUES (1, 0);
+
 CREATE TABLE truss.schema_doc (
   rev              int  NOT NULL REFERENCES truss.schema_rev (rev),
   ord              int  NOT NULL,             -- order of import within the revision
@@ -53,9 +60,8 @@ CREATE TABLE truss.type_def (
   element      text NOT NULL,
   kind         text NOT NULL,
   provisional  boolean NOT NULL DEFAULT false,  -- named by a relationship but not yet defined
-  placement    text NOT NULL DEFAULT 'own' CHECK (placement IN ('own','default')),  -- fixed at acceptance
   since_rev    int NOT NULL REFERENCES truss.schema_rev (rev),
-  doc_ord      int,                                  -- defining document; NULL for a provisional type
+  doc_ord      int,                              -- defining document; NULL for a provisional type
   retired_rev  int REFERENCES truss.schema_rev (rev),
   UNIQUE (module, element),
   FOREIGN KEY (since_rev, doc_ord) REFERENCES truss.schema_doc (rev, ord)
@@ -80,10 +86,14 @@ CREATE TABLE truss.prop_def (
 );
 CREATE TABLE truss.key_def (
   type_id    int  NOT NULL REFERENCES truss.type_def (type_id),
-  key_id     text NOT NULL,
-  prop_ids   int[] NOT NULL,
+  key_id     text NOT NULL,                     -- the stable UMF key identity
+  key_num    smallint NOT NULL,                 -- compact number used in object_key; never reused
+  prop_ids   int[] NOT NULL,                    -- components in order
   is_primary boolean NOT NULL,
-  PRIMARY KEY (type_id, key_id)
+  since_rev  int  NOT NULL REFERENCES truss.schema_rev (rev),
+  retired_rev int REFERENCES truss.schema_rev (rev),   -- a retired key's rows are deleted; its number is not reused
+  PRIMARY KEY (type_id, key_id),
+  UNIQUE (type_id, key_num)
 );
 CREATE TABLE truss.rel_def (
   rel_type_id   int PRIMARY KEY,
@@ -132,8 +142,22 @@ CREATE TABLE truss.object (
   CONSTRAINT object_retained_is_object CHECK (retained IS NULL OR jsonb_typeof(retained) = 'object'),
   CONSTRAINT object_root_both_or_neither CHECK ((root_id IS NULL) = (root_type IS NULL)),
   CONSTRAINT object_root_fk FOREIGN KEY (root_id, root_type) REFERENCES truss.object (id, type_id) ON DELETE RESTRICT
-) PARTITION BY LIST (type_id);
-CREATE TABLE truss.object_default PARTITION OF truss.object DEFAULT;
+);
+CREATE INDEX object_type_id ON truss.object (type_id, id);   -- keyset listing of one type
+
+-- Business identity: one row per object per key, unique per (type, key, value).
+-- `k` is the canonical key text (CONTRACT-001, Key identity).
+CREATE TABLE truss.object_key (
+  type_id    int      NOT NULL,
+  key_num    smallint NOT NULL,
+  k          text COLLATE "C" NOT NULL,
+  object_id  bigint   NOT NULL,
+  CONSTRAINT object_key_pkey PRIMARY KEY (type_id, key_num, k),
+  CONSTRAINT object_key_one_per_object UNIQUE (object_id, type_id, key_num),
+  CONSTRAINT object_key_def_fk FOREIGN KEY (type_id, key_num) REFERENCES truss.key_def (type_id, key_num),
+  CONSTRAINT object_key_object_fk FOREIGN KEY (object_id, type_id)
+    REFERENCES truss.object (id, type_id) ON DELETE CASCADE
+);
 
 CREATE TABLE truss.edge (
   id          bigint PRIMARY KEY DEFAULT nextval('truss.id_seq'),
@@ -158,6 +182,18 @@ CREATE TABLE truss.edge (
 );
 CREATE INDEX edge_out ON truss.edge (source_id, rel_type_id) INCLUDE (target_id, target_type);
 CREATE INDEX edge_in  ON truss.edge (target_id, rel_type_id) INCLUDE (source_id, source_type);
+
+-- Maximum multiplicity of one, enforced without a per-relationship index. A relationship that allows
+-- one edge per source gets an 's' row for each edge, one that allows one per target gets a 't' row;
+-- the primary key refuses a second. The engine or a host write function inserts the row with the edge.
+CREATE TABLE truss.edge_limit (
+  rel_type_id bigint NOT NULL,
+  side        char(1) NOT NULL CHECK (side IN ('s', 't')),
+  endpoint_id bigint NOT NULL,
+  edge_id     bigint NOT NULL REFERENCES truss.edge (id) ON DELETE CASCADE,
+  PRIMARY KEY (rel_type_id, side, endpoint_id)
+);
+CREATE INDEX edge_limit_edge ON truss.edge_limit (edge_id);
 
 -- ---- History -----------------------------------------------------------------------------
 CREATE SEQUENCE truss.journal_seq;

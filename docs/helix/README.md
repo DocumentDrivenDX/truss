@@ -24,9 +24,11 @@ storage bake-off ([SPIKE-002](02-design/spikes/SPIKE-002-storage-bake-off.md))
 recommends generic catalog storage (option C) over a runtime on UMF-generated
 per-type tables, conditional on prepared statements, bounded per-table indexes
 and engine-side enforcement. The owner accepted it in
-[ADR-002](02-design/adr/ADR-002-storage-strategy.md) on 2026-10-03, with objects
-partitioned by type; some points stay provisional until the follow-up spike
-measures them.
+[ADR-002](02-design/adr/ADR-002-storage-strategy.md) on 2026-10-03; its layout
+(one object table with a key table, no per-type DDL) was decided on 2026-10-04
+after [SPIKE-003](02-design/spikes/SPIKE-003-partitioning-locks-and-prepared-statements.md)
+measured the alternatives. Some points stay provisional until the follow-up
+spike measures them.
 
 **Next action:** `frame` — turn the product vision into a PRD, feature
 specifications and user stories. [ADR-001](02-design/adr/ADR-001-language-and-portable-core.md) and

@@ -45,22 +45,22 @@ Defines, in a way that does not depend on a programming language, what each read
 
 | Operation | Effect |
 |-----------|--------|
-| `create_object(type, props, origin)` | Inserts an object, returns its `ref` and `ver` 1. Writes a `create` journal row. |
-| `update_object(ref, set, unset, expected_ver?, origin)` | Changes the named properties, returns the new `ver`. A change that alters no value writes nothing and does not raise `ver`. |
-| `delete_object(ref, expected_ver?, origin)` | Deletes the object and its composed children and owned objects, in one transaction. Refuses when any other edge refers to it. |
+| `create_object(type, props, origin)` | Inserts an object and one `object_key` row for each key whose components are all present, returns its `ref` and `ver` 1. A key already held by another object fails as `key_conflict`. Writes a `create` journal row. |
+| `update_object(ref, set, unset, expected_ver?, origin)` | Changes the named properties, returns the new `ver`. A change to a key component also updates that key's `object_key` row, or inserts or deletes it when a component becomes present or absent; a conflict fails as `key_conflict`. A change that alters no value writes nothing and does not raise `ver`. |
+| `delete_object(ref, expected_ver?, origin)` | Deletes the object and its composed children and owned objects, in one transaction; their key rows go with them by the foreign key. Refuses when any other edge refers to it. |
 | `create_edge(rel_type, source, target, props, order_key?, origin)` | Inserts an edge between two existing objects of allowed types. |
 | `update_edge(id, set, unset, expected_ver?, origin)` | As `update_object`, for an edge. |
 | `delete_edge(id, expected_ver?, origin)` | Deletes an edge. |
 | `get_object(ref)`, `get_edge(id)` | Returns the record with its `ver`, or `not_found`. Values are read as text and parsed exactly (CONTRACT-001). |
-| `find_by_key(type, key_id, values)` | Returns the object holding that key value, or `not_found`. |
-| `list_objects(type, limit, after?)` | Keyset pages ordered by `id`, `limit` required. Returns the items and a marker that says whether more remain. |
+| `find_by_key(type, key_id, values)` | Returns the object holding that key value, or `not_found`: the canonical key text is built from `values` (CONTRACT-001, Key identity) and looked up in `object_key`. An incomplete key is `invalid`. |
+| `list_objects(type, limit, after?)` | Keyset pages ordered by `id`, served by the `(type_id, id)` index; `limit` required. Returns the items and a marker that says whether more remain. |
 | `list_edges(object, direction, rel_type?, limit, after?)` | As above, for the edges of one object, ordered by `order_key` (NULLs last) then `id`; the paging marker is the pair `(order_key, id)`. An ordered relationship's binding declares the index that serves this order. |
 
 A deployment sets the maximum `limit`. A call above it is refused as `invalid`.
 
 **Write protocol.** Every write operation MUST follow these steps in one transaction.
 
-1. Take the shared catalog lock as the first statement (`pg_advisory_xact_lock_shared(hashtextextended('truss.catalog', 0))`), read the head revision, and compare it with the revision being validated against. If they differ, fail as `catalog_changed` (MAY be retried). The lock is held to the end of the transaction, so no revision is accepted while the write runs. *(CONTRACT-001; ADR-002 D10 is the origin, the mechanism is Proposed)*
+1. Read the catalog head as the first statement, `SELECT rev FROM schema_head WHERE id = 1 FOR SHARE`, and compare it with the revision being validated against. If they differ, fail as `catalog_changed` (MAY be retried). The share lock is held to the end of the transaction, so no revision is accepted while the write runs. Under REPEATABLE READ or SERIALIZABLE a head changed since the snapshot fails as `retry`. *(CONTRACT-001; ADR-002 D10)*
 2. Lock the target row `FOR NO KEY UPDATE`; for `delete_object` and `delete_edge` lock it `FOR UPDATE`. Lock composed children after their parent, in ascending `(type_id, id)`. *(ADR-002 D9; delete lock Proposed)*
 3. If `expected_ver` is given and differs from the row's `ver`, fail as `version_conflict` with no change.
 4. Validate the whole proposed record against the catalog and report **every** violation, each with the UMF `rule`, a `path` and a `message`, and the `layer` that enforces it. Fail as `invalid` if there is any. *(ADR-002 D9)*
@@ -69,7 +69,7 @@ A deployment sets the maximum `limit`. A call above it is refused as `invalid`.
 7. In `engine` mode write the journal rows (CONTRACT-002) with the `origin` the caller gave and `db_role` from the database. In `trigger` mode write none: the triggers do, and writing them here would duplicate them. Read `setting.journal_mode` before step 1 and do not change behavior mid-transaction.
 8. Commit. If any step fails the transaction rolls back and nothing is visible.
 
-An operation uses prepared statements and refuses to run where it cannot prepare them. *(ADR-002 D11)*
+An operation SHOULD use prepared statements and MUST give the same results without them. *(ADR-002 D11)*
 
 **Cross-row rules.** Minimum multiplicity and aggregate invariants are checked in step 4 under the parent lock (`FOR NO KEY UPDATE`) or in a SERIALIZABLE transaction. A deferred trigger under READ COMMITTED alone is never reported as database enforcement. *(ADR-002 D9)*
 
@@ -80,12 +80,12 @@ An operation uses prepared statements and refuses to run where it cannot prepare
 | `invalid` | One or more violations; each has `rule`, `path`, `message`, `layer` | no |
 | `endpoint_violation` | The relationship does not allow these endpoint types, or an endpoint does not exist | no |
 | `has_edges` | The object is still referred to by an edge that is not owned by it | after removing the edges |
-| `key_conflict` | The key value already belongs to another object of the type | no |
+| `key_conflict` | The key value already belongs to another object of the type (a unique violation on `object_key`) | no |
 | `version_conflict` | `expected_ver` differs from the stored `ver` | after re-reading |
 | `catalog_changed` | The head revision differs from the one the write validated against | yes |
 | `retry` | The database reported `deadlock_detected` or `serialization_failure`; no change was made | yes, the whole operation |
 | `not_found` | No such object, edge or key value | no |
-| `unavailable` | The database cannot be reached or a statement cannot be prepared | when it recovers |
+| `unavailable` | The database cannot be reached | when it recovers |
 
 **Conformance corpus.** The corpus is data, not code. Its shape:
 

@@ -39,21 +39,22 @@ provisional may change when its validation measurements report.
   - Move the core to Rust only when an ADR-001 D6 trigger fires and a new ADR
     records the evidence.
 - [ADR-002](docs/helix/02-design/adr/ADR-002-storage-strategy.md): generic
-  catalog storage on PostgreSQL. Adding a type, property or relationship adds
-  catalog rows, never columns or table rewrites.
-  - Objects are LIST-partitioned by type and keyed on `(id, type_id)`. Values
-    sit in one flat JSONB map per object keyed by catalog property id: a
-    missing key is absent, JSON `null` is explicit null. Unknown data goes in
-    the `retained` map.
+  catalog storage on PostgreSQL. Adding a type, property, key or relationship
+  adds catalog rows, never columns, tables, partitions or per-type indexes.
+  - Objects are one table keyed on `(id, type_id)`; business identity (UMF keys)
+    is in a key table, `object_key`. Values sit in one flat JSONB map per object
+    keyed by catalog property id: a missing key is absent, JSON `null` is
+    explicit null. Unknown data goes in the `retained` map. SPIKE-003 measured
+    a partition per type and a partial index per type against this layout.
   - Edges carry typed endpoints, enforced by foreign keys against
     `rel_endpoint`, and their own properties column.
   - The object row is canonical; the journal records per-property history in
     the same transaction.
   - Database enforcement only in forms that need no DDL per revision. No
     per-type CHECK constraints on shared tables. Cross-row rules lock the
-    parent (`FOR NO KEY UPDATE`) or run SERIALIZABLE; never `FOR UPDATE` on
-    objects.
-  - Prepared statements are mandatory. Indexes and statistics exist only where
+    parent (`FOR NO KEY UPDATE`) or run SERIALIZABLE; a delete uses
+    `FOR UPDATE`. Writers read the catalog head row `FOR SHARE` first.
+  - Prepared statements are recommended, not required. Indexes and statistics exist only where
     the binding declares them.
   - Provisional until measured: storage-home thresholds, value records stored
     as structured values with `root_id` on composed objects, edge ids, and the

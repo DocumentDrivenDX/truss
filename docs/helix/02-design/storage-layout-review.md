@@ -29,6 +29,12 @@ measure. Written 2026-10-03; nothing here has been run beyond what SPIKE-002
 reports. Claims marked "inferred" come from PostgreSQL documentation or source
 and were not executed in this project.
 
+Concern 3 (a shared objects table growing with type count) is settled by
+[SPIKE-003](spikes/SPIKE-003-partitioning-locks-and-prepared-statements.md): the
+layout in [ADR-002](adr/ADR-002-storage-strategy.md) D2 is one table with a key
+table, not a partition per type, and the partitioning proposals below are not
+adopted.
+
 ## Summary
 
 Option C is a well-established shape: a typed object table plus a typed
