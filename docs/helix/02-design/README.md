@@ -25,7 +25,18 @@ confirms TypeScript with Bun for development, a host-neutral core in its own
 package with Bun and `pg` adapters, exact value handling, and four recorded
 triggers for a Rust core; Node support is provisional until check L1.
 
-Status: ADR-001 and ADR-002 accepted; no architecture document yet. Pending
+[CONTRACT-001](contracts/CONTRACT-001-storage-layout.md) (storage layout, with the
+executable DDL [`storage-layout.sql`](contracts/storage-layout.sql) and its
+[check](contracts/storage-layout.check.sql)), [CONTRACT-002](contracts/CONTRACT-002-journal.md)
+(journal), [CONTRACT-003](contracts/CONTRACT-003-catalog-revision.md) (catalog
+revision, ordered import and unknown entity types) and
+[CONTRACT-004](contracts/CONTRACT-004-mutation-and-conformance.md) (mutation
+protocol and the language-neutral conformance corpus) specify ADR-002 so that more
+than one implementation can share the tables. They are drafts: no PRD frames
+truss yet. [ADR-003](adr/ADR-003-conforming-implementations-and-shared-contracts.md)
+(proposed) records how implementations in other languages conform.
+
+Status: ADR-001 and ADR-002 accepted; ADR-003 proposed; no architecture document yet. Pending
 decisions that design must record: supported PostgreSQL versions,
 and the query language. The draft storage layers in
 [discovery input](../00-discover/vision-input.md) are design input, not decisions.

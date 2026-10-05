@@ -12,8 +12,9 @@ This repository uses HELIX. Read `.helix.yml` and engage the installed
 
 Start with `docs/helix/README.md`. truss has discovery artifacts (product
 vision, competitive analysis, naming research, discovery input, component
-profiles), a storage research plan, two spikes, a storage layout review and two
-accepted ADRs. No PRD, feature specifications or implementation exist yet. The
+profiles), a storage research plan, two spikes, a storage layout review, two
+accepted ADRs, one proposed ADR and four draft contracts. No PRD, feature
+specifications or implementation exist yet. The
 next HELIX action is `frame`: write the PRD and feature specifications.
 Implementation must trace to framed requirements.
 
@@ -58,7 +59,15 @@ provisional may change when its validation measurements report.
     as structured values with `root_id` on composed objects, edge ids, and the
     `target_type` edge-index include.
 
-Still open: supported PostgreSQL versions, the query language, how a future
+Draft contracts (layout 0.1) specify the storage layout and DDL
+([CONTRACT-001](docs/helix/02-design/contracts/CONTRACT-001-storage-layout.md),
+`storage-layout.sql` and its check), the journal (CONTRACT-002), catalog revision
+and unknown entity types (CONTRACT-003), and the mutation protocol and
+conformance corpus (CONTRACT-004). [ADR-003](docs/helix/02-design/adr/ADR-003-conforming-implementations-and-shared-contracts.md)
+(proposed) lets implementations in other languages conform to them. The layout DDL
+and its check pass on PostgreSQL 16.2 and 17.9; PostgreSQL 18 is untested for it.
+
+Still open: supported PostgreSQL versions (16 and 17 verified for the layout DDL), the query language, how a future
 Rust core would read UMF, and first users.
 
 ## Boundaries
