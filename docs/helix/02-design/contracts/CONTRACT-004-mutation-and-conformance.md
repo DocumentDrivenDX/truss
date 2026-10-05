@@ -54,19 +54,19 @@ Defines, in a way that does not depend on a programming language, what each read
 | `get_object(ref)`, `get_edge(id)` | Returns the record with its `ver`, or `not_found`. Values are read as text and parsed exactly (CONTRACT-001). |
 | `find_by_key(type, key_id, values)` | Returns the object holding that key value, or `not_found`. |
 | `list_objects(type, limit, after?)` | Keyset pages ordered by `id`, `limit` required. Returns the items and a marker that says whether more remain. |
-| `list_edges(object, direction, rel_type?, limit, after?)` | As above, for the edges of one object, in `order_key` order where present. |
+| `list_edges(object, direction, rel_type?, limit, after?)` | As above, for the edges of one object, ordered by `order_key` (NULLs last) then `id`; the paging marker is the pair `(order_key, id)`. An ordered relationship's binding declares the index that serves this order. |
 
 A deployment sets the maximum `limit`. A call above it is refused as `invalid`.
 
 **Write protocol.** Every write operation MUST follow these steps in one transaction.
 
-1. Confirm the catalog revision it validates against with `FOR SHARE` on the current `schema_rev` row. If the head moves before the transaction ends, the write fails as `catalog_changed` and MAY be retried. *(ADR-002 D10)*
-2. Lock the target row with `FOR NO KEY UPDATE`. *(ADR-002 D9)*
+1. Take the shared catalog lock as the first statement (`pg_advisory_xact_lock_shared(hashtextextended('truss.catalog', 0))`), read the head revision, and compare it with the revision being validated against. If they differ, fail as `catalog_changed` (MAY be retried). The lock is held to the end of the transaction, so no revision is accepted while the write runs. *(CONTRACT-001; ADR-002 D10 is the origin, the mechanism is Proposed)*
+2. Lock the target row `FOR NO KEY UPDATE`; for `delete_object` and `delete_edge` lock it `FOR UPDATE`. Lock composed children after their parent, in ascending `(type_id, id)`. *(ADR-002 D9; delete lock Proposed)*
 3. If `expected_ver` is given and differs from the row's `ver`, fail as `version_conflict` with no change.
 4. Validate the whole proposed record against the catalog and report **every** violation, each with the UMF `rule`, a `path` and a `message`, and the `layer` that enforces it. Fail as `invalid` if there is any. *(ADR-002 D9)*
 5. Apply the change. Values the catalog does not define go to `retained` and are reported, never dropped. A property set to explicit null is stored as `'null'::jsonb`; a property in `unset` is removed.
-6. Increase `ver` by 1, set `updated_at`, set `rev` to the validated revision.
-7. Write the journal rows (CONTRACT-002), with the `origin` the caller gave and `db_role` from the database.
+6. In `engine` journal mode, increase `ver` by 1, set `updated_at`, and set `rev` to the validated revision. In `trigger` mode, set `rev` and pass `origin` with `set_config('truss.origin', ..., true)`; the triggers maintain `ver` and `updated_at`.
+7. In `engine` mode write the journal rows (CONTRACT-002) with the `origin` the caller gave and `db_role` from the database. In `trigger` mode write none: the triggers do, and writing them here would duplicate them. Read `setting.journal_mode` before step 1 and do not change behavior mid-transaction.
 8. Commit. If any step fails the transaction rolls back and nothing is visible.
 
 An operation uses prepared statements and refuses to run where it cannot prepare them. *(ADR-002 D11)*
@@ -82,7 +82,8 @@ An operation uses prepared statements and refuses to run where it cannot prepare
 | `has_edges` | The object is still referred to by an edge that is not owned by it | after removing the edges |
 | `key_conflict` | The key value already belongs to another object of the type | no |
 | `version_conflict` | `expected_ver` differs from the stored `ver` | after re-reading |
-| `catalog_changed` | A catalog revision was accepted during the write | yes |
+| `catalog_changed` | The head revision differs from the one the write validated against | yes |
+| `retry` | The database reported `deadlock_detected` or `serialization_failure`; no change was made | yes, the whole operation |
 | `not_found` | No such object, edge or key value | no |
 | `unavailable` | The database cannot be reached or a statement cannot be prepared | when it recovers |
 
@@ -111,7 +112,7 @@ An operation uses prepared statements and refuses to run where it cannot prepare
 ## Precedence and Compatibility
 
 - Versioning: this contract and the corpus are versioned together as `0.x`. Adding an operation or a case is minor. Changing an operation's effect, an error kind or a normative expectation is major.
-- Precedence: the corpus expectations, then this document, then ADR-002.
+- Precedence: ADR-002 (accepted) governs; the DDL governs CONTRACT-001, which governs this document; the corpus states the expected behavior this document and CONTRACT-001 to CONTRACT-003 require, and a case that contradicts the ADR is a defect in the case.
 - Backward compatibility: an implementation MUST treat an unknown error kind or case tag as not applicable, not as a failure.
 - Deprecation: as CONTRACT-001.
 
@@ -119,7 +120,7 @@ An operation uses prepared statements and refuses to run where it cannot prepare
 
 | Condition | Outcome |
 |-----------|---------|
-| A write validates against a revision that is superseded before commit | `catalog_changed` |
+| A revision is accepted while a write waits for the catalog lock | `catalog_changed` after the write reads the new head |
 | Two writers update one object | One waits on the row lock; the second sees the new `ver` and, if it passed `expected_ver`, gets `version_conflict` |
 | A journal row cannot be written | The write rolls back; the caller sees `unavailable` |
 | An unknown value in `set` | Stored in `retained` and reported; not an error |

@@ -47,7 +47,7 @@ Defines the journal: the append-only record of every change to an object or an e
 | `entity_kind` | `o` for an object, `e` for an edge. | Proposed |
 | `entity_id`, `entity_type` | The record's id, and its `type_id` (object) or `rel_type_id` (edge). | Proposed |
 | `ver` | The record's `ver` after the change. | Proposed |
-| `op` | `create`, `update`, `delete`, `retain` or `rebind`. | ADR-002 D7; Proposed (values) |
+| `op` | `create`, `update`, `delete`, `retain`, `rebind` or `transform`. | ADR-002 D7; Proposed (values) |
 | `prop_id` | The property changed, or NULL for a whole-record row. | SPIKE-002 |
 | `old_value`, `new_value` | The property's old and new value as JSONB, in the encodings of CONTRACT-001. | SPIKE-002 |
 | `rev` | The catalog revision in force. | SPIKE-002 |
@@ -60,10 +60,13 @@ Defines the journal: the append-only record of every change to an object or an e
 | `create` | One row with `prop_id` NULL and `new_value` the object `{"props": <the props map>, "retained": <the retained map or null>}`. `ver` is 1. |
 | `update` | One row per property whose value changed, with `old_value` and `new_value`. All rows of one change share `entity_*`, `ver` and `xid`. A write that changes nothing writes no row and does not raise `ver`. |
 | `delete` | One row with `prop_id` NULL and `old_value` the object `{"props": ..., "retained": ...}` as it was. `ver` is the version it had plus 1. |
-| `retain` | One row when data that matched no definition is stored in `retained`. |
-| `rebind` | One row when retained data is re-bound to a newly defined property at catalog acceptance (CONTRACT-003). |
+| `retain` | One row when a later change stores data that matched no definition in `retained`: `prop_id` NULL, `old_value` NULL, `new_value` an object of the retained entries added, keyed by the author's field name. A `create` row carries `retained` in its envelope and writes no `retain` row. |
+| `rebind` | One row per property when retained data is bound to a newly defined property at catalog acceptance (CONTRACT-003): `prop_id` the new property, `old_value` the retained value, `new_value` the bound value. The retained entry is removed in the same change. |
+| `transform` | One row per property whose stored value a catalog revision's declared total transform changed (CONTRACT-003): `prop_id`, `old_value`, `new_value`, and `rev` the new revision. |
 
-A record's history is ordered by `ver`, then `seq`.
+A `rebind` or `transform` is a change: it raises `ver` and sets `updated_at`.
+
+A record's history is ordered by `ver`, then `seq`. All rows of one change share `entity_*`, `ver` and `xid`.
 
 **`origin`.** A JSON object that records who or what caused the change. Defined keys:
 
@@ -77,6 +80,17 @@ A record's history is ordered by `ver`, then `seq`.
 
 An implementation MUST NOT set `db_role` from a value the caller supplied.
 
+**Who writes what.** `setting.journal_mode` says, and every implementation MUST read it before it writes.
+
+| Mode | Journal rows, `ver`, `updated_at` | `origin` |
+|------|-----------------------------------|----------|
+| `engine` | The engine writes the journal rows and maintains `ver` and `updated_at`, in the write protocol (CONTRACT-004). | The engine builds it. |
+| `trigger` | Triggers on `object` and `edge` write the journal rows and maintain `ver` and `updated_at`. The engine MUST NOT write journal rows or set `ver` or `updated_at`; doing so would duplicate rows and raise `ver` twice. It passes `origin` with `SELECT set_config('truss.origin', '<json>', true)` in the same transaction. | The trigger reads `current_setting('truss.origin', true)`, adds `db_role`, and ignores any `db_role` in it. |
+
+A change in `engine` mode made by plain SQL is not journaled; in `trigger` mode it is. A host that must journal every change, including plain SQL, uses `trigger` mode.
+
+**`db_role`.** The role the operation ran as, determined by the database and never taken from the caller: `current_setting('role')` when it is not `none`, otherwise `session_user`. Inside a `SECURITY DEFINER` function `current_user` is the function's owner, so it MUST NOT be used. Verified on PostgreSQL 16.2 and 17.9 (4 Oct 2026): after `SET LOCAL ROLE app_w`, a definer function saw `current_user` as the owner, `current_setting('role')` as `app_w`, and a transaction-local `truss.origin`.
+
 **Atomicity.** A change and its journal rows MUST commit in one transaction. If a journal row cannot be written the change MUST NOT commit. *(ADR-002 D7)*
 
 **Append-only.** The journal MUST NOT be updated or deleted by a role truss or a host recognizes. A trigger that refuses UPDATE, DELETE and TRUNCATE is RECOMMENDED; a host MAY require it. Retention removes whole partitions, never rows. *(Proposed)*
@@ -89,14 +103,14 @@ An implementation MUST NOT set `db_role` from a value the caller supplied.
 SELECT * FROM truss.journal
 WHERE xid < pg_snapshot_xmin(pg_current_snapshot())
   AND (xid, seq) > ($last_xid, $last_seq)
-ORDER BY xid, seq;
+ORDER BY xid, seq;      -- served by the journal_feed index
 ```
 
-Every transaction with a lower `xid` has then finished, so no row below the watermark can appear later. The order is stable and complete, and it is the order transactions began, not committed. *(Proposed; verified on PostgreSQL 16.2 and 17.9 on 4 Oct 2026: a committed row is withheld while an older transaction is still open, and both appear in order once it commits.)*
+Every transaction with a lower `xid` has then finished, so no row below the watermark can appear later. The order is stable and complete, and it is the order in which transactions were given an `xid` (at their first write), not the order they committed. *(Proposed; verified on PostgreSQL 16.2 and 17.9 on 4 Oct 2026: a committed row is withheld while an older transaction is still open, and both appear in order once it commits.)*
 
-**As-of reads.** The state of a record at version `v` is its `create` row's `new_value.props` with every `update` row of versions up to `v` applied in order. As-of reads are derived from the journal; the object row stays canonical. *(ADR-002 D7)*
+**As-of reads.** The state of a record at version `v` is its `create` row's `new_value.props` with every `update`, `rebind` and `transform` row of versions up to `v` applied in order. A value is interpreted with the definition in force at the row's `rev`, taken from `schema_change` when a revision changed it. As-of reads are by version; a read by time is not defined in layout 0.1, because `at` is not a commit time. The object row stays canonical. *(ADR-002 D7)*
 
-**Retention.** `journal` is RANGE-partitioned by `at`. The deployment chooses the partition interval and the retention period; truss defines neither.
+**Partitions and retention.** `journal` is RANGE-partitioned by `at` and has **no default partition**: once rows sit in a default partition, a range partition covering them cannot be created (verified), and a retention job could never remove them. A deployment MUST create partitions ahead of time, and a write at a time no partition covers fails with `check_violation` and rolls the change back, which is the intended failure for an audit trail. The deployment chooses the interval, the horizon and the retention period; truss defines none. Retention drops whole partitions, never rows.
 
 ## Precedence and Compatibility
 
@@ -112,7 +126,7 @@ Every transaction with a lower `xid` has then finished, so no row below the wate
 | A journal row cannot be written | The whole change rolls back; the caller is told it failed | After the database recovers | None; no partial change exists |
 | A reader asks for a version that was never written | No rows; the reader reports an empty history, not an error | no | |
 | A consumer's saved watermark is ahead of the snapshot minimum | The consumer reads nothing until the minimum passes it | wait | |
-| A partition for `at` does not exist | The row goes to `journal_default` | no | Create partitions ahead of time |
+| No partition covers `at` | The write fails with `check_violation` and rolls back | after a partition is created | Create partitions ahead of time |
 
 ## Examples
 
@@ -125,4 +139,4 @@ load:    op=create  ...  origin={"load":{"id":"load-2026-10-05-01","initiated_by
 
 ## Non-Normative Notes
 
-The bake-off's journal had one row per property with no entity kind and a text `origin`. This contract adds the entity kind, the version, whole-record rows for create and delete (so a create does not write one row per property), and a JSON `origin`. Whether the journal or the object row is canonical was left open by the layout review; ADR-002 chose the object row, and a journal-canonical design can be adopted later without changing the table set.
+The bake-off's journal had no entity kind, no version and a text `origin`; it wrote one whole-record `create` row and a `migrate` operation for revisions. This contract adds the entity kind, the version, whole-record `delete` rows, a JSON `origin`, and names the revision operation `transform`. Whether the journal or the object row is canonical was left open by the layout review; ADR-002 chose the object row, and a journal-canonical design can be adopted later without changing the table set.

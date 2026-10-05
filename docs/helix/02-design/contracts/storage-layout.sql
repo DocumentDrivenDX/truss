@@ -8,6 +8,15 @@
 CREATE SCHEMA IF NOT EXISTS truss;
 COMMENT ON SCHEMA truss IS 'truss-layout 0.1';
 
+-- ---- Deployment settings ---------------------------------------------------------------
+-- journal_mode: 'engine' (the engine writes the journal and maintains ver and updated_at)
+-- or 'trigger' (database triggers do; the engine MUST NOT). See CONTRACT-002.
+CREATE TABLE truss.setting (
+  key   text PRIMARY KEY,
+  value jsonb NOT NULL
+);
+INSERT INTO truss.setting VALUES ('journal_mode', '"engine"');
+
 -- ---- Schema catalog: UMF documents verbatim and immutable per catalog revision --------
 CREATE TABLE truss.schema_rev (
   rev          int PRIMARY KEY,
@@ -26,6 +35,16 @@ CREATE TABLE truss.schema_doc (
   PRIMARY KEY (rev, ord),
   UNIQUE (rev, doc_id)
 );
+-- Prior definitions, kept when a revision changes a catalog row in place (CONTRACT-003).
+CREATE TABLE truss.schema_change (
+  rev     int  NOT NULL REFERENCES truss.schema_rev (rev),
+  seq     int  NOT NULL,
+  kind    text NOT NULL CHECK (kind IN ('type','prop','rel')),
+  def_id  int  NOT NULL,
+  before  jsonb NOT NULL,
+  after   jsonb NOT NULL,
+  PRIMARY KEY (rev, seq)
+);
 
 -- ---- Binding catalog: derived from the documents, rebuildable ---------------------------
 CREATE TABLE truss.type_def (
@@ -34,9 +53,12 @@ CREATE TABLE truss.type_def (
   element      text NOT NULL,
   kind         text NOT NULL,
   provisional  boolean NOT NULL DEFAULT false,  -- named by a relationship but not yet defined
+  placement    text NOT NULL DEFAULT 'own' CHECK (placement IN ('own','default')),  -- fixed at acceptance
   since_rev    int NOT NULL REFERENCES truss.schema_rev (rev),
+  doc_ord      int,                                  -- defining document; NULL for a provisional type
   retired_rev  int REFERENCES truss.schema_rev (rev),
-  UNIQUE (module, element)
+  UNIQUE (module, element),
+  FOREIGN KEY (since_rev, doc_ord) REFERENCES truss.schema_doc (rev, ord)
 );
 CREATE TABLE truss.prop_def (
   prop_id      int PRIMARY KEY,
@@ -50,9 +72,11 @@ CREATE TABLE truss.prop_def (
   item         jsonb,
   home         text NOT NULL DEFAULT 'json' CHECK (home IN ('json','row')),
   since_rev    int  NOT NULL REFERENCES truss.schema_rev (rev),
+  doc_ord      int  NOT NULL,
   retired_rev  int REFERENCES truss.schema_rev (rev),
   UNIQUE (type_id, name),
-  UNIQUE (element)
+  UNIQUE (type_id, element),
+  FOREIGN KEY (since_rev, doc_ord) REFERENCES truss.schema_doc (rev, ord)
 );
 CREATE TABLE truss.key_def (
   type_id    int  NOT NULL REFERENCES truss.type_def (type_id),
@@ -77,8 +101,10 @@ CREATE TABLE truss.rel_def (
   assoc_type_id int REFERENCES truss.type_def (type_id),  -- type whose properties an edge carries
   inverse       text,
   since_rev     int NOT NULL REFERENCES truss.schema_rev (rev),
+  doc_ord       int NOT NULL,
   retired_rev   int REFERENCES truss.schema_rev (rev),
-  UNIQUE (module, rel_id)
+  UNIQUE (module, rel_id),
+  FOREIGN KEY (since_rev, doc_ord) REFERENCES truss.schema_doc (rev, ord)
 );
 CREATE TABLE truss.rel_endpoint (
   rel_type_id int NOT NULL REFERENCES truss.rel_def (rel_type_id),
@@ -96,13 +122,16 @@ CREATE TABLE truss.object (
   props       jsonb  NOT NULL DEFAULT '{}'::jsonb,   -- keyed by prop_id rendered as text
   retained    jsonb,                                 -- data that matched no definition
   root_id     bigint,                                -- aggregate root of a composed object
+  root_type   int,
   rev         int    NOT NULL REFERENCES truss.schema_rev (rev),  -- catalog revision of the last write
   ver         bigint NOT NULL DEFAULT 1,             -- record version; +1 per change
   created_at  timestamptz NOT NULL DEFAULT clock_timestamp(),
   updated_at  timestamptz NOT NULL DEFAULT clock_timestamp(),
   CONSTRAINT object_pkey PRIMARY KEY (id, type_id),
   CONSTRAINT object_props_is_object CHECK (jsonb_typeof(props) = 'object'),
-  CONSTRAINT object_retained_is_object CHECK (retained IS NULL OR jsonb_typeof(retained) = 'object')
+  CONSTRAINT object_retained_is_object CHECK (retained IS NULL OR jsonb_typeof(retained) = 'object'),
+  CONSTRAINT object_root_both_or_neither CHECK ((root_id IS NULL) = (root_type IS NULL)),
+  CONSTRAINT object_root_fk FOREIGN KEY (root_id, root_type) REFERENCES truss.object (id, type_id) ON DELETE RESTRICT
 ) PARTITION BY LIST (type_id);
 CREATE TABLE truss.object_default PARTITION OF truss.object DEFAULT;
 
@@ -140,7 +169,7 @@ CREATE TABLE truss.journal (
   entity_id    bigint NOT NULL,
   entity_type  int NOT NULL,                       -- type_id for an object, rel_type_id for an edge
   ver          bigint NOT NULL,                    -- record version after the change
-  op           text NOT NULL CHECK (op IN ('create','update','delete','retain','rebind')),
+  op           text NOT NULL CHECK (op IN ('create','update','delete','retain','rebind','transform')),
   prop_id      int,                                -- NULL for create and delete rows
   old_value    jsonb,
   new_value    jsonb,
@@ -149,5 +178,6 @@ CREATE TABLE truss.journal (
   CONSTRAINT journal_pkey PRIMARY KEY (at, seq),
   CONSTRAINT journal_origin_is_object CHECK (jsonb_typeof(origin) = 'object')
 ) PARTITION BY RANGE (at);
-CREATE TABLE truss.journal_default PARTITION OF truss.journal DEFAULT;
+-- No default partition: a deployment creates RANGE partitions ahead of time (CONTRACT-002).
 CREATE INDEX journal_entity ON truss.journal (entity_kind, entity_id, ver);
+CREATE INDEX journal_feed   ON truss.journal (xid, seq);

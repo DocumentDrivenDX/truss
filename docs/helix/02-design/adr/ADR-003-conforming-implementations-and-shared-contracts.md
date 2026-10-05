@@ -29,7 +29,9 @@ ddx:
 
 ## Context
 
-ADR-001 chose TypeScript first and named four triggers for a Rust core. Trigger T1 fires when "a named consumer needs truss inside a Python (or other non-JavaScript) process, and an out-of-process service does not meet that consumer's needs". A consumer now exists: Hohfeld, an application-specific mutable sub-graph that must run inside a Python 3.11 Databricks app and wants to share truss's tables rather than design its own. ADR-001 D6 requires that firing T1 be recorded with evidence in a new ADR, and D7 describes only one response: port the core to Rust and call it from the host.
+ADR-001 chose TypeScript first and named four triggers for a Rust core. Trigger T1 fires when "a named consumer needs truss inside a Python (or other non-JavaScript) process, and an out-of-process service does not meet that consumer's needs". A consumer now exists: Hohfeld, an application-specific mutable sub-graph that must run inside a Python 3.11 Databricks app and wants to share truss's tables rather than design its own. ADR-001 D6 requires that firing T1 be recorded with evidence in a new ADR, and D7 describes only one response: port the core to Rust and call it from the host. ADR-001's consequences also say there is no in-process Python use until a Rust core exists.
+
+The out-of-process alternative does not meet this consumer's needs: the host is a Databricks App deployed as one unit, so a second runtime and service per deployment is a second app to build, deploy and secure, and the host's database connection, credentials and role model would have to cross a process boundary (Hohfeld ADR-006 and ADR-012).
 
 ADR-001 D5 already makes the conformance corpus language-neutral data with normative expected results and informative expected SQL, so that a Rust core could be verified against the same cases. The storage layout, the journal, the catalog revision steps and the mutation protocol are now written as contracts (CONTRACT-001 to CONTRACT-004), independent of any language.
 
@@ -75,6 +77,7 @@ We will treat the contracts and the corpus as the interface to truss, and accept
 
 - **Concern selection**: none changes. `typescript-bun` still governs the TypeScript core; a conforming implementation in another language follows its own language concerns.
 - **Practice override**: ADR-001 D4 applies to the TypeScript core only.
+- **Amendment**: this ADR amends ADR-001's consequence that there is no in-process Python use until a Rust core exists. If accepted, ADR-001 is updated to point here.
 
 ## References
 
