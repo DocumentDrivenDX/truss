@@ -32,8 +32,8 @@ executable DDL [`storage-layout.sql`](contracts/storage-layout.sql) and its
 revision, ordered import and unknown entity types) and
 [CONTRACT-004](contracts/CONTRACT-004-mutation-and-conformance.md) (mutation
 protocol and the language-neutral conformance corpus) specify ADR-002 so that more
-than one implementation can share the tables. They are drafts: no PRD frames
-truss yet. [ADR-003](adr/ADR-003-conforming-implementations-and-shared-contracts.md)
+than one implementation can share the tables. They are drafts; the [PRD](../01-frame/prd.md) (draft) now frames the
+requirements they serve. [ADR-003](adr/ADR-003-conforming-implementations-and-shared-contracts.md)
 (proposed) records how implementations in other languages conform.
 
 Status: ADR-001 and ADR-002 accepted; ADR-003 proposed; no architecture document yet. Pending

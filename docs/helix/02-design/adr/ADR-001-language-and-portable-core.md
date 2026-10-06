@@ -37,7 +37,7 @@ Terminology: UMF is DocumentDrivenDX's machine-readable metamodel and schema
 interchange fabric. SQL is Structured Query Language; PostgreSQL JSONB is its
 binary JSON storage type. DDL means data definition language, FK means foreign
 key, and p95 is the 95th percentile. PRD means product requirements document;
-the project PRD has not yet been authored.
+the project PRD is [`01-frame/prd.md`](../../01-frame/prd.md) (draft).
 Node LTS means Node.js long-term support releases. CLI means command-line
 interface; I/O means input and output. C ABI means C application binary
 interface; Node-API is Node.js's native addon interface.

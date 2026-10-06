@@ -12,11 +12,12 @@ This repository uses HELIX. Read `.helix.yml` and engage the installed
 
 Start with `docs/helix/README.md`. truss has discovery artifacts (product
 vision, competitive analysis, naming research, discovery input, component
-profiles), a storage research plan, two spikes, a storage layout review, two
-accepted ADRs, one proposed ADR and four draft contracts. No PRD, feature
-specifications or implementation exist yet. The
-next HELIX action is `frame`: write the PRD and feature specifications.
-Implementation must trace to framed requirements.
+profiles), a storage research plan, three spikes, a storage layout review, two
+accepted ADRs, one proposed ADR and five draft contracts. The frame drafts exist:
+a PRD with 50 functional requirements, 8 feature specifications and 39 user
+stories, awaiting the owner's review. No implementation exists yet. Deferred
+work is in `docs/helix/parking-lot.md`. Implementation must trace to framed
+requirements.
 
 ## Accepted decisions
 

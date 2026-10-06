@@ -71,7 +71,7 @@ The proposed targets are for the owner to agree. Measured baselines come from em
 - truss does not support a second backing database engine in this version; PostgreSQL only.
 - truss does not choose retention periods or partition intervals for the journal; a deployment does.
 
-Deferred items are tracked in `docs/helix/parking-lot.md` when it exists.
+Deferred items are tracked in the [parking lot](../parking-lot.md).
 
 ## Users and Scope
 
@@ -181,10 +181,10 @@ Deferred items are tracked in `docs/helix/parking-lot.md` when it exists.
 
 ### Subsystem: Host integration
 
-- **FR-41** — A host may add its own tables, functions, roles, triggers and row-level security in its own schema, and may not change a truss column, key or constraint. The contracts say which are permitted.
-- **FR-42** — Writes can be governed by database role grants: a host can assume a role per transaction, and truss records the assumed role in the journal.
-- **FR-43** — truss keeps no session state and works through a transaction-mode pooler, with or without prepared statements.
-- **FR-44** — The layout and its protocols work on an embedded PostgreSQL for development and tests, with the same DDL as a server.
+- **FR-41** — A host may add its own tables, functions, roles, triggers and row-level security in its own schema, and may not change a truss column, key or constraint. The contracts say which are permitted. *(P1)*
+- **FR-42** — Writes can be governed by database role grants: a host can assume a role per transaction, and truss records the assumed role in the journal. *(P1)*
+- **FR-43** — truss keeps no session state and works through a transaction-mode pooler, with or without prepared statements. *(P1)*
+- **FR-44** — The layout and its protocols work on an embedded PostgreSQL for development and tests, with the same DDL as a server. *(P1)*
 - **FR-48** — A deployment can give database roles read or write access per UMF module, enforced by the database, without changing the layout's tables or constraints; with the layer unused, truss behaves as without it. *(P1)*
 - **FR-49** — A relationship may name a type in another module. Such an edge is visible only to a role that can read the relationship's module and both endpoints' modules. *(P1)*
 
@@ -255,11 +255,19 @@ This section records current decisions; it does not make them.
 
 ## Open Questions
 
+Each question carries a recommendation drawn from the evidence so far. The
+recommendations are not decisions; the owner decides.
+
 - [ ] What scale should truss commit to, if any: the proposal is up to about 10^9 objects, unmeasured above 2×10^5? — blocks the scale and latency targets, ask the owner.
+  - *Recommendation:* commit only to a measured scale. Set the first target at 10^7 objects and 1,000 types, measured at 10^6 and 10^7 on a quiet machine before release, and record 10^9 as an aspiration, not a support claim. Every support claim must name its evidence, and nothing above 2×10^5 has been measured.
 - [ ] Are the proposed absolute latency targets (1 ms read, 3 ms write, 20 ms enumeration) the right bar? — blocks FR-29 to FR-32 acceptance, ask the owner.
+  - *Recommendation:* keep the read and write targets. SPIKE-003 measured 0.02 ms reads and 0.09–0.17 ms writes at 2×10^5 objects, so they leave room for a tenfold larger dataset and a network hop. Treat the 20 ms enumeration target as provisional until it is measured, because no baseline exists. Confirm all three at the committed scale before release.
 - [ ] Which PostgreSQL versions are supported: minimum 16, and 18? — blocks FR-40, ask the owner.
+  - *Recommendation:* support 16, 17 and 18. A version is claimed only after the layout DDL, its check and the conformance corpus pass on it. Today the layout DDL has passed on 16.2 and 17.9 (SPIKE-003). Earlier spikes ran the fidelity and enforcement suites on 18.6, but against an earlier layout, so 18 still needs the layout check. A minimum of 16 also covers deployments that have not yet upgraded; managed services remain untested. Add 19 the same way once it is released.
 - [ ] Is the unexplained read tail on the edge-limit table at 1,000 relationships a defect? — blocks the multiplicity design in FR-14 being final; re-run SPIKE-003 E1b.
+  - *Recommendation:* not an owner question. Re-run SPIKE-003 E1b on a quiet machine with `EXPLAIN (ANALYZE, BUFFERS)` on the slow tail before FR-14 is final. SPIKE-003 F3 reports a one-hop p95 of 2.3–2.5 ms against an unchanged p50, and it was not re-run.
 - [ ] How are `json`-like properties represented in UMF core? — blocks FR-10 for that value family, ask the UMF maintainers.
+  - *Recommendation:* until UMF answers, do not bind such properties. Keep their values in the `retained` map and report them, so nothing is lost (FR-11). Raise the gap upstream instead of defining a truss encoding.
 
 ## Success Criteria
 

@@ -39,7 +39,10 @@ Concern 3 (a shared objects table growing with type count) is settled by
 [SPIKE-003](spikes/SPIKE-003-partitioning-locks-and-prepared-statements.md): the
 layout in [ADR-002](adr/ADR-002-storage-strategy.md) D2 is one table with a key
 table, not a partition per type, and the partitioning proposals below are not
-adopted.
+adopted. The candidate rule "refuse rather than degrade" for unprepared
+execution is also superseded: ADR-002 D11 makes prepared statements
+recommended, not required, because the adopted layout plans cheaply without
+them (SPIKE-003 E3).
 
 ## Summary
 

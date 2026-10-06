@@ -39,7 +39,7 @@ Terminology: UMF is DocumentDrivenDX's machine-readable metamodel and schema
 interchange fabric. SQL is Structured Query Language; PostgreSQL JSONB is its
 binary JSON storage type. DDL means data definition language, FK means foreign
 key, and p95 is the 95th percentile. PRD means product requirements document;
-the project PRD has not yet been authored.
+the project PRD is [`01-frame/prd.md`](../../01-frame/prd.md) (draft).
 HOT means PostgreSQL heap-only tuple updates; WAL is PostgreSQL's write-ahead
 log. RFC 3339 is the IETF date and time format used by D3. DDD means
 domain-driven design; `umf.ddd` is UMF's semantic projection.
