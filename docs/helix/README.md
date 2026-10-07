@@ -15,6 +15,8 @@ adoption remain open.
 See [design coordination](04-build/design-coordination.md) for source baselines,
 interface dependencies and unresolved gates.
 
+**Storage handoff priority (2026-10-07):** start with [CONTRACT-012](02-design/contracts/CONTRACT-012-weft-storage-handoff.md). It indexes all 19 baseline tables, the three candidate row-home tables, exact DDL and binding schemas, typed joins and value semantics. The complete intended installed layout and an adopted Weft binding remain unfinished.
+
 | Activity | State | Entry point |
 | --- | --- | --- |
 | 00 Discover | Drafts | [Product vision](00-discover/product-vision.md), [competitive analysis](00-discover/competitive-analysis.md), [discovery input](00-discover/vision-input.md), [naming research](00-discover/naming-research.md), 11 [component profiles](00-discover/README.md) |
@@ -75,7 +77,7 @@ bidirectional relationship mapping, atomic same-store key replacement, guard
 generation capacity, converted-reservation archive custody and signed legacy
 catalog-ID transport. Proposed signed bucket namespace v0.2 requires explicit
 migration; it does not reinterpret v0.1 or renumber historical IDs. Retirement
-reactivation remains an unanswered product decision. Truss-owned composition and generated/native correspondence using existing UMF
+reactivation follows the owner-selected same-authored-identity policy after full validation. Truss-owned composition and generated/native correspondence using existing UMF
 capabilities remain open, alongside Weft mapping adoption and native parameter review.
 
 Current checks establish scoped draft schema/type/source properties only. The
