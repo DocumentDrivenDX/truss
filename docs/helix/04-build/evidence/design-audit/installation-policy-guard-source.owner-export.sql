@@ -1,0 +1,1 @@
+CREATE TABLE truss.policy_generation_guard (singleton smallint PRIMARY KEY CHECK (singleton = 1), installation_identity_bytes bytea NOT NULL CHECK (octet_length(installation_identity_bytes) > 0), policy_profile_bytes bytea NOT NULL CHECK (octet_length(policy_profile_bytes) > 0), generation bigint NOT NULL CHECK (generation > 0))

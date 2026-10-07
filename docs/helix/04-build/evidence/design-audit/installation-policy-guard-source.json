@@ -1,0 +1,95 @@
+{
+  "scope": "Existing UMF capture/reload/export of optional installation-wide policy guard table only; no owner adoption, native installation, complete lineage uniqueness, policy/grant conversion or compiler binding qualification",
+  "ownerSource": {
+    "root": "/Users/erik/Projects/umf",
+    "commit": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+    "status": "",
+    "files": [
+      {
+        "path": "native/postgresql/runtime.ts",
+        "sha256": "a88fea4cf15c9c3c3f0ad1f0a36d8f5de42a42ce8ea9712499f609beee3ea751"
+      },
+      {
+        "path": "src/adapters/postgresql/index.ts",
+        "sha256": "7baa071d95e5f9863a4ce2bf892d87fb27cab9d8605ba4cf8887016d14ca17b4"
+      },
+      {
+        "path": "src/adapters/postgresql/declarations.ts",
+        "sha256": "e47ebd6366fee86fb8ccaf1270555bcd338957bff511f30cdcae22a088c6d8d9"
+      },
+      {
+        "path": "src/model/document.ts",
+        "sha256": "a0422042659defdea425dff8bb0618eaa4bbf125f68da16aa5ad21af0b6c282f"
+      },
+      {
+        "path": "spec/extensions/postgresql/native-ast.schema.json",
+        "sha256": "aa3d3b50bc04edbc3ab3430e113ee8710edb1c10ff5cee15d4bcc7b16d9a9039"
+      },
+      {
+        "path": "bun.lock",
+        "sha256": "98a99f7d306f7269db103bdbfafe5f9ad9ed34b02024276ad0cce45df27f5cc3"
+      }
+    ]
+  },
+  "backend": "@libpg-query/parser@17.6.10",
+  "path": "docs/helix/02-design/contracts/installation-policy-guard-v0.1.proposal.sql",
+  "sourceSha256": "0e1d881a2eccbcaf3d34ab8c4729a1aa21361c8c64b4ac142d706ee1da1312cf",
+  "artifactPath": "docs/helix/02-design/contracts/installation-policy-guard-v0.1.proposal.umf.json",
+  "artifactSha256": "5c0f27b0175145dafe3b70c33bba1cc5c1ea2c6496af701fc4018fd3611ebd15",
+  "exportSha256": "dd8e6eb0aa981b286a7be0c8ef7c0f5743aae59820bd084e6076e4df44f1b746",
+  "sourceArchiveExact": true,
+  "reloadedExportExact": true,
+  "complete": false,
+  "declarations": [
+    {
+      "kind": "create-table",
+      "path": "/stmts/0/stmt/CreateStmt",
+      "requiresCatalogExpansion": false,
+      "columns": [
+        {
+          "path": "/stmts/0/stmt/CreateStmt/tableElts/0/ColumnDef",
+          "name": "singleton",
+          "typeResolution": "builtin-syntax",
+          "syntacticScalarFamily": "integer"
+        },
+        {
+          "path": "/stmts/0/stmt/CreateStmt/tableElts/1/ColumnDef",
+          "name": "installation_identity_bytes",
+          "typeResolution": "unresolved"
+        },
+        {
+          "path": "/stmts/0/stmt/CreateStmt/tableElts/2/ColumnDef",
+          "name": "policy_profile_bytes",
+          "typeResolution": "unresolved"
+        },
+        {
+          "path": "/stmts/0/stmt/CreateStmt/tableElts/3/ColumnDef",
+          "name": "generation",
+          "typeResolution": "builtin-syntax",
+          "syntacticScalarFamily": "integer"
+        }
+      ]
+    }
+  ],
+  "unhandled": [],
+  "diagnostics": [
+    {
+      "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+      "path": "",
+      "severity": "warning",
+      "message": "Raw syntax is not catalog resolution, SQL execution, permissions or server-state validation"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/0/stmt/CreateStmt/tableElts/1/ColumnDef/typeName",
+      "severity": "warning",
+      "message": "Type remains unresolved, structured, array-valued or outside the known qualified builtin families"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/0/stmt/CreateStmt/tableElts/2/ColumnDef/typeName",
+      "severity": "warning",
+      "message": "Type remains unresolved, structured, array-valued or outside the known qualified builtin families"
+    }
+  ]
+}

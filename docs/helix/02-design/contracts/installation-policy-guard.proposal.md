@@ -4,6 +4,8 @@ Candidate realization of CONTRACT-005's current-authority exclusion, not an inst
 
 ## Fixed home and identity
 
+The [table SQL](installation-policy-guard-v0.1.proposal.sql) and [UMF capture](installation-policy-guard-v0.1.proposal.umf.json) now retain this candidate declaration. The [private generation UPDATE](installation-policy-generation-advance-v0.1.proposal.sql) supplies a checked original-identity/profile/expected-generation effect after complete authority-delta parity; it does not itself establish proof or exclusion.
+
 Allocate `truss.policy_generation_guard` with `singleton smallint PRIMARY KEY CHECK(singleton=1)`, exact installation identity bytes, policy-profile bytes and `generation bigint NOT NULL CHECK(generation>0)`. Identity/profile carriers are nonempty bytea and immutable for the installed profile. Initialization inserts exactly one row with generation 1 in the same verified bootstrap transaction as installation initialization. Missing, duplicate, incompatible or replaced guard refuses admission; no operation repairs it on demand.
 
 The installer must inventory the table/columns/checks/PK and original identity/profile bytes, plus protected acquisition/update routines and effective privileges. Ordinary roles cannot modify/delete the row or reinitialize generation. The ready marker cannot publish until this home and controlled authority paths are included in complete native parity. This table is not yet in layout 0.9.
