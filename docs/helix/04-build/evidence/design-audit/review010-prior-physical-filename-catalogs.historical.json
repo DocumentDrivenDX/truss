@@ -1,5 +1,5 @@
 {
-  "scope": "content-discovered authored entry catalogs in docs/helix/02-design/models/*.json, including physical, constraint, supporting-index, initialization and derived effects; not all repository identities or native inventory",
+  "scope": "existing authored identity catalogs only; preserve original IDs and versioned source/model locators before review010 reconciliation; no name-based ID assignment or native parity",
   "catalogs": [
     {
       "path": "docs/helix/02-design/models/truss-catalog-acceptance-report.physical-ids.proposal.json",
@@ -24,36 +24,6 @@
         "truss.edge-limit.trigger.edge_limit_edge_observe",
         "truss.edge-limit.trigger.edge_limit_marker_observe",
         "truss.edge-limit.trigger.edge_limit_catalog_observe"
-      ]
-    },
-    {
-      "path": "docs/helix/02-design/models/truss-feed-current-union-trigger-effects.proposal.json",
-      "sha256": "e4d9528c5da89c7536b45687d50217d8450a8aabd1c7366b9f20b29b6f40eb46",
-      "complete": false,
-      "entryIds": [
-        "truss.feed.trigger.feed_tx_current_union_guard",
-        "truss.feed.trigger-constraint.feed_tx_current_union_guard",
-        "truss.feed.trigger.feed_member_current_union_guard",
-        "truss.feed.trigger-constraint.feed_member_current_union_guard",
-        "truss.feed.trigger.feed_prerequisite_current_union_guard",
-        "truss.feed.trigger-constraint.feed_prerequisite_current_union_guard",
-        "truss.feed.trigger.feed_configuration_prerequisite_current_union_guard",
-        "truss.feed.trigger-constraint.feed_configuration_prerequisite_current_union_guard"
-      ]
-    },
-    {
-      "path": "docs/helix/02-design/models/truss-feed-native-layout.derived-effects.proposal.json",
-      "sha256": "76e1b905f4e186817dd0ea747e4e00d990245164d4ac80b7effd61d821b87095",
-      "complete": false,
-      "entryIds": [
-        "truss.feed.supporting-index.feed_tx.feed_tx_pk",
-        "truss.feed.supporting-index.feed_member.feed_member_pk",
-        "truss.feed.reference.feed_member.feed_member_tx_fk",
-        "truss.feed.supporting-index.feed_member.feed_member_delivery_unique",
-        "truss.feed.supporting-index.feed_prerequisite.feed_prerequisite_pk",
-        "truss.feed.reference.feed_prerequisite.feed_prerequisite_tx_fk",
-        "truss.feed.supporting-index.feed_configuration_prerequisite.feed_configuration_prerequisite_pk",
-        "truss.feed.reference.feed_configuration_prerequisite.feed_configuration_prerequisite_tx_fk"
       ]
     },
     {
@@ -129,98 +99,6 @@
         "truss.feed.constraint.feed_configuration_prerequisite.feed_configuration_prerequisite_tx_fk",
         "truss.feed.constraint.feed_configuration_prerequisite.feed_configuration_prerequisite_address_domain",
         "truss.feed.constraint.feed_configuration_prerequisite.feed_configuration_prerequisite_originals_nonempty"
-      ]
-    },
-    {
-      "path": "docs/helix/02-design/models/truss-layout-0.2.constraint-ids.draft.json",
-      "sha256": "47afbf83fe511218d3ecd03ff567e9c4fed0ee42186fd3fa5f1e78e2ab069a98",
-      "complete": false,
-      "entryIds": [
-        "truss.constraint.1677abf3-ff6b-4272-aecf-75b2a6a6502c",
-        "truss.constraint.5a000bee-cacf-4262-8a50-ca421324220a",
-        "truss.constraint.43653790-13f4-43d9-86ac-f5181f2e654e",
-        "truss.constraint.183fbc5a-dc2f-4e2b-89b3-343448c55a41",
-        "truss.constraint.1134f9d2-cb67-4539-bd71-f840abb7217a",
-        "truss.constraint.a580226d-a897-4e09-912d-d50ed3027d83",
-        "truss.constraint.a54105c4-37a4-4750-b6d4-e24ca3bcf13d",
-        "truss.constraint.3bd5bf9e-e844-454d-b66e-7ef16c5f3c1a",
-        "truss.constraint.9c50f9e0-1197-4cf5-b81c-8e872765203b",
-        "truss.constraint.88f1b439-85a0-4fa2-9db9-26381c4b55c6",
-        "truss.constraint.f78d42a4-e623-4ad9-8a76-b2299f78bf9a",
-        "truss.constraint.124e3a28-dc0f-4a41-922d-afec21e04970",
-        "truss.constraint.4c7c801a-bb3a-4667-a0dc-885aa22b77fd",
-        "truss.constraint.7125d0d7-266a-4d82-8eac-04fa4b960c22",
-        "truss.constraint.fe9f3a11-85a6-4669-9d5e-fc39eb86859c",
-        "truss.constraint.59f14ba3-7b20-4e8f-9836-f0a1741b99ea",
-        "truss.constraint.f7835db6-3e7a-479c-9cd9-c86c5b0c1081",
-        "truss.constraint.f1b9b1ca-c6b3-405a-8142-3461059828bf",
-        "truss.constraint.70a30731-a4a1-4ef6-8e40-6fed3c15830e",
-        "truss.constraint.1ddd4b24-72d9-4803-bf17-efdf4db0e076",
-        "truss.constraint.21374d18-dbd2-4368-bdda-ed41787dd3a9",
-        "truss.constraint.0fdcd018-432a-4053-ad0a-11ed2c6f42b6",
-        "truss.constraint.007c092e-808d-4fba-ad78-d1df49a99835",
-        "truss.constraint.4c8b02cf-3852-474e-9762-210cce9d282e",
-        "truss.constraint.5aa8790c-3361-4b7f-9d42-2a9ec1b48e32",
-        "truss.constraint.6e1b5956-f779-4b1e-9d77-d1acd0071dfa",
-        "truss.constraint.1154c94f-d4b7-4f93-96da-6fea1fde25df",
-        "truss.constraint.acea4d53-3f6e-454b-9109-fc28a848907a",
-        "truss.constraint.6b82621a-f23b-4e9b-8070-4e447b20b271",
-        "truss.constraint.fc020f17-8e98-4ebb-981f-09d81005f5c9",
-        "truss.constraint.d525e2e6-573d-4ce5-b9c2-8cf5ac2bcd36",
-        "truss.constraint.5e860777-b745-47c7-940a-5cce05391f01",
-        "truss.constraint.cf210b68-0b81-4977-bd36-03e60c8a727a",
-        "truss.constraint.6ea802fb-38d9-4589-baef-0e0edaa48eb9",
-        "truss.constraint.9b59076c-9fdf-45ab-8dbc-222c8bda5961",
-        "truss.constraint.6c5c5591-4726-4cd3-8451-7040a054de94",
-        "truss.constraint.a291e953-d30f-4494-8e24-ea75abc41561",
-        "truss.constraint.7372458d-3d38-4ee5-87ca-ba0030304c9a",
-        "truss.constraint.414c33d2-cbf8-4a67-aecb-26cd7c72781d",
-        "truss.constraint.bf8c3d97-5d4b-457a-bef7-68bab2c914fc",
-        "truss.constraint.0fa15d68-fa90-40dd-bcc7-300cef8ef0ea",
-        "truss.constraint.e73d84f1-4d82-4eeb-a9be-8e29d803a2f8",
-        "truss.constraint.b1945f1e-a859-4552-a931-cfc6aa4ee791",
-        "truss.constraint.eb4a5111-0f8a-4f13-ad89-1276ec09e9c7",
-        "truss.constraint.ee26099c-2db7-47f0-a0fe-9a0fabf712d3",
-        "truss.constraint.e5a82ff8-a5da-4932-84e2-469e607702da",
-        "truss.constraint.ccbac12b-6019-4f35-b0f2-ae5c5e46f3ae",
-        "truss.constraint.338c8199-4338-4427-9091-3be8109ddf9c",
-        "truss.constraint.e7909bdd-cb8b-4650-9b56-b477c488aa30",
-        "truss.constraint.a558a095-efdd-4914-83f5-8ae9cbba2fde",
-        "truss.constraint.9ac70487-ba0a-4381-90e2-dd35f4d35107",
-        "truss.constraint.196c2f8e-7a6d-4554-9525-d865916c8bbe",
-        "truss.constraint.bddd1293-fe8b-467f-ace1-242de802d14b",
-        "truss.constraint.ca85bde5-81b3-4433-9129-f81debcf9ba6",
-        "truss.constraint.e3104f3a-c00e-431f-84fe-a2cdfe33765a",
-        "truss.constraint.c0bc65ec-ac6c-470b-8a4e-4c4a81428900",
-        "truss.constraint.452e7671-0989-41cb-ac28-012982c5f9bb",
-        "truss.constraint.368f12ad-7b6f-4462-a664-b73d81994ce8",
-        "truss.constraint.f179cd4f-59e4-4e15-8c45-c48a20bd78e3",
-        "truss.constraint.11836421-f73f-4831-93b8-5e603e7d873e",
-        "truss.constraint.ee73187a-7b89-46e8-9269-55914baa9a3d",
-        "truss.constraint.41cd0ab8-03a4-47a5-9007-bb82d8e08dfc",
-        "truss.constraint.3a6e8755-efd2-46b6-8f1f-b5523be3648b",
-        "truss.constraint.716d5d24-d8d3-46cd-80e6-f1db6e0101e9",
-        "truss.constraint.55e67395-d3e3-4be4-a767-556cb67371a8",
-        "truss.constraint.6c87e62a-9955-4862-b308-0dbdeb11553b",
-        "truss.constraint.dc609764-0d0f-4de6-a47c-3e86a15bc51e",
-        "truss.constraint.9243ed65-c154-4c5c-b767-8ef9f9b7030c",
-        "truss.constraint.2f7a6a11-1566-4da2-92ce-1286c6df165b",
-        "truss.constraint.3d962ae6-8209-4ce6-b18f-1b1a62a48ed7",
-        "truss.constraint.9270d7e4-e524-40f8-b53e-f123908a4178",
-        "truss.constraint.669e2768-29e0-4972-a313-69d016b7114e",
-        "truss.constraint.7f1455ac-cc95-49f4-b9a8-03097bda102c"
-      ]
-    },
-    {
-      "path": "docs/helix/02-design/models/truss-layout-0.2.initialization-ids.draft.json",
-      "sha256": "a940f2335ace28394fd325e13eca2bdc99e796d410a402001d1a9b160540b7a0",
-      "complete": false,
-      "entryIds": [
-        "truss.layout.schema.truss.version-comment",
-        "truss.layout.initialization.journal-mode",
-        "truss.layout.initialization.key-reuse",
-        "truss.layout.initialization.genesis-revision",
-        "truss.layout.initialization.schema-head"
       ]
     },
     {
@@ -393,39 +271,6 @@
       ]
     },
     {
-      "path": "docs/helix/02-design/models/truss-layout-0.2.supporting-index-ids.draft.json",
-      "sha256": "17a84cf92685ed90ddfce4ebe2a7697229c6059202aa0535654b401014255f1e",
-      "complete": false,
-      "entryIds": [
-        "truss.supporting-index.81d013d4-778c-4bce-9799-b6a6dea3272b",
-        "truss.supporting-index.105ff4d6-0d2c-4fea-a0aa-721981564dc5",
-        "truss.supporting-index.fd2fb8ce-5438-4d45-9fec-420cd0c07cb9",
-        "truss.supporting-index.91ad35a2-904f-431c-b663-52e6908098ed",
-        "truss.supporting-index.16d3b656-86b2-49b7-b7a6-79f354e881d0",
-        "truss.supporting-index.d029bdcf-04f4-4177-8886-0921c97c47e6",
-        "truss.supporting-index.929a3cc8-6e7d-4aa1-b5df-9520cb175b6e",
-        "truss.supporting-index.887ebc8c-2ef8-4dee-8475-eef6a223885c",
-        "truss.supporting-index.f190859a-372a-4f71-b640-ca2b1505a599",
-        "truss.supporting-index.4d2e5ede-8121-4547-83e5-4afbc531d302",
-        "truss.supporting-index.54d073c4-0510-45dc-a834-ecef2b292923",
-        "truss.supporting-index.7d6f19ae-3511-4155-b465-151eabecd75b",
-        "truss.supporting-index.bd6407e6-f65a-4083-b62f-5546752b8cd0",
-        "truss.supporting-index.2f5a8a37-a820-4a73-945b-f8085b906fb7",
-        "truss.supporting-index.4c672d95-f65b-4a5b-a85d-046e53f9441b",
-        "truss.supporting-index.b0c92a70-b276-423b-a7a7-6b879b45fdcb",
-        "truss.supporting-index.33f6bacc-41df-47c3-a484-adb00e84973f",
-        "truss.supporting-index.85c94a95-c8d4-481c-8956-0bd365879de2",
-        "truss.supporting-index.9e411ef2-f7e9-4129-bf1f-809f907988ac",
-        "truss.supporting-index.8343d5ee-d65d-47d1-9162-4f1e324b1078",
-        "truss.supporting-index.84e038a5-8794-4315-8b90-94375bf4611a",
-        "truss.supporting-index.ec61705e-e85b-44c0-9e41-c824e7d3c588",
-        "truss.supporting-index.6c08e1b7-5c7c-4a00-b144-7912eb165096",
-        "truss.supporting-index.91c1a127-e445-4bfb-ba2a-a5924e5a7bec",
-        "truss.supporting-index.ebeb50bf-3e7a-4724-acd4-a9c64c94bf7d",
-        "truss.supporting-index.2aacd34e-db49-4799-be13-7a82609a56dd"
-      ]
-    },
-    {
       "path": "docs/helix/02-design/models/truss-receipt-candidate.physical-ids.draft.json",
       "sha256": "151b4e8ad6f5c43c544d706b034c2abfd145dceef5b025cf16e42da62810c687",
       "complete": false,
@@ -581,29 +426,6 @@
       ]
     },
     {
-      "path": "docs/helix/02-design/models/truss-row-home-candidate.supporting-index-ids.proposal.json",
-      "sha256": "ce8d63f11fb9acbbf22af74769c7e4ded1223463196b8b68e26722931da3caa4",
-      "complete": false,
-      "entryIds": [
-        "truss.row-home.supporting-index.prop_def.prop_def_owner_property_row_home",
-        "truss.row-home.supporting-index.edge.edge_typed_identity_row_home",
-        "truss.row-home.supporting-index.row_home_state.state_id.constr_primary",
-        "truss.row-home.supporting-index.row_home_state.row_home_state_object_property",
-        "truss.row-home.supporting-index.row_home_state.row_home_state_edge_property",
-        "truss.row-home.supporting-index.row_home_node.row_home_node_pk",
-        "truss.row-home.supporting-index.row_home_node.row_home_node_id_unique",
-        "truss.row-home.supporting-index.row_home_scalar.row_home_scalar_pk"
-      ]
-    },
-    {
-      "path": "docs/helix/02-design/models/truss-row-home-capacity.initialization-ids.proposal.json",
-      "sha256": "39cebfb9df110a0c327d094878685f7638d91c9a191fb40a536b3961cbcb9ec1",
-      "complete": false,
-      "entryIds": [
-        "truss.row-home.initialization.capacity-fresh"
-      ]
-    },
-    {
       "path": "docs/helix/02-design/models/truss-row-home-capacity.physical-ids.proposal.json",
       "sha256": "76703263ed025c8b895e608068f525562e33468c9c3a4d19d4345048ad01d9e4",
       "complete": false,
@@ -621,14 +443,6 @@
         "truss.row-home.constraint.row_home_capacity.row_home_capacity_nonnegative",
         "truss.row-home.constraint.row_home_capacity.row_home_capacity_reference_caps",
         "truss.row-home.constraint.row_home_capacity.row_home_capacity_originals"
-      ]
-    },
-    {
-      "path": "docs/helix/02-design/models/truss-row-home-capacity.supporting-index-ids.proposal.json",
-      "sha256": "f4eca4db48e72e405ae1b1493efebd2da4a619bfbfcc9f609b0d34885700c273",
-      "complete": false,
-      "entryIds": [
-        "truss.row-home.supporting-index.row_home_capacity.singleton_id.constr_primary"
       ]
     },
     {
@@ -662,14 +476,6 @@
       ]
     },
     {
-      "path": "docs/helix/02-design/models/truss-row-home-operation.supporting-index-ids.proposal.json",
-      "sha256": "8e32d33147ce2c41d0c44e8f234c07a90d4bcbc36e2ebf6fe801cb15717f5725",
-      "complete": false,
-      "entryIds": [
-        "truss.row-home.supporting-index.row_home_operation.row_home_operation_pk"
-      ]
-    },
-    {
       "path": "docs/helix/02-design/models/truss-row-home-touch.physical-ids.proposal.json",
       "sha256": "6b982bdcb5e09dc77662da4c441138861d27ba8932a9cbb70c9248784907ffed",
       "complete": false,
@@ -694,14 +500,6 @@
       ]
     },
     {
-      "path": "docs/helix/02-design/models/truss-row-home-touch.supporting-index-ids.proposal.json",
-      "sha256": "a4ae582e7a171c952fb78030ca10c3d5dd0aa8e49db577eec9002eb79046a474",
-      "complete": false,
-      "entryIds": [
-        "truss.row-home.supporting-index.row_home_touch.row_home_touch_pk"
-      ]
-    },
-    {
       "path": "docs/helix/02-design/models/truss-row-home-triggers.physical-ids.proposal.json",
       "sha256": "93099ce6c3cce4f9eaa0d8bea7f43da25f3c7e6c33f00669439b82da407d8e70",
       "complete": false,
@@ -723,7 +521,7 @@
       ]
     }
   ],
-  "distinctIds": 567,
+  "distinctIds": 435,
   "repeatedIds": {},
   "review010BindingComplete": false,
   "nativeQualified": false

@@ -16,7 +16,7 @@ Companion to CONTRACT-008/012. Profile 0.7 is a 94-statement source composition,
 
 ### Exact trigger-to-routine composition worklist
 
-The preserved trigger fragments describe thirteen source events referencing five trigger-returning routines. The prior physical-ID catalogs enumerate only the six row-home and three edge-limit triggers; the four feed triggers require deliberate authored identities too. None of these fragments is in layout 0.10, and matching table presence does not install their behavior.
+The preserved trigger fragments describe thirteen source events referencing five trigger-returning routines. Source identities already exist for all thirteen: six row-home and three edge-limit triggers in their physical-ID catalogs, plus four feed triggers and four associated constraint effects in truss-feed-current-union-trigger-effects.proposal.json. The earlier physical-ids filename scan missed that effects catalog; reuse these existing IDs. None of these fragments is in layout 0.10, and matching table presence does not install their behavior.
 
 | Trigger source family | Registered targets / events | Referenced private routine and required dependency |
 | --- | --- | --- |
