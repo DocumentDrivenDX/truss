@@ -22,6 +22,8 @@ The report must enumerate each reactivated category/qualified identity, retained
 
 ## Independent planned acceptance
 
+The [TypeScript 0.3 binding](bindings/truss-acceptance-report-v0.3.proposal.d.ts) matches the composed report discriminator and adds explicit owner-local reactivation entries. Its type controls reject unowned/global/numeric keys, missing original definitions and implicit old-report upgrade. Type success cannot validate canonical numeric ranges, artifact digests, complete transition membership or native authority.
+
 CP-01 retire then reactivate the same qualified identity: retained IDs and creation revisions match originals; current authority and full final invariants pass; complete report/history records the transition.
 
 CP-02 same label with distinct document/authored identity: allocate fresh ID, preserve retired original and do not transfer its permissions or history.
