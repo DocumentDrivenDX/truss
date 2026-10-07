@@ -14,6 +14,22 @@ Companion to CONTRACT-008/012. Profile 0.7 is a 94-statement source composition,
 
 ## Authority composition boundary
 
+### Exact trigger-to-routine composition worklist
+
+The preserved trigger fragments describe thirteen source events referencing five trigger-returning routines. The prior physical-ID catalogs enumerate only the six row-home and three edge-limit triggers; the four feed triggers require deliberate authored identities too. None of these fragments is in layout 0.10, and matching table presence does not install their behavior.
+
+| Trigger source family | Registered targets / events | Referenced private routine and required dependency |
+| --- | --- | --- |
+| Row-home observers (three) | row_home_state/node/scalar; AFTER ROW INSERT/every UPDATE/DELETE | row_touch_observe() RETURNS trigger; original OC registry selection, OLD/NEW tuple attribution, capacity reservation and generation producer |
+| Completion guards (three) | row_home_touch/capacity/operation; deferred AFTER ROW INSERT/every UPDATE | row_touch_commit_check() RETURNS trigger; full touch/capacity/operation validation plus ordinary feed_union_validate_current_scope() RETURNS void when complete feed is selected |
+| Edge/marker observers (two) | edge/edge_limit; AFTER ROW INSERT/every UPDATE/DELETE | edge_limit_observe() RETURNS trigger; original edge/marker contribution custody and EL complete-scope validation dependency |
+| Catalog observer (one) | rel_def; AFTER ROW INSERT/every UPDATE/DELETE | edge_limit_catalog_observe() RETURNS trigger; protected catalog-operation custody, complete affected relationship scope and EL validation dependency |
+| Complete-feed guards (four) | feed_tx/member/prerequisite/configuration_prerequisite; deferred AFTER ROW INSERT/every UPDATE/DELETE | feed_current_union_check() RETURNS trigger; exact feed-event attribution and the same ordinary feed_union_validate_current_scope() RETURNS void |
+
+CONTRACT-006 proposes the exact zero-argument ordinary feed validator separately from the two trigger handlers. CONTRACT-001's edge_limit_verify_current_scope() RETURNS void is likewise a separate private validation dependency, not an additional observer or permission to call a trigger handler through SELECT. Include these call edges and complete collector/codec/account dependencies in CH-02. Routine source/type/security/profile selection remains open; this table allocates existing obligations without fabricating installed bodies.
+
+CH-01 must cover source trigger identities and actual installed trigger/partition/enabled/internal dependency effects. CH-02 must cover caller/event/custody admission and native validator realization. CH-03 must reject a bundle containing only the thirteen declarations, or handlers without their ordinary validators. Whole-scope absence, direct privileged bypass, immediate constraint firing, later dirtying, rollback/savepoint and deferred COMMIT remain native qualification schedules. A trigger count or routine-name join cannot close these gates.
+
 CONTRACT-005's qualified policy selects `grant_module_roles(document_id,module,writes)`. The current profile AST declares only two custom ordinary functions, catalog_global_high_water_v01 and catalog_key_high_water_v01. It does not declare the grant helper or the five trigger bodies. Source table presence therefore cannot establish policy installation.
 
 The administrative helper must resolve exact document/module and native role identities, reject missing/ambiguous mappings and apply only privileges admitted by the selected protected-writer profile. `writes` must not grant raw DML that bypasses canonical writer/finalizer/receipt/seed enforcement. Fixed schema usage and qualified callable privileges are distinct from document-specific row authority; policies require current complete owner union. Select exact routine identity, owner, search path, argument/result types, effective role paths and authorized invocation before including its body/grants in the bundle. Do not grant blanket access to archive/recovery evidence as a workaround for a missing reader.
