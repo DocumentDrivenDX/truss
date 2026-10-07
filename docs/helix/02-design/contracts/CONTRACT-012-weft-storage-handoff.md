@@ -19,6 +19,8 @@ ddx:
 
 # Contract: PostgreSQL storage handoff to Weft
 
+Current review entry: [layout 0.10](../models/truss-layout-weft-review-0.10.proposal.sql), [420-column index](weft-review-columns-v0.10.proposal.md), and [matching source packet](../../04-build/evidence/weft-source-binding010/README.md). Earlier sections preserve historical checkpoints; their packet/version statements do not select the current input. This contract remains draft and the packet remains unregistered.
+
 **Contract ID**: CONTRACT-012  
 **Type**: schema / compiler boundary  
 **Version**: source handoff 0.1.0, 2026-10-07  
@@ -260,3 +262,23 @@ The [current 0.10 source packet](../../04-build/evidence/weft-source-binding010/
 
 
 CH-01 now has review010-declared-effects.json: exact source pointers for 43 relations, 420 columns, 563 constraint-source nodes, 60 expression/allocator nodes, 23 explicit indexes, ten sequences and two routines. These are source categories, not native physical counts. It separately lists 116 implicit-dependency work items and eight other statements requiring effect review. Authored/native IDs remain unresolved rather than being fabricated from names/pointers; prior authored IDs must be reused through original correspondence. Complete implicit effects, types/roles/policies/grants and actual native inventory remain required.
+
+### Physical identity reconciliation handoff (proposed)
+
+CH-01 MUST produce an explicit correspondence before the current review declarations become an installation inventory. Inputs are the pinned prior catalogs, their original captured models/source bytes, the selected composed model/AST and the declared-effect worklist. A source pointer identifies a node within one pinned document; it is not a durable physical identity. Native names and OIDs are observations under one installation, not authored IDs.
+
+For each prior entry, retain its catalog path/hash, authored ID, original model path/hash/pointer and complete original node. For each selected effect, retain its selected model/AST path/hash/pointer, effect kind and owning relation correspondence. The reconciliation output MUST classify every prior entry and every selected effect; unclassified entries make the result incomplete. Supporting indexes and other implicit effects retain their creator correspondence separately from any observed generated native name.
+
+| Classification | Required evidence and disposition |
+| --- | --- |
+| Retained | Original node correspondence, kind and parent identity agree; preserve the authored ID. Parser location changes alone do not authorize replacement. |
+| Changed under retained identity | Explicit reviewed before/after definition and allowed evolution identify the same authored object; retain the ID and record changed dependencies. Structural similarity alone cannot choose this class. |
+| Superseded or removed | Explicit composition/evolution decision identifies the original entry and its disposition; preserve its history and any successor relation. An absent source node alone is an unresolved omission. |
+| Newly authored | No prior identity applies, with complete checked prior scope and deliberate new identity allocation. Record the allocation decision; a generated name/pointer ID is insufficient. |
+| Unresolved or conflicting | Missing originals, ambiguous parent/correspondence, incompatible repeated-ID definitions or competing IDs for one effect. Refuse installation readiness; preserve all competing evidence. |
+
+Repeated IDs across catalogs MUST be evaluated against both originals and their version relationship. Identical retained declarations may share one correspondence while preserving both source witnesses. Different definitions require an explicit evolution edge or remain conflicting; directory order and newest filename confer no authority. Conversely, two distinct authored IDs MUST NOT collapse because their declarations or native names match. Parent reconciliation precedes child reconciliation, including owner-local columns/constraints and creator-owned implicit effects.
+
+The output has separate `sourceCorrespondenceComplete` and `nativeInventoryQualified` conclusions. The first requires exhaustive dispositions, original custody, unique selected ownership and resolved conflicts for the selected source scope. The second additionally requires the independently collected installed object/dependency/security inventory and its full comparison. A source-complete result cannot publish the ready marker, register the Weft binding or certify native support by itself.
+
+Planned independent CH-01 controls: remove a prior original; substitute a model hash; move an otherwise identical column to another parent; reuse one ID for incompatible definitions; assign two IDs to one selected effect; omit a superseded baseline entry; replace a supporting-index creator with its generated name; and change only parser locations. The first seven MUST refuse completeness; the last MUST retain identity when independently established composition correspondence agrees. These are required future reconciliation tests, not executed evidence.
