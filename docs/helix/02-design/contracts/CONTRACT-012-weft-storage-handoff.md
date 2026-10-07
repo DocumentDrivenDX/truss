@@ -38,6 +38,18 @@ The full intended layout is **not complete**. Baseline 0.2 has concrete DDL; typ
 
 ## Normative Surface
 
+### Selected integrated review profile: 0.3 proposal
+
+The [single UMF model](../models/truss-layout-weft-review-0.3.proposal.umf.yaml) and [generated SQL](../models/truss-layout-weft-review-0.3.proposal.sql) now compose one review selection: 64 statements, 27 tables, 249 explicitly declared columns after selected ALTER effects, and 13 explicit indexes. The [current column reference](weft-review-columns-v0.3.proposal.md) and [source-effect inventory](weft-review-columns-v0.3.proposal.json) describe that selection. Baseline references below remain for compatibility review; they are not the current integrated proposal.
+
+The selection replaces exactly the baseline `module_access`, `type_def` and `rel_def` declarations with [qualified owner homes](catalog-owner-homes-v0.1.proposal.sql). It retains the complete history/edge-retained/private-operation composition and adds the fixed row tree/scalar/touch/capacity stores, relationship lineage and independent catalog definition-source homes. Replacement is deliberate: old module-only uniqueness is removed, not left installed alongside the new owner meanings. `type_def.document_id` and `rel_def.document_id` identify declaring owners independently of `definition_document_id`; property/key owners follow the owning type. The module grant primary key is `(document_id,module)`.
+
+Type identity is full registered `lineage_bytes`, projected to exact document/module/element values, with nonunique `(lineage_sha256,type_id)` routing. Relationship identity remains the full tagged adjunct, not a new UNIQUE(document,module,rel_id) that would collapse authored/composition identity. Both require protected full-byte uniqueness/total-coverage validation. Fresh CREATE declarations do not supply a populated migration, implicit grants or native guard bodies.
+
+Reproduce the selected model/SQL with `bun docs/helix/04-build/evidence/design-audit/compose-weft-review-layout.ts`; verify complete ordered source AST correspondence with `python3 docs/helix/04-build/evidence/design-audit/check-weft-review-layout.py`; regenerate its column reference with `python3 docs/helix/04-build/evidence/design-audit/collect-weft-review-columns.py`. The [composition receipt](../../04-build/evidence/design-audit/weft-review-layout-composition.json) pins eight original model inputs, the UMF owner source, replacements and output hashes. YAML is the UMF-supported serialization selected because the combined pretty-JSON output exceeds UMF's serialization limit; no limit was raised or bypassed.
+
+**Still incomplete:** this review selection is not the complete installation profile. Key-bucket/allocator/acceptance-report alternatives, initialization with admitted private-profile bytes, all guard/function/trigger/policy/grant definitions, implicit/dependency/native parity and populated conversion still require integration or explicit disposition. It has no actual exporter binding instance or registered Weft adapter. The schema marker explicitly says REVIEW ONLY. The new profile resolves the missing declaring-owner declarations; it does not claim those remaining obligations are finished.
+
 ### Exact source selection
 
 [Source manifest](weft-layout-handoff-v0.1.proposal.json) pins the six selected files by SHA-256. A consumer MUST distinguish these source sets:

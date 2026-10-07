@@ -6,6 +6,7 @@ SOURCES=[('baseline','docs/helix/02-design/models/truss-layout-0.2.umf.json'),('
 def decode(n):
     if n['kind']=='object':return {k:decode(v) for k,v in n['members'].items()}
     if n['kind']=='array':return [decode(v) for v in n['items']]
+    if n['kind']=='number':return json.loads(n['value'])
     return n.get('value')
 def text(n):
     return n.get('String',{}).get('sval','?')

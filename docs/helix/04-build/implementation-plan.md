@@ -69,6 +69,20 @@ Current source inventory is verified across thirty-three separate receipts by `p
 | Binding/basis/installation finalizer | Tagged local/shared addresses, relation/domain constraint ownership, route-qualified fixed-point completion and entry/policy list normalization are authored. Remaining: complete original definition/policy canonical producer, full basis vectors, owned/prerequisite/unexpected classification, actual initialization/archive/marker procedures and committed reconciliation. |
 | Independent qualification | Exact server/adapter/build/query/source pins and independent generated/native/role/race/fault/resource oracles remain selected execution outputs under STP-045. Current 33 receipts/73 queries, 73 route entries/219 pins and 43 decoder/order fragments prove scoped source/fixture/inventory properties only. No closed native support gate follows. |
 
+## Storage profile priority for the Weft handoff
+
+The owner prioritized a complete on-disk layout. Use CONTRACT-012's integrated 0.3 review model/SQL and 27-table/249-column source-effect inventory as the current composition starting point; baseline 0.2 remains separately versioned. Do not make Weft derive the physical profile by combining chronological proposals.
+
+| Step | Truss-owned output | Completion evidence |
+| --- | --- | --- |
+| WL01 resolve remaining homes | Explicit disposition of key-bucket/allocator/report stores and initialization; complete selected declarative model | One model/DDL/inventory with all required stores and no contradictory alternative activated |
+| WL02 protected installation design | Every required function/trigger/policy/grant/sequence/dependency and bounded producer, plus fresh/populated conversion and rollback ordering | Full definitions and one-to-one inventory; unresolved items named, not inferred from fixed table counts |
+| WL03 exporter fixture | Deterministic actual PostgreSQL binding instance from selected original catalog/model/layout and profile artifacts | Schema validation plus complete physical identity/source/codec/presence/key/relationship correspondence; no fabricated trusted registry |
+| WL04 Weft reconciliation | Compare actual binding definitions with current compiler-owned grammars and capability subsets | Joint interface review/adoption recorded separately from local Truss checks |
+| WL05 integration qualification | Execute generated reads and original decoders through selected host protocols against the installed profile | Independent exact scalar/presence/typed-key/edge/recursive fixtures and refusal evidence under pinned database/driver/build profiles |
+
+These refine B-001/B-003/B-005/B-015, not a competing compiler workstream. Current source composition passes UMF save/reload/export and independent ordered AST correspondence; none of those proves WL02–WL05 or production readiness. Preserve Weft's newly implemented scalar presence/leaf result handling; Truss supplies stored-domain and actual executor obligations.
+
 ## Build entry sequence and design closure boundary
 
 ### Immediate Weft binding delivery

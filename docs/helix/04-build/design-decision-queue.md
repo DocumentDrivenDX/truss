@@ -17,7 +17,7 @@ ddx:
 
 ## Immediate priority: one complete physical profile for Weft
 
-The owner prioritized the on-disk layout on 2026-10-07. [CONTRACT-012](../02-design/contracts/CONTRACT-012-weft-storage-handoff.md) is the current compiler handoff, with an exact source manifest and a complete 22-table/168-column source dictionary. Finish the selected full model/DDL/inventory and its actual exporter binding before unrelated resource-account refinements. Source completeness for these selected tables does not close document-qualified ownership, candidate adoption or installed layout parity. The remaining work is explicitly sequenced in CONTRACT-012.
+The owner prioritized the on-disk layout on 2026-10-07. [CONTRACT-012](../02-design/contracts/CONTRACT-012-weft-storage-handoff.md) is the current compiler handoff, with an exact source manifest and a complete 22-table/168-column source dictionary. A selected integrated 0.3 review model/DDL and 27-table/249-column source-effect inventory now supplies document-qualified owner homes, row stores and source/history custody. Finish the remaining complete-installation composition and its actual exporter binding before unrelated resource-account refinements. Source completeness for these selected tables does not close document-qualified ownership, candidate adoption or installed layout parity. The remaining work is explicitly sequenced in CONTRACT-012.
 
 ## Current owner direction: UMF is sufficient
 

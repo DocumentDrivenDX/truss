@@ -1,0 +1,103 @@
+{
+  "scope": "Selected original UMF AST composition with three explicit catalog-owner replacements; all other selected statements preserved in order; no complete native inventory, installer, binding adoption or runtime qualification",
+  "ownerSource": {
+    "commit": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+    "files": [
+      {
+        "path": "src/adapters/postgresql/index.ts",
+        "sha256": "7baa071d95e5f9863a4ce2bf892d87fb27cab9d8605ba4cf8887016d14ca17b4"
+      },
+      {
+        "path": "src/model/native-json.ts",
+        "sha256": "1459a3e030419c3ae09b300972e27aed8b8ee1f7e41972b3cc00627dff7d7882"
+      },
+      {
+        "path": "src/model/document.ts",
+        "sha256": "a0422042659defdea425dff8bb0618eaa4bbf125f68da16aa5ad21af0b6c282f"
+      },
+      {
+        "path": "native/postgresql/runtime.ts",
+        "sha256": "a88fea4cf15c9c3c3f0ad1f0a36d8f5de42a42ce8ea9712499f609beee3ea751"
+      }
+    ]
+  },
+  "backend": "@libpg-query/parser@17.6.10",
+  "inputs": [
+    {
+      "path": "docs/helix/02-design/models/truss-layout-journal-stage.proposal.umf.json",
+      "sha256": "3ab7f3eb162597e954f5f15ab310b6ba0d381b238fb56888ed9ffe13e8ff860e"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/catalog-owner-homes-v0.1.proposal.umf.json",
+      "sha256": "c15f408b0f357804d2d0e60d348bd3dca9c98d30cab77f1cdcfdbb2783b46f45"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/row-home-tree-v0.1.proposal.umf.json",
+      "sha256": "570a2fa5c3f538b017ed880dea0e216b1c4225801d33ca7a1411fcc13e382fe9"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/row-home-scalar-v0.1.proposal.umf.json",
+      "sha256": "ad9efb6e1ba9b39ba1d438e7a327331be592868d3deeaaacb012ecb46e652105"
+    },
+    {
+      "path": "docs/helix/02-design/models/truss-relationship-lineage-candidate.umf.json",
+      "sha256": "c70a78c65dad005e3752439d97476d14682df3215836e4c3cb3c443b0248dc2a"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/catalog-definition-source-v0.1.proposal.umf.json",
+      "sha256": "cacded023cc8214f7c9f3cce959556c5119574902b08335b8bc121969d0dd67f"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/row-home-touch-v0.1.proposal.umf.json",
+      "sha256": "6aa8f0ee9f1c7d411977590f3cd23758fa148121ff359fb08a25677945dda6f2"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/row-home-capacity-v0.1.proposal.umf.json",
+      "sha256": "98066d3397e138e1e4e2e86ffde784bd536f4c433053b90aa99d5b01e55d751d"
+    }
+  ],
+  "replacementRelations": [
+    "module_access",
+    "type_def",
+    "rel_def"
+  ],
+  "modelPath": "docs/helix/02-design/models/truss-layout-weft-review-0.3.proposal.umf.yaml",
+  "modelSha256": "a1c3790f55701f06275bcc5995941419f45c3a3f52b72e2c90d7f88dbee0eec5",
+  "sqlPath": "docs/helix/02-design/models/truss-layout-weft-review-0.3.proposal.sql",
+  "sqlSha256": "126de6a4d3272b95f5d87adecac7da1cfc8c0ff5136abeb3b067139f3b66b24a",
+  "astPath": "docs/helix/04-build/evidence/design-audit/weft-review-layout.native-ast.json",
+  "astSha256": "52557f823599dd74bf5528446488f930f1c14631765eb186864f454e9217d1dc",
+  "statements": 64,
+  "tables": [
+    "truss.setting",
+    "truss.module_access",
+    "truss.schema_rev",
+    "truss.schema_head",
+    "truss.schema_doc",
+    "truss.schema_change",
+    "truss.type_def",
+    "truss.prop_def",
+    "truss.key_def",
+    "truss.rel_def",
+    "truss.rel_endpoint",
+    "truss.object",
+    "truss.object_key",
+    "truss.edge",
+    "truss.edge_limit",
+    "truss.key_tombstone",
+    "truss.record_source",
+    "truss.feed_consumer",
+    "truss.journal",
+    "truss.row_home_operation",
+    "truss.row_home_journal_stage",
+    "truss.row_home_state",
+    "truss.row_home_node",
+    "truss.row_home_scalar",
+    "truss.relationship_lineage",
+    "truss.row_home_touch",
+    "truss.row_home_capacity"
+  ],
+  "sourceArchivePreserved": true,
+  "reloadedExportExact": true,
+  "installationReady": false
+}
