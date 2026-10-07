@@ -240,3 +240,6 @@ This closes the source-home omission identified in the reactivation audit. Prote
 
 
 Source referential audit: check-layout-foreign-key-closure.py verifies all 59 explicit inline/table foreign-key column tuples against declared target tables and nondeferrable PK/unique source keys in profile 0.9. A deliberately missing target is rejected. This covers source target/arity/key closure only; actual native type/collation/operator/dependency parity and implicit effects remain installer qualification. The receipt pins the source-effect inventory and verifies its saved AST hash.
+
+
+Index/allocator source audit: check-layout-index-sequence-closure.py verifies all 22 explicit indexes, including expression/predicate column references, and all 12 literal nextval defaults against the nine declared sequences. No dangling declared column/sequence reference was found. The inventory/AST is pinned; dynamic references refuse this audit. Native search-path/regclass/type/opclass/collation/OID and routine-body dependencies are outside its scope and remain installer admission work.
