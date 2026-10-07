@@ -252,3 +252,6 @@ Existing UMF reload/export and independent ordered AST composition pass. This cl
 
 
 The declared dependency audits now accept an explicit inventory version and preserve historical receipts. On 0.10, all 60 explicit foreign keys resolve to declared tables/unique targets; all 23 indexes and 13 literal sequence defaults resolve against the ten declared sequences. The missing-target corruption control rejects. This includes migration admission head linkage and receipt allocation/route. Native type/operator/OID/search-path, implicit effects, routine bodies and installation parity remain outside these source checks.
+
+
+The [current 0.10 source packet](../../04-build/evidence/weft-source-binding010/README.md) now accompanies this layout: 328413 bytes, all 420 declared columns, exact SQL and original logical fixture definitions. Six schema checks, independent artifact/source closure and four corruption refusals pass. Historical packets remain unchanged. No compiler/native execution, registration or owner adoption follows; the string-only fixture does not imply full mapping capability.
