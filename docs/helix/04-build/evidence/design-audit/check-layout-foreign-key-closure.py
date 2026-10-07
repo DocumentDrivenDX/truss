@@ -1,8 +1,10 @@
 """Declared source FK target/unique-key closure only; no native type resolution."""
-import copy,hashlib,json
+import copy,hashlib,json,sys
 from pathlib import Path
 R=Path(__file__).resolve().parents[5]
-P=R/'docs/helix/02-design/contracts/weft-review-columns-v0.9.proposal.json'
+version=sys.argv[1] if len(sys.argv)>1 else '0.9'
+if version not in ('0.9','0.10'):raise ValueError('unsupported inventory version')
+P=R/f'docs/helix/02-design/contracts/weft-review-columns-v{version}.proposal.json'
 inventory=json.loads(P.read_bytes())
 if hashlib.sha256((R/inventory['astPath']).read_bytes()).hexdigest()!=inventory['astSha256']:raise ValueError('stale source AST')
 def names(xs):return tuple(x['String']['sval'] for x in xs)
@@ -55,5 +57,5 @@ try:audit(damaged)
 except ValueError:pass
 else:raise ValueError('missing target accepted')
 receipt={'scope':'all declared inline/table FK columns and referenced nondeferrable declared PK/unique targets; no native type/collation/operator/dependency or hidden-effect qualification','inventorySha256':hashlib.sha256(P.read_bytes()).hexdigest(),'references':refs,'missingTargetControlRejected':True,'nativeQualified':False}
-(R/'docs/helix/04-build/evidence/design-audit/layout-foreign-key-closure.json').write_text(json.dumps(receipt,indent=2)+'\n')
+(R/('docs/helix/04-build/evidence/design-audit/layout-foreign-key-closure'+('' if version=='0.9' else '-v'+version)+'.json')).write_text(json.dumps(receipt,indent=2)+'\n')
 print(json.dumps({'declaredReferences':len(refs),'sourceTargetClosure':True,'missingTargetControlRejected':True,'nativeQualified':False}))

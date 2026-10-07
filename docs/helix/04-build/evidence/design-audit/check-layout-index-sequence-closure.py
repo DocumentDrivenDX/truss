@@ -1,8 +1,10 @@
 """Explicit source index/sequence references; not native dependency resolution."""
-import hashlib,json
+import hashlib,json,sys
 from pathlib import Path
 R=Path(__file__).resolve().parents[5]
-P=R/'docs/helix/02-design/contracts/weft-review-columns-v0.9.proposal.json'
+version=sys.argv[1] if len(sys.argv)>1 else '0.9'
+if version not in ('0.9','0.10'):raise ValueError('unsupported inventory version')
+P=R/f'docs/helix/02-design/contracts/weft-review-columns-v{version}.proposal.json'
 inv=json.loads(P.read_bytes());astbytes=(R/inv['astPath']).read_bytes()
 if hashlib.sha256(astbytes).hexdigest()!=inv['astSha256']:raise ValueError('stale AST')
 ast=json.loads(astbytes);tables={t['name']:{c['name'] for c in t['columns']} for t in inv['tables']}
@@ -43,6 +45,6 @@ for t in inv['tables']:
    key=tuple(parts) if len(parts)==2 else ('truss',name)
    if key not in sequences:raise ValueError('missing sequence '+name)
    defaults.append({'table':t['name'],'column':c['name'],'sequence':name})
-receipt={'scope':'all explicit index columns/expressions/predicates and literal nextval defaults resolve in declared 0.9 source; no native opclass/type/collation/OID/search-path or runtime routine-body dependency qualification','inventorySha256':hashlib.sha256(P.read_bytes()).hexdigest(),'indexes':indexes,'declaredSequences':sorted(sequences),'sequenceDefaults':defaults,'nativeQualified':False}
-(R/'docs/helix/04-build/evidence/design-audit/layout-index-sequence-closure.json').write_text(json.dumps(receipt,indent=2)+'\n')
+receipt={'scope':f'all explicit index columns/expressions/predicates and literal nextval defaults resolve in declared {version} source; no native opclass/type/collation/OID/search-path or runtime routine-body dependency qualification','inventorySha256':hashlib.sha256(P.read_bytes()).hexdigest(),'indexes':indexes,'declaredSequences':sorted(sequences),'sequenceDefaults':defaults,'nativeQualified':False}
+(R/('docs/helix/04-build/evidence/design-audit/layout-index-sequence-closure'+('' if version=='0.9' else '-v'+version)+'.json')).write_text(json.dumps(receipt,indent=2)+'\n')
 print(json.dumps({'explicitIndexes':len(indexes),'declaredSequences':len(sequences),'sequenceDefaults':len(defaults),'sourceClosure':True,'nativeQualified':False}))
