@@ -15,6 +15,14 @@ ddx:
 
 # Design coordination and remaining work
 
+## Latest read-only owner source review (2026-10-07)
+
+UMF primary remains 16c35e8d. Weft is now 9ce9a96, original member-slot logical assembly, after recursive pending-work reservation. B-005 evidence reports eight native synthetic public uint64 props cursor cases and 83 crate tests at this head. Truss has not rerun owner tests. Earlier cursor-unimplemented notes are superseded only for that candidate path; composite keys, numeric row-home paging, recursive SQL and embeddings remain separately unqualified.
+
+The record hook supplies original declared slot order, identity, stored name, original presence bytes and optional decoded child. Truss preserves these when mapping selected UMF definitions; it cannot infer logical identity from stored labels or replace compiler-owned traversal/parameters/decoders. The hook is not a qualified automatic UMF decoder. Original compound fixtures, nullable-container meanings and definition/profile/native correspondence remain integration work.
+
+Truss layout is 0.10 while review packets remain 0.8/0.4. No owner delivery/adoption or automatic compatibility follows from source inspection; cross-chat authorization remains pending.
+
 ## Current source review (2026-10-07)
 
 Read-only inspection finds clean-primary UMF at 16c35e8d and Weft at 259e6c0 (Register original named equality parameters through public V02 compilation). Weft's B-005-native-preparation evidence reports public candidate SUM for decimal(28,2)/uint64 and named equality parameter origin/transport, with synthetic PostgreSQL cases. We have not rerun those owner tests. The reported 78 crate tests and native receipts qualify their stated fixtures, not Truss's layout or production compatibility. Cursor/relationship operations, numeric row-home correspondence and embedding packaging remain separately scoped by Weft.

@@ -1977,3 +1977,6 @@ B-002/B-003/B-006 must compose the separate key_lifecycle_history home before ke
 
 
 Key history composition checkpoint: 0.9 now includes the existing owner-local lifecycle table/index, with exact UMF reload/export and independent ordered AST correspondence. This satisfies the source composition portion of the preceding B-002/B-003/B-006 handoff. Protected lifecycle/chain/report producers, conversion and CP-01–06 native schedules remain pending. Weft review packets remain explicitly pinned to their earlier versions.
+
+
+B-012 current Weft handoff observes 9ce9a96: consume original record-slot assembly and pre-queue traversal reservation where explicitly selected. Independent fixtures must cover ordered member identity/presence/name/custody, missing graph correspondence and non-object assembly refusal. Do not duplicate recursive decoding or infer blanket cursor support from synthetic uint64 props evidence. Layout 0.10 still needs exact accepted mapping/codec/executor scope.
