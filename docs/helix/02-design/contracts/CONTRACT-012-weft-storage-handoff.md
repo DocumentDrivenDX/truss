@@ -52,6 +52,10 @@ The full intended layout is **not complete**. Baseline 0.2 has concrete DDL; typ
 
 The baseline SQL's first comment says 0.1 while its schema marker says 0.2; the marker and CONTRACT-001 identify this baseline as 0.2. The comment remains a documented editorial mismatch; changing the pinned original SQL requires refreshing its existing source receipts. The 23-, 37-, 41- and 43-statement review compositions elsewhere are different proposal selections. Consumers MUST NOT assemble a layout by unioning those fragments or infer adoption from statement counts.
 
+### Column dictionary
+
+The [column reference](weft-layout-columns-v0.1.proposal.md) lists all 168 columns across the 19 baseline and three candidate tables in declaration order, with native type names, declared/default presence and primary-key-aware nullability. The [machine dictionary](weft-layout-dictionary-v0.1.proposal.json) retains complete original column/table nodes, type modifiers, defaults, collations, constraints and all other selected statements. Reproduce it with `python3 docs/helix/04-build/evidence/design-audit/collect-weft-layout-dictionary.py`. It is source coverage, not resolved native inventory or adoption.
+
 ### Complete baseline table index
 
 The selected DDL is the exact column/constraint reference for every table below. All names are deployment-schema qualified; `truss` is the default, not an unquoted string to interpolate into SQL.
