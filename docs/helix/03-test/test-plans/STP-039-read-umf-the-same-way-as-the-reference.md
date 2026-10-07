@@ -17,6 +17,23 @@ ddx:
 
 # STP-039: UMF reference parity
 
+## Original member-slot integration (planned)
+
+These B-012 integration schedules consume the Weft 9ce9a96 original-slot interface; they do not reimplement its recursive traversal. Pin one exact selected original UMF/model/profile/binding and independently author expected logical member identities and presence/value results. Layout 0.10 source presence alone cannot admit the compiler mapping. Native and embedding cases remain not_run.
+
+| Case | Independent fixture | Required Truss boundary result |
+| --- | --- | --- |
+| MS-01 declared order | Declare members B,A while JSON storage keys arrive A,B; retain original slot order and distinct authored identities | Correlation follows original declarations, not storage iteration or alphabetical labels; value occurrences remain distinct |
+| MS-02 absent member | Include a declared optional member with original absent presence and no decoded child beside a present empty value | Preserve explicit absence separately from empty value; no default insertion or dropped slot |
+| MS-03 Unicode spelling | Distinct exact names with Unicode composition differences, trailing spaces and different stored versus logical names | Retain exact original names/identities under selected UMF interpretation; no normalization or storage-label identity inference |
+| MS-04 foreign member | Substitute same display/storage name from another document/module/owner or stale original graph/descriptor | Refuse original definition correspondence before publication; equal integer IDs/names cannot establish ownership |
+| MS-05 nullable container | Independently provide absent, explicit null, empty record and present populated record under selected authored meaning | Distinct outcomes; unsupported nullable-container/profile semantics refuse rather than being coerced |
+| MS-06 invalid callback result | Registered assembly produces an array/scalar or omits an original member slot | Refuse assembly with no partial decoded/public value; caller cannot replace registered callback custody |
+| MS-07 traversal budget | Pin the owner traversal definition and independently construct exact/one-over queued-child work including cycles and empty children | Consume compiler-owned admission/refusal; do not queue uncharged Truss reconstruction or restart with a fresh counter |
+| MS-08 publication failure | Change current authority, original binding or actual native correspondence after staging but before publication | Withhold complete result under existing original executor/recovery; no partial member output, rebinding or automatic recompilation |
+
+Record original slot/presence bytes and independently expected logical results in the corpus. Weft's reported hook tests qualify its interface only; Truss's source/model/native/current-authority mapping and packed browser/Python integrations need their own exact selected evidence. No broad recursive support is inferred from these planned cases.
+
 ## Story Reference and Scope
 
 US-039, TD-039, SD-007, TP-001 and CONTRACT-003/004. Tests are planned. Pin exact oracle/version/subset and distinguish validity from Truss support.
