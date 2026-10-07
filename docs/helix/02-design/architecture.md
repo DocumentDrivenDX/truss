@@ -57,6 +57,8 @@ The proposed `createReferenceAssembly` construction/lifetime export belongs to `
 
 ### Public capability inventory
 
+The [package delivery design](package-delivery.proposal.md) allocates emitted exports, dependency closures, the packed reference consumer and PD-01–06 acceptance schedules. Published package names and adapter runtime profiles remain unselected.
+
 Initial package-format candidate: emit ESM JavaScript targeting ES2022 with matching `.d.ts` declarations and explicit `exports`/type entry points. Publish compiled artifacts rather than requiring consumers to compile workspace TypeScript. Browser core, driver-neutral PostgreSQL assembly and Bun/Node adapters retain separate entry points and dependency closures. Data contracts/corpus artifacts use explicit data exports and exact version/digest inventories; importing an executable entry point does not eagerly load all corpus/native-model data. Native database support still follows selected adapter/server profiles rather than the JavaScript target. This is a draft packaging choice, requiring public API/build review and independent loader evidence before release; CommonJS or other loader profiles need their own selected build/evidence and are not inferred from ESM tests.
 
 These are planned embeddable capability families. Draft bindings name proposed exports; they do not imply published packages, existing runtime code or release qualification. Hosts assemble the families they use; administrative operations are explicit tooling, not automatic library startup effects.
