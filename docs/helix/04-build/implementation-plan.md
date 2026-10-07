@@ -1958,3 +1958,6 @@ Recovery source checkpoint: the 0.7 UMF/DDL composition now declares all three r
 
 
 Current installer dependency handoff: the [gap matrix](../02-design/contracts/weft-review-installation-gap-matrix.proposal.md) assigns concrete outputs by store family. In particular, B-003/B-013 must implement the qualified three-argument grant helper and full protected privilege/policy composition; the current source AST contains only the two high-water ordinary functions. Native implementation is separate from unresolved operation/codec/security/driver profile selection.
+
+
+OC01/OC02 source composition checkpoint: profile 0.8 includes the previously separate partial unique unfinished-operation index. B-003/B-005/B-013 must independently qualify second-unfinished rejection, genuine finalization admitting the next ordinal, savepoint rollback restoring membership, zero-unfinished observer refusal and finalized-record commit collection. Source uniqueness does not replace original transaction/issuer/custody admission.
