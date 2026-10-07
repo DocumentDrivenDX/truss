@@ -66,6 +66,8 @@ This candidate deliberately restricts canonical table writes to admitted protect
 
 ### Proposed document-qualified grant home
 
+The [qualified helper execution design](qualified-grant-helper.proposal.md) defines original actor capture, six-step privilege-delta ordering, no-op/rollback behavior and QG-01–06 native schedules. Its body and installation-bound callable inventory remain unimplemented.
+
 The table above describes baseline layout 0.2. Under proposed ADR-004, `truss-qualified-module-policy/0.1.0` instead selects a fixed generic `module_access` home with exact non-null text columns `document_id`, `module`, `reader_role`, `writer_role` and primary key `(document_id,module)`. All identity comparisons use the selected native exact-byte text/collation profile, with no case folding, Unicode normalization or locale-dependent equality. Reader and writer remain distinct exact native role names. Qualified document/module values must independently resolve under the admitted UMF/catalog context and PostgreSQL text carrier; this profile cannot truncate or rename unsupported identities. A predeclared grant may precede definitions in its exact document/module, as in the baseline, but cannot supply provenance for a later catalog definition.
 
 This candidate changes fixed ownership columns/constraints and the optional policy bundle; it requires a new explicit layout/binding version and complete generated/native inventory. It is not an unchanged-column extension to baseline 0.2, and native predicates cannot assume the new catalog ownership homes already exist. CONTRACT-001/003 own those full original type/relationship ownership mappings. Missing or ambiguous owner mapping refuses qualification rather than falling back to the unqualified `module` string.

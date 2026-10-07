@@ -1937,6 +1937,8 @@ Owner selections on 2026-10-07: B-006 uses validated same-identity reactivation;
 
 ## Custom trigger-body implementation slice
 
+B-003/B-013 consume the [qualified grant helper design](../02-design/contracts/qualified-grant-helper.proposal.md). Implement the three-argument administrative entrypoint against original installation-bound callable identities, with captured actor, exclusive policy generation, independently compared native delta and rollback/unknown-commit handling. Qualify QG-01–06; module writes must not grant worker/admin or raw canonical DML authority. The historical two-argument helper remains excluded.
+
 B-011/B-013 must also compose the three homes in [feed recovery storage allocation](../02-design/contracts/feed-recovery-storage-allocation.proposal.md): administrative receipts, seed attempts and immutable seed artifacts. Deliver exact UMF/DDL/column identities, protected producers/readers and retention conversion. Receipt arbitration precedes stale-generation validation; source confirmation remains separate from downstream activation. These are required before claiming the storage profile complete.
 
 The source inventory `native-trigger-body-gaps.json` independently identifies thirteen original trigger references and five custom bodies absent from the selected 0.6 model. This is a concrete B-005/B-007/B-011/B-013 native implementation slice, not a new compiler or UMF parser.
