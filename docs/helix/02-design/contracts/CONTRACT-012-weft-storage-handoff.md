@@ -243,3 +243,9 @@ Source referential audit: check-layout-foreign-key-closure.py verifies all 59 ex
 
 
 Index/allocator source audit: check-layout-index-sequence-closure.py verifies all 22 explicit indexes, including expression/predicate column references, and all 12 literal nextval defaults against the nine declared sequences. No dangling declared column/sequence reference was found. The inventory/AST is pinned; dynamic references refuse this audit. Native search-path/regclass/type/opclass/collation/OID and routine-body dependencies are outside its scope and remain installer admission work.
+
+## Current migration homes profile 0.10 (2026-10-07)
+
+The [UMF model](../models/truss-layout-weft-review-0.10.proposal.umf.json) and [SQL](../models/truss-layout-weft-review-0.10.proposal.sql) preserve the 97 prior statements and add installation_admission plus key_migration_receipt, its allocator and route. The source profile has 101 statements, 43 tables, 420 columns and 23 explicit indexes. [Column index](weft-review-columns-v0.10.proposal.md), [feed/lifecycle/migration chapter](weft-review-columns-v0.10.feed.proposal.md) and [source inventory](weft-review-columns-v0.10.proposal.json) pin original declarations.
+
+Existing UMF reload/export and independent ordered AST composition pass. This closes the declared migration-home omission; initialization and exact marker/admission continuity, original generation/receipt production, full feed transition/archive correspondence and native conversion/privilege/profile qualification remain open. No migration capability is admitted by source composition alone. Policy guard remains a separate optional candidate. Weft packets stay pinned to 0.8/0.4; neither implicitly adopts this layout.

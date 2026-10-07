@@ -42,3 +42,6 @@ Reactivation audit: key_lifecycle_history is an existing separately captured sou
 
 
 Current source correction: profile 0.9 now composes the key_lifecycle_history table/index. The earlier 0.8 omission remains historical evidence; protected transition/report production and CP-01–06 native qualification remain open.
+
+
+Current composition correction: profile 0.10 now includes both migration homes, allocator and route. The 0.9 omission is historical; original marker/admission initialization and continuity, protected receipt/feed producers and complete native qualification remain required.
