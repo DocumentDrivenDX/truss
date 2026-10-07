@@ -1,0 +1,11 @@
+# Managed extension source review
+
+Read-only documentation review, 2026-10-07. No provider account, database installation or native test was accessed. The owner requires any selected extension to ship with RDS PostgreSQL, Aurora PostgreSQL and Lakebase.
+
+RDS publishes versioned [extension matrices](https://docs.aws.amazon.com/AmazonRDS/latest/PostgreSQLReleaseNotes/postgresql-extensions.html). Aurora separately publishes its [supported extensions by engine version](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraPostgreSQLReleaseNotes/AuroraPostgreSQL.Extensions.html). Both list pg_stat_statements. These are availability sources, not evidence for Truss's native cumulative-account interfaces or a selected build/deployment tuple.
+
+Databricks publishes [Lakebase extension tables](https://docs.databricks.com/aws/en/oltp/projects/extensions), including pg_stat_statements and plpgsql. Exact Lakebase product/major-version selection and extension versions still need pinning; the table does not qualify Truss's account protocol or custom module deployment.
+
+PostgreSQL 17's [pg_stat_statements documentation](https://www.postgresql.org/docs/17/pgstatstatements.html) describes statistics collection, with planning/execution statistics updated at the respective phase end only for successful operations. Consequently, **our inference** is that this documented telemetry alone cannot establish charge-before-error, rollback-resistant original transaction spend or pre-materialization admission required by the native account proposal. Listing this common extension does not close the resource-account design.
+
+No shipped extension implementing the complete Truss account contract has been identified or qualified in this review. This is not an exhaustive proof that none exists. Native C/Rust account packaging remains unselected; do not assume provider support for an arbitrary custom module. Preserve the [FR-43 reconciliation](resource-account-requirement-reconciliation.md) and select exact language/entrypoint/epoch/account/security/deployment evidence before adoption. SQL/protected PL/pgSQL producer planning can continue where its required semantics are explicit, without claiming that ordinary transactional rows preserve spent counters across rollback.

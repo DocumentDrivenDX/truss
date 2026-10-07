@@ -45,6 +45,8 @@ UMF is sufficient for the current scope. Select/pin its existing source/APIs and
 
 ## Execution-ready work and next closure order
 
+The [managed extension source review](../02-design/contracts/managed-extension-source-review.md) supplies current primary availability sources. Common pg_stat_statements telemetry is not evidence for the proposed native account; no complete shipped account module has been identified/qualified. Exact deployment/profile selection remains open.
+
 1. Finish the native operation/codec/security/driver composition selections for one coherent installation tuple. The [installer matrix](../02-design/contracts/weft-review-installation-gap-matrix.proposal.md) identifies concrete store/routine dependencies; use existing algorithms rather than restarting them as missing design.
 2. Resolve pending owner choices only where exercised. Record the answer in governing requirements/ADR/contract/test sources, not just this status document. Request-free groups and inert packaging remain independent.
 3. Produce one complete versioned physical/effect/routine/grant bundle with initialization and conversion. Compare independent native inventory before ready-marker publication. Source SQL count alone cannot close this step.
