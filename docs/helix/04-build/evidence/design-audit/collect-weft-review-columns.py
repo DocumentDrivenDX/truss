@@ -1,8 +1,11 @@
 """Selected authored declaration effects only; never a PostgreSQL resolver."""
-import json,hashlib
+import json,hashlib,sys
 from pathlib import Path
 R=Path(__file__).resolve().parents[5]
-receipt=json.loads((R/'docs/helix/04-build/evidence/design-audit/weft-review-layout-composition.json').read_text())
+key_profile='--key-profile' in sys.argv
+version='0.4' if key_profile else '0.3'
+receipt_name='weft-key-profile-composition.json' if key_profile else 'weft-review-layout-composition.json'
+receipt=json.loads((R/'docs/helix/04-build/evidence/design-audit'/receipt_name).read_text())
 b=(R/receipt['astPath']).read_bytes()
 if hashlib.sha256(b).hexdigest()!=receipt['astSha256']:raise ValueError('stale AST')
 a=json.loads(b);tables={};indexes=[];other=[]
@@ -35,10 +38,10 @@ for i,n in enumerate(a):
    else:raise ValueError('unclassified ALTER effect')
  elif 'IndexStmt' in s:indexes.append({'pointer':ptr+'/IndexStmt','definition':s['IndexStmt']})
  else:other.append({'pointer':ptr,'statementKind':list(s)})
-result={'interfaceVersion':'truss-weft-review-columns/0.3.0-proposal','scope':'Ordered explicit CREATE/ALTER column and constraint effects in the selected review AST; other statements retained by pointer; no native type/dependency resolution or implicit effect completeness','astPath':receipt['astPath'],'astSha256':receipt['astSha256'],'nativeQualified':False,'tables':list(tables.values()),'indexes':indexes,'otherStatements':other}
-base=R/'docs/helix/02-design/contracts';(base/'weft-review-columns-v0.3.proposal.json').write_text(json.dumps(result,indent=2)+'\n')
-lines=['# Selected review layout columns (0.3 proposal)','','Companion to [CONTRACT-012](CONTRACT-012-weft-storage-handoff.md).','This is the selected 64-statement review composition, including explicit ADD COLUMN and column-type changes.','Baseline 0.2 remains a separate profile. Native installation and compiler binding adoption remain unqualified.','Nullability reports explicit NOT NULL/PRIMARY KEY effects only; CHECK expressions and protected guards may reject NULL independently.',
-'The [source-effect inventory](weft-review-columns-v0.3.proposal.json) pins the complete native AST and original definition pointers.','','| Table | Columns |','| --- | --- |']
+result={'interfaceVersion':f'truss-weft-review-columns/{version}.0-proposal','scope':'Ordered explicit CREATE/ALTER column and constraint effects in the selected review AST; other statements retained by pointer; no native type/dependency resolution or implicit effect completeness','astPath':receipt['astPath'],'astSha256':receipt['astSha256'],'nativeQualified':False,'tables':list(tables.values()),'indexes':indexes,'otherStatements':other}
+base=R/'docs/helix/02-design/contracts';(base/f'weft-review-columns-v{version}.proposal.json').write_text(json.dumps(result,indent=2)+'\n')
+lines=[f'# Selected review layout columns ({version} proposal)','','Companion to [CONTRACT-012](CONTRACT-012-weft-storage-handoff.md).',f'This is the selected {len(a)}-statement review composition, including explicit ADD COLUMN and column-type changes.','Baseline 0.2 remains a separate profile. Native installation and compiler binding adoption remain unqualified.','Nullability reports explicit NOT NULL/PRIMARY KEY effects only; CHECK expressions and protected guards may reject NULL independently.',
+f'The [source-effect inventory](weft-review-columns-v{version}.proposal.json) pins the complete native AST and original definition pointers.','','| Table | Columns |','| --- | --- |']
 for name,t in tables.items():lines.append(f'| `{name}` | {len(t["columns"])} |')
 for name,t in tables.items():
  lines.extend(['',f'## {name}','','| Column | Declared native type | SQL NULL allowed by declaration |','| --- | --- | --- |'])
@@ -51,5 +54,5 @@ for name,t in tables.items():
   nn=c['name'] in pk or any(x['contype'] in ('CONSTR_PRIMARY','CONSTR_NOTNULL') for x in cons)
   lines.append(f'| `{c["name"]}` | `{typ}` | {"no" if nn else "yes"} |')
 if len(lines)>=500:raise ValueError('reference exceeds single-edit size')
-(base/'weft-review-columns-v0.3.proposal.md').write_text('\n'.join(lines)+'\n')
+(base/f'weft-review-columns-v{version}.proposal.md').write_text('\n'.join(lines)+'\n')
 print(json.dumps({'tables':len(tables),'columns':sum(len(t['columns']) for t in tables.values()),'explicitIndexes':len(indexes),'markdownLines':len(lines),'nativeQualified':False}))

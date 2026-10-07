@@ -71,11 +71,11 @@ Current source inventory is verified across thirty-three separate receipts by `p
 
 ## Storage profile priority for the Weft handoff
 
-The owner prioritized a complete on-disk layout. Use CONTRACT-012's integrated 0.3 review model/SQL and 27-table/249-column source-effect inventory as the current composition starting point; baseline 0.2 remains separately versioned. Do not make Weft derive the physical profile by combining chronological proposals.
+The owner prioritized a complete on-disk layout. Use CONTRACT-012's integrated 0.4 review model/SQL and 30-table/264-column source-effect inventory as the current composition starting point; baseline 0.2 remains separately versioned. Do not make Weft derive the physical profile by combining chronological proposals.
 
 | Step | Truss-owned output | Completion evidence |
 | --- | --- | --- |
-| WL01 resolve remaining homes | Explicit disposition of key-bucket/allocator/report stores and initialization; complete selected declarative model | One model/DDL/inventory with all required stores and no contradictory alternative activated |
+| WL01 resolve remaining homes | Selected key-bucket/allocator/report declarations now integrated; finish exact initialization and all remaining required homes in the full installation model | One model/DDL/inventory with all required stores and no contradictory alternative activated |
 | WL02 protected installation design | Every required function/trigger/policy/grant/sequence/dependency and bounded producer, plus fresh/populated conversion and rollback ordering | Full definitions and one-to-one inventory; unresolved items named, not inferred from fixed table counts |
 | WL03 exporter fixture | Deterministic actual PostgreSQL binding instance from selected original catalog/model/layout and profile artifacts | Schema validation plus complete physical identity/source/codec/presence/key/relationship correspondence; no fabricated trusted registry |
 | WL04 Weft reconciliation | Compare actual binding definitions with current compiler-owned grammars and capability subsets | Joint interface review/adoption recorded separately from local Truss checks |

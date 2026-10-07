@@ -48,6 +48,9 @@ The PRD and feature specifications now frame Truss. This contract implements ADR
 
 ## Normative Surface
 
+**Selected-profile distinction (2026-10-07):** [CONTRACT-012](CONTRACT-012-weft-storage-handoff.md) now selects the integrated 0.4 review model. In that proposal, full-byte bucket stores replace the legacy object_key home, object reservations leave the edge-only tombstone home, and immutable report bytes in catalog_acceptance_report replace schema_rev.report. Baseline 0.2 behavior below remains separately versioned; it must not be applied to 0.4 by name matching. The selected proposal still requires complete protected installation/migration and actual binding adoption.
+
+
 ### Proposed catalog owner and definition source homes
 
 #### Proposed fixed row-home value model

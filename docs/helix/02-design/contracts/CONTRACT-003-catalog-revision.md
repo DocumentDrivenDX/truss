@@ -48,6 +48,9 @@ CONTRACT-007 governs transaction adoption, timeout restoration, original contain
 
 ## Normative Surface
 
+**Selected-profile distinction (2026-10-07):** [CONTRACT-012](CONTRACT-012-weft-storage-handoff.md) now selects the integrated 0.4 review model. In that proposal, full-byte bucket stores replace the legacy object_key home, object reservations leave the edge-only tombstone home, and immutable report bytes in catalog_acceptance_report replace schema_rev.report. Baseline 0.2 behavior below remains separately versioned; it must not be applied to 0.4 by name matching. The selected proposal still requires complete protected installation/migration and actual binding adoption.
+
+
 ### Stable authored key identity and local storage binding
 
 Key binding admission is ordered: validate closed vocabulary/profile/resources and exact accepted binding bytes; resolve every owning Record against the complete accepted document inventory; verify stable binding/source IDs and exact definition/ownership pins; resolve unique ordered owned properties; validate the source-kind rule (portable Key correspondence versus explicit storage assertion); admit selected equality/null/missing/encoding registrations against source family/facets; establish current data/backfill/native profile obligations; only then persist mapping/catalog/report atomically. No phase executes artifact code or installs a comparator from its name. Collect permitted complete diagnostics before persistence; resource exhaustion refuses rather than returning a truncated complete inventory.

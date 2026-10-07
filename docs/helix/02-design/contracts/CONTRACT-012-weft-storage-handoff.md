@@ -38,6 +38,32 @@ The full intended layout is **not complete**. Baseline 0.2 has concrete DDL; typ
 
 ## Normative Surface
 
+### Current selected store profile: 0.4 proposal
+
+The [0.4 UMF model](../models/truss-layout-weft-review-0.4.proposal.umf.yaml), [generated SQL](../models/truss-layout-weft-review-0.4.proposal.sql), [column reference](weft-review-columns-v0.4.proposal.md) and [source-effect inventory](weft-review-columns-v0.4.proposal.json) supersede 0.3 as the current integrated review selection. They contain 74 statements, 30 tables, 264 declared columns after selected ALTER effects and 15 explicit indexes. All earlier profiles remain historical/baseline references, not compatible aliases.
+
+The selected proposal makes these dispositions explicit:
+
+| Concern | Selected physical home | Rule |
+| --- | --- | --- |
+| Live logical keys | `object_key_bucket` replaces `object_key` | Exact namespace/key bytes and original context; nonunique digest routing, full-byte identity |
+| Object-key reservations | `object_key_reservation_bucket` | Complete immutable reservation artifact; no object reservations in a second canonical home |
+| Bucket exclusion/generation | `key_bucket_guard` | Digest collisions share exclusion; generation counts actual membership mutations; never digest-only semantic equality |
+| Edge endpoint reservations | `key_tombstone`, restricted to `entity_kind = 'e'` | Existing endpoint-ID encoding and typed relationship context; object legacy tombstones require explicit migration into the reservation artifact home |
+| Acceptance reports | `catalog_acceptance_report` replaces `schema_rev.report` | One nonempty canonical report artifact per accepted positive revision, persisted only after complete actual event/report finalization |
+| Allocation observation | Two protected high-water function declarations | Retained active/provisional/retired catalog IDs included; negative legacy IDs remain valid, new positive allocation is bounded and separately guarded |
+| Private capacity initialization | Existing parameterized fresh-only INSERT | Installer supplies full admitted layout/resource definition bytes, proves empty scope, inserts exactly once, independently reobserves; no reset/upsert or marker-only bytes |
+
+For a bucket key lookup, filter the admitted native type/key-number and qualified namespace/key digest route, compare **both full namespace_bytes and key_bytes**, then join `(object_id,type_id)` to `object.(id,type_id)`. Digest collision alone is neither a match nor a uniqueness failure. The binding must retain original namespace/portable encoding/definition context and qualify the exact byte parameter protocol and bounded collision processing. The old object_key text join remains baseline-only. Ordered logical-key paging still requires its independently admitted comparator; storage_row_id orders internal locators, not logical key values.
+
+For acceptance, insert the complete parent revision/origin/documents and candidate catalog/data effects in one protected transaction, finalize actual journal/feed facts, encode and persist the final immutable report bytes, prove positive-revision report completeness and only then advance `schema_head`. Revision zero is bootstrap empty-catalog state, not a positive accepted report. The existing three-value schema_rev seed now assigns its third JSON object to origin after report removal; the selected source inventory explicitly records this change. A failure rolls back parent/report/catalog/data/journal/head effects together. Full guard bodies and producer privilege closure remain mandatory and are not supplied by the table PK/FK alone.
+
+Migration must preserve exact retained numeric IDs and original meanings. Legacy key text/report JSONB is not automatically original canonical bytes; an independently admitted complete source/codec/owner mapping must prove conversion or refuse. Distinct original reservation identities are retained even when routing hashes collide. No downgrade may collapse qualified owner identities, discard reservations or manufacture missing original report/value artifacts. M-01–M-07 still own bounded staging, atomic activation, unknown-outcome recovery and rollback.
+
+Reproduce with `bun docs/helix/04-build/evidence/design-audit/capture-key-and-allocation-sources.ts`, then `bun docs/helix/04-build/evidence/design-audit/compose-weft-key-profile.ts`. Verify the selected replacements/additions with `python3 docs/helix/04-build/evidence/design-audit/check-weft-key-profile.py`; generate the reference with `python3 docs/helix/04-build/evidence/design-audit/collect-weft-review-columns.py --key-profile`. The [composition receipt](../../04-build/evidence/design-audit/weft-key-profile-composition.json) pins all four inputs and model/SQL/saved AST outputs.
+
+This is a design selection for review, not owner adoption or installed support. Remaining installation outputs are exact initialization/admission producers, all required protected guard/routine/trigger/policy/grant definitions, complete implicit/dependency/native correspondence and the populated conversion profile. An actual exporter binding and registered Weft adapter remain separate outputs. High-water declarations observe maxima; they do not allocate, lock, prove visibility, enforce resources or finalize acceptance by themselves.
+
 ### Selected integrated review profile: 0.3 proposal
 
 The [single UMF model](../models/truss-layout-weft-review-0.3.proposal.umf.yaml) and [generated SQL](../models/truss-layout-weft-review-0.3.proposal.sql) now compose one review selection: 64 statements, 27 tables, 249 explicitly declared columns after selected ALTER effects, and 13 explicit indexes. The [current column reference](weft-review-columns-v0.3.proposal.md) and [source-effect inventory](weft-review-columns-v0.3.proposal.json) describe that selection. Baseline references below remain for compatibility review; they are not the current integrated proposal.
