@@ -255,3 +255,6 @@ The declared dependency audits now accept an explicit inventory version and pres
 
 
 The [current 0.10 source packet](../../04-build/evidence/weft-source-binding010/README.md) now accompanies this layout: 328413 bytes, all 420 declared columns, exact SQL and original logical fixture definitions. Six schema checks, independent artifact/source closure and four corruption refusals pass. Historical packets remain unchanged. No compiler/native execution, registration or owner adoption follows; the string-only fixture does not imply full mapping capability.
+
+
+CH-01 now has review010-declared-effects.json: exact source pointers for 43 relations, 420 columns, 563 constraint-source nodes, 60 expression/allocator nodes, 23 explicit indexes, ten sequences and two routines. These are source categories, not native physical counts. It separately lists 116 implicit-dependency work items and eight other statements requiring effect review. Authored/native IDs remain unresolved rather than being fabricated from names/pointers; prior authored IDs must be reused through original correspondence. Complete implicit effects, types/roles/policies/grants and actual native inventory remain required.
