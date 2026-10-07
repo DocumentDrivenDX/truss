@@ -34,6 +34,20 @@ These B-012 integration schedules consume the Weft 9ce9a96 original-slot interfa
 
 Record original slot/presence bytes and independently expected logical results in the corpus. Weft's reported hook tests qualify its interface only; Truss's source/model/native/current-authority mapping and packed browser/Python integrations need their own exact selected evidence. No broad recursive support is inferred from these planned cases.
 
+## Original-topology physical observation integration (planned)
+
+Consume Weft `1d914b86aed571759d16f8773686ffd23cad53a4` only after exact binding/profile admission. Its owner-reported JSONB cases do not supply Truss fixtures or qualify row-tree storage. These B-012 schedules supplement MS-01–08 and keep observation, logical decoding and native work containment separate.
+
+| Case | Independent input or fault | Required boundary observation |
+| --- | --- | --- |
+| RO-01 original compound custody | Original sequence/structured definitions with optional missing, present empty and Unicode/trailing-space leaves; then substitute descriptor, member-presence or leaf-codec bytes | Consume owner validation with exact original correspondence; substitution refuses before a public result, with staged parameters unpublished |
+| RO-02 complete owner | Valid requested leaf alongside malformed unprojected sibling, missing required member and foreign stored slot | Complete-owner prerequisite refuses the read even when the projected leaf passes; no predicate/filter bypass of prerequisite collection |
+| RO-03 container semantics | Sequence/map/structured/record fixtures with wrong kinds, explicit null, empty values and absent optional members under selected definitions | Preserve selected authored availability/nullability; an unsupported container profile refuses explicitly rather than inheriting scalar null rules |
+| RO-04 work containment | Wide shallow graph exceeding occurrence admission, deep graph at/over cutoff and concurrent cancellation during expansion | Record final integrity refusal separately from actual work admission, deadline, cancellation and transaction cleanup evidence. Count-after-traversal success/failure cannot certify pre-expansion work accounting |
+| RO-05 storage profile substitution | Replace JSONB home with row-tree home, change original leaf representation or reuse the JSONB receipt for a different profile | Refuse unsupported correspondence; require independently selected row-tree compiler/native mapping and original fixtures before claiming that scope |
+
+For each case retain the original binding/model/codec pins, complete-owner selection, compiled parameter custody, independent stored input and expected outcome, actual executor profile and cleanup observations. Native work measurements belong to the selected Truss enforcement/adapter profile. No compiler-owned recursive SQL is reimplemented by this plan; all cases remain not_run.
+
 ## Story Reference and Scope
 
 US-039, TD-039, SD-007, TP-001 and CONTRACT-003/004. Tests are planned. Pin exact oracle/version/subset and distinguish validity from Truss support.

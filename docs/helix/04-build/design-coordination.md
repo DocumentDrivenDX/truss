@@ -17,11 +17,13 @@ ddx:
 
 ## Latest read-only owner source review (2026-10-07)
 
-UMF primary remains 16c35e8d. Weft is now 9ce9a96, original member-slot logical assembly, after recursive pending-work reservation. B-005 evidence reports eight native synthetic public uint64 props cursor cases and 83 crate tests at this head. Truss has not rerun owner tests. Earlier cursor-unimplemented notes are superseded only for that candidate path; composite keys, numeric row-home paging, recursive SQL and embeddings remain separately unqualified.
+UMF primary remains 16c35e8d. Latest inspected Weft commit is `1d914b86aed571759d16f8773686ffd23cad53a4`, recursive JSONB observation using original UMF topology. Its B-005-native-preparation report records 86 PostgreSQL crate tests and 16 native sequence/structured observation cases. Truss has inspected the original source and owner evidence, without rerunning those tests. Earlier 9ce9a96 member-slot assembly and recursive pending-work reservations remain scoped prerequisites, not complete Truss integration.
 
 The record hook supplies original declared slot order, identity, stored name, original presence bytes and optional decoded child. Truss preserves these when mapping selected UMF definitions; it cannot infer logical identity from stored labels or replace compiler-owned traversal/parameters/decoders. The hook is not a qualified automatic UMF decoder. Original compound fixtures, nullable-container meanings and definition/profile/native correspondence remain integration work.
 
-Truss layout is 0.10 while review packets remain 0.8/0.4. No owner delivery/adoption or automatic compatibility follows from source inspection; cross-chat authorization remains pending.
+The new `recursive_observation::props` primitive checks original descriptor/member-presence custody, stages original topology as a bound parameter and derives scalar guards from original codecs. Its SQL checks sequence/map/structured/record container kinds, required/optional member availability, authored scalar nullability and unknown record slots. It returns per-value physical integrity; complete-owner orchestration and logical projection remain separate. The source uses a depth cutoff of 128 and a final occurrence count of 100000 after traversal. That count is a result-admission guard, not proof that database work was reserved or bounded before expansion. Truss must not replace its pre-materialization/resource obligations with this final predicate.
+
+Truss layout is 0.10 and its matching [source packet](evidence/weft-source-binding010/README.md) now exists; historical 0.8/0.4 packets remain preserved. The JSONB primitive does not establish Truss row-tree storage correspondence, map/nested exact numeric fixture coverage, public recursive projection or embedding qualification. STP-039 RO-01–05 allocates the integration checks. No owner delivery/adoption or automatic compatibility follows from source inspection; cross-chat authorization remains pending. No new UMF capability or duplicate compiler implementation is assigned.
 
 ## Current source review (2026-10-07)
 
