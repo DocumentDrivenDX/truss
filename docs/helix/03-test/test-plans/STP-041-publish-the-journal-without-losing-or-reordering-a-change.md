@@ -17,6 +17,21 @@ ddx:
 
 # STP-041: Ordered feed and replay
 
+## Recovery storage schedules (planned, not executed)
+
+These cases qualify the [three recovery homes](../../02-design/contracts/feed-recovery-storage-allocation.proposal.md) after native composition. Use independent committed observations and exact original artifact comparison.
+
+| Case | Schedule and required result |
+| --- | --- |
+| RS-01 | Commit removal/reseed, lose acknowledgment, then retry after generation changes. Current authorized equal input returns the original stored result; different full input conflicts. |
+| RS-02 | Inject failure between transition and receipt and at commit. Rollback leaves neither effect; unknown commit reconciles originals before retry. Supplied-scope visible receipt remains pending. |
+| RS-03 | Remove a consumer and reuse its display name with a new registration. Original receipt remains recoverable; it cannot authorize the new registration. Digest-route collisions compare full identity/input bytes. |
+| RS-04 | Crash before/after extraction, staging, downstream activation and source confirmation. Original attempt/artifacts determine recovery; activation without source confirmation preserves source protection. |
+| RS-05 | Attempt classifier retirement before complete coverage through original xmax, including no event at xmax. Protection/classifier persist until qualified complete coverage, with no fabricated transaction boundary. |
+| RS-06 | Invalidate without containment, then remove another consumer and trim. Independent seed protection remains; abandonment requires original containment/cleanup evidence. |
+| RS-07 | Substitute cross-epoch/worker artifacts, omit an ordered transition, create reverse hash references or exceed selected retention/resource limits. Refuse without partial successful seed/receipt publication or loss of originals. |
+
+
 ## Story Reference and Scope
 
 Configuration prerequisite controls require exact original epoch/installation/generation/profile artifacts where member interpretation depends on them. Change current settings after producing the transaction and verify original interpretation remains stable; remove/conflict a required configuration artifact and require unavailable before application/acknowledgment. Same generation under a different epoch/installation cannot substitute. Independent manifest-byte and page-budget fixtures include these artifacts; seed/staged application must retain them with protected dependent transactions. A selected pin without trusted original admission cannot qualify the producer.

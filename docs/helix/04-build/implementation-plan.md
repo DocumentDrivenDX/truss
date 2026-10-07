@@ -1937,6 +1937,8 @@ Owner selections on 2026-10-07: B-006 uses validated same-identity reactivation;
 
 ## Custom trigger-body implementation slice
 
+B-011/B-013 must also compose the three homes in [feed recovery storage allocation](../02-design/contracts/feed-recovery-storage-allocation.proposal.md): administrative receipts, seed attempts and immutable seed artifacts. Deliver exact UMF/DDL/column identities, protected producers/readers and retention conversion. Receipt arbitration precedes stale-generation validation; source confirmation remains separate from downstream activation. These are required before claiming the storage profile complete.
+
 The source inventory `native-trigger-body-gaps.json` independently identifies thirteen original trigger references and five custom bodies absent from the selected 0.6 model. This is a concrete B-005/B-007/B-011/B-013 native implementation slice, not a new compiler or UMF parser.
 
 | Native interface | Required original processing | Verification boundary |
