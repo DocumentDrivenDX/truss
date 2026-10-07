@@ -12,6 +12,8 @@ Prepared and unprepared execution need independently equivalent semantic/account
 
 ## Required selection record
 
+Accepted ADR-001 D6/T4 is conditional: it considers a Rust core when a separately chosen in-database extension requires C/Rust. It does not select such an extension, require every native guard to be Rust, or adopt the cumulative-account proposal. ADR-002's accepted storage direction likewise supplies no complete native-account implementation. Reading these accepted decisions therefore does not resolve the current resource scope. Owner clarification has been requested; neither the broader native-account branch nor a narrower scope is inferred.
+
 Before choosing a native extension or driver account implementation, record: original epoch/incarnation producer, account creation/charge/cleanup signatures, complete participating path inventory, transaction-mode pooler handoff procedure, prepared/unprepared behavior, original failure/recovery custody, finite capacity/work rules and deployment continuity. The owner permits an extension only when it ships with the selected RDS PostgreSQL, Aurora PostgreSQL and Lakebase profiles. No common extension/version evidence is currently supplied by this source audit.
 
 This document does not claim the native proposal is impossible or select a substitute. It identifies the missing compatibility proof. Numerical candidate limits and a host ledger cannot by themselves establish unavoidable native accounting. Likewise, the PRD does not currently name every rollback-resistant cumulative native counter as a separate numbered requirement; each claimed guarantee needs explicit governing traceability and its chosen enforcement classification.

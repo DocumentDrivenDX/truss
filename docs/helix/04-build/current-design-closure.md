@@ -37,6 +37,8 @@ Current source checkpoint: layout 0.9, 97 statements, 41 tables, 395 columns and
 
 ## Owner and shared-owner decisions
 
+Resource scope clarification is also pending: bounded toolkit/protected-procedure work with separate enforcement classification versus rollback-resistant cumulative accounting for all native work including bypass. Source audit of accepted ADR-001/002 finds no unconditional native-account selection; ADR-001's Rust-extension trigger is conditional. Do not use it to require a custom deployment module or silently narrow the current draft guarantees. Continue independent source/API/packaging design while the question remains unanswered.
+
 Native resource composition also needs [FR-43 reconciliation](../02-design/contracts/resource-account-requirement-reconciliation.md): backend-local accounting cannot silently introduce session affinity or narrow the required transaction-mode pooler behavior. Exact epoch/handoff/cleanup and prepared/unprepared evidence are missing. This gate precedes extension/profile adoption.
 
 Pending owner interpretation: whether FR-15 permanently reserves IDs disclosed before graph commit. The conditional allocation service specifies the stronger branch; no answer is inferred. ADR-005/006/007 remain proposed where their product/profile choices are required. Existing selected reactivation and property-delta/witness behavior must not be reclassified as unanswered.
