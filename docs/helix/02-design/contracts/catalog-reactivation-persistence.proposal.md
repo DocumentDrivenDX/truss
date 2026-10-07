@@ -10,6 +10,8 @@ Validate current authorization, complete retained values, original codecs, requi
 
 ## Atomic effect order
 
+The [report 0.3 candidate](acceptance-report-v0.3.proposal.schema.json) composes the earlier reactivation inventory and complete-history rebind shapes under a distinct discriminator. It remains conditional on selecting those report/history profiles; choosing reactivation alone does not adopt ADR-007. Earlier report schemas remain separately versioned. Original bytes, complete actual-effect inventory and native semantic validation remain mandatory.
+
 After original candidate admission and full reservations, insert the new revision origin/archive before dependent catalog/history rows. Apply exact permitted lifecycle changes and independently record original before/after definitions and retirement state. For type/property/relationship categories, preserve the admitted schema_change category/identity correspondence. Keys require the separate owner-local `(type_id,key_num)` lifecycle chain, not a global def_id surrogate.
 
 The existing [key history SQL](key-lifecycle-history-v0.1.proposal.sql) and [UMF source](key-lifecycle-history-v0.1.proposal.umf.json) allocate that key chain. They remain outside historical profile 0.8 and are now composed into review profile 0.9; native producers and installation qualification remain required. Preserve positive actual revision and original sequence order, exact complete before/after bytes, creation basis and contiguous admitted history. Shape constraints alone cannot establish chain completeness. No-change repeat adds no history or new head.
