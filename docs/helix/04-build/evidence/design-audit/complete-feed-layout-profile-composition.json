@@ -1,0 +1,66 @@
+{
+  "serialization": "compact ECMAScript JSON; owner readDocument limits/validation unchanged",
+  "scope": "Complete ordered 0.5 source profile plus four complete-feed stores and consumer registration/checkpoint home; no native admission, initialization, privileges, migration, ready marker or compiler binding adoption",
+  "inputs": [
+    {
+      "path": "docs/helix/02-design/models/truss-layout-weft-review-0.5.proposal.umf.yaml",
+      "sha256": "d37dc816f202d1a7d41bae65d4d688139bc958a31290a077e69467edce49a245"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/feed-native-layout-v0.1.proposal.umf.json",
+      "sha256": "f59fa94c5eb1580835df22058959f45457709cd4980a6d68e47c1748d1a79b3c"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/complete-feed-consumer-v0.1.proposal.umf.json",
+      "sha256": "20b06cd3ff80ee9f5d01c3233c20ee0b79e7203f3b556177a371778b754ebfd6"
+    }
+  ],
+  "modelPath": "docs/helix/02-design/models/truss-layout-weft-review-0.6.proposal.umf.json",
+  "modelSha256": "ae4c2e4af74dab196fc79cfaaeba970fdabc60f5d3267539d912686d3bf9bc59",
+  "sqlPath": "docs/helix/02-design/models/truss-layout-weft-review-0.6.proposal.sql",
+  "sqlSha256": "3b476db03f76eb79eaa63fa6f16a6f5ecd7b7e7d56feb33fd6f0542c63bbe7cd",
+  "astPath": "docs/helix/04-build/evidence/design-audit/complete-feed-layout-profile.native-ast.json",
+  "astSha256": "2f307313cb7a1f9708bc7718cc3ccb5c0c434080a78d1351edbfc11d61c43c87",
+  "statements": 85,
+  "tables": [
+    "setting",
+    "module_access",
+    "schema_rev",
+    "schema_head",
+    "schema_doc",
+    "schema_change",
+    "type_def",
+    "prop_def",
+    "key_def",
+    "rel_def",
+    "rel_endpoint",
+    "object",
+    "edge",
+    "edge_limit",
+    "key_tombstone",
+    "record_source",
+    "feed_consumer",
+    "journal",
+    "row_home_operation",
+    "row_home_journal_stage",
+    "row_home_state",
+    "row_home_node",
+    "row_home_scalar",
+    "relationship_lineage",
+    "row_home_touch",
+    "row_home_capacity",
+    "key_bucket_guard",
+    "object_key_bucket",
+    "object_key_reservation_bucket",
+    "catalog_acceptance_report",
+    "installation_marker",
+    "installation_archive",
+    "feed_tx",
+    "feed_member",
+    "feed_prerequisite",
+    "feed_configuration_prerequisite",
+    "complete_feed_consumer"
+  ],
+  "reloadedExportExact": true,
+  "installationReady": false
+}

@@ -37,6 +37,9 @@ Defines what any publisher of truss's changes to a downstream copy (a warehouse,
 
 ## Normative Surface
 
+**Selected storage distinction (2026-10-07):** CONTRACT-012's 0.6 review profile integrates all four feed fact/prerequisite stores and the [complete consumer home](complete-feed-consumer-v0.1.proposal.sql). The baseline feed_consumer row below remains journal-only. Complete manifest/seed/coverage boundaries cannot be projected to (xid,seq). Native registration/fencing/full prior-boundary CAS, seed activation/administrative receipt persistence, guard bodies, roles and full conversion remain separate required outputs.
+
+
 **Records.** A feed carries these record kinds, each defined by tables of CONTRACT-001.
 
 | Kind | Source | Content |

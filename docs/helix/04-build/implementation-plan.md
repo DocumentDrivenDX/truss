@@ -71,7 +71,7 @@ Current source inventory is verified across thirty-three separate receipts by `p
 
 ## Storage profile priority for the Weft handoff
 
-The owner prioritized a complete on-disk layout. Use CONTRACT-012's integrated 0.5 review model/SQL and 32-table/282-column source-effect inventory as the current composition starting point; baseline 0.2 remains separately versioned. Do not make Weft derive the physical profile by combining chronological proposals.
+The owner prioritized a complete on-disk layout. Use CONTRACT-012's integrated 0.6 review model/SQL and 37-table/350-column source-effect inventory as the current composition starting point; baseline 0.2 remains separately versioned. Do not make Weft derive the physical profile by combining chronological proposals.
 
 | Step | Truss-owned output | Completion evidence |
 | --- | --- | --- |
@@ -1934,3 +1934,17 @@ B-005/011/013 may consume the unadopted PostgreSQL 17 original-xid settlement SE
 
 
 Owner selections on 2026-10-07: B-006 uses validated same-identity reactivation; B-007/011 use two property deltas plus a complete metadata witness. Native hosting may require an extension only when it ships with RDS PostgreSQL, Aurora PostgreSQL and Lakebase for the selected provider/version profiles. Unverified/custom extensions cannot qualify the required native account/enforcement design; exact managed-service deployment and guarantee evidence remain to be supplied.
+
+## Custom trigger-body implementation slice
+
+The source inventory `native-trigger-body-gaps.json` independently identifies thirteen original trigger references and five custom bodies absent from the selected 0.6 model. This is a concrete B-005/B-007/B-011/B-013 native implementation slice, not a new compiler or UMF parser.
+
+| Native interface | Required original processing | Verification boundary |
+| --- | --- | --- |
+| row_touch_observe() RETURNS trigger | Capture actual producing transaction/qualified OLD and NEW owner/property attribution across state/node/scalar events; resolve deleted-child ownership through original protected prestate custody; advance dirty generation/capacity and invalidate dependent seals | No caller-selected xid/owner; no missing cascaded OLD state; actual insert/update/delete and savepoint rollback coverage |
+| row_touch_commit_check() RETURNS trigger | Dispatch complete original operation/participant obligations, compare full dirty/sealed generations, current node/payload/edge-limit/journal/group/report parity and actual retained/reserved capacity before commit | Early forced checks followed by later writes invalidate prior finalization; unfinished/forged operation or orphan participant prevents commit |
+| edge_limit_observe() RETURNS trigger | Attribute both original OLD/NEW typed edge or marker tuples, retain prestate/current affected relationship endpoints and original operation generation | Source/target/key/relationship changes and cascades cannot hide stale or missing cardinality markers |
+| edge_limit_catalog_observe() RETURNS trigger | Enumerate complete affected retained/current relationships under original catalog exclusion and mark all governing participants for revalidation | Catalog cardinality/endpoint change cannot leave old constraints treated as validated |
+| feed_current_union_check() RETURNS trigger | Execute CONTRACT-006 FV01–FV07 on the complete actual four-store/upstream fact/prerequisite union; retain original transaction identity/clock/profile/owner bytes and current generation | Missing/extra/reordered fact, stale manifest or omitted revision/source/reservation producer prevents a complete-feed commit |
+
+These are zero-argument trigger interfaces. The native event/OLD/NEW context is captured by PostgreSQL, not supplied by callers. Unexpected event/relation/arguments or unavailable original custody refuses through the original transaction protocol. Each definition needs an exact inventory-bound name/body/owner/security/search-path/privilege/dependency profile and finite original resource admission before its thirteen trigger declarations enter a full installer. Supporting readers/finalizers/administration remain separately inventoried; these five bodies do not claim exhaustive native program coverage. Source checks cannot mark the native tests passed.

@@ -2,10 +2,11 @@
 import json,hashlib,sys
 from pathlib import Path
 R=Path(__file__).resolve().parents[5]
+feed_profile='--complete-feed' in sys.argv
 metadata_profile='--installation-metadata' in sys.argv
 key_profile='--key-profile' in sys.argv
-version='0.5' if metadata_profile else '0.4' if key_profile else '0.3'
-receipt_name='installation-metadata-profile-composition.json' if metadata_profile else 'weft-key-profile-composition.json' if key_profile else 'weft-review-layout-composition.json'
+version='0.6' if feed_profile else '0.5' if metadata_profile else '0.4' if key_profile else '0.3'
+receipt_name='complete-feed-layout-profile-composition.json' if feed_profile else 'installation-metadata-profile-composition.json' if metadata_profile else 'weft-key-profile-composition.json' if key_profile else 'weft-review-layout-composition.json'
 receipt=json.loads((R/'docs/helix/04-build/evidence/design-audit'/receipt_name).read_text())
 b=(R/receipt['astPath']).read_bytes()
 if hashlib.sha256(b).hexdigest()!=receipt['astSha256']:raise ValueError('stale AST')
@@ -44,8 +45,11 @@ base=R/'docs/helix/02-design/contracts';(base/f'weft-review-columns-v{version}.p
 lines=[f'# Selected review layout columns ({version} proposal)','','Companion to [CONTRACT-012](CONTRACT-012-weft-storage-handoff.md).',f'This is the selected {len(a)}-statement review composition, including explicit ADD COLUMN and column-type changes.','Baseline 0.2 remains a separate profile. Native installation and compiler binding adoption remain unqualified.','Nullability reports explicit NOT NULL/PRIMARY KEY effects only; CHECK expressions and protected guards may reject NULL independently.',
 f'The [source-effect inventory](weft-review-columns-v{version}.proposal.json) pins the complete native AST and original definition pointers.','','| Table | Columns |','| --- | --- |']
 for name,t in tables.items():lines.append(f'| `{name}` | {len(t["columns"])} |')
+feed_lines=[f'# Complete-feed columns ({version} proposal)','',f'Companion to [full column index](weft-review-columns-v{version}.proposal.md).','']
+if feed_profile:lines.extend(['',f'Complete-feed table column definitions are in the [feed chapter](weft-review-columns-v{version}.feed.proposal.md).'])
 for name,t in tables.items():
- lines.extend(['',f'## {name}','','| Column | Declared native type | SQL NULL allowed by declaration |','| --- | --- | --- |'])
+ target=feed_lines if feed_profile and (name.startswith('feed_') and name!='feed_consumer' or name=='complete_feed_consumer') else lines
+ target.extend(['',f'## {name}','','| Column | Declared native type | SQL NULL allowed by declaration |','| --- | --- | --- |'])
  pk={k['String']['sval'] for c in t['constraints'] if c['definition']['contype']=='CONSTR_PRIMARY' for k in c['definition']['keys']}
  for c in t['columns']:
   typ='.'.join(n['String']['sval'] for n in c['declaredType']['names'])
@@ -53,7 +57,8 @@ for name,t in tables.items():
   if c['declaredType'].get('typmods'):typ+=' (see original modifiers)'
   cons=[x['Constraint'] for x in c['constraints']]
   nn=c['name'] in pk or any(x['contype'] in ('CONSTR_PRIMARY','CONSTR_NOTNULL') for x in cons)
-  lines.append(f'| `{c["name"]}` | `{typ}` | {"no" if nn else "yes"} |')
+  target.append(f'| `{c["name"]}` | `{typ}` | {"no" if nn else "yes"} |')
+if feed_profile:(base/f'weft-review-columns-v{version}.feed.proposal.md').write_text('\n'.join(feed_lines)+'\n')
 if len(lines)>=500:raise ValueError('reference exceeds single-edit size')
 (base/f'weft-review-columns-v{version}.proposal.md').write_text('\n'.join(lines)+'\n')
 print(json.dumps({'tables':len(tables),'columns':sum(len(t['columns']) for t in tables.values()),'explicitIndexes':len(indexes),'markdownLines':len(lines),'nativeQualified':False}))
