@@ -15,6 +15,8 @@ ddx:
 
 # Remaining semantic decision queue
 
+Use [current design closure](current-design-closure.md) for the consolidated eleven-area status, pending choices and implementation-ready boundaries. Chronological evidence below retains its original version scope.
+
 ## Immediate priority: one complete physical profile for Weft
 
 The owner prioritized the on-disk layout on 2026-10-07. [CONTRACT-012](../02-design/contracts/CONTRACT-012-weft-storage-handoff.md) is the current compiler handoff, with an exact source manifest and a complete 22-table/168-column source dictionary. The current selected integrated 0.9 review model/DDL and 41-table/395-column source-effect inventory supplies document-qualified owner homes, row stores, source/history custody, full-byte key/reservation buckets, separate immutable acceptance reports and high-water observers. Finish the remaining complete-installation composition and its actual exporter binding before unrelated resource-account refinements. Source completeness for these selected tables does not close document-qualified ownership, candidate adoption or installed layout parity. The remaining work is explicitly sequenced in CONTRACT-012.

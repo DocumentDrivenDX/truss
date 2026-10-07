@@ -24,6 +24,7 @@ interface dependencies and unresolved gates.
 | 02 Design | ADR-001 and ADR-002 accepted; ADR-003–007 proposed; CONTRACT-001–011 draft | [SPIKE-001](02-design/spikes/SPIKE-001-apache-age.md) (Apache AGE), [SPIKE-002](02-design/spikes/SPIKE-002-storage-bake-off.md) (storage bake-off), [storage layout review](02-design/storage-layout-review.md), [ADR-002](02-design/adr/ADR-002-storage-strategy.md) (storage, accepted 2026-10-03, some points provisional), [ADR-001](02-design/adr/ADR-001-language-and-portable-core.md) (TypeScript first, portable core, Rust triggers; accepted 2026-10-03, Node support provisional) |
 | 03 Test | Draft strategy; all 45 story plans allocated | [TP-001](03-test/test-plan.md), [story coverage](04-build/design-coverage.md) |
 | 04 Build | Draft sequencing; implementation not started | [Implementation plan](04-build/implementation-plan.md), [coordination](04-build/design-coordination.md) |
+| Current closure | Design selections and adoption remain open | [Consolidated design closure](04-build/current-design-closure.md) |
 | 05 Deploy | Not started | — |
 | 06 Iterate | Not started | — |
 
