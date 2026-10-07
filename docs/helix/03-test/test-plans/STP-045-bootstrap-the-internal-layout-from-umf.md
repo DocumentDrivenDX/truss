@@ -17,6 +17,21 @@ ddx:
 
 # STP-045: Bootstrap the internal layout from UMF
 
+## Migration admission initialization (planned native schedules)
+
+Exercise the [original initializer](../../02-design/contracts/migration-admission-initialize-v0.1.proposal.sql) within the complete selected installation, separately from source capture. These cases are not_run and supplement IM-T01–08.
+
+| Case | Independent setup/fault | Required observation |
+| --- | --- | --- |
+| MI-01 original bootstrap | Independently author installation/epoch/configuration/binding/inventory bytes and selected starting generation; capture native row and public installation outcome | Exact eight parameters, one insertion and five returned fields correspond; reread full original bytes/scalars/generated digests; ready marker appears only after final complete parity |
+| MI-02 existing admission | Repeat equal initialization and separately substitute epoch/configuration/binding while preserving marker display identity | Neither invocation upserts or overwrites. Existing-installation observation decides compatibility against originals; unequal artifacts refuse without effects |
+| MI-03 scalar/artifact mismatch | Keep valid artifact hashes but alter decoded key_reuse/journal_mode, generation, installed binding or marker UTF-8 identity | Original semantic/native parity refuses before ready publication; equal digests or selected table counts cannot hide mismatched meaning |
+| MI-04 completion corruption | Inject zero/extra rows, wrong result descriptors, SQL NULL, malformed hex, changed generation or confirmed command with invalid response | No admitted initialization success. Preserve original transaction containment/recovery; do not retry INSERT or synthesize missing evidence |
+| MI-05 rollback boundaries | Fail before insertion, after insertion, during original-byte reread and after provisional marker but before commit | Independently observe complete rollback to original sentinel/namespace/admission/marker state after confirmed termination; pending visibility is never committed readiness |
+| MI-06 uncertain commit | Lose acknowledgment after original submission, then independently observe committed/rolled-back/active/unavailable/foreign attempt | Recover the original installation identity and artifacts only. No new epoch, generation, replacement INSERT or inference from absence |
+
+Use an independent artifact encoder/expected-state fixture and native observer; expected bytes must not be regenerated from the production initializer. Record exact deployment/driver/UMF/layout/security/resource pins and all unavailable preparation as unverified. A successful five-field decoder alone cannot qualify MI-01's complete installed inventory or any ready marker.
+
 ## Story Reference
 
 US-045, TD-045, SD-007, CONTRACT-008. The project test plan will aggregate this allocation. Planned test files below are not yet implemented; the native capture experiment is prerequisite evidence only.
