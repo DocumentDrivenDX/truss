@@ -38,6 +38,10 @@ The full intended layout is **not complete**. Baseline 0.2 has concrete DDL; typ
 
 ## Normative Surface
 
+### Concrete binding review packet
+
+A [source-backed binding packet](../../04-build/evidence/weft-source-binding/README.md) now supplies an actual envelope, original valid UMF Record/Field model, complete selected declared physical map, layout SQL and original home/value/codec/presence/read-context definitions. Six strict schema checks and independent artifact/profile/source/selector closure checks pass. Its 206,405-byte binding and 200,916-byte recursively decoded occurrence closure fit the inspected Weft four-MiB limits. This is a synthetic unregistered one-string-field fixture, not an accepted catalog, admitted native inventory or production exporter/adapter. The remaining review/registration evidence and planned fixture expansion are explicit in the packet.
+
 ### Current selected store profile: 0.4 proposal
 
 The [0.4 UMF model](../models/truss-layout-weft-review-0.4.proposal.umf.yaml), [generated SQL](../models/truss-layout-weft-review-0.4.proposal.sql), [column reference](weft-review-columns-v0.4.proposal.md) and [source-effect inventory](weft-review-columns-v0.4.proposal.json) supersede 0.3 as the current integrated review selection. They contain 74 statements, 30 tables, 264 declared columns after selected ALTER effects and 15 explicit indexes. All earlier profiles remain historical/baseline references, not compatible aliases.

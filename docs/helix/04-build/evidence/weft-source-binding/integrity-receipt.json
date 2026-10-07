@@ -1,0 +1,9 @@
+{
+  "scope": "Exact original source/profile/artifact closure and complete declared column-map correspondence only; no compiler execution, native catalog or registry admission",
+  "bindingSha256": "67bedeac34fe4c002140373bf44939b048887f1cd73687849bdf9d7e8912d0a6",
+  "bindingBytes": 206405,
+  "recursiveArtifactOccurrences": 23,
+  "decodedOccurrenceBytes": 200916,
+  "declaredColumns": 264,
+  "nativeQualified": false
+}
