@@ -1965,3 +1965,6 @@ Current installer dependency handoff: the [gap matrix](../02-design/contracts/we
 
 
 OC01/OC02 source composition checkpoint: profile 0.8 includes the previously separate partial unique unfinished-operation index. B-003/B-005/B-013 must independently qualify second-unfinished rejection, genuine finalization admitting the next ordinal, savepoint rollback restoring membership, zero-unfinished observer refusal and finalized-record commit collection. Source uniqueness does not replace original transaction/issuer/custody admission.
+
+
+B-002/B-003/B-006 must compose the separate key_lifecycle_history home before key reactivation and implement [selected lifecycle persistence](../02-design/contracts/catalog-reactivation-persistence.proposal.md). CP-01–06 qualify original identity retention, full invariant rebuilding, owner-local history, actual-effect report ordering and rollback/repeat recovery. Profile 0.8 currently lacks this required key-history home; its table inventory is not full lifecycle closure.

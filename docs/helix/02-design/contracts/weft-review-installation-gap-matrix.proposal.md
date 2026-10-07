@@ -26,3 +26,6 @@ The administrative helper must resolve exact document/module and native role ide
 4. Submit the exact versioned storage/binding scope for Weft review when authorized. Accepted compiler mapping, installed layout and support qualification are independent evidence.
 
 Native routine implementation and execution are future build work. Remaining unspecified codec, operation registry, driver observation and security/deployment selections are design gaps. This matrix neither adopts ADR-005/006/007 nor turns optional compiler capabilities into required upstream changes.
+
+
+Reactivation audit: key_lifecycle_history is an existing separately captured source home absent from profile 0.8. [Selected persistence](catalog-reactivation-persistence.proposal.md) requires its composition plus owner-local transition producers and explicit reactivation report inventory before claiming key lifecycle support.
