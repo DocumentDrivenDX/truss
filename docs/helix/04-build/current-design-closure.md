@@ -37,6 +37,8 @@ Current source checkpoint: layout 0.9, 97 statements, 41 tables, 395 columns and
 
 ## Owner and shared-owner decisions
 
+Native resource composition also needs [FR-43 reconciliation](../02-design/contracts/resource-account-requirement-reconciliation.md): backend-local accounting cannot silently introduce session affinity or narrow the required transaction-mode pooler behavior. Exact epoch/handoff/cleanup and prepared/unprepared evidence are missing. This gate precedes extension/profile adoption.
+
 Pending owner interpretation: whether FR-15 permanently reserves IDs disclosed before graph commit. The conditional allocation service specifies the stronger branch; no answer is inferred. ADR-005/006/007 remain proposed where their product/profile choices are required. Existing selected reactivation and property-delta/witness behavior must not be reclassified as unanswered.
 
 UMF is sufficient for the current scope. Select/pin its existing source/APIs and preserve unknown semantics; no generic new UMF capability request blocks Truss. Weft's candidate SUM/named equality progress is compiler-owned. Exact Truss binding review/adoption remains separate from local source checks; current packet versions do not imply current-layout compatibility. Cross-chat delivery authorization is still pending and does not block independent Truss design work.
