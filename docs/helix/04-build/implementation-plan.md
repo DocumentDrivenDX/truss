@@ -1937,6 +1937,8 @@ Owner selections on 2026-10-07: B-006 uses validated same-identity reactivation;
 
 ## Custom trigger-body implementation slice
 
+Allocation durability remains an owner interpretation of FR-15. If permanent precommit ID reservation is selected, B-005/B-008/B-014 consume the [conditional durable allocation service](../02-design/contracts/durable-allocation-service.proposal.md), add its receipt home/protected producer inventory and qualify DA-01–07 before exposing IDs. Otherwise reconcile provisional pending-ID meaning in governing artifacts before ordinary sequence adoption. Neither path is currently selected; no default hidden host connection is authorized.
+
 B-003/B-013 consume the [qualified grant helper design](../02-design/contracts/qualified-grant-helper.proposal.md). Implement the three-argument administrative entrypoint against original installation-bound callable identities, with captured actor, exclusive policy generation, independently compared native delta and rollback/unknown-commit handling. Qualify QG-01–06; module writes must not grant worker/admin or raw canonical DML authority. The historical two-argument helper remains excluded.
 
 B-011/B-013 must also compose the three homes in [feed recovery storage allocation](../02-design/contracts/feed-recovery-storage-allocation.proposal.md): administrative receipts, seed attempts and immutable seed artifacts. Deliver exact UMF/DDL/column identities, protected producers/readers and retention conversion. Receipt arbitration precedes stale-generation validation; source confirmation remains separate from downstream activation. These are required before claiming the storage profile complete.
