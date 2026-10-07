@@ -71,7 +71,7 @@ Current source inventory is verified across thirty-three separate receipts by `p
 
 ## Storage profile priority for the Weft handoff
 
-The owner prioritized a complete on-disk layout. Use CONTRACT-012's integrated 0.4 review model/SQL and 30-table/264-column source-effect inventory as the current composition starting point; baseline 0.2 remains separately versioned. Do not make Weft derive the physical profile by combining chronological proposals.
+The owner prioritized a complete on-disk layout. Use CONTRACT-012's integrated 0.5 review model/SQL and 32-table/282-column source-effect inventory as the current composition starting point; baseline 0.2 remains separately versioned. Do not make Weft derive the physical profile by combining chronological proposals.
 
 | Step | Truss-owned output | Completion evidence |
 | --- | --- | --- |

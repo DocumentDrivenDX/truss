@@ -42,7 +42,15 @@ The full intended layout is **not complete**. Baseline 0.2 has concrete DDL; typ
 
 A [source-backed binding packet](../../04-build/evidence/weft-source-binding/README.md) now supplies an actual envelope, original valid UMF Record/Field model, complete selected declared physical map, layout SQL and original home/value/codec/presence/read-context definitions. Six strict schema checks and independent artifact/profile/source/selector closure checks pass. Its 206,405-byte binding and 200,916-byte recursively decoded occurrence closure fit the inspected Weft four-MiB limits. This is a synthetic unregistered one-string-field fixture, not an accepted catalog, admitted native inventory or production exporter/adapter. The remaining review/registration evidence and planned fixture expansion are explicit in the packet.
 
-### Current selected store profile: 0.4 proposal
+### Current integrated review profile: 0.5 proposal
+
+The [0.5 UMF model](../models/truss-layout-weft-review-0.5.proposal.umf.yaml), [SQL](../models/truss-layout-weft-review-0.5.proposal.sql), [column reference](weft-review-columns-v0.5.proposal.md) and [source inventory](weft-review-columns-v0.5.proposal.json) add installation marker/archive homes to the unchanged 0.4 selection: 78 statements, 32 tables, 282 declared columns and 16 explicit indexes. These metadata homes are separate from logical application records. CONTRACT-008 now defines IM01–IM07 fresh initialization/archive/marker/commit order and avoids self-embedding inventory digests.
+
+Reproduce with `bun docs/helix/04-build/evidence/design-audit/check-installation-metadata-source.ts`, then `bun docs/helix/04-build/evidence/design-audit/compose-installation-metadata-profile.ts`; verify with `python3 docs/helix/04-build/evidence/design-audit/check-installation-metadata-profile.py`; regenerate columns with `python3 docs/helix/04-build/evidence/design-audit/collect-weft-review-columns.py --installation-metadata`. Source capture, saved-model export and independent ordered AST correspondence pass; no metadata rows were inserted and no native installation is qualified.
+
+The source binding review packet remains explicitly pinned to 0.4; no compatibility/adoption is inferred for 0.5. Compiler-facing graph/value column declarations are unchanged, but selected complete layout/profile/SQL hashes differ and must be supplied together in any later admitted binding. Full native guard/grant/trigger/policy/dependency and initialization/migration qualification remain unfinished.
+
+### Prior selected store profile: 0.4 proposal
 
 The [0.4 UMF model](../models/truss-layout-weft-review-0.4.proposal.umf.yaml), [generated SQL](../models/truss-layout-weft-review-0.4.proposal.sql), [column reference](weft-review-columns-v0.4.proposal.md) and [source-effect inventory](weft-review-columns-v0.4.proposal.json) supersede 0.3 as the current integrated review selection. They contain 74 statements, 30 tables, 264 declared columns after selected ALTER effects and 15 explicit indexes. All earlier profiles remain historical/baseline references, not compatible aliases.
 

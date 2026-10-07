@@ -2,9 +2,10 @@
 import json,hashlib,sys
 from pathlib import Path
 R=Path(__file__).resolve().parents[5]
+metadata_profile='--installation-metadata' in sys.argv
 key_profile='--key-profile' in sys.argv
-version='0.4' if key_profile else '0.3'
-receipt_name='weft-key-profile-composition.json' if key_profile else 'weft-review-layout-composition.json'
+version='0.5' if metadata_profile else '0.4' if key_profile else '0.3'
+receipt_name='installation-metadata-profile-composition.json' if metadata_profile else 'weft-key-profile-composition.json' if key_profile else 'weft-review-layout-composition.json'
 receipt=json.loads((R/'docs/helix/04-build/evidence/design-audit'/receipt_name).read_text())
 b=(R/receipt['astPath']).read_bytes()
 if hashlib.sha256(b).hexdigest()!=receipt['astSha256']:raise ValueError('stale AST')
