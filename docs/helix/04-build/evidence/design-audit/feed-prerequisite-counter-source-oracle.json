@@ -1,0 +1,81 @@
+{
+  "scope": "Two exact prerequisite reservation masks, complete predicates and twelve-column source projections; no prerequisite insert or native enforcement proof",
+  "sourcePins": [
+    {
+      "path": "docs/helix/02-design/contracts/feed-prerequisite-counter-reservation-v0.1.proposal.sql",
+      "sourceSha256": "dae195bd00b17b31636a91fbb2caaaf955610a259ac9eef54e69d129a44354e3",
+      "artifactPath": "docs/helix/02-design/contracts/feed-prerequisite-counter-reservation-v0.1.proposal.umf.json",
+      "artifactSha256": "b52a4a161e61e9c328fee046a46f83b8697a4c57bec7f419e12c11bbf4942702",
+      "exportPath": "docs/helix/04-build/evidence/design-audit/feed-prerequisite-counter-reservation.owner-export.sql",
+      "exportSha256": "f6be6bf44f160d051fc7e9d16575c26684aea35ec741e40189af335d2a1b9200",
+      "sourceArchiveExact": true,
+      "reloadedExportExact": true,
+      "complete": false,
+      "declarationCount": 0,
+      "unhandled": [
+        {
+          "path": "/stmts/0/stmt"
+        },
+        {
+          "path": "/stmts/1/stmt"
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning",
+          "message": "Raw syntax is not catalog resolution, SQL execution, permissions or server-state validation"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt",
+          "severity": "warning",
+          "message": "Statement is retained without declaration extraction or execution"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/1/stmt",
+          "severity": "warning",
+          "message": "Statement is retained without declaration extraction or execution"
+        }
+      ]
+    }
+  ],
+  "controls": [
+    {
+      "case": "wrong family target",
+      "refused": true
+    },
+    {
+      "case": "semantic member address mutation",
+      "refused": true
+    },
+    {
+      "case": "omitted generation mutation",
+      "refused": true
+    },
+    {
+      "case": "missing original profile predicate",
+      "refused": true
+    },
+    {
+      "case": "omitted overflow bound",
+      "refused": true
+    },
+    {
+      "case": "reordered families",
+      "refused": true
+    },
+    {
+      "case": "changed returning mask",
+      "refused": true
+    },
+    {
+      "case": "hidden update FROM",
+      "refused": true
+    }
+  ],
+  "nativeExecution": false,
+  "complete": false
+}

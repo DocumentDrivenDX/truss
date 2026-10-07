@@ -1,0 +1,552 @@
+{
+  "profile": "truss-edge-limit-correspondence/0.1.0",
+  "status": "independent design cases; no native or production guard qualification",
+  "scope": "maximum-one marker derivation/equality only; larger bounds, minima, type/ownership, source profiles and native availability require separate admission",
+  "vectors": [
+    {
+      "name": "incoming-one/outgoing-two complete",
+      "definitions": [
+        {
+          "relationshipId": "1",
+          "sourceMax": "1",
+          "targetMax": "2"
+        }
+      ],
+      "edges": [
+        {
+          "id": "10",
+          "relationshipId": "1",
+          "sourceId": "100",
+          "targetId": "200"
+        },
+        {
+          "id": "11",
+          "relationshipId": "1",
+          "sourceId": "100",
+          "targetId": "201"
+        }
+      ],
+      "actualMarkers": [
+        {
+          "relationshipId": "1",
+          "side": "t",
+          "endpointId": "200",
+          "edgeId": "10"
+        },
+        {
+          "relationshipId": "1",
+          "side": "t",
+          "endpointId": "201",
+          "edgeId": "11"
+        }
+      ],
+      "expectedRequiredMarkers": [
+        {
+          "relationshipId": "1",
+          "side": "t",
+          "endpointId": "200",
+          "edgeId": "10"
+        },
+        {
+          "relationshipId": "1",
+          "side": "t",
+          "endpointId": "201",
+          "edgeId": "11"
+        }
+      ],
+      "expectedOutcome": "correspondence"
+    },
+    {
+      "name": "missing required marker",
+      "definitions": [
+        {
+          "relationshipId": "1",
+          "sourceMax": "1",
+          "targetMax": "2"
+        }
+      ],
+      "edges": [
+        {
+          "id": "10",
+          "relationshipId": "1",
+          "sourceId": "100",
+          "targetId": "200"
+        },
+        {
+          "id": "11",
+          "relationshipId": "1",
+          "sourceId": "100",
+          "targetId": "201"
+        }
+      ],
+      "actualMarkers": [
+        {
+          "relationshipId": "1",
+          "side": "t",
+          "endpointId": "200",
+          "edgeId": "10"
+        }
+      ],
+      "expectedRequiredMarkers": [
+        {
+          "relationshipId": "1",
+          "side": "t",
+          "endpointId": "200",
+          "edgeId": "10"
+        },
+        {
+          "relationshipId": "1",
+          "side": "t",
+          "endpointId": "201",
+          "edgeId": "11"
+        }
+      ],
+      "expectedOutcome": "marker_mismatch"
+    },
+    {
+      "name": "wrong side",
+      "definitions": [
+        {
+          "relationshipId": "1",
+          "sourceMax": "1",
+          "targetMax": "2"
+        }
+      ],
+      "edges": [
+        {
+          "id": "10",
+          "relationshipId": "1",
+          "sourceId": "100",
+          "targetId": "200"
+        },
+        {
+          "id": "11",
+          "relationshipId": "1",
+          "sourceId": "100",
+          "targetId": "201"
+        }
+      ],
+      "actualMarkers": [
+        {
+          "relationshipId": "1",
+          "side": "s",
+          "endpointId": "200",
+          "edgeId": "10"
+        },
+        {
+          "relationshipId": "1",
+          "side": "t",
+          "endpointId": "201",
+          "edgeId": "11"
+        }
+      ],
+      "expectedRequiredMarkers": [
+        {
+          "relationshipId": "1",
+          "side": "t",
+          "endpointId": "200",
+          "edgeId": "10"
+        },
+        {
+          "relationshipId": "1",
+          "side": "t",
+          "endpointId": "201",
+          "edgeId": "11"
+        }
+      ],
+      "expectedOutcome": "marker_mismatch"
+    },
+    {
+      "name": "wrong relationship still in collector scope",
+      "definitions": [
+        {
+          "relationshipId": "1",
+          "sourceMax": "1",
+          "targetMax": "2"
+        }
+      ],
+      "edges": [
+        {
+          "id": "10",
+          "relationshipId": "1",
+          "sourceId": "100",
+          "targetId": "200"
+        },
+        {
+          "id": "11",
+          "relationshipId": "1",
+          "sourceId": "100",
+          "targetId": "201"
+        }
+      ],
+      "actualMarkers": [
+        {
+          "relationshipId": "99",
+          "side": "t",
+          "endpointId": "200",
+          "edgeId": "10"
+        },
+        {
+          "relationshipId": "1",
+          "side": "t",
+          "endpointId": "201",
+          "edgeId": "11"
+        }
+      ],
+      "expectedRequiredMarkers": [
+        {
+          "relationshipId": "1",
+          "side": "t",
+          "endpointId": "200",
+          "edgeId": "10"
+        },
+        {
+          "relationshipId": "1",
+          "side": "t",
+          "endpointId": "201",
+          "edgeId": "11"
+        }
+      ],
+      "expectedOutcome": "marker_mismatch"
+    },
+    {
+      "name": "wrong edge within named relationship scope",
+      "definitions": [
+        {
+          "relationshipId": "1",
+          "sourceMax": "1",
+          "targetMax": "2"
+        }
+      ],
+      "edges": [
+        {
+          "id": "10",
+          "relationshipId": "1",
+          "sourceId": "100",
+          "targetId": "200"
+        },
+        {
+          "id": "11",
+          "relationshipId": "1",
+          "sourceId": "100",
+          "targetId": "201"
+        }
+      ],
+      "actualMarkers": [
+        {
+          "relationshipId": "1",
+          "side": "t",
+          "endpointId": "200",
+          "edgeId": "99"
+        },
+        {
+          "relationshipId": "1",
+          "side": "t",
+          "endpointId": "201",
+          "edgeId": "11"
+        }
+      ],
+      "expectedRequiredMarkers": [
+        {
+          "relationshipId": "1",
+          "side": "t",
+          "endpointId": "200",
+          "edgeId": "10"
+        },
+        {
+          "relationshipId": "1",
+          "side": "t",
+          "endpointId": "201",
+          "edgeId": "11"
+        }
+      ],
+      "expectedOutcome": "marker_mismatch"
+    },
+    {
+      "name": "two sources for incoming-one target",
+      "definitions": [
+        {
+          "relationshipId": "1",
+          "sourceMax": "1",
+          "targetMax": "2"
+        }
+      ],
+      "edges": [
+        {
+          "id": "10",
+          "relationshipId": "1",
+          "sourceId": "100",
+          "targetId": "200"
+        },
+        {
+          "id": "11",
+          "relationshipId": "1",
+          "sourceId": "101",
+          "targetId": "200"
+        }
+      ],
+      "actualMarkers": [
+        {
+          "relationshipId": "1",
+          "side": "t",
+          "endpointId": "200",
+          "edgeId": "10"
+        }
+      ],
+      "expectedRequiredMarkers": [
+        {
+          "relationshipId": "1",
+          "side": "t",
+          "endpointId": "200",
+          "edgeId": "10"
+        },
+        {
+          "relationshipId": "1",
+          "side": "t",
+          "endpointId": "200",
+          "edgeId": "11"
+        }
+      ],
+      "expectedOutcome": "required_key_conflict"
+    },
+    {
+      "name": "both-one self-edge",
+      "definitions": [
+        {
+          "relationshipId": "1",
+          "sourceMax": "1",
+          "targetMax": "1"
+        }
+      ],
+      "edges": [
+        {
+          "id": "10",
+          "relationshipId": "1",
+          "sourceId": "100",
+          "targetId": "100"
+        }
+      ],
+      "actualMarkers": [
+        {
+          "relationshipId": "1",
+          "side": "s",
+          "endpointId": "100",
+          "edgeId": "10"
+        },
+        {
+          "relationshipId": "1",
+          "side": "t",
+          "endpointId": "100",
+          "edgeId": "10"
+        }
+      ],
+      "expectedRequiredMarkers": [
+        {
+          "relationshipId": "1",
+          "side": "s",
+          "endpointId": "100",
+          "edgeId": "10"
+        },
+        {
+          "relationshipId": "1",
+          "side": "t",
+          "endpointId": "100",
+          "edgeId": "10"
+        }
+      ],
+      "expectedOutcome": "correspondence"
+    },
+    {
+      "name": "unbounded sides",
+      "definitions": [
+        {
+          "relationshipId": "1",
+          "sourceMax": null,
+          "targetMax": null
+        }
+      ],
+      "edges": [
+        {
+          "id": "10",
+          "relationshipId": "1",
+          "sourceId": "100",
+          "targetId": "200"
+        },
+        {
+          "id": "11",
+          "relationshipId": "1",
+          "sourceId": "100",
+          "targetId": "201"
+        }
+      ],
+      "actualMarkers": [],
+      "expectedRequiredMarkers": [],
+      "expectedOutcome": "correspondence"
+    },
+    {
+      "name": "missing definition",
+      "definitions": [],
+      "edges": [
+        {
+          "id": "10",
+          "relationshipId": "1",
+          "sourceId": "100",
+          "targetId": "200"
+        },
+        {
+          "id": "11",
+          "relationshipId": "1",
+          "sourceId": "100",
+          "targetId": "201"
+        }
+      ],
+      "actualMarkers": [
+        {
+          "relationshipId": "1",
+          "side": "t",
+          "endpointId": "200",
+          "edgeId": "10"
+        },
+        {
+          "relationshipId": "1",
+          "side": "t",
+          "endpointId": "201",
+          "edgeId": "11"
+        }
+      ],
+      "expectedRequiredMarkers": [],
+      "expectedOutcome": "definition_unavailable"
+    },
+    {
+      "name": "larger outgoing bound violated despite correct max-one markers",
+      "definitions": [
+        {
+          "relationshipId": "1",
+          "sourceMax": "1",
+          "targetMax": "2"
+        }
+      ],
+      "edges": [
+        {
+          "id": "10",
+          "relationshipId": "1",
+          "sourceId": "100",
+          "targetId": "200"
+        },
+        {
+          "id": "11",
+          "relationshipId": "1",
+          "sourceId": "100",
+          "targetId": "201"
+        },
+        {
+          "id": "12",
+          "relationshipId": "1",
+          "sourceId": "100",
+          "targetId": "202"
+        }
+      ],
+      "actualMarkers": [
+        {
+          "relationshipId": "1",
+          "side": "t",
+          "endpointId": "200",
+          "edgeId": "10"
+        },
+        {
+          "relationshipId": "1",
+          "side": "t",
+          "endpointId": "201",
+          "edgeId": "11"
+        },
+        {
+          "relationshipId": "1",
+          "side": "t",
+          "endpointId": "202",
+          "edgeId": "12"
+        }
+      ],
+      "expectedRequiredMarkers": [
+        {
+          "relationshipId": "1",
+          "side": "t",
+          "endpointId": "200",
+          "edgeId": "10"
+        },
+        {
+          "relationshipId": "1",
+          "side": "t",
+          "endpointId": "201",
+          "edgeId": "11"
+        },
+        {
+          "relationshipId": "1",
+          "side": "t",
+          "endpointId": "202",
+          "edgeId": "12"
+        }
+      ],
+      "expectedOutcome": "correspondence",
+      "separateLargerBoundExpected": "violation"
+    },
+    {
+      "name": "duplicated raw marker occurrence is not deduplicated",
+      "definitions": [
+        {
+          "relationshipId": "1",
+          "sourceMax": "1",
+          "targetMax": "2"
+        }
+      ],
+      "edges": [
+        {
+          "id": "10",
+          "relationshipId": "1",
+          "sourceId": "100",
+          "targetId": "200"
+        },
+        {
+          "id": "11",
+          "relationshipId": "1",
+          "sourceId": "100",
+          "targetId": "201"
+        }
+      ],
+      "actualMarkers": [
+        {
+          "relationshipId": "1",
+          "side": "t",
+          "endpointId": "200",
+          "edgeId": "10"
+        },
+        {
+          "relationshipId": "1",
+          "side": "t",
+          "endpointId": "201",
+          "edgeId": "11"
+        },
+        {
+          "relationshipId": "1",
+          "side": "t",
+          "endpointId": "200",
+          "edgeId": "10"
+        }
+      ],
+      "expectedRequiredMarkers": [
+        {
+          "relationshipId": "1",
+          "side": "t",
+          "endpointId": "200",
+          "edgeId": "10"
+        },
+        {
+          "relationshipId": "1",
+          "side": "t",
+          "endpointId": "201",
+          "edgeId": "11"
+        }
+      ],
+      "expectedOutcome": "marker_mismatch"
+    }
+  ]
+}

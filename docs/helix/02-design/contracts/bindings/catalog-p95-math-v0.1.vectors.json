@@ -1,0 +1,161 @@
+{
+  "profile": "truss-catalog-p95-math-witness/0.1.0",
+  "status": "unadopted_design_witness",
+  "scope": "Independent finite decimal rank-95/20ms mathematical examples only; no actual timer, runner, result correctness, resource or native latency qualification.",
+  "sampleCount": 100,
+  "rank": 95,
+  "thresholdMs": "20",
+  "cases": [
+    {
+      "id": "below",
+      "runs": [
+        {
+          "count": 94,
+          "durationMs": "1"
+        },
+        {
+          "count": 6,
+          "durationMs": "19.999999"
+        }
+      ],
+      "expectedP95Ms": "19.999999",
+      "expectedComparison": "within-proposed-threshold"
+    },
+    {
+      "id": "equal",
+      "runs": [
+        {
+          "count": 94,
+          "durationMs": "1"
+        },
+        {
+          "count": 5,
+          "durationMs": "20"
+        },
+        {
+          "count": 1,
+          "durationMs": "100"
+        }
+      ],
+      "expectedP95Ms": "20",
+      "expectedComparison": "within-proposed-threshold"
+    },
+    {
+      "id": "above",
+      "runs": [
+        {
+          "count": 94,
+          "durationMs": "1"
+        },
+        {
+          "count": 6,
+          "durationMs": "20.000001"
+        }
+      ],
+      "expectedP95Ms": "20.000001",
+      "expectedComparison": "above-proposed-threshold"
+    },
+    {
+      "id": "slow-outlier-retained",
+      "runs": [
+        {
+          "count": 99,
+          "durationMs": "1"
+        },
+        {
+          "count": 1,
+          "durationMs": "100000000000000000000000001"
+        }
+      ],
+      "expectedP95Ms": "1",
+      "expectedComparison": "within-proposed-threshold"
+    },
+    {
+      "id": "tied-all",
+      "runs": [
+        {
+          "count": 100,
+          "durationMs": "20"
+        }
+      ],
+      "expectedP95Ms": "20",
+      "expectedComparison": "within-proposed-threshold"
+    },
+    {
+      "id": "ninety-nine-samples",
+      "runs": [
+        {
+          "count": 99,
+          "durationMs": "1"
+        }
+      ],
+      "expectedRefusal": "sample-count"
+    },
+    {
+      "id": "hundred-and-one-samples",
+      "runs": [
+        {
+          "count": 101,
+          "durationMs": "1"
+        }
+      ],
+      "expectedRefusal": "sample-count"
+    },
+    {
+      "id": "negative-duration",
+      "runs": [
+        {
+          "count": 99,
+          "durationMs": "1"
+        },
+        {
+          "count": 1,
+          "durationMs": "-1"
+        }
+      ],
+      "expectedRefusal": "duration-domain"
+    },
+    {
+      "id": "nonfinite-duration",
+      "runs": [
+        {
+          "count": 99,
+          "durationMs": "1"
+        },
+        {
+          "count": 1,
+          "durationMs": "NaN"
+        }
+      ],
+      "expectedRefusal": "duration-domain"
+    },
+    {
+      "id": "duplicate-ordinal",
+      "runs": [
+        {
+          "count": 100,
+          "durationMs": "1"
+        }
+      ],
+      "ordinalOverride": {
+        "sample": 99,
+        "ordinal": 98
+      },
+      "expectedRefusal": "ordinal-membership"
+    },
+    {
+      "id": "missing-ordinal",
+      "runs": [
+        {
+          "count": 100,
+          "durationMs": "1"
+        }
+      ],
+      "ordinalOverride": {
+        "sample": 99,
+        "ordinal": 100
+      },
+      "expectedRefusal": "ordinal-membership"
+    }
+  ]
+}

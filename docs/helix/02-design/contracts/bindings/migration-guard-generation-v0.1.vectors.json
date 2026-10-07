@@ -1,0 +1,50 @@
+{
+  "status": "unadopted_candidate",
+  "scope": "Six authored exact arithmetic expectations; no native generation/cascade/transaction evidence",
+  "cases": [
+    {
+      "name": "same-route-replacement",
+      "originalGeneration": "5",
+      "deletions": "1",
+      "insertions": "1",
+      "expectedGeneration": "7"
+    },
+    {
+      "name": "no-net-count-shortcut",
+      "originalGeneration": "9223372036854775806",
+      "deletions": "1",
+      "insertions": "1",
+      "expected": "refuse_entire_migration"
+    },
+    {
+      "name": "last-mutation-slot",
+      "originalGeneration": "9223372036854775806",
+      "deletions": "0",
+      "insertions": "1",
+      "expectedGeneration": "9223372036854775807"
+    },
+    {
+      "name": "existing-colliding-target-guard",
+      "originalGeneration": "9",
+      "deletions": "2",
+      "insertions": "3",
+      "expectedGeneration": "14",
+      "targetInitializationAllowed": false
+    },
+    {
+      "name": "new-guard",
+      "guardOriginallyAbsent": true,
+      "originalGeneration": "0",
+      "deletions": "0",
+      "insertions": "2",
+      "expectedGeneration": "2"
+    },
+    {
+      "name": "unchanged-membership-not-replaced",
+      "originalGeneration": "8",
+      "deletions": "0",
+      "insertions": "0",
+      "expectedGeneration": "8"
+    }
+  ]
+}

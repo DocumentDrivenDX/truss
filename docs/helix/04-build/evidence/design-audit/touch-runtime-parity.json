@@ -1,0 +1,194 @@
+{
+  "scope": "Original source/archive/export hash consistency, three effect projections and two update identity prefixes against current-writer observation plus independently named insert columns, initialization, complete write assignment masks and independently constructed complete effect predicates and closed statement modifiers plus complete independently expected lookup shape and predicate. Does not validate source interpretation, original authority, native parameter/completion, savepoints, concurrency or execution.",
+  "originalSources": [
+    {
+      "path": "docs/helix/02-design/contracts/row-touch-current-writer-observation-v0.1.proposal.sql",
+      "sourceSha256": "b11cf572f00bc964ce5985fb7e0db7ec5b23eb82864b627dabb2a50c61a5b7a7",
+      "artifactPath": "docs/helix/02-design/contracts/row-touch-current-writer-observation-v0.1.proposal.umf.json",
+      "artifactSha256": "1d2af468d8d3e911ee4cefbbd13ba94cfb674230ea03b2941f6235891fb9e323",
+      "exportPath": "docs/helix/04-build/evidence/design-audit/row-touch-current-writer-observation.owner-export.sql",
+      "exportSha256": "f1616cae0fad2752184d819dfd0093e6a7a98007f466d70c5239cf6607a91aea",
+      "sourceArchiveExact": true,
+      "reloadedExportExact": true,
+      "complete": false,
+      "unhandled": [
+        {
+          "path": "/stmts/0/stmt"
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning",
+          "message": "Raw syntax is not catalog resolution, SQL execution, permissions or server-state validation"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt",
+          "severity": "warning",
+          "message": "Statement is retained without declaration extraction or execution"
+        }
+      ]
+    },
+    {
+      "path": "docs/helix/02-design/contracts/row-touch-create-and-seal-v0.1.proposal.sql",
+      "sourceSha256": "e55ffe00114ebe31e4699e6850b1c9a7282968b10dee242c594bbf47e4c2e083",
+      "artifactPath": "docs/helix/02-design/contracts/row-touch-create-and-seal-v0.1.proposal.umf.json",
+      "artifactSha256": "279ec8935edf9c4fe175c8c5dc542283cf62dd4ccabe6b43adf7c03783ac45ee",
+      "exportPath": "docs/helix/04-build/evidence/design-audit/row-touch-create-and-seal.owner-export.sql",
+      "exportSha256": "030feb544126816331fa96d69e2e0eb343068a5cadae2feacb47f17ea76c5a37",
+      "sourceArchiveExact": true,
+      "reloadedExportExact": true,
+      "complete": false,
+      "unhandled": [
+        {
+          "path": "/stmts/0/stmt"
+        },
+        {
+          "path": "/stmts/1/stmt"
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning",
+          "message": "Raw syntax is not catalog resolution, SQL execution, permissions or server-state validation"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt",
+          "severity": "warning",
+          "message": "Statement is retained without declaration extraction or execution"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/1/stmt",
+          "severity": "warning",
+          "message": "Statement is retained without declaration extraction or execution"
+        }
+      ]
+    },
+    {
+      "path": "docs/helix/02-design/contracts/row-touch-generation-advance-v0.1.proposal.sql",
+      "sourceSha256": "b0e78c6bb7992d13bc2933e080c45c751dc330fe3a78cdb3814aadd776dea738",
+      "artifactPath": "docs/helix/02-design/contracts/row-touch-generation-advance-v0.1.proposal.umf.json",
+      "artifactSha256": "417087f955c1e29d66e5cf83d9dd38ca33bb2dfc75a8985095563ae1f50df631",
+      "exportPath": "docs/helix/04-build/evidence/design-audit/row-touch-generation-advance.owner-export.sql",
+      "exportSha256": "a229a28011a988cd1d0f99bfe1552c6fb254b6a4f945508cc9a018d60599f3c1",
+      "sourceArchiveExact": true,
+      "reloadedExportExact": true,
+      "complete": false,
+      "unhandled": [
+        {
+          "path": "/stmts/0/stmt"
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning",
+          "message": "Raw syntax is not catalog resolution, SQL execution, permissions or server-state validation"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt",
+          "severity": "warning",
+          "message": "Statement is retained without declaration extraction or execution"
+        }
+      ]
+    }
+  ],
+  "effectStatements": 3,
+  "returnedFields": 12,
+  "identityComponents": 6,
+  "controls": [
+    {
+      "case": "relation substitution",
+      "refused": true
+    },
+    {
+      "case": "missing returned field",
+      "refused": true
+    },
+    {
+      "case": "reordered snapshot",
+      "refused": true
+    },
+    {
+      "case": "lost identity component",
+      "refused": true
+    },
+    {
+      "case": "first generation altered",
+      "refused": true
+    },
+    {
+      "case": "carrier source substituted",
+      "refused": true
+    },
+    {
+      "case": "seal assignment removed",
+      "refused": true
+    },
+    {
+      "case": "advance seal retained",
+      "refused": true
+    },
+    {
+      "case": "lost upper generation bound",
+      "refused": true
+    },
+    {
+      "case": "lost original custody comparison",
+      "refused": true
+    },
+    {
+      "case": "lost nonempty next custody",
+      "refused": true
+    },
+    {
+      "case": "lost first-touch xid prerequisite",
+      "refused": true
+    },
+    {
+      "case": "unexpected update FROM",
+      "refused": true
+    },
+    {
+      "case": "unexpected write CTE",
+      "refused": true
+    },
+    {
+      "case": "unexpected insert source LIMIT",
+      "refused": true
+    },
+    {
+      "case": "unexpected conflict path",
+      "refused": true
+    },
+    {
+      "case": "identity override",
+      "refused": true
+    },
+    {
+      "case": "wrong insert column",
+      "refused": true
+    },
+    {
+      "case": "lookup LIMIT hides matches",
+      "refused": true
+    },
+    {
+      "case": "lookup joins suppress rows",
+      "refused": true
+    },
+    {
+      "case": "lookup extra predicate",
+      "refused": true
+    }
+  ],
+  "nativeExecution": false
+}

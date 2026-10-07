@@ -1,0 +1,40 @@
+{
+  "scope": "Immutable upstream source bytes and function/package metadata only; no package dependency closure or runtime/native support",
+  "revision": "9808955838dd84835c4ca904228c9c2eaeda047e",
+  "files": [
+    {
+      "path": "packages/pg/lib/result.js",
+      "url": "https://raw.githubusercontent.com/brianc/node-postgres/9808955838dd84835c4ca904228c9c2eaeda047e/packages/pg/lib/result.js",
+      "sha256": "6d7193da53f8557600a065e4356626026e8c5baf12c477dc19e439d8f204225c",
+      "bytes": 2829,
+      "countParsingObserved": true
+    },
+    {
+      "path": "packages/pg/lib/client.js",
+      "url": "https://raw.githubusercontent.com/brianc/node-postgres/9808955838dd84835c4ca904228c9c2eaeda047e/packages/pg/lib/client.js",
+      "sha256": "ad6aa93c26b0bf26db1f2ebe74216212790a04c41af5585c63760f9fa8322a32",
+      "bytes": 25715
+    },
+    {
+      "path": "packages/pg-protocol/src/parser.ts",
+      "url": "https://raw.githubusercontent.com/brianc/node-postgres/9808955838dd84835c4ca904228c9c2eaeda047e/packages/pg-protocol/src/parser.ts",
+      "sha256": "b991370b2b49c7a701e8b75fa0e18e43757c57ccf83b86d830866fcdd3ba825f",
+      "bytes": 13057,
+      "protocolFunctionsObserved": true
+    },
+    {
+      "path": "packages/pg/package.json",
+      "url": "https://raw.githubusercontent.com/brianc/node-postgres/9808955838dd84835c4ca904228c9c2eaeda047e/packages/pg/package.json",
+      "sha256": "b14b5c9100654bd8b0610407886d64f9219efd4b94a697f918a60b1c2cda738d",
+      "bytes": 1611,
+      "version": "8.23.0"
+    },
+    {
+      "path": "packages/pg-protocol/package.json",
+      "url": "https://raw.githubusercontent.com/brianc/node-postgres/9808955838dd84835c4ca904228c9c2eaeda047e/packages/pg-protocol/package.json",
+      "sha256": "afe04a2959311e88d61da45d585d6c4590181ff556053f70e3a25a147c69dfb2",
+      "bytes": 1016,
+      "version": "1.16.0"
+    }
+  ]
+}

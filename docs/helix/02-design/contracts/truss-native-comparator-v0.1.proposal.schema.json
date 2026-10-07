@@ -1,0 +1,178 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:native-comparator:0.1.0",
+  "title": "Proposed exact native scalar comparator definition",
+  "description": "Admitted source/domain and native operator evidence remain required. No arbitrary SQL fragments or inferred cast safety.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-native-comparator/0.1.0"
+    },
+    "profile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "valueDefinition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "sourceDomainDefinition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "nativeDomainProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "nativeDomainDefinition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "operatorInventory": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "strategy": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "unicode-text-C"
+            },
+            "nativeType": {
+              "const": "pg_catalog.text"
+            },
+            "encoding": {
+              "const": "UTF8"
+            },
+            "collation": {
+              "const": "pg_catalog.C"
+            },
+            "normalization": {
+              "const": "none"
+            }
+          },
+          "required": [
+            "kind",
+            "nativeType",
+            "encoding",
+            "collation",
+            "normalization"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "native-boolean"
+            },
+            "nativeType": {
+              "const": "pg_catalog.bool"
+            }
+          },
+          "required": [
+            "kind",
+            "nativeType"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "signed-integer"
+            },
+            "nativeType": {
+              "enum": [
+                "pg_catalog.int2",
+                "pg_catalog.int4",
+                "pg_catalog.int8",
+                "pg_catalog.numeric"
+              ]
+            },
+            "integrality": {
+              "const": "validate-before-cast"
+            }
+          },
+          "required": [
+            "kind",
+            "nativeType",
+            "integrality"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "finite-decimal"
+            },
+            "nativeType": {
+              "const": "pg_catalog.numeric"
+            },
+            "scaleCoercion": {
+              "const": "forbidden"
+            },
+            "nonfinite": {
+              "const": "refuse"
+            }
+          },
+          "required": [
+            "kind",
+            "nativeType",
+            "scaleCoercion",
+            "nonfinite"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "unsigned-integer"
+            },
+            "nativeType": {
+              "const": "pg_catalog.numeric"
+            },
+            "integrality": {
+              "const": "validate-before-cast"
+            },
+            "range": {
+              "const": "original-authored-unsigned-facets"
+            }
+          },
+          "required": [
+            "kind",
+            "nativeType",
+            "integrality",
+            "range"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "castOutcome": {
+      "const": "exact-or-error"
+    },
+    "nullOperands": {
+      "const": "refuse"
+    },
+    "absentOperands": {
+      "const": "refuse"
+    },
+    "qualification": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "profile",
+    "valueDefinition",
+    "sourceDomainDefinition",
+    "nativeDomainProfile",
+    "nativeDomainDefinition",
+    "operatorInventory",
+    "strategy",
+    "castOutcome",
+    "nullOperands",
+    "absentOperands",
+    "qualification"
+  ],
+  "additionalProperties": false
+}

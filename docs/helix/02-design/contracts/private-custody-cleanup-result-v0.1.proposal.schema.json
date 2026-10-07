@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:private-custody-cleanup-result:0.1.0",
+  "title": "Proposed original pending private-custody cleanup result",
+  "description": "Private RT05 effect evidence only. No commit acknowledgment, replay receipt, public transaction status or cleanup permission. Full original producer/artifact/membership correspondence requires semantic admission.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "interfaceVersion",
+    "durability",
+    "profile",
+    "originalSelection",
+    "originalAdministrativeContext",
+    "originalCleanupAttempt",
+    "originalRecheckObservation",
+    "removedRowInventory",
+    "preservedDependencyInventory",
+    "originalDispositionEvidence",
+    "capacityTransition",
+    "completeCleanupEffectEvidence"
+  ],
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-private-custody-cleanup-result/0.1.0"
+    },
+    "durability": {
+      "const": "pending"
+    },
+    "profile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "originalSelection": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "originalAdministrativeContext": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "originalCleanupAttempt": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "originalRecheckObservation": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "removedRowInventory": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "preservedDependencyInventory": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "originalDispositionEvidence": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "capacityTransition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "completeCleanupEffectEvidence": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    }
+  }
+}

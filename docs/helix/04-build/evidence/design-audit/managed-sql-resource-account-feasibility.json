@@ -1,0 +1,36 @@
+{
+  "scope": "Documented PostgreSQL 17 counter-lifetime feasibility boundary; no native runtime experiment or universal SQL impossibility proof",
+  "sources": [
+    "https://www.postgresql.org/docs/17/plpgsql-control-structures.html",
+    "https://www.postgresql.org/docs/17/functions-sequence.html"
+  ],
+  "requiredInvariant": "Spent work cannot be refunded by savepoint/statement rollback; retained occupancy and unresolved reservations remain distinct.",
+  "findings": [
+    {
+      "mechanism": "transactional table counters inside protected work block",
+      "result": "insufficient alone",
+      "reason": "Caught exception rolls back persistent database changes in the block; counter increments can disappear with failed effects."
+    },
+    {
+      "mechanism": "PLpgSQL local variables",
+      "result": "conditional call-local mechanism only",
+      "reason": "Documented preservation within the catching function is not persistent protected account state across later calls/adopted host savepoints."
+    },
+    {
+      "mechanism": "sequence increments",
+      "result": "candidate primitive, not complete account design",
+      "reason": "nextval is not reclaimed on abort, but state may revert after crash before commit. Original account association, exact charging, concurrency, privilege/reset protection and unresolved recovery still need design."
+    }
+  ],
+  "managedConstraint": "No custom module allowed unless it ships with RDS PostgreSQL, Aurora PostgreSQL and Lakebase; no eligible common callback module identified.",
+  "nextDesignProofs": [
+    "define each required account lifetime explicitly: call, operation, adopted transaction and recovery",
+    "prove nonrefundable charges across nested exceptions and host savepoint rollback",
+    "preserve protected original identity and authority across pooled/adopted calls",
+    "admit native materialization and recovery bounds before effects",
+    "qualify exact provider/version privileges and crash/failover subset"
+  ],
+  "nativeExecuted": false,
+  "fullSqlPlpgsqlSolutionProven": false,
+  "requirementsWeakened": false
+}

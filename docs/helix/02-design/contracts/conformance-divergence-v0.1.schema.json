@@ -1,0 +1,225 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:conformance-divergence:0.1.0",
+  "title": "Draft complete conformance mismatch and reviewed attribution",
+  "description": "Exact evidence custody and actual independent comparison/reviewer recognition are semantic admission. Observed unresolved record does not satisfy attribution closeout.",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-conformance-divergence/0.1.0"
+        },
+        "runIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "caseIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "requiredManifest": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "state": {
+          "const": "observed"
+        },
+        "direction": {
+          "enum": [
+            "a_write_b_read",
+            "b_write_a_read"
+          ]
+        },
+        "surface": {
+          "enum": [
+            "result",
+            "state",
+            "journal",
+            "report"
+          ]
+        },
+        "implementationA": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "implementationB": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "comparatorProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "identityAliases": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "expected": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "observedA": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "observedB": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "nativeObservation": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "comparisonEvidence": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "attribution": {
+          "const": "unresolved"
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "runIdentity",
+        "caseIdentity",
+        "requiredManifest",
+        "state",
+        "direction",
+        "surface",
+        "implementationA",
+        "implementationB",
+        "comparatorProfile",
+        "identityAliases",
+        "expected",
+        "observedA",
+        "observedB",
+        "nativeObservation",
+        "comparisonEvidence",
+        "attribution"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-conformance-divergence/0.1.0"
+        },
+        "runIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "caseIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "requiredManifest": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "state": {
+          "const": "observed"
+        },
+        "direction": {
+          "const": "single_run"
+        },
+        "surface": {
+          "enum": [
+            "result",
+            "state",
+            "journal",
+            "report"
+          ]
+        },
+        "comparatorProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "identityAliases": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "expected": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "nativeObservation": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "comparisonEvidence": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "attribution": {
+          "const": "unresolved"
+        },
+        "implementation": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "observed": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "runIdentity",
+        "caseIdentity",
+        "requiredManifest",
+        "state",
+        "direction",
+        "surface",
+        "comparatorProfile",
+        "identityAliases",
+        "expected",
+        "nativeObservation",
+        "comparisonEvidence",
+        "attribution",
+        "implementation",
+        "observed"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-conformance-divergence/0.1.0"
+        },
+        "runIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "caseIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "requiredManifest": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "state": {
+          "const": "reviewed"
+        },
+        "originalMismatch": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "resolution": {
+          "enum": [
+            "implementation",
+            "implementation_a",
+            "implementation_b",
+            "both_implementations",
+            "contract"
+          ]
+        },
+        "reviewProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "originalReviewerRecognition": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "reviewEvidence": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "runIdentity",
+        "caseIdentity",
+        "requiredManifest",
+        "state",
+        "originalMismatch",
+        "resolution",
+        "reviewProfile",
+        "originalReviewerRecognition",
+        "reviewEvidence"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

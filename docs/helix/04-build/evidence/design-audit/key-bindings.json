@@ -1,0 +1,71 @@
+{
+  "scope": "Key binding shape only; no ownership, profile/source semantics, identity continuity, native enforcement or resource qualification",
+  "cases": 13,
+  "outcomes": [
+    {
+      "name": "portable binding",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "sparse storage binding",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "participating null explicit",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "nonparticipating null explicit",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "portable cannot override null policy",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "missing component policy",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "empty components",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "numeric authored key ID",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "artifact executable field",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "duplicate binding IDs need semantic refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "duplicate components need semantic refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "foreign source owner needs semantic refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "unavailable profile needs semantic refusal",
+      "expected": true,
+      "actual": true
+    }
+  ]
+}

@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:bootstrap-generation-diagnostics:0.1.0",
+  "title": "Proposed bounded bootstrap generation refusal diagnostics",
+  "description": "Decoded shape only; exact source semantics, original evidence and UTF-8/resource totals require semantic admission. No executable candidate output.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-bootstrap-generation-diagnostics/0.1.0"
+    },
+    "state": {
+      "enum": [
+        "complete",
+        "unavailable"
+      ]
+    },
+    "reason": {
+      "enum": [
+        "invalid-input",
+        "profile-unavailable",
+        "interpretation-unavailable",
+        "incomplete-inventory",
+        "composition-mismatch",
+        "resource-exhausted",
+        "cancelled",
+        "containment-unresolved",
+        "diagnostic-capacity"
+      ]
+    },
+    "stage": {
+      "type": "string",
+      "enum": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10"
+      ]
+    },
+    "entries": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "items": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "inputPath": {
+            "type": "string",
+            "maxLength": 4096
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096
+          },
+          "originalEvidence": {
+            "type": "array",
+            "maxItems": 64,
+            "items": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            }
+          }
+        },
+        "required": [
+          "code",
+          "inputPath",
+          "message",
+          "originalEvidence"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "state",
+    "reason",
+    "stage"
+  ],
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "state": {
+            "const": "complete"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "entries": {}
+        },
+        "required": [
+          "entries"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "state": {
+            "const": "unavailable"
+          }
+        }
+      },
+      "then": {
+        "not": {
+          "properties": {
+            "entries": {}
+          },
+          "required": [
+            "entries"
+          ]
+        }
+      }
+    }
+  ]
+}

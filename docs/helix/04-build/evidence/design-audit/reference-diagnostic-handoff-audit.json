@@ -1,0 +1,31 @@
+{
+  "scope": "five retained original diagnostic handoffs and six corruption refusals; no native/semantic support or adoption",
+  "status": "pass",
+  "controls": [
+    {
+      "case": "missing",
+      "refused": true
+    },
+    {
+      "case": "duplicate",
+      "refused": true
+    },
+    {
+      "case": "changed_severity",
+      "refused": true
+    },
+    {
+      "case": "promoted",
+      "refused": true
+    },
+    {
+      "case": "assumed_support",
+      "refused": true
+    },
+    {
+      "case": "blank_obligation",
+      "refused": true
+    }
+  ],
+  "manifestSha256": "d2b480d96a553fc34ee57c4d997307ebdcc9b9302cf0c0049ecfd85e0db53e6d"
+}

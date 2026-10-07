@@ -1,0 +1,23 @@
+{
+  "scope": "Two complete-owner source ASTs and manifest source/order/type/NULL/parameter correspondence only; no native complete visibility, ownership, resource or whole-record decoding qualification",
+  "sourceSha256": "aad6ba4e8d752906af3d27bd500c71f4505dd4a2812294f78755c15feaaa73b1",
+  "modelSha256": "72ffcf4d29cd4fd1fe4d540fd65a3415b726260dc44b7a0957a376ffee516fc2",
+  "statements": 2,
+  "corruptionControls": [
+    "missing_route",
+    "property_filter",
+    "row_limit",
+    "text_collection_sort",
+    "lost_profile_bytes",
+    "owner_discriminator_swap"
+  ],
+  "manifestCorruptionControls": [
+    "route_swap",
+    "extra_property_parameter",
+    "nullable_definition",
+    "missing_order_component",
+    "native_claim"
+  ],
+  "nativeExecution": false,
+  "complete": false
+}

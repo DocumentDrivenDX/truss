@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:proposal:acceptance-report:0.2.0",
+  "description": "Unadopted consumer proposal for the exact complete event 0.2 proposal. Existing 0.1 consumers remain unchanged. Original context/profile/authority/native semantic validation and migration remain required.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-acceptance-report/0.2.0-proposal"
+    },
+    "reportProfile": {
+      "$ref": "urn:truss:draft:acceptance-report:0.1.0#/properties/reportProfile"
+    },
+    "rev": {
+      "$ref": "urn:truss:draft:acceptance-report:0.1.0#/properties/rev"
+    },
+    "originalExecution": {
+      "$ref": "urn:truss:draft:acceptance-report:0.1.0#/properties/originalExecution"
+    },
+    "acceptedInput": {
+      "$ref": "urn:truss:draft:acceptance-report:0.1.0#/properties/acceptedInput"
+    },
+    "umf": {
+      "$ref": "urn:truss:draft:acceptance-report:0.1.0#/properties/umf"
+    },
+    "documents": {
+      "$ref": "urn:truss:draft:acceptance-report:0.1.0#/properties/documents"
+    },
+    "diagnostics": {
+      "$ref": "urn:truss:draft:acceptance-report:0.1.0#/properties/diagnostics"
+    },
+    "documentInterpretations": {
+      "$ref": "urn:truss:draft:acceptance-report:0.1.0#/properties/documentInterpretations"
+    },
+    "counts": {
+      "$ref": "urn:truss:draft:acceptance-report:0.1.0#/properties/counts"
+    },
+    "provisional": {
+      "$ref": "urn:truss:draft:acceptance-report:0.1.0#/properties/provisional"
+    },
+    "rebinds": {
+      "type": "array",
+      "items": {
+        "allOf": [
+          {
+            "$ref": "urn:truss:proposal:history-event:0.2.0"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "operation": {
+                "const": "rebind"
+              }
+            },
+            "required": [
+              "operation"
+            ]
+          }
+        ]
+      }
+    },
+    "assertions": {
+      "$ref": "urn:truss:draft:acceptance-report:0.1.0#/properties/assertions"
+    },
+    "pending_indexes": {
+      "$ref": "urn:truss:draft:acceptance-report:0.1.0#/properties/pending_indexes"
+    },
+    "losses": {
+      "$ref": "urn:truss:draft:acceptance-report:0.1.0#/properties/losses"
+    },
+    "extensions": {
+      "$ref": "urn:truss:draft:acceptance-report:0.1.0#/properties/extensions"
+    },
+    "transformRegistrations": {
+      "$ref": "urn:truss:draft:acceptance-report:0.1.0#/properties/transformRegistrations"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "reportProfile",
+    "rev",
+    "originalExecution",
+    "acceptedInput",
+    "umf",
+    "documents",
+    "diagnostics",
+    "documentInterpretations",
+    "counts",
+    "provisional",
+    "rebinds",
+    "assertions",
+    "pending_indexes",
+    "losses",
+    "extensions",
+    "transformRegistrations"
+  ],
+  "additionalProperties": false
+}

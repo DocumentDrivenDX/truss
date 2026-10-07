@@ -1,0 +1,91 @@
+{
+  "interfaceVersion": "truss-bootstrap-route-entry/0.1.0",
+  "routeIdentity": "pg17.partition.relation-scope/0.1.0",
+  "status": "unadopted; source pins only verified; native class/cut/transport/semantic producers unqualified",
+  "nativeClass": {
+    "namespace": "pg_catalog",
+    "relation": "pg_partitioned_table",
+    "classOid": "resolve actual catalog relation on original target",
+    "storageScope": "database",
+    "addressability": "No invented adjunct/link object OID; original identities use actual pg_class endpoints and native parent ordinal or partrelid",
+    "subobjectNumber": "0 on original relation scope"
+  },
+  "selector": "original relation-keyed partition adjunct",
+  "artifacts": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-external-partition-observation-pg17.proposal.sql",
+      "sha256": "2451dfc2d0051e3c826391881d8734badca82c29b0f5a4a562f1447a3560f3a8"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-external-partition-observation-pg17.proposal.umf.json",
+      "sha256": "f7d23d2ab1eb98af3ab950faebcfd07d035442bd44506febc6b2d65690c0f286"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/bootstrap-external-partition-observation.owner-export.sql",
+      "sha256": "3b7b2efb3ae249adc237588ee1a568eef553dc5cb956a83d7b143a534678e021"
+    }
+  ],
+  "parameterGrammar": {
+    "slot": "1",
+    "nativeType": "pg_catalog.oid[]",
+    "dimensions": "exactly one",
+    "lowerBound": "1",
+    "nullAllowed": false,
+    "nullItemsAllowed": false,
+    "uniqueItems": true,
+    "countInclusive": [
+      "1",
+      "256"
+    ],
+    "itemDomain": "canonical nonzero uint32 decimal text; independently admitted actual pg_class scope",
+    "encoder": "selected original canonical PostgreSQL array encoder; no JS numeric round trip"
+  },
+  "orderedColumns": [
+    "catalog_class_oid",
+    "relation_oid",
+    "partattrs_native_vector_text",
+    "partattrs_native_vector_dimensions",
+    "partclass_native_vector_text",
+    "partclass_native_vector_dimensions",
+    "partcollation_native_vector_text",
+    "partcollation_native_vector_dimensions",
+    "original_catalog_row_json"
+  ],
+  "coverage": "Each independently admitted partitioned-table kind requires matching partrelid adjunct; nonpartitioned parent absence is separately classified. No unsupported-kind filter may manufacture complete coverage.",
+  "requiredKnownFields": [
+    "partrelid",
+    "partstrat",
+    "partnatts",
+    "partdefid",
+    "partattrs",
+    "partclass",
+    "partcollation",
+    "partexprs"
+  ],
+  "preservation": "Retain full exact returned row JSON text and every unknown extension member; lossless bounded selected native JSON decoder; no parse/stringify reconstruction",
+  "dependencyExtraction": {
+    "relation": "partrelid actual pg_class with independent partitioned-table native kind",
+    "defaultPartition": "nonzero partdefid actual pg_class default partition; zero native sentinel preserved; relation bounds/hierarchy context mandatory",
+    "vectors": "exact ordered partattrs/partclass/partcollation/native dimensions/key count/expression slots; actual attributes/opclasses/collations resolved under selected grammar",
+    "expressions": "partexprs/native strategy and child/default bound definitions retained with complete original dependencies; no expression evaluation",
+    "fieldClassification": {
+      "partrelid": "resolved original partitioned-table parent definition",
+      "partstrat": "exact h/l/r hash/list/range strategy; selected strategy-specific native semantics",
+      "partnatts": "exact native int2 key count admitted against complete aligned vectors",
+      "partdefid": "zero no-default sentinel or resolved original default child relation with hierarchy/bound proof",
+      "partattrs": "exact ordered native int2vector; nonzero original columns, zero expression positions",
+      "partclass": "exact ordered native oidvector; resolved per-position operator class and strategy compatibility",
+      "partcollation": "exact ordered native oidvector; zero noncollatable sentinel or resolved per-position collation/environment",
+      "partexprs": "exact nullable original expression-tree list; one expression per zero partattrs position in original order, full native context/dependency proof"
+    },
+    "canonicalProcedure": "CONTRACT-008 Hierarchy/partition projection: resolved directed parent-child definitions with native parent order and transition readiness, ordered aligned key/expression/opclass/collation tuples and complete default/bound/member meaning"
+  },
+  "adjuncts": [
+    "complete original parent/default/child relation and either-endpoint hierarchy/bound definitions",
+    "all key/opclass/family/member/collation/provider/type/expression dependencies",
+    "actual native strategy/detach/default coverage and current owner authority"
+  ],
+  "resourceProfile": "truss-bootstrap-collector-resource/0.1.0",
+  "refusal": "Unsupported original hierarchy/ordinal/detach/partition/key/bound/native meaning or incomplete endpoint/adjunct coverage refuses completeness; no new partition layout, repair or invented link OID",
+  "resourceObligations": "Shared enclosing totals, complete original cut/authority and explicit pre-materialization/native-work permits; no independent per-route allowance"
+}

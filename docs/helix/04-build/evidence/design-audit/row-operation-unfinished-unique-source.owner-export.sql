@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX row_home_operation_unfinished_xid ON truss.row_home_operation USING btree (original_writer_xid) WHERE phase OPERATOR(pg_catalog.<>) 'application_finalized'

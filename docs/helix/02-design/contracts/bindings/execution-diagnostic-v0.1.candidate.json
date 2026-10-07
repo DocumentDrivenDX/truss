@@ -1,0 +1,19 @@
+{
+  "interfaceVersion": "truss-execution-diagnostic/0.1.0",
+  "identity": "truss-fixed-execution-diagnostics",
+  "version": "0.1.0",
+  "status": "unqualified_candidate",
+  "messages": {
+    "invalid_transaction": "Transaction admission failed.",
+    "retry": "Whole-transaction retry may be requested.",
+    "transaction_unusable": "Transaction recovery is required.",
+    "commit_unknown": "Commit outcome is unresolved.",
+    "execution_obligation": "Execution obligation failed.",
+    "cancelled": "Execution was cancelled."
+  },
+  "sqlState": "omit_unless_selected_adapter_classification_and_current_disclosure_allow_exact_code",
+  "maximumCanonicalWireBytes": "512",
+  "rawDriverExceptionForwarding": false,
+  "domainValueRewriting": false,
+  "originalEvidence": "protected_host_recovery_custody"
+}

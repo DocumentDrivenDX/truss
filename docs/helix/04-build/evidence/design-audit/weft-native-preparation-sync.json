@@ -1,0 +1,43 @@
+{
+  "scope": "Read-only inspection of sibling-authored native preparation evidence and five current source hashes; Truss did not rerun native probes or adopt a storage binding",
+  "ownerRoot": "/Users/erik/Projects/weft",
+  "ownerCommit": "a95da1f82baf9148ec5235a0f2002d059a8ca3b5",
+  "ownerBranch": "codex/b005-truss-postgres",
+  "evidencePath": "/Users/erik/Projects/weft/docs/helix/04-build/evidence/B-005-native-preparation.md",
+  "evidenceSha256": "8949d1b98b8df2d4eb87cd9ca642531f0dfb592de05b1592c5d86249987bfb2b",
+  "nativeVersionReported": "PostgreSQL 17.9 (Debian 17.9-1.pgdg13+1)",
+  "imageDigestReported": "sha256:2a0d0fe14825b0939f78a8cad5cd4e6aa68bf94d0e5dd96e24b6d23af4315545",
+  "semanticObservationsReported": 9,
+  "emissionPrimitiveTestsReported": 3,
+  "preparedSlotsReported": 4,
+  "checks": [
+    {
+      "path": "crates/weft-postgresql/src/lib.rs",
+      "sha256": "5cd0752e29f2236fcac19e47e314fa28a087962808e2ec70d469208ea2260861",
+      "matchesCurrentSource": true
+    },
+    {
+      "path": "crates/weft-postgresql/examples/parameter_probe.rs",
+      "sha256": "f6d0cf77b6315f7e12ba1ce281c1cf9ce294bbe03743e521c0e5a7e5685488e3",
+      "matchesCurrentSource": true
+    },
+    {
+      "path": "tests/truss-postgresql/native-boundaries.sql",
+      "sha256": "3aea470e84ced366b0a2c4979ebba7d7973fe1402b1c5a81c35db07e4aa0fc63",
+      "matchesCurrentSource": true
+    },
+    {
+      "path": "tests/truss-postgresql/check-native-boundaries.py",
+      "sha256": "27804d648936c9e17a11224dc34d7eeaccba62e568dbb65d617eca4f6a5bec45",
+      "matchesCurrentSource": true
+    },
+    {
+      "path": "tests/truss-postgresql/prepared-check.py",
+      "sha256": "ab061813e529badcf7acb5a100f21679c8c6be8d7805d5a1eb01a164b94471dd",
+      "matchesCurrentSource": true
+    }
+  ],
+  "storageAdapterQualified": false,
+  "protocolParameterBindingQualified": false,
+  "trussBindingAdopted": false
+}

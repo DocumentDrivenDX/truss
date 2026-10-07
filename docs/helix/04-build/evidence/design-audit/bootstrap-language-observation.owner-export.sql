@@ -1,0 +1,1 @@
+SELECT l.tableoid::pg_catalog.oid::pg_catalog.text AS catalog_class_oid, l.oid::pg_catalog.text AS object_oid, l.lanacl::pg_catalog.text AS lanacl_native_text, pg_catalog.array_dims(l.lanacl) AS lanacl_native_dimensions, pg_catalog.to_jsonb(l)::pg_catalog.text AS original_catalog_row_json FROM pg_catalog.pg_language l WHERE l.oid = ANY($1::pg_catalog.oid[]) ORDER BY l.oid

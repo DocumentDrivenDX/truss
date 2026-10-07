@@ -1,0 +1,503 @@
+{
+  "umf": "0.1.0",
+  "id": "truss-edge-retained-home-proposal",
+  "vocabularies": {
+    "umf.postgresql": {
+      "version": "0.1.0"
+    }
+  },
+  "modules": [
+    {
+      "id": "schema",
+      "namespace": "",
+      "elements": [
+        {
+          "id": "schema",
+          "extensions": {
+            "umf.postgresql": {
+              "profile": "postgresql-raw-parse-tree",
+              "source": "-- Review candidate only; not part of the adopted layout or installer.\n-- Apply only to the exact baseline whose edge table has no retained home.\n-- Existing rows remain SQL NULL: this does not recover previously lost content.\n-- Truss must qualify the selected exact-value/presence profile independently.\nALTER TABLE truss.edge ADD COLUMN retained pg_catalog.jsonb;\nALTER TABLE truss.edge ADD CONSTRAINT edge_retained_is_object\n  CHECK (retained IS NULL OR pg_catalog.jsonb_typeof(retained) = 'object');\n",
+              "root": {
+                "kind": "object",
+                "members": {
+                  "version": {
+                    "kind": "number",
+                    "value": "170004"
+                  },
+                  "stmts": {
+                    "kind": "array",
+                    "items": [
+                      {
+                        "kind": "object",
+                        "members": {
+                          "stmt": {
+                            "kind": "object",
+                            "members": {
+                              "AlterTableStmt": {
+                                "kind": "object",
+                                "members": {
+                                  "relation": {
+                                    "kind": "object",
+                                    "members": {
+                                      "schemaname": {
+                                        "kind": "string",
+                                        "value": "truss"
+                                      },
+                                      "relname": {
+                                        "kind": "string",
+                                        "value": "edge"
+                                      },
+                                      "inh": {
+                                        "kind": "boolean",
+                                        "value": true
+                                      },
+                                      "relpersistence": {
+                                        "kind": "string",
+                                        "value": "p"
+                                      },
+                                      "location": {
+                                        "kind": "number",
+                                        "value": "318"
+                                      }
+                                    }
+                                  },
+                                  "cmds": {
+                                    "kind": "array",
+                                    "items": [
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "AlterTableCmd": {
+                                            "kind": "object",
+                                            "members": {
+                                              "subtype": {
+                                                "kind": "string",
+                                                "value": "AT_AddColumn"
+                                              },
+                                              "def": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "ColumnDef": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "colname": {
+                                                        "kind": "string",
+                                                        "value": "retained"
+                                                      },
+                                                      "typeName": {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "names": {
+                                                            "kind": "array",
+                                                            "items": [
+                                                              {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "String": {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "sval": {
+                                                                        "kind": "string",
+                                                                        "value": "pg_catalog"
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              },
+                                                              {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "String": {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "sval": {
+                                                                        "kind": "string",
+                                                                        "value": "jsonb"
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            ]
+                                                          },
+                                                          "typemod": {
+                                                            "kind": "number",
+                                                            "value": "-1"
+                                                          },
+                                                          "location": {
+                                                            "kind": "number",
+                                                            "value": "349"
+                                                          }
+                                                        }
+                                                      },
+                                                      "is_local": {
+                                                        "kind": "boolean",
+                                                        "value": true
+                                                      },
+                                                      "location": {
+                                                        "kind": "number",
+                                                        "value": "340"
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "behavior": {
+                                                "kind": "string",
+                                                "value": "DROP_RESTRICT"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "objtype": {
+                                    "kind": "string",
+                                    "value": "OBJECT_TABLE"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "stmt_len": {
+                            "kind": "number",
+                            "value": "365"
+                          }
+                        }
+                      },
+                      {
+                        "kind": "object",
+                        "members": {
+                          "stmt": {
+                            "kind": "object",
+                            "members": {
+                              "AlterTableStmt": {
+                                "kind": "object",
+                                "members": {
+                                  "relation": {
+                                    "kind": "object",
+                                    "members": {
+                                      "schemaname": {
+                                        "kind": "string",
+                                        "value": "truss"
+                                      },
+                                      "relname": {
+                                        "kind": "string",
+                                        "value": "edge"
+                                      },
+                                      "inh": {
+                                        "kind": "boolean",
+                                        "value": true
+                                      },
+                                      "relpersistence": {
+                                        "kind": "string",
+                                        "value": "p"
+                                      },
+                                      "location": {
+                                        "kind": "number",
+                                        "value": "379"
+                                      }
+                                    }
+                                  },
+                                  "cmds": {
+                                    "kind": "array",
+                                    "items": [
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "AlterTableCmd": {
+                                            "kind": "object",
+                                            "members": {
+                                              "subtype": {
+                                                "kind": "string",
+                                                "value": "AT_AddConstraint"
+                                              },
+                                              "def": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "Constraint": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "contype": {
+                                                        "kind": "string",
+                                                        "value": "CONSTR_CHECK"
+                                                      },
+                                                      "conname": {
+                                                        "kind": "string",
+                                                        "value": "edge_retained_is_object"
+                                                      },
+                                                      "initially_valid": {
+                                                        "kind": "boolean",
+                                                        "value": true
+                                                      },
+                                                      "raw_expr": {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "BoolExpr": {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "boolop": {
+                                                                "kind": "string",
+                                                                "value": "OR_EXPR"
+                                                              },
+                                                              "args": {
+                                                                "kind": "array",
+                                                                "items": [
+                                                                  {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "NullTest": {
+                                                                        "kind": "object",
+                                                                        "members": {
+                                                                          "arg": {
+                                                                            "kind": "object",
+                                                                            "members": {
+                                                                              "ColumnRef": {
+                                                                                "kind": "object",
+                                                                                "members": {
+                                                                                  "fields": {
+                                                                                    "kind": "array",
+                                                                                    "items": [
+                                                                                      {
+                                                                                        "kind": "object",
+                                                                                        "members": {
+                                                                                          "String": {
+                                                                                            "kind": "object",
+                                                                                            "members": {
+                                                                                              "sval": {
+                                                                                                "kind": "string",
+                                                                                                "value": "retained"
+                                                                                              }
+                                                                                            }
+                                                                                          }
+                                                                                        }
+                                                                                      }
+                                                                                    ]
+                                                                                  },
+                                                                                  "location": {
+                                                                                    "kind": "number",
+                                                                                    "value": "438"
+                                                                                  }
+                                                                                }
+                                                                              }
+                                                                            }
+                                                                          },
+                                                                          "nulltesttype": {
+                                                                            "kind": "string",
+                                                                            "value": "IS_NULL"
+                                                                          },
+                                                                          "location": {
+                                                                            "kind": "number",
+                                                                            "value": "447"
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  },
+                                                                  {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "A_Expr": {
+                                                                        "kind": "object",
+                                                                        "members": {
+                                                                          "kind": {
+                                                                            "kind": "string",
+                                                                            "value": "AEXPR_OP"
+                                                                          },
+                                                                          "name": {
+                                                                            "kind": "array",
+                                                                            "items": [
+                                                                              {
+                                                                                "kind": "object",
+                                                                                "members": {
+                                                                                  "String": {
+                                                                                    "kind": "object",
+                                                                                    "members": {
+                                                                                      "sval": {
+                                                                                        "kind": "string",
+                                                                                        "value": "="
+                                                                                      }
+                                                                                    }
+                                                                                  }
+                                                                                }
+                                                                              }
+                                                                            ]
+                                                                          },
+                                                                          "lexpr": {
+                                                                            "kind": "object",
+                                                                            "members": {
+                                                                              "FuncCall": {
+                                                                                "kind": "object",
+                                                                                "members": {
+                                                                                  "funcname": {
+                                                                                    "kind": "array",
+                                                                                    "items": [
+                                                                                      {
+                                                                                        "kind": "object",
+                                                                                        "members": {
+                                                                                          "String": {
+                                                                                            "kind": "object",
+                                                                                            "members": {
+                                                                                              "sval": {
+                                                                                                "kind": "string",
+                                                                                                "value": "pg_catalog"
+                                                                                              }
+                                                                                            }
+                                                                                          }
+                                                                                        }
+                                                                                      },
+                                                                                      {
+                                                                                        "kind": "object",
+                                                                                        "members": {
+                                                                                          "String": {
+                                                                                            "kind": "object",
+                                                                                            "members": {
+                                                                                              "sval": {
+                                                                                                "kind": "string",
+                                                                                                "value": "jsonb_typeof"
+                                                                                              }
+                                                                                            }
+                                                                                          }
+                                                                                        }
+                                                                                      }
+                                                                                    ]
+                                                                                  },
+                                                                                  "args": {
+                                                                                    "kind": "array",
+                                                                                    "items": [
+                                                                                      {
+                                                                                        "kind": "object",
+                                                                                        "members": {
+                                                                                          "ColumnRef": {
+                                                                                            "kind": "object",
+                                                                                            "members": {
+                                                                                              "fields": {
+                                                                                                "kind": "array",
+                                                                                                "items": [
+                                                                                                  {
+                                                                                                    "kind": "object",
+                                                                                                    "members": {
+                                                                                                      "String": {
+                                                                                                        "kind": "object",
+                                                                                                        "members": {
+                                                                                                          "sval": {
+                                                                                                            "kind": "string",
+                                                                                                            "value": "retained"
+                                                                                                          }
+                                                                                                        }
+                                                                                                      }
+                                                                                                    }
+                                                                                                  }
+                                                                                                ]
+                                                                                              },
+                                                                                              "location": {
+                                                                                                "kind": "number",
+                                                                                                "value": "482"
+                                                                                              }
+                                                                                            }
+                                                                                          }
+                                                                                        }
+                                                                                      }
+                                                                                    ]
+                                                                                  },
+                                                                                  "funcformat": {
+                                                                                    "kind": "string",
+                                                                                    "value": "COERCE_EXPLICIT_CALL"
+                                                                                  },
+                                                                                  "location": {
+                                                                                    "kind": "number",
+                                                                                    "value": "458"
+                                                                                  }
+                                                                                }
+                                                                              }
+                                                                            }
+                                                                          },
+                                                                          "rexpr": {
+                                                                            "kind": "object",
+                                                                            "members": {
+                                                                              "A_Const": {
+                                                                                "kind": "object",
+                                                                                "members": {
+                                                                                  "sval": {
+                                                                                    "kind": "object",
+                                                                                    "members": {
+                                                                                      "sval": {
+                                                                                        "kind": "string",
+                                                                                        "value": "object"
+                                                                                      }
+                                                                                    }
+                                                                                  },
+                                                                                  "location": {
+                                                                                    "kind": "number",
+                                                                                    "value": "494"
+                                                                                  }
+                                                                                }
+                                                                              }
+                                                                            }
+                                                                          },
+                                                                          "location": {
+                                                                            "kind": "number",
+                                                                            "value": "492"
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                ]
+                                                              },
+                                                              "location": {
+                                                                "kind": "number",
+                                                                "value": "455"
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      },
+                                                      "location": {
+                                                        "kind": "number",
+                                                        "value": "394"
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "behavior": {
+                                                "kind": "string",
+                                                "value": "DROP_RESTRICT"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "objtype": {
+                                    "kind": "string",
+                                    "value": "OBJECT_TABLE"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "stmt_location": {
+                            "kind": "number",
+                            "value": "366"
+                          },
+                          "stmt_len": {
+                            "kind": "number",
+                            "value": "137"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

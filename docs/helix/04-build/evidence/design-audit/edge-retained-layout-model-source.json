@@ -1,0 +1,52 @@
+{
+  "scope": "existing UMF edited native statement-array export and JSON reload only; no complete required physical inventory, catalog resolution, native execution, migration or runtime adoption",
+  "ownerSource": {
+    "root": "/Users/erik/Projects/umf",
+    "commit": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+    "files": [
+      {
+        "path": "src/adapters/postgresql/index.ts",
+        "sha256": "7baa071d95e5f9863a4ce2bf892d87fb27cab9d8605ba4cf8887016d14ca17b4"
+      },
+      {
+        "path": "src/model/native-json.ts",
+        "sha256": "1459a3e030419c3ae09b300972e27aed8b8ee1f7e41972b3cc00627dff7d7882"
+      },
+      {
+        "path": "src/model/document.ts",
+        "sha256": "a0422042659defdea425dff8bb0618eaa4bbf125f68da16aa5ad21af0b6c282f"
+      },
+      {
+        "path": "native/postgresql/runtime.ts",
+        "sha256": "a88fea4cf15c9c3c3f0ad1f0a36d8f5de42a42ce8ea9712499f609beee3ea751"
+      },
+      {
+        "path": "bun.lock",
+        "sha256": "98a99f7d306f7269db103bdbfafe5f9ad9ed34b02024276ad0cce45df27f5cc3"
+      }
+    ]
+  },
+  "bunVersion": "1.4.2",
+  "backend": "@libpg-query/parser@17.6.10",
+  "inputs": [
+    {
+      "path": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+      "sha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/edge-retained-home-v0.1.proposal.umf.json",
+      "sha256": "78336f2f83a24f424740408d504c832ead014c06f1290949b1fa09f39b27f5b4"
+    }
+  ],
+  "modelPath": "docs/helix/02-design/models/truss-layout-edge-retained.proposal.umf.json",
+  "modelSha256": "e2d03312c575f75f249b5abff3a0ae2f7fb6e977fc71f7081f9311c913c2ca7a",
+  "exportPath": "docs/helix/04-build/evidence/design-audit/truss-layout-edge-retained.owner-export.sql",
+  "exportSha256": "879ed4807e2a97f321285bbed5a31c17c8327ee4aad58c81254ccff6e6d183e2",
+  "originalStatements": 35,
+  "addedStatements": 2,
+  "reviewMarker": true,
+  "baselineArchivePreserved": true,
+  "editedAstExport": true,
+  "reloadedExportExact": true,
+  "installationReady": false
+}

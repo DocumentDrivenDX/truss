@@ -1,0 +1,119 @@
+{
+  "scope": "strict Draft 2020-12 complete event proposal shape and old/new version isolation only",
+  "bunVersion": "1.4.2",
+  "sourcePins": [
+    {
+      "path": "docs/helix/02-design/contracts/exact-value-v0.1.schema.json",
+      "sha256": "0c804796bfbf68339c299f0c55d24db58fcfcc929bffe2d5ffaf4a2f27e24880"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/history-record-v0.1.schema.json",
+      "sha256": "c35c1258028cc4c8c95dcd16b561caed4f2a347c086f72ebfc7bfc4f2dfcf2fe"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/history-event-v0.1.schema.json",
+      "sha256": "e42f9b48642528cabbb646ccb758eb12b7f030029b712cf5d6f5174cbd90bfa6"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/history-retain-payload-v0.1.proposal.schema.json",
+      "sha256": "fc08e07a4b09636ac234737be9bb2cf3a9a3c26120baad612176574c17659605"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/history-event-v0.2.proposal.schema.json",
+      "sha256": "714923be0f86bd3508a097cabfee63a180e03b19651ebbfa38844bb3e637b425"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/check-history-event-v0.2-proposal.ts",
+      "sha256": "206226d7102005371e147a2255804da51de0c09ac9f57ef39aa2979ed778d46a"
+    }
+  ],
+  "outcomes": [
+    {
+      "name": "create",
+      "oldAndNewShapeValid": true,
+      "versionIsolation": true
+    },
+    {
+      "name": "delete",
+      "oldAndNewShapeValid": true,
+      "versionIsolation": true
+    },
+    {
+      "name": "property",
+      "oldAndNewShapeValid": true,
+      "versionIsolation": true
+    },
+    {
+      "name": "transform",
+      "oldAndNewShapeValid": true,
+      "versionIsolation": true
+    },
+    {
+      "name": "rebind",
+      "oldAndNewShapeValid": true,
+      "versionIsolation": true
+    },
+    {
+      "name": "metadata",
+      "oldAndNewShapeValid": true,
+      "versionIsolation": true
+    },
+    {
+      "name": "complete retain",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "multiple names one event",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "payload without custody",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "missing group",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "missing original context",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "empty changes",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "replacement",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "removal",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "unknown root",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "duplicate names need semantic refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "forged original context needs semantic admission",
+      "expected": true,
+      "actual": true
+    }
+  ],
+  "nativeExecuted": false,
+  "adopted": false
+}

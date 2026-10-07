@@ -1,0 +1,340 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:seed-baseline:0.1.0",
+  "description": "Shape only; complete cut, original semantics/identity, canonical order, archive closure and authority require independent admission.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-seed-baseline/0.1.0"
+    },
+    "attempt": {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-seed-activation/0.1.0"
+        },
+        "seedId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "worker": {
+          "type": "object",
+          "properties": {
+            "context": {
+              "type": "object",
+              "properties": {
+                "sourceEpoch": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "feedProfile": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "scopeIdentity": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "sourceEpoch",
+                "feedProfile",
+                "scopeIdentity"
+              ],
+              "additionalProperties": false
+            },
+            "consumerId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "registrationId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "generation": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$",
+              "maxLength": 20
+            }
+          },
+          "required": [
+            "context",
+            "consumerId",
+            "registrationId",
+            "generation"
+          ],
+          "additionalProperties": false
+        },
+        "activationProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "seedId",
+        "worker",
+        "activationProfile"
+      ],
+      "additionalProperties": false
+    },
+    "baselineProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "layoutProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "valueProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "interpretationProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "catalogRevision": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$"
+    },
+    "snapshotEvidence": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "records": {
+      "type": "array",
+      "items": {
+        "$ref": "urn:truss:draft:history-record:0.1.0"
+      }
+    },
+    "revisions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/revision"
+      }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    },
+    "reservations": {
+      "type": "array",
+      "items": {
+        "$ref": "urn:truss:draft:seed-baseline-inventory:0.1.0#/$defs/reservation"
+      }
+    },
+    "configurations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "configuration": {
+            "$ref": "urn:truss:draft:import-report:0.1.0#/properties/selectedConfiguration"
+          },
+          "artifact": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          }
+        },
+        "required": [
+          "configuration",
+          "artifact"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "retainedArchives": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "archiveProfile": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+          },
+          "artifact": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          }
+        },
+        "required": [
+          "archiveProfile",
+          "artifact"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "attempt",
+    "baselineProfile",
+    "layoutProfile",
+    "valueProfile",
+    "interpretationProfile",
+    "catalogRevision",
+    "snapshotEvidence",
+    "records",
+    "revisions",
+    "sources",
+    "reservations",
+    "configurations",
+    "retainedArchives"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "source": {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-feed-source/0.1.0"
+        },
+        "identity": {
+          "$ref": "urn:truss:draft:history-record:0.1.0#/$defs/identity"
+        },
+        "loadId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "createdCatalogRevision": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        },
+        "source": {
+          "type": "object",
+          "properties": {
+            "author": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "at": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "system": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "extensions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "value": {
+                    "$ref": "urn:truss:draft:exact-value:0.1.0#/$defs/value"
+                  }
+                },
+                "required": [
+                  "name",
+                  "value"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "extensions"
+          ],
+          "additionalProperties": false
+        },
+        "endpoints": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "object"
+                }
+              },
+              "required": [
+                "kind"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "edge"
+                },
+                "source": {
+                  "$ref": "urn:truss:draft:history-record:0.1.0#/$defs/identity"
+                },
+                "target": {
+                  "$ref": "urn:truss:draft:history-record:0.1.0#/$defs/identity"
+                }
+              },
+              "required": [
+                "kind",
+                "source",
+                "target"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "identity",
+        "loadId",
+        "createdCatalogRevision",
+        "source",
+        "endpoints"
+      ],
+      "additionalProperties": false
+    },
+    "revision": {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-feed-revision/0.1.0"
+        },
+        "revision": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        },
+        "acceptedAt": {
+          "type": "string",
+          "minLength": 1
+        },
+        "input": {
+          "$ref": "urn:truss:acceptance-input:0.1.0"
+        },
+        "report": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "origin": {
+          "type": "object",
+          "properties": {
+            "asserted": {
+              "$ref": "urn:truss:draft:exact-value:0.1.0#/$defs/value"
+            },
+            "databaseRole": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "asserted",
+            "databaseRole"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "revision",
+        "acceptedAt",
+        "input",
+        "report",
+        "origin"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

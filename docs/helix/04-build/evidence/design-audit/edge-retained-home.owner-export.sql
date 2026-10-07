@@ -1,0 +1,1 @@
+ALTER TABLE truss.edge ADD COLUMN retained pg_catalog.jsonb; ALTER TABLE truss.edge ADD CONSTRAINT edge_retained_is_object CHECK (retained IS NULL OR pg_catalog.jsonb_typeof(retained) = 'object')

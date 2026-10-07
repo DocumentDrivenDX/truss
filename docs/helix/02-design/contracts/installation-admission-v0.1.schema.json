@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:installation-admission:0.1.0",
+  "description": "Complete projected native admission shape; scalar-to-original-byte parity, producer and native custody require semantic admission.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-installation-admission/0.1.0"
+    },
+    "installationId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sourceEpoch": {
+      "type": "string",
+      "minLength": 1
+    },
+    "configurationGeneration": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$"
+    },
+    "keyReuse": {
+      "enum": [
+        "forbid",
+        "allow"
+      ]
+    },
+    "journalMode": {
+      "enum": [
+        "engine",
+        "trigger"
+      ]
+    },
+    "configuration": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "selectedBinding": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "installedInventory": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "observationProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "originalObservation": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "installationId",
+    "sourceEpoch",
+    "configurationGeneration",
+    "keyReuse",
+    "journalMode",
+    "configuration",
+    "selectedBinding",
+    "installedInventory",
+    "observationProfile",
+    "originalObservation"
+  ],
+  "additionalProperties": false
+}

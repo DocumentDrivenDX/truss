@@ -1,0 +1,54 @@
+-- Unexecuted PG17 original admitted address scopes, each unique nonnull 1D oid[].
+-- Constraint: $1 pg_constraint IDs, $2 pg_class parents/endpoints, $3 pg_type domains; total <=256.
+-- No namespace/name/state filters; full original cut/fanout/resources require admission.
+SELECT k.tableoid::pg_catalog.oid::pg_catalog.text AS catalog_class_oid,
+       k.oid::text AS constraint_oid,
+       kn.nspname AS constraint_schema,
+       k.conname AS constraint_name,
+       k.contype::text AS constraint_kind,
+       k.conrelid::text AS relation_oid,
+       rn.nspname AS relation_schema,
+       r.relname AS relation_name,
+       k.contypid::text AS domain_oid,
+       tn.nspname AS domain_schema,
+       t.typname AS domain_name,
+       k.condeferrable AS deferrable,
+       k.condeferred AS initially_deferred,
+       k.convalidated AS validated,
+       k.conindid::text AS supporting_index_oid,
+       k.conparentid::text AS parent_constraint_oid,
+       k.confrelid::text AS referenced_relation_oid,
+       k.confupdtype::text AS update_action,
+       k.confdeltype::text AS delete_action,
+       k.confmatchtype::text AS match_mode,
+       k.conislocal AS is_local,
+       k.coninhcount::text AS inheritance_count,
+       k.connoinherit AS no_inherit,
+       k.conkey::text AS constrained_ordinals_display,
+       pg_catalog.array_dims(k.conkey) AS conkey_native_dimensions,
+       k.confkey::text AS referenced_ordinals_display,
+       pg_catalog.array_dims(k.confkey) AS confkey_native_dimensions,
+       k.conpfeqop::text AS pk_fk_operators_display,
+       pg_catalog.array_dims(k.conpfeqop) AS conpfeqop_native_dimensions,
+       k.conppeqop::text AS pk_pk_operators_display,
+       pg_catalog.array_dims(k.conppeqop) AS conppeqop_native_dimensions,
+       k.conffeqop::text AS fk_fk_operators_display,
+       pg_catalog.array_dims(k.conffeqop) AS conffeqop_native_dimensions,
+       k.confdelsetcols::text AS delete_set_ordinals_display,
+       pg_catalog.array_dims(k.confdelsetcols) AS confdelsetcols_native_dimensions,
+       k.conexclop::text AS exclusion_operators_display,
+       pg_catalog.array_dims(k.conexclop) AS conexclop_native_dimensions,
+       k.conbin::text AS expression_native_tree,
+       pg_catalog.pg_get_constraintdef(k.oid, false) AS definition_sql,
+       pg_catalog.to_jsonb(k)::pg_catalog.text AS original_catalog_row_json
+FROM pg_catalog.pg_constraint AS k
+LEFT JOIN pg_catalog.pg_namespace AS kn ON kn.oid = k.connamespace
+LEFT JOIN pg_catalog.pg_class AS r ON r.oid = k.conrelid
+LEFT JOIN pg_catalog.pg_namespace AS rn ON rn.oid = r.relnamespace
+LEFT JOIN pg_catalog.pg_type AS t ON t.oid = k.contypid
+LEFT JOIN pg_catalog.pg_namespace AS tn ON tn.oid = t.typnamespace
+WHERE k.oid = ANY($1::pg_catalog.oid[])
+   OR k.conrelid = ANY($2::pg_catalog.oid[])
+   OR k.confrelid = ANY($2::pg_catalog.oid[])
+   OR k.contypid = ANY($3::pg_catalog.oid[])
+ORDER BY k.oid;

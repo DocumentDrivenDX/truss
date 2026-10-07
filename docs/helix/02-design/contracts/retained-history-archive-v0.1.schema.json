@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:retained-history-archive:0.1.0",
+  "description": "Shape only; baseline/event/definition/owner correspondence, continuity and current authority require independent admission.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-retained-history-archive/0.1.0"
+    },
+    "sourceEpoch": {
+      "type": "string",
+      "minLength": 1
+    },
+    "archiveProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "identity": {
+      "$ref": "urn:truss:draft:history-record:0.1.0#/$defs/identity"
+    },
+    "baseline": {
+      "$ref": "urn:truss:draft:history-record:0.1.0"
+    },
+    "throughVersion": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$"
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "$ref": "urn:truss:draft:history-event:0.1.0"
+      }
+    },
+    "definitions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "definitionPin": {
+            "type": "string",
+            "minLength": 1
+          },
+          "interpretationProfile": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+          },
+          "artifact": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          }
+        },
+        "required": [
+          "definitionPin",
+          "interpretationProfile",
+          "artifact"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "baselineEvidence": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "completeEventInventory": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "retainedOwnerInventory": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "retentionEvidence": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "sourceEpoch",
+    "archiveProfile",
+    "identity",
+    "baseline",
+    "throughVersion",
+    "events",
+    "definitions",
+    "baselineEvidence",
+    "completeEventInventory",
+    "retainedOwnerInventory",
+    "retentionEvidence"
+  ],
+  "additionalProperties": false
+}

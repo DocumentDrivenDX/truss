@@ -1,0 +1,29 @@
+{
+  "scope": "exact old twenty/new twenty-three selected source statements and three observer effect additions; no complete baseline, native bodies/dependencies/security or installation qualification",
+  "status": "pass",
+  "retainedStatements": 20,
+  "addedObserverStatements": 3,
+  "addedPhysicalIdentities": [
+    "truss.edge-limit.trigger.edge_limit_catalog_observe",
+    "truss.edge-limit.trigger.edge_limit_edge_observe",
+    "truss.edge-limit.trigger.edge_limit_marker_observe"
+  ],
+  "inputPins": [
+    {
+      "path": "/private/tmp/claude-501/truss-spec-wt/docs/helix/04-build/evidence/design-audit/row-home-native-guard-statement-composition.json",
+      "sha256": "544c6ba246b82f7158a301ea3e7ec997b5c1cb4406188f4a7df6278ee1b830eb"
+    },
+    {
+      "path": "/private/tmp/claude-501/truss-spec-wt/docs/helix/04-build/evidence/design-audit/row-home-edge-limit-guard-statement-composition.json",
+      "sha256": "88bf4ad693825fd2d4f26cceec4685266716404b9bf804d39ec8fad93f4f472d"
+    },
+    {
+      "path": "/private/tmp/claude-501/truss-spec-wt/docs/helix/04-build/evidence/design-audit/row-home-native-guard-statement-mapping.json",
+      "sha256": "4cce344ce5fe62e444f666a8eb3cf96d61c622c08cf3813fd21a141d0449692f"
+    },
+    {
+      "path": "/private/tmp/claude-501/truss-spec-wt/docs/helix/04-build/evidence/design-audit/row-home-edge-limit-guard-statement-mapping.json",
+      "sha256": "989a8568c2e8408c051000d565f37c38b55d905fba28904dd68ecdd8cbbb9373"
+    }
+  ]
+}

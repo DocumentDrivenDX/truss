@@ -1,0 +1,121 @@
+{
+  "scope": "document allocation corruption sensitivity only; no semantic/native coverage",
+  "controls": 14,
+  "failures": [],
+  "results": [
+    {
+      "control": "original",
+      "optimized": false,
+      "passed": true,
+      "errors": []
+    },
+    {
+      "control": "original",
+      "optimized": true,
+      "passed": true,
+      "errors": []
+    },
+    {
+      "control": "missing TD",
+      "optimized": false,
+      "passed": true,
+      "errors": [
+        "US-001: missing TD",
+        "US-001: missing TD references ['US-001-AC1', 'US-001-AC2', 'US-001-AC3']"
+      ]
+    },
+    {
+      "control": "missing TD",
+      "optimized": true,
+      "passed": true,
+      "errors": [
+        "US-001: missing TD",
+        "US-001: missing TD references ['US-001-AC1', 'US-001-AC2', 'US-001-AC3']"
+      ]
+    },
+    {
+      "control": "missing STP",
+      "optimized": false,
+      "passed": true,
+      "errors": [
+        "US-001: missing STP",
+        "US-001: missing STP references ['US-001-AC1', 'US-001-AC2', 'US-001-AC3']"
+      ]
+    },
+    {
+      "control": "missing STP",
+      "optimized": true,
+      "passed": true,
+      "errors": [
+        "US-001: missing STP",
+        "US-001: missing STP references ['US-001-AC1', 'US-001-AC2', 'US-001-AC3']"
+      ]
+    },
+    {
+      "control": "missing declaration section",
+      "optimized": false,
+      "passed": true,
+      "errors": [
+        "US-001: requires exactly one acceptance declaration section"
+      ]
+    },
+    {
+      "control": "missing declaration section",
+      "optimized": true,
+      "passed": true,
+      "errors": [
+        "US-001: requires exactly one acceptance declaration section"
+      ]
+    },
+    {
+      "control": "duplicate criterion",
+      "optimized": false,
+      "passed": true,
+      "errors": [
+        "US-001: missing or repeated criterion declaration"
+      ]
+    },
+    {
+      "control": "duplicate criterion",
+      "optimized": true,
+      "passed": true,
+      "errors": [
+        "US-001: missing or repeated criterion declaration"
+      ]
+    },
+    {
+      "control": "missing primary allocation",
+      "optimized": false,
+      "passed": true,
+      "errors": [
+        "US-001: missing STP references ['US-001-AC1']",
+        "US-001: US-001-AC1 needs exactly one primary allocation row"
+      ]
+    },
+    {
+      "control": "missing primary allocation",
+      "optimized": true,
+      "passed": true,
+      "errors": [
+        "US-001: missing STP references ['US-001-AC1']",
+        "US-001: US-001-AC1 needs exactly one primary allocation row"
+      ]
+    },
+    {
+      "control": "empty inventory",
+      "optimized": false,
+      "passed": true,
+      "errors": [
+        "missing story inventory"
+      ]
+    },
+    {
+      "control": "empty inventory",
+      "optimized": true,
+      "passed": true,
+      "errors": [
+        "missing story inventory"
+      ]
+    }
+  ]
+}

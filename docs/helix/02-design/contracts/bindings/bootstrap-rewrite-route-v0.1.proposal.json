@@ -1,0 +1,75 @@
+{
+  "interfaceVersion": "truss-bootstrap-route-entry/0.1.0",
+  "routeIdentity": "pg17.rewrite.namespace-fanout/0.1.0",
+  "status": "unadopted; source pins only verified; native class/cut/transport/semantic producers unqualified",
+  "nativeClass": {
+    "namespace": "pg_catalog",
+    "relation": "pg_rewrite",
+    "classOid": "resolve from original target; never constant",
+    "storageScope": "database",
+    "subobjectNumber": "0"
+  },
+  "selector": "complete original namespace relation-parent fanout",
+  "artifacts": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-rewrite-observation-pg17.proposal.sql",
+      "sha256": "9336988cc4eb60096225b544fccb35518fd875de74c1efd6ff8b2f2b4907536f"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-rewrite-observation-pg17.proposal.umf.json",
+      "sha256": "6e8c797c452f2e86da7ec5ac309eda1d5f9f26c60a191eb6c0921a5b0523bf9b"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/bootstrap-rewrite-observation.owner-export.sql",
+      "sha256": "69e149337d90d91e3b6bfa211c7dc4e40d4692a9634978a6e5cdb9f15c610aac"
+    }
+  ],
+  "parameterGrammar": {
+    "slot": "1",
+    "nativeType": "pg_catalog.oid",
+    "nullAllowed": false,
+    "itemDomain": "canonical nonzero uint32 decimal text; independently admitted original pg_namespace",
+    "encoder": "exact original text parameter"
+  },
+  "orderedColumns": [
+    "catalog_class_oid",
+    "object_oid",
+    "relation_oid",
+    "original_catalog_row_json"
+  ],
+  "coverage": "Complete unique original member fanout for every admitted parent; empty requires independent full parent/cut/authority proof. Specific child requires selected pg17.rewrite.child-direct/0.1.0 original resolution and exact member presence. Internal/disabled/unexpected objects retained.",
+  "requiredKnownFields": [
+    "oid",
+    "rulename",
+    "ev_class",
+    "ev_type",
+    "ev_enabled",
+    "is_instead",
+    "ev_qual",
+    "ev_action"
+  ],
+  "preservation": "Retain full exact returned row JSON text and every unknown extension member; lossless bounded selected native JSON decoder; no parse/stringify reconstruction",
+  "dependencyExtraction": {
+    "parent": "ev_class actual pg_class with original view/rule/relation context",
+    "expressions": "full original ev_qual/ev_action native trees and dependency definition preserved; actual multiple-action ordering/context interpreted under selected native grammar",
+    "state": "ev_type/ev_enabled/is_instead and view return-rule/native relation semantics separately admitted; no name/enablement filtering or action execution",
+    "fieldClassification": {
+      "oid": "original rule correlation only",
+      "rulename": "exact native rule name under resolved original parent relation",
+      "ev_class": "resolved original parent relation/view definition",
+      "ev_type": "exact native event character 1/2/3/4; not host integer enum or invented command",
+      "ev_enabled": "exact O/D/R/A replication firing declaration; disabled remains present definition",
+      "is_instead": "actual INSTEAD declaration distinct from action/qualification",
+      "ev_qual": "complete original qualifying native tree and selected native context/dependency interpretation",
+      "ev_action": "complete original ordered action query tree and selected native context/dependency interpretation"
+    },
+    "canonicalProcedure": "CONTRACT-008 Rewrite semantic projection: resolved parent/exact rule name plus event/firing/INSTEAD and full native qualifying/ordered-action meaning with original dependencies; direct child requires complete parent fanout"
+  },
+  "adjuncts": [
+    "complete original parent/child-kind/type/routine/operator/collation/role/native expression dependencies",
+    "original current parent/owner/module authority and actual installed policy/enforcement context"
+  ],
+  "resourceProfile": "truss-bootstrap-collector-resource/0.1.0",
+  "refusal": "Missing required child/parent resolver or unsupported original guard/rule/expression/principal/native meaning refuses completeness; no status/name filter, execution or deparse-only equality",
+  "resourceObligations": "Shared enclosing totals, complete original cut/authority and explicit pre-materialization/native-work permits; no independent per-route allowance"
+}

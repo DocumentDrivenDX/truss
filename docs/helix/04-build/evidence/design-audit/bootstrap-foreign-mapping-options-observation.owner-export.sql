@@ -1,0 +1,1 @@
+SELECT c.tableoid::pg_catalog.text AS catalog_class_oid, c.oid::pg_catalog.text AS mapping_oid, c.umoptions::pg_catalog.text AS options_native_text, pg_catalog.array_dims(c.umoptions) AS options_native_dimensions FROM pg_catalog.pg_user_mapping c WHERE c.oid = ANY($1::pg_catalog.oid[]) ORDER BY c.oid

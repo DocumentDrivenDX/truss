@@ -1,0 +1,5 @@
+{
+  "scope": "Draft journal request/cursor shape only; no native bounds, authority, horizon, snapshot or ordering qualification",
+  "cases": 9,
+  "failures": []
+}

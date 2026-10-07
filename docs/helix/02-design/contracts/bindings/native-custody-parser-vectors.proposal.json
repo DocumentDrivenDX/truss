@@ -1,0 +1,135 @@
+{
+  "scope": "Independently authored component inputs for proposed native custody parser; generic member a is not a conforming Truss envelope. Passing a component does not imply closed schema/authority/native profile acceptance. No parser or PostgreSQL execution has been performed.",
+  "cases": [
+    {
+      "caseId": "unique-object",
+      "sourceBase64": "eyJhIjoib2sifQ==",
+      "sourceSha256": "678a8fd42ca02ed60960ee27c79415c6f3b2a5ee028bc43aa2a48cc1fdc1889b",
+      "sourceByteLength": 10,
+      "targetStage": "native-json-unique",
+      "expectedComponentOutcome": "pass"
+    },
+    {
+      "caseId": "duplicate-top",
+      "sourceBase64": "eyJhIjoxLCJhIjoyfQ==",
+      "sourceSha256": "1c53ee0df7b12fd4d65b976120c7fa6b847dc41dffd7f0331c3237a1ceab1756",
+      "sourceByteLength": 13,
+      "targetStage": "native-json-unique",
+      "expectedComponentOutcome": "refuse"
+    },
+    {
+      "caseId": "duplicate-nested",
+      "sourceBase64": "eyJhIjp7ImIiOjEsImIiOjJ9fQ==",
+      "sourceSha256": "193179e03522e6a46c057edc9ffe5a9945bbb25d9f02e657256936640d92ec52",
+      "sourceByteLength": 19,
+      "targetStage": "native-json-unique",
+      "expectedComponentOutcome": "refuse"
+    },
+    {
+      "caseId": "duplicate-escaped-key",
+      "sourceBase64": "eyJhIjoxLCJcdTAwNjEiOjJ9",
+      "sourceSha256": "c95ba945b310a34906bbfc28ce1346b87741d5a2b3066d1d3ecfa0acbd86392c",
+      "sourceByteLength": 18,
+      "targetStage": "native-json-unique",
+      "expectedComponentOutcome": "refuse"
+    },
+    {
+      "caseId": "duplicate-in-array",
+      "sourceBase64": "eyJhIjpbeyJiIjoxLCJiIjoyfV19",
+      "sourceSha256": "0f079ed2f4a046405790a497a7633eedf2dedeb678de6eb8e94fbff84a34abe5",
+      "sourceByteLength": 21,
+      "targetStage": "native-json-unique",
+      "expectedComponentOutcome": "refuse"
+    },
+    {
+      "caseId": "braces-in-string",
+      "sourceBase64": "eyJhIjoieyBbIH0gXSJ9",
+      "sourceSha256": "1429ce64a1937563f95133ccfa9207f44b98741079322e6b23a356587d72a74c",
+      "sourceByteLength": 15,
+      "targetStage": "lexical-preflight",
+      "expectedComponentOutcome": "pass"
+    },
+    {
+      "caseId": "escaped-backslash-quote",
+      "sourceBase64": "eyJhIjoiXFxcInt9In0=",
+      "sourceSha256": "e60ee6e1bb7c379f9df36fd6fbe9ff0d8675984ef02508c558099cabcf88e49a",
+      "sourceByteLength": 14,
+      "targetStage": "lexical-preflight",
+      "expectedComponentOutcome": "pass"
+    },
+    {
+      "caseId": "trailing-garbage",
+      "sourceBase64": "eyJhIjoxfXg=",
+      "sourceSha256": "e3de6add675ec69cc38526eb2dd586a2f9ce66fe7e14616a9dee6180b131b7d3",
+      "sourceByteLength": 8,
+      "targetStage": "native-json-unique",
+      "expectedComponentOutcome": "refuse"
+    },
+    {
+      "caseId": "truncated-string",
+      "sourceBase64": "eyJhIjoidW5maW5pc2hlZA==",
+      "sourceSha256": "7fcc0bfd351e47bb26a80355c2d15f939323d8ce51dd1372d8613519bbc0b8a7",
+      "sourceByteLength": 16,
+      "targetStage": "lexical-or-native-grammar",
+      "expectedComponentOutcome": "refuse"
+    },
+    {
+      "caseId": "invalid-utf8",
+      "sourceBase64": "eyJhIjoi/yJ9",
+      "sourceSha256": "dc2222acf0a31b9e965c6577a25c70f729766e07124482731257cb4bca738af7",
+      "sourceByteLength": 9,
+      "targetStage": "utf8-admission",
+      "expectedComponentOutcome": "refuse"
+    },
+    {
+      "caseId": "paired-surrogate",
+      "sourceBase64": "eyJhIjoiXHVkODNkXHVkZTAwIn0=",
+      "sourceSha256": "ecbc324dfaa36b6066d86b6b488ad41d8c5d213d5e379041ffd714429891186f",
+      "sourceByteLength": 20,
+      "targetStage": "unicode-string-admission",
+      "expectedComponentOutcome": "pass"
+    },
+    {
+      "caseId": "unpaired-surrogate",
+      "sourceBase64": "eyJhIjoiXHVkODAwIn0=",
+      "sourceSha256": "89f8ca88ea20e6cd48ed0ab6b731b66377cab0c8fb9a7187ea96ac6813ed24e4",
+      "sourceByteLength": 14,
+      "targetStage": "unicode-string-admission",
+      "expectedComponentOutcome": "refuse"
+    },
+    {
+      "caseId": "nul-valid-scalar",
+      "sourceBase64": "eyJhIjoiXHUwMDAwIn0=",
+      "sourceSha256": "f7b95dfbd9df8540bd3e4afbae53b2423868505e94d7822a22d9a2031c7d6642",
+      "sourceByteLength": 14,
+      "targetStage": "native-text-representability",
+      "expectedComponentOutcome": "unsupported-profile"
+    },
+    {
+      "caseId": "embedded-arbitrary-artifact",
+      "sourceBase64": "eyJhIjp7ImJ5dGVzQmFzZTY0IjoiQVA5YyJ9fQ==",
+      "sourceSha256": "5e86a80a14c1321d83d9bd0323e2474fe991de9ae92c7ad0d41dc0f449e6ada7",
+      "sourceByteLength": 28,
+      "targetStage": "artifact-byte-preservation",
+      "expectedComponentOutcome": "preserve-original-bytes",
+      "expectedEmbeddedBytesHex": "00ff5c"
+    },
+    {
+      "caseId": "numeric-spelling",
+      "sourceBase64": "eyJhIjoiLTAuMDEwMGUrMiJ9",
+      "sourceSha256": "97d923d269df4021b5b0e464e5449fac3fd0e27c1652a46e253faa836908f71d",
+      "sourceByteLength": 18,
+      "targetStage": "string-byte-preservation",
+      "expectedComponentOutcome": "preserve-original-spelling",
+      "expectedDecodedString": "-0.0100e+2"
+    }
+  ],
+  "nativeExecution": false,
+  "additionalParameterizedControls": [
+    "at selected maximum nesting and one beyond",
+    "at selected token/member/source/string byte bounds and one beyond",
+    "unknown/missing/wrong-kind members at every actual closed envelope node",
+    "strict Base64 invalid padding/alphabet and source/hash substitution"
+  ],
+  "productMeaning": "NUL is a valid Unicode scalar but unsupported by this native-text candidate, not malformed source. Embedded artifact bytes remain arbitrary original bytes under their own profiles."
+}

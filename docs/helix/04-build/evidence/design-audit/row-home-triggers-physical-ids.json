@@ -1,0 +1,11 @@
+{
+  "scope": "Six exact trigger source/target identities only; routine/type/security/grant/event/native behavior qualification incomplete.",
+  "allocationSha256": "93099ce6c3cce4f9eaa0d8bea7f43da25f3c7e6c33f00669439b82da407d8e70",
+  "entries": 6,
+  "counts": {
+    "trigger": 6
+  },
+  "complete": false,
+  "exactCapturedNodes": true,
+  "selectedSourceCoverage": true
+}

@@ -1,0 +1,38 @@
+-- Protected new-member candidate; not an ordinary-role public insertion API.
+-- Invoke only after independently admitted originals and confirmed counter
+-- reservation, under the same native exclusion and operation savepoint.
+INSERT INTO truss.feed_member AS m (
+  source_epoch, feed_profile, original_writer_xid, registration_address,
+  fact_kind, original_fact_key_bytes, original_fact_key_profile_bytes,
+  original_payload_bytes, original_payload_profile_bytes, original_payload_sha256,
+  original_owner_context_bytes, original_write_at, original_fact_clock_bytes,
+  delivery_ordinal)
+SELECT t.source_epoch, t.feed_profile, t.original_writer_xid,
+  $3::pg_catalog.int8, $5::pg_catalog.text,
+  $6::pg_catalog.bytea, $7::pg_catalog.bytea,
+  $8::pg_catalog.bytea, $9::pg_catalog.bytea, $10::pg_catalog.bytea,
+  $11::pg_catalog.bytea, $12::pg_catalog.timestamptz, $13::pg_catalog.bytea,
+  NULL::pg_catalog.int8
+FROM truss.feed_tx AS t
+WHERE t.source_epoch = $1::pg_catalog.text
+  AND t.feed_profile = $2::pg_catalog.text
+  AND t.original_writer_xid = pg_catalog.pg_current_xact_id_if_assigned()
+  AND t.registration_counter = $3::pg_catalog.int8
+  AND t.membership_generation = $4::pg_catalog.int8
+  AND t.original_context_bytes = $14::pg_catalog.bytea
+  AND t.manifest_profile_bytes = $15::pg_catalog.bytea
+  AND $3::pg_catalog.int8 > 0
+  AND $4::pg_catalog.int8 > 0
+RETURNING m.source_epoch, m.feed_profile,
+  m.original_writer_xid::pg_catalog.text AS original_writer_xid,
+  m.registration_address::pg_catalog.text AS registration_address,
+  m.fact_kind,
+  pg_catalog.encode(m.original_fact_key_bytes, 'hex') AS original_fact_key_bytes_hex,
+  pg_catalog.encode(m.original_fact_key_profile_bytes, 'hex') AS original_fact_key_profile_bytes_hex,
+  pg_catalog.encode(m.original_payload_bytes, 'hex') AS original_payload_bytes_hex,
+  pg_catalog.encode(m.original_payload_profile_bytes, 'hex') AS original_payload_profile_bytes_hex,
+  pg_catalog.encode(m.original_payload_sha256, 'hex') AS original_payload_sha256_hex,
+  pg_catalog.encode(m.original_owner_context_bytes, 'hex') AS original_owner_context_bytes_hex,
+  m.original_write_at::pg_catalog.text AS original_write_at,
+  pg_catalog.encode(m.original_fact_clock_bytes, 'hex') AS original_fact_clock_bytes_hex,
+  m.delivery_ordinal::pg_catalog.text AS delivery_ordinal;

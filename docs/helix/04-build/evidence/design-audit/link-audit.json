@@ -1,0 +1,7 @@
+{
+  "scope": "local Markdown file targets and ddx identity references only; no anchor or semantic validation",
+  "artifactIds": 202,
+  "duplicateIds": [],
+  "missingLinkIds": [],
+  "brokenFileTargets": []
+}

@@ -1,0 +1,28 @@
+{
+  "scope": "Read-only shared expression traversal/source correspondence; owner synthetic native evidence not rerun",
+  "weftHead": "20a308611113955c50c4548ae0a4c46153fcf1db",
+  "clean": true,
+  "sources": [
+    {
+      "path": "crates/weft-postgresql/src/expression.rs",
+      "sha256": "b2867d312f9aafc1651a709ceea0e215af6206b6cb8ebbba74472685e8fdacd5"
+    },
+    {
+      "path": "crates/weft-postgresql/src/candidate.rs",
+      "sha256": "2c06a6967a41fb4a5d2934be836013207a7b59514d16fc8e415e06b06abce74e"
+    },
+    {
+      "path": "tests/truss-postgresql/application-native.py",
+      "sha256": "c2307f4796900695c488c3ea7ec37fd69ede5df7053701683953ef6ffd123a90"
+    },
+    {
+      "path": "tests/truss-postgresql/fixtures/application-cases.json",
+      "sha256": "86dbf599a2cb09381a1fcfc9f9d5ea9df94bf1e08f87d8c86fb2e70a806480e1"
+    }
+  ],
+  "ownerReceiptSha256": "dca3128d31a3439d53e67ae0b793543bb818127d3845aa94e3907f4d9731419e",
+  "ownerReportedCases": 76,
+  "ownerReportedCrateTests": 58,
+  "nativeExecutionByTruss": false,
+  "complete": false
+}

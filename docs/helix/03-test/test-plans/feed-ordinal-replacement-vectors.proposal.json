@@ -1,0 +1,159 @@
+{
+  "profile": "truss-feed-ordinal-replacement-vectors/0.1.0",
+  "status": "unadopted_candidate",
+  "nativeExecution": false,
+  "scope": "Symbolic independently authored expected states for the retained-stale-manifest candidate. Symbol names stand for original registered native facts/clocks/canonical bytes, not a new feed encoding. Actual profile artifacts and native procedures must be supplied before execution.",
+  "originalFacts": {
+    "B": {
+      "registrationAddress": "1",
+      "clock": "original-clock-B"
+    },
+    "C": {
+      "registrationAddress": "2",
+      "clock": "original-clock-C"
+    },
+    "A": {
+      "registrationAddress": "3",
+      "clock": "original-clock-A"
+    }
+  },
+  "requiredOrder": [
+    "A",
+    "B",
+    "C"
+  ],
+  "states": {
+    "BC_final": {
+      "registrationCounter": "2",
+      "membershipGeneration": "2",
+      "finalizedGeneration": "2",
+      "manifest": "canonical-BC",
+      "members": {
+        "B": "0",
+        "C": "1"
+      },
+      "commitEligibleSubjectToOtherGuards": true
+    },
+    "BCA_dirty": {
+      "registrationCounter": "3",
+      "membershipGeneration": "3",
+      "finalizedGeneration": "2",
+      "manifest": "canonical-BC",
+      "members": {
+        "B": "0",
+        "C": "1",
+        "A": null
+      },
+      "commitEligibleSubjectToOtherGuards": false
+    },
+    "BCA_cleared": {
+      "registrationCounter": "3",
+      "membershipGeneration": "3",
+      "finalizedGeneration": null,
+      "manifest": null,
+      "members": {
+        "B": null,
+        "C": null,
+        "A": null
+      },
+      "commitEligibleSubjectToOtherGuards": false
+    },
+    "BCA_partial": {
+      "registrationCounter": "3",
+      "membershipGeneration": "3",
+      "finalizedGeneration": null,
+      "manifest": null,
+      "members": {
+        "B": null,
+        "C": null,
+        "A": "0"
+      },
+      "commitEligibleSubjectToOtherGuards": false
+    },
+    "ABC_final": {
+      "registrationCounter": "3",
+      "membershipGeneration": "3",
+      "finalizedGeneration": "3",
+      "manifest": "canonical-ABC",
+      "members": {
+        "B": "1",
+        "C": "2",
+        "A": "0"
+      },
+      "commitEligibleSubjectToOtherGuards": true
+    }
+  },
+  "cases": [
+    {
+      "id": "OR01",
+      "steps": [
+        "start BC_final",
+        "register A -> BCA_dirty",
+        "begin finalizer savepoint",
+        "clear -> BCA_cleared",
+        "assign A -> BCA_partial",
+        "complete assignments and manifest -> ABC_final",
+        "release finalizer savepoint",
+        "repeat finalizer -> ABC_final"
+      ],
+      "expectedFinalState": "ABC_final",
+      "preserveAllOriginalFactCustody": true
+    },
+    {
+      "id": "OR02",
+      "steps": [
+        "start BC_final",
+        "register A -> BCA_dirty",
+        "begin finalizer savepoint",
+        "clear -> BCA_cleared",
+        "assign A -> BCA_partial",
+        "inject error",
+        "confirmed rollback finalizer savepoint -> BCA_dirty",
+        "raw COMMIT -> native refusal"
+      ],
+      "expectedStateBeforeCommit": "BCA_dirty",
+      "preserveAllOriginalFactCustody": true
+    },
+    {
+      "id": "OR03",
+      "steps": [
+        "start BC_final",
+        "begin outer savepoint",
+        "register A -> BCA_dirty",
+        "begin finalizer savepoint",
+        "clear -> BCA_cleared",
+        "inject error",
+        "confirmed rollback finalizer savepoint -> BCA_dirty",
+        "confirmed rollback outer savepoint -> BC_final"
+      ],
+      "expectedFinalState": "BC_final",
+      "removedFact": "A",
+      "staleCaptureOfARemainsInvalid": true
+    },
+    {
+      "id": "OR04",
+      "steps": [
+        "start BC_final",
+        "set completeness validation immediate successfully",
+        "begin finalizer savepoint",
+        "attempt clear -> native refusal before statement completion",
+        "confirmed rollback finalizer savepoint -> BC_final"
+      ],
+      "expectedFinalState": "BC_final",
+      "constraintTimingAfter": "immediate",
+      "preserveAllOriginalFactCustody": true
+    },
+    {
+      "id": "OR05",
+      "steps": [
+        "start BCA_dirty",
+        "begin finalizer savepoint",
+        "clear -> BCA_cleared",
+        "lose rollback/termination confirmation"
+      ],
+      "expectedDisposition": "unresolved_original_recovery",
+      "publishSuccess": false,
+      "automaticRetry": false
+    }
+  ]
+}

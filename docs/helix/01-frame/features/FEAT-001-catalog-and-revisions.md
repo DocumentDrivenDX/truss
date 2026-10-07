@@ -60,6 +60,8 @@ CAT-02. Documents are ordered deterministically so each follows those it depends
 
 CAT-03. A relationship naming an entity type no document defines is handled by policy: reject, create a provisional type reported until defined, or skip and report the loss (FR-3).
 
+CAT-03 remains a desired capability, not current upstream support. UMF validity is checked before this policy. Its current local relationship profile rejects missing required endpoints; all policies must return that rejection without deriving placeholders or relationships. Native policy acceptance needs an upstream-valid unresolved-reference representation, qualified identity and lifecycle rules (TD-003, D-04). Do not fabricate stubs or flatten document identities to make a case validate.
+
 #### Identity
 
 CAT-04. A type, property, key or relationship keeps its identifier while its UMF identity is unchanged; identifiers are never reused, even after retirement (FR-4).
@@ -101,8 +103,8 @@ CAT-09. Every accepted revision records who or what accepted it: the asserted ac
 ## Edge Cases and Error Handling
 
 - **Two documents define the same element with different content**: rejected as a duplicate definition.
-- **The same documents accepted twice**: no new revision.
-- **A dependency cycle between documents**: accepted together, ordered by document identifier.
+- **The same complete verified acceptance input repeated at the current head**: no new revision; return the original report and origin under CONTRACT-003. Equal derived rows or a historical match alone do not qualify.
+- **A dependency cycle between documents**: accepted together only when valid under the pinned upstream package/reference profile, ordered by CONTRACT-003's strongly connected component rule. Current local relationship cycles are valid; they do not prove cross-document dependency support.
 - **Retained data matches a newly defined property**: re-bound, journaled and reported, not dropped.
 - **The lock is not granted in time**: the acceptance rolls back and may be retried.
 

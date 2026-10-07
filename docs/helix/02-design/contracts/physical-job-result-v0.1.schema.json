@@ -1,0 +1,564 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:physical-job-result:0.1.0",
+  "title": "Draft physical-job successful transport result envelope",
+  "description": "Operation-bound metadata shape only. Native execution failures remain CONTRACT-007 outcomes. Decoding grants no issuer custody, actual queue commit, native readiness or performance.",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-physical-job-result/0.1.0"
+        },
+        "kind": {
+          "const": "index"
+        },
+        "operation": {
+          "const": "admit"
+        },
+        "result": {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "admitted"
+            },
+            "admission": {
+              "allOf": [
+                {
+                  "$ref": "urn:truss:draft:physical-job-admission:0.1.0"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "kind": {
+                      "const": "index"
+                    },
+                    "durability": {
+                      "const": "pending"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": [
+            "outcome",
+            "admission"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "kind",
+        "operation",
+        "result"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-physical-job-result/0.1.0"
+        },
+        "kind": {
+          "const": "index"
+        },
+        "operation": {
+          "const": "admit"
+        },
+        "result": {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "unavailable"
+            },
+            "reason": {
+              "enum": [
+                "authority",
+                "profile",
+                "context",
+                "generation",
+                "observation",
+                "disposed"
+              ]
+            }
+          },
+          "required": [
+            "outcome",
+            "reason"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "kind",
+        "operation",
+        "result"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-physical-job-result/0.1.0"
+        },
+        "kind": {
+          "const": "index"
+        },
+        "operation": {
+          "const": "observe_admission"
+        },
+        "result": {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "admitted"
+            },
+            "admission": {
+              "allOf": [
+                {
+                  "$ref": "urn:truss:draft:physical-job-admission:0.1.0"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "kind": {
+                      "const": "index"
+                    },
+                    "durability": {
+                      "const": "committed"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": [
+            "outcome",
+            "admission"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "kind",
+        "operation",
+        "result"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-physical-job-result/0.1.0"
+        },
+        "kind": {
+          "const": "index"
+        },
+        "operation": {
+          "const": "observe_admission"
+        },
+        "result": {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "unavailable"
+            },
+            "reason": {
+              "enum": [
+                "authority",
+                "profile",
+                "context",
+                "generation",
+                "observation",
+                "disposed"
+              ]
+            }
+          },
+          "required": [
+            "outcome",
+            "reason"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "kind",
+        "operation",
+        "result"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-physical-job-result/0.1.0"
+        },
+        "kind": {
+          "const": "index"
+        },
+        "operation": {
+          "enum": [
+            "run",
+            "observe_readiness"
+          ]
+        },
+        "result": {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "observed"
+            },
+            "readiness": {
+              "$ref": "urn:truss:draft:index-readiness:0.1.0"
+            }
+          },
+          "required": [
+            "outcome",
+            "readiness"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "kind",
+        "operation",
+        "result"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-physical-job-result/0.1.0"
+        },
+        "kind": {
+          "const": "index"
+        },
+        "operation": {
+          "enum": [
+            "run",
+            "observe_readiness"
+          ]
+        },
+        "result": {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "unavailable"
+            },
+            "reason": {
+              "enum": [
+                "authority",
+                "profile",
+                "context",
+                "observation",
+                "disposed"
+              ]
+            }
+          },
+          "required": [
+            "outcome",
+            "reason"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "kind",
+        "operation",
+        "result"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-physical-job-result/0.1.0"
+        },
+        "kind": {
+          "const": "statistics"
+        },
+        "operation": {
+          "const": "admit"
+        },
+        "result": {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "admitted"
+            },
+            "admission": {
+              "allOf": [
+                {
+                  "$ref": "urn:truss:draft:physical-job-admission:0.1.0"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "kind": {
+                      "const": "statistics"
+                    },
+                    "durability": {
+                      "const": "pending"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": [
+            "outcome",
+            "admission"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "kind",
+        "operation",
+        "result"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-physical-job-result/0.1.0"
+        },
+        "kind": {
+          "const": "statistics"
+        },
+        "operation": {
+          "const": "admit"
+        },
+        "result": {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "unavailable"
+            },
+            "reason": {
+              "enum": [
+                "authority",
+                "profile",
+                "context",
+                "generation",
+                "observation",
+                "disposed"
+              ]
+            }
+          },
+          "required": [
+            "outcome",
+            "reason"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "kind",
+        "operation",
+        "result"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-physical-job-result/0.1.0"
+        },
+        "kind": {
+          "const": "statistics"
+        },
+        "operation": {
+          "const": "observe_admission"
+        },
+        "result": {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "admitted"
+            },
+            "admission": {
+              "allOf": [
+                {
+                  "$ref": "urn:truss:draft:physical-job-admission:0.1.0"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "kind": {
+                      "const": "statistics"
+                    },
+                    "durability": {
+                      "const": "committed"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "required": [
+            "outcome",
+            "admission"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "kind",
+        "operation",
+        "result"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-physical-job-result/0.1.0"
+        },
+        "kind": {
+          "const": "statistics"
+        },
+        "operation": {
+          "const": "observe_admission"
+        },
+        "result": {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "unavailable"
+            },
+            "reason": {
+              "enum": [
+                "authority",
+                "profile",
+                "context",
+                "generation",
+                "observation",
+                "disposed"
+              ]
+            }
+          },
+          "required": [
+            "outcome",
+            "reason"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "kind",
+        "operation",
+        "result"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-physical-job-result/0.1.0"
+        },
+        "kind": {
+          "const": "statistics"
+        },
+        "operation": {
+          "enum": [
+            "run",
+            "observe_readiness"
+          ]
+        },
+        "result": {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "observed"
+            },
+            "readiness": {
+              "$ref": "urn:truss:draft:statistics-readiness:0.1.0"
+            }
+          },
+          "required": [
+            "outcome",
+            "readiness"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "kind",
+        "operation",
+        "result"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-physical-job-result/0.1.0"
+        },
+        "kind": {
+          "const": "statistics"
+        },
+        "operation": {
+          "enum": [
+            "run",
+            "observe_readiness"
+          ]
+        },
+        "result": {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "unavailable"
+            },
+            "reason": {
+              "enum": [
+                "authority",
+                "profile",
+                "context",
+                "observation",
+                "disposed"
+              ]
+            }
+          },
+          "required": [
+            "outcome",
+            "reason"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "kind",
+        "operation",
+        "result"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

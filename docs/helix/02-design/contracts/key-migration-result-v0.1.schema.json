@@ -1,0 +1,571 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:key-migration-result:0.1.0",
+  "description": "Result structure only; native original-attempt custody, containment and complete evidence admission remain mandatory.",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "const": "migrated"
+        },
+        "commit": {
+          "$ref": "#/$defs/commit"
+        }
+      },
+      "required": [
+        "outcome",
+        "commit"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "const": "refused"
+        },
+        "reason": {
+          "enum": [
+            "authorization",
+            "profile",
+            "changed",
+            "collision",
+            "representation",
+            "resource",
+            "registry",
+            "integrity"
+          ]
+        },
+        "containment": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "phase": {
+                  "const": "pre_native"
+                }
+              },
+              "required": [
+                "phase"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "phase": {
+                  "const": "preflight_terminated"
+                },
+                "originalAttempt": {
+                  "$ref": "#/$defs/attempt"
+                },
+                "terminationEvidence": {
+                  "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+                }
+              },
+              "required": [
+                "phase",
+                "originalAttempt",
+                "terminationEvidence"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "assessment": {
+          "$ref": "#/$defs/assessment"
+        }
+      },
+      "required": [
+        "outcome",
+        "reason",
+        "containment"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "reason": {
+                "const": "authorization"
+              }
+            },
+            "required": [
+              "reason"
+            ]
+          },
+          "then": {
+            "properties": {
+              "assessment": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "const": "rolled_back"
+        },
+        "originalAttempt": {
+          "$ref": "#/$defs/attempt"
+        },
+        "failedStage": {
+          "enum": [
+            "admission",
+            "exclusion",
+            "source_inventory",
+            "conversion",
+            "collision_assessment",
+            "target_staging",
+            "policy_verification",
+            "binding_switch",
+            "commit"
+          ]
+        },
+        "terminationEvidence": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        }
+      },
+      "required": [
+        "outcome",
+        "originalAttempt",
+        "failedStage",
+        "terminationEvidence"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "const": "commit_unknown"
+        },
+        "originalAttempt": {
+          "$ref": "#/$defs/attempt"
+        },
+        "originalEvidence": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "recoveryReference": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "outcome",
+        "originalAttempt",
+        "originalEvidence",
+        "recoveryReference"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "const": "recovery_required"
+        },
+        "reason": {
+          "enum": [
+            "application_unknown",
+            "cleanup_unknown"
+          ]
+        },
+        "failedStage": {
+          "enum": [
+            "admission",
+            "exclusion",
+            "source_inventory",
+            "conversion",
+            "collision_assessment",
+            "target_staging",
+            "policy_verification",
+            "binding_switch",
+            "commit"
+          ]
+        },
+        "originalAttempt": {
+          "$ref": "#/$defs/attempt"
+        },
+        "originalEvidence": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "recoveryReference": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "outcome",
+        "reason",
+        "failedStage",
+        "originalAttempt",
+        "originalEvidence",
+        "recoveryReference"
+      ],
+      "additionalProperties": false
+    }
+  ],
+  "$defs": {
+    "attempt": {
+      "type": "object",
+      "properties": {
+        "databaseIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "schemaName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "installationId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceEpoch": {
+          "type": "string",
+          "minLength": 1
+        },
+        "migrationAttemptId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "const": "installed"
+        },
+        "procedure": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "originalRequest": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        }
+      },
+      "required": [
+        "databaseIdentity",
+        "schemaName",
+        "installationId",
+        "sourceEpoch",
+        "migrationAttemptId",
+        "kind",
+        "procedure",
+        "originalRequest"
+      ],
+      "additionalProperties": false
+    },
+    "assessment": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "state": {
+              "const": "complete"
+            },
+            "observation": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            },
+            "sourceInventory": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            },
+            "targetCorrespondence": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            },
+            "verdict": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "state": {
+                      "const": "collision_free"
+                    }
+                  },
+                  "required": [
+                    "state"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "state": {
+                      "const": "blocked"
+                    },
+                    "report": {
+                      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+                    },
+                    "reasons": {
+                      "type": "array",
+                      "minItems": 1,
+                      "items": {
+                        "enum": [
+                          "collision",
+                          "unrepresentable_reservation",
+                          "unrepresentable_live_key"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "state",
+                    "report",
+                    "reasons"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
+          "required": [
+            "state",
+            "observation",
+            "sourceInventory",
+            "targetCorrespondence",
+            "verdict"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "state": {
+              "const": "incomplete"
+            },
+            "reason": {
+              "enum": [
+                "resource",
+                "authority",
+                "profile",
+                "custody",
+                "integrity"
+              ]
+            },
+            "diagnostics": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            }
+          },
+          "required": [
+            "state",
+            "reason",
+            "diagnostics"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "commit": {
+      "type": "object",
+      "properties": {
+        "originalAttempt": {
+          "$ref": "#/$defs/attempt"
+        },
+        "receipt": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "commitObservation": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "committedBinding": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "installedInventory": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "assessment": {
+          "type": "object",
+          "properties": {
+            "state": {
+              "const": "complete"
+            },
+            "observation": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            },
+            "sourceInventory": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            },
+            "targetCorrespondence": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            },
+            "verdict": {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "const": "collision_free"
+                }
+              },
+              "required": [
+                "state"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "state",
+            "observation",
+            "sourceInventory",
+            "targetCorrespondence",
+            "verdict"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "originalAttempt",
+        "receipt",
+        "commitObservation",
+        "committedBinding",
+        "installedInventory",
+        "assessment"
+      ],
+      "additionalProperties": false
+    },
+    "reconciliation": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "migrated"
+            },
+            "commit": {
+              "$ref": "#/$defs/commit"
+            }
+          },
+          "required": [
+            "outcome",
+            "commit"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "rolled_back"
+            },
+            "originalAttempt": {
+              "$ref": "#/$defs/attempt"
+            },
+            "failedStage": {
+              "enum": [
+                "admission",
+                "exclusion",
+                "source_inventory",
+                "conversion",
+                "collision_assessment",
+                "target_staging",
+                "policy_verification",
+                "binding_switch",
+                "commit"
+              ]
+            },
+            "terminationEvidence": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            }
+          },
+          "required": [
+            "outcome",
+            "originalAttempt",
+            "failedStage",
+            "terminationEvidence"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "commit_unknown"
+            },
+            "originalAttempt": {
+              "$ref": "#/$defs/attempt"
+            },
+            "originalEvidence": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            },
+            "recoveryReference": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "outcome",
+            "originalAttempt",
+            "originalEvidence",
+            "recoveryReference"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "recovery_required"
+            },
+            "reason": {
+              "enum": [
+                "application_unknown",
+                "cleanup_unknown"
+              ]
+            },
+            "failedStage": {
+              "enum": [
+                "admission",
+                "exclusion",
+                "source_inventory",
+                "conversion",
+                "collision_assessment",
+                "target_staging",
+                "policy_verification",
+                "binding_switch",
+                "commit"
+              ]
+            },
+            "originalAttempt": {
+              "$ref": "#/$defs/attempt"
+            },
+            "originalEvidence": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            },
+            "recoveryReference": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "outcome",
+            "reason",
+            "failedStage",
+            "originalAttempt",
+            "originalEvidence",
+            "recoveryReference"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "observation_unavailable"
+            },
+            "reason": {
+              "enum": [
+                "authorization",
+                "custody",
+                "profile",
+                "integrity",
+                "resource"
+              ]
+            }
+          },
+          "required": [
+            "outcome",
+            "reason"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

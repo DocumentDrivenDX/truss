@@ -1,0 +1,19 @@
+{
+  "scope": "Full original ColumnDef and existing authored column/table correspondence only; no resolved native type/default/nullability/collation or implicit dependencies",
+  "columns": 132,
+  "inputPins": [
+    {
+      "path": "docs/helix/02-design/models/truss-layout-0.2.physical-ids.draft.json",
+      "sha256": "f1f4ca272e10f06eb1865c120ff17f1a14282e92dc917dccdb6a9805f91555f3"
+    },
+    {
+      "path": "docs/helix/02-design/models/truss-layout-0.2.column-semantics.draft.json",
+      "sha256": "5f9bc4f77f09bdd0d6d48b8c3f3d37ce7230f479d225dd51f44278e6d750eb2c"
+    },
+    {
+      "path": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+      "sha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381"
+    }
+  ],
+  "physicalCoverageComplete": false
+}

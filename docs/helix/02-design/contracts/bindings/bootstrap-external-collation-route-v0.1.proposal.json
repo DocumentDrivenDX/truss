@@ -1,0 +1,85 @@
+{
+  "interfaceVersion": "truss-bootstrap-route-entry/0.1.0",
+  "routeIdentity": "pg17.collation.direct/0.1.0",
+  "status": "unadopted; source pins only verified; native class/cut/transport/semantic producers unqualified",
+  "nativeClass": {
+    "namespace": "pg_catalog",
+    "relation": "pg_collation",
+    "classOid": "resolve from original target; never constant",
+    "storageScope": "database",
+    "subobjectNumber": "0"
+  },
+  "selector": "direct original collation OIDs",
+  "artifacts": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-external-collation-observation-pg17.proposal.sql",
+      "sha256": "fd6ad00b759ae8289e7943d1decccdf0de0c064b1dde2dee7d7552bc6505380f"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-external-collation-observation-pg17.proposal.umf.json",
+      "sha256": "9a594ca879779c1e577aba76e01a2a1c1090a5efa770e41b3bbb111f63448b77"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/bootstrap-external-collation-observation.owner-export.sql",
+      "sha256": "4e2a38712e2f4aefda993c83506400c297ab4e36b37cff62c9117af1982b429b"
+    }
+  ],
+  "parameterGrammar": {
+    "slot": "1",
+    "nativeType": "pg_catalog.oid[]",
+    "dimensions": "exactly one",
+    "lowerBound": "1",
+    "nullAllowed": false,
+    "nullItemsAllowed": false,
+    "uniqueItems": true,
+    "countInclusive": [
+      "1",
+      "256"
+    ],
+    "itemDomain": "canonical nonzero uint32 decimal text; actual pg_collation object OID",
+    "encoder": "selected original canonical PostgreSQL array encoder; no JS numeric round trip"
+  },
+  "orderedColumns": [
+    "catalog_class_oid",
+    "object_oid",
+    "namespace_oid",
+    "original_catalog_row_json"
+  ],
+  "coverage": "Exact unique requested-address bijection; missing row is absent, extra/wrong-class/duplicate refuses",
+  "requiredKnownFields": [
+    "oid",
+    "collname",
+    "collnamespace",
+    "collowner",
+    "collprovider",
+    "collisdeterministic",
+    "collencoding",
+    "collcollate",
+    "collctype",
+    "colllocale",
+    "collicurules",
+    "collversion"
+  ],
+  "preservation": "Retain full exact returned row JSON text and every unknown extension member; lossless bounded selected native JSON decoder; no parse/stringify reconstruction",
+  "dependencyExtraction": {
+    "collnamespace": "required nonzero actual pg_namespace address in original database scope",
+    "collowner": "required nonzero actual shared pg_authid address with shared scope, not local database address",
+    "provider": "retain exact d/b/c/i and original applicable locale/rules/nulls; unregistered provider meaning refuses",
+    "encoding": "exact signed int4; -1 native any-encoding sentinel, not OID; current applicability independently assessed without filtering source membership",
+    "version": "recorded collversion text/null retained; actual provider environment/version compatibility requires separately qualified evidence, not inferred from recorded text",
+    "definitionSpecification": {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-collation-definition-v0.1.proposal.json",
+      "sha256": "d26c37edea26c9d963b47d37c2535a00ac77d52aa72024e92f4c01bdc1911fc8",
+      "admission": "Complete original field classification plus separate provider/environment/comparator admission; no version refresh during collection"
+    }
+  },
+  "adjuncts": [
+    "original local/shared dependency closure",
+    "namespace and owner authority definition closure",
+    "original target database encoding/default-collation context",
+    "selected actual locale/provider/version/comparator environment observation"
+  ],
+  "resourceProfile": "truss-bootstrap-collector-resource/0.1.0",
+  "refusal": "Unknown provider/native meaning or unresolved environment/comparator profile refuses relevant semantic support; source observation alone never qualifies equality/order or repairs collation version",
+  "resourceObligations": "Shared enclosing totals, complete original cut/authority and explicit pre-materialization/native-work permits; no independent per-route allowance"
+}

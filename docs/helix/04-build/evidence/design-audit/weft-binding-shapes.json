@@ -1,0 +1,161 @@
+{
+  "scope": "28 structural acceptance/refusal controls only; accepted invalid-semantic fixtures explicitly demonstrate required later admission. No digest/custody/native completeness or backend adoption proof.",
+  "bunVersion": "1.4.2",
+  "schemaSources": [
+    {
+      "path": "truss-postgresql-binding-v0.1.proposal.schema.json",
+      "sha256": "2a37a1775dfa6e245053e8975df349c5522cf9cb4d5f1d1b1d0f34602b2883e6"
+    },
+    {
+      "path": "truss-property-home-v0.1.proposal.schema.json",
+      "sha256": "15e78a535adcf2786af3521abdf52a634e98ef3096ebed84652fed7ab6e2eaae"
+    },
+    {
+      "path": "truss-row-home-v0.1.proposal.schema.json",
+      "sha256": "3d35289dc9e5286bc17b1d4a40f68dc5cfc174d23ac97381dc7de3c8f9856e23"
+    }
+  ],
+  "observations": [
+    {
+      "name": "complete proposed envelope; unqualified",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "independent unequal endpoint key arity",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "old paired endpoint mapping",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "old identity names",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "relationship element substitution",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "profile string missing",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "host-number catalog ID",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "duplicate maps require semantic refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "native overflow requires semantic refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "row scalar-root home",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "row complete-tree declaration",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "row join missing",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "row SQL injected",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "row edge association missing",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "row edge association declared",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "row host numeric property",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "row unknown obligation needs semantic refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "object props home",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "edge props home",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "edge association missing",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "object association contamination",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "wrong discriminator",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "wrong relation",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "SQL accessor injection",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "unowned extra path",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "noncanonical member ID",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "member/property mismatch requires semantic refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "row home needs separate profile",
+      "expected": false,
+      "actual": false
+    }
+  ],
+  "failures": []
+}

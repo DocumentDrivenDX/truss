@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:direct-lookup-result:0.1.0",
+  "title": "Draft direct lookup admission result",
+  "description": "Shape only. Current authorized record and key correspondence require original native observation; absence cannot hide unsupported comparison or incomplete decoding. No partial failure disclosure.",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "const": "found"
+        },
+        "context": {
+          "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/context"
+        },
+        "record": {
+          "$ref": "urn:truss:draft:direct-page-result:0.1.0#/$defs/record"
+        }
+      },
+      "required": [
+        "outcome",
+        "context",
+        "record"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "const": "not_found"
+        }
+      },
+      "required": [
+        "outcome"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "const": "invalid"
+        },
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "path": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "outcome",
+        "code",
+        "path"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "const": "unavailable"
+        },
+        "reason": {
+          "enum": [
+            "context",
+            "profile",
+            "snapshot",
+            "observation",
+            "resource"
+          ]
+        }
+      },
+      "required": [
+        "outcome",
+        "reason"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

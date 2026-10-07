@@ -1,0 +1,40 @@
+{
+  "profile": "truss-direct-lookup-batched-resource/0.1.0",
+  "status": "unadopted-design-candidate",
+  "limits": {
+    "requestCanonicalBytes": "16777216",
+    "lookupRows": "2",
+    "namespaceAndKeyBytes": "16777216",
+    "privateContextArtifactBytes": "8388608",
+    "nativeEncodedRowBytes": "67108864",
+    "nativeEncodedResultBytes": "134217728",
+    "publicRecordCanonicalBytes": "4194304",
+    "qualifiedOwnerEntries": "10000",
+    "nativeSubmissions": "128",
+    "ownedPeakBytes": "268435456",
+    "cumulativeChargedBytes": "536870912",
+    "operationMilliseconds": "5000",
+    "containmentMilliseconds": "1000"
+  },
+  "units": {
+    "namespaceAndKeyBytes": "Complete admitted lookup namespace/key carrier bytes and privately observed match bytes, including repeated comparisons; does not enlarge the selected key codec ceiling.",
+    "privateContextArtifactBytes": "Each complete original match/context artifact; original custody and containing archive limits also apply.",
+    "nativeEncodedRowBytes": "Per actual selected native encoded row, including full private framing/context/hex/source columns; contributes independently to cumulative result and peak-owned limits.",
+    "nativeSubmissions": "All actual original data, context, authority and containment submissions; a retry is not free.",
+    "ownedPeakBytes": "All request, key/context, adapter/decoder, catalog/owner and serialization buffers/copies still owned by the original call.",
+    "nativeEncodedResultBytes": "Cumulative complete native encoded result bytes received across every original lookup/header/node/scalar/context/authority/containment submission, including repeated observations; no per-batch reset.",
+    "publicRecordCanonicalBytes": "Complete final public record canonical bytes, including all defined/retained members; partial batch outputs cannot each claim a fresh ceiling.",
+    "cumulativeChargedBytes": "Cumulative admitted input/copy/decode/comparison/serialization byte work across the entire original operation; release of occupancy does not refund spent work.",
+    "qualifiedOwnerEntries": "Complete original qualified owner/property/retained inventory entries under the selected admission meaning; not automatically the number of tree states or a per-batch limit."
+  },
+  "qualification": "Separate unadopted larger-submission candidate; other byte/work/time limits remain independent. The 10000-state example establishes submission arithmetic only. All actual lookup/context/authority/containment paths must fit the remaining capacity, and complete native/driver/allocator feasibility must be qualified before adoption.",
+  "composition": {
+    "treeBatchProfile": "truss-private-tree-batch-observation/0.1.0",
+    "maximumStatesPerBatch": "256",
+    "exampleCompleteOwnerStates": "10000",
+    "exampleOwnerEnumerationSubmissions": "1",
+    "exampleTreeStreamSubmissions": "80",
+    "remainingSubmissionCapacityForAllOtherWork": "47",
+    "automaticProfileEscalation": false
+  }
+}

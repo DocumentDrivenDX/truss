@@ -1,0 +1,102 @@
+{
+  "interfaceVersion": "truss-bootstrap-route-entry/0.1.0",
+  "routeIdentity": "pg17.operator.direct/0.1.0",
+  "status": "unadopted; source pins only verified; native class/cut/transport/semantic producers unqualified",
+  "nativeClass": {
+    "namespace": "pg_catalog",
+    "relation": "pg_operator",
+    "classOid": "resolve from original target; never constant",
+    "storageScope": "database",
+    "subobjectNumber": "0"
+  },
+  "selector": "direct original pg_operator object OIDs",
+  "artifacts": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-operator-observation-pg17.proposal.sql",
+      "sha256": "d0ff5f1a198391d26eb2e2c30b32c3ad3b78123cfd24a31d6e7c842ac3b88330"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-operator-observation-pg17.proposal.umf.json",
+      "sha256": "2727eaecfd4897aaca831163fd218e1ac9ee59f7a961c2592ea2659431e59fd5"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/bootstrap-operator-observation.owner-export.sql",
+      "sha256": "1330ee7f4c54431c31b6afa139859b865602e78450293eb6f857c64fa1bd0256"
+    }
+  ],
+  "parameterGrammar": {
+    "slot": "1",
+    "nativeType": "pg_catalog.oid[]",
+    "dimensions": "exactly one",
+    "lowerBound": "1",
+    "nullAllowed": false,
+    "nullItemsAllowed": false,
+    "uniqueItems": true,
+    "countInclusive": [
+      "1",
+      "256"
+    ],
+    "itemDomain": "canonical nonzero uint32 decimal text; actual pg_operator object OID",
+    "encoder": "selected original canonical PostgreSQL array encoder; no JS numeric round trip"
+  },
+  "orderedColumns": [
+    "catalog_class_oid",
+    "object_oid",
+    "namespace_oid",
+    "oprcode_oid",
+    "oprrest_oid",
+    "oprjoin_oid",
+    "original_catalog_row_json"
+  ],
+  "coverage": "Exact bijection between requested original addresses and returned unique admitted rows; missing requested row is absent, wrong class/extra/duplicate row refuses, not empty complete",
+  "requiredKnownFields": [
+    "oid",
+    "oprname",
+    "oprnamespace",
+    "oprowner",
+    "oprkind",
+    "oprcanmerge",
+    "oprcanhash",
+    "oprleft",
+    "oprright",
+    "oprresult",
+    "oprcom",
+    "oprnegate",
+    "oprcode",
+    "oprrest",
+    "oprjoin"
+  ],
+  "preservation": "Retain full exact returned row JSON text and every unknown extension member; lossless bounded selected native JSON decoder; no parse/stringify reconstruction",
+  "dependencyExtraction": {
+    "types": "nonzero oprleft/oprright/oprresult reach actual pg_type; unary zero operand sentinel preserved, kind/signature consistency separately admitted",
+    "routines": "nonzero oprcode/oprrest/oprjoin reach actual pg_proc; original projected OID/raw-definition correspondence; shell/optional zero meanings retained, never executed",
+    "operators": "nonzero oprcom/oprnegate reach actual pg_operator; cycles retained and task-deduplicated",
+    "scope": "namespace reaches actual local pg_namespace; owner reaches actual shared pg_authid",
+    "fieldClassification": {
+      "oid": "original native operator correlation only",
+      "oprname": "exact native name bound to resolved namespace and directed operand signature",
+      "oprnamespace": "resolved original namespace definition",
+      "oprowner": "resolved original shared owner policy",
+      "oprkind": "exact PG17 b infix/l prefix; unknown postfix/custom code unsupported",
+      "oprcanmerge": "actual declared merge-join support flag; not independent implementation qualification",
+      "oprcanhash": "actual declared hash-join support flag; not independent implementation qualification",
+      "oprleft": "nonzero resolved left type for b; zero missing-left sentinel for l",
+      "oprright": "nonzero resolved right operand type under selected PG17 grammar",
+      "oprresult": "nonzero resolved result type for defined operator; zero unresolved shell fact",
+      "oprcom": "zero absent or resolved original commutator operator; retain cycle",
+      "oprnegate": "zero absent or resolved original negator operator; retain cycle",
+      "oprcode": "native regproc plus exact projected OID; zero shell or resolved implementing routine",
+      "oprrest": "native regproc plus exact projected OID; zero absent or resolved restriction estimator",
+      "oprjoin": "native regproc plus exact projected OID; zero absent or resolved join estimator"
+    },
+    "canonicalProcedure": "CONTRACT-008 Operator semantic projection: exact kind/directed operands/result/flags plus resolved namespace/owner/implementation/commutator/negator/planner definitions; unresolved shells cannot seal complete installed operator"
+  },
+  "adjuncts": [
+    "complete operand/result type and routine definitions",
+    "commutator/negator original closure",
+    "namespace/owner/local/shared dependency and selected operator meaning"
+  ],
+  "resourceProfile": "truss-bootstrap-collector-resource/0.1.0",
+  "refusal": "Unknown native category/meaning, shell definition without qualified semantics or unresolved complete dependency/member closure is unsupported; original observation never executes handlers/operators/routines or enables comparator/lowering support",
+  "resourceObligations": "Shared enclosing totals, complete original cut/authority and explicit pre-materialization/native-work permits; no independent per-route allowance"
+}

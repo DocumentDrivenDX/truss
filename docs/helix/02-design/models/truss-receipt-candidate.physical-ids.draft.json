@@ -1,0 +1,870 @@
+{
+  "interfaceVersion": "truss-physical-id-allocation/0.1.0",
+  "status": "unadopted-receipt-candidate-fragment",
+  "complete": false,
+  "identityMeaning": "Explicit authored IDs allocated once; native rename/definition/parent/source changes require deliberate binding review, never regenerate IDs from names or pointers",
+  "sourceSha256": "84344d87881fb784c6093919ffae88325837bcea6f7193075797d8ee56128ff4",
+  "entries": [
+    {
+      "entryId": "truss.physical.81cbbafc-b3f9-434d-a2e7-31b0e84cb65b",
+      "objectKind": "table",
+      "nativeIdentity": {
+        "schema": "truss",
+        "name": "request_receipt_route_guard"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      }
+    },
+    {
+      "entryId": "truss.physical.bb6fd99a-7718-420d-a00f-5c58aa386d41",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt_route_guard",
+        "name": "namespace_sha256"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      },
+      "parentEntryId": "truss.physical.81cbbafc-b3f9-434d-a2e7-31b0e84cb65b"
+    },
+    {
+      "entryId": "truss.physical.5402fcb8-e6c5-43c4-b922-3fc8d439cd35",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt_route_guard",
+        "name": "request_sha256"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/1/members/ColumnDef",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      },
+      "parentEntryId": "truss.physical.81cbbafc-b3f9-434d-a2e7-31b0e84cb65b"
+    },
+    {
+      "entryId": "truss.physical.ec1ff6eb-469c-408c-a427-dafad799a7f3",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt_route_guard",
+        "name": "generation"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/2/members/ColumnDef",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      },
+      "parentEntryId": "truss.physical.81cbbafc-b3f9-434d-a2e7-31b0e84cb65b"
+    },
+    {
+      "entryId": "truss.physical.515a8190-5c0f-48ab-bbe4-3d7361d10ba5",
+      "objectKind": "sequence",
+      "nativeIdentity": {
+        "schema": "truss",
+        "name": "request_receipt_row_seq"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/1/members/stmt/members/CreateSeqStmt",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      }
+    },
+    {
+      "entryId": "truss.physical.88efaa3e-88c7-4065-9643-7ea43ba9e3a1",
+      "objectKind": "table",
+      "nativeIdentity": {
+        "schema": "truss",
+        "name": "request_receipt"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/2/members/stmt/members/CreateStmt",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      }
+    },
+    {
+      "entryId": "truss.physical.2d9336a9-e376-46bd-a41f-5f3a442a7e8f",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt",
+        "name": "storage_row_id"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/2/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      },
+      "parentEntryId": "truss.physical.88efaa3e-88c7-4065-9643-7ea43ba9e3a1"
+    },
+    {
+      "entryId": "truss.physical.2a0060ac-b4a3-4612-8770-39e008eb201e",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt",
+        "name": "namespace_identity_utf8"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/2/members/stmt/members/CreateStmt/members/tableElts/items/1/members/ColumnDef",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      },
+      "parentEntryId": "truss.physical.88efaa3e-88c7-4065-9643-7ea43ba9e3a1"
+    },
+    {
+      "entryId": "truss.physical.c224b1e7-1607-4c29-aba7-d147862a7bd3",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt",
+        "name": "request_id_utf8"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/2/members/stmt/members/CreateStmt/members/tableElts/items/2/members/ColumnDef",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      },
+      "parentEntryId": "truss.physical.88efaa3e-88c7-4065-9643-7ea43ba9e3a1"
+    },
+    {
+      "entryId": "truss.physical.62a9ad62-6f1e-4894-8632-66c40fd7b766",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt",
+        "name": "original_writer_xid"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/2/members/stmt/members/CreateStmt/members/tableElts/items/3/members/ColumnDef",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      },
+      "parentEntryId": "truss.physical.88efaa3e-88c7-4065-9643-7ea43ba9e3a1"
+    },
+    {
+      "entryId": "truss.physical.46d6e9f6-6e3a-4785-acfc-1dd263faf5ff",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt",
+        "name": "original_writer_context_bytes"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/2/members/stmt/members/CreateStmt/members/tableElts/items/4/members/ColumnDef",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      },
+      "parentEntryId": "truss.physical.88efaa3e-88c7-4065-9643-7ea43ba9e3a1"
+    },
+    {
+      "entryId": "truss.physical.09056ea1-2038-4bff-a839-4e4d4cc1bf91",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt",
+        "name": "lifecycle_generation"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/2/members/stmt/members/CreateStmt/members/tableElts/items/5/members/ColumnDef",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      },
+      "parentEntryId": "truss.physical.88efaa3e-88c7-4065-9643-7ea43ba9e3a1"
+    },
+    {
+      "entryId": "truss.physical.19de57c5-e7ae-49a9-be65-6c1c8539571a",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt",
+        "name": "payload_state"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/2/members/stmt/members/CreateStmt/members/tableElts/items/6/members/ColumnDef",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      },
+      "parentEntryId": "truss.physical.88efaa3e-88c7-4065-9643-7ea43ba9e3a1"
+    },
+    {
+      "entryId": "truss.physical.e2eaf530-10c4-4326-b08a-19e82d2ec2af",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt",
+        "name": "original_receipt_bytes"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/2/members/stmt/members/CreateStmt/members/tableElts/items/7/members/ColumnDef",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      },
+      "parentEntryId": "truss.physical.88efaa3e-88c7-4065-9643-7ea43ba9e3a1"
+    },
+    {
+      "entryId": "truss.physical.59a61da8-29dd-4d82-807b-6e12b1be1a43",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt",
+        "name": "expired_identity_bytes"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/2/members/stmt/members/CreateStmt/members/tableElts/items/8/members/ColumnDef",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      },
+      "parentEntryId": "truss.physical.88efaa3e-88c7-4065-9643-7ea43ba9e3a1"
+    },
+    {
+      "entryId": "truss.physical.df2378e8-ff04-46f6-a1cc-27da1dc13ed8",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt",
+        "name": "namespace_sha256"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/2/members/stmt/members/CreateStmt/members/tableElts/items/9/members/ColumnDef",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      },
+      "parentEntryId": "truss.physical.88efaa3e-88c7-4065-9643-7ea43ba9e3a1"
+    },
+    {
+      "entryId": "truss.physical.8f6a2d2f-ee09-4be5-80af-f58151d3a019",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt",
+        "name": "request_sha256"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/2/members/stmt/members/CreateStmt/members/tableElts/items/10/members/ColumnDef",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      },
+      "parentEntryId": "truss.physical.88efaa3e-88c7-4065-9643-7ea43ba9e3a1"
+    },
+    {
+      "entryId": "truss.physical.e9c0861a-2dc4-4121-9fa8-e71cb221337a",
+      "objectKind": "index",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt",
+        "name": "request_receipt_route"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/3/members/stmt/members/IndexStmt",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      }
+    },
+    {
+      "entryId": "truss.physical.c04aa44d-6593-4c5a-a52d-b2b70851e33c",
+      "objectKind": "table",
+      "nativeIdentity": {
+        "schema": "truss",
+        "name": "request_receipt_protection"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/4/members/stmt/members/CreateStmt",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      }
+    },
+    {
+      "entryId": "truss.physical.dbf44c8b-fd70-4143-9e2c-5c66ece7fc5a",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt_protection",
+        "name": "receipt_storage_row_id"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/4/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      },
+      "parentEntryId": "truss.physical.c04aa44d-6593-4c5a-a52d-b2b70851e33c"
+    },
+    {
+      "entryId": "truss.physical.c850afdc-61e0-4941-8c2b-61ffecddafff",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt_protection",
+        "name": "protection_generation"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/4/members/stmt/members/CreateStmt/members/tableElts/items/1/members/ColumnDef",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      },
+      "parentEntryId": "truss.physical.c04aa44d-6593-4c5a-a52d-b2b70851e33c"
+    },
+    {
+      "entryId": "truss.physical.f7591184-fd30-462d-9f0b-8b49830b6c1d",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt_protection",
+        "name": "original_protection_bytes"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/4/members/stmt/members/CreateStmt/members/tableElts/items/2/members/ColumnDef",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      },
+      "parentEntryId": "truss.physical.c04aa44d-6593-4c5a-a52d-b2b70851e33c"
+    },
+    {
+      "entryId": "truss.physical.290de2da-0398-43c2-8569-b784ef7a6aa2",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt_protection",
+        "name": "original_update_evidence_bytes"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/4/members/stmt/members/CreateStmt/members/tableElts/items/3/members/ColumnDef",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      },
+      "parentEntryId": "truss.physical.c04aa44d-6593-4c5a-a52d-b2b70851e33c"
+    },
+    {
+      "entryId": "truss.physical.85a27ef0-f451-4d85-8843-6908c7dba35b",
+      "objectKind": "constraint",
+      "parentEntryId": "truss.physical.81cbbafc-b3f9-434d-a2e7-31b0e84cb65b",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt_route_guard",
+        "name": "rr_guard_namespace_digest",
+        "kind": "CONSTR_CHECK",
+        "column": "namespace_sha256"
+      },
+      "nativeNameResolution": "explicit-source",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef/members/constraints/items/1/members/Constraint",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      }
+    },
+    {
+      "entryId": "truss.physical.f5562af1-ac67-4478-a0f3-6520240aa0b7",
+      "objectKind": "constraint",
+      "parentEntryId": "truss.physical.81cbbafc-b3f9-434d-a2e7-31b0e84cb65b",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt_route_guard",
+        "name": "rr_guard_request_digest",
+        "kind": "CONSTR_CHECK",
+        "column": "request_sha256"
+      },
+      "nativeNameResolution": "explicit-source",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/1/members/ColumnDef/members/constraints/items/1/members/Constraint",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      }
+    },
+    {
+      "entryId": "truss.physical.812c7e29-2d7d-467a-8b31-310e3b49d82f",
+      "objectKind": "constraint",
+      "parentEntryId": "truss.physical.81cbbafc-b3f9-434d-a2e7-31b0e84cb65b",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt_route_guard",
+        "name": "rr_guard_generation",
+        "kind": "CONSTR_CHECK",
+        "column": "generation"
+      },
+      "nativeNameResolution": "explicit-source",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/2/members/ColumnDef/members/constraints/items/1/members/Constraint",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      }
+    },
+    {
+      "entryId": "truss.physical.95ab3f75-d549-44b1-b1ed-f080d5e8edab",
+      "objectKind": "constraint",
+      "parentEntryId": "truss.physical.81cbbafc-b3f9-434d-a2e7-31b0e84cb65b",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt_route_guard",
+        "name": "rr_guard_pk",
+        "kind": "CONSTR_PRIMARY"
+      },
+      "nativeNameResolution": "explicit-source",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/3/members/Constraint",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      }
+    },
+    {
+      "entryId": "truss.physical.01520a32-28f7-47ab-8ff6-d51c869cb156",
+      "objectKind": "constraint",
+      "parentEntryId": "truss.physical.88efaa3e-88c7-4065-9643-7ea43ba9e3a1",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt",
+        "name": "rr_receipt_pk",
+        "kind": "CONSTR_PRIMARY",
+        "column": "storage_row_id"
+      },
+      "nativeNameResolution": "explicit-source",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/2/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef/members/constraints/items/0/members/Constraint",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      }
+    },
+    {
+      "entryId": "truss.physical.1551b22e-c29e-4125-b58d-18ac2bc7e186",
+      "objectKind": "constraint",
+      "parentEntryId": "truss.physical.88efaa3e-88c7-4065-9643-7ea43ba9e3a1",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt",
+        "name": "rr_namespace_identity_bytes",
+        "kind": "CONSTR_CHECK",
+        "column": "namespace_identity_utf8"
+      },
+      "nativeNameResolution": "explicit-source",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/2/members/stmt/members/CreateStmt/members/tableElts/items/1/members/ColumnDef/members/constraints/items/1/members/Constraint",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      }
+    },
+    {
+      "entryId": "truss.physical.18c44cce-7856-4f8d-a521-e30116231067",
+      "objectKind": "constraint",
+      "parentEntryId": "truss.physical.88efaa3e-88c7-4065-9643-7ea43ba9e3a1",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt",
+        "name": "rr_request_identity_bytes",
+        "kind": "CONSTR_CHECK",
+        "column": "request_id_utf8"
+      },
+      "nativeNameResolution": "explicit-source",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/2/members/stmt/members/CreateStmt/members/tableElts/items/2/members/ColumnDef/members/constraints/items/1/members/Constraint",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      }
+    },
+    {
+      "entryId": "truss.physical.112f144c-68fe-4b0f-bde9-f0f9d3a7679c",
+      "objectKind": "constraint",
+      "parentEntryId": "truss.physical.88efaa3e-88c7-4065-9643-7ea43ba9e3a1",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt",
+        "name": "rr_writer_context_bytes",
+        "kind": "CONSTR_CHECK",
+        "column": "original_writer_context_bytes"
+      },
+      "nativeNameResolution": "explicit-source",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/2/members/stmt/members/CreateStmt/members/tableElts/items/4/members/ColumnDef/members/constraints/items/1/members/Constraint",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      }
+    },
+    {
+      "entryId": "truss.physical.f6e96c34-8902-400f-936b-adce55580c73",
+      "objectKind": "constraint",
+      "parentEntryId": "truss.physical.88efaa3e-88c7-4065-9643-7ea43ba9e3a1",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt",
+        "name": "rr_lifecycle_generation",
+        "kind": "CONSTR_CHECK",
+        "column": "lifecycle_generation"
+      },
+      "nativeNameResolution": "explicit-source",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/2/members/stmt/members/CreateStmt/members/tableElts/items/5/members/ColumnDef/members/constraints/items/1/members/Constraint",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      }
+    },
+    {
+      "entryId": "truss.physical.a61bb16c-6775-4193-b300-8585dd3ffe63",
+      "objectKind": "constraint",
+      "parentEntryId": "truss.physical.88efaa3e-88c7-4065-9643-7ea43ba9e3a1",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt",
+        "name": "rr_payload_state",
+        "kind": "CONSTR_CHECK",
+        "column": "payload_state"
+      },
+      "nativeNameResolution": "explicit-source",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/2/members/stmt/members/CreateStmt/members/tableElts/items/6/members/ColumnDef/members/constraints/items/1/members/Constraint",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      }
+    },
+    {
+      "entryId": "truss.physical.59be0477-b681-405f-a17f-409b96dd82fd",
+      "objectKind": "constraint",
+      "parentEntryId": "truss.physical.88efaa3e-88c7-4065-9643-7ea43ba9e3a1",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt",
+        "name": "request_receipt_positive_storage",
+        "kind": "CONSTR_CHECK"
+      },
+      "nativeNameResolution": "explicit-source",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/2/members/stmt/members/CreateStmt/members/tableElts/items/11/members/Constraint",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      }
+    },
+    {
+      "entryId": "truss.physical.93ef756e-2e2b-431b-b740-ae23f44e6e85",
+      "objectKind": "constraint",
+      "parentEntryId": "truss.physical.88efaa3e-88c7-4065-9643-7ea43ba9e3a1",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt",
+        "name": "request_receipt_payload_shape",
+        "kind": "CONSTR_CHECK"
+      },
+      "nativeNameResolution": "explicit-source",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/2/members/stmt/members/CreateStmt/members/tableElts/items/12/members/Constraint",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      }
+    },
+    {
+      "entryId": "truss.physical.aa4782b4-5e83-47d6-b709-eca0fe611532",
+      "objectKind": "constraint",
+      "parentEntryId": "truss.physical.c04aa44d-6593-4c5a-a52d-b2b70851e33c",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt_protection",
+        "name": "rr_protection_pk",
+        "kind": "CONSTR_PRIMARY",
+        "column": "receipt_storage_row_id"
+      },
+      "nativeNameResolution": "explicit-source",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/4/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef/members/constraints/items/0/members/Constraint",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      }
+    },
+    {
+      "entryId": "truss.physical.7373c9c1-f05b-4a05-9e9e-606eeb80caa4",
+      "objectKind": "constraint",
+      "parentEntryId": "truss.physical.c04aa44d-6593-4c5a-a52d-b2b70851e33c",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt_protection",
+        "name": "rr_protection_receipt_fk",
+        "kind": "CONSTR_FOREIGN",
+        "column": "receipt_storage_row_id"
+      },
+      "nativeNameResolution": "explicit-source",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/4/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef/members/constraints/items/1/members/Constraint",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      }
+    },
+    {
+      "entryId": "truss.physical.cb517af1-715d-490c-afba-115c68cc6618",
+      "objectKind": "constraint",
+      "parentEntryId": "truss.physical.c04aa44d-6593-4c5a-a52d-b2b70851e33c",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt_protection",
+        "name": "rr_protection_generation",
+        "kind": "CONSTR_CHECK",
+        "column": "protection_generation"
+      },
+      "nativeNameResolution": "explicit-source",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/4/members/stmt/members/CreateStmt/members/tableElts/items/1/members/ColumnDef/members/constraints/items/1/members/Constraint",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      }
+    },
+    {
+      "entryId": "truss.physical.b9ab7b52-0b1a-495f-a586-b0e6dbccd84c",
+      "objectKind": "constraint",
+      "parentEntryId": "truss.physical.c04aa44d-6593-4c5a-a52d-b2b70851e33c",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt_protection",
+        "name": "rr_protection_artifact_bytes",
+        "kind": "CONSTR_CHECK",
+        "column": "original_protection_bytes"
+      },
+      "nativeNameResolution": "explicit-source",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/4/members/stmt/members/CreateStmt/members/tableElts/items/2/members/ColumnDef/members/constraints/items/1/members/Constraint",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      }
+    },
+    {
+      "entryId": "truss.physical.7bfcdc56-00bc-4066-bfc9-1c581846ef6f",
+      "objectKind": "constraint",
+      "parentEntryId": "truss.physical.c04aa44d-6593-4c5a-a52d-b2b70851e33c",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt_protection",
+        "name": "rr_protection_evidence_bytes",
+        "kind": "CONSTR_CHECK",
+        "column": "original_update_evidence_bytes"
+      },
+      "nativeNameResolution": "explicit-source",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/4/members/stmt/members/CreateStmt/members/tableElts/items/3/members/ColumnDef/members/constraints/items/1/members/Constraint",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      }
+    },
+    {
+      "entryId": "truss.physical.0ca78213-d6d5-4e7d-86e4-c1a126d9a3da",
+      "objectKind": "index",
+      "origin": "implicit-primary-index",
+      "parentEntryId": "truss.physical.81cbbafc-b3f9-434d-a2e7-31b0e84cb65b",
+      "parentConstraintEntryId": "truss.physical.95ab3f75-d549-44b1-b1ed-f080d5e8edab",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt_route_guard",
+        "name": null
+      },
+      "nativeNameResolution": "unresolved-catalog-binding",
+      "expectedSemantics": {
+        "method": "btree",
+        "unique": true,
+        "columnMeaning": "exact original creating primary constraint column order; not independent guessed keys"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/3/members/Constraint",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      }
+    },
+    {
+      "entryId": "truss.physical.b1eb5699-80a6-4509-a1f0-ed7c689a1246",
+      "objectKind": "index",
+      "origin": "implicit-primary-index",
+      "parentEntryId": "truss.physical.88efaa3e-88c7-4065-9643-7ea43ba9e3a1",
+      "parentConstraintEntryId": "truss.physical.01520a32-28f7-47ab-8ff6-d51c869cb156",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt",
+        "name": null
+      },
+      "nativeNameResolution": "unresolved-catalog-binding",
+      "expectedSemantics": {
+        "method": "btree",
+        "unique": true,
+        "columnMeaning": "exact original creating primary constraint column order; not independent guessed keys"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/2/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef/members/constraints/items/0/members/Constraint",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      }
+    },
+    {
+      "entryId": "truss.physical.35eecc6e-cabd-4174-9e7e-fc3314fd8eb3",
+      "objectKind": "index",
+      "origin": "implicit-primary-index",
+      "parentEntryId": "truss.physical.c04aa44d-6593-4c5a-a52d-b2b70851e33c",
+      "parentConstraintEntryId": "truss.physical.aa4782b4-5e83-47d6-b709-eca0fe611532",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt_protection",
+        "name": null
+      },
+      "nativeNameResolution": "unresolved-catalog-binding",
+      "expectedSemantics": {
+        "method": "btree",
+        "unique": true,
+        "columnMeaning": "exact original creating primary constraint column order; not independent guessed keys"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/4/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef/members/constraints/items/0/members/Constraint",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      }
+    },
+    {
+      "entryId": "truss.physical.201c5175-18b3-46f9-89c4-2a69db0e9b25",
+      "objectKind": "column",
+      "parentEntryId": "truss.physical.c04aa44d-6593-4c5a-a52d-b2b70851e33c",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt_protection",
+        "name": "original_update_writer_xid"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/4/members/stmt/members/CreateStmt/members/tableElts/items/4/members/ColumnDef",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      }
+    },
+    {
+      "entryId": "truss.physical.f5fdd069-aa29-4a97-b9df-2c6d995eee4d",
+      "objectKind": "column",
+      "parentEntryId": "truss.physical.c04aa44d-6593-4c5a-a52d-b2b70851e33c",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt_protection",
+        "name": "original_update_writer_context_bytes"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/4/members/stmt/members/CreateStmt/members/tableElts/items/5/members/ColumnDef",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      }
+    },
+    {
+      "entryId": "truss.physical.5980d28f-ec8e-45dc-8c45-e92848cb50da",
+      "objectKind": "constraint",
+      "parentEntryId": "truss.physical.c04aa44d-6593-4c5a-a52d-b2b70851e33c",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt_protection",
+        "column": "original_update_writer_context_bytes",
+        "name": "rr_protection_update_context_bytes",
+        "kind": "CONSTR_CHECK"
+      },
+      "nativeNameResolution": "explicit-source",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/4/members/stmt/members/CreateStmt/members/tableElts/items/5/members/ColumnDef/members/constraints/items/1/members/Constraint",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      }
+    },
+    {
+      "entryId": "truss.physical.11c49445-c94d-4c6a-8c6d-0637a38455d9",
+      "objectKind": "column",
+      "parentEntryId": "truss.physical.88efaa3e-88c7-4065-9643-7ea43ba9e3a1",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt",
+        "name": "expiry_writer_xid"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/2/members/stmt/members/CreateStmt/members/tableElts/items/13/members/ColumnDef",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      }
+    },
+    {
+      "entryId": "truss.physical.7fc58d4a-f609-4342-af93-22d615ab2cd1",
+      "objectKind": "column",
+      "parentEntryId": "truss.physical.88efaa3e-88c7-4065-9643-7ea43ba9e3a1",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt",
+        "name": "expiry_writer_context_bytes"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/2/members/stmt/members/CreateStmt/members/tableElts/items/14/members/ColumnDef",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      }
+    },
+    {
+      "entryId": "truss.physical.6b86c23b-8ee7-4446-971a-f0610a74fc3b",
+      "objectKind": "constraint",
+      "parentEntryId": "truss.physical.88efaa3e-88c7-4065-9643-7ea43ba9e3a1",
+      "nativeIdentity": {
+        "schema": "truss",
+        "table": "request_receipt",
+        "column": "expiry_writer_context_bytes",
+        "name": "rr_expiry_writer_context_bytes",
+        "kind": "CONSTR_CHECK"
+      },
+      "nativeNameResolution": "explicit-source",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+        "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/2/members/stmt/members/CreateStmt/members/tableElts/items/14/members/ColumnDef/members/constraints/items/0/members/Constraint",
+        "meaning": "Original tagged native node only; not generated correspondence or identity derivation"
+      }
+    }
+  ],
+  "remaining": [
+    "native catalog constraint/index resolution and complete installed binding/definition admission",
+    "native primary index names/opclasses/collations/dependencies and sequence ownership",
+    "column defaults/generated-expression/native bindings",
+    "functions/triggers/grants/policies and namespace/clock/procedures",
+    "complete exporter statement/source correspondence",
+    "adopted layout version/migration review and native catalog closure"
+  ]
+}

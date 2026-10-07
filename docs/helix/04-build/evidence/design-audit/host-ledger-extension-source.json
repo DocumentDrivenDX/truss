@@ -1,0 +1,9 @@
+{
+  "scope": "Test fixture owner parser/source archive/document reload/stable export only; no PLpgSQL body compilation, native installation, privilege, transaction or coexistence qualification",
+  "path": "docs/helix/03-test/test-plans/host-ledger-extension-v0.1.proposal.sql",
+  "sourceSha256": "af6b2d7285dc745ee4f59051ab0a766f72c74477f35b46c43389a9749b88b910",
+  "exportSha256": "38ece68aeae806e28a89f00ceb0357dc57dab4e54292334bcfe86c2400bfdcd0",
+  "backend": "@libpg-query/parser@17.6.10",
+  "sourceArchiveExact": true,
+  "reloadedExportExact": true
+}

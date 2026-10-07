@@ -1,0 +1,289 @@
+{
+  "profile": "truss-edge-limit-trigger-allocation/0.1.0",
+  "status": "unadopted_candidate",
+  "complete": false,
+  "scope": "Three original trigger declarations only; native routines/phase/privilege/source-layout adoption incomplete",
+  "sources": [
+    {
+      "source": "docs/helix/02-design/contracts/edge-limit-triggers-v0.1.proposal.sql",
+      "sourceSha256": "be78c9b0672804fd602b23a052de6c8e43d03a19e43efbfb13c0d30baa0d935d",
+      "model": "docs/helix/02-design/contracts/edge-limit-triggers-v0.1.proposal.umf.json",
+      "modelSha256": "7a5d6d4741c88abac79396c4e1cfe8c95a793eeb807f89bb7dd30efdc2bff075"
+    }
+  ],
+  "parentAllocationPins": [
+    {
+      "path": "docs/helix/02-design/models/truss-layout-0.2.physical-ids.draft.json",
+      "sha256": "f1f4ca272e10f06eb1865c120ff17f1a14282e92dc917dccdb6a9805f91555f3"
+    }
+  ],
+  "entries": [
+    {
+      "entryId": "truss.edge-limit.trigger.edge_limit_edge_observe",
+      "objectKind": "trigger",
+      "nativeName": "edge_limit_edge_observe",
+      "parentId": "truss.layout.table.edge",
+      "nativeBinding": {
+        "state": "unresolved"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/edge-limit-triggers-v0.1.proposal.umf.json",
+        "modelSha256": "7a5d6d4741c88abac79396c4e1cfe8c95a793eeb807f89bb7dd30efdc2bff075",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateTrigStmt"
+      },
+      "originalNativeNode": {
+        "kind": "object",
+        "members": {
+          "trigname": {
+            "kind": "string",
+            "value": "edge_limit_edge_observe"
+          },
+          "relation": {
+            "kind": "object",
+            "members": {
+              "schemaname": {
+                "kind": "string",
+                "value": "truss"
+              },
+              "relname": {
+                "kind": "string",
+                "value": "edge"
+              },
+              "inh": {
+                "kind": "boolean",
+                "value": true
+              },
+              "relpersistence": {
+                "kind": "string",
+                "value": "p"
+              },
+              "location": {
+                "kind": "number",
+                "value": "299"
+              }
+            }
+          },
+          "funcname": {
+            "kind": "array",
+            "items": [
+              {
+                "kind": "object",
+                "members": {
+                  "String": {
+                    "kind": "object",
+                    "members": {
+                      "sval": {
+                        "kind": "string",
+                        "value": "truss"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "kind": "object",
+                "members": {
+                  "String": {
+                    "kind": "object",
+                    "members": {
+                      "sval": {
+                        "kind": "string",
+                        "value": "edge_limit_observe"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "row": {
+            "kind": "boolean",
+            "value": true
+          },
+          "events": {
+            "kind": "number",
+            "value": "28"
+          }
+        }
+      }
+    },
+    {
+      "entryId": "truss.edge-limit.trigger.edge_limit_marker_observe",
+      "objectKind": "trigger",
+      "nativeName": "edge_limit_marker_observe",
+      "parentId": "truss.layout.table.edge_limit",
+      "nativeBinding": {
+        "state": "unresolved"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/edge-limit-triggers-v0.1.proposal.umf.json",
+        "modelSha256": "7a5d6d4741c88abac79396c4e1cfe8c95a793eeb807f89bb7dd30efdc2bff075",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/1/members/stmt/members/CreateTrigStmt"
+      },
+      "originalNativeNode": {
+        "kind": "object",
+        "members": {
+          "trigname": {
+            "kind": "string",
+            "value": "edge_limit_marker_observe"
+          },
+          "relation": {
+            "kind": "object",
+            "members": {
+              "schemaname": {
+                "kind": "string",
+                "value": "truss"
+              },
+              "relname": {
+                "kind": "string",
+                "value": "edge_limit"
+              },
+              "inh": {
+                "kind": "boolean",
+                "value": true
+              },
+              "relpersistence": {
+                "kind": "string",
+                "value": "p"
+              },
+              "location": {
+                "kind": "number",
+                "value": "449"
+              }
+            }
+          },
+          "funcname": {
+            "kind": "array",
+            "items": [
+              {
+                "kind": "object",
+                "members": {
+                  "String": {
+                    "kind": "object",
+                    "members": {
+                      "sval": {
+                        "kind": "string",
+                        "value": "truss"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "kind": "object",
+                "members": {
+                  "String": {
+                    "kind": "object",
+                    "members": {
+                      "sval": {
+                        "kind": "string",
+                        "value": "edge_limit_observe"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "row": {
+            "kind": "boolean",
+            "value": true
+          },
+          "events": {
+            "kind": "number",
+            "value": "28"
+          }
+        }
+      }
+    },
+    {
+      "entryId": "truss.edge-limit.trigger.edge_limit_catalog_observe",
+      "objectKind": "trigger",
+      "nativeName": "edge_limit_catalog_observe",
+      "parentId": "truss.layout.table.rel_def",
+      "nativeBinding": {
+        "state": "unresolved"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/edge-limit-triggers-v0.1.proposal.umf.json",
+        "modelSha256": "7a5d6d4741c88abac79396c4e1cfe8c95a793eeb807f89bb7dd30efdc2bff075",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/2/members/stmt/members/CreateTrigStmt"
+      },
+      "originalNativeNode": {
+        "kind": "object",
+        "members": {
+          "trigname": {
+            "kind": "string",
+            "value": "edge_limit_catalog_observe"
+          },
+          "relation": {
+            "kind": "object",
+            "members": {
+              "schemaname": {
+                "kind": "string",
+                "value": "truss"
+              },
+              "relname": {
+                "kind": "string",
+                "value": "rel_def"
+              },
+              "inh": {
+                "kind": "boolean",
+                "value": true
+              },
+              "relpersistence": {
+                "kind": "string",
+                "value": "p"
+              },
+              "location": {
+                "kind": "number",
+                "value": "606"
+              }
+            }
+          },
+          "funcname": {
+            "kind": "array",
+            "items": [
+              {
+                "kind": "object",
+                "members": {
+                  "String": {
+                    "kind": "object",
+                    "members": {
+                      "sval": {
+                        "kind": "string",
+                        "value": "truss"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "kind": "object",
+                "members": {
+                  "String": {
+                    "kind": "object",
+                    "members": {
+                      "sval": {
+                        "kind": "string",
+                        "value": "edge_limit_catalog_observe"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "row": {
+            "kind": "boolean",
+            "value": true
+          },
+          "events": {
+            "kind": "number",
+            "value": "28"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "status": "proposed design vectors; no runtime qualification",
+  "profile": "truss-canonical/0.1.0",
+  "vectors": [
+    {
+      "name": "null",
+      "canonicalUtf8Hex": "6e756c6c",
+      "domain": "truss-group-input/0.1.0",
+      "sha256": "8b1b433babdea168d100c4201682346f27336524b7388571b4ad38ff86e4d4e4"
+    },
+    {
+      "name": "empty array",
+      "canonicalUtf8Hex": "5b5d",
+      "domain": "truss-group-input/0.1.0",
+      "sha256": "1f10efccef64173363173dbeaa8758753ea19b7baf61a1e727d43fbd905b41de"
+    },
+    {
+      "name": "empty object",
+      "canonicalUtf8Hex": "7b7d",
+      "domain": "truss-group-input/0.1.0",
+      "sha256": "5e06e2f813431bfd03af47b7dc2f4821ab53164f66aec024a62b6b0957ee90a1"
+    },
+    {
+      "name": "sorted members",
+      "canonicalUtf8Hex": "7b2261223a6e756c6c2c2262223a22312e3030227d",
+      "domain": "truss-group-input/0.1.0",
+      "sha256": "b00d412014bcdd2161fc967746206acc45397c06cc26e556d12d461be85bca56"
+    },
+    {
+      "name": "control spelling",
+      "canonicalUtf8Hex": "225c753030306122",
+      "domain": "truss-group-input/0.1.0",
+      "sha256": "d88ecddd4e9281b042513f5e362100f078e3161dc780b141acb32a76149b9355"
+    },
+    {
+      "name": "unicode direct",
+      "canonicalUtf8Hex": "22c3a922",
+      "domain": "truss-group-input/0.1.0",
+      "sha256": "102f6ecef898e00744bf966b9f5b0a3be6c251b468973014204b0ffc6a0f040a"
+    }
+  ],
+  "scope": "Primitive canonical-byte fixtures only; no input-schema or runtime qualification. Draft domain corrected from superseded truss-request-input/0.1.0."
+}

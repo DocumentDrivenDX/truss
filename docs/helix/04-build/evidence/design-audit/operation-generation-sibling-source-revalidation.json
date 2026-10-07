@@ -1,0 +1,64 @@
+{
+  "scope": "Read-only original sibling HEAD/cleanliness and selected shared-source hashes. No owner adoption, message delivery, fresh compiler bundle or native qualification.",
+  "observedAt": "2026-10-06T21:24:44.839738+00:00",
+  "priorReceipt": {
+    "path": "docs/helix/04-build/evidence/design-audit/catalog-enumeration-sibling-source-revalidation.json",
+    "sha256": "901c87e9188ffcc1234654196d4e50220855d1692cb8aff1bdd2d2efe86d0f56"
+  },
+  "siblings": {
+    "umf": {
+      "head": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+      "clean": true
+    },
+    "weft": {
+      "head": "b261d2a37f8ded79ced66a52bd22b322e37a084c",
+      "clean": true
+    }
+  },
+  "weftSourcePins": [
+    {
+      "path": "/Users/erik/Projects/weft/docs/helix/04-build/implementation-plan.md",
+      "sha256": "0c3a17658b5e26059438a20f060fab2bebc7379c8302cb91b0ceb479ac500398"
+    },
+    {
+      "path": "/Users/erik/Projects/weft/docs/helix/04-build/evidence/B-005-native-preparation.md",
+      "sha256": "01e8239292f206a1dc857d94404559591fbf8c431bf4229e0f6e9404936c64af"
+    },
+    {
+      "path": "/Users/erik/Projects/weft/tests/truss-postgresql/driver-native.py",
+      "sha256": "833cc6954b9ce3bee955cdc8f78dcc8d809ca497fcb59adc738d0093fd78ef83"
+    },
+    {
+      "path": "/Users/erik/Projects/weft/tests/truss-postgresql/upstream/source-pins.json",
+      "sha256": "73990f0df76e7c4b2f350502ccb130fbdf142e66d151914fb1fe277979c99e89"
+    }
+  ],
+  "trussSchemas": [
+    {
+      "id": "urn:truss:acceptance-input:0.1.0",
+      "path": "docs/helix/02-design/contracts/acceptance-input-v0.1.schema.json",
+      "sha256": "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd"
+    },
+    {
+      "id": "urn:truss:draft:postgresql-binding:0.1.0",
+      "path": "docs/helix/02-design/contracts/truss-postgresql-binding-v0.1.proposal.schema.json",
+      "sha256": "2a37a1775dfa6e245053e8975df349c5522cf9cb4d5f1d1b1d0f34602b2883e6"
+    },
+    {
+      "id": "urn:truss:draft:property-home:0.1.0",
+      "path": "docs/helix/02-design/contracts/truss-property-home-v0.1.proposal.schema.json",
+      "sha256": "15e78a535adcf2786af3521abdf52a634e98ef3096ebed84652fed7ab6e2eaae"
+    },
+    {
+      "id": "urn:truss:draft:row-home:0.1.0",
+      "path": "docs/helix/02-design/contracts/truss-row-home-v0.1.proposal.schema.json",
+      "sha256": "3d35289dc9e5286bc17b1d4a40f68dc5cfc174d23ac97381dc7de3c8f9856e23"
+    },
+    {
+      "id": "urn:truss:draft:row-join-definition:0.1.0",
+      "path": "docs/helix/02-design/contracts/truss-row-join-definition-v0.1.proposal.schema.json",
+      "sha256": "ddc7528dd546dfc76092076613fa612caee55a45ed51f46a553675b6f4e9d2b1"
+    }
+  ],
+  "unchangedAgainstPrior": false
+}

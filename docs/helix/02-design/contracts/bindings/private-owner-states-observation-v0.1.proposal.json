@@ -1,0 +1,215 @@
+{
+  "profile": "truss-private-owner-states-observation/0.1.0",
+  "status": "planned_unadopted",
+  "sourceSha256": "aad6ba4e8d752906af3d27bd500c71f4505dd4a2812294f78755c15feaaa73b1",
+  "modelSha256": "72ffcf4d29cd4fd1fe4d540fd65a3415b726260dc44b7a0957a376ffee516fc2",
+  "statements": [
+    {
+      "ordinal": 0,
+      "ownerKind": "object",
+      "parameterSlots": [
+        {
+          "position": 1,
+          "nativeCast": "pg_catalog.int8",
+          "meaning": "Original admitted positive graph owner identity"
+        },
+        {
+          "position": 2,
+          "nativeCast": "pg_catalog.int4",
+          "meaning": "Original signed object type or relationship discriminator"
+        }
+      ],
+      "columns": [
+        {
+          "position": 0,
+          "name": "state_id",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": false
+        },
+        {
+          "position": 1,
+          "name": "owner_kind",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": false
+        },
+        {
+          "position": 2,
+          "name": "object_id",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": true
+        },
+        {
+          "position": 3,
+          "name": "object_type_id",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": true
+        },
+        {
+          "position": 4,
+          "name": "edge_id",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": true
+        },
+        {
+          "position": 5,
+          "name": "relationship_type_id",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": true
+        },
+        {
+          "position": 6,
+          "name": "property_owner_type_id",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": false
+        },
+        {
+          "position": 7,
+          "name": "property_id",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": false
+        },
+        {
+          "position": 8,
+          "name": "root_node_id",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": false
+        },
+        {
+          "position": 9,
+          "name": "definition_bytes_hex",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": false
+        },
+        {
+          "position": 10,
+          "name": "home_profile_bytes_hex",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": false
+        },
+        {
+          "position": 11,
+          "name": "value_profile_bytes_hex",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": false
+        },
+        {
+          "position": 12,
+          "name": "state_source_bytes_hex",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": false
+        }
+      ],
+      "collectionOrder": [
+        "property_owner_type_id",
+        "property_id",
+        "state_id"
+      ],
+      "coverage": "Every state under the complete original typed owner, including properties absent from current active/requested field lists"
+    },
+    {
+      "ordinal": 1,
+      "ownerKind": "edge",
+      "parameterSlots": [
+        {
+          "position": 1,
+          "nativeCast": "pg_catalog.int8",
+          "meaning": "Original admitted positive graph owner identity"
+        },
+        {
+          "position": 2,
+          "nativeCast": "pg_catalog.int4",
+          "meaning": "Original signed object type or relationship discriminator"
+        }
+      ],
+      "columns": [
+        {
+          "position": 0,
+          "name": "state_id",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": false
+        },
+        {
+          "position": 1,
+          "name": "owner_kind",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": false
+        },
+        {
+          "position": 2,
+          "name": "object_id",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": true
+        },
+        {
+          "position": 3,
+          "name": "object_type_id",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": true
+        },
+        {
+          "position": 4,
+          "name": "edge_id",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": true
+        },
+        {
+          "position": 5,
+          "name": "relationship_type_id",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": true
+        },
+        {
+          "position": 6,
+          "name": "property_owner_type_id",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": false
+        },
+        {
+          "position": 7,
+          "name": "property_id",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": false
+        },
+        {
+          "position": 8,
+          "name": "root_node_id",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": false
+        },
+        {
+          "position": 9,
+          "name": "definition_bytes_hex",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": false
+        },
+        {
+          "position": 10,
+          "name": "home_profile_bytes_hex",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": false
+        },
+        {
+          "position": 11,
+          "name": "value_profile_bytes_hex",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": false
+        },
+        {
+          "position": 12,
+          "name": "state_source_bytes_hex",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": false
+        }
+      ],
+      "collectionOrder": [
+        "property_owner_type_id",
+        "property_id",
+        "state_id"
+      ],
+      "coverage": "Every state under the complete original typed owner, including properties absent from current active/requested field lists"
+    }
+  ],
+  "semanticAdmission": "Complete original header and bidirectional property/home/retained meaning; duplicate owner/property states or unclassified extras refuse; zero states requires independently qualified original presence",
+  "nativeExecution": false,
+  "complete": false
+}

@@ -1,0 +1,1544 @@
+{
+  "scope": "Synthetic exact-tree boundary correspondence only; not full event/native profile",
+  "cases": [
+    {
+      "id": "metadata-first",
+      "start": {
+        "identity": "object-7",
+        "version": "1",
+        "props": {
+          "a": {
+            "present": false
+          },
+          "b": {
+            "present": true,
+            "value": {
+              "numericToken": "1.0"
+            }
+          }
+        },
+        "retained": {
+          "unknown": {
+            "text": "keep"
+          }
+        }
+      },
+      "events": [
+        {
+          "kind": "metadata",
+          "before": {
+            "identity": "object-7",
+            "version": "1",
+            "props": {
+              "a": {
+                "present": false
+              },
+              "b": {
+                "present": true,
+                "value": {
+                  "numericToken": "1.0"
+                }
+              }
+            },
+            "retained": {
+              "unknown": {
+                "text": "keep"
+              }
+            }
+          },
+          "after": {
+            "identity": "object-7",
+            "version": "2",
+            "props": {
+              "a": {
+                "present": true,
+                "value": null
+              },
+              "b": {
+                "present": true,
+                "value": {
+                  "numericToken": "1.00"
+                }
+              }
+            },
+            "retained": {
+              "unknown": {
+                "text": "keep"
+              }
+            }
+          }
+        },
+        {
+          "kind": "property",
+          "home": "a",
+          "before": {
+            "present": false
+          },
+          "after": {
+            "present": true,
+            "value": null
+          }
+        },
+        {
+          "kind": "property",
+          "home": "b",
+          "before": {
+            "present": true,
+            "value": {
+              "numericToken": "1.0"
+            }
+          },
+          "after": {
+            "present": true,
+            "value": {
+              "numericToken": "1.00"
+            }
+          }
+        }
+      ],
+      "expected": "admitted"
+    },
+    {
+      "id": "metadata-between",
+      "start": {
+        "identity": "object-7",
+        "version": "1",
+        "props": {
+          "a": {
+            "present": false
+          },
+          "b": {
+            "present": true,
+            "value": {
+              "numericToken": "1.0"
+            }
+          }
+        },
+        "retained": {
+          "unknown": {
+            "text": "keep"
+          }
+        }
+      },
+      "events": [
+        {
+          "kind": "property",
+          "home": "a",
+          "before": {
+            "present": false
+          },
+          "after": {
+            "present": true,
+            "value": null
+          }
+        },
+        {
+          "kind": "metadata",
+          "before": {
+            "identity": "object-7",
+            "version": "1",
+            "props": {
+              "a": {
+                "present": false
+              },
+              "b": {
+                "present": true,
+                "value": {
+                  "numericToken": "1.0"
+                }
+              }
+            },
+            "retained": {
+              "unknown": {
+                "text": "keep"
+              }
+            }
+          },
+          "after": {
+            "identity": "object-7",
+            "version": "2",
+            "props": {
+              "a": {
+                "present": true,
+                "value": null
+              },
+              "b": {
+                "present": true,
+                "value": {
+                  "numericToken": "1.00"
+                }
+              }
+            },
+            "retained": {
+              "unknown": {
+                "text": "keep"
+              }
+            }
+          }
+        },
+        {
+          "kind": "property",
+          "home": "b",
+          "before": {
+            "present": true,
+            "value": {
+              "numericToken": "1.0"
+            }
+          },
+          "after": {
+            "present": true,
+            "value": {
+              "numericToken": "1.00"
+            }
+          }
+        }
+      ],
+      "expected": "admitted"
+    },
+    {
+      "id": "metadata-last",
+      "start": {
+        "identity": "object-7",
+        "version": "1",
+        "props": {
+          "a": {
+            "present": false
+          },
+          "b": {
+            "present": true,
+            "value": {
+              "numericToken": "1.0"
+            }
+          }
+        },
+        "retained": {
+          "unknown": {
+            "text": "keep"
+          }
+        }
+      },
+      "events": [
+        {
+          "kind": "property",
+          "home": "a",
+          "before": {
+            "present": false
+          },
+          "after": {
+            "present": true,
+            "value": null
+          }
+        },
+        {
+          "kind": "property",
+          "home": "b",
+          "before": {
+            "present": true,
+            "value": {
+              "numericToken": "1.0"
+            }
+          },
+          "after": {
+            "present": true,
+            "value": {
+              "numericToken": "1.00"
+            }
+          }
+        },
+        {
+          "kind": "metadata",
+          "before": {
+            "identity": "object-7",
+            "version": "1",
+            "props": {
+              "a": {
+                "present": false
+              },
+              "b": {
+                "present": true,
+                "value": {
+                  "numericToken": "1.0"
+                }
+              }
+            },
+            "retained": {
+              "unknown": {
+                "text": "keep"
+              }
+            }
+          },
+          "after": {
+            "identity": "object-7",
+            "version": "2",
+            "props": {
+              "a": {
+                "present": true,
+                "value": null
+              },
+              "b": {
+                "present": true,
+                "value": {
+                  "numericToken": "1.00"
+                }
+              }
+            },
+            "retained": {
+              "unknown": {
+                "text": "keep"
+              }
+            }
+          }
+        }
+      ],
+      "expected": "admitted"
+    },
+    {
+      "id": "missing-delta",
+      "start": {
+        "identity": "object-7",
+        "version": "1",
+        "props": {
+          "a": {
+            "present": false
+          },
+          "b": {
+            "present": true,
+            "value": {
+              "numericToken": "1.0"
+            }
+          }
+        },
+        "retained": {
+          "unknown": {
+            "text": "keep"
+          }
+        }
+      },
+      "events": [
+        {
+          "kind": "property",
+          "home": "a",
+          "before": {
+            "present": false
+          },
+          "after": {
+            "present": true,
+            "value": null
+          }
+        },
+        {
+          "kind": "metadata",
+          "before": {
+            "identity": "object-7",
+            "version": "1",
+            "props": {
+              "a": {
+                "present": false
+              },
+              "b": {
+                "present": true,
+                "value": {
+                  "numericToken": "1.0"
+                }
+              }
+            },
+            "retained": {
+              "unknown": {
+                "text": "keep"
+              }
+            }
+          },
+          "after": {
+            "identity": "object-7",
+            "version": "2",
+            "props": {
+              "a": {
+                "present": true,
+                "value": null
+              },
+              "b": {
+                "present": true,
+                "value": {
+                  "numericToken": "1.00"
+                }
+              }
+            },
+            "retained": {
+              "unknown": {
+                "text": "keep"
+              }
+            }
+          }
+        }
+      ],
+      "expected": "refused"
+    },
+    {
+      "id": "missing-metadata",
+      "start": {
+        "identity": "object-7",
+        "version": "1",
+        "props": {
+          "a": {
+            "present": false
+          },
+          "b": {
+            "present": true,
+            "value": {
+              "numericToken": "1.0"
+            }
+          }
+        },
+        "retained": {
+          "unknown": {
+            "text": "keep"
+          }
+        }
+      },
+      "events": [
+        {
+          "kind": "property",
+          "home": "a",
+          "before": {
+            "present": false
+          },
+          "after": {
+            "present": true,
+            "value": null
+          }
+        },
+        {
+          "kind": "property",
+          "home": "b",
+          "before": {
+            "present": true,
+            "value": {
+              "numericToken": "1.0"
+            }
+          },
+          "after": {
+            "present": true,
+            "value": {
+              "numericToken": "1.00"
+            }
+          }
+        }
+      ],
+      "expected": "refused"
+    },
+    {
+      "id": "duplicate-metadata",
+      "start": {
+        "identity": "object-7",
+        "version": "1",
+        "props": {
+          "a": {
+            "present": false
+          },
+          "b": {
+            "present": true,
+            "value": {
+              "numericToken": "1.0"
+            }
+          }
+        },
+        "retained": {
+          "unknown": {
+            "text": "keep"
+          }
+        }
+      },
+      "events": [
+        {
+          "kind": "property",
+          "home": "a",
+          "before": {
+            "present": false
+          },
+          "after": {
+            "present": true,
+            "value": null
+          }
+        },
+        {
+          "kind": "property",
+          "home": "b",
+          "before": {
+            "present": true,
+            "value": {
+              "numericToken": "1.0"
+            }
+          },
+          "after": {
+            "present": true,
+            "value": {
+              "numericToken": "1.00"
+            }
+          }
+        },
+        {
+          "kind": "metadata",
+          "before": {
+            "identity": "object-7",
+            "version": "1",
+            "props": {
+              "a": {
+                "present": false
+              },
+              "b": {
+                "present": true,
+                "value": {
+                  "numericToken": "1.0"
+                }
+              }
+            },
+            "retained": {
+              "unknown": {
+                "text": "keep"
+              }
+            }
+          },
+          "after": {
+            "identity": "object-7",
+            "version": "2",
+            "props": {
+              "a": {
+                "present": true,
+                "value": null
+              },
+              "b": {
+                "present": true,
+                "value": {
+                  "numericToken": "1.00"
+                }
+              }
+            },
+            "retained": {
+              "unknown": {
+                "text": "keep"
+              }
+            }
+          }
+        },
+        {
+          "kind": "metadata",
+          "before": {
+            "identity": "object-7",
+            "version": "1",
+            "props": {
+              "a": {
+                "present": false
+              },
+              "b": {
+                "present": true,
+                "value": {
+                  "numericToken": "1.0"
+                }
+              }
+            },
+            "retained": {
+              "unknown": {
+                "text": "keep"
+              }
+            }
+          },
+          "after": {
+            "identity": "object-7",
+            "version": "2",
+            "props": {
+              "a": {
+                "present": true,
+                "value": null
+              },
+              "b": {
+                "present": true,
+                "value": {
+                  "numericToken": "1.00"
+                }
+              }
+            },
+            "retained": {
+              "unknown": {
+                "text": "keep"
+              }
+            }
+          }
+        }
+      ],
+      "expected": "refused"
+    },
+    {
+      "id": "wrong-delta-before",
+      "start": {
+        "identity": "object-7",
+        "version": "1",
+        "props": {
+          "a": {
+            "present": false
+          },
+          "b": {
+            "present": true,
+            "value": {
+              "numericToken": "1.0"
+            }
+          }
+        },
+        "retained": {
+          "unknown": {
+            "text": "keep"
+          }
+        }
+      },
+      "events": [
+        {
+          "kind": "property",
+          "home": "a",
+          "before": {
+            "present": false
+          },
+          "after": {
+            "present": true,
+            "value": null
+          }
+        },
+        {
+          "kind": "property",
+          "home": "b",
+          "before": {
+            "present": true,
+            "value": {
+              "numericToken": "1"
+            }
+          },
+          "after": {
+            "present": true,
+            "value": {
+              "numericToken": "1.00"
+            }
+          }
+        },
+        {
+          "kind": "metadata",
+          "before": {
+            "identity": "object-7",
+            "version": "1",
+            "props": {
+              "a": {
+                "present": false
+              },
+              "b": {
+                "present": true,
+                "value": {
+                  "numericToken": "1.0"
+                }
+              }
+            },
+            "retained": {
+              "unknown": {
+                "text": "keep"
+              }
+            }
+          },
+          "after": {
+            "identity": "object-7",
+            "version": "2",
+            "props": {
+              "a": {
+                "present": true,
+                "value": null
+              },
+              "b": {
+                "present": true,
+                "value": {
+                  "numericToken": "1.00"
+                }
+              }
+            },
+            "retained": {
+              "unknown": {
+                "text": "keep"
+              }
+            }
+          }
+        }
+      ],
+      "expected": "refused"
+    },
+    {
+      "id": "dropped-retained",
+      "start": {
+        "identity": "object-7",
+        "version": "1",
+        "props": {
+          "a": {
+            "present": false
+          },
+          "b": {
+            "present": true,
+            "value": {
+              "numericToken": "1.0"
+            }
+          }
+        },
+        "retained": {
+          "unknown": {
+            "text": "keep"
+          }
+        }
+      },
+      "events": [
+        {
+          "kind": "property",
+          "home": "a",
+          "before": {
+            "present": false
+          },
+          "after": {
+            "present": true,
+            "value": null
+          }
+        },
+        {
+          "kind": "property",
+          "home": "b",
+          "before": {
+            "present": true,
+            "value": {
+              "numericToken": "1.0"
+            }
+          },
+          "after": {
+            "present": true,
+            "value": {
+              "numericToken": "1.00"
+            }
+          }
+        },
+        {
+          "kind": "metadata",
+          "before": {
+            "identity": "object-7",
+            "version": "1",
+            "props": {
+              "a": {
+                "present": false
+              },
+              "b": {
+                "present": true,
+                "value": {
+                  "numericToken": "1.0"
+                }
+              }
+            },
+            "retained": {
+              "unknown": {
+                "text": "keep"
+              }
+            }
+          },
+          "after": {
+            "identity": "object-7",
+            "version": "2",
+            "props": {
+              "a": {
+                "present": true,
+                "value": null
+              },
+              "b": {
+                "present": true,
+                "value": {
+                  "numericToken": "1.00"
+                }
+              }
+            },
+            "retained": {}
+          }
+        }
+      ],
+      "expected": "refused"
+    },
+    {
+      "id": "snapshot-token-swap",
+      "start": {
+        "identity": "object-7",
+        "version": "1",
+        "props": {
+          "a": {
+            "present": false
+          },
+          "b": {
+            "present": true,
+            "value": {
+              "numericToken": "1.0"
+            }
+          }
+        },
+        "retained": {
+          "unknown": {
+            "text": "keep"
+          }
+        }
+      },
+      "events": [
+        {
+          "kind": "property",
+          "home": "a",
+          "before": {
+            "present": false
+          },
+          "after": {
+            "present": true,
+            "value": null
+          }
+        },
+        {
+          "kind": "property",
+          "home": "b",
+          "before": {
+            "present": true,
+            "value": {
+              "numericToken": "1.0"
+            }
+          },
+          "after": {
+            "present": true,
+            "value": {
+              "numericToken": "1.00"
+            }
+          }
+        },
+        {
+          "kind": "metadata",
+          "before": {
+            "identity": "object-7",
+            "version": "1",
+            "props": {
+              "a": {
+                "present": false
+              },
+              "b": {
+                "present": true,
+                "value": {
+                  "numericToken": "1.0"
+                }
+              }
+            },
+            "retained": {
+              "unknown": {
+                "text": "keep"
+              }
+            }
+          },
+          "after": {
+            "identity": "object-7",
+            "version": "2",
+            "props": {
+              "a": {
+                "present": true,
+                "value": null
+              },
+              "b": {
+                "present": true,
+                "value": {
+                  "numericToken": "1.0"
+                }
+              }
+            },
+            "retained": {
+              "unknown": {
+                "text": "keep"
+              }
+            }
+          }
+        }
+      ],
+      "expected": "refused"
+    },
+    {
+      "id": "wrong-start",
+      "start": {
+        "identity": "object-7",
+        "version": "1",
+        "props": {
+          "a": {
+            "present": false
+          },
+          "b": {
+            "present": true,
+            "value": {
+              "numericToken": "1.0"
+            }
+          }
+        },
+        "retained": {
+          "unknown": {
+            "text": "keep"
+          }
+        }
+      },
+      "events": [
+        {
+          "kind": "property",
+          "home": "a",
+          "before": {
+            "present": false
+          },
+          "after": {
+            "present": true,
+            "value": null
+          }
+        },
+        {
+          "kind": "property",
+          "home": "b",
+          "before": {
+            "present": true,
+            "value": {
+              "numericToken": "1.0"
+            }
+          },
+          "after": {
+            "present": true,
+            "value": {
+              "numericToken": "1.00"
+            }
+          }
+        },
+        {
+          "kind": "metadata",
+          "before": {
+            "identity": "object-7",
+            "version": "0",
+            "props": {
+              "a": {
+                "present": false
+              },
+              "b": {
+                "present": true,
+                "value": {
+                  "numericToken": "1.0"
+                }
+              }
+            },
+            "retained": {
+              "unknown": {
+                "text": "keep"
+              }
+            }
+          },
+          "after": {
+            "identity": "object-7",
+            "version": "2",
+            "props": {
+              "a": {
+                "present": true,
+                "value": null
+              },
+              "b": {
+                "present": true,
+                "value": {
+                  "numericToken": "1.00"
+                }
+              }
+            },
+            "retained": {
+              "unknown": {
+                "text": "keep"
+              }
+            }
+          }
+        }
+      ],
+      "expected": "refused"
+    },
+    {
+      "id": "retain-two-additions",
+      "start": {
+        "identity": "object-7",
+        "version": "1",
+        "props": {
+          "a": {
+            "present": false
+          },
+          "b": {
+            "present": true,
+            "value": {
+              "numericToken": "1.0"
+            }
+          }
+        },
+        "retained": {
+          "unknown": {
+            "text": "keep"
+          }
+        }
+      },
+      "events": [
+        {
+          "kind": "retain",
+          "changes": [
+            {
+              "name": "a/b",
+              "before": {
+                "present": false
+              },
+              "after": {
+                "present": true,
+                "value": null
+              }
+            },
+            {
+              "name": "é",
+              "before": {
+                "present": false
+              },
+              "after": {
+                "present": true,
+                "value": {
+                  "numericToken": "1.00"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "kind": "metadata",
+          "before": {
+            "identity": "object-7",
+            "version": "1",
+            "props": {
+              "a": {
+                "present": false
+              },
+              "b": {
+                "present": true,
+                "value": {
+                  "numericToken": "1.0"
+                }
+              }
+            },
+            "retained": {
+              "unknown": {
+                "text": "keep"
+              }
+            }
+          },
+          "after": {
+            "identity": "object-7",
+            "version": "2",
+            "props": {
+              "a": {
+                "present": false
+              },
+              "b": {
+                "present": true,
+                "value": {
+                  "numericToken": "1.0"
+                }
+              }
+            },
+            "retained": {
+              "unknown": {
+                "text": "keep"
+              },
+              "a/b": null,
+              "é": {
+                "numericToken": "1.00"
+              }
+            }
+          }
+        }
+      ],
+      "expected": "admitted"
+    },
+    {
+      "id": "retain-duplicate-name",
+      "start": {
+        "identity": "object-7",
+        "version": "1",
+        "props": {
+          "a": {
+            "present": false
+          },
+          "b": {
+            "present": true,
+            "value": {
+              "numericToken": "1.0"
+            }
+          }
+        },
+        "retained": {
+          "unknown": {
+            "text": "keep"
+          }
+        }
+      },
+      "events": [
+        {
+          "kind": "retain",
+          "changes": [
+            {
+              "name": "a/b",
+              "before": {
+                "present": false
+              },
+              "after": {
+                "present": true,
+                "value": null
+              }
+            },
+            {
+              "name": "a/b",
+              "before": {
+                "present": false
+              },
+              "after": {
+                "present": true,
+                "value": {
+                  "numericToken": "1.00"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "kind": "metadata",
+          "before": {
+            "identity": "object-7",
+            "version": "1",
+            "props": {
+              "a": {
+                "present": false
+              },
+              "b": {
+                "present": true,
+                "value": {
+                  "numericToken": "1.0"
+                }
+              }
+            },
+            "retained": {
+              "unknown": {
+                "text": "keep"
+              }
+            }
+          },
+          "after": {
+            "identity": "object-7",
+            "version": "2",
+            "props": {
+              "a": {
+                "present": false
+              },
+              "b": {
+                "present": true,
+                "value": {
+                  "numericToken": "1.0"
+                }
+              }
+            },
+            "retained": {
+              "unknown": {
+                "text": "keep"
+              },
+              "a/b": null,
+              "é": {
+                "numericToken": "1.00"
+              }
+            }
+          }
+        }
+      ],
+      "expected": "refused"
+    },
+    {
+      "id": "retain-existing-replacement",
+      "start": {
+        "identity": "object-7",
+        "version": "1",
+        "props": {
+          "a": {
+            "present": false
+          },
+          "b": {
+            "present": true,
+            "value": {
+              "numericToken": "1.0"
+            }
+          }
+        },
+        "retained": {
+          "unknown": {
+            "text": "keep"
+          }
+        }
+      },
+      "events": [
+        {
+          "kind": "retain",
+          "changes": [
+            {
+              "name": "unknown",
+              "before": {
+                "present": false
+              },
+              "after": {
+                "present": true,
+                "value": null
+              }
+            },
+            {
+              "name": "é",
+              "before": {
+                "present": false
+              },
+              "after": {
+                "present": true,
+                "value": {
+                  "numericToken": "1.00"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "kind": "metadata",
+          "before": {
+            "identity": "object-7",
+            "version": "1",
+            "props": {
+              "a": {
+                "present": false
+              },
+              "b": {
+                "present": true,
+                "value": {
+                  "numericToken": "1.0"
+                }
+              }
+            },
+            "retained": {
+              "unknown": {
+                "text": "keep"
+              }
+            }
+          },
+          "after": {
+            "identity": "object-7",
+            "version": "2",
+            "props": {
+              "a": {
+                "present": false
+              },
+              "b": {
+                "present": true,
+                "value": {
+                  "numericToken": "1.0"
+                }
+              }
+            },
+            "retained": {
+              "unknown": {
+                "text": "keep"
+              },
+              "a/b": null,
+              "é": {
+                "numericToken": "1.00"
+              }
+            }
+          }
+        }
+      ],
+      "expected": "refused"
+    },
+    {
+      "id": "retain-missing-delta",
+      "start": {
+        "identity": "object-7",
+        "version": "1",
+        "props": {
+          "a": {
+            "present": false
+          },
+          "b": {
+            "present": true,
+            "value": {
+              "numericToken": "1.0"
+            }
+          }
+        },
+        "retained": {
+          "unknown": {
+            "text": "keep"
+          }
+        }
+      },
+      "events": [
+        {
+          "kind": "retain",
+          "changes": [
+            {
+              "name": "a/b",
+              "before": {
+                "present": false
+              },
+              "after": {
+                "present": true,
+                "value": null
+              }
+            }
+          ]
+        },
+        {
+          "kind": "metadata",
+          "before": {
+            "identity": "object-7",
+            "version": "1",
+            "props": {
+              "a": {
+                "present": false
+              },
+              "b": {
+                "present": true,
+                "value": {
+                  "numericToken": "1.0"
+                }
+              }
+            },
+            "retained": {
+              "unknown": {
+                "text": "keep"
+              }
+            }
+          },
+          "after": {
+            "identity": "object-7",
+            "version": "2",
+            "props": {
+              "a": {
+                "present": false
+              },
+              "b": {
+                "present": true,
+                "value": {
+                  "numericToken": "1.0"
+                }
+              }
+            },
+            "retained": {
+              "unknown": {
+                "text": "keep"
+              },
+              "a/b": null,
+              "é": {
+                "numericToken": "1.00"
+              }
+            }
+          }
+        }
+      ],
+      "expected": "refused"
+    },
+    {
+      "id": "retain-not-absent-before",
+      "start": {
+        "identity": "object-7",
+        "version": "1",
+        "props": {
+          "a": {
+            "present": false
+          },
+          "b": {
+            "present": true,
+            "value": {
+              "numericToken": "1.0"
+            }
+          }
+        },
+        "retained": {
+          "unknown": {
+            "text": "keep"
+          }
+        }
+      },
+      "events": [
+        {
+          "kind": "retain",
+          "changes": [
+            {
+              "name": "a/b",
+              "before": {
+                "present": true,
+                "value": null
+              },
+              "after": {
+                "present": true,
+                "value": null
+              }
+            },
+            {
+              "name": "é",
+              "before": {
+                "present": false
+              },
+              "after": {
+                "present": true,
+                "value": {
+                  "numericToken": "1.00"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "kind": "metadata",
+          "before": {
+            "identity": "object-7",
+            "version": "1",
+            "props": {
+              "a": {
+                "present": false
+              },
+              "b": {
+                "present": true,
+                "value": {
+                  "numericToken": "1.0"
+                }
+              }
+            },
+            "retained": {
+              "unknown": {
+                "text": "keep"
+              }
+            }
+          },
+          "after": {
+            "identity": "object-7",
+            "version": "2",
+            "props": {
+              "a": {
+                "present": false
+              },
+              "b": {
+                "present": true,
+                "value": {
+                  "numericToken": "1.0"
+                }
+              }
+            },
+            "retained": {
+              "unknown": {
+                "text": "keep"
+              },
+              "a/b": null,
+              "é": {
+                "numericToken": "1.00"
+              }
+            }
+          }
+        }
+      ],
+      "expected": "refused"
+    },
+    {
+      "id": "retain-token-swap",
+      "start": {
+        "identity": "object-7",
+        "version": "1",
+        "props": {
+          "a": {
+            "present": false
+          },
+          "b": {
+            "present": true,
+            "value": {
+              "numericToken": "1.0"
+            }
+          }
+        },
+        "retained": {
+          "unknown": {
+            "text": "keep"
+          }
+        }
+      },
+      "events": [
+        {
+          "kind": "retain",
+          "changes": [
+            {
+              "name": "a/b",
+              "before": {
+                "present": false
+              },
+              "after": {
+                "present": true,
+                "value": null
+              }
+            },
+            {
+              "name": "é",
+              "before": {
+                "present": false
+              },
+              "after": {
+                "present": true,
+                "value": {
+                  "numericToken": "1.00"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "kind": "metadata",
+          "before": {
+            "identity": "object-7",
+            "version": "1",
+            "props": {
+              "a": {
+                "present": false
+              },
+              "b": {
+                "present": true,
+                "value": {
+                  "numericToken": "1.0"
+                }
+              }
+            },
+            "retained": {
+              "unknown": {
+                "text": "keep"
+              }
+            }
+          },
+          "after": {
+            "identity": "object-7",
+            "version": "2",
+            "props": {
+              "a": {
+                "present": false
+              },
+              "b": {
+                "present": true,
+                "value": {
+                  "numericToken": "1.0"
+                }
+              }
+            },
+            "retained": {
+              "unknown": {
+                "text": "keep"
+              },
+              "a/b": null,
+              "é": {
+                "numericToken": "1.0"
+              }
+            }
+          }
+        }
+      ],
+      "expected": "refused"
+    }
+  ]
+}

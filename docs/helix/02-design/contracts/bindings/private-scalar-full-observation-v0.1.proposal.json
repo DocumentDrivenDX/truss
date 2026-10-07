@@ -1,0 +1,133 @@
+{
+  "profile": "truss-private-scalar-full-observation/0.1.0",
+  "status": "planned_unadopted",
+  "sourceSha256": "d92a8870ed951ef7ae4b583f6ddf0f5fbd77c996570055bce50fa8685afe26b2",
+  "modelSha256": "fd901c196cb127e817f41573d9bfceb26012497f3d8a3c0310c31ccd1a8fad62",
+  "parameterSlots": [
+    {
+      "position": 1,
+      "nativeCast": "pg_catalog.int8",
+      "meaning": "Admitted original positive state identity"
+    },
+    {
+      "position": 2,
+      "nativeCast": "pg_catalog.int8",
+      "meaning": "Admitted original positive node identity"
+    }
+  ],
+  "columns": [
+    {
+      "position": 0,
+      "name": "state_id",
+      "nativeResultType": "pg_catalog.text",
+      "nativeNullPermitted": false,
+      "meaning": "Original positive state identity, exact decimal text"
+    },
+    {
+      "position": 1,
+      "name": "node_id",
+      "nativeResultType": "pg_catalog.text",
+      "nativeNullPermitted": false,
+      "meaning": "Original positive node identity, exact decimal text"
+    },
+    {
+      "position": 2,
+      "name": "scalar_kind",
+      "nativeResultType": "pg_catalog.text",
+      "nativeNullPermitted": false,
+      "meaning": "Original seven-family storage dispatch; not semantic codec identity"
+    },
+    {
+      "position": 3,
+      "name": "text_value",
+      "nativeResultType": "pg_catalog.text",
+      "nativeNullPermitted": true,
+      "meaning": "Exact native text observation under selected original descriptor/grammar"
+    },
+    {
+      "position": 4,
+      "name": "boolean_value",
+      "nativeResultType": "pg_catalog.text",
+      "nativeNullPermitted": true,
+      "meaning": "Exact native text observation under selected original descriptor/grammar"
+    },
+    {
+      "position": 5,
+      "name": "native_numeric_text",
+      "nativeResultType": "pg_catalog.text",
+      "nativeNullPermitted": true,
+      "meaning": "Native numeric text, separate from lexical source token"
+    },
+    {
+      "position": 6,
+      "name": "original_numeric_token",
+      "nativeResultType": "pg_catalog.text",
+      "nativeNullPermitted": true,
+      "meaning": "Original admitted numeric token, no normalization"
+    },
+    {
+      "position": 7,
+      "name": "binary_value_hex",
+      "nativeResultType": "pg_catalog.text",
+      "nativeNullPermitted": true,
+      "meaning": "Exact binary payload; present empty hex differs from native NULL"
+    },
+    {
+      "position": 8,
+      "name": "temporal_text",
+      "nativeResultType": "pg_catalog.text",
+      "nativeNullPermitted": true,
+      "meaning": "Original temporal spelling"
+    },
+    {
+      "position": 9,
+      "name": "temporal_instant_text",
+      "nativeResultType": "pg_catalog.text",
+      "nativeNullPermitted": true,
+      "meaning": "Optional qualified native timestamptz text; requires original settings/profile"
+    },
+    {
+      "position": 10,
+      "name": "opaque_bytes_hex",
+      "nativeResultType": "pg_catalog.text",
+      "nativeNullPermitted": true,
+      "meaning": "Exact opaque bytes, not inferred text"
+    },
+    {
+      "position": 11,
+      "name": "codec_bytes_hex",
+      "nativeResultType": "pg_catalog.text",
+      "nativeNullPermitted": false,
+      "meaning": "Full original nonempty registered codec bytes"
+    },
+    {
+      "position": 12,
+      "name": "source_bytes_hex",
+      "nativeResultType": "pg_catalog.text",
+      "nativeNullPermitted": false,
+      "meaning": "Full original nonempty source bytes"
+    },
+    {
+      "position": 13,
+      "name": "metadata_date_style",
+      "nativeResultType": "pg_catalog.text",
+      "nativeNullPermitted": false,
+      "meaning": "Exact native text observation under selected original descriptor/grammar"
+    },
+    {
+      "position": 14,
+      "name": "metadata_time_zone",
+      "nativeResultType": "pg_catalog.text",
+      "nativeNullPermitted": false,
+      "meaning": "Exact native text observation under selected original descriptor/grammar"
+    }
+  ],
+  "rowAdmission": {
+    "zero": "Requires independent state/node/presence/visibility classification",
+    "one": "Admit complete framing, original identities, family slot mask, codec/source semantics and original read cut before logical decoding",
+    "two": "Integrity refusal; never choose a winner"
+  },
+  "resourceAdmission": "Bound all fifteen native carriers and buffers before driver materialization; charge decoded copies, settings/source interpretation and repeated comparison to original account",
+  "nativeExecution": false,
+  "complete": false
+}

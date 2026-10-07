@@ -1,0 +1,183 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:expiry-evidence:0.1.0",
+  "description": "Minimal pending expiry basis/transaction custody. No full input/result or future compact/commit hash; protected native finalization separately verifies actual row/effect correspondence.",
+  "allOf": [
+    {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-expiry-evidence/0.1.0"
+        },
+        "authorizedScopeIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "requestId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "canonicalProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "semanticDomain": {
+          "const": "truss-group-input/0.1.0"
+        },
+        "inputSha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "clockProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "retentionProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "expiryProcedureProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "expiredAt": {
+          "type": "string",
+          "minLength": 1
+        },
+        "priorLifecycleGeneration": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        },
+        "resultingLifecycleGeneration": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        },
+        "originalProtection": {
+          "$ref": "#/$defs/reference"
+        },
+        "clockObservation": {
+          "$ref": "#/$defs/reference"
+        },
+        "currentAuthorityObservation": {
+          "$ref": "#/$defs/reference"
+        },
+        "expiryWriterContext": {
+          "$ref": "#/$defs/reference"
+        },
+        "eventAdmission": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "event_bearing"
+                },
+                "completeOriginalEventUnion": {
+                  "$ref": "#/$defs/reference"
+                },
+                "absenceObservation": {
+                  "$ref": "#/$defs/reference"
+                }
+              },
+              "required": [
+                "kind",
+                "completeOriginalEventUnion",
+                "absenceObservation"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "all_no_op"
+                },
+                "originalNoOpClassification": {
+                  "$ref": "#/$defs/reference"
+                },
+                "replayWindowProfile": {
+                  "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+                }
+              },
+              "required": [
+                "kind",
+                "originalNoOpClassification",
+                "replayWindowProfile"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "authorizedScopeIdentity",
+        "requestId",
+        "canonicalProfile",
+        "semanticDomain",
+        "inputSha256",
+        "clockProfile",
+        "retentionProfile",
+        "expiryProcedureProfile",
+        "expiredAt",
+        "priorLifecycleGeneration",
+        "resultingLifecycleGeneration",
+        "originalProtection",
+        "clockObservation",
+        "currentAuthorityObservation",
+        "expiryWriterContext",
+        "eventAdmission"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "if": {
+        "properties": {
+          "clockProfile": {
+            "type": "object",
+            "properties": {
+              "identity": {
+                "const": "truss-receipt-clock"
+              },
+              "version": {
+                "const": "0.1.0"
+              }
+            },
+            "required": [
+              "identity",
+              "version"
+            ]
+          }
+        },
+        "required": [
+          "clockProfile"
+        ]
+      },
+      "then": {
+        "properties": {
+          "expiredAt": {
+            "type": "string",
+            "pattern": "^(?!0000)[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{6}Z(?![\\s\\S])"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "reference": {
+      "type": "object",
+      "properties": {
+        "identity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "identity",
+        "sha256"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "type": "object"
+}

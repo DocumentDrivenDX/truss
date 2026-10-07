@@ -1,0 +1,151 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:seed-baseline:0.2.0",
+  "description": "Shape only; native cut/selected binding/anchor/transition archive closure require admission.",
+  "type": "object",
+  "properties": {
+    "attempt": {
+      "$ref": "urn:truss:draft:seed-baseline:0.1.0#/properties/attempt"
+    },
+    "baselineProfile": {
+      "$ref": "urn:truss:draft:seed-baseline:0.1.0#/properties/baselineProfile"
+    },
+    "layoutProfile": {
+      "$ref": "urn:truss:draft:seed-baseline:0.1.0#/properties/layoutProfile"
+    },
+    "valueProfile": {
+      "$ref": "urn:truss:draft:seed-baseline:0.1.0#/properties/valueProfile"
+    },
+    "interpretationProfile": {
+      "$ref": "urn:truss:draft:seed-baseline:0.1.0#/properties/interpretationProfile"
+    },
+    "catalogRevision": {
+      "$ref": "urn:truss:draft:seed-baseline:0.1.0#/properties/catalogRevision"
+    },
+    "snapshotEvidence": {
+      "$ref": "urn:truss:draft:seed-baseline:0.1.0#/properties/snapshotEvidence"
+    },
+    "records": {
+      "$ref": "urn:truss:draft:seed-baseline:0.1.0#/properties/records"
+    },
+    "revisions": {
+      "$ref": "urn:truss:draft:seed-baseline:0.1.0#/properties/revisions"
+    },
+    "sources": {
+      "$ref": "urn:truss:draft:seed-baseline:0.1.0#/properties/sources"
+    },
+    "reservations": {
+      "$ref": "urn:truss:draft:seed-baseline:0.1.0#/properties/reservations"
+    },
+    "configurations": {
+      "$ref": "urn:truss:draft:seed-baseline:0.1.0#/properties/configurations"
+    },
+    "retainedArchives": {
+      "$ref": "urn:truss:draft:seed-baseline:0.1.0#/properties/retainedArchives"
+    },
+    "interfaceVersion": {
+      "const": "truss-seed-baseline/0.2.0"
+    },
+    "keyBinding": {
+      "type": "object",
+      "properties": {
+        "basis": {
+          "$ref": "urn:truss:draft:key-profile-migration:0.1.0#/$defs/basis"
+        },
+        "selectedBinding": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "configuration": {
+          "$ref": "urn:truss:draft:import-report:0.1.0#/properties/selectedConfiguration"
+        },
+        "origin": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "bootstrap"
+                },
+                "originalInitialization": {
+                  "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+                }
+              },
+              "required": [
+                "kind",
+                "originalInitialization"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "migration"
+                },
+                "migrationAttemptId": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "kind",
+                "migrationAttemptId"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "chainAnchor": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        }
+      },
+      "required": [
+        "basis",
+        "selectedBinding",
+        "configuration",
+        "origin",
+        "chainAnchor"
+      ],
+      "additionalProperties": false
+    },
+    "keyTransitions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "producingXid": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]*)$"
+          },
+          "fact": {
+            "$ref": "urn:truss:draft:feed-key-transition:0.2.0"
+          }
+        },
+        "required": [
+          "producingXid",
+          "fact"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "attempt",
+    "baselineProfile",
+    "layoutProfile",
+    "valueProfile",
+    "interpretationProfile",
+    "catalogRevision",
+    "snapshotEvidence",
+    "records",
+    "revisions",
+    "sources",
+    "reservations",
+    "configurations",
+    "retainedArchives",
+    "interfaceVersion",
+    "keyBinding",
+    "keyTransitions"
+  ],
+  "additionalProperties": false
+}

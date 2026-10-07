@@ -1,0 +1,15 @@
+{
+  "status": "pass",
+  "cases": 22,
+  "fixtureSha256": "8bc61ad3bd67238f1f5d66a9c888444a2d3e25ad4c576790c09e3aa2d97fbfd9",
+  "scope": "pointer syntax, tokens and existing-value lookup only; no native custody, contributor merge or canonical basis qualification",
+  "nativeExecuted": false,
+  "profileAdopted": false,
+  "notCovered": [
+    "accessor/prototype rejection in JavaScript",
+    "resource producer qualification",
+    "original native fact custody",
+    "contribution membership/merge",
+    "complete installation basis"
+  ]
+}

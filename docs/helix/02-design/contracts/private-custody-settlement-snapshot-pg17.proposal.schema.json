@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:proposal:private-custody-settlement-snapshot-pg17:0.1.0",
+  "title": "Unadopted private PostgreSQL 17 settlement query snapshot",
+  "description": "Exact two-column data snapshot only; original source/descriptors/installation/epoch/attempt/authority/native termination and verdict admission remain independent. Unknown status text is diagnostic data, not eligible settlement.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-private-custody-settlement-snapshot-pg17/0.1.0-proposal"
+    },
+    "kind": {
+      "const": "original-xid-settlement"
+    },
+    "fields": {
+      "type": "object",
+      "properties": {
+        "original_writer_xid": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$",
+          "maxLength": 20
+        },
+        "transaction_status": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "original_writer_xid",
+        "transaction_status"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "kind",
+    "fields"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:direct-traversal-release-request:0.1.0",
+  "title": "Draft direct-traversal-release-request",
+  "description": "Shape only. Original registry ownership, invalidation, cleanup confirmation and recovery-reference custody require semantic host profile admission. No graph or host transaction control.",
+  "type": "object",
+  "properties": {
+    "handle": {
+      "$ref": "urn:truss:draft:direct-traversal-request:0.1.0#/$defs/handle"
+    }
+  },
+  "required": [
+    "handle"
+  ],
+  "additionalProperties": false
+}

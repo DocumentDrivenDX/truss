@@ -1,0 +1,97 @@
+{
+  "profile": "truss-private-tree-state-observation/0.1.0",
+  "status": "planned_unadopted",
+  "sourceSha256": "97eefe00fb649cc1f306867ee32e136061c7f658945754beebbe48b89e7e95ea",
+  "modelSha256": "433231853d4d02d4dafa465f8946aaacaa93b2a6066f8a86aeb6067239c42f87",
+  "parameterSlots": [
+    {
+      "position": 1,
+      "nativeCast": "pg_catalog.int8",
+      "meaning": "Original admitted positive state identity"
+    }
+  ],
+  "columns": [
+    {
+      "position": 0,
+      "name": "state_id",
+      "nativeResultType": "pg_catalog.text",
+      "nativeNullPermitted": false
+    },
+    {
+      "position": 1,
+      "name": "owner_kind",
+      "nativeResultType": "pg_catalog.text",
+      "nativeNullPermitted": false
+    },
+    {
+      "position": 2,
+      "name": "object_id",
+      "nativeResultType": "pg_catalog.text",
+      "nativeNullPermitted": true
+    },
+    {
+      "position": 3,
+      "name": "object_type_id",
+      "nativeResultType": "pg_catalog.text",
+      "nativeNullPermitted": true
+    },
+    {
+      "position": 4,
+      "name": "edge_id",
+      "nativeResultType": "pg_catalog.text",
+      "nativeNullPermitted": true
+    },
+    {
+      "position": 5,
+      "name": "relationship_type_id",
+      "nativeResultType": "pg_catalog.text",
+      "nativeNullPermitted": true
+    },
+    {
+      "position": 6,
+      "name": "property_owner_type_id",
+      "nativeResultType": "pg_catalog.text",
+      "nativeNullPermitted": false
+    },
+    {
+      "position": 7,
+      "name": "property_id",
+      "nativeResultType": "pg_catalog.text",
+      "nativeNullPermitted": false
+    },
+    {
+      "position": 8,
+      "name": "root_node_id",
+      "nativeResultType": "pg_catalog.text",
+      "nativeNullPermitted": false
+    },
+    {
+      "position": 9,
+      "name": "definition_bytes_hex",
+      "nativeResultType": "pg_catalog.text",
+      "nativeNullPermitted": false
+    },
+    {
+      "position": 10,
+      "name": "home_profile_bytes_hex",
+      "nativeResultType": "pg_catalog.text",
+      "nativeNullPermitted": false
+    },
+    {
+      "position": 11,
+      "name": "value_profile_bytes_hex",
+      "nativeResultType": "pg_catalog.text",
+      "nativeNullPermitted": false
+    },
+    {
+      "position": 12,
+      "name": "state_source_bytes_hex",
+      "nativeResultType": "pg_catalog.text",
+      "nativeNullPermitted": false
+    }
+  ],
+  "ownerMask": "object requires original object/type pair and native NULL edge/relationship pair; edge requires original edge/relationship pair and native NULL object/type pair; association proof separately binds edge property owner",
+  "rowAdmission": "Zero needs complete independent owner/property presence classification; one needs complete original tuple/bytes/cut parity; two is integrity refusal",
+  "nativeExecution": false,
+  "complete": false
+}

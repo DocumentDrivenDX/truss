@@ -1,0 +1,267 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:receipt-protection-tooling:0.1.0",
+  "description": "Candidate administrative update result root; requests and fresh observations in defs. Shape does not establish authority, byte equality, current protection, clock continuity or original commit.",
+  "allOf": [
+    {
+      "$ref": "#/$defs/updateResult"
+    }
+  ],
+  "$defs": {
+    "updateRequest": {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-receipt-protection-update/0.1.0"
+        },
+        "authorizedScopeIdentity": {
+          "type": "string"
+        },
+        "requestId": {
+          "type": "string"
+        },
+        "originalReceipt": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "expected": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "const": "absent"
+                }
+              },
+              "required": [
+                "state"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "const": "present"
+                },
+                "protection": {
+                  "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+                }
+              },
+              "required": [
+                "state",
+                "protection"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "procedureProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "clockProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "retentionProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "extension": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "const": "none"
+                }
+              },
+              "required": [
+                "state"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "const": "requested"
+                },
+                "protectedUntil": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "state",
+                "protectedUntil"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "authorizedScopeIdentity",
+        "requestId",
+        "originalReceipt",
+        "expected",
+        "procedureProfile",
+        "clockProfile",
+        "retentionProfile",
+        "extension"
+      ],
+      "additionalProperties": false
+    },
+    "updateResult": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "enum": [
+                "updated",
+                "equal"
+              ]
+            },
+            "durability": {
+              "const": "pending"
+            },
+            "protection": {
+              "$ref": "urn:truss:draft:request-receipt-lifecycle:0.1.0#/$defs/protection"
+            },
+            "updateEvidence": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            }
+          },
+          "required": [
+            "outcome",
+            "durability",
+            "protection",
+            "updateEvidence"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "conflict"
+            }
+          },
+          "required": [
+            "outcome"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "unavailable"
+            },
+            "reason": {
+              "enum": [
+                "authority",
+                "context",
+                "profile",
+                "clock",
+                "commit",
+                "receipt",
+                "observation",
+                "resource"
+              ]
+            }
+          },
+          "required": [
+            "outcome",
+            "reason"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "observationRequest": {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-receipt-protection-observation/0.1.0"
+        },
+        "authorizedScopeIdentity": {
+          "type": "string"
+        },
+        "requestId": {
+          "type": "string"
+        },
+        "expectedProtection": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "originalUpdateEvidence": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "observationProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "authorizedScopeIdentity",
+        "requestId",
+        "expectedProtection",
+        "originalUpdateEvidence",
+        "observationProfile"
+      ],
+      "additionalProperties": false
+    },
+    "observation": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "current_committed"
+            },
+            "protection": {
+              "$ref": "urn:truss:draft:request-receipt-lifecycle:0.1.0#/$defs/protection"
+            },
+            "originalCommitObservation": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            },
+            "currentObservation": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            }
+          },
+          "required": [
+            "outcome",
+            "protection",
+            "originalCommitObservation",
+            "currentObservation"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "unavailable"
+            },
+            "reason": {
+              "enum": [
+                "authority",
+                "context",
+                "profile",
+                "uncommitted",
+                "superseded",
+                "integrity",
+                "observation",
+                "resource"
+              ]
+            }
+          },
+          "required": [
+            "outcome",
+            "reason"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

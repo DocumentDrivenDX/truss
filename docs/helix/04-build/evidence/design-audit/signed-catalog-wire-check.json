@@ -1,0 +1,1267 @@
+{
+  "scope": "Named changed catalog fields across the exact authored draft inventory: lexical text shape only. Out-of-native-range canonical text remains shape-valid and requires semantic refusal; no native capability inferred.",
+  "cases": 180,
+  "failures": [],
+  "results": [
+    {
+      "file": "docs/helix/02-design/contracts/history-event-v0.1.schema.json",
+      "path": "/oneOf/2/properties/propertyId",
+      "input": "0",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-event-v0.1.schema.json",
+      "path": "/oneOf/2/properties/propertyId",
+      "input": "1",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-event-v0.1.schema.json",
+      "path": "/oneOf/2/properties/propertyId",
+      "input": "-1",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-event-v0.1.schema.json",
+      "path": "/oneOf/2/properties/propertyId",
+      "input": "-0",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-event-v0.1.schema.json",
+      "path": "/oneOf/2/properties/propertyId",
+      "input": "+1",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-event-v0.1.schema.json",
+      "path": "/oneOf/2/properties/propertyId",
+      "input": "01",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-event-v0.1.schema.json",
+      "path": "/oneOf/2/properties/propertyId",
+      "input": "-01",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-event-v0.1.schema.json",
+      "path": "/oneOf/2/properties/propertyId",
+      "input": -1,
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-event-v0.1.schema.json",
+      "path": "/oneOf/2/properties/propertyId",
+      "input": "2147483648",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-event-v0.1.schema.json",
+      "path": "/oneOf/3/properties/propertyId",
+      "input": "0",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-event-v0.1.schema.json",
+      "path": "/oneOf/3/properties/propertyId",
+      "input": "1",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-event-v0.1.schema.json",
+      "path": "/oneOf/3/properties/propertyId",
+      "input": "-1",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-event-v0.1.schema.json",
+      "path": "/oneOf/3/properties/propertyId",
+      "input": "-0",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-event-v0.1.schema.json",
+      "path": "/oneOf/3/properties/propertyId",
+      "input": "+1",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-event-v0.1.schema.json",
+      "path": "/oneOf/3/properties/propertyId",
+      "input": "01",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-event-v0.1.schema.json",
+      "path": "/oneOf/3/properties/propertyId",
+      "input": "-01",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-event-v0.1.schema.json",
+      "path": "/oneOf/3/properties/propertyId",
+      "input": -1,
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-event-v0.1.schema.json",
+      "path": "/oneOf/3/properties/propertyId",
+      "input": "2147483648",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-event-v0.1.schema.json",
+      "path": "/oneOf/4/properties/propertyId",
+      "input": "0",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-event-v0.1.schema.json",
+      "path": "/oneOf/4/properties/propertyId",
+      "input": "1",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-event-v0.1.schema.json",
+      "path": "/oneOf/4/properties/propertyId",
+      "input": "-1",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-event-v0.1.schema.json",
+      "path": "/oneOf/4/properties/propertyId",
+      "input": "-0",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-event-v0.1.schema.json",
+      "path": "/oneOf/4/properties/propertyId",
+      "input": "+1",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-event-v0.1.schema.json",
+      "path": "/oneOf/4/properties/propertyId",
+      "input": "01",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-event-v0.1.schema.json",
+      "path": "/oneOf/4/properties/propertyId",
+      "input": "-01",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-event-v0.1.schema.json",
+      "path": "/oneOf/4/properties/propertyId",
+      "input": -1,
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-event-v0.1.schema.json",
+      "path": "/oneOf/4/properties/propertyId",
+      "input": "2147483648",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/seed-baseline-inventory-v0.1.schema.json",
+      "path": "/$defs/reservation/properties/reservation/oneOf/0/properties/keyNumber",
+      "input": "0",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/seed-baseline-inventory-v0.1.schema.json",
+      "path": "/$defs/reservation/properties/reservation/oneOf/0/properties/keyNumber",
+      "input": "1",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/seed-baseline-inventory-v0.1.schema.json",
+      "path": "/$defs/reservation/properties/reservation/oneOf/0/properties/keyNumber",
+      "input": "-1",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/seed-baseline-inventory-v0.1.schema.json",
+      "path": "/$defs/reservation/properties/reservation/oneOf/0/properties/keyNumber",
+      "input": "-0",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/seed-baseline-inventory-v0.1.schema.json",
+      "path": "/$defs/reservation/properties/reservation/oneOf/0/properties/keyNumber",
+      "input": "+1",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/seed-baseline-inventory-v0.1.schema.json",
+      "path": "/$defs/reservation/properties/reservation/oneOf/0/properties/keyNumber",
+      "input": "01",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/seed-baseline-inventory-v0.1.schema.json",
+      "path": "/$defs/reservation/properties/reservation/oneOf/0/properties/keyNumber",
+      "input": "-01",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/seed-baseline-inventory-v0.1.schema.json",
+      "path": "/$defs/reservation/properties/reservation/oneOf/0/properties/keyNumber",
+      "input": -1,
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/seed-baseline-inventory-v0.1.schema.json",
+      "path": "/$defs/reservation/properties/reservation/oneOf/0/properties/keyNumber",
+      "input": "2147483648",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/import-report-v0.1.schema.json",
+      "path": "/$defs/identity/properties/typeId",
+      "input": "0",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/import-report-v0.1.schema.json",
+      "path": "/$defs/identity/properties/typeId",
+      "input": "1",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/import-report-v0.1.schema.json",
+      "path": "/$defs/identity/properties/typeId",
+      "input": "-1",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/import-report-v0.1.schema.json",
+      "path": "/$defs/identity/properties/typeId",
+      "input": "-0",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/import-report-v0.1.schema.json",
+      "path": "/$defs/identity/properties/typeId",
+      "input": "+1",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/import-report-v0.1.schema.json",
+      "path": "/$defs/identity/properties/typeId",
+      "input": "01",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/import-report-v0.1.schema.json",
+      "path": "/$defs/identity/properties/typeId",
+      "input": "-01",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/import-report-v0.1.schema.json",
+      "path": "/$defs/identity/properties/typeId",
+      "input": -1,
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/import-report-v0.1.schema.json",
+      "path": "/$defs/identity/properties/typeId",
+      "input": "2147483648",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/feed-transaction-v0.2.schema.json",
+      "path": "/$defs/memberKey/oneOf/3/properties/typeId",
+      "input": "0",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/feed-transaction-v0.2.schema.json",
+      "path": "/$defs/memberKey/oneOf/3/properties/typeId",
+      "input": "1",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/feed-transaction-v0.2.schema.json",
+      "path": "/$defs/memberKey/oneOf/3/properties/typeId",
+      "input": "-1",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/feed-transaction-v0.2.schema.json",
+      "path": "/$defs/memberKey/oneOf/3/properties/typeId",
+      "input": "-0",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/feed-transaction-v0.2.schema.json",
+      "path": "/$defs/memberKey/oneOf/3/properties/typeId",
+      "input": "+1",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/feed-transaction-v0.2.schema.json",
+      "path": "/$defs/memberKey/oneOf/3/properties/typeId",
+      "input": "01",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/feed-transaction-v0.2.schema.json",
+      "path": "/$defs/memberKey/oneOf/3/properties/typeId",
+      "input": "-01",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/feed-transaction-v0.2.schema.json",
+      "path": "/$defs/memberKey/oneOf/3/properties/typeId",
+      "input": -1,
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/feed-transaction-v0.2.schema.json",
+      "path": "/$defs/memberKey/oneOf/3/properties/typeId",
+      "input": "2147483648",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/feed-transaction-v0.2.schema.json",
+      "path": "/$defs/memberKey/oneOf/3/properties/keyNumber",
+      "input": "0",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/feed-transaction-v0.2.schema.json",
+      "path": "/$defs/memberKey/oneOf/3/properties/keyNumber",
+      "input": "1",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/feed-transaction-v0.2.schema.json",
+      "path": "/$defs/memberKey/oneOf/3/properties/keyNumber",
+      "input": "-1",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/feed-transaction-v0.2.schema.json",
+      "path": "/$defs/memberKey/oneOf/3/properties/keyNumber",
+      "input": "-0",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/feed-transaction-v0.2.schema.json",
+      "path": "/$defs/memberKey/oneOf/3/properties/keyNumber",
+      "input": "+1",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/feed-transaction-v0.2.schema.json",
+      "path": "/$defs/memberKey/oneOf/3/properties/keyNumber",
+      "input": "01",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/feed-transaction-v0.2.schema.json",
+      "path": "/$defs/memberKey/oneOf/3/properties/keyNumber",
+      "input": "-01",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/feed-transaction-v0.2.schema.json",
+      "path": "/$defs/memberKey/oneOf/3/properties/keyNumber",
+      "input": -1,
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/feed-transaction-v0.2.schema.json",
+      "path": "/$defs/memberKey/oneOf/3/properties/keyNumber",
+      "input": "2147483648",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/0/properties/typeId",
+      "input": "0",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/0/properties/typeId",
+      "input": "1",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/0/properties/typeId",
+      "input": "-1",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/0/properties/typeId",
+      "input": "-0",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/0/properties/typeId",
+      "input": "+1",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/0/properties/typeId",
+      "input": "01",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/0/properties/typeId",
+      "input": "-01",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/0/properties/typeId",
+      "input": -1,
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/0/properties/typeId",
+      "input": "2147483648",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/1/properties/propertyId",
+      "input": "0",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/1/properties/propertyId",
+      "input": "1",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/1/properties/propertyId",
+      "input": "-1",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/1/properties/propertyId",
+      "input": "-0",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/1/properties/propertyId",
+      "input": "+1",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/1/properties/propertyId",
+      "input": "01",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/1/properties/propertyId",
+      "input": "-01",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/1/properties/propertyId",
+      "input": -1,
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/1/properties/propertyId",
+      "input": "2147483648",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/1/properties/typeId",
+      "input": "0",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/1/properties/typeId",
+      "input": "1",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/1/properties/typeId",
+      "input": "-1",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/1/properties/typeId",
+      "input": "-0",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/1/properties/typeId",
+      "input": "+1",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/1/properties/typeId",
+      "input": "01",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/1/properties/typeId",
+      "input": "-01",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/1/properties/typeId",
+      "input": -1,
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/1/properties/typeId",
+      "input": "2147483648",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/2/properties/typeId",
+      "input": "0",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/2/properties/typeId",
+      "input": "1",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/2/properties/typeId",
+      "input": "-1",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/2/properties/typeId",
+      "input": "-0",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/2/properties/typeId",
+      "input": "+1",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/2/properties/typeId",
+      "input": "01",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/2/properties/typeId",
+      "input": "-01",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/2/properties/typeId",
+      "input": -1,
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/2/properties/typeId",
+      "input": "2147483648",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/2/properties/keyNumber",
+      "input": "0",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/2/properties/keyNumber",
+      "input": "1",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/2/properties/keyNumber",
+      "input": "-1",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/2/properties/keyNumber",
+      "input": "-0",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/2/properties/keyNumber",
+      "input": "+1",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/2/properties/keyNumber",
+      "input": "01",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/2/properties/keyNumber",
+      "input": "-01",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/2/properties/keyNumber",
+      "input": -1,
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/2/properties/keyNumber",
+      "input": "2147483648",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/3/properties/relationshipId",
+      "input": "0",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/3/properties/relationshipId",
+      "input": "1",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/3/properties/relationshipId",
+      "input": "-1",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/3/properties/relationshipId",
+      "input": "-0",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/3/properties/relationshipId",
+      "input": "+1",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/3/properties/relationshipId",
+      "input": "01",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/3/properties/relationshipId",
+      "input": "-01",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/3/properties/relationshipId",
+      "input": -1,
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "path": "/$defs/reference/oneOf/3/properties/relationshipId",
+      "input": "2147483648",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/direct-lookup-request-v0.1.schema.json",
+      "path": "/properties/selection/oneOf/2/properties/keyNumber",
+      "input": "0",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/direct-lookup-request-v0.1.schema.json",
+      "path": "/properties/selection/oneOf/2/properties/keyNumber",
+      "input": "1",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/direct-lookup-request-v0.1.schema.json",
+      "path": "/properties/selection/oneOf/2/properties/keyNumber",
+      "input": "-1",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/direct-lookup-request-v0.1.schema.json",
+      "path": "/properties/selection/oneOf/2/properties/keyNumber",
+      "input": "-0",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/direct-lookup-request-v0.1.schema.json",
+      "path": "/properties/selection/oneOf/2/properties/keyNumber",
+      "input": "+1",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/direct-lookup-request-v0.1.schema.json",
+      "path": "/properties/selection/oneOf/2/properties/keyNumber",
+      "input": "01",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/direct-lookup-request-v0.1.schema.json",
+      "path": "/properties/selection/oneOf/2/properties/keyNumber",
+      "input": "-01",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/direct-lookup-request-v0.1.schema.json",
+      "path": "/properties/selection/oneOf/2/properties/keyNumber",
+      "input": -1,
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/direct-lookup-request-v0.1.schema.json",
+      "path": "/properties/selection/oneOf/2/properties/keyNumber",
+      "input": "2147483648",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-record-v0.1.schema.json",
+      "path": "/oneOf/0/properties/properties/items/properties/propertyId",
+      "input": "0",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-record-v0.1.schema.json",
+      "path": "/oneOf/0/properties/properties/items/properties/propertyId",
+      "input": "1",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-record-v0.1.schema.json",
+      "path": "/oneOf/0/properties/properties/items/properties/propertyId",
+      "input": "-1",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-record-v0.1.schema.json",
+      "path": "/oneOf/0/properties/properties/items/properties/propertyId",
+      "input": "-0",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-record-v0.1.schema.json",
+      "path": "/oneOf/0/properties/properties/items/properties/propertyId",
+      "input": "+1",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-record-v0.1.schema.json",
+      "path": "/oneOf/0/properties/properties/items/properties/propertyId",
+      "input": "01",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-record-v0.1.schema.json",
+      "path": "/oneOf/0/properties/properties/items/properties/propertyId",
+      "input": "-01",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-record-v0.1.schema.json",
+      "path": "/oneOf/0/properties/properties/items/properties/propertyId",
+      "input": -1,
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-record-v0.1.schema.json",
+      "path": "/oneOf/0/properties/properties/items/properties/propertyId",
+      "input": "2147483648",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-record-v0.1.schema.json",
+      "path": "/oneOf/1/properties/properties/items/properties/propertyId",
+      "input": "0",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-record-v0.1.schema.json",
+      "path": "/oneOf/1/properties/properties/items/properties/propertyId",
+      "input": "1",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-record-v0.1.schema.json",
+      "path": "/oneOf/1/properties/properties/items/properties/propertyId",
+      "input": "-1",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-record-v0.1.schema.json",
+      "path": "/oneOf/1/properties/properties/items/properties/propertyId",
+      "input": "-0",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-record-v0.1.schema.json",
+      "path": "/oneOf/1/properties/properties/items/properties/propertyId",
+      "input": "+1",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-record-v0.1.schema.json",
+      "path": "/oneOf/1/properties/properties/items/properties/propertyId",
+      "input": "01",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-record-v0.1.schema.json",
+      "path": "/oneOf/1/properties/properties/items/properties/propertyId",
+      "input": "-01",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-record-v0.1.schema.json",
+      "path": "/oneOf/1/properties/properties/items/properties/propertyId",
+      "input": -1,
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-record-v0.1.schema.json",
+      "path": "/oneOf/1/properties/properties/items/properties/propertyId",
+      "input": "2147483648",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-record-v0.1.schema.json",
+      "path": "/$defs/identity/properties/typeId",
+      "input": "0",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-record-v0.1.schema.json",
+      "path": "/$defs/identity/properties/typeId",
+      "input": "1",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-record-v0.1.schema.json",
+      "path": "/$defs/identity/properties/typeId",
+      "input": "-1",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-record-v0.1.schema.json",
+      "path": "/$defs/identity/properties/typeId",
+      "input": "-0",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-record-v0.1.schema.json",
+      "path": "/$defs/identity/properties/typeId",
+      "input": "+1",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-record-v0.1.schema.json",
+      "path": "/$defs/identity/properties/typeId",
+      "input": "01",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-record-v0.1.schema.json",
+      "path": "/$defs/identity/properties/typeId",
+      "input": "-01",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-record-v0.1.schema.json",
+      "path": "/$defs/identity/properties/typeId",
+      "input": -1,
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-record-v0.1.schema.json",
+      "path": "/$defs/identity/properties/typeId",
+      "input": "2147483648",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/key-migration-source-inventory-v0.1.schema.json",
+      "path": "/properties/entries/items/oneOf/0/properties/localKeyNumber",
+      "input": "0",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/key-migration-source-inventory-v0.1.schema.json",
+      "path": "/properties/entries/items/oneOf/0/properties/localKeyNumber",
+      "input": "1",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/key-migration-source-inventory-v0.1.schema.json",
+      "path": "/properties/entries/items/oneOf/0/properties/localKeyNumber",
+      "input": "-1",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/key-migration-source-inventory-v0.1.schema.json",
+      "path": "/properties/entries/items/oneOf/0/properties/localKeyNumber",
+      "input": "-0",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/key-migration-source-inventory-v0.1.schema.json",
+      "path": "/properties/entries/items/oneOf/0/properties/localKeyNumber",
+      "input": "+1",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/key-migration-source-inventory-v0.1.schema.json",
+      "path": "/properties/entries/items/oneOf/0/properties/localKeyNumber",
+      "input": "01",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/key-migration-source-inventory-v0.1.schema.json",
+      "path": "/properties/entries/items/oneOf/0/properties/localKeyNumber",
+      "input": "-01",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/key-migration-source-inventory-v0.1.schema.json",
+      "path": "/properties/entries/items/oneOf/0/properties/localKeyNumber",
+      "input": -1,
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/key-migration-source-inventory-v0.1.schema.json",
+      "path": "/properties/entries/items/oneOf/0/properties/localKeyNumber",
+      "input": "2147483648",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/key-migration-source-inventory-v0.1.schema.json",
+      "path": "/properties/entries/items/oneOf/1/properties/localKeyNumber",
+      "input": "0",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/key-migration-source-inventory-v0.1.schema.json",
+      "path": "/properties/entries/items/oneOf/1/properties/localKeyNumber",
+      "input": "1",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/key-migration-source-inventory-v0.1.schema.json",
+      "path": "/properties/entries/items/oneOf/1/properties/localKeyNumber",
+      "input": "-1",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/key-migration-source-inventory-v0.1.schema.json",
+      "path": "/properties/entries/items/oneOf/1/properties/localKeyNumber",
+      "input": "-0",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/key-migration-source-inventory-v0.1.schema.json",
+      "path": "/properties/entries/items/oneOf/1/properties/localKeyNumber",
+      "input": "+1",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/key-migration-source-inventory-v0.1.schema.json",
+      "path": "/properties/entries/items/oneOf/1/properties/localKeyNumber",
+      "input": "01",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/key-migration-source-inventory-v0.1.schema.json",
+      "path": "/properties/entries/items/oneOf/1/properties/localKeyNumber",
+      "input": "-01",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/key-migration-source-inventory-v0.1.schema.json",
+      "path": "/properties/entries/items/oneOf/1/properties/localKeyNumber",
+      "input": -1,
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/key-migration-source-inventory-v0.1.schema.json",
+      "path": "/properties/entries/items/oneOf/1/properties/localKeyNumber",
+      "input": "2147483648",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/key-migration-bucket-collection-v0.1.schema.json",
+      "path": "/properties/entries/items/properties/locator/oneOf/0/properties/localKeyNumber",
+      "input": "0",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/key-migration-bucket-collection-v0.1.schema.json",
+      "path": "/properties/entries/items/properties/locator/oneOf/0/properties/localKeyNumber",
+      "input": "1",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/key-migration-bucket-collection-v0.1.schema.json",
+      "path": "/properties/entries/items/properties/locator/oneOf/0/properties/localKeyNumber",
+      "input": "-1",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "file": "docs/helix/02-design/contracts/key-migration-bucket-collection-v0.1.schema.json",
+      "path": "/properties/entries/items/properties/locator/oneOf/0/properties/localKeyNumber",
+      "input": "-0",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/key-migration-bucket-collection-v0.1.schema.json",
+      "path": "/properties/entries/items/properties/locator/oneOf/0/properties/localKeyNumber",
+      "input": "+1",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/key-migration-bucket-collection-v0.1.schema.json",
+      "path": "/properties/entries/items/properties/locator/oneOf/0/properties/localKeyNumber",
+      "input": "01",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/key-migration-bucket-collection-v0.1.schema.json",
+      "path": "/properties/entries/items/properties/locator/oneOf/0/properties/localKeyNumber",
+      "input": "-01",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/key-migration-bucket-collection-v0.1.schema.json",
+      "path": "/properties/entries/items/properties/locator/oneOf/0/properties/localKeyNumber",
+      "input": -1,
+      "expected": false,
+      "actual": false
+    },
+    {
+      "file": "docs/helix/02-design/contracts/key-migration-bucket-collection-v0.1.schema.json",
+      "path": "/properties/entries/items/properties/locator/oneOf/0/properties/localKeyNumber",
+      "input": "2147483648",
+      "expected": true,
+      "actual": true
+    }
+  ]
+}

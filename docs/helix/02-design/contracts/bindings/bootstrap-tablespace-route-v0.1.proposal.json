@@ -1,0 +1,72 @@
+{
+  "interfaceVersion": "truss-bootstrap-route-entry/0.1.0",
+  "routeIdentity": "pg17.tablespace.direct-address/0.1.0",
+  "status": "unadopted; source pins only verified; native class/cut/transport/semantic producers unqualified",
+  "nativeClass": {
+    "namespace": "pg_catalog",
+    "relation": "pg_tablespace",
+    "classOid": "actual original shared pg_tablespace catalog identity",
+    "storageScope": "shared",
+    "subobjectNumber": "0"
+  },
+  "selector": "original shared pg_tablespace OID frontier",
+  "artifacts": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-tablespace-observation-pg17.proposal.sql",
+      "sha256": "79c59c662fce9d21af331733189ccd1559041a2d41a12b46d82a67771063341d"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-tablespace-observation-pg17.proposal.umf.json",
+      "sha256": "b8ed51b4cbe50ce349e8346eaed39d90910b59935fc7c60fef08fa0a6e881c3b"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/bootstrap-tablespace-observation.owner-export.sql",
+      "sha256": "5ff2ae4b061512141b731dea601bd616014cdd97a0fc5a6fa525bac06026041a"
+    }
+  ],
+  "parameterGrammar": {
+    "slots": [
+      1
+    ],
+    "nativeTypes": [
+      "pg_catalog.oid[]"
+    ],
+    "nativeInput": "One-dimensional lower-bound-one nonnull array; 1..256 unique nonzero canonical OID tokens; no null items or duplicate addresses"
+  },
+  "orderedColumns": [
+    "catalog_class_oid",
+    "object_oid",
+    "owner_oid",
+    "acl_native_text",
+    "acl_native_dimensions",
+    "options_native_text",
+    "options_native_dimensions",
+    "original_catalog_row_json"
+  ],
+  "coverage": "Exactly one original row per requested shared object OID; absent requested rows reported explicitly; no name/default substitution",
+  "requiredKnownFields": [
+    "oid",
+    "spcname",
+    "spcowner",
+    "spcacl",
+    "spcoptions"
+  ],
+  "preservation": "Retain full exact returned row JSON text and every unknown extension member; lossless bounded selected native JSON decoder; no parse/stringify reconstruction",
+  "dependencyExtraction": {
+    "owner": "Nonzero spcowner resolves to original shared pg_authid identity and selected role definition; ACL principals resolve separately with native PUBLIC semantics.",
+    "definition": "Preserve exact spcname, ACL and options including null, dimensions, ordering and unknown option content; selected option/native ACL grammar must admit meaning before canonical comparison.",
+    "defaultSelection": "Relation reltablespace zero is a contextual default marker, never pg_tablespace OID zero; bind actual original database default and native placement rules independently.",
+    "definitionSpecification": {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-tablespace-definition-v0.1.proposal.json",
+      "sha256": "58ab622f85d9805377af4d589d8faf71a4d969f763ea9f40a42b073846d32cbb",
+      "admission": "Original shared policy/options definition; physical placement/default/current rights separately admitted"
+    }
+  },
+  "adjuncts": [
+    "original shared owner/ACL principal and dependency closure",
+    "selected native tablespace option/default-placement and privilege interpretation"
+  ],
+  "resourceProfile": "truss-bootstrap-collector-resource/0.1.0",
+  "refusal": "Unknown owner/options/ACL/default-placement meaning or missing original shared definition refuses admission; this observation does not prove filesystem location, physical storage equivalence or CREATE privilege",
+  "resourceObligations": "Shared enclosing totals, complete original cut/authority and explicit pre-materialization/native-work permits; no independent per-route allowance"
+}

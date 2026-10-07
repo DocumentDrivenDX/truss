@@ -1,0 +1,58 @@
+{
+  "interfaceVersion": "truss-bootstrap-tablespace-definition-profile/0.1.0",
+  "status": "unadopted field specification; native option/ACL/placement/canonical producers unqualified",
+  "nativeVersion": "PostgreSQL 17; exact build separately admitted",
+  "requiredRawFieldInventory": [
+    "oid",
+    "spcname",
+    "spcowner",
+    "spcacl",
+    "spcoptions"
+  ],
+  "fields": [
+    {
+      "nativeField": "oid",
+      "domain": "nonzero canonical uint32; shared cluster original correlation",
+      "classification": "original correlation only",
+      "rawPreservation": "Complete original row plus projected nullable array text/dimensions; mismatch refuses"
+    },
+    {
+      "nativeField": "spcname",
+      "domain": "exact native name under original shared cluster identity",
+      "classification": "resolved shared definition/policy or exact option facts",
+      "rawPreservation": "Complete original row plus projected nullable array text/dimensions; mismatch refuses"
+    },
+    {
+      "nativeField": "spcowner",
+      "domain": "nonzero canonical uint32; original shared pg_authid owner",
+      "classification": "resolved shared definition/policy or exact option facts",
+      "rawPreservation": "Complete original row plus projected nullable array text/dimensions; mismatch refuses"
+    },
+    {
+      "nativeField": "spcacl",
+      "domain": "native nullable ACL with original text/dimensions; resolved complete grantor/grantee/CREATE/grant-option policy",
+      "classification": "resolved shared definition/policy or exact option facts",
+      "rawPreservation": "Complete original row plus projected nullable array text/dimensions; mismatch refuses"
+    },
+    {
+      "nativeField": "spcoptions",
+      "domain": "native nullable text array with original dimensions/items/order; selected keyword=value interpretation",
+      "classification": "resolved shared definition/policy or exact option facts",
+      "rawPreservation": "Complete original row plus projected nullable array text/dimensions; mismatch refuses"
+    }
+  ],
+  "unknownFields": "Preserved unsupported pending complete governing classification",
+  "optionsAdmission": "Retain exact array carriers before interpretation. Validate original dimensions/nulls and selected per-option grammar. Unknown keys, duplicate/conflicting keys or unclassified values prevent complete interpretation rather than last-value-wins or silent dropping. NULL and empty remain raw-distinct until governing native meaning admits equivalence.",
+  "policyAdmission": "Resolve shared owner/grant principals under original cluster scope; PUBLIC sentinel applies only in ACL context. Admit native tablespace ACL/default meaning and current actor CREATE rights separately. No local database address substitutes for shared role or tablespace identity.",
+  "additionalRequiredDefinitions": [
+    "original shared role/grant/policy/dependency/comment definitions",
+    "original database/default-placement context when reached from a relation",
+    "selected option value/default/physical-placement interpretation"
+  ],
+  "canonicalProducer": "Resolved shared name/owner/full policy and admitted option meaning, with exact raw evidence retained. A semantic option map requires explicit duplicate/order/default interpretation; sorted raw strings are not automatically native equality. Physical location is not observed by this route and cannot be inferred from name/OID/options.",
+  "placementAdmission": "Relation reltablespace zero is contextual default, never an object address; bind original database/default and object-kind placement rules separately. Same metadata across clusters does not prove same physical storage.",
+  "observationPolicy": "No filesystem reads, tablespace creation/move, option updates or authority changes during collection. Missing physical-placement evidence qualifies only declared metadata, not operational equivalence.",
+  "sources": [
+    "https://www.postgresql.org/docs/17/catalog-pg-tablespace.html"
+  ]
+}

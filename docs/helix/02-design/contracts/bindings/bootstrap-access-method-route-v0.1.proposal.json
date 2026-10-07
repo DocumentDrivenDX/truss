@@ -1,0 +1,74 @@
+{
+  "interfaceVersion": "truss-bootstrap-route-entry/0.1.0",
+  "routeIdentity": "pg17.access-method.direct/0.1.0",
+  "status": "unadopted; source pins only verified; native class/cut/transport/semantic producers unqualified",
+  "nativeClass": {
+    "namespace": "pg_catalog",
+    "relation": "pg_am",
+    "classOid": "resolve from original target; never constant",
+    "storageScope": "database",
+    "subobjectNumber": "0"
+  },
+  "selector": "direct original pg_am object OIDs",
+  "artifacts": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-access-method-observation-pg17.proposal.sql",
+      "sha256": "87fec45e23495bac0ec19467f6a77b4bc56f67583dec763a5a406114d6524b82"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-access-method-observation-pg17.proposal.umf.json",
+      "sha256": "3bc5460b3b3d510b90a308f7e6a3f377d6058196dbb360dff9b6c360dd15789e"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/bootstrap-access-method-observation.owner-export.sql",
+      "sha256": "13c3e4a92a319bc98d966061a238143aeb8a7c0f5d5a827d86d4018c43c89828"
+    }
+  ],
+  "parameterGrammar": {
+    "slot": "1",
+    "nativeType": "pg_catalog.oid[]",
+    "dimensions": "exactly one",
+    "lowerBound": "1",
+    "nullAllowed": false,
+    "nullItemsAllowed": false,
+    "uniqueItems": true,
+    "countInclusive": [
+      "1",
+      "256"
+    ],
+    "itemDomain": "canonical nonzero uint32 decimal text; actual pg_am object OID",
+    "encoder": "selected original canonical PostgreSQL array encoder; no JS numeric round trip"
+  },
+  "orderedColumns": [
+    "catalog_class_oid",
+    "object_oid",
+    "amhandler_oid",
+    "original_catalog_row_json"
+  ],
+  "coverage": "Exact bijection between requested original addresses and returned unique admitted rows; missing requested row is absent, wrong class/extra/duplicate row refuses, not empty complete",
+  "requiredKnownFields": [
+    "oid",
+    "amname",
+    "amhandler",
+    "amtype"
+  ],
+  "preservation": "Retain full exact returned row JSON text and every unknown extension member; lossless bounded selected native JSON decoder; no parse/stringify reconstruction",
+  "dependencyExtraction": {
+    "handler": "nonzero original amhandler reaches actual pg_proc under admitted handler semantics; unsupported zero/native category retained and refused, not executed",
+    "methodKind": "retain actual amtype and selected table/index/custom method meaning; name cannot manufacture support",
+    "fieldClassification": {
+      "oid": "original native correlation only",
+      "amname": "exact native access-method name; never behavioral support proof",
+      "amhandler": "original regproc plus independently projected nonzero routine OID; resolve full handler/build meaning",
+      "amtype": "exact t/i native table/index kind; unsupported category retained and refused"
+    },
+    "canonicalProcedure": "CONTRACT-008 Access-method/operator-class/family projection: exact declared names/kinds/default/key facts and complete resolved method/family/type/handler/member/policy definitions; native executable capabilities independently qualified"
+  },
+  "adjuncts": [
+    "complete handler definition/authority and original local dependencies",
+    "registered actual native access-method semantics"
+  ],
+  "resourceProfile": "truss-bootstrap-collector-resource/0.1.0",
+  "refusal": "Unknown native category/meaning, shell definition without qualified semantics or unresolved complete dependency/member closure is unsupported; original observation never executes handlers/operators/routines or enables comparator/lowering support",
+  "resourceObligations": "Shared enclosing totals, complete original cut/authority and explicit pre-materialization/native-work permits; no independent per-route allowance"
+}

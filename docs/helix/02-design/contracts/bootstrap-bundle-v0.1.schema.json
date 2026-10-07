@@ -1,0 +1,153 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:bootstrap-bundle:0.1.0",
+  "description": "Shape only; original native model, artifact bytes, identifiers, complete inventory and profile admission remain independent.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-bootstrap-bundle/0.1.0"
+    },
+    "layoutVersion": {
+      "type": "string",
+      "minLength": 1
+    },
+    "model": {
+      "type": "object",
+      "properties": {
+        "document": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "coreVersion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "vocabularies": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+          }
+        },
+        "nativeProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        }
+      },
+      "required": [
+        "document",
+        "coreVersion",
+        "vocabularies",
+        "nativeProfile"
+      ],
+      "additionalProperties": false
+    },
+    "generator": {
+      "type": "object",
+      "properties": {
+        "operation": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "backend": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        }
+      },
+      "required": [
+        "operation",
+        "backend"
+      ],
+      "additionalProperties": false
+    },
+    "target": {
+      "type": "object",
+      "properties": {
+        "postgresqlVersion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "encoding": {
+          "type": "string",
+          "minLength": 1
+        },
+        "localeProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "settings": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        }
+      },
+      "required": [
+        "postgresqlVersion",
+        "encoding",
+        "localeProfile",
+        "settings"
+      ],
+      "additionalProperties": false
+    },
+    "names": {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "type": "string",
+          "minLength": 1
+        },
+        "identifierMap": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "profile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        }
+      },
+      "required": [
+        "schema",
+        "identifierMap",
+        "profile"
+      ],
+      "additionalProperties": false
+    },
+    "initialization": {
+      "type": "object",
+      "properties": {
+        "profile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "orderedInput": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        }
+      },
+      "required": [
+        "profile",
+        "orderedInput"
+      ],
+      "additionalProperties": false
+    },
+    "expectedCatalog": {
+      "type": "object",
+      "properties": {
+        "profile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "inventory": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        }
+      },
+      "required": [
+        "profile",
+        "inventory"
+      ],
+      "additionalProperties": false
+    },
+    "canonicalizationProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "layoutVersion",
+    "model",
+    "generator",
+    "target",
+    "names",
+    "initialization",
+    "expectedCatalog",
+    "canonicalizationProfile"
+  ],
+  "additionalProperties": false
+}

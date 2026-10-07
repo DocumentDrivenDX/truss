@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:seed-profile-composition:0.2.0",
+  "description": "Profile tuple structure only; joint original custody/native composition qualification remains mandatory.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-seed-profile-composition/0.2.0"
+    },
+    "compositionProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "baselineProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "inventoryProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "anchorProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "extractionProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "visibilityProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "stageProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "activationProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "confirmationProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "downstreamProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "originalQualificationEvidence": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "compositionProfile",
+    "baselineProfile",
+    "inventoryProfile",
+    "anchorProfile",
+    "extractionProfile",
+    "visibilityProfile",
+    "stageProfile",
+    "activationProfile",
+    "confirmationProfile",
+    "downstreamProfile",
+    "originalQualificationEvidence"
+  ],
+  "additionalProperties": false
+}

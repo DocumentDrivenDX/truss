@@ -1,0 +1,67 @@
+{
+  "scope": "Twelve admission snapshot shape expectations; scalar/artifact/native/current-authority counterexamples deliberately shape-valid",
+  "cases": 12,
+  "results": [
+    {
+      "name": "zero generation",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "resulting generation",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "negative generation",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "native numeric generation",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "aliased generation",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "unsupported policy",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "missing configuration bytes",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "missing original observation",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "future commit excluded",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "native bigint overflow needs semantic refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "configuration scalar mismatch needs semantic refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "historical snapshot cannot confer current authority",
+      "expected": true,
+      "actual": true
+    }
+  ],
+  "failures": []
+}

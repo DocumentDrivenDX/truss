@@ -19,7 +19,7 @@ ddx:
 **Status**: Draft
 **Priority**: P0
 **Covered PRD Subsystem(s)**: Conformance and portability
-**Covered PRD Requirements**: FR-36 to FR-40, FR-50
+**Covered PRD Requirements**: FR-36 to FR-40, FR-50, FR-56
 **Cross-Subsystem Rationale**: None; single subsystem.
 
 ## Overview
@@ -71,6 +71,10 @@ CNF-05. The layout DDL and its check pass on every supported PostgreSQL version 
 
 CNF-06. An implementation reads UMF so that it accepts and rejects the same documents, with the same diagnostics (severity, code and path), as the reference validator; the corpus carries documents and their expected diagnostics (FR-50).
 
+#### Bootstrap from UMF
+
+CNF-07. The internal physical layout is a versioned UMF artifact that generates reproducible bootstrap SQL. Every physical object is accounted for, unsupported generation is reported, and catalog/behavior parity must pass before it replaces the SQL baseline (FR-56).
+
 ### Non-Functional Requirements
 
 - **Reproducibility**: the DDL and its check run on PostgreSQL 16.2 and 17.9 today.
@@ -79,6 +83,8 @@ CNF-06. An implementation reads UMF so that it accepts and rejects the same docu
 
 ## User Stories
 
+- [US-045 — Bootstrap the internal layout from UMF](../user-stories/US-045-bootstrap-the-internal-layout-from-umf.md)
+
 - [US-039 — Read UMF the same way as the reference validator](../user-stories/US-039-read-umf-the-same-way-as-the-reference.md)
 - [US-027 — Build an implementation from the contracts](../user-stories/US-027-build-an-implementation-from-the-contracts.md)
 - [US-028 — Pass the corpus and the interchange check](../user-stories/US-028-pass-the-corpus-and-the-interchange-check.md)
@@ -86,7 +92,7 @@ CNF-06. An implementation reads UMF so that it accepts and rejects the same docu
 
 ## Edge Cases and Error Handling
 
-- **An unknown error kind or case tag**: not applicable, never a failure.
+- **An unknown normative error kind or required case tag**: the corpus version is unsupported; no full conformance pass may be reported. Optional host-specific cases remain separately qualified.
 - **A host-specific case**: tagged and outside the pass rule.
 - **A corpus version newer than the implementation**: reported, not silently passed.
 

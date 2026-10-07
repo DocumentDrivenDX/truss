@@ -1,0 +1,58 @@
+{
+  "scope": "Current read-only sibling HEAD/cleanliness, four selected Weft source pins and five Truss schema hashes compared with prior original synchronization receipt. No fresh structural bundle, native execution, message delivery, adoption or owner acknowledgement.",
+  "observedAt": "2026-10-06T20:53:30.661681+00:00",
+  "siblings": {
+    "umf": {
+      "head": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+      "clean": true
+    },
+    "weft": {
+      "head": "a76866732d9e4fa314ad13355d2ccc8112cba32e",
+      "clean": true
+    }
+  },
+  "weftSourcePins": [
+    {
+      "path": "/Users/erik/Projects/weft/docs/helix/04-build/implementation-plan.md",
+      "sha256": "0c3a17658b5e26059438a20f060fab2bebc7379c8302cb91b0ceb479ac500398"
+    },
+    {
+      "path": "/Users/erik/Projects/weft/docs/helix/04-build/evidence/B-005-native-preparation.md",
+      "sha256": "f1982974394a34a0b68e4c43940236d49809eb3f8ccd5940d76744a8dddf122c"
+    },
+    {
+      "path": "/Users/erik/Projects/weft/tests/truss-postgresql/driver-native.py",
+      "sha256": "833cc6954b9ce3bee955cdc8f78dcc8d809ca497fcb59adc738d0093fd78ef83"
+    },
+    {
+      "path": "/Users/erik/Projects/weft/tests/truss-postgresql/upstream/source-pins.json",
+      "sha256": "73990f0df76e7c4b2f350502ccb130fbdf142e66d151914fb1fe277979c99e89"
+    }
+  ],
+  "trussSchemas": [
+    {
+      "id": "urn:truss:acceptance-input:0.1.0",
+      "sha256": "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd"
+    },
+    {
+      "id": "urn:truss:draft:postgresql-binding:0.1.0",
+      "sha256": "2a37a1775dfa6e245053e8975df349c5522cf9cb4d5f1d1b1d0f34602b2883e6"
+    },
+    {
+      "id": "urn:truss:draft:property-home:0.1.0",
+      "sha256": "15e78a535adcf2786af3521abdf52a634e98ef3096ebed84652fed7ab6e2eaae"
+    },
+    {
+      "id": "urn:truss:draft:row-home:0.1.0",
+      "sha256": "3d35289dc9e5286bc17b1d4a40f68dc5cfc174d23ac97381dc7de3c8f9856e23"
+    },
+    {
+      "id": "urn:truss:draft:row-join-definition:0.1.0",
+      "sha256": "ddc7528dd546dfc76092076613fa612caee55a45ed51f46a553675b6f4e9d2b1"
+    }
+  ],
+  "benchmarkSource": {
+    "path": "docs/helix/02-design/contracts/bindings/catalog-enumeration-benchmark-v0.1.proposal.umf.json",
+    "sha256": "496ca682008579dce66fbfa5d3096a569785e2b45e6d1e93f2a058b8a8ec77e8"
+  }
+}

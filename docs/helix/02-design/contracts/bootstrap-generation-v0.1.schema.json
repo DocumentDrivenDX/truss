@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:bootstrap-generation:0.1.0",
+  "description": "Serialized request only; AbortSignal is host control, not wire. Native/custody/resource/profile admission remains separate.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-bootstrap-generation/0.1.0"
+    },
+    "bundle": {
+      "$ref": "urn:truss:draft:bootstrap-bundle:0.1.0"
+    },
+    "resourceProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "qualification": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "state": {
+              "const": "absent"
+            }
+          },
+          "required": [
+            "state"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "state": {
+              "const": "supplied"
+            },
+            "targetProfile": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+            },
+            "evidence": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            }
+          },
+          "required": [
+            "state",
+            "targetProfile",
+            "evidence"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "limits": {
+      "type": "object",
+      "properties": {
+        "inputBytes": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "outputBytes": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "statements": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "workUnits": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        }
+      },
+      "required": [
+        "inputBytes",
+        "outputBytes",
+        "statements",
+        "workUnits"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "bundle",
+    "resourceProfile",
+    "qualification",
+    "limits"
+  ],
+  "additionalProperties": false
+}

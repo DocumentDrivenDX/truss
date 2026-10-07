@@ -1,0 +1,25 @@
+{
+  "profile": "truss-migration-chunk-planning/0.1.0",
+  "status": "authored_expected_arithmetic_only",
+  "chunkBytes": "65536",
+  "scope": "Synthetic complete carrier-length inventories; no native producer, decoder, authorization, exhaustion or profile-adoption evidence",
+  "carrierCases": [
+    {"name":"empty_carrier","lengthHistogram":[{"lengthBytes":"0","count":"1"}],"expectedChunkCalls":"0"},
+    {"name":"one_exact_chunk","lengthHistogram":[{"lengthBytes":"65536","count":"1"}],"expectedChunkCalls":"1"},
+    {"name":"one_over_chunk","lengthHistogram":[{"lengthBytes":"65537","count":"1"}],"expectedChunkCalls":"2"},
+    {"name":"two_small_distinct_carriers","lengthHistogram":[{"lengthBytes":"1","count":"2"}],"expectedChunkCalls":"2","incorrectAggregateCeiling":"1"},
+    {"name":"ten_thousand_small_carriers","lengthHistogram":[{"lengthBytes":"1","count":"10000"}],"expectedChunkCalls":"10000","incorrectAggregateCeiling":"1"},
+    {"name":"mixed_boundary_and_empty","lengthHistogram":[{"lengthBytes":"0","count":"7"},{"lengthBytes":"65535","count":"2"},{"lengthBytes":"65536","count":"3"},{"lengthBytes":"65537","count":"4"}],"expectedChunkCalls":"13"}
+  ],
+  "submissionCases": [
+    {"name":"all_stages_and_reserved_calls_at_bound","sourceChunkCalls":"10000","targetChunkCalls":"10000","postStateChunkCalls":"10000","metadataCalls":"2","locatorCalls":"10000","finalizationAllowance":"3","containmentAllowance":"2","statementLimit":"40007","expectedReservedTotal":"40007","expectedAdmission":"arithmetic_fits"},
+    {"name":"reserved_calls_one_over_bound","sourceChunkCalls":"10000","targetChunkCalls":"10000","postStateChunkCalls":"10000","metadataCalls":"2","locatorCalls":"10000","finalizationAllowance":"3","containmentAllowance":"2","statementLimit":"40006","expectedReservedTotal":"40007","expectedAdmission":"refuse"},
+    {"name":"unknown_finalization_allowance","sourceChunkCalls":"1","targetChunkCalls":"1","postStateChunkCalls":"1","metadataCalls":"2","locatorCalls":"1","finalizationAllowance":null,"containmentAllowance":"2","statementLimit":"100000","expectedAdmission":"refuse_unknown_allowance"}
+  ],
+  "notes": [
+    "Zero-length carrier needs its independently qualified metadata/empty-byte witness; zero chunk calls do not prove absence or completeness.",
+    "Histogram count multiplies each carrier ceiling, not a ceiling of aggregate lengths.",
+    "Synthetic submission counts are not selected producer allowances. Actual registered procedures must supply complete bounded call inventories before effects.",
+    "Arithmetic fits is only one admission condition; all byte, row, work, owned-buffer, deadline, native and containing profiles still apply."
+  ]
+}

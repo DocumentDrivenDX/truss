@@ -1,0 +1,9 @@
+{
+  "scope": "source AST correspondence and explicit selected column/constraint shape only",
+  "baselineStatements": 35,
+  "candidateStatements": 37,
+  "originalArchivePreserved": true,
+  "onlyExpectedAstChanges": true,
+  "nativeExecuted": false,
+  "installationReady": false
+}

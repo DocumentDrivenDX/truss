@@ -1,0 +1,630 @@
+{
+  "umf": "0.1.0",
+  "id": "truss-row-home-triggers-proposal",
+  "vocabularies": {
+    "umf.postgresql": {
+      "version": "0.1.0"
+    }
+  },
+  "modules": [
+    {
+      "id": "schema",
+      "namespace": "",
+      "elements": [
+        {
+          "id": "schema",
+          "extensions": {
+            "umf.postgresql": {
+              "profile": "postgresql-raw-parse-tree",
+              "source": "-- Unadopted trigger fragment: referenced routines are not yet defined/qualified.\n-- No WHEN/UPDATE OF filter; all actual canonical row effects are observed.\nCREATE TRIGGER row_home_state_touch_observe\n  AFTER INSERT OR UPDATE OR DELETE ON truss.row_home_state\n  FOR EACH ROW EXECUTE FUNCTION truss.row_touch_observe();\nCREATE TRIGGER row_home_node_touch_observe\n  AFTER INSERT OR UPDATE OR DELETE ON truss.row_home_node\n  FOR EACH ROW EXECUTE FUNCTION truss.row_touch_observe();\nCREATE TRIGGER row_home_scalar_touch_observe\n  AFTER INSERT OR UPDATE OR DELETE ON truss.row_home_scalar\n  FOR EACH ROW EXECUTE FUNCTION truss.row_touch_observe();\nCREATE CONSTRAINT TRIGGER row_home_touch_commit_guard\n  AFTER INSERT OR UPDATE ON truss.row_home_touch\n  DEFERRABLE INITIALLY DEFERRED\n  FOR EACH ROW EXECUTE FUNCTION truss.row_touch_commit_check();\nCREATE CONSTRAINT TRIGGER row_home_capacity_commit_guard\n  AFTER INSERT OR UPDATE ON truss.row_home_capacity\n  DEFERRABLE INITIALLY DEFERRED\n  FOR EACH ROW EXECUTE FUNCTION truss.row_touch_commit_check();\nCREATE CONSTRAINT TRIGGER row_home_operation_commit_guard\n  AFTER INSERT OR UPDATE ON truss.row_home_operation\n  DEFERRABLE INITIALLY DEFERRED\n  FOR EACH ROW EXECUTE FUNCTION truss.row_touch_commit_check();\n-- Ordinary DELETE/TRUNCATE of touch/capacity is denied separately by privileges.\n-- Routine bodies, type/security/owner/grants, complete producer/retention/init\n-- registry and full native inventory/behavior proof remain required.\n",
+              "root": {
+                "kind": "object",
+                "members": {
+                  "version": {
+                    "kind": "number",
+                    "value": "170004"
+                  },
+                  "stmts": {
+                    "kind": "array",
+                    "items": [
+                      {
+                        "kind": "object",
+                        "members": {
+                          "stmt": {
+                            "kind": "object",
+                            "members": {
+                              "CreateTrigStmt": {
+                                "kind": "object",
+                                "members": {
+                                  "trigname": {
+                                    "kind": "string",
+                                    "value": "row_home_state_touch_observe"
+                                  },
+                                  "relation": {
+                                    "kind": "object",
+                                    "members": {
+                                      "schemaname": {
+                                        "kind": "string",
+                                        "value": "truss"
+                                      },
+                                      "relname": {
+                                        "kind": "string",
+                                        "value": "row_home_state"
+                                      },
+                                      "inh": {
+                                        "kind": "boolean",
+                                        "value": true
+                                      },
+                                      "relpersistence": {
+                                        "kind": "string",
+                                        "value": "p"
+                                      },
+                                      "location": {
+                                        "kind": "number",
+                                        "value": "240"
+                                      }
+                                    }
+                                  },
+                                  "funcname": {
+                                    "kind": "array",
+                                    "items": [
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "String": {
+                                            "kind": "object",
+                                            "members": {
+                                              "sval": {
+                                                "kind": "string",
+                                                "value": "truss"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "String": {
+                                            "kind": "object",
+                                            "members": {
+                                              "sval": {
+                                                "kind": "string",
+                                                "value": "row_touch_observe"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "row": {
+                                    "kind": "boolean",
+                                    "value": true
+                                  },
+                                  "events": {
+                                    "kind": "number",
+                                    "value": "28"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "stmt_len": {
+                            "kind": "number",
+                            "value": "318"
+                          }
+                        }
+                      },
+                      {
+                        "kind": "object",
+                        "members": {
+                          "stmt": {
+                            "kind": "object",
+                            "members": {
+                              "CreateTrigStmt": {
+                                "kind": "object",
+                                "members": {
+                                  "trigname": {
+                                    "kind": "string",
+                                    "value": "row_home_node_touch_observe"
+                                  },
+                                  "relation": {
+                                    "kind": "object",
+                                    "members": {
+                                      "schemaname": {
+                                        "kind": "string",
+                                        "value": "truss"
+                                      },
+                                      "relname": {
+                                        "kind": "string",
+                                        "value": "row_home_node"
+                                      },
+                                      "inh": {
+                                        "kind": "boolean",
+                                        "value": true
+                                      },
+                                      "relpersistence": {
+                                        "kind": "string",
+                                        "value": "p"
+                                      },
+                                      "location": {
+                                        "kind": "number",
+                                        "value": "401"
+                                      }
+                                    }
+                                  },
+                                  "funcname": {
+                                    "kind": "array",
+                                    "items": [
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "String": {
+                                            "kind": "object",
+                                            "members": {
+                                              "sval": {
+                                                "kind": "string",
+                                                "value": "truss"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "String": {
+                                            "kind": "object",
+                                            "members": {
+                                              "sval": {
+                                                "kind": "string",
+                                                "value": "row_touch_observe"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "row": {
+                                    "kind": "boolean",
+                                    "value": true
+                                  },
+                                  "events": {
+                                    "kind": "number",
+                                    "value": "28"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "stmt_location": {
+                            "kind": "number",
+                            "value": "319"
+                          },
+                          "stmt_len": {
+                            "kind": "number",
+                            "value": "159"
+                          }
+                        }
+                      },
+                      {
+                        "kind": "object",
+                        "members": {
+                          "stmt": {
+                            "kind": "object",
+                            "members": {
+                              "CreateTrigStmt": {
+                                "kind": "object",
+                                "members": {
+                                  "trigname": {
+                                    "kind": "string",
+                                    "value": "row_home_scalar_touch_observe"
+                                  },
+                                  "relation": {
+                                    "kind": "object",
+                                    "members": {
+                                      "schemaname": {
+                                        "kind": "string",
+                                        "value": "truss"
+                                      },
+                                      "relname": {
+                                        "kind": "string",
+                                        "value": "row_home_scalar"
+                                      },
+                                      "inh": {
+                                        "kind": "boolean",
+                                        "value": true
+                                      },
+                                      "relpersistence": {
+                                        "kind": "string",
+                                        "value": "p"
+                                      },
+                                      "location": {
+                                        "kind": "number",
+                                        "value": "563"
+                                      }
+                                    }
+                                  },
+                                  "funcname": {
+                                    "kind": "array",
+                                    "items": [
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "String": {
+                                            "kind": "object",
+                                            "members": {
+                                              "sval": {
+                                                "kind": "string",
+                                                "value": "truss"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "String": {
+                                            "kind": "object",
+                                            "members": {
+                                              "sval": {
+                                                "kind": "string",
+                                                "value": "row_touch_observe"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "row": {
+                                    "kind": "boolean",
+                                    "value": true
+                                  },
+                                  "events": {
+                                    "kind": "number",
+                                    "value": "28"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "stmt_location": {
+                            "kind": "number",
+                            "value": "479"
+                          },
+                          "stmt_len": {
+                            "kind": "number",
+                            "value": "163"
+                          }
+                        }
+                      },
+                      {
+                        "kind": "object",
+                        "members": {
+                          "stmt": {
+                            "kind": "object",
+                            "members": {
+                              "CreateTrigStmt": {
+                                "kind": "object",
+                                "members": {
+                                  "isconstraint": {
+                                    "kind": "boolean",
+                                    "value": true
+                                  },
+                                  "trigname": {
+                                    "kind": "string",
+                                    "value": "row_home_touch_commit_guard"
+                                  },
+                                  "relation": {
+                                    "kind": "object",
+                                    "members": {
+                                      "schemaname": {
+                                        "kind": "string",
+                                        "value": "truss"
+                                      },
+                                      "relname": {
+                                        "kind": "string",
+                                        "value": "row_home_touch"
+                                      },
+                                      "inh": {
+                                        "kind": "boolean",
+                                        "value": true
+                                      },
+                                      "relpersistence": {
+                                        "kind": "string",
+                                        "value": "p"
+                                      },
+                                      "location": {
+                                        "kind": "number",
+                                        "value": "726"
+                                      }
+                                    }
+                                  },
+                                  "funcname": {
+                                    "kind": "array",
+                                    "items": [
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "String": {
+                                            "kind": "object",
+                                            "members": {
+                                              "sval": {
+                                                "kind": "string",
+                                                "value": "truss"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "String": {
+                                            "kind": "object",
+                                            "members": {
+                                              "sval": {
+                                                "kind": "string",
+                                                "value": "row_touch_commit_check"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "row": {
+                                    "kind": "boolean",
+                                    "value": true
+                                  },
+                                  "events": {
+                                    "kind": "number",
+                                    "value": "20"
+                                  },
+                                  "deferrable": {
+                                    "kind": "boolean",
+                                    "value": true
+                                  },
+                                  "initdeferred": {
+                                    "kind": "boolean",
+                                    "value": true
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "stmt_location": {
+                            "kind": "number",
+                            "value": "643"
+                          },
+                          "stmt_len": {
+                            "kind": "number",
+                            "value": "198"
+                          }
+                        }
+                      },
+                      {
+                        "kind": "object",
+                        "members": {
+                          "stmt": {
+                            "kind": "object",
+                            "members": {
+                              "CreateTrigStmt": {
+                                "kind": "object",
+                                "members": {
+                                  "isconstraint": {
+                                    "kind": "boolean",
+                                    "value": true
+                                  },
+                                  "trigname": {
+                                    "kind": "string",
+                                    "value": "row_home_capacity_commit_guard"
+                                  },
+                                  "relation": {
+                                    "kind": "object",
+                                    "members": {
+                                      "schemaname": {
+                                        "kind": "string",
+                                        "value": "truss"
+                                      },
+                                      "relname": {
+                                        "kind": "string",
+                                        "value": "row_home_capacity"
+                                      },
+                                      "inh": {
+                                        "kind": "boolean",
+                                        "value": true
+                                      },
+                                      "relpersistence": {
+                                        "kind": "string",
+                                        "value": "p"
+                                      },
+                                      "location": {
+                                        "kind": "number",
+                                        "value": "928"
+                                      }
+                                    }
+                                  },
+                                  "funcname": {
+                                    "kind": "array",
+                                    "items": [
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "String": {
+                                            "kind": "object",
+                                            "members": {
+                                              "sval": {
+                                                "kind": "string",
+                                                "value": "truss"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "String": {
+                                            "kind": "object",
+                                            "members": {
+                                              "sval": {
+                                                "kind": "string",
+                                                "value": "row_touch_commit_check"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "row": {
+                                    "kind": "boolean",
+                                    "value": true
+                                  },
+                                  "events": {
+                                    "kind": "number",
+                                    "value": "20"
+                                  },
+                                  "deferrable": {
+                                    "kind": "boolean",
+                                    "value": true
+                                  },
+                                  "initdeferred": {
+                                    "kind": "boolean",
+                                    "value": true
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "stmt_location": {
+                            "kind": "number",
+                            "value": "842"
+                          },
+                          "stmt_len": {
+                            "kind": "number",
+                            "value": "204"
+                          }
+                        }
+                      },
+                      {
+                        "kind": "object",
+                        "members": {
+                          "stmt": {
+                            "kind": "object",
+                            "members": {
+                              "CreateTrigStmt": {
+                                "kind": "object",
+                                "members": {
+                                  "isconstraint": {
+                                    "kind": "boolean",
+                                    "value": true
+                                  },
+                                  "trigname": {
+                                    "kind": "string",
+                                    "value": "row_home_operation_commit_guard"
+                                  },
+                                  "relation": {
+                                    "kind": "object",
+                                    "members": {
+                                      "schemaname": {
+                                        "kind": "string",
+                                        "value": "truss"
+                                      },
+                                      "relname": {
+                                        "kind": "string",
+                                        "value": "row_home_operation"
+                                      },
+                                      "inh": {
+                                        "kind": "boolean",
+                                        "value": true
+                                      },
+                                      "relpersistence": {
+                                        "kind": "string",
+                                        "value": "p"
+                                      },
+                                      "location": {
+                                        "kind": "number",
+                                        "value": "1134"
+                                      }
+                                    }
+                                  },
+                                  "funcname": {
+                                    "kind": "array",
+                                    "items": [
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "String": {
+                                            "kind": "object",
+                                            "members": {
+                                              "sval": {
+                                                "kind": "string",
+                                                "value": "truss"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "String": {
+                                            "kind": "object",
+                                            "members": {
+                                              "sval": {
+                                                "kind": "string",
+                                                "value": "row_touch_commit_check"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "row": {
+                                    "kind": "boolean",
+                                    "value": true
+                                  },
+                                  "events": {
+                                    "kind": "number",
+                                    "value": "20"
+                                  },
+                                  "deferrable": {
+                                    "kind": "boolean",
+                                    "value": true
+                                  },
+                                  "initdeferred": {
+                                    "kind": "boolean",
+                                    "value": true
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "stmt_location": {
+                            "kind": "number",
+                            "value": "1047"
+                          },
+                          "stmt_len": {
+                            "kind": "number",
+                            "value": "206"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,364 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:key-migration-locator-correspondence:0.1.0",
+  "description": "Same-store bucket source/target physical locator shape only; complete original native correspondence and action meaning require semantic admission.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-key-migration-locator-correspondence/0.1.0"
+    },
+    "originalAttempt": {
+      "$ref": "urn:truss:draft:key-migration-result:0.1.0#/$defs/attempt"
+    },
+    "sourceInventory": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "targetCorrespondence": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "locatorProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "sourceEntryId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "enum": [
+                  "live",
+                  "reservation"
+                ]
+              },
+              "action": {
+                "const": "unchanged"
+              },
+              "source": {
+                "type": "object",
+                "properties": {
+                  "state": {
+                    "const": "held"
+                  },
+                  "storageRowId": {
+                    "type": "string",
+                    "pattern": "^[1-9][0-9]*$"
+                  },
+                  "rowEvidence": {
+                    "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+                  }
+                },
+                "required": [
+                  "state",
+                  "storageRowId",
+                  "rowEvidence"
+                ],
+                "additionalProperties": false
+              },
+              "target": {
+                "type": "object",
+                "properties": {
+                  "state": {
+                    "const": "held"
+                  },
+                  "storageRowId": {
+                    "type": "string",
+                    "pattern": "^[1-9][0-9]*$"
+                  },
+                  "rowEvidence": {
+                    "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+                  }
+                },
+                "required": [
+                  "state",
+                  "storageRowId",
+                  "rowEvidence"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "sourceEntryId",
+              "kind",
+              "action",
+              "source",
+              "target"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "sourceEntryId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "enum": [
+                  "live",
+                  "reservation"
+                ]
+              },
+              "action": {
+                "const": "replaced"
+              },
+              "source": {
+                "type": "object",
+                "properties": {
+                  "state": {
+                    "const": "held"
+                  },
+                  "storageRowId": {
+                    "type": "string",
+                    "pattern": "^[1-9][0-9]*$"
+                  },
+                  "rowEvidence": {
+                    "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+                  }
+                },
+                "required": [
+                  "state",
+                  "storageRowId",
+                  "rowEvidence"
+                ],
+                "additionalProperties": false
+              },
+              "target": {
+                "type": "object",
+                "properties": {
+                  "state": {
+                    "const": "held"
+                  },
+                  "storageRowId": {
+                    "type": "string",
+                    "pattern": "^[1-9][0-9]*$"
+                  },
+                  "rowEvidence": {
+                    "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+                  }
+                },
+                "required": [
+                  "state",
+                  "storageRowId",
+                  "rowEvidence"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "sourceEntryId",
+              "kind",
+              "action",
+              "source",
+              "target"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "sourceEntryId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "enum": [
+                  "live"
+                ]
+              },
+              "action": {
+                "const": "created"
+              },
+              "source": {
+                "type": "object",
+                "properties": {
+                  "state": {
+                    "const": "omitted"
+                  },
+                  "missingComponentEvidence": {
+                    "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+                  }
+                },
+                "required": [
+                  "state",
+                  "missingComponentEvidence"
+                ],
+                "additionalProperties": false
+              },
+              "target": {
+                "type": "object",
+                "properties": {
+                  "state": {
+                    "const": "held"
+                  },
+                  "storageRowId": {
+                    "type": "string",
+                    "pattern": "^[1-9][0-9]*$"
+                  },
+                  "rowEvidence": {
+                    "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+                  }
+                },
+                "required": [
+                  "state",
+                  "storageRowId",
+                  "rowEvidence"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "sourceEntryId",
+              "kind",
+              "action",
+              "source",
+              "target"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "sourceEntryId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "enum": [
+                  "live"
+                ]
+              },
+              "action": {
+                "const": "removed"
+              },
+              "source": {
+                "type": "object",
+                "properties": {
+                  "state": {
+                    "const": "held"
+                  },
+                  "storageRowId": {
+                    "type": "string",
+                    "pattern": "^[1-9][0-9]*$"
+                  },
+                  "rowEvidence": {
+                    "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+                  }
+                },
+                "required": [
+                  "state",
+                  "storageRowId",
+                  "rowEvidence"
+                ],
+                "additionalProperties": false
+              },
+              "target": {
+                "type": "object",
+                "properties": {
+                  "state": {
+                    "const": "omitted"
+                  },
+                  "missingComponentEvidence": {
+                    "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+                  }
+                },
+                "required": [
+                  "state",
+                  "missingComponentEvidence"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "sourceEntryId",
+              "kind",
+              "action",
+              "source",
+              "target"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "sourceEntryId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "enum": [
+                  "live"
+                ]
+              },
+              "action": {
+                "const": "omitted"
+              },
+              "source": {
+                "type": "object",
+                "properties": {
+                  "state": {
+                    "const": "omitted"
+                  },
+                  "missingComponentEvidence": {
+                    "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+                  }
+                },
+                "required": [
+                  "state",
+                  "missingComponentEvidence"
+                ],
+                "additionalProperties": false
+              },
+              "target": {
+                "type": "object",
+                "properties": {
+                  "state": {
+                    "const": "omitted"
+                  },
+                  "missingComponentEvidence": {
+                    "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+                  }
+                },
+                "required": [
+                  "state",
+                  "missingComponentEvidence"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "sourceEntryId",
+              "kind",
+              "action",
+              "source",
+              "target"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    "originalObservation": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "completeCorrespondenceEvidence": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "originalAttempt",
+    "sourceInventory",
+    "targetCorrespondence",
+    "locatorProfile",
+    "entries",
+    "originalObservation",
+    "completeCorrespondenceEvidence"
+  ],
+  "additionalProperties": false
+}

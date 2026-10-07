@@ -1,0 +1,77 @@
+{
+  "interfaceVersion": "truss-bootstrap-route-entry/0.1.0",
+  "routeIdentity": "pg17.cast.direct/0.1.0",
+  "status": "unadopted; source pins only verified; native class/cut/transport/semantic producers unqualified",
+  "nativeClass": {
+    "namespace": "pg_catalog",
+    "relation": "pg_cast",
+    "classOid": "resolve from original target; never constant",
+    "storageScope": "database",
+    "subobjectNumber": "0"
+  },
+  "selector": "direct original pg_cast object OIDs",
+  "artifacts": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-cast-observation-pg17.proposal.sql",
+      "sha256": "a429ed8530ce38a230ca8c5402069506050846e4a3e2356de9f2c10eba952e95"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-cast-observation-pg17.proposal.umf.json",
+      "sha256": "b0ad29a49b02630f141893a70a5293e7aed744afa9871c513e44253bb57e713c"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/bootstrap-cast-observation.owner-export.sql",
+      "sha256": "77f9a65662b93506a672294a7333715ec452dccb97bdd63718581aa4ea4e1291"
+    }
+  ],
+  "parameterGrammar": {
+    "slot": "1",
+    "nativeType": "pg_catalog.oid[]",
+    "dimensions": "exactly one",
+    "lowerBound": "1",
+    "nullAllowed": false,
+    "nullItemsAllowed": false,
+    "uniqueItems": true,
+    "countInclusive": [
+      "1",
+      "256"
+    ],
+    "itemDomain": "canonical nonzero uint32 decimal text; actual pg_cast object OID",
+    "encoder": "selected original canonical PostgreSQL array encoder; no JS numeric round trip"
+  },
+  "orderedColumns": [
+    "catalog_class_oid",
+    "object_oid",
+    "original_catalog_row_json"
+  ],
+  "coverage": "Exact bijection between requested original addresses and returned unique admitted rows; missing requested row is absent, wrong class/extra/duplicate row refuses, not empty complete",
+  "requiredKnownFields": [
+    "oid",
+    "castsource",
+    "casttarget",
+    "castfunc",
+    "castcontext",
+    "castmethod"
+  ],
+  "preservation": "Retain full exact returned row JSON text and every unknown extension member; lossless bounded selected native JSON decoder; no parse/stringify reconstruction",
+  "dependencyExtraction": {
+    "castsource": "required nonzero pg_type address at subobject 0 in same database scope",
+    "casttarget": "required nonzero pg_type address at subobject 0 in same database scope",
+    "castfunc": "method f requires nonzero pg_proc address at subobject 0; methods i/b require zero, retain sentinel but create no routine address",
+    "nativeMeaning": "castcontext admitted only e/a/i; castmethod only f/i/b under selected PG17 profile; original known-field/native definition correspondence mandatory",
+    "definitionSpecification": {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-cast-definition-v0.1.proposal.json",
+      "sha256": "6b6c0ba16e04d989d9f208ccb5d2deccd2532cb32698e43277387a8ba24f5c30",
+      "admission": "Complete original method/context/signature/type closure; conversion behavior separately qualified"
+    }
+  },
+  "adjuncts": [
+    "local dependency closure for original cast address",
+    "source/target complete type adjunct/definition routes",
+    "function method complete routine/authority closure",
+    "I/O method source-output/target-input and binary method representation closure"
+  ],
+  "resourceProfile": "truss-bootstrap-collector-resource/0.1.0",
+  "refusal": "Unknown method/context/subobject or missing extractor/native meaning is unsupported; unavailable authority/cut/transport/resource stays unavailable; generic conversion availability is not inferred from pg_cast absence",
+  "resourceObligations": "Shared enclosing totals, complete original cut/authority and explicit pre-materialization/native-work permits; no independent per-route allowance"
+}

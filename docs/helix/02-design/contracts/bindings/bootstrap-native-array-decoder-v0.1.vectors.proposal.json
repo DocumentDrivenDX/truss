@@ -1,0 +1,133 @@
+{
+  "interfaceVersion": "truss-bootstrap-native-array-decoder-vectors/0.1.0",
+  "status": "independently authored planned vectors; unexecuted",
+  "scope": "PostgreSQL 17 ordinary comma-delimited text-array output decoding only; field-specific meaning, vectors, ACLs and native transport remain separate",
+  "vectors": [
+    {
+      "name": "native-null",
+      "text": null,
+      "dimensions": null,
+      "expected": {
+        "kind": "native-null"
+      }
+    },
+    {
+      "name": "empty",
+      "text": "{}",
+      "dimensions": null,
+      "expected": {
+        "kind": "array",
+        "bounds": [],
+        "elements": []
+      }
+    },
+    {
+      "name": "null-and-null-text",
+      "text": "{NULL,\"NULL\"}",
+      "dimensions": "[1:2]",
+      "expected": {
+        "kind": "array",
+        "bounds": [
+          [
+            "1",
+            "2"
+          ]
+        ],
+        "elements": [
+          null,
+          "NULL"
+        ]
+      }
+    },
+    {
+      "name": "empty-text",
+      "text": "{\"\"}",
+      "dimensions": "[1:1]",
+      "expected": {
+        "kind": "array",
+        "bounds": [
+          [
+            "1",
+            "1"
+          ]
+        ],
+        "elements": [
+          ""
+        ]
+      }
+    },
+    {
+      "name": "nondefault-lower-bound",
+      "text": "[0:1]={a,b}",
+      "dimensions": "[0:1]",
+      "expected": {
+        "kind": "array",
+        "bounds": [
+          [
+            "0",
+            "1"
+          ]
+        ],
+        "elements": [
+          "a",
+          "b"
+        ]
+      }
+    },
+    {
+      "name": "quoted-delimiter",
+      "text": "{\"a,b\",\"{c}\"}",
+      "dimensions": "[1:2]",
+      "expected": {
+        "kind": "array",
+        "bounds": [
+          [
+            "1",
+            "2"
+          ]
+        ],
+        "elements": [
+          "a,b",
+          "{c}"
+        ]
+      }
+    },
+    {
+      "name": "nested-shape",
+      "text": "{{a,b},{c,d}}",
+      "dimensions": "[1:2][1:2]",
+      "expected": {
+        "kind": "array",
+        "bounds": [
+          [
+            "1",
+            "2"
+          ],
+          [
+            "1",
+            "2"
+          ]
+        ],
+        "elements": [
+          [
+            "a",
+            "b"
+          ],
+          [
+            "c",
+            "d"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "dimensions-mismatch",
+      "text": "{a,b}",
+      "dimensions": "[1:3]",
+      "expected": {
+        "kind": "refusal",
+        "reason": "native-correspondence"
+      }
+    }
+  ]
+}

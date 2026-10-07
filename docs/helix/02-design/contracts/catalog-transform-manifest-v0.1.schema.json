@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:catalog-transform-manifest:0.1.0",
+  "title": "Draft immutable transform registration manifest",
+  "description": "Original metadata/implementation provenance, not executable code. Exact function/implementation issuer recognition and dependency/value/resource qualification are separate.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-catalog-transform-manifest/0.1.0"
+    },
+    "implementationProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "resourceProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "execution": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "trusted_cooperative"
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "isolated"
+            },
+            "executionProfile": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+            }
+          },
+          "required": [
+            "kind",
+            "executionProfile"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "inputValueProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "outputValueProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "dependencyProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "declaredDependencies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "propertyId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "definitionPin": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "propertyId",
+          "definitionPin"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "supportedDefinitionPairs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "beforeDefinitionPin": {
+            "type": "string",
+            "minLength": 1
+          },
+          "afterDefinitionPin": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "beforeDefinitionPin",
+          "afterDefinitionPin"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "implementationProfile",
+    "resourceProfile",
+    "execution",
+    "inputValueProfile",
+    "outputValueProfile",
+    "dependencyProfile",
+    "declaredDependencies",
+    "supportedDefinitionPairs"
+  ],
+  "additionalProperties": false
+}

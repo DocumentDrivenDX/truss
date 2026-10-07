@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:catalog-transform-input:0.1.0",
+  "title": "Draft catalog-transform-input",
+  "description": "Closed callback wire only; original registration, declared dependency inventory, same prior snapshot, supported definition pair and complete candidate admission require semantic/host qualification. No executable code or authority is carried.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-catalog-transform/0.1.0"
+    },
+    "registration": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "dependencyProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "targetDefinitionIdentity": {
+      "type": "string",
+      "minLength": 1
+    },
+    "beforeDefinitionPin": {
+      "type": "string",
+      "minLength": 1
+    },
+    "afterDefinitionPin": {
+      "type": "string",
+      "minLength": 1
+    },
+    "priorCatalogRevision": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$"
+    },
+    "candidateCatalogRevision": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$"
+    },
+    "record": {
+      "$ref": "urn:truss:draft:history-record:0.1.0#/$defs/identity"
+    },
+    "propertyId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "before": {
+      "$ref": "urn:truss:draft:exact-value:0.1.0#/$defs/presence"
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "propertyId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "definitionPin": {
+            "type": "string",
+            "minLength": 1
+          },
+          "before": {
+            "$ref": "urn:truss:draft:exact-value:0.1.0#/$defs/presence"
+          }
+        },
+        "required": [
+          "propertyId",
+          "definitionPin",
+          "before"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "parameters": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/canonicalTree"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "registration",
+    "dependencyProfile",
+    "targetDefinitionIdentity",
+    "beforeDefinitionPin",
+    "afterDefinitionPin",
+    "priorCatalogRevision",
+    "candidateCatalogRevision",
+    "record",
+    "propertyId",
+    "before",
+    "dependencies",
+    "parameters"
+  ],
+  "additionalProperties": false
+}

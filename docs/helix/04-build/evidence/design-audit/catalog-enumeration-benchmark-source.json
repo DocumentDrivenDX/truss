@@ -1,0 +1,300 @@
+{
+  "scope": "UMF 0.7 proposed benchmark metadata validation/serialization and independent authored identity/member/key/ring correspondence; four malformed variants refused. No Truss catalog extraction, native installation, Weft binding, public enumeration or latency qualification.",
+  "expectedMembership": {
+    "types": 1000,
+    "properties": 4000,
+    "keys": 2000,
+    "keyComponents": 3000,
+    "relationships": 1000,
+    "endpointReferences": 2000
+  },
+  "source": {
+    "path": "docs/helix/02-design/contracts/bindings/catalog-enumeration-benchmark-v0.1.proposal.umf.json",
+    "sha256": "496ca682008579dce66fbfa5d3096a569785e2b45e6d1e93f2a058b8a8ec77e8"
+  },
+  "owner": {
+    "root": "/Users/erik/Projects/umf",
+    "head": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+    "status": "",
+    "files": [
+      {
+        "path": "src/validation/document.ts",
+        "sha256": "2569bf6aadd33e3b228b3ae9ffd5d3c0da60500e8f26baa078bba81b17c8634b"
+      },
+      {
+        "path": "src/validation/relationships.ts",
+        "sha256": "5d94c2df0847d0315b514a005407d6e95f34531d9822ae5b2db48f176673a932"
+      },
+      {
+        "path": "src/validation/keys.ts",
+        "sha256": "00650bc3e645c2d36e01f423b0a5eb85dba8b38c102697b0e62e3030a4be7886"
+      },
+      {
+        "path": "src/model/document.ts",
+        "sha256": "a0422042659defdea425dff8bb0618eaa4bbf125f68da16aa5ad21af0b6c282f"
+      },
+      {
+        "path": "spec/core/relationship-document.schema.json",
+        "sha256": "a95512729481417f1a3a094cc337d7264a575bd6b54046b05c037db6c33b4813"
+      }
+    ]
+  },
+  "bunVersion": "1.4.2",
+  "validation": {
+    "valid": true,
+    "complete": false,
+    "diagnostics": [
+      {
+        "code": "EXPERIMENTAL_CORE_NULLABILITY",
+        "path": "/umf",
+        "message": "Nullability envelope is experimental; no native absence encoding or default execution is implied",
+        "severity": "warning"
+      },
+      {
+        "code": "EXPERIMENTAL_CORE_CARDINALITY",
+        "path": "/umf",
+        "message": "Cardinality envelope is experimental; native shape and item semantics require explicit bindings",
+        "severity": "warning"
+      },
+      {
+        "code": "EXPERIMENTAL_CORE_FACETS",
+        "path": "/umf",
+        "message": "Facet envelope is experimental; bounds do not establish native enforcement or value conversion",
+        "severity": "warning"
+      },
+      {
+        "code": "EXPERIMENTAL_CORE_KEYS",
+        "path": "/umf",
+        "message": "Candidate key profile; native uniqueness and author provenance are not inferred",
+        "severity": "warning"
+      },
+      {
+        "code": "EXPERIMENTAL_CORE_RELATIONSHIPS",
+        "path": "/umf",
+        "message": "Candidate authored relationship profile; native enforcement and storage are not inferred",
+        "severity": "warning"
+      }
+    ]
+  },
+  "roundtripExactTree": true,
+  "fixtureControls": [
+    {
+      "name": "changed_scalar_family",
+      "umfValid": true,
+      "umfComplete": false,
+      "status": "expected-fixture-refusal"
+    },
+    {
+      "name": "changed_presence",
+      "umfValid": true,
+      "umfComplete": false,
+      "status": "expected-fixture-refusal"
+    },
+    {
+      "name": "changed_composite_key_order",
+      "umfValid": true,
+      "umfComplete": false,
+      "status": "expected-fixture-refusal"
+    },
+    {
+      "name": "changed_relationship_bound",
+      "umfValid": true,
+      "umfComplete": false,
+      "status": "expected-fixture-refusal"
+    },
+    {
+      "name": "changed_ring_endpoint",
+      "umfValid": true,
+      "umfComplete": false,
+      "status": "expected-fixture-refusal"
+    },
+    {
+      "name": "changed_record_name",
+      "umfValid": true,
+      "umfComplete": false,
+      "status": "expected-fixture-refusal"
+    }
+  ],
+  "controls": [
+    {
+      "name": "missing_endpoint",
+      "validation": {
+        "valid": false,
+        "complete": false,
+        "diagnostics": [
+          {
+            "code": "EXPERIMENTAL_CORE_NULLABILITY",
+            "path": "/umf",
+            "message": "Nullability envelope is experimental; no native absence encoding or default execution is implied",
+            "severity": "warning"
+          },
+          {
+            "code": "EXPERIMENTAL_CORE_CARDINALITY",
+            "path": "/umf",
+            "message": "Cardinality envelope is experimental; native shape and item semantics require explicit bindings",
+            "severity": "warning"
+          },
+          {
+            "code": "EXPERIMENTAL_CORE_FACETS",
+            "path": "/umf",
+            "message": "Facet envelope is experimental; bounds do not establish native enforcement or value conversion",
+            "severity": "warning"
+          },
+          {
+            "code": "EXPERIMENTAL_CORE_KEYS",
+            "path": "/umf",
+            "message": "Candidate key profile; native uniqueness and author provenance are not inferred",
+            "severity": "warning"
+          },
+          {
+            "code": "EXPERIMENTAL_CORE_RELATIONSHIPS",
+            "path": "/umf",
+            "message": "Candidate authored relationship profile; native enforcement and storage are not inferred",
+            "severity": "warning"
+          },
+          {
+            "code": "RELATIONSHIP_ENDPOINT_MISSING",
+            "path": "/modules/0/relationships/0/target/0",
+            "message": "Endpoint does not resolve by exact module and element IDs",
+            "severity": "error"
+          }
+        ]
+      }
+    },
+    {
+      "name": "missing_key",
+      "validation": {
+        "valid": false,
+        "complete": false,
+        "diagnostics": [
+          {
+            "code": "EXPERIMENTAL_CORE_NULLABILITY",
+            "path": "/umf",
+            "message": "Nullability envelope is experimental; no native absence encoding or default execution is implied",
+            "severity": "warning"
+          },
+          {
+            "code": "EXPERIMENTAL_CORE_CARDINALITY",
+            "path": "/umf",
+            "message": "Cardinality envelope is experimental; native shape and item semantics require explicit bindings",
+            "severity": "warning"
+          },
+          {
+            "code": "EXPERIMENTAL_CORE_FACETS",
+            "path": "/umf",
+            "message": "Facet envelope is experimental; bounds do not establish native enforcement or value conversion",
+            "severity": "warning"
+          },
+          {
+            "code": "EXPERIMENTAL_CORE_KEYS",
+            "path": "/umf",
+            "message": "Candidate key profile; native uniqueness and author provenance are not inferred",
+            "severity": "warning"
+          },
+          {
+            "code": "EXPERIMENTAL_CORE_RELATIONSHIPS",
+            "path": "/umf",
+            "message": "Candidate authored relationship profile; native enforcement and storage are not inferred",
+            "severity": "warning"
+          },
+          {
+            "code": "RELATIONSHIP_TARGET_KEY",
+            "path": "/modules/0/relationships/0/target/0/key",
+            "message": "Target key must resolve by its stable ID",
+            "severity": "error"
+          }
+        ]
+      }
+    },
+    {
+      "name": "inverted_multiplicity",
+      "validation": {
+        "valid": false,
+        "complete": false,
+        "diagnostics": [
+          {
+            "code": "EXPERIMENTAL_CORE_NULLABILITY",
+            "path": "/umf",
+            "message": "Nullability envelope is experimental; no native absence encoding or default execution is implied",
+            "severity": "warning"
+          },
+          {
+            "code": "EXPERIMENTAL_CORE_CARDINALITY",
+            "path": "/umf",
+            "message": "Cardinality envelope is experimental; native shape and item semantics require explicit bindings",
+            "severity": "warning"
+          },
+          {
+            "code": "EXPERIMENTAL_CORE_FACETS",
+            "path": "/umf",
+            "message": "Facet envelope is experimental; bounds do not establish native enforcement or value conversion",
+            "severity": "warning"
+          },
+          {
+            "code": "EXPERIMENTAL_CORE_KEYS",
+            "path": "/umf",
+            "message": "Candidate key profile; native uniqueness and author provenance are not inferred",
+            "severity": "warning"
+          },
+          {
+            "code": "EXPERIMENTAL_CORE_RELATIONSHIPS",
+            "path": "/umf",
+            "message": "Candidate authored relationship profile; native enforcement and storage are not inferred",
+            "severity": "warning"
+          },
+          {
+            "code": "RELATIONSHIP_MULTIPLICITY",
+            "path": "/modules/0/relationships/0/targetMultiplicity",
+            "message": "Maximum must be at least the minimum",
+            "severity": "error"
+          }
+        ]
+      }
+    },
+    {
+      "name": "duplicate_relationship_name",
+      "validation": {
+        "valid": false,
+        "complete": false,
+        "diagnostics": [
+          {
+            "code": "EXPERIMENTAL_CORE_NULLABILITY",
+            "path": "/umf",
+            "message": "Nullability envelope is experimental; no native absence encoding or default execution is implied",
+            "severity": "warning"
+          },
+          {
+            "code": "EXPERIMENTAL_CORE_CARDINALITY",
+            "path": "/umf",
+            "message": "Cardinality envelope is experimental; native shape and item semantics require explicit bindings",
+            "severity": "warning"
+          },
+          {
+            "code": "EXPERIMENTAL_CORE_FACETS",
+            "path": "/umf",
+            "message": "Facet envelope is experimental; bounds do not establish native enforcement or value conversion",
+            "severity": "warning"
+          },
+          {
+            "code": "EXPERIMENTAL_CORE_KEYS",
+            "path": "/umf",
+            "message": "Candidate key profile; native uniqueness and author provenance are not inferred",
+            "severity": "warning"
+          },
+          {
+            "code": "EXPERIMENTAL_CORE_RELATIONSHIPS",
+            "path": "/umf",
+            "message": "Candidate authored relationship profile; native enforcement and storage are not inferred",
+            "severity": "warning"
+          },
+          {
+            "code": "RELATIONSHIP_DUPLICATE_NAME",
+            "path": "/modules/0/relationships/1/name",
+            "message": "Relationship name must be unique in its module",
+            "severity": "error"
+          }
+        ]
+      }
+    }
+  ]
+}

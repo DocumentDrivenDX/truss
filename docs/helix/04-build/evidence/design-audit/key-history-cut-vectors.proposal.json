@@ -1,0 +1,103 @@
+{
+  "interfaceVersion": "truss-key-history-cut-vectors/0.1.0",
+  "scope": "Independently authored planned historical state expectations; no native/producer evidence",
+  "captureRevision": "10",
+  "admittedCatalogRevisions": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10"
+  ],
+  "identity": {
+    "typeId": "-2",
+    "keyNumber": "-1"
+  },
+  "creation": {
+    "revision": "1",
+    "definitionWitness": "source-A"
+  },
+  "transitions": [
+    {
+      "revision": "3",
+      "kind": "definition_change",
+      "definitionWitness": "source-B"
+    },
+    {
+      "revision": "5",
+      "kind": "retirement",
+      "definitionWitness": "source-B"
+    },
+    {
+      "revision": "7",
+      "kind": "reactivation",
+      "definitionWitness": "source-C"
+    },
+    {
+      "revision": "9",
+      "kind": "retirement",
+      "definitionWitness": "source-C"
+    }
+  ],
+  "expectedCurrentAtCapture": {
+    "state": "retired",
+    "retiredRevision": "9",
+    "definitionWitness": "source-C"
+  },
+  "queries": [
+    {
+      "revision": "0",
+      "expected": "proved_absent_with_complete_creation_basis"
+    },
+    {
+      "revision": "1",
+      "expected": "active",
+      "definitionWitness": "source-A"
+    },
+    {
+      "revision": "3",
+      "expected": "active",
+      "definitionWitness": "source-B"
+    },
+    {
+      "revision": "5",
+      "expected": "retired",
+      "retiredRevision": "5",
+      "definitionWitness": "source-B"
+    },
+    {
+      "revision": "6",
+      "expected": "retired",
+      "retiredRevision": "5",
+      "definitionWitness": "source-B"
+    },
+    {
+      "revision": "7",
+      "expected": "active",
+      "definitionWitness": "source-C"
+    },
+    {
+      "revision": "9",
+      "expected": "retired",
+      "retiredRevision": "9",
+      "definitionWitness": "source-C"
+    },
+    {
+      "revision": "11",
+      "expected": "refuse_future_cut"
+    }
+  ],
+  "negativeControls": [
+    "Missing original creation basis is unavailable, not proved absent",
+    "Earlier active state must not equal capture retired state",
+    "Earlier source-A must not be replaced by source-C",
+    "Unadmitted sequence-gap revision refuses",
+    "Future private validation facts are not public historical output"
+  ]
+}

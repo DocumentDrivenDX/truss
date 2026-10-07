@@ -1,0 +1,28 @@
+{
+  "scope": "Six original AST statement memberships, source hashes, parameter occurrence/order/native casts and projection aliases only; nullable membership is not nullable type proof. No origin authenticity, native binding, collation/operator resolution, resource, role/cut, settlement or execution qualification.",
+  "manifestPath": "docs/helix/02-design/contracts/bindings/truss-private-cleanup-query-parameters-v0.1.proposal.json",
+  "manifestSha256": "4c5a4555bbd1d77d0a057b18221401be81d427160d9144ae0c185c99abc048a3",
+  "queries": 6,
+  "expectedRefusals": [
+    {
+      "name": "missing query",
+      "expectedRefusal": true
+    },
+    {
+      "name": "wrong source hash",
+      "expectedRefusal": true
+    },
+    {
+      "name": "reordered projection",
+      "expectedRefusal": true
+    },
+    {
+      "name": "wrong parameter position",
+      "expectedRefusal": true
+    },
+    {
+      "name": "narrowed native cast",
+      "expectedRefusal": true
+    }
+  ]
+}

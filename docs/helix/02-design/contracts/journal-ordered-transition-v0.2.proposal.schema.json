@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:proposal:journal-ordered-transition:0.2.0",
+  "title": "Unadopted ordered property/retained transition body",
+  "description": "Private actual-effect proposal only, not a HistoricalEvent. Original effect ordinal, typed identity/version, original capture/candidate/context/source and native transition evidence require semantic admission. Creation/deletion boundary images and final metadata witness remain separate producer phases. No allocated journal sequence or group digest.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-journal-ordered-transition/0.2.0-proposal"
+    },
+    "producerProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "originalOperationContext": {
+      "$ref": "urn:truss:draft:row-operation-context:0.1.0"
+    },
+    "identity": {
+      "$ref": "urn:truss:draft:history-record:0.1.0#/$defs/identity"
+    },
+    "kind": {
+      "enum": [
+        "object",
+        "relationship"
+      ]
+    },
+    "targetRecordVersion": {
+      "type": "string",
+      "pattern": "^[1-9][0-9]*$",
+      "maxLength": 20
+    },
+    "effectOrdinal": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$",
+      "maxLength": 20
+    },
+    "originalEffectEvidence": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "nativeTransitionEvidence": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "delta": {
+      "type": "object",
+      "oneOf": [
+        {
+          "$ref": "urn:truss:proposal:history-event:0.2.0#/allOf/1/oneOf/2"
+        },
+        {
+          "$ref": "urn:truss:proposal:history-event:0.2.0#/allOf/1/oneOf/3"
+        },
+        {
+          "$ref": "urn:truss:proposal:history-event:0.2.0#/allOf/1/oneOf/4"
+        },
+        {
+          "$ref": "urn:truss:proposal:history-event:0.2.0#/allOf/1/oneOf/6"
+        }
+      ],
+      "unevaluatedProperties": false
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "producerProfile",
+    "originalOperationContext",
+    "identity",
+    "kind",
+    "targetRecordVersion",
+    "effectOrdinal",
+    "originalEffectEvidence",
+    "nativeTransitionEvidence",
+    "delta"
+  ],
+  "additionalProperties": false
+}

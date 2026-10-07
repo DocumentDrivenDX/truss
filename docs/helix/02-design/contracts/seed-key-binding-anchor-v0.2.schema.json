@@ -1,0 +1,161 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:seed-key-binding-anchor:0.2.0",
+  "description": "Original anchor shape only; actual retained/bootstrap cut, archive/horizon/authority/custody require admission.",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-seed-key-binding-anchor/0.2.0"
+        },
+        "anchorProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "context": {
+          "type": "object",
+          "properties": {
+            "sourceEpoch": {
+              "type": "string",
+              "minLength": 1
+            },
+            "feedProfile": {
+              "type": "string",
+              "minLength": 1
+            },
+            "scopeIdentity": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "sourceEpoch",
+            "feedProfile",
+            "scopeIdentity"
+          ],
+          "additionalProperties": false
+        },
+        "installationId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "basis": {
+          "$ref": "urn:truss:draft:key-profile-migration:0.1.0#/$defs/basis"
+        },
+        "selectedBinding": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "configuration": {
+          "$ref": "urn:truss:draft:import-report:0.1.0#/properties/selectedConfiguration"
+        },
+        "kind": {
+          "const": "bootstrap"
+        },
+        "originalInitialization": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "originalInstalledInventory": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "anchorProfile",
+        "context",
+        "installationId",
+        "basis",
+        "selectedBinding",
+        "configuration",
+        "kind",
+        "originalInitialization",
+        "originalInstalledInventory"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-seed-key-binding-anchor/0.2.0"
+        },
+        "anchorProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "context": {
+          "type": "object",
+          "properties": {
+            "sourceEpoch": {
+              "type": "string",
+              "minLength": 1
+            },
+            "feedProfile": {
+              "type": "string",
+              "minLength": 1
+            },
+            "scopeIdentity": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "sourceEpoch",
+            "feedProfile",
+            "scopeIdentity"
+          ],
+          "additionalProperties": false
+        },
+        "installationId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "basis": {
+          "$ref": "urn:truss:draft:key-profile-migration:0.1.0#/$defs/basis"
+        },
+        "selectedBinding": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "configuration": {
+          "$ref": "urn:truss:draft:import-report:0.1.0#/properties/selectedConfiguration"
+        },
+        "kind": {
+          "const": "retained_cut"
+        },
+        "originalSnapshotEvidence": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "originalBindingState": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "retainedHistoryHorizon": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "archiveClosure": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          }
+        },
+        "completeScopeEvidence": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "anchorProfile",
+        "context",
+        "installationId",
+        "basis",
+        "selectedBinding",
+        "configuration",
+        "kind",
+        "originalSnapshotEvidence",
+        "originalBindingState",
+        "retainedHistoryHorizon",
+        "archiveClosure",
+        "completeScopeEvidence"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

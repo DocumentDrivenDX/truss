@@ -1,0 +1,23 @@
+{
+  "interfaceVersion": "truss-traversal-resource/0.1.0",
+  "identity": "truss-traversal-bounded-reference",
+  "version": "0.1.0",
+  "status": "unqualified_candidate",
+  "limits": {
+    "hops": "3",
+    "resultPageRecords": "1000",
+    "examinedEdges": "100000",
+    "pathStates": "100000",
+    "retainedStageBytes": "67108864",
+    "retainedAssemblyStageBytes": "268435456",
+    "assemblyStages": "32",
+    "requestBytes": "1048576",
+    "decodedPageBytes": "16777216",
+    "cumulativeActiveWorkMilliseconds": "30000",
+    "containmentObservationMilliseconds": "5000"
+  },
+  "retention": "process_lifetime_original_host_registry",
+  "counterEncoding": "canonical_nonnegative_decimal",
+  "retryPolicy": "no_automatic_reexecution",
+  "selection": "exact original artifact pinned by registered direct-read capability and original host stage profile"
+}

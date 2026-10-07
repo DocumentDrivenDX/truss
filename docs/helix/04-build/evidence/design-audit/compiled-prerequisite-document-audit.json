@@ -1,0 +1,44 @@
+{
+  "scope": "Structural document checks after compiled prerequisite procedures; no semantic completeness, anchors, native execution or profile adoption",
+  "links": {
+    "exitCode": 0,
+    "artifactIds": 202,
+    "duplicateIds": [],
+    "missingLinkIds": [],
+    "brokenFileTargets": []
+  },
+  "coverage": {
+    "exitCode": 0,
+    "stories": 45,
+    "criteria": 167,
+    "pairsWithAllReferences": 45,
+    "criteriaWithPairReferences": 167,
+    "errors": []
+  },
+  "changedArtifactPins": [
+    {
+      "path": "docs/helix/02-design/contracts/CONTRACT-007-embedding-and-execution.md",
+      "sha256": "07551bbb8bdd5e25028e7d4298368de4f12d766e1c1ffc0940171c4ab32c157d"
+    },
+    {
+      "path": "docs/helix/04-build/implementation-plan.md",
+      "sha256": "2af4967c11fa8e97f4f36c8282a9d42d3af7e84f35f4c1d878396d84c80f3429"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-020-read-an-object-by-identifier-or-key.md",
+      "sha256": "2fdf0da4606ff75afd933cde71f2070cd129740f7b390efcd55a0a7c37545fca"
+    }
+  ],
+  "nativeExecution": false,
+  "allocationRejectionControls": {
+    "exitCode": 0,
+    "validInventoryExitCode": 0,
+    "rejectedCorruptions": [
+      "duplicate primary allocation",
+      "missing allocation",
+      "missing citation",
+      "undeclared criterion"
+    ],
+    "scope": "isolated copy rejection behavior only; not whole-scope completeness"
+  }
+}

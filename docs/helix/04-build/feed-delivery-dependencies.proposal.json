@@ -1,0 +1,98 @@
+{
+  "profile": "truss-feed-delivery-dependencies/0.1.0",
+  "status": "unadopted_planning_handoff",
+  "scope": "Design/body delivery dependencies only, not completed units or execution authorization. F08 audits full producing/delivery/seed/application/retention/freshness scope. Selected integration tuple remains unresolved.",
+  "dependencies": {
+    "selected-integration-tuple": [],
+    "F01": [
+      "selected-integration-tuple"
+    ],
+    "F02": [
+      "F01"
+    ],
+    "F03": [
+      "F01",
+      "F02"
+    ],
+    "F04": [
+      "F01",
+      "F02",
+      "F03"
+    ],
+    "F05": [
+      "F01",
+      "F02",
+      "F03",
+      "F04"
+    ],
+    "F06": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05"
+    ],
+    "B-011c": [
+      "F06"
+    ],
+    "B-011d": [
+      "F06"
+    ],
+    "B-011e": [
+      "B-011c",
+      "B-011d"
+    ],
+    "B-011f": [
+      "B-011c",
+      "B-011d",
+      "B-011e"
+    ],
+    "F07": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F06",
+      "B-011f"
+    ],
+    "B-011g": [
+      "B-011c",
+      "B-011d",
+      "B-011e",
+      "B-011f",
+      "F07"
+    ],
+    "F08": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F06",
+      "F07",
+      "B-011c",
+      "B-011d",
+      "B-011e",
+      "B-011f",
+      "B-011g"
+    ]
+  },
+  "topologicalOrder": [
+    "selected-integration-tuple",
+    "F01",
+    "F02",
+    "F03",
+    "F04",
+    "F05",
+    "F06",
+    "B-011c",
+    "B-011d",
+    "B-011e",
+    "B-011f",
+    "F07",
+    "B-011g",
+    "F08"
+  ],
+  "complete": false
+}

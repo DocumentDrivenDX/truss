@@ -1,0 +1,98 @@
+{
+  "scope": "UMF parser/source archive/JSON reload/guarded export only; no PostgreSQL execution, query result grammar, complete native scope, privileges, dependencies or installed parity",
+  "bunVersion": "1.4.2",
+  "ownerSource": {
+    "root": "/Users/erik/Projects/umf",
+    "commit": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+    "status": "",
+    "files": [
+      {
+        "path": "native/postgresql/runtime.ts",
+        "sha256": "a88fea4cf15c9c3c3f0ad1f0a36d8f5de42a42ce8ea9712499f609beee3ea751"
+      },
+      {
+        "path": "src/adapters/postgresql/index.ts",
+        "sha256": "7baa071d95e5f9863a4ce2bf892d87fb27cab9d8605ba4cf8887016d14ca17b4"
+      },
+      {
+        "path": "src/adapters/postgresql/declarations.ts",
+        "sha256": "e47ebd6366fee86fb8ccaf1270555bcd338957bff511f30cdcae22a088c6d8d9"
+      },
+      {
+        "path": "src/model/document.ts",
+        "sha256": "a0422042659defdea425dff8bb0618eaa4bbf125f68da16aa5ad21af0b6c282f"
+      },
+      {
+        "path": "spec/extensions/postgresql/native-ast.schema.json",
+        "sha256": "aa3d3b50bc04edbc3ab3430e113ee8710edb1c10ff5cee15d4bcc7b16d9a9039"
+      },
+      {
+        "path": "bun.lock",
+        "sha256": "98a99f7d306f7269db103bdbfafe5f9ad9ed34b02024276ad0cce45df27f5cc3"
+      }
+    ]
+  },
+  "backend": "@libpg-query/parser@17.6.10",
+  "observations": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-language-observation-pg17.proposal.sql",
+      "sourceSha256": "af473fdcf50c0eb01cbdbb7bd64bf35e81e3d8ffa1b8796b188de67a8091adf2",
+      "artifactPath": "docs/helix/02-design/contracts/bindings/bootstrap-language-observation-pg17.proposal.umf.json",
+      "artifactSha256": "f21c6c8aecb56118cd8781fa3462040a8d1fd8d9fd50d7fdc7f48b615d053946",
+      "exportPath": "docs/helix/04-build/evidence/design-audit/bootstrap-language-observation.owner-export.sql",
+      "exportSha256": "ea5f74e8fde32b53966013d16a4b386fac2cea2ac599c364c77a3779ed18ceca",
+      "sourceArchiveExact": true,
+      "reloadedExportExact": true,
+      "complete": false,
+      "unhandled": [
+        {
+          "path": "/stmts/0/stmt"
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning",
+          "message": "Raw syntax is not catalog resolution, SQL execution, permissions or server-state validation"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt",
+          "severity": "warning",
+          "message": "Statement is retained without declaration extraction or execution"
+        }
+      ]
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-aggregate-observation-pg17.proposal.sql",
+      "sourceSha256": "163a787fe9694b4b830f2b4aa5bae1a853928df064c9946ef55ce6ad8ce36cef",
+      "artifactPath": "docs/helix/02-design/contracts/bindings/bootstrap-aggregate-observation-pg17.proposal.umf.json",
+      "artifactSha256": "e20f904ba255d91fec1396cc6e4184e2e136b97ba1d0104133c96336099ad9d2",
+      "exportPath": "docs/helix/04-build/evidence/design-audit/bootstrap-aggregate-observation.owner-export.sql",
+      "exportSha256": "03611b501c353fba1fd9e855b24b1f082a1caa312dae3cd305a695ec63a0044e",
+      "sourceArchiveExact": true,
+      "reloadedExportExact": true,
+      "complete": false,
+      "unhandled": [
+        {
+          "path": "/stmts/0/stmt"
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning",
+          "message": "Raw syntax is not catalog resolution, SQL execution, permissions or server-state validation"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt",
+          "severity": "warning",
+          "message": "Statement is retained without declaration extraction or execution"
+        }
+      ]
+    }
+  ]
+}

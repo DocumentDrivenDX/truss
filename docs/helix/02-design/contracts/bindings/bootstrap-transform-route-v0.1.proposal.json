@@ -1,0 +1,78 @@
+{
+  "interfaceVersion": "truss-bootstrap-route-entry/0.1.0",
+  "routeIdentity": "pg17.transform.direct/0.1.0",
+  "status": "unadopted; source pins only verified; native class/cut/transport/semantic producers unqualified",
+  "nativeClass": {
+    "namespace": "pg_catalog",
+    "relation": "pg_transform",
+    "classOid": "resolve from original target; never constant",
+    "storageScope": "database",
+    "subobjectNumber": "0"
+  },
+  "selector": "direct original pg_transform OIDs",
+  "artifacts": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-transform-observation-pg17.proposal.sql",
+      "sha256": "7d1573c84d1b877bec3289ad068468904c784bf15d09df2dfb1439f444e8eac7"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-transform-observation-pg17.proposal.umf.json",
+      "sha256": "58fef7c8144b91ad1bb1113836be4cb860bc0caae9ae1de63216612b67ce9022"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/bootstrap-transform-observation.owner-export.sql",
+      "sha256": "396356ce0970430c18b0e128d28c0103fdc2295b02c38fee91d9fea892e60395"
+    }
+  ],
+  "parameterGrammar": {
+    "slot": "1",
+    "nativeType": "pg_catalog.oid[]",
+    "dimensions": "exactly one",
+    "lowerBound": "1",
+    "nullAllowed": false,
+    "nullItemsAllowed": false,
+    "uniqueItems": true,
+    "countInclusive": [
+      "1",
+      "256"
+    ],
+    "itemDomain": "canonical nonzero uint32 decimal text; actual pg_transform OID",
+    "encoder": "selected original canonical PostgreSQL array encoder; no JS numeric round trip"
+  },
+  "orderedColumns": [
+    "catalog_class_oid",
+    "object_oid",
+    "type_oid",
+    "language_oid",
+    "from_sql_routine_oid",
+    "to_sql_routine_oid",
+    "original_catalog_row_json"
+  ],
+  "coverage": "Exact unique requested transform-address bijection; missing absent, duplicate/extra/wrong-class refuses",
+  "requiredKnownFields": [
+    "oid",
+    "trftype",
+    "trflang",
+    "trffromsql",
+    "trftosql"
+  ],
+  "preservation": "Retain full exact returned row JSON text and every unknown extension member; lossless bounded selected native JSON decoder; no parse/stringify reconstruction",
+  "dependencyExtraction": {
+    "type": "trftype actual pg_type",
+    "language": "trflang actual pg_language",
+    "routines": "nonzero trffromsql/trftosql actual pg_proc; projected OID/raw native correspondence mandatory; zero preserves native default-behavior sentinel, not a routine address",
+    "pair": "projected/raw type-language identity must agree; missing row versus present zero-function transform remain distinct; selected native declaration/default interpretation mandatory",
+    "definitionSpecification": {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-transform-definition-v0.1.proposal.json",
+      "sha256": "8af22ca770760d72d34a6ff3704e5e6ce83e1820040095753f9b759d67a422d7",
+      "admission": "Exact original pair/direction/signature/default closure; procedural-language behavior separately qualified"
+    }
+  },
+  "adjuncts": [
+    "complete type/language/from-sql/to-sql routine definitions and original local dependencies",
+    "original routine/language authority and selected transform native semantics"
+  ],
+  "resourceProfile": "truss-bootstrap-collector-resource/0.1.0",
+  "refusal": "Unsupported type/language/default/native transform meaning refuses complete semantics; observation executes no transform routine; missing declared pair cannot be invented or treated as unrelated generic cast",
+  "resourceObligations": "Shared enclosing totals, complete original cut/authority and explicit pre-materialization/native-work permits; no independent per-route allowance"
+}

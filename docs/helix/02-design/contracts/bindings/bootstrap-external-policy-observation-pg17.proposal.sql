@@ -1,0 +1,18 @@
+-- Unexecuted PG17 original admitted pg_class parent batch; unique nonnull 1D oid[] <=256.
+-- Complete parent fanout includes internal/unexpected/disabled rows without namespace filter.
+-- Actual parent/cut/full coverage/transport/resource interpretation remains required.
+SELECT x.tableoid::pg_catalog.oid::pg_catalog.text AS catalog_class_oid,
+       x.oid::pg_catalog.text AS object_oid,
+       x.polrelid::pg_catalog.text AS relation_oid,
+       x.polqual::pg_catalog.text AS using_native_tree,
+       x.polwithcheck::pg_catalog.text AS check_native_tree,
+       CASE WHEN x.polqual IS NULL THEN NULL::pg_catalog.text
+            ELSE pg_catalog.pg_get_expr(x.polqual,x.polrelid,false) END AS using_deparsed_sql,
+       CASE WHEN x.polwithcheck IS NULL THEN NULL::pg_catalog.text
+            ELSE pg_catalog.pg_get_expr(x.polwithcheck,x.polrelid,false) END AS check_deparsed_sql,
+       x.polroles::pg_catalog.text AS polroles_native_text,
+       pg_catalog.array_dims(x.polroles) AS polroles_native_dimensions,
+       pg_catalog.to_jsonb(x)::pg_catalog.text AS original_catalog_row_json
+FROM pg_catalog.pg_policy AS x
+WHERE x.polrelid = ANY($1::pg_catalog.oid[])
+ORDER BY x.oid;

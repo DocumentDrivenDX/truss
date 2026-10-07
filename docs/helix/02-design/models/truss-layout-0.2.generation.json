@@ -1,0 +1,26 @@
+{
+  "profile": "truss-native-layout-capture/0.1.0",
+  "id": "truss-layout-0.2",
+  "layoutVersion": "0.2",
+  "source": "storage-layout.sql",
+  "sourceSha256": "8b6978ae29e22c0f961b586a2a9b312a0e9d20bf3c7ef920159f7946902d7145",
+  "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+  "generatedSqlSha256": "4e7fb8739c42163c5a113ed215d944994edb8bc09e63bc151f711b3c869db6ab",
+  "umfVersion": "0.1.0",
+  "backendIdentity": "@libpg-query/parser@17.6.10",
+  "checks": {
+    "sourceArchiveExact": true,
+    "jsonRoundtrip": true,
+    "deterministicExport": true,
+    "umfNativeExportGuard": true
+  },
+  "qualification": "design-candidate",
+  "notEstablished": [
+    "independent catalog parity",
+    "PostgreSQL 16/17 execution",
+    "PL/pgSQL body validation",
+    "complete coverage inventory",
+    "browser execution",
+    "authority transition"
+  ]
+}

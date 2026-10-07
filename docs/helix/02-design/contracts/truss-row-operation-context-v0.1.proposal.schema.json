@@ -1,0 +1,85 @@
+{
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-row-operation-context/0.1.0"
+    },
+    "profile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "installationIdentity": {
+      "type": "string",
+      "minLength": 1
+    },
+    "originalInstallation": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "originalLayout": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "originalResourceProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "originalWriterXid": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$",
+      "maxLength": 20
+    },
+    "operationOrdinal": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$",
+      "maxLength": 20
+    },
+    "originalOperationDefinition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "originalExecutionContext": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "originalActingRoleContext": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "originalCatalogAuthorityCut": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "originalOwnerUnion": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "originalGroupAdmission": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "addressDomain": {
+      "const": "truss-row-operation-address/0.1.0"
+    },
+    "authority": {
+      "const": "actual-protected-native-registry-correspondence"
+    },
+    "durability": {
+      "const": "transaction-local-until-original-commit-observation"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "profile",
+    "installationIdentity",
+    "originalInstallation",
+    "originalLayout",
+    "originalResourceProfile",
+    "originalWriterXid",
+    "operationOrdinal",
+    "originalOperationDefinition",
+    "originalExecutionContext",
+    "originalActingRoleContext",
+    "originalCatalogAuthorityCut",
+    "originalOwnerUnion",
+    "originalGroupAdmission",
+    "addressDomain",
+    "authority",
+    "durability"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:row-operation-context:0.1.0",
+  "title": "Proposed original native row-home operation context",
+  "description": "Closed decoded original_context_bytes body; original native xid/ordinal/installation/profile and actual caller/admission are independently captured and checked. A serialized context is not authority."
+}

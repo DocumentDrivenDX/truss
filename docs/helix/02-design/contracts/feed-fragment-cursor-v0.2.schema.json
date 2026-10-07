@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:feed-fragment-cursor:0.2.0",
+  "description": "Cursor shape only; exact original manifest/profile/current authority/retention admission remains required.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-feed-fragment-cursor/0.2.0"
+    },
+    "context": {
+      "type": "object",
+      "properties": {
+        "sourceEpoch": {
+          "type": "string",
+          "minLength": 1
+        },
+        "feedProfile": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scopeIdentity": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "sourceEpoch",
+        "feedProfile",
+        "scopeIdentity"
+      ],
+      "additionalProperties": false
+    },
+    "xid": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$"
+    },
+    "manifestSha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "deliveryProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "afterOrdinal": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "context",
+    "xid",
+    "manifestSha256",
+    "deliveryProfile",
+    "afterOrdinal"
+  ],
+  "additionalProperties": false
+}

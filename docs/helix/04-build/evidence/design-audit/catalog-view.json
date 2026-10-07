@@ -1,0 +1,96 @@
+{
+  "scope": "Catalog-view shape only; no digest, owner, closure, inventory or native qualification",
+  "cases": 18,
+  "outcomes": [
+    {
+      "name": "accepted binding provenance",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "binding missing owning Record source",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "binding missing vocabulary",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "binding not in acceptance inventory needs semantic refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "missing archive provenance",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "wrong accepted document digest requires semantic rejection",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "complete candidate",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "closed authorized projection",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "projection missing closure",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "fabricated global key ID",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "key missing owning type",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "host numeric key",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "noncanonical numeric alias",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "unknown root field",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "duplicate inventory needs semantic rejection",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "false archive digest needs semantic rejection",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "unproved empty complete inventory",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "same local key number on distinct types",
+      "expected": true,
+      "actual": true
+    }
+  ]
+}

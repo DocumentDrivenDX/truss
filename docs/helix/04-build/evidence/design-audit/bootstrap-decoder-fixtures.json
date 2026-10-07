@@ -1,0 +1,29 @@
+{
+  "scope": "Independent planned fixture consistency only; no Truss decoder, complete basis, original custody, native send/settings/privilege or runtime support qualification",
+  "pythonVersion": "3.9.6",
+  "verifierSha256": "77f881ce0e86f7f59f0a7bb4504db65e3e078be19a6de7cf213fcfd58bb16d10",
+  "fixtures": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-basis-list-order-v0.1.vectors.proposal.json",
+      "sha256": "2e69c6e7888d380d2b2a9736f68d2ba2f13c70012138139da770dfaeccb07b47",
+      "cases": 6
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-routine-settings-v0.1.vectors.proposal.json",
+      "sha256": "092b6b44845bbfe14fe38f59548b3f16635fc55df74836648757378085c351bb",
+      "cases": 10
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-address-token-v0.1.vectors.proposal.json",
+      "sha256": "0c0f435122674a504de08abcef20af8e28592670ef3cbb2f4d849997f280d715",
+      "cases": 15
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-float4-v0.1.vectors.proposal.json",
+      "sha256": "757967089522b3f2efa2271ff60e5499fb72b048f6cb3d9f2bae275dd5883bee",
+      "cases": 12
+    }
+  ],
+  "cases": 43,
+  "pass": true
+}

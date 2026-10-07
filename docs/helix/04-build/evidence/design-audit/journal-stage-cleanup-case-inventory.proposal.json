@@ -1,0 +1,151 @@
+{
+  "scope": "planned native stage-cleanup supplement allocation and original source consistency only; not complete product qualification",
+  "testPlan": "docs/helix/03-test/test-plans/STP-007-store-and-read-objects-and-edges-exactly.md",
+  "plannedTestFile": "tests/values/journal-stage-cleanup.native.test.ts",
+  "plannedCommand": "bun test tests/values/journal-stage-cleanup.native.test.ts",
+  "profileSelection": "unresolved",
+  "supportingCriteria": [
+    "US-007-AC1",
+    "US-007-AC4"
+  ],
+  "criterionCoverageClaim": "supplementary only; full exact-value and durable-ID corpus remains separate",
+  "sources": [
+    {
+      "path": "docs/helix/03-test/test-plans/STP-007-store-and-read-objects-and-edges-exactly.md",
+      "sha256": "545387798d92056e953c94bb649ee5b6576a57fca0c120f3b3aa1bd15b962c40"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-007-store-and-read-objects-and-edges-exactly.md",
+      "sha256": "6bcc7b2ac62b0b685db911511214dcf26c57f5bc3bc910bee73aaa2881bed057"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/journal-stage-snapshot-v0.2.proposal.schema.json",
+      "sha256": "9220ad8661438b9c9de0aad4f2371135460c55aa1d6dbac15b40e408c11ef050"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/journal-stage-cleanup-cohort-v0.2.proposal.schema.json",
+      "sha256": "91868e6081c41f0a1b53fa5f45a7ce415f52ec1be1666fdac17443fa825f778b"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/journal-stage-cleanup-result-v0.2.proposal.schema.json",
+      "sha256": "9e74a98acbda583b65679c04ba1530d084a4bfff5ffba49e265a5407e4333c41"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/journal-stage-cleanup-observation-v0.2.proposal.sql",
+      "sha256": "f94c70efe36d99f733beab3e0ff4ed26d033f77f250df9a532a119ca4fb801d9"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/journal-stage-cleanup-delete-v0.2.proposal.sql",
+      "sha256": "422f09ddfc9ba8a6a9ae773565fd3b1c87ded9118f35593f80d05d208f8a25de"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/journal-stage-cleanup-absence-v0.2.proposal.sql",
+      "sha256": "4571d5cf862143641d0b86e82dd2bfce8c062d89d5094199065611deccea3ca9"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-journal-stage-cleanup-v0.2.proposal.d.ts",
+      "sha256": "37a83e0ac8f3aa90a747d92965856bec589561d934887114e56118b325d6b991"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-journal-stage-cleanup-resource-v0.2.proposal.json",
+      "sha256": "d7619e43a40ac1d6cc46d810d04e1ee30df90efd57bfb3490d4120becedb668e"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/journal-stage-snapshot-audit.json",
+      "sha256": "4c181333de044684b1987f77fdc9e2c95cfbfb6abb2232d43c7bfa411f56f6ba"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/journal-stage-cleanup-cohort-audit.json",
+      "sha256": "08eb6beccdac4f829fc0df4743d042edecccd426de3a83329d366096d20ca12d"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/journal-stage-cleanup-result-audit.json",
+      "sha256": "cd1a71f00f2f1777f88f810f75b0027ec455206bfcf9576ccef7fc0983e7d3e6"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/journal-stage-cleanup-parity.json",
+      "sha256": "4a39b4f2beedb36ab556b0813c5165767f5acd983d2eee6e553be63d5bf62f75"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/journal-stage-cleanup-absence-audit.json",
+      "sha256": "e2382e8a77be6c33b1fc2864f4b4e31f47ebe967bb91e50b12d2d2497d93cfe4"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/all-binding-consumers-stage-cleanup-refresh-typecheck.json",
+      "sha256": "738538635e61723fa00b97c6b4bc855050955ca238649c1645441d9aacebb7da"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/CONTRACT-001-storage-layout.md",
+      "sha256": "6ee15a22531999886d46d893d57a2490a71c5d4253f95ee658e8328531e8012f"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/private-custody-snapshot-v0.1.proposal.schema.json",
+      "sha256": "b5db25c905bbbad5449e1f8cbcaba2dd185b9de8bfe6d4a5fa9f719c5ce428b0"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/private-custody-settlement-observation-pg17.proposal.sql",
+      "sha256": "27b487561ec63a30195c951b7189cf45321d9d11d1bd9c932957d320fca27430"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/private-custody-settlement-observation-pg17.proposal.umf.json",
+      "sha256": "f24e6081f0244753cfb4caa2d509ce8c94fcf8cd8fd53664eb452085662f476e"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/private-custody-settlement-observation-pg17.owner-export.sql",
+      "sha256": "70d28a667fc5c2f44a7ae4285cc170346824acee6408c91b018294f205062847"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/private-custody-settlement-observation-pg17-source.json",
+      "sha256": "40de0354d5700fa505f2964b0cb93bd9e67fcd5b466abe192cafedcc68a9073f"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/private-custody-settlement-observation-pg17-audit.json",
+      "sha256": "428fded323e7ece3b955dc9cd6ef95cdcba11c4b517ae58ac44a838ab99a075e"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/private-custody-settlement-symbolic-dependencies.json",
+      "sha256": "b13ea1227b8dc5079e8e5a59862a573bf3d873f76c5bf072d8d3e3ab37280fc6"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/private-custody-settlement-snapshot-pg17.proposal.schema.json",
+      "sha256": "b3ef4968f50ae7b9eb9b28bc0ef7b87e017937bb56c03c1f40cc1bd4a9054433"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-private-custody-settlement-snapshot-pg17.proposal.d.ts",
+      "sha256": "d37b754457290c23c1726303b3658c6bf60d403f2bdb0050fda55b0454cfdc87"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/all-binding-consumers-settlement-snapshot-refresh-typecheck.json",
+      "sha256": "4be41c6ba2b365181683169a944bd1a685b8a70e4106218617c5b357cd48d1fc"
+    }
+  ],
+  "cases": [
+    {
+      "id": "JC-01",
+      "function": "cleanup_preserves_complete_original_stage_cohort",
+      "nativeStatus": "not_run"
+    },
+    {
+      "id": "JC-02",
+      "function": "cleanup_rechecks_racing_dependencies",
+      "nativeStatus": "not_run"
+    },
+    {
+      "id": "JC-03",
+      "function": "child_and_parent_deletion_roll_back_together",
+      "nativeStatus": "not_run"
+    },
+    {
+      "id": "JC-04",
+      "function": "cleanup_retains_unknown_settlement_custody",
+      "nativeStatus": "not_run"
+    },
+    {
+      "id": "JC-05",
+      "function": "cleanup_admits_resources_and_private_rights",
+      "nativeStatus": "not_run"
+    }
+  ],
+  "nativeExecuted": false,
+  "adopted": false
+}

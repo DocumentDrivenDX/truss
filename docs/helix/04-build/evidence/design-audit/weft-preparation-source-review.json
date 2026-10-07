@@ -1,0 +1,24 @@
+{
+  "scope": "Read-only current Weft source review; no execution receipts available at checkout target/b005; owner progress is separate",
+  "commit": "a95da1f82baf9148ec5235a0f2002d059a8ca3b5",
+  "files": [
+    {
+      "path": "/Users/erik/Projects/weft/tests/truss-postgresql/README.md",
+      "sha256": "11bd875d83954eb90d5060b783b43562e9e9e4705aea3c75c76aa97dfbdef627"
+    },
+    {
+      "path": "/Users/erik/Projects/weft/tests/truss-postgresql/prepared-check.py",
+      "sha256": "ab061813e529badcf7acb5a100f21679c8c6be8d7805d5a1eb01a164b94471dd"
+    },
+    {
+      "path": "/Users/erik/Projects/weft/tests/truss-postgresql/parameter-native.py",
+      "sha256": "e3f0a308a7948e955d109979107217176a08de7a6a083284595a5ae7131a10a6"
+    }
+  ],
+  "findings": [
+    "SQL PREPARE harness explicitly excludes host protocol binding qualification",
+    "Parameter-boundary native fixtures use independently chosen stored values and expected Decimal results; compiler reports provide emitted SQL/slots only",
+    "No local target/b005 result artifacts inspected; source cannot prove reported passes"
+  ],
+  "ownerProgressCursor": "68c1d315-f478-4884-b7f9-421ce10bc5d1:12"
+}

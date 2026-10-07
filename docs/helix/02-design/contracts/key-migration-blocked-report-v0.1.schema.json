@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:key-migration-blocked-report:0.1.0",
+  "description": "Shape only; complete target equality classes, policy, original inventory references and native evidence require admission.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-key-migration-blocked-report/0.1.0"
+    },
+    "sourceInventory": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "targetCorrespondence": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "reportProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "conflicts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "fullKey": {
+            "$ref": "urn:truss:draft:key-migration-source-inventory:0.1.0#/$defs/fullKey"
+          },
+          "sourceEntryIds": {
+            "type": "array",
+            "minItems": 2,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "policy": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+          },
+          "evidence": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          }
+        },
+        "required": [
+          "fullKey",
+          "sourceEntryIds",
+          "policy",
+          "evidence"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "unrepresentableEntryIds": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "completeReportEvidence": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "sourceInventory",
+    "targetCorrespondence",
+    "reportProfile",
+    "conflicts",
+    "unrepresentableEntryIds",
+    "completeReportEvidence"
+  ],
+  "additionalProperties": false,
+  "anyOf": [
+    {
+      "properties": {
+        "conflicts": {
+          "minItems": 1,
+          "type": "array"
+        }
+      }
+    },
+    {
+      "properties": {
+        "unrepresentableEntryIds": {
+          "minItems": 1,
+          "type": "array"
+        }
+      }
+    }
+  ]
+}

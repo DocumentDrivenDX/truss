@@ -1,0 +1,82 @@
+{
+  "interfaceVersion": "truss-bootstrap-route-entry/0.1.0",
+  "routeIdentity": "pg17.policy.namespace-fanout/0.1.0",
+  "status": "unadopted; source pins only verified; native class/cut/transport/semantic producers unqualified",
+  "nativeClass": {
+    "namespace": "pg_catalog",
+    "relation": "pg_policy",
+    "classOid": "resolve from original target; never constant",
+    "storageScope": "database",
+    "subobjectNumber": "0"
+  },
+  "selector": "complete original namespace relation-parent fanout",
+  "artifacts": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-policy-observation-pg17.proposal.sql",
+      "sha256": "702a812bab01d301a0e7654e7bc7d6b6eb3e58f89232d0e4e8c90949db63d9c4"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-policy-observation-pg17.proposal.umf.json",
+      "sha256": "0692315eb322a24c406436f15a13edbc442e42a48d2e3c46f1945f0875e50fa7"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/bootstrap-policy-observation.owner-export.sql",
+      "sha256": "016f46b66aa3dfc737cf01e96748979b77daaa0bff29cf42fdc87cc7fb30dc31"
+    }
+  ],
+  "parameterGrammar": {
+    "slot": "1",
+    "nativeType": "pg_catalog.oid",
+    "nullAllowed": false,
+    "itemDomain": "canonical nonzero uint32 decimal text; independently admitted original pg_namespace",
+    "encoder": "exact original text parameter"
+  },
+  "orderedColumns": [
+    "catalog_class_oid",
+    "object_oid",
+    "relation_oid",
+    "using_native_tree",
+    "check_native_tree",
+    "using_deparsed_sql",
+    "check_deparsed_sql",
+    "polroles_native_text",
+    "polroles_native_dimensions",
+    "original_catalog_row_json"
+  ],
+  "coverage": "Complete unique original member fanout for every admitted parent; empty requires independent full parent/cut/authority proof. Specific child requires selected pg17.policy.child-direct/0.1.0 original resolution and exact member presence. Internal/disabled/unexpected objects retained.",
+  "requiredKnownFields": [
+    "oid",
+    "polname",
+    "polrelid",
+    "polcmd",
+    "polpermissive",
+    "polroles",
+    "polqual",
+    "polwithcheck"
+  ],
+  "preservation": "Retain full exact returned row JSON text and every unknown extension member; lossless bounded selected native JSON decoder; no parse/stringify reconstruction",
+  "dependencyExtraction": {
+    "parent": "polrelid actual pg_class with original RLS/force-RLS/owner/authority state",
+    "principals": "ordered raw polroles/null/dimensions preserved; zero PUBLIC is a tagged applicability principal, never shared role OID 0; nonzero actual shared pg_authid",
+    "expressions": "exact using/check native trees/nulls/deparse and command-compatible native meaning; omitted check is not blindly copied into stored definition",
+    "state": "retain native polcmd/permissive/composition meaning; selected actual-role path/current authority independently observed",
+    "fieldClassification": {
+      "oid": "original native policy correlation only",
+      "polname": "exact native policy name under resolved parent relation",
+      "polrelid": "resolved original parent relation and complete RLS flags/policy inventory",
+      "polcmd": "exact r/a/w/d/* native command declaration; no generic SQL-privilege equivalence",
+      "polpermissive": "actual permissive/restrictive composition declaration; no single-row authorization inference",
+      "polroles": "original nullable/dimensional native role array; resolve shared principals with distinct PUBLIC zero tag under selected policy grammar",
+      "polqual": "exact nullable original USING tree/deparse and complete native relation/type/role/dependency context",
+      "polwithcheck": "exact nullable original WITH CHECK tree/deparse; preserve declared absence and separately admit command-specific native fallback"
+    },
+    "canonicalProcedure": "CONTRACT-008 Row-security policy projection: resolved parent/name, command/composition/principals and distinct exact USING/WITH CHECK declarations with complete native context; current actor applicability and execution separate"
+  },
+  "adjuncts": [
+    "complete original parent/child-kind/type/routine/operator/collation/role/native expression dependencies",
+    "original current parent/owner/module authority and actual installed policy/enforcement context"
+  ],
+  "resourceProfile": "truss-bootstrap-collector-resource/0.1.0",
+  "refusal": "Missing required child/parent resolver or unsupported original guard/rule/expression/principal/native meaning refuses completeness; no status/name filter, execution or deparse-only equality",
+  "resourceObligations": "Shared enclosing totals, complete original cut/authority and explicit pre-materialization/native-work permits; no independent per-route allowance"
+}

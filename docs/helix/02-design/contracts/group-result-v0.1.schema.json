@@ -1,0 +1,456 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:group-result:0.1.0",
+  "description": "Complete semantic response shape; original input/result order, native deletion/event completeness, current authority and actual durability require semantic admission.",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "semantic": {
+          "$ref": "#/$defs/semantic"
+        },
+        "disposition": {
+          "const": "applied"
+        },
+        "durability": {
+          "enum": [
+            "pending",
+            "committed"
+          ]
+        }
+      },
+      "required": [
+        "semantic",
+        "disposition",
+        "durability"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "semantic": {
+          "$ref": "#/$defs/semantic"
+        },
+        "disposition": {
+          "const": "replayed"
+        },
+        "durability": {
+          "const": "pending"
+        },
+        "replay": {
+          "type": "object",
+          "properties": {
+            "basis": {
+              "const": "same_transaction"
+            },
+            "observationProfile": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+            },
+            "evidence": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            }
+          },
+          "required": [
+            "basis",
+            "observationProfile",
+            "evidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "semantic",
+        "disposition",
+        "durability",
+        "replay"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "semantic": {
+          "$ref": "#/$defs/semantic"
+        },
+        "disposition": {
+          "const": "replayed"
+        },
+        "durability": {
+          "const": "committed"
+        },
+        "replay": {
+          "type": "object",
+          "properties": {
+            "basis": {
+              "const": "committed_receipt"
+            },
+            "observationProfile": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+            },
+            "evidence": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            }
+          },
+          "required": [
+            "basis",
+            "observationProfile",
+            "evidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "semantic",
+        "disposition",
+        "durability",
+        "replay"
+      ],
+      "additionalProperties": false
+    }
+  ],
+  "$defs": {
+    "semantic": {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-group-result/0.1.0"
+        },
+        "executedCatalogRevision": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        },
+        "layoutProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "mutationProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "results": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "operation": {
+                    "enum": [
+                      "create_object",
+                      "create_edge"
+                    ]
+                  },
+                  "outcome": {
+                    "const": "created"
+                  },
+                  "identity": {
+                    "$ref": "urn:truss:draft:history-record:0.1.0#/$defs/identity"
+                  },
+                  "version": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]*)$"
+                  },
+                  "alias": {
+                    "type": "string"
+                  },
+                  "events": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "sourceEpoch": {
+                          "type": "string"
+                        },
+                        "historyProfile": {
+                          "type": "string"
+                        },
+                        "xid": {
+                          "type": "string",
+                          "pattern": "^(0|[1-9][0-9]*)$"
+                        },
+                        "seq": {
+                          "type": "string",
+                          "pattern": "^(0|[1-9][0-9]*)$"
+                        }
+                      },
+                      "required": [
+                        "sourceEpoch",
+                        "historyProfile",
+                        "xid",
+                        "seq"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": [
+                  "operation",
+                  "outcome",
+                  "identity",
+                  "version",
+                  "events"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "operation": {
+                    "enum": [
+                      "update_object",
+                      "update_edge"
+                    ]
+                  },
+                  "outcome": {
+                    "const": "changed"
+                  },
+                  "identity": {
+                    "$ref": "urn:truss:draft:history-record:0.1.0#/$defs/identity"
+                  },
+                  "version": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]*)$"
+                  },
+                  "events": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "sourceEpoch": {
+                          "type": "string"
+                        },
+                        "historyProfile": {
+                          "type": "string"
+                        },
+                        "xid": {
+                          "type": "string",
+                          "pattern": "^(0|[1-9][0-9]*)$"
+                        },
+                        "seq": {
+                          "type": "string",
+                          "pattern": "^(0|[1-9][0-9]*)$"
+                        }
+                      },
+                      "required": [
+                        "sourceEpoch",
+                        "historyProfile",
+                        "xid",
+                        "seq"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": [
+                  "operation",
+                  "outcome",
+                  "identity",
+                  "version",
+                  "events"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "operation": {
+                    "enum": [
+                      "update_object",
+                      "update_edge"
+                    ]
+                  },
+                  "outcome": {
+                    "const": "unchanged"
+                  },
+                  "identity": {
+                    "$ref": "urn:truss:draft:history-record:0.1.0#/$defs/identity"
+                  },
+                  "version": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]*)$"
+                  },
+                  "events": {
+                    "type": "array",
+                    "maxItems": 0,
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "sourceEpoch": {
+                          "type": "string"
+                        },
+                        "historyProfile": {
+                          "type": "string"
+                        },
+                        "xid": {
+                          "type": "string",
+                          "pattern": "^(0|[1-9][0-9]*)$"
+                        },
+                        "seq": {
+                          "type": "string",
+                          "pattern": "^(0|[1-9][0-9]*)$"
+                        }
+                      },
+                      "required": [
+                        "sourceEpoch",
+                        "historyProfile",
+                        "xid",
+                        "seq"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": [
+                  "operation",
+                  "outcome",
+                  "identity",
+                  "version",
+                  "events"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "operation": {
+                    "enum": [
+                      "delete_object",
+                      "delete_edge"
+                    ]
+                  },
+                  "outcome": {
+                    "const": "deleted"
+                  },
+                  "identity": {
+                    "$ref": "urn:truss:draft:history-record:0.1.0#/$defs/identity"
+                  },
+                  "deletionVersion": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]*)$"
+                  },
+                  "deleted": {
+                    "type": "array",
+                    "minItems": 0,
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "identity": {
+                          "$ref": "urn:truss:draft:history-record:0.1.0#/$defs/identity"
+                        },
+                        "deletionVersion": {
+                          "type": "string",
+                          "pattern": "^(0|[1-9][0-9]*)$"
+                        }
+                      },
+                      "required": [
+                        "identity",
+                        "deletionVersion"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "events": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "sourceEpoch": {
+                          "type": "string"
+                        },
+                        "historyProfile": {
+                          "type": "string"
+                        },
+                        "xid": {
+                          "type": "string",
+                          "pattern": "^(0|[1-9][0-9]*)$"
+                        },
+                        "seq": {
+                          "type": "string",
+                          "pattern": "^(0|[1-9][0-9]*)$"
+                        }
+                      },
+                      "required": [
+                        "sourceEpoch",
+                        "historyProfile",
+                        "xid",
+                        "seq"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": [
+                  "operation",
+                  "outcome",
+                  "identity",
+                  "deletionVersion",
+                  "deleted",
+                  "events"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          }
+        },
+        "aliases": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "type": "object",
+            "properties": {
+              "alias": {
+                "type": "string"
+              },
+              "identity": {
+                "$ref": "urn:truss:draft:history-record:0.1.0#/$defs/identity"
+              }
+            },
+            "required": [
+              "alias",
+              "identity"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "executedCatalogRevision",
+        "layoutProfile",
+        "mutationProfile",
+        "results",
+        "aliases"
+      ],
+      "additionalProperties": false
+    },
+    "journalEventReference": {
+      "type": "object",
+      "properties": {
+        "sourceEpoch": {
+          "type": "string"
+        },
+        "historyProfile": {
+          "type": "string"
+        },
+        "xid": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        },
+        "seq": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        }
+      },
+      "required": [
+        "sourceEpoch",
+        "historyProfile",
+        "xid",
+        "seq"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

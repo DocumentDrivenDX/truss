@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:traversal-publication-evidence:0.1.0",
+  "title": "Draft private confirmed stage publication evidence",
+  "description": "Registered host-store effect evidence only, not native graph execution, future cleanup or transferable stage permission. Original records and actual atomic store transition must independently correspond.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-traversal-publication-evidence/0.1.0"
+    },
+    "assemblyId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "handle": {
+      "$ref": "urn:truss:draft:direct-traversal-request:0.1.0#/$defs/handle"
+    },
+    "storeProfile": {
+      "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/profilePin"
+    },
+    "publicationProfile": {
+      "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/profilePin"
+    },
+    "originalQuery": {
+      "$ref": "urn:truss:draft:traversal-resource-ledger:0.1.0#/$defs/reference"
+    },
+    "previousState": {
+      "$ref": "urn:truss:draft:traversal-resource-ledger:0.1.0#/$defs/reference"
+    },
+    "resultingState": {
+      "$ref": "urn:truss:draft:traversal-resource-ledger:0.1.0#/$defs/reference"
+    },
+    "resourceLedger": {
+      "$ref": "urn:truss:draft:traversal-resource-ledger:0.1.0#/$defs/reference"
+    },
+    "previousWorkVersion": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$"
+    },
+    "resultingWorkVersion": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$"
+    },
+    "accountingVersion": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$"
+    },
+    "resultingPhase": {
+      "enum": [
+        "working",
+        "sealed"
+      ]
+    },
+    "originalAttemptIdentity": {
+      "type": "string",
+      "minLength": 1
+    },
+    "originalStoreObservation": {
+      "$ref": "urn:truss:draft:traversal-resource-ledger:0.1.0#/$defs/reference"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "assemblyId",
+    "handle",
+    "storeProfile",
+    "publicationProfile",
+    "originalQuery",
+    "previousState",
+    "resultingState",
+    "resourceLedger",
+    "previousWorkVersion",
+    "resultingWorkVersion",
+    "accountingVersion",
+    "resultingPhase",
+    "originalAttemptIdentity",
+    "originalStoreObservation"
+  ],
+  "additionalProperties": false
+}

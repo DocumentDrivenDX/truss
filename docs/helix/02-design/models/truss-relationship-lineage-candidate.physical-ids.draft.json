@@ -1,0 +1,260 @@
+{
+  "profile": "truss-physical-id-allocation/0.1.0",
+  "status": "unadopted_candidate",
+  "source": "docs/helix/02-design/contracts/relationship-lineage-layout-v0.1.draft.sql",
+  "sourceSha256": "266773369bb070e3be626c919ba33df482ff0d415bce023e55f9e26bc5611dbf",
+  "model": "docs/helix/02-design/models/truss-relationship-lineage-candidate.umf.json",
+  "modelSha256": "c70a78c65dad005e3752439d97476d14682df3215836e4c3cb3c443b0248dc2a",
+  "entries": [
+    {
+      "id": "truss.relationship-lineage.table",
+      "kind": "table",
+      "nativeName": "relationship_lineage",
+      "sourceDisposition": "explicit",
+      "capturedModelLocator": {
+        "model": "docs/helix/02-design/models/truss-relationship-lineage-candidate.umf.json",
+        "modelSha256": "c70a78c65dad005e3752439d97476d14682df3215836e4c3cb3c443b0248dc2a",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt",
+        "bindingKind": "direct-source-node",
+        "generatedStatementOrdinal": null
+      }
+    },
+    {
+      "id": "truss.relationship-lineage.column.rel_type_id",
+      "kind": "column",
+      "parent": "truss.relationship-lineage.table",
+      "nativeName": "rel_type_id",
+      "sourceDisposition": "explicit",
+      "capturedModelLocator": {
+        "model": "docs/helix/02-design/models/truss-relationship-lineage-candidate.umf.json",
+        "modelSha256": "c70a78c65dad005e3752439d97476d14682df3215836e4c3cb3c443b0248dc2a",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef",
+        "bindingKind": "direct-source-node",
+        "generatedStatementOrdinal": null
+      }
+    },
+    {
+      "id": "truss.relationship-lineage.column.lineage_category",
+      "kind": "column",
+      "parent": "truss.relationship-lineage.table",
+      "nativeName": "lineage_category",
+      "sourceDisposition": "explicit",
+      "capturedModelLocator": {
+        "model": "docs/helix/02-design/models/truss-relationship-lineage-candidate.umf.json",
+        "modelSha256": "c70a78c65dad005e3752439d97476d14682df3215836e4c3cb3c443b0248dc2a",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/1/members/ColumnDef",
+        "bindingKind": "direct-source-node",
+        "generatedStatementOrdinal": null
+      }
+    },
+    {
+      "id": "truss.relationship-lineage.column.identity_profile",
+      "kind": "column",
+      "parent": "truss.relationship-lineage.table",
+      "nativeName": "identity_profile",
+      "sourceDisposition": "explicit",
+      "capturedModelLocator": {
+        "model": "docs/helix/02-design/models/truss-relationship-lineage-candidate.umf.json",
+        "modelSha256": "c70a78c65dad005e3752439d97476d14682df3215836e4c3cb3c443b0248dc2a",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/2/members/ColumnDef",
+        "bindingKind": "direct-source-node",
+        "generatedStatementOrdinal": null
+      }
+    },
+    {
+      "id": "truss.relationship-lineage.column.original_identity_bytes",
+      "kind": "column",
+      "parent": "truss.relationship-lineage.table",
+      "nativeName": "original_identity_bytes",
+      "sourceDisposition": "explicit",
+      "capturedModelLocator": {
+        "model": "docs/helix/02-design/models/truss-relationship-lineage-candidate.umf.json",
+        "modelSha256": "c70a78c65dad005e3752439d97476d14682df3215836e4c3cb3c443b0248dc2a",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/3/members/ColumnDef",
+        "bindingKind": "direct-source-node",
+        "generatedStatementOrdinal": null
+      }
+    },
+    {
+      "id": "truss.relationship-lineage.column.identity_sha256",
+      "kind": "column",
+      "parent": "truss.relationship-lineage.table",
+      "nativeName": "identity_sha256",
+      "sourceDisposition": "explicit",
+      "capturedModelLocator": {
+        "model": "docs/helix/02-design/models/truss-relationship-lineage-candidate.umf.json",
+        "modelSha256": "c70a78c65dad005e3752439d97476d14682df3215836e4c3cb3c443b0248dc2a",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/4/members/ColumnDef",
+        "bindingKind": "direct-source-node",
+        "generatedStatementOrdinal": null
+      }
+    },
+    {
+      "id": "truss.relationship-lineage.primary-key",
+      "kind": "constraint",
+      "parent": "truss.relationship-lineage.table",
+      "nativeName": null,
+      "sourceDisposition": "explicit-unnamed",
+      "capturedModelLocator": {
+        "model": "docs/helix/02-design/models/truss-relationship-lineage-candidate.umf.json",
+        "modelSha256": "c70a78c65dad005e3752439d97476d14682df3215836e4c3cb3c443b0248dc2a",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef/members/constraints/items/0/members/Constraint",
+        "bindingKind": "direct-source-node",
+        "generatedStatementOrdinal": null
+      }
+    },
+    {
+      "id": "truss.relationship-lineage.relationship-home-fk",
+      "kind": "constraint",
+      "parent": "truss.relationship-lineage.table",
+      "nativeName": null,
+      "sourceDisposition": "explicit-unnamed",
+      "capturedModelLocator": {
+        "model": "docs/helix/02-design/models/truss-relationship-lineage-candidate.umf.json",
+        "modelSha256": "c70a78c65dad005e3752439d97476d14682df3215836e4c3cb3c443b0248dc2a",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef/members/constraints/items/1/members/Constraint",
+        "bindingKind": "direct-source-node",
+        "generatedStatementOrdinal": null
+      }
+    },
+    {
+      "id": "truss.relationship-lineage.category",
+      "kind": "constraint",
+      "parent": "truss.relationship-lineage.table",
+      "nativeName": "relationship_lineage_category",
+      "sourceDisposition": "explicit",
+      "capturedModelLocator": {
+        "model": "docs/helix/02-design/models/truss-relationship-lineage-candidate.umf.json",
+        "modelSha256": "c70a78c65dad005e3752439d97476d14682df3215836e4c3cb3c443b0248dc2a",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/5/members/Constraint",
+        "bindingKind": "direct-source-node",
+        "generatedStatementOrdinal": null
+      }
+    },
+    {
+      "id": "truss.relationship-lineage.profile-nonempty",
+      "kind": "constraint",
+      "parent": "truss.relationship-lineage.table",
+      "nativeName": "relationship_lineage_profile_nonempty",
+      "sourceDisposition": "explicit",
+      "capturedModelLocator": {
+        "model": "docs/helix/02-design/models/truss-relationship-lineage-candidate.umf.json",
+        "modelSha256": "c70a78c65dad005e3752439d97476d14682df3215836e4c3cb3c443b0248dc2a",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/6/members/Constraint",
+        "bindingKind": "direct-source-node",
+        "generatedStatementOrdinal": null
+      }
+    },
+    {
+      "id": "truss.relationship-lineage.identity-nonempty",
+      "kind": "constraint",
+      "parent": "truss.relationship-lineage.table",
+      "nativeName": "relationship_lineage_identity_nonempty",
+      "sourceDisposition": "explicit",
+      "capturedModelLocator": {
+        "model": "docs/helix/02-design/models/truss-relationship-lineage-candidate.umf.json",
+        "modelSha256": "c70a78c65dad005e3752439d97476d14682df3215836e4c3cb3c443b0248dc2a",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/7/members/Constraint",
+        "bindingKind": "direct-source-node",
+        "generatedStatementOrdinal": null
+      }
+    },
+    {
+      "id": "truss.relationship-lineage.route-index",
+      "kind": "index",
+      "parent": "truss.relationship-lineage.table",
+      "nativeName": "relationship_lineage_route",
+      "sourceDisposition": "explicit",
+      "capturedModelLocator": {
+        "model": "docs/helix/02-design/models/truss-relationship-lineage-candidate.umf.json",
+        "modelSha256": "c70a78c65dad005e3752439d97476d14682df3215836e4c3cb3c443b0248dc2a",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/1/members/stmt/members/IndexStmt",
+        "bindingKind": "direct-source-node",
+        "generatedStatementOrdinal": null
+      }
+    },
+    {
+      "id": "truss.relationship-lineage.primary-key-index",
+      "kind": "index",
+      "parent": "truss.relationship-lineage.table",
+      "nativeName": null,
+      "sourceDisposition": "implicit-owned",
+      "capturedModelLocator": {
+        "model": "docs/helix/02-design/models/truss-relationship-lineage-candidate.umf.json",
+        "modelSha256": "c70a78c65dad005e3752439d97476d14682df3215836e4c3cb3c443b0248dc2a",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef/members/constraints/items/0/members/Constraint",
+        "bindingKind": "implicit-owned-source-basis",
+        "generatedStatementOrdinal": null
+      }
+    },
+    {
+      "id": "truss.relationship-lineage.not-null.lineage_category",
+      "kind": "column-attribute",
+      "parent": "truss.relationship-lineage.column.lineage_category",
+      "nativeName": null,
+      "sourceDisposition": "explicit-unnamed",
+      "attribute": "not-null",
+      "capturedModelLocator": {
+        "model": "docs/helix/02-design/models/truss-relationship-lineage-candidate.umf.json",
+        "modelSha256": "c70a78c65dad005e3752439d97476d14682df3215836e4c3cb3c443b0248dc2a",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/1/members/ColumnDef/members/constraints/items/0/members/Constraint",
+        "bindingKind": "direct-source-node",
+        "generatedStatementOrdinal": null
+      }
+    },
+    {
+      "id": "truss.relationship-lineage.not-null.identity_profile",
+      "kind": "column-attribute",
+      "parent": "truss.relationship-lineage.column.identity_profile",
+      "nativeName": null,
+      "sourceDisposition": "explicit-unnamed",
+      "attribute": "not-null",
+      "capturedModelLocator": {
+        "model": "docs/helix/02-design/models/truss-relationship-lineage-candidate.umf.json",
+        "modelSha256": "c70a78c65dad005e3752439d97476d14682df3215836e4c3cb3c443b0248dc2a",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/2/members/ColumnDef/members/constraints/items/0/members/Constraint",
+        "bindingKind": "direct-source-node",
+        "generatedStatementOrdinal": null
+      }
+    },
+    {
+      "id": "truss.relationship-lineage.not-null.original_identity_bytes",
+      "kind": "column-attribute",
+      "parent": "truss.relationship-lineage.column.original_identity_bytes",
+      "nativeName": null,
+      "sourceDisposition": "explicit-unnamed",
+      "attribute": "not-null",
+      "capturedModelLocator": {
+        "model": "docs/helix/02-design/models/truss-relationship-lineage-candidate.umf.json",
+        "modelSha256": "c70a78c65dad005e3752439d97476d14682df3215836e4c3cb3c443b0248dc2a",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/3/members/ColumnDef/members/constraints/items/0/members/Constraint",
+        "bindingKind": "direct-source-node",
+        "generatedStatementOrdinal": null
+      }
+    },
+    {
+      "id": "truss.relationship-lineage.generation.identity_sha256",
+      "kind": "generated-expression",
+      "parent": "truss.relationship-lineage.column.identity_sha256",
+      "nativeName": null,
+      "sourceDisposition": "explicit-unnamed",
+      "capturedModelLocator": {
+        "model": "docs/helix/02-design/models/truss-relationship-lineage-candidate.umf.json",
+        "modelSha256": "c70a78c65dad005e3752439d97476d14682df3215836e4c3cb3c443b0248dc2a",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/4/members/ColumnDef/members/constraints/items/0/members/Constraint",
+        "bindingKind": "direct-source-node",
+        "generatedStatementOrdinal": null
+      }
+    }
+  ],
+  "complete": false,
+  "scope": "Seventeen authored stable allocation labels bound to exact captured tagged source nodes/bases; implicit primary index shares primary-constraint basis, not independent emission/native proof",
+  "requiredUnclosedInventory": [
+    "external rel_def original owner/home/provenance",
+    "implicit constraint/index native identity and statement ownership",
+    "exact identity canonical/derivation procedure and protected finalizer/privileges",
+    "replacement legacy uniqueness and complete owner mapping",
+    "selected namespace/version/initialization/native qualification"
+  ],
+  "sourceNodeBindingCompleteForEntries": true
+}

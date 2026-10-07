@@ -1,0 +1,16 @@
+{
+  "scope": "Committed owner source and captured synthetic string-projection native receipt correspondence only; Truss did not rerun or adopt a public backend",
+  "head": "c8fca16fe8b6592fa321f0169482d74942ae6f12",
+  "sourceSha256": {
+    "crates/weft-postgresql/src/result_definition.rs": "3e0486901bc93408154cce68a43a76aa806ffdb2204cbfae4d7591379eb5e4dc",
+    "crates/weft-postgresql/src/registered_access.rs": "d91b17ad242160ecc1602e9c4633213298a07f1e9471457a6264337d28971bc7",
+    "docs/helix/04-build/evidence/B-005-native-preparation.md": "e0e54622eb9cd7a3bb487844d8b7c94fbeaacc29fffef7c3dc6dc7319974a681",
+    "docs/helix/04-build/evidence/B-005-projection-contract-native.json": "1139914bab56aa9d04e171eed047f961451f16f39125ce89fb0ed97513bad204",
+    "tests/truss-postgresql/fixtures/projection-contract-emission.json": "8e8df65ea1fe6e8c1a28f5533d1f83cb955fcf27617c31d46034efefe6fb21d7",
+    "tests/truss-postgresql/owner-preflight-native.py": "059167b972ee4bca6128ded89e1a071e320736875daea3e65d2589b99307c71e"
+  },
+  "captureHarnessCorrespondence": true,
+  "ownerNativeCases": 6,
+  "nativeExecutionByTruss": false,
+  "complete": false
+}

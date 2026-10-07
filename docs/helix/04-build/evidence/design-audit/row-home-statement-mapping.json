@@ -1,0 +1,559 @@
+{
+  "scope": "Selected76 authored source/effect identities to ten ordered original export statements; full native effect/guard/grant/dependency inventory remains incomplete",
+  "inputPins": [
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/row-home-statement-composition.json",
+      "sha256": "23f172939f5304ea89396f6680be548ab6472aeaa99ab7a0d42c48dfb2f01378"
+    },
+    {
+      "path": "docs/helix/02-design/models/truss-row-home-candidate.physical-ids.proposal.json",
+      "sha256": "249ea91409e127148b48ef872811af221b1fe6c54de344b3789016a1003b7b75"
+    },
+    {
+      "path": "docs/helix/02-design/models/truss-row-home-candidate.supporting-index-ids.proposal.json",
+      "sha256": "ce8d63f11fb9acbbf22af74769c7e4ded1223463196b8b68e26722931da3caa4"
+    }
+  ],
+  "physicalIdentities": 76,
+  "statements": 10,
+  "unmappedStatements": [],
+  "physicalCoverageComplete": false,
+  "mapping": [
+    {
+      "ordinal": "0",
+      "modelPath": "docs/helix/02-design/contracts/row-home-tree-v0.1.proposal.umf.json",
+      "sourceStatementIndex": "0",
+      "statementSqlSha256": "5dae4a2cf1a0c916d417ffa4eac04e728b46a0bce6329cf1e46c60a215aae098",
+      "entries": [
+        {
+          "physicalIdentity": "truss.row-home.constraint.prop_def.prop_def_owner_property_row_home",
+          "objectKind": "constraint",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/AlterTableStmt/members/cmds/items/0/members/AlterTableCmd/members/def/members/Constraint",
+          "statementSqlSha256": "5dae4a2cf1a0c916d417ffa4eac04e728b46a0bce6329cf1e46c60a215aae098"
+        },
+        {
+          "physicalIdentity": "truss.row-home.supporting-index.prop_def.prop_def_owner_property_row_home",
+          "objectKind": "supporting-index",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/AlterTableStmt/members/cmds/items/0/members/AlterTableCmd/members/def/members/Constraint",
+          "statementSqlSha256": "5dae4a2cf1a0c916d417ffa4eac04e728b46a0bce6329cf1e46c60a215aae098"
+        }
+      ]
+    },
+    {
+      "ordinal": "1",
+      "modelPath": "docs/helix/02-design/contracts/row-home-tree-v0.1.proposal.umf.json",
+      "sourceStatementIndex": "1",
+      "statementSqlSha256": "50eced015b7c75df93ea50321fd2784101055f3ca69e0fe851fc0805d9fa2c07",
+      "entries": [
+        {
+          "physicalIdentity": "truss.row-home.constraint.edge.edge_typed_identity_row_home",
+          "objectKind": "constraint",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/1/members/stmt/members/AlterTableStmt/members/cmds/items/0/members/AlterTableCmd/members/def/members/Constraint",
+          "statementSqlSha256": "50eced015b7c75df93ea50321fd2784101055f3ca69e0fe851fc0805d9fa2c07"
+        },
+        {
+          "physicalIdentity": "truss.row-home.supporting-index.edge.edge_typed_identity_row_home",
+          "objectKind": "supporting-index",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/1/members/stmt/members/AlterTableStmt/members/cmds/items/0/members/AlterTableCmd/members/def/members/Constraint",
+          "statementSqlSha256": "50eced015b7c75df93ea50321fd2784101055f3ca69e0fe851fc0805d9fa2c07"
+        }
+      ]
+    },
+    {
+      "ordinal": "2",
+      "modelPath": "docs/helix/02-design/contracts/row-home-tree-v0.1.proposal.umf.json",
+      "sourceStatementIndex": "2",
+      "statementSqlSha256": "b309c1c93115531b3265d6715831c466573cf151c9efa9d2861b378245b055fd",
+      "entries": [
+        {
+          "physicalIdentity": "truss.row-home.sequence.row_home_id_seq",
+          "objectKind": "sequence",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/2/members/stmt/members/CreateSeqStmt",
+          "statementSqlSha256": "b309c1c93115531b3265d6715831c466573cf151c9efa9d2861b378245b055fd"
+        }
+      ]
+    },
+    {
+      "ordinal": "3",
+      "modelPath": "docs/helix/02-design/contracts/row-home-tree-v0.1.proposal.umf.json",
+      "sourceStatementIndex": "3",
+      "statementSqlSha256": "a13117b85808640545146b5a622ecac38af05e1567f55064b35a6f16bb6d1b9a",
+      "entries": [
+        {
+          "physicalIdentity": "truss.row-home.table.row_home_state",
+          "objectKind": "table",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/3/members/stmt/members/CreateStmt",
+          "statementSqlSha256": "a13117b85808640545146b5a622ecac38af05e1567f55064b35a6f16bb6d1b9a"
+        },
+        {
+          "physicalIdentity": "truss.row-home.column.row_home_state.state_id",
+          "objectKind": "column",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/3/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef",
+          "statementSqlSha256": "a13117b85808640545146b5a622ecac38af05e1567f55064b35a6f16bb6d1b9a"
+        },
+        {
+          "physicalIdentity": "truss.row-home.constraint.row_home_state.state_id.constr_primary",
+          "objectKind": "constraint",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/3/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef/members/constraints/items/0/members/Constraint",
+          "statementSqlSha256": "a13117b85808640545146b5a622ecac38af05e1567f55064b35a6f16bb6d1b9a"
+        },
+        {
+          "physicalIdentity": "truss.row-home.column.row_home_state.owner_kind",
+          "objectKind": "column",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/3/members/stmt/members/CreateStmt/members/tableElts/items/1/members/ColumnDef",
+          "statementSqlSha256": "a13117b85808640545146b5a622ecac38af05e1567f55064b35a6f16bb6d1b9a"
+        },
+        {
+          "physicalIdentity": "truss.row-home.column.row_home_state.object_id",
+          "objectKind": "column",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/3/members/stmt/members/CreateStmt/members/tableElts/items/2/members/ColumnDef",
+          "statementSqlSha256": "a13117b85808640545146b5a622ecac38af05e1567f55064b35a6f16bb6d1b9a"
+        },
+        {
+          "physicalIdentity": "truss.row-home.column.row_home_state.object_type_id",
+          "objectKind": "column",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/3/members/stmt/members/CreateStmt/members/tableElts/items/3/members/ColumnDef",
+          "statementSqlSha256": "a13117b85808640545146b5a622ecac38af05e1567f55064b35a6f16bb6d1b9a"
+        },
+        {
+          "physicalIdentity": "truss.row-home.column.row_home_state.edge_id",
+          "objectKind": "column",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/3/members/stmt/members/CreateStmt/members/tableElts/items/4/members/ColumnDef",
+          "statementSqlSha256": "a13117b85808640545146b5a622ecac38af05e1567f55064b35a6f16bb6d1b9a"
+        },
+        {
+          "physicalIdentity": "truss.row-home.column.row_home_state.relationship_type_id",
+          "objectKind": "column",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/3/members/stmt/members/CreateStmt/members/tableElts/items/5/members/ColumnDef",
+          "statementSqlSha256": "a13117b85808640545146b5a622ecac38af05e1567f55064b35a6f16bb6d1b9a"
+        },
+        {
+          "physicalIdentity": "truss.row-home.column.row_home_state.property_owner_type_id",
+          "objectKind": "column",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/3/members/stmt/members/CreateStmt/members/tableElts/items/6/members/ColumnDef",
+          "statementSqlSha256": "a13117b85808640545146b5a622ecac38af05e1567f55064b35a6f16bb6d1b9a"
+        },
+        {
+          "physicalIdentity": "truss.row-home.column.row_home_state.property_id",
+          "objectKind": "column",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/3/members/stmt/members/CreateStmt/members/tableElts/items/7/members/ColumnDef",
+          "statementSqlSha256": "a13117b85808640545146b5a622ecac38af05e1567f55064b35a6f16bb6d1b9a"
+        },
+        {
+          "physicalIdentity": "truss.row-home.column.row_home_state.root_node_id",
+          "objectKind": "column",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/3/members/stmt/members/CreateStmt/members/tableElts/items/8/members/ColumnDef",
+          "statementSqlSha256": "a13117b85808640545146b5a622ecac38af05e1567f55064b35a6f16bb6d1b9a"
+        },
+        {
+          "physicalIdentity": "truss.row-home.column.row_home_state.definition_bytes",
+          "objectKind": "column",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/3/members/stmt/members/CreateStmt/members/tableElts/items/9/members/ColumnDef",
+          "statementSqlSha256": "a13117b85808640545146b5a622ecac38af05e1567f55064b35a6f16bb6d1b9a"
+        },
+        {
+          "physicalIdentity": "truss.row-home.column.row_home_state.home_profile_bytes",
+          "objectKind": "column",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/3/members/stmt/members/CreateStmt/members/tableElts/items/10/members/ColumnDef",
+          "statementSqlSha256": "a13117b85808640545146b5a622ecac38af05e1567f55064b35a6f16bb6d1b9a"
+        },
+        {
+          "physicalIdentity": "truss.row-home.column.row_home_state.value_profile_bytes",
+          "objectKind": "column",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/3/members/stmt/members/CreateStmt/members/tableElts/items/11/members/ColumnDef",
+          "statementSqlSha256": "a13117b85808640545146b5a622ecac38af05e1567f55064b35a6f16bb6d1b9a"
+        },
+        {
+          "physicalIdentity": "truss.row-home.column.row_home_state.source_bytes",
+          "objectKind": "column",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/3/members/stmt/members/CreateStmt/members/tableElts/items/12/members/ColumnDef",
+          "statementSqlSha256": "a13117b85808640545146b5a622ecac38af05e1567f55064b35a6f16bb6d1b9a"
+        },
+        {
+          "physicalIdentity": "truss.row-home.constraint.row_home_state.row_home_state_positive_ids",
+          "objectKind": "constraint",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/3/members/stmt/members/CreateStmt/members/tableElts/items/13/members/Constraint",
+          "statementSqlSha256": "a13117b85808640545146b5a622ecac38af05e1567f55064b35a6f16bb6d1b9a"
+        },
+        {
+          "physicalIdentity": "truss.row-home.constraint.row_home_state.row_home_state_kind",
+          "objectKind": "constraint",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/3/members/stmt/members/CreateStmt/members/tableElts/items/14/members/Constraint",
+          "statementSqlSha256": "a13117b85808640545146b5a622ecac38af05e1567f55064b35a6f16bb6d1b9a"
+        },
+        {
+          "physicalIdentity": "truss.row-home.constraint.row_home_state.row_home_state_property_fk",
+          "objectKind": "constraint",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/3/members/stmt/members/CreateStmt/members/tableElts/items/15/members/Constraint",
+          "statementSqlSha256": "a13117b85808640545146b5a622ecac38af05e1567f55064b35a6f16bb6d1b9a"
+        },
+        {
+          "physicalIdentity": "truss.row-home.constraint.row_home_state.row_home_state_object_fk",
+          "objectKind": "constraint",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/3/members/stmt/members/CreateStmt/members/tableElts/items/16/members/Constraint",
+          "statementSqlSha256": "a13117b85808640545146b5a622ecac38af05e1567f55064b35a6f16bb6d1b9a"
+        },
+        {
+          "physicalIdentity": "truss.row-home.constraint.row_home_state.row_home_state_edge_fk",
+          "objectKind": "constraint",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/3/members/stmt/members/CreateStmt/members/tableElts/items/17/members/Constraint",
+          "statementSqlSha256": "a13117b85808640545146b5a622ecac38af05e1567f55064b35a6f16bb6d1b9a"
+        },
+        {
+          "physicalIdentity": "truss.row-home.constraint.row_home_state.row_home_state_object_property",
+          "objectKind": "constraint",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/3/members/stmt/members/CreateStmt/members/tableElts/items/18/members/Constraint",
+          "statementSqlSha256": "a13117b85808640545146b5a622ecac38af05e1567f55064b35a6f16bb6d1b9a"
+        },
+        {
+          "physicalIdentity": "truss.row-home.constraint.row_home_state.row_home_state_edge_property",
+          "objectKind": "constraint",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/3/members/stmt/members/CreateStmt/members/tableElts/items/19/members/Constraint",
+          "statementSqlSha256": "a13117b85808640545146b5a622ecac38af05e1567f55064b35a6f16bb6d1b9a"
+        },
+        {
+          "physicalIdentity": "truss.row-home.constraint.row_home_state.row_home_state_carriers_nonempty",
+          "objectKind": "constraint",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/3/members/stmt/members/CreateStmt/members/tableElts/items/20/members/Constraint",
+          "statementSqlSha256": "a13117b85808640545146b5a622ecac38af05e1567f55064b35a6f16bb6d1b9a"
+        },
+        {
+          "physicalIdentity": "truss.row-home.supporting-index.row_home_state.state_id.constr_primary",
+          "objectKind": "supporting-index",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/3/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef/members/constraints/items/0/members/Constraint",
+          "statementSqlSha256": "a13117b85808640545146b5a622ecac38af05e1567f55064b35a6f16bb6d1b9a"
+        },
+        {
+          "physicalIdentity": "truss.row-home.supporting-index.row_home_state.row_home_state_object_property",
+          "objectKind": "supporting-index",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/3/members/stmt/members/CreateStmt/members/tableElts/items/18/members/Constraint",
+          "statementSqlSha256": "a13117b85808640545146b5a622ecac38af05e1567f55064b35a6f16bb6d1b9a"
+        },
+        {
+          "physicalIdentity": "truss.row-home.supporting-index.row_home_state.row_home_state_edge_property",
+          "objectKind": "supporting-index",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/3/members/stmt/members/CreateStmt/members/tableElts/items/19/members/Constraint",
+          "statementSqlSha256": "a13117b85808640545146b5a622ecac38af05e1567f55064b35a6f16bb6d1b9a"
+        }
+      ]
+    },
+    {
+      "ordinal": "4",
+      "modelPath": "docs/helix/02-design/contracts/row-home-tree-v0.1.proposal.umf.json",
+      "sourceStatementIndex": "4",
+      "statementSqlSha256": "56ab8e47e943f419b18f6463a3869196e436fd279b75c23c6ab35a38e8d99736",
+      "entries": [
+        {
+          "physicalIdentity": "truss.row-home.table.row_home_node",
+          "objectKind": "table",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/4/members/stmt/members/CreateStmt",
+          "statementSqlSha256": "56ab8e47e943f419b18f6463a3869196e436fd279b75c23c6ab35a38e8d99736"
+        },
+        {
+          "physicalIdentity": "truss.row-home.column.row_home_node.state_id",
+          "objectKind": "column",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/4/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef",
+          "statementSqlSha256": "56ab8e47e943f419b18f6463a3869196e436fd279b75c23c6ab35a38e8d99736"
+        },
+        {
+          "physicalIdentity": "truss.row-home.constraint.row_home_node.state_id.constr_foreign",
+          "objectKind": "constraint",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/4/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef/members/constraints/items/1/members/Constraint",
+          "statementSqlSha256": "56ab8e47e943f419b18f6463a3869196e436fd279b75c23c6ab35a38e8d99736"
+        },
+        {
+          "physicalIdentity": "truss.row-home.column.row_home_node.node_id",
+          "objectKind": "column",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/4/members/stmt/members/CreateStmt/members/tableElts/items/1/members/ColumnDef",
+          "statementSqlSha256": "56ab8e47e943f419b18f6463a3869196e436fd279b75c23c6ab35a38e8d99736"
+        },
+        {
+          "physicalIdentity": "truss.row-home.column.row_home_node.parent_node_id",
+          "objectKind": "column",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/4/members/stmt/members/CreateStmt/members/tableElts/items/2/members/ColumnDef",
+          "statementSqlSha256": "56ab8e47e943f419b18f6463a3869196e436fd279b75c23c6ab35a38e8d99736"
+        },
+        {
+          "physicalIdentity": "truss.row-home.column.row_home_node.slot_kind",
+          "objectKind": "column",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/4/members/stmt/members/CreateStmt/members/tableElts/items/3/members/ColumnDef",
+          "statementSqlSha256": "56ab8e47e943f419b18f6463a3869196e436fd279b75c23c6ab35a38e8d99736"
+        },
+        {
+          "physicalIdentity": "truss.row-home.column.row_home_node.sequence_ordinal",
+          "objectKind": "column",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/4/members/stmt/members/CreateStmt/members/tableElts/items/4/members/ColumnDef",
+          "statementSqlSha256": "56ab8e47e943f419b18f6463a3869196e436fd279b75c23c6ab35a38e8d99736"
+        },
+        {
+          "physicalIdentity": "truss.row-home.column.row_home_node.map_key",
+          "objectKind": "column",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/4/members/stmt/members/CreateStmt/members/tableElts/items/5/members/ColumnDef",
+          "statementSqlSha256": "56ab8e47e943f419b18f6463a3869196e436fd279b75c23c6ab35a38e8d99736"
+        },
+        {
+          "physicalIdentity": "truss.row-home.column.row_home_node.record_field_identity_bytes",
+          "objectKind": "column",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/4/members/stmt/members/CreateStmt/members/tableElts/items/6/members/ColumnDef",
+          "statementSqlSha256": "56ab8e47e943f419b18f6463a3869196e436fd279b75c23c6ab35a38e8d99736"
+        },
+        {
+          "physicalIdentity": "truss.row-home.column.row_home_node.value_kind",
+          "objectKind": "column",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/4/members/stmt/members/CreateStmt/members/tableElts/items/7/members/ColumnDef",
+          "statementSqlSha256": "56ab8e47e943f419b18f6463a3869196e436fd279b75c23c6ab35a38e8d99736"
+        },
+        {
+          "physicalIdentity": "truss.row-home.column.row_home_node.definition_bytes",
+          "objectKind": "column",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/4/members/stmt/members/CreateStmt/members/tableElts/items/8/members/ColumnDef",
+          "statementSqlSha256": "56ab8e47e943f419b18f6463a3869196e436fd279b75c23c6ab35a38e8d99736"
+        },
+        {
+          "physicalIdentity": "truss.row-home.column.row_home_node.source_bytes",
+          "objectKind": "column",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/4/members/stmt/members/CreateStmt/members/tableElts/items/9/members/ColumnDef",
+          "statementSqlSha256": "56ab8e47e943f419b18f6463a3869196e436fd279b75c23c6ab35a38e8d99736"
+        },
+        {
+          "physicalIdentity": "truss.row-home.constraint.row_home_node.row_home_node_pk",
+          "objectKind": "constraint",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/4/members/stmt/members/CreateStmt/members/tableElts/items/10/members/Constraint",
+          "statementSqlSha256": "56ab8e47e943f419b18f6463a3869196e436fd279b75c23c6ab35a38e8d99736"
+        },
+        {
+          "physicalIdentity": "truss.row-home.constraint.row_home_node.row_home_node_id_unique",
+          "objectKind": "constraint",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/4/members/stmt/members/CreateStmt/members/tableElts/items/11/members/Constraint",
+          "statementSqlSha256": "56ab8e47e943f419b18f6463a3869196e436fd279b75c23c6ab35a38e8d99736"
+        },
+        {
+          "physicalIdentity": "truss.row-home.constraint.row_home_node.row_home_node_positive_ids",
+          "objectKind": "constraint",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/4/members/stmt/members/CreateStmt/members/tableElts/items/12/members/Constraint",
+          "statementSqlSha256": "56ab8e47e943f419b18f6463a3869196e436fd279b75c23c6ab35a38e8d99736"
+        },
+        {
+          "physicalIdentity": "truss.row-home.constraint.row_home_node.row_home_node_parent_fk",
+          "objectKind": "constraint",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/4/members/stmt/members/CreateStmt/members/tableElts/items/13/members/Constraint",
+          "statementSqlSha256": "56ab8e47e943f419b18f6463a3869196e436fd279b75c23c6ab35a38e8d99736"
+        },
+        {
+          "physicalIdentity": "truss.row-home.constraint.row_home_node.row_home_node_not_self_parent",
+          "objectKind": "constraint",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/4/members/stmt/members/CreateStmt/members/tableElts/items/14/members/Constraint",
+          "statementSqlSha256": "56ab8e47e943f419b18f6463a3869196e436fd279b75c23c6ab35a38e8d99736"
+        },
+        {
+          "physicalIdentity": "truss.row-home.constraint.row_home_node.row_home_node_value_kind",
+          "objectKind": "constraint",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/4/members/stmt/members/CreateStmt/members/tableElts/items/15/members/Constraint",
+          "statementSqlSha256": "56ab8e47e943f419b18f6463a3869196e436fd279b75c23c6ab35a38e8d99736"
+        },
+        {
+          "physicalIdentity": "truss.row-home.constraint.row_home_node.row_home_node_slot",
+          "objectKind": "constraint",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/4/members/stmt/members/CreateStmt/members/tableElts/items/16/members/Constraint",
+          "statementSqlSha256": "56ab8e47e943f419b18f6463a3869196e436fd279b75c23c6ab35a38e8d99736"
+        },
+        {
+          "physicalIdentity": "truss.row-home.constraint.row_home_node.row_home_node_carriers_nonempty",
+          "objectKind": "constraint",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/4/members/stmt/members/CreateStmt/members/tableElts/items/17/members/Constraint",
+          "statementSqlSha256": "56ab8e47e943f419b18f6463a3869196e436fd279b75c23c6ab35a38e8d99736"
+        },
+        {
+          "physicalIdentity": "truss.row-home.supporting-index.row_home_node.row_home_node_pk",
+          "objectKind": "supporting-index",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/4/members/stmt/members/CreateStmt/members/tableElts/items/10/members/Constraint",
+          "statementSqlSha256": "56ab8e47e943f419b18f6463a3869196e436fd279b75c23c6ab35a38e8d99736"
+        },
+        {
+          "physicalIdentity": "truss.row-home.supporting-index.row_home_node.row_home_node_id_unique",
+          "objectKind": "supporting-index",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/4/members/stmt/members/CreateStmt/members/tableElts/items/11/members/Constraint",
+          "statementSqlSha256": "56ab8e47e943f419b18f6463a3869196e436fd279b75c23c6ab35a38e8d99736"
+        }
+      ]
+    },
+    {
+      "ordinal": "5",
+      "modelPath": "docs/helix/02-design/contracts/row-home-tree-v0.1.proposal.umf.json",
+      "sourceStatementIndex": "5",
+      "statementSqlSha256": "bc7cdb1809c672dd3b5600ef75c56e774998ed950d1ecf57660f7636512290f5",
+      "entries": [
+        {
+          "physicalIdentity": "truss.row-home.constraint.row_home_state.row_home_state_root_fk",
+          "objectKind": "constraint",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/5/members/stmt/members/AlterTableStmt/members/cmds/items/0/members/AlterTableCmd/members/def/members/Constraint",
+          "statementSqlSha256": "bc7cdb1809c672dd3b5600ef75c56e774998ed950d1ecf57660f7636512290f5"
+        }
+      ]
+    },
+    {
+      "ordinal": "6",
+      "modelPath": "docs/helix/02-design/contracts/row-home-tree-v0.1.proposal.umf.json",
+      "sourceStatementIndex": "6",
+      "statementSqlSha256": "d30d6b29b538152039e0e0be8d01c3564aeef62f05da2c20472507a76d83d42b",
+      "entries": [
+        {
+          "physicalIdentity": "truss.row-home.index.row_home_one_root",
+          "objectKind": "index",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/6/members/stmt/members/IndexStmt",
+          "statementSqlSha256": "d30d6b29b538152039e0e0be8d01c3564aeef62f05da2c20472507a76d83d42b"
+        }
+      ]
+    },
+    {
+      "ordinal": "7",
+      "modelPath": "docs/helix/02-design/contracts/row-home-tree-v0.1.proposal.umf.json",
+      "sourceStatementIndex": "7",
+      "statementSqlSha256": "6ef6e04285d18c6ef12b1f90f7bd444fe374a7a538eb0bc916b5d2d3806785b8",
+      "entries": [
+        {
+          "physicalIdentity": "truss.row-home.index.row_home_sequence_slot",
+          "objectKind": "index",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/7/members/stmt/members/IndexStmt",
+          "statementSqlSha256": "6ef6e04285d18c6ef12b1f90f7bd444fe374a7a538eb0bc916b5d2d3806785b8"
+        }
+      ]
+    },
+    {
+      "ordinal": "8",
+      "modelPath": "docs/helix/02-design/contracts/row-home-tree-v0.1.proposal.umf.json",
+      "sourceStatementIndex": "8",
+      "statementSqlSha256": "7c57e062c7fa22465f647a59ca935db73e855f4780a87450a60a92c4fbca08f8",
+      "entries": [
+        {
+          "physicalIdentity": "truss.row-home.index.row_home_map_parent",
+          "objectKind": "index",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/8/members/stmt/members/IndexStmt",
+          "statementSqlSha256": "7c57e062c7fa22465f647a59ca935db73e855f4780a87450a60a92c4fbca08f8"
+        }
+      ]
+    },
+    {
+      "ordinal": "9",
+      "modelPath": "docs/helix/02-design/contracts/row-home-scalar-v0.1.proposal.umf.json",
+      "sourceStatementIndex": "0",
+      "statementSqlSha256": "0e05366b66cd03892d7271c60895138e8d785e9f221f7c3b1ebebcd800749c42",
+      "entries": [
+        {
+          "physicalIdentity": "truss.row-home.table.row_home_scalar",
+          "objectKind": "table",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt",
+          "statementSqlSha256": "0e05366b66cd03892d7271c60895138e8d785e9f221f7c3b1ebebcd800749c42"
+        },
+        {
+          "physicalIdentity": "truss.row-home.column.row_home_scalar.state_id",
+          "objectKind": "column",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef",
+          "statementSqlSha256": "0e05366b66cd03892d7271c60895138e8d785e9f221f7c3b1ebebcd800749c42"
+        },
+        {
+          "physicalIdentity": "truss.row-home.column.row_home_scalar.node_id",
+          "objectKind": "column",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/1/members/ColumnDef",
+          "statementSqlSha256": "0e05366b66cd03892d7271c60895138e8d785e9f221f7c3b1ebebcd800749c42"
+        },
+        {
+          "physicalIdentity": "truss.row-home.column.row_home_scalar.scalar_kind",
+          "objectKind": "column",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/2/members/ColumnDef",
+          "statementSqlSha256": "0e05366b66cd03892d7271c60895138e8d785e9f221f7c3b1ebebcd800749c42"
+        },
+        {
+          "physicalIdentity": "truss.row-home.column.row_home_scalar.text_value",
+          "objectKind": "column",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/3/members/ColumnDef",
+          "statementSqlSha256": "0e05366b66cd03892d7271c60895138e8d785e9f221f7c3b1ebebcd800749c42"
+        },
+        {
+          "physicalIdentity": "truss.row-home.column.row_home_scalar.boolean_value",
+          "objectKind": "column",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/4/members/ColumnDef",
+          "statementSqlSha256": "0e05366b66cd03892d7271c60895138e8d785e9f221f7c3b1ebebcd800749c42"
+        },
+        {
+          "physicalIdentity": "truss.row-home.column.row_home_scalar.numeric_value",
+          "objectKind": "column",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/5/members/ColumnDef",
+          "statementSqlSha256": "0e05366b66cd03892d7271c60895138e8d785e9f221f7c3b1ebebcd800749c42"
+        },
+        {
+          "physicalIdentity": "truss.row-home.column.row_home_scalar.numeric_token",
+          "objectKind": "column",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/6/members/ColumnDef",
+          "statementSqlSha256": "0e05366b66cd03892d7271c60895138e8d785e9f221f7c3b1ebebcd800749c42"
+        },
+        {
+          "physicalIdentity": "truss.row-home.column.row_home_scalar.binary_value",
+          "objectKind": "column",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/7/members/ColumnDef",
+          "statementSqlSha256": "0e05366b66cd03892d7271c60895138e8d785e9f221f7c3b1ebebcd800749c42"
+        },
+        {
+          "physicalIdentity": "truss.row-home.column.row_home_scalar.temporal_text",
+          "objectKind": "column",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/8/members/ColumnDef",
+          "statementSqlSha256": "0e05366b66cd03892d7271c60895138e8d785e9f221f7c3b1ebebcd800749c42"
+        },
+        {
+          "physicalIdentity": "truss.row-home.column.row_home_scalar.temporal_instant",
+          "objectKind": "column",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/9/members/ColumnDef",
+          "statementSqlSha256": "0e05366b66cd03892d7271c60895138e8d785e9f221f7c3b1ebebcd800749c42"
+        },
+        {
+          "physicalIdentity": "truss.row-home.column.row_home_scalar.opaque_bytes",
+          "objectKind": "column",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/10/members/ColumnDef",
+          "statementSqlSha256": "0e05366b66cd03892d7271c60895138e8d785e9f221f7c3b1ebebcd800749c42"
+        },
+        {
+          "physicalIdentity": "truss.row-home.column.row_home_scalar.codec_definition_bytes",
+          "objectKind": "column",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/11/members/ColumnDef",
+          "statementSqlSha256": "0e05366b66cd03892d7271c60895138e8d785e9f221f7c3b1ebebcd800749c42"
+        },
+        {
+          "physicalIdentity": "truss.row-home.column.row_home_scalar.original_source_bytes",
+          "objectKind": "column",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/12/members/ColumnDef",
+          "statementSqlSha256": "0e05366b66cd03892d7271c60895138e8d785e9f221f7c3b1ebebcd800749c42"
+        },
+        {
+          "physicalIdentity": "truss.row-home.constraint.row_home_scalar.row_home_scalar_pk",
+          "objectKind": "constraint",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/13/members/Constraint",
+          "statementSqlSha256": "0e05366b66cd03892d7271c60895138e8d785e9f221f7c3b1ebebcd800749c42"
+        },
+        {
+          "physicalIdentity": "truss.row-home.constraint.row_home_scalar.row_home_scalar_node_fk",
+          "objectKind": "constraint",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/14/members/Constraint",
+          "statementSqlSha256": "0e05366b66cd03892d7271c60895138e8d785e9f221f7c3b1ebebcd800749c42"
+        },
+        {
+          "physicalIdentity": "truss.row-home.constraint.row_home_scalar.row_home_scalar_carriers_nonempty",
+          "objectKind": "constraint",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/15/members/Constraint",
+          "statementSqlSha256": "0e05366b66cd03892d7271c60895138e8d785e9f221f7c3b1ebebcd800749c42"
+        },
+        {
+          "physicalIdentity": "truss.row-home.constraint.row_home_scalar.row_home_scalar_family",
+          "objectKind": "constraint",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/16/members/Constraint",
+          "statementSqlSha256": "0e05366b66cd03892d7271c60895138e8d785e9f221f7c3b1ebebcd800749c42"
+        },
+        {
+          "physicalIdentity": "truss.row-home.supporting-index.row_home_scalar.row_home_scalar_pk",
+          "objectKind": "supporting-index",
+          "capturedSourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/13/members/Constraint",
+          "statementSqlSha256": "0e05366b66cd03892d7271c60895138e8d785e9f221f7c3b1ebebcd800749c42"
+        }
+      ]
+    }
+  ]
+}

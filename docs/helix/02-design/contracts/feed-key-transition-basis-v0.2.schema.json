@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:feed-key-transition-basis:0.2.0",
+  "description": "Original transition basis only; native context, generation continuity and source/target correspondence require admission.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-feed-key-transition-basis/0.2.0"
+    },
+    "transitionProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "context": {
+      "type": "object",
+      "properties": {
+        "sourceEpoch": {
+          "type": "string",
+          "minLength": 1
+        },
+        "feedProfile": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scopeIdentity": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "sourceEpoch",
+        "feedProfile",
+        "scopeIdentity"
+      ],
+      "additionalProperties": false
+    },
+    "originalAttempt": {
+      "$ref": "urn:truss:draft:key-migration-result:0.1.0#/$defs/attempt"
+    },
+    "source": {
+      "$ref": "urn:truss:draft:key-profile-migration:0.1.0#/$defs/basis"
+    },
+    "target": {
+      "$ref": "urn:truss:draft:key-profile-migration:0.1.0#/$defs/basis"
+    },
+    "priorConfiguration": {
+      "$ref": "urn:truss:draft:import-report:0.1.0#/properties/selectedConfiguration"
+    },
+    "resultingConfiguration": {
+      "$ref": "urn:truss:draft:import-report:0.1.0#/properties/selectedConfiguration"
+    },
+    "priorSelectedBinding": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "resultingSelectedBinding": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "sourceInventory": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "targetCorrespondence": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "transitionProfile",
+    "context",
+    "originalAttempt",
+    "source",
+    "target",
+    "priorConfiguration",
+    "resultingConfiguration",
+    "priorSelectedBinding",
+    "resultingSelectedBinding",
+    "sourceInventory",
+    "targetCorrespondence"
+  ],
+  "additionalProperties": false
+}

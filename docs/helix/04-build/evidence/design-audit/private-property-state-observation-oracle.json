@@ -1,0 +1,23 @@
+{
+  "scope": "Closed two-route source AST and manifest source/order/carrier/NULL/parameter correspondence; no native owner association, complete visibility or absence proof",
+  "sourceSha256": "fd6b1e9309bb7af5100b10a4c8d6e4e3198da90a327c4b212da5e10f8f3a1f44",
+  "modelSha256": "e913efbaa4a35c56c826e8c0f132e1b4c1961d7394543800dc35794d5046bc27",
+  "statements": 2,
+  "corruptionControls": [
+    "missing_edge_route",
+    "edge_as_object",
+    "relationship_as_property_owner",
+    "missing_property",
+    "foreign_owner_slot",
+    "one_row_limit"
+  ],
+  "manifestCorruptionControls": [
+    "route_kind_swap",
+    "changed_catalog_cast",
+    "missing_owner_parameter",
+    "nullable_property",
+    "complete_claim"
+  ],
+  "nativeExecution": false,
+  "complete": false
+}

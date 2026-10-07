@@ -1,0 +1,10 @@
+{
+  "status": "pass",
+  "cases": 15,
+  "independentRationalCases": 11,
+  "maxDigitVisits": 16,
+  "fixtureSha256": "3628daed81f3eeca3a76037003cb47b90366ad8a104b6205ecaea34cff6c804d",
+  "scope": "NC magnitude comparison only; source grammar/facets/native domains and production resource accounting unqualified",
+  "nativeExecuted": false,
+  "profileAdopted": false
+}

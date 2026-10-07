@@ -1,0 +1,9 @@
+[package]
+name = "truss-record-identity-design-oracle"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+weft-core = { path = "/Users/erik/Projects/weft/crates/weft-core" }
+serde_json = { version = "=1.0.145", features = ["arbitrary_precision", "raw_value"] }

@@ -1,0 +1,86 @@
+{
+  "interfaceVersion": "truss-bootstrap-route-entry/0.1.0",
+  "routeIdentity": "pg17.opclass.direct/0.1.0",
+  "status": "unadopted; source pins only verified; native class/cut/transport/semantic producers unqualified",
+  "nativeClass": {
+    "namespace": "pg_catalog",
+    "relation": "pg_opclass",
+    "classOid": "resolve from original target; never constant",
+    "storageScope": "database",
+    "subobjectNumber": "0"
+  },
+  "selector": "direct original pg_opclass object OIDs",
+  "artifacts": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-opclass-observation-pg17.proposal.sql",
+      "sha256": "b3ac6f2329ce414624c091322ebe4abc72ccef2bfbdb1122531753bd35254de8"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-opclass-observation-pg17.proposal.umf.json",
+      "sha256": "fd213f5da9f81072b327dc2df3ccd6cb64215ea84a7f5576cba43eccbb67bb7d"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/bootstrap-opclass-observation.owner-export.sql",
+      "sha256": "4af0bca80227748d78a68bfa420727c72c4e94b70105e1520e5b78c26886496a"
+    }
+  ],
+  "parameterGrammar": {
+    "slot": "1",
+    "nativeType": "pg_catalog.oid[]",
+    "dimensions": "exactly one",
+    "lowerBound": "1",
+    "nullAllowed": false,
+    "nullItemsAllowed": false,
+    "uniqueItems": true,
+    "countInclusive": [
+      "1",
+      "256"
+    ],
+    "itemDomain": "canonical nonzero uint32 decimal text; actual pg_opclass object OID",
+    "encoder": "selected original canonical PostgreSQL array encoder; no JS numeric round trip"
+  },
+  "orderedColumns": [
+    "catalog_class_oid",
+    "object_oid",
+    "namespace_oid",
+    "original_catalog_row_json"
+  ],
+  "coverage": "Exact bijection between requested original addresses and returned unique admitted rows; missing requested row is absent, wrong class/extra/duplicate row refuses, not empty complete",
+  "requiredKnownFields": [
+    "oid",
+    "opcname",
+    "opcnamespace",
+    "opcowner",
+    "opcmethod",
+    "opcfamily",
+    "opcintype",
+    "opcdefault",
+    "opckeytype"
+  ],
+  "preservation": "Retain full exact returned row JSON text and every unknown extension member; lossless bounded selected native JSON decoder; no parse/stringify reconstruction",
+  "dependencyExtraction": {
+    "method": "opcmethod reaches actual pg_am",
+    "family": "opcfamily reaches actual pg_opfamily plus complete member routes",
+    "types": "opcintype reaches actual pg_type; nonzero opckeytype reaches pg_type, zero native sentinel retained for selected meaning",
+    "scope": "namespace local pg_namespace; owner shared pg_authid",
+    "fieldClassification": {
+      "oid": "original native correlation only",
+      "opcname": "exact native name under resolved namespace and access-method identity",
+      "opcnamespace": "resolved original namespace definition",
+      "opcowner": "resolved original shared owner policy",
+      "opcmethod": "resolved original index access-method definition",
+      "opcfamily": "resolved original family and complete required members",
+      "opcintype": "resolved original indexed input-type definition",
+      "opcdefault": "actual native default flag; global method/input uniqueness needs complete original coverage",
+      "opckeytype": "resolved original stored key type or zero same-input sentinel; preserve declaration separately"
+    },
+    "canonicalProcedure": "CONTRACT-008 Access-method/operator-class/family projection: exact declared names/kinds/default/key facts and complete resolved method/family/type/handler/member/policy definitions; native executable capabilities independently qualified"
+  },
+  "adjuncts": [
+    "complete method/family/member/type closure",
+    "namespace/owner/local/shared dependencies and selected opclass meaning"
+  ],
+  "resourceProfile": "truss-bootstrap-collector-resource/0.1.0",
+  "refusal": "Unknown native category/meaning, shell definition without qualified semantics or unresolved complete dependency/member closure is unsupported; original observation never executes handlers/operators/routines or enables comparator/lowering support",
+  "resourceObligations": "Shared enclosing totals, complete original cut/authority and explicit pre-materialization/native-work permits; no independent per-route allowance"
+}

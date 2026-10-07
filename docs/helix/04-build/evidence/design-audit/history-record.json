@@ -1,0 +1,66 @@
+{
+  "scope": "Draft historical carrier shape only; no native owner/domain/time/uniqueness/history qualification",
+  "cases": 12,
+  "outcomes": [
+    {
+      "name": "rootless object",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "owned object",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "complete edge",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "edge missing endpoint",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "object with edge metadata",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "rounded host identity",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "null order with stray text",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "exact property token",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "host numeric token",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "duplicate property requires semantic rejection",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "unresolved owner requires semantic rejection",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "invalid timestamp requires semantic rejection",
+      "expected": true,
+      "actual": true
+    }
+  ]
+}

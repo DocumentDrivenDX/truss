@@ -1,0 +1,22 @@
+-- Unexecuted PostgreSQL 17 namespace ACL expansion proposal.
+-- $1: independently admitted unique one-dimensional nonnull pg_namespace OIDs,
+-- at most 256, with original class/subobject=0 custody. No namespace filter.
+-- LEFT JOIN retains namespaces whose explicit ACL expands to no grants.
+SELECT n.tableoid::pg_catalog.oid::pg_catalog.text AS catalog_class_oid,
+       n.oid::pg_catalog.text AS object_oid,
+       n.nspowner::pg_catalog.text AS owner_oid,
+       n.nspacl IS NULL AS original_acl_is_null,
+       n.nspacl::pg_catalog.text AS original_acl_native_text,
+       pg_catalog.array_dims(n.nspacl) AS original_acl_native_dimensions,
+       pg_catalog.cardinality(COALESCE(n.nspacl,
+           pg_catalog.acldefault('n'::pg_catalog."char", n.nspowner))) AS assumed_acl_item_count,
+       a.grantor IS NOT NULL AS has_expanded_grant,
+       a.grantor::pg_catalog.text AS grantor_oid,
+       a.grantee::pg_catalog.text AS grantee_oid,
+       a.privilege_type,
+       a.is_grantable
+FROM pg_catalog.pg_namespace AS n
+LEFT JOIN LATERAL pg_catalog.aclexplode(COALESCE(n.nspacl,
+    pg_catalog.acldefault('n'::pg_catalog."char", n.nspowner))) AS a ON true
+WHERE n.oid = ANY($1::pg_catalog.oid[])
+ORDER BY n.oid, a.grantor, a.grantee, a.privilege_type, a.is_grantable;

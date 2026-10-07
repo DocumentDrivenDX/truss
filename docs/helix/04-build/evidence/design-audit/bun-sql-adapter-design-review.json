@@ -1,0 +1,23 @@
+{
+  "scope": "Read-only installed declaration/source and official documentation review; no Bun SQL construction, native connection, query or adapter qualification",
+  "runtimeEvidenceVersion": "Bun 1.4.2 used by existing source checks; SQL runtime not exercised",
+  "sources": [
+    {
+      "path": "/Users/erik/Projects/umf/node_modules/bun-types/sql.d.ts",
+      "sha256": "9ae72ea9b6e33001dbe932bc3b8c6566601eb0b5f7c262998c9c68f4c121986e"
+    },
+    {
+      "path": "/Users/erik/Projects/umf/node_modules/bun-types/package.json",
+      "sha256": "3a84571e93b9af8e5503ea535a5deec9b7800513250a16eab43151988f10ba74"
+    }
+  ],
+  "officialDocs": "https://bun.com/docs/runtime/sql",
+  "observations": [
+    "TransactionSQL.reserve declares a new unrelated connection; cannot implement adoption on original transaction",
+    "Query.raw declares buffer-array output; exact null/encoding/column metadata remains unqualified",
+    "Query.cancel is cancellation request; no independent termination guarantee established",
+    "unsafe accepts parameter array; exact host-carrier/native OID/domain behavior remains unqualified",
+    "savepoint is callback-shaped; Executor explicit savepoint handle semantics need original transaction procedures",
+    "No Truss package.json/adapter implementation exists in inspected worktree"
+  ]
+}

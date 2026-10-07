@@ -1,0 +1,140 @@
+{
+  "scope": "Existing UMF owner parser/source archive/JSON reload/stable export and partial declaration observation only; no native installation, constraint/index binding, history continuity, privileges, encoder or complete exporter qualification",
+  "ownerSource": {
+    "root": "/Users/erik/Projects/umf",
+    "commit": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+    "status": "",
+    "files": [
+      {
+        "path": "native/postgresql/runtime.ts",
+        "sha256": "a88fea4cf15c9c3c3f0ad1f0a36d8f5de42a42ce8ea9712499f609beee3ea751"
+      },
+      {
+        "path": "src/adapters/postgresql/index.ts",
+        "sha256": "7baa071d95e5f9863a4ce2bf892d87fb27cab9d8605ba4cf8887016d14ca17b4"
+      },
+      {
+        "path": "src/adapters/postgresql/declarations.ts",
+        "sha256": "e47ebd6366fee86fb8ccaf1270555bcd338957bff511f30cdcae22a088c6d8d9"
+      },
+      {
+        "path": "src/model/document.ts",
+        "sha256": "a0422042659defdea425dff8bb0618eaa4bbf125f68da16aa5ad21af0b6c282f"
+      },
+      {
+        "path": "spec/extensions/postgresql/native-ast.schema.json",
+        "sha256": "aa3d3b50bc04edbc3ab3430e113ee8710edb1c10ff5cee15d4bcc7b16d9a9039"
+      },
+      {
+        "path": "bun.lock",
+        "sha256": "98a99f7d306f7269db103bdbfafe5f9ad9ed34b02024276ad0cce45df27f5cc3"
+      }
+    ]
+  },
+  "backend": "@libpg-query/parser@17.6.10",
+  "path": "docs/helix/02-design/contracts/key-lifecycle-history-v0.1.proposal.sql",
+  "sourceSha256": "ece75b2901582bfc814ebb99c88eaf627c43ffa97c6f22b1694fd34c328ecc15",
+  "artifactPath": "docs/helix/02-design/contracts/key-lifecycle-history-v0.1.proposal.umf.json",
+  "artifactSha256": "15b79f1ee8307b59997ac99cd674ad27128a2eef4ef8ae581a2d83fde76d03d9",
+  "exportSha256": "6c9a54be799eaef642cca123269d6e5e14dbd5a88a66ef3e0ebcca01eb47202c",
+  "sourceArchiveExact": true,
+  "reloadedExportExact": true,
+  "complete": false,
+  "declarations": [
+    {
+      "kind": "create-table",
+      "path": "/stmts/0/stmt/CreateStmt",
+      "requiresCatalogExpansion": false,
+      "columns": [
+        {
+          "path": "/stmts/0/stmt/CreateStmt/tableElts/0/ColumnDef",
+          "name": "rev",
+          "typeResolution": "builtin-syntax",
+          "syntacticScalarFamily": "integer"
+        },
+        {
+          "path": "/stmts/0/stmt/CreateStmt/tableElts/1/ColumnDef",
+          "name": "seq",
+          "typeResolution": "builtin-syntax",
+          "syntacticScalarFamily": "integer"
+        },
+        {
+          "path": "/stmts/0/stmt/CreateStmt/tableElts/2/ColumnDef",
+          "name": "type_id",
+          "typeResolution": "builtin-syntax",
+          "syntacticScalarFamily": "integer"
+        },
+        {
+          "path": "/stmts/0/stmt/CreateStmt/tableElts/3/ColumnDef",
+          "name": "key_num",
+          "typeResolution": "builtin-syntax",
+          "syntacticScalarFamily": "integer"
+        },
+        {
+          "path": "/stmts/0/stmt/CreateStmt/tableElts/4/ColumnDef",
+          "name": "transition_kind",
+          "typeResolution": "unresolved"
+        },
+        {
+          "path": "/stmts/0/stmt/CreateStmt/tableElts/5/ColumnDef",
+          "name": "before_retired_rev",
+          "typeResolution": "builtin-syntax",
+          "syntacticScalarFamily": "integer"
+        },
+        {
+          "path": "/stmts/0/stmt/CreateStmt/tableElts/6/ColumnDef",
+          "name": "after_retired_rev",
+          "typeResolution": "builtin-syntax",
+          "syntacticScalarFamily": "integer"
+        },
+        {
+          "path": "/stmts/0/stmt/CreateStmt/tableElts/7/ColumnDef",
+          "name": "before_definition_bytes",
+          "typeResolution": "unresolved"
+        },
+        {
+          "path": "/stmts/0/stmt/CreateStmt/tableElts/8/ColumnDef",
+          "name": "after_definition_bytes",
+          "typeResolution": "unresolved"
+        }
+      ]
+    }
+  ],
+  "unhandled": [
+    {
+      "path": "/stmts/1/stmt"
+    }
+  ],
+  "diagnostics": [
+    {
+      "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+      "path": "",
+      "severity": "warning",
+      "message": "Raw syntax is not catalog resolution, SQL execution, permissions or server-state validation"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/0/stmt/CreateStmt/tableElts/4/ColumnDef/typeName",
+      "severity": "warning",
+      "message": "Type remains unresolved, structured, array-valued or outside the known qualified builtin families"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/0/stmt/CreateStmt/tableElts/7/ColumnDef/typeName",
+      "severity": "warning",
+      "message": "Type remains unresolved, structured, array-valued or outside the known qualified builtin families"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/0/stmt/CreateStmt/tableElts/8/ColumnDef/typeName",
+      "severity": "warning",
+      "message": "Type remains unresolved, structured, array-valued or outside the known qualified builtin families"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/1/stmt",
+      "severity": "warning",
+      "message": "Statement is retained without declaration extraction or execution"
+    }
+  ]
+}

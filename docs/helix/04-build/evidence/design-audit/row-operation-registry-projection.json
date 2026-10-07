@@ -1,0 +1,192 @@
+{
+  "status": "pass",
+  "scope": "source-pinned original UMF native ASTs: sixteen ordered column expressions and nullable declarations; no SQL execution, transport/decoder/authority/resource qualification",
+  "corruptionControls": [
+    {
+      "case": "omit-last-projected-column",
+      "status": "expected-refusal"
+    },
+    {
+      "case": "reorder-original-projection",
+      "status": "expected-refusal"
+    },
+    {
+      "case": "substitute-original-relation",
+      "status": "expected-refusal"
+    },
+    {
+      "case": "duplicate-result-alias",
+      "status": "expected-refusal"
+    },
+    {
+      "case": "add-limit-hides-surviving-operations",
+      "status": "expected-refusal"
+    },
+    {
+      "case": "add-distinct-collapses-observations",
+      "status": "expected-refusal"
+    },
+    {
+      "case": "add-caller-parameter-to-xid-producer",
+      "status": "expected-refusal"
+    },
+    {
+      "case": "allocate-xid-in-identity-observation",
+      "status": "expected-refusal"
+    },
+    {
+      "case": "allocate-xid-in-operation-selection",
+      "status": "expected-refusal"
+    },
+    {
+      "case": "unqualified-xid-producer",
+      "status": "expected-refusal"
+    },
+    {
+      "case": "substitute-byte-carrier-encoding",
+      "status": "expected-refusal"
+    },
+    {
+      "case": "add-aggregate-modifier-to-byte-carrier",
+      "status": "expected-refusal"
+    },
+    {
+      "case": "add-array-cast-to-native-text",
+      "status": "expected-refusal"
+    },
+    {
+      "case": "add-result-indirection",
+      "status": "expected-refusal"
+    },
+    {
+      "case": "restrict-inheritance-observation",
+      "status": "expected-refusal"
+    },
+    {
+      "case": "substitute-cross-database-relation",
+      "status": "expected-refusal"
+    },
+    {
+      "case": "erase-original-nullable-generation",
+      "status": "expected-refusal"
+    }
+  ],
+  "columns": [
+    {
+      "ordinal": 0,
+      "sourceColumn": "original_writer_xid",
+      "outputColumn": "original_writer_xid",
+      "nullable": false,
+      "carrier": "native-text"
+    },
+    {
+      "ordinal": 1,
+      "sourceColumn": "operation_ordinal",
+      "outputColumn": "operation_ordinal",
+      "nullable": false,
+      "carrier": "native-text"
+    },
+    {
+      "ordinal": 2,
+      "sourceColumn": "operation_kind",
+      "outputColumn": "operation_kind",
+      "nullable": false,
+      "carrier": "native-text"
+    },
+    {
+      "ordinal": 3,
+      "sourceColumn": "phase",
+      "outputColumn": "phase",
+      "nullable": false,
+      "carrier": "native-text"
+    },
+    {
+      "ordinal": 4,
+      "sourceColumn": "effect_generation",
+      "outputColumn": "effect_generation",
+      "nullable": false,
+      "carrier": "native-text"
+    },
+    {
+      "ordinal": 5,
+      "sourceColumn": "readiness_generation",
+      "outputColumn": "readiness_generation",
+      "nullable": true,
+      "carrier": "native-text"
+    },
+    {
+      "ordinal": 6,
+      "sourceColumn": "sealed_generation",
+      "outputColumn": "sealed_generation",
+      "nullable": true,
+      "carrier": "native-text"
+    },
+    {
+      "ordinal": 7,
+      "sourceColumn": "application_generation",
+      "outputColumn": "application_generation",
+      "nullable": true,
+      "carrier": "native-text"
+    },
+    {
+      "ordinal": 8,
+      "sourceColumn": "original_context_bytes",
+      "outputColumn": "original_context_bytes_hex",
+      "nullable": false,
+      "carrier": "hex-text"
+    },
+    {
+      "ordinal": 9,
+      "sourceColumn": "original_definition_bytes",
+      "outputColumn": "original_definition_bytes_hex",
+      "nullable": false,
+      "carrier": "hex-text"
+    },
+    {
+      "ordinal": 10,
+      "sourceColumn": "original_input_bytes",
+      "outputColumn": "original_input_bytes_hex",
+      "nullable": false,
+      "carrier": "hex-text"
+    },
+    {
+      "ordinal": 11,
+      "sourceColumn": "original_prestate_bytes",
+      "outputColumn": "original_prestate_bytes_hex",
+      "nullable": false,
+      "carrier": "hex-text"
+    },
+    {
+      "ordinal": 12,
+      "sourceColumn": "admitted_candidate_bytes",
+      "outputColumn": "admitted_candidate_bytes_hex",
+      "nullable": false,
+      "carrier": "hex-text"
+    },
+    {
+      "ordinal": 13,
+      "sourceColumn": "effect_obligation_bytes",
+      "outputColumn": "effect_obligation_bytes_hex",
+      "nullable": false,
+      "carrier": "hex-text"
+    },
+    {
+      "ordinal": 14,
+      "sourceColumn": "original_group_custody_bytes",
+      "outputColumn": "original_group_custody_bytes_hex",
+      "nullable": false,
+      "carrier": "hex-text"
+    },
+    {
+      "ordinal": 15,
+      "sourceColumn": "application_result_bytes",
+      "outputColumn": "application_result_bytes_hex",
+      "nullable": true,
+      "carrier": "hex-text"
+    }
+  ],
+  "sourcePins": {
+    "02-design/contracts/row-operation-registry-observation-v0.1.proposal.sql": "29d1a6647aedae69bda2276d6a0f6173b50a5a9e89a79b3cc4076f504b5125ca",
+    "02-design/contracts/row-home-operation-v0.1.proposal.sql": "cda531af7e04c1da98b90dc000689de5cbed5ea665243b8584532337fd14b89f"
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "scope": "private start-capture shape with original context references only; empty/duplicate/foreign/kind/custody meanings require actual semantic admission",
+  "bunVersion": "1.4.2",
+  "sourcePins": [
+    {
+      "path": "docs/helix/02-design/contracts/journal-start-capture-v0.2.proposal.schema.json",
+      "sha256": "c3801f87fc1e07b76cd49fa33ffa0d10de58c7dff0febf454d1c4f8c7621dde9"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/truss-row-operation-context-v0.1.proposal.schema.json",
+      "sha256": "e5b906ada259af29afe28f6cf29b7f5b980ec84af6eaf6a96ab6c879e0b6be50"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/history-record-v0.1.schema.json",
+      "sha256": "c35c1258028cc4c8c95dcd16b561caed4f2a347c086f72ebfc7bfc4f2dfcf2fe"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/exact-value-v0.1.schema.json",
+      "sha256": "0c804796bfbf68339c299f0c55d24db58fcfcc929bffe2d5ffaf4a2f27e24880"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/acceptance-input-v0.1.schema.json",
+      "sha256": "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/check-journal-start-capture.ts",
+      "sha256": "86a3afa77d328a8f78b22886423f95670b6809e9d28d56e0cc958f35f2620005"
+    }
+  ],
+  "outcomes": [
+    {
+      "name": "complete present shape",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "qualified absent shape",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "empty scope requires independent completeness",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "missing original context",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "missing original role",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "missing affected inventory",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "present without record",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "absent without evidence",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "unknown physical kind",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "future group digest",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "allocated position at start",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "commit assertion at start",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "duplicate identities need semantic refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "foreign record identity needs semantic refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "record kind mismatch needs semantic refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "forged native original context needs semantic refusal",
+      "expected": true,
+      "actual": true
+    }
+  ],
+  "nativeExecuted": false,
+  "adopted": false
+}

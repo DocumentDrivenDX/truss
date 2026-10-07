@@ -1,0 +1,6 @@
+{
+  "scope": "Published group canonical spelling/byte/hash/input-shape correspondence only; no production/native/authority qualification",
+  "vectors": 7,
+  "rejectionControls": 5,
+  "failures": []
+}

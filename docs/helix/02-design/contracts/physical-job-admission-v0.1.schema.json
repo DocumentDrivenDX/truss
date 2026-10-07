@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:physical-job-admission:0.1.0",
+  "title": "Draft physical job admission metadata",
+  "description": "Closed transport metadata only. Cannot mint opaque original admission custody. Actual queue writer commitment/current generation/authority and original evidence require native admission independently of accepted catalog commitment.",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-physical-job-admission/0.1.0"
+        },
+        "kind": {
+          "const": "index"
+        },
+        "durability": {
+          "const": "pending"
+        },
+        "attempt": {
+          "$ref": "urn:truss:draft:index-readiness:0.1.0#/$defs/attempt"
+        },
+        "evidence": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "kind",
+        "durability",
+        "attempt",
+        "evidence"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-physical-job-admission/0.1.0"
+        },
+        "kind": {
+          "const": "index"
+        },
+        "durability": {
+          "const": "committed"
+        },
+        "attempt": {
+          "$ref": "urn:truss:draft:index-readiness:0.1.0#/$defs/attempt"
+        },
+        "observation": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "kind",
+        "durability",
+        "attempt",
+        "observation"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-physical-job-admission/0.1.0"
+        },
+        "kind": {
+          "const": "statistics"
+        },
+        "durability": {
+          "const": "pending"
+        },
+        "attempt": {
+          "$ref": "urn:truss:draft:statistics-readiness:0.1.0#/$defs/attempt"
+        },
+        "evidence": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "kind",
+        "durability",
+        "attempt",
+        "evidence"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-physical-job-admission/0.1.0"
+        },
+        "kind": {
+          "const": "statistics"
+        },
+        "durability": {
+          "const": "committed"
+        },
+        "attempt": {
+          "$ref": "urn:truss:draft:statistics-readiness:0.1.0#/$defs/attempt"
+        },
+        "observation": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "kind",
+        "durability",
+        "attempt",
+        "observation"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

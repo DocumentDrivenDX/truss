@@ -1,0 +1,38 @@
+{
+  "interfaceVersion": "truss-native-custody-parser-resource/0.1.0",
+  "status": "unadopted proposal; native preflight/parser/accounting unqualified",
+  "scope": "One private custody envelope parse occurrence inside an original OC/RF/RT invocation; not graph-value codec limits or independent extra budget",
+  "derivedConstraints": [
+    {
+      "path": "truss-row-finalization-resource-v0.1.proposal.json",
+      "sha256": "18806b9cb7c6a4f499ab217f4120c5b9d8b05d1537f927c08a0e1b76d347c4cb"
+    },
+    {
+      "path": "truss-private-custody-cleanup-resource-v0.1.proposal.json",
+      "sha256": "d12eedf9e80e4c837d7d90521846ff13c69185a3683095de411cbdaf9307d324"
+    }
+  ],
+  "limits": {
+    "oneOriginalEnvelopeBytes": "8388608",
+    "containerDepth": "64",
+    "tokenOccurrences": "262144",
+    "objectMemberOccurrences": "65536",
+    "oneStringSourceBytes": "8388608",
+    "peakOwnedBytes": "134217728",
+    "cumulativeAllocationBytes": "536870912",
+    "abstractWorkUnits": "32000000",
+    "wallDeadlineMilliseconds": "30000"
+  },
+  "counting": {
+    "depth": "Root object depth one; increment only object/array container nesting outside strings. Embedded artifact bytes are not JSON nesting.",
+    "tokens": "Count each object/array start, object member name, string/number/boolean/null value occurrence; closing delimiters and punctuation remain byte/work charges.",
+    "members": "Every object name/value member occurrence, including duplicates that later refuse.",
+    "strings": "Source bytes inside quotes including escape spellings; decoded text/UTF-8 and copied substring representations charged separately.",
+    "work": "Every scanned/decoded/hashed/copied/compared byte, member/token/lookup/allocation operation and uniqueness comparison; repeated parser passes and envelopes charge again.",
+    "preflight": "Read original source length and reserve complete selected materialization before allocation; bounded byte lexical scan precedes recursive native JSON parse. Unknown native detoast/parser scratch upper bound refuses this profile.",
+    "aggregate": "Apply minimum of every applicable enclosing original row/operation/group/transaction/retention allowance and remaining budget. No per-envelope reset, extra 128 MiB allowance or evicted original recovery.",
+    "deadline": "Minimum stage/enclosing deadline from original invocation admission; preflight does not reset the clock. Native parsing must have selected actual cancellation/containment.",
+    "maxima": "Independent maxima do not promise simultaneous fit. A row total bound covers all original carriers, not a new 8 MiB entitlement for every carrier."
+  },
+  "adoption": "Select actual native preflight depth/token/string producer, UTF-8/JSON function identities, memory/work upper-bound method, deadline/error containment and all exact-limit/one-over independent cases."
+}

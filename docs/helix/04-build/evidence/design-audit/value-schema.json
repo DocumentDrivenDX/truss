@@ -1,0 +1,81 @@
+{
+  "scope": "Draft 2020-12 structure only; no token/domain/digest/bounds/native qualification",
+  "cases": 15,
+  "outcomes": [
+    {
+      "name": "absence",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "present null",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "lexical decimal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "nested exact values",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "empty map",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "record descriptor",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "opaque source",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "missing present value",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "value on absence",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "host decimal number",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "unknown selected tag",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "unexpected member",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "map missing key",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "record missing pin",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "opaque malformed digest",
+      "expected": false,
+      "actual": false
+    }
+  ]
+}

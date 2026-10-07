@@ -1,0 +1,125 @@
+{
+  "scope": "One original plus nine fault-injected allocation manifests in normal and optimized Python; scoped audit behavior only, no native/exporter qualification",
+  "cases": [
+    {
+      "case": "original",
+      "mode": "normal",
+      "expected": "pass",
+      "observed": "pass"
+    },
+    {
+      "case": "original",
+      "mode": "optimized",
+      "expected": "pass",
+      "observed": "pass"
+    },
+    {
+      "case": "stale-source",
+      "mode": "normal",
+      "expected": "refuse",
+      "observed": "refuse"
+    },
+    {
+      "case": "stale-source",
+      "mode": "optimized",
+      "expected": "refuse",
+      "observed": "refuse"
+    },
+    {
+      "case": "stale-model",
+      "mode": "normal",
+      "expected": "refuse",
+      "observed": "refuse"
+    },
+    {
+      "case": "stale-model",
+      "mode": "optimized",
+      "expected": "refuse",
+      "observed": "refuse"
+    },
+    {
+      "case": "duplicate-label",
+      "mode": "normal",
+      "expected": "refuse",
+      "observed": "refuse"
+    },
+    {
+      "case": "duplicate-label",
+      "mode": "optimized",
+      "expected": "refuse",
+      "observed": "refuse"
+    },
+    {
+      "case": "wrong-column-name",
+      "mode": "normal",
+      "expected": "refuse",
+      "observed": "refuse"
+    },
+    {
+      "case": "wrong-column-name",
+      "mode": "optimized",
+      "expected": "refuse",
+      "observed": "refuse"
+    },
+    {
+      "case": "fabricated-emission-ordinal",
+      "mode": "normal",
+      "expected": "refuse",
+      "observed": "refuse"
+    },
+    {
+      "case": "fabricated-emission-ordinal",
+      "mode": "optimized",
+      "expected": "refuse",
+      "observed": "refuse"
+    },
+    {
+      "case": "wrong-primary-index-basis",
+      "mode": "normal",
+      "expected": "refuse",
+      "observed": "refuse"
+    },
+    {
+      "case": "wrong-primary-index-basis",
+      "mode": "optimized",
+      "expected": "refuse",
+      "observed": "refuse"
+    },
+    {
+      "case": "overclaimed-completeness",
+      "mode": "normal",
+      "expected": "refuse",
+      "observed": "refuse"
+    },
+    {
+      "case": "overclaimed-completeness",
+      "mode": "optimized",
+      "expected": "refuse",
+      "observed": "refuse"
+    },
+    {
+      "case": "wrong-attribute-parent",
+      "mode": "normal",
+      "expected": "refuse",
+      "observed": "refuse"
+    },
+    {
+      "case": "wrong-attribute-parent",
+      "mode": "optimized",
+      "expected": "refuse",
+      "observed": "refuse"
+    },
+    {
+      "case": "wrong-attribute-node",
+      "mode": "normal",
+      "expected": "refuse",
+      "observed": "refuse"
+    },
+    {
+      "case": "wrong-attribute-node",
+      "mode": "optimized",
+      "expected": "refuse",
+      "observed": "refuse"
+    }
+  ]
+}

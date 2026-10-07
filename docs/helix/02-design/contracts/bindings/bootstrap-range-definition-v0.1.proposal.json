@@ -1,0 +1,75 @@
+{
+  "interfaceVersion": "truss-bootstrap-range-definition-profile/0.1.0",
+  "status": "unadopted field specification; native routine/operator/comparator producers unqualified",
+  "nativeVersion": "PostgreSQL 17; exact build separately admitted",
+  "requiredRawFieldInventory": [
+    "rngtypid",
+    "rngsubtype",
+    "rngmultitypid",
+    "rngcollation",
+    "rngsubopc",
+    "rngcanonical",
+    "rngsubdiff"
+  ],
+  "fields": [
+    {
+      "nativeField": "rngtypid",
+      "domain": "nonzero canonical uint32; original pg_type range endpoint and adjunct key",
+      "classification": "resolved original reference or field-specific zero sentinel; raw numeric IDs never semantic identities",
+      "rawPreservation": "Complete original row and projected OID carriers retained without regproc name lookup"
+    },
+    {
+      "nativeField": "rngsubtype",
+      "domain": "nonzero canonical uint32; original pg_type subtype",
+      "classification": "resolved original reference or field-specific zero sentinel; raw numeric IDs never semantic identities",
+      "rawPreservation": "Complete original row and projected OID carriers retained without regproc name lookup"
+    },
+    {
+      "nativeField": "rngmultitypid",
+      "domain": "nonzero canonical uint32; original pg_type multirange endpoint",
+      "classification": "resolved original reference or field-specific zero sentinel; raw numeric IDs never semantic identities",
+      "rawPreservation": "Complete original row and projected OID carriers retained without regproc name lookup"
+    },
+    {
+      "nativeField": "rngcollation",
+      "domain": "canonical uint32; zero no-collation sentinel or resolved pg_collation",
+      "classification": "resolved original reference or field-specific zero sentinel; raw numeric IDs never semantic identities",
+      "rawPreservation": "Complete original row and projected OID carriers retained without regproc name lookup"
+    },
+    {
+      "nativeField": "rngsubopc",
+      "domain": "nonzero canonical uint32; resolved pg_opclass and actual btree method/family/member closure",
+      "classification": "resolved original reference or field-specific zero sentinel; raw numeric IDs never semantic identities",
+      "rawPreservation": "Complete original row and projected OID carriers retained without regproc name lookup"
+    },
+    {
+      "nativeField": "rngcanonical",
+      "domain": "native regproc carrier plus independently projected exact OID; zero absent or resolved pg_proc",
+      "classification": "resolved original reference or field-specific zero sentinel; raw numeric IDs never semantic identities",
+      "rawPreservation": "Complete original row and projected OID carriers retained without regproc name lookup"
+    },
+    {
+      "nativeField": "rngsubdiff",
+      "domain": "native regproc carrier plus independently projected exact OID; zero absent or resolved pg_proc",
+      "classification": "resolved original reference or field-specific zero sentinel; raw numeric IDs never semantic identities",
+      "rawPreservation": "Complete original row and projected OID carriers retained without regproc name lookup"
+    }
+  ],
+  "unknownFields": "Preserved unsupported pending complete governing classification",
+  "association": "One original pg_range adjunct keyed by original rngtypid, no invented object OID. Both independently admitted range and multirange requests may cover the same row; preserve both coverage edges without duplicating definition.",
+  "parentAdmission": "Resolve actual pg_type kinds and complete definitions under one cut; range and multirange endpoints must match the original unique adjunct. Missing or conflicting adjunct never means supported empty type.",
+  "operatorAdmission": "Resolve actual btree access method and full selected opclass/family/input/member meaning. A name match or default-opclass flag cannot substitute for original subtype compatibility and comparator qualification.",
+  "routineAdmission": "Nonzero canonical routine requires original one-range-argument/same-range-result signature; nonzero difference routine requires original two-subtype-argument/double-precision-result signature, including full argument modes/kind and executable provenance. Resolve return types as original native identities, not spelling or hardcoded OIDs. Zero remains absence. Complete signatures are required but do not qualify mathematical behavior.",
+  "canonicalProducer": "Resolved range/multirange/subtype definitions, optional collation and routines, opclass/family/comparator plus required policy/dependency associations. Preserve finite complete cyclic closure through definition identities; no recursive hashing or name-derived endpoint pairing.",
+  "additionalRequiredDefinitions": [
+    "complete endpoint/subtype definitions and authority",
+    "collation declared facts and separately qualified environment when applicable",
+    "full operator-family/member/comparator and routine implementation/authority closure",
+    "original comments/extensions/dependencies and containing type policy"
+  ],
+  "observationPolicy": "Do not invoke canonical, difference, comparator, casts or value I/O as a discovery shortcut; independently qualify executable semantics in selected conformance tests.",
+  "sources": [
+    "https://www.postgresql.org/docs/17/catalog-pg-range.html",
+    "https://www.postgresql.org/docs/17/sql-createtype.html"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "scope": "Candidate authored ID, exact source/model hash, tagged native node and parent correspondence only; native definitions/implicit objects/full allocation/exporter closure unqualified",
+  "entries": 49,
+  "negativeControls": [
+    "duplicate ID",
+    "wrong native schema",
+    "wrong source hash",
+    "wrong model hash",
+    "overclaimed complete",
+    "missing parent",
+    "wrong native column pointer",
+    "wrong constraint kind",
+    "invented constraint native name",
+    "invented constraint name resolution",
+    "missing implicit index creator",
+    "invented implicit index name",
+    "wrong implicit uniqueness"
+  ],
+  "failures": []
+}

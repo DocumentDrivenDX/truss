@@ -1,0 +1,81 @@
+{
+  "profile": "truss-bootstrap-native-address-token/0.1.0",
+  "scope": "Independent exact native integer lexical/domain expectations only; no original address/class/scope qualification",
+  "vectors": [
+    {
+      "domain": "oid",
+      "token": "0",
+      "acceptedToken": "0"
+    },
+    {
+      "domain": "oid",
+      "token": "4294967295",
+      "acceptedToken": "4294967295"
+    },
+    {
+      "domain": "oid",
+      "token": "4294967296",
+      "refusal": "invalid_native_integer"
+    },
+    {
+      "domain": "oid",
+      "token": "-1",
+      "refusal": "invalid_native_integer"
+    },
+    {
+      "domain": "oid",
+      "token": "01",
+      "refusal": "invalid_native_integer"
+    },
+    {
+      "domain": "oid",
+      "token": "+1",
+      "refusal": "invalid_native_integer"
+    },
+    {
+      "domain": "oid",
+      "token": "1e2",
+      "refusal": "invalid_native_integer"
+    },
+    {
+      "domain": "oid",
+      "token": " 1",
+      "refusal": "invalid_native_integer"
+    },
+    {
+      "domain": "int4",
+      "token": "-2147483648",
+      "acceptedToken": "-2147483648"
+    },
+    {
+      "domain": "int4",
+      "token": "2147483647",
+      "acceptedToken": "2147483647"
+    },
+    {
+      "domain": "int4",
+      "token": "-2147483649",
+      "refusal": "invalid_native_integer"
+    },
+    {
+      "domain": "int4",
+      "token": "2147483648",
+      "refusal": "invalid_native_integer"
+    },
+    {
+      "domain": "int4",
+      "token": "-0",
+      "refusal": "invalid_native_integer"
+    },
+    {
+      "domain": "int4",
+      "token": "0",
+      "acceptedToken": "0"
+    },
+    {
+      "domain": "int4",
+      "token": "1.0",
+      "refusal": "invalid_native_integer"
+    }
+  ]
+}

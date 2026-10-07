@@ -1,0 +1,242 @@
+{
+  "profile": "truss-private-tree-batch-observation/0.1.0",
+  "status": "planned_unadopted",
+  "sourceSha256": "699cd0cdd2ffa1c9a5431cbbeb685dc0e5152175ec813c0e0ae25cf6307049fc",
+  "statements": [
+    {
+      "ordinal": 0,
+      "family": "selected_batch_all_state_nodes",
+      "relation": "truss.row_home_node",
+      "parameterSlots": [
+        {
+          "position": 1,
+          "nativeCast": "pg_catalog.int8[]",
+          "meaning": "Same original bounded nonempty state set in both statements; exact positive int8 IDs"
+        }
+      ],
+      "columns": [
+        {
+          "position": 0,
+          "name": "state_id",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": false
+        },
+        {
+          "position": 1,
+          "name": "node_id",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": false
+        },
+        {
+          "position": 2,
+          "name": "parent_node_id",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": true
+        },
+        {
+          "position": 3,
+          "name": "slot_kind",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": false
+        },
+        {
+          "position": 4,
+          "name": "sequence_ordinal",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": true
+        },
+        {
+          "position": 5,
+          "name": "map_key",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": true
+        },
+        {
+          "position": 6,
+          "name": "record_field_identity_hex",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": true
+        },
+        {
+          "position": 7,
+          "name": "value_kind",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": false
+        },
+        {
+          "position": 8,
+          "name": "definition_bytes_hex",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": false
+        },
+        {
+          "position": 9,
+          "name": "node_source_bytes_hex",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": false
+        }
+      ],
+      "collectionOrder": [
+        "state_id",
+        "node_id"
+      ]
+    },
+    {
+      "ordinal": 1,
+      "family": "selected_batch_all_state_scalar_payloads",
+      "relation": "truss.row_home_scalar",
+      "parameterSlots": [
+        {
+          "position": 1,
+          "nativeCast": "pg_catalog.int8[]",
+          "meaning": "Same original bounded nonempty state set in both statements; exact positive int8 IDs"
+        }
+      ],
+      "columns": [
+        {
+          "position": 0,
+          "name": "state_id",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": false,
+          "meaning": "Original positive state identity, exact decimal text"
+        },
+        {
+          "position": 1,
+          "name": "node_id",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": false,
+          "meaning": "Original positive node identity, exact decimal text"
+        },
+        {
+          "position": 2,
+          "name": "scalar_kind",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": false,
+          "meaning": "Original seven-family storage dispatch; not semantic codec identity"
+        },
+        {
+          "position": 3,
+          "name": "text_value",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": true,
+          "meaning": "Exact native text observation under selected original descriptor/grammar"
+        },
+        {
+          "position": 4,
+          "name": "boolean_value",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": true,
+          "meaning": "Exact native text observation under selected original descriptor/grammar"
+        },
+        {
+          "position": 5,
+          "name": "native_numeric_text",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": true,
+          "meaning": "Native numeric text, separate from lexical source token"
+        },
+        {
+          "position": 6,
+          "name": "original_numeric_token",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": true,
+          "meaning": "Original admitted numeric token, no normalization"
+        },
+        {
+          "position": 7,
+          "name": "binary_value_hex",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": true,
+          "meaning": "Exact binary payload; present empty hex differs from native NULL"
+        },
+        {
+          "position": 8,
+          "name": "temporal_text",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": true,
+          "meaning": "Original temporal spelling"
+        },
+        {
+          "position": 9,
+          "name": "temporal_instant_text",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": true,
+          "meaning": "Optional qualified native timestamptz text; requires original settings/profile"
+        },
+        {
+          "position": 10,
+          "name": "opaque_bytes_hex",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": true,
+          "meaning": "Exact opaque bytes, not inferred text"
+        },
+        {
+          "position": 11,
+          "name": "codec_bytes_hex",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": false,
+          "meaning": "Full original nonempty registered codec bytes"
+        },
+        {
+          "position": 12,
+          "name": "source_bytes_hex",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": false,
+          "meaning": "Full original nonempty source bytes"
+        },
+        {
+          "position": 13,
+          "name": "metadata_date_style",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": false,
+          "meaning": "Exact native text observation under selected original descriptor/grammar"
+        },
+        {
+          "position": 14,
+          "name": "metadata_time_zone",
+          "nativeResultType": "pg_catalog.text",
+          "nativeNullPermitted": false,
+          "meaning": "Exact native text observation under selected original descriptor/grammar"
+        }
+      ],
+      "collectionOrder": [
+        "state_id",
+        "node_id"
+      ]
+    }
+  ],
+  "originalCustodyPrerequisites": [
+    "complete original header inventory with state/root/definition/home/value/source/owner tuple for every selected state",
+    "complete visibility for both relations and every original selected state",
+    "one coherent original read cut/exclusion retained across all batches and both complete statements",
+    "pre-materialization native scan/transport limits and shared-account reservation without batch reset",
+    "complete raw descriptors, framing and original termination for both streams in every batch",
+    "independent complete required-state partition union with no overlap or omitted present state"
+  ],
+  "correlation": "Complete full state/node identity bijection with original node kind; scalar orphan/missing/duplicate/forbidden payload evidence must survive collection",
+  "nativeExecution": false,
+  "complete": false,
+  "captureStatus": "exact_existing_UMF_source_archive_reload_export; two_unhandled_SELECTs_complete_false; native_unqualified",
+  "originalProjectionSourceSha256": "db1ddad5f6ef8953a2e3dacf91b7c69fc8941c5df4e1ca2fc304d7e6a33df6a8",
+  "stateBatchAdmission": {
+    "maximumStates": "256",
+    "minimumStates": "1",
+    "nullArrayPermitted": false,
+    "nullElementsPermitted": false,
+    "duplicateElementsPermitted": false,
+    "origin": "Complete admitted original owner-state headers; exact disjoint union over required present states",
+    "counterResetPermitted": false
+  },
+  "modelSha256": "9f0570ce60c16404fe7d7500142fcc3832d3f2082849a1b6c879de35a54a8147",
+  "parameterEncoding": {
+    "carrier": "text",
+    "nativeCast": "pg_catalog.int8[]",
+    "elementGrammar": "positive_canonical_int8_decimal",
+    "ordering": "exact_numeric_ascending",
+    "containerGrammar": "one_flat_braced_comma_separated_ascii_array",
+    "maximumCarrierBytes": "5121",
+    "sqlInterpolationPermitted": false,
+    "hostNumberConversionPermitted": false,
+    "genericDriverArrayConversionPermitted": false
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "status": "pass",
+  "scope": "exact retained 23-statement/142-identity source correspondence and relative order, one additional source-bound index after registry, initializer last; no native dependency/security/adoption/installation/enforcement",
+  "mappingCorruptionControls": [
+    "missing-statement-row",
+    "duplicate-effect-identity",
+    "wrong-original-source-index",
+    "wrong-effect-statement-hash",
+    "lost-initialization-parameters",
+    "promote-installation-claim"
+  ],
+  "retainedStatements": 23,
+  "retainedIdentities": 142,
+  "addedStatements": 1,
+  "addedIdentities": 1,
+  "candidateStatements": 24,
+  "candidateIdentities": 143,
+  "inputPins": {
+    "row-home-edge-limit-guard-statement-composition.json": "88bf4ad693825fd2d4f26cceec4685266716404b9bf804d39ec8fad93f4f472d",
+    "row-home-unfinished-unique-guard-statement-composition.json": "9d08b84d467e811e258b45d50102958d40879c54a744cbf46a367b753fff7b08",
+    "row-home-edge-limit-guard-statement-mapping.json": "989a8568c2e8408c051000d565f37c38b55d905fba28904dd68ecdd8cbbb9373",
+    "row-home-unfinished-unique-guard-statement-mapping.json": "8b9131db776332085ca93c23b982e96ea8559e70a7527228d91ad12b8821a66f"
+  },
+  "installable": false,
+  "nativeExecution": false
+}

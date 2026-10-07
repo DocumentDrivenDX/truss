@@ -1,0 +1,89 @@
+---
+ddx:
+  id: TD-007
+  type: technical-design
+  activity: design
+  status: draft
+  authoring:
+    home: repo
+  links:
+    - id: US-007
+      kind: informed_by
+    - id: SD-002
+      kind: informed_by
+    - id: CONTRACT-001
+      kind: informed_by
+    - id: CONTRACT-007
+      kind: informed_by
+---
+
+# TD-007: Store and read objects and edges exactly
+
+**User Story:** [[US-007]]. **Feature:** FEAT-002. **Parent:** [[SD-002]].
+
+## Scope
+
+Build the catalog-driven exact value codec and fixed object/edge storage transport. No per-type tables or implicit driver conversions. The story includes shared identifier allocation, not edge lifecycle/cardinality rules covered by other stories. Numeric lexical preservation remains a blocking design decision, not an acceptable loss.
+
+## Technical Approach
+
+Inherit SD-002's lossless text boundary. Core receives typed values and a pinned catalog; the adapter passes explicit typed parameters and raw text/null result cells under CONTRACT-007. Avoid a generic host JSON parser for numeric tokens. Read object maps with an exact recursive parser that preserves presence before converting each value according to its catalog meaning.
+
+US-007-AC1 spans pure codec and actual PostgreSQL roundtrip. Binary uses canonical base64; timestamps retain authored offset text rather than native driver Date conversion. Arbitrary-precision arithmetic handles numeric validation. AC2 uses map membership plus explicit JSON null; SQL null and absent field are not interchangeable. AC3 checks nested strings as well as top-level properties before persistence and reports the governing rule. AC4 obtains identifiers exclusively from the shared native sequence; rolled-back reservations leave gaps and deleted identifiers are never recycled.
+
+## Component Changes
+
+| Planned files | Responsibility | Criteria |
+| --- | --- | --- |
+| `packages/core/src/values/parse.ts` | Exact recursive parsing and token diagnostics | US-007-AC1, US-007-AC3 |
+| `packages/core/src/values/codec.ts` | Catalog-directed encoding/decoding, presence and family validation | US-007-AC1, US-007-AC2, US-007-AC3 |
+| `packages/core/src/values/numeric-correspondence.ts` | CONTRACT-010 NX01–NX06 bounded mathematical witnesses after original grammar/facet admission; lexical custody stays separate | US-007-AC1 |
+| `packages/postgresql/src/storage/values.ts` | Parameterized fixed-row writes and raw-text map reads | US-007-AC1, US-007-AC2 |
+| `packages/postgresql/src/storage/identity.ts` | Shared sequence reservations without caller-chosen IDs | US-007-AC4 |
+| `tests/values/codec.test.ts`, `tests/values/native.test.ts`, `tests/values/browser.test.ts` | Exact corpus, real persistence and pure browser portability | All criteria |
+
+These are new implementation components. Keep browser tests independent of Bun/Node-only APIs; database integration remains outside core.
+
+## API/Interface Design
+
+CONTRACT-001 governs storage representation and sequence identity; CONTRACT-004 governs mutation/report behavior; CONTRACT-007 governs exact executor transport and transaction ownership. Shared public value schemas and the final lexical-preservation carrier must be settled there before publication. Weft's decoder consumes the qualified Truss profile, not an independently guessed JSON representation.
+
+## Data Model Changes
+
+Existing property maps and shared sequence remain the baseline. A lexical receipt or alternative numeric carrier, if selected, is a versioned contract/layout change and cannot be hidden in this story's implementation. Structured nonidentity records remain value containment; keyed records and owned relationships require explicit UMF bindings rather than inference from a record-valued field.
+
+## Integration Points
+
+Catalog supplies recursive logical type and physical binding. Codec refusal is explicit for selected unsupported types; unknown retained content follows its separate retention contract. Storage executes within the catalog pin and host transaction context. Exact driver configuration is mandatory on every connection, including adopted caller connections. If the executor cannot provide raw text for required cells, refuse the adapter profile rather than trust rounded output.
+
+## Security
+
+Authentication and connection ownership belong to the host. Enforce the acting role/context before reads/writes. Parameterize values and identifiers through validated templates. Bound recursive depth/size through the exact selected versioned value/resource profiles before accepting untrusted inputs. Existing read/row-home/collector resource proposals are candidate inputs, not an adopted complete codec profile; select their original units/producers and composition without silently inventing or widening limits. Reports identify rule/path without unnecessary value disclosure.
+
+## Performance
+
+Measure encode/decode cost by bytes and nesting, and database roundtrip by the qualified corpus. Cache compiled codecs by full catalog/profile identity. Do not trade exactness for native double parsing. Broad scale claims depend on ADR-002 V1/V2 and PRD benchmarks, not this story's correctness pass.
+
+## Testing
+
+STP-007 owns all four primary allocations. Independent fixtures include 9007199254740993, signed limits, decimal trailing zeroes/exponent spellings, equivalent instants with distinct offsets, binary bytes, empty/nested containers, absent and null. Native observations inspect stored text and decoded results separately. Concurrent object/edge creates use independent clients; deletion and rollback cases prove nonreuse. Browser tests run the same codec output package.
+
+## Migration and Rollback
+
+Initial storage uses fresh bootstrap only. Failed writes leave no canonical rows or journal effects; sequence gaps are permitted. Never repair exactness by rewriting existing values without an explicit migration. A carrier change requires old/new decoding qualification and a reviewed version transition. Preserve previous fixtures and profiles for comparison.
+
+## Implementation Sequence
+
+1. Select the full original logical/native/home/codec/resource tuple and resolve applicable D-05 lexical carrier and FR-15 allocation durability choices. Row-home numeric_token is an authored candidate; it does not silently accept the props lexical ADR or prove durability.
+2. Add independent exactness/presence/U+0000/native identity cases and the NX witness/refusal corpus. Original facet and native representability expectations must be separate from mathematical/lexical equality.
+3. Implement bounded exact parsing and pure NX comparison with source bytes retained; validate the complete original token/exponent/facets before zero normalization. Run pure browser/Bun cases through the same portable output.
+4. Implement raw native descriptor/text/parameter transport, actual stored source/token/value correspondence and complete row/recursive finalization under selected original context/resource custody. Register/qualify native parsing/facet/correspondence producers before reporting database enforcement.
+5. Exercise caller-owned connections, selected adapter/timing/cancellation/containment cases and native identity/concurrency controls. Publish scoped receipts for storage/readback; key, order, predicate and aggregate capability qualification remains separately declared under CR03.
+
+## Risks and Gates
+
+JSONB preserves numeric value but is not a general original-token archive. CONTRACT-001's authored lexical promise therefore requires a concrete carrier/receipt decision before AC1 can pass for the full corpus. Unsupported native scalar widths, float special values, nested presence and unknown values require explicit profile decisions. Driver convenience decoding can irreversibly lose precision before core receives a value. No native roundtrip claim follows from pure codec or parser tests.
+
+### Journal-stage cleanup integration
+
+For a selected journal child-store profile, CONTRACT-001's original stage cohort/snapshot/pending-result and paired observation/DELETE sources participate in RT01–RT06 retention. Whole-operation closure preserves exact original values and allocator/recovery dependencies: child rows cannot be independently evicted, split to fit resources or used as commit proof. Independently admit full original parent/stage membership and current eligibility, reobserve under exclusions, compare complete returned snapshots, prove child/parent absence and publish pending capacity/effect evidence atomically. Existing operation/touch cleanup wires remain a separate profile. STP-007's stage-cleanup supplements below specify native race/rollback/uncertainty controls; installer/routines/resource/privilege/descriptor profile selection and actual native runs remain open.

@@ -1,0 +1,52 @@
+{
+  "profile": "truss-record-field-identity-byte-witnesses/0.1.0",
+  "status": "planned_unadopted",
+  "scope": "Independent explicit JSON/UTF8 comparison witnesses; text order is a fixture input, not a selected universal canonical encoding or observed compiler output",
+  "nativeExecution": false,
+  "cases": [
+    {
+      "id": "FI01",
+      "producerText": "{\"documentId\":\"d\",\"element\":\"field-z\",\"module\":\"m\",\"revision\":\"1\"}",
+      "producerUtf8Hex": "7b22646f63756d656e744964223a2264222c22656c656d656e74223a226669656c642d7a222c226d6f64756c65223a226d222c227265766973696f6e223a2231227d",
+      "consumerText": "{\"documentId\":\"d\",\"element\":\"field-z\",\"module\":\"m\",\"revision\":\"1\"}",
+      "consumerUtf8Hex": "7b22646f63756d656e744964223a2264222c22656c656d656e74223a226669656c642d7a222c226d6f64756c65223a226d222c227265766973696f6e223a2231227d",
+      "parsedIdentityEqual": true,
+      "fullBytesEqual": true,
+      "expectedSelectedByteComparison": "match",
+      "publicationPermitted": false
+    },
+    {
+      "id": "FI02",
+      "producerText": "{\"documentId\":\"d\",\"element\":\"field-z\",\"module\":\"m\",\"revision\":\"1\"}",
+      "producerUtf8Hex": "7b22646f63756d656e744964223a2264222c22656c656d656e74223a226669656c642d7a222c226d6f64756c65223a226d222c227265766973696f6e223a2231227d",
+      "consumerText": "{\"documentId\":\"d\",\"revision\":\"1\",\"module\":\"m\",\"element\":\"field-z\"}",
+      "consumerUtf8Hex": "7b22646f63756d656e744964223a2264222c227265766973696f6e223a2231222c226d6f64756c65223a226d222c22656c656d656e74223a226669656c642d7a227d",
+      "parsedIdentityEqual": true,
+      "fullBytesEqual": false,
+      "expectedSelectedByteComparison": "refuse_encoding_or_identity_mismatch",
+      "publicationPermitted": false
+    },
+    {
+      "id": "FI03",
+      "producerText": "{\"documentId\":\"d\",\"element\":\"é\",\"module\":\"m\",\"revision\":\"1\"}",
+      "producerUtf8Hex": "7b22646f63756d656e744964223a2264222c22656c656d656e74223a22c3a9222c226d6f64756c65223a226d222c227265766973696f6e223a2231227d",
+      "consumerText": "{\"documentId\":\"d\",\"element\":\"\\u00e9\",\"module\":\"m\",\"revision\":\"1\"}",
+      "consumerUtf8Hex": "7b22646f63756d656e744964223a2264222c22656c656d656e74223a225c7530306539222c226d6f64756c65223a226d222c227265766973696f6e223a2231227d",
+      "parsedIdentityEqual": true,
+      "fullBytesEqual": false,
+      "expectedSelectedByteComparison": "refuse_encoding_or_identity_mismatch",
+      "publicationPermitted": false
+    },
+    {
+      "id": "FI04",
+      "producerText": "{\"documentId\":\"d\",\"element\":\"field-z\",\"module\":\"m\",\"revision\":\"1\"}",
+      "producerUtf8Hex": "7b22646f63756d656e744964223a2264222c22656c656d656e74223a226669656c642d7a222c226d6f64756c65223a226d222c227265766973696f6e223a2231227d",
+      "consumerText": "{\"documentId\":\"d\",\"element\":\"field-z\",\"module\":\"m\",\"revision\":\"2\"}",
+      "consumerUtf8Hex": "7b22646f63756d656e744964223a2264222c22656c656d656e74223a226669656c642d7a222c226d6f64756c65223a226d222c227265766973696f6e223a2232227d",
+      "parsedIdentityEqual": false,
+      "fullBytesEqual": false,
+      "expectedSelectedByteComparison": "refuse_encoding_or_identity_mismatch",
+      "publicationPermitted": false
+    }
+  ]
+}

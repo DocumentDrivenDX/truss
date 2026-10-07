@@ -1,0 +1,81 @@
+{
+  "scope": "Enforcement report shape only; no assertion inventory, provenance, evidence trust or native qualification",
+  "cases": 15,
+  "outcomes": [
+    {
+      "name": "storage binding assertion",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "missing source kind",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "wrong source kind needs archive admission refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "opaque source preserved",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "engine candidate",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "database candidate needs trusted qualification",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "authored identity",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "projection",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "database empty writer paths",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "none with stray qualification",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "missing rule name",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "unknown enforcement",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "duplicate assertion needs semantic rejection",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "unproved empty inventory",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "changed source digest requires semantic rejection",
+      "expected": true,
+      "actual": true
+    }
+  ]
+}

@@ -1,0 +1,122 @@
+{
+  "scope": "Decoded manifest/context closed shape only; duplicate/order/native custody/range/artifact correspondence intentionally require semantic admission",
+  "bunVersion": "1.4.2",
+  "sourcePins": [
+    {
+      "path": "truss-row-operation-custody-v0.1.proposal.schema.json",
+      "sha256": "9edd43db8bb48de56bfb28c87bce8d7c51092bab9a6e333b67aeee21ab05fb91"
+    },
+    {
+      "path": "truss-row-operation-context-v0.1.proposal.schema.json",
+      "sha256": "e5b906ada259af29afe28f6cf29b7f5b980ec84af6eaf6a96ab6c879e0b6be50"
+    }
+  ],
+  "observations": [
+    {
+      "name": "two ordered contributions",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "catalog acceptance row contribution shape",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "missing original prestate",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "empty contribution list",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "future group digest",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "caller transaction identity",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "committed receipt required before seal",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "completion asserted by manifest",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "unknown operation kind",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "noncanonical ordinal",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "duplicate operations require semantic refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "reordered operations require semantic refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "unknown native group requires semantic refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "original native context shape",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "original acting role missing",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "caller authority advertised",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "committed context advertised",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "numeric native xid",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "noncanonical native ordinal",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "foreign installation requires semantic refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "ordinal beyond bigint requires semantic refusal",
+      "expected": true,
+      "actual": true
+    }
+  ],
+  "failures": []
+}

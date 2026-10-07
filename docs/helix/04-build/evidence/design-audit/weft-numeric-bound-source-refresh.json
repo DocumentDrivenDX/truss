@@ -1,0 +1,32 @@
+{
+  "scope": "committed source inspection of comparator facet and numeric witness admission only; no compiler execution or native Truss adoption",
+  "ownerHead": "5ae231bc0f475ba4887a3d1896c3ad9fbcae9695",
+  "files": [
+    {
+      "path": "crates/weft-postgresql/src/native_comparator_definition.rs",
+      "sha256": "407af256d2f586c02b6db92d72f3456a9f63053550ebf177b4f75a3024f38168",
+      "matchesCommit": true
+    },
+    {
+      "path": "crates/weft-postgresql/src/numeric_correspondence.rs",
+      "sha256": "45adadb6ab68f8c0cff909285f7998fa76c6373332a0395d6208cbd38a5d4440",
+      "matchesCommit": true
+    },
+    {
+      "path": "crates/weft-postgresql/src/comparator_requirements.rs",
+      "sha256": "89e2e1629c4bef07a43385700f66369ddb9c6d9a6cec94171fabb03086198846",
+      "matchesCommit": true
+    }
+  ],
+  "facts": [
+    "comparator refuses nullable operands",
+    "string/boolean facets must be empty",
+    "integer facets must be exactly integerWidth with bits/signed; bits 1..64",
+    "decimal facets must be exactly precision/scale; precision 1..28, unsigned scale <= precision",
+    "unknown or additional min/max facets refuse current comparator parse",
+    "numeric witness exponent uses checked i64 arithmetic; fraction_digits u64 admitted through i64 conversion",
+    "numeric witness budget reserves 4*digit_count+8 per occurrence before normalization"
+  ],
+  "nativeExecuted": false,
+  "trussProfileAdopted": false
+}

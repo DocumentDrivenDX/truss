@@ -1,0 +1,320 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:feed-progress:0.2.0",
+  "description": "v0.2 boundary shape only; complete native membership, seed binding closure and custody require admission.",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "state": {
+          "const": "seed"
+        },
+        "context": {
+          "type": "object",
+          "properties": {
+            "sourceEpoch": {
+              "type": "string",
+              "minLength": 1
+            },
+            "feedProfile": {
+              "type": "string",
+              "minLength": 1
+            },
+            "scopeIdentity": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "sourceEpoch",
+            "feedProfile",
+            "scopeIdentity"
+          ],
+          "additionalProperties": false
+        },
+        "seedId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "activationEvidenceSha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "seedProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        }
+      },
+      "required": [
+        "state",
+        "context",
+        "seedId",
+        "activationEvidenceSha256",
+        "seedProfile"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "state": {
+          "const": "transaction"
+        },
+        "boundary": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "const": "complete-feed-transaction/0.2.0"
+            },
+            "context": {
+              "type": "object",
+              "properties": {
+                "sourceEpoch": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "feedProfile": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "scopeIdentity": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "sourceEpoch",
+                "feedProfile",
+                "scopeIdentity"
+              ],
+              "additionalProperties": false
+            },
+            "xid": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$"
+            },
+            "manifestSha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "domain",
+            "context",
+            "xid",
+            "manifestSha256"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "state",
+        "boundary"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "state": {
+          "const": "coverage"
+        },
+        "boundary": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "const": "complete-feed-coverage/0.2.0"
+            },
+            "context": {
+              "type": "object",
+              "properties": {
+                "sourceEpoch": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "feedProfile": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "scopeIdentity": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "sourceEpoch",
+                "feedProfile",
+                "scopeIdentity"
+              ],
+              "additionalProperties": false
+            },
+            "throughExclusiveXid": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$"
+            },
+            "coverageEvidenceSha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "domain",
+            "context",
+            "throughExclusiveXid",
+            "coverageEvidenceSha256"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "state",
+        "boundary"
+      ],
+      "additionalProperties": false
+    }
+  ],
+  "$defs": {
+    "progressBoundary": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "const": "complete-feed-transaction/0.2.0"
+            },
+            "context": {
+              "type": "object",
+              "properties": {
+                "sourceEpoch": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "feedProfile": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "scopeIdentity": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "sourceEpoch",
+                "feedProfile",
+                "scopeIdentity"
+              ],
+              "additionalProperties": false
+            },
+            "xid": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$"
+            },
+            "manifestSha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "domain",
+            "context",
+            "xid",
+            "manifestSha256"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "const": "complete-feed-coverage/0.2.0"
+            },
+            "context": {
+              "type": "object",
+              "properties": {
+                "sourceEpoch": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "feedProfile": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "scopeIdentity": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "sourceEpoch",
+                "feedProfile",
+                "scopeIdentity"
+              ],
+              "additionalProperties": false
+            },
+            "throughExclusiveXid": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$"
+            },
+            "coverageEvidenceSha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "domain",
+            "context",
+            "throughExclusiveXid",
+            "coverageEvidenceSha256"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "worker": {
+      "type": "object",
+      "properties": {
+        "context": {
+          "type": "object",
+          "properties": {
+            "sourceEpoch": {
+              "type": "string",
+              "minLength": 1
+            },
+            "feedProfile": {
+              "type": "string",
+              "minLength": 1
+            },
+            "scopeIdentity": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "sourceEpoch",
+            "feedProfile",
+            "scopeIdentity"
+          ],
+          "additionalProperties": false
+        },
+        "consumerId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "registrationId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "generation": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        }
+      },
+      "required": [
+        "context",
+        "consumerId",
+        "registrationId",
+        "generation"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

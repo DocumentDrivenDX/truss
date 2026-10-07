@@ -1,0 +1,32 @@
+{
+  "scope": "Read-only committed owner-wide structural preflight source/evidence; concurrent uncommitted Record work excluded",
+  "weftCommit": "2dbf9a3bfd6cce2931d5024394910bea9d08d7de",
+  "captureMethod": "git show exact committed objects",
+  "workingTreeStatusAtRead": "",
+  "pins": [
+    {
+      "path": "crates/weft-postgresql/src/registered_access.rs",
+      "sha256": "67986a85a5f48b8eb0b7bde2b9478b7d7367a1ea43d66f1e7533db2f3eeebf94"
+    },
+    {
+      "path": "tests/truss-postgresql/fixtures/row-scan-emission.json",
+      "sha256": "b311011154ec491e46b07e09958221e1df1581f1df0d8f506f0fcb11fee464a6"
+    },
+    {
+      "path": "tests/truss-postgresql/row-scan-native.py",
+      "sha256": "99b0ebc1fe9aad200971c404897232e0a73ac4e628302df95b13eb6e3ff707af"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/B-005-row-scan-native.json",
+      "sha256": "43f24c96a625be1f6b369d958f47f7d3b5feeeda6264fed86a4255d9a02b07da"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/B-005-owner-preflight-native.json",
+      "sha256": "21f193b0b23a782c8d9ea8c98d4a83662cb38e21d47d27b4060cea373a7d8b13"
+    }
+  ],
+  "ownerReportedRowStructuralCases": 20,
+  "ownerReportedPropsStructuralCases": 6,
+  "nativeExecutionByTruss": false,
+  "complete": false
+}

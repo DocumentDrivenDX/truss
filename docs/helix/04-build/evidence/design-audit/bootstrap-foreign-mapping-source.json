@@ -1,0 +1,98 @@
+{
+  "scope": "UMF parser/source archive/JSON reload/guarded export only; no PostgreSQL execution, query result grammar, complete native scope, privileges, dependencies or installed parity",
+  "bunVersion": "1.4.2",
+  "ownerSource": {
+    "root": "/Users/erik/Projects/umf",
+    "commit": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+    "status": "",
+    "files": [
+      {
+        "path": "native/postgresql/runtime.ts",
+        "sha256": "a88fea4cf15c9c3c3f0ad1f0a36d8f5de42a42ce8ea9712499f609beee3ea751"
+      },
+      {
+        "path": "src/adapters/postgresql/index.ts",
+        "sha256": "7baa071d95e5f9863a4ce2bf892d87fb27cab9d8605ba4cf8887016d14ca17b4"
+      },
+      {
+        "path": "src/adapters/postgresql/declarations.ts",
+        "sha256": "e47ebd6366fee86fb8ccaf1270555bcd338957bff511f30cdcae22a088c6d8d9"
+      },
+      {
+        "path": "src/model/document.ts",
+        "sha256": "a0422042659defdea425dff8bb0618eaa4bbf125f68da16aa5ad21af0b6c282f"
+      },
+      {
+        "path": "spec/extensions/postgresql/native-ast.schema.json",
+        "sha256": "aa3d3b50bc04edbc3ab3430e113ee8710edb1c10ff5cee15d4bcc7b16d9a9039"
+      },
+      {
+        "path": "bun.lock",
+        "sha256": "98a99f7d306f7269db103bdbfafe5f9ad9ed34b02024276ad0cce45df27f5cc3"
+      }
+    ]
+  },
+  "backend": "@libpg-query/parser@17.6.10",
+  "observations": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-foreign-mapping-header-observation-pg17.proposal.sql",
+      "sourceSha256": "7e9dad390410f35ceef094709934b20e6776245617fea52dff1e22c6ad3ea4ba",
+      "artifactPath": "docs/helix/02-design/contracts/bindings/bootstrap-foreign-mapping-header-observation-pg17.proposal.umf.json",
+      "artifactSha256": "cf2b216afa04fad06ee7f779e25de70c6ba7407e89a1000f207d8a1f3e2e3e26",
+      "exportPath": "docs/helix/04-build/evidence/design-audit/bootstrap-foreign-mapping-header-observation.owner-export.sql",
+      "exportSha256": "571353854aaa6558d5b48f6484cbf89ef77ed050e993acc4d43caecb3a638858",
+      "sourceArchiveExact": true,
+      "reloadedExportExact": true,
+      "complete": false,
+      "unhandled": [
+        {
+          "path": "/stmts/0/stmt"
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning",
+          "message": "Raw syntax is not catalog resolution, SQL execution, permissions or server-state validation"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt",
+          "severity": "warning",
+          "message": "Statement is retained without declaration extraction or execution"
+        }
+      ]
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-foreign-mapping-options-observation-pg17.proposal.sql",
+      "sourceSha256": "004f64d0fc3c070270a81cb50c3ce5108f2c611810e8364944e53a0fe2567c71",
+      "artifactPath": "docs/helix/02-design/contracts/bindings/bootstrap-foreign-mapping-options-observation-pg17.proposal.umf.json",
+      "artifactSha256": "d6d1a365a696ec125a941a47bff9a206da834b1d48d297738fb9e942827fb819",
+      "exportPath": "docs/helix/04-build/evidence/design-audit/bootstrap-foreign-mapping-options-observation.owner-export.sql",
+      "exportSha256": "fc6d31c65c85d772a9e45dbdca4e8f5c720fdd6c7228330c962305bd219cf1db",
+      "sourceArchiveExact": true,
+      "reloadedExportExact": true,
+      "complete": false,
+      "unhandled": [
+        {
+          "path": "/stmts/0/stmt"
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning",
+          "message": "Raw syntax is not catalog resolution, SQL execution, permissions or server-state validation"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt",
+          "severity": "warning",
+          "message": "Statement is retained without declaration extraction or execution"
+        }
+      ]
+    }
+  ]
+}

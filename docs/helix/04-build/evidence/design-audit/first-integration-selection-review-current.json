@@ -1,0 +1,141 @@
+{
+  "scope": "Refreshed current first-integration design selection checklist; not a selected manifest, owner approval or native capability token",
+  "observedSiblingHeads": {
+    "umf": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+    "weft": "5ae231bc0f475ba4887a3d1896c3ad9fbcae9695"
+  },
+  "authorityFacts": [
+    "ADR-001 accepted TypeScript portable core and Bun development direction",
+    "ADR-002 accepted generic fixed storage direction",
+    "Owner states existing UMF capabilities are sufficient"
+  ],
+  "rows": [
+    {
+      "selection": "language-packaging",
+      "status": "unresolved",
+      "governingArtifacts": [
+        "ADR-001"
+      ],
+      "missingOutput": "Deliberate package/runtime/export adoption, implementation-specific browser dependency closure and packed consumer execution",
+      "responsibleOwner": "Truss",
+      "authoredEvidence": "Architecture package/export map and B-014 packed consumer plan"
+    },
+    {
+      "selection": "umf-composition",
+      "status": "unresolved",
+      "governingArtifacts": [
+        "CONTRACT-008",
+        "CONTRACT-010"
+      ],
+      "missingOutput": "Consumable API/envelope/key versions and complete authored/source/generated correspondence using existing APIs",
+      "responsibleOwner": "Truss"
+    },
+    {
+      "selection": "postgresql-target",
+      "status": "unresolved",
+      "governingArtifacts": [
+        "CONTRACT-008",
+        "CONTRACT-011"
+      ],
+      "missingOutput": "Exact server/build/extensions/locale/roles and isolated deployment identity",
+      "responsibleOwner": "Truss"
+    },
+    {
+      "selection": "driver-transactions",
+      "status": "unresolved",
+      "governingArtifacts": [
+        "CONTRACT-007"
+      ],
+      "missingOutput": "Original descriptor/completion/control/cancellation/termination/resource producers and qualified pooling profile",
+      "responsibleOwner": "Truss"
+    },
+    {
+      "selection": "layout-values",
+      "status": "unresolved",
+      "governingArtifacts": [
+        "ADR-002",
+        "CONTRACT-001",
+        "CONTRACT-010"
+      ],
+      "missingOutput": "Complete selected native routine/trigger/privilege/source/codec/comparator profiles and installation composition; authored/source checks do not supply native producers",
+      "responsibleOwner": "Truss",
+      "authoredEvidence": "RH/RF, scalar/TCA/record identity procedures, full scalar/header/tree/owner and selected-state batch SQL/manifest/source evidence"
+    },
+    {
+      "selection": "identity-report",
+      "status": "unresolved",
+      "governingArtifacts": [
+        "CONTRACT-003",
+        "ADR-004"
+      ],
+      "missingOutput": "Retirement decision, report-home decision and complete persistence/finalization procedures",
+      "responsibleOwner": "Truss owner"
+    },
+    {
+      "selection": "allocation-durability",
+      "status": "unresolved",
+      "governingArtifacts": [
+        "CONTRACT-009"
+      ],
+      "missingOutput": "FR-15 precommit exposure interpretation and exact allocator crash/recovery semantics",
+      "responsibleOwner": "Truss owner"
+    },
+    {
+      "selection": "weft-reads",
+      "status": "unresolved",
+      "governingArtifacts": [
+        "CONTRACT-007",
+        "CONTRACT-010"
+      ],
+      "missingOutput": "Actual selected compiler-owned occurrence/ABI/lifetime/identity-encoding bridge, native contextual/domain observations and independently expected direct/compiled execution; preserve name-addressed projection subset limits",
+      "responsibleOwner": "Truss + Weft",
+      "authoredEvidence": "Committed original-property physical custody coupling, pinned qualified-identity/recursive projection assumptions, private exact occurrence bridge procedure and FI/SC/TC/NP cases"
+    },
+    {
+      "selection": "resources-host",
+      "status": "unresolved",
+      "governingArtifacts": [
+        "CONTRACT-007",
+        "CONTRACT-008",
+        "CONTRACT-011"
+      ],
+      "missingOutput": "Exact native/driver/allocator/clock/account producers and coherent pre-work/retention/recovery composition; qualify complete path counts, simultaneous/cumulative bounds and owner deployment choice",
+      "responsibleOwner": "Truss",
+      "authoredEvidence": "Original account/lifetime/containment procedures and explicit finite candidates, including 256-state batch transport and separate 128-submission lookup candidate"
+    }
+  ],
+  "sourcePins": [
+    {
+      "path": "docs/helix/04-build/implementation-plan.md",
+      "sha256": "1a8149ae6b7c8061a674ae58dc7356de99aa7983b7e936794e37b22a192bc5b2"
+    },
+    {
+      "path": "docs/helix/04-build/design-decision-queue.md",
+      "sha256": "a5341331687ce83977c13e01ac55692196a29dd2a107c4eb316b5ea3adfbb7a8"
+    },
+    {
+      "path": "docs/helix/02-design/adr/ADR-001-language-and-portable-core.md",
+      "sha256": "53925739c3512278cca22496a4cb35b3a2e39f96e1cc1fa5296c04955dc53d09"
+    },
+    {
+      "path": "docs/helix/02-design/adr/ADR-002-storage-strategy.md",
+      "sha256": "680c032e963fb6210828816e688781aded59d5715948e2707638554bfbff8d70"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/CONTRACT-007-embedding-and-execution.md",
+      "sha256": "cf61694e9abe412afcff883c975fdcc9ad2548da651365638767858f887db9e5"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/CONTRACT-010-exact-value-transport.md",
+      "sha256": "715efd80cd68e94a8495d43a3d3ba283915aebe44d5cc136b12d82875530bc57"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/weft-record-identity-source-refresh.json",
+      "sha256": "6ae6bd9a0a1063dfa43067e428dc218fb80636d56b22bcfa14c4767cea5ef744"
+    }
+  ],
+  "integrationReady": false,
+  "nativeExecution": false,
+  "remainingProductScope": "Catalog evolution/import/groups/feed/history/retention/policy/conformance remain required beyond this milestone",
+  "previousReview": "first-integration-selection-review.json"
+}

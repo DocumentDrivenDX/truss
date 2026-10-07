@@ -1,0 +1,22 @@
+{
+  "scope": "Closed state-header source AST and manifest ordered type/NULL/parameter/hash correspondence; no native owner association, authority or decoding",
+  "sourceSha256": "97eefe00fb649cc1f306867ee32e136061c7f658945754beebbe48b89e7e95ea",
+  "modelSha256": "433231853d4d02d4dafa465f8946aaacaa93b2a6066f8a86aeb6067239c42f87",
+  "columns": 13,
+  "corruptionControls": [
+    "swapped_owner_fields",
+    "lost_home_profile",
+    "wrong_definition_carrier",
+    "narrow_state_parameter",
+    "wrong_relation",
+    "one_row_limit"
+  ],
+  "manifestCorruptionControls": [
+    "nullable_root",
+    "nonnull_object_pair",
+    "extra_parameter",
+    "native_claim"
+  ],
+  "nativeExecution": false,
+  "complete": false
+}

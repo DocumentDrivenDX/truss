@@ -1,0 +1,199 @@
+{
+  "profile": "truss-feed-trigger-effects/0.1.0",
+  "status": "unadopted_candidate",
+  "complete": false,
+  "scope": "Four authored trigger identities and four expected associated user constraint-trigger catalog effects only; original native bindings, routine, dependencies, grants, partition/enabled inventory unresolved. No supporting indexes inferred.",
+  "nativeEffectSource": "https://raw.githubusercontent.com/postgres/postgres/REL_17_9/src/backend/commands/trigger.c",
+  "tableAllocationPath": "docs/helix/02-design/models/truss-feed-native-layout.physical-ids.proposal.json",
+  "tableAllocationSha256": "5163f1a5dcf4420ac164bbcea2288a38bd3a8dfa003a8f2166fffbfc9645613c",
+  "sources": [
+    {
+      "source": "docs/helix/02-design/contracts/feed-current-union-triggers-v0.1.proposal.sql",
+      "sourceSha256": "3a4f04e17139da1e0609af72a344d18342be17fbe723a5207c7d82a023903d37",
+      "model": "docs/helix/02-design/contracts/feed-current-union-triggers-v0.1.proposal.umf.json",
+      "modelSha256": "c3d790b7b4ecd3c5a100f8c01e71232d0950023b2df046f9a306042fee60d09a"
+    }
+  ],
+  "entries": [
+    {
+      "parentId": "truss.feed.table.feed_tx",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/feed-current-union-triggers-v0.1.proposal.umf.json",
+        "modelSha256": "c3d790b7b4ecd3c5a100f8c01e71232d0950023b2df046f9a306042fee60d09a",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateTrigStmt"
+      },
+      "originalNativeNodeSha256": "eefe012a82385076f36e5fd86ab95e1252fe41cbd06f7f569cd4baff95c9369c",
+      "nativeBinding": {
+        "state": "unresolved"
+      },
+      "entryId": "truss.feed.trigger.feed_tx_current_union_guard",
+      "objectKind": "trigger",
+      "nativeName": "feed_tx_current_union_guard",
+      "callableReference": {
+        "schema": "truss",
+        "name": "feed_current_union_check",
+        "bodyState": "undefined_unqualified"
+      },
+      "sourceEventMask": "28",
+      "row": true,
+      "timing": "AFTER",
+      "deferrable": true,
+      "initiallyDeferred": true
+    },
+    {
+      "parentId": "truss.feed.table.feed_tx",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/feed-current-union-triggers-v0.1.proposal.umf.json",
+        "modelSha256": "c3d790b7b4ecd3c5a100f8c01e71232d0950023b2df046f9a306042fee60d09a",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateTrigStmt"
+      },
+      "originalNativeNodeSha256": "eefe012a82385076f36e5fd86ab95e1252fe41cbd06f7f569cd4baff95c9369c",
+      "nativeBinding": {
+        "state": "unresolved"
+      },
+      "entryId": "truss.feed.trigger-constraint.feed_tx_current_union_guard",
+      "objectKind": "expected_trigger_constraint",
+      "creatorId": "truss.feed.trigger.feed_tx_current_union_guard",
+      "nativeName": "feed_tx_current_union_guard",
+      "constraintKind": "CONSTRAINT_TRIGGER",
+      "deferrable": true,
+      "initiallyDeferred": true,
+      "supportingIndexExpected": false
+    },
+    {
+      "parentId": "truss.feed.table.feed_member",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/feed-current-union-triggers-v0.1.proposal.umf.json",
+        "modelSha256": "c3d790b7b4ecd3c5a100f8c01e71232d0950023b2df046f9a306042fee60d09a",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/1/members/stmt/members/CreateTrigStmt"
+      },
+      "originalNativeNodeSha256": "6af413365778c7ac2a3591ae30c55fa1e8337d6bc1c3f196bbb10145fdb1ab83",
+      "nativeBinding": {
+        "state": "unresolved"
+      },
+      "entryId": "truss.feed.trigger.feed_member_current_union_guard",
+      "objectKind": "trigger",
+      "nativeName": "feed_member_current_union_guard",
+      "callableReference": {
+        "schema": "truss",
+        "name": "feed_current_union_check",
+        "bodyState": "undefined_unqualified"
+      },
+      "sourceEventMask": "28",
+      "row": true,
+      "timing": "AFTER",
+      "deferrable": true,
+      "initiallyDeferred": true
+    },
+    {
+      "parentId": "truss.feed.table.feed_member",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/feed-current-union-triggers-v0.1.proposal.umf.json",
+        "modelSha256": "c3d790b7b4ecd3c5a100f8c01e71232d0950023b2df046f9a306042fee60d09a",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/1/members/stmt/members/CreateTrigStmt"
+      },
+      "originalNativeNodeSha256": "6af413365778c7ac2a3591ae30c55fa1e8337d6bc1c3f196bbb10145fdb1ab83",
+      "nativeBinding": {
+        "state": "unresolved"
+      },
+      "entryId": "truss.feed.trigger-constraint.feed_member_current_union_guard",
+      "objectKind": "expected_trigger_constraint",
+      "creatorId": "truss.feed.trigger.feed_member_current_union_guard",
+      "nativeName": "feed_member_current_union_guard",
+      "constraintKind": "CONSTRAINT_TRIGGER",
+      "deferrable": true,
+      "initiallyDeferred": true,
+      "supportingIndexExpected": false
+    },
+    {
+      "parentId": "truss.feed.table.feed_prerequisite",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/feed-current-union-triggers-v0.1.proposal.umf.json",
+        "modelSha256": "c3d790b7b4ecd3c5a100f8c01e71232d0950023b2df046f9a306042fee60d09a",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/2/members/stmt/members/CreateTrigStmt"
+      },
+      "originalNativeNodeSha256": "bcb8da2bf043697c5aa924e1ca5f4d025296a15a7d1c4e8e1c889cd835d74621",
+      "nativeBinding": {
+        "state": "unresolved"
+      },
+      "entryId": "truss.feed.trigger.feed_prerequisite_current_union_guard",
+      "objectKind": "trigger",
+      "nativeName": "feed_prerequisite_current_union_guard",
+      "callableReference": {
+        "schema": "truss",
+        "name": "feed_current_union_check",
+        "bodyState": "undefined_unqualified"
+      },
+      "sourceEventMask": "28",
+      "row": true,
+      "timing": "AFTER",
+      "deferrable": true,
+      "initiallyDeferred": true
+    },
+    {
+      "parentId": "truss.feed.table.feed_prerequisite",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/feed-current-union-triggers-v0.1.proposal.umf.json",
+        "modelSha256": "c3d790b7b4ecd3c5a100f8c01e71232d0950023b2df046f9a306042fee60d09a",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/2/members/stmt/members/CreateTrigStmt"
+      },
+      "originalNativeNodeSha256": "bcb8da2bf043697c5aa924e1ca5f4d025296a15a7d1c4e8e1c889cd835d74621",
+      "nativeBinding": {
+        "state": "unresolved"
+      },
+      "entryId": "truss.feed.trigger-constraint.feed_prerequisite_current_union_guard",
+      "objectKind": "expected_trigger_constraint",
+      "creatorId": "truss.feed.trigger.feed_prerequisite_current_union_guard",
+      "nativeName": "feed_prerequisite_current_union_guard",
+      "constraintKind": "CONSTRAINT_TRIGGER",
+      "deferrable": true,
+      "initiallyDeferred": true,
+      "supportingIndexExpected": false
+    },
+    {
+      "parentId": "truss.feed.table.feed_configuration_prerequisite",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/feed-current-union-triggers-v0.1.proposal.umf.json",
+        "modelSha256": "c3d790b7b4ecd3c5a100f8c01e71232d0950023b2df046f9a306042fee60d09a",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/3/members/stmt/members/CreateTrigStmt"
+      },
+      "originalNativeNodeSha256": "f817ae5b17731a380c44590a6e4e9b0f982fbb2579b2dc073e90882740318c92",
+      "nativeBinding": {
+        "state": "unresolved"
+      },
+      "entryId": "truss.feed.trigger.feed_configuration_prerequisite_current_union_guard",
+      "objectKind": "trigger",
+      "nativeName": "feed_configuration_prerequisite_current_union_guard",
+      "callableReference": {
+        "schema": "truss",
+        "name": "feed_current_union_check",
+        "bodyState": "undefined_unqualified"
+      },
+      "sourceEventMask": "28",
+      "row": true,
+      "timing": "AFTER",
+      "deferrable": true,
+      "initiallyDeferred": true
+    },
+    {
+      "parentId": "truss.feed.table.feed_configuration_prerequisite",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/feed-current-union-triggers-v0.1.proposal.umf.json",
+        "modelSha256": "c3d790b7b4ecd3c5a100f8c01e71232d0950023b2df046f9a306042fee60d09a",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/3/members/stmt/members/CreateTrigStmt"
+      },
+      "originalNativeNodeSha256": "f817ae5b17731a380c44590a6e4e9b0f982fbb2579b2dc073e90882740318c92",
+      "nativeBinding": {
+        "state": "unresolved"
+      },
+      "entryId": "truss.feed.trigger-constraint.feed_configuration_prerequisite_current_union_guard",
+      "objectKind": "expected_trigger_constraint",
+      "creatorId": "truss.feed.trigger.feed_configuration_prerequisite_current_union_guard",
+      "nativeName": "feed_configuration_prerequisite_current_union_guard",
+      "constraintKind": "CONSTRAINT_TRIGGER",
+      "deferrable": true,
+      "initiallyDeferred": true,
+      "supportingIndexExpected": false
+    }
+  ]
+}

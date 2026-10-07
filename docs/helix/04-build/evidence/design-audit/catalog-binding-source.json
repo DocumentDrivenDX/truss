@@ -1,0 +1,67 @@
+{
+  "scope": "Twelve binding-source envelope shape expectations; original fixture artifacts are untrusted and cross-artifact counterexamples deliberately shape-valid",
+  "cases": 12,
+  "results": [
+    {
+      "name": "complete candidate with empty dependency list",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "missing original binding",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "digest-only binding",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "document provenance is not binding provenance",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "missing original Record document",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "missing original Record definition",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "future receipt excluded",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "future report excluded",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "unknown native projection excluded",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "mismatched binding hash needs semantic refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "substituted Record document needs semantic refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "missing original source evidence",
+      "expected": false,
+      "actual": false
+    }
+  ],
+  "failures": []
+}

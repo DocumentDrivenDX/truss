@@ -1,0 +1,103 @@
+{
+  "scope": "Nineteen isolated inventory/descriptor/pin/field-admission corruption controls only; no semantic route or native PostgreSQL qualification",
+  "status": "pass",
+  "cases": [
+    {
+      "case": "unchanged isolated inventory",
+      "expectedPass": true,
+      "observedPass": true
+    },
+    {
+      "case": "missing original route",
+      "expectedPass": false,
+      "observedPass": false
+    },
+    {
+      "case": "wrong original positional descriptor",
+      "expectedPass": false,
+      "observedPass": false
+    },
+    {
+      "case": "duplicate original query route",
+      "expectedPass": false,
+      "observedPass": false
+    },
+    {
+      "case": "unreviewed extra route",
+      "expectedPass": false,
+      "observedPass": false
+    },
+    {
+      "case": "stale original source pin",
+      "expectedPass": false,
+      "observedPass": false
+    },
+    {
+      "case": "changed aggregate receipt",
+      "expectedPass": false,
+      "observedPass": false
+    },
+    {
+      "case": "stale field specification pin",
+      "expectedPass": false,
+      "observedPass": false
+    },
+    {
+      "case": "rehashed specification with missing classified field",
+      "expectedPass": false,
+      "observedPass": false
+    },
+    {
+      "case": "coordinated missing field and inventory still disagrees with route",
+      "expectedPass": false,
+      "observedPass": false
+    },
+    {
+      "case": "rehashed empty field domain",
+      "expectedPass": false,
+      "observedPass": false
+    },
+    {
+      "case": "rehashed empty field meaning",
+      "expectedPass": false,
+      "observedPass": false
+    },
+    {
+      "case": "rehashed unsupported definition version",
+      "expectedPass": false,
+      "observedPass": false
+    },
+    {
+      "case": "rehashed missing unknown-field policy",
+      "expectedPass": false,
+      "observedPass": false
+    },
+    {
+      "case": "removed entire required inline classification",
+      "expectedPass": false,
+      "observedPass": false
+    },
+    {
+      "case": "missing inline native field",
+      "expectedPass": false,
+      "observedPass": false
+    },
+    {
+      "case": "blank inline meaning",
+      "expectedPass": false,
+      "observedPass": false
+    },
+    {
+      "case": "blank inline canonical procedure",
+      "expectedPass": false,
+      "observedPass": false
+    },
+    {
+      "case": "restored isolated inventory",
+      "expectedPass": true,
+      "observedPass": true
+    }
+  ],
+  "checkerSha256": "d792ea85c1c85aee10f14398c716e47afe7b062a0ed7f3d956a9cbac4df103a7",
+  "controlsSha256": "d729fe0057ec45b43b6b4e36f8f244f577cfc1fe475ba56f4a3cabcc3c8c4091"
+}

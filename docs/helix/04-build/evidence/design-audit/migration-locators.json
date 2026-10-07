@@ -1,0 +1,82 @@
+{
+  "scope": "Fifteen locator correspondence shapes including deliberately shape-valid native/semantic counterexamples; no native mapping/custody qualification",
+  "cases": 15,
+  "results": [
+    {
+      "name": "live replacement",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "reservation replacement",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "unchanged projection",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "created live projection",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "removed live projection",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "continuing omission",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "reservation removal forbidden",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "zero physical locator",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "host number locator",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "missing row evidence",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "missing complete evidence",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "future receipt is not grammar member",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "duplicate source needs semantic refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "replacement same locator needs semantic refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "native overflow needs semantic refusal",
+      "expected": true,
+      "actual": true
+    }
+  ],
+  "failures": []
+}

@@ -1,0 +1,187 @@
+{
+  "scope": "Five explicit private registration source families/seven statements; separate from eight lookup/finalization statements and installer. Family arrays are not a batch: select exactly the original route/statement ordinal and its statement-local bindings.",
+  "ownerSource": {
+    "root": "/Users/erik/Projects/umf",
+    "commit": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+    "status": "",
+    "files": [
+      {
+        "path": "native/postgresql/runtime.ts",
+        "sha256": "a88fea4cf15c9c3c3f0ad1f0a36d8f5de42a42ce8ea9712499f609beee3ea751"
+      },
+      {
+        "path": "src/adapters/postgresql/index.ts",
+        "sha256": "7baa071d95e5f9863a4ce2bf892d87fb27cab9d8605ba4cf8887016d14ca17b4"
+      },
+      {
+        "path": "src/adapters/postgresql/declarations.ts",
+        "sha256": "e47ebd6366fee86fb8ccaf1270555bcd338957bff511f30cdcae22a088c6d8d9"
+      },
+      {
+        "path": "src/model/document.ts",
+        "sha256": "a0422042659defdea425dff8bb0618eaa4bbf125f68da16aa5ad21af0b6c282f"
+      },
+      {
+        "path": "spec/extensions/postgresql/native-ast.schema.json",
+        "sha256": "aa3d3b50bc04edbc3ab3430e113ee8710edb1c10ff5cee15d4bcc7b16d9a9039"
+      },
+      {
+        "path": "bun.lock",
+        "sha256": "98a99f7d306f7269db103bdbfafe5f9ad9ed34b02024276ad0cce45df27f5cc3"
+      }
+    ]
+  },
+  "families": [
+    {
+      "family": "feed-transaction-create",
+      "statementKind": "InsertStmt",
+      "statementCount": 1,
+      "files": [
+        {
+          "path": "docs/helix/02-design/contracts/feed-transaction-create-v0.1.proposal.sql",
+          "sha256": "4c99efac297db762c7c95a82626cb6cd0c0e610d11feda3b2ea31cb9803192d7"
+        },
+        {
+          "path": "docs/helix/02-design/contracts/feed-transaction-create-v0.1.proposal.umf.json",
+          "sha256": "977e5338a835b3930a1dd60ebe25ae10e130ef16a5f022451374b5e3329984bf"
+        },
+        {
+          "path": "docs/helix/04-build/evidence/design-audit/feed-transaction-create.owner-export.sql",
+          "sha256": "bbde69b129fc23a4bf13f1fbbd5f526625f77498ae4afbcc9bbd2fde969bf8f6"
+        }
+      ],
+      "captureReceipt": {
+        "path": "docs/helix/04-build/evidence/design-audit/feed-transaction-create-source.json",
+        "sha256": "bb5f616dd679fe65e234b51d7a0b01a0d5ab4238aacb6e99f677f04087cc8b8a"
+      },
+      "complete": false
+    },
+    {
+      "family": "feed-member-counter-reservation",
+      "statementKind": "UpdateStmt",
+      "statementCount": 1,
+      "files": [
+        {
+          "path": "docs/helix/02-design/contracts/feed-member-counter-reservation-v0.1.proposal.sql",
+          "sha256": "7b9040f135f4d9a68f4af6235f91959b852f0e57c8c243930b8d450cbb21a3a2"
+        },
+        {
+          "path": "docs/helix/02-design/contracts/feed-member-counter-reservation-v0.1.proposal.umf.json",
+          "sha256": "9e5198305687fa598c1dc70e142b8813c6b4120b4c2ead4ca695555b0f86eebd"
+        },
+        {
+          "path": "docs/helix/04-build/evidence/design-audit/feed-member-counter-reservation.owner-export.sql",
+          "sha256": "213e936ced1bd774b73d7c382f296a02e140bb6b462835c6134d2f470b6ade77"
+        }
+      ],
+      "captureReceipt": {
+        "path": "docs/helix/04-build/evidence/design-audit/feed-member-counter-reservation-source.json",
+        "sha256": "f158e3d9c400f1378d191ec49b95a6909f6255650a922c1404ba8c3dd720eda1"
+      },
+      "complete": false
+    },
+    {
+      "family": "feed-member-insert",
+      "statementKind": "InsertStmt",
+      "statementCount": 1,
+      "files": [
+        {
+          "path": "docs/helix/02-design/contracts/feed-member-insert-v0.1.proposal.sql",
+          "sha256": "29d4948c87185d1480bb32aaceb079ad8762191e3c31f86ec3b40ac051ba87b4"
+        },
+        {
+          "path": "docs/helix/02-design/contracts/feed-member-insert-v0.1.proposal.umf.json",
+          "sha256": "979681daf4e8301c572618fef536e3db0600202a514af8985c6f1e4c6e0ddfd4"
+        },
+        {
+          "path": "docs/helix/04-build/evidence/design-audit/feed-member-insert.owner-export.sql",
+          "sha256": "4c91dd0261a76767de4cd84b4987b9aab449964378bad98e1fcd96c0a5ad4370"
+        }
+      ],
+      "captureReceipt": {
+        "path": "docs/helix/04-build/evidence/design-audit/feed-member-insert-source.json",
+        "sha256": "571c3f920e6afcdde9ac25681d1a1aeace57a03d55a8e0698559934ececec62a"
+      },
+      "complete": false
+    },
+    {
+      "family": "feed-prerequisite-counter-reservation",
+      "statementKind": "UpdateStmt",
+      "statementCount": 2,
+      "files": [
+        {
+          "path": "docs/helix/02-design/contracts/feed-prerequisite-counter-reservation-v0.1.proposal.sql",
+          "sha256": "dae195bd00b17b31636a91fbb2caaaf955610a259ac9eef54e69d129a44354e3"
+        },
+        {
+          "path": "docs/helix/02-design/contracts/feed-prerequisite-counter-reservation-v0.1.proposal.umf.json",
+          "sha256": "b52a4a161e61e9c328fee046a46f83b8697a4c57bec7f419e12c11bbf4942702"
+        },
+        {
+          "path": "docs/helix/04-build/evidence/design-audit/feed-prerequisite-counter-reservation.owner-export.sql",
+          "sha256": "f6be6bf44f160d051fc7e9d16575c26684aea35ec741e40189af335d2a1b9200"
+        }
+      ],
+      "captureReceipt": {
+        "path": "docs/helix/04-build/evidence/design-audit/feed-prerequisite-counter-reservation-source.json",
+        "sha256": "421620e2e83cc664dfa12cef72e24a6e0ec11e59ebfd8fdf8f0b17cbd9a7ce36"
+      },
+      "complete": false
+    },
+    {
+      "family": "feed-prerequisite-insert",
+      "statementKind": "InsertStmt",
+      "statementCount": 2,
+      "files": [
+        {
+          "path": "docs/helix/02-design/contracts/feed-prerequisite-insert-v0.1.proposal.sql",
+          "sha256": "fc6306ae0485edd4d292a20416a628896c53ed4d627e0da777e5de83e9eaa814"
+        },
+        {
+          "path": "docs/helix/02-design/contracts/feed-prerequisite-insert-v0.1.proposal.umf.json",
+          "sha256": "cf9b753576f2938a18b61ee78f3eceb6d499ee00498ce7cf6624008ae63c2b81"
+        },
+        {
+          "path": "docs/helix/04-build/evidence/design-audit/feed-prerequisite-insert.owner-export.sql",
+          "sha256": "d020c9a086891a2051176d6f9dff9b04e18ea2ab3004ad83466cefc59da887a8"
+        }
+      ],
+      "captureReceipt": {
+        "path": "docs/helix/04-build/evidence/design-audit/feed-prerequisite-insert-source.json",
+        "sha256": "3de47e41d91e3bb68d00c47ed86f54c1e46aba74e08376148576adeba1af3bc4"
+      },
+      "complete": false
+    }
+  ],
+  "controls": [
+    {
+      "case": "omitted family",
+      "refused": true
+    },
+    {
+      "case": "duplicate family",
+      "refused": true
+    },
+    {
+      "case": "invented complete claim",
+      "refused": true
+    },
+    {
+      "case": "substituted source hash",
+      "refused": true
+    },
+    {
+      "case": "narrower statement count",
+      "refused": true
+    }
+  ],
+  "nativeExecution": false,
+  "complete": false,
+  "missingNativeOutputs": [
+    "complete original registration/comparison/guard native routine bodies and independent authority",
+    "complete helper/type/security/role/grant/dependency inventory",
+    "original codec/canonical/hash/clock/descriptor/accounting/termination producers",
+    "complete upstream required-effect and four-store event coverage",
+    "installation composition and independent native/bypass/state/resource qualification"
+  ]
+}

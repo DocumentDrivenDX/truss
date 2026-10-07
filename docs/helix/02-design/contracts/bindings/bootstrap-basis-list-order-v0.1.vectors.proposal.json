@@ -1,0 +1,74 @@
+{
+  "scope": "Independent expected ordering fragments for unadopted basis entry/required-role normalization; not full inventory or native qualification",
+  "profile": "truss-bootstrap-basis-list-order/0.1.0",
+  "cases": [
+    {
+      "name": "query-order-independent",
+      "input": [
+        "z",
+        "a",
+        "m"
+      ],
+      "expected": [
+        "a",
+        "m",
+        "z"
+      ]
+    },
+    {
+      "name": "opaque-identity-lexical",
+      "input": [
+        "2",
+        "10",
+        "1"
+      ],
+      "expected": [
+        "1",
+        "10",
+        "2"
+      ]
+    },
+    {
+      "name": "utf8-not-utf16",
+      "input": [
+        "\ud800\udc00",
+        "\ue000"
+      ],
+      "expected": [
+        "\ue000",
+        "\ud800\udc00"
+      ]
+    },
+    {
+      "name": "case-and-normalization-preserved",
+      "input": [
+        "\u00e9",
+        "e\u0301",
+        "a",
+        "A"
+      ],
+      "expected": [
+        "A",
+        "a",
+        "e\u0301",
+        "\u00e9"
+      ]
+    },
+    {
+      "name": "duplicate-identity-refuses",
+      "input": [
+        "a",
+        "b",
+        "a"
+      ],
+      "refusal": "duplicate_identity"
+    },
+    {
+      "name": "invalid-scalar-refuses",
+      "input": [
+        "\ud800"
+      ],
+      "refusal": "invalid_unicode_scalar"
+    }
+  ]
+}

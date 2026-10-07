@@ -1,0 +1,182 @@
+{
+  "scope": "Original existing-UMF guarded per-statement export and ordered selected-capture composition/re-import only; no baseline conversion, native installation, implicit-effect completeness or accepted Weft binding",
+  "owner": {
+    "root": "/Users/erik/Projects/umf",
+    "commit": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+    "status": "",
+    "files": [
+      {
+        "path": "native/postgresql/runtime.ts",
+        "sha256": "a88fea4cf15c9c3c3f0ad1f0a36d8f5de42a42ce8ea9712499f609beee3ea751"
+      },
+      {
+        "path": "src/adapters/postgresql/index.ts",
+        "sha256": "7baa071d95e5f9863a4ce2bf892d87fb27cab9d8605ba4cf8887016d14ca17b4"
+      },
+      {
+        "path": "src/model/document.ts",
+        "sha256": "a0422042659defdea425dff8bb0618eaa4bbf125f68da16aa5ad21af0b6c282f"
+      },
+      {
+        "path": "src/model/native-json.ts",
+        "sha256": "1459a3e030419c3ae09b300972e27aed8b8ee1f7e41972b3cc00627dff7d7882"
+      },
+      {
+        "path": "bun.lock",
+        "sha256": "98a99f7d306f7269db103bdbfafe5f9ad9ed34b02024276ad0cce45df27f5cc3"
+      }
+    ]
+  },
+  "backend": "@libpg-query/parser@17.6.10",
+  "bunVersion": "1.4.2",
+  "inputs": [
+    {
+      "modelPath": "docs/helix/02-design/contracts/row-home-tree-v0.1.proposal.umf.json",
+      "modelSha256": "570a2fa5c3f538b017ed880dea0e216b1c4225801d33ca7a1411fcc13e382fe9",
+      "sourcePath": "docs/helix/02-design/contracts/row-home-tree-v0.1.proposal.sql",
+      "sourceSha256": "3ffa469a40cd37cf86edae88c864e850d514fd36d41c79205cf5511a7dca0c72"
+    },
+    {
+      "modelPath": "docs/helix/02-design/contracts/row-home-scalar-v0.1.proposal.umf.json",
+      "modelSha256": "ad9efb6e1ba9b39ba1d438e7a327331be592868d3deeaaacb012ecb46e652105",
+      "sourcePath": "docs/helix/02-design/contracts/row-home-scalar-v0.1.proposal.sql",
+      "sourceSha256": "95a6ed245d05abbbac6288d73c548855f3adfcfc8e4b789a224a01cf70c898f7"
+    },
+    {
+      "modelPath": "docs/helix/02-design/contracts/row-home-touch-v0.1.proposal.umf.json",
+      "modelSha256": "6aa8f0ee9f1c7d411977590f3cd23758fa148121ff359fb08a25677945dda6f2",
+      "sourcePath": "docs/helix/02-design/contracts/row-home-touch-v0.1.proposal.sql",
+      "sourceSha256": "98c9b2422581eefa43d9412a9f57930ed261ec55518efee4b79686d17ac7b99f"
+    }
+  ],
+  "statements": [
+    {
+      "ordinal": "0",
+      "modelPath": "docs/helix/02-design/contracts/row-home-tree-v0.1.proposal.umf.json",
+      "sourceStatementIndex": "0",
+      "sourcePath": "/stmts/0",
+      "executionKind": "ddl",
+      "parameterPositions": [],
+      "sql": "ALTER TABLE truss.prop_def ADD CONSTRAINT prop_def_owner_property_row_home UNIQUE (type_id, prop_id)",
+      "sha256": "5dae4a2cf1a0c916d417ffa4eac04e728b46a0bce6329cf1e46c60a215aae098"
+    },
+    {
+      "ordinal": "1",
+      "modelPath": "docs/helix/02-design/contracts/row-home-tree-v0.1.proposal.umf.json",
+      "sourceStatementIndex": "1",
+      "sourcePath": "/stmts/1",
+      "executionKind": "ddl",
+      "parameterPositions": [],
+      "sql": "ALTER TABLE truss.edge ADD CONSTRAINT edge_typed_identity_row_home UNIQUE (id, rel_type_id)",
+      "sha256": "50eced015b7c75df93ea50321fd2784101055f3ca69e0fe851fc0805d9fa2c07"
+    },
+    {
+      "ordinal": "2",
+      "modelPath": "docs/helix/02-design/contracts/row-home-tree-v0.1.proposal.umf.json",
+      "sourceStatementIndex": "2",
+      "sourcePath": "/stmts/2",
+      "executionKind": "ddl",
+      "parameterPositions": [],
+      "sql": "CREATE SEQUENCE truss.row_home_id_seq AS bigint NO CYCLE",
+      "sha256": "b309c1c93115531b3265d6715831c466573cf151c9efa9d2861b378245b055fd"
+    },
+    {
+      "ordinal": "3",
+      "modelPath": "docs/helix/02-design/contracts/row-home-tree-v0.1.proposal.umf.json",
+      "sourceStatementIndex": "3",
+      "sourcePath": "/stmts/3",
+      "executionKind": "ddl",
+      "parameterPositions": [],
+      "sql": "CREATE TABLE truss.row_home_state (state_id bigint PRIMARY KEY DEFAULT nextval('truss.row_home_id_seq'), owner_kind text NOT NULL COLLATE pg_catalog.\"C\", object_id bigint, object_type_id int, edge_id bigint, relationship_type_id int, property_owner_type_id int NOT NULL, property_id int NOT NULL, root_node_id bigint NOT NULL, definition_bytes bytea NOT NULL, home_profile_bytes bytea NOT NULL, value_profile_bytes bytea NOT NULL, source_bytes bytea NOT NULL, CONSTRAINT row_home_state_positive_ids CHECK (state_id > 0 AND root_node_id > 0), CONSTRAINT row_home_state_kind CHECK ((owner_kind = 'object' AND object_id IS NOT NULL AND object_type_id IS NOT NULL AND edge_id IS NULL AND relationship_type_id IS NULL AND property_owner_type_id = object_type_id) OR (owner_kind = 'edge' AND edge_id IS NOT NULL AND relationship_type_id IS NOT NULL AND object_id IS NULL AND object_type_id IS NULL)), CONSTRAINT row_home_state_property_fk FOREIGN KEY (property_owner_type_id, property_id) REFERENCES truss.prop_def (type_id, prop_id), CONSTRAINT row_home_state_object_fk FOREIGN KEY (object_id, object_type_id) REFERENCES truss.object (id, type_id) ON DELETE CASCADE, CONSTRAINT row_home_state_edge_fk FOREIGN KEY (edge_id, relationship_type_id) REFERENCES truss.edge (id, rel_type_id) ON DELETE CASCADE, CONSTRAINT row_home_state_object_property UNIQUE (object_id, object_type_id, property_id), CONSTRAINT row_home_state_edge_property UNIQUE (edge_id, relationship_type_id, property_id), CONSTRAINT row_home_state_carriers_nonempty CHECK (octet_length(definition_bytes) > 0 AND octet_length(home_profile_bytes) > 0 AND octet_length(value_profile_bytes) > 0 AND octet_length(source_bytes) > 0))",
+      "sha256": "a13117b85808640545146b5a622ecac38af05e1567f55064b35a6f16bb6d1b9a"
+    },
+    {
+      "ordinal": "4",
+      "modelPath": "docs/helix/02-design/contracts/row-home-tree-v0.1.proposal.umf.json",
+      "sourceStatementIndex": "4",
+      "sourcePath": "/stmts/4",
+      "executionKind": "ddl",
+      "parameterPositions": [],
+      "sql": "CREATE TABLE truss.row_home_node (state_id bigint NOT NULL REFERENCES truss.row_home_state (state_id) ON DELETE CASCADE, node_id bigint NOT NULL DEFAULT nextval('truss.row_home_id_seq'), parent_node_id bigint, slot_kind text NOT NULL COLLATE pg_catalog.\"C\", sequence_ordinal bigint, map_key text COLLATE pg_catalog.\"C\", record_field_identity_bytes bytea, value_kind text NOT NULL COLLATE pg_catalog.\"C\", definition_bytes bytea NOT NULL, source_bytes bytea NOT NULL, CONSTRAINT row_home_node_pk PRIMARY KEY (state_id, node_id), CONSTRAINT row_home_node_id_unique UNIQUE (node_id), CONSTRAINT row_home_node_positive_ids CHECK (state_id > 0 AND node_id > 0 AND (parent_node_id IS NULL OR parent_node_id > 0)), CONSTRAINT row_home_node_parent_fk FOREIGN KEY (state_id, parent_node_id) REFERENCES truss.row_home_node (state_id, node_id) ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED, CONSTRAINT row_home_node_not_self_parent CHECK (parent_node_id IS DISTINCT FROM node_id), CONSTRAINT row_home_node_value_kind CHECK (value_kind IN ('scalar', 'null', 'sequence', 'map', 'record', 'structured')), CONSTRAINT row_home_node_slot CHECK ((slot_kind = 'root' AND parent_node_id IS NULL AND sequence_ordinal IS NULL AND map_key IS NULL AND record_field_identity_bytes IS NULL) OR (slot_kind = 'sequence' AND parent_node_id IS NOT NULL AND sequence_ordinal >= 0 AND sequence_ordinal IS NOT NULL AND map_key IS NULL AND record_field_identity_bytes IS NULL) OR (slot_kind = 'map' AND parent_node_id IS NOT NULL AND map_key IS NOT NULL AND sequence_ordinal IS NULL AND record_field_identity_bytes IS NULL) OR (slot_kind = 'record' AND parent_node_id IS NOT NULL AND record_field_identity_bytes IS NOT NULL AND octet_length(record_field_identity_bytes) > 0 AND sequence_ordinal IS NULL AND map_key IS NULL)), CONSTRAINT row_home_node_carriers_nonempty CHECK (octet_length(definition_bytes) > 0 AND octet_length(source_bytes) > 0))",
+      "sha256": "56ab8e47e943f419b18f6463a3869196e436fd279b75c23c6ab35a38e8d99736"
+    },
+    {
+      "ordinal": "5",
+      "modelPath": "docs/helix/02-design/contracts/row-home-tree-v0.1.proposal.umf.json",
+      "sourceStatementIndex": "5",
+      "sourcePath": "/stmts/5",
+      "executionKind": "ddl",
+      "parameterPositions": [],
+      "sql": "ALTER TABLE truss.row_home_state ADD CONSTRAINT row_home_state_root_fk FOREIGN KEY (state_id, root_node_id) REFERENCES truss.row_home_node (state_id, node_id) DEFERRABLE INITIALLY DEFERRED",
+      "sha256": "bc7cdb1809c672dd3b5600ef75c56e774998ed950d1ecf57660f7636512290f5"
+    },
+    {
+      "ordinal": "6",
+      "modelPath": "docs/helix/02-design/contracts/row-home-tree-v0.1.proposal.umf.json",
+      "sourceStatementIndex": "6",
+      "sourcePath": "/stmts/6",
+      "executionKind": "ddl",
+      "parameterPositions": [],
+      "sql": "CREATE UNIQUE INDEX row_home_one_root ON truss.row_home_node USING btree (state_id) WHERE parent_node_id IS NULL",
+      "sha256": "d30d6b29b538152039e0e0be8d01c3564aeef62f05da2c20472507a76d83d42b"
+    },
+    {
+      "ordinal": "7",
+      "modelPath": "docs/helix/02-design/contracts/row-home-tree-v0.1.proposal.umf.json",
+      "sourceStatementIndex": "7",
+      "sourcePath": "/stmts/7",
+      "executionKind": "ddl",
+      "parameterPositions": [],
+      "sql": "CREATE UNIQUE INDEX row_home_sequence_slot ON truss.row_home_node USING btree (state_id, parent_node_id, sequence_ordinal) WHERE slot_kind = 'sequence'",
+      "sha256": "6ef6e04285d18c6ef12b1f90f7bd444fe374a7a538eb0bc916b5d2d3806785b8"
+    },
+    {
+      "ordinal": "8",
+      "modelPath": "docs/helix/02-design/contracts/row-home-tree-v0.1.proposal.umf.json",
+      "sourceStatementIndex": "8",
+      "sourcePath": "/stmts/8",
+      "executionKind": "ddl",
+      "parameterPositions": [],
+      "sql": "CREATE INDEX row_home_map_parent ON truss.row_home_node USING btree (state_id, parent_node_id) WHERE slot_kind = 'map'",
+      "sha256": "7c57e062c7fa22465f647a59ca935db73e855f4780a87450a60a92c4fbca08f8"
+    },
+    {
+      "ordinal": "9",
+      "modelPath": "docs/helix/02-design/contracts/row-home-scalar-v0.1.proposal.umf.json",
+      "sourceStatementIndex": "0",
+      "sourcePath": "/stmts/0",
+      "executionKind": "ddl",
+      "parameterPositions": [],
+      "sql": "CREATE TABLE truss.row_home_scalar (state_id bigint NOT NULL, node_id bigint NOT NULL, scalar_kind text NOT NULL COLLATE pg_catalog.\"C\", text_value text COLLATE pg_catalog.\"C\", boolean_value boolean, numeric_value numeric, numeric_token text COLLATE pg_catalog.\"C\", binary_value bytea, temporal_text text COLLATE pg_catalog.\"C\", temporal_instant timestamptz, opaque_bytes bytea, codec_definition_bytes bytea NOT NULL, original_source_bytes bytea NOT NULL, CONSTRAINT row_home_scalar_pk PRIMARY KEY (state_id, node_id), CONSTRAINT row_home_scalar_node_fk FOREIGN KEY (state_id, node_id) REFERENCES truss.row_home_node (state_id, node_id) ON DELETE CASCADE, CONSTRAINT row_home_scalar_carriers_nonempty CHECK (octet_length(codec_definition_bytes) > 0 AND octet_length(original_source_bytes) > 0), CONSTRAINT row_home_scalar_family CHECK ((scalar_kind = 'string' AND text_value IS NOT NULL AND boolean_value IS NULL AND numeric_value IS NULL AND numeric_token IS NULL AND binary_value IS NULL AND temporal_text IS NULL AND temporal_instant IS NULL AND opaque_bytes IS NULL) OR (scalar_kind = 'boolean' AND boolean_value IS NOT NULL AND text_value IS NULL AND numeric_value IS NULL AND numeric_token IS NULL AND binary_value IS NULL AND temporal_text IS NULL AND temporal_instant IS NULL AND opaque_bytes IS NULL) OR (scalar_kind IN ('integer', 'decimal') AND numeric_value IS NOT NULL AND numeric_token IS NOT NULL AND octet_length(numeric_token) > 0 AND numeric_value::text COLLATE pg_catalog.\"C\" NOT IN ('NaN', 'Infinity', '-Infinity') AND (scalar_kind = 'decimal' OR numeric_value = pg_catalog.trunc(numeric_value)) AND text_value IS NULL AND boolean_value IS NULL AND binary_value IS NULL AND temporal_text IS NULL AND temporal_instant IS NULL AND opaque_bytes IS NULL) OR (scalar_kind = 'binary' AND binary_value IS NOT NULL AND text_value IS NULL AND boolean_value IS NULL AND numeric_value IS NULL AND numeric_token IS NULL AND temporal_text IS NULL AND temporal_instant IS NULL AND opaque_bytes IS NULL) OR (scalar_kind = 'timestamp' AND temporal_text IS NOT NULL AND text_value IS NULL AND boolean_value IS NULL AND numeric_value IS NULL AND numeric_token IS NULL AND binary_value IS NULL AND opaque_bytes IS NULL) OR (scalar_kind = 'opaque' AND opaque_bytes IS NOT NULL AND text_value IS NULL AND boolean_value IS NULL AND numeric_value IS NULL AND numeric_token IS NULL AND binary_value IS NULL AND temporal_text IS NULL AND temporal_instant IS NULL)))",
+      "sha256": "0e05366b66cd03892d7271c60895138e8d785e9f221f7c3b1ebebcd800749c42"
+    },
+    {
+      "ordinal": "10",
+      "modelPath": "docs/helix/02-design/contracts/row-home-touch-v0.1.proposal.umf.json",
+      "sourceStatementIndex": "0",
+      "sourcePath": "/stmts/0",
+      "executionKind": "ddl",
+      "parameterPositions": [],
+      "sql": "CREATE TABLE truss.row_home_touch (transaction_id xid8 NOT NULL DEFAULT pg_catalog.pg_current_xact_id(), owner_kind text NOT NULL COLLATE pg_catalog.\"C\", owner_id bigint NOT NULL, owner_discriminator_id int NOT NULL, property_owner_type_id int NOT NULL, property_id int NOT NULL, dirty_generation bigint NOT NULL, sealed_generation bigint, original_layout_bytes bytea NOT NULL, original_home_bytes bytea NOT NULL, original_owner_property_bytes bytea NOT NULL, original_operation_bytes bytea NOT NULL, CONSTRAINT row_home_touch_pk PRIMARY KEY (transaction_id, owner_kind, owner_id, owner_discriminator_id, property_owner_type_id, property_id), CONSTRAINT row_home_touch_kind CHECK (owner_kind IN ('object', 'edge')), CONSTRAINT row_home_touch_generations CHECK (dirty_generation > 0 AND (sealed_generation IS NULL OR (sealed_generation > 0 AND sealed_generation <= dirty_generation))), CONSTRAINT row_home_touch_originals CHECK (octet_length(original_layout_bytes) > 0 AND octet_length(original_home_bytes) > 0 AND octet_length(original_owner_property_bytes) > 0 AND octet_length(original_operation_bytes) > 0))",
+      "sha256": "7fbbd2bec6f6b5343794c115438b97e1dcb75723969cea0a031f24280158b97b"
+    }
+  ],
+  "joins": [
+    "",
+    ";\n",
+    ";\n",
+    ";\n",
+    ";\n",
+    ";\n",
+    ";\n",
+    ";\n",
+    ";\n",
+    ";\n",
+    ";\n",
+    ";"
+  ],
+  "joinedSqlSha256": "56f283fee723acf858d4894f337881b95c73b4831aebf394df8461f871c89018",
+  "joinedOwnerReexportExact": true,
+  "physicalCoverageComplete": false,
+  "nativeExecution": false
+}

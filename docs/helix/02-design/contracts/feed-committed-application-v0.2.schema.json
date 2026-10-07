@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:feed-committed-application:0.2.0",
+  "description": "Archived original application shape only; v0.2 transition/interval/native fence/commit custody require admission.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-feed-committed-application/0.2.0"
+    },
+    "applicationIdentity": {
+      "$ref": "urn:truss:draft:feed-committed-application:0.1.0#/properties/applicationIdentity"
+    },
+    "worker": {
+      "$ref": "urn:truss:draft:feed-committed-application:0.1.0#/properties/worker"
+    },
+    "downstreamIdentity": {
+      "$ref": "urn:truss:draft:feed-committed-application:0.1.0#/properties/downstreamIdentity"
+    },
+    "downstreamProfile": {
+      "$ref": "urn:truss:draft:feed-committed-application:0.1.0#/properties/downstreamProfile"
+    },
+    "applicationProfile": {
+      "$ref": "urn:truss:draft:feed-committed-application:0.1.0#/properties/applicationProfile"
+    },
+    "evidenceProfile": {
+      "$ref": "urn:truss:draft:feed-committed-application:0.1.0#/properties/evidenceProfile"
+    },
+    "prior": {
+      "$ref": "urn:truss:draft:feed-progress:0.2.0"
+    },
+    "applied": {
+      "$ref": "urn:truss:draft:feed-progress:0.2.0#/$defs/progressBoundary"
+    },
+    "operation": {
+      "$ref": "urn:truss:draft:feed-committed-application:0.1.0#/properties/operation"
+    },
+    "intervalEvidence": {
+      "$ref": "urn:truss:draft:feed-committed-application:0.1.0#/properties/intervalEvidence"
+    },
+    "admissionEvidence": {
+      "$ref": "urn:truss:draft:feed-committed-application:0.1.0#/properties/admissionEvidence"
+    },
+    "durableTransitionInventory": {
+      "$ref": "urn:truss:draft:feed-committed-application:0.1.0#/properties/durableTransitionInventory"
+    },
+    "commitObservation": {
+      "$ref": "urn:truss:draft:feed-committed-application:0.1.0#/properties/commitObservation"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "applicationIdentity",
+    "worker",
+    "downstreamIdentity",
+    "downstreamProfile",
+    "applicationProfile",
+    "evidenceProfile",
+    "prior",
+    "applied",
+    "operation",
+    "intervalEvidence",
+    "admissionEvidence",
+    "durableTransitionInventory",
+    "commitObservation"
+  ],
+  "additionalProperties": false
+}

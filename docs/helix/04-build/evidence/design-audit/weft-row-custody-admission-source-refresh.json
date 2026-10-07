@@ -1,0 +1,10 @@
+{
+  "scope": "Committed private physical custody admission source review only; no Truss execution or semantic decoder adoption",
+  "head": "7a47597fb94202b0dfb8e95480a49c59439d7d95",
+  "sourceSha256": {
+    "crates/weft-postgresql/src/row_custody.rs": "3b9f630a4a013e2aeeaa04c17c84d9f92a6f2275a0a31b60c54e9f8da70cacab",
+    "docs/helix/04-build/evidence/B-005-row-custody-admission.json": "7c681e62af9e5f51e051220ad33781260de3f5bd8737e497f39f36466f9a2bb4"
+  },
+  "nativeExecutionByTruss": false,
+  "complete": false
+}

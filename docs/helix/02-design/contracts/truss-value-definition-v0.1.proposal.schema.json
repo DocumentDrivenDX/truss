@@ -1,0 +1,200 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:value-definition:0.1.0",
+  "title": "Proposed type-directed storage value graph",
+  "description": "Closed graph grammar; complete authored correspondence, codec interpretation, native storage domains and finite traversal require semantic admission. Does not adopt a numeric encoding profile or alter Weft decoder ABI.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-value-definition/0.1.0"
+    },
+    "profile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "rootNodeId": {
+      "$ref": "#/$defs/id"
+    },
+    "acceptedDefinition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "nodes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/node"
+      }
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "profile",
+    "rootNodeId",
+    "acceptedDefinition",
+    "nodes"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "node": {
+      "type": "object",
+      "properties": {
+        "nodeId": {
+          "$ref": "#/$defs/id"
+        },
+        "authoredIdentity": {
+          "$ref": "#/$defs/identity"
+        },
+        "authoredDefinition": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "codecProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "codecDefinition": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "shape": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "scalar"
+                },
+                "family": {
+                  "$ref": "#/$defs/id"
+                },
+                "storageRepresentation": {
+                  "enum": [
+                    "json-string",
+                    "json-number",
+                    "json-boolean",
+                    "json-null",
+                    "opaque-archive"
+                  ]
+                }
+              },
+              "required": [
+                "kind",
+                "family",
+                "storageRepresentation"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "enum": [
+                    "sequence",
+                    "map"
+                  ]
+                },
+                "itemNodeId": {
+                  "$ref": "#/$defs/id"
+                }
+              },
+              "required": [
+                "kind",
+                "itemNodeId"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "record"
+                },
+                "members": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "fieldIdentity": {
+                        "$ref": "#/$defs/identity"
+                      },
+                      "storedMemberName": {
+                        "type": "string"
+                      },
+                      "valueNodeId": {
+                        "$ref": "#/$defs/id"
+                      },
+                      "presenceDefinition": {
+                        "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+                      }
+                    },
+                    "required": [
+                      "fieldIdentity",
+                      "storedMemberName",
+                      "valueNodeId",
+                      "presenceDefinition"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "kind",
+                "members"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "structured"
+                },
+                "recordNodeId": {
+                  "$ref": "#/$defs/id"
+                }
+              },
+              "required": [
+                "kind",
+                "recordNodeId"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": [
+        "nodeId",
+        "authoredIdentity",
+        "authoredDefinition",
+        "codecProfile",
+        "codecDefinition",
+        "shape"
+      ],
+      "additionalProperties": false
+    },
+    "identity": {
+      "type": "object",
+      "properties": {
+        "documentId": {
+          "$ref": "#/$defs/id"
+        },
+        "revision": {
+          "$ref": "#/$defs/id"
+        },
+        "module": {
+          "$ref": "#/$defs/id"
+        },
+        "element": {
+          "$ref": "#/$defs/id"
+        }
+      },
+      "required": [
+        "documentId",
+        "revision",
+        "module",
+        "element"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

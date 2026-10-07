@@ -1,0 +1,34 @@
+{
+  "profile": "truss-catalog-identity-resource/0.1.0",
+  "status": "unadopted_candidate",
+  "scope": "Catalog identity pre-state/candidate/post-state matching and finalization only; containing acceptance/value/transform/report/executor profiles also apply",
+  "limits": {
+    "retainedCatalogEntries": "10000",
+    "candidateCatalogEntries": "10000",
+    "newCatalogEntries": "10000",
+    "individualLineagePreimageBytes": "1048576",
+    "retainedIdentityCarrierBytes": "67108864",
+    "candidateIdentityCarrierBytes": "67108864",
+    "metadataResultBytes": "8388608",
+    "nativeIdentityRowsObserved": "40000",
+    "comparisonWorkUnits": "1073741824",
+    "ownedBytes": "268435456",
+    "elapsedMilliseconds": "30000",
+    "containmentMilliseconds": "5000"
+  },
+  "units": {
+    "retainedCatalogEntries": "Total retained type/property/relationship/key definitions across active/provisional/retired states; repeated owner references do not create definitions",
+    "candidateCatalogEntries": "Complete candidate definitions across the same four namespaces",
+    "newCatalogEntries": "Genuinely new definitions after complete original matching; no duplicate/retired-match evasion",
+    "individualLineagePreimageBytes": "Complete canonical transport preimage, including framing",
+    "retainedIdentityCarrierBytes": "Sum of full retained identity preimages, not digest lengths",
+    "candidateIdentityCarrierBytes": "Sum of full candidate identity preimages, not digest lengths",
+    "metadataResultBytes": "Complete encoded metadata over all identity stages; decoder/native adapter expansion also charges ownedBytes",
+    "nativeIdentityRowsObserved": "Every actually returned pre/post/refetch identity row; repeated real work charges again",
+    "comparisonWorkUnits": "One byte examined/copied during full identity comparison or canonical matching; ledger charges actual repeated work",
+    "ownedBytes": "All original identity input/candidate/native adapter/decoder/sort/group/evidence buffers and still-owned uncertainty reservations",
+    "elapsedMilliseconds": "One original monotonic identity-operation deadline, including native waits/transport; containing acceptance deadline may be stricter",
+    "containmentMilliseconds": "Original containment observation budget; expiry retains original recovery, not confirmed termination"
+  },
+  "qualification": "Proposed defaults only. Native detoast/sort/workspace, producer allocator and adapter enforcement must be selected and independently qualified. No result-size-only guarantee."
+}

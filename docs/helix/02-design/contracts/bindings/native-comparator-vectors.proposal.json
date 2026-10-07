@@ -1,0 +1,151 @@
+{
+  "scope": "Independent planned scalar/tuple comparison expectations. Native equality/order/operator/cast/collation/domain and source-facet qualification remains required.",
+  "cases": [
+    {
+      "id": "integer-not-lexical",
+      "strategy": "signed-integer",
+      "left": "2",
+      "right": "10",
+      "expectedOrder": "less"
+    },
+    {
+      "id": "large-adjacent-integers",
+      "strategy": "signed-integer",
+      "left": "9007199254740992",
+      "right": "9007199254740993",
+      "requires": "native domain admits both exactly",
+      "expectedOrder": "less"
+    },
+    {
+      "id": "decimal-spelling-equality",
+      "strategy": "finite-decimal",
+      "left": "1.0",
+      "right": "1.00",
+      "requires": "source grammar/facets and native domain admit both",
+      "expectedOrder": "equal",
+      "originalTokensRemainDistinct": true
+    },
+    {
+      "id": "decimal-negative-zero",
+      "strategy": "finite-decimal",
+      "left": "-0.00",
+      "right": "0",
+      "requires": "source grammar/facets admit both",
+      "expectedOrder": "equal",
+      "originalTokensRemainDistinct": true
+    },
+    {
+      "id": "fraction-to-integer",
+      "strategy": "signed-integer",
+      "left": "1.5",
+      "right": "2",
+      "expectedRefusal": "nonintegral-before-cast"
+    },
+    {
+      "id": "int4-overflow",
+      "strategy": "signed-integer",
+      "nativeType": "pg_catalog.int4",
+      "left": "2147483648",
+      "right": "1",
+      "expectedRefusal": "native-domain-overflow-before-sql"
+    },
+    {
+      "id": "decimal-scale-rounding",
+      "strategy": "finite-decimal",
+      "left": "1.001",
+      "right": "1.00",
+      "nativeCast": "numeric(4,2)",
+      "expectedRefusal": "scale-coercion-is-not-exact-comparison"
+    },
+    {
+      "id": "nonfinite",
+      "strategy": "finite-decimal",
+      "left": "NaN",
+      "right": "1",
+      "expectedRefusal": "nonfinite-before-sql"
+    },
+    {
+      "id": "text-trailing-space",
+      "strategy": "unicode-text-C",
+      "left": "a",
+      "right": "a ",
+      "requires": "qualified UTF8 text/C native comparator",
+      "expectedOrder": "less"
+    },
+    {
+      "id": "text-normalization-distinct",
+      "strategy": "unicode-text-C",
+      "left": "é",
+      "right": "é",
+      "requires": "qualified UTF8 text/C native comparator",
+      "expectedOrder": "less"
+    },
+    {
+      "id": "tuple-first-difference",
+      "left": [
+        "2",
+        "100"
+      ],
+      "right": [
+        "10",
+        "0"
+      ],
+      "components": [
+        "signed-integer",
+        "signed-integer"
+      ],
+      "expectedOrder": "less"
+    },
+    {
+      "id": "tuple-later-difference",
+      "left": [
+        "2",
+        "10"
+      ],
+      "right": [
+        "2",
+        "2"
+      ],
+      "components": [
+        "signed-integer",
+        "signed-integer"
+      ],
+      "expectedOrder": "greater"
+    },
+    {
+      "id": "equality-only",
+      "orderingQualification": "missing",
+      "queryOperation": "ordered-page",
+      "expectedRefusal": "ordering-unavailable-no-lexical-fallback"
+    },
+    {
+      "id": "stored-domain-gap",
+      "storedLeaf": "invalid numeric token",
+      "predicateElsewhereWouldExcludeRow": true,
+      "expectedRefusal": "unsafe-cast-domain-unqualified-no-evaluation-order-assumption"
+    },
+    {
+      "id": "unsigned64-high-range",
+      "strategy": "unsigned-integer",
+      "left": "9223372036854775808",
+      "right": "18446744073709551615",
+      "requires": "authored uint64 domain and exact native numeric",
+      "expectedOrder": "less"
+    },
+    {
+      "id": "unsigned64-overflow",
+      "strategy": "unsigned-integer",
+      "left": "18446744073709551616",
+      "right": "0",
+      "requires": "authored uint64 facets",
+      "expectedRefusal": "source-domain-overflow-before-sql"
+    },
+    {
+      "id": "unsigned-negative",
+      "strategy": "unsigned-integer",
+      "left": "-1",
+      "right": "0",
+      "expectedRefusal": "unsigned-source-domain-refusal"
+    }
+  ]
+}

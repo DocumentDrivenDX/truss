@@ -1,0 +1,260 @@
+{
+  "scope": "three complete proposal schemas compile; twelve embedded event-array and complete positive/negative wrapper shape controls only; no runtime or native semantic adoption",
+  "bunVersion": "1.4.2",
+  "sourcePins": [
+    {
+      "path": "docs/helix/02-design/contracts/journal-page-result-v0.2.proposal.schema.json",
+      "sha256": "9d42cba78b7f4973140a8d873032717857edfe3b40ab6dfe76fa7bcad80141e4"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/journal-page-result-v0.1.schema.json",
+      "sha256": "c91173f57681a494cc99d79a79b0aae01591083135ebabd1c6c75197eaca18b1"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/journal-page-request-v0.1.schema.json",
+      "sha256": "80e8f73c03d84ec1bba00f1f457d82c6b8867b15b1294b0a7adb026d702d2455"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/acceptance-input-v0.1.schema.json",
+      "sha256": "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/history-event-v0.1.schema.json",
+      "sha256": "e42f9b48642528cabbb646ccb758eb12b7f030029b712cf5d6f5174cbd90bfa6"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/history-record-v0.1.schema.json",
+      "sha256": "c35c1258028cc4c8c95dcd16b561caed4f2a347c086f72ebfc7bfc4f2dfcf2fe"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/exact-value-v0.1.schema.json",
+      "sha256": "0c804796bfbf68339c299f0c55d24db58fcfcc929bffe2d5ffaf4a2f27e24880"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/history-event-v0.2.proposal.schema.json",
+      "sha256": "714923be0f86bd3508a097cabfee63a180e03b19651ebbfa38844bb3e637b425"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/history-retain-payload-v0.1.proposal.schema.json",
+      "sha256": "fc08e07a4b09636ac234737be9bb2cf3a9a3c26120baad612176574c17659605"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/retained-history-archive-v0.2.proposal.schema.json",
+      "sha256": "000cd715c000bd6bb1e7bb35bb2d2eb100a5de55692dfbd8527139b26dde1f3f"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/retained-history-archive-v0.1.schema.json",
+      "sha256": "97f3987876a019d675ffd03a59dc9b4c90abf0e9c1be9627601c5015d7a276e6"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/acceptance-report-v0.2.proposal.schema.json",
+      "sha256": "d2ecde4e040e1bd0267765fc8df2257095152de74b9c5545320856c5771f942f"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/acceptance-report-v0.1.schema.json",
+      "sha256": "ccdc9976de3c158fae0a14d6cc41685d5f5a289d67daeb86b5e998b4a611e902"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/acceptance-rejection-v0.1.schema.json",
+      "sha256": "98262b8d99fe0f87f752140a418a4e4f8751c4d28986457302586fee622258cf"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/direct-cursor-v0.1.schema.json",
+      "sha256": "bff79ad2e5ccc1047b43bdbe6eeb51b597f098c881313fd980de01c1685b4942"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/enforcement-report-v0.1.schema.json",
+      "sha256": "452b7562d6e7959d940d5596a52a2221529482ea29853c3e021431885faa4351"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/check-history-consumer-v0.2-proposals.ts",
+      "sha256": "f4b8d47e0dd398a5dbed06213055ff951083e00eb09fda2757667bdebfddd054"
+    }
+  ],
+  "outcomes": [
+    {
+      "consumer": "urn:truss:proposal:journal-page-result:0.2.0",
+      "name": "new rebind",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "consumer": "urn:truss:proposal:journal-page-result:0.2.0",
+      "name": "new retain",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "consumer": "urn:truss:proposal:journal-page-result:0.2.0",
+      "name": "old version",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "consumer": "urn:truss:proposal:journal-page-result:0.2.0",
+      "name": "mixed versions",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "consumer": "urn:truss:proposal:retained-history-archive:0.2.0",
+      "name": "new rebind",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "consumer": "urn:truss:proposal:retained-history-archive:0.2.0",
+      "name": "new retain",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "consumer": "urn:truss:proposal:retained-history-archive:0.2.0",
+      "name": "old version",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "consumer": "urn:truss:proposal:retained-history-archive:0.2.0",
+      "name": "mixed versions",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "consumer": "urn:truss:proposal:acceptance-report:0.2.0",
+      "name": "new rebind",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "consumer": "urn:truss:proposal:acceptance-report:0.2.0",
+      "name": "new retain",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "consumer": "urn:truss:proposal:acceptance-report:0.2.0",
+      "name": "old version",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "consumer": "urn:truss:proposal:acceptance-report:0.2.0",
+      "name": "mixed versions",
+      "expected": false,
+      "actual": false
+    }
+  ],
+  "wrapperOutcomes": [
+    {
+      "consumer": "urn:truss:proposal:journal-page-result:0.2.0",
+      "name": "complete positive wrapper",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "consumer": "urn:truss:proposal:journal-page-result:0.2.0",
+      "name": "unknown root member",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "consumer": "urn:truss:proposal:journal-page-result:0.2.0",
+      "name": "missing required evidence",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "consumer": "urn:truss:proposal:journal-page-result:0.2.0",
+      "name": "old event in complete wrapper",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "consumer": "urn:truss:proposal:journal-page-result:0.2.0",
+      "name": "mixed events in complete wrapper",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "consumer": "urn:truss:proposal:journal-page-result:0.2.0",
+      "name": "unavailable with partial rows",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "consumer": "urn:truss:proposal:journal-page-result:0.2.0",
+      "name": "unavailable without payload",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "consumer": "urn:truss:proposal:retained-history-archive:0.2.0",
+      "name": "complete positive wrapper",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "consumer": "urn:truss:proposal:retained-history-archive:0.2.0",
+      "name": "unknown root member",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "consumer": "urn:truss:proposal:retained-history-archive:0.2.0",
+      "name": "missing required evidence",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "consumer": "urn:truss:proposal:retained-history-archive:0.2.0",
+      "name": "old event in complete wrapper",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "consumer": "urn:truss:proposal:retained-history-archive:0.2.0",
+      "name": "mixed events in complete wrapper",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "consumer": "urn:truss:proposal:acceptance-report:0.2.0",
+      "name": "complete positive wrapper",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "consumer": "urn:truss:proposal:acceptance-report:0.2.0",
+      "name": "unknown root member",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "consumer": "urn:truss:proposal:acceptance-report:0.2.0",
+      "name": "missing required evidence",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "consumer": "urn:truss:proposal:acceptance-report:0.2.0",
+      "name": "old event in complete wrapper",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "consumer": "urn:truss:proposal:acceptance-report:0.2.0",
+      "name": "mixed events in complete wrapper",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "consumer": "urn:truss:proposal:acceptance-report:0.2.0",
+      "name": "retain in complete report",
+      "expected": false,
+      "actual": false
+    }
+  ],
+  "nativeExecuted": false,
+  "adopted": false
+}

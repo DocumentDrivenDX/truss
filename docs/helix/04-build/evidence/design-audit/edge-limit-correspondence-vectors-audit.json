@@ -1,0 +1,62 @@
+{
+  "scope": "eleven finite independently authored maximum-one derivation/multiset cases checked by Python oracle only; no Truss/native/privilege/cut/resource/support qualification",
+  "status": "pass",
+  "outcomes": [
+    {
+      "case": "incoming-one/outgoing-two complete",
+      "matchesIndependentlyAuthoredExpectation": true,
+      "outcome": "correspondence"
+    },
+    {
+      "case": "missing required marker",
+      "matchesIndependentlyAuthoredExpectation": true,
+      "outcome": "marker_mismatch"
+    },
+    {
+      "case": "wrong side",
+      "matchesIndependentlyAuthoredExpectation": true,
+      "outcome": "marker_mismatch"
+    },
+    {
+      "case": "wrong relationship still in collector scope",
+      "matchesIndependentlyAuthoredExpectation": true,
+      "outcome": "marker_mismatch"
+    },
+    {
+      "case": "wrong edge within named relationship scope",
+      "matchesIndependentlyAuthoredExpectation": true,
+      "outcome": "marker_mismatch"
+    },
+    {
+      "case": "two sources for incoming-one target",
+      "matchesIndependentlyAuthoredExpectation": true,
+      "outcome": "required_key_conflict"
+    },
+    {
+      "case": "both-one self-edge",
+      "matchesIndependentlyAuthoredExpectation": true,
+      "outcome": "correspondence"
+    },
+    {
+      "case": "unbounded sides",
+      "matchesIndependentlyAuthoredExpectation": true,
+      "outcome": "correspondence"
+    },
+    {
+      "case": "missing definition",
+      "matchesIndependentlyAuthoredExpectation": true,
+      "outcome": "definition_unavailable"
+    },
+    {
+      "case": "larger outgoing bound violated despite correct max-one markers",
+      "matchesIndependentlyAuthoredExpectation": true,
+      "outcome": "correspondence"
+    },
+    {
+      "case": "duplicated raw marker occurrence is not deduplicated",
+      "matchesIndependentlyAuthoredExpectation": true,
+      "outcome": "marker_mismatch"
+    }
+  ],
+  "vectorsSha256": "57d392e56e275c0f205700b1d1017e6edd5b3b600c214305d493325c8aa465a3"
+}

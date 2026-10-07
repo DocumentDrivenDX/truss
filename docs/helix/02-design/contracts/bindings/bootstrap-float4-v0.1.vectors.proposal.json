@@ -1,0 +1,95 @@
+{
+  "profile": "truss-bootstrap-float4/0.1.0",
+  "scope": "Independent IEEE binary32 classification expectations only; actual native send/build/profile unqualified",
+  "vectors": [
+    {
+      "hex": "00000000",
+      "expected": {
+        "class": "zero",
+        "sign": "positive"
+      }
+    },
+    {
+      "hex": "80000000",
+      "expected": {
+        "class": "zero",
+        "sign": "negative"
+      }
+    },
+    {
+      "hex": "3f800000",
+      "expected": {
+        "class": "finite",
+        "sign": "positive",
+        "mantissa": "8388608",
+        "exponent": "-23"
+      }
+    },
+    {
+      "hex": "bf800000",
+      "expected": {
+        "class": "finite",
+        "sign": "negative",
+        "mantissa": "8388608",
+        "exponent": "-23"
+      }
+    },
+    {
+      "hex": "00000001",
+      "expected": {
+        "class": "finite",
+        "sign": "positive",
+        "mantissa": "1",
+        "exponent": "-149"
+      }
+    },
+    {
+      "hex": "00800000",
+      "expected": {
+        "class": "finite",
+        "sign": "positive",
+        "mantissa": "8388608",
+        "exponent": "-149"
+      }
+    },
+    {
+      "hex": "7f7fffff",
+      "expected": {
+        "class": "finite",
+        "sign": "positive",
+        "mantissa": "16777215",
+        "exponent": "104"
+      }
+    },
+    {
+      "hex": "7f800000",
+      "expected": {
+        "class": "infinity",
+        "sign": "positive"
+      }
+    },
+    {
+      "hex": "ff800000",
+      "expected": {
+        "class": "infinity",
+        "sign": "negative"
+      }
+    },
+    {
+      "hex": "7fc00001",
+      "expected": {
+        "class": "nan",
+        "sign": "positive",
+        "fractionBits": "4194305"
+      }
+    },
+    {
+      "hex": "3F800000",
+      "refusal": "invalid_hex"
+    },
+    {
+      "hex": "000000",
+      "refusal": "invalid_hex"
+    }
+  ]
+}

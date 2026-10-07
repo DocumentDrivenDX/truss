@@ -1,0 +1,202 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:traversal-resource-ledger:0.1.0",
+  "title": "Draft private traversal resource ledger",
+  "description": "Private registered accounting snapshot, not transferable work permission. Exact arithmetic, complete original permit inventory, issuer/completion custody and physical reservation correspondence require semantic host admission.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-traversal-resource-ledger/0.1.0"
+    },
+    "assemblyId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "handle": {
+      "$ref": "urn:truss:draft:direct-traversal-request:0.1.0#/$defs/handle"
+    },
+    "storeProfile": {
+      "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/profilePin"
+    },
+    "resourceProfile": {
+      "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/profilePin"
+    },
+    "accountingVersion": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$"
+    },
+    "originalQuery": {
+      "$ref": "#/$defs/reference"
+    },
+    "actualWork": {
+      "$ref": "#/$defs/increments"
+    },
+    "outstandingMaximumWork": {
+      "$ref": "#/$defs/increments"
+    },
+    "retainedBytes": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$"
+    },
+    "chargedReservationBytes": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$"
+    },
+    "permits": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "permitIdentity": {
+                "type": "string",
+                "minLength": 1
+              },
+              "admittedAccountingVersion": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]*)$"
+              },
+              "maximumIncrements": {
+                "$ref": "#/$defs/increments"
+              },
+              "maximumReservationBytes": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]*)$"
+              },
+              "originalAdmission": {
+                "$ref": "#/$defs/reference"
+              },
+              "state": {
+                "const": "reserved"
+              }
+            },
+            "required": [
+              "permitIdentity",
+              "admittedAccountingVersion",
+              "maximumIncrements",
+              "maximumReservationBytes",
+              "originalAdmission",
+              "state"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "permitIdentity": {
+                "type": "string",
+                "minLength": 1
+              },
+              "admittedAccountingVersion": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]*)$"
+              },
+              "maximumIncrements": {
+                "$ref": "#/$defs/increments"
+              },
+              "maximumReservationBytes": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]*)$"
+              },
+              "originalAdmission": {
+                "$ref": "#/$defs/reference"
+              },
+              "state": {
+                "const": "settled"
+              },
+              "settledAccountingVersion": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]*)$"
+              },
+              "actualIncrements": {
+                "$ref": "#/$defs/increments"
+              },
+              "originalCompletion": {
+                "$ref": "#/$defs/reference"
+              }
+            },
+            "required": [
+              "permitIdentity",
+              "admittedAccountingVersion",
+              "maximumIncrements",
+              "maximumReservationBytes",
+              "originalAdmission",
+              "state",
+              "settledAccountingVersion",
+              "actualIncrements",
+              "originalCompletion"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    "initialWork": {
+      "$ref": "#/$defs/increments"
+    },
+    "originalCreation": {
+      "$ref": "#/$defs/reference"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "assemblyId",
+    "handle",
+    "storeProfile",
+    "resourceProfile",
+    "accountingVersion",
+    "originalQuery",
+    "actualWork",
+    "outstandingMaximumWork",
+    "retainedBytes",
+    "chargedReservationBytes",
+    "permits",
+    "initialWork",
+    "originalCreation"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "increments": {
+      "type": "object",
+      "properties": {
+        "examinedEdges": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        },
+        "pathStates": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        },
+        "activeWorkMilliseconds": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        }
+      },
+      "required": [
+        "examinedEdges",
+        "pathStates",
+        "activeWorkMilliseconds"
+      ],
+      "additionalProperties": false
+    },
+    "reference": {
+      "type": "object",
+      "properties": {
+        "identity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "identity",
+        "sha256"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

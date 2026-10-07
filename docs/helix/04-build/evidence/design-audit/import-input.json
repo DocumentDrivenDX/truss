@@ -1,0 +1,5 @@
+{
+  "scope": "identity envelope shape only; no payload decoding",
+  "cases": 8,
+  "failures": []
+}

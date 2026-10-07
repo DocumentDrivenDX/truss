@@ -1,0 +1,69 @@
+{
+  "profile": "truss-native-layout-capture/0.1.0",
+  "status": "unadopted_candidate",
+  "source": "docs/helix/02-design/contracts/relationship-lineage-layout-v0.1.draft.sql",
+  "sourceSha256": "266773369bb070e3be626c919ba33df482ff0d415bce023e55f9e26bc5611dbf",
+  "model": "docs/helix/02-design/models/truss-relationship-lineage-candidate.umf.json",
+  "modelSha256": "c70a78c65dad005e3752439d97476d14682df3215836e4c3cb3c443b0248dc2a",
+  "backend": "@libpg-query/parser@17.6.10",
+  "checks": {
+    "sourceArchiveExact": true,
+    "jsonReload": true,
+    "reloadedExportExact": true,
+    "columnOrderExact": true
+  },
+  "declarationInventory": {
+    "complete": false,
+    "declaredTables": 1,
+    "columns": [
+      "rel_type_id",
+      "lineage_category",
+      "identity_profile",
+      "original_identity_bytes",
+      "identity_sha256"
+    ],
+    "unhandled": 1,
+    "diagnostics": [
+      {
+        "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+        "path": "",
+        "severity": "warning"
+      },
+      {
+        "code": "POSTGRESQL_DDL_UNRESOLVED",
+        "path": "/stmts/0/stmt/CreateStmt/tableElts/1/ColumnDef/typeName",
+        "severity": "warning"
+      },
+      {
+        "code": "POSTGRESQL_DDL_UNRESOLVED",
+        "path": "/stmts/0/stmt/CreateStmt/tableElts/2/ColumnDef/typeName",
+        "severity": "warning"
+      },
+      {
+        "code": "POSTGRESQL_DDL_UNRESOLVED",
+        "path": "/stmts/0/stmt/CreateStmt/tableElts/3/ColumnDef/typeName",
+        "severity": "warning"
+      },
+      {
+        "code": "POSTGRESQL_DDL_UNRESOLVED",
+        "path": "/stmts/0/stmt/CreateStmt/tableElts/4/ColumnDef/typeName",
+        "severity": "warning"
+      },
+      {
+        "code": "POSTGRESQL_DDL_UNRESOLVED",
+        "path": "/stmts/1/stmt",
+        "severity": "warning"
+      }
+    ]
+  },
+  "physicalIdentityAllocationComplete": false,
+  "completeExporterCorrespondence": false,
+  "installed": false,
+  "adoptionPrerequisites": [
+    "ADR-004 and complete document-qualified new layout",
+    "legacy uniqueness/category/provenance conversion",
+    "native full-identity/total mapping/finalizer/role/resource profiles",
+    "complete authored physical identity/source-node/exporter correspondence",
+    "independent native parity on selected target"
+  ]
+}

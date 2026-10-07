@@ -1,0 +1,139 @@
+{
+  "scope": "Three explicit private feed runtime source families/eight statements only; not all feed producers or native installation effects. Execute with statement-local bindings, never blind SQL concatenation.",
+  "ownerSource": {
+    "root": "/Users/erik/Projects/umf",
+    "commit": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+    "status": "",
+    "files": [
+      {
+        "path": "native/postgresql/runtime.ts",
+        "sha256": "a88fea4cf15c9c3c3f0ad1f0a36d8f5de42a42ce8ea9712499f609beee3ea751"
+      },
+      {
+        "path": "src/adapters/postgresql/index.ts",
+        "sha256": "7baa071d95e5f9863a4ce2bf892d87fb27cab9d8605ba4cf8887016d14ca17b4"
+      },
+      {
+        "path": "src/adapters/postgresql/declarations.ts",
+        "sha256": "e47ebd6366fee86fb8ccaf1270555bcd338957bff511f30cdcae22a088c6d8d9"
+      },
+      {
+        "path": "src/model/document.ts",
+        "sha256": "a0422042659defdea425dff8bb0618eaa4bbf125f68da16aa5ad21af0b6c282f"
+      },
+      {
+        "path": "spec/extensions/postgresql/native-ast.schema.json",
+        "sha256": "aa3d3b50bc04edbc3ab3430e113ee8710edb1c10ff5cee15d4bcc7b16d9a9039"
+      },
+      {
+        "path": "bun.lock",
+        "sha256": "98a99f7d306f7269db103bdbfafe5f9ad9ed34b02024276ad0cce45df27f5cc3"
+      }
+    ]
+  },
+  "families": [
+    {
+      "family": "feed-original-custody-lookup",
+      "statementKind": "SelectStmt",
+      "statementCount": 4,
+      "files": [
+        {
+          "path": "docs/helix/02-design/contracts/feed-original-custody-lookup-v0.1.proposal.sql",
+          "sha256": "7f1ed5ad1518ab8113dfdfc9e1f09dbb3c1865d29ad4b5b9904e931ed0319d1b"
+        },
+        {
+          "path": "docs/helix/02-design/contracts/feed-original-custody-lookup-v0.1.proposal.umf.json",
+          "sha256": "43a648252106f53170e561400dbb416509aebf96e935811c2f7632e70313724e"
+        },
+        {
+          "path": "docs/helix/04-build/evidence/design-audit/feed-original-custody-lookup.owner-export.sql",
+          "sha256": "21bfca962025a367c48a036976ca0993c48ac0bdd5aa20c63240c3c563c84330"
+        }
+      ],
+      "captureReceipt": {
+        "path": "docs/helix/04-build/evidence/design-audit/feed-original-custody-lookup-source.json",
+        "sha256": "2a575fe50a9b2140d231ecf33b2d0e53e2f68b2aafb7c9297cd1f7caa9269206"
+      },
+      "complete": false
+    },
+    {
+      "family": "feed-finalization-clear",
+      "statementKind": "UpdateStmt",
+      "statementCount": 2,
+      "files": [
+        {
+          "path": "docs/helix/02-design/contracts/feed-finalization-clear-v0.1.proposal.sql",
+          "sha256": "9e26a2a50479890d2985f7984f80f5c3bcaecf0e94da7928231ec57a39c99ae1"
+        },
+        {
+          "path": "docs/helix/02-design/contracts/feed-finalization-clear-v0.1.proposal.umf.json",
+          "sha256": "f1192f39a86133f32b8c589abb673f820750319dbe9023dd273fdea6aae152f3"
+        },
+        {
+          "path": "docs/helix/04-build/evidence/design-audit/feed-finalization-clear.owner-export.sql",
+          "sha256": "bd58d5c393a6e7dc21bf9609df26fab72d002f702a31607435b7b0f297046063"
+        }
+      ],
+      "captureReceipt": {
+        "path": "docs/helix/04-build/evidence/design-audit/feed-finalization-clear-source.json",
+        "sha256": "cdbd46e87ad9a4b63b594836b0e827f08f302ad970c7c0d0c4ac3011baff5fc4"
+      },
+      "complete": false
+    },
+    {
+      "family": "feed-finalization-assign-publish",
+      "statementKind": "UpdateStmt",
+      "statementCount": 2,
+      "files": [
+        {
+          "path": "docs/helix/02-design/contracts/feed-finalization-assign-publish-v0.1.proposal.sql",
+          "sha256": "d34773fd1f1d75a93f3dffedcf0bc23be2e9926d5d4382506ab9926005a529f3"
+        },
+        {
+          "path": "docs/helix/02-design/contracts/feed-finalization-assign-publish-v0.1.proposal.umf.json",
+          "sha256": "fe3466b2f6561232b2c801dd9af28adc3cc071136eed1d31b3bfe31160697f7e"
+        },
+        {
+          "path": "docs/helix/04-build/evidence/design-audit/feed-finalization-assign-publish.owner-export.sql",
+          "sha256": "fb0dd1905accfbd9551562366a3755572254b997713c476dcaac3cabd59bb47d"
+        }
+      ],
+      "captureReceipt": {
+        "path": "docs/helix/04-build/evidence/design-audit/feed-finalization-assign-publish-source.json",
+        "sha256": "e1774db50116c2b3fbf13efade5ead937bcc08a4d6ba634001302d4210ae681e"
+      },
+      "complete": false
+    }
+  ],
+  "controls": [
+    {
+      "case": "omitted family",
+      "refused": true
+    },
+    {
+      "case": "duplicate family",
+      "refused": true
+    },
+    {
+      "case": "invented complete claim",
+      "refused": true
+    },
+    {
+      "case": "substituted source hash",
+      "refused": true
+    },
+    {
+      "case": "narrower statement count",
+      "refused": true
+    }
+  ],
+  "nativeExecution": false,
+  "complete": false,
+  "missingNativeOutputs": [
+    "registration/comparison/finalizer/guard/retention native routine bodies and independent authority",
+    "complete helper/type/security/role/grant/dependency inventory",
+    "original codec/canonical/hash/clock/descriptor/accounting/termination producers",
+    "complete upstream required-effect and four-store event coverage",
+    "installation composition and independent native/bypass/state/resource qualification"
+  ]
+}

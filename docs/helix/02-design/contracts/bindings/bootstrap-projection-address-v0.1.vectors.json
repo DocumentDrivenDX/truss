@@ -1,0 +1,231 @@
+{
+  "status": "unadopted independently authored synthetic pointer fixtures",
+  "scope": "pointer syntax, tokens and existing-value lookup only; no native custody, contributor merge or canonical basis qualification",
+  "basis": {
+    "": "empty",
+    "a/b": "slash",
+    "m~n": "tilde",
+    "~1": "literal-tilde-one",
+    "array": [
+      "first",
+      null
+    ],
+    "01": "object-numeric",
+    "__proto__": "inert",
+    "é": "composed",
+    "é": "decomposed"
+  },
+  "vectors": [
+    {
+      "id": "PA01",
+      "pointer": "",
+      "expected": {
+        "kind": "resolved",
+        "tokens": [],
+        "value": {
+          "": "empty",
+          "a/b": "slash",
+          "m~n": "tilde",
+          "~1": "literal-tilde-one",
+          "array": [
+            "first",
+            null
+          ],
+          "01": "object-numeric",
+          "__proto__": "inert",
+          "é": "composed",
+          "é": "decomposed"
+        }
+      }
+    },
+    {
+      "id": "PA02",
+      "pointer": "/",
+      "expected": {
+        "kind": "resolved",
+        "tokens": [
+          ""
+        ],
+        "value": "empty"
+      }
+    },
+    {
+      "id": "PA03",
+      "pointer": "/a~1b",
+      "expected": {
+        "kind": "resolved",
+        "tokens": [
+          "a/b"
+        ],
+        "value": "slash"
+      }
+    },
+    {
+      "id": "PA04",
+      "pointer": "/m~0n",
+      "expected": {
+        "kind": "resolved",
+        "tokens": [
+          "m~n"
+        ],
+        "value": "tilde"
+      }
+    },
+    {
+      "id": "PA05",
+      "pointer": "/~01",
+      "expected": {
+        "kind": "resolved",
+        "tokens": [
+          "~1"
+        ],
+        "value": "literal-tilde-one"
+      }
+    },
+    {
+      "id": "PA06",
+      "pointer": "/array/0",
+      "expected": {
+        "kind": "resolved",
+        "tokens": [
+          "array",
+          "0"
+        ],
+        "value": "first"
+      }
+    },
+    {
+      "id": "PA07",
+      "pointer": "/array/1",
+      "expected": {
+        "kind": "resolved",
+        "tokens": [
+          "array",
+          "1"
+        ],
+        "value": null
+      }
+    },
+    {
+      "id": "PA08",
+      "pointer": "/01",
+      "expected": {
+        "kind": "resolved",
+        "tokens": [
+          "01"
+        ],
+        "value": "object-numeric"
+      }
+    },
+    {
+      "id": "PA09",
+      "pointer": "/__proto__",
+      "expected": {
+        "kind": "resolved",
+        "tokens": [
+          "__proto__"
+        ],
+        "value": "inert"
+      }
+    },
+    {
+      "id": "PA10",
+      "pointer": "/é",
+      "expected": {
+        "kind": "resolved",
+        "tokens": [
+          "é"
+        ],
+        "value": "composed"
+      }
+    },
+    {
+      "id": "PA11",
+      "pointer": "/é",
+      "expected": {
+        "kind": "resolved",
+        "tokens": [
+          "é"
+        ],
+        "value": "decomposed"
+      }
+    },
+    {
+      "id": "PA12",
+      "pointer": "/a~2b",
+      "expected": {
+        "kind": "refused"
+      }
+    },
+    {
+      "id": "PA13",
+      "pointer": "/a~",
+      "expected": {
+        "kind": "refused"
+      }
+    },
+    {
+      "id": "PA14",
+      "pointer": "#/array/0",
+      "expected": {
+        "kind": "refused"
+      }
+    },
+    {
+      "id": "PA15",
+      "pointer": "array/0",
+      "expected": {
+        "kind": "refused"
+      }
+    },
+    {
+      "id": "PA16",
+      "pointer": "/array/01",
+      "expected": {
+        "kind": "refused"
+      }
+    },
+    {
+      "id": "PA17",
+      "pointer": "/array/-",
+      "expected": {
+        "kind": "refused"
+      }
+    },
+    {
+      "id": "PA18",
+      "pointer": "/array/-1",
+      "expected": {
+        "kind": "refused"
+      }
+    },
+    {
+      "id": "PA19",
+      "pointer": "/array/2",
+      "expected": {
+        "kind": "refused"
+      }
+    },
+    {
+      "id": "PA20",
+      "pointer": "/array/999999999999999999999999999999999999",
+      "expected": {
+        "kind": "refused"
+      }
+    },
+    {
+      "id": "PA21",
+      "pointer": "/missing",
+      "expected": {
+        "kind": "refused"
+      }
+    },
+    {
+      "id": "PA22",
+      "pointer": "/a~1b/child",
+      "expected": {
+        "kind": "refused"
+      }
+    }
+  ]
+}

@@ -34,13 +34,13 @@ The database role comes from the database; the actor is what the caller asserts.
 ## Walkthrough
 
 1. Engineer, as role `w` with actor `a`, changes two properties of an Order.
-2. System writes two journal rows sharing entity, version and transaction.
+2. System writes two property-delta journal rows plus one complete record-boundary metadata witness, sharing entity, version and transaction.
 3. Auditor reads the rows.
 4. Auditor forces a journal write failure and repeats the change.
 
 ## Acceptance Criteria
 
-- [ ] **US-015-AC1** — Given a change to two properties, when it commits, then two rows exist with old and new values, the same version, origin actor `a` and database role `w`.
+- [ ] **US-015-AC1** — Given a change to two properties, when it commits, then two property-delta rows exist with old and new values, the same version, origin actor `a` and database role `w`, plus one complete record-boundary metadata witness in the same complete mutation group.
 - [ ] **US-015-AC2** — Given a caller that supplies a database role in the origin, when the change commits, then the stored role is the database's, not the caller's.
 - [ ] **US-015-AC3** — Given a forced journal write failure, when a change is attempted, then the change is not stored.
 - [ ] **US-015-AC4** — Given a create, an update and a delete, when the rows are read, then each has the operation and the whole-record payloads defined for it.

@@ -1,0 +1,39 @@
+{
+  "interfaceVersion": "truss-bootstrap-collector-resource/0.1.0",
+  "status": "unadopted; native/runtime metering and containment unqualified",
+  "integerCarrier": "canonical positive decimal text",
+  "limits": {
+    "originalRequestBytes": "16777216",
+    "batchAddressesOrPairs": "256",
+    "queryDispatches": "8192",
+    "concurrentNativeQueries": "1",
+    "distinctOriginalAddresses": "65536",
+    "requiredRouteTasks": "262144",
+    "observedRowsAllRoutes": "1048576",
+    "dependencyObservedRows": "262144",
+    "dependencyRawBytes": "67108864",
+    "rawResultBytesAllRoutes": "134217728",
+    "oneRawRowUtf8Bytes": "8388608",
+    "decodedArtifactOccurrencesBytes": "67108864",
+    "decoderDepth": "128",
+    "decoderOccurrences": "524288",
+    "completeObservationArtifactBytes": "134217728",
+    "peakOwnedBytes": "268435456",
+    "cumulativeAllocationBytes": "1073741824",
+    "abstractWorkUnits": "256000000",
+    "wallDeadlineMilliseconds": "30000",
+    "containmentObservationMilliseconds": "5000",
+    "diagnosticCount": "64",
+    "oneDiagnosticUtf8Bytes": "4096",
+    "diagnosticBytesTotal": "65536"
+  },
+  "accounting": {
+    "simultaneous": "All inclusive limits apply together, including stricter dependency-stage caps; maxima are not a promise they fit simultaneously",
+    "rows": "Every received native row occurrence including overlap, denied rights and ACL sentinel rows counts; scheduling dedup never rebates observations",
+    "bytes": "Original transport, decoded copies, raw archives, private ledger/frontier/edges, canonical basis and encoded publication remain owned until independently released",
+    "work": "Charge every native query invocation, actual selected native work and every scanned/visited/copied/decoded/encoded/hashed/compared byte/occurrence; lengths cannot estimate native work",
+    "permits": "Precharge materialization/transport/decoded/output and bounded native workload before dispatch; no query receives a new global allowance",
+    "failure": "Stop new admission on first exhaustion; no partial basis or complete scope; retain original evidence and termination/recovery custody under existing contracts"
+  },
+  "scope": "Complete native collector invocation only; generation, installation mutations, Weft compilation and later recovery have separate explicit profiles and cannot borrow unused collector capacity"
+}

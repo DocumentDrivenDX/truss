@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:proposal:journal-stage-snapshot:0.2.0",
+  "title": "Unadopted complete native journal stage snapshot",
+  "description": "Private exact six-column decoded observation only. Unknown stage and empty bytes remain diagnostic evidence, not admitted cleanup; native ranges, body grammar, parent and settlement require independent checks.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "interfaceVersion",
+    "kind",
+    "fields"
+  ],
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-journal-stage-snapshot/0.2.0-proposal"
+    },
+    "kind": {
+      "const": "journal-stage"
+    },
+    "fields": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "original_writer_xid",
+        "operation_ordinal",
+        "stage_name",
+        "stage_ordinal",
+        "effect_generation",
+        "body_bytes_hex"
+      ],
+      "properties": {
+        "original_writer_xid": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        },
+        "operation_ordinal": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        },
+        "stage_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "stage_ordinal": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        },
+        "effect_generation": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        },
+        "body_bytes_hex": {
+          "type": "string",
+          "pattern": "^([0-9a-f]{2})*$"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:proposal:journal-page-result:0.2.0",
+  "description": "Unadopted consumer proposal for the exact complete event 0.2 proposal. Existing 0.1 consumers remain unchanged. Original context/profile/authority/native semantic validation and migration remain required.",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "$ref": "urn:truss:draft:journal-page-result:0.1.0#/oneOf/0/properties/outcome"
+        },
+        "context": {
+          "$ref": "urn:truss:draft:journal-page-result:0.1.0#/oneOf/0/properties/context"
+        },
+        "events": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:truss:proposal:history-event:0.2.0"
+          }
+        },
+        "safeWatermarkXid": {
+          "$ref": "urn:truss:draft:journal-page-result:0.1.0#/oneOf/0/properties/safeWatermarkXid"
+        },
+        "continuation": {
+          "$ref": "urn:truss:draft:journal-page-result:0.1.0#/oneOf/0/properties/continuation"
+        },
+        "observation": {
+          "$ref": "urn:truss:draft:journal-page-result:0.1.0#/oneOf/0/properties/observation"
+        }
+      },
+      "required": [
+        "outcome",
+        "context",
+        "events",
+        "safeWatermarkXid",
+        "continuation",
+        "observation"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "$ref": "urn:truss:draft:journal-page-result:0.1.0#/oneOf/1"
+    }
+  ]
+}

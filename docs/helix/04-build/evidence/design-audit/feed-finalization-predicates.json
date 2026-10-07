@@ -1,0 +1,38 @@
+{
+  "scope": "Four exact original context/generation/NULL/address/ordinal predicate trees and complete correlated parent EXISTS only. Returning descriptors, trigger/helper side effects, authority/resources/native semantics remain separate.",
+  "modelPins": [
+    {
+      "path": "docs/helix/02-design/contracts/feed-finalization-clear-v0.1.proposal.umf.json",
+      "sha256": "f1192f39a86133f32b8c589abb673f820750319dbe9023dd273fdea6aae152f3"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/feed-finalization-assign-publish-v0.1.proposal.umf.json",
+      "sha256": "fe3466b2f6561232b2c801dd9af28adc3cc071136eed1d31b3bfe31160697f7e"
+    }
+  ],
+  "statements": 4,
+  "controls": [
+    {
+      "case": "missing context predicate",
+      "refused": true
+    },
+    {
+      "case": "missing captured generation",
+      "refused": true
+    },
+    {
+      "case": "duplicate narrowing predicate",
+      "refused": true
+    },
+    {
+      "case": "omitted parent check",
+      "refused": true
+    },
+    {
+      "case": "omitted cleared hash check",
+      "refused": true
+    }
+  ],
+  "nativeExecution": false,
+  "complete": false
+}

@@ -1,0 +1,102 @@
+{
+  "interfaceVersion": "truss-bootstrap-trigger-argument-vectors/0.1.0",
+  "status": "independently authored planned expectations; native/decoder unexecuted",
+  "encodingProfile": "UTF8 server encoding selected for these vectors only; other encodings require separate admission",
+  "scope": "exact argument hex/count/byte length and NUL framing only; not full trigger definition or installed qualification",
+  "vectors": [
+    {
+      "name": "zero-arguments",
+      "count": "0",
+      "hex": "",
+      "byteLength": "0",
+      "expectedStrings": []
+    },
+    {
+      "name": "one-empty-argument",
+      "count": "1",
+      "hex": "00",
+      "byteLength": "1",
+      "expectedStrings": [
+        ""
+      ]
+    },
+    {
+      "name": "ordered-empty-and-text",
+      "count": "3",
+      "hex": "6100006200",
+      "byteLength": "5",
+      "expectedStrings": [
+        "a",
+        "",
+        "b"
+      ]
+    },
+    {
+      "name": "utf8-non-ascii",
+      "count": "1",
+      "hex": "c3a900",
+      "byteLength": "3",
+      "expectedStrings": [
+        "é"
+      ]
+    },
+    {
+      "name": "literal-quote-backslash",
+      "count": "1",
+      "hex": "225c00",
+      "byteLength": "3",
+      "expectedStrings": [
+        "\"\\"
+      ]
+    },
+    {
+      "name": "missing-final-terminator",
+      "count": "1",
+      "hex": "61",
+      "byteLength": "1",
+      "refusal": "termination"
+    },
+    {
+      "name": "trailing-extra-string",
+      "count": "1",
+      "hex": "61006200",
+      "byteLength": "4",
+      "refusal": "count"
+    },
+    {
+      "name": "byte-length-mismatch",
+      "count": "1",
+      "hex": "6100",
+      "byteLength": "1",
+      "refusal": "byte-length"
+    },
+    {
+      "name": "odd-hex",
+      "count": "1",
+      "hex": "610",
+      "byteLength": "2",
+      "refusal": "hex-domain"
+    },
+    {
+      "name": "invalid-utf8",
+      "count": "1",
+      "hex": "ff00",
+      "byteLength": "2",
+      "refusal": "encoding"
+    },
+    {
+      "name": "zero-count-nonempty",
+      "count": "0",
+      "hex": "00",
+      "byteLength": "1",
+      "refusal": "count"
+    },
+    {
+      "name": "null-native-arguments",
+      "count": "0",
+      "hex": null,
+      "byteLength": null,
+      "refusal": "native-null"
+    }
+  ]
+}

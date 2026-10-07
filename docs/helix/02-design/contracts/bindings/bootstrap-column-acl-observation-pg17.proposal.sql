@@ -1,0 +1,17 @@
+-- Unexecuted PG17 column ACL expansion; original pg_class oid[] <=256.
+-- Retain every native attribute, including system/dropped entries. No fake object OID.
+SELECT a.attrelid::pg_catalog.text AS relation_oid,
+       a.attnum::pg_catalog.text AS attribute_number,
+       a.attname AS original_attribute_name,
+       a.attisdropped AS is_dropped,
+       a.attacl IS NULL AS original_acl_is_null,
+       a.attacl::pg_catalog.text AS original_acl_native_text,
+       pg_catalog.array_dims(a.attacl) AS original_acl_native_dimensions,
+       x.grantor IS NOT NULL AS has_expanded_grant,
+       x.grantor::pg_catalog.text AS grantor_oid,
+       x.grantee::pg_catalog.text AS grantee_oid,
+       x.privilege_type,x.is_grantable
+FROM pg_catalog.pg_attribute AS a
+LEFT JOIN LATERAL pg_catalog.aclexplode(a.attacl) AS x ON true
+WHERE a.attrelid = ANY($1::pg_catalog.oid[])
+ORDER BY a.attrelid,a.attnum,x.grantor,x.grantee,x.privilege_type,x.is_grantable;

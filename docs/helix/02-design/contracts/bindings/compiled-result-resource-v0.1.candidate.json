@@ -1,0 +1,20 @@
+{
+  "interfaceVersion": "truss-compiled-result-resource/0.1.0",
+  "identity": "truss-compiled-result-bounded-reference",
+  "version": "0.1.0",
+  "status": "unqualified_candidate",
+  "limits": {
+    "receivedArtifactBytes": "16777216",
+    "returnedRows": "100000",
+    "canonicalDecodedResultBytes": "16777216",
+    "singleRawRowBytes": "4194304",
+    "ownedAssemblyBytes": "67108864",
+    "operationElapsedMilliseconds": "30000",
+    "containmentObservationMilliseconds": "5000"
+  },
+  "counterEncoding": "canonical_nonnegative_decimal",
+  "overflow": "complete_result_refusal_after_confirmed_containment",
+  "sqlRewriting": false,
+  "successfulPartialResult": false,
+  "nativeTransport": "qualified_preallocation_bounded_incremental_or_equivalently_bounded_transport_required"
+}

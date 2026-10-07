@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:key-profile-migration:0.1.0",
+  "description": "Request structure only; complete native/custody/authority/profile/byte admission is separate.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-key-profile-migration/0.1.0"
+    },
+    "sourceEpoch": {
+      "type": "string",
+      "minLength": 1
+    },
+    "installationId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source": {
+      "$ref": "#/$defs/basis"
+    },
+    "target": {
+      "$ref": "#/$defs/basis"
+    },
+    "procedure": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "resource": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "conversion": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "state": {
+              "const": "none"
+            }
+          },
+          "required": [
+            "state"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "state": {
+              "const": "selected"
+            },
+            "profile": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+            }
+          },
+          "required": [
+            "state",
+            "profile"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "targetPhysicalInventory": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "transitionProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "limits": {
+      "type": "object",
+      "properties": {
+        "inventoryRows": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "inventoryBytes": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "reportBytes": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "workUnits": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        }
+      },
+      "required": [
+        "inventoryRows",
+        "inventoryBytes",
+        "reportBytes",
+        "workUnits"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "sourceEpoch",
+    "installationId",
+    "source",
+    "target",
+    "procedure",
+    "resource",
+    "conversion",
+    "targetPhysicalInventory",
+    "transitionProfile",
+    "limits"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "basis": {
+      "type": "object",
+      "properties": {
+        "layout": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "catalog": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "encoding": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "bucket": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "installedPolicy": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        }
+      },
+      "required": [
+        "layout",
+        "catalog",
+        "encoding",
+        "bucket",
+        "installedPolicy"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

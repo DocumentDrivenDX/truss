@@ -1,0 +1,35 @@
+{
+  "scope": "Explicit original four-table/47-column/17-named-constraint nodes only. Separate NOT NULL/default/type/collation, reference/supporting-index/native effects, guards/grants/dependencies remain incomplete.",
+  "allocationSha256": "5163f1a5dcf4420ac164bbcea2288a38bd3a8dfa003a8f2166fffbfc9645613c",
+  "entries": 68,
+  "counts": {
+    "table": 4,
+    "column": 47,
+    "constraint": 17
+  },
+  "selectedOriginalNodeCoverage": true,
+  "controls": [
+    {
+      "case": "omitted source node",
+      "refused": true
+    },
+    {
+      "case": "duplicate identity",
+      "refused": true
+    },
+    {
+      "case": "wrong parent",
+      "refused": true
+    },
+    {
+      "case": "substituted node",
+      "refused": true
+    },
+    {
+      "case": "fabricated native binding",
+      "refused": true
+    }
+  ],
+  "complete": false,
+  "nativeExecution": false
+}

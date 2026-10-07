@@ -1,0 +1,156 @@
+{
+  "status": "unadopted_candidate",
+  "scope": "Six authored canonical array byte examples and nine lexical/range refusal inputs. Synthetic profile pin; no owner encoder output, native derivation or installation evidence. Zero case requires independently valid original object-key definition.",
+  "canonicalProfile": "truss-canonical/0.1.0",
+  "vectors": [
+    {
+      "name": "positive-v01",
+      "namespaceTree": [
+        "truss-key-bucket/0.1.0",
+        "epoch:A",
+        "installation:A",
+        "1",
+        "1",
+        "umf-key-tuple-v1",
+        "0.7.0",
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      ],
+      "canonicalUtf8": "[\"truss-key-bucket/0.1.0\",\"epoch:A\",\"installation:A\",\"1\",\"1\",\"umf-key-tuple-v1\",\"0.7.0\",\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"]",
+      "byteLength": "155",
+      "hex": "5b2274727573732d6b65792d6275636b65742f302e312e30222c2265706f63683a41222c22696e7374616c6c6174696f6e3a41222c2231222c2231222c22756d662d6b65792d7475706c652d7631222c22302e372e30222c2261616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161225d",
+      "routingSha256": "ed0c5b924b259da14169be0331ff19f05f03b65dd31ebe69a8f276b58620c5b7"
+    },
+    {
+      "name": "positive-v02",
+      "namespaceTree": [
+        "truss-key-bucket/0.2.0",
+        "epoch:A",
+        "installation:A",
+        "1",
+        "1",
+        "umf-key-tuple-v1",
+        "0.7.0",
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      ],
+      "canonicalUtf8": "[\"truss-key-bucket/0.2.0\",\"epoch:A\",\"installation:A\",\"1\",\"1\",\"umf-key-tuple-v1\",\"0.7.0\",\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"]",
+      "byteLength": "155",
+      "hex": "5b2274727573732d6b65792d6275636b65742f302e322e30222c2265706f63683a41222c22696e7374616c6c6174696f6e3a41222c2231222c2231222c22756d662d6b65792d7475706c652d7631222c22302e372e30222c2261616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161225d",
+      "routingSha256": "2207e8ae413ed75e66ba4b21b81e51c141024330399941b515dabb667624ebfc"
+    },
+    {
+      "name": "native-minima",
+      "namespaceTree": [
+        "truss-key-bucket/0.2.0",
+        "epoch:A",
+        "installation:A",
+        "-2147483648",
+        "-32768",
+        "umf-key-tuple-v1",
+        "0.7.0",
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      ],
+      "canonicalUtf8": "[\"truss-key-bucket/0.2.0\",\"epoch:A\",\"installation:A\",\"-2147483648\",\"-32768\",\"umf-key-tuple-v1\",\"0.7.0\",\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"]",
+      "byteLength": "170",
+      "hex": "5b2274727573732d6b65792d6275636b65742f302e322e30222c2265706f63683a41222c22696e7374616c6c6174696f6e3a41222c222d32313437343833363438222c222d3332373638222c22756d662d6b65792d7475706c652d7631222c22302e372e30222c2261616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161225d",
+      "routingSha256": "17b4347af29a5407637ccf2650f4fd2dd35ca51224e0f0f973601d71b28dfab5"
+    },
+    {
+      "name": "native-maxima",
+      "namespaceTree": [
+        "truss-key-bucket/0.2.0",
+        "epoch:A",
+        "installation:A",
+        "2147483647",
+        "32767",
+        "umf-key-tuple-v1",
+        "0.7.0",
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      ],
+      "canonicalUtf8": "[\"truss-key-bucket/0.2.0\",\"epoch:A\",\"installation:A\",\"2147483647\",\"32767\",\"umf-key-tuple-v1\",\"0.7.0\",\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"]",
+      "byteLength": "168",
+      "hex": "5b2274727573732d6b65792d6275636b65742f302e322e30222c2265706f63683a41222c22696e7374616c6c6174696f6e3a41222c2232313437343833363437222c223332373637222c22756d662d6b65792d7475706c652d7631222c22302e372e30222c2261616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161225d",
+      "routingSha256": "d6d036fee0a0cd88f13675fb91a1e6ca73d25ec383a4c0897a410fe772d5ef7e"
+    },
+    {
+      "name": "admitted-zero-definition",
+      "namespaceTree": [
+        "truss-key-bucket/0.2.0",
+        "epoch:A",
+        "installation:A",
+        "0",
+        "0",
+        "umf-key-tuple-v1",
+        "0.7.0",
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      ],
+      "canonicalUtf8": "[\"truss-key-bucket/0.2.0\",\"epoch:A\",\"installation:A\",\"0\",\"0\",\"umf-key-tuple-v1\",\"0.7.0\",\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"]",
+      "byteLength": "155",
+      "hex": "5b2274727573732d6b65792d6275636b65742f302e322e30222c2265706f63683a41222c22696e7374616c6c6174696f6e3a41222c2230222c2230222c22756d662d6b65792d7475706c652d7631222c22302e372e30222c2261616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161225d",
+      "routingSha256": "c8d981c55123d239dcdd8e6c5d530b107c704397a37c3920a3f82a5e1316966d"
+    },
+    {
+      "name": "negative-one",
+      "namespaceTree": [
+        "truss-key-bucket/0.2.0",
+        "epoch:A",
+        "installation:A",
+        "-1",
+        "-1",
+        "umf-key-tuple-v1",
+        "0.7.0",
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      ],
+      "canonicalUtf8": "[\"truss-key-bucket/0.2.0\",\"epoch:A\",\"installation:A\",\"-1\",\"-1\",\"umf-key-tuple-v1\",\"0.7.0\",\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"]",
+      "byteLength": "157",
+      "hex": "5b2274727573732d6b65792d6275636b65742f302e322e30222c2265706f63683a41222c22696e7374616c6c6174696f6e3a41222c222d31222c222d31222c22756d662d6b65792d7475706c652d7631222c22302e372e30222c2261616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161225d",
+      "routingSha256": "f43b38ade1e456871e700e85a3a9ce5c01134ae3cb3bb07fd5a89543269e8555"
+    }
+  ],
+  "refusalInputs": [
+    {
+      "typeId": "-0",
+      "keyNumber": "1",
+      "expected": "refuse_namespace_admission"
+    },
+    {
+      "typeId": "+1",
+      "keyNumber": "1",
+      "expected": "refuse_namespace_admission"
+    },
+    {
+      "typeId": "01",
+      "keyNumber": "1",
+      "expected": "refuse_namespace_admission"
+    },
+    {
+      "typeId": "2147483648",
+      "keyNumber": "1",
+      "expected": "refuse_namespace_admission"
+    },
+    {
+      "typeId": "-2147483649",
+      "keyNumber": "1",
+      "expected": "refuse_namespace_admission"
+    },
+    {
+      "typeId": "1",
+      "keyNumber": "32768",
+      "expected": "refuse_namespace_admission"
+    },
+    {
+      "typeId": "1",
+      "keyNumber": "-32769",
+      "expected": "refuse_namespace_admission"
+    },
+    {
+      "typeId": "1",
+      "keyNumber": "1e0",
+      "expected": "refuse_namespace_admission"
+    },
+    {
+      "typeId": " 1",
+      "keyNumber": "1",
+      "expected": "refuse_namespace_admission"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "status": "pass",
+  "scope": "strict no-emit declaration consumer checks, including four request-free negative type cases and none-branch overload selection; no runtime/native qualification",
+  "command": "/Users/erik/Projects/umf/node_modules/.bin/tsc --noEmit --strict --target ES2022 --module ESNext --moduleResolution bundler docs/helix/02-design/contracts/bindings/truss-mutation-group-capability-v0.1.typecheck.ts",
+  "nativeExecuted": false,
+  "sourcePins": [
+    {
+      "path": "02-design/contracts/bindings/truss-group-capability-v0.1.d.ts",
+      "sha256": "470481e1789cfd9eb3463843d177cae4fc34c6c3ec9d4c0ce946e03d3b32d471"
+    },
+    {
+      "path": "02-design/contracts/bindings/truss-mutation-group-capability-v0.1.typecheck.ts",
+      "sha256": "6bc9ffecbe565e62d6aff9a89774b2e1a353b7a2fe6aade82458a4219d1a50c6"
+    }
+  ]
+}

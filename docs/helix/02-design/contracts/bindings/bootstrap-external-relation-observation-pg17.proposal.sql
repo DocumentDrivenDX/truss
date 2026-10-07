@@ -1,0 +1,43 @@
+-- Unexecuted PG17 original pg_class OID batch; unique nonnull 1D array <=256.
+-- Columns/indexes are complete parent-scoped fanout; retain system/dropped/status rows.
+-- Exact parent/address/cut/grammar/resource admission is independent of source parsing.
+SELECT c.tableoid::pg_catalog.oid::pg_catalog.text AS relation_catalog_class_oid,
+       n.oid::text AS namespace_oid,
+       n.nspname AS schema_name,
+       c.oid::text AS relation_oid,
+       c.relname AS relation_name,
+       c.relkind::text AS relation_kind,
+       c.relpersistence::text AS persistence,
+       c.relowner::text AS owner_oid,
+       r.rolname AS owner_name,
+       c.reltype::text AS row_type_oid,
+       c.reloftype::text AS typed_table_type_oid,
+       c.relam::text AS access_method_oid,
+       am.amname AS access_method_name,
+       c.reltablespace::text AS tablespace_oid,
+       c.reltoastrelid::text AS toast_relation_oid,
+       c.relnatts::text AS user_attribute_slots,
+       c.relchecks::text AS check_count,
+       c.relhasindex AS index_hint,
+       c.relhasrules AS rule_hint,
+       c.relhastriggers AS trigger_hint,
+       c.relhassubclass AS descendant_hint,
+       c.relrowsecurity AS row_security,
+       c.relforcerowsecurity AS force_row_security,
+       c.relispartition AS is_partition,
+       c.relpartbound::text AS partition_bound_native_tree,
+       c.relreplident::text AS replica_identity_mode,
+       c.relispopulated AS is_populated,
+       c.relisshared AS is_shared,
+       c.relacl::text AS acl_display,
+       pg_catalog.array_dims(c.relacl) AS acl_native_dimensions,
+       c.reloptions AS relation_options,
+       c.reloptions::pg_catalog.text AS relation_options_native_text,
+       pg_catalog.array_dims(c.reloptions) AS relation_options_native_dimensions,
+       pg_catalog.to_jsonb(c)::pg_catalog.text AS original_catalog_row_json
+FROM pg_catalog.pg_namespace AS n
+JOIN pg_catalog.pg_class AS c ON c.relnamespace = n.oid
+LEFT JOIN pg_catalog.pg_roles AS r ON r.oid = c.relowner
+LEFT JOIN pg_catalog.pg_am AS am ON am.oid = c.relam
+WHERE c.oid = ANY($1::pg_catalog.oid[])
+ORDER BY c.oid;

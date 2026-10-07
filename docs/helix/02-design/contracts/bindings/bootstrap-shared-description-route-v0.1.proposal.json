@@ -1,0 +1,66 @@
+{
+  "interfaceVersion": "truss-bootstrap-route-entry/0.1.0",
+  "routeIdentity": "pg17.shared-description.original-scope/0.1.0",
+  "status": "unadopted; source pins only verified; native class/cut/transport/semantic producers unqualified",
+  "nativeClass": {
+    "namespace": "pg_catalog",
+    "relation": "pg_shdescription",
+    "classOid": "actual original shared pg_shdescription catalog identity",
+    "storageScope": "shared",
+    "subobjectNumber": "native association key; no invented row address"
+  },
+  "selector": "Original shared class/OID pairs under admitted cluster identity; no fabricated subobject number. Resolve each association against original shared object definitions.",
+  "artifacts": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-shared-description-observation-pg17.proposal.sql",
+      "sha256": "844905be9b08be0cddfb8575e43fc854e9f72d88bd89bdd4053498f6975cb335"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-shared-description-observation-pg17.proposal.umf.json",
+      "sha256": "db4e05c27982a08e12f89742f056202e2cd5c9a8405392e1e4fc6d97019d9d65"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/bootstrap-shared-description-observation.owner-export.sql",
+      "sha256": "38d82599fdf36ca17d77fe328e57ba9589fcc3646cea6150c0c028544e8d9889"
+    }
+  ],
+  "parameterGrammar": {
+    "slots": [
+      1,
+      2
+    ],
+    "nativeTypes": [
+      "pg_catalog.oid[]",
+      "pg_catalog.oid[]"
+    ],
+    "nativeInput": "Two equal-length nonnull one-dimensional lower-bound-one OID arrays of length 1..256. Every component is canonical nonzero uint32 text; no null items. Complete class/object pairs unique; repeated class or object components permitted. Local/shared address scope admitted before dispatch."
+  },
+  "orderedColumns": [
+    "catalog_class_oid",
+    "original_catalog_row_json"
+  ],
+  "coverage": "Complete original selector union/fanout under same cut, including unexpected rows; absence optional only after original parent/input scope proof",
+  "requiredKnownFields": [
+    "objoid",
+    "classoid",
+    "description"
+  ],
+  "preservation": "Retain full exact returned row JSON text and every unknown extension member; lossless bounded selected native JSON decoder; no parse/stringify reconstruction",
+  "dependencyExtraction": {
+    "associations": "Original shared class/OID pairs under admitted cluster identity; no fabricated subobject number. Resolve each association against original shared object definitions.",
+    "metadata": "Exact comment text and extension names/versions are facts, never authority, installation readiness or executable provenance. Preserve full original rows/unknown members; unresolved native meaning refuses complete comparison.",
+    "fieldClassification": {
+      "objoid": "original object correlation; resolve original complete parent definition identity before semantic projection",
+      "classoid": "original native class correlation; selected class meaning and database/shared scope retained in resolved association",
+      "description": "stable exact present comment text; no Unicode/whitespace normalization, null/present-empty equivalence or execution"
+    },
+    "canonicalProcedure": "CONTRACT-008 Comment semantic projection: complete association-to-definition resolution and present/absent projection only after full original parent/input/cut/termination proof; unknown fields preserved unsupported"
+  },
+  "adjuncts": [
+    "complete original owner/address/dependency and class-specific scope",
+    "selected metadata classification/canonical bytes and original authority"
+  ],
+  "resourceProfile": "truss-bootstrap-collector-resource/0.1.0",
+  "refusal": "Incomplete association, unknown dependency/native array meaning or unresolved prerequisite refuses complete admission; never execute comment/condition text or install/update/drop extensions to force a match",
+  "resourceObligations": "Shared enclosing totals, complete original cut/authority and explicit pre-materialization/native-work permits; no independent per-route allowance"
+}

@@ -1,0 +1,72 @@
+{
+  "scope": "Python Decimal independent finite mathematical rank-95 and 20ms comparison; malformed count/ordinal/domain witness refusal only; no Truss assessor/clock/grammar/result correctness/resource/native performance qualification",
+  "sourceSha256": "8f1a49c26dc2b8a9729d303debbbdffde4f64f32e134c1b1232aaea84da57fc1",
+  "cases": [
+    {
+      "id": "below",
+      "status": "pass",
+      "retainedSamples": 100,
+      "p95Ms": "19.999999",
+      "comparison": "within-proposed-threshold"
+    },
+    {
+      "id": "equal",
+      "status": "pass",
+      "retainedSamples": 100,
+      "p95Ms": "20",
+      "comparison": "within-proposed-threshold"
+    },
+    {
+      "id": "above",
+      "status": "pass",
+      "retainedSamples": 100,
+      "p95Ms": "20.000001",
+      "comparison": "above-proposed-threshold"
+    },
+    {
+      "id": "slow-outlier-retained",
+      "status": "pass",
+      "retainedSamples": 100,
+      "p95Ms": "1",
+      "comparison": "within-proposed-threshold"
+    },
+    {
+      "id": "tied-all",
+      "status": "pass",
+      "retainedSamples": 100,
+      "p95Ms": "20",
+      "comparison": "within-proposed-threshold"
+    },
+    {
+      "id": "ninety-nine-samples",
+      "status": "expected-refusal",
+      "reason": "sample-count"
+    },
+    {
+      "id": "hundred-and-one-samples",
+      "status": "expected-refusal",
+      "reason": "sample-count"
+    },
+    {
+      "id": "negative-duration",
+      "status": "expected-refusal",
+      "reason": "duration-domain"
+    },
+    {
+      "id": "nonfinite-duration",
+      "status": "expected-refusal",
+      "reason": "duration-domain"
+    },
+    {
+      "id": "duplicate-ordinal",
+      "status": "expected-refusal",
+      "reason": "ordinal-membership"
+    },
+    {
+      "id": "missing-ordinal",
+      "status": "expected-refusal",
+      "reason": "ordinal-membership"
+    }
+  ],
+  "nativeExecution": false
+}

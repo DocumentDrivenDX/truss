@@ -1,0 +1,118 @@
+---
+ddx:
+  id: STP-004
+  type: story-test-plan
+  activity: test
+  status: draft
+  authoring:
+    home: repo
+  links:
+    - id: US-004
+      kind: informed_by
+    - id: TD-004
+      kind: informed_by
+    - id: SD-001
+      kind: informed_by
+---
+
+# STP-004: Stable catalog identifiers
+
+## Story Reference and Scope
+
+US-004, TD-004, SD-001, TP-001 and CONTRACT-001/003. Tests are planned; identity lifecycle and acceptance fingerprint remain shared gates.
+
+## Acceptance Criteria Test Mapping
+
+| AC ID | Planned failing test | Asserted behavior | Citation | Primary layer | Setup |
+| --- | --- | --- | --- | --- | --- |
+| US-004-AC1 | `unchanged_lineage_preserves_all_catalog_identifiers` | Type/property/key/relationship ids and key_num remain stable across supported rename/reordering revisions | `@covers US-004-AC1` | Native integration | `tests/catalog/identity.test.ts`; independent prior id inventory |
+| US-004-AC2 | `new_property_never_reuses_retired_identifier` | Retired row/history remains and new property id differs from every committed historical property id | `@covers US-004-AC2` | Native integration | Same file; retire/add and concurrent acceptance controls |
+| US-004-AC3 | `same_bytes_same_acceptance_context_returns_existing_revision` | Repeated same bytes/context produce no new revision/head/history/origin/journal effects | `@covers US-004-AC3` | Native integration | Same file; frozen binding/policy/validator profile |
+
+## Additional Probes
+
+Declaring-owner/type-lineage candidate controls preserve distinct numeric IDs for equal module/element labels in different admitted documents. Force equal route digests for unequal full lineage bytes and require separate types; duplicate full lineage across two numeric IDs refuses finalization. Wrong document/module/element projection, replaced lineage profile, missing original owner evidence and a partial retained inventory cannot pass. Compare case/NFC/NFD distinctions admitted by the source profile and identities beyond baseline B-tree tuple capacity under the selected bounded full-carrier profile, without truncation or a unique digest. Protected ordinary write paths cannot change owner/carrier/hash projections independently. Populated conversion preserves signed legacy IDs and all retained lifecycle states; rollback keeps original constraints/owner mapping and qualified policy selection. These are planned candidate/native tests, not proof of installed document-qualified layout or long-identity enforcement.
+
+Exercise the owner-selected reactivation profile (2026-10-07) independently. Same exact qualified identity preserves its retired ID only after full retained-value/key/reservation/endpoint/ownership/cardinality and current-authority validation. Inject conflicting key, incompatible retained value and unauthorized ownership separately: preserve the retired state, prior head, definitions, reservations and journal on failure. Deleted records remain deleted and old grants are not automatically restored. Distinct authored incarnations receive fresh IDs without inherited data/grants. Equal labels or changed document revisions cannot choose lineage. Repeat across property/type/key/relationship identifier domains; competing acceptances must preserve one atomic validated transition.
+
+Use exact document digests and independently observed id sets; no expected allocation from implementation helper. Equal names with different qualified owners must not collapse. Changed element identity allocates new id; same-identity retired redefinition exercises validated original-ID reactivation. Failed revision cannot publish candidate identifiers. Read historical definitions for prior journal values after rename/type changes.
+
+Change only binding/policy or source whitespace and assert the reconciled provenance/fingerprint behavior, not assumed byte-only equivalence. Original accepted origin remains unchanged on no-op. Native no-change is distinct from comparing pure derivation output.
+
+## Executable Proof and Handoff
+
+Future command `bun test tests/catalog/identity.test.ts` requires implemented harness and selected identity/reactivation/no-change profiles. Pin model/validator/layout and preserve all before/after ids/history. All three criteria block closeout.
+
+
+## Synthesized composition identity controls
+
+Planned independent cases create an authored relationship whose opaque ID resembles the serialized composition tuple; category/full tuple keeps two distinct lineages/storage IDs. Two fields sharing a display name but different qualified owner-provided identities cannot collapse; rename/reorder with unchanged admitted field identity preserves the derived relationship ID. Missing field continuity identity remains unavailable stable-derived-lineage support, while valid original UMF is preserved unchanged. No pointer/name/index/digest fallback passes.
+
+Change only target/cardinality/lifecycle under one admitted field identity: candidate validation/total transform/history rules determine acceptance, and failure preserves original endpoint/edge/definition/head state. Move owning document/module/Record or change field identity: new lineage allocates a fresh ID without transferring old edges/grants/history implicitly. Retire then reintroduce the exact derived identity: require the selected product lifecycle; this profile alone cannot choose reactivation. Compare full original source/derived definitions independently, never expected IDs generated by the production matcher. These are planned tests and proposed-design vectors, not native evidence.
+
+
+Authored-core correspondence cases hold Field element.id constant while changing optional name and membership ordering; the full qualified derived identity remains unchanged. Put the Field and owner Record in different modules and require both explicit module components, with exact membership proof. Change only Field element.id and require different lineage even with the same name/pointer; a native-derived rename with changed ID cannot pass stable-lineage support. Shape-valid record-type author receipts with missing original ingress/custody or unadmitted owned-lifecycle binding cannot authorize composition. Pin the actual core/source/operation versions; unimplemented newer dispatch is unavailable, not downgraded.
+
+
+## Relationship lineage physical mapping
+
+Planned native mapping cases force equal routing digests for unequal full authored/derived identities in a separately qualified test fixture; both remain distinct. Duplicate equal full identity, mismatched category/profile bytes, missing adjunct for an active/retired rel_def, foreign rel_type_id, exhausted numeric allocation and full routing/byte resource overflow refuse acceptance atomically. Same text under independent document owners does not collide under the new layout; a still-installed legacy module/rel_id unique constraint invalidates activation rather than redefining the supported identity subset.
+
+Retirement preserves the original adjunct bytes and historical interpretation. Legacy conversion without exact authored/derived origin/provenance refuses; neither composition boolean nor a string prefix proves category. Concurrent catalog acceptances serialize under original exclusive head and independently prove full mapping/definition/provenance/head rollback on finalizer failure. Ordinary adjunct writes/helper bypasses must be denied or invalidate qualification. These tests await exact native finalizer/profile/exporter adoption and are not evidence from the DDL fragment.
+
+
+Relationship byte transport controls compare complete stored preimages against the published six identity vectors, preserving NFC/NFD and quote/backslash spelling. Reject wrong/missing/extra domain framing, trailing LF, canonical payload without preimage, duplicate/unknown identity members, source name/path substitutions, scalar category/profile mismatch and digest-only equality. Native generated route hashes must match SHA-256 of actual full stored bytes. Definition target/revision changes do not change lineage bytes but still require complete candidate/pin/history validation. The vectors do not provide production encoder/native proof; selected bounded producer/resource and full equality tests remain planned.
+
+
+## Identifier range and high-water controls
+
+Planned allocation cases independently seed active/provisional/retired maxima and exact native int/smallint boundary values; global type/property/relationship and per-type key domains remain separate. At one remaining slot, one new admitted lineage succeeds pending while two reject the entire acceptance without head/definition/history/report effects. Hidden retired maximum, missing range provenance, wrapped arithmetic, input reordering/name changes and reused retired number cannot pass. Preserve any explicitly admitted legacy nonpositive ID verbatim; it cannot cause new allocation below the positive floor or become another owner's identity.
+
+Concurrent acceptances acquire original exclusive head before full range observation and allocate disjoint committed identities; confirmed rollback publishes no candidate authority, while later tentative-number computation is not reuse of a committed ID. Restore/compact away the sole original high-water proof and require continuity/profile refusal rather than MAX of incomplete current rows. Native sequence gaps, if selected explicitly, do not repair missing lineage/history admission. Retired reintroduction continues to require the product decision; no range algorithm selects it. These are planned native and pure exact-arithmetic controls, not passing allocation evidence.
+
+
+The [allocation boundary vectors](../../02-design/contracts/bindings/catalog-id-allocation-v0.1.vectors.json) provide twelve authored expectations for component boundaries, UTF-8 prefix/normalization distinctions, exact capacity, historical visibility and independent owner domains. They are inputs for the future independent allocator/native acceptance harness, not recorded execution results. Verify permutations preserve expected assignments only after complete lineage matching; run the exhaustion cases with other namespaces also containing otherwise valid new definitions to establish whole-acceptance refusal. The retired-reintroduction vector intentionally requires a lifecycle decision instead of supplying an assumed result.
+
+
+## Mapping finalizer fault schedules
+
+Plan independently seeded pre/post sets with: a rel_def missing its adjunct; duplicate equal full identity under active/retired IDs; unequal identity bytes with a forced test digest collision; an existing mapping modified while candidate definitions remain valid; unexpected adjunct insertion/deletion; and one namespace exhausting after other namespaces validate. Each schedule must refuse the whole acceptance and preserve prior head, mappings, definitions, history and report durability. Include a fault between paired insertions and a lost final-observation reply; neither may publish partial acceptance. A successful candidate-only validator with corrupted actual post-state is a negative control for the finalizer.
+
+Legacy migration cases retain numeric IDs while qualifying full source owner/category correspondence, then verify both constraint inventory and advertised capability switch. Missing provenance, an unchanged legacy UNIQUE(module, rel_id), unauthorized mutation path or incomplete post-state collector prevents activation. Commit-unknown recovery observes the original attempt before any new allocation. Retired reintroduction remains decision-gated. These schedules test the proposed finalization protocol after native adoption; authoring them provides no native execution evidence.
+
+
+High-water callable schedules compare independently seeded native retained sets with all three global results and the exact owner-local key result. Include negative-only/empty sets, native upper bounds, retired maxima, provisional types, unknown/missing domains, NULL/rounded values, absent owners and valid nonpositive legacy owners. A restrictive observer policy hiding the maximum must invalidate qualification rather than pass the smaller value. New private owners cannot be made to appear retained by querying an absent type and interpreting failure as zero. The original exclusive head remains held across observation, assignment and finalization; concurrent acceptance cannot consume the same committed slot. These helper/native schedules are planned; source preservation does not execute them.
+
+
+Bounded collector schedules seed IDs at native minimum, zero, positive interior and maximum values; initial scan must include all admitted rows. Inject a skipped/duplicate/out-of-order page, false terminal page, changed carrier length, chunk offset gap and metadata/result mismatch. Equal rel_def/adjunct counts with different ID sets must fail coverage. Force one routed collision group above its admitted byte/work capacity and require complete acceptance refusal, including when all earlier groups matched. Repeat pre/post fetch work after a lost checkpoint and verify cumulative charging rather than reset. Native detoast/adapter buffering exceeding a bound is a failed profile/control, not evidence of safety from small chunk results.
+
+
+Catalog identity resource boundary schedules use the proposed profile's declared roots: exact retained/candidate/new entry ceilings, individual/full aggregate carrier bytes, metadata expansion, cumulative actual pre/post/refetch rows, byte comparison/copy work and whole owned buffers. At-limit success still requires complete original/native correspondence; one-over refuses the whole acceptance. Seed retained retired rows and repeated real work to detect omitted/reset accounting. A 64 MiB carrier allowance does not override cumulative repeated-work or whole-owned-buffer ceilings. Unknown native detoast/sort/adapter allocation or uncontained deadline cannot qualify the profile; no silent larger-profile selection or partial finalizer is permitted. Native/resource schedules remain planned.
+
+
+Conditional reactivation-report controls retain owner-local keys with equal keyNumber under two different types and independently expect only the actually reactivated tuple. Require one same-ID/lineage transition per category with original before-retirement and actual after-definition/source snapshots; additions counters do not count reactivation. Reject duplicate/omitted/wrong-owner/current-guessed snapshots and changed lineage/storage ID. Old 0.1.0 consumers refuse the 0.2.0 proposal absent explicit schema/byte-profile adoption. Native key retirement intervals remain independently reconstructed; this report declaration cannot create missing key history. Terminal-retirement tests still refuse a returning identical lineage. Neither branch is adopted by these planned controls.
+
+For the conditional key-history home, independently author creation/retirement/reactivation/second-retirement/second-reactivation and expect active/retired intervals at every boundary revision. Exercise two types sharing key_num and signed native IDs; compare full before/after source bytes, never history generated by the production reconstructor. Both-null/both-present states tagged retirement/reactivation and future/equal prior retirement fail the native constraint; missing/reordered/duplicate/contradictory snapshots fail semantic admission even when SQL constraints pass. Inject failure between history insertion, reservation reconstruction, current-state update, report parity and head advancement and require the original state/history/reservations or original qualified recovery outcome. Try unauthorized inherited/SET-role raw reads and history mutation, source retention removal and seed/feed conversion gaps. Same-revision multi-transition scenarios remain refused until explicitly qualified by the lifecycle profile. Insert an active definition/source edit between retirement cycles and independently require its complete history row and unchanged active state; omission must break reconstruction even if lifecycle intervals alone look correct. Definition_change permits equal nulls or equal admitted prior-retirement references at shape level but rejects changing lifecycle state. Unsupported retired edits fail semantic admission. No-change repeats produce no synthetic row and do not count as reactivation. No native constraint, producer, disclosure or reconstruction execution is claimed by these planned cases.
+
+Historical-cut controls use one original capture C after two retirement cycles and independently query each earlier admitted revision R. Current state parity compares reconstruction through C with actual state at C; it must not compare the requested earlier state with the current retired flag/source. Include an early active R while C is retired and an earlier definition before later source edits. Future/unadmitted R refuses; original creation after R proves absence only with complete identity/creation inventory and qualified disclosure. Removing that basis changes the result to unavailable, not absent. Future-only private validation facts cannot leak through the public R projection. The literal [historical-cut vectors](../../04-build/evidence/design-audit/key-history-cut-vectors.proposal.json) are independent expected states, not executed native evidence.
+
+Native binding controls independently inspect original actual types, collation, operator/function/index/FK dependencies. Substitute a same-named domain/type, text carrier for bytea, nondeterministic transition collation, custom octet_length overload or wrong referenced key uniqueness: selected profile admission fails. Under a database with a case-insensitive default, the explicit C transition column still rejects Retirement, reactivation plus trailing space and visually similar Unicode labels. Decoder closed-tag admission independently refuses them too. This planned native matrix is not qualified by source parsing or the declared collation name.
+
+Conditional populated-conversion controls supply independent creation/allocation/source evidence for every owner-local key and revision. Remove a retired key from live rows while retaining its original reservation and require inclusion; remove its archive or introduce ambiguous owner/allocation and require no candidate publication. A baseline schema_change query with no key rows cannot certify unchanged keys. Compare converted snapshot bytes as newly produced artifacts with explicit original-source correspondence, never original historical lexical bytes. Missing old component/source edits, invented transition order, current-registry substitution, fabricated report metadata and an empty installed history table all fail complete conversion. Independently project every supported cut before the switch; inject failure and lost reply at staging/parity/profile publication to require original containment/recovery. Old mappings/readers refuse changed layout and no checkpoint silently narrows historical scope.
+
+
+### Ordered exact-repeat and intervening-head schedule
+
+Use STP-024's two equal-membership, display-name-distinct original catalogs A and B after their separate source/profile admission. Run public acceptance through the original selected executor/report/archive profiles; no direct native row seeding stands in for acceptance. Freeze the independent expected qualified identity inventory and every prior local ID/key number after the original A acceptance has independently confirmed commitment.
+
+| Step | Required original observation |
+| --- | --- |
+| Accept A | One original accepted revision/report, complete accepted-input/preimage/source custody and expected identity membership. Record actual committed head and original report/origin without deriving expected lineage from the returned result. |
+| Repeat A at that head | Complete compared input/profile equality returns the same original revision/report/IDs. Observe zero transform invocations, revision/history/journal writes and index dispatch. A new authorized attempt origin/context stays outside repeat identity and cannot rewrite original accepted attribution. |
+| Accept B | Display-name changes are an ordinary supported new acceptance after full validation, with unchanged qualified lineage/local IDs and new original definition/source/report provenance. Head differs from A's accepted head. |
+| Submit A after B commits | A's historical fingerprint match is not current-head repeat eligibility. Run current candidate validation and selected persistence; if accepted, obtain a new revision/report for restoring A's definitions, preserving local lineage IDs and all prior report/history bytes. Do not return the first A report as the current acceptance. |
+| Repeat A at the restored head | Reuse the restored revision's original report and input custody, rather than the first historical A result. No new acceptance effects or dispatch occur. |
+
+Independently compare full original framed preimage bytes, profile/domain versions and artifact correspondence before any repeat equality verdict; inject matching stored digests with unequal bytes to prove digests are not authority. Outer transport member order/whitespace may differ while the admitted canonical wire stays equal. Changing embedded original document bytes, binding presence, a compared policy/profile or transform pin changes the compared input even when derived rows look identical. Missing original preimage/document/report/reader custody, wrong domain or unsupported historical interpretation makes repeat unavailable under the selected refusal/integrity profile, with no report reconstruction, historical event regeneration or retry-to-green fallback. Current-authority revocation refuses disclosure even for identical complete input; different authorized attempt metadata never supplies bypass authority.
+
+Barrier variants pause after original head/input collection while another client accepts B: the actual selected head/snapshot/exclusion profile must reestablish current eligibility before repeat result publication. An old source hash or cached head cannot supply it. Preserve full prior/actual head, archives, definitions, IDs, reports and original pending/commit/rollback/unknown outcome evidence. These planned native schedules cover AC1/AC3 and do not settle retired-ID lifecycle or claim source fixture checks prove exact-repeat persistence.

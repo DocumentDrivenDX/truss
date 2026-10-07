@@ -1,0 +1,65 @@
+{
+  "interfaceVersion": "truss-physical-id-allocation/0.1.0",
+  "status": "draft-baseline-initialization-fragment",
+  "layoutVersion": "0.2",
+  "complete": false,
+  "sourceSha256": "8b6978ae29e22c0f961b586a2a9b312a0e9d20bf3c7ef920159f7946902d7145",
+  "scope": "Explicitly authored baseline comment/initialization identities; no profile selection or complete physical inventory",
+  "entries": [
+    {
+      "entryId": "truss.layout.schema.truss.version-comment",
+      "objectKind": "schema-comment",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "1",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/1/members/stmt/members/CommentStmt",
+        "meaning": "Exact captured native source binding; not native installation or current authority"
+      }
+    },
+    {
+      "entryId": "truss.layout.initialization.journal-mode",
+      "objectKind": "initialization",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "3",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/3/members/stmt/members/InsertStmt",
+        "meaning": "Exact captured native source binding; not native installation or current authority"
+      }
+    },
+    {
+      "entryId": "truss.layout.initialization.key-reuse",
+      "objectKind": "initialization",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "4",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/4/members/stmt/members/InsertStmt",
+        "meaning": "Exact captured native source binding; not native installation or current authority"
+      }
+    },
+    {
+      "entryId": "truss.layout.initialization.genesis-revision",
+      "objectKind": "initialization",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "7",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/7/members/stmt/members/InsertStmt",
+        "meaning": "Exact captured native source binding; not native installation or current authority"
+      }
+    },
+    {
+      "entryId": "truss.layout.initialization.schema-head",
+      "objectKind": "initialization",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "9",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/9/members/stmt/members/InsertStmt",
+        "meaning": "Exact captured native source binding; not native installation or current authority"
+      }
+    }
+  ]
+}

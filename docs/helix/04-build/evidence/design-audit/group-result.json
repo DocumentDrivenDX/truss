@@ -1,0 +1,5 @@
+{
+  "scope": "Group input/result/receipt shape only; original full-byte/native closure/authority/time/durability not qualified",
+  "cases": 99,
+  "failures": []
+}

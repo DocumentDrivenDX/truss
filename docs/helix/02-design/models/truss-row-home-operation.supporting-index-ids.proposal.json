@@ -1,0 +1,26 @@
+{
+  "profile": "truss-row-home-supporting-index-allocation/0.1.0",
+  "status": "unadopted_candidate",
+  "complete": false,
+  "sourceAllocationPath": "docs/helix/02-design/models/truss-row-home-operation.physical-ids.proposal.json",
+  "sourceAllocationSha256": "b9423159f24285911aedefd5926adcd4915d08bb230ab316f996921ceb3082a0",
+  "scope": "Operation registry original primary-key index effect only; native name/definition/dependency unresolved.",
+  "entries": [
+    {
+      "entryId": "truss.row-home.supporting-index.row_home_operation.row_home_operation_pk",
+      "objectKind": "supporting-index",
+      "parentId": "truss.row-home.table.row_home_operation",
+      "creatingConstraintId": "truss.row-home.constraint.row_home_operation.row_home_operation_pk",
+      "nativeBinding": {
+        "state": "unresolved"
+      },
+      "nativeName": null,
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+        "modelSha256": "e399f0b68a068b3ff828d31e7a0d8d3443f9619d5e84845d64dc7ba0b0ea53a6",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/16/members/Constraint"
+      },
+      "sourceDisposition": "implicit-native-effect-of-original-primary-or-unique-constraint"
+    }
+  ]
+}

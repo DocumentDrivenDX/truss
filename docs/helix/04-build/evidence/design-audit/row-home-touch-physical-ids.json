@@ -1,0 +1,13 @@
+{
+  "scope": "Explicit table/column/sequence/index and CHECK/FK/PK/UNIQUE source nodes only; default/NOT NULL/type/collation/implicit supporting index/native dependency/guard/grant inventory remains separate and incomplete. Source IDs do not resolve PostgreSQL OIDs or generated statement correspondence.",
+  "allocationSha256": "6b982bdcb5e09dc77662da4c441138861d27ba8932a9cbb70c9248784907ffed",
+  "entries": 17,
+  "counts": {
+    "table": 1,
+    "column": 12,
+    "constraint": 4
+  },
+  "complete": false,
+  "exactCapturedNodes": true,
+  "selectedSourceCoverage": true
+}

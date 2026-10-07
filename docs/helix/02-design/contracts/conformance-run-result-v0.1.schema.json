@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:conformance-run-result:0.1.0",
+  "title": "Draft conformance run result",
+  "description": "Closed existing tooling result shape only. Original run/receipt/manifest/assessor custody, complete evidence, current disclosure and native observation are independently admitted.",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "const": "recorded"
+        },
+        "receipt": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        }
+      },
+      "required": [
+        "outcome",
+        "receipt"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "const": "unavailable"
+        },
+        "reason": {
+          "enum": [
+            "authorization",
+            "profile",
+            "custody",
+            "resource"
+          ]
+        }
+      },
+      "required": [
+        "outcome",
+        "reason"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "const": "interrupted"
+        },
+        "originalRunEvidence": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "recoveryReference": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "outcome",
+        "originalRunEvidence",
+        "recoveryReference"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

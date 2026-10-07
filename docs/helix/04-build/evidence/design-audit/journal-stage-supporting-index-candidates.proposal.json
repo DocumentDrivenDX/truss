@@ -1,0 +1,55 @@
+{
+  "scope": "two authored parent/stage PK supporting-index candidates only; not observed native indexes or complete implicit inventory",
+  "declarationInventory": {
+    "path": "docs/helix/04-build/evidence/design-audit/journal-stage-declaration-inventory.json",
+    "sha256": "ad5770f03a0a17225a377926b753c741b2f338ec261a640876dfd222f4e98de1"
+  },
+  "entries": [
+    {
+      "id": "truss.row_home_operation.row_home_operation_pk.supporting-index",
+      "kind": "implicit-supporting-index-candidate",
+      "creatorConstraint": "truss.row_home_operation.row_home_operation_pk",
+      "parentTable": "truss.row_home_operation",
+      "originalSource": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "originalConstraintPointer": "/stmts/0/stmt/CreateStmt/tableElts/16/Constraint",
+      "orderedColumnNames": [
+        "original_writer_xid",
+        "operation_ordinal"
+      ],
+      "emission": "created by selected native constraint declaration; no separate CREATE INDEX emitted",
+      "nativeStatus": "unresolved",
+      "unresolvedNativeFacts": [
+        "actual index object identity/name/namespace",
+        "constraint/index bidirectional association and relation kind",
+        "access method/operator classes/collations/options",
+        "full index definition/validity/readiness/uniqueness/dependencies",
+        "owner/privilege/partition-child and retained conversion correspondence"
+      ]
+    },
+    {
+      "id": "truss.row_home_journal_stage.row_home_journal_stage_pk.supporting-index",
+      "kind": "implicit-supporting-index-candidate",
+      "creatorConstraint": "truss.row_home_journal_stage.row_home_journal_stage_pk",
+      "parentTable": "truss.row_home_journal_stage",
+      "originalSource": "docs/helix/02-design/contracts/row-home-journal-stage-v0.2.proposal.umf.json",
+      "originalConstraintPointer": "/stmts/0/stmt/CreateStmt/tableElts/6/Constraint",
+      "orderedColumnNames": [
+        "original_writer_xid",
+        "operation_ordinal",
+        "stage_name",
+        "stage_ordinal"
+      ],
+      "emission": "created by selected native constraint declaration; no separate CREATE INDEX emitted",
+      "nativeStatus": "unresolved",
+      "unresolvedNativeFacts": [
+        "actual index object identity/name/namespace",
+        "constraint/index bidirectional association and relation kind",
+        "access method/operator classes/collations/options",
+        "full index definition/validity/readiness/uniqueness/dependencies",
+        "owner/privilege/partition-child and retained conversion correspondence"
+      ]
+    }
+  ],
+  "nativeExecuted": false,
+  "installationReady": false
+}

@@ -1,0 +1,112 @@
+{
+  "scope": "Four exact original CreateTrigStmt source schedules/names/tables/functions/flags, no native constraint/trigger inventory, function body or firing/bypass qualification",
+  "postgresqlEventBitSource": "https://raw.githubusercontent.com/postgres/postgres/REL_17_9/src/include/catalog/pg_trigger.h",
+  "sourcePins": [
+    {
+      "path": "docs/helix/02-design/contracts/feed-current-union-triggers-v0.1.proposal.sql",
+      "sourceSha256": "3a4f04e17139da1e0609af72a344d18342be17fbe723a5207c7d82a023903d37",
+      "artifactPath": "docs/helix/02-design/contracts/feed-current-union-triggers-v0.1.proposal.umf.json",
+      "artifactSha256": "c3d790b7b4ecd3c5a100f8c01e71232d0950023b2df046f9a306042fee60d09a",
+      "exportPath": "docs/helix/04-build/evidence/design-audit/feed-current-union-triggers.owner-export.sql",
+      "exportSha256": "2e4c4f9ec29788fbd4bdebec14e681f4e5e4111542e958178e73fe53e9c1dccf",
+      "sourceArchiveExact": true,
+      "reloadedExportExact": true,
+      "complete": false,
+      "declarationCount": 0,
+      "unhandled": [
+        {
+          "path": "/stmts/0/stmt"
+        },
+        {
+          "path": "/stmts/1/stmt"
+        },
+        {
+          "path": "/stmts/2/stmt"
+        },
+        {
+          "path": "/stmts/3/stmt"
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning",
+          "message": "Raw syntax is not catalog resolution, SQL execution, permissions or server-state validation"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt",
+          "severity": "warning",
+          "message": "Statement is retained without declaration extraction or execution"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/1/stmt",
+          "severity": "warning",
+          "message": "Statement is retained without declaration extraction or execution"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/2/stmt",
+          "severity": "warning",
+          "message": "Statement is retained without declaration extraction or execution"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/3/stmt",
+          "severity": "warning",
+          "message": "Statement is retained without declaration extraction or execution"
+        }
+      ]
+    }
+  ],
+  "controls": [
+    {
+      "case": "omitted store",
+      "refused": true
+    },
+    {
+      "case": "duplicate table coverage",
+      "refused": true
+    },
+    {
+      "case": "missing DELETE",
+      "refused": true
+    },
+    {
+      "case": "TRUNCATE substitution",
+      "refused": true
+    },
+    {
+      "case": "nondeferred flag",
+      "refused": true
+    },
+    {
+      "case": "statement-level substitution",
+      "refused": true
+    },
+    {
+      "case": "skipping WHEN",
+      "refused": true
+    },
+    {
+      "case": "UPDATE OF filter",
+      "refused": true
+    },
+    {
+      "case": "alternate function",
+      "refused": true
+    },
+    {
+      "case": "caller arguments",
+      "refused": true
+    },
+    {
+      "case": "BEFORE timing",
+      "refused": true
+    }
+  ],
+  "nativeExecution": false,
+  "complete": false
+}

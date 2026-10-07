@@ -1,0 +1,451 @@
+{
+  "interfaceVersion": "truss-physical-id-allocation/0.1.0",
+  "status": "draft-baseline-supporting-index-fragment",
+  "layoutVersion": "0.2",
+  "complete": false,
+  "sourceSha256": "8b6978ae29e22c0f961b586a2a9b312a0e9d20bf3c7ef920159f7946902d7145",
+  "entries": [
+    {
+      "entryId": "truss.supporting-index.81d013d4-778c-4bce-9799-b6a6dea3272b",
+      "objectKind": "supporting-index",
+      "creatingConstraintId": "truss.constraint.1677abf3-ff6b-4272-aecf-75b2a6a6502c",
+      "parentId": "truss.layout.table.setting",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "2",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/2/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef/members/constraints/items/0/members/Constraint",
+        "meaning": "Original source observation; authored ID does not derive from pointer/name/order"
+      },
+      "creationMeaning": "Supporting index required by original PRIMARY/UNIQUE constraint; this locator is creator provenance, not observed index definition",
+      "nativeBinding": {
+        "state": "unresolved"
+      }
+    },
+    {
+      "entryId": "truss.supporting-index.105ff4d6-0d2c-4fea-a0aa-721981564dc5",
+      "objectKind": "supporting-index",
+      "creatingConstraintId": "truss.constraint.5a000bee-cacf-4262-8a50-ca421324220a",
+      "parentId": "truss.layout.table.module_access",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "5",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/5/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef/members/constraints/items/0/members/Constraint",
+        "meaning": "Original source observation; authored ID does not derive from pointer/name/order"
+      },
+      "creationMeaning": "Supporting index required by original PRIMARY/UNIQUE constraint; this locator is creator provenance, not observed index definition",
+      "nativeBinding": {
+        "state": "unresolved"
+      }
+    },
+    {
+      "entryId": "truss.supporting-index.fd2fb8ce-5438-4d45-9fec-420cd0c07cb9",
+      "objectKind": "supporting-index",
+      "creatingConstraintId": "truss.constraint.183fbc5a-dc2f-4e2b-89b3-343448c55a41",
+      "parentId": "truss.layout.table.schema_rev",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "6",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/6/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef/members/constraints/items/0/members/Constraint",
+        "meaning": "Original source observation; authored ID does not derive from pointer/name/order"
+      },
+      "creationMeaning": "Supporting index required by original PRIMARY/UNIQUE constraint; this locator is creator provenance, not observed index definition",
+      "nativeBinding": {
+        "state": "unresolved"
+      }
+    },
+    {
+      "entryId": "truss.supporting-index.91ad35a2-904f-431c-b663-52e6908098ed",
+      "objectKind": "supporting-index",
+      "creatingConstraintId": "truss.constraint.a580226d-a897-4e09-912d-d50ed3027d83",
+      "parentId": "truss.layout.table.schema_head",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "8",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/8/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef/members/constraints/items/0/members/Constraint",
+        "meaning": "Original source observation; authored ID does not derive from pointer/name/order"
+      },
+      "creationMeaning": "Supporting index required by original PRIMARY/UNIQUE constraint; this locator is creator provenance, not observed index definition",
+      "nativeBinding": {
+        "state": "unresolved"
+      }
+    },
+    {
+      "entryId": "truss.supporting-index.16d3b656-86b2-49b7-b7a6-79f354e881d0",
+      "objectKind": "supporting-index",
+      "creatingConstraintId": "truss.constraint.88f1b439-85a0-4fa2-9db9-26381c4b55c6",
+      "parentId": "truss.layout.table.schema_doc",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "10",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/10/members/stmt/members/CreateStmt/members/tableElts/items/8/members/Constraint",
+        "meaning": "Original source observation; authored ID does not derive from pointer/name/order"
+      },
+      "creationMeaning": "Supporting index required by original PRIMARY/UNIQUE constraint; this locator is creator provenance, not observed index definition",
+      "nativeBinding": {
+        "state": "unresolved"
+      }
+    },
+    {
+      "entryId": "truss.supporting-index.d029bdcf-04f4-4177-8886-0921c97c47e6",
+      "objectKind": "supporting-index",
+      "creatingConstraintId": "truss.constraint.f78d42a4-e623-4ad9-8a76-b2299f78bf9a",
+      "parentId": "truss.layout.table.schema_doc",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "10",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/10/members/stmt/members/CreateStmt/members/tableElts/items/9/members/Constraint",
+        "meaning": "Original source observation; authored ID does not derive from pointer/name/order"
+      },
+      "creationMeaning": "Supporting index required by original PRIMARY/UNIQUE constraint; this locator is creator provenance, not observed index definition",
+      "nativeBinding": {
+        "state": "unresolved"
+      }
+    },
+    {
+      "entryId": "truss.supporting-index.929a3cc8-6e7d-4aa1-b5df-9520cb175b6e",
+      "objectKind": "supporting-index",
+      "creatingConstraintId": "truss.constraint.7125d0d7-266a-4d82-8eac-04fa4b960c22",
+      "parentId": "truss.layout.table.schema_change",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "11",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/11/members/stmt/members/CreateStmt/members/tableElts/items/6/members/Constraint",
+        "meaning": "Original source observation; authored ID does not derive from pointer/name/order"
+      },
+      "creationMeaning": "Supporting index required by original PRIMARY/UNIQUE constraint; this locator is creator provenance, not observed index definition",
+      "nativeBinding": {
+        "state": "unresolved"
+      }
+    },
+    {
+      "entryId": "truss.supporting-index.887ebc8c-2ef8-4dee-8475-eef6a223885c",
+      "objectKind": "supporting-index",
+      "creatingConstraintId": "truss.constraint.fe9f3a11-85a6-4669-9d5e-fc39eb86859c",
+      "parentId": "truss.layout.table.type_def",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "12",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/12/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef/members/constraints/items/0/members/Constraint",
+        "meaning": "Original source observation; authored ID does not derive from pointer/name/order"
+      },
+      "creationMeaning": "Supporting index required by original PRIMARY/UNIQUE constraint; this locator is creator provenance, not observed index definition",
+      "nativeBinding": {
+        "state": "unresolved"
+      }
+    },
+    {
+      "entryId": "truss.supporting-index.f190859a-372a-4f71-b640-ca2b1505a599",
+      "objectKind": "supporting-index",
+      "creatingConstraintId": "truss.constraint.f1b9b1ca-c6b3-405a-8142-3461059828bf",
+      "parentId": "truss.layout.table.type_def",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "12",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/12/members/stmt/members/CreateStmt/members/tableElts/items/8/members/Constraint",
+        "meaning": "Original source observation; authored ID does not derive from pointer/name/order"
+      },
+      "creationMeaning": "Supporting index required by original PRIMARY/UNIQUE constraint; this locator is creator provenance, not observed index definition",
+      "nativeBinding": {
+        "state": "unresolved"
+      }
+    },
+    {
+      "entryId": "truss.supporting-index.4d2e5ede-8121-4547-83e5-4afbc531d302",
+      "objectKind": "supporting-index",
+      "creatingConstraintId": "truss.constraint.1ddd4b24-72d9-4803-bf17-efdf4db0e076",
+      "parentId": "truss.layout.table.prop_def",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "13",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/13/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef/members/constraints/items/0/members/Constraint",
+        "meaning": "Original source observation; authored ID does not derive from pointer/name/order"
+      },
+      "creationMeaning": "Supporting index required by original PRIMARY/UNIQUE constraint; this locator is creator provenance, not observed index definition",
+      "nativeBinding": {
+        "state": "unresolved"
+      }
+    },
+    {
+      "entryId": "truss.supporting-index.54d073c4-0510-45dc-a834-ecef2b292923",
+      "objectKind": "supporting-index",
+      "creatingConstraintId": "truss.constraint.5aa8790c-3361-4b7f-9d42-2a9ec1b48e32",
+      "parentId": "truss.layout.table.prop_def",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "13",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/13/members/stmt/members/CreateStmt/members/tableElts/items/13/members/Constraint",
+        "meaning": "Original source observation; authored ID does not derive from pointer/name/order"
+      },
+      "creationMeaning": "Supporting index required by original PRIMARY/UNIQUE constraint; this locator is creator provenance, not observed index definition",
+      "nativeBinding": {
+        "state": "unresolved"
+      }
+    },
+    {
+      "entryId": "truss.supporting-index.7d6f19ae-3511-4155-b465-151eabecd75b",
+      "objectKind": "supporting-index",
+      "creatingConstraintId": "truss.constraint.6e1b5956-f779-4b1e-9d77-d1acd0071dfa",
+      "parentId": "truss.layout.table.prop_def",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "13",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/13/members/stmt/members/CreateStmt/members/tableElts/items/14/members/Constraint",
+        "meaning": "Original source observation; authored ID does not derive from pointer/name/order"
+      },
+      "creationMeaning": "Supporting index required by original PRIMARY/UNIQUE constraint; this locator is creator provenance, not observed index definition",
+      "nativeBinding": {
+        "state": "unresolved"
+      }
+    },
+    {
+      "entryId": "truss.supporting-index.bd6407e6-f65a-4083-b62f-5546752b8cd0",
+      "objectKind": "supporting-index",
+      "creatingConstraintId": "truss.constraint.d525e2e6-573d-4ce5-b9c2-8cf5ac2bcd36",
+      "parentId": "truss.layout.table.key_def",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "14",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/14/members/stmt/members/CreateStmt/members/tableElts/items/7/members/Constraint",
+        "meaning": "Original source observation; authored ID does not derive from pointer/name/order"
+      },
+      "creationMeaning": "Supporting index required by original PRIMARY/UNIQUE constraint; this locator is creator provenance, not observed index definition",
+      "nativeBinding": {
+        "state": "unresolved"
+      }
+    },
+    {
+      "entryId": "truss.supporting-index.2f5a8a37-a820-4a73-945b-f8085b906fb7",
+      "objectKind": "supporting-index",
+      "creatingConstraintId": "truss.constraint.5e860777-b745-47c7-940a-5cce05391f01",
+      "parentId": "truss.layout.table.key_def",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "14",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/14/members/stmt/members/CreateStmt/members/tableElts/items/8/members/Constraint",
+        "meaning": "Original source observation; authored ID does not derive from pointer/name/order"
+      },
+      "creationMeaning": "Supporting index required by original PRIMARY/UNIQUE constraint; this locator is creator provenance, not observed index definition",
+      "nativeBinding": {
+        "state": "unresolved"
+      }
+    },
+    {
+      "entryId": "truss.supporting-index.4c672d95-f65b-4a5b-a85d-046e53f9441b",
+      "objectKind": "supporting-index",
+      "creatingConstraintId": "truss.constraint.cf210b68-0b81-4977-bd36-03e60c8a727a",
+      "parentId": "truss.layout.table.rel_def",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "15",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/15/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef/members/constraints/items/0/members/Constraint",
+        "meaning": "Original source observation; authored ID does not derive from pointer/name/order"
+      },
+      "creationMeaning": "Supporting index required by original PRIMARY/UNIQUE constraint; this locator is creator provenance, not observed index definition",
+      "nativeBinding": {
+        "state": "unresolved"
+      }
+    },
+    {
+      "entryId": "truss.supporting-index.b0c92a70-b276-423b-a7a7-6b879b45fdcb",
+      "objectKind": "supporting-index",
+      "creatingConstraintId": "truss.constraint.a291e953-d30f-4494-8e24-ea75abc41561",
+      "parentId": "truss.layout.table.rel_def",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "15",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/15/members/stmt/members/CreateStmt/members/tableElts/items/17/members/Constraint",
+        "meaning": "Original source observation; authored ID does not derive from pointer/name/order"
+      },
+      "creationMeaning": "Supporting index required by original PRIMARY/UNIQUE constraint; this locator is creator provenance, not observed index definition",
+      "nativeBinding": {
+        "state": "unresolved"
+      }
+    },
+    {
+      "entryId": "truss.supporting-index.33f6bacc-41df-47c3-a484-adb00e84973f",
+      "objectKind": "supporting-index",
+      "creatingConstraintId": "truss.constraint.e73d84f1-4d82-4eeb-a9be-8e29d803a2f8",
+      "parentId": "truss.layout.table.rel_endpoint",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "16",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/16/members/stmt/members/CreateStmt/members/tableElts/items/3/members/Constraint",
+        "meaning": "Original source observation; authored ID does not derive from pointer/name/order"
+      },
+      "creationMeaning": "Supporting index required by original PRIMARY/UNIQUE constraint; this locator is creator provenance, not observed index definition",
+      "nativeBinding": {
+        "state": "unresolved"
+      }
+    },
+    {
+      "entryId": "truss.supporting-index.85c94a95-c8d4-481c-8956-0bd365879de2",
+      "objectKind": "supporting-index",
+      "creatingConstraintId": "truss.constraint.ee26099c-2db7-47f0-a0fe-9a0fabf712d3",
+      "parentId": "truss.layout.table.object",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "18",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/18/members/stmt/members/CreateStmt/members/tableElts/items/10/members/Constraint",
+        "meaning": "Original source observation; authored ID does not derive from pointer/name/order"
+      },
+      "creationMeaning": "Supporting index required by original PRIMARY/UNIQUE constraint; this locator is creator provenance, not observed index definition",
+      "nativeBinding": {
+        "state": "unresolved"
+      }
+    },
+    {
+      "entryId": "truss.supporting-index.9e411ef2-f7e9-4129-bf1f-809f907988ac",
+      "objectKind": "supporting-index",
+      "creatingConstraintId": "truss.constraint.a558a095-efdd-4914-83f5-8ae9cbba2fde",
+      "parentId": "truss.layout.table.object_key",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "20",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/20/members/stmt/members/CreateStmt/members/tableElts/items/4/members/Constraint",
+        "meaning": "Original source observation; authored ID does not derive from pointer/name/order"
+      },
+      "creationMeaning": "Supporting index required by original PRIMARY/UNIQUE constraint; this locator is creator provenance, not observed index definition",
+      "nativeBinding": {
+        "state": "unresolved"
+      }
+    },
+    {
+      "entryId": "truss.supporting-index.8343d5ee-d65d-47d1-9162-4f1e324b1078",
+      "objectKind": "supporting-index",
+      "creatingConstraintId": "truss.constraint.9ac70487-ba0a-4381-90e2-dd35f4d35107",
+      "parentId": "truss.layout.table.object_key",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "20",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/20/members/stmt/members/CreateStmt/members/tableElts/items/5/members/Constraint",
+        "meaning": "Original source observation; authored ID does not derive from pointer/name/order"
+      },
+      "creationMeaning": "Supporting index required by original PRIMARY/UNIQUE constraint; this locator is creator provenance, not observed index definition",
+      "nativeBinding": {
+        "state": "unresolved"
+      }
+    },
+    {
+      "entryId": "truss.supporting-index.84e038a5-8794-4315-8b90-94375bf4611a",
+      "objectKind": "supporting-index",
+      "creatingConstraintId": "truss.constraint.ca85bde5-81b3-4433-9129-f81debcf9ba6",
+      "parentId": "truss.layout.table.edge",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "21",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/21/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef/members/constraints/items/0/members/Constraint",
+        "meaning": "Original source observation; authored ID does not derive from pointer/name/order"
+      },
+      "creationMeaning": "Supporting index required by original PRIMARY/UNIQUE constraint; this locator is creator provenance, not observed index definition",
+      "nativeBinding": {
+        "state": "unresolved"
+      }
+    },
+    {
+      "entryId": "truss.supporting-index.ec61705e-e85b-44c0-9e41-c824e7d3c588",
+      "objectKind": "supporting-index",
+      "creatingConstraintId": "truss.constraint.41cd0ab8-03a4-47a5-9007-bb82d8e08dfc",
+      "parentId": "truss.layout.table.edge_limit",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "24",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/24/members/stmt/members/CreateStmt/members/tableElts/items/4/members/Constraint",
+        "meaning": "Original source observation; authored ID does not derive from pointer/name/order"
+      },
+      "creationMeaning": "Supporting index required by original PRIMARY/UNIQUE constraint; this locator is creator provenance, not observed index definition",
+      "nativeBinding": {
+        "state": "unresolved"
+      }
+    },
+    {
+      "entryId": "truss.supporting-index.6c08e1b7-5c7c-4a00-b144-7912eb165096",
+      "objectKind": "supporting-index",
+      "creatingConstraintId": "truss.constraint.716d5d24-d8d3-46cd-80e6-f1db6e0101e9",
+      "parentId": "truss.layout.table.key_tombstone",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "26",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/26/members/stmt/members/CreateStmt/members/tableElts/items/7/members/Constraint",
+        "meaning": "Original source observation; authored ID does not derive from pointer/name/order"
+      },
+      "creationMeaning": "Supporting index required by original PRIMARY/UNIQUE constraint; this locator is creator provenance, not observed index definition",
+      "nativeBinding": {
+        "state": "unresolved"
+      }
+    },
+    {
+      "entryId": "truss.supporting-index.91c1a127-e445-4bfb-ba2a-a5924e5a7bec",
+      "objectKind": "supporting-index",
+      "creatingConstraintId": "truss.constraint.dc609764-0d0f-4de6-a47c-3e86a15bc51e",
+      "parentId": "truss.layout.table.record_source",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "27",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/27/members/stmt/members/CreateStmt/members/tableElts/items/5/members/Constraint",
+        "meaning": "Original source observation; authored ID does not derive from pointer/name/order"
+      },
+      "creationMeaning": "Supporting index required by original PRIMARY/UNIQUE constraint; this locator is creator provenance, not observed index definition",
+      "nativeBinding": {
+        "state": "unresolved"
+      }
+    },
+    {
+      "entryId": "truss.supporting-index.ebeb50bf-3e7a-4724-acd4-a9c64c94bf7d",
+      "objectKind": "supporting-index",
+      "creatingConstraintId": "truss.constraint.2f7a6a11-1566-4da2-92ce-1286c6df165b",
+      "parentId": "truss.layout.table.feed_consumer",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "29",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/29/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef/members/constraints/items/0/members/Constraint",
+        "meaning": "Original source observation; authored ID does not derive from pointer/name/order"
+      },
+      "creationMeaning": "Supporting index required by original PRIMARY/UNIQUE constraint; this locator is creator provenance, not observed index definition",
+      "nativeBinding": {
+        "state": "unresolved"
+      }
+    },
+    {
+      "entryId": "truss.supporting-index.2aacd34e-db49-4799-be13-7a82609a56dd",
+      "objectKind": "supporting-index",
+      "creatingConstraintId": "truss.constraint.669e2768-29e0-4972-a313-69d016b7114e",
+      "parentId": "truss.layout.table.journal",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "31",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/31/members/stmt/members/CreateStmt/members/tableElts/items/13/members/Constraint",
+        "meaning": "Original source observation; authored ID does not derive from pointer/name/order"
+      },
+      "creationMeaning": "Supporting index required by original PRIMARY/UNIQUE constraint; this locator is creator provenance, not observed index definition",
+      "nativeBinding": {
+        "state": "unresolved"
+      }
+    }
+  ]
+}

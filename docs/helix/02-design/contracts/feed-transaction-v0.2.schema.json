@@ -1,0 +1,250 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:feed-transaction:0.2.0",
+  "description": "Complete v0.2 manifest shape only; original membership/order/hash/transaction/custody/native completeness require admission.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-feed-transaction/0.2.0"
+    },
+    "context": {
+      "type": "object",
+      "properties": {
+        "sourceEpoch": {
+          "type": "string",
+          "minLength": 1
+        },
+        "feedProfile": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scopeIdentity": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "sourceEpoch",
+        "feedProfile",
+        "scopeIdentity"
+      ],
+      "additionalProperties": false
+    },
+    "xid": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$"
+    },
+    "manifestProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "configurationPrerequisites": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "type": "object",
+        "properties": {
+          "configuration": {
+            "$ref": "urn:truss:draft:import-report:0.1.0#/properties/selectedConfiguration"
+          },
+          "artifact": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          }
+        },
+        "required": [
+          "configuration",
+          "artifact"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "members": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "ordinal": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]*)$"
+          },
+          "key": {
+            "$ref": "#/$defs/memberKey"
+          },
+          "payloadProfile": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+          },
+          "payloadSha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        },
+        "required": [
+          "ordinal",
+          "key",
+          "payloadProfile",
+          "payloadSha256"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "prerequisites": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "type": "object",
+        "properties": {
+          "revision": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]*)$"
+          },
+          "artifact": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          }
+        },
+        "required": [
+          "revision",
+          "artifact"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "manifestSha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "context",
+    "xid",
+    "manifestProfile",
+    "configurationPrerequisites",
+    "members",
+    "prerequisites",
+    "manifestSha256"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "memberKey": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "change"
+            },
+            "seq": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$"
+            }
+          },
+          "required": [
+            "kind",
+            "seq"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "revision"
+            },
+            "revision": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$"
+            }
+          },
+          "required": [
+            "kind",
+            "revision"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "source"
+            },
+            "entityKind": {
+              "enum": [
+                "object",
+                "edge"
+              ]
+            },
+            "identity": {
+              "$ref": "urn:truss:draft:history-record:0.1.0#/$defs/identity"
+            }
+          },
+          "required": [
+            "kind",
+            "entityKind",
+            "identity"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "reservation"
+            },
+            "entityKind": {
+              "enum": [
+                "object",
+                "edge"
+              ]
+            },
+            "typeId": {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]*)$"
+            },
+            "keyNumber": {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]*)$"
+            },
+            "encodedKey": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "entityKind",
+            "typeId",
+            "keyNumber",
+            "encodedKey"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "key_profile_transition"
+            },
+            "sourceEpoch": {
+              "type": "string",
+              "minLength": 1
+            },
+            "installationId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "migrationAttemptId": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "kind",
+            "sourceEpoch",
+            "installationId",
+            "migrationAttemptId"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

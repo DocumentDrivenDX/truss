@@ -1,0 +1,364 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:enforcement-report:0.1.0",
+  "title": "Draft enforcement report",
+  "description": "Shape only; source/identity fidelity, inventory completeness, evidence trust, native enforcement and current authority require semantic validation.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-enforcement-report/0.1.0"
+    },
+    "catalogRevision": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$"
+    },
+    "reportProfile": {
+      "$ref": "#/$defs/profilePin"
+    },
+    "layoutProfile": {
+      "$ref": "#/$defs/profilePin"
+    },
+    "scope": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "complete"
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "authorized_projection"
+            },
+            "authorizedScopeIdentity": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "kind",
+            "authorizedScopeIdentity"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "assertionInventorySha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/entry"
+      }
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "catalogRevision",
+    "reportProfile",
+    "layoutProfile",
+    "scope",
+    "assertionInventorySha256",
+    "entries"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "profilePin": {
+      "type": "object",
+      "properties": {
+        "identity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "identity",
+        "version",
+        "sha256"
+      ],
+      "additionalProperties": false
+    },
+    "exactArtifact": {
+      "type": "object",
+      "properties": {
+        "identity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "bytesBase64": {
+          "type": "string",
+          "pattern": "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "identity",
+        "bytesBase64",
+        "sha256"
+      ],
+      "additionalProperties": false
+    },
+    "owner": {
+      "type": "object",
+      "properties": {
+        "documentId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "moduleId": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "documentId",
+        "moduleId"
+      ],
+      "additionalProperties": false
+    },
+    "assertion": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "$ref": "#/$defs/owner"
+            },
+            "definitionPin": {
+              "type": "string",
+              "minLength": 1
+            },
+            "sourcePointer": {
+              "type": "string"
+            },
+            "kind": {
+              "const": "authored"
+            },
+            "authoredIdentity": {
+              "type": "string",
+              "minLength": 1
+            },
+            "sourceKind": {
+              "enum": [
+                "umf_document",
+                "truss_binding"
+              ]
+            }
+          },
+          "required": [
+            "owner",
+            "definitionPin",
+            "sourcePointer",
+            "kind",
+            "authoredIdentity",
+            "sourceKind"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "$ref": "#/$defs/owner"
+            },
+            "definitionPin": {
+              "type": "string",
+              "minLength": 1
+            },
+            "sourcePointer": {
+              "type": "string"
+            },
+            "kind": {
+              "const": "source"
+            },
+            "sourceIdentityProfile": {
+              "$ref": "#/$defs/profilePin"
+            },
+            "sourceKind": {
+              "enum": [
+                "umf_document",
+                "truss_binding"
+              ]
+            }
+          },
+          "required": [
+            "owner",
+            "definitionPin",
+            "sourcePointer",
+            "kind",
+            "sourceIdentityProfile",
+            "sourceKind"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "entry": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "assertion": {
+              "$ref": "#/$defs/assertion"
+            },
+            "source": {
+              "$ref": "#/$defs/exactArtifact"
+            },
+            "ruleName": {
+              "type": "string",
+              "minLength": 1
+            },
+            "ruleNameOrigin": {
+              "enum": [
+                "authored",
+                "profile_generated"
+              ]
+            },
+            "enforcement": {
+              "const": "database"
+            },
+            "procedureProfile": {
+              "$ref": "#/$defs/profilePin"
+            },
+            "qualificationReceiptSha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "installedInventorySha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "currentObservationEvidenceSha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "qualifiedWritePaths": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "required": [
+            "assertion",
+            "source",
+            "ruleName",
+            "ruleNameOrigin",
+            "enforcement",
+            "procedureProfile",
+            "qualificationReceiptSha256",
+            "installedInventorySha256",
+            "currentObservationEvidenceSha256",
+            "qualifiedWritePaths"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "assertion": {
+              "$ref": "#/$defs/assertion"
+            },
+            "source": {
+              "$ref": "#/$defs/exactArtifact"
+            },
+            "ruleName": {
+              "type": "string",
+              "minLength": 1
+            },
+            "ruleNameOrigin": {
+              "enum": [
+                "authored",
+                "profile_generated"
+              ]
+            },
+            "enforcement": {
+              "const": "engine"
+            },
+            "validatorProfile": {
+              "$ref": "#/$defs/profilePin"
+            },
+            "qualificationReceiptSha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "assertion",
+            "source",
+            "ruleName",
+            "ruleNameOrigin",
+            "enforcement",
+            "validatorProfile",
+            "qualificationReceiptSha256"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "assertion": {
+              "$ref": "#/$defs/assertion"
+            },
+            "source": {
+              "$ref": "#/$defs/exactArtifact"
+            },
+            "ruleName": {
+              "type": "string",
+              "minLength": 1
+            },
+            "ruleNameOrigin": {
+              "enum": [
+                "authored",
+                "profile_generated"
+              ]
+            },
+            "enforcement": {
+              "const": "none"
+            },
+            "reason": {
+              "enum": [
+                "opaque",
+                "unsupported",
+                "unqualified",
+                "drift"
+              ]
+            }
+          },
+          "required": [
+            "assertion",
+            "source",
+            "ruleName",
+            "ruleNameOrigin",
+            "enforcement",
+            "reason"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

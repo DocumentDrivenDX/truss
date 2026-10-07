@@ -1,0 +1,29 @@
+{
+  "interfaceVersion": "truss-postgresql-savepoint-resource/0.1.0",
+  "status": "unadopted; native/runtime accounting and containment unqualified",
+  "integerCarrier": "canonical positive decimal text",
+  "scope": "One original transaction epoch; every compatible Truss assembly shares the ledger. Host native stack depth is independently admitted.",
+  "limits": {
+    "createdAttempts": "8192",
+    "outstandingTrussHandles": "64",
+    "totalAdmittedNativeSavepointDepth": "64",
+    "normalControlSubmissions": "32768",
+    "retainedHandleRecords": "8192",
+    "oneHandleRecordAccountedBytes": "512",
+    "peakOwnedBytes": "8388608",
+    "cumulativeAllocationBytes": "33554432",
+    "abstractWorkUnits": "16000000",
+    "containmentObservationMilliseconds": "5000",
+    "outstandingCleanupCommandPermits": "128",
+    "cumulativeCleanupCommandSubmissions": "16384",
+    "allControlSubmissions": "49152"
+  },
+  "accounting": {
+    "creation": "Charge an attempt and consume the unique name counter before possible native submission; unknown creation retains its outstanding slot. Refused pre-submission attempts consume no native-depth slot.",
+    "commands": "Every native control submission charges allControlSubmissions and exactly one normal or reserved-cleanup counter, including failed/unknown controls. Total and category limits apply simultaneously; no refund after rollback, release or cleanup.",
+    "depth": "Admit observed host plus Truss stack before creation; a Truss-only count cannot prove native depth. Unknown host stack depth refuses this finite profile.",
+    "cleanup": "Before each new creation reserve one qualified rollback-to and one release allowance plus their exact bounded transport/work/storage costs. Existing ancestor/descendant cleanup reservations remain owned until confirmed invalidation. Reserved cleanup is separate from normal admission and cannot finance new work. Each created boundary owns at most two single-use cleanup command permits; consuming one never replenishes it. After cleanup, a retained target without sufficient cleanup reserve cannot admit new dependent work until separately charged replacement reserves pass the same cumulative/total limits. Resource reservations stay inside the shared peak/cumulative/work ledger, not extra budgets.",
+    "bytes": "Charge full private record, indexes, name and original evidence copies; 512 is a selected implementation ceiling to prove, not a measured object-size assertion. Payload release does not invalidate retained external handles by itself.",
+    "failure": "Normal-cap exhaustion closes new control admission but preserves already-reserved cleanup and original recovery. Cleanup cannot be submitted without original transaction usability/ordering; uncertainty retains quarantine rather than spending permits blindly."
+  }
+}

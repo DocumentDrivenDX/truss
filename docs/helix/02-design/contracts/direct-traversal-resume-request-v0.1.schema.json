@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:direct-traversal-resume-request:0.1.0",
+  "title": "Draft direct-traversal-resume-request",
+  "description": "Closed shape only. Original host registry, exact full query/context, cumulative work, snapshot/authority and native resources require independent semantic admission.",
+  "type": "object",
+  "properties": {
+    "handle": {
+      "$ref": "urn:truss:draft:direct-traversal-request:0.1.0#/$defs/handle"
+    },
+    "expectedWorkVersion": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$"
+    },
+    "workLimits": {
+      "$ref": "urn:truss:draft:direct-traversal-request:0.1.0#/$defs/workLimits"
+    },
+    "resultLimit": {
+      "type": "string",
+      "pattern": "^[1-9][0-9]*$"
+    }
+  },
+  "required": [
+    "handle",
+    "expectedWorkVersion",
+    "workLimits",
+    "resultLimit"
+  ],
+  "additionalProperties": false
+}

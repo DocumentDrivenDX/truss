@@ -37,7 +37,7 @@ Terminology: UMF is DocumentDrivenDX's machine-readable metamodel and schema
 interchange fabric. SQL is Structured Query Language; PostgreSQL JSONB is its
 binary JSON storage type. DDL means data definition language, FK means foreign
 key, and p95 is the 95th percentile. PRD means product requirements document;
-the project PRD has not yet been authored.
+the project PRD is [01-frame/prd.md](../../01-frame/prd.md) (draft).
 Node LTS means Node.js long-term support releases. CLI means command-line
 interface; I/O means input and output. C ABI means C application binary
 interface; Node-API is Node.js's native addon interface.
@@ -116,7 +116,7 @@ The code is split into three layers, with dependencies only pointing downward:
 
 | Layer | Contents | May use |
 |-------|----------|---------|
-| Core | UMF catalog and binding derivation, value encoding and validation, enforcement reporting, query and mutation compilation, SQL generation per dialect, the exact value model | ECMAScript built-ins only. No I/O, no `node:*` or `bun` imports, no host globals, no clocks or randomness except through injected interfaces |
+| Core | UMF catalog and binding derivation, exact values and validation, enforcement reporting, fixed mutation planning/template assembly and original artifact admission; logical SQL compilation belongs to Weft | ECMAScript built-ins only. No I/O, no `node:*` or `bun` imports, no host globals, no clocks or randomness except through injected interfaces |
 | Adapters | Database drivers behind one narrow interface: prepared statements, typed parameters, text-mode results, transactions with isolation level, row locks, advisory locks | Host and driver APIs: `Bun.sql`, `pg` |
 | Tooling and tests | CLI, loaders, benchmarks, conformance runner | Anything, including Bun-native APIs |
 
@@ -286,3 +286,9 @@ question.
 | 4 | Are the proposed T2 and T3 figures acceptable as PRD targets? | Yes, as proposed PRD targets; the PRD may revise them (D6) |
 | 5 | Is expected SQL informative rather than normative in the corpus? | Yes, informative (D5) |
 | 6 | Require L1–L3 before acceptance, or accept now? | Accept now. L1 confirms or amends Node support; L2 is the first build task; L3 sets the T2 baseline |
+
+## Current compiler and native-enforcement boundary clarification
+
+The accepted TypeScript-first/portable-core decision remains in force. Current owner direction assigns logical SQL compilation to Weft; the core responsibility table now reflects that boundary rather than retaining its earlier combined query/mutation compilation wording. Truss supplies original storage/value/key mappings and qualified execution evidence, and consumes Weft's admitted artifact/decoder interface. Weft's Rust implementation does not select a Rust Truss core, PostgreSQL helper language or native extension deployment.
+
+Unavoidable database enforcement is a separate PostgreSQL deployment-profile responsibility under CONTRACT-001/005/007. Its exact routine/type/language/security/resource declarations and native helper bodies must be selected and reviewed; no accepted language decision here supplies those missing artifacts. TypeScript prepares/transports original inputs and independent test observations, but a host callback is not a native COMMIT guard. If a proposed backend needs a compiled database helper, record its complete source/build/installation/role/runtime boundary and review that profile explicitly. It cannot be hidden as a transitive portable-core dependency or described as an already approved Rust core migration. This clarification preserves D1/D2 and their existing qualification requirements.

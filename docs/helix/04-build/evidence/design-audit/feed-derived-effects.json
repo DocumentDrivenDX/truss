@@ -1,0 +1,52 @@
+{
+  "scope": "Five expected constraint-supporting indexes and three original FK relation/ordered-column references. Reference IDs describe source edges, not extra pg_constraint objects. No FK referencing-side index is inferred. Native names/OIDs, generated triggers, operator classes, collations, privileges and dependencies remain unresolved.",
+  "derivedEffectsSha256": "76e1b905f4e186817dd0ea747e4e00d990245164d4ac80b7effd61d821b87095",
+  "expectedSupportingIndexes": 5,
+  "sourceForeignKeyReferences": 3,
+  "controls": [
+    {
+      "case": "omitted index",
+      "refused": true
+    },
+    {
+      "case": "invented FK-side index",
+      "refused": true
+    },
+    {
+      "case": "reversed reference columns",
+      "refused": true
+    },
+    {
+      "case": "wrong creator",
+      "refused": true
+    },
+    {
+      "case": "invented native name",
+      "refused": true
+    },
+    {
+      "case": "forged native binding",
+      "refused": true
+    }
+  ],
+  "independentSemanticControls": [
+    {
+      "case": "wrong member address key",
+      "refused": true
+    },
+    {
+      "case": "delivery key treated as primary",
+      "refused": true
+    },
+    {
+      "case": "foreign key cascade substitution",
+      "refused": true
+    },
+    {
+      "case": "source reference column substitution",
+      "refused": true
+    }
+  ],
+  "complete": false,
+  "nativeExecution": false
+}

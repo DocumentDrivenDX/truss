@@ -1,0 +1,164 @@
+{
+  "profile": "truss-resource-account-state-vectors/0.1.0",
+  "status": "planned_unadopted",
+  "nativeExecution": false,
+  "scope": "Independent symbolic transition expectations; no public account API, native mechanism, universal limit or runtime qualification. Selected resource profile must map each symbolic producer to original evidence.",
+  "limits": {
+    "retainedBytes": "100",
+    "ordinaryWork": "100"
+  },
+  "accountingMeaning": "Admission counts spent plus pending work. These tiny independent fixture ceilings replace no production profile. Cleanup costs have a separately pre-reserved profile. RA cases are independent unless an action explicitly references an earlier unresolved attempt.",
+  "cases": [
+    {
+      "id": "RA01",
+      "before": {
+        "account": "original-epoch-A",
+        "retainedBytes": "40",
+        "spentWork": "60",
+        "pendingWork": "0",
+        "ordinaryAdmission": "open",
+        "cleanupPermits": "2"
+      },
+      "action": "Reserve bounded work 30, submit and settle at full reserved charge; retain 20 additional bytes; confirm savepoint rollback and buffer release",
+      "expected": {
+        "account": "original-epoch-A",
+        "retainedBytes": "40",
+        "spentWork": "90",
+        "pendingWork": "0",
+        "ordinaryAdmission": "open",
+        "cleanupPermits": "2"
+      },
+      "oracle": "Rollback removes the additional retained occupancy but preserves all 30 spent work units."
+    },
+    {
+      "id": "RA02",
+      "before": {
+        "account": "original-epoch-A",
+        "retainedBytes": "40",
+        "spentWork": "90",
+        "pendingWork": "0",
+        "ordinaryAdmission": "open",
+        "cleanupPermits": "2"
+      },
+      "action": "Atomically request 20 retained bytes and 11 work units before any submission",
+      "expected": {
+        "account": "original-epoch-A",
+        "retainedBytes": "40",
+        "spentWork": "90",
+        "pendingWork": "0",
+        "ordinaryAdmission": "open",
+        "cleanupPermits": "2"
+      },
+      "outcome": "confirmed_pre_work_refusal",
+      "oracle": "Work would exceed 100; no occupancy/work reservation is partially applied."
+    },
+    {
+      "id": "RA03",
+      "before": {
+        "account": "original-epoch-A",
+        "retainedBytes": "40",
+        "spentWork": "90",
+        "pendingWork": "0",
+        "ordinaryAdmission": "open",
+        "cleanupPermits": "2"
+      },
+      "action": "Reserve 10 work units and submit; completion and buffer release are unknown",
+      "expected": {
+        "account": "original-epoch-A",
+        "retainedBytes": "40",
+        "spentWork": "90",
+        "pendingWork": "10",
+        "ordinaryAdmission": "closed",
+        "cleanupPermits": "2"
+      },
+      "outcome": "unresolved_original_recovery",
+      "oracle": "The complete reserved charge remains pending; no ordinary retry, refund or buffer reclamation follows."
+    },
+    {
+      "id": "RA04",
+      "before": {
+        "account": "original-epoch-A",
+        "retainedBytes": "40",
+        "spentWork": "90",
+        "pendingWork": "10",
+        "ordinaryAdmission": "closed",
+        "cleanupPermits": "2"
+      },
+      "action": "Reconstruct assembly around the same original issuer while RA03 remains unresolved",
+      "expected": {
+        "account": "original-epoch-A",
+        "retainedBytes": "40",
+        "spentWork": "90",
+        "pendingWork": "10",
+        "ordinaryAdmission": "closed",
+        "cleanupPermits": "2"
+      },
+      "oracle": "A facade does not establish a new epoch or fresh budget."
+    },
+    {
+      "id": "RA05",
+      "before": {
+        "account": "original-epoch-A",
+        "retainedBytes": "40",
+        "spentWork": "100",
+        "pendingWork": "0",
+        "ordinaryAdmission": "closed",
+        "cleanupPermits": "2"
+      },
+      "action": "Perform one previously reserved qualified containment command and confirm original completion",
+      "expected": {
+        "account": "original-epoch-A",
+        "retainedBytes": "40",
+        "spentWork": "100",
+        "pendingWork": "0",
+        "ordinaryAdmission": "closed",
+        "cleanupPermits": "1"
+      },
+      "oracle": "Containment consumes its own permit; it neither replenishes nor borrows the ordinary work allowance. Its actual costs remain covered by the separately reserved enclosing cleanup profile."
+    },
+    {
+      "id": "RA06",
+      "before": {
+        "account": "original-epoch-A",
+        "retainedBytes": "40",
+        "spentWork": "90",
+        "pendingWork": "0",
+        "ordinaryAdmission": "open",
+        "cleanupPermits": "2"
+      },
+      "action": "Two participants sharing the original issuer concurrently request 7 work units each; barrier holds settlement until both decisions are observed",
+      "allowedExpectedStates": [
+        {
+          "account": "original-epoch-A",
+          "retainedBytes": "40",
+          "spentWork": "90",
+          "pendingWork": "7",
+          "ordinaryAdmission": "open",
+          "cleanupPermits": "2"
+        }
+      ],
+      "oracle": "Exactly one reservation is admitted and the other refuses; pending reservations participate in the same 100-unit ceiling. Which participant wins is not prescribed."
+    },
+    {
+      "id": "RA07",
+      "before": {
+        "account": "original-epoch-A",
+        "retainedBytes": "40",
+        "spentWork": "90",
+        "pendingWork": "10",
+        "ordinaryAdmission": "closed",
+        "cleanupPermits": "2"
+      },
+      "action": "Original native evidence confirms RA03 performed its entire reserved work and confirms original savepoint containment plus buffer release",
+      "expected": {
+        "account": "original-epoch-A",
+        "retainedBytes": "40",
+        "spentWork": "100",
+        "pendingWork": "0",
+        "ordinaryAdmission": "closed",
+        "cleanupPermits": "2"
+      },
+      "oracle": "Pending charge transfers once to spent, never counts twice and never disappears on rollback. Full-budget exhaustion keeps ordinary admission closed."
+    }
+  ]
+}

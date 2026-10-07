@@ -1,0 +1,30 @@
+{
+  "scope": "Read-only original access-plan/codec/presence/finite-layout source refresh; not Truss native qualification",
+  "weftHead": "20a308611113955c50c4548ae0a4c46153fcf1db",
+  "clean": true,
+  "sources": [
+    {
+      "path": "crates/weft-postgresql/src/registered_access.rs",
+      "sha256": "4f7e9cb68e00ed3becb60e3357b999b1e3e22536a3312e4ce5dd41e35d20ed97"
+    },
+    {
+      "path": "crates/weft-postgresql/src/property_definition.rs",
+      "sha256": "117762db20912b723d31a733c2b0293808fb3ea42b95f05f66fdca24084ba00b"
+    },
+    {
+      "path": "crates/weft-postgresql/src/value_definition.rs",
+      "sha256": "e2f9b3671f6659aecef602e7b7c50b2d3f743d45e60ca5d2b42d912904d042e9"
+    },
+    {
+      "path": "crates/weft-postgresql/src/leaf_codec_definition.rs",
+      "sha256": "1502bd78e6f368e94b5ce8ed8fe379c46a67aeaee8a10aba0de619ac21fe8d6a"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/B-005-native-preparation.md",
+      "sha256": "1093e18239730a6e78d8d568958e930e3aee2557f7382f81b625b41dddb6be82"
+    }
+  ],
+  "ownerReportedCrateTests": 57,
+  "testsRerunByTruss": false,
+  "complete": false
+}

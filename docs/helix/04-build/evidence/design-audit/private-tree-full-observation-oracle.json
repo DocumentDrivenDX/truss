@@ -1,0 +1,23 @@
+{
+  "scope": "Two complete fixed source ASTs and manifest source/order/type/NULL/parameter correspondence only; no native visibility, bounds, descriptors or decoding",
+  "sourceSha256": "db1ddad5f6ef8953a2e3dacf91b7c69fc8941c5df4e1ca2fc304d7e6a33df6a8",
+  "modelSha256": "e6a6164f29ce54fbf2dc972d4505fd007b45de610df6717cd3a2bcfa8f13adc2",
+  "statements": 2,
+  "corruptionControls": [
+    "missing_stream",
+    "state_scope_swap",
+    "scalar_node_filter",
+    "truncated_nodes",
+    "lost_orphan_payload"
+  ],
+  "manifestCorruptionControls": [
+    "stream_identity_swap",
+    "nullable_node_definition",
+    "nonnull_parent",
+    "binary_native_carrier",
+    "scalar_node_parameter",
+    "native_claim"
+  ],
+  "nativeExecution": false,
+  "complete": false
+}

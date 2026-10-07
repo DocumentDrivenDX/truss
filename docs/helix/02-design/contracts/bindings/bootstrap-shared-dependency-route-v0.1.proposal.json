@@ -1,0 +1,113 @@
+{
+  "interfaceVersion": "truss-bootstrap-route-entry/0.1.0",
+  "routeIdentity": "pg17.shared-dependency.address-frontier/0.1.0",
+  "status": "unadopted; source pins only verified; native class/cut/transport/semantic producers unqualified",
+  "nativeClass": {
+    "namespace": "pg_catalog",
+    "relation": "pg_shdepend",
+    "classOid": "actual original catalog relation identity; edges have no invented object OID",
+    "storageScope": "shared",
+    "addressability": "Original complete edge tuple and occurrence; no invented edge OID",
+    "subobjectNumber": "exact original endpoint/native scope grammar"
+  },
+  "selector": "outgoing exact dependent addresses in original current database or explicit shared dbid zero",
+  "artifacts": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-shared-dependency-observation-pg17.proposal.sql",
+      "sha256": "d8b3211263ccad6661c25d138fbef9f7bf6aa468204dbc008b6d2a605543715b"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-shared-dependency-observation-pg17.proposal.umf.json",
+      "sha256": "80ada89628e46eb299a4719e1e9e7e5d6a91ad0acfbcabd2178756e5753a5813"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/bootstrap-shared-dependency-observation.owner-export.sql",
+      "sha256": "7f7e06e1e2a0c87026e767716372cf5656fc6548aaba0c34655bb7a0f818eb0f"
+    }
+  ],
+  "parameterGrammar": {
+    "slots": [
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "nativeTypes": [
+      "pg_catalog.oid[]",
+      "pg_catalog.oid[]",
+      "pg_catalog.oid[]",
+      "pg_catalog.int4[]"
+    ],
+    "slotMeaning": [
+      "database scope OIDs",
+      "catalog class OIDs",
+      "object OIDs",
+      "exact signed subobjects"
+    ],
+    "dimensions": "each exactly one, lower bound 1, equal nonzero length",
+    "nullAllowed": false,
+    "nullItemsAllowed": false,
+    "uniqueAlignedTuples": true,
+    "scalarRepetitionAllowed": true,
+    "countInclusive": [
+      "1",
+      "256"
+    ],
+    "encoder": "selected canonical native arrays; preserve aligned tuples, no independent sort/cartesian/padding; zero subobject never wildcard",
+    "databaseGrammar": "observed original current database or explicitly admitted shared dbid 0 only"
+  },
+  "orderedColumns": [
+    "dependent_database_oid",
+    "dependent_class_oid",
+    "dependent_object_oid",
+    "dependent_subobject",
+    "referenced_shared_class_oid",
+    "referenced_shared_object_oid",
+    "dependency_kind",
+    "original_catalog_row_json"
+  ],
+  "coverage": "Complete outgoing original shared-edge membership per aligned dependent address; empty only with independent original scope/class/authority/cut proof. No claim about incoming references from every database.",
+  "requiredKnownFields": [
+    "dbid",
+    "classid",
+    "objid",
+    "objsubid",
+    "refclassid",
+    "refobjid",
+    "deptype"
+  ],
+  "preservation": "Retain full exact returned row JSON text and every unknown extension member; lossless bounded selected native JSON decoder; no parse/stringify reconstruction",
+  "dependencyExtraction": {
+    "endpoints": "independently resolve actual class/scope/object/subobject for every reached endpoint under same original registry/cut; equal numeric OIDs across classes/scopes never merge",
+    "nativeKind": "preserve exact deptype and raw edge multiplicity; unsupported/pin/internal/extension/auto/partition/ownership meaning independently classified, not filtered",
+    "zeroFacts": "native pin/category zero sentinels retained and interpreted under exact selected grammar, never queued as invented object addresses",
+    "sharedScope": "dependent dbid 0/current retained; referenced original shared object has no fabricated column ordinal. Full address reconstruction follows admitted shared object grammar, not a claimed observed referenced subobject",
+    "closure": "retain every original edge occurrence/provenance while task scheduling deduplicates exact original route/address/cut keys; cross-scope class routes and authority definitions remain mandatory",
+    "fieldClassification": {
+      "dbid": "original database scope correlation; zero shared dependent sentinel, otherwise original admitted database identity",
+      "classid": "original native class/object correlation; resolve complete same-cut definition identity and exact scope; numeric coincidence never merges",
+      "objid": "original native class/object correlation; resolve complete same-cut definition identity and exact scope; numeric coincidence never merges",
+      "objsubid": "original signed class-specific subobject association; resolve complete original child identity, zero object-level not wildcard",
+      "refclassid": "original native class/object correlation; resolve complete same-cut definition identity and exact scope; numeric coincidence never merges",
+      "refobjid": "original native class/object correlation; resolve complete same-cut definition identity and exact scope; numeric coincidence never merges",
+      "deptype": "exact catalog-specific registered native dependency kind; stable edge meaning, local/shared codes never interchangeable"
+    },
+    "canonicalProcedure": "CONTRACT-008 Dependency semantic multigraph: independently resolved endpoint identities plus catalog-specific kind, preserve original edge occurrence/multiplicity and complete provenance; scheduling deduplication never removes semantic edges",
+    "registeredKinds": {
+      "o": "owner role",
+      "a": "ACL role",
+      "i": "initial ACL role",
+      "r": "policy role",
+      "t": "tablespace for relation without storage"
+    },
+    "pinnedClosure": "PG17 catalogs may omit pinned-object references. Independently extract all required definition field/expression/routine/type references and resolve them under original target/profile; empty edge result is not semantic closure or pin evidence. Legacy pin/zero shorthand does not admit unknown kind p or all-zero endpoints.",
+    "overlapReconciliation": "CONTRACT-008 Overlapping dependency observation reconciliation: equal per-query multiset counts across every same-cut complete applicable original selector, including zero; no sum/max/dedup of semantic multiplicity; preserve all original observation provenance"
+  },
+  "adjuncts": [
+    "every original required endpoint definition and class/subobject native meaning",
+    "original authority/provenance/extension/partition/ownership context and full route-qualified closure"
+  ],
+  "resourceProfile": "truss-bootstrap-collector-resource/0.1.0",
+  "refusal": "Unregistered class/subobject/dependency/scope meaning or incomplete native edge/endpoint coverage refuses completeness; no missing-edge authorization inference or all-database shared role scan",
+  "resourceObligations": "Shared enclosing totals, complete original cut/authority and explicit pre-materialization/native-work permits; no independent per-route allowance"
+}

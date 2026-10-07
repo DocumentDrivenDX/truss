@@ -1,0 +1,10 @@
+{
+  "status": "pass",
+  "cases": 10,
+  "exact": 7,
+  "refused": 3,
+  "fixtureSha256": "8e9d80412768fb5bc635b57ce01eb6e9d604757e0b794e311402a3f6d2153811",
+  "scope": "Gregorian finite parts/offset/precision arithmetic only; no source token grammar, native renderer/domain or resource producer qualification",
+  "nativeExecuted": false,
+  "profileAdopted": false
+}

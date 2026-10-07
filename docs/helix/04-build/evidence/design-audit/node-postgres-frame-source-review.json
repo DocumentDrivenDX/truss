@@ -1,0 +1,27 @@
+{
+  "scope": "Four immutable public source files downloaded for read-only decoding/frame review; no execution or installed-driver qualification",
+  "revision": "9808955838dd84835c4ca904228c9c2eaeda047e",
+  "localReviewRoot": "/private/tmp/truss-node-postgres-source-review",
+  "files": [
+    {
+      "path": "packages/pg-protocol/src/buffer-reader.ts",
+      "sha256": "2465afc8aa6d9863357d35e2ccac9f6b2d0d5d6c10fc4b03d8b01dbc640f3b32",
+      "bytes": 1409
+    },
+    {
+      "path": "packages/pg-protocol/src/parser.ts",
+      "sha256": "b991370b2b49c7a701e8b75fa0e18e43757c57ccf83b86d830866fcdd3ba825f",
+      "bytes": 13057
+    },
+    {
+      "path": "packages/pg/lib/connection.js",
+      "sha256": "836b6abbfbc68744769ba499e2a79062dba5fd281af31fc5e83431514bdefd4a",
+      "bytes": 5900
+    },
+    {
+      "path": "packages/pg/lib/query.js",
+      "sha256": "a13377272ad4f842f6f6616d187ef3123cfed90e764cae9a663058ab41a769a0",
+      "bytes": 7654
+    }
+  ]
+}

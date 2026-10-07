@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:proposal:journal-reserved-positions:0.2.0",
+  "title": "Unadopted original prepared-sibling position mapping",
+  "description": "Private allocation phase only. Original prepared artifact and actual native allocations require complete protected correspondence; unique increasing seq may contain gaps. Empty mapping requires complete empty prepared scope. No digest, append, seal or commit claim.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-journal-reserved-positions/0.2.0-proposal"
+    },
+    "producerProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "allocationProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "originalOperationContext": {
+      "$ref": "urn:truss:draft:row-operation-context:0.1.0"
+    },
+    "originalPrepared": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "mapping": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "ordinal": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]*)$",
+            "maxLength": 20
+          },
+          "identity": {
+            "$ref": "urn:truss:draft:history-record:0.1.0#/$defs/identity"
+          },
+          "kind": {
+            "enum": [
+              "object",
+              "relationship"
+            ]
+          },
+          "recordVersion": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$",
+            "maxLength": 20
+          },
+          "seq": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$",
+            "maxLength": 20
+          },
+          "originalAllocationEvidence": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          }
+        },
+        "required": [
+          "ordinal",
+          "identity",
+          "kind",
+          "recordVersion",
+          "seq",
+          "originalAllocationEvidence"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "producerProfile",
+    "allocationProfile",
+    "originalOperationContext",
+    "originalPrepared",
+    "mapping"
+  ],
+  "additionalProperties": false
+}

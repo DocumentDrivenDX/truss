@@ -1,0 +1,72 @@
+{
+  "interfaceVersion": "truss-bootstrap-route-entry/0.1.0",
+  "routeIdentity": "pg17.routine-rights.complete-inquiry/0.1.0",
+  "status": "unadopted; source pins only verified; native class/cut/transport/semantic producers unqualified",
+  "nativeClass": {
+    "namespace": "pg_catalog",
+    "relation": "pg_proc",
+    "classOid": "actual original pg_proc catalog identity",
+    "storageScope": "database",
+    "subobjectNumber": "0"
+  },
+  "selector": "Original real-role/object pairs",
+  "artifacts": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-routine-rights-observation-pg17.proposal.sql",
+      "sha256": "7a231258e5840732c1136ceb61483b0132ecef7e49d61b8e893be266340ca6c5"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-routine-rights-observation-pg17.proposal.umf.json",
+      "sha256": "41ca13c9ac72682767e6f9c61880c048f378b285474459dd3966b8eb591f73d4"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/bootstrap-routine-rights-observation.owner-export.sql",
+      "sha256": "2d5c718d9c10b27e076d446a0c8e3564d92a126c1797e2fb5549c23abfdd7dcc"
+    }
+  ],
+  "parameterGrammar": {
+    "slots": [
+      1,
+      2
+    ],
+    "nativeTypes": [
+      "pg_catalog.oid[]",
+      "pg_catalog.oid[]"
+    ],
+    "nativeInput": "Equal-length nonnull one-dimensional lower-bound-one arrays of 1..256 unique complete tuples; repeated individual components allowed, no null items. OID components canonical nonzero uint32; column number exact signed int2 and independently admitted non-dropped attribute. No Cartesian expansion or name/PUBLIC substitution."
+  },
+  "orderedColumns": [
+    "role_oid",
+    "object_oid",
+    "has_execute",
+    "can_grant_execute"
+  ],
+  "coverage": "Exact expected request/privilege result-key set constructed before submission; complete false answers retained. Missing/duplicate/unrequested keys refuse whole matrix.",
+  "requiredKnownFields": [
+    "role_oid",
+    "object_oid",
+    "has_execute",
+    "can_grant_execute"
+  ],
+  "preservation": "Retain full exact returned row JSON text and every unknown extension member; lossless bounded selected native JSON decoder; no parse/stringify reconstruction",
+  "dependencyExtraction": {
+    "originalContext": "Complete original real roles/object/kind/attribute definitions and actor/authority/cut correspondence before dispatch; PUBLIC is not an inquiry role.",
+    "matrix": "Use CONTRACT-008 effective inquiry matrix procedure and CONTRACT-011 object-specific native privilege rules. Grant-option true requires base-right true. MEMBER/USAGE/SET role-path answers are separate capabilities, never one reachability bit.",
+    "projection": "Keep every false/true native answer in protected evidence; positive projection only after full set equality, native termination and shared resource settlement. No mutation, RLS, definer or SET ROLE success is inferred.",
+    "fieldClassification": {
+      "role_oid": "original canonical nonzero uint32 correlation; independently resolved real role or object under original scope/cut; never stable semantic identifier",
+      "object_oid": "original canonical nonzero uint32 correlation; independently resolved real role or object under original scope/cut; never stable semantic identifier",
+      "has_execute": "exact original native boolean operational authority evidence; false retained, unavailable never false; no stable definition fact or reusable permission token",
+      "can_grant_execute": "exact original native boolean operational authority evidence; false retained, unavailable never false; no stable definition fact or reusable permission token"
+    },
+    "canonicalProcedure": "CONTRACT-008 Effective authority evidence projection: complete original matrix retains all answers and custody; excluded from stable definition preimage under explicit operational classification, stored policy definition remains separate",
+    "authorityLifetime": "Bind original invocation/actor/session/scope/cut and selected inquiry kind. No timestamp/TTL or prior positive answer substitutes for protected current operation authority admission; separately observe/revalidate under governing coherence and original operation issuer."
+  },
+  "adjuncts": [
+    "complete original role graph/path scope and object-specific definition/ACL",
+    "exact expected key set and selected native inquiry/authority profile"
+  ],
+  "resourceProfile": "truss-bootstrap-collector-resource/0.1.0",
+  "refusal": "Unsupported kind/attribute/function/build, incomplete original correspondence, malformed boolean or partial matrix/cut/resource/termination refuses publication",
+  "resourceObligations": "Shared enclosing totals, complete original cut/authority and explicit pre-materialization/native-work permits; no independent per-route allowance"
+}

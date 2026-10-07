@@ -1,0 +1,16 @@
+{
+  "scope": "independent syntactic original occurrence counts/names/kinds only; not full expression semantics or native resolution",
+  "helperSha256": "ae5e7bbc9a60e7d412ccc6dd62b384759449dd2184355f00cd8fe3c0b7557e0a",
+  "inventorySha256": "79bed043365c4b3badb77da86f20af3adf217c6f462d5951d80e883d79ef9cb4",
+  "occurrences": 59,
+  "negativeControls": [
+    "omitted_reference",
+    "duplicate_pointer",
+    "changed_type",
+    "changed_function",
+    "changed_collation",
+    "changed_operator",
+    "invented_resolution"
+  ],
+  "nativeExecuted": false
+}

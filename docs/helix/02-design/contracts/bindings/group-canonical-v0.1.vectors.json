@@ -1,0 +1,615 @@
+{
+  "scope": "Published draft byte/hash witnesses; profile/source/authority/native execution unqualified",
+  "canonicalProfile": "truss-canonical/0.1.0",
+  "semanticDomain": "truss-group-input/0.1.0",
+  "vectors": [
+    {
+      "name": "original",
+      "relation": "original",
+      "input": {
+        "interfaceVersion": "truss-group-input/0.1.0",
+        "layoutProfile": {
+          "identity": "unqualified-fixture",
+          "version": "0.1.0",
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        "mutationProfile": {
+          "identity": "unqualified-fixture",
+          "version": "0.1.0",
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        "valueProfile": {
+          "identity": "unqualified-fixture",
+          "version": "0.1.0",
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        "catalog": {
+          "selection": "current"
+        },
+        "operations": [
+          {
+            "operation": "update_object",
+            "target": {
+              "state": "stored",
+              "identity": {
+                "id": "1",
+                "typeId": "2",
+                "definitionPin": "original",
+                "owner": {
+                  "documentId": "doc",
+                  "moduleId": "module"
+                }
+              }
+            },
+            "expectedVersion": "1",
+            "set": [
+              {
+                "name": "amount",
+                "value": {
+                  "kind": "decimal",
+                  "text": "1.0"
+                }
+              }
+            ],
+            "unset": []
+          },
+          {
+            "operation": "update_object",
+            "target": {
+              "state": "stored",
+              "identity": {
+                "id": "3",
+                "typeId": "2",
+                "definitionPin": "original",
+                "owner": {
+                  "documentId": "doc",
+                  "moduleId": "module"
+                }
+              }
+            },
+            "set": [],
+            "unset": [
+              "note"
+            ]
+          }
+        ],
+        "assertedOrigin": {
+          "kind": "map",
+          "entries": [
+            {
+              "key": "reason",
+              "value": {
+                "kind": "string",
+                "text": "révision"
+              }
+            }
+          ]
+        }
+      },
+      "canonicalUtf8": "{\"assertedOrigin\":{\"entries\":[{\"key\":\"reason\",\"value\":{\"kind\":\"string\",\"text\":\"révision\"}}],\"kind\":\"map\"},\"catalog\":{\"selection\":\"current\"},\"interfaceVersion\":\"truss-group-input/0.1.0\",\"layoutProfile\":{\"identity\":\"unqualified-fixture\",\"sha256\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"version\":\"0.1.0\"},\"mutationProfile\":{\"identity\":\"unqualified-fixture\",\"sha256\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"version\":\"0.1.0\"},\"operations\":[{\"expectedVersion\":\"1\",\"operation\":\"update_object\",\"set\":[{\"name\":\"amount\",\"value\":{\"kind\":\"decimal\",\"text\":\"1.0\"}}],\"target\":{\"identity\":{\"definitionPin\":\"original\",\"id\":\"1\",\"owner\":{\"documentId\":\"doc\",\"moduleId\":\"module\"},\"typeId\":\"2\"},\"state\":\"stored\"},\"unset\":[]},{\"operation\":\"update_object\",\"set\":[],\"target\":{\"identity\":{\"definitionPin\":\"original\",\"id\":\"3\",\"owner\":{\"documentId\":\"doc\",\"moduleId\":\"module\"},\"typeId\":\"2\"},\"state\":\"stored\"},\"unset\":[\"note\"]}],\"valueProfile\":{\"identity\":\"unqualified-fixture\",\"sha256\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"version\":\"0.1.0\"}}",
+      "preimageBase64": "dHJ1c3MtY2Fub25pY2FsLzAuMS4wCnRydXNzLWdyb3VwLWlucHV0LzAuMS4wCnsiYXNzZXJ0ZWRPcmlnaW4iOnsiZW50cmllcyI6W3sia2V5IjoicmVhc29uIiwidmFsdWUiOnsia2luZCI6InN0cmluZyIsInRleHQiOiJyw6l2aXNpb24ifX1dLCJraW5kIjoibWFwIn0sImNhdGFsb2ciOnsic2VsZWN0aW9uIjoiY3VycmVudCJ9LCJpbnRlcmZhY2VWZXJzaW9uIjoidHJ1c3MtZ3JvdXAtaW5wdXQvMC4xLjAiLCJsYXlvdXRQcm9maWxlIjp7ImlkZW50aXR5IjoidW5xdWFsaWZpZWQtZml4dHVyZSIsInNoYTI1NiI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAiLCJ2ZXJzaW9uIjoiMC4xLjAifSwibXV0YXRpb25Qcm9maWxlIjp7ImlkZW50aXR5IjoidW5xdWFsaWZpZWQtZml4dHVyZSIsInNoYTI1NiI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAiLCJ2ZXJzaW9uIjoiMC4xLjAifSwib3BlcmF0aW9ucyI6W3siZXhwZWN0ZWRWZXJzaW9uIjoiMSIsIm9wZXJhdGlvbiI6InVwZGF0ZV9vYmplY3QiLCJzZXQiOlt7Im5hbWUiOiJhbW91bnQiLCJ2YWx1ZSI6eyJraW5kIjoiZGVjaW1hbCIsInRleHQiOiIxLjAifX1dLCJ0YXJnZXQiOnsiaWRlbnRpdHkiOnsiZGVmaW5pdGlvblBpbiI6Im9yaWdpbmFsIiwiaWQiOiIxIiwib3duZXIiOnsiZG9jdW1lbnRJZCI6ImRvYyIsIm1vZHVsZUlkIjoibW9kdWxlIn0sInR5cGVJZCI6IjIifSwic3RhdGUiOiJzdG9yZWQifSwidW5zZXQiOltdfSx7Im9wZXJhdGlvbiI6InVwZGF0ZV9vYmplY3QiLCJzZXQiOltdLCJ0YXJnZXQiOnsiaWRlbnRpdHkiOnsiZGVmaW5pdGlvblBpbiI6Im9yaWdpbmFsIiwiaWQiOiIzIiwib3duZXIiOnsiZG9jdW1lbnRJZCI6ImRvYyIsIm1vZHVsZUlkIjoibW9kdWxlIn0sInR5cGVJZCI6IjIifSwic3RhdGUiOiJzdG9yZWQifSwidW5zZXQiOlsibm90ZSJdfV0sInZhbHVlUHJvZmlsZSI6eyJpZGVudGl0eSI6InVucXVhbGlmaWVkLWZpeHR1cmUiLCJzaGEyNTYiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwIiwidmVyc2lvbiI6IjAuMS4wIn19",
+      "sha256": "e1e12873b5c39c69051c4b6e4f0a1ba5f047ff66733daa06a433c19d1b865f94"
+    },
+    {
+      "name": "object_member_permutation",
+      "relation": "same_as_original",
+      "input": {
+        "assertedOrigin": {
+          "kind": "map",
+          "entries": [
+            {
+              "key": "reason",
+              "value": {
+                "kind": "string",
+                "text": "révision"
+              }
+            }
+          ]
+        },
+        "operations": [
+          {
+            "operation": "update_object",
+            "target": {
+              "state": "stored",
+              "identity": {
+                "id": "1",
+                "typeId": "2",
+                "definitionPin": "original",
+                "owner": {
+                  "documentId": "doc",
+                  "moduleId": "module"
+                }
+              }
+            },
+            "expectedVersion": "1",
+            "set": [
+              {
+                "name": "amount",
+                "value": {
+                  "kind": "decimal",
+                  "text": "1.0"
+                }
+              }
+            ],
+            "unset": []
+          },
+          {
+            "operation": "update_object",
+            "target": {
+              "state": "stored",
+              "identity": {
+                "id": "3",
+                "typeId": "2",
+                "definitionPin": "original",
+                "owner": {
+                  "documentId": "doc",
+                  "moduleId": "module"
+                }
+              }
+            },
+            "set": [],
+            "unset": [
+              "note"
+            ]
+          }
+        ],
+        "catalog": {
+          "selection": "current"
+        },
+        "valueProfile": {
+          "identity": "unqualified-fixture",
+          "version": "0.1.0",
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        "mutationProfile": {
+          "identity": "unqualified-fixture",
+          "version": "0.1.0",
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        "layoutProfile": {
+          "identity": "unqualified-fixture",
+          "version": "0.1.0",
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        "interfaceVersion": "truss-group-input/0.1.0"
+      },
+      "canonicalUtf8": "{\"assertedOrigin\":{\"entries\":[{\"key\":\"reason\",\"value\":{\"kind\":\"string\",\"text\":\"révision\"}}],\"kind\":\"map\"},\"catalog\":{\"selection\":\"current\"},\"interfaceVersion\":\"truss-group-input/0.1.0\",\"layoutProfile\":{\"identity\":\"unqualified-fixture\",\"sha256\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"version\":\"0.1.0\"},\"mutationProfile\":{\"identity\":\"unqualified-fixture\",\"sha256\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"version\":\"0.1.0\"},\"operations\":[{\"expectedVersion\":\"1\",\"operation\":\"update_object\",\"set\":[{\"name\":\"amount\",\"value\":{\"kind\":\"decimal\",\"text\":\"1.0\"}}],\"target\":{\"identity\":{\"definitionPin\":\"original\",\"id\":\"1\",\"owner\":{\"documentId\":\"doc\",\"moduleId\":\"module\"},\"typeId\":\"2\"},\"state\":\"stored\"},\"unset\":[]},{\"operation\":\"update_object\",\"set\":[],\"target\":{\"identity\":{\"definitionPin\":\"original\",\"id\":\"3\",\"owner\":{\"documentId\":\"doc\",\"moduleId\":\"module\"},\"typeId\":\"2\"},\"state\":\"stored\"},\"unset\":[\"note\"]}],\"valueProfile\":{\"identity\":\"unqualified-fixture\",\"sha256\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"version\":\"0.1.0\"}}",
+      "preimageBase64": "dHJ1c3MtY2Fub25pY2FsLzAuMS4wCnRydXNzLWdyb3VwLWlucHV0LzAuMS4wCnsiYXNzZXJ0ZWRPcmlnaW4iOnsiZW50cmllcyI6W3sia2V5IjoicmVhc29uIiwidmFsdWUiOnsia2luZCI6InN0cmluZyIsInRleHQiOiJyw6l2aXNpb24ifX1dLCJraW5kIjoibWFwIn0sImNhdGFsb2ciOnsic2VsZWN0aW9uIjoiY3VycmVudCJ9LCJpbnRlcmZhY2VWZXJzaW9uIjoidHJ1c3MtZ3JvdXAtaW5wdXQvMC4xLjAiLCJsYXlvdXRQcm9maWxlIjp7ImlkZW50aXR5IjoidW5xdWFsaWZpZWQtZml4dHVyZSIsInNoYTI1NiI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAiLCJ2ZXJzaW9uIjoiMC4xLjAifSwibXV0YXRpb25Qcm9maWxlIjp7ImlkZW50aXR5IjoidW5xdWFsaWZpZWQtZml4dHVyZSIsInNoYTI1NiI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAiLCJ2ZXJzaW9uIjoiMC4xLjAifSwib3BlcmF0aW9ucyI6W3siZXhwZWN0ZWRWZXJzaW9uIjoiMSIsIm9wZXJhdGlvbiI6InVwZGF0ZV9vYmplY3QiLCJzZXQiOlt7Im5hbWUiOiJhbW91bnQiLCJ2YWx1ZSI6eyJraW5kIjoiZGVjaW1hbCIsInRleHQiOiIxLjAifX1dLCJ0YXJnZXQiOnsiaWRlbnRpdHkiOnsiZGVmaW5pdGlvblBpbiI6Im9yaWdpbmFsIiwiaWQiOiIxIiwib3duZXIiOnsiZG9jdW1lbnRJZCI6ImRvYyIsIm1vZHVsZUlkIjoibW9kdWxlIn0sInR5cGVJZCI6IjIifSwic3RhdGUiOiJzdG9yZWQifSwidW5zZXQiOltdfSx7Im9wZXJhdGlvbiI6InVwZGF0ZV9vYmplY3QiLCJzZXQiOltdLCJ0YXJnZXQiOnsiaWRlbnRpdHkiOnsiZGVmaW5pdGlvblBpbiI6Im9yaWdpbmFsIiwiaWQiOiIzIiwib3duZXIiOnsiZG9jdW1lbnRJZCI6ImRvYyIsIm1vZHVsZUlkIjoibW9kdWxlIn0sInR5cGVJZCI6IjIifSwic3RhdGUiOiJzdG9yZWQifSwidW5zZXQiOlsibm90ZSJdfV0sInZhbHVlUHJvZmlsZSI6eyJpZGVudGl0eSI6InVucXVhbGlmaWVkLWZpeHR1cmUiLCJzaGEyNTYiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwIiwidmVyc2lvbiI6IjAuMS4wIn19",
+      "sha256": "e1e12873b5c39c69051c4b6e4f0a1ba5f047ff66733daa06a433c19d1b865f94"
+    },
+    {
+      "name": "operation_order",
+      "relation": "different",
+      "input": {
+        "interfaceVersion": "truss-group-input/0.1.0",
+        "layoutProfile": {
+          "identity": "unqualified-fixture",
+          "version": "0.1.0",
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        "mutationProfile": {
+          "identity": "unqualified-fixture",
+          "version": "0.1.0",
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        "valueProfile": {
+          "identity": "unqualified-fixture",
+          "version": "0.1.0",
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        "catalog": {
+          "selection": "current"
+        },
+        "operations": [
+          {
+            "operation": "update_object",
+            "target": {
+              "state": "stored",
+              "identity": {
+                "id": "3",
+                "typeId": "2",
+                "definitionPin": "original",
+                "owner": {
+                  "documentId": "doc",
+                  "moduleId": "module"
+                }
+              }
+            },
+            "set": [],
+            "unset": [
+              "note"
+            ]
+          },
+          {
+            "operation": "update_object",
+            "target": {
+              "state": "stored",
+              "identity": {
+                "id": "1",
+                "typeId": "2",
+                "definitionPin": "original",
+                "owner": {
+                  "documentId": "doc",
+                  "moduleId": "module"
+                }
+              }
+            },
+            "expectedVersion": "1",
+            "set": [
+              {
+                "name": "amount",
+                "value": {
+                  "kind": "decimal",
+                  "text": "1.0"
+                }
+              }
+            ],
+            "unset": []
+          }
+        ],
+        "assertedOrigin": {
+          "kind": "map",
+          "entries": [
+            {
+              "key": "reason",
+              "value": {
+                "kind": "string",
+                "text": "révision"
+              }
+            }
+          ]
+        }
+      },
+      "canonicalUtf8": "{\"assertedOrigin\":{\"entries\":[{\"key\":\"reason\",\"value\":{\"kind\":\"string\",\"text\":\"révision\"}}],\"kind\":\"map\"},\"catalog\":{\"selection\":\"current\"},\"interfaceVersion\":\"truss-group-input/0.1.0\",\"layoutProfile\":{\"identity\":\"unqualified-fixture\",\"sha256\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"version\":\"0.1.0\"},\"mutationProfile\":{\"identity\":\"unqualified-fixture\",\"sha256\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"version\":\"0.1.0\"},\"operations\":[{\"operation\":\"update_object\",\"set\":[],\"target\":{\"identity\":{\"definitionPin\":\"original\",\"id\":\"3\",\"owner\":{\"documentId\":\"doc\",\"moduleId\":\"module\"},\"typeId\":\"2\"},\"state\":\"stored\"},\"unset\":[\"note\"]},{\"expectedVersion\":\"1\",\"operation\":\"update_object\",\"set\":[{\"name\":\"amount\",\"value\":{\"kind\":\"decimal\",\"text\":\"1.0\"}}],\"target\":{\"identity\":{\"definitionPin\":\"original\",\"id\":\"1\",\"owner\":{\"documentId\":\"doc\",\"moduleId\":\"module\"},\"typeId\":\"2\"},\"state\":\"stored\"},\"unset\":[]}],\"valueProfile\":{\"identity\":\"unqualified-fixture\",\"sha256\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"version\":\"0.1.0\"}}",
+      "preimageBase64": "dHJ1c3MtY2Fub25pY2FsLzAuMS4wCnRydXNzLWdyb3VwLWlucHV0LzAuMS4wCnsiYXNzZXJ0ZWRPcmlnaW4iOnsiZW50cmllcyI6W3sia2V5IjoicmVhc29uIiwidmFsdWUiOnsia2luZCI6InN0cmluZyIsInRleHQiOiJyw6l2aXNpb24ifX1dLCJraW5kIjoibWFwIn0sImNhdGFsb2ciOnsic2VsZWN0aW9uIjoiY3VycmVudCJ9LCJpbnRlcmZhY2VWZXJzaW9uIjoidHJ1c3MtZ3JvdXAtaW5wdXQvMC4xLjAiLCJsYXlvdXRQcm9maWxlIjp7ImlkZW50aXR5IjoidW5xdWFsaWZpZWQtZml4dHVyZSIsInNoYTI1NiI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAiLCJ2ZXJzaW9uIjoiMC4xLjAifSwibXV0YXRpb25Qcm9maWxlIjp7ImlkZW50aXR5IjoidW5xdWFsaWZpZWQtZml4dHVyZSIsInNoYTI1NiI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAiLCJ2ZXJzaW9uIjoiMC4xLjAifSwib3BlcmF0aW9ucyI6W3sib3BlcmF0aW9uIjoidXBkYXRlX29iamVjdCIsInNldCI6W10sInRhcmdldCI6eyJpZGVudGl0eSI6eyJkZWZpbml0aW9uUGluIjoib3JpZ2luYWwiLCJpZCI6IjMiLCJvd25lciI6eyJkb2N1bWVudElkIjoiZG9jIiwibW9kdWxlSWQiOiJtb2R1bGUifSwidHlwZUlkIjoiMiJ9LCJzdGF0ZSI6InN0b3JlZCJ9LCJ1bnNldCI6WyJub3RlIl19LHsiZXhwZWN0ZWRWZXJzaW9uIjoiMSIsIm9wZXJhdGlvbiI6InVwZGF0ZV9vYmplY3QiLCJzZXQiOlt7Im5hbWUiOiJhbW91bnQiLCJ2YWx1ZSI6eyJraW5kIjoiZGVjaW1hbCIsInRleHQiOiIxLjAifX1dLCJ0YXJnZXQiOnsiaWRlbnRpdHkiOnsiZGVmaW5pdGlvblBpbiI6Im9yaWdpbmFsIiwiaWQiOiIxIiwib3duZXIiOnsiZG9jdW1lbnRJZCI6ImRvYyIsIm1vZHVsZUlkIjoibW9kdWxlIn0sInR5cGVJZCI6IjIifSwic3RhdGUiOiJzdG9yZWQifSwidW5zZXQiOltdfV0sInZhbHVlUHJvZmlsZSI6eyJpZGVudGl0eSI6InVucXVhbGlmaWVkLWZpeHR1cmUiLCJzaGEyNTYiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwIiwidmVyc2lvbiI6IjAuMS4wIn19",
+      "sha256": "e281799fd790f7047cad4e492a4038442ffe5b304862317616ecdb06a874a7d7"
+    },
+    {
+      "name": "decimal_lexical_token",
+      "relation": "different",
+      "input": {
+        "interfaceVersion": "truss-group-input/0.1.0",
+        "layoutProfile": {
+          "identity": "unqualified-fixture",
+          "version": "0.1.0",
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        "mutationProfile": {
+          "identity": "unqualified-fixture",
+          "version": "0.1.0",
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        "valueProfile": {
+          "identity": "unqualified-fixture",
+          "version": "0.1.0",
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        "catalog": {
+          "selection": "current"
+        },
+        "operations": [
+          {
+            "operation": "update_object",
+            "target": {
+              "state": "stored",
+              "identity": {
+                "id": "1",
+                "typeId": "2",
+                "definitionPin": "original",
+                "owner": {
+                  "documentId": "doc",
+                  "moduleId": "module"
+                }
+              }
+            },
+            "expectedVersion": "1",
+            "set": [
+              {
+                "name": "amount",
+                "value": {
+                  "kind": "decimal",
+                  "text": "1.00"
+                }
+              }
+            ],
+            "unset": []
+          },
+          {
+            "operation": "update_object",
+            "target": {
+              "state": "stored",
+              "identity": {
+                "id": "3",
+                "typeId": "2",
+                "definitionPin": "original",
+                "owner": {
+                  "documentId": "doc",
+                  "moduleId": "module"
+                }
+              }
+            },
+            "set": [],
+            "unset": [
+              "note"
+            ]
+          }
+        ],
+        "assertedOrigin": {
+          "kind": "map",
+          "entries": [
+            {
+              "key": "reason",
+              "value": {
+                "kind": "string",
+                "text": "révision"
+              }
+            }
+          ]
+        }
+      },
+      "canonicalUtf8": "{\"assertedOrigin\":{\"entries\":[{\"key\":\"reason\",\"value\":{\"kind\":\"string\",\"text\":\"révision\"}}],\"kind\":\"map\"},\"catalog\":{\"selection\":\"current\"},\"interfaceVersion\":\"truss-group-input/0.1.0\",\"layoutProfile\":{\"identity\":\"unqualified-fixture\",\"sha256\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"version\":\"0.1.0\"},\"mutationProfile\":{\"identity\":\"unqualified-fixture\",\"sha256\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"version\":\"0.1.0\"},\"operations\":[{\"expectedVersion\":\"1\",\"operation\":\"update_object\",\"set\":[{\"name\":\"amount\",\"value\":{\"kind\":\"decimal\",\"text\":\"1.00\"}}],\"target\":{\"identity\":{\"definitionPin\":\"original\",\"id\":\"1\",\"owner\":{\"documentId\":\"doc\",\"moduleId\":\"module\"},\"typeId\":\"2\"},\"state\":\"stored\"},\"unset\":[]},{\"operation\":\"update_object\",\"set\":[],\"target\":{\"identity\":{\"definitionPin\":\"original\",\"id\":\"3\",\"owner\":{\"documentId\":\"doc\",\"moduleId\":\"module\"},\"typeId\":\"2\"},\"state\":\"stored\"},\"unset\":[\"note\"]}],\"valueProfile\":{\"identity\":\"unqualified-fixture\",\"sha256\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"version\":\"0.1.0\"}}",
+      "preimageBase64": "dHJ1c3MtY2Fub25pY2FsLzAuMS4wCnRydXNzLWdyb3VwLWlucHV0LzAuMS4wCnsiYXNzZXJ0ZWRPcmlnaW4iOnsiZW50cmllcyI6W3sia2V5IjoicmVhc29uIiwidmFsdWUiOnsia2luZCI6InN0cmluZyIsInRleHQiOiJyw6l2aXNpb24ifX1dLCJraW5kIjoibWFwIn0sImNhdGFsb2ciOnsic2VsZWN0aW9uIjoiY3VycmVudCJ9LCJpbnRlcmZhY2VWZXJzaW9uIjoidHJ1c3MtZ3JvdXAtaW5wdXQvMC4xLjAiLCJsYXlvdXRQcm9maWxlIjp7ImlkZW50aXR5IjoidW5xdWFsaWZpZWQtZml4dHVyZSIsInNoYTI1NiI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAiLCJ2ZXJzaW9uIjoiMC4xLjAifSwibXV0YXRpb25Qcm9maWxlIjp7ImlkZW50aXR5IjoidW5xdWFsaWZpZWQtZml4dHVyZSIsInNoYTI1NiI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAiLCJ2ZXJzaW9uIjoiMC4xLjAifSwib3BlcmF0aW9ucyI6W3siZXhwZWN0ZWRWZXJzaW9uIjoiMSIsIm9wZXJhdGlvbiI6InVwZGF0ZV9vYmplY3QiLCJzZXQiOlt7Im5hbWUiOiJhbW91bnQiLCJ2YWx1ZSI6eyJraW5kIjoiZGVjaW1hbCIsInRleHQiOiIxLjAwIn19XSwidGFyZ2V0Ijp7ImlkZW50aXR5Ijp7ImRlZmluaXRpb25QaW4iOiJvcmlnaW5hbCIsImlkIjoiMSIsIm93bmVyIjp7ImRvY3VtZW50SWQiOiJkb2MiLCJtb2R1bGVJZCI6Im1vZHVsZSJ9LCJ0eXBlSWQiOiIyIn0sInN0YXRlIjoic3RvcmVkIn0sInVuc2V0IjpbXX0seyJvcGVyYXRpb24iOiJ1cGRhdGVfb2JqZWN0Iiwic2V0IjpbXSwidGFyZ2V0Ijp7ImlkZW50aXR5Ijp7ImRlZmluaXRpb25QaW4iOiJvcmlnaW5hbCIsImlkIjoiMyIsIm93bmVyIjp7ImRvY3VtZW50SWQiOiJkb2MiLCJtb2R1bGVJZCI6Im1vZHVsZSJ9LCJ0eXBlSWQiOiIyIn0sInN0YXRlIjoic3RvcmVkIn0sInVuc2V0IjpbIm5vdGUiXX1dLCJ2YWx1ZVByb2ZpbGUiOnsiaWRlbnRpdHkiOiJ1bnF1YWxpZmllZC1maXh0dXJlIiwic2hhMjU2IjoiMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMCIsInZlcnNpb24iOiIwLjEuMCJ9fQ==",
+      "sha256": "30f015c2eceef7bbf6ae5dbe49b37fcb56ec5e7a152da47609f7ec1ddf869b26"
+    },
+    {
+      "name": "value_family",
+      "relation": "different",
+      "input": {
+        "interfaceVersion": "truss-group-input/0.1.0",
+        "layoutProfile": {
+          "identity": "unqualified-fixture",
+          "version": "0.1.0",
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        "mutationProfile": {
+          "identity": "unqualified-fixture",
+          "version": "0.1.0",
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        "valueProfile": {
+          "identity": "unqualified-fixture",
+          "version": "0.1.0",
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        "catalog": {
+          "selection": "current"
+        },
+        "operations": [
+          {
+            "operation": "update_object",
+            "target": {
+              "state": "stored",
+              "identity": {
+                "id": "1",
+                "typeId": "2",
+                "definitionPin": "original",
+                "owner": {
+                  "documentId": "doc",
+                  "moduleId": "module"
+                }
+              }
+            },
+            "expectedVersion": "1",
+            "set": [
+              {
+                "name": "amount",
+                "value": {
+                  "kind": "string",
+                  "text": "1.0"
+                }
+              }
+            ],
+            "unset": []
+          },
+          {
+            "operation": "update_object",
+            "target": {
+              "state": "stored",
+              "identity": {
+                "id": "3",
+                "typeId": "2",
+                "definitionPin": "original",
+                "owner": {
+                  "documentId": "doc",
+                  "moduleId": "module"
+                }
+              }
+            },
+            "set": [],
+            "unset": [
+              "note"
+            ]
+          }
+        ],
+        "assertedOrigin": {
+          "kind": "map",
+          "entries": [
+            {
+              "key": "reason",
+              "value": {
+                "kind": "string",
+                "text": "révision"
+              }
+            }
+          ]
+        }
+      },
+      "canonicalUtf8": "{\"assertedOrigin\":{\"entries\":[{\"key\":\"reason\",\"value\":{\"kind\":\"string\",\"text\":\"révision\"}}],\"kind\":\"map\"},\"catalog\":{\"selection\":\"current\"},\"interfaceVersion\":\"truss-group-input/0.1.0\",\"layoutProfile\":{\"identity\":\"unqualified-fixture\",\"sha256\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"version\":\"0.1.0\"},\"mutationProfile\":{\"identity\":\"unqualified-fixture\",\"sha256\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"version\":\"0.1.0\"},\"operations\":[{\"expectedVersion\":\"1\",\"operation\":\"update_object\",\"set\":[{\"name\":\"amount\",\"value\":{\"kind\":\"string\",\"text\":\"1.0\"}}],\"target\":{\"identity\":{\"definitionPin\":\"original\",\"id\":\"1\",\"owner\":{\"documentId\":\"doc\",\"moduleId\":\"module\"},\"typeId\":\"2\"},\"state\":\"stored\"},\"unset\":[]},{\"operation\":\"update_object\",\"set\":[],\"target\":{\"identity\":{\"definitionPin\":\"original\",\"id\":\"3\",\"owner\":{\"documentId\":\"doc\",\"moduleId\":\"module\"},\"typeId\":\"2\"},\"state\":\"stored\"},\"unset\":[\"note\"]}],\"valueProfile\":{\"identity\":\"unqualified-fixture\",\"sha256\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"version\":\"0.1.0\"}}",
+      "preimageBase64": "dHJ1c3MtY2Fub25pY2FsLzAuMS4wCnRydXNzLWdyb3VwLWlucHV0LzAuMS4wCnsiYXNzZXJ0ZWRPcmlnaW4iOnsiZW50cmllcyI6W3sia2V5IjoicmVhc29uIiwidmFsdWUiOnsia2luZCI6InN0cmluZyIsInRleHQiOiJyw6l2aXNpb24ifX1dLCJraW5kIjoibWFwIn0sImNhdGFsb2ciOnsic2VsZWN0aW9uIjoiY3VycmVudCJ9LCJpbnRlcmZhY2VWZXJzaW9uIjoidHJ1c3MtZ3JvdXAtaW5wdXQvMC4xLjAiLCJsYXlvdXRQcm9maWxlIjp7ImlkZW50aXR5IjoidW5xdWFsaWZpZWQtZml4dHVyZSIsInNoYTI1NiI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAiLCJ2ZXJzaW9uIjoiMC4xLjAifSwibXV0YXRpb25Qcm9maWxlIjp7ImlkZW50aXR5IjoidW5xdWFsaWZpZWQtZml4dHVyZSIsInNoYTI1NiI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAiLCJ2ZXJzaW9uIjoiMC4xLjAifSwib3BlcmF0aW9ucyI6W3siZXhwZWN0ZWRWZXJzaW9uIjoiMSIsIm9wZXJhdGlvbiI6InVwZGF0ZV9vYmplY3QiLCJzZXQiOlt7Im5hbWUiOiJhbW91bnQiLCJ2YWx1ZSI6eyJraW5kIjoic3RyaW5nIiwidGV4dCI6IjEuMCJ9fV0sInRhcmdldCI6eyJpZGVudGl0eSI6eyJkZWZpbml0aW9uUGluIjoib3JpZ2luYWwiLCJpZCI6IjEiLCJvd25lciI6eyJkb2N1bWVudElkIjoiZG9jIiwibW9kdWxlSWQiOiJtb2R1bGUifSwidHlwZUlkIjoiMiJ9LCJzdGF0ZSI6InN0b3JlZCJ9LCJ1bnNldCI6W119LHsib3BlcmF0aW9uIjoidXBkYXRlX29iamVjdCIsInNldCI6W10sInRhcmdldCI6eyJpZGVudGl0eSI6eyJkZWZpbml0aW9uUGluIjoib3JpZ2luYWwiLCJpZCI6IjMiLCJvd25lciI6eyJkb2N1bWVudElkIjoiZG9jIiwibW9kdWxlSWQiOiJtb2R1bGUifSwidHlwZUlkIjoiMiJ9LCJzdGF0ZSI6InN0b3JlZCJ9LCJ1bnNldCI6WyJub3RlIl19XSwidmFsdWVQcm9maWxlIjp7ImlkZW50aXR5IjoidW5xdWFsaWZpZWQtZml4dHVyZSIsInNoYTI1NiI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAiLCJ2ZXJzaW9uIjoiMC4xLjAifX0=",
+      "sha256": "fe729283c56acc54bd3aa8af076491f70ba4c2435e0c20e3fcdebbb39b9a4fd6"
+    },
+    {
+      "name": "expected_version_omission",
+      "relation": "different",
+      "input": {
+        "interfaceVersion": "truss-group-input/0.1.0",
+        "layoutProfile": {
+          "identity": "unqualified-fixture",
+          "version": "0.1.0",
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        "mutationProfile": {
+          "identity": "unqualified-fixture",
+          "version": "0.1.0",
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        "valueProfile": {
+          "identity": "unqualified-fixture",
+          "version": "0.1.0",
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        "catalog": {
+          "selection": "current"
+        },
+        "operations": [
+          {
+            "operation": "update_object",
+            "target": {
+              "state": "stored",
+              "identity": {
+                "id": "1",
+                "typeId": "2",
+                "definitionPin": "original",
+                "owner": {
+                  "documentId": "doc",
+                  "moduleId": "module"
+                }
+              }
+            },
+            "set": [
+              {
+                "name": "amount",
+                "value": {
+                  "kind": "decimal",
+                  "text": "1.0"
+                }
+              }
+            ],
+            "unset": []
+          },
+          {
+            "operation": "update_object",
+            "target": {
+              "state": "stored",
+              "identity": {
+                "id": "3",
+                "typeId": "2",
+                "definitionPin": "original",
+                "owner": {
+                  "documentId": "doc",
+                  "moduleId": "module"
+                }
+              }
+            },
+            "set": [],
+            "unset": [
+              "note"
+            ]
+          }
+        ],
+        "assertedOrigin": {
+          "kind": "map",
+          "entries": [
+            {
+              "key": "reason",
+              "value": {
+                "kind": "string",
+                "text": "révision"
+              }
+            }
+          ]
+        }
+      },
+      "canonicalUtf8": "{\"assertedOrigin\":{\"entries\":[{\"key\":\"reason\",\"value\":{\"kind\":\"string\",\"text\":\"révision\"}}],\"kind\":\"map\"},\"catalog\":{\"selection\":\"current\"},\"interfaceVersion\":\"truss-group-input/0.1.0\",\"layoutProfile\":{\"identity\":\"unqualified-fixture\",\"sha256\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"version\":\"0.1.0\"},\"mutationProfile\":{\"identity\":\"unqualified-fixture\",\"sha256\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"version\":\"0.1.0\"},\"operations\":[{\"operation\":\"update_object\",\"set\":[{\"name\":\"amount\",\"value\":{\"kind\":\"decimal\",\"text\":\"1.0\"}}],\"target\":{\"identity\":{\"definitionPin\":\"original\",\"id\":\"1\",\"owner\":{\"documentId\":\"doc\",\"moduleId\":\"module\"},\"typeId\":\"2\"},\"state\":\"stored\"},\"unset\":[]},{\"operation\":\"update_object\",\"set\":[],\"target\":{\"identity\":{\"definitionPin\":\"original\",\"id\":\"3\",\"owner\":{\"documentId\":\"doc\",\"moduleId\":\"module\"},\"typeId\":\"2\"},\"state\":\"stored\"},\"unset\":[\"note\"]}],\"valueProfile\":{\"identity\":\"unqualified-fixture\",\"sha256\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"version\":\"0.1.0\"}}",
+      "preimageBase64": "dHJ1c3MtY2Fub25pY2FsLzAuMS4wCnRydXNzLWdyb3VwLWlucHV0LzAuMS4wCnsiYXNzZXJ0ZWRPcmlnaW4iOnsiZW50cmllcyI6W3sia2V5IjoicmVhc29uIiwidmFsdWUiOnsia2luZCI6InN0cmluZyIsInRleHQiOiJyw6l2aXNpb24ifX1dLCJraW5kIjoibWFwIn0sImNhdGFsb2ciOnsic2VsZWN0aW9uIjoiY3VycmVudCJ9LCJpbnRlcmZhY2VWZXJzaW9uIjoidHJ1c3MtZ3JvdXAtaW5wdXQvMC4xLjAiLCJsYXlvdXRQcm9maWxlIjp7ImlkZW50aXR5IjoidW5xdWFsaWZpZWQtZml4dHVyZSIsInNoYTI1NiI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAiLCJ2ZXJzaW9uIjoiMC4xLjAifSwibXV0YXRpb25Qcm9maWxlIjp7ImlkZW50aXR5IjoidW5xdWFsaWZpZWQtZml4dHVyZSIsInNoYTI1NiI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAiLCJ2ZXJzaW9uIjoiMC4xLjAifSwib3BlcmF0aW9ucyI6W3sib3BlcmF0aW9uIjoidXBkYXRlX29iamVjdCIsInNldCI6W3sibmFtZSI6ImFtb3VudCIsInZhbHVlIjp7ImtpbmQiOiJkZWNpbWFsIiwidGV4dCI6IjEuMCJ9fV0sInRhcmdldCI6eyJpZGVudGl0eSI6eyJkZWZpbml0aW9uUGluIjoib3JpZ2luYWwiLCJpZCI6IjEiLCJvd25lciI6eyJkb2N1bWVudElkIjoiZG9jIiwibW9kdWxlSWQiOiJtb2R1bGUifSwidHlwZUlkIjoiMiJ9LCJzdGF0ZSI6InN0b3JlZCJ9LCJ1bnNldCI6W119LHsib3BlcmF0aW9uIjoidXBkYXRlX29iamVjdCIsInNldCI6W10sInRhcmdldCI6eyJpZGVudGl0eSI6eyJkZWZpbml0aW9uUGluIjoib3JpZ2luYWwiLCJpZCI6IjMiLCJvd25lciI6eyJkb2N1bWVudElkIjoiZG9jIiwibW9kdWxlSWQiOiJtb2R1bGUifSwidHlwZUlkIjoiMiJ9LCJzdGF0ZSI6InN0b3JlZCJ9LCJ1bnNldCI6WyJub3RlIl19XSwidmFsdWVQcm9maWxlIjp7ImlkZW50aXR5IjoidW5xdWFsaWZpZWQtZml4dHVyZSIsInNoYTI1NiI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAiLCJ2ZXJzaW9uIjoiMC4xLjAifX0=",
+      "sha256": "a5bc052961da0afe46e6b2cf529c8664707f483248222172b2b5ab301d2adbfe"
+    },
+    {
+      "name": "asserted_origin",
+      "relation": "different",
+      "input": {
+        "interfaceVersion": "truss-group-input/0.1.0",
+        "layoutProfile": {
+          "identity": "unqualified-fixture",
+          "version": "0.1.0",
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        "mutationProfile": {
+          "identity": "unqualified-fixture",
+          "version": "0.1.0",
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        "valueProfile": {
+          "identity": "unqualified-fixture",
+          "version": "0.1.0",
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        "catalog": {
+          "selection": "current"
+        },
+        "operations": [
+          {
+            "operation": "update_object",
+            "target": {
+              "state": "stored",
+              "identity": {
+                "id": "1",
+                "typeId": "2",
+                "definitionPin": "original",
+                "owner": {
+                  "documentId": "doc",
+                  "moduleId": "module"
+                }
+              }
+            },
+            "expectedVersion": "1",
+            "set": [
+              {
+                "name": "amount",
+                "value": {
+                  "kind": "decimal",
+                  "text": "1.0"
+                }
+              }
+            ],
+            "unset": []
+          },
+          {
+            "operation": "update_object",
+            "target": {
+              "state": "stored",
+              "identity": {
+                "id": "3",
+                "typeId": "2",
+                "definitionPin": "original",
+                "owner": {
+                  "documentId": "doc",
+                  "moduleId": "module"
+                }
+              }
+            },
+            "set": [],
+            "unset": [
+              "note"
+            ]
+          }
+        ],
+        "assertedOrigin": {
+          "kind": "map",
+          "entries": [
+            {
+              "key": "reason",
+              "value": {
+                "kind": "string",
+                "text": "changed reason"
+              }
+            }
+          ]
+        }
+      },
+      "canonicalUtf8": "{\"assertedOrigin\":{\"entries\":[{\"key\":\"reason\",\"value\":{\"kind\":\"string\",\"text\":\"changed reason\"}}],\"kind\":\"map\"},\"catalog\":{\"selection\":\"current\"},\"interfaceVersion\":\"truss-group-input/0.1.0\",\"layoutProfile\":{\"identity\":\"unqualified-fixture\",\"sha256\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"version\":\"0.1.0\"},\"mutationProfile\":{\"identity\":\"unqualified-fixture\",\"sha256\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"version\":\"0.1.0\"},\"operations\":[{\"expectedVersion\":\"1\",\"operation\":\"update_object\",\"set\":[{\"name\":\"amount\",\"value\":{\"kind\":\"decimal\",\"text\":\"1.0\"}}],\"target\":{\"identity\":{\"definitionPin\":\"original\",\"id\":\"1\",\"owner\":{\"documentId\":\"doc\",\"moduleId\":\"module\"},\"typeId\":\"2\"},\"state\":\"stored\"},\"unset\":[]},{\"operation\":\"update_object\",\"set\":[],\"target\":{\"identity\":{\"definitionPin\":\"original\",\"id\":\"3\",\"owner\":{\"documentId\":\"doc\",\"moduleId\":\"module\"},\"typeId\":\"2\"},\"state\":\"stored\"},\"unset\":[\"note\"]}],\"valueProfile\":{\"identity\":\"unqualified-fixture\",\"sha256\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"version\":\"0.1.0\"}}",
+      "preimageBase64": "dHJ1c3MtY2Fub25pY2FsLzAuMS4wCnRydXNzLWdyb3VwLWlucHV0LzAuMS4wCnsiYXNzZXJ0ZWRPcmlnaW4iOnsiZW50cmllcyI6W3sia2V5IjoicmVhc29uIiwidmFsdWUiOnsia2luZCI6InN0cmluZyIsInRleHQiOiJjaGFuZ2VkIHJlYXNvbiJ9fV0sImtpbmQiOiJtYXAifSwiY2F0YWxvZyI6eyJzZWxlY3Rpb24iOiJjdXJyZW50In0sImludGVyZmFjZVZlcnNpb24iOiJ0cnVzcy1ncm91cC1pbnB1dC8wLjEuMCIsImxheW91dFByb2ZpbGUiOnsiaWRlbnRpdHkiOiJ1bnF1YWxpZmllZC1maXh0dXJlIiwic2hhMjU2IjoiMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMCIsInZlcnNpb24iOiIwLjEuMCJ9LCJtdXRhdGlvblByb2ZpbGUiOnsiaWRlbnRpdHkiOiJ1bnF1YWxpZmllZC1maXh0dXJlIiwic2hhMjU2IjoiMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMCIsInZlcnNpb24iOiIwLjEuMCJ9LCJvcGVyYXRpb25zIjpbeyJleHBlY3RlZFZlcnNpb24iOiIxIiwib3BlcmF0aW9uIjoidXBkYXRlX29iamVjdCIsInNldCI6W3sibmFtZSI6ImFtb3VudCIsInZhbHVlIjp7ImtpbmQiOiJkZWNpbWFsIiwidGV4dCI6IjEuMCJ9fV0sInRhcmdldCI6eyJpZGVudGl0eSI6eyJkZWZpbml0aW9uUGluIjoib3JpZ2luYWwiLCJpZCI6IjEiLCJvd25lciI6eyJkb2N1bWVudElkIjoiZG9jIiwibW9kdWxlSWQiOiJtb2R1bGUifSwidHlwZUlkIjoiMiJ9LCJzdGF0ZSI6InN0b3JlZCJ9LCJ1bnNldCI6W119LHsib3BlcmF0aW9uIjoidXBkYXRlX29iamVjdCIsInNldCI6W10sInRhcmdldCI6eyJpZGVudGl0eSI6eyJkZWZpbml0aW9uUGluIjoib3JpZ2luYWwiLCJpZCI6IjMiLCJvd25lciI6eyJkb2N1bWVudElkIjoiZG9jIiwibW9kdWxlSWQiOiJtb2R1bGUifSwidHlwZUlkIjoiMiJ9LCJzdGF0ZSI6InN0b3JlZCJ9LCJ1bnNldCI6WyJub3RlIl19XSwidmFsdWVQcm9maWxlIjp7ImlkZW50aXR5IjoidW5xdWFsaWZpZWQtZml4dHVyZSIsInNoYTI1NiI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAiLCJ2ZXJzaW9uIjoiMC4xLjAifX0=",
+      "sha256": "e573c632104fc4992ab974d7eaa07f5609983c949fd7d598d94bc823d5522209"
+    }
+  ]
+}

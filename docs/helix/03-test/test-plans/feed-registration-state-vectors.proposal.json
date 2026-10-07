@@ -1,0 +1,190 @@
+{
+  "profile": "truss-feed-registration-state-vectors/0.1.0",
+  "status": "planned_unadopted",
+  "nativeExecution": false,
+  "scope": "Independently authored symbolic complete parent/member/closure states for the retained-stale-tuple candidate. Labels require actual original admitted artifacts; no wire encoding, native authority or runtime support follows. All dirty/reserved states refuse commit until complete finalization and independent required-effect proof.",
+  "states": {
+    "B_final": {
+      "transactionPresent": true,
+      "registrationCounter": "1",
+      "prerequisiteCounter": "0",
+      "configurationCounter": "0",
+      "membershipGeneration": "1",
+      "finalizedGeneration": "1",
+      "manifest": "original-canonical-B",
+      "members": {
+        "B": {
+          "address": "1",
+          "ordinal": "0",
+          "clock": "original-clock-B"
+        }
+      },
+      "catalogPrerequisites": {},
+      "configurationPrerequisites": {}
+    },
+    "C_reserved": {
+      "transactionPresent": true,
+      "registrationCounter": "2",
+      "prerequisiteCounter": "0",
+      "configurationCounter": "0",
+      "membershipGeneration": "2",
+      "finalizedGeneration": "1",
+      "manifest": "original-canonical-B",
+      "members": {
+        "B": {
+          "address": "1",
+          "ordinal": "0",
+          "clock": "original-clock-B"
+        }
+      },
+      "catalogPrerequisites": {},
+      "configurationPrerequisites": {}
+    },
+    "BC_dirty": {
+      "transactionPresent": true,
+      "registrationCounter": "2",
+      "prerequisiteCounter": "0",
+      "configurationCounter": "0",
+      "membershipGeneration": "2",
+      "finalizedGeneration": "1",
+      "manifest": "original-canonical-B",
+      "members": {
+        "B": {
+          "address": "1",
+          "ordinal": "0",
+          "clock": "original-clock-B"
+        },
+        "C": {
+          "address": "2",
+          "ordinal": null,
+          "clock": "original-clock-C"
+        }
+      },
+      "catalogPrerequisites": {},
+      "configurationPrerequisites": {}
+    },
+    "BCK_dirty": {
+      "transactionPresent": true,
+      "registrationCounter": "2",
+      "prerequisiteCounter": "1",
+      "configurationCounter": "0",
+      "membershipGeneration": "3",
+      "finalizedGeneration": "1",
+      "manifest": "original-canonical-B",
+      "members": {
+        "B": {
+          "address": "1",
+          "ordinal": "0",
+          "clock": "original-clock-B"
+        },
+        "C": {
+          "address": "2",
+          "ordinal": null,
+          "clock": "original-clock-C"
+        }
+      },
+      "catalogPrerequisites": {
+        "K": {
+          "address": "1",
+          "originals": "original-catalog-K"
+        }
+      },
+      "configurationPrerequisites": {}
+    },
+    "BCKF_dirty": {
+      "transactionPresent": true,
+      "registrationCounter": "2",
+      "prerequisiteCounter": "1",
+      "configurationCounter": "1",
+      "membershipGeneration": "4",
+      "finalizedGeneration": "1",
+      "manifest": "original-canonical-B",
+      "members": {
+        "B": {
+          "address": "1",
+          "ordinal": "0",
+          "clock": "original-clock-B"
+        },
+        "C": {
+          "address": "2",
+          "ordinal": null,
+          "clock": "original-clock-C"
+        }
+      },
+      "catalogPrerequisites": {
+        "K": {
+          "address": "1",
+          "originals": "original-catalog-K"
+        }
+      },
+      "configurationPrerequisites": {
+        "F": {
+          "address": "1",
+          "originals": "original-configuration-F"
+        }
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "RG01",
+      "before": "B_final",
+      "action": "Register genuinely new original C under confirmed whole-operation containment",
+      "expected": "BC_dirty",
+      "oracle": "Only member counter and membership generation advance once; original B clock/ordinal and finalized tuple remain unchanged."
+    },
+    {
+      "id": "RG02",
+      "before": "BC_dirty",
+      "action": "Register original catalog closure K required by the complete original producer union",
+      "expected": "BCK_dirty",
+      "oracle": "Only catalog counter and membership generation advance; member ordinals/clocks/address counter do not change."
+    },
+    {
+      "id": "RG03",
+      "before": "BCK_dirty",
+      "action": "Register original configuration closure F required by the complete original producer union",
+      "expected": "BCKF_dirty",
+      "oracle": "Only configuration counter and membership generation advance; complete original inventory bytes are retained."
+    },
+    {
+      "id": "RG04",
+      "before": "BCKF_dirty",
+      "action": "Repeat each complete identical original B/C/K/F registration",
+      "expected": "BCKF_dirty",
+      "oracle": "No counter/generation/clock/address/ordinal/profile/manifest changes and no reservation/insertion statement invoked."
+    },
+    {
+      "id": "RG05",
+      "before": "B_final",
+      "action": "Confirm C counter reservation then fail C insert; confirm rollback of the original registration savepoint",
+      "intermediate": "C_reserved",
+      "expected": "B_final",
+      "oracle": "The partial parent increment cannot survive containment; all preceding caller B originals remain exact."
+    },
+    {
+      "id": "RG06",
+      "before": "B_final",
+      "action": "Create outer savepoint, perform RG01/RG02/RG03, then confirm rollback to that outer savepoint",
+      "intermediate": "BCKF_dirty",
+      "expected": "B_final",
+      "oracle": "Rollback removes all three registration effects, restores all four counters/finalized originals, and invalidates retained C/K/F captures. Spent enclosing resource usage is not reset."
+    },
+    {
+      "id": "RG07",
+      "before": "B_final",
+      "action": "Reserve C, submit insertion and lose original completion",
+      "outcome": "unresolved_original_recovery",
+      "expected": null,
+      "oracle": "No known restored state, retry, successor registration or successful manifest is claimed before original reconciliation."
+    },
+    {
+      "id": "RG08",
+      "before": "BCKF_dirty",
+      "action": "Attempt same selected original C identity with different original payload/profile/owner/timing",
+      "expected": "BCKF_dirty",
+      "outcome": "confirmed_pre_mutation_refusal",
+      "oracle": "Complete duplicate scan detects conflict before any counter reservation; existing originals remain immutable."
+    }
+  ]
+}

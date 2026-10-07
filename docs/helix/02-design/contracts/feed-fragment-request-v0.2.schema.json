@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:feed-fragment-request:0.2.0",
+  "description": "Version selected by exact manifest/cursor; native original artifact custody and resources remain separate.",
+  "type": "object",
+  "properties": {
+    "manifest": {
+      "$ref": "urn:truss:draft:feed-transaction:0.2.0"
+    },
+    "deliveryProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "limits": {
+      "type": "object",
+      "properties": {
+        "records": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "encodedBytes": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        }
+      },
+      "required": [
+        "records",
+        "encodedBytes"
+      ],
+      "additionalProperties": false
+    },
+    "continuation": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "state": {
+              "const": "first"
+            }
+          },
+          "required": [
+            "state"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "state": {
+              "const": "after"
+            },
+            "cursor": {
+              "$ref": "urn:truss:draft:feed-fragment-cursor:0.2.0"
+            }
+          },
+          "required": [
+            "state",
+            "cursor"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "required": [
+    "manifest",
+    "deliveryProfile",
+    "limits",
+    "continuation"
+  ],
+  "additionalProperties": false
+}

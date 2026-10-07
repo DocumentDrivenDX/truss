@@ -1,0 +1,240 @@
+{
+  "interfaceVersion": "truss-private-cleanup-query-parameters/0.1.0",
+  "status": "unadopted original parameter/output correspondence proposal; no native qualification",
+  "scope": "Six original selected-row/discovery statements only; full-transaction observations remain separately scoped. No caller authorization or public compiler ABI.",
+  "queries": [
+    {
+      "sourcePath": "docs/helix/02-design/contracts/private-custody-cleanup-identity-page-v0.1.proposal.sql",
+      "sourceSha256": "25b81516a22516701ad938c07a704638f4d1d5118501b3caf214b188e9ab5b3a",
+      "statementOrdinal": 1,
+      "operation": "operation discovery first",
+      "parameters": [
+        {
+          "position": 1,
+          "originalOrigin": "qualified RT02 producing-transaction settlement.originalWriterXid",
+          "carrier": "canonical exact text",
+          "nativeCast": "pg_catalog.xid8"
+        }
+      ],
+      "outputAliases": [
+        "original_writer_xid",
+        "operation_ordinal"
+      ],
+      "nativeBinding": "unresolved; original relation/column/type/operator/collation/cut/role profile required",
+      "nullableOutputAliases": []
+    },
+    {
+      "sourcePath": "docs/helix/02-design/contracts/private-custody-cleanup-identity-page-v0.1.proposal.sql",
+      "sourceSha256": "25b81516a22516701ad938c07a704638f4d1d5118501b3caf214b188e9ab5b3a",
+      "statementOrdinal": 2,
+      "operation": "operation discovery continuation",
+      "parameters": [
+        {
+          "position": 1,
+          "originalOrigin": "qualified RT02 producing-transaction settlement.originalWriterXid",
+          "carrier": "canonical exact text",
+          "nativeCast": "pg_catalog.xid8"
+        },
+        {
+          "position": 2,
+          "originalOrigin": "original discovery cursor.operationOrdinal",
+          "carrier": "canonical exact text",
+          "nativeCast": "pg_catalog.int8"
+        }
+      ],
+      "outputAliases": [
+        "original_writer_xid",
+        "operation_ordinal"
+      ],
+      "nativeBinding": "unresolved; original relation/column/type/operator/collation/cut/role profile required",
+      "nullableOutputAliases": []
+    },
+    {
+      "sourcePath": "docs/helix/02-design/contracts/private-custody-cleanup-identity-page-v0.1.proposal.sql",
+      "sourceSha256": "25b81516a22516701ad938c07a704638f4d1d5118501b3caf214b188e9ab5b3a",
+      "statementOrdinal": 3,
+      "operation": "touch discovery first",
+      "parameters": [
+        {
+          "position": 1,
+          "originalOrigin": "qualified RT02 producing-transaction settlement.originalWriterXid",
+          "carrier": "canonical exact text",
+          "nativeCast": "pg_catalog.xid8"
+        }
+      ],
+      "outputAliases": [
+        "original_writer_xid",
+        "owner_kind",
+        "owner_id",
+        "owner_discriminator_id",
+        "property_owner_type_id",
+        "property_id"
+      ],
+      "nativeBinding": "unresolved; original relation/column/type/operator/collation/cut/role profile required",
+      "nullableOutputAliases": []
+    },
+    {
+      "sourcePath": "docs/helix/02-design/contracts/private-custody-cleanup-identity-page-v0.1.proposal.sql",
+      "sourceSha256": "25b81516a22516701ad938c07a704638f4d1d5118501b3caf214b188e9ab5b3a",
+      "statementOrdinal": 4,
+      "operation": "touch discovery continuation",
+      "parameters": [
+        {
+          "position": 1,
+          "originalOrigin": "qualified RT02 producing-transaction settlement.originalWriterXid",
+          "carrier": "canonical exact text",
+          "nativeCast": "pg_catalog.xid8"
+        },
+        {
+          "position": 2,
+          "originalOrigin": "original discovery cursor.ownerKind",
+          "carrier": "canonical exact text",
+          "nativeCast": "pg_catalog.text with original pg_catalog.\"C\" collation"
+        },
+        {
+          "position": 3,
+          "originalOrigin": "original discovery cursor.ownerId",
+          "carrier": "canonical exact text",
+          "nativeCast": "pg_catalog.int8"
+        },
+        {
+          "position": 4,
+          "originalOrigin": "original discovery cursor.ownerDiscriminatorId",
+          "carrier": "canonical exact text",
+          "nativeCast": "pg_catalog.int4"
+        },
+        {
+          "position": 5,
+          "originalOrigin": "original discovery cursor.propertyOwnerTypeId",
+          "carrier": "canonical exact text",
+          "nativeCast": "pg_catalog.int4"
+        },
+        {
+          "position": 6,
+          "originalOrigin": "original discovery cursor.propertyId",
+          "carrier": "canonical exact text",
+          "nativeCast": "pg_catalog.int4"
+        }
+      ],
+      "outputAliases": [
+        "original_writer_xid",
+        "owner_kind",
+        "owner_id",
+        "owner_discriminator_id",
+        "property_owner_type_id",
+        "property_id"
+      ],
+      "nativeBinding": "unresolved; original relation/column/type/operator/collation/cut/role profile required",
+      "nullableOutputAliases": []
+    },
+    {
+      "sourcePath": "docs/helix/02-design/contracts/private-custody-cleanup-selected-row-observation-v0.1.proposal.sql",
+      "sourceSha256": "d2f746a2dc1590036ebedcb2fe7ced62f8ed3b0a623d9825fa326c970cca3f40",
+      "statementOrdinal": 1,
+      "operation": "operation selected snapshot",
+      "parameters": [
+        {
+          "position": 1,
+          "originalOrigin": "qualified RT02 producing-transaction settlement.originalWriterXid",
+          "carrier": "canonical exact text",
+          "nativeCast": "pg_catalog.xid8"
+        },
+        {
+          "position": 2,
+          "originalOrigin": "original admitted operation row.operationOrdinal",
+          "carrier": "canonical exact text",
+          "nativeCast": "pg_catalog.int8"
+        }
+      ],
+      "outputAliases": [
+        "original_writer_xid",
+        "operation_ordinal",
+        "operation_kind",
+        "phase",
+        "effect_generation",
+        "readiness_generation",
+        "sealed_generation",
+        "application_generation",
+        "original_context_bytes_hex",
+        "original_definition_bytes_hex",
+        "original_input_bytes_hex",
+        "original_prestate_bytes_hex",
+        "admitted_candidate_bytes_hex",
+        "effect_obligation_bytes_hex",
+        "original_group_custody_bytes_hex",
+        "application_result_bytes_hex"
+      ],
+      "nativeBinding": "unresolved; original relation/column/type/operator/collation/cut/role profile required",
+      "nullableOutputAliases": [
+        "readiness_generation",
+        "sealed_generation",
+        "application_generation",
+        "application_result_bytes_hex"
+      ]
+    },
+    {
+      "sourcePath": "docs/helix/02-design/contracts/private-custody-cleanup-selected-row-observation-v0.1.proposal.sql",
+      "sourceSha256": "d2f746a2dc1590036ebedcb2fe7ced62f8ed3b0a623d9825fa326c970cca3f40",
+      "statementOrdinal": 2,
+      "operation": "touch selected snapshot",
+      "parameters": [
+        {
+          "position": 1,
+          "originalOrigin": "qualified RT02 producing-transaction settlement.originalWriterXid",
+          "carrier": "canonical exact text",
+          "nativeCast": "pg_catalog.xid8"
+        },
+        {
+          "position": 2,
+          "originalOrigin": "original admitted touch row.ownerKind",
+          "carrier": "canonical exact text",
+          "nativeCast": "pg_catalog.text with original pg_catalog.\"C\" collation"
+        },
+        {
+          "position": 3,
+          "originalOrigin": "original admitted touch row.ownerId",
+          "carrier": "canonical exact text",
+          "nativeCast": "pg_catalog.int8"
+        },
+        {
+          "position": 4,
+          "originalOrigin": "original admitted touch row.ownerDiscriminatorId",
+          "carrier": "canonical exact text",
+          "nativeCast": "pg_catalog.int4"
+        },
+        {
+          "position": 5,
+          "originalOrigin": "original admitted touch row.propertyOwnerTypeId",
+          "carrier": "canonical exact text",
+          "nativeCast": "pg_catalog.int4"
+        },
+        {
+          "position": 6,
+          "originalOrigin": "original admitted touch row.propertyId",
+          "carrier": "canonical exact text",
+          "nativeCast": "pg_catalog.int4"
+        }
+      ],
+      "outputAliases": [
+        "transaction_id",
+        "owner_kind",
+        "owner_id",
+        "owner_discriminator_id",
+        "property_owner_type_id",
+        "property_id",
+        "dirty_generation",
+        "sealed_generation",
+        "original_layout_bytes_hex",
+        "original_home_bytes_hex",
+        "original_owner_property_bytes_hex",
+        "original_operation_bytes_hex"
+      ],
+      "nativeBinding": "unresolved; original relation/column/type/operator/collation/cut/role profile required",
+      "nullableOutputAliases": [
+        "sealed_generation"
+      ]
+    }
+  ],
+  "admission": "Verify producing xid equals selected row/cursor original xid; require exact row-kind/cut/issuer/profile and all native domains before binding. Canonical text does not establish authority. Missing/mismatched/extra parameters refuse before submission.",
+  "resource": "All statement invocations, lookahead and original decode/copy work consume one enclosing cleanup ledger; never reset per query."
+}

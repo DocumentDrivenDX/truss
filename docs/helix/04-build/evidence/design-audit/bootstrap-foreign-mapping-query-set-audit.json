@@ -1,0 +1,7 @@
+{
+  "status": "pass",
+  "scope": "two original source/archive/export pins, parameter-domain/selector, full source-column/cast/array-dimension expressions, clause/order shape and ordered result/nullability manifest consistency only; no native disclosure/cut/array/role/resource or route qualification",
+  "manifestSha256": "928c18933a1c9ddc3f69785c15a832ea40c59483616753e186b1e1253dfcffa2",
+  "queries": 2,
+  "registeredRoutesChanged": false
+}

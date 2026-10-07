@@ -1,0 +1,75 @@
+{
+  "scope": "Current owner/profile dependencies across the full eleven-gate design objective; not a claim that all other authoring is finished",
+  "queueSource": {
+    "path": "docs/helix/04-build/design-decision-queue.md",
+    "sha256": "225aa99c9d084641e8d310463453f9b7b87557e88832ca1a361999316470887b"
+  },
+  "selections": [
+    {
+      "decision": "Retired same-identity lifecycle",
+      "surface": "ADR-004 / US-004 / CONTRACT-003",
+      "state": "owner question pending; no branch selected",
+      "unblocks": [
+        "D-04",
+        "catalog lifecycle"
+      ]
+    },
+    {
+      "decision": "Native hosting and deployment profile",
+      "surface": "CONTRACT-007 / CONTRACT-001",
+      "state": "extension hosting owner choice pending; candidate backend-local account remains unadopted",
+      "unblocks": [
+        "D-03",
+        "enforcement",
+        "policy",
+        "qualification"
+      ]
+    },
+    {
+      "decision": "Complete request receipt persistence",
+      "surface": "ADR-005 / CONTRACT-009 / CONTRACT-004",
+      "state": "unadopted proposal; reconcile persistence with accepted storage direction",
+      "unblocks": [
+        "D-06"
+      ]
+    },
+    {
+      "decision": "Complete history/event row-count interpretation",
+      "surface": "ADR-007 / TD-015 / US-015",
+      "state": "two-property-row criterion interpretation remains unresolved",
+      "unblocks": [
+        "D-07"
+      ]
+    },
+    {
+      "decision": "Catalog acceptance report home",
+      "surface": "CONTRACT-003",
+      "state": "separate immutable report home versus alternative wire/producer redesign remains unselected",
+      "unblocks": [
+        "catalog lifecycle"
+      ]
+    },
+    {
+      "decision": "Pending disclosed ID durability",
+      "surface": "CONTRACT-009 AP03 / FR-15 / US-007",
+      "state": "durable allocation service versus governing clarification remains unselected",
+      "unblocks": [
+        "import",
+        "enforcement"
+      ]
+    },
+    {
+      "decision": "Exact value/codec and compiled bridge tuple",
+      "surface": "ADR-006 / CONTRACT-010 / SD-005 / Weft B-005",
+      "state": "exact selected profile and joint accepted Truss binding remain open",
+      "unblocks": [
+        "D-05",
+        "reads and D-08"
+      ]
+    }
+  ],
+  "designVsBuildRule": "Select/reconcile governing semantics and exact coherent profiles to close design. Later native execution receipts prove implemented support; generic source/shape tests cannot substitute for either.",
+  "newUmfFeatureRequired": false,
+  "goalComplete": false,
+  "remainingIndependentDesignWork": "Exact native producer/decoder/registration/privilege and replacement inventory/conversion outputs must be checked under the selected profiles; no blanket closure is inferred."
+}

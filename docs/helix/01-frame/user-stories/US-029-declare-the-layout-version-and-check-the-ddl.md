@@ -29,7 +29,7 @@ ddx:
 
 ## Context
 
-The layout comment carries its version; the check script exercises constraints and behavior.
+The installed schema marker carries the normative layout version; SQL comments document it. The check script and independent native probes exercise constraints and behavior.
 
 ## Walkthrough
 

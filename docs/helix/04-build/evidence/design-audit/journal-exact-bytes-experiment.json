@@ -1,0 +1,63 @@
+{
+  "scope": "five original byte-preservation and six canonical-base64/strict-UTF8 refusal experiments; 4096-byte local guard is not a production limit",
+  "helperSha256": "a16f7a7a82a1f1c8b872f93b1fe564522f90e2facecffef6d7d7f35d02dc270e",
+  "outcomes": [
+    {
+      "name": "escaped embedded NUL",
+      "inputSha256": "5f1f4d17afbd706cf950006c96e773aa8f9a19611fb0950936f928abc8a4c115",
+      "bytesBase64": "eyJraW5kIjoic3RyaW5nIiwidGV4dCI6ImFcdTAwMDBiIn0=",
+      "exactRoundTrip": true
+    },
+    {
+      "name": "Unicode members",
+      "inputSha256": "9c18e35aa8c147b6f6a82e5a0bbe5986a83d85799d216a589acae55a07631494",
+      "bytesBase64": "eyJtZW1iZXJzIjpbeyJuYW1lIjoiw6kiLCJ2YWx1ZSI6IumbqiJ9LHsibmFtZSI6ImEvYiIsInZhbHVlIjpudWxsfV19",
+      "exactRoundTrip": true
+    },
+    {
+      "name": "token spelling 1.0",
+      "inputSha256": "3093ee03b349448ae885c637641ac183f24ee0d349c79716e56441298a917943",
+      "bytesBase64": "eyJraW5kIjoibnVtYmVyIiwidG9rZW4iOiIxLjAifQ==",
+      "exactRoundTrip": true
+    },
+    {
+      "name": "token spelling 1.00",
+      "inputSha256": "5d69f6d07c4ae12c0853f8c76fd79f20d199b0a5f8624b95eebbeea3856165ac",
+      "bytesBase64": "eyJraW5kIjoibnVtYmVyIiwidG9rZW4iOiIxLjAwIn0=",
+      "exactRoundTrip": true
+    },
+    {
+      "name": "preserved member order",
+      "inputSha256": "cfa8e9fa1328edb42591f452a56182b2860c58bef2b7b7e018f389cd7a667169",
+      "bytesBase64": "eyJtZW1iZXJzIjpbeyJuYW1lIjoieiJ9LHsibmFtZSI6ImEifV19",
+      "exactRoundTrip": true
+    },
+    {
+      "name": "empty",
+      "refused": true
+    },
+    {
+      "name": "missing padding",
+      "refused": true
+    },
+    {
+      "name": "nonzero pad bits",
+      "refused": true
+    },
+    {
+      "name": "URL alphabet",
+      "refused": true
+    },
+    {
+      "name": "invalid UTF8",
+      "refused": true
+    },
+    {
+      "name": "embedded whitespace",
+      "refused": true
+    }
+  ],
+  "nativeExecuted": false,
+  "canonicalJsonQualified": false,
+  "adopted": false
+}

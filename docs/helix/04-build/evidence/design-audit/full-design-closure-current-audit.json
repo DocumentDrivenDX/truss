@@ -1,0 +1,149 @@
+{
+  "scope": "Current full-scope governed design completion audit; structural checks do not prove semantic closure or runtime support",
+  "designGoalComplete": false,
+  "completionRule": "Every gate needs specified original semantics, adopted owner choices where required and execution-ready outputs; native passes are later implementation qualification, not a substitute for design.",
+  "inputs": [
+    {
+      "path": "docs/helix/04-build/design-decision-queue.md",
+      "sha256": "f0aba6e79701b2309f308a6680cab69f50398232e0b29412cc013dde9e574ffc"
+    },
+    {
+      "path": "docs/helix/README.md",
+      "sha256": "56790034c4fde3e8707c487dadabd07d393987a5689cee02a657e4fe8cf4eb91"
+    },
+    {
+      "path": "docs/helix/02-design/architecture.md",
+      "sha256": "5ae2694d75c60415a7ce51856a66c488e31350066b5e3c5c809edf29347ce1c7"
+    },
+    {
+      "path": "docs/helix/04-build/implementation-plan.md",
+      "sha256": "e2c9714229b52af675a666bc90addb48b1d6305c9e85934f25709b5415c35025"
+    },
+    {
+      "path": "docs/helix/04-build/design-coordination.md",
+      "sha256": "6d7ff5b44483b1dc854364d70c98a8a95208f5fbbd157a827f67f5f5315c5c30"
+    }
+  ],
+  "structuralEvidence": {
+    "stories": 45,
+    "criteria": 167,
+    "pairsWithAllReferences": 45,
+    "errors": [],
+    "links": {
+      "scope": "local Markdown file targets and ddx identity references only; no anchor or semantic validation",
+      "artifactIds": 202,
+      "duplicateIds": [],
+      "missingLinkIds": [],
+      "brokenFileTargets": []
+    }
+  },
+  "gates": [
+    {
+      "gate": "1 / D-04",
+      "owningSurface": "CONTRACT-001/003; UMF package boundary",
+      "currentRequiredResolution": "Document-qualified lineage versus current module/element uniqueness; retirement/reactivation; upstream-valid external dependencies, cycles and unresolved categories. UMF owner confirmed current local cycles and invalid missing endpoints; external relationship migration remains future work. [ADR-004](../02-design/adr/ADR-004-document-qualified-catalog-identity.md) proposes exact storage ownership/provenance; tagged synthesized composition lineage candidate is authored; existing authored-core Field identity correspondence is source-reviewed; fixed relationship-lineage adjunct, UMF capture and seventeen source-bound physical entries are authored; complete matching/allocation/UTF-8 ordering and bidirectional pre/post finalization protocols are authored, with bounded collector ordering and high-water callables; exact original extraction, finite/native resource and privilege realization and owner reviews remain. Signed legacy wire/domain compatibility is authored; joint review is pending, no fabricated resolver.",
+      "affectedSlices": "B-006, B-012",
+      "designCompletion": "not_proven",
+      "nativeExecutionRequiredToAuthorDesign": false
+    },
+    {
+      "gate": "2 / D-05",
+      "owningSurface": "CONTRACT-001/004/010; exact carrier contract",
+      "currentRequiredResolution": "Recursive value/presence/opaque, leaf codec, ordered key/comparator and row-home/join definitions are authored; [ADR-006](../02-design/adr/ADR-006-exact-numeric-value-carriers.md) numeric token adoption remains open. Fixed tree/scalar/touch/capacity source candidates retain full original semantics; scalar-root and complete-tree capabilities remain separate. CONTRACT-010 specifies all seven scalar dispatches, CR01\u2013CR06 registration and NX01\u2013NX06 bounded numeric equality/refusal ordering. Eleven independently authored witnesses/seven mathematical-versus-lexical pairs have scoped Decimal evidence. NC01\u2013NC04 mathematical bound comparison and the finite PostgreSQL numeric text-output grammar are now authored; fifteen order pairs have scoped experiment evidence including eleven rational-oracle comparisons. Original source grammar/facet meanings, exact deployed native output/domain/resource producers and adoption remain open; the moving-source review is not a build pin. Current Weft nullable/extra-facet/i64 limits remain explicit compiled-capability boundaries. Seven-stage scalar admission, twelve two-layer scalar vectors, thirteen tree-correlation vectors and TCA01\u2013TCA07 full-tree processing order are authored. Four direct-read source families now have six UMF-captured SELECTs and sixteen SQL/model/export/manifest pins: original owner/property selection, state header, complete node/scalar streams and single-scalar observation. A separate two-route complete-owner enumeration source supplements that unchanged four-family inventory for whole-record membership. Original record-field correlation and independent identity/order/presence controls are authored. A separate two-SELECT selected-state batch candidate preserves full projections and original 1\u2013256-state array/partition admission; existing UMF capture is exact with complete=false. Closed AST/manifest controls cover array scope/order/limits/custody and original projection pins. A separate 128-submission batched lookup candidate addresses the 10000-state/81-data-submission composition; all other limits and the remaining 47-path capacity require full original admission. Actual array transport, complete partition union, same-cut native bounds and adoption remain open; the historical four-family inventory/regressions exclude this candidate. Source/manifest oracles and the dispatcher inventory have scoped corruption controls; FS01\u2013FS08 and complete-tree controls plan native coverage. Storage/readback and equality/order/key/predicate/aggregate capabilities are distinct. Select the exact registered codec definitions, null/key comparison and resource/deployment profiles; complete column-to-codec/domain/source parity and Weft accepted binding adoption. Authored schema/source counts do not establish native support.",
+      "affectedSlices": "B-004 onward",
+      "designCompletion": "not_proven",
+      "nativeExecutionRequiredToAuthorDesign": false
+    },
+    {
+      "gate": "3 / D-03",
+      "owningSurface": "CONTRACT-007",
+      "currentRequiredResolution": "Public binding types, adapter adoption/liveness/cancellation, trusted role/definer capture and profile obligations. [Proposed TypeScript declaration](../02-design/contracts/bindings/truss-execution-v0.1.d.ts) and negative typecheck examples exist; layered server/adapter/pool deadline and setting-restoration semantics are authored; original issuer/epoch/adoption arbitration, explicit savepoint lifetime/host stack/finite cleanup resource, exact parameter translation, positional/native-descriptor/result-tag admission, query-cycle/transaction-state and native failure precedence procedures are now authored in CONTRACT-007. Executor-owned monotone operation ordinals, reserve-before-savepoint admission and assembly-independent issuer lifetime are authored. Adopted-host profiles now require complete participating command-path inventory and shared arbitration; unmediated driver aliases cannot qualify through xid/status polling. STP-044 includes corresponding control-invalidation, unknown-completion and resource-exhaustion cases. Host constraint-timing preservation and original savepoint-contained early-check failure are now authored; immediate-compatible behavior depends on actual native body/statement/firing boundaries. Shared resource-account transition rules and RA01\u2013RA07 expected states now distinguish occupancy, spent and unresolved reservations. A conditional backend-local native account proposal remains unadopted; extension hosting is pending owner input. Remaining: selected driver recognition/hooks/exclusion, native descriptor/command/count/error/termination/timing/account producers, actual pre-materialization bounds, coherent deployment composition and owner review. Authored algorithms do not qualify a driver.",
+      "affectedSlices": "B-005, B-014",
+      "designCompletion": "not_proven",
+      "nativeExecutionRequiredToAuthorDesign": false
+    },
+    {
+      "gate": "4 / D-06",
+      "owningSurface": "CONTRACT-004/009; ADR-002 persistence reconciliation",
+      "currentRequiredResolution": "[ADR-005](../02-design/adr/ADR-005-complete-group-request-receipts.md) proposes fixed complete receipts; select/reconcile persistence and canonical digest/scope/authorization/retention. Preserve request-free group independence.",
+      "affectedSlices": "B-009",
+      "designCompletion": "not_proven",
+      "nativeExecutionRequiredToAuthorDesign": false
+    },
+    {
+      "gate": "5 / D-07",
+      "owningSurface": "CONTRACT-002/006",
+      "currentRequiredResolution": "[ADR-007](../02-design/adr/ADR-007-complete-historical-record-envelopes.md) full history adoption remains open. Feed now has four-store layout, seven registration and eight lookup/finalization source statements, explicit trigger scheduling, typed order/canonical/archive proposals, FV01\u2013FV07 write-free validation and upstream omission scheduling through original operation custody. Source identity union distinguishes 81 proposed physical identities from 3 reference edges; all native bindings remain unresolved. Remaining: selected complete history/feed profile, actual independent five-fact/two-closure extractors and shared validator body, original native clock/codec/account/role/event/retention composition and owner adoption; planned RG/FV/FP cases are not native qualification.",
+      "affectedSlices": "B-007, B-011",
+      "designCompletion": "not_proven",
+      "nativeExecutionRequiredToAuthorDesign": false
+    },
+    {
+      "gate": "6 / enforcement",
+      "owningSurface": "CONTRACT-001/004/005/009",
+      "currentRequiredResolution": "Row-home RH/RF complete mutation/finalization, dirty-generation touch protocol, private routine signatures, explicit observation/deferred trigger source, protected privilege matrix, operation custody, capacity ledger/reservation ordering and RT retention/resource proposals are authored. OC01\u2013OC07 now defines original registry selection, with two private observation sources and sixteen-field projection/decoder handoff; EL01\u2013EL12 defines complete canonical/marker finalization and current-union commit proof. These authored wires are distinct from unresolved actual native bodies/registration. Native marker/key/value/association guarantees, original registry/codec/type/security/role/grant/dependency selections, complete producer/guard inventory and bypass qualification remain. Engine-only validation cannot become database enforcement. Operation/touch retention now has closed private mixed-cohort selection and pending-result wires, a separate resource profile and bounded bidirectional dependency closure; eighteen selection and ten result source-shape controls pass. Remaining cleanup design is exact snapshot/dependency/settlement decoding, native DELETE/grant/current-union and atomic capacity/evidence procedures; finalized phase is not commit proof.",
+      "affectedSlices": "B-008, B-010, B-013",
+      "designCompletion": "not_proven",
+      "nativeExecutionRequiredToAuthorDesign": false
+    },
+    {
+      "gate": "7 / catalog lifecycle",
+      "owningSurface": "CONTRACT-003",
+      "currentRequiredResolution": "Trusted total-transform profile/check order, complete diagnostics/violators, full acceptance fingerprint, postcommit index dispatch/readiness receipt and admission semantics. Whole-attempt report atomicity and candidate-before-persistence transform order are authored; complete rebind-event reporting versus immutable parent-before-effects remains a concrete reconciliation gate. The separate report-home option now has concrete DDL and conditional event/report/head ordering, canonical report bytes, original context/input/event producer ownership, feed revision-fact composition and protected owner-union disclosure. UMF confirmed embedded-diagnostic byte preservation aligns with its boundary; Weft acknowledged no compatibility/adoption follows. Select persistence explicitly, then finish the exact native producer/encoder/group finalization/registration/privilege and complete replacement inventory/conversion design; these authored contracts are not missing wires. TD-013 A1\u2013A5 now authors optional database-wide advisory admission, original transaction/reentry/cross-connection/timeout and full 50 ms measurement design; exact native registry/privilege/fairness/resource profiles and performance review remain.",
+      "affectedSlices": "B-006, B-015",
+      "designCompletion": "not_proven",
+      "nativeExecutionRequiredToAuthorDesign": false
+    },
+    {
+      "gate": "8 / import",
+      "owningSurface": "CONTRACT-001/004",
+      "currentRequiredResolution": "Identity-first precedence, immutable typed endpoint reservation identity, request/batch/resource proposals and report capacity are authored. Deleted provenance uses complete original owner/creation custody under current authority. TD-035 now specifies cleanup dependency closure and preserved result evidence; STP-035 PC01 supplies a barrier-driven newly retained dependency race. Select exact native decoder/reservation/context inventory, producer/accounting, historical loader and retention policy/routine composition under I01\u2013I08; the authored procedures do not qualify native cleanup.",
+      "affectedSlices": "B-010",
+      "designCompletion": "not_proven",
+      "nativeExecutionRequiredToAuthorDesign": false
+    },
+    {
+      "gate": "9 / reads and D-08",
+      "owningSurface": "CONTRACT-004/007; Weft mapping contract",
+      "currentRequiredResolution": "Direct cursor/lookup/page/traversal/private-stage wires, fixed SQL, D0\u2013D7 ordering and finite resources are authored. Row-home join body now includes exact typed/token/source payload and child traversal columns; Weft reviewed selectors as aligned, with optional presence/owner multiplicity/null-root/integrity rules preserved. Select exact native transport/parser/codec/coordinator/comparator/parameter/resource and snapshot/current-authority custody; complete original physical/source admission and safe scalar/whole-value lowering. Committed Weft 5ae231b includes original-profile SELECT assembly, codec-owned direct projections, complete prepared-read physical checks and original-property-coupled scalar custody admission with cumulative local byte/cell bounds. Owner evidence now exercises positive original property/home coupling on synthetic native rows; actual Truss semantic/native/host adoption remains open. Pinned recursive graph/object source now establishes serialized qualified-identity byte comparison, member-name sorting and duplicate-name refusal as concrete consumer assumptions. CONTRACT-007 specifies original per-occurrence whole-value observation under the same cut/account; CONTRACT-010 separates name-addressed projection from exact ordered/source-preserving readback, with FI01\u2013FI04 byte witnesses. Select the actual occurrence/encoding bridge before adopting that exact capability; no new UMF requirement or Truss compiler is implied. Original Record preparation and ordered Column metadata remain compiler-owned. Private custody admission retains native numeric text and source token without semantic comparison; owner evidence is source-pinned, not Truss execution or public result ABI adoption. Truss supplies genuine mapping/domain/host obligations and preserves ordered metadata; executable conversion/decoder/publication and complete selected joint profile remain open. Registered backend support remains separate from source/shape evidence.",
+      "affectedSlices": "B-012",
+      "designCompletion": "not_proven",
+      "nativeExecutionRequiredToAuthorDesign": false
+    },
+    {
+      "gate": "10 / policy",
+      "owningSurface": "CONTRACT-005",
+      "currentRequiredResolution": "Hidden UPDATE outcome is reconciled; indirect deleted-edge journal/tombstone/source visibility, non-superuser definer acting role and catalog-report disclosure. SELECT-only observer/policy/helper and optional-admission cross-connection candidates are authored; the existing current-authority coordinator now has an explicit participant wait matrix and original-context drain prerequisites for conflicting DDL; a concrete raw PostgreSQL 17 role/membership observation and finite resource proposal now preserve separate grantor/admin/inherit/set facts. The proposed protected row-home privilege matrix now separates public read, canonical writer, touch observer, finalizer, commit guard and retention authority and rejects incompatible direct-DML profiles. The feed authority matrix separately covers registration, finalization, validation, consumers, retention and installation, with FP01\u2013FP08 planned bypass and permitted-action controls. Namespace/routine/relation/column/sequence/type/domain/language grant and effective inquiry candidates, tagged RLS principals and command-compatible carriers are now authored under IP01\u2013IP07. Exact original writer capture, complete native producers/decoders/canonical comparisons, actual effective role paths, full dependency/provenance closure and administrative/native profiles remain.",
+      "affectedSlices": "B-013",
+      "designCompletion": "not_proven",
+      "nativeExecutionRequiredToAuthorDesign": false
+    },
+    {
+      "gate": "11 / qualification",
+      "owningSurface": "TP-001, CONTRACT-004/011",
+      "currentRequiredResolution": "V01\u2013V06 in the implementation plan distinguish authored receipts/runner/assessor/resource proposals from exact corpus/native deployment/producer/archive/independent implementation and performance selections. No historical spike auto-qualification.",
+      "affectedSlices": "B-001, B-003, B-015",
+      "designCompletion": "not_proven",
+      "nativeExecutionRequiredToAuthorDesign": false
+    }
+  ],
+  "upstreamFeaturePrerequisite": "No additional UMF capability by default; current owner direction treats existing UMF as sufficient.",
+  "nativeSupportClaim": false,
+  "supplementalAllocations": [
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/import-interruption-recovery-case-inventory.proposal.json",
+      "sha256": "462945d879139f3f12c6ee881671d6a9bf92f11fe9a4f81c8887064056460a44",
+      "cases": 6,
+      "primaryAcceptanceCoverage": false,
+      "nativeStatus": "not_run"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/compiled-consumer-case-inventory.proposal.json",
+      "sha256": "9806a329f533024a5c7624d62381cf4d45329159be2c284ad65382b7940ba344",
+      "cases": 6,
+      "primaryAcceptanceCoverage": false,
+      "nativeStatus": "not_run"
+    }
+  ],
+  "pendingOwnerSelection": "Retired same-identity lifecycle question remains unanswered; neither proposed alternative adopted."
+}

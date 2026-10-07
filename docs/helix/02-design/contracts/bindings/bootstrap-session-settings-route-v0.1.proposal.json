@@ -1,0 +1,88 @@
+{
+  "interfaceVersion": "truss-bootstrap-route-entry/0.1.0",
+  "routeIdentity": "pg17.session-settings.original-context/0.1.0",
+  "status": "unadopted; source pins only verified; native class/cut/transport/semantic producers unqualified",
+  "nativeClass": {
+    "namespace": "pg_catalog",
+    "relation": "context-only; no catalog relation/object identity claimed",
+    "classOid": "not applicable; original connection/transaction/settings context only",
+    "storageScope": "database",
+    "addressability": "No invented pg_settings/setting OID or catalog object address",
+    "subobjectNumber": "not applicable"
+  },
+  "selector": "fixed sixteen-name original session observation",
+  "artifacts": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-session-settings-observation-pg17.proposal.sql",
+      "sha256": "6a107cdda9ff6b7094ff143711d36ef666e56a010d1adbca5c632242ad647b83"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-session-settings-observation-pg17.proposal.umf.json",
+      "sha256": "61621745033f0ed7fecc277e3b9fa7396e1e427b5efcafe80975186a7f572923"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/bootstrap-session-settings-observation.owner-export.sql",
+      "sha256": "7b82c0306e14058522340c0ff7abc7286ac584a5692f41c1ac02e01aff7d11f6"
+    }
+  ],
+  "parameterGrammar": {
+    "slots": [],
+    "nativeTypes": [],
+    "nativeInput": "fixed trusted query allowlist; no arbitrary setting names"
+  },
+  "orderedColumns": [
+    "setting_name",
+    "observed_value"
+  ],
+  "coverage": "Exactly one nonnull observed_value for every fixed setting_name; no missing/extra/duplicate rows; complete original connection/cut context",
+  "requiredKnownFields": [
+    "transaction_isolation",
+    "transaction_read_only",
+    "transaction_deferrable",
+    "client_encoding",
+    "server_encoding",
+    "search_path",
+    "row_security",
+    "session_replication_role",
+    "extra_float_digits",
+    "standard_conforming_strings",
+    "TimeZone",
+    "DateStyle",
+    "IntervalStyle",
+    "statement_timeout",
+    "lock_timeout",
+    "idle_in_transaction_session_timeout"
+  ],
+  "preservation": "Retain full exact returned row JSON text and every unknown extension member; lossless bounded selected native JSON decoder; no parse/stringify reconstruction",
+  "dependencyExtraction": {
+    "meaning": "preserve original exact strings and independently decode selected isolation/access/deferrability/encoding/lookup/RLS/replication/format/timeout meanings; display equality alone not profile admission",
+    "scope": "no general pg_settings/configuration/credential scan, SET/RESET/state change or inferred writer authority",
+    "limits": "fixed allowlist is not complete proof of every deployment timeout/parameter; selected original profile must explicitly identify additional required facts",
+    "fieldClassification": {
+      "transaction_isolation": "original operational session/transaction observation with exact selected native transaction_isolation interpretation and profile requirement check; excluded from stable definition only with retained original custody and explicit governing reason",
+      "transaction_read_only": "original operational session/transaction observation with exact selected native transaction_read_only interpretation and profile requirement check; excluded from stable definition only with retained original custody and explicit governing reason",
+      "transaction_deferrable": "original operational session/transaction observation with exact selected native transaction_deferrable interpretation and profile requirement check; excluded from stable definition only with retained original custody and explicit governing reason",
+      "client_encoding": "original operational session/transaction observation with exact selected native client_encoding interpretation and profile requirement check; excluded from stable definition only with retained original custody and explicit governing reason",
+      "server_encoding": "original operational session/transaction observation with exact selected native server_encoding interpretation and profile requirement check; excluded from stable definition only with retained original custody and explicit governing reason",
+      "search_path": "original operational session/transaction observation with exact selected native search_path interpretation and profile requirement check; excluded from stable definition only with retained original custody and explicit governing reason",
+      "row_security": "original operational session/transaction observation with exact selected native row_security interpretation and profile requirement check; excluded from stable definition only with retained original custody and explicit governing reason",
+      "session_replication_role": "original operational session/transaction observation with exact selected native session_replication_role interpretation and profile requirement check; excluded from stable definition only with retained original custody and explicit governing reason",
+      "extra_float_digits": "original operational session/transaction observation with exact selected native extra_float_digits interpretation and profile requirement check; excluded from stable definition only with retained original custody and explicit governing reason",
+      "standard_conforming_strings": "original operational session/transaction observation with exact selected native standard_conforming_strings interpretation and profile requirement check; excluded from stable definition only with retained original custody and explicit governing reason",
+      "TimeZone": "original operational session/transaction observation with exact selected native TimeZone interpretation and profile requirement check; excluded from stable definition only with retained original custody and explicit governing reason",
+      "DateStyle": "original operational session/transaction observation with exact selected native DateStyle interpretation and profile requirement check; excluded from stable definition only with retained original custody and explicit governing reason",
+      "IntervalStyle": "original operational session/transaction observation with exact selected native IntervalStyle interpretation and profile requirement check; excluded from stable definition only with retained original custody and explicit governing reason",
+      "statement_timeout": "original operational session/transaction observation with exact selected native statement_timeout interpretation and profile requirement check; excluded from stable definition only with retained original custody and explicit governing reason",
+      "lock_timeout": "original operational session/transaction observation with exact selected native lock_timeout interpretation and profile requirement check; excluded from stable definition only with retained original custody and explicit governing reason",
+      "idle_in_transaction_session_timeout": "original operational session/transaction observation with exact selected native idle_in_transaction_session_timeout interpretation and profile requirement check; excluded from stable definition only with retained original custody and explicit governing reason"
+    },
+    "canonicalProcedure": "CONTRACT-008 Target/session context projection: original observed settings compared to separately selected stable execution-profile requirements; retain complete operational evidence, no observed settings manufacture authority"
+  },
+  "adjuncts": [
+    "original connection/transaction/role/target/cut proof",
+    "selected settings native decoding/stability/restoration profile under existing Executor"
+  ],
+  "resourceProfile": "truss-bootstrap-collector-resource/0.1.0",
+  "refusal": "Missing/unavailable/unknown native setting meaning or original context mismatch refuses; raw strings cannot qualify the complete protected cut",
+  "resourceObligations": "Shared enclosing totals, complete original cut/authority and explicit pre-materialization/native-work permits; no independent per-route allowance"
+}

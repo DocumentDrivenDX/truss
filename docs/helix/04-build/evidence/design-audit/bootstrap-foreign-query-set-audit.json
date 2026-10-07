@@ -1,0 +1,41 @@
+{
+  "scope": "fixed six source/AST aliases, field/nullability/disclosure declarations and eight manifest corruption refusals only; no native grammar, resource, privilege, semantics or support qualification",
+  "queries": 6,
+  "controls": [
+    {
+      "control": "remove",
+      "refused": true
+    },
+    {
+      "control": "duplicate",
+      "refused": true
+    },
+    {
+      "control": "reorder",
+      "refused": true
+    },
+    {
+      "control": "nullability",
+      "refused": true
+    },
+    {
+      "control": "pin",
+      "refused": true
+    },
+    {
+      "control": "disclosure",
+      "refused": true
+    },
+    {
+      "control": "params",
+      "refused": true
+    },
+    {
+      "control": "blank",
+      "refused": true
+    }
+  ],
+  "status": "pass",
+  "manifestSha256": "9350fda6a35b679bbc85b95a5bc520a0f18e15a641d335b79cf9b32649d467d1",
+  "checkerSha256": "74c148eec4320367c8282566916f6a835f19d07cbc1e3ce705c00e4777acb909"
+}

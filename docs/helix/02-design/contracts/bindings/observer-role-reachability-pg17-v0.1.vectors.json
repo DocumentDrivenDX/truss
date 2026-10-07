@@ -1,0 +1,244 @@
+{
+  "status": "unadopted independently authored synthetic PG17 membership-option cases",
+  "scope": "static SET and INHERIT closure only; no native identities/grants/options/delegation/ACL/wrapper/RLS/resource qualification",
+  "roles": [
+    "login",
+    "mid",
+    "observer"
+  ],
+  "sessionRole": "login",
+  "activeRole": "login",
+  "observerRole": "observer",
+  "cases": [
+    {
+      "id": "RG01",
+      "name": "isolated observer",
+      "edges": [],
+      "expected": {
+        "outcome": "not_exposed",
+        "switchable": [
+          "login"
+        ],
+        "effectivePrivilegeRoles": [
+          "login"
+        ]
+      }
+    },
+    {
+      "id": "RG02",
+      "name": "inherit only",
+      "edges": [
+        {
+          "member": "login",
+          "role": "observer",
+          "inherit": true,
+          "set": false,
+          "admin": false
+        }
+      ],
+      "expected": {
+        "outcome": "exposed",
+        "switchable": [
+          "login"
+        ],
+        "effectivePrivilegeRoles": [
+          "login",
+          "observer"
+        ]
+      }
+    },
+    {
+      "id": "RG03",
+      "name": "switch only",
+      "edges": [
+        {
+          "member": "login",
+          "role": "observer",
+          "inherit": false,
+          "set": true,
+          "admin": false
+        }
+      ],
+      "expected": {
+        "outcome": "exposed",
+        "switchable": [
+          "login",
+          "observer"
+        ],
+        "effectivePrivilegeRoles": [
+          "login",
+          "observer"
+        ]
+      }
+    },
+    {
+      "id": "RG04",
+      "name": "inherit after switch",
+      "edges": [
+        {
+          "member": "login",
+          "role": "mid",
+          "inherit": false,
+          "set": true,
+          "admin": false
+        },
+        {
+          "member": "mid",
+          "role": "observer",
+          "inherit": true,
+          "set": false,
+          "admin": false
+        }
+      ],
+      "expected": {
+        "outcome": "exposed",
+        "switchable": [
+          "login",
+          "mid"
+        ],
+        "effectivePrivilegeRoles": [
+          "login",
+          "mid",
+          "observer"
+        ]
+      }
+    },
+    {
+      "id": "RG05",
+      "name": "mixed path is not switch permission",
+      "edges": [
+        {
+          "member": "login",
+          "role": "mid",
+          "inherit": true,
+          "set": false,
+          "admin": false
+        },
+        {
+          "member": "mid",
+          "role": "observer",
+          "inherit": false,
+          "set": true,
+          "admin": false
+        }
+      ],
+      "expected": {
+        "outcome": "not_exposed",
+        "switchable": [
+          "login"
+        ],
+        "effectivePrivilegeRoles": [
+          "login",
+          "mid"
+        ]
+      }
+    },
+    {
+      "id": "RG06",
+      "name": "blocked observer edge",
+      "edges": [
+        {
+          "member": "login",
+          "role": "mid",
+          "inherit": false,
+          "set": true,
+          "admin": false
+        },
+        {
+          "member": "mid",
+          "role": "observer",
+          "inherit": false,
+          "set": false,
+          "admin": false
+        }
+      ],
+      "expected": {
+        "outcome": "not_exposed",
+        "switchable": [
+          "login",
+          "mid"
+        ],
+        "effectivePrivilegeRoles": [
+          "login",
+          "mid"
+        ]
+      }
+    },
+    {
+      "id": "RG07",
+      "name": "all SET path",
+      "edges": [
+        {
+          "member": "login",
+          "role": "mid",
+          "inherit": false,
+          "set": true,
+          "admin": false
+        },
+        {
+          "member": "mid",
+          "role": "observer",
+          "inherit": false,
+          "set": true,
+          "admin": false
+        }
+      ],
+      "expected": {
+        "outcome": "exposed",
+        "switchable": [
+          "login",
+          "mid",
+          "observer"
+        ],
+        "effectivePrivilegeRoles": [
+          "login",
+          "mid",
+          "observer"
+        ]
+      }
+    },
+    {
+      "id": "RG08",
+      "name": "cycle is corrupt PG17 inventory",
+      "edges": [
+        {
+          "member": "login",
+          "role": "mid",
+          "inherit": true,
+          "set": true,
+          "admin": false
+        },
+        {
+          "member": "mid",
+          "role": "login",
+          "inherit": true,
+          "set": true,
+          "admin": false
+        }
+      ],
+      "expected": {
+        "outcome": "refused",
+        "switchable": null,
+        "effectivePrivilegeRoles": null
+      }
+    },
+    {
+      "id": "RG09",
+      "name": "PUBLIC membership corrupt",
+      "edges": [
+        {
+          "member": "PUBLIC",
+          "role": "observer",
+          "inherit": true,
+          "set": true,
+          "admin": false
+        }
+      ],
+      "expected": {
+        "outcome": "refused",
+        "switchable": null,
+        "effectivePrivilegeRoles": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,190 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:feed-application:0.2.0",
+  "description": "Application request/result shape; installed/complete labels require original native custody. Proof submission is not verified.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-feed-application/0.2.0"
+    },
+    "installation": {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "const": "installed"
+        },
+        "worker": {
+          "$ref": "urn:truss:draft:feed-progress:0.2.0#/$defs/worker"
+        },
+        "downstreamApplied": {
+          "$ref": "urn:truss:draft:feed-progress:0.2.0"
+        },
+        "installationEvidenceSha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "outcome",
+        "worker",
+        "downstreamApplied",
+        "installationEvidenceSha256"
+      ],
+      "additionalProperties": false
+    },
+    "transaction": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "const": "complete"
+        },
+        "manifest": {
+          "$ref": "urn:truss:draft:feed-transaction:0.2.0"
+        },
+        "orderedPayloads": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          }
+        }
+      },
+      "required": [
+        "state",
+        "manifest",
+        "orderedPayloads"
+      ],
+      "additionalProperties": false
+    },
+    "applicationProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "installation",
+    "transaction",
+    "applicationProfile"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "coverageRequest": {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-feed-coverage-application/0.2.0"
+        },
+        "installation": {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "installed"
+            },
+            "worker": {
+              "$ref": "urn:truss:draft:feed-progress:0.2.0#/$defs/worker"
+            },
+            "downstreamApplied": {
+              "$ref": "urn:truss:draft:feed-progress:0.2.0"
+            },
+            "installationEvidenceSha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "outcome",
+            "worker",
+            "downstreamApplied",
+            "installationEvidenceSha256"
+          ],
+          "additionalProperties": false
+        },
+        "coverage": {
+          "$ref": "urn:truss:draft:feed-interval-coverage:0.2.0"
+        },
+        "applicationProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "installation",
+        "coverage",
+        "applicationProfile"
+      ],
+      "additionalProperties": false
+    },
+    "result": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "enum": [
+                "applied",
+                "equal"
+              ]
+            },
+            "proofSubmission": {
+              "$ref": "urn:truss:draft:feed-application-proof:0.2.0"
+            },
+            "committedApplicationEvidence": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            }
+          },
+          "required": [
+            "outcome",
+            "proofSubmission",
+            "committedApplicationEvidence"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "unavailable"
+            },
+            "reason": {
+              "enum": [
+                "authorization",
+                "context",
+                "generation",
+                "prior",
+                "integrity",
+                "profile",
+                "resource"
+              ]
+            }
+          },
+          "required": [
+            "outcome",
+            "reason"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "commit_unknown"
+            },
+            "recoveryReference": {
+              "type": "string",
+              "minLength": 1
+            },
+            "originalAttemptEvidence": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            }
+          },
+          "required": [
+            "outcome",
+            "recoveryReference",
+            "originalAttemptEvidence"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "scope": "Bootstrap bundle shape only; no native model/artifact/profile/inventory admission",
+  "cases": 10,
+  "failures": []
+}

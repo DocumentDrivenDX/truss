@@ -1,0 +1,269 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:operation-completion:0.1.0",
+  "title": "Draft private operation boundary completion",
+  "description": "Closed completion metadata only; complete original inventory, exact referenced bytes, issuer custody and native observations are independently admitted. Unknown commit is allowed only with confirmed termination; no release or future closure hash is encoded.",
+  "$defs": {
+    "reference": {
+      "type": "object",
+      "properties": {
+        "identity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "identity",
+        "sha256"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-operation-completion/0.1.0"
+        },
+        "registryIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "assemblyId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "executorIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "transactionIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "transactionGeneration": {
+          "type": "string",
+          "minLength": 1
+        },
+        "attemptIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "leaseIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "completionProfile": {
+          "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/profilePin"
+        },
+        "resourceProfile": {
+          "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/profilePin"
+        },
+        "originalComposition": {
+          "$ref": "#/$defs/reference"
+        },
+        "originalAdmission": {
+          "$ref": "#/$defs/reference"
+        },
+        "originalNativeLedger": {
+          "$ref": "#/$defs/reference"
+        },
+        "resources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "identity": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "enum": [
+                  "native_call",
+                  "savepoint",
+                  "authority_lease",
+                  "buffer"
+                ]
+              },
+              "finalObservation": {
+                "$ref": "#/$defs/reference"
+              }
+            },
+            "required": [
+              "identity",
+              "kind",
+              "finalObservation"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "boundaryRestoration": {
+          "$ref": "#/$defs/reference"
+        },
+        "outcomeEvidence": {
+          "$ref": "#/$defs/reference"
+        },
+        "completionClass": {
+          "const": "caller_idle"
+        },
+        "outcome": {
+          "enum": [
+            "pending",
+            "operation_failed"
+          ]
+        },
+        "originalActiveUsableObservation": {
+          "$ref": "#/$defs/reference"
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "registryIdentity",
+        "assemblyId",
+        "executorIdentity",
+        "transactionIdentity",
+        "transactionGeneration",
+        "attemptIdentity",
+        "leaseIdentity",
+        "completionProfile",
+        "resourceProfile",
+        "originalComposition",
+        "originalAdmission",
+        "originalNativeLedger",
+        "resources",
+        "boundaryRestoration",
+        "outcomeEvidence",
+        "completionClass",
+        "outcome",
+        "originalActiveUsableObservation"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-operation-completion/0.1.0"
+        },
+        "registryIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "assemblyId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "executorIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "transactionIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "transactionGeneration": {
+          "type": "string",
+          "minLength": 1
+        },
+        "attemptIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "leaseIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "completionProfile": {
+          "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/profilePin"
+        },
+        "resourceProfile": {
+          "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/profilePin"
+        },
+        "originalComposition": {
+          "$ref": "#/$defs/reference"
+        },
+        "originalAdmission": {
+          "$ref": "#/$defs/reference"
+        },
+        "originalNativeLedger": {
+          "$ref": "#/$defs/reference"
+        },
+        "resources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "identity": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "enum": [
+                  "native_call",
+                  "savepoint",
+                  "authority_lease",
+                  "buffer"
+                ]
+              },
+              "finalObservation": {
+                "$ref": "#/$defs/reference"
+              }
+            },
+            "required": [
+              "identity",
+              "kind",
+              "finalObservation"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "boundaryRestoration": {
+          "$ref": "#/$defs/reference"
+        },
+        "outcomeEvidence": {
+          "$ref": "#/$defs/reference"
+        },
+        "completionClass": {
+          "const": "transaction_ended"
+        },
+        "outcome": {
+          "enum": [
+            "committed",
+            "rolled_back",
+            "commit_unknown"
+          ]
+        },
+        "originalTermination": {
+          "$ref": "#/$defs/reference"
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "registryIdentity",
+        "assemblyId",
+        "executorIdentity",
+        "transactionIdentity",
+        "transactionGeneration",
+        "attemptIdentity",
+        "leaseIdentity",
+        "completionProfile",
+        "resourceProfile",
+        "originalComposition",
+        "originalAdmission",
+        "originalNativeLedger",
+        "resources",
+        "boundaryRestoration",
+        "outcomeEvidence",
+        "completionClass",
+        "outcome",
+        "originalTermination"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

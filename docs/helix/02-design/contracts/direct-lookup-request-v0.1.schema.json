@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:direct-lookup-request:0.1.0",
+  "title": "Draft direct lookup request",
+  "description": "Shape only; admitted native identity ranges, key ownership/order/facets/encoding and original read context require semantic verification.",
+  "type": "object",
+  "properties": {
+    "context": {
+      "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/context"
+    },
+    "selection": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "operation": {
+              "const": "object_id"
+            },
+            "type": {
+              "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/type"
+            },
+            "id": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "operation",
+            "type",
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "operation": {
+              "const": "edge_id"
+            },
+            "id": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "operation",
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "operation": {
+              "const": "object_key"
+            },
+            "type": {
+              "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/type"
+            },
+            "keyNumber": {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]*)$"
+            },
+            "keyDefinitionPin": {
+              "type": "string",
+              "minLength": 1
+            },
+            "keyEncodingProfile": {
+              "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/profilePin"
+            },
+            "components": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "propertyId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "definitionPin": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "value": {
+                    "$ref": "urn:truss:draft:exact-value:0.1.0#/$defs/value"
+                  }
+                },
+                "required": [
+                  "propertyId",
+                  "definitionPin",
+                  "value"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "operation",
+            "type",
+            "keyNumber",
+            "keyDefinitionPin",
+            "keyEncodingProfile",
+            "components"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "required": [
+    "context",
+    "selection"
+  ],
+  "additionalProperties": false
+}

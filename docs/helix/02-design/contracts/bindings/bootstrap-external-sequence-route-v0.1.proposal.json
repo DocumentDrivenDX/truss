@@ -1,0 +1,92 @@
+{
+  "interfaceVersion": "truss-bootstrap-route-entry/0.1.0",
+  "routeIdentity": "pg17.sequence.relation-adjunct/0.1.0",
+  "status": "unadopted; source pins only verified; native class/cut/transport/semantic producers unqualified",
+  "nativeClass": {
+    "namespace": "pg_catalog",
+    "relation": "pg_sequence",
+    "classOid": "actual catalog relation identity; dependency address uses actual pg_class sequence",
+    "storageScope": "database",
+    "addressability": "No invented pg_sequence OID; seqrelid is original pg_class sequence parent",
+    "subobjectNumber": "0 on original sequence parent"
+  },
+  "selector": "original independently admitted pg_class sequence parent configuration",
+  "artifacts": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-external-sequence-observation-pg17.proposal.sql",
+      "sha256": "d8c6038fbc76633dcdc64bf3c9d51c13eb2ecf532f37cffb19a78b84dd6b7da1"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-external-sequence-observation-pg17.proposal.umf.json",
+      "sha256": "b33998a627eb752f90faf059b8025b4dd2dae2fbeceb1c70cec831adc7bd8687"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/bootstrap-external-sequence-observation.owner-export.sql",
+      "sha256": "b320a15b56333e9b08e1e13004328ac142547a8a3534919ce337431db4d865fb"
+    }
+  ],
+  "parameterGrammar": {
+    "slot": "1",
+    "nativeType": "pg_catalog.oid[]",
+    "dimensions": "exactly one",
+    "lowerBound": "1",
+    "nullAllowed": false,
+    "nullItemsAllowed": false,
+    "uniqueItems": true,
+    "countInclusive": [
+      "1",
+      "256"
+    ],
+    "itemDomain": "canonical nonzero uint32 decimal text; actual pg_class parent independently observed kind S",
+    "encoder": "selected original canonical native array encoder"
+  },
+  "orderedColumns": [
+    "relation_catalog_class_oid",
+    "sequence_oid",
+    "sequence_schema",
+    "sequence_name",
+    "persistence",
+    "configuration_oid",
+    "type_oid",
+    "start_value",
+    "increment",
+    "minimum",
+    "maximum",
+    "cache_size",
+    "cycles",
+    "original_configuration_row_json",
+    "original_relation_row_json"
+  ],
+  "coverage": "Exactly one original relation/configuration correspondence per admitted S-kind parent; missing configuration remains original LEFT JOIN null evidence and refuses complete definition, not absent sequence",
+  "requiredKnownFields": [
+    "seqrelid",
+    "seqtypid",
+    "seqstart",
+    "seqincrement",
+    "seqmin",
+    "seqmax",
+    "seqcache",
+    "seqcycle"
+  ],
+  "preservation": "Retain full exact returned row JSON text and every unknown extension member; lossless bounded selected native JSON decoder; no parse/stringify reconstruction",
+  "dependencyExtraction": {
+    "relation": "sequence_oid/raw class oid and configuration_oid/raw seqrelid must agree under original S-kind/native persistence meaning",
+    "type": "nonzero seqtypid actual pg_type with independently admitted sequence native signed integer domain",
+    "configuration": "exact signed decimal text start/increment/min/max/cache and raw native correspondence; validate selected range/increment/cache/cycle semantics without host numeric rounding",
+    "scope": "complete original relation namespace/shared-owner/ACL and local/shared ownership dependencies, including owned-by relation/attribute where present",
+    "liveState": "no nextval/setval/currval/live counter observation, reset or precommit-durability inference; configuration is not allocation/nonreuse proof",
+    "definitionSpecification": {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-sequence-definition-v0.1.proposal.json",
+      "sha256": "de523572c59cb98a3f083a06e0efbaea7ea5685bdb2d841a01765d4b0f12d03f",
+      "admission": "Unadopted enclosing/per-field specification; not native producer or complete basis qualification"
+    }
+  },
+  "adjuncts": [
+    "complete original pg_class/pg_type and namespace/owner/dependency definitions",
+    "sequence ACL/effective USAGE/SELECT/UPDATE observations under actual roles",
+    "selected installation/native configuration parity independent of live allocator"
+  ],
+  "resourceProfile": "truss-bootstrap-collector-resource/0.1.0",
+  "refusal": "Wrong kind, missing configuration, unsupported signed native configuration/domain/persistence or incomplete dependencies refuses definition; no repair/reset/allocation or inferred FR-15 durability",
+  "resourceObligations": "Shared enclosing totals, complete original cut/authority and explicit pre-materialization/native-work permits; no independent per-route allowance"
+}

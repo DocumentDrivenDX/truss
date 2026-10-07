@@ -1,0 +1,31 @@
+{
+  "interfaceVersion": "truss-conformance-resource/0.1.0",
+  "identity": "truss-conformance-bounded-reference",
+  "version": "0.1.0",
+  "status": "unqualified_candidate",
+  "limits": {
+    "requiredCases": "1000",
+    "receivedManifestBytes": "4194304",
+    "receivedInputInventoryBytes": "16777216",
+    "completeReceiptBytes": "33554432",
+    "receiptContextBytes": "1048576",
+    "receiptPerCaseOutcomeBytes": "16384",
+    "requiredEvidenceArtifacts": "10000",
+    "singleArchivedEvidenceBytes": "67108864",
+    "totalArchivedEvidenceBytes": "1073741824",
+    "ownedAssemblyBytes": "67108864",
+    "runElapsedMilliseconds": "3600000",
+    "assessmentElapsedMilliseconds": "30000",
+    "containmentObservationMilliseconds": "10000",
+    "receiptPerRequiredCaseBytes": "4096",
+    "preparedRuns": "128",
+    "activeOrUnresolvedRuns": "8",
+    "retainedRunRecords": "1024",
+    "ownedRunRegistryBytes": "8388608",
+    "singleRunRegistryMetadataBytes": "65536"
+  },
+  "counterEncoding": "canonical_nonnegative_decimal",
+  "receiptReservation": "receiptContextBytes_plus_requiredCases_times_sum_of_receiptPerRequiredCaseBytes_and_receiptPerCaseOutcomeBytes",
+  "archive": "original_complete_exact_artifacts_under_separate_precharged_host_custody",
+  "overflow": "no_truncation_case_omission_or_partial_qualification"
+}

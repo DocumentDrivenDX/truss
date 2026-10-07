@@ -1,0 +1,106 @@
+{
+  "interfaceVersion": "truss-bootstrap-route-entry/0.1.0",
+  "routeIdentity": "pg17.trigger.namespace-fanout/0.1.0",
+  "status": "unadopted; source pins only verified; native class/cut/transport/semantic producers unqualified",
+  "nativeClass": {
+    "namespace": "pg_catalog",
+    "relation": "pg_trigger",
+    "classOid": "resolve from original target; never constant",
+    "storageScope": "database",
+    "subobjectNumber": "0"
+  },
+  "selector": "complete original namespace relation-parent fanout",
+  "artifacts": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-trigger-observation-pg17.proposal.sql",
+      "sha256": "ef13bde7138512b89acd832b5a2d6131310a21692dd2e7adb7475aa934ceb7fc"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-trigger-observation-pg17.proposal.umf.json",
+      "sha256": "9929353fbced174bc7d95f5f3d92288e67e2ef36140c31cd2e4ee27dc355f8a1"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/bootstrap-trigger-observation.owner-export.sql",
+      "sha256": "b972707a2cd036a8ab981d8a0b2da186cf90a7ace0f06c4bd1fc99af45faa2e6"
+    }
+  ],
+  "parameterGrammar": {
+    "slot": "1",
+    "nativeType": "pg_catalog.oid",
+    "nullAllowed": false,
+    "itemDomain": "canonical nonzero uint32 decimal text; independently admitted original pg_namespace",
+    "encoder": "exact original text parameter"
+  },
+  "orderedColumns": [
+    "catalog_class_oid",
+    "object_oid",
+    "relation_oid",
+    "arguments_are_null",
+    "arguments_hex",
+    "argument_bytes",
+    "when_native_tree",
+    "definition_sql",
+    "tgattr_native_vector_text",
+    "tgattr_native_vector_dimensions",
+    "original_catalog_row_json"
+  ],
+  "coverage": "Complete unique original member fanout for every admitted parent; empty requires independent full parent/cut/authority proof. Specific child requires selected pg17.trigger.child-direct/0.1.0 original resolution and exact member presence. Internal/disabled/unexpected objects retained.",
+  "requiredKnownFields": [
+    "oid",
+    "tgrelid",
+    "tgparentid",
+    "tgname",
+    "tgfoid",
+    "tgtype",
+    "tgenabled",
+    "tgisinternal",
+    "tgconstrrelid",
+    "tgconstrindid",
+    "tgconstraint",
+    "tgdeferrable",
+    "tginitdeferred",
+    "tgnargs",
+    "tgattr",
+    "tgargs",
+    "tgqual",
+    "tgoldtable",
+    "tgnewtable"
+  ],
+  "preservation": "Retain full exact returned row JSON text and every unknown extension member; lossless bounded selected native JSON decoder; no parse/stringify reconstruction",
+  "dependencyExtraction": {
+    "parent": "tgrelid actual pg_class; nonzero tgparentid actual pg_trigger; constraint-related relation/index endpoints actual pg_class and tgconstraint actual pg_constraint",
+    "routine": "nonzero tgfoid actual pg_proc with complete signature/security/language definition",
+    "arguments": "exact tgargs null/hex/octet/tgnargs and native NUL-terminated argument grammar; ordered tgattr signed native vector/null/dimensions; no generic text-array reconstruction",
+    "when": "retain original tgqual OLD/NEW expression context and full pg_get_triggerdef evidence; ordinary pg_get_expr must not be substituted for trigger WHEN",
+    "state": "native tgtype/event/timing/row/constraint/deferral/enablement/internal and transition-table name meaning separately admitted, no filtering or execution",
+    "fieldClassification": {
+      "oid": "original trigger correlation only",
+      "tgrelid": "resolved original parent relation/view definition",
+      "tgparentid": "zero not-clone or resolved original parent trigger with partition-clone correspondence",
+      "tgname": "exact native name under resolved parent relation",
+      "tgfoid": "resolved original trigger function signature/implementation/authority",
+      "tgtype": "exact native int2 mask; selected timing/level/event bit grammar, unknown bits unsupported",
+      "tgenabled": "exact O/D/R/A firing declaration; disabled remains installed definition",
+      "tgisinternal": "actual internal-generation provenance; never filter or infer permission",
+      "tgconstrrelid": "zero no relevant referenced relation or resolved constraint-related relation",
+      "tgconstrindid": "zero none or resolved original supporting index with exact constraint role",
+      "tgconstraint": "zero nonconstraint or resolved original constraint; trigger flags not copied wholesale",
+      "tgdeferrable": "actual trigger deferrability distinct from parent constraint declaration",
+      "tginitdeferred": "actual trigger initial-defer declaration under exact native consistency rules",
+      "tgnargs": "exact nonnegative native int2 count matched to fully consumed original argument bytes",
+      "tgattr": "ordered original int2vector columns; UPDATE-specific applicability, complete original attribute resolution",
+      "tgargs": "exact original bytea hex/count/null carriers; count NUL-terminated strings, full consumption and selected encoding",
+      "tgqual": "exact nullable WHEN tree with original OLD/NEW native context and full reconstruction/dependency proof",
+      "tgoldtable": "exact nullable OLD TABLE transition name with native event/level applicability",
+      "tgnewtable": "exact nullable NEW TABLE transition name with native event/level applicability"
+    },
+    "canonicalProcedure": "CONTRACT-008 Trigger semantic projection: resolved parent/name/function/clone/constraint plus exact independent timing/firing/deferral, column-event, argument-byte/WHEN/transition definitions; complete parent fanout and native enforcement separately admitted"
+  },
+  "adjuncts": [
+    "complete original parent/child-kind/type/routine/operator/collation/role/native expression dependencies",
+    "original current parent/owner/module authority and actual installed policy/enforcement context"
+  ],
+  "resourceProfile": "truss-bootstrap-collector-resource/0.1.0",
+  "refusal": "Missing required child/parent resolver or unsupported original guard/rule/expression/principal/native meaning refuses completeness; no status/name filter, execution or deparse-only equality",
+  "resourceObligations": "Shared enclosing totals, complete original cut/authority and explicit pre-materialization/native-work permits; no independent per-route allowance"
+}

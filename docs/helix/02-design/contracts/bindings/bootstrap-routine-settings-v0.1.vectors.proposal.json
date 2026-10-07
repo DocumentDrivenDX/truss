@@ -1,0 +1,64 @@
+{
+  "scope": "Independent lexical proconfig element expectations only; native setting recognition/precedence/resource admission unqualified",
+  "profile": "truss-routine-setting-element/0.1.0",
+  "vectors": [
+    {
+      "input": "search_path=truss, pg_catalog",
+      "expected": {
+        "name": "search_path",
+        "value": "truss, pg_catalog"
+      }
+    },
+    {
+      "input": "custom.flag=a=b=c",
+      "expected": {
+        "name": "custom.flag",
+        "value": "a=b=c"
+      }
+    },
+    {
+      "input": "custom.flag=",
+      "expected": {
+        "name": "custom.flag",
+        "value": ""
+      }
+    },
+    {
+      "input": "custom.flag=  a  ",
+      "expected": {
+        "name": "custom.flag",
+        "value": "  a  "
+      }
+    },
+    {
+      "input": "custom.flag=\"a,b\"\\c",
+      "expected": {
+        "name": "custom.flag",
+        "value": "\"a,b\"\\c"
+      }
+    },
+    {
+      "input": "custom.flag=\u00e9",
+      "expected": {
+        "name": "custom.flag",
+        "value": "\u00e9"
+      }
+    },
+    {
+      "input": "missing_separator",
+      "refusal": "missing_separator"
+    },
+    {
+      "input": "=value",
+      "refusal": "empty_name"
+    },
+    {
+      "input": null,
+      "refusal": "null_element"
+    },
+    {
+      "input": "custom.flag=a\u0000b",
+      "refusal": "invalid_native_text"
+    }
+  ]
+}

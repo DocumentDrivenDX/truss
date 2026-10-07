@@ -1,0 +1,246 @@
+{
+  "status": "unadopted independently authored normalized mathematical witness pairs",
+  "scope": "NC magnitude comparison only; source grammar/facets/native domains and production resource accounting unqualified",
+  "pairs": [
+    {
+      "id": "NC01",
+      "name": "adjacent beyond safe host range",
+      "left": {
+        "negative": false,
+        "digits": "9007199254740993",
+        "exponent": "0"
+      },
+      "right": {
+        "negative": false,
+        "digits": "9007199254740992",
+        "exponent": "0"
+      },
+      "expectedOrder": 1,
+      "independentRationalCheck": true
+    },
+    {
+      "id": "NC02",
+      "name": "virtual zero padding less",
+      "left": {
+        "negative": false,
+        "digits": "12",
+        "exponent": "1"
+      },
+      "right": {
+        "negative": false,
+        "digits": "121",
+        "exponent": "0"
+      },
+      "expectedOrder": -1,
+      "independentRationalCheck": true
+    },
+    {
+      "id": "NC03",
+      "name": "virtual zero padding greater",
+      "left": {
+        "negative": false,
+        "digits": "121",
+        "exponent": "0"
+      },
+      "right": {
+        "negative": false,
+        "digits": "12",
+        "exponent": "1"
+      },
+      "expectedOrder": 1,
+      "independentRationalCheck": true
+    },
+    {
+      "id": "NC04",
+      "name": "equal magnitude",
+      "left": {
+        "negative": false,
+        "digits": "123",
+        "exponent": "-1"
+      },
+      "right": {
+        "negative": false,
+        "digits": "123",
+        "exponent": "-1"
+      },
+      "expectedOrder": 0,
+      "independentRationalCheck": true
+    },
+    {
+      "id": "NC05",
+      "name": "negative reversal",
+      "left": {
+        "negative": true,
+        "digits": "12",
+        "exponent": "1"
+      },
+      "right": {
+        "negative": true,
+        "digits": "121",
+        "exponent": "0"
+      },
+      "expectedOrder": 1,
+      "independentRationalCheck": true
+    },
+    {
+      "id": "NC06",
+      "name": "opposite signs",
+      "left": {
+        "negative": true,
+        "digits": "1",
+        "exponent": "0"
+      },
+      "right": {
+        "negative": false,
+        "digits": "1",
+        "exponent": "0"
+      },
+      "expectedOrder": -1,
+      "independentRationalCheck": true
+    },
+    {
+      "id": "NC07",
+      "name": "zero versus positive",
+      "left": {
+        "negative": false,
+        "digits": "0",
+        "exponent": "0"
+      },
+      "right": {
+        "negative": false,
+        "digits": "1",
+        "exponent": "-40"
+      },
+      "expectedOrder": -1,
+      "independentRationalCheck": true
+    },
+    {
+      "id": "NC08",
+      "name": "negative versus zero",
+      "left": {
+        "negative": true,
+        "digits": "1",
+        "exponent": "-40"
+      },
+      "right": {
+        "negative": false,
+        "digits": "0",
+        "exponent": "0"
+      },
+      "expectedOrder": -1,
+      "independentRationalCheck": true
+    },
+    {
+      "id": "NC09",
+      "name": "two zeros",
+      "left": {
+        "negative": false,
+        "digits": "0",
+        "exponent": "0"
+      },
+      "right": {
+        "negative": false,
+        "digits": "0",
+        "exponent": "0"
+      },
+      "expectedOrder": 0,
+      "independentRationalCheck": true
+    },
+    {
+      "id": "NC10",
+      "name": "unequal adjusted exponent",
+      "left": {
+        "negative": false,
+        "digits": "9",
+        "exponent": "2"
+      },
+      "right": {
+        "negative": false,
+        "digits": "1",
+        "exponent": "3"
+      },
+      "expectedOrder": -1,
+      "independentRationalCheck": true
+    },
+    {
+      "id": "NC11",
+      "name": "tiny exact decimal",
+      "left": {
+        "negative": false,
+        "digits": "123",
+        "exponent": "-20"
+      },
+      "right": {
+        "negative": false,
+        "digits": "124",
+        "exponent": "-20"
+      },
+      "expectedOrder": -1,
+      "independentRationalCheck": true
+    },
+    {
+      "id": "NC12",
+      "name": "huge equal adjusted exponent",
+      "left": {
+        "negative": false,
+        "digits": "12",
+        "exponent": "1000000000"
+      },
+      "right": {
+        "negative": false,
+        "digits": "121",
+        "exponent": "999999999"
+      },
+      "expectedOrder": -1,
+      "independentRationalCheck": false
+    },
+    {
+      "id": "NC13",
+      "name": "huge positive exponent ordering",
+      "left": {
+        "negative": false,
+        "digits": "1",
+        "exponent": "1000000000"
+      },
+      "right": {
+        "negative": false,
+        "digits": "9",
+        "exponent": "999999998"
+      },
+      "expectedOrder": 1,
+      "independentRationalCheck": false
+    },
+    {
+      "id": "NC14",
+      "name": "huge negative exponent ordering",
+      "left": {
+        "negative": false,
+        "digits": "1",
+        "exponent": "-1000000000"
+      },
+      "right": {
+        "negative": false,
+        "digits": "9",
+        "exponent": "-1000000002"
+      },
+      "expectedOrder": 1,
+      "independentRationalCheck": false
+    },
+    {
+      "id": "NC15",
+      "name": "huge negative magnitudes reversed",
+      "left": {
+        "negative": true,
+        "digits": "12",
+        "exponent": "1000000000"
+      },
+      "right": {
+        "negative": true,
+        "digits": "121",
+        "exponent": "999999999"
+      },
+      "expectedOrder": 1,
+      "independentRationalCheck": false
+    }
+  ]
+}

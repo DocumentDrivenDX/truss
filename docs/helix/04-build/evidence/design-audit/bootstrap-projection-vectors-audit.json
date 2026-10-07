@@ -1,0 +1,7 @@
+{
+  "scope": "nine manually authored fragment UTF-8/content hashes and one equal/four distinct pair checks only; no projection, complete inventory, native semantics or canonicalizer qualification",
+  "cases": 9,
+  "pairChecks": 5,
+  "status": "pass",
+  "vectorsSha256": "70786f096fbc57b8344aeb9ae7e8b088f3048eafac4367e49a9314884bf49f9d"
+}

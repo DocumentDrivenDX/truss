@@ -1,0 +1,42 @@
+{
+  "scope": "Selected UMF source inspection, not native extension dependency closure or Truss execution",
+  "commit": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+  "files": [
+    {
+      "path": "src/model/selection.ts",
+      "sha256": "101d15bea9c048316aa557b82d6a8edab31573cd976bf30f1e50ceba11b65dda",
+      "matchesCommit": true
+    },
+    {
+      "path": "src/model/selection-verification.ts",
+      "sha256": "365c662ace1c348a87ebbd749c229041bb7caae64d64116e235afd84f4bc8988",
+      "matchesCommit": true
+    },
+    {
+      "path": "docs/helix/02-design/contracts/CONTRACT-001-core-envelope.md",
+      "sha256": "1fe772ea17df4144d4c29e05ab50dbbea7c97d98ccfc41acc4f1b147fd121008",
+      "matchesCommit": true
+    },
+    {
+      "path": "src/model/json.ts",
+      "sha256": "b2c3f48bb779972af5beadfb22ec1db48c793dcdaf572293afa62904016465e7",
+      "matchesCommit": true
+    },
+    {
+      "path": "tests/core/selection.test.ts",
+      "sha256": "672fa0e543190d0e77b38bd5e984c5a9daf9ab238775085828cdd455de01bad7",
+      "matchesCommit": true
+    }
+  ],
+  "observedTraversal": {
+    "allAdmittedProfiles": "Element.references",
+    "0.4.0_through_0.8.0": "also itemType",
+    "0.6.0_through_0.8.0": "also members and key fields"
+  },
+  "originalScopeRequired": true,
+  "nativeExtensionLinksDiscovered": false,
+  "trussExecutionQualified": false,
+  "copyObservation": "copyJson counts at most 100000 visited values and depth 128 per invocation, rejects cycles/getters/custom prototypes and unsafe numeric values; selector copies full input and final source/selection/boundary result. These bounds are not Truss cumulative allocation/work or native heap qualification.",
+  "ownerFixtureInspection": "Authored selector cases retain repeated annotations/full source, support valid-but-incomplete unknown scalar metadata, terminate explicit core cycles and keep selected/source/query copies independent. Owner tests were inspected, not rerun by Truss.",
+  "verificationBoundary": "verifyCoreElementSelection recomputes consistency with receipt-retained source/query and caller registry; it does not prove authenticity of that source or original Truss admission."
+}

@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:private-custody-cleanup-selection:0.1.0",
+  "title": "Proposed private operation/touch custody cleanup selection",
+  "description": "RT01\u2013RT06 original administrative candidate only. Shape does not prove identities, settlement, authority, complete dependencies, transfer, deletion or capacity accounting.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "interfaceVersion",
+    "profile",
+    "originalInstallation",
+    "originalLayout",
+    "originalAdministrativeContext",
+    "originalResourceReservation",
+    "rows",
+    "dependencies",
+    "originalDependencyClosure",
+    "originalCapacityDisposition"
+  ],
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-private-custody-cleanup-selection/0.1.0"
+    },
+    "profile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "originalInstallation": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "originalLayout": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "originalAdministrativeContext": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "originalResourceReservation": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "rows": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 512,
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind",
+              "originalWriterXid",
+              "originalRow",
+              "originalSettlement",
+              "operationOrdinal"
+            ],
+            "properties": {
+              "kind": {
+                "const": "operation"
+              },
+              "originalWriterXid": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]*)$"
+              },
+              "originalRow": {
+                "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+              },
+              "originalSettlement": {
+                "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+              },
+              "operationOrdinal": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]*)$"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind",
+              "originalWriterXid",
+              "originalRow",
+              "originalSettlement",
+              "ownerKind",
+              "ownerId",
+              "ownerDiscriminatorId",
+              "propertyOwnerTypeId",
+              "propertyId"
+            ],
+            "properties": {
+              "kind": {
+                "const": "touch"
+              },
+              "originalWriterXid": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]*)$"
+              },
+              "originalRow": {
+                "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+              },
+              "originalSettlement": {
+                "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+              },
+              "ownerKind": {
+                "enum": [
+                  "object",
+                  "edge"
+                ]
+              },
+              "ownerId": {
+                "type": "string",
+                "pattern": "^(0|-?[1-9][0-9]*)$"
+              },
+              "ownerDiscriminatorId": {
+                "type": "string",
+                "pattern": "^(0|-?[1-9][0-9]*)$"
+              },
+              "propertyOwnerTypeId": {
+                "type": "string",
+                "pattern": "^(0|-?[1-9][0-9]*)$"
+              },
+              "propertyId": {
+                "type": "string",
+                "pattern": "^(0|-?[1-9][0-9]*)$"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "dependencies": {
+      "type": "array",
+      "maxItems": 65536,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "originalDependency",
+          "disposition",
+          "originalDispositionEvidence"
+        ],
+        "properties": {
+          "originalDependency": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          },
+          "disposition": {
+            "enum": [
+              "retain",
+              "transfer",
+              "remove-with-cohort"
+            ]
+          },
+          "originalDispositionEvidence": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          }
+        }
+      }
+    },
+    "originalDependencyClosure": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "originalCapacityDisposition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    }
+  }
+}

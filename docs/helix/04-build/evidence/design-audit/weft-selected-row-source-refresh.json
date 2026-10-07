@@ -1,0 +1,16 @@
+{
+  "scope": "Committed original-property coupling and owner synthetic original-row evidence correspondence only; not Truss native execution or adopted public bridge",
+  "head": "5ae231bc0f475ba4887a3d1896c3ad9fbcae9695",
+  "sourceSha256": {
+    "crates/weft-postgresql/src/row_custody.rs": "533be57cc82deee64c16c6d49d8465ba7e9083996fdce3138dc90f2a5c2b9587",
+    "crates/weft-postgresql/src/property_definition.rs": "f4a208aa656b5cbfb5a4a2a5f56b607006ba5acadb53f86f9ec8dd2ba4b7443a",
+    "crates/weft-postgresql/src/row_join_definition.rs": "c08892c50007e9c2cbfb32b742472527bf3e448a71a316dbb2f2ac37d7825b93",
+    "docs/helix/04-build/evidence/B-005-original-row-custody-native.json": "505331608b2c9d904915c38d3498c7ff6c4af3b3585b109221df541292f09bef",
+    "tests/truss-postgresql/fixtures/original-row-custody-emission.json": "d6394d5669c8b88a51668bd64ef71a0934994e88146aabb51a2fba55b8ba2865",
+    "tests/truss-postgresql/original-row-custody-native.py": "8e8d645450200996cb8c920da70538598556c50152d6cb445deabce6ffc11a5e"
+  },
+  "ownerNativeCases": 2,
+  "captureHarnessCorrespondence": true,
+  "nativeExecutionByTruss": false,
+  "complete": false
+}

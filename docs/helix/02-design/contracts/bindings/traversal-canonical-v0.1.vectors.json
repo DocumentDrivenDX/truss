@@ -1,0 +1,197 @@
+{
+  "status": "unqualified design vectors",
+  "canonicalProfile": "truss-canonical/0.1.0",
+  "vectors": [
+    {
+      "name": "query",
+      "domain": "truss-direct-traversal-query/0.1.0",
+      "input": {
+        "domain": "truss-direct-traversal-query/0.1.0",
+        "context": {
+          "catalogRevision": "2",
+          "layoutProfile": {
+            "identity": "fixture",
+            "version": "0.1.0",
+            "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "readProfile": {
+            "identity": "fixture",
+            "version": "0.1.0",
+            "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "authorizedScopeIdentity": "scope",
+          "consistency": {
+            "kind": "held_snapshot",
+            "snapshotIdentity": "snapshot"
+          }
+        },
+        "start": {
+          "id": "1",
+          "typeId": "1",
+          "definitionPin": "fixture",
+          "owner": {
+            "documentId": "doc-é",
+            "moduleId": "module"
+          }
+        },
+        "hops": [
+          {
+            "relationship": {
+              "relationshipId": "2",
+              "definitionPin": "fixture",
+              "owner": {
+                "documentId": "doc-é",
+                "moduleId": "module"
+              }
+            },
+            "direction": "outgoing"
+          }
+        ]
+      },
+      "canonicalUtf8": "{\"context\":{\"authorizedScopeIdentity\":\"scope\",\"catalogRevision\":\"2\",\"consistency\":{\"kind\":\"held_snapshot\",\"snapshotIdentity\":\"snapshot\"},\"layoutProfile\":{\"identity\":\"fixture\",\"sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"version\":\"0.1.0\"},\"readProfile\":{\"identity\":\"fixture\",\"sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"version\":\"0.1.0\"}},\"domain\":\"truss-direct-traversal-query/0.1.0\",\"hops\":[{\"direction\":\"outgoing\",\"relationship\":{\"definitionPin\":\"fixture\",\"owner\":{\"documentId\":\"doc-é\",\"moduleId\":\"module\"},\"relationshipId\":\"2\"}}],\"start\":{\"definitionPin\":\"fixture\",\"id\":\"1\",\"owner\":{\"documentId\":\"doc-é\",\"moduleId\":\"module\"},\"typeId\":\"1\"}}",
+      "preimageHex": "74727573732d63616e6f6e6963616c2f302e312e300a74727573732d6469726563742d74726176657273616c2d71756572792f302e312e300a7b22636f6e74657874223a7b22617574686f72697a656453636f70654964656e74697479223a2273636f7065222c22636174616c6f675265766973696f6e223a2232222c22636f6e73697374656e6379223a7b226b696e64223a2268656c645f736e617073686f74222c22736e617073686f744964656e74697479223a22736e617073686f74227d2c226c61796f757450726f66696c65223a7b226964656e74697479223a2266697874757265222c22736861323536223a2261616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161222c2276657273696f6e223a22302e312e30227d2c227265616450726f66696c65223a7b226964656e74697479223a2266697874757265222c22736861323536223a2261616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161222c2276657273696f6e223a22302e312e30227d7d2c22646f6d61696e223a2274727573732d6469726563742d74726176657273616c2d71756572792f302e312e30222c22686f7073223a5b7b22646972656374696f6e223a226f7574676f696e67222c2272656c6174696f6e73686970223a7b22646566696e6974696f6e50696e223a2266697874757265222c226f776e6572223a7b22646f63756d656e744964223a22646f632dc3a9222c226d6f64756c654964223a226d6f64756c65227d2c2272656c6174696f6e736869704964223a2232227d7d5d2c227374617274223a7b22646566696e6974696f6e50696e223a2266697874757265222c226964223a2231222c226f776e6572223a7b22646f63756d656e744964223a22646f632dc3a9222c226d6f64756c654964223a226d6f64756c65227d2c22747970654964223a2231227d7d",
+      "sha256": "666d6935199b14fa2b2a09ad41229bcb5465e17c82809b12d6356243de216c42"
+    },
+    {
+      "name": "sealed-state",
+      "domain": "truss-traversal-private-state/0.1.0",
+      "input": {
+        "interfaceVersion": "truss-traversal-private-state/0.1.0",
+        "stageIdentity": "stage",
+        "generation": "0",
+        "workVersion": "1",
+        "query": {
+          "domain": "truss-direct-traversal-query/0.1.0",
+          "context": {
+            "catalogRevision": "2",
+            "layoutProfile": {
+              "identity": "fixture",
+              "version": "0.1.0",
+              "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            "readProfile": {
+              "identity": "fixture",
+              "version": "0.1.0",
+              "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            "authorizedScopeIdentity": "scope",
+            "consistency": {
+              "kind": "held_snapshot",
+              "snapshotIdentity": "snapshot"
+            }
+          },
+          "start": {
+            "id": "1",
+            "typeId": "1",
+            "definitionPin": "fixture",
+            "owner": {
+              "documentId": "doc-é",
+              "moduleId": "module"
+            }
+          },
+          "hops": [
+            {
+              "relationship": {
+                "relationshipId": "2",
+                "definitionPin": "fixture",
+                "owner": {
+                  "documentId": "doc-é",
+                  "moduleId": "module"
+                }
+              },
+              "direction": "outgoing"
+            }
+          ]
+        },
+        "resourceProfile": {
+          "identity": "fixture",
+          "version": "0.1.0",
+          "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "counters": {
+          "examinedEdges": "0",
+          "pathStates": "1",
+          "retainedBytes": "1000",
+          "activeWorkMilliseconds": "0"
+        },
+        "terminalIdentities": [],
+        "phase": "sealed",
+        "accountingVersion": "0"
+      },
+      "canonicalUtf8": "{\"accountingVersion\":\"0\",\"counters\":{\"activeWorkMilliseconds\":\"0\",\"examinedEdges\":\"0\",\"pathStates\":\"1\",\"retainedBytes\":\"1000\"},\"generation\":\"0\",\"interfaceVersion\":\"truss-traversal-private-state/0.1.0\",\"phase\":\"sealed\",\"query\":{\"context\":{\"authorizedScopeIdentity\":\"scope\",\"catalogRevision\":\"2\",\"consistency\":{\"kind\":\"held_snapshot\",\"snapshotIdentity\":\"snapshot\"},\"layoutProfile\":{\"identity\":\"fixture\",\"sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"version\":\"0.1.0\"},\"readProfile\":{\"identity\":\"fixture\",\"sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"version\":\"0.1.0\"}},\"domain\":\"truss-direct-traversal-query/0.1.0\",\"hops\":[{\"direction\":\"outgoing\",\"relationship\":{\"definitionPin\":\"fixture\",\"owner\":{\"documentId\":\"doc-é\",\"moduleId\":\"module\"},\"relationshipId\":\"2\"}}],\"start\":{\"definitionPin\":\"fixture\",\"id\":\"1\",\"owner\":{\"documentId\":\"doc-é\",\"moduleId\":\"module\"},\"typeId\":\"1\"}},\"resourceProfile\":{\"identity\":\"fixture\",\"sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"version\":\"0.1.0\"},\"stageIdentity\":\"stage\",\"terminalIdentities\":[],\"workVersion\":\"1\"}",
+      "preimageHex": "74727573732d63616e6f6e6963616c2f302e312e300a74727573732d74726176657273616c2d707269766174652d73746174652f302e312e300a7b226163636f756e74696e6756657273696f6e223a2230222c22636f756e74657273223a7b22616374697665576f726b4d696c6c697365636f6e6473223a2230222c226578616d696e65644564676573223a2230222c2270617468537461746573223a2231222c2272657461696e65644279746573223a2231303030227d2c2267656e65726174696f6e223a2230222c22696e7465726661636556657273696f6e223a2274727573732d74726176657273616c2d707269766174652d73746174652f302e312e30222c227068617365223a227365616c6564222c227175657279223a7b22636f6e74657874223a7b22617574686f72697a656453636f70654964656e74697479223a2273636f7065222c22636174616c6f675265766973696f6e223a2232222c22636f6e73697374656e6379223a7b226b696e64223a2268656c645f736e617073686f74222c22736e617073686f744964656e74697479223a22736e617073686f74227d2c226c61796f757450726f66696c65223a7b226964656e74697479223a2266697874757265222c22736861323536223a2261616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161222c2276657273696f6e223a22302e312e30227d2c227265616450726f66696c65223a7b226964656e74697479223a2266697874757265222c22736861323536223a2261616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161222c2276657273696f6e223a22302e312e30227d7d2c22646f6d61696e223a2274727573732d6469726563742d74726176657273616c2d71756572792f302e312e30222c22686f7073223a5b7b22646972656374696f6e223a226f7574676f696e67222c2272656c6174696f6e73686970223a7b22646566696e6974696f6e50696e223a2266697874757265222c226f776e6572223a7b22646f63756d656e744964223a22646f632dc3a9222c226d6f64756c654964223a226d6f64756c65227d2c2272656c6174696f6e736869704964223a2232227d7d5d2c227374617274223a7b22646566696e6974696f6e50696e223a2266697874757265222c226964223a2231222c226f776e6572223a7b22646f63756d656e744964223a22646f632dc3a9222c226d6f64756c654964223a226d6f64756c65227d2c22747970654964223a2231227d7d2c227265736f7572636550726f66696c65223a7b226964656e74697479223a2266697874757265222c22736861323536223a2261616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161222c2276657273696f6e223a22302e312e30227d2c2273746167654964656e74697479223a227374616765222c227465726d696e616c4964656e746974696573223a5b5d2c22776f726b56657273696f6e223a2231227d",
+      "sha256": "70e161a4b1d0417c3a5f298e3f9e9ac0d4085cbde0cccd23bac4ee80c9a49a20"
+    },
+    {
+      "name": "ledger",
+      "domain": "truss-traversal-resource-ledger/0.1.0",
+      "input": {
+        "interfaceVersion": "truss-traversal-resource-ledger/0.1.0",
+        "assemblyId": "assembly",
+        "handle": {
+          "stageIdentity": "stage",
+          "generation": "0",
+          "querySha256": "666d6935199b14fa2b2a09ad41229bcb5465e17c82809b12d6356243de216c42",
+          "context": {
+            "catalogRevision": "2",
+            "layoutProfile": {
+              "identity": "fixture",
+              "version": "0.1.0",
+              "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            "readProfile": {
+              "identity": "fixture",
+              "version": "0.1.0",
+              "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            "authorizedScopeIdentity": "scope",
+            "consistency": {
+              "kind": "held_snapshot",
+              "snapshotIdentity": "snapshot"
+            }
+          }
+        },
+        "storeProfile": {
+          "identity": "fixture",
+          "version": "0.1.0",
+          "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "resourceProfile": {
+          "identity": "fixture",
+          "version": "0.1.0",
+          "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "accountingVersion": "0",
+        "originalQuery": {
+          "identity": "original",
+          "sha256": "22c515b17aabca65639b64a60602f1d154a20f692f5af1dfe94f356007b1ac77"
+        },
+        "originalCreation": {
+          "identity": "original",
+          "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "initialWork": {
+          "examinedEdges": "0",
+          "pathStates": "1",
+          "activeWorkMilliseconds": "0"
+        },
+        "actualWork": {
+          "examinedEdges": "0",
+          "pathStates": "1",
+          "activeWorkMilliseconds": "0"
+        },
+        "outstandingMaximumWork": {
+          "examinedEdges": "0",
+          "pathStates": "0",
+          "activeWorkMilliseconds": "0"
+        },
+        "retainedBytes": "1000",
+        "chargedReservationBytes": "4096",
+        "permits": []
+      },
+      "canonicalUtf8": "{\"accountingVersion\":\"0\",\"actualWork\":{\"activeWorkMilliseconds\":\"0\",\"examinedEdges\":\"0\",\"pathStates\":\"1\"},\"assemblyId\":\"assembly\",\"chargedReservationBytes\":\"4096\",\"handle\":{\"context\":{\"authorizedScopeIdentity\":\"scope\",\"catalogRevision\":\"2\",\"consistency\":{\"kind\":\"held_snapshot\",\"snapshotIdentity\":\"snapshot\"},\"layoutProfile\":{\"identity\":\"fixture\",\"sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"version\":\"0.1.0\"},\"readProfile\":{\"identity\":\"fixture\",\"sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"version\":\"0.1.0\"}},\"generation\":\"0\",\"querySha256\":\"666d6935199b14fa2b2a09ad41229bcb5465e17c82809b12d6356243de216c42\",\"stageIdentity\":\"stage\"},\"initialWork\":{\"activeWorkMilliseconds\":\"0\",\"examinedEdges\":\"0\",\"pathStates\":\"1\"},\"interfaceVersion\":\"truss-traversal-resource-ledger/0.1.0\",\"originalCreation\":{\"identity\":\"original\",\"sha256\":\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\"},\"originalQuery\":{\"identity\":\"original\",\"sha256\":\"22c515b17aabca65639b64a60602f1d154a20f692f5af1dfe94f356007b1ac77\"},\"outstandingMaximumWork\":{\"activeWorkMilliseconds\":\"0\",\"examinedEdges\":\"0\",\"pathStates\":\"0\"},\"permits\":[],\"resourceProfile\":{\"identity\":\"fixture\",\"sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"version\":\"0.1.0\"},\"retainedBytes\":\"1000\",\"storeProfile\":{\"identity\":\"fixture\",\"sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"version\":\"0.1.0\"}}",
+      "preimageHex": "74727573732d63616e6f6e6963616c2f302e312e300a74727573732d74726176657273616c2d7265736f757263652d6c65646765722f302e312e300a7b226163636f756e74696e6756657273696f6e223a2230222c2261637475616c576f726b223a7b22616374697665576f726b4d696c6c697365636f6e6473223a2230222c226578616d696e65644564676573223a2230222c2270617468537461746573223a2231227d2c22617373656d626c794964223a22617373656d626c79222c22636861726765645265736572766174696f6e4279746573223a2234303936222c2268616e646c65223a7b22636f6e74657874223a7b22617574686f72697a656453636f70654964656e74697479223a2273636f7065222c22636174616c6f675265766973696f6e223a2232222c22636f6e73697374656e6379223a7b226b696e64223a2268656c645f736e617073686f74222c22736e617073686f744964656e74697479223a22736e617073686f74227d2c226c61796f757450726f66696c65223a7b226964656e74697479223a2266697874757265222c22736861323536223a2261616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161222c2276657273696f6e223a22302e312e30227d2c227265616450726f66696c65223a7b226964656e74697479223a2266697874757265222c22736861323536223a2261616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161222c2276657273696f6e223a22302e312e30227d7d2c2267656e65726174696f6e223a2230222c227175657279536861323536223a2236363664363933353139396231346661326232613039616434313232396263623534363565313763383238303962313264363335363234336465323136633432222c2273746167654964656e74697479223a227374616765227d2c22696e697469616c576f726b223a7b22616374697665576f726b4d696c6c697365636f6e6473223a2230222c226578616d696e65644564676573223a2230222c2270617468537461746573223a2231227d2c22696e7465726661636556657273696f6e223a2274727573732d74726176657273616c2d7265736f757263652d6c65646765722f302e312e30222c226f726967696e616c4372656174696f6e223a7b226964656e74697479223a226f726967696e616c222c22736861323536223a2262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262227d2c226f726967696e616c5175657279223a7b226964656e74697479223a226f726967696e616c222c22736861323536223a2232326335313562313761616263613635363339623634613630363032663164313534613230663639326635616631646665393466333536303037623161633737227d2c226f75747374616e64696e674d6178696d756d576f726b223a7b22616374697665576f726b4d696c6c697365636f6e6473223a2230222c226578616d696e65644564676573223a2230222c2270617468537461746573223a2230227d2c227065726d697473223a5b5d2c227265736f7572636550726f66696c65223a7b226964656e74697479223a2266697874757265222c22736861323536223a2261616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161222c2276657273696f6e223a22302e312e30227d2c2272657461696e65644279746573223a2231303030222c2273746f726550726f66696c65223a7b226964656e74697479223a2266697874757265222c22736861323536223a2261616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161222c2276657273696f6e223a22302e312e30227d7d",
+      "sha256": "37cb2c3501d5fb929b6a0adf1811d9e51d3c7d4cbcccfaa0d116aa6e8d825e7f"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "interfaceVersion": "truss-operation-arbitration-resource/0.1.0",
+  "identity": "truss-operation-arbitration-bounded-reference",
+  "version": "0.1.0",
+  "status": "unqualified_candidate",
+  "retention": "process_lifetime",
+  "limits": {
+    "registeredAssemblies": "64",
+    "retainedAttempts": "4096",
+    "simultaneousPreparedAttempts": "256",
+    "activeOrUnresolvedLeases": "64",
+    "retainedRegistryBytes": "8388608",
+    "singleAttemptMetadataBytes": "4096",
+    "singleCompletionEvidenceBytes": "65536"
+  },
+  "counterEncoding": "canonical_nonnegative_decimal",
+  "admission": "reserve_complete_attempt_and_worst_case_decision_cleanup_metadata_before_prepare",
+  "uncertainRefund": false,
+  "payload": "metadata_and_original_protected_evidence_references_only"
+}

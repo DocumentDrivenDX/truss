@@ -1,0 +1,58 @@
+{
+  "scope": "Four original direct UPDATE mutation masks, statement-local SET null/parameter/cast carriers and complete ordered RETURNING source projections. Predicates have separate evidence; native descriptors/null behavior, functions/trigger side effects, original authority/resources/native parity remain unqualified.",
+  "sourcePins": [
+    {
+      "path": "docs/helix/02-design/contracts/feed-finalization-clear-v0.1.proposal.sql",
+      "sourceSha256": "9e26a2a50479890d2985f7984f80f5c3bcaecf0e94da7928231ec57a39c99ae1",
+      "artifactPath": "docs/helix/02-design/contracts/feed-finalization-clear-v0.1.proposal.umf.json",
+      "artifactSha256": "f1192f39a86133f32b8c589abb673f820750319dbe9023dd273fdea6aae152f3"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/feed-finalization-assign-publish-v0.1.proposal.sql",
+      "sourceSha256": "d34773fd1f1d75a93f3dffedcf0bc23be2e9926d5d4382506ab9926005a529f3",
+      "artifactPath": "docs/helix/02-design/contracts/feed-finalization-assign-publish-v0.1.proposal.umf.json",
+      "artifactSha256": "fe3466b2f6561232b2c801dd9af28adc3cc071136eed1d31b3bfe31160697f7e"
+    }
+  ],
+  "statements": 4,
+  "controls": [
+    {
+      "case": "counter mutation",
+      "refused": true
+    },
+    {
+      "case": "original clock mutation",
+      "refused": true
+    },
+    {
+      "case": "duplicated assignment",
+      "refused": true
+    },
+    {
+      "case": "wrong ordinal slot",
+      "refused": true
+    },
+    {
+      "case": "swapped manifest slots",
+      "refused": true
+    },
+    {
+      "case": "added FROM modifier",
+      "refused": true
+    },
+    {
+      "case": "reordered result columns",
+      "refused": true
+    },
+    {
+      "case": "omitted returned address",
+      "refused": true
+    },
+    {
+      "case": "forged returned alias",
+      "refused": true
+    }
+  ],
+  "nativeExecution": false,
+  "complete": false
+}

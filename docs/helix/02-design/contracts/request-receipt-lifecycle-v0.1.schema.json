@@ -1,0 +1,354 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:request-receipt-lifecycle:0.1.0",
+  "description": "Retained/expired/protection/purge shape; original identity, full event union, time/commit/protection/current authority and native arbitration remain semantic.",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "state": {
+          "const": "complete"
+        },
+        "receipt": {
+          "$ref": "urn:truss:draft:request-receipt:0.1.0"
+        }
+      },
+      "required": [
+        "state",
+        "receipt"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "state": {
+          "const": "expired"
+        },
+        "identity": {
+          "$ref": "#/$defs/expired"
+        }
+      },
+      "required": [
+        "state",
+        "identity"
+      ],
+      "additionalProperties": false
+    }
+  ],
+  "$defs": {
+    "expired": {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-expired-request/0.1.0"
+        },
+        "authorizedScopeIdentity": {
+          "type": "string"
+        },
+        "requestId": {
+          "type": "string"
+        },
+        "canonicalProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "semanticDomain": {
+          "const": "truss-group-input/0.1.0"
+        },
+        "inputSha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "expiredAt": {
+          "type": "string"
+        },
+        "expiryEvidenceSha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "clockProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "retentionProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "expiryProcedureProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "expiryEvidenceIdentity": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "authorizedScopeIdentity",
+        "requestId",
+        "canonicalProfile",
+        "semanticDomain",
+        "inputSha256",
+        "expiredAt",
+        "expiryEvidenceSha256",
+        "clockProfile",
+        "retentionProfile",
+        "expiryProcedureProfile",
+        "expiryEvidenceIdentity"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "clockProfile": {
+                "type": "object",
+                "properties": {
+                  "identity": {
+                    "const": "truss-receipt-clock"
+                  },
+                  "version": {
+                    "const": "0.1.0"
+                  }
+                },
+                "required": [
+                  "identity",
+                  "version"
+                ]
+              }
+            },
+            "required": [
+              "clockProfile"
+            ]
+          },
+          "then": {
+            "properties": {
+              "expiredAt": {
+                "type": "string",
+                "pattern": "^(?!0000)[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{6}Z(?![\\s\\S])"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "protection": {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-receipt-protection/0.1.0"
+        },
+        "authorizedScopeIdentity": {
+          "type": "string"
+        },
+        "requestId": {
+          "type": "string"
+        },
+        "firstConfirmedCommittedAt": {
+          "type": "string"
+        },
+        "protectedUntil": {
+          "type": "string"
+        },
+        "observationEvidenceSha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "clockProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "retentionProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "originalCommittedObservation": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "originalClockEvidence": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "authorizedScopeIdentity",
+        "requestId",
+        "firstConfirmedCommittedAt",
+        "protectedUntil",
+        "observationEvidenceSha256",
+        "clockProfile",
+        "retentionProfile",
+        "originalCommittedObservation",
+        "originalClockEvidence"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "clockProfile": {
+                "type": "object",
+                "properties": {
+                  "identity": {
+                    "const": "truss-receipt-clock"
+                  },
+                  "version": {
+                    "const": "0.1.0"
+                  }
+                },
+                "required": [
+                  "identity",
+                  "version"
+                ]
+              }
+            },
+            "required": [
+              "clockProfile"
+            ]
+          },
+          "then": {
+            "properties": {
+              "firstConfirmedCommittedAt": {
+                "type": "string",
+                "pattern": "^(?!0000)[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{6}Z(?![\\s\\S])"
+              },
+              "protectedUntil": {
+                "type": "string",
+                "pattern": "^(?!0000)[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{6}Z(?![\\s\\S])"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "purgeAssessment": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "protected"
+            },
+            "reason": {
+              "enum": [
+                "minimum_window",
+                "declared_window",
+                "original_event_retained"
+              ]
+            }
+          },
+          "required": [
+            "outcome",
+            "reason"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "unavailable"
+            },
+            "reason": {
+              "enum": [
+                "commit_observation_missing",
+                "inventory_incomplete",
+                "clock_invalid",
+                "profile_unsupported",
+                "scope_unavailable"
+              ]
+            }
+          },
+          "required": [
+            "outcome",
+            "reason"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "eligible"
+            },
+            "authorizedScopeIdentity": {
+              "type": "string"
+            },
+            "requestId": {
+              "type": "string"
+            },
+            "retentionProfile": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+            },
+            "assessedAt": {
+              "type": "string"
+            },
+            "protectionEvidenceSha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "eventInventory": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "kind": {
+                      "const": "event_bearing"
+                    },
+                    "originalEvents": {
+                      "type": "array",
+                      "minItems": 1,
+                      "items": {
+                        "$ref": "urn:truss:draft:group-result:0.1.0#/$defs/journalEventReference"
+                      }
+                    },
+                    "absenceEvidenceSha256": {
+                      "type": "string",
+                      "pattern": "^[a-f0-9]{64}$"
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "originalEvents",
+                    "absenceEvidenceSha256"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "kind": {
+                      "const": "all_no_op"
+                    },
+                    "originalEvents": {
+                      "type": "array",
+                      "maxItems": 0,
+                      "items": {
+                        "$ref": "urn:truss:draft:group-result:0.1.0#/$defs/journalEventReference"
+                      }
+                    },
+                    "replayWindowProfile": {
+                      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "originalEvents",
+                    "replayWindowProfile"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
+          "required": [
+            "outcome",
+            "authorizedScopeIdentity",
+            "requestId",
+            "retentionProfile",
+            "assessedAt",
+            "protectionEvidenceSha256",
+            "eventInventory"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

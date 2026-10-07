@@ -1,0 +1,109 @@
+{
+  "scope": "Nine explicitly selected private operation/touch/cleanup source families; current original receipt and source/archive/export hash consistency only. Not complete runtime inventory, fresh parser rerun, installer effects, routine authority or native execution. Statement counts correspond to unresolved parser statement receipts, not executable support.",
+  "sourceFamilies": 9,
+  "statements": 18,
+  "installable": false,
+  "nativeExecution": false,
+  "historicalInventory": "private-custody-runtime-source-inventory.json",
+  "observations": [
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/private-custody-cleanup-observation-source.json",
+      "receiptSha256": "af78cca57cef69eee46048e3797b70c193d3a6e3732ee470dccf2992709923c1",
+      "statementCount": 2,
+      "sourcePath": "docs/helix/02-design/contracts/private-custody-cleanup-observation-v0.1.proposal.sql",
+      "sourceSha256": "a7db7c27be8c9cc64b73a553a6d6e5ea34546771b3ce164dfa513ea9b07f1100",
+      "artifactPath": "docs/helix/02-design/contracts/private-custody-cleanup-observation-v0.1.proposal.umf.json",
+      "artifactSha256": "ece33d97531c7ef1f9a2de78fc0fd31e585f7aa51654da7ca4bd1a8a03277712",
+      "exportPath": "docs/helix/04-build/evidence/design-audit/private-custody-cleanup-observation.owner-export.sql",
+      "exportSha256": "0b424dba93fd18e878d31e39d8654b6588606780abc625949c9ae06d384d9421"
+    },
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/private-custody-cleanup-selected-row-observation-source.json",
+      "receiptSha256": "56a5007dc5dd8cfffe4ac3c43ce0ad01ae484be13d35a0a22fa8a8c234e740d7",
+      "statementCount": 2,
+      "sourcePath": "docs/helix/02-design/contracts/private-custody-cleanup-selected-row-observation-v0.1.proposal.sql",
+      "sourceSha256": "d2f746a2dc1590036ebedcb2fe7ced62f8ed3b0a623d9825fa326c970cca3f40",
+      "artifactPath": "docs/helix/02-design/contracts/private-custody-cleanup-selected-row-observation-v0.1.proposal.umf.json",
+      "artifactSha256": "b53403e8f0d132a3b8aa1069a88f69a16a6d192de27b5042e06b35f614adf8ad",
+      "exportPath": "docs/helix/04-build/evidence/design-audit/private-custody-cleanup-selected-row-observation.owner-export.sql",
+      "exportSha256": "de9f47bb05e8501a0d8049d14bf0cb705cd79a7267cd8029c9a164f4365193c7"
+    },
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/private-custody-cleanup-identity-page-source.json",
+      "receiptSha256": "7eb03f60e1ee7337223412171af3be18ac4cb7abb24f180dee5fdf2bf6aea4b9",
+      "statementCount": 4,
+      "sourcePath": "docs/helix/02-design/contracts/private-custody-cleanup-identity-page-v0.1.proposal.sql",
+      "sourceSha256": "25b81516a22516701ad938c07a704638f4d1d5118501b3caf214b188e9ab5b3a",
+      "artifactPath": "docs/helix/02-design/contracts/private-custody-cleanup-identity-page-v0.1.proposal.umf.json",
+      "artifactSha256": "e875ac05a73db749e6af5540480c582c869a8a1007efa44654df33cda65cc3ea",
+      "exportPath": "docs/helix/04-build/evidence/design-audit/private-custody-cleanup-identity-page.owner-export.sql",
+      "exportSha256": "dd2c8ae77fc1ec58f9db634c4080ff097ed89d392e3d2014a61ae299e5e82ccb"
+    },
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/private-custody-cleanup-delete-source.json",
+      "receiptSha256": "262d7b7c4e723c7372ea0212df2be6881225ea00ff95ff9820a259875ac125bf",
+      "statementCount": 2,
+      "sourcePath": "docs/helix/02-design/contracts/private-custody-cleanup-delete-v0.1.proposal.sql",
+      "sourceSha256": "73b598e2123c984aa197b25dde3acaf16101d5d901ddd27cce6671df0f22020a",
+      "artifactPath": "docs/helix/02-design/contracts/private-custody-cleanup-delete-v0.1.proposal.umf.json",
+      "artifactSha256": "cb1158820e6ff2348741939a70f2a24c2e228afc2fe882666dd03f06ff72ae46",
+      "exportPath": "docs/helix/04-build/evidence/design-audit/private-custody-cleanup-delete.owner-export.sql",
+      "exportSha256": "991ece39f0ffc0edcb2c205379e9864d4512e44bd77afd3eb1cdf8a244b3b101"
+    },
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/row-operation-generation-reset-source.json",
+      "receiptSha256": "c6077c6d1e68b9007d19df23c1c52bb5518d4c632b700335a35c1c2e0c361e7b",
+      "statementCount": 1,
+      "sourcePath": "docs/helix/02-design/contracts/row-operation-generation-reset-v0.1.proposal.sql",
+      "sourceSha256": "c1a41e397850e8507e1e5531e15fdf5a8658bc2f82255f62be455572eb5c4708",
+      "artifactPath": "docs/helix/02-design/contracts/row-operation-generation-reset-v0.1.proposal.umf.json",
+      "artifactSha256": "d6d71f1798c5efbb9b65683f6b5fe6de49daafce6dd953b697399bd6577df5b0",
+      "exportPath": "docs/helix/04-build/evidence/design-audit/row-operation-generation-reset.owner-export.sql",
+      "exportSha256": "a27bee111a28fa14256567b2e204ef359af945b27b10e688b7864fda34c4af1a"
+    },
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/row-operation-phase-transitions-source.json",
+      "receiptSha256": "68ca7da984a2a75e94346fed5d3673fe7b8053b0abaf63c13215230f91ae33fe",
+      "statementCount": 3,
+      "sourcePath": "docs/helix/02-design/contracts/row-operation-phase-transitions-v0.1.proposal.sql",
+      "sourceSha256": "91f4743c30e2326681b5d51cb5d28e65fe90d271dfda3f9d1593ea81a66b0274",
+      "artifactPath": "docs/helix/02-design/contracts/row-operation-phase-transitions-v0.1.proposal.umf.json",
+      "artifactSha256": "0750c78b45889f4b2ebadf9c5104f32ab5a1c94c74f9ed3023e64e2041716dcf",
+      "exportPath": "docs/helix/04-build/evidence/design-audit/row-operation-phase-transitions.owner-export.sql",
+      "exportSha256": "a7a898c3e489eed16d643104a472bc9ef60bbe913ca730cab7bd40f59ffa408b"
+    },
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/row-touch-generation-advance-source.json",
+      "receiptSha256": "5d3cf2fc6973963dfec38fbc07688ada037bffca173fd8170b9ff73502d6366c",
+      "statementCount": 1,
+      "sourcePath": "docs/helix/02-design/contracts/row-touch-generation-advance-v0.1.proposal.sql",
+      "sourceSha256": "b0e78c6bb7992d13bc2933e080c45c751dc330fe3a78cdb3814aadd776dea738",
+      "artifactPath": "docs/helix/02-design/contracts/row-touch-generation-advance-v0.1.proposal.umf.json",
+      "artifactSha256": "417087f955c1e29d66e5cf83d9dd38ca33bb2dfc75a8985095563ae1f50df631",
+      "exportPath": "docs/helix/04-build/evidence/design-audit/row-touch-generation-advance.owner-export.sql",
+      "exportSha256": "a229a28011a988cd1d0f99bfe1552c6fb254b6a4f945508cc9a018d60599f3c1"
+    },
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/row-touch-create-and-seal-source.json",
+      "receiptSha256": "716175734153f9b2b10a42aa2c7f29d87c1234b166a60bdaba53e4988f24f72a",
+      "statementCount": 2,
+      "sourcePath": "docs/helix/02-design/contracts/row-touch-create-and-seal-v0.1.proposal.sql",
+      "sourceSha256": "e55ffe00114ebe31e4699e6850b1c9a7282968b10dee242c594bbf47e4c2e083",
+      "artifactPath": "docs/helix/02-design/contracts/row-touch-create-and-seal-v0.1.proposal.umf.json",
+      "artifactSha256": "279ec8935edf9c4fe175c8c5dc542283cf62dd4ccabe6b43adf7c03783ac45ee",
+      "exportPath": "docs/helix/04-build/evidence/design-audit/row-touch-create-and-seal.owner-export.sql",
+      "exportSha256": "030feb544126816331fa96d69e2e0eb343068a5cadae2feacb47f17ea76c5a37"
+    },
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/row-touch-current-writer-observation-source.json",
+      "receiptSha256": "3ebdd9c803609e6cb9e82bc2a3562003bf66c15fae78060afd944e77397449e2",
+      "statementCount": 1,
+      "sourcePath": "docs/helix/02-design/contracts/row-touch-current-writer-observation-v0.1.proposal.sql",
+      "sourceSha256": "b11cf572f00bc964ce5985fb7e0db7ec5b23eb82864b627dabb2a50c61a5b7a7",
+      "artifactPath": "docs/helix/02-design/contracts/row-touch-current-writer-observation-v0.1.proposal.umf.json",
+      "artifactSha256": "1d2af468d8d3e911ee4cefbbd13ba94cfb674230ea03b2941f6235891fb9e323",
+      "exportPath": "docs/helix/04-build/evidence/design-audit/row-touch-current-writer-observation.owner-export.sql",
+      "exportSha256": "f1616cae0fad2752184d819dfd0093e6a7a98007f466d70c5239cf6607a91aea"
+    }
+  ]
+}

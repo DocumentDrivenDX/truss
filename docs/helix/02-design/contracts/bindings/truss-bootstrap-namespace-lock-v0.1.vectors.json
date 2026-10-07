@@ -1,0 +1,34 @@
+{
+  "profile": "truss-bootstrap-namespace-lock/0.1.0",
+  "scope": "Byte mapping only; no native locking or identity authority",
+  "vectors": [
+    {
+      "databaseIdentity": "deployment",
+      "schemaName": "truss",
+      "preimageHex": "74727573732d626f6f7473747261702d6e616d6573706163652d6c6f636b2f302e312e30000000000a6465706c6f796d656e74000000057472757373",
+      "sha256": "c52fb668b111689ca46f3c8847f9659a7f47653430be78477a406f25ea87c1d0",
+      "signedLockKey": "-4237968163568785252"
+    },
+    {
+      "databaseIdentity": "deployment",
+      "schemaName": "Truss",
+      "preimageHex": "74727573732d626f6f7473747261702d6e616d6573706163652d6c6f636b2f302e312e30000000000a6465706c6f796d656e74000000055472757373",
+      "sha256": "0637be7afcaf384a22f31dc8db41303aa82ccc7783ac4698ba265a974dbcd66c",
+      "signedLockKey": "448036123381282890"
+    },
+    {
+      "databaseIdentity": "deployment",
+      "schemaName": "é",
+      "preimageHex": "74727573732d626f6f7473747261702d6e616d6573706163652d6c6f636b2f302e312e30000000000a6465706c6f796d656e7400000002c3a9",
+      "sha256": "3ebaa89cd4345c620628e7a6de1d449e4ddc335738416f0485e2ca534120225f",
+      "signedLockKey": "4520110567548279906"
+    },
+    {
+      "databaseIdentity": "deployment",
+      "schemaName": "é",
+      "preimageHex": "74727573732d626f6f7473747261702d6e616d6573706163652d6c6f636b2f302e312e30000000000a6465706c6f796d656e740000000365cc81",
+      "sha256": "d1134e4445c7008ae31eb1ab90fbd58fb9df41c09d1147c5ed3380d5c6efb947",
+      "signedLockKey": "-3381272840089698166"
+    }
+  ]
+}

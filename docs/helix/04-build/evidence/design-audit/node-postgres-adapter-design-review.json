@@ -1,0 +1,20 @@
+{
+  "scope": "Official documentation and mutable upstream master source design review only; no immutable package/build selection, installation or native execution",
+  "candidate": "node-postgres JavaScript driver plus pg-protocol",
+  "sources": [
+    "https://node-postgres.com/apis/result",
+    "https://node-postgres.com/features/queries",
+    "https://raw.githubusercontent.com/brianc/node-postgres/master/packages/pg/lib/result.js",
+    "https://raw.githubusercontent.com/brianc/node-postgres/master/packages/pg/lib/client.js",
+    "https://raw.githubusercontent.com/brianc/node-postgres/master/packages/pg-protocol/src/parser.ts"
+  ],
+  "findings": [
+    "rowMode array and per-query type parsers can support positional identity-string decoding; actual native formats/bytes remain qualified separately",
+    "Public Result reduces command to category and parses affected counts with parseInt in reviewed source; it cannot satisfy original exact tag/count contract alone",
+    "Protocol source retains CommandComplete text, ReadyForQuery status and descriptor ordinal/type/provenance/format fields; a selected original event capture procedure is still needed",
+    "Documented parameter conversion accepts undefined/objects/arrays and callbacks; Truss must supply only preadmitted null/string carriers and its own exact native array text",
+    "Client timeout/cancel/queue behavior is not proof of original work termination, rollback or safe connection reuse; pipeline remains outside current qualification",
+    "Actual frame/encoding/materialization bounds, connection/epoch mediation, error extraction and cancellation/recovery producers remain unqualified"
+  ],
+  "selection": "unselected; Node runtime support remains independently governed by ADR-001; portable core stays browser compatible"
+}

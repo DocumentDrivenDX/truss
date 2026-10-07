@@ -1,0 +1,26 @@
+{
+  "interfaceVersion": "truss-import-resource/0.1.0",
+  "identity": "truss-import-bounded-reference",
+  "version": "0.1.0",
+  "status": "unqualified_candidate",
+  "limits": {
+    "inputRecords": "1000",
+    "canonicalInputBytes": "16777216",
+    "singlePayloadBytes": "4194304",
+    "batchRecords": "100",
+    "batchCanonicalRecordBytes": "8388608",
+    "retainedCandidateBytes": "67108864",
+    "reportBytes": "16777216",
+    "operationElapsedMilliseconds": "30000",
+    "containmentObservationMilliseconds": "5000",
+    "reportContextBytes": "1048576",
+    "reportOutcomeBytes": "8192",
+    "reportBatchBytes": "4096",
+    "unprocessedIndexBytes": "8"
+  },
+  "partition": "stable_objects_then_edges_greedy_bounded_chunks",
+  "counterEncoding": "canonical_nonnegative_decimal",
+  "retryPolicy": "no_automatic_reexecution",
+  "selection": "exact original artifact admitted by import profile",
+  "reportReservation": "contextCeiling + inputCount * (outcomeCeiling + batchCeiling + unprocessedIndexCeiling)"
+}

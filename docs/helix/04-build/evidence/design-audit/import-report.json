@@ -1,0 +1,96 @@
+{
+  "scope": "Import report shape only; no count, index coverage, ownership, evidence trust or native qualification",
+  "cases": 18,
+  "outcomes": [
+    {
+      "name": "outer engine scope pending",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "outer engine scope committed needs semantic rejection",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "missing configuration",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "native numeric configuration generation",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "unknown reuse policy",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "shape does not prove producer inventory installed",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "unresolved writer attempt",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "observed create with commit uncertainty",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "rejected input",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "skipped identity",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "created missing identity",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "committed missing proof",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "native numeric count",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "unknown outcome",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "duplicate index needs semantic rejection",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "false count needs semantic rejection",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "host committed disposition needs semantic rejection",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "processed unresolved attempt cannot qualify full-load success",
+      "expected": true,
+      "actual": true
+    }
+  ]
+}

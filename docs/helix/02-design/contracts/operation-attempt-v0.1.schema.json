@@ -1,0 +1,375 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:operation-attempt:0.1.0",
+  "title": "Draft private arbitration attempt observation",
+  "description": "Original service record metadata only; no wire value mints attempt/lease authority or proves native transaction state. References resolve through original issuer custody.",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-operation-attempt/0.1.0"
+        },
+        "registryIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "assemblyId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "executorIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "transactionIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "transactionGeneration": {
+          "type": "string",
+          "minLength": 1
+        },
+        "attemptIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "registryProfile": {
+          "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/profilePin"
+        },
+        "resourceProfile": {
+          "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/profilePin"
+        },
+        "originalComposition": {
+          "$ref": "urn:truss:draft:operation-completion:0.1.0#/$defs/reference"
+        },
+        "originalPreparation": {
+          "$ref": "urn:truss:draft:operation-completion:0.1.0#/$defs/reference"
+        },
+        "phase": {
+          "const": "prepared"
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "registryIdentity",
+        "assemblyId",
+        "executorIdentity",
+        "transactionIdentity",
+        "transactionGeneration",
+        "attemptIdentity",
+        "registryProfile",
+        "resourceProfile",
+        "originalComposition",
+        "originalPreparation",
+        "phase"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-operation-attempt/0.1.0"
+        },
+        "registryIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "assemblyId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "executorIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "transactionIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "transactionGeneration": {
+          "type": "string",
+          "minLength": 1
+        },
+        "attemptIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "registryProfile": {
+          "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/profilePin"
+        },
+        "resourceProfile": {
+          "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/profilePin"
+        },
+        "originalComposition": {
+          "$ref": "urn:truss:draft:operation-completion:0.1.0#/$defs/reference"
+        },
+        "originalPreparation": {
+          "$ref": "urn:truss:draft:operation-completion:0.1.0#/$defs/reference"
+        },
+        "phase": {
+          "const": "admitted"
+        },
+        "leaseIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "originalAcquisition": {
+          "$ref": "urn:truss:draft:operation-completion:0.1.0#/$defs/reference"
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "registryIdentity",
+        "assemblyId",
+        "executorIdentity",
+        "transactionIdentity",
+        "transactionGeneration",
+        "attemptIdentity",
+        "registryProfile",
+        "resourceProfile",
+        "originalComposition",
+        "originalPreparation",
+        "phase",
+        "leaseIdentity",
+        "originalAcquisition"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-operation-attempt/0.1.0"
+        },
+        "registryIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "assemblyId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "executorIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "transactionIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "transactionGeneration": {
+          "type": "string",
+          "minLength": 1
+        },
+        "attemptIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "registryProfile": {
+          "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/profilePin"
+        },
+        "resourceProfile": {
+          "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/profilePin"
+        },
+        "originalComposition": {
+          "$ref": "urn:truss:draft:operation-completion:0.1.0#/$defs/reference"
+        },
+        "originalPreparation": {
+          "$ref": "urn:truss:draft:operation-completion:0.1.0#/$defs/reference"
+        },
+        "phase": {
+          "const": "refused"
+        },
+        "reason": {
+          "enum": [
+            "busy",
+            "invalid_transaction",
+            "unsupported_profile",
+            "disposed",
+            "integrity",
+            "resource"
+          ]
+        },
+        "originalDecision": {
+          "$ref": "urn:truss:draft:operation-completion:0.1.0#/$defs/reference"
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "registryIdentity",
+        "assemblyId",
+        "executorIdentity",
+        "transactionIdentity",
+        "transactionGeneration",
+        "attemptIdentity",
+        "registryProfile",
+        "resourceProfile",
+        "originalComposition",
+        "originalPreparation",
+        "phase",
+        "reason",
+        "originalDecision"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-operation-attempt/0.1.0"
+        },
+        "registryIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "assemblyId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "executorIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "transactionIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "transactionGeneration": {
+          "type": "string",
+          "minLength": 1
+        },
+        "attemptIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "registryProfile": {
+          "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/profilePin"
+        },
+        "resourceProfile": {
+          "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/profilePin"
+        },
+        "originalComposition": {
+          "$ref": "urn:truss:draft:operation-completion:0.1.0#/$defs/reference"
+        },
+        "originalPreparation": {
+          "$ref": "urn:truss:draft:operation-completion:0.1.0#/$defs/reference"
+        },
+        "phase": {
+          "const": "closed"
+        },
+        "closure": {
+          "enum": [
+            "abandoned",
+            "released",
+            "transaction_ended"
+          ]
+        },
+        "originalClosure": {
+          "$ref": "urn:truss:draft:operation-completion:0.1.0#/$defs/reference"
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "registryIdentity",
+        "assemblyId",
+        "executorIdentity",
+        "transactionIdentity",
+        "transactionGeneration",
+        "attemptIdentity",
+        "registryProfile",
+        "resourceProfile",
+        "originalComposition",
+        "originalPreparation",
+        "phase",
+        "closure",
+        "originalClosure"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-operation-attempt/0.1.0"
+        },
+        "registryIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "assemblyId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "executorIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "transactionIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "transactionGeneration": {
+          "type": "string",
+          "minLength": 1
+        },
+        "attemptIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "registryProfile": {
+          "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/profilePin"
+        },
+        "resourceProfile": {
+          "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/profilePin"
+        },
+        "originalComposition": {
+          "$ref": "urn:truss:draft:operation-completion:0.1.0#/$defs/reference"
+        },
+        "originalPreparation": {
+          "$ref": "urn:truss:draft:operation-completion:0.1.0#/$defs/reference"
+        },
+        "phase": {
+          "const": "unresolved"
+        },
+        "recoveryReferences": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "urn:truss:draft:operation-completion:0.1.0#/$defs/reference"
+          }
+        },
+        "lastConfirmedPhase": {
+          "enum": [
+            "prepared",
+            "admitted",
+            "refused",
+            "closed"
+          ]
+        },
+        "originalLastConfirmed": {
+          "$ref": "urn:truss:draft:operation-completion:0.1.0#/$defs/reference"
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "registryIdentity",
+        "assemblyId",
+        "executorIdentity",
+        "transactionIdentity",
+        "transactionGeneration",
+        "attemptIdentity",
+        "registryProfile",
+        "resourceProfile",
+        "originalComposition",
+        "originalPreparation",
+        "phase",
+        "recoveryReferences",
+        "lastConfirmedPhase",
+        "originalLastConfirmed"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

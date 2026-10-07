@@ -1,0 +1,25 @@
+{
+  "scope": "accepted report shape only; no native/runtime producer/profile adoption",
+  "cases": 16,
+  "failures": [],
+  "sourceSha256": {
+    "exact-value-v0.1.schema.json": "0c804796bfbf68339c299f0c55d24db58fcfcc929bffe2d5ffaf4a2f27e24880",
+    "history-record-v0.1.schema.json": "c35c1258028cc4c8c95dcd16b561caed4f2a347c086f72ebfc7bfc4f2dfcf2fe",
+    "history-event-v0.1.schema.json": "e42f9b48642528cabbb646ccb758eb12b7f030029b712cf5d6f5174cbd90bfa6",
+    "acceptance-input-v0.1.schema.json": "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd",
+    "acceptance-rejection-v0.1.schema.json": "98262b8d99fe0f87f752140a418a4e4f8751c4d28986457302586fee622258cf",
+    "enforcement-report-v0.1.schema.json": "452b7562d6e7959d940d5596a52a2221529482ea29853c3e021431885faa4351",
+    "direct-cursor-v0.1.schema.json": "bff79ad2e5ccc1047b43bdbe6eeb51b597f098c881313fd980de01c1685b4942",
+    "acceptance-report-v0.1.schema.json": "ccdc9976de3c158fae0a14d6cc41685d5f5a289d67daeb86b5e998b4a611e902"
+  },
+  "helperSha256": "838e8fb4f03f8e57c4f96d10d10df1705c808eddc9c553cfbdc01395076b3e61",
+  "validator": {
+    "name": "ajv",
+    "version": "8.17.1"
+  },
+  "runtime": {
+    "bun": "1.4.2"
+  },
+  "nativeEvidence": false,
+  "profileAdopted": false
+}

@@ -1,0 +1,215 @@
+{
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-row-native-admission/0.1.0"
+    },
+    "profile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "originalOperationContext": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "invocationKind": {
+      "enum": [
+        "standalone-mutation",
+        "mutation-group",
+        "import-batch",
+        "catalog-transform",
+        "home-migration",
+        "administrative-repair"
+      ]
+    },
+    "originalFamilyDefinition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "originalInput": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "orderedCommandDefinitions": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1024,
+      "items": {
+        "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+      }
+    },
+    "plannedEffectInventory": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "orderedRequiredRowScopes": {
+      "type": "array",
+      "maxItems": 1024,
+      "items": {
+        "type": "object",
+        "properties": {
+          "ownerKind": {
+            "enum": [
+              "object",
+              "edge"
+            ]
+          },
+          "ownerDiscriminatorId": {
+            "type": "string",
+            "pattern": "^(0|-?[1-9][0-9]*)$",
+            "maxLength": 11
+          },
+          "propertyOwnerTypeId": {
+            "type": "string",
+            "pattern": "^(0|-?[1-9][0-9]*)$",
+            "maxLength": 11
+          },
+          "propertyId": {
+            "type": "string",
+            "pattern": "^(0|-?[1-9][0-9]*)$",
+            "maxLength": 11
+          },
+          "originalOwnerProperty": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          },
+          "originalHome": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          },
+          "originalPrestate": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          },
+          "admittedCandidate": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          },
+          "ownerLocator": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "existing-native"
+                  },
+                  "ownerId": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]*)$",
+                    "maxLength": 20
+                  }
+                },
+                "required": [
+                  "kind",
+                  "ownerId"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "creation-alias"
+                  },
+                  "aliasIdentity": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 4096
+                  },
+                  "originalAliasDefinition": {
+                    "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+                  }
+                },
+                "required": [
+                  "kind",
+                  "aliasIdentity",
+                  "originalAliasDefinition"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          }
+        },
+        "required": [
+          "ownerKind",
+          "ownerLocator",
+          "ownerDiscriminatorId",
+          "propertyOwnerTypeId",
+          "propertyId",
+          "originalOwnerProperty",
+          "originalHome",
+          "originalPrestate",
+          "admittedCandidate"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "nonRowEffectObligationDefinition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "effectsReadinessDefinition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "applicationCompletionDefinition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "requestParticipation": {
+      "enum": [
+        "none",
+        "present"
+      ]
+    },
+    "originalRequestAdmission": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "profile",
+    "originalOperationContext",
+    "invocationKind",
+    "originalFamilyDefinition",
+    "originalInput",
+    "orderedCommandDefinitions",
+    "plannedEffectInventory",
+    "orderedRequiredRowScopes",
+    "nonRowEffectObligationDefinition",
+    "effectsReadinessDefinition",
+    "applicationCompletionDefinition",
+    "requestParticipation"
+  ],
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "requestParticipation": {
+            "const": "present"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "originalRequestAdmission": {}
+        },
+        "required": [
+          "originalRequestAdmission"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "requestParticipation": {
+            "const": "none"
+          }
+        }
+      },
+      "then": {
+        "not": {
+          "properties": {
+            "originalRequestAdmission": {}
+          },
+          "required": [
+            "originalRequestAdmission"
+          ]
+        }
+      }
+    }
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:row-native-admission:0.1.0",
+  "title": "Proposed native row-home family/group admission custody",
+  "description": "Closed original_group_custody_bytes admission body; full original family semantics, complete effect scope, actual native operation and optional request custody require semantic admission. No future result/seal/commit digest."
+}

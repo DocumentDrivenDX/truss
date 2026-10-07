@@ -1,0 +1,169 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:journal-page-request:0.1.0",
+  "title": "Draft journal page request",
+  "description": "Shape only; scope authority, native positions, retention horizon, exact context equality and deployment bounds require semantic admission.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-journal-page/0.1.0"
+    },
+    "context": {
+      "$ref": "#/$defs/context"
+    },
+    "continuation": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "state": {
+              "const": "first"
+            }
+          },
+          "required": [
+            "state"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "state": {
+              "const": "after"
+            },
+            "cursor": {
+              "$ref": "#/$defs/cursor"
+            }
+          },
+          "required": [
+            "state",
+            "cursor"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "limits": {
+      "type": "object",
+      "properties": {
+        "rows": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "encodedBytes": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        }
+      },
+      "required": [
+        "rows",
+        "encodedBytes"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "context",
+    "continuation",
+    "limits"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "context": {
+      "type": "object",
+      "properties": {
+        "sourceEpoch": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scopeIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "journalProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "observationProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "snapshot": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "const": "statement"
+                }
+              },
+              "required": [
+                "state"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "const": "held"
+                },
+                "snapshotIdentity": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "state",
+                "snapshotIdentity"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": [
+        "sourceEpoch",
+        "scopeIdentity",
+        "journalProfile",
+        "observationProfile",
+        "snapshot"
+      ],
+      "additionalProperties": false
+    },
+    "cursor": {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-journal-cursor/0.1.0"
+        },
+        "context": {
+          "$ref": "#/$defs/context"
+        },
+        "after": {
+          "type": "object",
+          "properties": {
+            "xid": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$"
+            },
+            "seq": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$"
+            }
+          },
+          "required": [
+            "xid",
+            "seq"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "context",
+        "after"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

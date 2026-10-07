@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:feed-fragment-page:0.2.0",
+  "description": "Response shape only; complete native payload correspondence, current disclosure and whole-page bounds require admission.",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "const": "available"
+        },
+        "fragment": {
+          "type": "object",
+          "properties": {
+            "manifest": {
+              "$ref": "urn:truss:draft:feed-transaction:0.2.0"
+            },
+            "records": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "ordinal": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]*)$"
+                  },
+                  "payload": {
+                    "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+                  }
+                },
+                "required": [
+                  "ordinal",
+                  "payload"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "manifest",
+            "records"
+          ],
+          "additionalProperties": false
+        },
+        "continuation": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "const": "end"
+                }
+              },
+              "required": [
+                "state"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "const": "more"
+                },
+                "cursor": {
+                  "$ref": "urn:truss:draft:feed-fragment-cursor:0.2.0"
+                }
+              },
+              "required": [
+                "state",
+                "cursor"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": [
+        "outcome",
+        "fragment",
+        "continuation"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "const": "unavailable"
+        },
+        "reason": {
+          "enum": [
+            "authorization",
+            "retention",
+            "profile",
+            "integrity",
+            "resource_limit"
+          ]
+        }
+      },
+      "required": [
+        "outcome",
+        "reason"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

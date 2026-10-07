@@ -1,0 +1,15 @@
+{
+  "scope": "independent explicit column/key/FK expectations and corruption controls only",
+  "helperSha256": "aed6cdd4a33e8a89f8003ca4c0238f398e4e9d54d2f9632c9d8a47cc4b3af450",
+  "inventorySha256": "ad5770f03a0a17225a377926b753c741b2f338ec261a640876dfd222f4e98de1",
+  "explicitEntries": 35,
+  "negativeControls": [
+    "missing_original_column",
+    "duplicate_identity",
+    "reversed_parent_key",
+    "substituted_fk_parent",
+    "cascade_delete"
+  ],
+  "nativeExecuted": false,
+  "installationReady": false
+}

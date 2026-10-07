@@ -1,0 +1,15 @@
+{
+  "scope": "full independently constructed intended two-projection SELECT AST plus source/model/export hash consistency; no native function/descriptor/status/authority qualification",
+  "helperSha256": "3ed697bffd3918c52462d6f495d866fb7146591ec9197160535463f0eb7da1d7",
+  "sourceReceiptSha256": "40de0354d5700fa505f2964b0cb93bd9e67fcd5b466abe192cafedcc68a9073f",
+  "negativeControls": [
+    "foreign_function",
+    "unqualified_function",
+    "foreign_parameter",
+    "wrong_native_type",
+    "missing_status",
+    "added_relation",
+    "added_limit"
+  ],
+  "nativeExecuted": false
+}

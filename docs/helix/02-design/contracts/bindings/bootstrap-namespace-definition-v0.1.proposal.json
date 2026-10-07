@@ -1,0 +1,45 @@
+{
+  "interfaceVersion": "truss-bootstrap-namespace-definition-profile/0.1.0",
+  "status": "unadopted field producer specification; no native/runtime qualification",
+  "nativeVersion": "PostgreSQL 17; exact target/build/profile separately admitted",
+  "requiredRawFieldInventory": [
+    "oid",
+    "nspname",
+    "nspowner",
+    "nspacl"
+  ],
+  "fields": [
+    {
+      "nativeField": "oid",
+      "domain": "canonical nonzero uint32 OID token",
+      "classification": "original association/reference evidence",
+      "projection": "Resolve to original authored or prerequisite namespace identity; raw OID never cross-install semantic identity"
+    },
+    {
+      "nativeField": "nspname",
+      "domain": "exact native name text under original server encoding/identifier profile",
+      "classification": "stable definition",
+      "projection": "Exact schema name; no folding, normalization, locale comparison or search_path substitution"
+    },
+    {
+      "nativeField": "nspowner",
+      "domain": "canonical nonzero uint32 OID token",
+      "classification": "stable policy via resolved role identity",
+      "projection": "Original shared pg_authid reference resolved through complete installed role projection; observer is not owner"
+    },
+    {
+      "nativeField": "nspacl",
+      "domain": "native aclitem[] or SQL NULL; original text/dimensions/raw JSON retained",
+      "classification": "stable policy after native default/explicit expansion",
+      "projection": "CONTRACT-011 complete grant multiset and independent effective CREATE/USAGE matrix; raw representation preserved separately"
+    }
+  ],
+  "unknownFields": "Preserved unsupported; complete definition admission requires governing interpretation/classification",
+  "additionalRequiredDefinitions": [
+    "complete original target/cut and namespace identity correspondence",
+    "complete owner/principal/ACL/default/native-policy interpretation",
+    "dependency/shared comment/extension association scope where required",
+    "temporary/session lookup interpretation when reached"
+  ],
+  "canonicalProducer": "Existing selected canonical tree and policy projection only after complete original field/definition admission; raw OID/name alone cannot issue inventorySha256"
+}

@@ -1,0 +1,174 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:direct-traversal-result:0.1.0",
+  "title": "Draft direct-traversal-result",
+  "description": "Closed shape only. Original host registry, exact full query/context, cumulative work, snapshot/authority and native resources require independent semantic admission.",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "const": "page"
+        },
+        "context": {
+          "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/context"
+        },
+        "records": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:truss:draft:direct-page-result:0.1.0#/$defs/record"
+          }
+        },
+        "continuation": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "const": "end"
+                }
+              },
+              "required": [
+                "state"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "const": "more"
+                },
+                "cursor": {
+                  "$ref": "urn:truss:draft:direct-traversal-request:0.1.0#/$defs/cursor"
+                }
+              },
+              "required": [
+                "state",
+                "cursor"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": [
+        "outcome",
+        "context",
+        "records",
+        "continuation"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "const": "limited"
+        },
+        "reason": {
+          "enum": [
+            "examined_edges",
+            "path_states",
+            "retained_bytes",
+            "active_work"
+          ]
+        },
+        "completeness": {
+          "const": "not_established"
+        },
+        "continuation": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "const": "restart"
+                }
+              },
+              "required": [
+                "state"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "const": "staged"
+                },
+                "handle": {
+                  "$ref": "urn:truss:draft:direct-traversal-request:0.1.0#/$defs/handle"
+                },
+                "workVersion": {
+                  "type": "string",
+                  "pattern": "^(0|[1-9][0-9]*)$"
+                }
+              },
+              "required": [
+                "state",
+                "handle",
+                "workVersion"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": [
+        "outcome",
+        "reason",
+        "completeness",
+        "continuation"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "const": "unavailable"
+        },
+        "reason": {
+          "enum": [
+            "context",
+            "profile",
+            "snapshot",
+            "authorization",
+            "observation",
+            "resource"
+          ]
+        }
+      },
+      "required": [
+        "outcome",
+        "reason"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "const": "invalid"
+        },
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "path": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "outcome",
+        "code",
+        "path"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

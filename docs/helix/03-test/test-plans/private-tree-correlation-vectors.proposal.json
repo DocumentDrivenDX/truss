@@ -1,0 +1,462 @@
+{
+  "profile": "truss-private-tree-correlation-vectors/0.1.0",
+  "status": "planned_unadopted",
+  "scope": "Independent symbolic RF02\u2013RF05 structural membership expectations only; not raw native rows, codec/source admission, complete schema semantics or decoder execution",
+  "fixturePrerequisites": "Every symbolic state must map to one original qualified state and exact native int8 node identities; full descriptors, source/definition/slot semantics and read custody are separately required",
+  "nativeExecution": false,
+  "cases": [
+    {
+      "id": "TC01",
+      "observed": {
+        "state": "S-original",
+        "root": "1",
+        "nodes": [
+          {
+            "id": "1",
+            "parent": null,
+            "valueKind": "sequence",
+            "slotKind": "root",
+            "ordinal": null
+          },
+          {
+            "id": "2",
+            "parent": "1",
+            "valueKind": "scalar",
+            "slotKind": "sequence",
+            "ordinal": "0"
+          },
+          {
+            "id": "3",
+            "parent": "1",
+            "valueKind": "scalar",
+            "slotKind": "sequence",
+            "ordinal": "1"
+          }
+        ],
+        "scalarPayloadNodeIds": [
+          "2",
+          "3"
+        ]
+      },
+      "structuralExpected": {
+        "outcome": "admit_structure_only",
+        "reason": "One root, complete reachable children, contiguous ordinals and exactly one payload per scalar"
+      },
+      "logicalPublicationPermitted": false
+    },
+    {
+      "id": "TC02",
+      "observed": {
+        "state": "S-original",
+        "root": "1",
+        "nodes": [
+          {
+            "id": "1",
+            "parent": null,
+            "valueKind": "sequence",
+            "slotKind": "root",
+            "ordinal": null
+          },
+          {
+            "id": "2",
+            "parent": "1",
+            "valueKind": "scalar",
+            "slotKind": "sequence",
+            "ordinal": "0"
+          },
+          {
+            "id": "3",
+            "parent": "1",
+            "valueKind": "scalar",
+            "slotKind": "sequence",
+            "ordinal": "1"
+          }
+        ],
+        "scalarPayloadNodeIds": [
+          "2",
+          "3",
+          "4"
+        ]
+      },
+      "structuralExpected": {
+        "outcome": "refuse",
+        "reason": "Orphan scalar payload survives the independent scalar stream"
+      },
+      "logicalPublicationPermitted": false
+    },
+    {
+      "id": "TC03",
+      "observed": {
+        "state": "S-original",
+        "root": "1",
+        "nodes": [
+          {
+            "id": "1",
+            "parent": null,
+            "valueKind": "sequence",
+            "slotKind": "root",
+            "ordinal": null
+          },
+          {
+            "id": "2",
+            "parent": "1",
+            "valueKind": "scalar",
+            "slotKind": "sequence",
+            "ordinal": "0"
+          },
+          {
+            "id": "3",
+            "parent": "1",
+            "valueKind": "scalar",
+            "slotKind": "sequence",
+            "ordinal": "1"
+          },
+          {
+            "id": "4",
+            "parent": "5",
+            "valueKind": "null",
+            "slotKind": "sequence",
+            "ordinal": "0"
+          }
+        ],
+        "scalarPayloadNodeIds": [
+          "2",
+          "3"
+        ]
+      },
+      "structuralExpected": {
+        "outcome": "refuse",
+        "reason": "Unreachable node with missing original parent cannot disappear behind the valid root subtree"
+      },
+      "logicalPublicationPermitted": false
+    },
+    {
+      "id": "TC04",
+      "observed": {
+        "state": "S-original",
+        "root": "1",
+        "nodes": [
+          {
+            "id": "1",
+            "parent": null,
+            "valueKind": "sequence",
+            "slotKind": "root",
+            "ordinal": null
+          },
+          {
+            "id": "2",
+            "parent": "1",
+            "valueKind": "scalar",
+            "slotKind": "sequence",
+            "ordinal": "0"
+          },
+          {
+            "id": "2",
+            "parent": "1",
+            "valueKind": "scalar",
+            "slotKind": "sequence",
+            "ordinal": "0"
+          }
+        ],
+        "scalarPayloadNodeIds": [
+          "2",
+          "3"
+        ]
+      },
+      "structuralExpected": {
+        "outcome": "refuse",
+        "reason": "Count-preserving node substitution duplicates ID 2 and loses original node 3"
+      },
+      "logicalPublicationPermitted": false
+    },
+    {
+      "id": "TC05",
+      "observed": {
+        "state": "S-original",
+        "root": "1",
+        "nodes": [
+          {
+            "id": "1",
+            "parent": null,
+            "valueKind": "sequence",
+            "slotKind": "root",
+            "ordinal": null
+          },
+          {
+            "id": "2",
+            "parent": "1",
+            "valueKind": "scalar",
+            "slotKind": "sequence",
+            "ordinal": "0"
+          },
+          {
+            "id": "3",
+            "parent": "1",
+            "valueKind": "scalar",
+            "slotKind": "sequence",
+            "ordinal": "1"
+          }
+        ],
+        "scalarPayloadNodeIds": [
+          "2",
+          "2"
+        ]
+      },
+      "structuralExpected": {
+        "outcome": "refuse",
+        "reason": "Payload count equals scalar-node count but node 2 is duplicated and node 3 lacks its payload"
+      },
+      "logicalPublicationPermitted": false
+    },
+    {
+      "id": "TC06",
+      "observed": {
+        "state": "S-original",
+        "root": "1",
+        "nodes": [
+          {
+            "id": "1",
+            "parent": null,
+            "valueKind": "sequence",
+            "slotKind": "root",
+            "ordinal": null
+          },
+          {
+            "id": "2",
+            "parent": "3",
+            "valueKind": "sequence",
+            "slotKind": "sequence",
+            "ordinal": "0"
+          },
+          {
+            "id": "3",
+            "parent": "2",
+            "valueKind": "sequence",
+            "slotKind": "sequence",
+            "ordinal": "0"
+          }
+        ],
+        "scalarPayloadNodeIds": []
+      },
+      "structuralExpected": {
+        "outcome": "refuse",
+        "reason": "Disconnected cycle consists of container nodes with valid local slot kinds and no scalar payloads; whole-set reachability must reject it"
+      },
+      "logicalPublicationPermitted": false
+    },
+    {
+      "id": "TC07",
+      "observed": {
+        "state": "S-original",
+        "root": "1",
+        "nodes": [
+          {
+            "id": "1",
+            "parent": null,
+            "valueKind": "sequence",
+            "slotKind": "root",
+            "ordinal": null
+          },
+          {
+            "id": "2",
+            "parent": "1",
+            "valueKind": "scalar",
+            "slotKind": "sequence",
+            "ordinal": "0"
+          },
+          {
+            "id": "3",
+            "parent": "1",
+            "valueKind": "scalar",
+            "slotKind": "sequence",
+            "ordinal": "2"
+          }
+        ],
+        "scalarPayloadNodeIds": [
+          "2",
+          "3"
+        ]
+      },
+      "structuralExpected": {
+        "outcome": "refuse",
+        "reason": "Unique sequence ordinals with a gap do not satisfy exact 0 through count minus one"
+      },
+      "logicalPublicationPermitted": false
+    },
+    {
+      "id": "TC08",
+      "observed": {
+        "state": "S-original",
+        "root": "1",
+        "nodes": [
+          {
+            "id": "1",
+            "parent": null,
+            "valueKind": "sequence",
+            "slotKind": "root",
+            "ordinal": null
+          },
+          {
+            "id": "2",
+            "parent": "1",
+            "valueKind": "scalar",
+            "slotKind": "sequence",
+            "ordinal": "0"
+          },
+          {
+            "id": "3",
+            "parent": "1",
+            "valueKind": "null",
+            "slotKind": "sequence",
+            "ordinal": "1"
+          }
+        ],
+        "scalarPayloadNodeIds": [
+          "2",
+          "3"
+        ]
+      },
+      "structuralExpected": {
+        "outcome": "refuse",
+        "reason": "Null node has a retained scalar payload"
+      },
+      "logicalPublicationPermitted": false
+    },
+    {
+      "id": "TC09",
+      "observed": {
+        "state": "S-original",
+        "root": "1",
+        "nodes": [
+          {
+            "id": "1",
+            "parent": null,
+            "valueKind": "sequence",
+            "slotKind": "root",
+            "ordinal": null
+          },
+          {
+            "id": "2",
+            "parent": "1",
+            "valueKind": "scalar",
+            "slotKind": "sequence",
+            "ordinal": "0"
+          },
+          {
+            "id": "9007199254740993",
+            "parent": "1",
+            "valueKind": "scalar",
+            "slotKind": "sequence",
+            "ordinal": "1"
+          }
+        ],
+        "scalarPayloadNodeIds": [
+          "2",
+          "9007199254740993"
+        ]
+      },
+      "structuralExpected": {
+        "outcome": "admit_structure_only",
+        "reason": "Exact identity beyond JavaScript safe integer must not collide with a rounded adjacent identity"
+      },
+      "logicalPublicationPermitted": false
+    },
+    {
+      "id": "TC10",
+      "observed": {
+        "state": "S-original",
+        "root": "1",
+        "nodes": [
+          {
+            "id": "1",
+            "parent": null,
+            "valueKind": "sequence",
+            "slotKind": "root",
+            "ordinal": null
+          },
+          {
+            "id": "2",
+            "parent": "1",
+            "valueKind": "scalar",
+            "slotKind": "sequence",
+            "ordinal": "0"
+          },
+          {
+            "id": "9007199254740993",
+            "parent": "1",
+            "valueKind": "scalar",
+            "slotKind": "sequence",
+            "ordinal": "1"
+          }
+        ],
+        "scalarPayloadNodeIds": [
+          "2",
+          "9007199254740992"
+        ]
+      },
+      "structuralExpected": {
+        "outcome": "refuse",
+        "reason": "Distinct adjacent large node and payload identities cannot correlate after floating-point rounding"
+      },
+      "logicalPublicationPermitted": false
+    },
+    {
+      "id": "TC11",
+      "observed": {
+        "state": "S-original",
+        "root": "1",
+        "nodes": [
+          {
+            "id": "1",
+            "parent": null,
+            "valueKind": "null",
+            "slotKind": "root",
+            "ordinal": null
+          }
+        ],
+        "scalarPayloadNodeIds": []
+      },
+      "structuralExpected": {
+        "outcome": "admit_structure_only",
+        "reason": "Present null root has no scalar payload; native payload absence is not property absence"
+      },
+      "logicalPublicationPermitted": false
+    },
+    {
+      "id": "TC12",
+      "observed": {
+        "state": "S-original",
+        "root": "1",
+        "nodes": [
+          {
+            "id": "1",
+            "parent": null,
+            "valueKind": "sequence",
+            "slotKind": "root",
+            "ordinal": null
+          }
+        ],
+        "scalarPayloadNodeIds": []
+      },
+      "structuralExpected": {
+        "outcome": "admit_structure_only",
+        "reason": "Present empty sequence root has no children or scalar payload; empty collection is not absent property"
+      },
+      "logicalPublicationPermitted": false
+    },
+    {
+      "id": "TC13",
+      "observed": {
+        "state": "S-original",
+        "root": "1",
+        "nodes": [],
+        "scalarPayloadNodeIds": []
+      },
+      "structuralExpected": {
+        "outcome": "refuse",
+        "reason": "Present admitted state with no observed root nodes is not a valid empty tree"
+      },
+      "logicalPublicationPermitted": false
+    }
+  ]
+}

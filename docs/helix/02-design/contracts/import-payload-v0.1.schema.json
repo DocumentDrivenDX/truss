@@ -1,0 +1,167 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:import-payload:0.1.0",
+  "title": "Draft deferred import payload",
+  "description": "Closed decoded shape only; parse only after eligible identity admission. Source member semantics, duplicate names, identity agreement, exact grammar and native support require semantic admission. Missing source has the declared empty-map default.",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-import-payload/0.1.0"
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "value": {
+                "$ref": "urn:truss:draft:exact-value:0.1.0#/$defs/value"
+              }
+            },
+            "required": [
+              "name",
+              "value"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "source": {
+          "$ref": "urn:truss:draft:exact-value:0.1.0#/$defs/map"
+        },
+        "kind": {
+          "const": "object"
+        },
+        "ownership": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "const": "rootless"
+                }
+              },
+              "required": [
+                "state"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "const": "owned"
+                },
+                "root": {
+                  "type": "object",
+                  "properties": {
+                    "state": {
+                      "const": "stored"
+                    },
+                    "identity": {
+                      "$ref": "urn:truss:draft:history-record:0.1.0#/$defs/identity"
+                    }
+                  },
+                  "required": [
+                    "state",
+                    "identity"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "state",
+                "root"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "values",
+        "kind",
+        "ownership"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-import-payload/0.1.0"
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "value": {
+                "$ref": "urn:truss:draft:exact-value:0.1.0#/$defs/value"
+              }
+            },
+            "required": [
+              "name",
+              "value"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "source": {
+          "$ref": "urn:truss:draft:exact-value:0.1.0#/$defs/map"
+        },
+        "kind": {
+          "const": "edge"
+        },
+        "orderKey": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "const": "null"
+                }
+              },
+              "required": [
+                "state"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "const": "text"
+                },
+                "text": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "state",
+                "text"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "values",
+        "kind",
+        "orderKey"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

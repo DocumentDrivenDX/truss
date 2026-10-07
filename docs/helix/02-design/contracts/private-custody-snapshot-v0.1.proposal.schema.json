@@ -1,0 +1,225 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:private-custody-snapshot:0.1.0",
+  "title": "Proposed decoded original private operation/touch snapshot",
+  "description": "Exact selected-query output grammar only. Unknown kind/phase text remains representable evidence and requires semantic integrity refusal. Native ranges, profile, source bytes, identity, generations and custody need independent admission.",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "fields"
+      ],
+      "properties": {
+        "kind": {
+          "const": "operation"
+        },
+        "fields": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "original_writer_xid",
+            "operation_ordinal",
+            "operation_kind",
+            "phase",
+            "effect_generation",
+            "readiness_generation",
+            "sealed_generation",
+            "application_generation",
+            "original_context_bytes_hex",
+            "original_definition_bytes_hex",
+            "original_input_bytes_hex",
+            "original_prestate_bytes_hex",
+            "admitted_candidate_bytes_hex",
+            "effect_obligation_bytes_hex",
+            "original_group_custody_bytes_hex",
+            "application_result_bytes_hex"
+          ],
+          "properties": {
+            "original_writer_xid": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$"
+            },
+            "operation_ordinal": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$"
+            },
+            "operation_kind": {
+              "type": "string",
+              "minLength": 1
+            },
+            "phase": {
+              "type": "string",
+              "minLength": 1
+            },
+            "effect_generation": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$"
+            },
+            "readiness_generation": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^(0|[1-9][0-9]*)$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "sealed_generation": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^(0|[1-9][0-9]*)$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "application_generation": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^(0|[1-9][0-9]*)$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "original_context_bytes_hex": {
+              "type": "string",
+              "pattern": "^(?:[0-9a-f]{2})*$"
+            },
+            "original_definition_bytes_hex": {
+              "type": "string",
+              "pattern": "^(?:[0-9a-f]{2})*$"
+            },
+            "original_input_bytes_hex": {
+              "type": "string",
+              "pattern": "^(?:[0-9a-f]{2})*$"
+            },
+            "original_prestate_bytes_hex": {
+              "type": "string",
+              "pattern": "^(?:[0-9a-f]{2})*$"
+            },
+            "admitted_candidate_bytes_hex": {
+              "type": "string",
+              "pattern": "^(?:[0-9a-f]{2})*$"
+            },
+            "effect_obligation_bytes_hex": {
+              "type": "string",
+              "pattern": "^(?:[0-9a-f]{2})*$"
+            },
+            "original_group_custody_bytes_hex": {
+              "type": "string",
+              "pattern": "^(?:[0-9a-f]{2})*$"
+            },
+            "application_result_bytes_hex": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^(?:[0-9a-f]{2})*$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "fields"
+      ],
+      "properties": {
+        "kind": {
+          "const": "touch"
+        },
+        "fields": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "transaction_id",
+            "owner_kind",
+            "owner_id",
+            "owner_discriminator_id",
+            "property_owner_type_id",
+            "property_id",
+            "dirty_generation",
+            "sealed_generation",
+            "original_layout_bytes_hex",
+            "original_home_bytes_hex",
+            "original_owner_property_bytes_hex",
+            "original_operation_bytes_hex"
+          ],
+          "properties": {
+            "transaction_id": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$"
+            },
+            "owner_kind": {
+              "type": "string",
+              "minLength": 1
+            },
+            "owner_id": {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]*)$"
+            },
+            "owner_discriminator_id": {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]*)$"
+            },
+            "property_owner_type_id": {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]*)$"
+            },
+            "property_id": {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]*)$"
+            },
+            "dirty_generation": {
+              "type": "string",
+              "pattern": "^[1-9][0-9]*$"
+            },
+            "sealed_generation": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[1-9][0-9]*$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "original_layout_bytes_hex": {
+              "type": "string",
+              "pattern": "^(?:[0-9a-f]{2})*$"
+            },
+            "original_home_bytes_hex": {
+              "type": "string",
+              "pattern": "^(?:[0-9a-f]{2})*$"
+            },
+            "original_owner_property_bytes_hex": {
+              "type": "string",
+              "pattern": "^(?:[0-9a-f]{2})*$"
+            },
+            "original_operation_bytes_hex": {
+              "type": "string",
+              "pattern": "^(?:[0-9a-f]{2})*$"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

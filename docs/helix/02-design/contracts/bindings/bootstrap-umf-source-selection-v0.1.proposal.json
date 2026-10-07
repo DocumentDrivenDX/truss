@@ -1,0 +1,76 @@
+{
+  "interfaceVersion": "truss-bootstrap-umf-source-selection/0.1.0",
+  "status": "selected design proposal for source-backed tooling; packed/native qualification absent",
+  "ownerCommit": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+  "ownerPackage": {
+    "name": "@umf/core",
+    "version": "0.1.0",
+    "distribution": "private source checkout at exact owner commit; no npm publication implied"
+  },
+  "nativeRepresentation": "umf.postgresql",
+  "backend": "@libpg-query/parser@17.6.10",
+  "referenceRuntime": {
+    "name": "Bun",
+    "version": "1.4.2"
+  },
+  "sourceApis": {
+    "src/adapters/postgresql/index.ts": [
+      "getPostgresqlNode",
+      "proposePostgresqlNodeEdit",
+      "exportPostgresqlSql",
+      "importPostgresqlSql"
+    ],
+    "src/model/document.ts": [
+      "readDocument"
+    ],
+    "src/model/native-json.ts": [
+      "renderTree"
+    ],
+    "native/postgresql/runtime.ts": [
+      "backend"
+    ]
+  },
+  "observedDirectSourcePins": [
+    {
+      "path": "native/postgresql/runtime.ts",
+      "sha256": "a88fea4cf15c9c3c3f0ad1f0a36d8f5de42a42ce8ea9712499f609beee3ea751"
+    },
+    {
+      "path": "src/adapters/postgresql/index.ts",
+      "sha256": "7baa071d95e5f9863a4ce2bf892d87fb27cab9d8605ba4cf8887016d14ca17b4"
+    },
+    {
+      "path": "src/model/document.ts",
+      "sha256": "a0422042659defdea425dff8bb0618eaa4bbf125f68da16aa5ad21af0b6c282f"
+    },
+    {
+      "path": "src/model/native-json.ts",
+      "sha256": "1459a3e030419c3ae09b300972e27aed8b8ee1f7e41972b3cc00627dff7d7882"
+    },
+    {
+      "path": "bun.lock",
+      "sha256": "98a99f7d306f7269db103bdbfafe5f9ad9ed34b02024276ad0cce45df27f5cc3"
+    }
+  ],
+  "compositionProcedure": "original native /stmts array; guarded single-statement edit; explicit byte joins; full owner reimport/reexport equality; independent complete authored/source coverage",
+  "evidence": {
+    "path": "docs/helix/04-build/evidence/design-audit/row-home-native-guard-statement-composition.json",
+    "sha256": "f9848d87f1322734b20082cbf51a489ebd1b87dd56e3bcf200ad41e8eef38e37",
+    "statements": 20,
+    "scope": "Original existing-UMF guarded per-statement export and ordered selected-capture composition/re-import only; no baseline conversion, native installation, implicit-effect completeness or accepted Weft binding"
+  },
+  "requiredBuildAdmission": [
+    "complete immutable source checkout at ownerCommit with no dirty files",
+    "exact lockfile/resolved native backend dependencies and original build artifact inventory",
+    "full transitive tooling dependency/source closure and packed-consumer receipt",
+    "original complete installation inventory and generated/native comparison",
+    "qualified resource instrumentation and worker containment"
+  ],
+  "exclusions": [
+    "newer UMF branches and core/key operation versions",
+    "browser or Node runtime support from Bun source checks",
+    "logical-model/key validity from PostgreSQL native-source preservation",
+    "production Weft binding adoption",
+    "complete physical coverage or native installation"
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:traversal-cleanup-evidence:0.1.0",
+  "title": "Draft private stage cleanup completion",
+  "description": "Original registered invalidation/quiescence/ownership/deletion/accounting metadata. Shape is not native termination, complete resource inventory or runtime memory reclamation.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-traversal-cleanup-evidence/0.1.0"
+    },
+    "assemblyId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "handle": {
+      "$ref": "urn:truss:draft:direct-traversal-request:0.1.0#/$defs/handle"
+    },
+    "storeProfile": {
+      "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/profilePin"
+    },
+    "cleanupProfile": {
+      "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/profilePin"
+    },
+    "originalReleaseAttemptIdentity": {
+      "type": "string",
+      "minLength": 1
+    },
+    "originalInvalidation": {
+      "$ref": "urn:truss:draft:traversal-resource-ledger:0.1.0#/$defs/reference"
+    },
+    "originalQuiescence": {
+      "$ref": "urn:truss:draft:traversal-resource-ledger:0.1.0#/$defs/reference"
+    },
+    "originalResourceInventory": {
+      "$ref": "urn:truss:draft:traversal-resource-ledger:0.1.0#/$defs/reference"
+    },
+    "originalDeletion": {
+      "$ref": "urn:truss:draft:traversal-resource-ledger:0.1.0#/$defs/reference"
+    },
+    "resultingLedger": {
+      "$ref": "urn:truss:draft:traversal-resource-ledger:0.1.0#/$defs/reference"
+    },
+    "completionTombstoneIdentity": {
+      "type": "string",
+      "minLength": 1
+    },
+    "remainingMetadataChargeBytes": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$"
+    },
+    "termination": {
+      "const": "confirmed"
+    },
+    "stageOwnedResources": {
+      "const": "released"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "assemblyId",
+    "handle",
+    "storeProfile",
+    "cleanupProfile",
+    "originalReleaseAttemptIdentity",
+    "originalInvalidation",
+    "originalQuiescence",
+    "originalResourceInventory",
+    "originalDeletion",
+    "resultingLedger",
+    "completionTombstoneIdentity",
+    "remainingMetadataChargeBytes",
+    "termination",
+    "stageOwnedResources"
+  ],
+  "additionalProperties": false
+}

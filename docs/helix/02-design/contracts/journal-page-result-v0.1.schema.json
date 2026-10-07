@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:journal-page-result:0.1.0",
+  "description": "Shape only; event/cursor order, exact context, byte integrity and native completeness require independent admission.",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "const": "page"
+        },
+        "context": {
+          "$ref": "urn:truss:draft:journal-page-request:0.1.0#/$defs/context"
+        },
+        "events": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:truss:draft:history-event:0.1.0"
+          }
+        },
+        "safeWatermarkXid": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        },
+        "continuation": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "const": "end"
+                }
+              },
+              "required": [
+                "state"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "const": "more"
+                },
+                "cursor": {
+                  "$ref": "urn:truss:draft:journal-page-request:0.1.0#/$defs/cursor"
+                }
+              },
+              "required": [
+                "state",
+                "cursor"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "observation": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        }
+      },
+      "required": [
+        "outcome",
+        "context",
+        "events",
+        "safeWatermarkXid",
+        "continuation",
+        "observation"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "const": "unavailable"
+        },
+        "reason": {
+          "enum": [
+            "authorization",
+            "context",
+            "profile",
+            "retention",
+            "integrity",
+            "resource",
+            "observation"
+          ]
+        }
+      },
+      "required": [
+        "outcome",
+        "reason"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

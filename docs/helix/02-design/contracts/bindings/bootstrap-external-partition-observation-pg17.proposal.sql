@@ -1,0 +1,14 @@
+-- Unexecuted PG17 original admitted pg_class batch; unique nonnull 1D oid[] <=256.
+-- No namespace/name/state filters; full original cut/fanout/resources require admission.
+SELECT p.tableoid::pg_catalog.oid::pg_catalog.text AS catalog_class_oid,
+       p.partrelid::pg_catalog.text AS relation_oid,
+       p.partattrs::pg_catalog.text AS partattrs_native_vector_text,
+       pg_catalog.array_dims(p.partattrs) AS partattrs_native_vector_dimensions,
+       p.partclass::pg_catalog.text AS partclass_native_vector_text,
+       pg_catalog.array_dims(p.partclass) AS partclass_native_vector_dimensions,
+       p.partcollation::pg_catalog.text AS partcollation_native_vector_text,
+       pg_catalog.array_dims(p.partcollation) AS partcollation_native_vector_dimensions,
+       pg_catalog.to_jsonb(p)::pg_catalog.text AS original_catalog_row_json
+FROM pg_catalog.pg_partitioned_table AS p
+WHERE p.partrelid = ANY($1::pg_catalog.oid[])
+ORDER BY p.partrelid;

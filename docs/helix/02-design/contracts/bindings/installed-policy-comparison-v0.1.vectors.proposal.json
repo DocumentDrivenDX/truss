@@ -1,0 +1,279 @@
+{
+  "interfaceVersion": "truss-installed-policy-comparison-vectors/0.1.0",
+  "status": "independently authored planned expectations; comparator/native behavior unexecuted",
+  "scope": "named comparison/admission fragments only; full native scope, complete inventory, canonical bytes, actual caller authority and coherence separately required",
+  "vectors": [
+    {
+      "name": "reordered-grants",
+      "surface": "routine-grant-multiset",
+      "baseline": [
+        {
+          "grantor": "owner",
+          "grantee": {
+            "kind": "public"
+          },
+          "privilege": "EXECUTE",
+          "grantOption": false
+        },
+        {
+          "grantor": "owner",
+          "grantee": {
+            "kind": "role",
+            "name": "writer"
+          },
+          "privilege": "EXECUTE",
+          "grantOption": false
+        }
+      ],
+      "observed": [
+        {
+          "grantor": "owner",
+          "grantee": {
+            "kind": "role",
+            "name": "writer"
+          },
+          "privilege": "EXECUTE",
+          "grantOption": false
+        },
+        {
+          "grantor": "owner",
+          "grantee": {
+            "kind": "public"
+          },
+          "privilege": "EXECUTE",
+          "grantOption": false
+        }
+      ],
+      "expected": "match"
+    },
+    {
+      "name": "grantor-only-change",
+      "surface": "routine-grant-multiset",
+      "baseline": [
+        {
+          "grantor": "owner",
+          "grantee": {
+            "kind": "role",
+            "name": "writer"
+          },
+          "privilege": "EXECUTE",
+          "grantOption": false
+        }
+      ],
+      "observed": [
+        {
+          "grantor": "other-owner",
+          "grantee": {
+            "kind": "role",
+            "name": "writer"
+          },
+          "privilege": "EXECUTE",
+          "grantOption": false
+        }
+      ],
+      "expected": "drift"
+    },
+    {
+      "name": "grant-option-only-change",
+      "surface": "routine-grant-multiset",
+      "baseline": [
+        {
+          "grantor": "owner",
+          "grantee": {
+            "kind": "role",
+            "name": "writer"
+          },
+          "privilege": "EXECUTE",
+          "grantOption": false
+        }
+      ],
+      "observed": [
+        {
+          "grantor": "owner",
+          "grantee": {
+            "kind": "role",
+            "name": "writer"
+          },
+          "privilege": "EXECUTE",
+          "grantOption": true
+        }
+      ],
+      "expected": "drift"
+    },
+    {
+      "name": "public-versus-real-public-role",
+      "surface": "routine-grant-multiset",
+      "baseline": [
+        {
+          "grantor": "owner",
+          "grantee": {
+            "kind": "public"
+          },
+          "privilege": "EXECUTE",
+          "grantOption": false
+        }
+      ],
+      "observed": [
+        {
+          "grantor": "owner",
+          "grantee": {
+            "kind": "role",
+            "name": "public"
+          },
+          "privilege": "EXECUTE",
+          "grantOption": false
+        }
+      ],
+      "expected": "drift"
+    },
+    {
+      "name": "duplicate-full-tuple",
+      "surface": "routine-grant-multiset",
+      "baseline": [
+        {
+          "grantor": "owner",
+          "grantee": {
+            "kind": "role",
+            "name": "writer"
+          },
+          "privilege": "EXECUTE",
+          "grantOption": false
+        }
+      ],
+      "observed": [
+        {
+          "grantor": "owner",
+          "grantee": {
+            "kind": "role",
+            "name": "writer"
+          },
+          "privilege": "EXECUTE",
+          "grantOption": false
+        },
+        {
+          "grantor": "owner",
+          "grantee": {
+            "kind": "role",
+            "name": "writer"
+          },
+          "privilege": "EXECUTE",
+          "grantOption": false
+        }
+      ],
+      "expected": "drift"
+    },
+    {
+      "name": "different-case-role",
+      "surface": "routine-grant-multiset",
+      "baseline": [
+        {
+          "grantor": "owner",
+          "grantee": {
+            "kind": "role",
+            "name": "writer"
+          },
+          "privilege": "EXECUTE",
+          "grantOption": false
+        }
+      ],
+      "observed": [
+        {
+          "grantor": "owner",
+          "grantee": {
+            "kind": "role",
+            "name": "Writer"
+          },
+          "privilege": "EXECUTE",
+          "grantOption": false
+        }
+      ],
+      "expected": "drift"
+    },
+    {
+      "name": "missing-denied-pair",
+      "surface": "namespace-rights-matrix-admission",
+      "requiredPairs": [
+        {
+          "role": "writer",
+          "schema": "truss"
+        }
+      ],
+      "observedRows": [],
+      "expected": "unavailable",
+      "reason": "incomplete_scope"
+    },
+    {
+      "name": "complete-denied-pair",
+      "surface": "namespace-rights-matrix-admission",
+      "requiredPairs": [
+        {
+          "role": "writer",
+          "schema": "truss"
+        }
+      ],
+      "observedRows": [
+        {
+          "role": "writer",
+          "schema": "truss",
+          "canCreate": false,
+          "canGrantCreate": false,
+          "canUse": false,
+          "canGrantUsage": false
+        }
+      ],
+      "expected": "admitted",
+      "expectedPositiveRights": []
+    },
+    {
+      "name": "grant-option-without-right",
+      "surface": "namespace-rights-matrix-admission",
+      "requiredPairs": [
+        {
+          "role": "writer",
+          "schema": "truss"
+        }
+      ],
+      "observedRows": [
+        {
+          "role": "writer",
+          "schema": "truss",
+          "canCreate": false,
+          "canGrantCreate": true,
+          "canUse": false,
+          "canGrantUsage": false
+        }
+      ],
+      "expected": "unavailable",
+      "reason": "unsupported_profile"
+    },
+    {
+      "name": "same-native-address-changed-schema",
+      "surface": "resolved-namespace-identity",
+      "baseline": {
+        "nativeOid": "123",
+        "schema": "truss"
+      },
+      "observed": {
+        "nativeOid": "123",
+        "schema": "renamed"
+      },
+      "expected": "drift"
+    },
+    {
+      "name": "different-native-address-same-meaning",
+      "surface": "resolved-namespace-identity",
+      "baseline": {
+        "nativeOid": "123",
+        "schema": "truss",
+        "owner": "owner"
+      },
+      "observed": {
+        "nativeOid": "456",
+        "schema": "truss",
+        "owner": "owner"
+      },
+      "originalCorrespondenceAndCoherence": "independently-admitted",
+      "expected": "match"
+    }
+  ]
+}
