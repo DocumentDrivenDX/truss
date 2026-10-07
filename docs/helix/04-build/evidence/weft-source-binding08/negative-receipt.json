@@ -1,0 +1,22 @@
+{
+  "scope": "four deliberately corrupted source packet copies rejected by independent integrity/source validator; no compiler/native execution",
+  "cases": [
+    {
+      "case": "payload_corruption",
+      "rejected": true
+    },
+    {
+      "case": "profile_authority",
+      "rejected": true
+    },
+    {
+      "case": "missing_column",
+      "rejected": true
+    },
+    {
+      "case": "wrong_original_model",
+      "rejected": true
+    }
+  ],
+  "nativeQualified": false
+}

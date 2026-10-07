@@ -621,3 +621,6 @@ The owner permits required extensions only when bundled with RDS PostgreSQL, Aur
 ## Weft scalar presence refresh — 2026-10-07
 
 Read-only review of current Weft head `e4800a81021e8e759b1b45d945add5a74320eb15` confirms original UMF nullability now governs explicit JSON-null presence, and scalar JSONB projections emit explicit absent/null/value envelopes. Owner evidence reports 71 PostgreSQL crate tests and 28 synthetic PostgreSQL 17.9 envelope cases; row result-carrier evidence separately covers four scalar families. These are compiler-owner results, not tests rerun by Truss or production adapter adoption. Native-row presence, recursive reconstruction and full original-model/public integration remain distinct gates. Truss continues to own stored-domain/profile and actual executor admission; no duplicated compiler work is assigned. The integrated 0.3 review layout is source-only pending a complete installation selection and actual binding export.
+
+
+Current layout handoff now has a separate [0.8 source packet](evidence/weft-source-binding08/README.md), preserving the earlier 0.4 evidence. Exact versioned grammar/selector/profile review remains pending. Source integrity/schema checks and corruption refusals are scoped local evidence; no owner message, adoption or native support is inferred.
