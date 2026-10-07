@@ -1,6 +1,6 @@
 # Complete-feed recovery storage allocation
 
-Companion to CONTRACT-006 and CONTRACT-012. This proposal allocates remaining source-side durable homes; they are absent from the 0.6 DDL. Downstream active-copy, application dedup and activation storage belong to the registered downstream adapter. Weft owns query compilation.
+Companion to CONTRACT-006 and CONTRACT-012. This proposal allocates remaining source-side durable homes; they are absent from the historical 0.6 DDL and now declared in the unqualified [0.7 SQL](../models/truss-layout-weft-review-0.7.proposal.sql). Downstream active-copy, application dedup and activation storage belong to the registered downstream adapter. Weft owns query compilation.
 
 ## Administrative receipt home
 

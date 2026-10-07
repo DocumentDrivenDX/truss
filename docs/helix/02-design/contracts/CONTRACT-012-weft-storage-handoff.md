@@ -211,3 +211,11 @@ Prioritize these deliverables before declaring the layout Weft-ready:
 4. Separately finish native guard/grant/function/trigger/dependency inventory and mutation qualification. These do not justify withholding a clearly scoped compiler source handoff, but are required for full storage support.
 
 Current Weft B-005 evidence explicitly says no approved Truss binding or registered adapter exists. Its synthetic native compiler tests do not close the above gates. The source manifest can be checked immediately for stale files; native parity and binding adoption remain unclaimed.
+
+## Current recovery profile 0.7 (2026-10-07)
+
+The [UMF model](../models/truss-layout-weft-review-0.7.proposal.umf.json) and [exported SQL](../models/truss-layout-weft-review-0.7.proposal.sql) extend the unchanged 0.6 statements with the three [recovery homes](feed-recovery-layout-v0.1.proposal.sql). This selected source profile has 94 statements, 40 tables, 386 columns and 20 explicit indexes. The [column index](weft-review-columns-v0.7.proposal.md), [feed chapter](weft-review-columns-v0.7.feed.proposal.md) and [full source-effect inventory](weft-review-columns-v0.7.proposal.json) retain original declaration pointers.
+
+Administrative receipt storage is independent of consumer removal; source attempt/artifacts preserve original seed state and classifier custody. Original production evidence is separate from later committed observation, avoiding a self-referential commit proof. Native full-byte arbitration, decoded-column parity, worker/state CAS, protected artifact immutability, resource/retention rules and transition producers remain required. The [allocation](feed-recovery-storage-allocation.proposal.md) and STP-041 RS-01–07 define those obligations. No native tests are claimed.
+
+Existing UMF capture/reload/export and independent ordered AST comparison pass for the nine added declarations. Compact JSON uses unchanged UMF reader limits. These checks prove source preservation/composition only. The concrete Weft binding packet remains pinned to 0.4; it is not implicitly compatible with this layout. Native routines, roles, deployment qualification and complete installer conversion remain unfinished.

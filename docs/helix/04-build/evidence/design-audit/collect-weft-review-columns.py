@@ -2,11 +2,12 @@
 import json,hashlib,sys
 from pathlib import Path
 R=Path(__file__).resolve().parents[5]
-feed_profile='--complete-feed' in sys.argv
+recovery_profile='--feed-recovery' in sys.argv
+feed_profile='--complete-feed' in sys.argv or recovery_profile
 metadata_profile='--installation-metadata' in sys.argv
 key_profile='--key-profile' in sys.argv
-version='0.6' if feed_profile else '0.5' if metadata_profile else '0.4' if key_profile else '0.3'
-receipt_name='complete-feed-layout-profile-composition.json' if feed_profile else 'installation-metadata-profile-composition.json' if metadata_profile else 'weft-key-profile-composition.json' if key_profile else 'weft-review-layout-composition.json'
+version='0.7' if recovery_profile else '0.6' if feed_profile else '0.5' if metadata_profile else '0.4' if key_profile else '0.3'
+receipt_name='feed-recovery-layout-profile-composition.json' if recovery_profile else 'complete-feed-layout-profile-composition.json' if feed_profile else 'installation-metadata-profile-composition.json' if metadata_profile else 'weft-key-profile-composition.json' if key_profile else 'weft-review-layout-composition.json'
 receipt=json.loads((R/'docs/helix/04-build/evidence/design-audit'/receipt_name).read_text())
 b=(R/receipt['astPath']).read_bytes()
 if hashlib.sha256(b).hexdigest()!=receipt['astSha256']:raise ValueError('stale AST')
@@ -48,7 +49,7 @@ for name,t in tables.items():lines.append(f'| `{name}` | {len(t["columns"])} |')
 feed_lines=[f'# Complete-feed columns ({version} proposal)','',f'Companion to [full column index](weft-review-columns-v{version}.proposal.md).','']
 if feed_profile:lines.extend(['',f'Complete-feed table column definitions are in the [feed chapter](weft-review-columns-v{version}.feed.proposal.md).'])
 for name,t in tables.items():
- target=feed_lines if feed_profile and (name.startswith('feed_') and name!='feed_consumer' or name=='complete_feed_consumer') else lines
+ target=feed_lines if feed_profile and (name.startswith('feed_') and name!='feed_consumer' or name.startswith('complete_feed_')) else lines
  target.extend(['',f'## {name}','','| Column | Declared native type | SQL NULL allowed by declaration |','| --- | --- | --- |'])
  pk={k['String']['sval'] for c in t['constraints'] if c['definition']['contype']=='CONSTR_PRIMARY' for k in c['definition']['keys']}
  for c in t['columns']:
