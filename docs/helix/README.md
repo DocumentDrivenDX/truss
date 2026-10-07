@@ -15,7 +15,7 @@ adoption remain open.
 See [design coordination](04-build/design-coordination.md) for source baselines,
 interface dependencies and unresolved gates.
 
-**Storage handoff priority (2026-10-07):** start with [CONTRACT-012](02-design/contracts/CONTRACT-012-weft-storage-handoff.md). It now supplies the selected integrated 0.8 review model and its 40-table/386-column reference, with exact DDL, key/report store choices, typed joins and value semantics. Baseline 0.2 remains independently documented. The complete intended installed layout and an adopted Weft binding remain unfinished.
+**Storage handoff priority (2026-10-07):** start with [CONTRACT-012](02-design/contracts/CONTRACT-012-weft-storage-handoff.md). It now supplies the selected integrated 0.9 review model and its 41-table/395-column reference, with exact DDL, key/report store choices, typed joins and value semantics. Baseline 0.2 remains independently documented. The complete intended installed layout and an adopted Weft binding remain unfinished.
 
 | Activity | State | Entry point |
 | --- | --- | --- |

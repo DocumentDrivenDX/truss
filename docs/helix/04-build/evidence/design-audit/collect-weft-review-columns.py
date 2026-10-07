@@ -2,13 +2,14 @@
 import json,hashlib,sys
 from pathlib import Path
 R=Path(__file__).resolve().parents[5]
-operation_profile='--operation-uniqueness' in sys.argv
+lifecycle_profile='--key-lifecycle' in sys.argv
+operation_profile='--operation-uniqueness' in sys.argv or lifecycle_profile
 recovery_profile='--feed-recovery' in sys.argv or operation_profile
 feed_profile='--complete-feed' in sys.argv or recovery_profile
 metadata_profile='--installation-metadata' in sys.argv
 key_profile='--key-profile' in sys.argv
-version='0.8' if operation_profile else '0.7' if recovery_profile else '0.6' if feed_profile else '0.5' if metadata_profile else '0.4' if key_profile else '0.3'
-receipt_name='operation-uniqueness-layout-profile-composition.json' if operation_profile else 'feed-recovery-layout-profile-composition.json' if recovery_profile else 'complete-feed-layout-profile-composition.json' if feed_profile else 'installation-metadata-profile-composition.json' if metadata_profile else 'weft-key-profile-composition.json' if key_profile else 'weft-review-layout-composition.json'
+version='0.9' if lifecycle_profile else '0.8' if operation_profile else '0.7' if recovery_profile else '0.6' if feed_profile else '0.5' if metadata_profile else '0.4' if key_profile else '0.3'
+receipt_name='key-lifecycle-layout-profile-composition.json' if lifecycle_profile else 'operation-uniqueness-layout-profile-composition.json' if operation_profile else 'feed-recovery-layout-profile-composition.json' if recovery_profile else 'complete-feed-layout-profile-composition.json' if feed_profile else 'installation-metadata-profile-composition.json' if metadata_profile else 'weft-key-profile-composition.json' if key_profile else 'weft-review-layout-composition.json'
 receipt=json.loads((R/'docs/helix/04-build/evidence/design-audit'/receipt_name).read_text())
 b=(R/receipt['astPath']).read_bytes()
 if hashlib.sha256(b).hexdigest()!=receipt['astSha256']:raise ValueError('stale AST')
@@ -47,10 +48,10 @@ base=R/'docs/helix/02-design/contracts';(base/f'weft-review-columns-v{version}.p
 lines=[f'# Selected review layout columns ({version} proposal)','','Companion to [CONTRACT-012](CONTRACT-012-weft-storage-handoff.md).',f'This is the selected {len(a)}-statement review composition, including explicit ADD COLUMN and column-type changes.','Baseline 0.2 remains a separate profile. Native installation and compiler binding adoption remain unqualified.','Nullability reports explicit NOT NULL/PRIMARY KEY effects only; CHECK expressions and protected guards may reject NULL independently.',
 f'The [source-effect inventory](weft-review-columns-v{version}.proposal.json) pins the complete native AST and original definition pointers.','','| Table | Columns |','| --- | --- |']
 for name,t in tables.items():lines.append(f'| `{name}` | {len(t["columns"])} |')
-feed_lines=[f'# Complete-feed columns ({version} proposal)','',f'Companion to [full column index](weft-review-columns-v{version}.proposal.md).','']
+feed_lines=[f'# Feed and lifecycle columns ({version} proposal)','',f'Companion to [full column index](weft-review-columns-v{version}.proposal.md).','']
 if feed_profile:lines.extend(['',f'Complete-feed table column definitions are in the [feed chapter](weft-review-columns-v{version}.feed.proposal.md).'])
 for name,t in tables.items():
- target=feed_lines if feed_profile and (name.startswith('feed_') and name!='feed_consumer' or name.startswith('complete_feed_')) else lines
+ target=feed_lines if feed_profile and (name.startswith('feed_') and name!='feed_consumer' or name.startswith('complete_feed_') or name=='key_lifecycle_history') else lines
  target.extend(['',f'## {name}','','| Column | Declared native type | SQL NULL allowed by declaration |','| --- | --- | --- |'])
  pk={k['String']['sval'] for c in t['constraints'] if c['definition']['contype']=='CONSTR_PRIMARY' for k in c['definition']['keys']}
  for c in t['columns']:

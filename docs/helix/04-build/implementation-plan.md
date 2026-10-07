@@ -1968,3 +1968,6 @@ OC01/OC02 source composition checkpoint: profile 0.8 includes the previously sep
 
 
 B-002/B-003/B-006 must compose the separate key_lifecycle_history home before key reactivation and implement [selected lifecycle persistence](../02-design/contracts/catalog-reactivation-persistence.proposal.md). CP-01–06 qualify original identity retention, full invariant rebuilding, owner-local history, actual-effect report ordering and rollback/repeat recovery. Profile 0.8 currently lacks this required key-history home; its table inventory is not full lifecycle closure.
+
+
+Key history composition checkpoint: 0.9 now includes the existing owner-local lifecycle table/index, with exact UMF reload/export and independent ordered AST correspondence. This satisfies the source composition portion of the preceding B-002/B-003/B-006 handoff. Protected lifecycle/chain/report producers, conversion and CP-01–06 native schedules remain pending. Weft review packets remain explicitly pinned to their earlier versions.

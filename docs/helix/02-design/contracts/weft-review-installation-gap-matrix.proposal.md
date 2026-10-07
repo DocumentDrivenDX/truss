@@ -29,3 +29,6 @@ Native routine implementation and execution are future build work. Remaining uns
 
 
 Reactivation audit: key_lifecycle_history is an existing separately captured source home absent from profile 0.8. [Selected persistence](catalog-reactivation-persistence.proposal.md) requires its composition plus owner-local transition producers and explicit reactivation report inventory before claiming key lifecycle support.
+
+
+Current source correction: profile 0.9 now composes the key_lifecycle_history table/index. The earlier 0.8 omission remains historical evidence; protected transition/report production and CP-01–06 native qualification remain open.

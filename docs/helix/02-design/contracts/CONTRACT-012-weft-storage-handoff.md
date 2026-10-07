@@ -231,3 +231,9 @@ The index constrains at most one nonfinalized registry row per stored writer xid
 ## Separate current source binding packet
 
 A [0.8 review packet](../../04-build/evidence/weft-source-binding08/README.md) now accompanies the current layout. Its exact 301749-byte envelope maps all 386 declared columns with source-only review08 identities, actual SQL and original UMF string fixture definitions. Six schema checks, source/profile/artifact closure and four damaged-packet refusals pass. No compiler/native execution or registration is claimed. The historical 0.4 packet remains unchanged; neither packet establishes accepted Truss backend adoption.
+
+## Current key lifecycle profile 0.9 (2026-10-07)
+
+The [UMF model](../models/truss-layout-weft-review-0.9.proposal.umf.json) and [SQL](../models/truss-layout-weft-review-0.9.proposal.sql) preserve all 95 prior statements and compose the existing owner-local key_lifecycle_history table/index. This profile has 97 statements, 41 tables, 395 columns and 22 explicit indexes. [Column index](weft-review-columns-v0.9.proposal.md), [feed/lifecycle chapter](weft-review-columns-v0.9.feed.proposal.md) and [source-effect inventory](weft-review-columns-v0.9.proposal.json) pin the actual declarations.
+
+This closes the source-home omission identified in the reactivation audit. Protected original chain production, complete creation/transition custody, owner-local interpretation, immutable report effects and native CP-01–06 evidence remain required. Existing UMF save/reload/export and independent ordered AST comparison pass; source composition does not qualify native enforcement. The separate 0.8 and historical 0.4 Weft review packets retain their original pins and are not implicitly compatible with 0.9.
