@@ -246,6 +246,8 @@ Index/allocator source audit: check-layout-index-sequence-closure.py verifies al
 
 ## Current migration homes profile 0.10 (2026-10-07)
 
+Identity reconciliation now starts from review010-prior-identity-catalogs.json, a hash-pinned manifest of all existing physical-ID catalogs. Preserve their authored IDs and original versioned captured-model locators; the new effect worklist's null identities are not permission to reallocate by name. Repeated IDs across catalogs require original source/definition review, not automatic last-file selection. The manifest is a reconciliation input, not a completed 0.10 binding or native identity inventory.
+
 The [UMF model](../models/truss-layout-weft-review-0.10.proposal.umf.json) and [SQL](../models/truss-layout-weft-review-0.10.proposal.sql) preserve the 97 prior statements and add installation_admission plus key_migration_receipt, its allocator and route. The source profile has 101 statements, 43 tables, 420 columns and 23 explicit indexes. [Column index](weft-review-columns-v0.10.proposal.md), [feed/lifecycle/migration chapter](weft-review-columns-v0.10.feed.proposal.md) and [source inventory](weft-review-columns-v0.10.proposal.json) pin original declarations.
 
 Existing UMF reload/export and independent ordered AST composition pass. This closes the declared migration-home omission; initialization and exact marker/admission continuity, original generation/receipt production, full feed transition/archive correspondence and native conversion/privilege/profile qualification remain open. No migration capability is admitted by source composition alone. Policy guard remains a separate optional candidate. Weft packets stay pinned to 0.8/0.4; neither implicitly adopts this layout.
