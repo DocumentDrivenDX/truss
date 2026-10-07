@@ -1937,6 +1937,8 @@ Owner selections on 2026-10-07: B-006 uses validated same-identity reactivation;
 
 ## Custom trigger-body implementation slice
 
+Migration source audit: B-002/B-003/B-008 must compose the existing installation_admission and key_migration_receipt homes plus allocator/route before migration capability admission. The installer gap matrix records their absence from 0.9 and requires exact continuity reconciliation with installation_marker/archive, protected head-serialized receipt production and full feed transition parity. Existing declaration fragments are not a ready migration profile.
+
 B-005/B-013/B-014 must resolve [resource account versus FR-43](../02-design/contracts/resource-account-requirement-reconciliation.md) before selecting backend-local account or extension composition. Implement the original transaction-epoch/pooler handoff and qualify RA-P01–05; no session-affinity narrowing is inferred from candidate native memory.
 
 B-002/B-003/B-013 may select the [installation-wide policy guard](../02-design/contracts/installation-policy-guard.proposal.md) as a concrete current-authority realization. Compose its singleton identity/profile/generation home and controlled update/acquisition routines, then qualify PG-01–06 against actual snapshot/role/exclusion behavior. This candidate cannot silently qualify unmediated administrative paths or replace read-only coordinator admission.

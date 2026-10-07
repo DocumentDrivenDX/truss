@@ -20,6 +20,14 @@ The administrative helper must resolve exact document/module and native role ide
 
 ## Next composition outputs
 
+### Migration home omission (current 0.9 audit)
+
+The selected table inventory omits `installation_admission` from [migration admission SQL](migration-admission-layout-v0.1.draft.sql) and `key_migration_receipt`/its sequence and route from [migration receipt SQL](migration-receipt-layout-v0.1.draft.sql). These existing declarations remain unadopted fragments. Layout 0.9 cannot claim the receipt-backed migration capability merely because its key bucket and installation marker tables exist.
+
+Before composition, reconcile installation_admission's original installation/epoch/configuration/binding/inventory carriers with installation_marker/archive. The marker records installed identity/readiness; admission records current selected configuration/binding under schema_head exclusion. They must agree on exact installation continuity without conflating the original installed inventory with later migration state. Never initialize admission from today's marker hashes alone or replace head locking with this observation row.
+
+The receipt producer preserves exact original request/attempt/result and checked prior/resulting generation in the same migration transaction. Nonunique digest routing requires full installation/epoch/attempt-byte equality before effects; sequence defaults do not establish idempotency. Retain original receipts and dependency closure across later configurations, failure and acknowledgment loss. Native generation overflow must refuse before subtraction/increment effects. Compose exact source identities, initialization, privileges, archive/receipt conversion and complete feed transition correspondence as one versioned migration-capable profile; do not enable the capability on 0.9 by adding only a marker flag.
+
 1. Select one original operation/codec/security/resource tuple against the governing contracts, including allocation durability and permitted deployment constraints. Record unresolved product choices separately.
 2. Allocate exact routine/trigger/policy/grant and dependency identities across the families above; attach source bodies and complete implicit-effect inventory. Keep native catalog observations separate from authored IDs.
 3. Compose a versioned full installer with initialization and conversion, then independently compare the actual native inventory. Publish the ready marker only after complete parity.
