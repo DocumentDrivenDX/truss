@@ -15,6 +15,12 @@ ddx:
 
 # Design coordination and remaining work
 
+## Current source review (2026-10-07)
+
+Read-only inspection finds clean-primary UMF at 16c35e8d and Weft at 259e6c0 (Register original named equality parameters through public V02 compilation). Weft's B-005-native-preparation evidence reports public candidate SUM for decimal(28,2)/uint64 and named equality parameter origin/transport, with synthetic PostgreSQL cases. We have not rerun those owner tests. The reported 78 crate tests and native receipts qualify their stated fixtures, not Truss's layout or production compatibility. Cursor/relationship operations, numeric row-home correspondence and embedding packaging remain separately scoped by Weft.
+
+Truss supplies exact source homes, original codec/domain definitions, complete-owner preflight execution and its adapter's ordered transport; it does not implement SUM lowering or named-parameter compilation. The source-review binding packet remains 0.4 and unregistered. Layout 0.7 does not silently update that packet. No cross-chat delivery or adoption is inferred from this local source review.
+
 ## Current coordination boundary — 2026-10-06
 
 Current owner direction treats existing UMF capabilities as sufficient. Truss owns exact source/API selection, complete layout composition/native correspondence and original collection/definition/security/transaction procedures. Historical owner-capability requests below are evidence history, not active prerequisites for new UMF features. No new upstream encoder, validator, resolver or exporter is being requested by this goal.

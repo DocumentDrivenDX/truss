@@ -1953,3 +1953,6 @@ These are zero-argument trigger interfaces. The native event/OLD/NEW context is 
 
 
 Recovery source checkpoint: the 0.7 UMF/DDL composition now declares all three recovery homes with 36 explicit columns. Source capture/reload/export and independent ordered composition pass. B-011/B-013 still deliver protected native operations and STP-041 RS-01–07 execution; declaring homes does not complete those tasks or the installed layout.
+
+
+Current installer dependency handoff: the [gap matrix](../02-design/contracts/weft-review-installation-gap-matrix.proposal.md) assigns concrete outputs by store family. In particular, B-003/B-013 must implement the qualified three-argument grant helper and full protected privilege/policy composition; the current source AST contains only the two high-water ordinary functions. Native implementation is separate from unresolved operation/codec/security/driver profile selection.
