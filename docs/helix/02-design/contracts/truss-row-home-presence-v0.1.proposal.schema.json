@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:row-home-presence:0.1.0",
+  "title": "Candidate complete row-home presence interpretation",
+  "description": "Distinct from JSONB props presence v0.1. Closed serialization only; original owner/definition/root/payload/authority correspondence and native profile qualification require semantic admission. No Weft ABI or installed support follows.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-row-home-presence/0.1.0"
+    },
+    "carrierSchema": {
+      "const": "urn:truss:draft:exact-value:0.1.0#/$defs/presence"
+    },
+    "storageHome": {
+      "const": "row_home_state/row_home_node/row_home_scalar"
+    },
+    "absent": {
+      "const": "zero-owned-states-after-complete-authorized-applicability"
+    },
+    "presentNull": {
+      "const": "one-owned-state-null-root-no-payload"
+    },
+    "presentScalar": {
+      "const": "one-owned-state-scalar-root-one-qualified-payload"
+    },
+    "duplicateState": {
+      "const": "complete-result-refusal"
+    },
+    "extraNodeOrPayload": {
+      "const": "complete-result-refusal"
+    },
+    "incompleteVisibility": {
+      "const": "unavailable-not-absence"
+    },
+    "sqlNullPayload": {
+      "const": "integrity-refusal-not-logical-null"
+    },
+    "readDefault": {
+      "const": "none"
+    },
+    "profile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "acceptedDefinition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "physicalProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "physicalDefinition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "authorityProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "authorityDefinition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "valueDefinition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "nullAdmission": {
+      "enum": [
+        "refuse",
+        "explicit-null-under-original-definition"
+      ]
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "carrierSchema",
+    "storageHome",
+    "absent",
+    "presentNull",
+    "presentScalar",
+    "duplicateState",
+    "extraNodeOrPayload",
+    "incompleteVisibility",
+    "sqlNullPayload",
+    "readDefault",
+    "profile",
+    "acceptedDefinition",
+    "physicalProfile",
+    "physicalDefinition",
+    "authorityProfile",
+    "authorityDefinition",
+    "valueDefinition",
+    "nullAdmission"
+  ],
+  "additionalProperties": false
+}
