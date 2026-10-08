@@ -11,8 +11,8 @@ explicitly labeled private development sandbox; credentials remain memory-only.
 Evidence is in `docs/helix/04-build/evidence/inert-assembly/pg-executor.json`.
 No connection creation, role, grants or maintenance changes are implied by import.
 The caller owns connection settings/authentication. This is a built experimental host package, with public ESM/declaration exports.
-It is not published or production-qualified; clean packed-host consumption remains
-unverified. Build the portable package first with `bun run build`, then
+It is not published or production-qualified; clean packed-host consumption is checked with `bun scripts/check-packed-host.ts`
+using both actual local archives and an explicit unreleased-dependency override. Build the portable package first with `bun run build`, then
 `bun run build:host`.
 
 Caller adoption and cancellation remain unavailable. Uncertain connections are

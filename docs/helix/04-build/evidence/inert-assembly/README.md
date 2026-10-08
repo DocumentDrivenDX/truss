@@ -284,3 +284,27 @@ clean packed-host consumer, Node/pooler qualification and full native bootstrap
 remain unfinished. The required routine bodies additionally depend on protected
 original-operation producers/security; observation SQL alone is not a routine
 implementation. Full Truss/feed capability readiness remains unavailable.
+
+
+## Clean external packed host consumer
+
+`check-packed-host.ts` stages both built packages, archives their dist/manifests,
+and installs those actual archives in a fresh directory outside the repository.
+Only the staged host workspace dependency is rewritten to the exact candidate
+portable version; original manifests stay unchanged. An explicit consumer override
+selects the real local portable archive transitively. The first attempted install
+without that override requested an unreleased npm version and returned 404; no
+release claim follows from the corrected local-archive check.
+
+Strict TypeScript 7.0.2 consumer compilation and Bun 1.4.2 execution pass. Public
+host/source/executor types compose without a brand-repair cast; the full portable
+declaration closure contains one canonical transaction brand. Host construction
+and shutdown acquire no database connection. The exact consumer, archive/original
+manifest/consumer-lock hashes and scope are retained in packed-host-check.json
+and packed-host-consumer.ts. Repository source paths/links cannot supply imports.
+The portable packed checker also now resolves its default/relative compiler file
+from the repository root, fixing the earlier compiler-export/consumer-cwd issue.
+
+This supersedes the previous clean-packed-host gap only. Release publication,
+Node/pooler/runtime recovery/adoption/cancellation and full bootstrap/feed remain
+unverified. No native/cloud workload or deployment change occurred.

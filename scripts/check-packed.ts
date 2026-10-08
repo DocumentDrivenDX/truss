@@ -4,7 +4,7 @@ import {tmpdir} from 'node:os';
 import {resolve, join} from 'node:path';
 const root = resolve(import.meta.dir, '..');
 const arg = process.argv.indexOf('--tsc');
-const compiler = arg >= 0 ? process.argv[arg + 1] : Bun.resolveSync('typescript/bin/tsc', root);
+const compiler = arg >= 0 ? resolve(root, process.argv[arg + 1]) : resolve(root, 'node_modules/typescript/bin/tsc');
 if (!compiler) throw Error('Explicit compiler required');
 const temporary = await mkdtemp(join(tmpdir(), 'truss-inert-packed-'));
 const pkg = resolve(root, 'packages/postgresql');
