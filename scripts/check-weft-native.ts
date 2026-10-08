@@ -1,5 +1,6 @@
 /** Component native execution against the owner object definition; not protected engine adoption. */
 import {SQL} from 'bun';
+import {LocalPgProbe} from '../packages/weft-pg-probe/src/index';
 import {createQueryEngine,type Host,type BindingInput} from '../packages/weft/src/index';
 import {loadCompiler} from '../packages/weft-bun/src/index';
 const directory=process.env.TRUSS_WEFT_BUILD;if(!directory)throw Error('TRUSS_WEFT_BUILD required');
@@ -27,11 +28,13 @@ try {
   {sql:'SELECT COUNT(*) AS total FROM Customer c',expected:[[{integerToken:'2'}]]},
   {sql:'SELECT c.name,SUM(o.total) AS total FROM Customer c JOIN Orders o ON o.customer_id=c.id GROUP BY c.name',expected:[['Ada',{decimalToken:'25.00'}]]},
   {sql:'SELECT SUM(o.total) AS total FROM Orders o',emptyOrders:true,expected:[[null]]},
+  {sql:'SELECT c.id FROM Customer c WHERE c.id > :cursor ORDER BY c.id LIMIT 2',parameters:{cursor:{family:'integer',value:'9007199254740993'}},expected:[[{integerToken:'9007199254740994'}]]},
+  {sql:'SELECT c.id FROM Customer c WHERE c.name = :name ORDER BY c.id LIMIT 20',parameters:{name:{family:'string',value:"Ada'; DROP TABLE truss.object; --"}},expected:[]},
   {sql:'SELECT c.name,SUM(o.total) AS total FROM Customer c JOIN Orders o ON o.customer_id=c.id GROUP BY c.name',corruptDecimal:true,expected:[],refuse:true}
  ];
- let contexts=0,integrityChecks=0;const observations=[];const nativeProfiles:any[]=[];
+ let contexts=0,integrityChecks=0,nativeBindQueries=0;const observations=[];const nativeProfiles:any[]=[];const wireObservations:any[]=[];
  for(const scenario of cases){
-  const original=await probe.compile(scenario.sql);let dataCommands=0;
+  const original=await probe.compile(scenario.sql,scenario.parameters);let dataCommands=0;
   const handlers=Object.fromEntries(original.artifact.obligations.map(obligation=>[obligation.id,{
    accepts:(incoming:any)=>JSON.stringify(incoming)===JSON.stringify(obligation),async check(scope:any,_o:any,artifact:any){
     if(obligation.id==='truss.candidate.scalarIntegrity'){
@@ -46,7 +49,10 @@ try {
    }
   }]));
   // Entire private relation is fixture-owned. This is not production authorization evidence.
-  const host:Host={handlers,async withReadContext(body){return sql.begin(async tx=>{
+  const host:Host={handlers,async withReadContext(body){const parsedUrl=new URL(url);if(parsedUrl.hostname!=='127.0.0.1'||parsedUrl.username!=='postgres'||parsedUrl.pathname!=='/postgres')throw Error('Explicit local test profile required');
+   const native=await LocalPgProbe.connect(Number(parsedUrl.port));
+   const tx={async unsafe(text:string){const r=await native.query(text);return r.rows.map(row=>Object.fromEntries(r.fields.map((name,i)=>[name,row[i]])))}};
+   try{await native.query('BEGIN');
    await tx.unsafe('SET TRANSACTION ISOLATION LEVEL REPEATABLE READ');
    await tx.unsafe('CREATE TEMP TABLE object (LIKE truss.object INCLUDING ALL) ON COMMIT DROP');
    await tx.unsafe(`INSERT INTO object (id,type_id,props,rev) VALUES
@@ -59,19 +65,17 @@ try {
    const observe=()=>tx.unsafe(`SELECT current_setting('server_version') AS version,current_setting('server_encoding') AS encoding,(SELECT datcollate FROM pg_catalog.pg_database WHERE datname=current_database()) AS collate,(SELECT datctype FROM pg_catalog.pg_database WHERE datname=current_database()) AS ctype,current_setting('transaction_isolation') AS isolation,current_setting('standard_conforming_strings') AS strings,current_user::text AS actor,txid_current_snapshot()::text AS snapshot`);
    const before=await observe(),profile=before[0];
    if(profile.version.split(' ')[0]!=='17.9'||profile.encoding!=='UTF8'||profile.collate!=='C'||profile.ctype!=='C'||profile.isolation!=='repeatable read'||profile.strings!=='on')throw Error('Native profile mismatch');
-   nativeProfiles.push({...profile});const baseline=JSON.stringify(profile);let statementOrdinal=0;
-   return body({async verifyContext(){contexts++;const after=await observe();if(JSON.stringify(after[0])!==baseline)throw Error('Native context changed')},
+   nativeProfiles.push({...profile});const baseline=JSON.stringify(profile);
+   const result=await body({async verifyContext(){contexts++;const after=await observe();if(JSON.stringify(after[0])!==baseline)throw Error('Native context changed')},
     async query(text,values){
      if(text===original.artifact.sql)dataCommands++;
-     // Original compiler SQL is unchanged. Explicit text parameter types also cover sparse check vectors.
-     if(!values.length)return tx.unsafe(text).values() as any;
-     const name='truss_component_'+(++statementOrdinal);
-     if(values.some(v=>v.includes('\0')))throw Error('PostgreSQL text cannot carry NUL');
-     await tx.unsafe('PREPARE '+name+' ('+values.map(()=> 'text').join(',')+') AS '+text).simple();
-     try{return await tx.unsafe('EXECUTE '+name+' ('+values.map(v=>"'"+v.replaceAll("'","''")+"'").join(',')+')').values() as any}
-     finally{await tx.unsafe('DEALLOCATE '+name)}
+     const response=await native.query(text,values);nativeBindQueries++;wireObservations.push({sql:text,parameters:values,fields:response.fields,command:response.command,ready:response.ready,originalRequestFrames:response.originalRequestFrames,originalResponseFrames:response.originalFrames});
+     if(response.ready!=='T')throw Error('Lost original native transaction');
+     return response.rows;
     }});
-  })},async decode(artifact,rows){return rows.map(row=>row.map((value,index)=>{
+   const committed=await native.query('COMMIT');if(committed.command!=='COMMIT'||committed.ready!=='I')throw Error('Unconfirmed component transaction');return result;
+   }catch(error){await native.query('ROLLBACK');throw error}finally{native.close()}
+  },async decode(artifact,rows){if(artifact.columns.some((c:any)=>c.representation?.kind!=='scalar'||c.representation.carrier!=='text'||!['text','exact-integer','exact-decimal'].includes(c.representation.decoder)))throw Error('Unsupported component descriptor');return rows.map(row=>row.map((value,index)=>{
    const column=artifact.columns[index] as any,representation=column.representation;
    if(representation.kind!=='scalar'||representation.carrier!=='text')throw Error('Unsupported component decoder');
    if(value===null){if(!column.nullable)throw Error('Unexpected native null');return null}
@@ -83,7 +87,7 @@ try {
     default:throw Error('Unsupported component decoder');
    }
   }))}};
-  const engine=await createQueryEngine(compiler,input,host);const admitted=await engine.compile(scenario.sql);
+  const engine=await createQueryEngine(compiler,input,host);const admitted=await engine.compile(scenario.sql,scenario.parameters);
   if(scenario.refuse){
    let refused=false;try{await engine.execute(admitted)}catch(error){if((error as Error).message!=='Native integrity violation')throw error;refused=true}
    if(!refused||dataCommands!==0)throw Error('Corrupt native data reached user SQL/publication');
@@ -93,8 +97,8 @@ try {
   if(JSON.stringify(result)!==JSON.stringify(scenario.expected))throw Error('Independent native expected result mismatch: '+JSON.stringify(result));
   observations.push({query:scenario.sql,result,originalResponse:admitted.originalResponse});
  }
- if(contexts!==7||integrityChecks<2)throw Error('Incomplete native checks');
- const receipt={sourceRevision:'2744531735c2a771fbe7ed24a7f67e3afc851b25',ddlSha256:new Bun.CryptoHasher('sha256').update(ddl).digest('hex'),observations,nativeProfiles,contextChecks:contexts,integrityChecks,forgedDigestRefused,parameterTransport:'native PREPARE with explicit text types; EXECUTE exact escaped text under verified standard_conforming_strings; not extended-protocol Bind qualification',
-  qualification:'Component COUNT, duplicate-preserving join SUM and empty SUM execution against temp object LIKE actual owner 0.13 repair definition in isolated PostgreSQL17.9. Fixture bindings/IDs only; no accepted catalog, protected mutations/feed, production authorization, complete transport/resource or installed runtime qualification.'};
+ if(contexts!==11||integrityChecks<2)throw Error('Incomplete native checks');
+ const receipt={sourceRevision:'2744531735c2a771fbe7ed24a7f67e3afc851b25',ddlSha256:new Bun.CryptoHasher('sha256').update(ddl).digest('hex'),observations,nativeProfiles,wireObservations,contextChecks:contexts,integrityChecks,forgedDigestRefused,nativeBindQueries,parameterTransport:'original SQL in Parse with explicit text OID25 and exact UTF-8 parameter bytes in native Bind; local trust-auth component, not production transport qualification',
+  qualification:'Component COUNT, duplicate-preserving join SUM, empty SUM, exact logical-key paging, bound injection and corrupt-value refusal execution against temp object LIKE actual owner 0.13 repair definition in isolated PostgreSQL17.9. Fixture bindings/IDs only; no accepted catalog, protected mutations/feed, production authorization, complete transport/resource or installed runtime qualification.'};
  await Bun.write('docs/helix/04-build/evidence/weft-integration-native-component.json',JSON.stringify(receipt,null,2)+'\n');console.log(JSON.stringify({cases:observations.length,contextChecks:contexts,integrityChecks,forgedDigestRefused}));
 }finally{await sql.close()}

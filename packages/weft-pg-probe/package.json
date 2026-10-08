@@ -1,0 +1,9 @@
+{
+  "name": "@documentdrivendx/truss-weft-pg-probe",
+  "version": "0.0.0-experimental.1",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}
