@@ -19,7 +19,11 @@ ddx:
 
 # Contract: PostgreSQL storage handoff to Weft
 
-Latest source composition is [layout 0.11](../models/truss-layout-weft-review-0.11.proposal.sql) and its [UMF model](../models/truss-layout-weft-review-0.11.proposal.umf.json), adding the owner-selected request-receipt storage direction. The [0.11 column index](weft-review-columns-v0.11.proposal.md), [feed/lifecycle/receipt chapter](weft-review-columns-v0.11.feed.proposal.md) and [source-effect inventory](weft-review-columns-v0.11.proposal.json) now document all 46 tables and 442 columns. The existing 0.10 binding packet remains a separately pinned review input; it does not automatically map 0.11 or qualify replay.
+Latest source composition is [layout 0.11](../models/truss-layout-weft-review-0.11.proposal.sql) and its [UMF model](../models/truss-layout-weft-review-0.11.proposal.umf.json), adding the owner-selected request-receipt storage direction. The [0.11 column index](weft-review-columns-v0.11.proposal.md), [feed/lifecycle/receipt chapter](weft-review-columns-v0.11.feed.proposal.md) and [source-effect inventory](weft-review-columns-v0.11.proposal.json) now document all 46 tables and 442 columns. The current 0.11 source packet is separately documented below; historical 0.10 remains preserved. Neither qualifies native replay.
+
+## Current 0.11 source binding packet
+
+The [matching source packet](../../04-build/evidence/weft-source-binding011/README.md) carries actual 0.11 SQL and all 442 declared columns. Six strict schemas, original UMF model validation, independent artifact/profile/source and exact SQL/table-pointer/unique-selector checks pass. Seven damaged-packet controls refuse. Source-only review011 selectors do not replace authored physical IDs or admit native correspondence. The 346965-byte envelope and 341497-byte decoded occurrence closure fit the inspected limits. This remains an unregistered one-string fixture; compiler/native execution and owner adoption are open. Earlier packets remain unchanged.
 
 ## Receipt storage composition 0.11
 
