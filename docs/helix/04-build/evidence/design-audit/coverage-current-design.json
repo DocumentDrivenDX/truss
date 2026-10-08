@@ -1100,7 +1100,7 @@
     "03-test/test-plans/STP-040-apply-operations-as-one-atomic-group.md": "31ab6034b193753be070cc0678e2f3f6592542ee7bf06d485ef50b2ee2ebf6bc",
     "02-design/technical-designs/TD-041-publish-the-journal-without-losing-or-reordering-a-change.md": "f514a4c26c62ceba08c880bdc74d55758737436a31ca86d774d8ea96f3cedd27",
     "03-test/test-plans/STP-041-publish-the-journal-without-losing-or-reordering-a-change.md": "3631b0fa484414d4a1c58e34953f28d071a91d2d63fb38a0b004003d01829490",
-    "02-design/technical-designs/TD-042-read-how-far-behind-a-downstream-copy-is.md": "bec70e8dc72577e8298915f0a67ee04b3b255460e8f88d540f7e3b63688f9270",
+    "02-design/technical-designs/TD-042-read-how-far-behind-a-downstream-copy-is.md": "2b36eb214a7741a71f0d23a7b612e4c147e4f95d72a7bc40784c5ef4c80ab36e",
     "03-test/test-plans/STP-042-read-how-far-behind-a-downstream-copy-is.md": "e1d0b529dd8db841d7e17633540c444c6e631bb93c654d24ba29fc95df8927ce",
     "02-design/technical-designs/TD-043-make-a-group-safe-to-repeat.md": "06fdb6b5a62098e464965112ed76561479faedd4e07d88e85e727ef66d713d93",
     "03-test/test-plans/STP-043-make-a-group-safe-to-repeat.md": "9a7e555c77e41e4878a1f8a2bb7fafbdb922389ec5552e9d62ab00bb39d34d14",
