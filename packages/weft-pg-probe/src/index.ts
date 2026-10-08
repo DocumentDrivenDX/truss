@@ -63,7 +63,7 @@ export class LocalPgProbe {
   const describe=frame('D',Buffer.concat([Buffer.from('P'),z('')]));
   const execute=frame('E',Buffer.concat([z(''),i32(0)]));
   this.busy=true;const timeout=setTimeout(()=>this.stop(Error('Native query deadline')),5000);
-  const originalFrames:string[]=[],fields:string[]=[],rows:(string|null)[][]=[];let command='',error:Error|undefined,total=0,described=false;
+  const originalFrames:string[]=[],fields:string[]=[],rows:(string|null)[][]=[];let command='',error:Error|undefined,total=0,described=false,parsed=false,bound=false;
   try{
    this.socket.write(Buffer.concat([parse,bind,describe,execute,frame('S',Buffer.alloc(0))]));
    for(;;){const message=await this.next();total+=message.length;
@@ -72,22 +72,25 @@ export class LocalPgProbe {
     const read16=()=>{if(offset+2>body.length)throw Error('Truncated response');const n=body.readInt16BE(offset);offset+=2;return n};
     const read32=()=>{if(offset+4>body.length)throw Error('Truncated response');const n=body.readInt32BE(offset);offset+=4;return n};
     const cstring=()=>{const end=body.indexOf(0,offset);if(end<0)throw Error('Unterminated response string');const result=utf8.decode(body.subarray(offset,end));offset=end+1;return result};
-    if(tag==='T'){
-     if(described)throw Error('Duplicate row description');described=true;const count=read16();if(count<0||count>1024)throw Error('Field budget');
+    if(tag==='1'){if(parsed||bound||described||body.length!==0)throw Error('Invalid Parse completion');parsed=true}
+    else if(tag==='2'){if(!parsed||bound||described||body.length!==0)throw Error('Invalid Bind completion');bound=true}
+    else if(tag==='n'){if(!bound||described||body.length!==0)throw Error('Invalid NoData description');described=true}
+    else if(tag==='T'){
+     if(!bound||described)throw Error('Invalid row description order');described=true;const count=read16();if(count<0||count>1024)throw Error('Field budget');
      for(let i=0;i<count;i++){fields.push(cstring());if(offset+18>body.length)throw Error('Truncated field description');if(body.readInt16BE(offset+16)!==0)throw Error('Unexpected binary format');offset+=18}
      if(offset!==body.length)throw Error('Trailing row description');
     }else if(tag==='D'){
-     const count=read16();if(!described||count!==fields.length||rows.length>=10000)throw Error('Row shape/budget');const row:(string|null)[]=[];
+     const count=read16();if(command||!described||count!==fields.length||rows.length>=10000)throw Error('Row shape/budget');const row:(string|null)[]=[];
      for(let i=0;i<count;i++){const length=read32();if(length===-1)row.push(null);else{if(length<0||offset+length>body.length)throw Error('Invalid cell length');row.push(utf8.decode(body.subarray(offset,offset+length)));offset+=length}}
      if(offset!==body.length)throw Error('Trailing row bytes');rows.push(row);
-    }else if(tag==='C'){if(command)throw Error('Multiple command completion');command=cstring();if(offset!==body.length)throw Error('Trailing command bytes')}
+    }else if(tag==='C'){if(!bound||!described||command)throw Error('Invalid command completion order');command=cstring();if(offset!==body.length)throw Error('Trailing command bytes')}
     else if(tag==='E'){const parts:Record<string,string>={};while(offset<body.length&&body[offset]!==0){const key=String.fromCharCode(body[offset++]);parts[key]=cstring()};error=Object.assign(Error(parts.M??'Native error'),{code:parts.C})}
     else if(tag==='Z'){
      if(body.length!==1||!['I','T','E'].includes(String.fromCharCode(body[0])))throw Error('Invalid settlement status');
      const ready=String.fromCharCode(body[0]) as Response['ready'];if(error){Object.assign(error,{ready,originalFrames:Object.freeze(originalFrames)});throw error}if(!command)throw Error('Missing original command completion');
      if(command.startsWith('SELECT ')&&(!/^SELECT (0|[1-9][0-9]*)$/.test(command)||BigInt(command.slice(7))!==BigInt(rows.length)))throw Error('Original SELECT count mismatch');
      return Object.freeze({fields:Object.freeze(fields),rows:Object.freeze(rows.map(r=>Object.freeze(r))),command,ready,originalRequestFrames:Object.freeze([parse,bind,describe,execute,frame('S',Buffer.alloc(0))].map(v=>v.toString('base64'))),originalFrames:Object.freeze(originalFrames)});
-    }else if(!['1','2','n','N','S'].includes(tag))throw Error('Unsupported query response');
+    }else if(!['N','S'].includes(tag))throw Error('Unsupported query response');
    }
   }catch(e){if(!(e as any).code)this.stop(e as Error);throw e}finally{clearTimeout(timeout);this.busy=false}
  }

@@ -38,3 +38,16 @@ test('password authentication refuses without credentials or fallback',async()=>
  const server=await fixture(3,()=>{throw Error('unexpected query')});
  try{await expect(LocalPgProbe.connect(server.port)).rejects.toThrow('Only local trust-auth profile supported')}finally{await server.close()}
 });
+
+for(const [name,frames] of [
+ ['Bind before Parse',[frame('2',Buffer.alloc(0))]],
+ ['nonempty Parse completion',[frame('1',Buffer.from([0]))]],
+ ['duplicate Parse completion',[frame('1',Buffer.alloc(0)),frame('1',Buffer.alloc(0))]],
+ ['command before description',[frame('1',Buffer.alloc(0)),frame('2',Buffer.alloc(0)),frame('C',z('SELECT 0'))]],
+] as const){
+ test('malformed protocol order refuses: '+name,async()=>{
+  const server=await fixture(0,socket=>socket.write(Buffer.concat([...frames,frame('Z',Buffer.from('I'))])));let probe:LocalPgProbe|undefined;
+  try{probe=await LocalPgProbe.connect(server.port);await expect(probe.query('SELECT 1')).rejects.toThrow('Invalid');await expect(probe.query('SELECT 1')).rejects.toThrow('Closed or busy')}
+  finally{probe?.close();await server.close()}
+ });
+}

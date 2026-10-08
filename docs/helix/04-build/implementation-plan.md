@@ -2263,3 +2263,6 @@ Weft use-driven transport iteration: the local probe replaces textual PREPARE/EX
 
 
 Accepted-catalog execution handoff now has a [concrete producer composition](../02-design/contracts/weft-accepted-catalog-producer.proposal.md): original protected catalog/report/document/registration extraction under admitted context, complete existing binding basis and definitions, exact serializer output, per-execution context/authority checks and WCB-01–10 independent acceptance scenarios. Implement this with real catalog IDs before promoting the six fixture query cases to installed support. Weft owns grammar/lowering/profile admission, UMF owns logical/equality interpretation; no duplicate compiler or metadata checker is introduced. Actual producer/profile qualification remains pending.
+
+
+Native probe framing follow-up: explicit Parse/Bind/description/command completion ordering and empty-body checks now refuse malformed/duplicate completions, and protocol faults prevent connection reuse. Seven independent protocol tests/16 assertions and all six real PostgreSQL17.9 scenarios pass; exact native receipt recaptured. This remains local trust-auth component evidence, not full driver/security/account/cancellation qualification.
