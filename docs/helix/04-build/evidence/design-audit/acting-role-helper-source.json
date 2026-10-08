@@ -1,0 +1,294 @@
+{
+  "scope": "Original actor-helper source capture only; no native actor or policy qualification.",
+  "sourceModel": {
+    "path": "docs/helix/02-design/models/truss-module-isolation-0.2.umf.json",
+    "sha256": "d14abfa08dd5b418adddbdfd952517698836e289ac5c6661bae7255e66bd00f4"
+  },
+  "originalLocator": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0",
+  "originalTaggedStatement": {
+    "kind": "object",
+    "members": {
+      "stmt": {
+        "kind": "object",
+        "members": {
+          "CreateFunctionStmt": {
+            "kind": "object",
+            "members": {
+              "funcname": {
+                "kind": "array",
+                "items": [
+                  {
+                    "kind": "object",
+                    "members": {
+                      "String": {
+                        "kind": "object",
+                        "members": {
+                          "sval": {
+                            "kind": "string",
+                            "value": "truss"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "kind": "object",
+                    "members": {
+                      "String": {
+                        "kind": "object",
+                        "members": {
+                          "sval": {
+                            "kind": "string",
+                            "value": "acting_role"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "returnType": {
+                "kind": "object",
+                "members": {
+                  "names": {
+                    "kind": "array",
+                    "items": [
+                      {
+                        "kind": "object",
+                        "members": {
+                          "String": {
+                            "kind": "object",
+                            "members": {
+                              "sval": {
+                                "kind": "string",
+                                "value": "text"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "typemod": {
+                    "kind": "number",
+                    "value": "-1"
+                  },
+                  "location": {
+                    "kind": "number",
+                    "value": "751"
+                  }
+                }
+              },
+              "options": {
+                "kind": "array",
+                "items": [
+                  {
+                    "kind": "object",
+                    "members": {
+                      "DefElem": {
+                        "kind": "object",
+                        "members": {
+                          "defname": {
+                            "kind": "string",
+                            "value": "language"
+                          },
+                          "arg": {
+                            "kind": "object",
+                            "members": {
+                              "String": {
+                                "kind": "object",
+                                "members": {
+                                  "sval": {
+                                    "kind": "string",
+                                    "value": "sql"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "defaction": {
+                            "kind": "string",
+                            "value": "DEFELEM_UNSPEC"
+                          },
+                          "location": {
+                            "kind": "number",
+                            "value": "756"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "kind": "object",
+                    "members": {
+                      "DefElem": {
+                        "kind": "object",
+                        "members": {
+                          "defname": {
+                            "kind": "string",
+                            "value": "volatility"
+                          },
+                          "arg": {
+                            "kind": "object",
+                            "members": {
+                              "String": {
+                                "kind": "object",
+                                "members": {
+                                  "sval": {
+                                    "kind": "string",
+                                    "value": "stable"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "defaction": {
+                            "kind": "string",
+                            "value": "DEFELEM_UNSPEC"
+                          },
+                          "location": {
+                            "kind": "number",
+                            "value": "769"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "kind": "object",
+                    "members": {
+                      "DefElem": {
+                        "kind": "object",
+                        "members": {
+                          "defname": {
+                            "kind": "string",
+                            "value": "as"
+                          },
+                          "arg": {
+                            "kind": "object",
+                            "members": {
+                              "List": {
+                                "kind": "object",
+                                "members": {
+                                  "items": {
+                                    "kind": "array",
+                                    "items": [
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "String": {
+                                            "kind": "object",
+                                            "members": {
+                                              "sval": {
+                                                "kind": "string",
+                                                "value": " SELECT COALESCE(NULLIF(current_setting('role'), 'none'), session_user)::text "
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "defaction": {
+                            "kind": "string",
+                            "value": "DEFELEM_UNSPEC"
+                          },
+                          "location": {
+                            "kind": "number",
+                            "value": "776"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "stmt_len": {
+        "kind": "number",
+        "value": "861"
+      }
+    }
+  },
+  "decodedDefinition": {
+    "funcname": [
+      {
+        "String": {
+          "sval": "truss"
+        }
+      },
+      {
+        "String": {
+          "sval": "acting_role"
+        }
+      }
+    ],
+    "returnType": {
+      "names": [
+        {
+          "String": {
+            "sval": "text"
+          }
+        }
+      ],
+      "typemod": -1,
+      "location": 751
+    },
+    "options": [
+      {
+        "DefElem": {
+          "defname": "language",
+          "arg": {
+            "String": {
+              "sval": "sql"
+            }
+          },
+          "defaction": "DEFELEM_UNSPEC",
+          "location": 756
+        }
+      },
+      {
+        "DefElem": {
+          "defname": "volatility",
+          "arg": {
+            "String": {
+              "sval": "stable"
+            }
+          },
+          "defaction": "DEFELEM_UNSPEC",
+          "location": 769
+        }
+      },
+      {
+        "DefElem": {
+          "defname": "as",
+          "arg": {
+            "List": {
+              "items": [
+                {
+                  "String": {
+                    "sval": " SELECT COALESCE(NULLIF(current_setting('role'), 'none'), session_user)::text "
+                  }
+                }
+              ]
+            }
+          },
+          "defaction": "DEFELEM_UNSPEC",
+          "location": 776
+        }
+      }
+    ]
+  },
+  "producerSha256": "cedccb7bb41f1d902c88cfcacb2dd9b21d8cad4120a9a14d89f335eed5724aa9",
+  "physicalIdentity": null,
+  "nativeBinding": null,
+  "otherBaselinePoliciesAdmitted": false,
+  "nativeQualified": false
+}
