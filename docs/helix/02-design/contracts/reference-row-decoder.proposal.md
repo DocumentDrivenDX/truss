@@ -8,6 +8,22 @@ Admit the original requested Record/Field definitions, applicable property owner
 
 For each expected original field, independently determine the exact complete state membership. Zero states is permissible only for Item.note and only with complete applicable authorized visibility. Required code/amount fields refuse zero states. More than one matching state refuses; no first-row or last-row choice. Foreign/misowned states, conflicting definition/profile/source bytes and unexpected payload facts refuse the complete Record result rather than omitting a field.
 
+Use CONTRACT-010's existing selected-state batch source/manifest and TCA/RF admission procedures. Construct batches only from admitted complete original headers, retain the independently required state set, and verify disjoint full union and per-state ownership before submission. Reserve both streams plus remaining authority/context/containment capacity in the containing operation before collection. Both streams use the same original admitted state array; complete terminations and full state/node correlation precede interpretation. This procedure does not authorize a new collector wire, fresh snapshot per field or fresh resource budget. Complete header/home reconciliation remains required even when a batch returns every selected state.
+
+### Independent fixture inventory expectations
+
+For the independently authored M03 graph, expect these row-home contents under the proposed all-field mapping. Bind actual identities from independent native observations; this table assigns none. Counts supplement full membership/content assertions and cannot prove completeness alone.
+
+| Original owner / cut | Complete present fields and root/payload meaning |
+| --- | --- |
+| Account A, committed M03 | code: one string root/payload. |
+| Item B, committed M03 | code: string; amount: decimal; note: zero states. |
+| Item C, committed M03 | code: string; amount: decimal; note: null root with no scalar payload. |
+| Item D, committed M03 | code: string; amount: decimal; note: string root with present empty-text payload. |
+| Item B, original pending M05 or confirmed committed M06 | code and amount unchanged; note: one null root without scalar payload. Independent committed M05 remains the M03 observation. Confirmed M05 rollback restores the complete original M03 graph. |
+
+The full M03 scope has nine states, nine scalar-or-null root nodes and eight scalar payloads. The pending M05 and committed M06 scopes each have ten states, ten root nodes and eight scalar payloads. These are exact proposed fixture expectations, not global row limits or native measurements. Any extra descendant, foreign state, payload on a null root or missing required payload refuses even if total counts match. Independently compare every original owner/property/source/profile association and exact token/text value. Relationship and key stores remain separately verified under their own complete original inventories.
+
 ## State decision table
 
 | Complete admitted observation | Logical decision |
