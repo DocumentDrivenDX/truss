@@ -3,9 +3,9 @@ import hashlib,json,sys
 from pathlib import Path
 R=Path(__file__).resolve().parents[5]
 B='docs/helix/04-build/evidence/design-audit/'
-if len(sys.argv)>2:raise SystemExit('usage: capture-type-definition-parent-evolution.py [type_def|rel_def|module_access|schema_rev|journal]')
+if len(sys.argv)>2:raise SystemExit('usage: capture-type-definition-parent-evolution.py [type_def|rel_def|module_access|schema_rev|journal|key_tombstone]')
 table=sys.argv[1] if len(sys.argv)==2 else 'type_def'
-if table not in ('type_def','rel_def','module_access','schema_rev','journal'):raise ValueError('unreviewed parent selection')
+if table not in ('type_def','rel_def','module_access','schema_rev','journal','key_tombstone'):raise ValueError('unreviewed parent selection')
 identity='truss.layout.table.'+table
 def load(p):
  raw=(R/p).read_bytes();return json.loads(raw),hashlib.sha256(raw).hexdigest()
