@@ -79,6 +79,28 @@ function decodeResponseFrame(frame, limits) {
         fail();
       fields[0] = Object.freeze({ command, affectedRows: parts[2] });
     }
+  } else if (kind === "E" || kind === "N") {
+    const tags = new Set;
+    let terminated = false;
+    while (offset < frame.length) {
+      const byte = frame[offset++];
+      if (byte === 0) {
+        terminated = true;
+        break;
+      }
+      if (byte < 33 || byte > 126 || fields.length === limits.maxFields)
+        fail();
+      const tag = String.fromCharCode(byte);
+      if (tags.has(tag))
+        fail();
+      tags.add(tag);
+      const value = text();
+      if (tag === "C" && !/^[0-9A-Z]{5}$/.test(value))
+        fail();
+      fields.push(Object.freeze({ tag, value }));
+    }
+    if (!terminated || !tags.has("C"))
+      fail();
   } else if (kind === "Z") {
     if (offset + 1 !== frame.length)
       fail();
@@ -134,7 +156,7 @@ class ResponseIngress {
             size = size * 256n + BigInt(this.#header[i]);
           if (size < 4n || size + 1n > BigInt(this.limits.maxFrameBytes) || this.#frames === this.limits.maxFrames)
             throw Error("pg-ingress:frame-limit");
-          if (![84, 68, 67, 90].includes(this.#header[0]))
+          if (![84, 68, 67, 90, 69, 78].includes(this.#header[0]))
             throw Error("pg-ingress:unsupported-kind");
           this.#frame = new Uint8Array(Number(size) + 1);
           this.#frame.set(this.#header);
@@ -173,8 +195,15 @@ class ResponseIngress {
             if (command?.startsWith("SELECT ") && (decoded.fields[0].affectedRows === null || BigInt(decoded.fields[0].affectedRows) !== this.#rowCount))
               throw Error("pg-ingress:row-count");
             this.#phase = "command";
+          } else if (decoded.kind === "E") {
+            if (this.#phase !== "start" && this.#phase !== "rows")
+              throw Error("pg-ingress:response-order");
+            this.#phase = "error";
+          } else if (decoded.kind === "N") {
+            if (this.#phase === "ended")
+              throw Error("pg-ingress:response-order");
           } else if (decoded.kind === "Z") {
-            if (this.#phase !== "command")
+            if (this.#phase !== "command" && this.#phase !== "error")
               throw Error("pg-ingress:response-order");
             this.#columns = undefined;
             this.#phase = "ended";

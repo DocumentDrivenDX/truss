@@ -1,0 +1,59 @@
+{
+  "driver": "pg/8.16.3",
+  "sql": "SELECT 1/0",
+  "bytes": 72,
+  "frames": [
+    {
+      "kind": "E",
+      "originalHex": "4500000041534552524f5200564552524f5200433232303132004d6469766973696f6e206279207a65726f0046696e742e63004c3837300052696e74346469760000",
+      "fields": [
+        {
+          "tag": "S",
+          "value": "ERROR"
+        },
+        {
+          "tag": "V",
+          "value": "ERROR"
+        },
+        {
+          "tag": "C",
+          "value": "22012"
+        },
+        {
+          "tag": "M",
+          "value": "division by zero"
+        },
+        {
+          "tag": "F",
+          "value": "int.c"
+        },
+        {
+          "tag": "L",
+          "value": "870"
+        },
+        {
+          "tag": "R",
+          "value": "int4div"
+        }
+      ]
+    },
+    {
+      "kind": "Z",
+      "originalHex": "5a0000000545",
+      "fields": [
+        {
+          "status": "E"
+        }
+      ]
+    }
+  ],
+  "beforeParser": true,
+  "ingressAccounting": {
+    "bytes": 72,
+    "frames": 2,
+    "refused": false
+  },
+  "driverErrorCode": "22012",
+  "rollbackCommand": "ROLLBACK",
+  "qualification": "One original E/Z response for division-by-zero inside BEGIN, followed by confirmed ROLLBACK captured on local PostgreSQL 17.9 under Bun. Private probe replaces one existing data listener and forwards admitted complete frames to the original pg parser. Decoder/frame copy limits apply before parser forwarding; original socket chunk/transport allocation, full response/error/notice kinds, native uncertainty containment and original-query issuer/epoch authority remain unqualified. No Truss installation or complete producer/profile adoption."
+}

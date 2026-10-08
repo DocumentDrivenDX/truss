@@ -57,3 +57,23 @@ test('query completion requires original command then ready and matching SELECT 
  expect(()=>complete.feed(command,()=>{})).toThrow('ended');
  const wrongCount=new ResponseIngress(limits_);expect(()=>wrongCount.feed(frame('C',[...new TextEncoder().encode('SELECT 1\0')]),()=>{})).toThrow('row-count');
 });
+
+test('error response retains ordered fields and ends only on original ready',()=>{
+ const error=frame('E',[...new TextEncoder().encode('SERROR\0C22012\0Mdivision by zero\0'),0]);
+ const value=decodeResponseFrame(error,limits);expect(value.fields).toEqual([{tag:'S',value:'ERROR'},{tag:'C',value:'22012'},{tag:'M',value:'division by zero'}]);
+ const ingress=new ResponseIngress({...limits,maxTotalBytes:4096,maxFrames:4});let calls=0;
+ ingress.feed(error,()=>calls++);ingress.feed(frame('Z',[69]),()=>calls++);ingress.finish();expect(calls).toBe(2);
+ const duplicate=frame('E',[...new TextEncoder().encode('C22012\0C22012\0'),0]);
+ expect(()=>decodeResponseFrame(duplicate,limits)).toThrow();
+ const noCode=frame('E',[...new TextEncoder().encode('Merror\0'),0]);expect(()=>decodeResponseFrame(noCode,limits)).toThrow();
+ const noTerminator=frame('E',[...new TextEncoder().encode('C22012\0')]);expect(()=>decodeResponseFrame(noTerminator,limits)).toThrow();
+});
+
+test('notice is retained without replacing original command completion',()=>{
+ const ingress=new ResponseIngress({...limits,maxTotalBytes:4096,maxFrames:4});const kinds:string[]=[];
+ const notice=frame('N',[...new TextEncoder().encode('SNOTICE\0C00000\0Mnotice\0'),0]);
+ ingress.feed(notice,frame=>kinds.push(String.fromCharCode(frame[0])));
+ ingress.feed(frame('C',[...new TextEncoder().encode('SELECT 0\0')]),frame=>kinds.push(String.fromCharCode(frame[0])));
+ ingress.feed(frame('Z',[73]),frame=>kinds.push(String.fromCharCode(frame[0])));ingress.finish();
+ expect(kinds).toEqual(['N','C','Z']);
+});

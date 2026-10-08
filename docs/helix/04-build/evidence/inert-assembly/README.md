@@ -423,3 +423,27 @@ T/D/C/Z response support only: error/notice/extended-query/binary/multiple-resul
 profiles, native transport/issuer/resource/settlement authority and integration
 into the production bridge remain unfinished. ReadyForQuery is observed state,
 not independent authority to release quarantined or adopted resources.
+
+
+## Original error and notice frames
+
+The response decoder/ingress now retains ordered original ErrorResponse and
+NoticeResponse tagged UTF8 fields. Final zero terminator, unique tags, exact
+SQLSTATE and field limits are required. Unknown tags remain original data, not
+interpreted authority. Error transitions to failed completion and still requires
+original ReadyForQuery; notice consumes its frame budget without replacing the
+original command. Successful/error outcomes remain distinct. Thirty-two tests/218
+assertions, strict host build and packed consumer pass.
+
+`native-wire-error.json` records actual original E/Z frames from SELECT 1/0 inside
+BEGIN on local PostgreSQL 17.9, admitted before the original pg parser. Original
+SQLSTATE 22012 and status E match; a following ROLLBACK command is confirmed.
+The probe waits for original ReadyForQuery after the driver rejects rather than
+treating promise rejection as response completion. Notice handling has synthetic
+controls only, not native notice qualification. No table/cloud/deployment change.
+
+These component checks do not adopt the hook into the production bridge or
+establish original issuer/epoch/transport-allocation/refusal-settlement authority.
+Other extended-query/binary/asynchronous kinds, full arbitration/protected
+producers/bootstrap and actual Truss streaming remain unfinished. Error fields
+are private evidence and not a public authorization/disclosure result.

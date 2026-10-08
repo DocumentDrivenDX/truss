@@ -5,14 +5,14 @@
     "pg-runtime": "958e5c9e451ec2d9c523c5c3dcafad3b259d8a2b4204c9397d4fb8ea1ef7a562"
   },
   "archiveHashes": {
-    "postgresql": "7047ceeb5bc2a7df48ce480e173e7d465eed9c949c4d38572a73732aa15ac8da",
-    "pg-runtime": "d4033a3005ddd1868c4a9c83969022260203e8acc876d776ac3355554dfc03cc"
+    "postgresql": "f35ae213f8de7f5444365615f04cfa281afd5643343d4c6d46a33034f2188281",
+    "pg-runtime": "794f51ebfbd702ab8fccaa33ed2bddf4e6e941687d231ea8d1e2b405ab0274f9"
   },
   "cleanConsumerTypecheck": true,
   "cleanConsumerRuntime": true,
   "transactionBrandDeclarations": 1,
   "output": "Packed host construction closes without acquiring a connection.\n",
-  "consumerLockSha256": "5bcbbce806b0002b56914d1b1d3583be5fe967aa0af0617a3aa211f082771d46",
+  "consumerLockSha256": "fc55f5b4602ac5b82d940716ee5b723c7e55cfae5716a9adf12c5bcc67b3b982",
   "manifestTransformation": "Only staged host workspace:* dependency becomes exact portable package version; both original manifests unchanged. Root consumer selects the two actual local archives.",
   "qualification": "Clean external packed ESM host/portable consumer under Bun 1.4.2; no repository source paths, no connection acquisition, no native I/O. No release, Node/pooler, adoption/cancellation or full bootstrap qualification."
 }
