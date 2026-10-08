@@ -1,5 +1,7 @@
 # Reference original Weft registration handoff
 
+The [relationship binding](reference-relationship-binding.proposal.md) makes the original directed endpoint, target-key and opposite-end participation meanings explicit. Truss must supply exact native endpoint/membership enforcement; Weft retains relationship lowering ownership.
+
 Consume the [four-field source inventory](reference-account-items-field-inventory.proposal.json), [row-home proposal](reference-row-home-binding.proposal.md) and exact installed Truss evidence. The [owner source review](../../04-build/evidence/design-audit/weft-original-configuration-source-review.json) pins Weft's original_admission Configuration and owned selection structures. These are candidate Rust interfaces; released Python/WASM configuration is a separate owner delivery gate. No generic JSON registry or new compiler is introduced here.
 
 | Required selection | Original input and required Truss output |
