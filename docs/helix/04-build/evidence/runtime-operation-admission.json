@@ -30,6 +30,10 @@
     "rejected property batch leaves no partial field",
     "earlier allocated types survive rejected field batch",
     "native owner property IDs allocated in field order",
+    "invented key declaration refuses",
+    "changed original primary flag refuses",
+    "valid but wrong original key property refuses",
+    "source mismatch cannot allocate a key declaration",
     "native owner-local key number allocated",
     "original key component order and native property identity retained",
     "invalid later key refuses whole batch",
@@ -71,6 +75,6 @@
   "propertyStageSha256": "1cc3266134bd1714c5490ea9fd2b2c1814752e60f29596b5e27ff0ef5016993a",
   "relationshipStageSha256": "3dc1aed0c03a48758aa7a3bc1089a63f24d1e99c0409a20218505f8c96f32490",
   "keyBatchSha256": "e31a769cf820ca00035b3c4e96f75078d6696fca8eb1bd62c8c4dc136303ae18",
-  "keyStageSha256": "9e118fad3778d6a294876e11158f8011f866ea0e144f08fa29be31aa40fc81b7",
+  "keyStageSha256": "2e0b6d625cb90a3ad50fb94833d00b0be1baca9fec154830e459714aa2a4463c",
   "qualification": "Actual xid/context/artifact bounds/single unfinished/rollback/private invocation component only. Protected issuer registration, canonical observers, finalization, deferred complete-cohort checks, installer security and public runtime remain unfinished."
 }

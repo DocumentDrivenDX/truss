@@ -48,12 +48,12 @@ try{
  await sql.unsafe('BEGIN');
  await sql.unsafe(admit.replace("'mutation'","'catalog-acceptance'"));
  const originalModel={umf:'0.7.0',id:'original-document',vocabularies:{},extensions:{},modules:[{id:'m',namespace:'m',elements:[
-  ...['a','b','z'].map(id=>({id,kind:'record',extensions:{},...(id==='a'?{keys:[{id:'label-key',name:'label-key',fields:[{module:'m',element:'label'}],primary:true}]}:{}),members:id==='a'?[{module:'m',element:'label'},{module:'m',element:'caption'}]:[]})),
+  ...['a','b','z'].map(id=>({id,kind:'record',extensions:{},...(id==='a'?{keys:[{id:'label-key',name:'label-key',fields:[{module:'m',element:'label'}],primary:true},...['aaa-secondary','a-secondary','z-secondary'].map(keyId=>({id:keyId,name:keyId,fields:[{module:'m',element:'zz-'+keyId}],primary:false}))]}:{}),members:id==='a'?[{module:'m',element:'label'},{module:'m',element:'caption'},...['aaa-secondary','a-secondary','z-secondary'].map(keyId=>({module:'m',element:'zz-'+keyId}))]:[]})),
   {id:'label',name:'label',kind:'field',extensions:{},scalarType:'string',nullability:'required',cardinality:'one'},
-  {id:'caption',name:'caption',kind:'field',extensions:{},scalarType:'string',nullability:'absent-allowed',cardinality:'one'}],relationships:[{id:'a-z',name:'a-z',source:[{module:'m',element:'a'}],target:[{module:'m',element:'a',key:'label-key'}],sourceMultiplicity:{min:0,max:1},targetMultiplicity:{min:0,max:2},targetLifecycle:'independent',directed:true}]}]};
+  {id:'caption',name:'caption',kind:'field',extensions:{},scalarType:'string',nullability:'absent-allowed',cardinality:'one'},...['aaa-secondary','a-secondary','z-secondary'].map(keyId=>({id:'zz-'+keyId,name:'zz-'+keyId,kind:'field',extensions:{},scalarType:'string',nullability:'required',cardinality:'one'}))],relationships:[{id:'a-z',name:'a-z',source:[{module:'m',element:'a'}],target:[{module:'m',element:'a',key:'label-key'}],sourceMultiplicity:{min:0,max:1},targetMultiplicity:{min:0,max:2},targetLifecycle:'independent',directed:true}]}]};
  const originalDocument=JSON.stringify(originalModel);const originalInspection=producer.inspect(originalDocument);
  assert(originalInspection.sourceValidation.valid&&originalInspection.targetValidation.valid,'actual original UMF source and transition validate');
- const recordCheck=producer.checkRecord(originalInspection.target,{module:'m',element:'a'},[{field:{module:'m',element:'label'},state:'present',value:{string:'雪🙂'}}]);
+ const recordCheck=producer.checkRecord(originalInspection.target,{module:'m',element:'a'},[{field:{module:'m',element:'label'},state:'present',value:{string:'雪🙂'}},...['aaa-secondary','a-secondary','z-secondary'].map(keyId=>({field:{module:'m',element:'zz-'+keyId},state:'present',value:{string:keyId}}))]);
  assert(recordCheck.validation.valid&&!recordCheck.validation.complete,'actual owner producer retains declared-key dataset incompleteness');
  const originalValidation={producerSource:producer.sourceRevision,producerBundleSha256:producer.bundleSha256,sourceValidation:originalInspection.sourceValidation,transition:originalInspection.transition,targetValidation:originalInspection.targetValidation,recordChecks:[recordCheck]};
  const secondText=JSON.stringify({...originalModel,id:'second-document'});const secondInspection=producer.inspect(secondText);
@@ -80,18 +80,28 @@ try{
  assert(duplicatePropertyCode==='22023','duplicate field names refuse before property allocation');await sql.unsafe('ROLLBACK TO SAVEPOINT duplicate_properties');
  const rejectedProperties=await sql.unsafe('SELECT count(*)::text AS n FROM truss.prop_def');assert(rejectedProperties[0].n==='0','rejected property batch leaves no partial field');
  const survivingTypes=await sql.unsafe('SELECT count(*)::text AS n FROM truss.type_def');assert(survivingTypes[0].n==='2','earlier allocated types survive rejected field batch');
- const properties=await sql.unsafe('SELECT * FROM truss.runtime_stage_new_properties($1::int,$2::text::jsonb)',[staged[0].provisional_revision,JSON.stringify(fields)]);assert(properties.length===2&&properties[0].field_id==='caption'&&properties[0].property_id==='1'&&properties[1].property_id==='2','native owner property IDs allocated in field order');
+ const properties=await sql.unsafe('SELECT * FROM truss.runtime_stage_new_properties($1::int,$2::text::jsonb)',[staged[0].provisional_revision,JSON.stringify(fields)]);assert(properties.length===5&&properties[0].field_id==='caption'&&properties[0].property_id==='1'&&properties[1].property_id==='2','native owner property IDs allocated in field order');
  const keyStage=await Bun.file('packages/postgresql/native/catalog-key-stage.sql').text();await sql.unsafe(keyStage);
  const labelProperty=properties.find((p:any)=>p.field_id==='label').property_id;
  const keyBatch=await Bun.file('packages/postgresql/native/catalog-key-batch.sql').text();await sql.unsafe(keyBatch);
  const originalOwner=originalModel.modules[0].elements.find(element=>element.id==='a')!;
  const originalKeys=originalOwner.keys!.map(key=>({ownerTypeId:allocated[0].type_id,keyId:key.id,primary:key.primary,
   propertyIds:key.fields.map(field=>{const match=properties.filter((p:any)=>p.field_id===field.element);if(field.module!=='m'||match.length!==1)throw Error('Original key field correspondence');return match[0].property_id})}));
- const key=await sql.unsafe('SELECT * FROM truss.runtime_stage_new_keys($1::int,$2::text::jsonb)',[staged[0].provisional_revision,JSON.stringify(originalKeys)]);assert(key[0].key_number==='1','native owner-local key number allocated');
+ for(const [label,keyId,propertyId,primary] of [
+  ['invented key declaration refuses','invented-key',labelProperty,false],
+  ['changed original primary flag refuses','label-key',labelProperty,false],
+  ['valid but wrong original key property refuses','aaa-secondary',labelProperty,false],
+ ] as const){
+  await sql.unsafe('SAVEPOINT key_source_mismatch');let refusal='';
+  try{await sql.unsafe('SELECT truss.runtime_stage_new_key($1::int,$2::int,$3::text,ARRAY[$4::int],$5::boolean)',[staged[0].provisional_revision,allocated[0].type_id,keyId,propertyId,primary])}catch(e){refusal=(e as any).errno??(e as any).code}
+  assert(refusal==='55000',label);await sql.unsafe('ROLLBACK TO SAVEPOINT key_source_mismatch');
+ }
+ const beforeKeys=await sql.unsafe('SELECT count(*)::text AS n FROM truss.key_def');assert(beforeKeys[0].n==='0','source mismatch cannot allocate a key declaration');
+ const key=await sql.unsafe('SELECT * FROM truss.runtime_stage_new_keys($1::int,$2::text::jsonb)',[staged[0].provisional_revision,JSON.stringify(originalKeys.filter(key=>key.primary))]);assert(key[0].key_number==='1','native owner-local key number allocated');
  const nativeKey=await sql.unsafe('SELECT prop_ids::text AS ids FROM truss.key_def');assert(nativeKey[0].ids==='{'+labelProperty+'}','original key component order and native property identity retained');
  await sql.unsafe('SAVEPOINT invalid_key_batch');let keyBatchCode='';
  try{await sql.unsafe('SELECT * FROM truss.runtime_stage_new_keys($1::int,$2::text::jsonb)',[staged[0].provisional_revision,JSON.stringify([
-  {...originalKeys[0],keyId:'aaa-secondary',primary:false},
+  originalKeys.find(key=>key.keyId==='aaa-secondary')!,
   {...originalKeys[0],keyId:'zzz-invalid',primary:false,propertyIds:['2147483647']}
  ])])}catch(e){keyBatchCode=(e as any).errno??(e as any).code}
  assert(keyBatchCode==='55000','invalid later key refuses whole batch');await sql.unsafe('ROLLBACK TO SAVEPOINT invalid_key_batch');
@@ -108,8 +118,8 @@ try{
  }
  const keyInventory=await sql.unsafe('SELECT count(*)::text AS n FROM truss.key_def');assert(keyInventory[0].n==='1','refused keys preserve earlier key declaration');
  const orderedKeys=await sql.unsafe('SELECT * FROM truss.runtime_stage_new_keys($1::int,$2::text::jsonb)',[staged[0].provisional_revision,JSON.stringify([
-  {...originalKeys[0],keyId:'z-secondary',primary:false},
-  {...originalKeys[0],keyId:'a-secondary',primary:false}
+  originalKeys.find(key=>key.keyId==='z-secondary')!,
+  originalKeys.find(key=>key.keyId==='a-secondary')!
  ])]);assert(orderedKeys.length===2&&orderedKeys[0].key_id==='a-secondary'&&orderedKeys[0].key_number==='2'&&orderedKeys[1].key_number==='3','internal batch allocates key numbers in original identity byte order');
  const fieldState=await sql.unsafe("SELECT nullability FROM truss.prop_def WHERE element='caption'");assert(fieldState[0].nullability==='absent-allowed','original field availability retained');
  const relationshipStage=await Bun.file('packages/postgresql/native/catalog-relationship-stage.sql').text();await sql.unsafe(relationshipStage);

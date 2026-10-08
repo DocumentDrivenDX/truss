@@ -8,6 +8,10 @@ DECLARE
   owner truss.type_def%ROWTYPE;
   next_number bigint;
   component int;
+  original_keys jsonb;
+  original_key jsonb;
+  original_field jsonb;
+  component_ordinal int;
 BEGIN
   SELECT * INTO STRICT op FROM truss.row_home_operation o
     WHERE o.original_writer_xid=pg_current_xact_id_if_assigned() AND o.phase<>'application_finalized' FOR UPDATE;
@@ -30,6 +34,33 @@ BEGIN
   FOREACH component IN ARRAY ordered_property_ids LOOP
     PERFORM 1 FROM truss.prop_def p WHERE p.prop_id=component AND p.type_id=owner_id AND p.retired_rev IS NULL;
     IF NOT FOUND THEN RAISE EXCEPTION 'foreign or missing key component' USING ERRCODE='55000'; END IF;
+  END LOOP;
+  SELECT jsonb_agg(k.value) INTO original_keys FROM truss.schema_doc d
+    CROSS JOIN LATERAL jsonb_array_elements(d.document::jsonb->'modules') m
+    CROSS JOIN LATERAL jsonb_array_elements(m.value->'elements') e
+    CROSS JOIN LATERAL jsonb_array_elements(e.value->'keys') k
+    WHERE d.rev=revision AND d.ord=owner.doc_ord AND d.doc_id=owner.document_id
+      AND m.value->>'id'=owner.module AND e.value->>'id'=owner.element
+      AND e.value->>'kind'='record' AND k.value->>'id'=original_key_id;
+  IF original_keys IS NULL OR jsonb_array_length(original_keys)<>1 THEN
+    RAISE EXCEPTION 'key does not match original owner declaration' USING ERRCODE='55000';
+  END IF;
+  original_key:=original_keys->0;
+  IF coalesce((original_key->>'primary')::boolean,false)<>primary_key
+      OR jsonb_array_length(original_key->'fields')<>cardinality(ordered_property_ids) THEN
+    RAISE EXCEPTION 'original key flag or component count mismatch' USING ERRCODE='55000';
+  END IF;
+  FOR component_ordinal IN 1..cardinality(ordered_property_ids) LOOP
+    original_field:=original_key->'fields'->(component_ordinal-1);
+    -- Current native property source has no independent field-module column.
+    -- Do not infer cross-module field correspondence from an element name.
+    IF original_field->>'module'<>owner.module THEN
+      RAISE EXCEPTION 'cross-module key fields require an admitted source correspondence profile' USING ERRCODE='0A000';
+    END IF;
+    PERFORM 1 FROM truss.prop_def p WHERE p.prop_id=ordered_property_ids[component_ordinal]
+      AND p.type_id=owner_id AND p.element=original_field->>'element'
+      AND p.definition_document_id=owner.document_id;
+    IF NOT FOUND THEN RAISE EXCEPTION 'original ordered key field correspondence' USING ERRCODE='55000'; END IF;
   END LOOP;
   IF EXISTS(SELECT 1 FROM truss.key_def k WHERE k.type_id=owner_id AND (k.key_id=original_key_id OR (primary_key AND k.is_primary AND k.retired_rev IS NULL))) THEN
     RAISE EXCEPTION 'existing key requires original matching' USING ERRCODE='55000';
