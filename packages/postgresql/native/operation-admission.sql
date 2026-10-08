@@ -9,6 +9,7 @@ SET search_path = pg_catalog, pg_temp
 AS $$
 DECLARE
   native_xid xid8;
+  head_revision int;
   next_ordinal bigint;
   native_context bytea;
   item bytea;
@@ -28,6 +29,18 @@ BEGIN
   IF total_bytes > 4194304 THEN
     RAISE EXCEPTION 'operation artifact aggregate bound' USING ERRCODE='54000';
   END IF;
+  -- Catalog exclusion precedes operation-registry and business locks.
+  -- Never upgrade an earlier shared head admission in this internal profile.
+  IF kind='catalog-acceptance' THEN
+    IF EXISTS(SELECT 1 FROM pg_locks l WHERE l.pid=pg_backend_pid() AND l.granted
+        AND l.relation='truss.schema_head'::regclass AND l.mode IN ('RowShareLock','RowExclusiveLock'))
+        AND NOT EXISTS(SELECT 1 FROM pg_locks l WHERE l.pid=pg_backend_pid() AND l.granted
+          AND l.relation='truss.schema_head'::regclass AND l.mode IN ('ExclusiveLock','AccessExclusiveLock')) THEN
+      RAISE EXCEPTION 'earlier shared head admission cannot upgrade to catalog exclusion' USING ERRCODE='55000';
+    END IF;
+    LOCK TABLE truss.schema_head IN EXCLUSIVE MODE;
+  END IF;
+  SELECT h.rev INTO STRICT head_revision FROM truss.schema_head h WHERE h.id=1 FOR SHARE;
   native_xid := pg_current_xact_id();
   IF EXISTS (SELECT 1 FROM truss.row_home_operation AS o
       WHERE o.original_writer_xid=native_xid AND o.phase<>'application_finalized') THEN

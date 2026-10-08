@@ -6,6 +6,7 @@ const producer=await loadUmfProducer(producerDirectory);
 const url=process.env.TRUSS_OPERATION_TEST_URL;
 if(!url||!url.startsWith('postgres://postgres@127.0.0.1:15434/'))throw Error('Dedicated local test endpoint required');
 const sql=new SQL(url,{max:1});
+const peer=new SQL(url,{max:1});
 const layout=await Bun.file('docs/helix/04-build/evidence/weft-integration-layout-0.13.owner-export.sql').text();
 const body=await Bun.file('packages/postgresql/native/operation-admission.sql').text();
 const checks:string[]=[];
@@ -26,8 +27,15 @@ try{
  assert(code==='55000','second unfinished operation refused');await sql.unsafe('ROLLBACK TO SAVEPOINT duplicate');
  const stored=await sql.unsafe("SELECT encode(original_definition_bytes,'hex') AS bytes FROM truss.row_home_operation");
  assert(stored.length===1&&stored[0].bytes==='00ff','original binary artifact retained');
+ const headLock=await sql.unsafe("SELECT count(*)::text AS n FROM pg_locks WHERE pid=pg_backend_pid() AND granted AND relation='truss.schema_head'::regclass AND mode='RowShareLock'");assert(headLock[0].n==='1','mutation admission obtains original head share before registry');
+ const concurrentAdmit="SELECT * FROM truss.runtime_admit_operation('catalog-acceptance',decode('01','hex'),decode('01','hex'),decode('01','hex'),decode('01','hex'),decode('01','hex'),decode('01','hex'))";
+ await peer.unsafe('BEGIN');await peer.unsafe("SET LOCAL lock_timeout='100ms'");let peerWait='';try{await peer.unsafe(concurrentAdmit)}catch(e){peerWait=(e as any).errno??(e as any).code}assert(peerWait==='55P03','catalog acceptance waits for original mutation head admission');await peer.unsafe('ROLLBACK');
  await sql.unsafe('ROLLBACK');
  const after=await sql.unsafe('SELECT count(*)::text AS n FROM truss.row_home_operation');assert(after[0].n==='0','rollback removes operation custody');
+ await peer.unsafe('BEGIN');await peer.unsafe(concurrentAdmit);
+ await sql.unsafe('BEGIN');await sql.unsafe("SET LOCAL lock_timeout='100ms'");let acceptanceWait='';try{await sql.unsafe(concurrentAdmit)}catch(e){acceptanceWait=(e as any).errno??(e as any).code}assert(acceptanceWait==='55P03','second catalog acceptance waits at original admission exclusion');await sql.unsafe('ROLLBACK');await peer.unsafe('ROLLBACK');
+ await sql.unsafe('BEGIN');await sql.unsafe(concurrentAdmit.replace("'catalog-acceptance'","'mutation'"));await sql.unsafe('SAVEPOINT no_upgrade');let upgradeCode='';try{await sql.unsafe(concurrentAdmit)}catch(e){upgradeCode=(e as any).errno??(e as any).code}assert(upgradeCode==='55000','shared head admission cannot upgrade after earlier operation');await sql.unsafe('ROLLBACK TO SAVEPOINT no_upgrade');await sql.unsafe('ROLLBACK');
+ await sql.unsafe('BEGIN');const releasedAdmission=await sql.unsafe(concurrentAdmit);assert(releasedAdmission.length===1,'catalog admission proceeds after original transactions roll back');await sql.unsafe('ROLLBACK');
  const grants=await sql.unsafe("SELECT count(*)::text AS n FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace CROSS JOIN LATERAL aclexplode(p.proacl) a WHERE n.nspname='truss' AND p.proname='runtime_admit_operation' AND a.grantee=0 AND a.privilege_type='EXECUTE'");assert(grants[0].n==='0','no public execute');
  const barrier=await Bun.file('packages/postgresql/native/operation-commit-barrier.sql').text();await sql.unsafe(barrier);
  const admit="SELECT * FROM truss.runtime_admit_operation('mutation',decode('01','hex'),decode('01','hex'),decode('01','hex'),decode('01','hex'),decode('01','hex'),decode('01','hex'))";
@@ -215,4 +223,4 @@ try{
  const rolledRelationships=await sql.unsafe('SELECT count(*)::text AS n FROM truss.relationship_lineage');assert(rolledRelationships[0].n==='0','rollback removes staged relationship lineage');
  const receipt={component:'native operation and owner-backed catalog staging',engine:'PostgreSQL17.9',umfSource:producer.sourceRevision,umfBundleSha256:producer.bundleSha256,checks,bodySha256:new Bun.CryptoHasher('sha256').update(body).digest('hex'),prestateCaptureSha256:new Bun.CryptoHasher('sha256').update(prestateBody).digest('hex'),observerSha256:new Bun.CryptoHasher('sha256').update(observer).digest('hex'),barrierSha256:new Bun.CryptoHasher('sha256').update(barrier).digest('hex'),catalogStageSha256:new Bun.CryptoHasher('sha256').update(catalogStage).digest('hex'),documentBatchSha256:new Bun.CryptoHasher('sha256').update(documentBatch).digest('hex'),typeStageSha256:new Bun.CryptoHasher('sha256').update(typeStage).digest('hex'),propertyStageSha256:new Bun.CryptoHasher('sha256').update(propertyStage).digest('hex'),relationshipStageSha256:new Bun.CryptoHasher('sha256').update(relationshipStage).digest('hex'),keyBatchSha256:new Bun.CryptoHasher('sha256').update(keyBatch).digest('hex'),keyStageSha256:new Bun.CryptoHasher('sha256').update(keyStage).digest('hex'),qualification:'Actual xid/context/artifact bounds/single unfinished/rollback/private invocation and actual canonical generation dispatch component only. Canonical fixture carrier bytes are not admitted codec/layout authority. Protected issuer registration, canonical observers, finalization, deferred complete-cohort checks, installer security and public runtime remain unfinished.'};
  await Bun.write('docs/helix/04-build/evidence/runtime-operation-admission.json',JSON.stringify(receipt,null,2)+'\n');console.log(JSON.stringify({checks:checks.length}));
-}finally{await sql.close()}
+}finally{await peer.close();await sql.close()}
