@@ -164,3 +164,17 @@ Plan JA-01–03 for the selected journal_seq realization: substitute a same-name
 
 
 Plan HC-01–03 for the selected complete-envelope physical projection: independently preserve a complete delete.before while physical old_value is SQL NULL and reconstruct without the live record; introduce conflicting old_value content, wrong physical op/prop_id or an envelope/column identity-position mismatch and require whole-result refusal; present a legacy projection decoder/binding to the new profile and require admission refusal before interpreting any row. Independent fixtures must cover every selected op/property mapping, including metadata and the explicitly versioned retain variant. New complete wire/constraints/native producer and migration horizon are required test inputs; these cases remain not_run.
+
+
+### Journal phase security qualification (planned JP-01–04)
+
+Use actual separate application, journal-phase, finalization and cleanup role paths under the selected managed installation tuple. Independently inspect effective privileges and native attempted commands; a rollback leaving equal rows cannot prove absence of a prohibited command.
+
+| Case | Independent setup | Required result |
+| --- | --- | --- |
+| JP-01 original actor | Enter the admitted private phase path as a real application actor, including an allowed SET ROLE path, then traverse nested definer dependencies | Original journal/context attribution remains the admitted data actor. Definer current_user, caller-supplied role text and prior pooled-session capture cannot replace it. Changed actor requires fresh admission before effects |
+| JP-02 invocation denial | Attempt each phase directly through application/PUBLIC/inherited rights and present otherwise matching context bytes | Native private invocation denial or protected admission refusal before capture disclosure, stage write, allocator call or append. Context bytes alone supply no callable capability |
+| JP-03 owner separation | Attempt producer-owner sealing, canonical/catalog/report mutation, stage deletion and sequence reset; attempt cleanup-owner phase replay | All forbidden paths remain unavailable under actual effective rights and private admission. A legitimate nextval privilege cannot imply UPDATE/setval privilege. Cleanup cannot reopen a frozen phase or create missing history |
+| JP-04 trusted resolution | Introduce same-name objects in temporary or application-writable namespaces and substitute actual helper/sequence owner or overload dependencies | Exact installation/dependency admission refuses substitution; original trusted references execute only after full correspondence. A safe-looking search_path string cannot substitute for effective rights/native definition evidence |
+
+Complete role/grant/routine/body/dependency inventory and original caller custody are prerequisites. These tests qualify source selections under actual native behavior and remain not_run; the seven-routine manifest checks do not cover these additional journal phase bodies.
