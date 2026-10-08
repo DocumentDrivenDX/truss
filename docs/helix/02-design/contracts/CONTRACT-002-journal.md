@@ -303,11 +303,11 @@ This is a semantic proposal for the identified missing variant. Existing history
 
 [Payload declaration](bindings/truss-history-retain-payload-v0.1.proposal.d.ts) mirrors the separate proposal: nonempty typed member inventory, absent-before and present-after exact values with required original-context references. [Six negative static controls](bindings/truss-history-retain-payload-v0.1.proposal.typecheck.ts) reject empty/replacement/removal/missing-value/stray-value shapes and assignment into the unchanged HistoricalEvent union; [strict typecheck receipt](../../04-build/evidence/design-audit/history-retain-payload-typecheck.json). Runtime duplicate-name/context/finite-resource admission and complete-event integration remain distinct outputs.
 
-### Recommended one-row complete-envelope carrier candidate
+### Selected reference one-row complete-envelope carrier
 
-For review, recommend one complete semantic event envelope in physical new_value and physical old_value SQL NULL for the new complete profile. Event before/after values remain inside that envelope, including delete.before; do not duplicate selected semantic old/new images into competing authoritative columns. This intentionally changes the legacy old_value/new_value projection contract, so it requires an explicit new layout/encoding profile and reader migration. JSONB stores the selected exact-tree/token carrier, not lossy native JSON numbers substituted for original tokens; original archive bytes remain separately admitted artifacts.
+Select one complete semantic event envelope in physical new_value and physical old_value SQL NULL for the reference complete-history profile. This is a design selection; complete versioned wire/native constraints and migration qualification remain required before activation. Event before/after values remain inside that envelope, including delete.before; do not duplicate selected semantic old/new images into competing authoritative columns. This intentionally changes the legacy old_value/new_value projection contract, so it requires an explicit new layout/encoding profile and reader migration. JSONB stores the selected exact-tree/token carrier, not lossy native JSON numbers substituted for original tokens; original archive bytes remain separately admitted artifacts.
 
-| Semantic event | Physical op candidate | prop_id candidate |
+| Semantic event | Selected reference physical op | Selected reference prop_id |
 | --- | --- | --- |
 | create | create | SQL NULL |
 | delete | delete | SQL NULL |
