@@ -352,3 +352,30 @@ predecode/native-protocol capture are still unfinished, consistent with the
 candidate's incomplete readiness. Do not elevate public driver-result evidence
 into those stronger original custody/resource claims. Full protected producers,
 trigger bodies and native bootstrap/feed remain unfinished.
+
+
+## Original response-frame decoder prerequisite
+
+Truss Impl completed the source/design review at 9665a4d on its separate planning
+branch. It identifies missing E06 arbitration and original predecode/protocol
+capture, and enumerates the complete issuer/admission/observer/finalizer/feed/
+security chain. That review covers candidate 65d6106, not later changes or new
+native qualification; selected 0.12 readiness stays unfinished.
+
+The host package now exports `decodeResponseFrame` for bounded original T/D/C/Z
+frames. It checks exact frame length and full consumption, field limits and native
+integer domains; descriptor numeric metadata is exact text, raw row fields retain
+hex/NULL distinctions, and command/status retain their original text. Command
+counts beyond host numeric precision remain original decimal text. Unknown
+response kinds refuse this subset rather than disappearing. Twenty-six tests/197
+assertions, strict host build and clean packed host consumer pass.
+
+`native-wire.json` retains one complete original PostgreSQL 17.9 SELECT response
+through pg 8.16.3 under Bun, with T/D/C/Z frame hex and independent expected
+duplicate descriptors, bigint bytes, NULL, command count and idle status. The
+probe listener follows the existing pg parser. This is original-byte correspondence
+only, not predecode ingress/allocation enforcement, issuer/epoch/cut authority or
+full response enumeration across other queries/errors. The reviewed frozen
+pg 8.23.0/pg-protocol 1.16.0 tuple does not transfer to this dependency. The
+actual mandatory predecode producer/resource integration remains unfinished.
+No mutations/cloud/deployment changes occurred.

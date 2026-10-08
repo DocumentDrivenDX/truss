@@ -1,0 +1,77 @@
+{
+  "driver": "pg/8.16.3",
+  "sql": "SELECT 9007199254740993123::bigint AS duplicate,NULL::text AS duplicate",
+  "bytes": 117,
+  "frames": [
+    {
+      "kind": "T",
+      "originalHex": "540000003e00026475706c696361746500000000000000000000140008ffffffff00006475706c69636174650000000000000000000019ffffffffffff0000",
+      "fields": [
+        {
+          "name": "duplicate",
+          "tableOid": "0",
+          "attribute": "0",
+          "typeOid": "20",
+          "typeSize": "8",
+          "typeModifier": "-1",
+          "format": "0"
+        },
+        {
+          "name": "duplicate",
+          "tableOid": "0",
+          "attribute": "0",
+          "typeOid": "25",
+          "typeSize": "-1",
+          "typeModifier": "-1",
+          "format": "0"
+        }
+      ]
+    },
+    {
+      "kind": "D",
+      "originalHex": "440000002100020000001339303037313939323534373430393933313233ffffffff",
+      "fields": [
+        {
+          "hex": "39303037313939323534373430393933313233"
+        },
+        {
+          "hex": null
+        }
+      ]
+    },
+    {
+      "kind": "C",
+      "originalHex": "430000000d53454c454354203100",
+      "fields": [
+        {
+          "command": "SELECT 1",
+          "affectedRows": "1"
+        }
+      ]
+    },
+    {
+      "kind": "Z",
+      "originalHex": "5a0000000549",
+      "fields": [
+        {
+          "status": "I"
+        }
+      ]
+    }
+  ],
+  "driverResult": {
+    "fields": [
+      "duplicate",
+      "duplicate"
+    ],
+    "rows": [
+      [
+        "9007199254740993123",
+        null
+      ]
+    ],
+    "command": "SELECT",
+    "rowCount": "1"
+  },
+  "qualification": "One original T/D/C/Z response captured on local PostgreSQL 17.9 under Bun. Socket listener follows existing pg parser; no predecode ingress/allocation/transport bound or original-query issuer/epoch authority is established. No Truss installation or complete producer/profile adoption."
+}

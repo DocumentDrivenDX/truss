@@ -58,3 +58,6 @@ export function createPgConnectionSource(config:PoolConfig): {
     if(quarantine.size)throw Error('Original quarantined custody needs explicit settlement');await pool.end();
   }};
 }
+
+export {decodeResponseFrame} from './wire';
+export type {WireLimits} from './wire';

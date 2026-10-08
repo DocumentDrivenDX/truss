@@ -6,3 +6,5 @@ export declare function createPgConnectionSource(config: PoolConfig): {
     readonly quarantinedCount: () => number;
     readonly close: () => Promise<void>;
 };
+export { decodeResponseFrame } from './wire';
+export type { WireLimits } from './wire';
