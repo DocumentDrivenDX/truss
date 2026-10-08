@@ -10,7 +10,7 @@ Validate current authorization, complete retained values, original codecs, requi
 
 ## Atomic effect order
 
-The [report 0.3 candidate](acceptance-report-v0.3.proposal.schema.json) composes the earlier reactivation inventory and complete-history rebind shapes under a distinct discriminator. It remains conditional on selecting those report/history profiles; choosing reactivation alone does not adopt ADR-007. Earlier report schemas remain separately versioned. Original bytes, complete actual-effect inventory and native semantic validation remain mandatory.
+The [report 0.3 candidate](acceptance-report-v0.3.proposal.schema.json) composes the earlier reactivation inventory and complete-history rebind shapes under a distinct discriminator. The combined reference handoff selects this existing report v0.3 alongside history events, journal pages and retained-history archives v0.2 under CONTRACT-002 and CONTRACT-003. Selecting the composed wire shape does not qualify its native producer or consumer. Earlier report schemas remain separately versioned. Original bytes, complete actual-effect inventory and native semantic validation remain mandatory.
 
 After original candidate admission and full reservations, insert the new revision origin/archive before dependent catalog/history rows. Apply exact permitted lifecycle changes and independently record original before/after definitions and retirement state. For type/property/relationship categories, preserve the admitted schema_change category/identity correspondence. Keys require the separate owner-local `(type_id,key_num)` lifecycle chain, not a global def_id surrogate.
 
@@ -23,6 +23,8 @@ The report must enumerate each reactivated category/qualified identity, retained
 ## Independent planned acceptance
 
 The [TypeScript 0.3 binding](bindings/truss-acceptance-report-v0.3.proposal.d.ts) matches the composed report discriminator and adds explicit owner-local reactivation entries. Its type controls reject unowned/global/numeric keys, missing original definitions and implicit old-report upgrade. Type success cannot validate canonical numeric ranges, artifact digests, complete transition membership or native authority.
+
+The [composed report schema check](../../04-build/evidence/design-audit/check-composed-report-v0.3.ts) validates a complete synthetic report containing both rebind events and owner-local reactivation entries. Its [fourteen shape controls](../../04-build/evidence/design-audit/composed-report-v0.3-shapes.json) refuse omitted lifecycle/profile/original-execution evidence, an unowned key, old or mixed event versions, a retain event substituted into rebinds, an opaque lifecycle substitution, unknown root content and implicit old-report upgrade. An explicit empty reactivation inventory remains shape-valid; completeness against actual transitions is a semantic producer/admission obligation. Fixture digests are placeholders. These controls do not establish original artifact fidelity, native ranges, actual-effect membership or runtime qualification. Earlier v0.2 wrapper and lifecycle-fragment evidence keeps its original scope.
 
 CP-01 retire then reactivate the same qualified identity: retained IDs and creation revisions match originals; current authority and full final invariants pass; complete report/history records the transition.
 
