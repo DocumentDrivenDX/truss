@@ -15,7 +15,17 @@ ddx:
 
 # Design coordination and remaining work
 
-## Latest read-only owner source review — multi-root native cut
+## Latest read-only owner source review — explicit conformance configuration
+
+Inspected Weft HEAD is `b31101889f1078ce0d12da98b51c458e16c9a4a1`; UMF primary remains 16c35e8d. The [source review receipt](evidence/design-audit/weft-host-configuration-source-review.json) verifies eight original source-file pins at the two relevant receipt commits. Truss did not rerun owner Rust/PostgreSQL/Python/browser tests or independently check the 868 decimal capture files.
+
+Weft reports original property SUM and integrity checks for every admitted decimal precision 1..28 and scale 0..precision: 434 domain pairs in props and native row homes, 868 captures and 6076 PostgreSQL 17.9 executions. Independent owner arithmetic covers empty/exact sums, range boundaries, excess scale, required absence and wrong codec/carrier. This is a compiler-owned domain subset, not a universal Truss decimal domain, adoption of corrected Truss codec schema or installed storage compatibility.
+
+The separately enabled test-original build exports compile_json_with_conformance_configuration(request,configuration). The host supplies bounded metadata through the existing original-admission path; query/model input cannot select this configuration or load code. Owner receipts report 420 cases per fresh Python and Chromium WASM embedding, comprising 84 full responses with unlisted binding hashes and 336 configuration/version/candidate/digest refusals. The default preset route still refuses unlisted bindings. The first bulk browser transfer failed and is excluded; the identical corpus passed later in batches of eight. New decimal-domain embedding evidence and a released generic registration boundary remain unproven.
+
+Truss may plan additional conformance configurations under this explicit test boundary without requesting another compiler preset or implementing its own lowering. Actual original codec/source/native-home admission and independently expected Truss data remain required. Production packaging must exclude dependence on test-only exports; release registration needs explicit reviewed owner scope. STP-039 HC-01–05 allocates those distinctions. Current 0.11 packet remains unregistered and one-string only; current schema corrections require their own exact source pins and review.
+
+## Historical read-only owner source review — multi-root native cut
 
 UMF primary remains `16c35e8d943769ccfa7bb57d16785aa7159abe65`. Inspected Weft HEAD is `320a597398a429d8dc1e61cd225be403a48d154c`. The [source correspondence receipt](evidence/design-audit/weft-multi-root-source-review.json) independently verifies thirteen file hashes from two owner receipts against the original files at their respective commits. Truss did not rerun the owner's Rust, PostgreSQL, Python or browser tests.
 

@@ -1,0 +1,48 @@
+{
+  "scope": "Read-only original owner source/receipt hash correspondence; owner Rust/native/embedding tests not rerun; no Truss mapping or released registration adoption",
+  "weftHead": "b31101889f1078ce0d12da98b51c458e16c9a4a1",
+  "verifiedSourcePins": [
+    {
+      "commit": "b31101889f1078ce0d12da98b51c458e16c9a4a1",
+      "path": "crates/weft-postgresql/src/conformance_original.rs",
+      "sha256": "f39a721b9579d390e4d92d9404f389c33ae628b5b1e36409258543632a37d731"
+    },
+    {
+      "commit": "b31101889f1078ce0d12da98b51c458e16c9a4a1",
+      "path": "crates/weft-runtime/src/lib.rs",
+      "sha256": "fb3340349f30d138bbd3da0d19b8563c0ed8591090a90aee43ad55b311c3f5cd"
+    },
+    {
+      "commit": "b31101889f1078ce0d12da98b51c458e16c9a4a1",
+      "path": "crates/weft-python/src/lib.rs",
+      "sha256": "4a348481922988a364ab280b6f3fb4fae1a9940afa447e4282f4a704b6905366"
+    },
+    {
+      "commit": "b31101889f1078ce0d12da98b51c458e16c9a4a1",
+      "path": "crates/weft-wasm/src/lib.rs",
+      "sha256": "0afb607c939e226ab1f55494ff68e6e58ca0f1c806a3095a03ac527ab7855ee3"
+    },
+    {
+      "commit": "b31101889f1078ce0d12da98b51c458e16c9a4a1",
+      "path": "tests/compile/browser-check.mjs",
+      "sha256": "9d3d90c0815960797faa87d2e44e215cfc2c1992501b64b150b09e675788df3b"
+    },
+    {
+      "commit": "b31101889f1078ce0d12da98b51c458e16c9a4a1",
+      "path": "tests/truss-postgresql/host-configuration-embedding-check.py",
+      "sha256": "44c1f411758ec7accd733cc1e73bb6cba6962b71e24c2a0e0709a324f9cf73a7"
+    },
+    {
+      "commit": "84f4ba701ca7a2789d4f6360148c14d6d4c7c2dd",
+      "path": "crates/weft-postgresql/src/property_definition.rs",
+      "sha256": "82f0cd6576239cb45fe1b917b85a5504ac8e7ddfec550aff3bb78d02355c4a2a"
+    },
+    {
+      "commit": "84f4ba701ca7a2789d4f6360148c14d6d4c7c2dd",
+      "path": "tests/truss-postgresql/original-decimal-domain-native.py",
+      "sha256": "1de86ed01c3eec3ad3b7c61e6651ef8dfadcacd3a128470d050ceb15a9a7e5c4"
+    }
+  ],
+  "decimalCaptureHashScope": "868 capture hashes reported by owner receipt; capture files not independently revalidated in this review",
+  "nativeQualified": false
+}

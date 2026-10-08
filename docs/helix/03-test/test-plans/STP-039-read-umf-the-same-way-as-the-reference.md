@@ -63,6 +63,12 @@ Consume the exact Weft multi-root cut at `320a597398a429d8dc1e61cd225be403a48d15
 
 Pin original source/model/binding, each root's codec/profile/home, full-owner selection and actual adapter/publication observations. Keep native work containment and current-authority checks from RO/MS. All five cases are not_run; unsupported host combinations remain explicit rather than assumed from owner preset counts.
 
+## Host-owned conformance configuration (planned)
+
+HC-01–05 consume Weft b311018's explicit test-original instrumentation only: (01) default preset route refuses an unlisted Truss fixture binding, while explicitly supplied complete original conformance configuration is independently admitted; (02) malformed/oversized configuration, unknown version, wrong digest and candidate-disabled selection refuse without compiled SQL; (03) query/model/request content cannot supply or alter host configuration or load executable plugins; (04) same original configuration/query yields full Python/WASM response and parameter parity under independent Truss expected states, with browser transfers bounded separately from compilation; (05) normal/release builds and public Truss package imports do not depend on the test-only export, and no conformance receipt is treated as production registration. All cases are not_run.
+
+For numeric expansion, preserve Weft's precise compiler domain subset (precision 1..28, scale 0..precision) and independently bind selected Truss field/token/native homes; a broader Truss decimal field cannot silently narrow to that subset. New decimal-domain public embedding tests require their own evidence even though owner native SUM cases pass. Truss owns original configuration/mapping and host execution/security/resource admission; Weft owns lowering/parameters/decoders. No duplicate compiler or new UMF semantics are assigned.
+
 ## Story Reference and Scope
 
 US-039, TD-039, SD-007, TP-001 and CONTRACT-003/004. Tests are planned. Pin exact oracle/version/subset and distinguish validity from Truss support.
