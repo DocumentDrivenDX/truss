@@ -128,3 +128,17 @@ Supply observability hooks that record ordinary public phase observations. Under
 Inject a native collector error whose detail/hint/context contains independently authored hidden old-owner values and whose top-level original code/phase/containment is known. Public Outcome/callback/log projection preserves required failure/recovery meaning but exposes no private detail; independently authorized internal recovery still has exact required evidence. Repeat with unknown termination and lost commit acknowledgment: withholding detail cannot imply confirmed rollback/commit or permit reapplication. Revocation before later recovery disclosure applies current authority without deleting internal evidence.
 
 Configure insufficient protected evidence storage before admission: the dependent operation refuses before effects rather than retaining a digest-only substitute or truncated original. Use authored domain strings resembling tokens/URLs as exact data controls; no heuristic mutation of original values is allowed. These planned tests require selected native error/custody/diagnostic/account producers and cannot be proved by TypeScript shape or throwing a synthetic exception before any native work.
+
+
+### Selected reference owned-lease qualification (planned OL-01–04)
+
+Qualify the CONTRACT-007 adapter-private lease separately from adopted host transactions. Pin actual driver/pool/version, original issuer/arbitration, native cycle/termination/descriptor and session-cleanup producers. Use independent command and lease-return observations, plus an outside database observer for committed effects. All cases remain not_run.
+
+| Case | Controlled schedule | Required result |
+| --- | --- | --- |
+| OL-01 exclusive admission | Expose an independently submitting physical-client alias before BEGIN, then request owned execution | Refuse that lease/profile before BEGIN or callback invocation; locking only Truss methods does not establish command exclusivity |
+| OL-02 one command queue | Submit concurrent callback operations and cancellation/control requests; pause one native cycle before completion | All commands retain original queue/epoch/ordinal association; no overlap or reordered settlement. Cancellation closes admission while original pending work remains under recovery, with no callback replay |
+| OL-03 committed cleanup failure | Independently confirm COMMIT and committed state, then fail drain/session reset/pool bookkeeping | Preserve committed outcome, quarantine the actual lease and prove zero pool return/reuse. Cleanup failure cannot become rolled_back or commit_unknown when original commit confirmation is retained |
+| OL-04 unknown settlement | Lose COMMIT or rollback completion, or retain unresolved native termination; attempt another owned transaction | Original outcome/recovery custody remains unresolved; no pool return, guessed idle epoch or callback reapplication. A fresh physical lease has separate incarnation/epoch and cannot redeem the old handle |
+
+Also require zero raw-client/release exposure from public callback handles and explicit confirmed settlement/drain/session cleanup before normal pool return. Do not treat pool callback completion, an idle-status byte or after-state absence as proof of original COMMIT/rollback. This owned-path qualification does not admit arbitrary adopted-host command paths.
