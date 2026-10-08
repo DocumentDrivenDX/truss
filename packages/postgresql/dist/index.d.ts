@@ -1,7 +1,7 @@
 /** Inert construction only. No native capability, profile or permission is inferred. */
 import type { ReferenceAssemblyConfiguration, AssemblyConstructionResult } from './contracts/truss-reference-assembly-v0.1';
 import type { Executor, Statement, StatementResult, TransactionOptions } from './contracts/truss-execution-v0.1';
-import type { ProfilePin } from './contracts/truss-acceptance-input-v0.1';
+import type { ExactArtifact, ProfilePin } from './contracts/truss-acceptance-input-v0.1';
 import type { HostRecoveryRegistry } from './contracts/truss-recovery-registry-v0.1';
 import type { HostRequestNamespaceAuthority } from './contracts/truss-request-namespace-v0.1';
 import type { FeedProofVerifierRegistration } from './contracts/truss-feed-proof-verifier-v0.1';
@@ -132,3 +132,12 @@ export declare function decodeOperationRegistry(actualXid: string | null, result
     readonly maxRows: number;
     readonly maxBytes: number;
 }): readonly (readonly (string | null)[])[];
+export type { ExactArtifact } from './contracts/truss-acceptance-input-v0.1';
+/** CONTRACT-003 ingress primitive only: integrity is not UMF validity or native acceptance. */
+export interface ArtifactIngressLimits {
+    readonly maxArtifacts: number;
+    readonly maxSingleBytes: number;
+    readonly maxTotalBytes: number;
+}
+/** Snapshot and bound all original bytes before async hashing. No parsing, conversion or SQL. */
+export declare function verifyExactArtifacts(input: readonly ExactArtifact[], limits: ArtifactIngressLimits): Promise<readonly ExactArtifact[]>;

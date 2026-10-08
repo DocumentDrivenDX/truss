@@ -1,0 +1,26 @@
+{
+  "loader": "bun/1.4.2",
+  "artifacts": [
+    {
+      "identity": "schema-v1.umf.json",
+      "sha256": "bc5357b1eb99bddac4f1d1d1ce6d9727dbc98d8ca3a56b644510d07117919aec",
+      "bytes": 376
+    },
+    {
+      "identity": "schema-v2.umf.json",
+      "sha256": "59e4d58b5254df2291156a5b73ef0e04d4c74668b3818e8ecf630e4d104982d0",
+      "bytes": 550
+    },
+    {
+      "identity": "schema-v3.umf.json",
+      "sha256": "60d446310ba1bdebf36a1d066aadeb099336c7a551b3e563bd50ae938eeff085",
+      "bytes": 555
+    },
+    {
+      "identity": "schema-unknown.umf.json",
+      "sha256": "5221c59ad5c35bf25dda8b79e9de88b2ab096c003dc5bae74254a68b22c4d427",
+      "bytes": 437
+    }
+  ],
+  "qualification": "Actual original Ashlar v1/v2/v3/unknown UMF fixture bytes through built public Truss exact-artifact verifier, Web Crypto SHA-256 compared with Bun CryptoHasher. No JSON parsing, unknown semantic loss, database submission, native catalog acceptance, accepted IDs or full required-check validity/completeness claim."
+}

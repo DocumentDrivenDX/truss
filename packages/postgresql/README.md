@@ -34,3 +34,16 @@ bun scripts/check-packed.ts
 For the inspected local compiler, pass
 `--tsc /Users/erik/Projects/umf/node_modules/typescript/bin/tsc` to both scripts.
 That path is an explicit development command; emitted files contain no such path.
+
+`verifyExactArtifacts(artifacts, {maxArtifacts,maxSingleBytes,maxTotalBytes})`
+is the first CONTRACT-003 ingress primitive. It snapshots bounded exact artifact
+carriers before asynchronous Web Crypto SHA-256 verification. Canonical base64,
+exact digest, scalar identity, own data fields and full input/byte limits are
+required. It returns frozen original carriers without parsing/converting JSON;
+unknown UMF content and numeric spelling stay byte-exact. Unknown carrier fields,
+accessors, corrupt digests and noncanonical base64 refuse. No profile name or
+verified digest establishes provenance, UMF validity/completeness, dependency order,
+semantic support, native catalog acceptance, authorization or generated IDs.
+No SQL is issued. The observed Bun/public-package check uses the four original
+Ashlar v1/v2/v3/unknown UMF examples and independent Bun/Web Crypto hashes. Browser
+build passes; actual browser execution of this new primitive remains unverified.

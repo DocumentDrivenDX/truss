@@ -2,7 +2,7 @@
 import type {ReferenceAssemblyConfiguration, ReferenceAssembly, AssemblyConstructionResult, AssemblyDisposalResult}
   from '../../../docs/helix/02-design/contracts/bindings/truss-reference-assembly-v0.1';
 import type {Executor, Outcome, TransactionHandle, SavepointHandle, Statement, StatementResult, TransactionOptions, ExecutionFailure} from '../../../docs/helix/02-design/contracts/bindings/truss-execution-v0.1';
-import type {ProfilePin} from '../../../docs/helix/02-design/contracts/bindings/truss-acceptance-input-v0.1';
+import type {ExactArtifact,ProfilePin} from '../../../docs/helix/02-design/contracts/bindings/truss-acceptance-input-v0.1';
 import type {CapabilitySelection, CapabilityReadiness}
   from '../../../docs/helix/02-design/contracts/bindings/truss-capability-readiness-v0.1';
 import type {HostRecoveryRegistry} from '../../../docs/helix/02-design/contracts/bindings/truss-recovery-registry-v0.1';
@@ -595,4 +595,37 @@ export function decodeOperationRegistry(actualXid:string|null,result:StatementRe
     output.push(Object.freeze(values));
   }
   return Object.freeze(output);
+}
+
+export type {ExactArtifact} from '../../../docs/helix/02-design/contracts/bindings/truss-acceptance-input-v0.1';
+
+/** CONTRACT-003 ingress primitive only: integrity is not UMF validity or native acceptance. */
+export interface ArtifactIngressLimits {readonly maxArtifacts:number;readonly maxSingleBytes:number;readonly maxTotalBytes:number;}
+/** Snapshot and bound all original bytes before async hashing. No parsing, conversion or SQL. */
+export async function verifyExactArtifacts(input:readonly ExactArtifact[],limits:ArtifactIngressLimits):Promise<readonly ExactArtifact[]> {
+ for(const value of [limits.maxArtifacts,limits.maxSingleBytes,limits.maxTotalBytes])if(!Number.isSafeInteger(value)||value<0)throw Error('Exact artifact limits required');
+ if(!Array.isArray(input)||input.length>limits.maxArtifacts)throw Error('Artifact count limit');
+ if(Reflect.ownKeys(input).some(key=>typeof key!=='string'||key!=='length'&&! /^(0|[1-9][0-9]*)$/.test(key)))throw Error('Unknown artifact-list meaning');
+ const snapshots:ExactArtifact[]=[];const bytes:Uint8Array<ArrayBuffer>[]=[];let total=0;
+ for(let index=0;index<input.length;index++){
+  const item=Object.getOwnPropertyDescriptor(input,String(index));if(!item||!('value' in item))throw Error('Original artifact data required');
+  const value=item.value;
+  if(!value||typeof value!=='object'||Array.isArray(value)||![Object.prototype,null].includes(Object.getPrototypeOf(value)))throw Error('Original artifact object required');
+  const descriptors=Object.getOwnPropertyDescriptors(value);
+  if(Reflect.ownKeys(value).length!==3||!['identity','bytesBase64','sha256'].every(key=>descriptors[key]&&'value' in descriptors[key]))throw Error('Unknown artifact meaning or accessor');
+  const identity=descriptors.identity.value,encoded=descriptors.bytesBase64.value,digest=descriptors.sha256.value;
+  if(typeof identity!=='string'||!identity.length||identity.length>1024||identity.includes('\0')||/[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:^|[^\uD800-\uDBFF])[\uDC00-\uDFFF]/.test(identity)||typeof encoded!=='string'||typeof digest!=='string'||! /^[0-9a-f]{64}$/.test(digest))throw Error('Invalid exact artifact');
+  if(encoded.length>4*Math.ceil(limits.maxSingleBytes/3)||! /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(encoded))throw Error('Artifact byte bound or base64 grammar');
+  const size=encoded.length/4*3-(encoded.endsWith('==')?2:encoded.endsWith('=')?1:0);
+  if(size>limits.maxSingleBytes||size>limits.maxTotalBytes-total)throw Error('Artifact byte limit');total+=size;
+  const raw=atob(encoded);if(btoa(raw)!==encoded)throw Error('Noncanonical base64');
+  const decoded=Uint8Array.from(raw,char=>char.charCodeAt(0));
+  snapshots.push(Object.freeze({identity,bytesBase64:encoded,sha256:digest}));bytes.push(decoded);
+ }
+ for(let index=0;index<snapshots.length;index++){
+  const digest=new Uint8Array(await crypto.subtle.digest('SHA-256',bytes[index]));
+  const hex=Array.from(digest,byte=>byte.toString(16).padStart(2,'0')).join('');
+  if(hex!==snapshots[index].sha256)throw Error('Original artifact digest mismatch');
+ }
+ return Object.freeze(snapshots);
 }
