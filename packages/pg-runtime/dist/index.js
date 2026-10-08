@@ -1,52 +1,9 @@
 // @bun
 // packages/pg-runtime/src/journal.ts
-import { openSync, writeSync, fsyncSync, closeSync, lstatSync } from "fs";
+import { openSync, writeSync, fsyncSync, closeSync, lstatSync, fstatSync, readSync, constants } from "fs";
 import { join } from "path";
 import { randomUUID } from "crypto";
-function createFileQueryJournal(directory) {
-  const stat = lstatSync(directory);
-  if (!stat.isDirectory() || (stat.mode & 63) !== 0 || stat.uid !== process.getuid?.())
-    throw Error("Private owned journal directory required");
-  return { begin(text, values, custody) {
-    if (!custody || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(custody.lease) || !/^(0|[1-9][0-9]*)$/.test(custody.ordinal))
-      throw Error("Local query custody required");
-    const path = join(directory, randomUUID() + ".jsonl");
-    const append = (record, first = false) => {
-      const fd = openSync(path, first ? "wx" : "a", 384);
-      try {
-        const bytes = Buffer.from(JSON.stringify(record) + `
-`);
-        let offset = 0;
-        while (offset < bytes.length)
-          offset += writeSync(fd, bytes, offset, bytes.length - offset);
-        fsyncSync(fd);
-      } finally {
-        closeSync(fd);
-      }
-    };
-    append({ kind: "request", text, values: [...values], custody: { lease: custody.lease, ordinal: custody.ordinal } }, true);
-    const dir = openSync(directory, "r");
-    try {
-      fsyncSync(dir);
-    } finally {
-      closeSync(dir);
-    }
-    let ended = false;
-    return {
-      frame(bytes) {
-        if (ended)
-          throw Error("Journal ended");
-        append({ kind: "frame", hex: Buffer.from(bytes).toString("hex") });
-      },
-      finish(outcome) {
-        if (ended)
-          throw Error("Journal ended");
-        append({ kind: "outcome", outcome });
-        ended = true;
-      }
-    };
-  } };
-}
+
 // packages/pg-runtime/src/wire.ts
 function decodeResponseFrame(frame, limits) {
   const fail = () => {
@@ -293,6 +250,125 @@ class ResponseIngress {
   }
 }
 
+// packages/pg-runtime/src/journal.ts
+function createFileQueryJournal(directory) {
+  const stat = lstatSync(directory);
+  if (!stat.isDirectory() || (stat.mode & 63) !== 0 || stat.uid !== process.getuid?.())
+    throw Error("Private owned journal directory required");
+  return { begin(text, values, custody) {
+    if (!custody || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(custody.lease) || !/^(0|[1-9][0-9]*)$/.test(custody.ordinal))
+      throw Error("Local query custody required");
+    const path = join(directory, randomUUID() + ".jsonl");
+    const append = (record, first = false) => {
+      const fd = openSync(path, first ? "wx" : "a", 384);
+      try {
+        const bytes = Buffer.from(JSON.stringify(record) + `
+`);
+        let offset = 0;
+        while (offset < bytes.length)
+          offset += writeSync(fd, bytes, offset, bytes.length - offset);
+        fsyncSync(fd);
+      } finally {
+        closeSync(fd);
+      }
+    };
+    append({ kind: "request", text, values: [...values], custody: { lease: custody.lease, ordinal: custody.ordinal } }, true);
+    const dir = openSync(directory, "r");
+    try {
+      fsyncSync(dir);
+    } finally {
+      closeSync(dir);
+    }
+    let ended = false;
+    return {
+      frame(bytes) {
+        if (ended)
+          throw Error("Journal ended");
+        append({ kind: "frame", hex: Buffer.from(bytes).toString("hex") });
+      },
+      finish(outcome) {
+        if (ended)
+          throw Error("Journal ended");
+        append({ kind: "outcome", outcome });
+        ended = true;
+      }
+    };
+  } };
+}
+function inspectOriginalQueryFile(path, limits) {
+  if (!Number.isSafeInteger(limits.maxBytes) || limits.maxBytes < 1 || limits.maxBytes > 16777216)
+    throw Error("Journal byte limit required (at most 16 MiB)");
+  const fd = openSync(path, constants.O_RDONLY | constants.O_NOFOLLOW);
+  let bytes;
+  try {
+    const stat = fstatSync(fd);
+    if (!stat.isFile() || stat.uid !== process.getuid?.() || (stat.mode & 63) !== 0 || stat.size > limits.maxBytes)
+      throw Error("Private bounded original file required");
+    const buffer = Buffer.alloc(stat.size + 1);
+    let count = 0;
+    while (count < buffer.length) {
+      const n = readSync(fd, buffer, count, buffer.length - count, null);
+      if (!n)
+        break;
+      count += n;
+    }
+    if (count !== stat.size)
+      throw Error("Original journal changed during inspection");
+    bytes = buffer.subarray(0, count);
+  } finally {
+    closeSync(fd);
+  }
+  const originalHex = bytes.toString("hex");
+  const result = (state) => Object.freeze({ state, originalHex });
+  if (!bytes.length || bytes.at(-1) !== 10)
+    return result("incomplete");
+  try {
+    const lines = new TextDecoder("utf-8", { fatal: true, ignoreBOM: true }).decode(bytes).slice(0, -1).split(`
+`);
+    if (lines.length > 10002)
+      return result("invalid");
+    const records = lines.map((line) => JSON.parse(line));
+    const request = records.shift();
+    const exact = (value, keys) => value && typeof value === "object" && !Array.isArray(value) && Object.keys(value).length === keys.length && keys.every((key) => Object.hasOwn(value, key));
+    if (!exact(request, ["kind", "text", "values", "custody"]) || request.kind !== "request" || typeof request.text !== "string" || !Array.isArray(request.values) || request.values.some((v) => v !== null && typeof v !== "string") || !exact(request.custody, ["lease", "ordinal"]) || typeof request.custody.lease !== "string" || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(request.custody.lease) || typeof request.custody.ordinal !== "string" || !/^(0|[1-9][0-9]*)$/.test(request.custody.ordinal))
+      return result("invalid");
+    const last = records.at(-1);
+    const outcome = last?.kind === "outcome" ? records.pop() : undefined;
+    if (outcome && (!exact(outcome, ["kind", "outcome"]) || !["response_complete", "server_error", "uncertain"].includes(outcome.outcome)))
+      return result("invalid");
+    const wire = { maxFrameBytes: 1048576, maxFields: 2048, maxTotalBytes: 4194304, maxFrames: 1e4 };
+    const ingress = new ResponseIngress(wire);
+    const frames = [];
+    let errors = 0;
+    for (const record of records) {
+      if (!exact(record, ["kind", "hex"]) || record.kind !== "frame" || typeof record.hex !== "string" || !/^(?:[0-9a-f]{2})+$/.test(record.hex))
+        return result("invalid");
+      if (record.hex.length > wire.maxFrameBytes * 2)
+        return result("invalid");
+      const bytes = Buffer.from(record.hex, "hex");
+      decodeResponseFrame(bytes, wire);
+      ingress.feed(bytes, (frame) => {
+        if (decodeResponseFrame(frame, wire).kind === "E")
+          errors++;
+      });
+      frames.push(record.hex);
+    }
+    if (outcome && outcome.outcome !== "uncertain") {
+      ingress.finish();
+      if (outcome.outcome === "server_error" ? errors !== 1 : errors !== 0)
+        return result("invalid");
+    }
+    return Object.freeze({
+      state: !outcome ? "incomplete" : outcome.outcome === "uncertain" ? "uncertain" : "complete",
+      originalHex,
+      request: Object.freeze({ text: request.text, values: Object.freeze([...request.values]), custody: Object.freeze({ ...request.custody }) }),
+      frames: Object.freeze(frames),
+      ...outcome ? { outcome: outcome.outcome } : {}
+    });
+  } catch {
+    return result("invalid");
+  }
+}
 // packages/pg-runtime/src/native-query.ts
 async function originalQuery(client, text, values, journal, custody) {
   const connection = client.connection;
@@ -554,5 +630,6 @@ export {
   ResponseIngress,
   createFileQueryJournal,
   createPgConnectionSource,
-  decodeResponseFrame
+  decodeResponseFrame,
+  inspectOriginalQueryFile
 };

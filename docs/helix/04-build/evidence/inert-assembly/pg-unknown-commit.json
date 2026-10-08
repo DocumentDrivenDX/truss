@@ -1,7 +1,7 @@
 {
   "driver": "pg/8.16.3",
   "loader": "bun/1.4.2",
-  "originalJournalDirectory": "/private/tmp/truss-unknown-commit-8Aqt42",
+  "originalJournalDirectory": "/private/tmp/truss-unknown-commit-GpSm7X",
   "result": {
     "status": "error",
     "error": {
@@ -17,26 +17,27 @@
   "uncertaintyRetained": true,
   "admissionRefused": true,
   "independentCommittedRows": "1",
+  "publicOfflineInspection": true,
   "requests": 3,
   "commitSubmissions": 1,
   "rollbackSubmissions": 0,
   "retained": [
     {
-      "sha256": "ececd9edc7532776f73d0ac3ad4abafba4ff0324ec6d4278a9fbb51e2533d5c9",
+      "sha256": "921f8606879641ddab36cd9949edcda80a0d3dbd240d72e35eaa47bd4f6a6723",
       "outcome": {
         "kind": "outcome",
         "outcome": "response_complete"
       }
     },
     {
-      "sha256": "6a42a84dd3a2e1f11c5354384938717b98f6dfdec393200caf76df9fc43829b0",
+      "sha256": "73491da2ba5163a6b0b1389fa04e81d400e709609f50e65081f7fa4f98c8a9c8",
       "outcome": {
         "kind": "outcome",
         "outcome": "uncertain"
       }
     },
     {
-      "sha256": "6a9dc001a46de9f6fa0c50b4dca3a1e6d665bbfc87b7dd8ad6cf2d7be090f0e5",
+      "sha256": "79fd391e1aa7f14a0e525c3e134545bd2551a98dafa6f92966b9cb10ba79dfe6",
       "outcome": {
         "kind": "outcome",
         "outcome": "response_complete"

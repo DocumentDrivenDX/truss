@@ -94,3 +94,15 @@ checkouts rather than silently waiting for their owners. No automatic native SQL
 recovery settlement or retry is introduced. The native commit-loss probe verifies
 healthy-checkout refusal, normal bounded teardown, retained quarantine, closed
 admission and repeated teardown; no forced process exit is used.
+
+`inspectOriginalQueryFile(path, {maxBytes})` is a public bounded offline API.
+The explicit byte ceiling is at most 16 MiB; symlinks, non-private/unowned files,
+oversize and changing file sizes refuse. It returns exact original file bytes as
+hex plus immutable supported request/custody/frame records when interpretable.
+States are complete (response observation only), uncertain, incomplete or invalid.
+Missing outcome and torn records never become nonexecution proof. Unknown content
+refuses interpretation while preserving raw originals. Complete responses require
+original frame/error correspondence; no SQL, native recovery, retries or cleanup
+are performed. Resource limits bound file/wire sizes, not total host RSS. Historical
+records without current custody remain raw originals with invalid interpretation.
+The native lost-commit check uses this public API on its actual retained files.

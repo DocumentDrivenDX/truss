@@ -1,5 +1,5 @@
 /** Isolated child probe: deliberate lost driver completion after original server commit frame. */
-import {createPgConnectionSource,createFileQueryJournal,decodeResponseFrame,type OriginalQueryJournal} from '@documentdrivendx/truss-pg-runtime';
+import {inspectOriginalQueryFile,createPgConnectionSource,createFileQueryJournal,decodeResponseFrame,type OriginalQueryJournal} from '@documentdrivendx/truss-pg-runtime';
 import {createEngineExecutor} from '@documentdrivendx/truss-postgresql';
 import {createRequire} from 'node:module';
 import {mkdtemp,readFile,readdir,writeFile} from 'node:fs/promises';
@@ -47,7 +47,10 @@ try{
  if(!admissionRefused)throw Error('Shutdown source reopened admission');
  const files=await readdir(directory);const requests=[];const retained=[];
  for(const file of files){
-  const bytes=await readFile(join(directory,file));const records=bytes.toString('utf8').trimEnd().split('\n').map(line=>JSON.parse(line));
+  const inspected=inspectOriginalQueryFile(join(directory,file),{maxBytes:1048576});
+  if(inspected.state!=='complete'&&inspected.state!=='uncertain')throw Error('Public native journal inspection failed');
+  const bytes=await readFile(join(directory,file));
+  if(inspected.originalHex!==bytes.toString('hex'))throw Error('Public inspection changed original bytes');const records=bytes.toString('utf8').trimEnd().split('\n').map(line=>JSON.parse(line));
   if(records[0].text==='COMMIT'){
    const frames=records.filter(record=>record.kind==='frame').map(record=>decodeResponseFrame(Buffer.from(record.hex,'hex'),{maxFrameBytes:1048576,maxFields:2048}));
    if(frames.length!==1||frames[0].kind!=='C'||frames[0].fields[0].command!=='COMMIT')throw Error('Original COMMIT frame not retained before loss');
@@ -60,7 +63,7 @@ try{
  if(sql.length!==3||sql.filter(text=>text==='COMMIT').length!==1||sql.some(text=>text==='ROLLBACK'))throw Error('Replay or guessed rollback after uncertainty');
  const unknown=retained.filter(record=>record.outcome.kind==='outcome'&&record.outcome.outcome==='uncertain');
  if(unknown.length!==1)throw Error('Original uncertainty not retained');
- await writeFile(new URL('../docs/helix/04-build/evidence/inert-assembly/pg-unknown-commit.json',import.meta.url),JSON.stringify({driver:'pg/8.16.3',loader:'bun/'+Bun.version,originalJournalDirectory:directory,result,quarantined:1,closeRefused,healthyShutdownRefused,localTransportShutdown:true,uncertaintyRetained:true,admissionRefused,independentCommittedRows:'1',requests:3,commitSubmissions:1,rollbackSubmissions:0,retained,qualification:'Actual local PostgreSQL 17.9 commit effect independently observed after deliberate driver completion loss at retained original CommandComplete before parser forwarding. Adapter reports commit_unknown/no retry and keeps quarantine. Private originals retained; explicit local transport shutdown retains original uncertainty and closes admission after fixture removal. This is not natural packet-loss/crash testing, general uncertainty settlement, protected Truss installation or source ACK authority.'},null,2)+'\n');
+ await writeFile(new URL('../docs/helix/04-build/evidence/inert-assembly/pg-unknown-commit.json',import.meta.url),JSON.stringify({driver:'pg/8.16.3',loader:'bun/'+Bun.version,originalJournalDirectory:directory,result,quarantined:1,closeRefused,healthyShutdownRefused,localTransportShutdown:true,uncertaintyRetained:true,admissionRefused,independentCommittedRows:'1',publicOfflineInspection:true,requests:3,commitSubmissions:1,rollbackSubmissions:0,retained,qualification:'Actual local PostgreSQL 17.9 commit effect independently observed after deliberate driver completion loss at retained original CommandComplete before parser forwarding. Adapter reports commit_unknown/no retry and keeps quarantine. Private originals retained; explicit local transport shutdown retains original uncertainty and closes admission after fixture removal. This is not natural packet-loss/crash testing, general uncertainty settlement, protected Truss installation or source ACK authority.'},null,2)+'\n');
  console.log('Native lost commit completion: committed effect observed, unknown outcome retained, no replay/rollback.');
 }finally{
  if(created)await admin.query('DROP TABLE '+table);await admin.end();
