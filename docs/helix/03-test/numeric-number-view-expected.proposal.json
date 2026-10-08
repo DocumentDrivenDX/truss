@@ -258,6 +258,88 @@
         "status": "refused",
         "reason": "lossy_number"
       }
+    },
+    {
+      "case": "integer-fraction-spelling",
+      "input": {
+        "integerToken": "1.0"
+      },
+      "expected": {
+        "status": "lossless",
+        "original": {
+          "integerToken": "1.0"
+        },
+        "numberMeaning": "1",
+        "negativeZero": false
+      }
+    },
+    {
+      "case": "integer-exponent-spelling",
+      "input": {
+        "integerToken": "1e3"
+      },
+      "expected": {
+        "status": "lossless",
+        "original": {
+          "integerToken": "1e3"
+        },
+        "numberMeaning": "1000",
+        "negativeZero": false
+      }
+    },
+    {
+      "case": "integer-nonintegral",
+      "input": {
+        "integerToken": "1e-1"
+      },
+      "expected": {
+        "status": "refused",
+        "reason": "invalid_token"
+      }
+    },
+    {
+      "case": "decimal-exact-beyond-integer-safe",
+      "input": {
+        "decimalToken": "9007199254740992"
+      },
+      "expected": {
+        "status": "lossless",
+        "original": {
+          "decimalToken": "9007199254740992"
+        },
+        "numberMeaning": "2^53",
+        "negativeZero": false
+      }
+    },
+    {
+      "case": "leading-plus",
+      "input": {
+        "decimalToken": "+1"
+      },
+      "expected": {
+        "status": "refused",
+        "reason": "invalid_token"
+      }
+    },
+    {
+      "case": "leading-zero",
+      "input": {
+        "decimalToken": "01"
+      },
+      "expected": {
+        "status": "refused",
+        "reason": "invalid_token"
+      }
+    },
+    {
+      "case": "missing-fraction-digits",
+      "input": {
+        "decimalToken": "1."
+      },
+      "expected": {
+        "status": "refused",
+        "reason": "invalid_token"
+      }
     }
   ],
   "requiredAdditionalCases": [
