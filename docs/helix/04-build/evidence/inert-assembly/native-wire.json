@@ -59,6 +59,12 @@
       ]
     }
   ],
+  "beforeParser": true,
+  "ingressAccounting": {
+    "bytes": 117,
+    "frames": 4,
+    "refused": false
+  },
   "driverResult": {
     "fields": [
       "duplicate",
@@ -73,5 +79,5 @@
     "command": "SELECT",
     "rowCount": "1"
   },
-  "qualification": "One original T/D/C/Z response captured on local PostgreSQL 17.9 under Bun. Socket listener follows existing pg parser; no predecode ingress/allocation/transport bound or original-query issuer/epoch authority is established. No Truss installation or complete producer/profile adoption."
+  "qualification": "One original T/D/C/Z response captured on local PostgreSQL 17.9 under Bun. Private probe replaces one existing data listener and forwards admitted complete frames to the original pg parser. Decoder/frame copy limits apply before parser forwarding; original socket chunk/transport allocation, full response/error/notice kinds, native uncertainty containment and original-query issuer/epoch authority remain unqualified. No Truss installation or complete producer/profile adoption."
 }

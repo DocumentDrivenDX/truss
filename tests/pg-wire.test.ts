@@ -18,3 +18,30 @@ test('raw data preserves NULL/empty/binary distinctions and frame boundaries',()
  expect(()=>decodeResponseFrame(frame('Z',[88]),limits)).toThrow();
  expect(()=>decodeResponseFrame(frame('X',[]),limits)).toThrow();
 });
+
+import {ResponseIngress} from '../packages/pg-runtime/src/wire';
+test('fragmented original frame forwards once only after full admission',()=>{
+ const original=frame('C',[...new TextEncoder().encode('SELECT 1\0')]);
+ const ingress=new ResponseIngress({...limits,maxTotalBytes:100,maxFrames:2});const forwarded:Uint8Array[]=[];
+ for(const byte of original.subarray(0,original.length-1))ingress.feed(Uint8Array.of(byte),x=>forwarded.push(x));
+ expect(forwarded.length).toBe(0);ingress.feed(original.subarray(original.length-1),x=>forwarded.push(x));ingress.finish();
+ expect(forwarded).toEqual([original]);expect(ingress.accounting.frames).toBe(1);
+});
+test('oversized header refuses before body allocation or forwarding and remains closed',()=>{
+ const ingress=new ResponseIngress({...limits,maxTotalBytes:100,maxFrames:2});let calls=0;
+ expect(()=>ingress.feed(Uint8Array.of(68,127,255,255,255),()=>calls++)).toThrow('frame-limit');
+ expect(calls).toBe(0);expect(ingress.accounting.refused).toBe(true);
+ expect(()=>ingress.feed(frame('Z',[73]),()=>calls++)).toThrow('refused');
+ const partial=new ResponseIngress({...limits,maxTotalBytes:100,maxFrames:2});partial.feed(Uint8Array.of(84),()=>calls++);
+ expect(()=>partial.finish()).toThrow('incomplete');
+});
+
+import nativeWire from '../docs/helix/04-build/evidence/inert-assembly/native-wire.json';
+test('invalid text row refuses before forwarding to original parser',()=>{
+ const originalDescription=Uint8Array.from(Buffer.from(nativeWire.frames[0].originalHex,'hex'));
+ const ingress=new ResponseIngress({...limits,maxTotalBytes:4096,maxFrames:4});let calls=0;
+ ingress.feed(originalDescription,()=>calls++);
+ const invalid=frame('D',[0,2,0,0,0,1,255,255,255,255,255]);
+ expect(()=>ingress.feed(invalid,()=>calls++)).toThrow();
+ expect(calls).toBe(1);expect(ingress.accounting.refused).toBe(true);
+});

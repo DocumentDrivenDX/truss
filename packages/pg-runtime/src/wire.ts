@@ -38,3 +38,48 @@ export function decodeResponseFrame(frame:Uint8Array,limits:WireLimits): {
  if(offset!==frame.length)fail();
  return Object.freeze({kind,originalHex:hex(frame),fields:Object.freeze(fields)});
 }
+
+/** Complete-frame admission before forwarding; delivered socket chunks already exist. */
+export class ResponseIngress {
+ #header=new Uint8Array(5);#headerUsed=0;#frame:Uint8Array|undefined;#used=0;
+ #bytes=0;#frames=0;#failed=false;#columns:number|undefined;
+ constructor(readonly limits:WireLimits&{readonly maxTotalBytes:number;readonly maxFrames:number}){
+   if(![limits.maxFrameBytes,limits.maxFields,limits.maxTotalBytes,limits.maxFrames].every(n=>Number.isSafeInteger(n)&&n>=0))throw Error('pg-ingress:invalid-limits');
+   this.limits=Object.freeze({...limits});
+ }
+ feed(chunk:Uint8Array,forward:(frame:Uint8Array)=>void):void {
+   if(this.#failed)throw Error('pg-ingress:refused');
+   try{
+     if(chunk.length>this.limits.maxTotalBytes-this.#bytes)throw Error('pg-ingress:byte-limit');
+     this.#bytes+=chunk.length;let at=0;
+     while(at<chunk.length){
+       if(!this.#frame){
+         const take=Math.min(5-this.#headerUsed,chunk.length-at);this.#header.set(chunk.subarray(at,at+take),this.#headerUsed);this.#headerUsed+=take;at+=take;
+         if(this.#headerUsed<5)continue;
+         let size=0n;for(let i=1;i<5;i++)size=size*256n+BigInt(this.#header[i]);
+         if(size<4n||size+1n>BigInt(this.limits.maxFrameBytes)||this.#frames===this.limits.maxFrames)throw Error('pg-ingress:frame-limit');
+         if(![84,68,67,90].includes(this.#header[0]))throw Error('pg-ingress:unsupported-kind');
+         this.#frame=new Uint8Array(Number(size)+1);this.#frame.set(this.#header);this.#used=5;this.#headerUsed=0;
+       }
+       const take=Math.min(this.#frame.length-this.#used,chunk.length-at);this.#frame.set(chunk.subarray(at,at+take),this.#used);this.#used+=take;at+=take;
+       if(this.#used===this.#frame.length){
+         const decoded=decodeResponseFrame(this.#frame,this.limits);
+         if(decoded.kind==='T'){
+           if(decoded.fields.some(field=>field.format!=='0'))throw Error('pg-ingress:binary-unqualified');
+           this.#columns=decoded.fields.length;
+         }else if(decoded.kind==='D'){
+           if(this.#columns===undefined||decoded.fields.length!==this.#columns)throw Error('pg-ingress:row-description');
+           for(const field of decoded.fields){if(field.hex===null)continue;
+             const bytes=new Uint8Array(field.hex!.length/2);for(let i=0;i<bytes.length;i++)bytes[i]=parseInt(field.hex!.slice(i*2,i*2+2),16);
+             new TextDecoder('utf-8',{fatal:true,ignoreBOM:true}).decode(bytes);
+           }
+         }else if(decoded.kind==='Z')this.#columns=undefined;
+         this.#frames++;const original=this.#frame;this.#frame=undefined;this.#used=0;
+         forward(original);
+       }
+     }
+   }catch(error){this.#failed=true;throw error;}
+ }
+ finish():void {if(this.#failed||this.#headerUsed||this.#frame){this.#failed=true;throw Error('pg-ingress:incomplete');}}
+ get accounting(){return Object.freeze({bytes:this.#bytes,frames:this.#frames,refused:this.#failed});}
+}

@@ -379,3 +379,28 @@ full response enumeration across other queries/errors. The reviewed frozen
 pg 8.23.0/pg-protocol 1.16.0 tuple does not transfer to this dependency. The
 actual mandatory predecode producer/resource integration remains unfinished.
 No mutations/cloud/deployment changes occurred.
+
+
+## Incremental pre-parser frame admission component
+
+`ResponseIngress` validates fragmented complete frames before forwarding to a
+consumer. Exact advertised length is bounded before body allocation, total
+delivered bytes/frame count are bounded, and malformed/unknown frames close
+admission permanently. Text-format descriptions and DataRow count/UTF8 must
+correspond before forwarding; partial input fails finish. Original socket chunks
+are already allocated, and these limits do not bound transport/global heap/work.
+All non-T/D/C/Z kinds and binary fields remain unavailable in this component.
+Twenty-nine tests/208 assertions, host build and packed host consumer pass.
+
+The native-wire probe now temporarily replaces exactly one original private pg
+data listener after startup, admits original complete frames then invokes that
+original parser listener, and restores it after one SELECT. Its receipt records
+beforeParser=true and actual input accounting. This supersedes the previous
+post-parser capture for this single successful probe only. Oversized-header and
+invalid-UTF8 controls prove zero forwarding for their refused frames.
+
+No production bridge has adopted this hook/profile. Error/notice/extended-query
+message coverage, original socket allocation/producer/epoch authority, refusal
+settlement and full bounded native containment remain unfinished. Listener count
+is checked rather than silently assuming a compatible pg version. The separate
+frozen 8.23.0 profile is still unadopted. No mutations/cloud/deployment changes.

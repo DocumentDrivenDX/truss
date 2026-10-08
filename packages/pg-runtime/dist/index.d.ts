@@ -8,3 +8,4 @@ export declare function createPgConnectionSource(config: PoolConfig): {
 };
 export { decodeResponseFrame } from './wire';
 export type { WireLimits } from './wire';
+export { ResponseIngress } from './wire';
