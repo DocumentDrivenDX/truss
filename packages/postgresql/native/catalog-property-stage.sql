@@ -1,6 +1,6 @@
 -- Original already-interpreted genuinely-new property batch. Not public acceptance.
 CREATE FUNCTION truss.runtime_stage_new_properties(revision int,candidates jsonb)
-RETURNS TABLE(owner_type_id text,field_id text,property_id text)
+RETURNS TABLE(owner_type_id text,field_module text,field_id text,property_id text)
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER
 SET search_path = pg_catalog, pg_temp
 AS $$
@@ -12,7 +12,7 @@ DECLARE
   assigned bigint;
   total_new bigint;
   source_matches bigint;
-  field_module text;
+  original_field_module text;
 BEGIN
   SELECT * INTO STRICT op FROM truss.row_home_operation o
     WHERE o.original_writer_xid=pg_current_xact_id_if_assigned() AND o.phase<>'application_finalized' FOR UPDATE;
@@ -44,11 +44,11 @@ BEGIN
       RAISE EXCEPTION 'new property owner correspondence required' USING ERRCODE='55000';
     END IF;
     IF EXISTS(SELECT 1 FROM truss.prop_def p WHERE p.type_id=owner.type_id AND
-      (p.element=candidate->'field'->>'id' OR p.name=candidate->'field'->>'name')) THEN
+      ((p.declaration_module=candidate->>'fieldModule' AND p.element=candidate->'field'->>'id') OR p.name=candidate->'field'->>'name')) THEN
       RAISE EXCEPTION 'existing property requires original matching' USING ERRCODE='55000';
     END IF;
   END LOOP;
-  SELECT count(*) INTO total_new FROM (SELECT DISTINCT value->>'ownerTypeId',value->'field'->>'id' FROM jsonb_array_elements(candidates)) q;
+  SELECT count(*) INTO total_new FROM (SELECT DISTINCT value->>'ownerTypeId',value->>'fieldModule',value->'field'->>'id' FROM jsonb_array_elements(candidates)) q;
   IF total_new<>jsonb_array_length(candidates) THEN RAISE EXCEPTION 'duplicate owner field' USING ERRCODE='22023'; END IF;
   SELECT count(*) INTO total_new FROM (SELECT DISTINCT value->>'ownerTypeId',value->'field'->>'name' FROM jsonb_array_elements(candidates)) q;
   IF total_new<>jsonb_array_length(candidates) THEN RAISE EXCEPTION 'duplicate owner field name' USING ERRCODE='22023'; END IF;
@@ -56,7 +56,7 @@ BEGIN
   -- JSON extraction checks correspondence; UMF validity remains the owner's check.
   FOR candidate IN SELECT value FROM jsonb_array_elements(candidates) LOOP
     SELECT * INTO STRICT owner FROM truss.type_def t WHERE t.type_id=(candidate->>'ownerTypeId')::int;
-    SELECT count(*),min(fm.value->>'id') INTO source_matches,field_module FROM truss.schema_doc d
+    SELECT count(*),min(fm.value->>'id') INTO source_matches,original_field_module FROM truss.schema_doc d
         CROSS JOIN LATERAL jsonb_array_elements(d.document::jsonb->'modules') m
         CROSS JOIN LATERAL jsonb_array_elements(m.value->'elements') r
         CROSS JOIN LATERAL jsonb_array_elements(r.value->'members') member
@@ -78,17 +78,17 @@ BEGIN
       ORDER BY t.document_id COLLATE "C",t.module COLLATE "C",t.element COLLATE "C",(v.value->>'fieldModule') COLLATE "C",(v.value->'field'->>'id') COLLATE "C" LOOP
     assigned:=assigned+1;
     SELECT * INTO STRICT owner FROM truss.type_def t WHERE t.type_id=(candidate->>'ownerTypeId')::int;
-    SELECT fm.value->>'id' INTO STRICT field_module FROM truss.schema_doc d
+    SELECT fm.value->>'id' INTO STRICT original_field_module FROM truss.schema_doc d
       CROSS JOIN LATERAL jsonb_array_elements(d.document::jsonb->'modules') fm
       CROSS JOIN LATERAL jsonb_array_elements(fm.value->'elements') f
       WHERE d.rev=revision AND d.ord=owner.doc_ord AND d.doc_id=owner.document_id
         AND fm.value->>'id'=candidate->>'fieldModule' AND f.value=candidate->'field';
     INSERT INTO truss.prop_def(prop_id,type_id,element,declaration_module,name,scalar_type,nullability,cardinality,facets,item,home,
       since_rev,doc_ord,definition_source_kind,definition_rev,definition_doc_ord,definition_document_id)
-    VALUES(assigned::int,owner.type_id,candidate->'field'->>'id',field_module,candidate->'field'->>'name',candidate->'field'->>'scalarType',
+    VALUES(assigned::int,owner.type_id,candidate->'field'->>'id',original_field_module,candidate->'field'->>'name',candidate->'field'->>'scalarType',
       candidate->'field'->>'nullability',candidate->'field'->>'cardinality',candidate->'field'->'facets',candidate->'field'->'itemType',candidate->>'home',
       revision,owner.doc_ord,'accepted_document',revision,owner.doc_ord,owner.document_id);
-    RETURN QUERY SELECT owner.type_id::text,candidate->'field'->>'id',assigned::text;
+    RETURN QUERY SELECT owner.type_id::text,original_field_module,candidate->'field'->>'id',assigned::text;
   END LOOP;
 END;
 $$;

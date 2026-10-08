@@ -8,7 +8,7 @@ const url=process.env.TRUSS_OPERATION_TEST_URL;
 if(!url||!url.startsWith('postgres://postgres@127.0.0.1:15434/'))throw Error('Dedicated local test endpoint required');
 const sql=new SQL(url,{max:1});
 const peer=new SQL(url,{max:1});
-const layout=await Bun.file('docs/helix/04-build/evidence/field-module-layout-0.14.owner-export.sql').text();
+const layout=await Bun.file('docs/helix/04-build/evidence/qualified-property-layout-0.15.owner-export.sql').text();
 const body=await Bun.file('packages/postgresql/native/operation-admission.sql').text();
 const checks:string[]=[];
 const assert=(v:boolean,label:string)=>{if(!v)throw Error(label);checks.push(label)};
@@ -63,6 +63,9 @@ try{
  const foreignField={id:'foreign-note',name:'foreign-note',kind:'field',extensions:{},scalarType:'string',nullability:'absent-allowed',cardinality:'one'};
  (originalModel.modules[0].elements.find(e=>e.id==='a') as any).members.push({module:'other',element:'foreign-note'});
  (originalModel.modules as any[]).push({id:'other',namespace:'other',elements:[foreignField]},{id:'shadow',namespace:'shadow',elements:[{...foreignField}]});
+ const twinField={...foreignField,name:'twin-note'};
+ (originalModel.modules as any[]).push({id:'twin',namespace:'twin',elements:[twinField]});
+ (originalModel.modules[0].elements.find(e=>e.id==='a') as any).members.push({module:'twin',element:'foreign-note'});
  const originalDocument=JSON.stringify(originalModel);const originalInspection=producer.inspect(originalDocument);
  assert(originalInspection.sourceValidation.valid&&originalInspection.targetValidation.valid,'actual original UMF source and transition validate');
  const recordCheck=producer.checkRecord(originalInspection.target,{module:'m',element:'a'},[{field:{module:'m',element:'label'},state:'present',value:{string:'雪🙂'}},...['aaa-secondary','a-secondary','z-secondary'].map(keyId=>({field:{module:'m',element:'zz-'+keyId},state:'present',value:{string:keyId}}))]);
@@ -118,6 +121,7 @@ try{
  const propertyStage=await Bun.file('packages/postgresql/native/catalog-property-stage.sql').text();await sql.unsafe(propertyStage);
  const fields=originalModel.modules[0].elements.filter(field=>field.kind==='field').map(field=>({ownerTypeId:allocated[0].type_id,fieldModule:'m',home:field.id==='caption'?'row':'json',field}));
  await sql.unsafe('SAVEPOINT cross_module_property');const crossModuleStaged=await sql.unsafe('SELECT * FROM truss.runtime_stage_new_properties(1,$1::text::jsonb)',[JSON.stringify([fields[0],{ownerTypeId:allocated[0].type_id,fieldModule:'other',home:'json',field:foreignField}])]);const crossModuleStored=await sql.unsafe("SELECT declaration_module,element,definition_document_id FROM truss.prop_def WHERE element='foreign-note'");assert(crossModuleStaged.length===2&&crossModuleStored[0].declaration_module==='other'&&crossModuleStored[0].element==='foreign-note'&&crossModuleStored[0].definition_document_id==='original-document','original cross-module Field declaration identity persists independently');await sql.unsafe('ROLLBACK TO SAVEPOINT cross_module_property');const crossModuleRows=await sql.unsafe('SELECT count(*)::text AS n FROM truss.prop_def');assert(crossModuleRows[0].n==='0','cross-module property batch rolls back completely');
+ await sql.unsafe('SAVEPOINT qualified_twins');const twinProperties=await sql.unsafe('SELECT * FROM truss.runtime_stage_new_properties(1,$1::text::jsonb)',[JSON.stringify([{ownerTypeId:allocated[0].type_id,fieldModule:'twin',home:'json',field:twinField},{ownerTypeId:allocated[0].type_id,fieldModule:'other',home:'json',field:foreignField}])]);assert(twinProperties.length===2&&twinProperties[0].field_module==='other'&&twinProperties[1].field_module==='twin'&&twinProperties[0].field_id===twinProperties[1].field_id&&twinProperties[0].property_id!==twinProperties[1].property_id,'equal Field IDs on one owner retain distinct declaring-module identities and IDs');await sql.unsafe('ROLLBACK TO SAVEPOINT qualified_twins');
  await sql.unsafe('SAVEPOINT wrong_declaration_module');let wrongDeclarationModule='';try{await sql.unsafe('SELECT * FROM truss.runtime_stage_new_properties(1,$1::text::jsonb)',[JSON.stringify([{ownerTypeId:allocated[0].type_id,fieldModule:'shadow',home:'json',field:foreignField}])])}catch(e){wrongDeclarationModule=(e as any).errno??(e as any).code}assert(wrongDeclarationModule==='55000','equal original Field bytes in another module cannot substitute owner membership');await sql.unsafe('ROLLBACK TO SAVEPOINT wrong_declaration_module');
  await sql.unsafe('SAVEPOINT duplicate_properties');let duplicatePropertyCode='';
  const duplicateNames=fields.map(value=>({...value,field:{...value.field,name:'same-name'}}));
