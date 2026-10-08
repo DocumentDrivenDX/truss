@@ -60,6 +60,21 @@ This is the current next-work sequence. Later chronological notes preserve their
 | CH-05 public packaging / B-014 | Existing draft bindings and package delivery PD-01–08; exact driver hook handoff and STP-044 DH-01–05 alongside OL/LR/SB lease cases | Separate compiled ESM/declaration exports, clean packed consumers and inert construction/import evidence; reference host uses public interfaces | Build/import work can proceed now; native scenario requires CH-02/03 and selected driver; Node remains separately qualified |
 | CH-06 complete product qualification / B-001/015 | Independently authored corpus, all 45 story/STP pairs and public reference S01–S09 | Exact original per-case state/journal/report/fault/concurrency/resource/consumer receipts and complete assessor output | Required owner choices, selected corpus/deployment and implementation; unavailable prerequisites cannot be skipped into green status |
 
+### Concrete independent scenario inputs for execution
+
+These authored scenarios belong to the existing work packages and must be retained before implementation-generated observations. They are planned expectations, not runtime receipts. Actual native identity/version/clock and profile correspondence are independently observed; missing evidence cannot be filled with reader-derived expected values.
+
+| Existing work package | Concrete authored input | Required comparison |
+| --- | --- | --- |
+| B-006 catalog identity / CH-03 conversion | [STP-004 lifecycle schedule](../03-test/test-plans/STP-004-keep-identifiers-stable-across-revisions.md#concrete-same-identity-reactivation-and-fresh-incarnation-schedule) | Same lineage retains committed ID/creation basis; fresh identity receives a distinct ID; revoked grants stay revoked; staged failures preserve the complete original baseline |
+| B-009 receipts / CH-02 protected producers | [STP-043 mixed and all-no-op schedule](../03-test/test-plans/STP-043-make-a-group-safe-to-repeat.md#concrete-original-mixed-result-retry-scenario) | Original ordered changed/unchanged results survive lost acknowledgment and later edits; retry adds no semantic effects and never reconstructs results from current records |
+| B-010 imports and source | [51 original records](../03-test/reference-import-51-records.proposal.json), [complete logical cuts](../03-test/reference-import-51-expected-states.proposal.json), STP-034/035 | Correction/deletion/first-source facts survive repeat; full record/key content and every original index agree; live/reserved skips do not rewrite history or resurrect deleted records |
+| B-007 history / H6 archive | [STP-018 deleted-record schedule](../03-test/test-plans/STP-018-reconstruct-a-record-as-of-a-version.md) | Local and archive-only reconstruction preserve absent/null/empty/deleted meanings; no current-row fallback; missing original dependencies refuse complete history |
+| B-013 isolation | [effective authority matrix](../03-test/cross-module-authority-expected.proposal.json), STP-038 | Complete declaring/source/target intersection on every declared read path; relationship writer requires endpoint reads; inconsistent authority refuses admission |
+| B-003/013 profile activation | CONTRACT-005 direct SQL surface inventory and STP-045 controls | Declared SQL access cannot silently become API-only; broader inherited/base-table access refuses; physical-cell projection cannot claim complete logical decoding |
+
+Preserve the complete existing 45-story corpus, concurrency, failure, retention, recursive values and deployment requirements. These concrete inputs strengthen execution readiness; none replaces its broader work-package exit criteria. Finish exact source/body/security/driver/codec registrations before native activation, then run the relevant red scenarios through public interfaces under the original selected profiles. Compiler prerequisites remain Weft-owned and execute through the admitted Truss executor.
+
 ### Concrete conversion and compiler integration substeps
 
 CH-03 uses the [retained-report conversion sequence](../02-design/contracts/weft-review-installation-gap-matrix.proposal.md#retained-acceptance-report-conversion-sequence) and STP-045 RC-01–04 alongside existing allocator AQ-01–03. Produce complete original revision/report collection, per-revision artifact/profile correspondence, bounded replacement/recollection and original settlement observation as one installer review unit. A successful fresh install or schema wrapper test cannot close populated conversion.
@@ -846,7 +861,7 @@ ID05's owner/source migration now consumes CONTRACT-001's proposed declaring-own
 
 These phases define the conversion handoff, not installed DDL or permission to run it. Exact native signatures, table/DDL lock hierarchy, retained-context compatibility and producers remain selection/adoption outputs; complete Truss-owned source generation/native correspondence and Weft adoption of the selected mapping remain gates. Existing UMF APIs are the fixed dependency baseline; this does not request a new exporter or upstream reconciliation capability. The scoped UMF preservation review found no concrete conflict and must not be reported as complete layout/exporter adoption.
 
-B-006's identity sub-slice implements CONTRACT-003's allocation and relationship mapping finalization candidates, governed by ADR-004, TD-004 and STP-004. The following order separates pure matching from native authority and preserves the pending lifecycle decision. These are implementation boundaries with explicit admission gates, not an instruction to install the draft layout.
+B-006's identity sub-slice implements CONTRACT-003's allocation and relationship mapping finalization candidates, governed by ADR-004, TD-004 and STP-004. The following order separates pure matching from native authority and applies the selected validated same-qualified-identity reactivation rule; exact native realization remains gated. These are implementation boundaries with explicit admission gates, not an instruction to install the draft layout.
 
 | Step | Input and owned output | Completion evidence / prerequisite |
 | --- | --- | --- |
