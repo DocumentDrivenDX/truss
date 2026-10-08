@@ -49,3 +49,8 @@ STP-039 allocates four criteria. Finalize validator API/pins and diagnostic norm
 ## Gates
 
 Public validator result shape, exact parsing ownership, warning/path semantics, complete required corpus manifest and supported subset remain explicit integration decisions. AC1 applies to supported valid input; AC3 mandates explicit refusal outside that subset. Neither an empty fixture set nor a second-language promise qualifies parity.
+
+
+### Recursive numeric owner boundary
+
+The owner review at Weft 8de43d0 distinguishes exhaustive scalar decimal SUM evidence from missing recursive signed/decimal native procedures. B-012 must retain signed and exact decimal fields through record/sequence/map native homes; it cannot qualify that requirement through nonnegative integer fixtures, JSONB fallback or scalar aggregates. STP-039 RN-01–06 allocates exact signed bounds, decimal scale/token preservation, selected zero meaning, malformed unprojected siblings, original domain/codec substitution and fresh embedding/native parity. Requesting an unavailable original procedure refuses explicitly while the broader required integration remains open. Compiler procedure implementation stays Weft-owned; no additional UMF capability is commissioned.

@@ -70,6 +70,8 @@ CH-01/02 consume the [machine-readable seven-routine design input](../02-design/
 
 B-014 export ownership closure now includes all eighteen authored declared functions. PostgreSQL owns assembly, operation arbitration, catalog transform and traversal-stage registration; tooling owns administrative physical-job service/facade registration alongside its existing exports. Conformance owns its two factories. Follow the architecture/package map rather than implementing omitted registrations in a private reference-only layer. Actual published names, core callable API selection, exact dependency pins and packed/native qualification remain open.
 
+CH-04/B-012 retains recursive signed/decimal native support as an explicit remaining compiler-owner dependency after Weft 8de43d0's scalar decimal embedding evidence. Implement STP-039 RN-01–06 with original independently authored definitions/native homes/expected results after the owner procedure is admitted. Current native-tree conformance restrictions cannot narrow Truss's required recursive scope or be bypassed with JSONB/local lowering.
+
 ### Product-decision application boundaries
 
 Same-qualified-identity reactivation is selected and must govern acceptance/lifecycle design; terminal retirement is historical comparison material. The selected two-property-delta plus metadata-witness rule governs event count without adopting every complete-history profile. Required managed extensions must ship on the selected RDS PostgreSQL, Aurora PostgreSQL and Lakebase profiles; a custom helper cannot become a deployment assumption through source composition.
