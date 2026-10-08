@@ -11,7 +11,7 @@
     },
     {
       "path": "02-design/contracts/CONTRACT-005-module-isolation.md",
-      "sha256": "ff03ebd23c91cdedfa5e5cacb115c9673bc612a16661f4dadf5eada423337be3"
+      "sha256": "5f5236cd9306ee5f717b301d2600832f18ace02ec613faadd2f4fb622c879720"
     },
     {
       "path": "02-design/contracts/CONTRACT-006-change-feed.md",
