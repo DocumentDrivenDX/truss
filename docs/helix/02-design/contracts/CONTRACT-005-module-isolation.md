@@ -321,7 +321,7 @@ The protected reader cannot inherit the integrity observer's hidden-scope callab
 
 The report home and every reachable report/archive/helper path join CONTRACT-011's complete installed inventory and the existing policy/current-authority administrative change-control boundary. No standalone GRANT/REVOKE source fragment proves effective rights or immutable production. Parent FK and nonempty report CHECKs do not prevent missing positive-revision reports, arbitrary caller bytes, report replacement, deletion or a head switch before report completeness. A selected native profile must enforce those invariants for every claimed ordinary writer path, including inherited privileges, owner-role changes and helper entrypoints, or classify them as engine/none with the exact missing guarantee.
 
-This access proposal preserves host ownership of administrative connections and original caller transactions. It adds no data-caller commit, connection replacement, hidden integrity query, new policy singleton or implicit maintenance worker. Pending report-storage adoption and exact producer/reader/retention/native inventory profiles remain prerequisites.
+This access proposal preserves host ownership of administrative connections and original caller transactions. It adds no data-caller commit, connection replacement, hidden integrity query, new policy singleton or implicit maintenance worker. Separate report storage is selected; exact producer/reader/retention/native inventory profiles remain prerequisites.
 
 
 ### Complete-report protection in the baseline home
@@ -350,3 +350,24 @@ Keep original acting data caller distinct from native definer/installation owner
 Native review must enumerate all direct, inherited and routine-mediated paths to the four tables and proposed shared validator, including column-specific grants and administrative aliases. Independently test an ordinary public caller against direct INSERT/UPDATE/DELETE, finalization masks and private helper invocation; test a validator attempting repair; test a retention actor trying live registration and a writer trying retained deletion. With hidden/deleted owners, require complete internal proof but no provisional row/count/bytes in public output, trace or callback. Actual role/grant/function/source and bypass qualification remain open; this matrix selects no deployment or extension dependency.
 
 Complete historical row pages additionally authorize original mutation manifest disclosure under CONTRACT-002: count/digest and lookahead facts require complete retained group membership and current authority over the original full owner/source/definition union, including unreturned siblings. Ordinary per-row access cannot qualify these facts. Native private collection remains bounded and complete; inaccessible or unavailable union evidence uses the governing hidden/unavailable projection with no partial cursor or protected gap diagnostic. Split delivery and held snapshots do not relax current-union authorization or turn the row page into projected feed semantics.
+
+
+### Selected reference handler/validator security binding
+
+The seven required orchestration routines in the installer matrix use SECURITY DEFINER under separate protected responsibility owners. This closes their security-mode choice; actual role identities, effective rights and complete body/dependency correspondence remain native profile inputs. Ordinary application roles cannot inherit, SET into, administer or replace these owners. Installation maps the responsibility labels to exact observed roles, with no ordinary login/superuser/BYPASSRLS/CREATEROLE/replication authority inferred.
+
+| Required callable | Protected owner responsibility | Allowed invocation path |
+| --- | --- | --- |
+| row_touch_observe | Touch observation owner | Original installed row-home triggers |
+| row_touch_commit_check | Commit-check owner | Original installed completion triggers |
+| edge_limit_observe | Touch observation owner, with separately inventoried edge observation rights | Original installed edge/marker triggers |
+| edge_limit_catalog_observe | Touch observation owner, with separately inventoried catalog observation rights | Original installed catalog trigger |
+| feed_current_union_check | Commit-check owner, with separately inventoried feed validation dependencies | Original installed feed constraint triggers |
+| feed_union_validate_current_scope | Integrity/finalization owner | Exact private producer/finalizer/commit-check dependencies only |
+| edge_limit_verify_current_scope | Integrity/finalization owner | Exact private producer/finalizer/commit-check dependencies only |
+
+Each body has an explicit function-local search_path containing pg_catalog, the exact trusted installation namespace, then pg_temp last. Quote namespace identifiers through the selected installer; exclude PUBLIC/user-writable schemas and never capture ambient SET FROM CURRENT. Fully qualify protected relations/callables/types and bind operator/cast dependencies; the search path does not substitute for exact dependency identity. Original data-caller capture occurs before definer entry under the governing producer protocol: current_user inside a definer is not the original acting role. No caller-supplied role string creates that custody.
+
+Create the exact functions, revoke PUBLIC execution and grant only inventoried private callers within the same installer transaction, before readiness publication. No ordinary application SELECT of the two void validators is admitted. Required trigger installation and later body/owner/ACL changes remain privileged inventory events. Complete hidden observations return no application bytes/counts/diagnostics except through the governing authorized projection. No validator repairs canonical state.
+
+This design follows PostgreSQL 17's [SECURITY DEFINER guidance](https://www.postgresql.org/docs/17/sql-createfunction.html#SQL-CREATEFUNCTION-SECURITY): trusted resolution with temporary schema last and atomic restriction of default PUBLIC execution. Actual managed-service role creation/ownership, RLS behavior, trigger invocation, transitive calls and drift/bypass schedules must be qualified before support; names and source REVOKEs alone are insufficient.
