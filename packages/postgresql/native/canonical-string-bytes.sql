@@ -4,9 +4,10 @@ LANGUAGE plpgsql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp A
 DECLARE validated bytea:=original; chunk bytea:=decode('22','hex'); chunks bytea[]:=ARRAY[]::bytea[];
  output bytea; piece bytea; expected bigint:=2; n int; i int; b int;
 BEGIN
- IF original IS NULL OR octet_length(original)>65536 THEN
+ IF original IS NULL THEN
   RAISE EXCEPTION 'bounded original string bytes required' USING ERRCODE='22023';
  END IF;
+ IF octet_length(original)>65536 THEN RAISE EXCEPTION 'string source capacity' USING ERRCODE='54000'; END IF;
  n:=octet_length(original);
  -- PostgreSQL text excludes NUL. Replace only NUL in a validation copy; output
  -- below consumes original bytes and escapes every control, including NUL.

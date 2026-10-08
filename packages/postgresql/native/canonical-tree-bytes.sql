@@ -6,7 +6,8 @@ DECLARE tasks jsonb[]:=ARRAY[jsonb_build_object('node',tree,'depth','0')]; task 
  node jsonb; member jsonb; children jsonb; tag text; piece bytea; chunk bytea:=decode('','hex');
  chunks bytea[]:=ARRAY[]::bytea[]; output bytea; i int; depth int; steps int:=0; emitted bigint:=0;
 BEGIN
- IF tree IS NULL OR octet_length(tree::text)>4194304 THEN RAISE EXCEPTION 'bounded inert tree required' USING ERRCODE='22023'; END IF;
+ IF tree IS NULL THEN RAISE EXCEPTION 'inert tree required' USING ERRCODE='22023'; END IF;
+ IF octet_length(tree::text)>4194304 THEN RAISE EXCEPTION 'tree input capacity' USING ERRCODE='54000'; END IF;
  WHILE cardinality(tasks)>0 LOOP
   steps:=steps+1;
   IF steps>32768 OR cardinality(tasks)>16384 THEN RAISE EXCEPTION 'tree task capacity' USING ERRCODE='54000'; END IF;
@@ -35,7 +36,8 @@ BEGIN
    ELSIF tag='string' AND (SELECT count(*) FROM jsonb_object_keys(node))=2 AND jsonb_typeof(node->'utf8Hex')='string' AND node->>'utf8Hex' ~ '^([0-9a-f]{2})*$' THEN piece:=truss.runtime_canonical_string_bytes(decode(node->>'utf8Hex','hex'));
    ELSIF tag IN ('array','object') AND (SELECT count(*) FROM jsonb_object_keys(node))=2 THEN
     children:=node->CASE WHEN tag='array' THEN 'items' ELSE 'members' END;
-    IF jsonb_typeof(children) IS DISTINCT FROM 'array' OR jsonb_array_length(children)>4096 THEN RAISE EXCEPTION 'container inventory' USING ERRCODE='22023'; END IF;
+    IF jsonb_typeof(children) IS DISTINCT FROM 'array' THEN RAISE EXCEPTION 'container inventory' USING ERRCODE='22023'; END IF;
+    IF jsonb_array_length(children)>4096 THEN RAISE EXCEPTION 'container inventory capacity' USING ERRCODE='54000'; END IF;
     IF tag='object' THEN
      FOR member IN SELECT value FROM jsonb_array_elements(children) LOOP
       IF jsonb_typeof(member)<>'object' OR (SELECT count(*) FROM jsonb_object_keys(member))<>2
