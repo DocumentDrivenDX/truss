@@ -1,12 +1,12 @@
 # First local reference deployment planning target
 
-Planning assumption: use local PostgreSQL 17.9 as the first disposable M00–M07 integration target, because the retained Truss spike and Weft candidate evidence already name that minor. The optional owner deployment question remains open to correction. This is a concrete design baseline, not owner approval, an installed binary, a current security recommendation or a support claim. Actual patch/build suitability must be reviewed before installation. Aurora/RDS/Lakebase portability and qualification remain required product work.
+Planning assumption: use local PostgreSQL 17.11 as the first disposable M00–M07 integration target. Official [17.11 release notes](https://www.postgresql.org/docs/release/17.11/) document role-dependent cached-plan invalidation after role changes, directly relevant to protected current-authority checks. Existing Truss spike and Weft candidate evidence names 17.9 and stays separately scoped; it does not qualify 17.11. The optional owner deployment question remains open to correction. This is a concrete revisable baseline, not owner approval, installed binary evidence or a support claim. Actual patch/build suitability must be reviewed again before installation. Aurora/RDS/Lakebase portability and qualification remain required product work.
 
 ## Proposed initial composition
 
 | Boundary | Planning target and required admission |
 | --- | --- |
-| Server | PostgreSQL 17.9, UTF-8 database, independently verified native version/build/settings and actual database identity. Retain original executable/container package and dependency hashes when supplied. No inference from the owner compiler fixture's environment. |
+| Server | PostgreSQL 17.11, UTF-8 database, independently verified native version/build/settings and actual database identity. Retain original executable/container package and dependency hashes when supplied. No inference from the owner compiler fixture's environment. |
 | Connection | One exclusively leased physical PostgreSQL session, with direct native protocol visibility. Do not insert a transaction-pooling proxy in the first qualification tuple. Original transaction, queue, command-cycle and termination custody follow CONTRACT-007. |
 | Adapter | The existing frozen node-postgres source candidate plus the adapter-owned predecode/frame/completion integration from the driver review. Stock public Result/cancel APIs alone do not qualify. Exact installed package/runtime/hook builds remain required; Bun's declaration survey is not a substitute. |
 | Core/metadata/compiler | Portable TypeScript core and pinned existing UMF APIs; Weft-owned Truss PostgreSQL lowering/registration. Preserve their original artifact/build tuples. No Truss compiler or UMF semantic fork. |
