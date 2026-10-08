@@ -27,6 +27,8 @@ Truss may plan additional conformance configurations under this explicit test bo
 
 CONTRACT-007 now explicitly separates decimal storage admission from compiler admission: preserving a broader exact source domain never authorizes coercion into the compiler's tested subset, and compiler acceptance never bypasses source/native validation. STP-007 ND-01–04 allocates precision-29 retention versus SUM refusal, admitted boundary pairs with invalid values, additional-facet refusal and test/release configuration separation. These are planned integration cases, not newly executed numeric support.
 
+Implementation handoff reconciliation removes obsolete pending-product gates in S01, S04/S05, the catalog reference scenario and the custom-body slice. Provisional IDs, request-enabled receipts and same-qualified-identity reactivation now consistently govern those work items. Package build/import checks use the accepted ID direction; actual driver/native/profile qualification remains separate. No runtime implementation or support claim is added.
+
 ## Historical read-only owner source review — multi-root native cut
 
 UMF primary remains `16c35e8d943769ccfa7bb57d16785aa7159abe65`. Inspected Weft HEAD is `320a597398a429d8dc1e61cd225be403a48d154c`. The [source correspondence receipt](evidence/design-audit/weft-multi-root-source-review.json) independently verifies thirteen file hashes from two owner receipts against the original files at their respective commits. Truss did not rerun the owner's Rust, PostgreSQL, Python or browser tests.

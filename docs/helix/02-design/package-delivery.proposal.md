@@ -62,4 +62,4 @@ PD-05: compile a consumer's declared types for every selected export/data subpat
 
 PD-06: retain original package/build/dependency/configuration/corpus hashes per run; modify one packed artifact or profile after admission and require mismatch refusal. A passing workspace import is not packed-consumer evidence.
 
-All schedules are planned. B-014 can implement build/export and inert consumer checks independently of pending allocation policy; native PD-04 still requires the complete original deployment and installation tuple. Package construction does not qualify missing routines or Weft binding adoption.
+All schedules are planned. B-014 can implement build/export and inert consumer checks under the selected provisional-ID policy; native PD-04 still requires the complete original deployment and installation tuple. Package construction does not qualify missing routines or Weft binding adoption.
