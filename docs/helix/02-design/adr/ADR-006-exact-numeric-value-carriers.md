@@ -28,6 +28,20 @@ Reuse UMF's existing integer/decimal/float distinctions, facets, exact literal t
 
 **Status:** accepted carrier/API direction; codec/storage/Weft profile qualification remains required. **Date:** 2026-10-05.
 
+## Exact JavaScript decimal admission algorithm
+
+The convenience adapter must evaluate the actual IEEE-754 binary64 value, not `Number.toString()` or a JSON serialization of that value. For a finite number, obtain its sign, exponent and significand through browser-compatible bit inspection and derive the exact integer rational numerator/denominator. Do not use a decimal parser on the shortest printed representation as proof of exactness.
+
+For an admitted decimal field with selected scale s, calculate numerator × 10^s using bounded bigint operations and require exact divisibility by denominator. The resulting integer coefficient supplies the decimal-domain candidate; no rounding is permitted. Apply the pinned UMF field validator to the exact token candidate, including precision, range, allowed values and other admitted facets. Truss's storage/native profile admission remains a separate check. Missing scale semantics or an unsupported facet refuses convenience conversion instead of guessing a domain.
+
+Examples must name their declared domain: 12.5 fits decimal(3,1), while the actual number 0.1 does not fit decimal(3,1). This is domain-specific: a sufficiently large decimal scale/precision can represent the actual binary value of 0.1 exactly, but that value still differs from an authored decimalToken spelling `0.1`. Preserve the supplied exact token unchanged when token input is used. Number-origin input carries only the derived exact value and its number-input provenance; it cannot invent an original authored spelling.
+
+Integer convenience uses `Number.isSafeInteger` before bigint conversion and then pinned UMF width/signedness/range/allowed-value checks. A larger integer is supplied as bigint or an admitted exact integer token. NaN/infinity, unsafe integer numbers and any failed exact-domain check refuse before native mutation or request canonicalization. Float fields do not inherit decimal convenience admission. Signed-zero/token-spelling policy and the public carrier constructor/export names remain explicit selected-profile outputs; do not silently normalize them while waiting for UMF's convenience API.
+
+The [independent seven-example rational oracle](../../04-build/evidence/design-audit/number-decimal-domain-examples.json) checks domain representability with Python Fraction, independently of a future TypeScript adapter. Reproduce with `python3 docs/helix/04-build/evidence/design-audit/check-number-decimal-domain.py`. It does not qualify UMF facet admission, browser behavior or native storage.
+
+Reserve finite conversion work before bigint scaling or token construction. Source token limits, scale/precision limits and intermediate-size estimates come from the selected resource/domain profile; JavaScript numeric magnitude alone cannot override those limits. Read conversion to number separately reconstructs and compares the exact binary rational to the retained exact token value. A round trip through shortest printed decimal text is insufficient; retained original token custody survives a successful convenience conversion.
+
 ## Problem
 
 JSONB retains supported numeric value but cannot archive arbitrary authored number spelling. Host JSON numbers can also round before validation. The lexical promises of US-007 and unknown-content preservation therefore cannot be met by a raw JSONB numeric map alone. Mathematical key identity and SQL comparisons require typed numeric values, while readback must retain authored tokens.
