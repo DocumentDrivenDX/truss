@@ -1,0 +1,43 @@
+{
+  "scope": "Read-only committed owner source synchronization; no new runtime, pack execution, schema or compiler qualification",
+  "umf": {
+    "defaultCommit": "5bc76e1455f30bb64a62409bbaa3655a5375f1a1",
+    "testedValueNumericCommit": "9e4bed3efe922c11e4b5a888ba6854de14f1b29f",
+    "reviewedUnchangedPaths": [
+      "src/model",
+      "src/adapters/javascript-numeric.ts"
+    ],
+    "changes": [],
+    "newMetadataFiles": [
+      {
+        "path": "docs/helix/02-design/contracts/CONTRACT-052-domain-packs.md",
+        "sha256": "16c0452e5e7de789c2045488e162401bb60800938b9e2b3de6729a91db1c01fb"
+      },
+      {
+        "path": "spec/extensions/domain-pack/schema.json",
+        "sha256": "e5d74140efa75eae67086dbd1e4bbbca70d2dfe87e688d238b36f45e91e7ab98"
+      },
+      {
+        "path": "spec/extensions/dataset-source/schema.json",
+        "sha256": "385f12f3b643f86838cb2b9baec60d85cbac1e3e543ffd015105465fa1ccbc95"
+      },
+      {
+        "path": "src/domain-packs/schema.ts",
+        "sha256": "fd7025c8e2990a3e8ac5ff2bba7a42637d2459d44c10f1bbff158ac13bccfa3e"
+      },
+      {
+        "path": "src/domain-packs/source-schema.ts",
+        "sha256": "ecfcbd333a0a7f49065ec11ae0f8851ae48dda19a34c12297e831ececeab99a6"
+      }
+    ],
+    "recordProducerCommit": "c45c72a2a8a3c4fba61c40c5927dd9091acf8cc3",
+    "recordProducerPromoted": false
+  },
+  "weft": {
+    "defaultCommit": "5856c73db0342363e64802905a94abb96209d757",
+    "compilerChangesSinceLastReview": [],
+    "testedCompilerCommit": "2744531735c2a771fbe7ed24a7f67e3afc851b25",
+    "uncommittedWorkExcluded": true
+  },
+  "disposition": "Retain original tested producer pins. UMF owns domain/source metadata; Truss owns ontological synthetic generators, explicit trusted registry, local source binding and runtime scenarios. Metadata does not authorize imports, fetching or expression execution. Preserve unknown fields; unavailable generator/version/method is an explicit execution refusal."
+}
