@@ -1,0 +1,252 @@
+{
+  "interfaceVersion": "truss-reference-definition-recipe/0.1.0",
+  "status": "authored-recipe-not-accepted-definition-instance",
+  "scope": "Original four-field milestone; complete product/consumer and recursive/mixed-home requirements remain",
+  "originalSource": {
+    "path": "02-design/contracts/bindings/reference-account-items-v0.1.proposal.umf.json",
+    "sha256": "94f8367c3dd2462fb3f32a624f053bf56f023ddd3bf86bf5219bbc1e24b6fcc1"
+  },
+  "definitionSources": [
+    {
+      "path": "02-design/contracts/truss-reference-scalar-shape-v0.1.proposal.schema.json",
+      "sha256": "5d9cbcdaed049674a4706915996a4c2a5c48698428ab57794ca48fbba1510823"
+    },
+    {
+      "path": "02-design/contracts/truss-row-home-presence-v0.1.proposal.schema.json",
+      "sha256": "3f80f9cdb7029a9adc293bc3b91cbd3bd0f844e883cab4422d8601c816573edb"
+    },
+    {
+      "path": "02-design/contracts/truss-reference-row-scalar-codec-v0.1.proposal.schema.json",
+      "sha256": "d73355aedd6a7418ec74da1a3f935e4384c317dc6fa2d33c5d8a64bba7354195"
+    },
+    {
+      "path": "02-design/contracts/truss-reference-row-value-v0.1.proposal.schema.json",
+      "sha256": "b506728cfab24921b4d97ded3ceaaba154b1e854966cfa9fe7cb91154e997f7b"
+    },
+    {
+      "path": "02-design/contracts/reference-definition-composition-order.proposal.md",
+      "sha256": "ee0be2e6b76248b57f111566f249cde5ae463750f68bf6e515aae43274af581e"
+    }
+  ],
+  "fields": [
+    {
+      "fieldIdentity": {
+        "documentId": "truss.integration.account-items.v1",
+        "module": "integration",
+        "element": "Account.code"
+      },
+      "sourcePointer": "/modules/0/elements/0",
+      "originalAuthoredField": {
+        "id": "Account.code",
+        "name": "code",
+        "kind": "field",
+        "scalarType": "string",
+        "nullability": "required",
+        "cardinality": "one",
+        "extensions": {}
+      },
+      "recordOwner": "Account",
+      "selectedHome": "row_home_state/row_home_node/row_home_scalar",
+      "presence": {
+        "absent": "refuse",
+        "null": "refuse",
+        "scalar": "one-owned-state-scalar-root-one-qualified-payload"
+      },
+      "scalarShape": {
+        "family": "string",
+        "rootChildren": "none",
+        "nullRoot": "refuse"
+      },
+      "payload": {
+        "kind": "string",
+        "column": "text_value",
+        "content": "exact-unicode-scalars-no-normalization",
+        "empty": "present-string",
+        "nul": "unsupported-native-realization",
+        "unpairedSurrogate": "refuse-before-utf8"
+      },
+      "unusedPayloadSlots": "native-null",
+      "leafSchema": "truss-reference-scalar-shape-v0.1.proposal.schema.json",
+      "presenceSchema": "truss-row-home-presence-v0.1.proposal.schema.json",
+      "codecSchema": "truss-reference-row-scalar-codec-v0.1.proposal.schema.json",
+      "compositeSchema": "truss-reference-row-value-v0.1.proposal.schema.json",
+      "lateBoundOriginalInputs": [
+        "accepted-interpretation-and-revision",
+        "allocated-original-owner-type/property-identity",
+        "complete-row-join/native-physical-definition",
+        "native-domain/source/resource/authority-producer-definitions",
+        "compiler-owned-registration-for-claimed-compiled-capability"
+      ]
+    },
+    {
+      "fieldIdentity": {
+        "documentId": "truss.integration.account-items.v1",
+        "module": "integration",
+        "element": "Item.code"
+      },
+      "sourcePointer": "/modules/0/elements/1",
+      "originalAuthoredField": {
+        "id": "Item.code",
+        "name": "code",
+        "kind": "field",
+        "scalarType": "string",
+        "nullability": "required",
+        "cardinality": "one",
+        "extensions": {}
+      },
+      "recordOwner": "Item",
+      "selectedHome": "row_home_state/row_home_node/row_home_scalar",
+      "presence": {
+        "absent": "refuse",
+        "null": "refuse",
+        "scalar": "one-owned-state-scalar-root-one-qualified-payload"
+      },
+      "scalarShape": {
+        "family": "string",
+        "rootChildren": "none",
+        "nullRoot": "refuse"
+      },
+      "payload": {
+        "kind": "string",
+        "column": "text_value",
+        "content": "exact-unicode-scalars-no-normalization",
+        "empty": "present-string",
+        "nul": "unsupported-native-realization",
+        "unpairedSurrogate": "refuse-before-utf8"
+      },
+      "unusedPayloadSlots": "native-null",
+      "leafSchema": "truss-reference-scalar-shape-v0.1.proposal.schema.json",
+      "presenceSchema": "truss-row-home-presence-v0.1.proposal.schema.json",
+      "codecSchema": "truss-reference-row-scalar-codec-v0.1.proposal.schema.json",
+      "compositeSchema": "truss-reference-row-value-v0.1.proposal.schema.json",
+      "lateBoundOriginalInputs": [
+        "accepted-interpretation-and-revision",
+        "allocated-original-owner-type/property-identity",
+        "complete-row-join/native-physical-definition",
+        "native-domain/source/resource/authority-producer-definitions",
+        "compiler-owned-registration-for-claimed-compiled-capability"
+      ]
+    },
+    {
+      "fieldIdentity": {
+        "documentId": "truss.integration.account-items.v1",
+        "module": "integration",
+        "element": "Item.amount"
+      },
+      "sourcePointer": "/modules/0/elements/2",
+      "originalAuthoredField": {
+        "id": "Item.amount",
+        "name": "amount",
+        "kind": "field",
+        "scalarType": "decimal",
+        "nullability": "required",
+        "cardinality": "one",
+        "extensions": {},
+        "facets": {
+          "precision": 21,
+          "scale": 3
+        }
+      },
+      "recordOwner": "Item",
+      "selectedHome": "row_home_state/row_home_node/row_home_scalar",
+      "presence": {
+        "absent": "refuse",
+        "null": "refuse",
+        "scalar": "one-owned-state-scalar-root-one-qualified-payload"
+      },
+      "scalarShape": {
+        "family": "decimal",
+        "rootChildren": "none",
+        "nullRoot": "refuse"
+      },
+      "payload": {
+        "kind": "decimal",
+        "tokenColumn": "numeric_token",
+        "valueColumn": "numeric_value",
+        "precision": 21,
+        "scale": 3,
+        "numericProjection": "exact-admitted-coefficient/1000-unconstrained-numeric",
+        "token": "retain-original-spelling-no-rounding"
+      },
+      "unusedPayloadSlots": "native-null",
+      "leafSchema": "truss-reference-scalar-shape-v0.1.proposal.schema.json",
+      "presenceSchema": "truss-row-home-presence-v0.1.proposal.schema.json",
+      "codecSchema": "truss-reference-row-scalar-codec-v0.1.proposal.schema.json",
+      "compositeSchema": "truss-reference-row-value-v0.1.proposal.schema.json",
+      "lateBoundOriginalInputs": [
+        "accepted-interpretation-and-revision",
+        "allocated-original-owner-type/property-identity",
+        "complete-row-join/native-physical-definition",
+        "native-domain/source/resource/authority-producer-definitions",
+        "compiler-owned-registration-for-claimed-compiled-capability"
+      ]
+    },
+    {
+      "fieldIdentity": {
+        "documentId": "truss.integration.account-items.v1",
+        "module": "integration",
+        "element": "Item.note"
+      },
+      "sourcePointer": "/modules/0/elements/3",
+      "originalAuthoredField": {
+        "id": "Item.note",
+        "name": "note",
+        "kind": "field",
+        "scalarType": "string",
+        "nullability": "absent-allowed",
+        "cardinality": "one",
+        "extensions": {}
+      },
+      "recordOwner": "Item",
+      "selectedHome": "row_home_state/row_home_node/row_home_scalar",
+      "presence": {
+        "absent": "admit-only-after-complete-authorized-applicability",
+        "null": "explicit-owned-null-root-no-payload",
+        "scalar": "one-owned-state-scalar-root-one-qualified-payload"
+      },
+      "scalarShape": {
+        "family": "string",
+        "rootChildren": "none",
+        "nullRoot": "explicit-owned-null-root-no-children-no-payload"
+      },
+      "payload": {
+        "kind": "string",
+        "column": "text_value",
+        "content": "exact-unicode-scalars-no-normalization",
+        "empty": "present-string",
+        "nul": "unsupported-native-realization",
+        "unpairedSurrogate": "refuse-before-utf8"
+      },
+      "unusedPayloadSlots": "native-null",
+      "leafSchema": "truss-reference-scalar-shape-v0.1.proposal.schema.json",
+      "presenceSchema": "truss-row-home-presence-v0.1.proposal.schema.json",
+      "codecSchema": "truss-reference-row-scalar-codec-v0.1.proposal.schema.json",
+      "compositeSchema": "truss-reference-row-value-v0.1.proposal.schema.json",
+      "lateBoundOriginalInputs": [
+        "accepted-interpretation-and-revision",
+        "allocated-original-owner-type/property-identity",
+        "complete-row-join/native-physical-definition",
+        "native-domain/source/resource/authority-producer-definitions",
+        "compiler-owned-registration-for-claimed-compiled-capability"
+      ]
+    }
+  ],
+  "constructionOrder": [
+    "original-accepted/source/physical/authority/resource-prerequisites",
+    "scalar-shape-leaf",
+    "presence-referring-to-leaf",
+    "codec-referring-to-presence",
+    "row-join-and-composite-value",
+    "complete-atomic-semantic/native/compiler-admission"
+  ],
+  "prohibitedSubstitutions": [
+    "fake-accepted-revision-or-native-identity",
+    "presence-to-composite-cycle",
+    "schema-placeholder-as-authentic-artifact",
+    "default-null-or-absent-for-missing-observation",
+    "props-fallback",
+    "unreviewed-Weft-null-support"
+  ],
+  "nativeQualified": false,
+  "installerReady": false
+}

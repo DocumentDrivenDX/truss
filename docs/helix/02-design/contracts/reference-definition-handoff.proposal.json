@@ -101,5 +101,10 @@
     "trusted compiler-owned three-state note registration and full required host obligations",
     "independent native/public/compiled readback and transaction qualification"
   ],
-  "trustBoundary": "This design handoff is not a runtime registry or serialized Rust Configuration. Unresolved entries cannot be loaded as installed support."
+  "trustBoundary": "This design handoff is not a runtime registry or serialized Rust Configuration. Unresolved entries cannot be loaded as installed support.",
+  "authoredCompositionRecipe": {
+    "path": "02-design/contracts/reference-definition-recipes.proposal.json",
+    "sha256": "4e30b6e217f0deb97bde0eb86f0db36db433a481cf4827e15ac5c80d3a380428",
+    "scope": "Known original choices and late-bound prerequisites; no accepted/native/Weft registration instances"
+  }
 }
