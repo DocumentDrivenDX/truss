@@ -22,6 +22,9 @@ ddx:
 Planned selected-history controls HSEL-01–03: reconstruct object ownership and edge endpoints/order after deletion without current-row access; independently observe very short/zero local retention with durable archive confirmation before deletion and reconstruct through the admitted archive; remove both local and archive evidence and require explicit unavailable history, never partial success. Consumer/receipt protections and complete mutation/transaction boundaries remain enforced. Cases are not_run.
 
 
+Planned zero-retention schedules HSEL-04–08 supplement HSEL-01–03 under CONTRACT-006: (04) pause the archive worker across source commit and prove complete local history survives with no uncommitted publication; (05) lose the archive acknowledgment, retry identical original events, reject conflicting payloads and retain local history until qualified durability confirmation; (06) confirm the archive then fail local cleanup, proving reconstructability and safe cleanup retry with fresh protection checks; (07) register a protecting consumer or change the horizon between eligibility observation and deletion, requiring refusal rather than stale approval; (08) fill the selected finite archive backlog during an outage and require atomic write refusal before the bound is exceeded, without deleting protected history or partially committing graph/receipt effects. Thresholds and archive/native profiles must be pinned by the future harness. All cases are not_run.
+
+
 ## Story Reference
 
 US-018, TD-018, SD-004, TP-001 and CONTRACT-002/003/007. Tests are planned, not native reconstruction evidence.

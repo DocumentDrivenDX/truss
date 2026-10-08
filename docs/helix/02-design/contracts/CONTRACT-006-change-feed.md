@@ -24,6 +24,19 @@ ddx:
 Complete reconstructable history is selected under ADR-007. Local retention may be short or zero, but required durable archive/consumer handoff precedes deletion when continued reconstruction/delivery is promised. Transactional event production, complete group/transaction boundaries and registered consumer protection still apply. Missing both local and qualified archive history yields explicit unavailable history. Request-receipt replay/protection is independent of local journal retention; trimming cannot make an old request reapply.
 
 
+### Short and zero local retention
+
+Zero local retention is a cleanup eligibility target after confirmed source commit, not permission to omit transactional history production or delete uncommitted events. Cleanup operates on complete admitted transaction inventories and their required definition/ownership dependencies under CONTRACT-002's retained-horizon rules. A partition containing protected content cannot be dropped merely because its age target has elapsed.
+
+When continued reconstruction requires an external archive, the source transaction first commits its complete history locally. An offload worker then transfers the original complete inventory and prerequisites to the selected archive profile and obtains qualified durable confirmation. Only afterward may protected retention tooling recheck current protection and atomically remove eligible local content and publish the resulting horizon. Sending bytes, receiving a transport acknowledgment without the profile's durability evidence, or storing a digest alone does not release protection. Archive I/O does not become part of the caller's database commit. The archive format, durability observation and custody binding remain profile qualification gates; this sequence does not introduce a reusable caller-supplied deletion token.
+
+An offload timeout, ambiguous acknowledgment, crash or unavailable archive leaves the original local history protected. Retry uses the original immutable event identities and complete original payloads; conflicting bytes refuse. If archive confirmation succeeds but local cleanup fails, duplicate local/archive copies remain valid and cleanup can retry after fresh protection checks. New consumer registration, changed dependencies or a changed horizon between observation and deletion must cause refusal or renewed admission under the existing retention procedure.
+
+The deployment must select finite backlog admission and an operational response for archive outages. When continued reconstruction is promised, reaching the selected bound requires refusing new work before its protected history would exceed that bound; cleanup cannot discard unarchived history to restore capacity. Exact capacity, measurement, admission synchronization and recovery thresholds remain explicit native/profile design work. Zero retention does not promise zero physical storage or uninterrupted writes during an archive outage.
+
+Where the deployment explicitly withdraws reconstruction for discarded versions, eligible local history may be removed without an archive only after all remaining consumer, receipt and dependency protections are satisfied and the supported horizon is published honestly. A later checkpoint cannot restore discarded earlier versions. Missing required local and admitted archive evidence yields history_unavailable. Request-receipt lifetime and expired-request identity protection remain independently enforced.
+
+
 **Contract ID**: CONTRACT-006
 **Type**: schema
 **Version**: layout 0.2 (draft)
