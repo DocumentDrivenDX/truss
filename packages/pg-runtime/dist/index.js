@@ -103,6 +103,8 @@ class ResponseIngress {
   #frames = 0;
   #failed = false;
   #columns;
+  #phase = "start";
+  #rowCount = 0n;
   constructor(limits) {
     this.limits = limits;
     if (![limits.maxFrameBytes, limits.maxFields, limits.maxTotalBytes, limits.maxFrames].every((n) => Number.isSafeInteger(n) && n >= 0))
@@ -113,6 +115,8 @@ class ResponseIngress {
     if (this.#failed)
       throw Error("pg-ingress:refused");
     try {
+      if (this.#phase === "ended" && chunk.length)
+        throw Error("pg-ingress:ended");
       if (chunk.length > this.limits.maxTotalBytes - this.#bytes)
         throw Error("pg-ingress:byte-limit");
       this.#bytes += chunk.length;
@@ -144,12 +148,16 @@ class ResponseIngress {
         if (this.#used === this.#frame.length) {
           const decoded = decodeResponseFrame(this.#frame, this.limits);
           if (decoded.kind === "T") {
+            if (this.#phase !== "start")
+              throw Error("pg-ingress:response-order");
+            this.#phase = "rows";
             if (decoded.fields.some((field) => field.format !== "0"))
               throw Error("pg-ingress:binary-unqualified");
             this.#columns = decoded.fields.length;
           } else if (decoded.kind === "D") {
-            if (this.#columns === undefined || decoded.fields.length !== this.#columns)
+            if (this.#phase !== "rows" || this.#columns === undefined || decoded.fields.length !== this.#columns)
               throw Error("pg-ingress:row-description");
+            this.#rowCount++;
             for (const field of decoded.fields) {
               if (field.hex === null)
                 continue;
@@ -158,8 +166,19 @@ class ResponseIngress {
                 bytes[i] = parseInt(field.hex.slice(i * 2, i * 2 + 2), 16);
               new TextDecoder("utf-8", { fatal: true, ignoreBOM: true }).decode(bytes);
             }
-          } else if (decoded.kind === "Z")
+          } else if (decoded.kind === "C") {
+            if (this.#phase !== "start" && this.#phase !== "rows")
+              throw Error("pg-ingress:response-order");
+            const command = decoded.fields[0].command;
+            if (command?.startsWith("SELECT ") && (decoded.fields[0].affectedRows === null || BigInt(decoded.fields[0].affectedRows) !== this.#rowCount))
+              throw Error("pg-ingress:row-count");
+            this.#phase = "command";
+          } else if (decoded.kind === "Z") {
+            if (this.#phase !== "command")
+              throw Error("pg-ingress:response-order");
             this.#columns = undefined;
+            this.#phase = "ended";
+          }
           this.#frames++;
           const original = this.#frame;
           this.#frame = undefined;
@@ -173,7 +192,7 @@ class ResponseIngress {
     }
   }
   finish() {
-    if (this.#failed || this.#headerUsed || this.#frame) {
+    if (this.#failed || this.#headerUsed || this.#frame || this.#phase !== "ended") {
       this.#failed = true;
       throw Error("pg-ingress:incomplete");
     }

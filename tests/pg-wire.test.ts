@@ -21,11 +21,12 @@ test('raw data preserves NULL/empty/binary distinctions and frame boundaries',()
 
 import {ResponseIngress} from '../packages/pg-runtime/src/wire';
 test('fragmented original frame forwards once only after full admission',()=>{
- const original=frame('C',[...new TextEncoder().encode('SELECT 1\0')]);
+ const original=frame('C',[...new TextEncoder().encode('SELECT 0\0')]);
  const ingress=new ResponseIngress({...limits,maxTotalBytes:100,maxFrames:2});const forwarded:Uint8Array[]=[];
  for(const byte of original.subarray(0,original.length-1))ingress.feed(Uint8Array.of(byte),x=>forwarded.push(x));
- expect(forwarded.length).toBe(0);ingress.feed(original.subarray(original.length-1),x=>forwarded.push(x));ingress.finish();
- expect(forwarded).toEqual([original]);expect(ingress.accounting.frames).toBe(1);
+ expect(forwarded.length).toBe(0);ingress.feed(original.subarray(original.length-1),x=>forwarded.push(x));
+ ingress.feed(frame('Z',[73]),()=>{});ingress.finish();
+ expect(forwarded).toEqual([original]);expect(ingress.accounting.frames).toBe(2);
 });
 test('oversized header refuses before body allocation or forwarding and remains closed',()=>{
  const ingress=new ResponseIngress({...limits,maxTotalBytes:100,maxFrames:2});let calls=0;
@@ -44,4 +45,15 @@ test('invalid text row refuses before forwarding to original parser',()=>{
  const invalid=frame('D',[0,2,0,0,0,1,255,255,255,255,255]);
  expect(()=>ingress.feed(invalid,()=>calls++)).toThrow();
  expect(calls).toBe(1);expect(ingress.accounting.refused).toBe(true);
+});
+
+test('query completion requires original command then ready and matching SELECT rows',()=>{
+ const limits_={...limits,maxTotalBytes:4096,maxFrames:8};
+ const command=frame('C',[...new TextEncoder().encode('SELECT 0\0')]);
+ const incomplete=new ResponseIngress(limits_);incomplete.feed(command,()=>{});
+ expect(()=>incomplete.finish()).toThrow('incomplete');
+ const outOfOrder=new ResponseIngress(limits_);expect(()=>outOfOrder.feed(frame('Z',[73]),()=>{})).toThrow('response-order');
+ const complete=new ResponseIngress(limits_);complete.feed(command,()=>{});complete.feed(frame('Z',[73]),()=>{});complete.finish();
+ expect(()=>complete.feed(command,()=>{})).toThrow('ended');
+ const wrongCount=new ResponseIngress(limits_);expect(()=>wrongCount.feed(frame('C',[...new TextEncoder().encode('SELECT 1\0')]),()=>{})).toThrow('row-count');
 });

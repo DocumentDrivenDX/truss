@@ -404,3 +404,22 @@ message coverage, original socket allocation/producer/epoch authority, refusal
 settlement and full bounded native containment remain unfinished. Listener count
 is checked rather than silently assuming a compatible pg version. The separate
 frozen 8.23.0 profile is still unadopted. No mutations/cloud/deployment changes.
+
+
+## Original single-response completion ordering
+
+ResponseIngress now tracks start/rows/command/ended states. A description cannot
+replace an active response, rows require that original description, command
+completion occurs once, and ReadyForQuery must follow it. SELECT's original
+command-count text must equal the complete observed DataRow count using exact
+BigInt comparison. finish requires actual ended state as well as complete byte
+framing; command-only output cannot qualify response completion. Reuse after
+end refuses. This fixes the earlier framing-only finish behavior.
+
+Thirty tests/212 assertions, strict host build and clean packed consumer pass.
+The same one-SELECT native pre-parser probe passes final command/ready/count
+checks; no mutations/cloud/settings changes occur. This remains single successful
+T/D/C/Z response support only: error/notice/extended-query/binary/multiple-result
+profiles, native transport/issuer/resource/settlement authority and integration
+into the production bridge remain unfinished. ReadyForQuery is observed state,
+not independent authority to release quarantined or adopted resources.
