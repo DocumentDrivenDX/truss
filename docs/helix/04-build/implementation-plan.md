@@ -2026,3 +2026,8 @@ Key history composition checkpoint: 0.9 now includes the existing owner-local li
 
 
 B-012 current Weft handoff observes 9ce9a96: consume original record-slot assembly and pre-queue traversal reservation where explicitly selected. Independent fixtures must cover ordered member identity/presence/name/custody, missing graph correspondence and non-object assembly refusal. Do not duplicate recursive decoding or infer blanket cursor support from synthetic uint64 props evidence. Layout 0.10 still needs exact accepted mapping/codec/executor scope.
+
+
+### Reference journal staging selection (B-007/B-011)
+
+Use the authored row_home_journal_stage child-store with explicit start custody for the selected prepublication reservation algorithm. Deliver its complete original table/constraint/implicit dependency inventory, five immutable phase insertion paths, observations, frozen-generation guards and stage-aware retention/recovery composition with the original operation parent. Include the store and all dependencies in a new complete installation profile; source 0.11 does not implicitly gain this table. Baseline two-kind cleanup refuses this profile rather than relying on restrictive FK errors. Native permissions must prevent application phase writes, and all stage/event effects remain pending until original outer settlement. Backend scratch is not an unresolved reference choice or a silent fallback. Source/profile/body/resource/security realization and independent STP-018 schedules remain required before activation.

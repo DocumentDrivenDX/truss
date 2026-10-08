@@ -7,7 +7,7 @@
   "governingSources": [
     {
       "path": "02-design/contracts/CONTRACT-001-storage-layout.md",
-      "sha256": "6046c84b03f4d9d347d5cb2e83bfc8caa9d13a8a59000eb78752c75a6d0c1e73"
+      "sha256": "a50d804123d549fc6dd02679b6b97b5c23ef36f10d93eb6c8c32a31e319a0aae"
     },
     {
       "path": "02-design/contracts/CONTRACT-005-module-isolation.md",
