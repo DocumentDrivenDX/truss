@@ -1,0 +1,42 @@
+{
+  "scope": "Seven draft shape controls, using synthetic exact artifact; no actual numeric adoption, codec/native execution or Weft registration",
+  "schemaSha256": "e45efc6a2de1c85ef8c5b33c9aaad596f860b7f7113468e74c97b6ab3dfb4d22",
+  "cases": [
+    {
+      "id": "integer",
+      "expectedShapeValid": true,
+      "observedShapeValid": true
+    },
+    {
+      "id": "decimal",
+      "expectedShapeValid": true,
+      "observedShapeValid": true
+    },
+    {
+      "id": "integer-as-decimal",
+      "expectedShapeValid": false,
+      "observedShapeValid": false
+    },
+    {
+      "id": "decimal-as-integer",
+      "expectedShapeValid": false,
+      "observedShapeValid": false
+    },
+    {
+      "id": "missing-adoption",
+      "expectedShapeValid": false,
+      "observedShapeValid": false
+    },
+    {
+      "id": "raw-json-number",
+      "expectedShapeValid": false,
+      "observedShapeValid": false
+    },
+    {
+      "id": "numeric-as-string",
+      "expectedShapeValid": false,
+      "observedShapeValid": false
+    }
+  ],
+  "nativeQualified": false
+}

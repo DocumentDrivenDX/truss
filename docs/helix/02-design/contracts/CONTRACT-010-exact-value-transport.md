@@ -17,6 +17,15 @@ ddx:
 
 # CONTRACT-010: Exact recursive value transport
 
+## Numeric codec family correspondence — current draft correction
+
+The JSONB leaf codec schema now requires matching family/decodedCarrierKind pairs: integer/integer or decimal/decimal. A string token storage representation does not turn a typed integer into a decimal or make a numeric-looking string numeric. Both numeric branches still require original numericAdoptionEvidence plus source/native/profile custody; a shape-valid synthetic artifact is not reviewed adoption evidence.
+
+[Seven shape controls](../../04-build/evidence/design-audit/numeric-codec-family-shapes.json) accept matching integer/decimal declarations and refuse cross-family carriers, missing adoption artifact, raw JSON-number storage and a string carrier for decimal. Reproduce with `bun docs/helix/04-build/evidence/design-audit/check-numeric-codec-family-shapes.ts <Ajv2020-module-path>`. The current 0.11 one-string packet still passes its six schema checks. These are draft schema controls only; exact artifact hashes, authored field/domain correspondence, token grammar/facets and native codec behavior remain independently admitted.
+
+Existing source-pinned schemas/Weft receipts retain their original hash scope. This tighter draft cannot be presented as the same bytes as a previously frozen owner schema; a selected numeric binding must pin the corrected source and obtain its own review. No compiler-owned lowering/decoder implementation is changed by this correction.
+
+
 ## Owner decisions — 2026-10-07
 
 Accepted numeric direction: preserve exact authored integer/decimal tokens and reject silent precision loss. The JavaScript facade uses safe number values by default where lossless, bigint for larger integers and an exact decimal carrier preserving spelling. A number supplied for a decimal is admitted only when its actual binary value is exactly representable in the selected declared decimal domain; unsafe integer numbers, out-of-domain values and rounding refuse. Explicit float domains remain separately qualified. Number-origin input cannot recover spelling already lost before admission. Reads preserve original token custody and permit number conversion only with an explicit lossless check.
