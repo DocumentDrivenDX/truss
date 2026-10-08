@@ -1,0 +1,67 @@
+{
+  "source": "https://github.com/DocumentDrivenDX/truss/pull/6",
+  "title": "Change feed contract, feed consumers and grouped operations",
+  "observedState": "MERGED",
+  "mergeRevision": "e58f3c69817e744e32007acd273e556dac137b7b",
+  "bodySha256": "dcbd57e34544baacc6446b9aa8754685090209e96849d9aabd05fa181e997eda",
+  "changedFilePins": [
+    {
+      "path": "docs/helix/01-frame/feature-registry.md",
+      "sha256": "76a912b1748e515af2fe45da4558f37fece089ffab324d9c7612902f1ac76056"
+    },
+    {
+      "path": "docs/helix/01-frame/features/FEAT-003-mutation-and-concurrency.md",
+      "sha256": "41c11a97214589b487a65e507c6efc13880ec3520e113c6895ec593dbf1b417d"
+    },
+    {
+      "path": "docs/helix/01-frame/features/FEAT-004-journal-and-history.md",
+      "sha256": "bc79c067012b4b3ab2a48bdd7372a9384dd89382ac0fb30b1aa9e9b4d7ec594c"
+    },
+    {
+      "path": "docs/helix/01-frame/prd.md",
+      "sha256": "20af82b6f9075d10f327b23085080ac7aa4ea4518c804385f0859928171035aa"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-040-apply-operations-as-one-atomic-group.md",
+      "sha256": "7e1d7815d02ed3acc13f9988fc839ae3078fb7ae0959680ec8fb6b2335250fc2"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-041-publish-the-journal-without-losing-or-reordering-a-change.md",
+      "sha256": "7d967b92b1c11721246f0c08d812479f4a74b2fa16cf890928616bd9916b0c4b"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-042-read-how-far-behind-a-downstream-copy-is.md",
+      "sha256": "49abb2c987d93c42f7aaa9eabece65498634c37ae8e779c7de53c613b2606c56"
+    },
+    {
+      "path": "docs/helix/02-design/adr/ADR-002-storage-strategy.md",
+      "sha256": "e396daea1138a04c3f5fda147514117e9f4c5b97938ac2928455eb78f82fcd5b"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/CONTRACT-001-storage-layout.md",
+      "sha256": "aa5a70d6703e972c50c30712303559a4e51d0adce590bc4cff7fe849fba4cf4b"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/CONTRACT-004-mutation-and-conformance.md",
+      "sha256": "2fd63088f66e49c09585a5191618ca4462411d11ac6dcdd5cc14176df403ea19"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/CONTRACT-006-change-feed.md",
+      "sha256": "4ebd40b13ac5c260243ca2a02fa0c4133b9a46e39efae574233f0ece2231ea63"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/storage-layout.check.sql",
+      "sha256": "2e15d39ab62a561a0e55152a066479adf7178cc4d02328601ba49cf732beddc8"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/storage-layout.sql",
+      "sha256": "9336bbfb342f3e6642e47217bd61ba9cf2b29bb60e2a193e78e8b2200250d2c6"
+    },
+    {
+      "path": "docs/helix/README.md",
+      "sha256": "d0b3a81c50bcd56cf8aa3c1963acb2d0df4ddc83bb736ec2ce732a9f3e2f67c8"
+    }
+  ],
+  "interpretation": "PR6 is stacked on PR5; its changed-file inventory adds group/feed/lag stories US040-042. Body also describes idempotency/caller transactions from the stacked requirements. Later owner decisions select complete durable receipts, reconstructable history and complete feeds; historical journal-index-only replay is not the current design.",
+  "scope": "Read-only GitHub metadata and exact committed source custody; no native behavior, consumer approval, performance or public reference acceptance."
+}

@@ -698,7 +698,7 @@ Reviewed owner commit `27d6b907b87d9b5336a4c432929e85128fdc9267`: six self-join 
 
 Original name/customer_id/total and mixed-home queries, final story acceptance, released registration and Truss-specific native integration remain open. Do not replace Truss’s original-domain/codec obligations with this selected UInt64 fixture or duplicate Weft’s compiler work. The earlier numeric container/entity receipts retain their separate scope.
 
-## Consumer-source location audit — 2026-10-08
+## Historical consumer-source location audit — 2026-10-08
 
 Reference schema selection must reconcile the owner's merged consumer discovery inputs, but their exact source is not yet located. The current checkout discovery index points to the original 2026-09-24 vision input; a refreshed origin/main remains at `d3dcdde` and its discovery tree contains no separately named consumer input. This is a location unknown, not evidence the inputs do not exist or a reason to discard the owner's requirements. A path/commit/PR location has been requested. Preserve the pending source reconciliation before selecting the full reference schema; do not substitute Weft's Customer/Orders fixtures. Other governed native/security/installation design work can continue independently.
 
@@ -740,3 +740,7 @@ The 0.14 Field-module candidate now composes declaration_module into prop_def th
 
 
 The 0.15 qualified-property candidate composes the declaring module into native property identity uniqueness and private returned mappings. Same Field IDs from different declaring modules can coexist on one owning Record when original member names meet the separate name contract. UMF-generated source/export artifacts and native evidence are retained separately from earlier layouts. Weft and public catalog bindings still require explicit review of the changed identity/mapping tuple; prior compiler fixture registrations are not silently retargeted to this candidate. Full populated conversion must establish original Field module from archived membership/source; no guessed backfill is allowed.
+
+## Consumer discovery source verified — 2026-10-08
+
+GitHub reports PR #6 merged at e58f3c69817e744e32007acd273e556dac137b7b. The [source receipt](evidence/design-audit/consumer-pr6-source.json) verifies its fourteen changed-file hashes. The [reference handoff](remaining-design-handoff-audit.md#consumer-discovery-pr-6-source-to-reference-acceptance-handoff) maps the current five group/feed/lag/retry/caller-transaction requirements to all twenty-two US-040–044 criteria. Location is resolved; protected runtime and public consumer acceptance remain incomplete. The current durable-receipt direction supersedes the older journal-only replay technique, and proposed publisher freshness remains unmeasured.
