@@ -1,0 +1,54 @@
+{
+  "scope": "Pinned UMF parser/codec/JSON-YAML/export round-trip only; no native execution, catalog dependency resolution, policy, resource or Weft qualification",
+  "producerSha256": "738dc605a5f92b473d0911de9caa06118579074138c6b043c46f29180062ff3a",
+  "umfCommit": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+  "backend": "@libpg-query/parser@17.6.10",
+  "parserTreeVersion": 170004,
+  "dependencies": [
+    {
+      "path": "native/postgresql/runtime.ts",
+      "sha256": "a88fea4cf15c9c3c3f0ad1f0a36d8f5de42a42ce8ea9712499f609beee3ea751"
+    },
+    {
+      "path": "src/adapters/postgresql/index.ts",
+      "sha256": "7baa071d95e5f9863a4ce2bf892d87fb27cab9d8605ba4cf8887016d14ca17b4"
+    },
+    {
+      "path": "spec/extensions/postgresql/native-ast.schema.json",
+      "sha256": "aa3d3b50bc04edbc3ab3430e113ee8710edb1c10ff5cee15d4bcc7b16d9a9039"
+    },
+    {
+      "path": "node_modules/@libpg-query/parser/wasm/libpg-query.wasm",
+      "sha256": "21c450200169e2e884a9bcc40122f682304e83b14a4e677fc767b8e53c2f93c1"
+    }
+  ],
+  "cases": [
+    {
+      "path": "docs/helix/02-design/contracts/reference-participation-observation.proposal.sql",
+      "sha256": "4d44e57f04f5a1d30051b264e56032cfb4ac78831b693a4766cc17a967fe6da3",
+      "parameters": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "statement": "SelectStmt",
+      "umfJsonYamlSourceAndTreePreserved": true,
+      "ownerExportReparseAstEquality": true,
+      "exportedSql": "SELECT (SELECT pg_catalog.count(*)::pg_catalog.text FROM (SELECT e.id FROM truss.edge e WHERE e.rel_type_id = $1::int AND e.source_type = $2::int AND e.source_id = $3::bigint LIMIT 3) outgoing_witness) AS outgoing_saturated_count, (SELECT pg_catalog.count(*)::pg_catalog.text FROM (SELECT e.id FROM truss.edge e WHERE e.rel_type_id = $1::int AND e.target_type = $4::int AND e.target_id = $5::bigint LIMIT 2) incoming_witness) AS incoming_saturated_count"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/reference-code-equality-observation.proposal.sql",
+      "sha256": "d07539a7890f32f567b38890d4cd00271b3cbf75c4d33491214cb9781fef57d4",
+      "parameters": [
+        1,
+        2
+      ],
+      "statement": "SelectStmt",
+      "umfJsonYamlSourceAndTreePreserved": true,
+      "ownerExportReparseAstEquality": true,
+      "exportedSql": "SELECT CAST($1::pg_catalog.text COLLATE pg_catalog.\"C\" OPERATOR(pg_catalog.=) $2::pg_catalog.text COLLATE pg_catalog.\"C\" AS pg_catalog.text) AS equal_text"
+    }
+  ]
+}
