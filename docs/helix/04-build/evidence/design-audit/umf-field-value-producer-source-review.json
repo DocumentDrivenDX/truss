@@ -1,0 +1,22 @@
+{
+  "candidateRevision": "28bc152e903ca94c11566d4beb796ecbdd1d0716",
+  "umfSourceRevision": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+  "reviewKind": "committed source/report inspection; no native or browser rerun",
+  "files": [
+    {
+      "path": "scripts/check-umf-field-values.ts",
+      "sha256": "bb3a81b07edad5c1aa9d12d36055a3d13362f57df6b0dea7a34e184d585c8c04"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/inert-assembly/umf-field-values.json",
+      "sha256": "c322c356db78bef2581f88b439f88a67228a07dd017838086ada12cabc222c9d"
+    }
+  ],
+  "reportedRuntimes": {
+    "bun": "bun/1.4.2",
+    "chromium": "153.0.8010.12"
+  },
+  "selectedPresentStringChecks": 4,
+  "sourceSha256": "fa28ecead66f0f8a6b1dfd50dc26c89b4f129ff0dcbd7d94010e34bd3e9b460d",
+  "qualification": "Explicit verified reversible 0.7 to 0.8 transition and scoped field-value results only. No complete record/key/relationship, accepted native IDs, writable profile, storage presence binding or ACK authority."
+}
