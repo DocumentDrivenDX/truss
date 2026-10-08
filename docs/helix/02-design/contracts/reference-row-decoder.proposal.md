@@ -42,6 +42,20 @@ The decoder stages the complete Record privately. It never publishes a successfu
 
 ## Publication and lifetime
 
+### Two-stream collector failure procedure
+
+The node and scalar statements are separate native commands. Reserve original submission and containment capacity before the first command, and mediate both through the same admitted executor/transaction. Stage every complete original observation privately; a completed node stream is not a reconstructed value or permission to publish. Observe actual descriptor/framing/command termination independently for each stream.
+
+| Original failure boundary | Required disposition |
+| --- | --- |
+| Node stream descriptor, framing, row bounds or original termination fails | Stop admission; preserve original command custody and apply the existing executor containment protocol. Do not issue the scalar stream merely to obtain a matching count. |
+| Node stream completes but scalar submission cannot be admitted | Refuse the complete read before submission. Preserve already spent work and owned node buffers until actual release/containment; no fresh scalar budget. |
+| Scalar stream fails or terminates ambiguously | Withhold all staged fields. Establish original native termination through the qualified executor boundary; unresolved termination retains recovery custody. Node success cannot classify scalar completion. |
+| Both streams complete but membership/source/codec interpretation fails | Refuse the complete result under original integrity/domain diagnostics. Successful command completion does not make malformed values valid. |
+| Both streams and reconstruction pass, but publication authority changes | Withhold staged content and follow original resource release/containment rules. Do not disclose partial fields, retry on a replacement cut or infer authority from earlier stream success. |
+
+Owned and adopted transactions retain their existing distinct containment responsibilities. No decoder-triggered whole-host rollback, isolation change, callback replay or fresh transaction is permitted for an adopted read. A later explicit operation may collect a new cut only after the original operation is settled or contained through its existing recovery rules; it cannot be substituted as evidence that the failed original observation completed. Count retained node buffers, scalar framing/decoded copies, correspondence indexes and staged values together while simultaneously owned, including unresolved command lifetime.
+
 Keep exact original lexical token/source bytes in the staged value. Native numeric rendering is used only for qualified mathematical agreement, not as the authored token. Revalidate authority, original binding/source epoch and execution profile through the existing same-transaction publication protocol before releasing the complete value. Adopted transactions expose pending values only through their admitted original live handle; independent committed reads cannot see them before confirmed outer commit. Driver termination alone does not settle the mutation that produced a value.
 
 Apply the same full-owner prerequisites to compiled reads through Weft-owned obligations and result descriptors. A predicate excluding the corrupted owner cannot waive those prerequisites. Complete Item.note compiled projection remains unavailable until the exact absent/null/string registration is supported. Direct decoder success cannot certify that integration.
