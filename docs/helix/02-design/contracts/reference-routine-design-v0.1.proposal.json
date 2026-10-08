@@ -1,0 +1,177 @@
+{
+  "interfaceVersion": "truss-reference-routine-design/0.1.0",
+  "status": "selected_design_fields_incomplete_native_binding",
+  "nativeQualified": false,
+  "installerReady": false,
+  "scope": "Seven required orchestration routine design selections only. Names are original contract selectors, not adopted physical identity/OID or qualified namespace. No body, role, complete dependency or ACL realization is supplied.",
+  "governingSources": [
+    {
+      "path": "02-design/contracts/CONTRACT-001-storage-layout.md",
+      "sha256": "6046c84b03f4d9d347d5cb2e83bfc8caa9d13a8a59000eb78752c75a6d0c1e73"
+    },
+    {
+      "path": "02-design/contracts/CONTRACT-005-module-isolation.md",
+      "sha256": "152e9be2f9c2cdd42ac0908b23d771796945b4f9f92dcf8dd4733d12ac9be9b3"
+    },
+    {
+      "path": "02-design/contracts/CONTRACT-006-change-feed.md",
+      "sha256": "3d628d26ded4c3248e8f8db96d1e5828e295df5e901d6bf4be168ac5ec10e19d"
+    },
+    {
+      "path": "02-design/architecture.md",
+      "sha256": "dbf3b64425a1a60a029592aa782a963f8526e5ff9752af7263d2dcb8fb37df5d"
+    }
+  ],
+  "sharedSelectedAttributes": {
+    "language": "plpgsql",
+    "volatility": "VOLATILE",
+    "parallel": "UNSAFE",
+    "nullInput": "CALLED ON NULL INPUT",
+    "leakproof": false,
+    "security": "DEFINER",
+    "searchPathRecipe": [
+      "pg_catalog",
+      {
+        "trustedInstallationNamespace": true
+      },
+      "pg_temp"
+    ],
+    "publicExecute": false,
+    "ordinaryApplicationExecute": false
+  },
+  "routines": [
+    {
+      "originalContractName": "row_touch_observe",
+      "sqlArgumentTypes": [],
+      "resultType": "trigger",
+      "ownerResponsibility": "Touch observation owner",
+      "invocationKind": "installed_trigger_only",
+      "selectedValidatorDependencies": [],
+      "unresolvedNativeBinding": {
+        "physicalIdentity": null,
+        "namespace": null,
+        "bodyArtifact": null,
+        "nativeOwnerRole": null,
+        "completeDependencyInventory": null,
+        "exactPrivateCallerAcl": null,
+        "nativeQualificationReceipt": null
+      }
+    },
+    {
+      "originalContractName": "row_touch_commit_check",
+      "sqlArgumentTypes": [],
+      "resultType": "trigger",
+      "ownerResponsibility": "Commit-check owner",
+      "invocationKind": "installed_trigger_only",
+      "selectedValidatorDependencies": [
+        {
+          "originalContractName": "edge_limit_verify_current_scope",
+          "when": "edge_limit_scope_selected"
+        },
+        {
+          "originalContractName": "feed_union_validate_current_scope",
+          "when": "complete_feed_selected"
+        }
+      ],
+      "unresolvedNativeBinding": {
+        "physicalIdentity": null,
+        "namespace": null,
+        "bodyArtifact": null,
+        "nativeOwnerRole": null,
+        "completeDependencyInventory": null,
+        "exactPrivateCallerAcl": null,
+        "nativeQualificationReceipt": null
+      }
+    },
+    {
+      "originalContractName": "edge_limit_observe",
+      "sqlArgumentTypes": [],
+      "resultType": "trigger",
+      "ownerResponsibility": "Touch observation owner",
+      "invocationKind": "installed_trigger_only",
+      "selectedValidatorDependencies": [],
+      "unresolvedNativeBinding": {
+        "physicalIdentity": null,
+        "namespace": null,
+        "bodyArtifact": null,
+        "nativeOwnerRole": null,
+        "completeDependencyInventory": null,
+        "exactPrivateCallerAcl": null,
+        "nativeQualificationReceipt": null
+      }
+    },
+    {
+      "originalContractName": "edge_limit_catalog_observe",
+      "sqlArgumentTypes": [],
+      "resultType": "trigger",
+      "ownerResponsibility": "Touch observation owner",
+      "invocationKind": "installed_trigger_only",
+      "selectedValidatorDependencies": [],
+      "unresolvedNativeBinding": {
+        "physicalIdentity": null,
+        "namespace": null,
+        "bodyArtifact": null,
+        "nativeOwnerRole": null,
+        "completeDependencyInventory": null,
+        "exactPrivateCallerAcl": null,
+        "nativeQualificationReceipt": null
+      }
+    },
+    {
+      "originalContractName": "feed_current_union_check",
+      "sqlArgumentTypes": [],
+      "resultType": "trigger",
+      "ownerResponsibility": "Commit-check owner",
+      "invocationKind": "installed_trigger_only",
+      "selectedValidatorDependencies": [
+        {
+          "originalContractName": "feed_union_validate_current_scope",
+          "when": "complete_feed_selected"
+        }
+      ],
+      "unresolvedNativeBinding": {
+        "physicalIdentity": null,
+        "namespace": null,
+        "bodyArtifact": null,
+        "nativeOwnerRole": null,
+        "completeDependencyInventory": null,
+        "exactPrivateCallerAcl": null,
+        "nativeQualificationReceipt": null
+      }
+    },
+    {
+      "originalContractName": "feed_union_validate_current_scope",
+      "sqlArgumentTypes": [],
+      "resultType": "void",
+      "ownerResponsibility": "Integrity/finalization owner",
+      "invocationKind": "registered_private_call_only",
+      "selectedValidatorDependencies": [],
+      "unresolvedNativeBinding": {
+        "physicalIdentity": null,
+        "namespace": null,
+        "bodyArtifact": null,
+        "nativeOwnerRole": null,
+        "completeDependencyInventory": null,
+        "exactPrivateCallerAcl": null,
+        "nativeQualificationReceipt": null
+      }
+    },
+    {
+      "originalContractName": "edge_limit_verify_current_scope",
+      "sqlArgumentTypes": [],
+      "resultType": "void",
+      "ownerResponsibility": "Integrity/finalization owner",
+      "invocationKind": "registered_private_call_only",
+      "selectedValidatorDependencies": [],
+      "unresolvedNativeBinding": {
+        "physicalIdentity": null,
+        "namespace": null,
+        "bodyArtifact": null,
+        "nativeOwnerRole": null,
+        "completeDependencyInventory": null,
+        "exactPrivateCallerAcl": null,
+        "nativeQualificationReceipt": null
+      }
+    }
+  ]
+}

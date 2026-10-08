@@ -66,6 +66,8 @@ The document-allocation scanner now requires separately retained expected story/
 
 CH-02 implementation-language handoff: the architecture selects SQL fixed observations and PL/pgSQL protected orchestration for the reference PostgreSQL implementation, retaining ADR-001 TypeScript portable core and Weft-owned compilation. Author the five handlers, two ordinary complete-scope validators and protected producers in that orchestration path. Exact codec/resource helper realization, bodies/security/dependencies and managed driver/provider qualification remain required; general language selection is no longer a prerequisite to starting those source bodies.
 
+CH-01/02 consume the [machine-readable seven-routine design input](../02-design/contracts/reference-routine-design-v0.1.proposal.json). It captures selected signatures/attributes/responsibilities and known validator dependencies, with source pins and explicit unresolved native fields. Complete identity/body/role/ACL/dependency binding remains mandatory before installer admission; no null field may be silently defaulted into support.
+
 ### Product-decision application boundaries
 
 Same-qualified-identity reactivation is selected and must govern acceptance/lifecycle design; terminal retirement is historical comparison material. The selected two-property-delta plus metadata-witness rule governs event count without adopting every complete-history profile. Required managed extensions must ship on the selected RDS PostgreSQL, Aurora PostgreSQL and Lakebase profiles; a custom helper cannot become a deployment assumption through source composition.
