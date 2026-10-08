@@ -377,10 +377,61 @@ function decodeNativeTextArray(text, dimensions, limits) {
   }
   return Object.freeze({ kind: "array", originalText: text, bounds: Object.freeze(bounds.map((b) => Object.freeze(b))), elements });
 }
+function decodeNativeTriggerArguments(count, hex, byteLength, limits, encoding) {
+  const refuse = (why) => {
+    throw new Error("trigger-arguments:" + why);
+  };
+  if (encoding !== "UTF8")
+    refuse("encoding");
+  if (hex === null || byteLength === null)
+    refuse("native-null");
+  if (typeof count !== "string" || !/^(0|[1-9][0-9]*)$/.test(count) || count.length > 5 || BigInt(count) > 32767n)
+    refuse("count");
+  for (const n of [limits.maxBytes, limits.maxArguments])
+    if (!Number.isSafeInteger(n) || n < 0)
+      refuse("resource-limit");
+  if (typeof byteLength !== "string" || !/^(0|[1-9][0-9]*)$/.test(byteLength))
+    refuse("byte-length");
+  if (byteLength.length > String(limits.maxBytes).length || BigInt(byteLength) > BigInt(limits.maxBytes) || BigInt(count) > BigInt(limits.maxArguments))
+    refuse("resource-limit");
+  const bytesCount = Number(BigInt(byteLength));
+  if (typeof hex !== "string" || hex.length % 2 || !/^[0-9a-f]*$/.test(hex))
+    refuse("hex-domain");
+  if (BigInt(hex.length) !== BigInt(byteLength) * 2n)
+    refuse("byte-length");
+  if (count === "0" && bytesCount !== 0)
+    refuse("count");
+  const bytes = new Uint8Array(bytesCount);
+  for (let i = 0;i < bytesCount; i++)
+    bytes[i] = parseInt(hex.slice(i * 2, i * 2 + 2), 16);
+  const decoder = new TextDecoder("utf-8", { fatal: true, ignoreBOM: true });
+  const arguments_ = [];
+  let start = 0;
+  for (let i = 0;i < bytesCount; i++) {
+    if (bytes[i] !== 0)
+      continue;
+    if (BigInt(arguments_.length) === BigInt(count))
+      refuse("count");
+    let value;
+    try {
+      value = decoder.decode(bytes.subarray(start, i));
+    } catch {
+      return refuse("encoding");
+    }
+    arguments_.push(value);
+    start = i + 1;
+  }
+  if (start !== bytesCount)
+    refuse("termination");
+  if (BigInt(arguments_.length) !== BigInt(count))
+    refuse("count");
+  return Object.freeze({ count, byteLength, originalHex: hex, encoding, arguments: Object.freeze(arguments_) });
+}
 export {
   INERT_ASSEMBLY_PROFILE,
   NativeVectorError,
   createReferenceAssembly,
   decodeNativeTextArray,
+  decodeNativeTriggerArguments,
   decodeNativeVector
 };

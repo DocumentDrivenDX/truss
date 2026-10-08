@@ -313,3 +313,43 @@ export function decodeNativeTextArray(text: string | null, dimensions: string | 
   }
   return Object.freeze({kind:'array',originalText:text,bounds:Object.freeze(bounds.map(b=>Object.freeze(b))),elements});
 }
+
+export interface NativeTriggerArguments {
+  readonly count: string; readonly byteLength: string; readonly originalHex: string;
+  readonly encoding: 'UTF8'; readonly arguments: readonly string[];
+}
+/** CONTRACT-008 exact tgargs framing. No trigger definition or callable authority inferred. */
+export function decodeNativeTriggerArguments(count: string, hex: string | null,
+  byteLength: string | null, limits: {readonly maxBytes: number; readonly maxArguments: number},
+  encoding: 'UTF8'): NativeTriggerArguments {
+  const refuse = (why: string): never => {throw new Error('trigger-arguments:' + why);};
+  if (encoding !== 'UTF8') refuse('encoding');
+  if (hex === null || byteLength === null) refuse('native-null');
+  if (typeof count !== 'string' || !/^(0|[1-9][0-9]*)$/.test(count) || count.length > 5 || BigInt(count) > 32767n) refuse('count');
+  for (const n of [limits.maxBytes,limits.maxArguments])
+    if (!Number.isSafeInteger(n) || n < 0) refuse('resource-limit');
+  if (typeof byteLength !== 'string' || !/^(0|[1-9][0-9]*)$/.test(byteLength)) refuse('byte-length');
+  // Bound exact conversion and backing allocation before reading hex bytes.
+  if (byteLength!.length > String(limits.maxBytes).length || BigInt(byteLength!) > BigInt(limits.maxBytes) ||
+      BigInt(count) > BigInt(limits.maxArguments)) refuse('resource-limit');
+  const bytesCount = Number(BigInt(byteLength!)); // admitted allocation length; not a stored native value
+  if (typeof hex !== 'string' || hex.length % 2 || !/^[0-9a-f]*$/.test(hex)) refuse('hex-domain');
+  if (BigInt(hex!.length) !== BigInt(byteLength!)*2n) refuse('byte-length');
+  if (count === '0' && bytesCount !== 0) refuse('count');
+  const bytes = new Uint8Array(bytesCount);
+  for(let i=0;i<bytesCount;i++) bytes[i] = parseInt(hex!.slice(i*2,i*2+2),16);
+  // ignoreBOM retains U+FEFF as actual argument data, rather than stripping it.
+  const decoder = new TextDecoder('utf-8',{fatal:true,ignoreBOM:true});
+  const arguments_: string[] = [];
+  let start = 0;
+  for(let i=0;i<bytesCount;i++) {
+    if(bytes[i] !== 0) continue;
+    if(BigInt(arguments_.length) === BigInt(count)) refuse('count');
+    let value: string;
+    try {value = decoder.decode(bytes.subarray(start,i));} catch {return refuse('encoding');}
+    arguments_.push(value); start = i+1;
+  }
+  if(start !== bytesCount) refuse('termination');
+  if(BigInt(arguments_.length) !== BigInt(count)) refuse('count');
+  return Object.freeze({count,byteLength:byteLength!,originalHex:hex!,encoding,arguments:Object.freeze(arguments_)});
+}

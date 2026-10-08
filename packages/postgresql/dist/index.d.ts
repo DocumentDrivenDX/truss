@@ -50,3 +50,15 @@ export interface NativeArrayLimits {
 }
 /** Selected comma-delimited text element output. Type/ACL authority is independently admitted. */
 export declare function decodeNativeTextArray(text: string | null, dimensions: string | null, limits: NativeArrayLimits): NativeArray;
+export interface NativeTriggerArguments {
+    readonly count: string;
+    readonly byteLength: string;
+    readonly originalHex: string;
+    readonly encoding: 'UTF8';
+    readonly arguments: readonly string[];
+}
+/** CONTRACT-008 exact tgargs framing. No trigger definition or callable authority inferred. */
+export declare function decodeNativeTriggerArguments(count: string, hex: string | null, byteLength: string | null, limits: {
+    readonly maxBytes: number;
+    readonly maxArguments: number;
+}, encoding: 'UTF8'): NativeTriggerArguments;

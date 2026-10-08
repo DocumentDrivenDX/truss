@@ -72,3 +72,18 @@ retains one read-only SQL query, exact original stdout and seven decoded native
 arrays with exact original JSON correspondence on local PostgreSQL 17.9.
 Reproduce with `bun scripts/check-native-array.ts`. Complete catalog field/type
 coverage, aggregate collector custody and installation remain unfinished.
+
+
+## Native trigger argument decoder prerequisite
+
+`decodeNativeTriggerArguments` implements CONTRACT-008's UTF8 tgargs framing
+subset: exact nonnegative native-int2 count, original lowercase hex, exact byte
+length, bounded allocation and precisely count NUL terminators consuming all bytes.
+Empty strings and BOM characters remain data; invalid UTF8 cannot be replaced.
+All twelve original independent vectors and further domain/encoding/resource
+controls pass. Combined suite: nine tests, 116 assertions; strict build and clean
+packed consumer pass. `native-trigger.json` retains original SQL/stdout and exact
+argument correspondence from one actual temporary trigger on local PostgreSQL
+17.9 UTF8. The entire probe transaction rolls back. Reproduce using
+`bun scripts/check-native-trigger.ts`. No Truss triggers are installed; complete
+trigger definition, WHEN/dependency admission and native bootstrap remain open.

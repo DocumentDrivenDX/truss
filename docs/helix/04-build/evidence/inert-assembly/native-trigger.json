@@ -1,0 +1,16 @@
+{
+  "sql": "BEGIN;\nCREATE TEMP TABLE truss_tgargs_probe (id integer);\nCREATE FUNCTION pg_temp.truss_tgargs_probe_fn() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RETURN NEW; END $$;\nCREATE TRIGGER truss_tgargs_probe BEFORE INSERT ON truss_tgargs_probe FOR EACH ROW EXECUTE FUNCTION pg_temp.truss_tgargs_probe_fn('a','','é');\nSELECT json_build_object('server_version',current_setting('server_version'),'encoding',current_setting('server_encoding'),'count',tgnargs::text,'hex',encode(tgargs,'hex'),'byteLength',octet_length(tgargs)::text) FROM pg_catalog.pg_trigger WHERE tgrelid='pg_temp.truss_tgargs_probe'::regclass;\nROLLBACK;",
+  "originalStdout": "{\"server_version\" : \"17.9 (Debian 17.9-1.pgdg13+1)\", \"encoding\" : \"UTF8\", \"count\" : \"3\", \"hex\" : \"610000c3a900\", \"byteLength\" : \"6\"}\n",
+  "decoded": {
+    "count": "3",
+    "byteLength": "6",
+    "originalHex": "610000c3a900",
+    "encoding": "UTF8",
+    "arguments": [
+      "a",
+      "",
+      "é"
+    ]
+  },
+  "qualification": "One actual temporary pg_trigger tgargs observation on local PostgreSQL 17.9 UTF8; entire probe rolled back. No Truss trigger installation, trigger definition/WHEN/dependency admission or complete native support."
+}
