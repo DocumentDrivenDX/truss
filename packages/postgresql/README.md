@@ -53,8 +53,18 @@ builds the actual clean fac1497a UMF readDocument/validateDocument producer and
 runs original v1/v2/v3/unknown example artifacts through it after integrity ingress.
 All four observed results are valid=true, complete=false. Full original diagnostics
 are retained: experimental core warnings, v2 unknown nullability, and the unknown
-example's preserved assertion. CONTRACT-003's required-check route therefore
-remains unavailable for these actual inputs. This evidence does not introduce a
+example's preserved assertion. CONTRACT-003 requires completeness of separately selected semantic checks;
+aggregate validateDocument.complete is not the writable-readiness rule. No qualified
+semantic-check composition has been supplied, so writable acceptance remains
+unavailable. This evidence does not introduce a
 qualified validator service or accept native IDs; suppressing warnings would not
 establish completeness. The exact supported acceptance/profile composition remains
 a required dependency. The browser-target producer is observed under Bun only.
+
+Real Chromium 153.0.8010.12 executes the actual built Truss ingress and identical
+pinned UMF producer on all four original examples. Original bytes and complete
+validity/completeness/diagnostics match Bun. Corrupt digests, shared byte overflow
+and noncanonical base64 refuse; unknown assertion stays preserved and Node globals
+are absent. `check-umf-browser-ingress.ts` records exact bundle hashes. This verifies
+browser execution for the exercised subset, not selected semantic-check admission,
+qualified isolation/termination/resource accounting or native catalog readiness.

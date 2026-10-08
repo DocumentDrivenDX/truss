@@ -1,13 +1,15 @@
 {
-  "umfSourceRevision": "fac1497a5ac5cb39bbaaac34eb0da8dc8b208c69",
-  "producerBundleSha256": "209c4074042f32c296d9b672c782ca0e39dc9747563e22281072aa5385eb5568",
-  "loader": "bun/1.4.2",
-  "results": [
+  "originalArtifactsPreserved": true,
+  "originalDiagnosticsPreserved": true,
+  "unknownAssertionPreserved": true,
+  "corruptDigestRefused": true,
+  "sharedByteOverflowRefused": true,
+  "noncanonicalBase64Refused": true,
+  "nodeGlobalsAbsent": true,
+  "observations": [
     {
       "identity": "schema-v1.umf.json",
-      "sha256": "bc5357b1eb99bddac4f1d1d1ce6d9727dbc98d8ca3a56b644510d07117919aec",
-      "umf": "0.7.0",
-      "originalValidation": {
+      "validation": {
         "valid": true,
         "complete": false,
         "diagnostics": [
@@ -42,16 +44,11 @@
             "severity": "warning"
           }
         ]
-      },
-      "aggregateValidationCondition": "not_valid_complete",
-      "writableAcceptance": "unavailable_no_qualified_semantic_check_composition",
-      "acceptedCatalogRevision": null
+      }
     },
     {
       "identity": "schema-v2.umf.json",
-      "sha256": "59e4d58b5254df2291156a5b73ef0e04d4c74668b3818e8ecf630e4d104982d0",
-      "umf": "0.7.0",
-      "originalValidation": {
+      "validation": {
         "valid": true,
         "complete": false,
         "diagnostics": [
@@ -92,16 +89,11 @@
             "severity": "warning"
           }
         ]
-      },
-      "aggregateValidationCondition": "not_valid_complete",
-      "writableAcceptance": "unavailable_no_qualified_semantic_check_composition",
-      "acceptedCatalogRevision": null
+      }
     },
     {
       "identity": "schema-v3.umf.json",
-      "sha256": "60d446310ba1bdebf36a1d066aadeb099336c7a551b3e563bd50ae938eeff085",
-      "umf": "0.7.0",
-      "originalValidation": {
+      "validation": {
         "valid": true,
         "complete": false,
         "diagnostics": [
@@ -136,16 +128,11 @@
             "severity": "warning"
           }
         ]
-      },
-      "aggregateValidationCondition": "not_valid_complete",
-      "writableAcceptance": "unavailable_no_qualified_semantic_check_composition",
-      "acceptedCatalogRevision": null
+      }
     },
     {
       "identity": "schema-unknown.umf.json",
-      "sha256": "5221c59ad5c35bf25dda8b79e9de88b2ab096c003dc5bae74254a68b22c4d427",
-      "umf": "0.7.0",
-      "originalValidation": {
+      "validation": {
         "valid": true,
         "complete": false,
         "diagnostics": [
@@ -186,11 +173,12 @@
             "severity": "warning"
           }
         ]
-      },
-      "aggregateValidationCondition": "not_valid_complete",
-      "writableAcceptance": "unavailable_no_qualified_semantic_check_composition",
-      "acceptedCatalogRevision": null
+      }
     }
   ],
-  "qualification": "Actual pinned UMF readDocument/validateDocument producer on original Ashlar example files after public Truss byte-integrity ingress. Complete original diagnostics retained; unknown assertion preservation checked. Aggregate condition describes this document producer only, not completeness of separately selected semantic checks or writable readiness. Browser-target producer bundle executed in Bun, not a real browser. No qualified isolation/resource validator service, native catalog acceptance, installation, accepted IDs, transforms or streaming claim."
+  "browser": "153.0.8010.12",
+  "umfSourceRevision": "fac1497a5ac5cb39bbaaac34eb0da8dc8b208c69",
+  "producerBundleSha256": "209c4074042f32c296d9b672c782ca0e39dc9747563e22281072aa5385eb5568",
+  "trussBundleSha256": "7ca7d551d3f610d6eeb0121a44cd048bca301f64444001298bf88d7855f3fda9",
+  "qualification": "Real Chromium original UMF examples through built portable Truss integrity ingress and exact pinned UMF producer. All original validity/completeness/diagnostics agree with Bun; no native acceptance, installation, qualified validator isolation or source stream authority."
 }
