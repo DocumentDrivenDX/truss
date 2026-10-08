@@ -24,6 +24,8 @@ For the independently authored M03 graph, expect these row-home contents under t
 
 The full M03 scope has nine states, nine scalar-or-null root nodes and eight scalar payloads. The pending M05 and committed M06 scopes each have ten states, ten root nodes and eight scalar payloads. These are exact proposed fixture expectations, not global row limits or native measurements. Any extra descendant, foreign state, payload on a null root or missing required payload refuses even if total counts match. Independently compare every original owner/property/source/profile association and exact token/text value. Relationship and key stores remain separately verified under their own complete original inventories.
 
+The [row-shape expectations](../../03-test/reference-account-items-row-shape.proposal.json) retain these independently authored totals for all six original logical cuts, with the full logical oracle's exact hash. They were checked against each original present/null/scalar occurrence without changing that oracle. The assessor must bind and compare actual complete owner/property/node/payload membership first; totals are supplementary checks. No native identities, successful execution or count-only completeness claim is introduced.
+
 ## State decision table
 
 | Complete admitted observation | Logical decision |
