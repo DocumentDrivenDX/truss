@@ -1037,7 +1037,7 @@
     "02-design/technical-designs/TD-009-find-an-object-by-its-key.md": "25ed3ec38b49bd477065d3786ee529f092ddc8b7661e3433fe99a7784890a2d7",
     "03-test/test-plans/STP-009-find-an-object-by-its-key.md": "7933bcf0457901e193045e17f89269d00938fda9d441da98b3d5ba2887ce5259",
     "02-design/technical-designs/TD-010-refuse-bad-edges-and-protect-connected-objects.md": "e67e3592998f0ec7cc92f5c96835ffb20e81f70c95cb5fafd039efdde9ec7a3d",
-    "03-test/test-plans/STP-010-refuse-bad-edges-and-protect-connected-objects.md": "fa0d3b900abcbd5fb624251998edc217ea9d711abe0970909e33178c3866117b",
+    "03-test/test-plans/STP-010-refuse-bad-edges-and-protect-connected-objects.md": "039bc86ea67bd0e4b9a3a598a9316e32eb151d9cd1c003c9577ed45ee121ad88",
     "02-design/technical-designs/TD-011-limit-an-edges-multiplicity.md": "a6844d5eb289963466833406f77dfc22bdfb4b8c2ef90aa077091d2e1d443b3e",
     "03-test/test-plans/STP-011-limit-an-edges-multiplicity.md": "e5af2cd7e06b7ab01a9f84048ac1e69a82a6f2ac3d98d77abd7bbb4a9edc3bfb",
     "02-design/technical-designs/TD-012-write-with-one-protocol-and-report-every-violation.md": "4463200481ccd7103b4540004d9d8ab45517c00810a9751e427357903bcbadfa",

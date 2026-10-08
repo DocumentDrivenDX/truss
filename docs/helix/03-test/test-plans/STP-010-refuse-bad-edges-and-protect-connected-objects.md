@@ -17,6 +17,8 @@ ddx:
 
 # STP-010: Refuse bad edges and protect connected objects
 
+Reference Account/Item qualification consumes the [relationship binding](../../02-design/contracts/reference-relationship-binding.proposal.md). Under an independently seeded M03 graph, attempt A deletion with AB/AC present, then B and C deletion with their respective edges present: each must refuse under `@covers US-010-AC3`, including qualified plain-SQL attempts. Preserve complete original graph/key/value/source/journal state after confirmed containment; an uncertain native result stays unresolved. Separately delete AB/AC through protected edge mutations, then delete A under `@covers US-010-AC4`. B/C/D and their complete original values/keys survive; independent lifecycle cannot become target cascade. Verify actual original source/target RESTRICT constraints, complete journal contributions and outer settlement. Use separate fixtures for each destructive schedule; no production maintenance is authorized. These reference refinements remain not_run and do not replace the existing wrong-type, missing-endpoint, self-edge or concurrent create/delete cases.
+
 ## Story Reference
 
 US-010, TD-010, SD-002, TP-001 and CONTRACT-001/004/007/009. Tests are planned, not executable evidence.
