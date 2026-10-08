@@ -1107,7 +1107,7 @@
     "02-design/technical-designs/TD-044-run-a-change-in-a-transaction-and-roll-it-back.md": "81d6a4421e2c824f1161a4912afbd758e6824031f37f0469ef4f63f713714f8a",
     "03-test/test-plans/STP-044-run-a-change-in-a-transaction-and-roll-it-back.md": "c194379c6c15b59aa2c6180be04bb6af7e35135fd3bc9edd04f3243783e15b06",
     "02-design/technical-designs/TD-045-bootstrap-the-internal-layout-from-umf.md": "ca24959bde1ba9c23f15f856f2a61c882ac37d8377d4b73905ce5a4f0f859869",
-    "03-test/test-plans/STP-045-bootstrap-the-internal-layout-from-umf.md": "254e56be96b550183a33d0e1318ae61727e9cc2f277c14f4bc9d74b530f57b74"
+    "03-test/test-plans/STP-045-bootstrap-the-internal-layout-from-umf.md": "63032a2721741578e8d8f95fd37c7c56246358ad5f62ba16df589ddd59bfe7b9"
   },
   "storySha256": {
     "01-frame/user-stories/US-001-accept-a-umf-revision-as-a-whole.md": "faa9173cc8ab9cb8c0945c2492b207ffc8ee6953cf5efef16a821a71a7a35b12",
