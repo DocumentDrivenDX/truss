@@ -113,3 +113,6 @@ Retain and compare the original interrupted report bytes before and after each r
 
 
 The [import interruption/recovery case inventory](../../04-build/evidence/design-audit/import-interruption-recovery-case-inventory.proposal.json) assigns IR-01–IR-06 to the supplemental schedules above. It is an unselected native test allocation, not the complete US-034 corpus. Before running the existing planned command, the harness must provide the listed original profile, byte, state, authority, termination and settlement observations; absent observations cannot produce a passed receipt. All six primary criterion tests remain separately required.
+
+
+Plan NI-01/02 for a selected network host: lose acknowledgment after one runBatches batch commits and another becomes unknown, then invoke a new identity-based import and prove it cannot replace the original report or settle its native recovery; invoke applyInTransaction with successful and failed records, then lose outer commit acknowledgment and preserve original pending/unknown report until qualified original outcome observation, without presenting an atomic group receipt or treating loadId as exact-report idempotency. Compare independent original/later reports and native committed state. These are planned integration cases; no import receipt or new wire field is selected.
