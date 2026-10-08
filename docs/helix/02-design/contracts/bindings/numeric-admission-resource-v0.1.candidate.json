@@ -27,5 +27,12 @@
     "Independent exact/one-over limits across simultaneous buffers and repeated passes",
     "Public Bun and Chromium equivalence with original UMF diagnostics",
     "Complete packaged resource definition and exact digest/profile admission"
-  ]
+  ],
+  "compositionRules": {
+    "conjunction": "All ceilings apply to one admission attempt concurrently; no individual ceiling promises an admissible input of that size.",
+    "preflight": "Before a mandatory full byte traversal, reserve at least its complete byte length against remaining cumulative work. Refuse before traversal when this lower bound exceeds remaining work; qualified producer bounds may require more.",
+    "unreachableBoundary": "When mandatory work or simultaneous storage makes a size ceiling unreachable, qualification records that derivation and tests the controlling combined boundary; never resets a budget to manufacture an exact-size success.",
+    "diagnosticBudget": "Diagnostics share the attempt work and peak budgets and also have their own artifact-size ceiling. Resource exhaustion may yield explicit unavailable diagnostics without allocating a replacement full source or restarting validation.",
+    "scope": "A resource refusal does not prove source validity or numeric domain invalidity. Do not label an unexecuted UMF validation as successful or failed."
+  }
 }
