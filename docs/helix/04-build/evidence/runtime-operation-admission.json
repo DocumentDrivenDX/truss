@@ -5,7 +5,7 @@
   "umfBundleSha256": "ff990a3f9847a1bc0844fc6e637365462979efc3dcbec27383d4002943d64d83",
   "checks": [
     "exact PostgreSQL17.9",
-    "three ALWAYS generation observers installed",
+    "five ALWAYS canonical generation observers installed",
     "actual native xid and ordinal",
     "original actor and native context captured",
     "second unfinished operation refused",
@@ -79,8 +79,18 @@
     "native prestate retains actual state identity and scalar without host numeric decoding",
     "native prestate refuses foreign object property owner",
     "native snapshot records missing state and empty node inventory explicitly",
-    "actual state node and scalar cascaded deletes each advance generation",
+    "native membership gets a separate exact storage identity",
+    "original UMF tuple transport and receipt retained natively",
+    "actual key membership advances guard and operation generations",
+    "same complete key identity on another native object refuses",
+    "conflicting membership leaves original membership intact",
+    "actual key membership event refuses guard exhaustion",
+    "actual reservation insertion advances original operation generation",
+    "retained full-byte reservation refuses membership under forbid policy",
+    "actual reservation deletion advances original operation generation",
+    "actual key state node and scalar cascaded deletes each advance generation",
     "canonical cascade removes original state",
+    "actual cascaded membership deletion advances original key guard",
     "original native prestate retains deleted parent attribution after cascade",
     "retired retained IDs remain high-water contributors",
     "original lineage bytes retained",
@@ -91,8 +101,11 @@
     "rollback removes staged relationship lineage"
   ],
   "bodySha256": "a6cf8c9fca5a7d7e10bdfed243bfd17242a02928fb9fbe083987dfccd85c2bbd",
+  "keyMembershipBodySha256": "a303923e4dba7144863ab053f871423288cf9a7ecfa900d0b91894093143ed28",
+  "umfValueSource": "9e4bed3efe922c11e4b5a888ba6854de14f1b29f",
+  "umfValueBundleSha256": "0a5c81094f4cb153d8d847701e9f73dc96ddd3d03eeb6488251fc696a95ad775",
   "prestateCaptureSha256": "8f111fab8dccb3ff4cd5a4050861138e0fb82c47f99305b0a567d1f9cf6fb6df",
-  "observerSha256": "44962f3ca9b3ff95da87034910c74b09b6fa8c69fd214e3e97158aded3e41ce9",
+  "observerSha256": "ee808418b7e5d9f3f6943ce8c9873a92a20f4accd6116dc1d79e1a807b9fa37f",
   "barrierSha256": "eed4f044a241db7d70dd9cf222a3313bedd484273c18d0e7063b614ad5bab93b",
   "catalogStageSha256": "7319b574cbd5cf393a8a27e7325fcf05815c882c01acd817cf50d0d4a4628f7f",
   "documentBatchSha256": "fe6754c5d4fbf054f17f5529387eb0f1ca4531e05c28c1ab31d6902251021000",
@@ -101,5 +114,5 @@
   "relationshipStageSha256": "3dc1aed0c03a48758aa7a3bc1089a63f24d1e99c0409a20218505f8c96f32490",
   "keyBatchSha256": "e31a769cf820ca00035b3c4e96f75078d6696fca8eb1bd62c8c4dc136303ae18",
   "keyStageSha256": "2e0b6d625cb90a3ad50fb94833d00b0be1baca9fec154830e459714aa2a4463c",
-  "qualification": "Actual xid/context/artifact bounds/single unfinished/rollback/private invocation and actual canonical generation dispatch component only. Canonical fixture carrier bytes are not admitted codec/layout authority. Protected issuer registration, canonical observers, finalization, deferred complete-cohort checks, installer security and public runtime remain unfinished."
+  "qualification": "Actual xid/context/artifact bounds/single unfinished/rollback/private invocation and actual canonical generation dispatch component only. Canonical fixture carrier bytes, component namespace and reservation fixture are not admitted codec/layout/installation/historical reservation authority. Full-byte key stage and actual membership generation are component evidence only. Protected issuer registration, canonical observers, finalization, deferred complete-cohort checks, installer security and public runtime remain unfinished."
 }
