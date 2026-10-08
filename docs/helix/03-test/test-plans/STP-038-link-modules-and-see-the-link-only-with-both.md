@@ -51,3 +51,10 @@ Retain a cross-module edge obligation, revoke either endpoint grant and attempt 
 ## Executable Proof and Handoff
 
 Future command `bun test tests/host/cross-module-edges.test.ts` requires implemented harness/catalog/policy bundle. Pin model bytes, validator, layout, policies, roles and native target. All four criteria block closeout. Preserve FK/unique side-channel limitations in the receipt.
+
+
+## Complete independent effective-authority matrix
+
+The [authority oracle](../cross-module-authority-expected.proposal.json) enumerates all eight relationship/source/target read intersections and both relationship-write states. Instantiate coherent cases under an independently pinned valid in-document model, with distinct declaring/source/target modules and original acting-role/current-policy evidence. Relationship writer authority includes relationship read; inconsistent write-true/read-false rows are admission-corruption controls and must refuse before execution. Do not invent a native grant arrangement to make those inconsistent rows appear valid.
+
+Compare every declared direct/id/outgoing/incoming/compiled read path against the authored intersection, independently checking each endpoint's object-read visibility. A hidden edge does not revoke separately authorized source objects; it also cannot reveal an unauthorized target through traversal, counts or diagnostics. Creation additionally needs relationship write, with endpoint reads checked independently; endpoint write is not added as an unrequested requirement. Mutation refusal must retain complete independent canonical/marker/source/journal baseline and original containment evidence. This matrix supplements all four existing criteria, historical before/after owner unions and revocation schedules; it does not qualify cross-document UMF resolution or replace them.
