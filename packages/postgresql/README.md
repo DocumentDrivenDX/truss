@@ -78,3 +78,15 @@ producer, native binding and support-profile slots are explicitly unresolved;
 inspectors carry unverified provenance and cannot supply complete value validation,
 original author authority or native acceptance. This implements the inventory
 prerequisite requested by the Truss profile review without a Truss semantic validator.
+
+The newer existing UMF source 16c35e8d exposes validateCoreFieldValue for core 0.8.
+`check-umf-field-values.ts` uses its actual explicit verified 0.7→0.8 upgrade and
+rollback APIs, retaining original source bytes/receipts without changing examples.
+Four actual present string values in local-string-source.jsonl receive valid=true,
+complete=true results; required null and wrong scalar-family probes refuse, while
+v3's explicit absent-allowed caption accepts null. Bun and real Chromium agree on
+all original operation results. Legacy 0.7 direct value checks refuse. This supplies
+one actual upstream producer, not whole-record/availability/key/relationship or
+native binding support. A present-value result for v2's unknown availability or the
+unknown document assertion does not qualify those unresolved meanings. Fixture
+property mappings are local development IDs, not accepted Truss catalog identities.
