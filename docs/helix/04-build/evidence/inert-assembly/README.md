@@ -172,3 +172,30 @@ explicitly refuse. Parameter-domain/JSON validation, SQLSTATE-specific error
 mapping, full native result/resource admission, current public-operation registry,
 quarantine/recovery authority and driver qualification remain unfinished. No
 complete Executor conformance or native Truss readiness is claimed.
+
+
+## Actual direct PostgreSQL executor bridge
+
+The separate host-only `packages/pg-runtime` source composes pg 8.16.3 with the
+engine-owned executor. Bun's ordered-result metadata lacked native column
+descriptions in the observed subset; pg supplies them for duplicate names and
+empty results. All native text-format type parsers return original text, preventing
+default numeric/JSON/date coercion. Safe nonnegative command-tag counts convert
+to exact text; unsafe/null counts and multiple result sets refuse. Native COMMIT
+and ROLLBACK command correspondence is mandatory. Unknown resources remain held
+in quarantine; pool shutdown refuses unresolved quarantine.
+
+`pg-executor.json` records an actual small read-only PostgreSQL 17.9 transaction
+through `createEngineExecutor` and this bridge under Bun 1.4.2. Large integer and
+decimal values remain exact text without SQL text casts; duplicate column names,
+empty-result descriptions, savepoints and confirmed commit pass. Host strict
+typecheck, eighteen package tests/146 assertions, portable build and clean packed
+consumer pass. Dependency lockfile is retained. The build compiler path now uses
+the installed file directly, fixing Bun package-export resolution; the relative
+packed-check compiler invocation initially failed and the absolute invocation
+passed. No persistent tables/cloud workload/settings change occurred.
+
+The host package remains source-only. Caller adoption/cancellation, native lost
+COMMIT/rollback termination/recovery settlement, parameter domains, complete
+resource/error/current-operation admission and prepared/pooler/Node qualification
+remain open. This is actual engine executor integration, not native Truss bootstrap.

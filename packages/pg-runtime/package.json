@@ -1,0 +1,1 @@
+{"name":"@documentdrivendx/truss-pg-runtime","version":"0.0.0-experimental.1","private":true,"type":"module","dependencies":{"pg":"8.16.3"},"devDependencies":{"@types/pg":"8.15.5"}}

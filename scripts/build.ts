@@ -3,7 +3,7 @@ import {resolve, dirname, basename} from 'node:path';
 import {mkdir, readFile, writeFile, rm} from 'node:fs/promises';
 const root = resolve(import.meta.dir, '..');
 const arg = process.argv.indexOf('--tsc');
-const compiler = arg >= 0 ? process.argv[arg + 1] : Bun.resolveSync('typescript/bin/tsc', root);
+const compiler = arg >= 0 ? process.argv[arg + 1] : resolve(root, 'node_modules/typescript/bin/tsc');
 if (!compiler) throw Error('Explicit installed TypeScript compiler required');
 const version = Bun.spawnSync([process.execPath, compiler, '--version'], {cwd: root});
 if (version.exitCode !== 0 || new TextDecoder().decode(version.stdout).trim() !== 'Version 7.0.2') throw Error('Expected TypeScript 7.0.2');

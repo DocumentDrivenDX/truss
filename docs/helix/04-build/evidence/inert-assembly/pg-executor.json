@@ -1,0 +1,45 @@
+{
+  "driver": "pg/8.16.3",
+  "loader": "bun/1.4.2",
+  "result": {
+    "status": "ok",
+    "value": {
+      "value": {
+        "value": {
+          "columns": [
+            "duplicate",
+            "duplicate",
+            "absent"
+          ],
+          "rows": [
+            [
+              {
+                "state": "text",
+                "text": "9007199254740993123"
+              },
+              {
+                "state": "text",
+                "text": "12345678901234567890.123456789"
+              },
+              {
+                "state": "null"
+              }
+            ]
+          ],
+          "affectedRows": "1",
+          "command": "SELECT"
+        },
+        "empty": {
+          "columns": [
+            "retained_name"
+          ],
+          "rows": [],
+          "affectedRows": "0",
+          "command": "SELECT"
+        }
+      },
+      "durability": "committed"
+    }
+  },
+  "qualification": "Actual engine executor + direct pg driver on existing local PostgreSQL 17.9. Exact native numeric text cells, duplicate/empty column descriptions, savepoints and confirmed read-only commit. No caller adoption/cancellation, lost-commit native containment, pooler/Node or full Truss bootstrap qualification."
+}
