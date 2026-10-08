@@ -20,5 +20,5 @@ result.id='truss-layout-weft-integration-0.13-review';
 const ddl=await exportPostgresqlSql(result,backend);
 const modelPath='docs/helix/02-design/models/truss-layout-weft-integration-0.13.proposal.umf.json';
 const ddlPath='docs/helix/04-build/evidence/weft-integration-layout-0.13.owner-export.sql';
-await Bun.write(modelPath,JSON.stringify(result,null,2)+'\n');await Bun.write(ddlPath,ddl);
+await Bun.write(modelPath,JSON.stringify(result)+'\n');await Bun.write(ddlPath,ddl);
 console.log(JSON.stringify({source,modelPath,ddlPath,change:'artifact_identity_sha256 ordinary NOT NULL with exact native digest CHECK; writers must supply original digest',qualified:false}));
