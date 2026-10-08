@@ -2266,3 +2266,8 @@ Accepted-catalog execution handoff now has a [concrete producer composition](../
 
 
 Native probe framing follow-up: explicit Parse/Bind/description/command completion ordering and empty-body checks now refuse malformed/duplicate completions, and protocol faults prevent connection reuse. Seven independent protocol tests/16 assertions and all six real PostgreSQL17.9 scenarios pass; exact native receipt recaptured. This remains local trust-auth component evidence, not full driver/security/account/cancellation qualification.
+
+
+## Resumed full runtime implementation — 2026-10-08
+
+The human explicitly authorized the protected installation/UMF acceptance/mutation/journal/complete-feed/ACK chain and requested resuming it. Main checkout imports the committed8af84f7 PostgreSQL assembly/executor and separate pg-runtime source foundations without merging candidate documentation or generated distributions. Portable foundation build and26 independent tests/199 assertions pass. These retain original transaction/error/recovery and exact-carrier boundaries; assembly capabilities remain inert/unavailable. Next implement original native acceptance/protected producers and actual allocated IDs using the retained0.13 UMF-generated layout, then complete journal/feed/ACK and independent native faults. Core replacement DDL/microsite/affected compiled-null mapping do not block this runtime work. No completed installed runtime is claimed by foundation reuse.
