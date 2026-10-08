@@ -35,9 +35,9 @@ ID05 in the implementation plan owns populated owner/source/grant conversion as 
 
 ## Material Identity Gates
 
-CONTRACT-003 names document/module/element identity while physical layout currently uniquifies module/element. D-04 must reconcile ownership before competing documents can safely coexist. UMF CONTRACT-045 proposes document revision/dependencies but is not implemented; do not activate it from unknown keys. Keys have authored key identity plus stable per-type key_num; preserve both, never derive stability from display name/order.
+CONTRACT-003 names document/module/element identity. Baseline 0.2 uniquifies module/element; current layout 0.11 composes qualified owner homes. Complete source/native identity binding, protected acceptance and populated conversion must qualify coexistence before support. UMF CONTRACT-045 proposes document revision/dependencies but is not implemented; do not activate it from unknown keys. Keys have authored key identity plus stable per-type key_num; preserve both, never derive stability from display name/order.
 
-US-004's retired-element redefinition says it follows identity but is not given a retired identifier. That needs explicit lifecycle resolution: either reactivation of the same lineage with preserved historical id or a new incarnation with new identity/id. Do not silently choose one; stable identity and never reuse must remain coherent. Renames preserve ids only when upstream element identity remains the same. Moving owning document/module is a distinct lineage unless an explicit versioned migration defines otherwise.
+The owner selected same-qualified-identity reactivation on 2026-10-07. Reintroducing the exact original lineage preserves its storage ID after complete retained value/key/reservation/endpoint/ownership/cardinality and current-authority validation. A distinct identity receives a fresh ID; display-name or document-revision equality cannot establish lineage. Reactivation never implicitly restores grants. Moving owning document/module is a distinct lineage unless an explicitly admitted versioned migration defines otherwise. The remaining gate is exact native lifecycle/history/report conversion, not a repeated retirement-policy choice.
 
 ## No-change Acceptance
 
@@ -45,19 +45,19 @@ CONTRACT-003 now requires complete verified acceptance input equality at the cur
 
 ## History, Testing and Handoff
 
-Definitions before/after in schema_change retain exact historical meaning for old property/journal rows. Rejected allocation must not advance a committed catalog head or erase retained definitions. STP-004 allocates three criteria. Resolve ownership/reactivation/fingerprint, write red identity/retirement/no-change cases, implement shared identity index and locked persistence. Disabling code preserves all historical ids; migration cannot remap stored/journal ids casually. All runtime components remain planned.
+Definitions before/after in schema_change retain exact historical meaning for old property/journal rows. Rejected allocation must not advance a committed catalog head or erase retained definitions. STP-004 allocates three criteria. Compose qualified ownership, selected reactivation and complete-input repeat profiles; write red identity/reactivation/retirement/no-change cases, implement shared identity index and locked persistence. Disabling code preserves all historical ids; migration cannot remap stored/journal ids casually. All runtime components remain planned.
 
 
 ## Synthesized relationship identity handoff
 
 Consume ADR-004's proposed tagged relationship lineage. Pure classification distinguishes authored opaque identities from composition_field tuples even when textual renderings match. Derivation requires qualified source field continuity, complete owner Record/field source provenance and exact profile; a missing upstream identity contract refuses the stable-derived-lineage capability without rejecting otherwise valid UMF. The candidate matcher excludes target/cardinality/lifecycle from lineage but includes them in revisioned definition/candidate validation. Numeric allocation persists category/full identity/provenance under head exclusion; no prefix/digest-only mapping.
 
-STP-004 covers category collisions, qualified rename/reorder continuity, owner moves, target changes and unavailable field identity. Complete physical mapping, extraction/Weft review and retirement/reactivation remain separate adoption gates. No same-identity retired row is reactivated merely by this matching algorithm.
+STP-004 covers category collisions, qualified rename/reorder continuity, owner moves, target changes and unavailable field identity. Complete physical mapping, extraction/Weft review and exact native retirement/reactivation profiles remain separate adoption gates. No same-identity retired row is reactivated merely by this matching algorithm.
 
 
 ## Locked allocation profile
 
-CONTRACT-003 now proposes truss-catalog-id-allocation/0.1.0: independent global native-int type/property/relationship domains and per-owning-type native-smallint key numbers, positive new allocation, complete active/provisional/retired high-water observation and whole-acceptance preflight exhaustion. Match lineage first; retired reintroduction remains gated. Use exact qualified authored/full derived identity order, not input/name/ordinal order. Preserve admitted legacy IDs without renumbering, private tentative IDs without public authority, original rollback/durability and retained high-water evidence. Exact native visibility/max/capacity/assignment/role/finalizer/resource implementation is a B-006 design/adoption prerequisite.
+CONTRACT-003 now proposes truss-catalog-id-allocation/0.1.0: independent global native-int type/property/relationship domains and per-owning-type native-smallint key numbers, positive new allocation, complete active/provisional/retired high-water observation and whole-acceptance preflight exhaustion. Match lineage first; same-identity retired reintroduction follows selected reactivation validation. Use exact qualified authored/full derived identity order, not input/name/ordinal order. Preserve admitted legacy IDs without renumbering, private tentative IDs without public authority, original rollback/durability and retained high-water evidence. Exact native visibility/max/capacity/assignment/role/finalizer/resource implementation is a B-006 design/adoption prerequisite.
 
 
 ## Bidirectional relationship finalization

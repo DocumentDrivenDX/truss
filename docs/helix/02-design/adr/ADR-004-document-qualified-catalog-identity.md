@@ -39,9 +39,13 @@ A catalog definition's source points to `(catalog_revision,document_ordinal)` or
 
 Current core 0.7 documents do not gain successor revision semantics from matching unknown fields. CONTRACT-003's host-issued doc_revision remains a verified-byte label within its current input profile. Future UMF package pins are consumed only after the corresponding upstream version/migration is implemented. Ownership qualification does not enable cross-document relationship resolution by itself.
 
+## Owner-selected retirement direction — 2026-10-07
+
+Same-qualified-authored-identity reactivation preserves its original Truss storage ID after full validation; distinct incarnations require a distinct authored identity and fresh storage ID. Historical definitions/reservations remain interpretable and grants are not implicitly restored. CONTRACT-003, US-004 and STP-004 carry this selected direction. The broader qualified-identity ADR remains proposed pending exact interface/native/profile review; that status does not reopen the answered lifecycle choice.
+
 ## Alternatives
 
-### Retirement and incarnation decision still required
+### Historical retirement alternatives before owner selection
 
 FR-4 requires unchanged UMF identity to retain its storage identifier; US-004's retired-redefinition edge case also says not to issue a retired identifier. These conflict when a removed element returns with the same qualified identity. Document revision alone cannot distinguish a successor definition from a new logical incarnation. Do not resolve this by silently allocating a different storage id for unchanged lineage or clearing retirement and calling the old id new.
 
@@ -60,7 +64,7 @@ Independent review vectors: active rename with unchanged authored identity prese
 
 ### Candidate lifecycle transition matrix
 
-This matrix prepares the product choice; neither policy is accepted here. Match exact qualified authored identity before labels or allocation. Document revision changes definition provenance, not incarnation identity.
+This historical matrix compares both policies; the owner-selected reactivation direction above governs current work. The terminal alternative is retained for comparison, not a pending choice. Match exact qualified authored identity before labels or allocation. Document revision changes definition provenance, not incarnation identity.
 
 | Transition | Reactivation profile | Terminal-retirement profile | Shared invariant |
 | --- | --- | --- | --- |
