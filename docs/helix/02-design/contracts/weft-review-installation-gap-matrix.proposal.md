@@ -34,6 +34,10 @@ CONTRACT-005's qualified policy selects `grant_module_roles(document_id,module,w
 
 The administrative helper must resolve exact document/module and native role identities, reject missing/ambiguous mappings and apply only privileges admitted by the selected protected-writer profile. `writes` must not grant raw DML that bypasses canonical writer/finalizer/receipt/seed enforcement. Fixed schema usage and qualified callable privileges are distinct from document-specific row authority; policies require current complete owner union. Select exact routine identity, owner, search path, argument/result types, effective role paths and authorized invocation before including its body/grants in the bundle. Do not grant blanket access to archive/recovery evidence as a workaround for a missing reader.
 
+## Reference routine language candidate
+
+The [managed source review](managed-extension-source-review.md) now records common documented PL/pgSQL availability and the current builtin SHA-256 dependency. Start CH-02 body authoring with fixed SQL observations and protected PL/pgSQL handlers/validators/producers under the selected controlled-work scope. No custom native module or pgcrypto digest dependency is implied by the current layout. This is a concrete recommended realization; exact body/codec/collector/security/driver evidence must still admit each boundary, and provider language availability cannot qualify correctness or arbitrary native resource bounds.
+
 ## Installer dependency order and publication boundary
 
 CH-03 must derive a dependency graph from the exact selected authored inventory, including the thirteen trigger declarations, their associated constraint objects, five handlers, two ordinary validators and underlying protected collectors/producers/codecs. Builtin functions/types/operators and implicit backing objects remain separately bound native dependencies. A same-name routine or a source count cannot satisfy an edge.
