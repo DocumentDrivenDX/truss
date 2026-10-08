@@ -1,5 +1,5 @@
-import {createPgConnectionSource} from '../packages/pg-runtime/src/index';
-import {createEngineExecutor} from '../packages/postgresql/src/index';
+import {createPgConnectionSource} from '@documentdrivendx/truss-pg-runtime';
+import {createEngineExecutor} from '@documentdrivendx/truss-postgresql';
 import {writeFile} from 'node:fs/promises';
 const probe=Bun.spawnSync(['/usr/local/bin/docker','inspect','ashlar-e2e-truss-pg17']);
 if(probe.exitCode)throw Error('Existing sandbox unavailable');

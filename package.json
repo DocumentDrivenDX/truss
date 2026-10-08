@@ -7,9 +7,12 @@
   ],
   "scripts": {
     "test": "bun test",
-    "build": "bun scripts/build.ts"
+    "build": "bun scripts/build.ts",
+    "build:host": "bun scripts/build-pg-runtime.ts"
   },
   "devDependencies": {
-    "typescript": "7.0.2"
+    "typescript": "7.0.2",
+    "@documentdrivendx/truss-pg-runtime": "workspace:*",
+    "@documentdrivendx/truss-postgresql": "workspace:*"
   }
 }

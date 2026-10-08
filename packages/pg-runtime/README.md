@@ -10,8 +10,10 @@ The native probe is `bun scripts/check-pg-executor.ts`. It uses the existing
 explicitly labeled private development sandbox; credentials remain memory-only.
 Evidence is in `docs/helix/04-build/evidence/inert-assembly/pg-executor.json`.
 No connection creation, role, grants or maintenance changes are implied by import.
-The caller owns connection settings/authentication. This is source-only host code,
-not a published/packed or production-qualified host package.
+The caller owns connection settings/authentication. This is a built experimental host package, with public ESM/declaration exports.
+It is not published or production-qualified; clean packed-host consumption remains
+unverified. Build the portable package first with `bun run build`, then
+`bun run build:host`.
 
 Caller adoption and cancellation remain unavailable. Uncertain connections are
 retained in a quarantine set, never returned to the pool. `close()` refuses while

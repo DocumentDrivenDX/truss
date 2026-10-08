@@ -264,3 +264,23 @@ No persistent tables or deployment/cloud changes occur. Actual native 40001 at
 COMMIT, lost transport/containment/settlement, adoption/cancellation, resource
 admission and complete bootstrap remain unqualified. A caller-fabricated error
 code is not sufficient native rejection evidence in the bridge.
+
+
+## Built host package integration
+
+The host package now has public ESM/declaration exports and a retained strict
+TypeScript/Bun build with source hashes in its dist/build-evidence.json. Its public
+declarations import the owning Truss package by name, preserving canonical handle
+types without source-relative/private paths. pg remains an external host-only
+dependency; exact runtime/type dependencies and workspace resolution are locked.
+The root references both workspace packages for integration tooling. An initial
+public import failed because the root lacked those workspace dependency links;
+adding them and reinstalling resolved it. The actual native pg executor probe
+now imports both built packages by public name and passes the existing text,
+column, write, rollback, deadlock and deferred-COMMIT checks.
+
+This replaces the earlier source-only host delivery status. Published release,
+clean packed-host consumer, Node/pooler qualification and full native bootstrap
+remain unfinished. The required routine bodies additionally depend on protected
+original-operation producers/security; observation SQL alone is not a routine
+implementation. Full Truss/feed capability readiness remains unavailable.

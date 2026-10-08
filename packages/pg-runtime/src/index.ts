@@ -1,6 +1,6 @@
 /** Host-only PostgreSQL driver. Portable Truss package imports no pg dependency. */
 import {Pool, DatabaseError, type PoolClient, type PoolConfig} from 'pg';
-import type {NativeConnectionSource,NativeConnection,StatementResult} from '../../postgresql/src/index';
+import type {NativeConnectionSource,NativeConnection,StatementResult} from '@documentdrivendx/truss-postgresql';
 export function createPgConnectionSource(config:PoolConfig): {
   readonly source:NativeConnectionSource;
   readonly quarantinedCount:()=>number;
