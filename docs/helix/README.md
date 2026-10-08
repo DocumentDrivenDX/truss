@@ -1,6 +1,6 @@
 # truss project documentation
 
-Current storage source handoff: [CONTRACT-012](02-design/contracts/CONTRACT-012-weft-storage-handoff.md) now includes layout 0.11 with approved fixed request-receipt stores (46 tables, 442 columns). A matching [0.11 source packet](04-build/evidence/weft-source-binding011/README.md) is available; earlier packets remain separately pinned; native installation, replay qualification and mapping adoption are unfinished.
+Current storage source handoff: [CONTRACT-012](02-design/contracts/CONTRACT-012-weft-storage-handoff.md) supplies the reconciled 0.12 reference-history review, its [column inventory](02-design/contracts/weft-review-columns-v0.12.proposal.md) and separate [0.12 source packet](04-build/evidence/weft-source-binding012/README.md). It retains 46 tables and 442 columns from the separately pinned 0.11 foundation; explicit journal allocator settings and the review marker change. Native installation, replay qualification and Weft mapping adoption are unfinished.
 
 
 truss is a planned property-oriented graph engine that runs on SQL databases,
@@ -18,7 +18,7 @@ adoption remain open.
 See [design coordination](04-build/design-coordination.md) for source baselines,
 interface dependencies and unresolved gates.
 
-**Storage handoff priority (2026-10-07):** start with [CONTRACT-012](02-design/contracts/CONTRACT-012-weft-storage-handoff.md). It now supplies the integrated 0.11 review model and its 46-table/442-column source reference, with exact DDL, key/report store choices, typed joins and value semantics. Baseline 0.2 remains independently documented. The complete intended installed layout and an adopted Weft binding remain unfinished.
+**Storage handoff priority (2026-10-08):** start with [CONTRACT-012](02-design/contracts/CONTRACT-012-weft-storage-handoff.md), then its [installation gap matrix](02-design/contracts/weft-review-installation-gap-matrix.proposal.md). The 0.12 review supplies exact owner-export DDL and declaration custody; the 0.11 compiler packet and baseline 0.2 remain separately documented. The source packet exercises a synthetic required-string fixture and does not establish the Account/Item reference registration or an installed layout.
 
 | Activity | State | Entry point |
 | --- | --- | --- |
