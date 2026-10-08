@@ -23,6 +23,14 @@ Source reconciliation: the [0.12 history review](../02-design/models/truss-layou
 
 The [remaining handoff audit](remaining-design-handoff-audit.md) separates missing authored composition/interfaces from future native identity and qualification evidence. It is the current integrated next-work boundary; source checks alone cannot close it.
 
+## Current implementation and dependency boundary — 2026-10-08
+
+The 0.12 declaration packet above remains historical source custody. Actual native use found its nonimmutable generated identity digest; the UMF-authored [0.13 repair](../02-design/models/truss-layout-weft-integration-0.13.proposal.umf.json) installs in PostgreSQL17.9, with a checked native-derived archive writer statement. This does not complete installation-marker/security/authority/resource composition or populated conversion.
+
+Weft integration is now implemented experimentally, with six real native query scenarios and original Parse/Bind frames. The compiler remains pinned to 27445317; [current source synchronization](evidence/design-audit/weft-post-integration-source-sync.json) verifies unchanged compiler sources at committed a3a31e0 and exact retained Truss profile references. Rebuilding unchanged compiler code is unnecessary. Keep uncommitted security/core0.8 work outside the admitted baseline; when committed, review request/response/profile changes before upgrading and rerun the existing exact-value, integrity, context and refusal scenarios.
+
+The next complete runtime handoff remains accepted native catalog identity plus original binding/profile/authority custody, followed by the protected acceptance/mutation/journal/feed chain. Component query fixtures cannot replace that work. Core physical key semantics and microsite location remain scoped dependencies for core-generated DDL/ER publication; they do not block independent executor or protected producer design. Native-null compiler interpretation remains a gate for affected complete logical projections. Preserve these separate scopes when sequencing work.
+
 ## Closure by product area
 
 | Area / existing gate | Specified and reviewed source evidence | Remaining design output | Implementation/evidence after selection |

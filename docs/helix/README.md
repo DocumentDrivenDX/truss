@@ -1,7 +1,11 @@
 # truss project documentation
 
-Current storage source handoff: [CONTRACT-012](02-design/contracts/CONTRACT-012-weft-storage-handoff.md) supplies the reconciled 0.12 reference-history review, its [column inventory](02-design/contracts/weft-review-columns-v0.12.proposal.md) and separate [0.12 source packet](04-build/evidence/weft-source-binding012/README.md). It retains 46 tables and 442 columns from the separately pinned 0.11 foundation; explicit journal allocator settings and the review marker change. Native installation, replay qualification and Weft mapping adoption are unfinished.
+Historical storage source handoff: [CONTRACT-012](02-design/contracts/CONTRACT-012-weft-storage-handoff.md) supplies the reconciled 0.12 reference-history review, its [column inventory](02-design/contracts/weft-review-columns-v0.12.proposal.md) and separate [0.12 source packet](04-build/evidence/weft-source-binding012/README.md). It retains 46 tables and 442 columns from the separately pinned 0.11 foundation; explicit journal allocator settings and the review marker change. Native installation, replay qualification and Weft mapping adoption are unfinished.
 
+
+Current native-installable component model: [0.13 UMF repair](02-design/models/truss-layout-weft-integration-0.13.proposal.umf.json), generated through UMF's PostgreSQL adapter. It corrects the 0.12 generated identity-digest expression rejected by PostgreSQL17.9. Its successful isolated installation and checked archive INSERT are component evidence; complete protected installation and populated conversion remain unfinished. The core relational ER model still has explicit native key-equality/nullable-unique gaps.
+
+Experimental runnable query integration lives in `packages/weft` with the pinned Rust compiler adapter in `packages/weft-bun`. Six native PostgreSQL17.9 scenarios use original SQL and native Parse/Bind; fourteen compiler/host tests and three protocol tests pass. See [iteration feedback](02-design/contracts/weft-integration-iteration-feedback.proposal.md) for reproduction scope and the filtered-SUM refusal. Fixtures do not establish accepted catalog identities, protected mutations/feed or a production executor.
 
 truss is a planned property-oriented graph engine that runs on SQL databases,
 with its schemas supplied by [UMF](https://github.com/DocumentDrivenDX/umf).
@@ -26,7 +30,7 @@ interface dependencies and unresolved gates.
 | 01 Frame | In progress | [Concerns](01-frame/concerns.md), [research plan](01-frame/research-plan.md) (storage bake-off); [PRD](01-frame/prd.md), [feature registry](01-frame/feature-registry.md) (8 features, 45 stories) draft |
 | 02 Design | ADR-001/002/005/006/007 accepted directions; ADR-003/004 proposed; CONTRACT-001–012 draft | [SPIKE-001](02-design/spikes/SPIKE-001-apache-age.md) (Apache AGE), [SPIKE-002](02-design/spikes/SPIKE-002-storage-bake-off.md) (storage bake-off), [storage layout review](02-design/storage-layout-review.md), [ADR-002](02-design/adr/ADR-002-storage-strategy.md) (storage, accepted 2026-10-03, some points provisional), [ADR-001](02-design/adr/ADR-001-language-and-portable-core.md) (TypeScript first, portable core, Rust triggers; accepted 2026-10-03, Node support provisional) |
 | 03 Test | Draft strategy; all 45 story plans allocated | [TP-001](03-test/test-plan.md), [story coverage](04-build/design-coverage.md) |
-| 04 Build | Draft sequencing; implementation not started | [Implementation plan](04-build/implementation-plan.md), [coordination](04-build/design-coordination.md) |
+| 04 Build | Experimental Weft integration implemented; protected runtime unfinished | [Implementation plan](04-build/implementation-plan.md), [coordination](04-build/design-coordination.md) |
 | Current closure | Design selections and adoption remain open | [Consolidated design closure](04-build/current-design-closure.md) |
 | 05 Deploy | Not started | — |
 | 06 Iterate | Not started | — |
@@ -115,4 +119,4 @@ Current feed handoff includes explicit registration/finalization sources, four-s
 
 Current implementation handoffs select SQL/PLpgSQL orchestration, explicit attributes and protected ownership for seven required routines, with [source-pinned routine design](02-design/contracts/reference-routine-design-v0.1.proposal.json) and thirteen original trigger links. The [package delivery design](02-design/package-delivery.proposal.md) maps all eighteen authored function exports and the selected core numeric carrier types. Exact native bodies/profiles and published package/dependency selection remain open.
 
-Latest Weft review at 8de43d0 reports exhaustive scalar decimal Python/browser conformance evidence. Recursive signed/decimal native procedures and released generic registration remain separate gaps; Truss source layout and one-string review packet are not adopted native/compiler support. See [current coordination](04-build/design-coordination.md) for the original scope and source pins.
+Latest committed Weft review at a3a31e0 retains the same compiler sources as Truss’s tested 27445317 pin. Its final acceptance inventory reports all thirty compiler criteria passing within explicit fixture/profile scope; Truss verified retained Truss profile reference hashes, without rerunning upstream checks. See [source synchronization](04-build/evidence/design-audit/weft-post-integration-source-sync.json). Uncommitted core0.8/security work is excluded; production storage adoption remains separate.
