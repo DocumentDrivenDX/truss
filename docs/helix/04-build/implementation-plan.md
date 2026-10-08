@@ -75,6 +75,12 @@ These authored scenarios belong to the existing work packages and must be retain
 
 Preserve the complete existing 45-story corpus, concurrency, failure, retention, recursive values and deployment requirements. These concrete inputs strengthen execution readiness; none replaces its broader work-package exit criteria. Finish exact source/body/security/driver/codec registrations before native activation, then run the relevant red scenarios through public interfaces under the original selected profiles. Compiler prerequisites remain Weft-owned and execute through the admitted Truss executor.
 
+### Selected driver integration delivery order
+
+CH-02/05 now selects the complete-frame/no-parser-residual branch in the [driver handoff](../02-design/contracts/reference-driver-hook-review.proposal.md#selected-complete-frame-integration-state-transitions). Deliver the adapter-owned incremental gate and strict original grammar/capture first, then the explicit versioned parser entry/assertion interface, original command-cycle callback correlation and issuer arbitration. Complete transport/backing/copy/containment account composition before enabling native commands. Only then connect the implementation to public owned/adopted scopes and packed consumers. No-residual failure refuses this profile; stock result metadata, a late listener or automatic residual-parser fallback cannot replace these deliverables.
+
+The exact source/build/runtime/native ingress tuple and its full dependency custody remain required design composition inputs; running parser, socket/TLS, cancellation, native transaction and pool-return schedules supplies subsequent implementation evidence. The selected forwarding procedure closes that algorithm choice without claiming installed support. Keep original pending/unknown recovery and application disclosure separate from parser success, and retain the broad DH/OL/LR/SB and caller-ownership corpus.
+
 ### Concrete conversion and compiler integration substeps
 
 CH-03 uses the [retained-report conversion sequence](../02-design/contracts/weft-review-installation-gap-matrix.proposal.md#retained-acceptance-report-conversion-sequence) and STP-045 RC-01–04 alongside existing allocator AQ-01–03. Produce complete original revision/report collection, per-revision artifact/profile correspondence, bounded replacement/recollection and original settlement observation as one installer review unit. A successful fresh install or schema wrapper test cannot close populated conversion.
