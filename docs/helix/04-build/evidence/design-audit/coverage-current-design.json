@@ -1097,7 +1097,7 @@
     "02-design/technical-designs/TD-039-read-umf-the-same-way-as-the-reference.md": "e3146f575b9b1edd866169b19e34cd2443eaeee410ad3b773cb5bd6c08b7e6eb",
     "03-test/test-plans/STP-039-read-umf-the-same-way-as-the-reference.md": "17b19e069da3c1be95fc5843d84266836df81531d7863696425209dc35dab0b6",
     "02-design/technical-designs/TD-040-apply-operations-as-one-atomic-group.md": "a700d25ee591f89258965ef2bbcbadabd7dc026ac222140d2c20e860c74079e9",
-    "03-test/test-plans/STP-040-apply-operations-as-one-atomic-group.md": "da896a4d4178d8057dabb223de3cc9a008e945a58230c63e2669de17604286b9",
+    "03-test/test-plans/STP-040-apply-operations-as-one-atomic-group.md": "109d758e0135d5617611a00d292945826fd8aa870912134f80bb2bf4ea95fc54",
     "02-design/technical-designs/TD-041-publish-the-journal-without-losing-or-reordering-a-change.md": "5a977cd0ee2e19a2537601a017317c6f65cb5bfb6b65531510234b0df7155d16",
     "03-test/test-plans/STP-041-publish-the-journal-without-losing-or-reordering-a-change.md": "3631b0fa484414d4a1c58e34953f28d071a91d2d63fb38a0b004003d01829490",
     "02-design/technical-designs/TD-042-read-how-far-behind-a-downstream-copy-is.md": "2b36eb214a7741a71f0d23a7b612e4c147e4f95d72a7bc40784c5ef4c80ab36e",
