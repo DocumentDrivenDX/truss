@@ -15,7 +15,7 @@ const digest=(bytes:any)=>createHash('sha256').update(bytes).digest('hex');
 const dependencies=[];
 for(const path of ['native/postgresql/runtime.ts','src/adapters/postgresql/index.ts','spec/extensions/postgresql/native-ast.schema.json','node_modules/@libpg-query/parser/wasm/libpg-query.wasm'])dependencies.push({path,sha256:digest(await Bun.file(umf+'/'+path).bytes())});
 const cases=[];
-for(const [name,parameters] of [['reference-participation-observation.proposal.sql',[1,2,3,4,5]],['reference-code-equality-observation.proposal.sql',[1,2]],['reference-outgoing-participation.proposal.sql',[1,2,3]],['reference-incoming-participation.proposal.sql',[1,2,3]]] as const){
+for(const [name,parameters] of [['reference-participation-observation.proposal.sql',[1,2,3,4,5]],['reference-code-equality-observation.proposal.sql',[1,2]],['reference-outgoing-participation.proposal.sql',[1,2,3]],['reference-incoming-participation.proposal.sql',[1,2,3]],['reference-endpoint-exclusion.proposal.sql',[1,2]]] as const){
  const path='docs/helix/02-design/contracts/'+name,source=await Bun.file(root+'/'+path).text();
  const ast=await backend.parse(source);
  if(ast.version!==170004||ast.stmts?.length!==1||!ast.stmts[0].stmt.SelectStmt)throw Error('Expected one PostgreSQL 17.4 SelectStmt');

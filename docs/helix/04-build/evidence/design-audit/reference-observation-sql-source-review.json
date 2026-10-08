@@ -1,6 +1,6 @@
 {
   "scope": "Pinned UMF parser/codec/JSON-YAML/export round-trip only; no native execution, catalog dependency resolution, policy, resource or Weft qualification",
-  "producerSha256": "070e5efb5d996459e54cb1b9c2f4a246634e677ad6b22bf033bbc3ab113ec981",
+  "producerSha256": "8d0f1aa11144d89b328db714fbdc53b7af364ec68b10c3340233a8eb7bc8e45c",
   "umfCommit": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
   "backend": "@libpg-query/parser@17.6.10",
   "parserTreeVersion": 170004,
@@ -75,6 +75,18 @@
       "umfJsonYamlSourceAndTreePreserved": true,
       "ownerExportReparseAstEquality": true,
       "exportedSql": "SELECT pg_catalog.count(*)::pg_catalog.text AS saturated_count FROM (SELECT e.id FROM truss.edge e WHERE e.rel_type_id = $1::int AND e.target_type = $2::int AND e.target_id = $3::bigint LIMIT 2) incoming_witness"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/reference-endpoint-exclusion.proposal.sql",
+      "sha256": "6eeb8bdfed69d4895b6f0c41a14a610641a8f62863f07737919d7d59e89f2220",
+      "parameters": [
+        1,
+        2
+      ],
+      "statement": "SelectStmt",
+      "umfJsonYamlSourceAndTreePreserved": true,
+      "ownerExportReparseAstEquality": true,
+      "exportedSql": "SELECT o.type_id::pg_catalog.text AS endpoint_type, o.id::pg_catalog.text AS endpoint_id FROM truss.object o WHERE o.type_id = $1::int AND o.id = $2::bigint FOR UPDATE"
     }
   ]
 }
