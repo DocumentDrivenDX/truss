@@ -1075,3 +1075,16 @@ Return the lease to its pool only after original confirmed outer settlement, dra
 
 
 For withTransaction, once original COMMIT confirmation and the already prepared callback result are retained, a subsequent owned-lease cleanup failure projects the existing ok outcome with durability committed. Quarantine and bounded internal recovery/health evidence remain adapter-owned; they are not a new application failure code or retry permission. The adapter must retain the original confirmed outcome before beginning cleanup and cannot let pool reset/release exceptions overwrite it. If committed result delivery itself becomes unavailable, preserve original commit evidence and follow the applicable result/transport recovery protocol; do not invent rollback or repeat the mutation. Unknown COMMIT confirmation still uses commit_unknown and cannot be promoted by observing idle pool state. No new Outcome member, raw lease handle or public cleanup endpoint is introduced by this rule.
+
+
+### Reference owned-lease lifecycle and disposal
+
+| Original state | Permitted transition and retained obligation |
+| --- | --- |
+| reserved before BEGIN | Original exclusive lease/account admission precedes native work. Failed acquisition releases only confirmed unused reservations; uncertain acquisition retains the actual pool attempt |
+| active original epoch | One admitted queue owns commands and callback custody. Closing/disposal rejects new admissions and hands in-flight work to the same original bounded settlement procedure; it does not return the lease |
+| confirmed settlement, cleanup pending | Retain immutable original committed/rolled-back evidence separately from drain/reset/release status. Only confirmed complete native/session cleanup permits normal pool return |
+| quarantined | Original recovery owns the actual lease and pending cycle/account evidence after assembly disposal. No fresh epoch, unrelated pool borrower or replacement facade may use it. A timeout alone cannot release custody |
+| confirmed returned or terminated | Confirmed clean pool return ends Truss lease custody; independently confirmed physical termination instead retires that connection incarnation. Old handles remain invalid. Termination does not resolve an unknown prior COMMIT |
+
+Reserve bounded lease/recovery/account capacity before pool acquisition. Saturation refuses new owned work without evicting unresolved quarantined evidence or recycling its client. Recovery uses only the selected original termination/cleanup procedure; closing an owned physical connection is distinct from committing/rolling back or declaring the data outcome. Driver close-request acceptance is not confirmed physical termination. Original unknown transaction outcome may therefore remain in its retained recovery record after physical resources are confirmed retired. No automatic background worker or new public lifecycle API is selected here.
