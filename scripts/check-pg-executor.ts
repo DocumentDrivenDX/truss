@@ -6,7 +6,7 @@ if(probe.exitCode)throw Error('Existing sandbox unavailable');
 const container=JSON.parse(new TextDecoder().decode(probe.stdout))[0];
 if(container.Config.Labels['ashlar.purpose']!=='end-to-end-development')throw Error('Wrong sandbox');
 const password=container.Config.Env.find((s:string)=>s.startsWith('POSTGRES_PASSWORD=')).slice(18);
-const host=createPgConnectionSource({host:'127.0.0.1',port:15432,user:'postgres',password,database:'truss_e2e',max:1,
+const host=createPgConnectionSource({host:'127.0.0.1',port:15432,user:'postgres',password,database:'truss_e2e',max:2,
 connectionTimeoutMillis:5000,options:'-c statement_timeout=5000 -c lock_timeout=1000'});
 const executor=createEngineExecutor(host.source);
 try{
@@ -44,7 +44,19 @@ try{
  });throw Error('Unexpected callback completion');}catch(error){if(error!==sentinel)throw Error('Original callback exception not preserved');}
  const rollback=await executor.withTransaction({isolation:'read_committed',accessMode:'read_only'},async tx=>run(tx,"SELECT to_regclass('pg_temp.truss_pg_rollback_probe')::text AS absent"));
  if(rollback.status!=='ok'||rollback.value.value.rows[0][0].state!=='null')throw Error('Original rollback not observed');
- await writeFile(new URL('../docs/helix/04-build/evidence/inert-assembly/pg-executor.json',import.meta.url),JSON.stringify({driver:'pg/8.16.3',loader:'bun/'+Bun.version,result,writes,rollback,
- qualification:'Actual engine executor + direct pg driver on existing local PostgreSQL 17.9. Exact native numeric text cells, duplicate/empty column descriptions, savepoints, confirmed read-only/write commit, exact parameterized write, uniqueness-error savepoint containment preserving prior work and independently observed callback rollback. No caller adoption/cancellation, lost-commit native containment, pooler/Node or full Truss bootstrap qualification.'},null,2)+'\n');
+ let arrived=0;let releaseBarrier:()=>void=()=>{};
+ const barrier=new Promise<void>(resolve=>{releaseBarrier=resolve;});
+ const lockPair=async(first:string,second:string)=>executor.withTransaction({isolation:'read_committed',accessMode:'read_write'},async tx=>{
+   await run(tx,"SET LOCAL lock_timeout='3s'");
+   const lock=(key:string)=>executor.execute(tx,{sql:'SELECT pg_advisory_xact_lock($1::bigint)::text AS locked',parameters:[{position:1,carrier:'integer',text:key}]});
+   if((await lock(first)).status!=='ok')throw Error('First private probe lock failed');
+   if(++arrived===2)releaseBarrier();await barrier;
+   return lock(second);
+ });
+ const deadlock=await Promise.all([lockPair('1890033411','1890033412'),lockPair('1890033412','1890033411')]);
+ if(deadlock.filter(r=>r.status==='error'&&r.error.code==='retry'&&r.error.sqlState==='40P01'&&r.error.retryScope==='whole_transaction').length!==1||
+    deadlock.filter(r=>r.status==='ok'&&r.value.durability==='committed').length!==1)throw Error('Native deadlock settlement correspondence');
+ await writeFile(new URL('../docs/helix/04-build/evidence/inert-assembly/pg-executor.json',import.meta.url),JSON.stringify({driver:'pg/8.16.3',loader:'bun/'+Bun.version,result,writes,rollback,deadlock,
+ qualification:'Actual engine executor + direct pg driver on existing local PostgreSQL 17.9. Exact native numeric text cells, duplicate/empty column descriptions, savepoints, confirmed read-only/write commit, exact parameterized write, uniqueness-error savepoint containment preserving prior work and independently observed callback rollback and one actual advisory-lock deadlock with whole-transaction retry outcome. No caller adoption/cancellation, lost-commit native containment, pooler/Node or full Truss bootstrap qualification.'},null,2)+'\n');
  console.log('Native pg executor exact transport/columns/savepoints/commit passed.');
 }finally{await host.close();}

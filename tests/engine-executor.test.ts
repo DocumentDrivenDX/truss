@@ -41,3 +41,16 @@ test('invalid carrier domains refuse before native execution',async()=>{
     expect(result.status).toBe('error');expect(f.calls).toEqual(['begin','rollback','release']);
   }
 });
+
+test('native retry SQLSTATE cannot be cleared by a savepoint',async()=>{
+  for(const code of ['40001','40P01']){
+    const f=fixture();f.connection.execute=async()=>{throw Object.assign(Error('private native detail'),{code});};
+    const result=await f.executor.withTransaction(options,async handle=>{
+      const point=await f.executor.savepoint(handle);if(point.status!=='ok')throw Error();
+      expect(await f.executor.execute(handle,{sql:'SELECT 1',parameters:[]})).toEqual({status:'error',error:{code:'retry',message:'Native transaction must retry',retryScope:'whole_transaction',sqlState:code}});
+      expect((await f.executor.rollbackToSavepoint(handle,point.value)).status).toBe('error');
+    });
+    expect(result).toMatchObject({status:'error',error:{code:'retry',retryScope:'whole_transaction',sqlState:code}});
+    expect(f.calls.slice(-2)).toEqual(['rollback','release']);expect(f.calls).not.toContain('commit');
+  }
+});

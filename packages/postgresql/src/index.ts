@@ -439,7 +439,7 @@ export interface NativeConnection {
   quarantine(reason:'commit_unknown'|'transaction_unusable'):Promise<void>;
 }
 export interface NativeConnectionSource {acquire():Promise<NativeConnection>}
-type Entry={connection:NativeConnection;live:boolean;busy:boolean;failed:boolean;savepoints:SavepointHandle[]};
+type Entry={connection:NativeConnection;live:boolean;busy:boolean;failed:boolean;nativeFailure?:ExecutionFailure;savepoints:SavepointHandle[]};
 const failure=(code:ExecutionFailure['code']):Outcome<never>=>({status:'error',error:code==='retry'?{code,message:code,retryScope:'whole_transaction'}:{code,message:code,retryScope:'none'}});
 /** Engine-owned executor composition. Caller adoption deliberately refuses until native custody is implemented. */
 export function createEngineExecutor(source:NativeConnectionSource):Executor<never> {
@@ -448,10 +448,18 @@ export function createEngineExecutor(source:NativeConnectionSource):Executor<nev
   let sequence=0n;
   const call=async<T>(handle:TransactionHandle,fn:(entry:Entry)=>Promise<T>,containment=false):Promise<Outcome<T>>=>{
     const entry=entries.get(handle);
-    if(!entry||!entry.live||entry.busy||(entry.failed&&!containment))return failure('invalid_transaction');
+    if(!entry||!entry.live||entry.busy||(entry.failed&&(!containment||entry.nativeFailure?.code==='retry')))return failure('invalid_transaction');
     entry.busy=true;
     try{return {status:'ok',value:await fn(entry)};}
-    catch{entry.failed=true;return failure('transaction_unusable');}
+    catch(error){
+      entry.failed=true;
+      const code = error && typeof error==='object' ? Object.getOwnPropertyDescriptor(error,'code')?.value : undefined;
+      const sqlState=typeof code==='string'&&/^[0-9A-Z]{5}$/.test(code)?code:undefined;
+      entry.nativeFailure = sqlState==='40001'||sqlState==='40P01'
+        ? {code:'retry',message:'Native transaction must retry',retryScope:'whole_transaction',sqlState}
+        : {code:'transaction_unusable',message:'Native execution failed',retryScope:'none',...(sqlState?{sqlState}:{})};
+      return {status:'error',error:entry.nativeFailure};
+    }
     finally{entry.busy=false;}
   };
   return {
@@ -486,7 +494,7 @@ export function createEngineExecutor(source:NativeConnectionSource):Executor<nev
       if(entry.failed){
         try{if(await connection.rollback()!=='rolled_back')return quarantine('transaction_unusable');await connection.release();}
         catch{return quarantine('transaction_unusable');}
-        return failure('transaction_unusable');
+        return entry.nativeFailure ? {status:'error' as const,error:entry.nativeFailure} : failure('transaction_unusable');
       }
       try{if(await connection.commit()!=='committed')return quarantine('commit_unknown');}
       catch{return quarantine('commit_unknown');}
@@ -531,7 +539,7 @@ export function createEngineExecutor(source:NativeConnectionSource):Executor<nev
       const found=points.get(point);const index=entry.savepoints.indexOf(point);
       if(!found||found.entry!==entry||index<0)throw Error('invalid savepoint');
       await entry.connection.control('ROLLBACK TO SAVEPOINT '+found.name);
-      entry.savepoints.splice(index+1);entry.failed=false;
+      entry.savepoints.splice(index+1);entry.failed=false;entry.nativeFailure=undefined;
     },true);},
     releaseSavepoint(handle,point){return call(handle,async entry=>{
       const found=points.get(point);const index=entry.savepoints.indexOf(point);

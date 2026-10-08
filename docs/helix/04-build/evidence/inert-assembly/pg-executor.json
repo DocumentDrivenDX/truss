@@ -95,5 +95,40 @@
       "durability": "committed"
     }
   },
-  "qualification": "Actual engine executor + direct pg driver on existing local PostgreSQL 17.9. Exact native numeric text cells, duplicate/empty column descriptions, savepoints, confirmed read-only/write commit, exact parameterized write, uniqueness-error savepoint containment preserving prior work and independently observed callback rollback. No caller adoption/cancellation, lost-commit native containment, pooler/Node or full Truss bootstrap qualification."
+  "deadlock": [
+    {
+      "status": "error",
+      "error": {
+        "code": "retry",
+        "message": "Native transaction must retry",
+        "retryScope": "whole_transaction",
+        "sqlState": "40P01"
+      }
+    },
+    {
+      "status": "ok",
+      "value": {
+        "value": {
+          "status": "ok",
+          "value": {
+            "columns": [
+              "locked"
+            ],
+            "rows": [
+              [
+                {
+                  "state": "text",
+                  "text": ""
+                }
+              ]
+            ],
+            "affectedRows": "1",
+            "command": "SELECT"
+          }
+        },
+        "durability": "committed"
+      }
+    }
+  ],
+  "qualification": "Actual engine executor + direct pg driver on existing local PostgreSQL 17.9. Exact native numeric text cells, duplicate/empty column descriptions, savepoints, confirmed read-only/write commit, exact parameterized write, uniqueness-error savepoint containment preserving prior work and independently observed callback rollback and one actual advisory-lock deadlock with whole-transaction retry outcome. No caller adoption/cancellation, lost-commit native containment, pooler/Node or full Truss bootstrap qualification."
 }

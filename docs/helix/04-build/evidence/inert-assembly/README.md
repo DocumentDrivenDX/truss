@@ -221,3 +221,25 @@ typecheck, portable build and packed consumer pass. The final native probe was
 rerun after validation changes. Native error-to-SQLSTATE mapping, exact resource
 admission, caller adoption/cancellation, uncertain native settlement and full
 bootstrap remain unfinished. No cloud/settings change occurred.
+
+
+## Native deadlock retry settlement
+
+Statement SQLSTATE 40001/40P01 now returns `retry/whole_transaction` with the
+original state code, without native error-detail disclosure. The original entry
+remains failed; savepoint rollback cannot clear a whole-transaction retry. If the
+callback returns after this failure, the outer executor confirms rollback/release
+and returns the original retry failure rather than committing or replacing it
+with generic transaction_unusable. Other native state codes retain no-retry
+transaction-unusable semantics until their explicit classification is implemented.
+
+Twenty tests/164 assertions, strict host typecheck, build and packed consumer
+pass. The native probe adds two concurrent direct transactions taking two private
+transaction-scoped advisory locks in opposite order: one actual 40P01 victim
+returns whole-transaction retry after outer rollback; the other commits. No
+automatic retry, table or persistent lock remains. Initial native attempts instead
+returned 55P03 under the default one-second lock timeout and both rolled back.
+The successful probe uses a three-second transaction-local lock timeout under
+the existing five-second statement limit; no deployment setting changes. Final
+original outcomes are retained in pg-executor.json. COMMIT-phase SQLSTATE-specific
+settlement, cancellation and full native recovery/bootstrap remain unfinished.

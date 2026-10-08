@@ -523,14 +523,17 @@ function createEngineExecutor(source) {
   let sequence = 0n;
   const call = async (handle, fn, containment = false) => {
     const entry = entries.get(handle);
-    if (!entry || !entry.live || entry.busy || entry.failed && !containment)
+    if (!entry || !entry.live || entry.busy || entry.failed && (!containment || entry.nativeFailure?.code === "retry"))
       return failure("invalid_transaction");
     entry.busy = true;
     try {
       return { status: "ok", value: await fn(entry) };
-    } catch {
+    } catch (error) {
       entry.failed = true;
-      return failure("transaction_unusable");
+      const code = error && typeof error === "object" ? Object.getOwnPropertyDescriptor(error, "code")?.value : undefined;
+      const sqlState = typeof code === "string" && /^[0-9A-Z]{5}$/.test(code) ? code : undefined;
+      entry.nativeFailure = sqlState === "40001" || sqlState === "40P01" ? { code: "retry", message: "Native transaction must retry", retryScope: "whole_transaction", sqlState } : { code: "transaction_unusable", message: "Native execution failed", retryScope: "none", ...sqlState ? { sqlState } : {} };
+      return { status: "error", error: entry.nativeFailure };
     } finally {
       entry.busy = false;
     }
@@ -596,7 +599,7 @@ function createEngineExecutor(source) {
         } catch {
           return quarantine("transaction_unusable");
         }
-        return failure("transaction_unusable");
+        return entry.nativeFailure ? { status: "error", error: entry.nativeFailure } : failure("transaction_unusable");
       }
       try {
         if (await connection.commit() !== "committed")
@@ -676,6 +679,7 @@ function createEngineExecutor(source) {
         await entry.connection.control("ROLLBACK TO SAVEPOINT " + found.name);
         entry.savepoints.splice(index + 1);
         entry.failed = false;
+        entry.nativeFailure = undefined;
       }, true);
     },
     releaseSavepoint(handle, point) {
