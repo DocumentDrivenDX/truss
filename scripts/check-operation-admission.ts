@@ -1,5 +1,8 @@
 /** Isolated native internal component; no normal installation marker or public writer. */
 import {SQL} from 'bun';
+import {loadUmfProducer} from '../packages/umf-bun/src/index';
+const producerDirectory=process.env.TRUSS_UMF_PRODUCER;if(!producerDirectory)throw Error('Pinned original UMF producer required');
+const producer=await loadUmfProducer(producerDirectory);
 const url=process.env.TRUSS_OPERATION_TEST_URL;
 if(!url||!url.startsWith('postgres://postgres@127.0.0.1:15434/'))throw Error('Dedicated local test endpoint required');
 const sql=new SQL(url,{max:1});
@@ -43,8 +46,16 @@ try{
  const beforeHead=await sql.unsafe('SELECT rev::text AS rev FROM truss.schema_head');const beforeRevisions=await sql.unsafe('SELECT count(*)::text AS n FROM truss.schema_rev');
  await sql.unsafe('BEGIN');
  await sql.unsafe(admit.replace("'mutation'","'catalog-acceptance'"));
- const originalDocument='{"umf":"0.7.0","opaque":"雪\\u0000"}';
- const staged=await sql.unsafe("SELECT * FROM truss.runtime_stage_catalog_document('original-document','r1','0.7.0',$1::text,'{}'::jsonb,'{}'::jsonb)",[originalDocument]);
+ const originalModel={umf:'0.7.0',id:'original-document',vocabularies:{},extensions:{},modules:[{id:'m',namespace:'m',elements:[
+  ...['a','b','z'].map(id=>({id,kind:'record',extensions:{},members:id==='a'?[{module:'m',element:'label'},{module:'m',element:'caption'}]:[]})),
+  {id:'label',name:'label',kind:'field',extensions:{},scalarType:'string',nullability:'required',cardinality:'one'},
+  {id:'caption',name:'caption',kind:'field',extensions:{},scalarType:'string',nullability:'absent-allowed',cardinality:'one'}]}]};
+ const originalDocument=JSON.stringify(originalModel);const originalInspection=producer.inspect(originalDocument);
+ assert(originalInspection.sourceValidation.valid&&originalInspection.targetValidation.valid,'actual original UMF source and transition validate');
+ const recordCheck=producer.checkRecord(originalInspection.target,{module:'m',element:'a'},[{field:{module:'m',element:'label'},state:'present',value:{string:'雪🙂'}}]);
+ assert(recordCheck.validation.valid&&recordCheck.validation.complete,'actual original owner Record producer passes selected logical input');
+ const originalValidation={producerSource:producer.sourceRevision,producerBundleSha256:producer.bundleSha256,sourceValidation:originalInspection.sourceValidation,transition:originalInspection.transition,targetValidation:originalInspection.targetValidation,recordChecks:[recordCheck]};
+ const staged=await sql.unsafe("SELECT * FROM truss.runtime_stage_catalog_document('original-document','r1','0.7.0',$1::text,$2::text::jsonb,'{}'::jsonb)",[originalDocument,JSON.stringify(originalValidation)]);
  assert(staged.length===1&&staged[0].provisional_revision==='1','native provisional catalog revision allocated');
  const typeStage=await Bun.file('packages/postgresql/native/catalog-type-stage.sql').text();await sql.unsafe(typeStage);
  const candidates=[{documentId:'original-document',moduleId:'m',elementId:'z',lineageProfile:'test-original-bytes',lineageHex:'00ff'},{documentId:'original-document',moduleId:'m',elementId:'a',lineageProfile:'test-original-bytes',lineageHex:'01'}];
@@ -52,16 +63,16 @@ try{
  assert(allocated.length===2&&allocated[0].element_id==='a'&&allocated[0].type_id==='1'&&allocated[1].type_id==='2','native IDs follow original qualified byte order');
  await sql.unsafe('SAVEPOINT existing_type');let existingCode='';try{await sql.unsafe('SELECT * FROM truss.runtime_stage_new_types($1::int,$2::text::jsonb)',[staged[0].provisional_revision,JSON.stringify(candidates)])}catch(e){existingCode=(e as any).errno??(e as any).code}assert(existingCode==='55000','existing identities refuse new allocation');await sql.unsafe('ROLLBACK TO SAVEPOINT existing_type');
  const propertyStage=await Bun.file('packages/postgresql/native/catalog-property-stage.sql').text();await sql.unsafe(propertyStage);
- const fields=[{ownerTypeId:allocated[0].type_id,home:'json',field:{id:'label',name:'label',kind:'field',scalarType:'string',nullability:'required',cardinality:'one',extensions:{opaque:{retained:'source document'}}}},{ownerTypeId:allocated[0].type_id,home:'json',field:{id:'caption',name:'caption',kind:'field',scalarType:'string',nullability:'absent-allowed',cardinality:'one'}}];
+ const fields=originalModel.modules[0].elements.filter(field=>field.kind==='field').map(field=>({ownerTypeId:allocated[0].type_id,home:'json',field}));
  const properties=await sql.unsafe('SELECT * FROM truss.runtime_stage_new_properties($1::int,$2::text::jsonb)',[staged[0].provisional_revision,JSON.stringify(fields)]);assert(properties.length===2&&properties[0].field_id==='caption'&&properties[0].property_id==='1'&&properties[1].property_id==='2','native owner property IDs allocated in field order');
  const fieldState=await sql.unsafe("SELECT nullability FROM truss.prop_def WHERE element='caption'");assert(fieldState[0].nullability==='absent-allowed','original field availability retained');
  await sql.unsafe('UPDATE truss.type_def SET retired_rev=since_rev');
  const next=await sql.unsafe('SELECT * FROM truss.runtime_stage_new_types($1::int,$2::text::jsonb)',[staged[0].provisional_revision,JSON.stringify([{...candidates[0],elementId:'b'}])]);assert(next[0].type_id==='3','retired retained IDs remain high-water contributors');
  const originalLineage=await sql.unsafe("SELECT encode(lineage_bytes,'hex') AS bytes FROM truss.type_def WHERE element='z'");assert(originalLineage[0].bytes==='00ff','original lineage bytes retained');
- const retained=await sql.unsafe('SELECT document FROM truss.schema_doc');assert(retained[0].document===originalDocument,'verbatim original source retained');
+ const retained=await sql.unsafe('SELECT document,validation::text AS validation FROM truss.schema_doc');assert(JSON.parse(retained[0].validation).transition.source.umf==='0.7.0'&&JSON.parse(retained[0].validation).recordChecks[0].validation.complete,'original transition and checker result retained natively');assert(retained[0].document===originalDocument,'verbatim original source retained');
  const head=await sql.unsafe('SELECT rev::text AS rev FROM truss.schema_head');assert(JSON.stringify(head)===JSON.stringify(beforeHead),'document stage cannot publish catalog head');
  await sql.unsafe('ROLLBACK');
  const remaining=await sql.unsafe('SELECT count(*)::text AS n FROM truss.schema_rev');assert(remaining[0].n===beforeRevisions[0].n,'rollback removes staged revision and source');
- const receipt={component:'native operation admission',engine:'PostgreSQL17.9',checks,bodySha256:new Bun.CryptoHasher('sha256').update(body).digest('hex'),observerSha256:new Bun.CryptoHasher('sha256').update(observer).digest('hex'),barrierSha256:new Bun.CryptoHasher('sha256').update(barrier).digest('hex'),catalogStageSha256:new Bun.CryptoHasher('sha256').update(catalogStage).digest('hex'),typeStageSha256:new Bun.CryptoHasher('sha256').update(typeStage).digest('hex'),propertyStageSha256:new Bun.CryptoHasher('sha256').update(propertyStage).digest('hex'),qualification:'Actual xid/context/artifact bounds/single unfinished/rollback/private invocation component only. Protected issuer registration, canonical observers, finalization, deferred complete-cohort checks, installer security and public runtime remain unfinished.'};
+ const receipt={component:'native operation and owner-backed catalog staging',engine:'PostgreSQL17.9',umfSource:producer.sourceRevision,umfBundleSha256:producer.bundleSha256,checks,bodySha256:new Bun.CryptoHasher('sha256').update(body).digest('hex'),observerSha256:new Bun.CryptoHasher('sha256').update(observer).digest('hex'),barrierSha256:new Bun.CryptoHasher('sha256').update(barrier).digest('hex'),catalogStageSha256:new Bun.CryptoHasher('sha256').update(catalogStage).digest('hex'),typeStageSha256:new Bun.CryptoHasher('sha256').update(typeStage).digest('hex'),propertyStageSha256:new Bun.CryptoHasher('sha256').update(propertyStage).digest('hex'),qualification:'Actual xid/context/artifact bounds/single unfinished/rollback/private invocation component only. Protected issuer registration, canonical observers, finalization, deferred complete-cohort checks, installer security and public runtime remain unfinished.'};
  await Bun.write('docs/helix/04-build/evidence/runtime-operation-admission.json',JSON.stringify(receipt,null,2)+'\n');console.log(JSON.stringify({checks:checks.length}));
 }finally{await sql.close()}

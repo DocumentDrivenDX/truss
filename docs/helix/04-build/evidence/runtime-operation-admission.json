@@ -1,6 +1,8 @@
 {
-  "component": "native operation admission",
+  "component": "native operation and owner-backed catalog staging",
   "engine": "PostgreSQL17.9",
+  "umfSource": "c45c72a2a8a3c4fba61c40c5927dd9091acf8cc3",
+  "umfBundleSha256": "ff990a3f9847a1bc0844fc6e637365462979efc3dcbec27383d4002943d64d83",
   "checks": [
     "exact PostgreSQL17.9",
     "three ALWAYS generation observers installed",
@@ -14,6 +16,8 @@
     "failed commit removes custody",
     "rolled back operation preserves earlier caller work",
     "phase flags cannot bypass unavailable complete finalizer",
+    "actual original UMF source and transition validate",
+    "actual original owner Record producer passes selected logical input",
     "native provisional catalog revision allocated",
     "native IDs follow original qualified byte order",
     "existing identities refuse new allocation",
@@ -21,6 +25,7 @@
     "original field availability retained",
     "retired retained IDs remain high-water contributors",
     "original lineage bytes retained",
+    "original transition and checker result retained natively",
     "verbatim original source retained",
     "document stage cannot publish catalog head",
     "rollback removes staged revision and source"
