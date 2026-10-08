@@ -1,0 +1,24 @@
+{
+  "revision": "2744531735c2a771fbe7ed24a7f67e3afc851b25",
+  "reviewKind": "committed source inspection only; no working-tree edits or native rerun",
+  "files": [
+    {
+      "path": "docs/helix/04-build/evidence/B-007-support-inventory.json",
+      "sha256": "8492c9a846abbecb4e4e0791d7439ebe88c029d5c385334dd477f3f8c7d579fb"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/B-007-qualified-truss.json",
+      "sha256": "3fd7596bc0ab8da092bedd6dc8f12c4973a166fd5c01d11118413cddb4166dbe"
+    },
+    {
+      "path": "crates/weft-postgresql/src/qualified_profile.rs",
+      "sha256": "ee93032d4e787330ba41b0a72b5ed3686c26c8d9326bda868bf0b2e670c75993"
+    }
+  ],
+  "backend": "truss.postgresql",
+  "backendVersion": "0.1.0-qualified",
+  "targetProfile": "pg17.9-qualified-fixtures",
+  "qualification": "Compiler native semantics for explicitly bound fixture domains; not installed Truss, authorization or production execution",
+  "excluded": "native null as logical value; unknown selected homes/meaning; unregistered native settings; installed storage adoption",
+  "releasedPackages": false
+}

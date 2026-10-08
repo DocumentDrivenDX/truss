@@ -54,3 +54,10 @@ Read-route reconciliation: the public native route map's earlier “pending type
 
 
 Dependency separation: microsite source/rendering blocks only that independent deliverable. Core physical-key representation blocks core-driven replacement DDL/full ER interpretation, not authoring native bodies against the retained source. Weft three-state registration blocks its affected compiled projection, not every direct mutation/feed path. The [runtime eligibility review](../02-design/contracts/ashlar-runtime-candidate-design-review.proposal.md#runtime-implementation-eligibility-versus-independent-deliverables) identifies already selected implementation directions and exact remaining runtime profile outputs. The full design goal still includes all these deliverables, but no UI prerequisite is imposed on engine implementation.
+
+
+## Merged Weft qualification update — 27445317
+
+The [merged-source checkpoint](evidence/design-audit/weft-merged-qualified-profile-source-review.json) supersedes the older c0f3852 “no supported native profiles” observation. B-007 now lists `truss.postgresql` backend `0.1.0-qualified`, target `pg17.9-qualified-fixtures`, with native-semantics qualification for admitted JSONB, typed scalar and complete compound-tree domains. Packages remain unpublished. Use a pinned committed source build and explicit qualified feature; do not build against another chat's uncommitted B-008 security/core0.8 work.
+
+Qualification is conditional on exact native settings, all integrity checks, authenticated authorization, one admitted context, exact decoding and buffered publication/recheck. It is not installed Truss adoption. The original qualified report explicitly excludes native null as a logical value; Item.note three-state support remains unresolved despite this newer registration. Actual catalog identities and owner-produced bindings must match Truss's selected homes; synthetic fixture IDs/layout cannot become accepted storage mappings. UMF0.7 model/Weft language0.1/0.2 pins do not silently adopt UMF0.8 Record validation sources. This review did not execute compiler/native tests or authorize runtime integration.
