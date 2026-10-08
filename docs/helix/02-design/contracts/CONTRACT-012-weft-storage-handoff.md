@@ -373,3 +373,8 @@ Planned independent CH-01 controls: remove a prior original; substitute a model 
 ### Separate current-layout source packet
 
 The [0.12 source-review packet](../../04-build/evidence/weft-source-binding012/README.md) now carries the reconciled history review's exact owner-export SQL and complete declaration inventory, separately from preserved 0.11 bytes. Original artifact/profile closure passes for 46 tables/442 columns, 347073 binding bytes and 23 recursive artifact occurrences. Its synthetic one-string props model is transport/source evidence only, not the Account/Item registration, adopted native identity, full installer or supported compiler/runtime tuple. Existing 0.11 checks retain their original hash and scope; no old packet is promoted by this new capture. Native body/security/dependency/conversion parity and the complete original reference registration remain required.
+
+
+## Accepted catalog producer handoff
+
+The [accepted catalog producer](weft-accepted-catalog-producer.proposal.md) specifies native input/output custody for the implemented serializer, complete original basis/definition composition, transaction/cache lifetime and WCB-01–10 independent acceptance scenarios. It reuses the compiler-owned binding grammar. Positive revisions and matching hashes are insufficient without actual protected acceptance and installed profile correspondence; fixture-qualified compilation remains separate.
