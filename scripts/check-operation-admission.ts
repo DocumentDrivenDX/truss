@@ -69,6 +69,15 @@ try{
  assert(staged.length===1&&staged[0].provisional_revision==='1','native provisional catalog revision allocated');
  const typeStage=await Bun.file('packages/postgresql/native/catalog-type-stage.sql').text();await sql.unsafe(typeStage);
  const candidates=[{documentId:'original-document',moduleId:'m',elementId:'z',lineageProfile:'test-original-bytes',lineageHex:'00ff'},{documentId:'original-document',moduleId:'m',elementId:'a',lineageProfile:'test-original-bytes',lineageHex:'01'}];
+ for(const [label,invalid] of [
+  ['Field cannot be allocated as a Record type',{...candidates[0],elementId:'label'}],
+  ['invented Record identity refuses',{...candidates[0],elementId:'invented'}],
+ ] as const){
+  await sql.unsafe('SAVEPOINT invalid_type_source');let refusal='';
+  try{await sql.unsafe('SELECT * FROM truss.runtime_stage_new_types($1::int,$2::text::jsonb)',[staged[0].provisional_revision,JSON.stringify([candidates[1],invalid])])}catch(e){refusal=(e as any).errno??(e as any).code}
+  assert(refusal==='55000',label);await sql.unsafe('ROLLBACK TO SAVEPOINT invalid_type_source');
+ }
+ const beforeTypes=await sql.unsafe('SELECT count(*)::text AS n FROM truss.type_def');assert(beforeTypes[0].n==='0','type source mismatch leaves no partial Record allocation');
  const allocated=await sql.unsafe('SELECT * FROM truss.runtime_stage_new_types($1::int,$2::text::jsonb)',[staged[0].provisional_revision,JSON.stringify(candidates)]);
  assert(allocated.length===2&&allocated[0].element_id==='a'&&allocated[0].type_id==='1'&&allocated[1].type_id==='2','native IDs follow original qualified byte order');
  await sql.unsafe('SAVEPOINT existing_type');let existingCode='';try{await sql.unsafe('SELECT * FROM truss.runtime_stage_new_types($1::int,$2::text::jsonb)',[staged[0].provisional_revision,JSON.stringify(candidates)])}catch(e){existingCode=(e as any).errno??(e as any).code}assert(existingCode==='55000','existing identities refuse new allocation');await sql.unsafe('ROLLBACK TO SAVEPOINT existing_type');
@@ -80,6 +89,16 @@ try{
  assert(duplicatePropertyCode==='22023','duplicate field names refuse before property allocation');await sql.unsafe('ROLLBACK TO SAVEPOINT duplicate_properties');
  const rejectedProperties=await sql.unsafe('SELECT count(*)::text AS n FROM truss.prop_def');assert(rejectedProperties[0].n==='0','rejected property batch leaves no partial field');
  const survivingTypes=await sql.unsafe('SELECT count(*)::text AS n FROM truss.type_def');assert(survivingTypes[0].n==='2','earlier allocated types survive rejected field batch');
+ for(const [label,invalid] of [
+  ['changed original Field semantics refuse',{...fields[1],field:{...fields[1].field,scalarType:'boolean'}}],
+  ['Field bound to wrong original Record refuses',{...fields[1],ownerTypeId:allocated[1].type_id}],
+  ['invented Field declaration refuses',{...fields[1],field:{...fields[1].field,id:'invented',name:'invented'}}],
+ ] as const){
+  await sql.unsafe('SAVEPOINT invalid_field_source');let refusal='';
+  try{await sql.unsafe('SELECT * FROM truss.runtime_stage_new_properties($1::int,$2::text::jsonb)',[staged[0].provisional_revision,JSON.stringify([fields[0],invalid])])}catch(e){refusal=(e as any).errno??(e as any).code}
+  assert(refusal==='55000',label);await sql.unsafe('ROLLBACK TO SAVEPOINT invalid_field_source');
+ }
+ const beforeFields=await sql.unsafe('SELECT count(*)::text AS n FROM truss.prop_def');assert(beforeFields[0].n==='0','field source mismatch leaves no partial property allocation');
  const properties=await sql.unsafe('SELECT * FROM truss.runtime_stage_new_properties($1::int,$2::text::jsonb)',[staged[0].provisional_revision,JSON.stringify(fields)]);assert(properties.length===5&&properties[0].field_id==='caption'&&properties[0].property_id==='1'&&properties[1].property_id==='2','native owner property IDs allocated in field order');
  const keyStage=await Bun.file('packages/postgresql/native/catalog-key-stage.sql').text();await sql.unsafe(keyStage);
  const labelProperty=properties.find((p:any)=>p.field_id==='label').property_id;

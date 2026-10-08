@@ -48,6 +48,23 @@ BEGIN
   IF total_new<>jsonb_array_length(candidates) THEN RAISE EXCEPTION 'duplicate owner field' USING ERRCODE='22023'; END IF;
   SELECT count(*) INTO total_new FROM (SELECT DISTINCT value->>'ownerTypeId',value->'field'->>'name' FROM jsonb_array_elements(candidates)) q;
   IF total_new<>jsonb_array_length(candidates) THEN RAISE EXCEPTION 'duplicate owner field name' USING ERRCODE='22023'; END IF;
+  -- Complete original membership/definition preflight precedes every allocation.
+  -- JSON extraction checks correspondence; UMF validity remains the owner's check.
+  FOR candidate IN SELECT value FROM jsonb_array_elements(candidates) LOOP
+    SELECT * INTO STRICT owner FROM truss.type_def t WHERE t.type_id=(candidate->>'ownerTypeId')::int;
+    IF (SELECT count(*) FROM truss.schema_doc d
+        CROSS JOIN LATERAL jsonb_array_elements(d.document::jsonb->'modules') m
+        CROSS JOIN LATERAL jsonb_array_elements(m.value->'elements') r
+        CROSS JOIN LATERAL jsonb_array_elements(r.value->'members') member
+        CROSS JOIN LATERAL jsonb_array_elements(d.document::jsonb->'modules') fm
+        CROSS JOIN LATERAL jsonb_array_elements(fm.value->'elements') f
+        WHERE d.rev=revision AND d.ord=owner.doc_ord AND d.doc_id=owner.document_id
+          AND m.value->>'id'=owner.module AND r.value->>'id'=owner.element AND r.value->>'kind'='record'
+          AND fm.value->>'id'=member.value->>'module' AND f.value->>'id'=member.value->>'element'
+          AND f.value=candidate->'field')<>1 THEN
+      RAISE EXCEPTION 'property does not match original owner member and Field definition' USING ERRCODE='55000';
+    END IF;
+  END LOOP;
   SELECT greatest(coalesce(max(p.prop_id)::bigint,0),0) INTO high_water FROM truss.prop_def p;
   IF high_water+total_new>2147483647 THEN RAISE EXCEPTION 'property capacity exhausted' USING ERRCODE='54000'; END IF;
   assigned:=high_water;

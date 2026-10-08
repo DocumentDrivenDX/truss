@@ -36,6 +36,14 @@ BEGIN
     END IF;
     PERFORM 1 FROM truss.schema_doc d WHERE d.rev=revision AND d.doc_id=candidate->>'documentId';
     IF NOT FOUND THEN RAISE EXCEPTION 'missing original document' USING ERRCODE='55000'; END IF;
+    IF (SELECT count(*) FROM truss.schema_doc d
+        CROSS JOIN LATERAL jsonb_array_elements(d.document::jsonb->'modules') m
+        CROSS JOIN LATERAL jsonb_array_elements(m.value->'elements') e
+        WHERE d.rev=revision AND d.doc_id=candidate->>'documentId'
+          AND m.value->>'id'=candidate->>'moduleId'
+          AND e.value->>'id'=candidate->>'elementId' AND e.value->>'kind'='record')<>1 THEN
+      RAISE EXCEPTION 'type does not match original Record declaration' USING ERRCODE='55000';
+    END IF;
     IF EXISTS(SELECT 1 FROM truss.type_def t WHERE t.document_id=candidate->>'documentId'
         AND t.module=candidate->>'moduleId' AND t.element=candidate->>'elementId') THEN
       RAISE EXCEPTION 'existing identity requires original matching, not new allocation' USING ERRCODE='55000';
