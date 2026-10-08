@@ -1,0 +1,12 @@
+{
+  "sourceRevision": "2744531735c2a771fbe7ed24a7f67e3afc851b25",
+  "ddlSha256": "04b73b182202edd43d07bf698e8b5b0147c3cec90050ac0c19af7c0238857795",
+  "result": [
+    {
+      "integerToken": "2"
+    }
+  ],
+  "contextChecks": 2,
+  "forgedDigestRefused": true,
+  "qualification": "Component COUNT execution against temp object LIKE actual owner 0.13 repair definition in isolated PostgreSQL17.9. Fixture bindings/IDs only; no accepted catalog, protected mutations/feed, production authorization, complete transport/resource or installed runtime qualification."
+}
