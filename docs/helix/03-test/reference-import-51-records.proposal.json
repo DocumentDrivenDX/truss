@@ -1,0 +1,877 @@
+{
+  "scope": "Independently authored FR-45/FR-46 51-record import scenario using original reference Item definitions; not ImportInput wire or native registration",
+  "source": {
+    "path": "02-design/contracts/bindings/reference-account-items-v0.1.proposal.umf.json",
+    "sha256": "94f8367c3dd2462fb3f32a624f053bf56f023ddd3bf86bf5219bbc1e24b6fcc1"
+  },
+  "reusePolicy": "forbid",
+  "records": [
+    {
+      "inputIndex": "0",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-b"
+      },
+      "amount": {
+        "decimalToken": "9007199254740993.000"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "1",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-c"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": true,
+        "value": null
+      }
+    },
+    {
+      "inputIndex": "2",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-d"
+      },
+      "amount": {
+        "decimalToken": "-0.01"
+      },
+      "note": {
+        "present": true,
+        "value": {
+          "string": ""
+        }
+      }
+    },
+    {
+      "inputIndex": "3",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-001"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "4",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-002"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "5",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-003"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "6",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-004"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "7",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-005"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "8",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-006"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "9",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-007"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "10",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-008"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "11",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-009"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "12",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-010"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "13",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-011"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "14",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-012"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "15",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-013"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "16",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-014"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "17",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-015"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "18",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-016"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "19",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-017"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "20",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-018"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "21",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-019"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "22",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-020"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "23",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-021"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "24",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-022"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "25",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-023"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "26",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-024"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "27",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-025"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "28",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-026"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "29",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-027"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "30",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-028"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "31",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-029"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "32",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-030"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "33",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-031"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "34",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-032"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "35",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-033"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "36",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-034"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "37",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-035"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "38",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-036"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "39",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-037"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "40",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-038"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "41",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-039"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "42",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-040"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "43",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-041"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "44",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-042"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "45",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-043"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "46",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-044"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "47",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-045"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "48",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-046"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "49",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-047"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    },
+    {
+      "inputIndex": "50",
+      "record": "Item",
+      "primaryKey": "by-code",
+      "code": {
+        "string": "item-extra-048"
+      },
+      "amount": {
+        "decimalToken": "0.00"
+      },
+      "note": {
+        "present": false
+      }
+    }
+  ],
+  "firstAttempt": {
+    "loadId": "reference-import-original",
+    "sourceFacts": {
+      "author": "source-author-original",
+      "at": "2026-10-08T00:00:00Z",
+      "system": "reference-source"
+    },
+    "expectedCreatedIndices": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12",
+      "13",
+      "14",
+      "15",
+      "16",
+      "17",
+      "18",
+      "19",
+      "20",
+      "21",
+      "22",
+      "23",
+      "24",
+      "25",
+      "26",
+      "27",
+      "28",
+      "29",
+      "30",
+      "31",
+      "32",
+      "33",
+      "34",
+      "35",
+      "36",
+      "37",
+      "38",
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44",
+      "45",
+      "46",
+      "47",
+      "48",
+      "49",
+      "50"
+    ],
+    "expectedSkippedIndices": [],
+    "expectedRejectedIndices": []
+  },
+  "interveningWrites": [
+    {
+      "action": "set-exact-amount",
+      "code": "item-b",
+      "beforeToken": "9007199254740993.000",
+      "afterToken": "12.340",
+      "sourceFacts": "retain-original-import-source"
+    },
+    {
+      "action": "delete",
+      "code": "item-c",
+      "requiredReservation": "original-qualified-Item/by-code-full-tuple",
+      "retainedDeletedRecord": "complete-original-item-c"
+    }
+  ],
+  "repeatAttempt": {
+    "loadId": "reference-import-repeat",
+    "sourceFacts": {
+      "author": "source-author-repeat",
+      "at": "2026-10-08T01:00:00Z",
+      "system": "reference-source-repeat"
+    },
+    "input": "same-original-51-records",
+    "expectedCreatedIndices": [],
+    "expectedSkippedLiveIndices": [
+      "0",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12",
+      "13",
+      "14",
+      "15",
+      "16",
+      "17",
+      "18",
+      "19",
+      "20",
+      "21",
+      "22",
+      "23",
+      "24",
+      "25",
+      "26",
+      "27",
+      "28",
+      "29",
+      "30",
+      "31",
+      "32",
+      "33",
+      "34",
+      "35",
+      "36",
+      "37",
+      "38",
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44",
+      "45",
+      "46",
+      "47",
+      "48",
+      "49",
+      "50"
+    ],
+    "expectedSkippedReservedIndices": [
+      "1"
+    ],
+    "expectedRejectedIndices": [],
+    "expectedState": "50 original live Items; item-b amount remains 12.340; item-c remains deleted; all other original field/presence/token facts unchanged",
+    "expectedImportSource": "Every retained original live/deleted record keeps the first load and source facts; repeat facts do not rewrite them",
+    "expectedRepeatEffects": "No canonical/key/version/source/journal change from skips; retained reservation/deletion history unchanged"
+  },
+  "nativeBindings": "Original item identities, versions, clocks, complete source/journal/reservation artifacts and settlement are independently observed under the qualified profile, not allocated by this fixture",
+  "remainingScenarios": "Allow reuse, mixed edges, malformed identity versus deferred payload, concurrency, partial batches, authority and lost acknowledgment retain existing STP-034/035 obligations; this scenario does not replace them."
+}
