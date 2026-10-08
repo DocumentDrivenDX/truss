@@ -67,9 +67,6 @@ BEGIN
     IF source_matches<>1 THEN
       RAISE EXCEPTION 'property does not match original owner member and Field definition' USING ERRCODE='55000';
     END IF;
-    IF field_module COLLATE "C"<>owner.module COLLATE "C" THEN
-      RAISE EXCEPTION 'cross-module Field identity requires an admitted independent declaration-module home' USING ERRCODE='0A000';
-    END IF;
   END LOOP;
   SELECT greatest(coalesce(max(p.prop_id)::bigint,0),0) INTO high_water FROM truss.prop_def p;
   IF high_water+total_new>2147483647 THEN RAISE EXCEPTION 'property capacity exhausted' USING ERRCODE='54000'; END IF;
@@ -79,9 +76,14 @@ BEGIN
       ORDER BY t.document_id COLLATE "C",t.module COLLATE "C",t.element COLLATE "C",(v.value->'field'->>'id') COLLATE "C" LOOP
     assigned:=assigned+1;
     SELECT * INTO STRICT owner FROM truss.type_def t WHERE t.type_id=(candidate->>'ownerTypeId')::int;
-    INSERT INTO truss.prop_def(prop_id,type_id,element,name,scalar_type,nullability,cardinality,facets,item,home,
+    SELECT fm.value->>'id' INTO STRICT field_module FROM truss.schema_doc d
+      CROSS JOIN LATERAL jsonb_array_elements(d.document::jsonb->'modules') fm
+      CROSS JOIN LATERAL jsonb_array_elements(fm.value->'elements') f
+      WHERE d.rev=revision AND d.ord=owner.doc_ord AND d.doc_id=owner.document_id
+        AND f.value=candidate->'field';
+    INSERT INTO truss.prop_def(prop_id,type_id,element,declaration_module,name,scalar_type,nullability,cardinality,facets,item,home,
       since_rev,doc_ord,definition_source_kind,definition_rev,definition_doc_ord,definition_document_id)
-    VALUES(assigned::int,owner.type_id,candidate->'field'->>'id',candidate->'field'->>'name',candidate->'field'->>'scalarType',
+    VALUES(assigned::int,owner.type_id,candidate->'field'->>'id',field_module,candidate->'field'->>'name',candidate->'field'->>'scalarType',
       candidate->'field'->>'nullability',candidate->'field'->>'cardinality',candidate->'field'->'facets',candidate->'field'->'itemType',candidate->>'home',
       revision,owner.doc_ord,'accepted_document',revision,owner.doc_ord,owner.document_id);
     RETURN QUERY SELECT owner.type_id::text,candidate->'field'->>'id',assigned::text;

@@ -1,0 +1,12 @@
+{
+  "scope": "UMF owner AST composition and saved reload/export only; no conversion or installed runtime qualification",
+  "ownerRoot": "/Users/erik/Projects/umf",
+  "ownerCommit": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+  "source": "docs/helix/02-design/models/truss-layout-weft-integration-0.13.proposal.umf.json",
+  "sourceSha256": "50a81a4c84ca71f31223e95623bf1a2f09b9296566c5666574060e4d579a6af0",
+  "modelPath": "docs/helix/02-design/models/truss-layout-field-module-0.14.proposal.umf.json",
+  "modelSha256": "b98192cacef3261f022b73cdad0fad12618f0d1edde0d4c7ec5dafb0fdb3c528",
+  "ddlPath": "docs/helix/04-build/evidence/field-module-layout-0.14.owner-export.sql",
+  "ddlSha256": "98d46ed65377cf2b2d0de9638c0a2f3902999069a553b1ad6f35d33bb8c0ffeb",
+  "reloadedExportExact": true
+}

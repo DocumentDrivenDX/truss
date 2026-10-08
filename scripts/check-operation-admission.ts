@@ -8,7 +8,7 @@ const url=process.env.TRUSS_OPERATION_TEST_URL;
 if(!url||!url.startsWith('postgres://postgres@127.0.0.1:15434/'))throw Error('Dedicated local test endpoint required');
 const sql=new SQL(url,{max:1});
 const peer=new SQL(url,{max:1});
-const layout=await Bun.file('docs/helix/04-build/evidence/weft-integration-layout-0.13.owner-export.sql').text();
+const layout=await Bun.file('docs/helix/04-build/evidence/field-module-layout-0.14.owner-export.sql').text();
 const body=await Bun.file('packages/postgresql/native/operation-admission.sql').text();
 const checks:string[]=[];
 const assert=(v:boolean,label:string)=>{if(!v)throw Error(label);checks.push(label)};
@@ -117,7 +117,7 @@ try{
  await sql.unsafe('SAVEPOINT existing_type');let existingCode='';try{await sql.unsafe('SELECT * FROM truss.runtime_stage_new_types($1::int,$2::text::jsonb)',[staged[0].provisional_revision,JSON.stringify(candidates)])}catch(e){existingCode=(e as any).errno??(e as any).code}assert(existingCode==='55000','existing identities refuse new allocation');await sql.unsafe('ROLLBACK TO SAVEPOINT existing_type');
  const propertyStage=await Bun.file('packages/postgresql/native/catalog-property-stage.sql').text();await sql.unsafe(propertyStage);
  const fields=originalModel.modules[0].elements.filter(field=>field.kind==='field').map(field=>({ownerTypeId:allocated[0].type_id,home:field.id==='caption'?'row':'json',field}));
- await sql.unsafe('SAVEPOINT cross_module_property');let crossModuleProperty='';try{await sql.unsafe('SELECT * FROM truss.runtime_stage_new_properties(1,$1::text::jsonb)',[JSON.stringify([fields[0],{ownerTypeId:allocated[0].type_id,home:'json',field:foreignField}])])}catch(e){crossModuleProperty=(e as any).errno??(e as any).code}assert(crossModuleProperty==='0A000','original cross-module Field refuses missing declaration-module home');await sql.unsafe('ROLLBACK TO SAVEPOINT cross_module_property');const crossModuleRows=await sql.unsafe('SELECT count(*)::text AS n FROM truss.prop_def');assert(crossModuleRows[0].n==='0','cross-module refusal leaves complete property batch unallocated');
+ await sql.unsafe('SAVEPOINT cross_module_property');const crossModuleStaged=await sql.unsafe('SELECT * FROM truss.runtime_stage_new_properties(1,$1::text::jsonb)',[JSON.stringify([fields[0],{ownerTypeId:allocated[0].type_id,home:'json',field:foreignField}])]);const crossModuleStored=await sql.unsafe("SELECT declaration_module,element,definition_document_id FROM truss.prop_def WHERE element='foreign-note'");assert(crossModuleStaged.length===2&&crossModuleStored[0].declaration_module==='other'&&crossModuleStored[0].element==='foreign-note'&&crossModuleStored[0].definition_document_id==='original-document','original cross-module Field declaration identity persists independently');await sql.unsafe('ROLLBACK TO SAVEPOINT cross_module_property');const crossModuleRows=await sql.unsafe('SELECT count(*)::text AS n FROM truss.prop_def');assert(crossModuleRows[0].n==='0','cross-module property batch rolls back completely');
  await sql.unsafe('SAVEPOINT duplicate_properties');let duplicatePropertyCode='';
  const duplicateNames=fields.map(value=>({...value,field:{...value.field,name:'same-name'}}));
  try{await sql.unsafe('SELECT * FROM truss.runtime_stage_new_properties($1::int,$2::text::jsonb)',[staged[0].provisional_revision,JSON.stringify(duplicateNames)])}catch(e){duplicatePropertyCode=(e as any).errno??(e as any).code}
