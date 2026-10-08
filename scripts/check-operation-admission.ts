@@ -59,6 +59,10 @@ try{
  const secondText=JSON.stringify({...originalModel,id:'second-document'});const secondInspection=producer.inspect(secondText);
  assert(secondInspection.sourceValidation.valid,'second original document validated');
  const documents=[{documentId:'original-document',revision:'r1',umfVersion:'0.7.0',originalText:originalDocument,validation:originalValidation},{documentId:'second-document',revision:'r2',umfVersion:'0.7.0',originalText:secondText,validation:{sourceValidation:secondInspection.sourceValidation,transition:secondInspection.transition}}];
+ await sql.unsafe('SAVEPOINT duplicate_documents');let duplicateDocumentCode='';
+ try{await sql.unsafe("SELECT * FROM truss.runtime_stage_catalog_documents($1::text::jsonb,'{}'::jsonb)",[JSON.stringify([documents[0],documents[0]])])}catch(e){duplicateDocumentCode=(e as any).errno??(e as any).code}
+ assert(duplicateDocumentCode==='22023','duplicate documents refuse before revision allocation');await sql.unsafe('ROLLBACK TO SAVEPOINT duplicate_documents');
+ const beforeValid=await sql.unsafe('SELECT count(*)::text AS n FROM truss.schema_rev');assert(beforeValid[0].n===beforeRevisions[0].n,'rejected document set leaves original revision inventory');
  const staged=await sql.unsafe("SELECT * FROM truss.runtime_stage_catalog_documents($1::text::jsonb,'{}'::jsonb)",[JSON.stringify(documents)]);
  assert(staged[0].document_count==='2','complete ordered document set shares one native revision');
  const orderedDocuments=await sql.unsafe('SELECT doc_id,ord::text AS ord FROM truss.schema_doc ORDER BY ord');assert(orderedDocuments.length===2&&orderedDocuments[0].doc_id==='original-document'&&orderedDocuments[1].ord==='1','original document order retained');
@@ -70,6 +74,12 @@ try{
  await sql.unsafe('SAVEPOINT existing_type');let existingCode='';try{await sql.unsafe('SELECT * FROM truss.runtime_stage_new_types($1::int,$2::text::jsonb)',[staged[0].provisional_revision,JSON.stringify(candidates)])}catch(e){existingCode=(e as any).errno??(e as any).code}assert(existingCode==='55000','existing identities refuse new allocation');await sql.unsafe('ROLLBACK TO SAVEPOINT existing_type');
  const propertyStage=await Bun.file('packages/postgresql/native/catalog-property-stage.sql').text();await sql.unsafe(propertyStage);
  const fields=originalModel.modules[0].elements.filter(field=>field.kind==='field').map(field=>({ownerTypeId:allocated[0].type_id,home:'json',field}));
+ await sql.unsafe('SAVEPOINT duplicate_properties');let duplicatePropertyCode='';
+ const duplicateNames=fields.map(value=>({...value,field:{...value.field,name:'same-name'}}));
+ try{await sql.unsafe('SELECT * FROM truss.runtime_stage_new_properties($1::int,$2::text::jsonb)',[staged[0].provisional_revision,JSON.stringify(duplicateNames)])}catch(e){duplicatePropertyCode=(e as any).errno??(e as any).code}
+ assert(duplicatePropertyCode==='22023','duplicate field names refuse before property allocation');await sql.unsafe('ROLLBACK TO SAVEPOINT duplicate_properties');
+ const rejectedProperties=await sql.unsafe('SELECT count(*)::text AS n FROM truss.prop_def');assert(rejectedProperties[0].n==='0','rejected property batch leaves no partial field');
+ const survivingTypes=await sql.unsafe('SELECT count(*)::text AS n FROM truss.type_def');assert(survivingTypes[0].n==='2','earlier allocated types survive rejected field batch');
  const properties=await sql.unsafe('SELECT * FROM truss.runtime_stage_new_properties($1::int,$2::text::jsonb)',[staged[0].provisional_revision,JSON.stringify(fields)]);assert(properties.length===2&&properties[0].field_id==='caption'&&properties[0].property_id==='1'&&properties[1].property_id==='2','native owner property IDs allocated in field order');
  const fieldState=await sql.unsafe("SELECT nullability FROM truss.prop_def WHERE element='caption'");assert(fieldState[0].nullability==='absent-allowed','original field availability retained');
  await sql.unsafe('UPDATE truss.type_def SET retired_rev=since_rev');

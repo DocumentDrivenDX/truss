@@ -46,6 +46,8 @@ BEGIN
   END LOOP;
   SELECT count(*) INTO total_new FROM (SELECT DISTINCT value->>'ownerTypeId',value->'field'->>'id' FROM jsonb_array_elements(candidates)) q;
   IF total_new<>jsonb_array_length(candidates) THEN RAISE EXCEPTION 'duplicate owner field' USING ERRCODE='22023'; END IF;
+  SELECT count(*) INTO total_new FROM (SELECT DISTINCT value->>'ownerTypeId',value->'field'->>'name' FROM jsonb_array_elements(candidates)) q;
+  IF total_new<>jsonb_array_length(candidates) THEN RAISE EXCEPTION 'duplicate owner field name' USING ERRCODE='22023'; END IF;
   SELECT greatest(coalesce(max(p.prop_id)::bigint,0),0) INTO high_water FROM truss.prop_def p;
   IF high_water+total_new>2147483647 THEN RAISE EXCEPTION 'property capacity exhausted' USING ERRCODE='54000'; END IF;
   assigned:=high_water;

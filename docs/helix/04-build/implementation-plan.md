@@ -2298,3 +2298,6 @@ Owner-backed catalog staging test now uses an actual valid core0.7 model through
 
 
 Whole-set catalog persistence now has an ordered bounded document-batch routine: precheck all original carriers/duplicate document identities and total size, acquire catalog exclusion once, allocate one provisional revision and preserve every original source/validation row and ordinal atomically. The joined actual-UMF/native scenario now stages two original validated documents in one revision; twenty-eight component checks pass. The earlier single-document helper is not the whole-set acceptance route. Complete aggregate acceptance report/current-data validation/matching/keys/relationships/journal/feed finalization and publication remain required; a successful staging result cannot become public accepted identity authority.
+
+
+Catalog atomic-refusal follow-up adds duplicate owner-field-name preflight before allocation, alongside existing identity checks. Thirty-three native combined checks pass: duplicate original documents leave the prior revision inventory unchanged; duplicate property names leave zero partial properties and preserve earlier caller-transaction type allocations. These failure observations use savepoints and independent native inventories, not facade return counts. Broader report/journal/feed/native acceptance composition remains open.
