@@ -2090,3 +2090,6 @@ V1/V2 can be authored and reviewed before V3/V4 qualification, but cannot be nar
 
 
 The [Item.note presence binding](../02-design/contracts/reference-note-presence-binding.proposal.md) proposes the milestone's explicit absent/null/string interpretation without changing its original UMF absent-allowed declaration. V2 must select exact physical/value/presence/codec realization. V4 must separately admit Weft support: accepted B-005 native-null exclusions currently prevent qualifying a complete compiled note projection. Preserve M07's full original fixture requirements and an explicit unavailable prerequisite; direct-read success cannot erase that compiler integration gap.
+
+
+The [Item.amount domain binding](../02-design/contracts/reference-amount-domain-binding.proposal.md) supplies concrete decimal(21,3) admission and independent boundary/scale/token expectations for V2/V4. It consumes UMF's exact fixed-scale coefficient meaning and preserves M03 lexical tokens. Native projection must be checked before narrowing/rounding; the selected owner-wide compiler prerequisites remain mandatory. Storage/readback, comparator/key/SUM and compiler registration are separate capabilities, and the sales decimal(28,2) evidence cannot substitute for this original field.
