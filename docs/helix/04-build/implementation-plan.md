@@ -2375,3 +2375,28 @@ Retained property source matching now requires the archived defining revision's 
 
 
 The four private retained identity classifiers now explicitly require the accepted_document source kind before interpreting retained definition archives. Physical accepted_binding rows require their own admitted original interpreter and refuse with 0A000 rather than entering document-source matching. PostgreSQL 17.9 accepts the complete physical binding-source shape in rollback-only fixtures for type/property/key/relationship; each matcher independently refuses that unsupported interpretation. 154 combined checks pass. One-byte fixture binding bytes and pointers are shape controls, not an actual adopted binding source. Complete binding interpretation, original archive integrity/owner support registry, resource/privilege visibility and whole-set lifecycle/report finalization remain required. This makes the supported component source subset explicit without removing binding-source support from the desired runtime requirements.
+
+## Shared security: ordinary-login host-runtime component
+
+The actual pg-runtime source now optionally pins one ordinary native login,
+verifies original/effective actor and NOSUPERUSER/NOBYPASSRLS flags, resets context
+at pool checkout/release and checks it after BEGIN. Failures close new source
+admission and retain original quarantine. Original ParameterStatus reports now
+preserve their name/value/raw bytes without manufacturing command completion.
+Four wire tests pass (12 assertions). The owned PostgreSQL 17.9 / pg 8.16.3 /
+Bun 1.4.2 component probe has forty observations over three SCRAM-authenticated
+ordinary actors, same-PID reuse, commit/abort, wrong pin, superuser and changed
+bypass flag. Source/runtime receipts are retained in UMF's shared security evidence
+as `truss-principal.json`; this does not pass a Truss backend acceptance case.
+
+Initial native probes correctly quarantined unsupported context-report responses;
+probe cleanup initially masked the original error with ordinary-close refusal.
+Cleanup now uses explicit quarantined transport shutdown. The legacy counter
+uses its admitted SET command rather than unsupported generic RESET statement
+count handling. Wire/context support is scoped to observed original responses.
+The source compiles with explicit cached pinned pg/type dependencies; this is not
+a published or packed-host qualification. Installed 0.13 graph protection and
+native US-032/US-037 conformance remain unfinished; no story is newly accepted.
+
+
+The complete report encoder now has a private native string-byte building block independent of PostgreSQL text's NUL restriction. It accepts bounded original UTF-8 bytea including empty input, validates a separate NUL-substituted copy through native UTF-8 decoding and emits only from original bytes. Every C0 control uses lowercase six-byte escapes; quote/backslash escape exactly, and all other Unicode bytes remain unchanged without normalization. Independent literal hex fixtures and invalid overlong/surrogate/out-of-range/interrupted UTF-8 controls pass; 161 PostgreSQL 17.9 component checks pass. This is scalar spelling evidence only. Repeated bytea concatenation and validation copies are not the selected precharged chunk-sink/resource realization and cannot be promoted to full report readiness. Complete bounded inert tree traversal, unsigned UTF-8 member sorting/duplicate refusal, report schema/actual-effect parity, original artifact custody, complete allocation/work accounting and immutable report/head/finalizer remain required. No caller JSONB rendering or source artifact parsing is substituted for complete canonical report bytes.
