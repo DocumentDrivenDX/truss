@@ -13,6 +13,9 @@ export interface NumericAdmissionRequest {
  readonly diagnosticProfile:ProfilePin;
  readonly input:NumericInput;
 }
+export type NumericAdmissionDiagnostics = {readonly state:'available';readonly artifact:ExactArtifact} |
+ {readonly state:'not_produced'} |
+ {readonly state:'unavailable';readonly reason:'resource'|'encoding'|'profile'};
 export type NumericAdmissionResult = {
  readonly status:'admitted';
  readonly field:NumericAdmissionRequest['field'];
@@ -24,7 +27,7 @@ export type NumericAdmissionResult = {
  readonly code:'invalid_source'|'unsupported_profile'|'invalid_numeric_input'|'out_of_domain'|'resource';
  readonly diagnosticProfile:ProfilePin;
  /** Exact original diagnostics under the selected encoder; never reconstructed from message text. */
- readonly diagnostics?:ExactArtifact;
+ readonly diagnostics:NumericAdmissionDiagnostics;
  readonly token?:never;readonly value?:never;
 };
 /** Pure bounded conversion + pinned UMF field validation; no native/transaction/receipt I/O. */
