@@ -32,7 +32,17 @@ if decode(entity['source'])!=model_bytes or decode(prop['source'])!=model_bytes:
 if json.loads(decode(entity['acceptedDefinition']))!=record or json.loads(decode(prop['acceptedDefinition']))!=field:raise ValueError('original definition mismatch')
 bundle=json.loads(decode(b['basis']['modelBundle']))
 if bundle[0]['documentJson'].encode()!=model_bytes or bundle[0]['pin']['sha256']!=sha(model_bytes):raise ValueError('original model pin mismatch')
-inv=json.loads(decode(b['basis']['layoutInventory']));source=(R/inv['sourceInventory']['path']).read_bytes()
+versions={'truss-postgresql-source-review/0.11.0-fixture':('0.11','011'),'truss-postgresql-source-review/0.12.0-fixture':('0.12','012')}
+if b.get('bindingProfileId') not in versions:raise ValueError('unknown source packet version')
+version,tag=versions[b['bindingProfileId']]
+inv=json.loads(decode(b['basis']['layoutInventory']))
+if inv['sourceInventory']['path']!='docs/helix/02-design/contracts/weft-review-columns-v'+version+'.proposal.json':raise ValueError('mixed source packet inventory version')
+if b['basis']['layoutProfile']['identity']!='truss-review-layout'+tag or b['basis']['layoutSql']['identity']!='selected-review'+tag+'-layout-sql':raise ValueError('mixed layout component identity')
+for table in inv['tables']:
+ if table['physicalIdentity']!='truss.review'+tag+'.table.'+table['name']:raise ValueError('foreign review table identity')
+ for column in table['columns']:
+  if column['physicalIdentity']!='truss.review'+tag+'.column.'+table['name']+'.'+column['name']:raise ValueError('foreign review column identity')
+source=(R/inv['sourceInventory']['path']).read_bytes()
 if sha(source)!=inv['sourceInventory']['sha256']:raise ValueError('stale inventory source')
 layout=json.loads(source)
 if sha((R/inv['astPath']).read_bytes())!=inv['astSha256']:raise ValueError('stale AST')
