@@ -1,0 +1,14 @@
+{
+  "scope": "read-only original Configuration/owned selection source review; no runtime registration, ABI release or Truss mapping adoption",
+  "ownerCommit": "a16591dbc9de961ae473920641e5bc815dd659ff",
+  "sourcePath": "crates/weft-postgresql/src/original_admission.rs",
+  "sourceSha256": "adb96451b616ad9b366386cd40eed41fb80160f743a2b78529bae54f868dba24",
+  "sourceBytes": 12852,
+  "trustedProcedureSelection": "Rust Configuration has no serde implementation; original bindings do not select executable plugins/SQL",
+  "requiredSelectionKinds": [
+    "OwnedRecordSelection",
+    "OwnedPropertySelection",
+    "OwnedRelationshipSelection"
+  ],
+  "nativeExecutedByTruss": false
+}
