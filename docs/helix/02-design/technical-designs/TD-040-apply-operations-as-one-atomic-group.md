@@ -21,7 +21,7 @@ ddx:
 
 ## Technical Approach
 
-Use one shared planner for groups and single writes. CONTRACT-009 owns whole-input discovery, identity reservation, sorted strongest-first locks, post-lock revalidation and ordered simulation. CONTRACT-007 owns caller/engine transaction lifetime and savepoint containment. Persist only a fully validated plan; return results in input order regardless of lock/persistence order. Request-free atomicity does not depend on the unresolved request-receipt decision.
+Use one shared planner for groups and single writes. CONTRACT-009 owns whole-input discovery, identity reservation, sorted strongest-first locks, post-lock revalidation and ordered simulation. CONTRACT-007 owns caller/engine transaction lifetime and savepoint containment. Persist only a fully validated plan; return results in input order regardless of lock/persistence order. Request-free atomicity does not depend on request-receipt activation. ADR-005 selects durable complete-result receipts for request-bearing groups; exact native receipt composition and qualification remain required.
 
 ## Component Changes
 
