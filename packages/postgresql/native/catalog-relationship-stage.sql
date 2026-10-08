@@ -12,6 +12,9 @@ DECLARE
   endpoint int;
   bound jsonb;
   target_key text;
+  original_document jsonb;
+  original_endpoint jsonb;
+  endpoint_ordinal int;
 BEGIN
   SELECT * INTO STRICT op FROM truss.row_home_operation o
     WHERE o.original_writer_xid=pg_current_xact_id_if_assigned() AND o.phase<>'application_finalized' FOR UPDATE;
@@ -63,6 +66,31 @@ BEGIN
   END IF;
   LOCK TABLE truss.schema_head IN EXCLUSIVE MODE;
   SELECT d.ord INTO STRICT doc_ordinal FROM truss.schema_doc d WHERE d.rev=revision AND d.doc_id=runtime_stage_new_relationship.document_id;
+  SELECT d.document::jsonb INTO STRICT original_document FROM truss.schema_doc d
+    WHERE d.rev=revision AND d.ord=doc_ordinal;
+  IF (SELECT count(*) FROM jsonb_array_elements(original_document->'modules') m
+      CROSS JOIN LATERAL jsonb_array_elements(m.value->'relationships') r
+      WHERE m.value->>'id'=module_id AND r.value=relationship)<>1 THEN
+    RAISE EXCEPTION 'relationship does not match original declaring module source' USING ERRCODE='55000';
+  END IF;
+  -- This JSON-source profile resolves UMF module/element references inside their
+  -- original document. Cross-document resolution requires an explicit later profile.
+  FOR endpoint_ordinal IN 1..cardinality(source_ids) LOOP
+    original_endpoint:=relationship->'source'->(endpoint_ordinal-1);
+    PERFORM 1 FROM truss.type_def t WHERE t.type_id=source_ids[endpoint_ordinal]
+      AND t.document_id=runtime_stage_new_relationship.document_id
+      AND t.module=original_endpoint->>'module' AND t.element=original_endpoint->>'element';
+    IF NOT FOUND THEN RAISE EXCEPTION 'original source endpoint correspondence' USING ERRCODE='55000'; END IF;
+    PERFORM 1 FROM truss.key_def k WHERE k.type_id=source_ids[endpoint_ordinal] AND k.retired_rev IS NULL;
+    IF NOT FOUND THEN RAISE EXCEPTION 'original source endpoint key required' USING ERRCODE='55000'; END IF;
+  END LOOP;
+  FOR endpoint_ordinal IN 1..cardinality(target_ids) LOOP
+    original_endpoint:=relationship->'target'->(endpoint_ordinal-1);
+    PERFORM 1 FROM truss.type_def t WHERE t.type_id=target_ids[endpoint_ordinal]
+      AND t.document_id=runtime_stage_new_relationship.document_id
+      AND t.module=original_endpoint->>'module' AND t.element=original_endpoint->>'element';
+    IF NOT FOUND THEN RAISE EXCEPTION 'original target endpoint correspondence' USING ERRCODE='55000'; END IF;
+  END LOOP;
   IF EXISTS(SELECT 1 FROM truss.rel_def r WHERE r.document_id=runtime_stage_new_relationship.document_id AND r.module=module_id AND r.rel_id=relationship->>'id')
       OR EXISTS(SELECT 1 FROM truss.relationship_lineage l WHERE l.identity_profile=runtime_stage_new_relationship.identity_profile AND l.original_identity_bytes=identity_bytes) THEN
     RAISE EXCEPTION 'existing relationship requires original matching' USING ERRCODE='55000';
