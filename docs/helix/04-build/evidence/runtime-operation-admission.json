@@ -1,0 +1,15 @@
+{
+  "component": "native operation admission",
+  "engine": "PostgreSQL17.9",
+  "checks": [
+    "exact PostgreSQL17.9",
+    "actual native xid and ordinal",
+    "original actor and native context captured",
+    "second unfinished operation refused",
+    "original binary artifact retained",
+    "rollback removes operation custody",
+    "no public execute"
+  ],
+  "bodySha256": "8dcb3d6f545af7046e6bc644aa58dc800615e5962c6ad99a1199bc96b9d68301",
+  "qualification": "Actual xid/context/artifact bounds/single unfinished/rollback/private invocation component only. Protected issuer registration, canonical observers, finalization, deferred complete-cohort checks, installer security and public runtime remain unfinished."
+}
