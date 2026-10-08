@@ -2159,3 +2159,6 @@ CH-02/B-008 now has a distinct [reference maximum-two producer handoff](../02-de
 
 
 B-004/B-014 now has a concrete [pure lossless number-view operation proposal](../02-design/contracts/core-numeric-number-view.proposal.md), alongside the existing data entry. Resolve its exact declaration/error/resource and parser binding before export, implement the existing exact binary-rational procedure and verify the packed public helper in Chromium. Field-domain admission stays UMF-owned and default reads retain original tokens. This supplies one concrete pure surface without implying a complete core API or numerical/native support.
+
+
+B-014's proposed [primary core entry](../02-design/contracts/bindings/truss-core-v0.1.d.ts) composes the existing pure data entry with viewNumericAsNumber and its closed result type. The consumer witness now imports through that entry. The earlier eighteen-function checkpoint predates this additional core operation; other factories retain their package ownership. Emit actual compiled ESM/types only after parser/resource/build admission and packed browser verification. This is declaration/export design, not an existing published package.

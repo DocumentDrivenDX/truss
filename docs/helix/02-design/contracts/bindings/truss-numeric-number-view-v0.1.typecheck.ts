@@ -1,5 +1,5 @@
 /** Compile-only public surface witness; no runtime conversion evidence. */
-import {viewNumericAsNumber,type NumericNumberViewResult} from './truss-numeric-number-view-v0.1';
+import {viewNumericAsNumber,type NumericNumberViewResult} from './truss-core-v0.1';
 const result:NumericNumberViewResult=viewNumericAsNumber({decimalToken:'0.5'});
 if(result.status==='lossless')void [result.view.original,result.view.value];
 else void result.reason;

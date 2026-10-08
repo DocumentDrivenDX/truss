@@ -104,6 +104,7 @@ This map assigns the authored declarations to the existing six-package design. I
 
 | Proposed public surface | Package implementation owner | Required dependencies / remaining closure |
 | --- | --- | --- |
+| [viewNumericAsNumber](contracts/bindings/truss-core-v0.1.d.ts) | core | Standalone exact-token convenience under fixed qualified numeric own-work profile; internal operations reuse the same conversion with their enclosing account. No Field/native admission, caller budget override, I/O or host globals. Declaration is authored; parser/resource producer and packed browser evidence remain open. |
 | [createFeedCapabilityV02](contracts/bindings/truss-feed-key-transition-v0.2.d.ts) | tooling | Existing assembly and exact v0.2 feed selection plus explicit host verifier registration; inert projection with per-call native/custody admission. Old assembly facade stays unchanged. Full lifecycle/worker/seed/native profiles remain open. |
 | [registerFeedHostCompositionV02](contracts/bindings/truss-feed-host-composition-v0.2.d.ts) | tooling | Existing assembly and complete versioned host service/seed/source-procedure tuple; inert atomic registration returns original opaque custody, without worker startup or readiness claims. Lifecycle projection and native profiles remain open. |
 | [createFeedLifecycleToolingV02](contracts/bindings/truss-feed-lifecycle-v0.2.d.ts) | tooling | Exact existing assembly plus original opaque v0.2 host registration; all lifecycle facades preserve versioned progress, start no services and retain current native admission. |
