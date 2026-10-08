@@ -21,6 +21,8 @@ Current physical design source is the reconciled 0.12 history review over the se
 
 Source reconciliation: the [0.12 history review](../02-design/models/truss-layout-reference-history-0.12.proposal.umf.json) retains the 106-statement foundation, with no new tables, columns or carrier constraints. Exact source comparison confirms that 0.11 already contains the stage child, four carrier ALTERs and metadata operation. Only the journal sequence settings and review marker/identity change. The [receipt](evidence/design-audit/reference-history-layout-model-source.json) verifies this delta and exact export/reload equality; the existing 0.11 compiler packet remains separately pinned and cannot establish 0.12 adoption.
 
+The [remaining handoff audit](remaining-design-handoff-audit.md) separates missing authored composition/interfaces from future native identity and qualification evidence. It is the current integrated next-work boundary; source checks alone cannot close it.
+
 ## Closure by product area
 
 | Area / existing gate | Specified and reviewed source evidence | Remaining design output | Implementation/evidence after selection |
