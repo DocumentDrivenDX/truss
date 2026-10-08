@@ -1,5 +1,5 @@
 -- Internal persistence of a complete already-matched genuinely-new type batch.
--- No identity interpretation or public acceptance; full report/head/finalizer still required.
+-- Archive-derived candidate lineage; no public acceptance or complete report/head/finalizer.
 CREATE FUNCTION truss.runtime_stage_new_types(revision int, candidates jsonb)
 RETURNS TABLE(document_id text,module_id text,element_id text,type_id text)
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER
@@ -26,24 +26,16 @@ BEGIN
   PERFORM 1 FROM truss.schema_rev AS r WHERE r.rev=revision;
   IF NOT FOUND THEN RAISE EXCEPTION 'missing original revision' USING ERRCODE='55000'; END IF;
   FOR candidate IN SELECT value FROM jsonb_array_elements(candidates) LOOP
-    IF jsonb_typeof(candidate)<>'object' OR NOT candidate ?& ARRAY['documentId','moduleId','elementId','lineageProfile','lineageHex']
-        OR (SELECT count(*) FROM jsonb_object_keys(candidate))<>5 THEN
+    IF jsonb_typeof(candidate)<>'object' OR NOT candidate ?& ARRAY['documentId','moduleId','elementId']
+        OR (SELECT count(*) FROM jsonb_object_keys(candidate))<>3 THEN
       RAISE EXCEPTION 'original type candidate shape' USING ERRCODE='22023';
     END IF;
-    IF EXISTS(SELECT 1 FROM jsonb_each(candidate) e WHERE jsonb_typeof(e.value)<>'string' OR octet_length(e.value #>> '{}') NOT BETWEEN 1 AND 65536)
-        OR candidate->>'lineageHex' !~ '^([0-9a-f]{2})+$' THEN
+    IF EXISTS(SELECT 1 FROM jsonb_each(candidate) e WHERE jsonb_typeof(e.value)<>'string' OR octet_length(e.value #>> '{}') NOT BETWEEN 1 AND 65536) THEN
       RAISE EXCEPTION 'original type candidate carrier' USING ERRCODE='22023';
     END IF;
     PERFORM 1 FROM truss.schema_doc d WHERE d.rev=revision AND d.doc_id=candidate->>'documentId';
     IF NOT FOUND THEN RAISE EXCEPTION 'missing original document' USING ERRCODE='55000'; END IF;
-    IF (SELECT count(*) FROM truss.schema_doc d
-        CROSS JOIN LATERAL jsonb_array_elements(d.document::jsonb->'modules') m
-        CROSS JOIN LATERAL jsonb_array_elements(m.value->'elements') e
-        WHERE d.rev=revision AND d.doc_id=candidate->>'documentId'
-          AND m.value->>'id'=candidate->>'moduleId'
-          AND e.value->>'id'=candidate->>'elementId' AND e.value->>'kind'='record')<>1 THEN
-      RAISE EXCEPTION 'type does not match original Record declaration' USING ERRCODE='55000';
-    END IF;
+    PERFORM truss.runtime_catalog_lineage(revision,'record',candidate->>'documentId',candidate->>'moduleId',candidate->>'elementId');
     IF EXISTS(SELECT 1 FROM truss.type_def t WHERE t.document_id=candidate->>'documentId'
         AND t.module=candidate->>'moduleId' AND t.element=candidate->>'elementId') THEN
       RAISE EXCEPTION 'existing identity requires original matching, not new allocation' USING ERRCODE='55000';
@@ -61,7 +53,8 @@ BEGIN
     INSERT INTO truss.type_def(document_id,type_id,module,element,kind,provisional,since_rev,doc_ord,
       lineage_profile,lineage_bytes,definition_source_kind,definition_rev,definition_doc_ord,definition_document_id)
     VALUES(candidate->>'documentId',assigned::int,candidate->>'moduleId',candidate->>'elementId','record',false,
-      revision,doc_ordinal,candidate->>'lineageProfile',decode(candidate->>'lineageHex','hex'),
+      revision,doc_ordinal,'truss-type-lineage/0.1.0',
+      truss.runtime_catalog_lineage(revision,'record',candidate->>'documentId',candidate->>'moduleId',candidate->>'elementId'),
       'accepted_document',revision,doc_ordinal,candidate->>'documentId');
     RETURN QUERY SELECT candidate->>'documentId',candidate->>'moduleId',candidate->>'elementId',assigned::text;
   END LOOP;

@@ -92,7 +92,7 @@ try{
  assert(sourcedLineage[0].record&&sourcedLineage[0].relationship,'lineage resolves original archived Record and relationship');
  await sql.unsafe('SAVEPOINT missing_lineage');let lineageRefusal='';try{await sql.unsafe("SELECT truss.runtime_catalog_lineage(1,'record','original-document','m','label')")}catch(e){lineageRefusal=(e as any).errno??(e as any).code}assert(lineageRefusal==='55000','lineage refuses Field as original Record');await sql.unsafe('ROLLBACK TO SAVEPOINT missing_lineage');
  const typeStage=await Bun.file('packages/postgresql/native/catalog-type-stage.sql').text();await sql.unsafe(typeStage);
- const candidates=[{documentId:'original-document',moduleId:'m',elementId:'z',lineageProfile:'test-original-bytes',lineageHex:'00ff'},{documentId:'original-document',moduleId:'m',elementId:'a',lineageProfile:'test-original-bytes',lineageHex:'01'}];
+ const candidates=[{documentId:'original-document',moduleId:'m',elementId:'z'},{documentId:'original-document',moduleId:'m',elementId:'a'}];
  for(const [label,invalid] of [
   ['Field cannot be allocated as a Record type',{...candidates[0],elementId:'label'}],
   ['invented Record identity refuses',{...candidates[0],elementId:'invented'}],
@@ -101,6 +101,7 @@ try{
   try{await sql.unsafe('SELECT * FROM truss.runtime_stage_new_types($1::int,$2::text::jsonb)',[staged[0].provisional_revision,JSON.stringify([candidates[1],invalid])])}catch(e){refusal=(e as any).errno??(e as any).code}
   assert(refusal==='55000',label);await sql.unsafe('ROLLBACK TO SAVEPOINT invalid_type_source');
  }
+ await sql.unsafe('SAVEPOINT forged_type_lineage');let forgedLineage='';try{await sql.unsafe('SELECT * FROM truss.runtime_stage_new_types($1::int,$2::text::jsonb)',[staged[0].provisional_revision,JSON.stringify([{...candidates[0],lineageProfile:'forged',lineageHex:'00ff'}])])}catch(e){forgedLineage=(e as any).errno??(e as any).code}assert(forgedLineage==='22023','type staging rejects caller-supplied lineage substitution');await sql.unsafe('ROLLBACK TO SAVEPOINT forged_type_lineage');
  const beforeTypes=await sql.unsafe('SELECT count(*)::text AS n FROM truss.type_def');assert(beforeTypes[0].n==='0','type source mismatch leaves no partial Record allocation');
  const allocated=await sql.unsafe('SELECT * FROM truss.runtime_stage_new_types($1::int,$2::text::jsonb)',[staged[0].provisional_revision,JSON.stringify(candidates)]);
  assert(allocated.length===2&&allocated[0].element_id==='a'&&allocated[0].type_id==='1'&&allocated[1].type_id==='2','native IDs follow original qualified byte order');
@@ -252,7 +253,7 @@ try{
  const deletedPrestate=await sql.unsafe("SELECT convert_from(decode($1::text,'hex'),'UTF8')::jsonb #>> '{owner,id}' AS owner_id,convert_from(decode($1::text,'hex'),'UTF8')::jsonb #>> '{state,state_id}' AS state_id",[nativePrestate[0].bytes]);assert(deletedPrestate[0].owner_id===object[0].id&&deletedPrestate[0].state_id===nodeIds[0].state_id,'original native prestate retains deleted parent attribution after cascade');
  await sql.unsafe('UPDATE truss.type_def SET retired_rev=since_rev');
  const next=await sql.unsafe('SELECT * FROM truss.runtime_stage_new_types($1::int,$2::text::jsonb)',[staged[0].provisional_revision,JSON.stringify([{...candidates[0],elementId:'b'}])]);assert(next[0].type_id==='3','retired retained IDs remain high-water contributors');
- const originalLineage=await sql.unsafe("SELECT encode(lineage_bytes,'hex') AS bytes FROM truss.type_def WHERE element='z'");assert(originalLineage[0].bytes==='00ff','original lineage bytes retained');
+ const originalLineage=await sql.unsafe("SELECT lineage_profile='truss-type-lineage/0.1.0' AND lineage_bytes=truss.runtime_catalog_lineage(1,'record',document_id,module,element) AS original FROM truss.type_def WHERE element='z'");assert(originalLineage[0].original,'archive-derived original type lineage retained');
  const retained=await sql.unsafe("SELECT document,validation::text AS validation FROM truss.schema_doc WHERE doc_id='original-document'");assert(JSON.parse(retained[0].validation).transition.source.umf==='0.7.0'&&JSON.parse(retained[0].validation).recordChecks[0].validation.complete===false,'original transition and checker result retained natively');assert(retained[0].document===originalDocument,'verbatim original source retained');
  const head=await sql.unsafe('SELECT rev::text AS rev FROM truss.schema_head');assert(JSON.stringify(head)===JSON.stringify(beforeHead),'document stage cannot publish catalog head');
  await sql.unsafe('ROLLBACK');
