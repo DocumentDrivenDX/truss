@@ -181,3 +181,18 @@ The native runner must capture actual installation/layout/profile/body/security 
 ## Accepted catalog binding custody (planned)
 
 WCB-01–04 and WCB-07 from the [accepted catalog producer](../../02-design/contracts/weft-accepted-catalog-producer.proposal.md) supplement RCSEL-01–10: independently verify qualified original IDs/documents/report bytes, substitution/incomplete-report refusal, exact revision/evolution context and provisional versus confirmed outer-commit publication. Native acceptance must precede owner binding production; a positive serializer revision or hash check cannot supply acceptance. Inspect original catalog/report/head and recovery effects independently. All cases remain not_run.
+
+## Original input to report-document bijection (planned)
+
+RPDOC-01–06 qualify CONTRACT-003's complete input/archive projection. All are `not_run` at the full protected acceptance boundary; the private archive collector does not pass these cases. Expected submitted input/artifact bytes, native archive members, interpretation evidence and report members are independently authored before execution.
+
+| Case | Setup / corruption | Required outcome |
+| --- | --- | --- |
+| RPDOC-01 | Two original native documents with different revisions, Unicode identities and preserved noncanonical document whitespace; original order differs from lexical identity order | Complete input/archive/report bijection; exact source bytes/hash, metadata and ordinal strings, with no sorting or normalization |
+| RPDOC-02 | Equal counts but swapped document IDs/order; separately substitute different original bytes under an equal claimed digest | Refuse complete report admission before head publication; full byte comparison and original order independently detect the mismatch |
+| RPDOC-03 | Missing/extra/duplicate member, ordinal gap, wrong document revision, native UMF version or interpretation evidence/profile | Refuse; no inferred empty interpretation, deduplication, metadata repair or partial document report |
+| RPDOC-04 | Original converted ingress with accepted UMF artifact plus distinct source/adapter/loss artifacts; repeat with only upstream source or loss changed while accepted UMF stays equal | Preserve all original artifacts; valid first acceptance uses accepted UMF bytes for the archive; changed upstream provenance cannot qualify as a current-head repeat |
+| RPDOC-05 | Opaque registry fixture, wrong framed domain/profile, duplicate outer JSON member, invalid Unicode/base64 or unsupported original parser; separately replace original input with a caller documents-only list | Refuse original input interpretation; never interpret a fingerprint digest as a document source or accept the replacement list |
+| RPDOC-06 | Exceed original native decoding/accounting budget; inject failure after complete archive matching but before report persistence; change surviving effect generation after matching | Preserve original execution/recovery evidence and earlier adopted caller work; publish no partial report/head; invalidate stale readiness and require complete recollection |
+
+Compare complete original input/archive/report sets and bytes, not counts alone. Converted-source fidelity requires the exact adapter qualification; an invented loss report is a refusal control. Tests must exercise ordinary protected entry points and effective role closure, not grant access to private collectors as a substitute. Existing RPSEL-01–06 still govern report persistence, repeat and unknown commit outcomes.
