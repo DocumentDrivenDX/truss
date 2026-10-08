@@ -1,0 +1,331 @@
+{
+  "scope": "all explicit index columns/expressions/predicates and literal nextval defaults resolve in declared 0.11 source; no native opclass/type/collation/OID/search-path or runtime routine-body dependency qualification",
+  "inventorySha256": "73a8bb36bd827f348ac8a465fb9aa6578b2411f4d3416eedbf1f32d381ac2e13",
+  "indexes": [
+    {
+      "index": "object_type_id",
+      "table": "object",
+      "columnReferences": [
+        "id",
+        "type_id"
+      ]
+    },
+    {
+      "index": "edge_out",
+      "table": "edge",
+      "columnReferences": [
+        "rel_type_id",
+        "source_id",
+        "target_id",
+        "target_type"
+      ]
+    },
+    {
+      "index": "edge_in",
+      "table": "edge",
+      "columnReferences": [
+        "rel_type_id",
+        "source_id",
+        "source_type",
+        "target_id"
+      ]
+    },
+    {
+      "index": "edge_limit_edge",
+      "table": "edge_limit",
+      "columnReferences": [
+        "edge_id"
+      ]
+    },
+    {
+      "index": "record_source_load",
+      "table": "record_source",
+      "columnReferences": [
+        "load_id"
+      ]
+    },
+    {
+      "index": "journal_entity",
+      "table": "journal",
+      "columnReferences": [
+        "entity_id",
+        "entity_kind",
+        "ver"
+      ]
+    },
+    {
+      "index": "journal_feed",
+      "table": "journal",
+      "columnReferences": [
+        "seq",
+        "xid"
+      ]
+    },
+    {
+      "index": "journal_request",
+      "table": "journal",
+      "columnReferences": [
+        "origin"
+      ]
+    },
+    {
+      "index": "type_def_lineage_route",
+      "table": "type_def",
+      "columnReferences": [
+        "lineage_sha256",
+        "type_id"
+      ]
+    },
+    {
+      "index": "row_home_one_root",
+      "table": "row_home_node",
+      "columnReferences": [
+        "parent_node_id",
+        "state_id"
+      ]
+    },
+    {
+      "index": "row_home_sequence_slot",
+      "table": "row_home_node",
+      "columnReferences": [
+        "parent_node_id",
+        "sequence_ordinal",
+        "slot_kind",
+        "state_id"
+      ]
+    },
+    {
+      "index": "row_home_map_parent",
+      "table": "row_home_node",
+      "columnReferences": [
+        "parent_node_id",
+        "slot_kind",
+        "state_id"
+      ]
+    },
+    {
+      "index": "relationship_lineage_route",
+      "table": "relationship_lineage",
+      "columnReferences": [
+        "identity_sha256",
+        "rel_type_id"
+      ]
+    },
+    {
+      "index": "object_key_bucket_route",
+      "table": "object_key_bucket",
+      "columnReferences": [
+        "key_sha256",
+        "namespace_sha256",
+        "storage_row_id"
+      ]
+    },
+    {
+      "index": "object_key_reservation_bucket_route",
+      "table": "object_key_reservation_bucket",
+      "columnReferences": [
+        "key_sha256",
+        "namespace_sha256",
+        "storage_row_id"
+      ]
+    },
+    {
+      "index": "installation_archive_identity_route",
+      "table": "installation_archive",
+      "columnReferences": [
+        "archive_row_id",
+        "artifact_identity_sha256",
+        "installation_id"
+      ]
+    },
+    {
+      "index": "complete_feed_consumer_identity_route",
+      "table": "complete_feed_consumer",
+      "columnReferences": [
+        "consumer_identity_sha256",
+        "storage_row_id"
+      ]
+    },
+    {
+      "index": "feed_administration_receipt_identity_route",
+      "table": "complete_feed_administration_receipt",
+      "columnReferences": [
+        "identity_sha256",
+        "storage_row_id"
+      ]
+    },
+    {
+      "index": "feed_seed_attempt_identity_route",
+      "table": "complete_feed_seed_attempt",
+      "columnReferences": [
+        "attempt_identity_sha256",
+        "storage_row_id"
+      ]
+    },
+    {
+      "index": "feed_seed_artifact_identity_route",
+      "table": "complete_feed_seed_artifact",
+      "columnReferences": [
+        "artifact_identity_sha256",
+        "attempt_row_id",
+        "storage_row_id"
+      ]
+    },
+    {
+      "index": "row_home_operation_unfinished_xid",
+      "table": "row_home_operation",
+      "columnReferences": [
+        "original_writer_xid",
+        "phase"
+      ]
+    },
+    {
+      "index": "key_lifecycle_history_by_key",
+      "table": "key_lifecycle_history",
+      "columnReferences": [
+        "key_num",
+        "rev",
+        "seq",
+        "type_id"
+      ]
+    },
+    {
+      "index": "key_migration_receipt_route",
+      "table": "key_migration_receipt",
+      "columnReferences": [
+        "attempt_sha256",
+        "epoch_sha256",
+        "installation_sha256",
+        "storage_row_id"
+      ]
+    },
+    {
+      "index": "request_receipt_route",
+      "table": "request_receipt",
+      "columnReferences": [
+        "namespace_sha256",
+        "request_sha256",
+        "storage_row_id"
+      ]
+    }
+  ],
+  "declaredSequences": [
+    [
+      "truss",
+      "complete_feed_consumer_row_seq"
+    ],
+    [
+      "truss",
+      "feed_administration_receipt_row_seq"
+    ],
+    [
+      "truss",
+      "feed_seed_artifact_row_seq"
+    ],
+    [
+      "truss",
+      "feed_seed_attempt_row_seq"
+    ],
+    [
+      "truss",
+      "id_seq"
+    ],
+    [
+      "truss",
+      "installation_archive_row_seq"
+    ],
+    [
+      "truss",
+      "journal_seq"
+    ],
+    [
+      "truss",
+      "key_storage_row_seq"
+    ],
+    [
+      "truss",
+      "migration_receipt_row_seq"
+    ],
+    [
+      "truss",
+      "request_receipt_row_seq"
+    ],
+    [
+      "truss",
+      "row_home_id_seq"
+    ]
+  ],
+  "sequenceDefaults": [
+    {
+      "table": "object",
+      "column": "id",
+      "sequence": "truss.id_seq"
+    },
+    {
+      "table": "edge",
+      "column": "id",
+      "sequence": "truss.id_seq"
+    },
+    {
+      "table": "journal",
+      "column": "seq",
+      "sequence": "truss.journal_seq"
+    },
+    {
+      "table": "row_home_state",
+      "column": "state_id",
+      "sequence": "truss.row_home_id_seq"
+    },
+    {
+      "table": "row_home_node",
+      "column": "node_id",
+      "sequence": "truss.row_home_id_seq"
+    },
+    {
+      "table": "object_key_bucket",
+      "column": "storage_row_id",
+      "sequence": "truss.key_storage_row_seq"
+    },
+    {
+      "table": "object_key_reservation_bucket",
+      "column": "storage_row_id",
+      "sequence": "truss.key_storage_row_seq"
+    },
+    {
+      "table": "installation_archive",
+      "column": "archive_row_id",
+      "sequence": "truss.installation_archive_row_seq"
+    },
+    {
+      "table": "complete_feed_consumer",
+      "column": "storage_row_id",
+      "sequence": "truss.complete_feed_consumer_row_seq"
+    },
+    {
+      "table": "complete_feed_administration_receipt",
+      "column": "storage_row_id",
+      "sequence": "truss.feed_administration_receipt_row_seq"
+    },
+    {
+      "table": "complete_feed_seed_attempt",
+      "column": "storage_row_id",
+      "sequence": "truss.feed_seed_attempt_row_seq"
+    },
+    {
+      "table": "complete_feed_seed_artifact",
+      "column": "storage_row_id",
+      "sequence": "truss.feed_seed_artifact_row_seq"
+    },
+    {
+      "table": "key_migration_receipt",
+      "column": "storage_row_id",
+      "sequence": "truss.migration_receipt_row_seq"
+    },
+    {
+      "table": "request_receipt",
+      "column": "storage_row_id",
+      "sequence": "truss.request_receipt_row_seq"
+    }
+  ],
+  "nativeQualified": false
+}
