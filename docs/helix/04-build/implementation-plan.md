@@ -2045,3 +2045,6 @@ The reference private phase codec now selects truss-journal-phase-json/0.2.0-pro
 
 
 Use the existing truss-journal-phase-resource/0.2.0-proposal policy for the reference phase codec/staging composition. Its nine finite maxima and original parser counting remain conjunctive within the shared operation/transaction/retention account. Selection does not qualify native detoast/parser/sort/copy/cancellation producers: unknown conservative bounds refuse before invocation. Do not create an independent phase budget, reset deadlines by stage name or discard immutable transitions to fit. Deliver exact native producer/account/build pins and independent whole-operation cleanup-fit qualification against this selected policy.
+
+
+B-005/B-014 reference-owned transaction wiring uses CONTRACT-007’s selected adapter-private exclusive lease and single original command queue. Deliver concrete lease acquisition/exclusive alias inventory, BEGIN/epoch/ordinal custody, callback handle projection, serialized controls and confirmed settlement/drain/session cleanup before pool return. Unknown native termination or cleanup quarantines the actual lease. Adopted-host integration is a separate profile; implementing this owned path cannot close its mediation gate. Actual driver/version/source/native observations remain qualification outputs.
