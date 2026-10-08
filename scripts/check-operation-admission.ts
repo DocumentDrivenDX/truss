@@ -10,6 +10,8 @@ const assert=(v:boolean,label:string)=>{if(!v)throw Error(label);checks.push(lab
 try{
  const version=await sql.unsafe('SHOW server_version');assert(version[0].server_version.startsWith('17.9'),'exact PostgreSQL17.9');
  await sql.unsafe(layout);await sql.unsafe(body);
+ const observer=await Bun.file('packages/postgresql/native/operation-generation-observer.sql').text();await sql.unsafe(observer);
+ const triggers=await sql.unsafe("SELECT count(*)::text AS n FROM pg_trigger WHERE tgname IN ('runtime_state_generation','runtime_node_generation','runtime_scalar_generation') AND tgenabled='A' AND NOT tgisinternal");assert(triggers[0].n==='3','three ALWAYS generation observers installed');
  await sql.unsafe('BEGIN');
  const xid=await sql.unsafe('SELECT pg_catalog.pg_current_xact_id()::text AS xid');
  const rows=await sql.unsafe("SELECT * FROM truss.runtime_admit_operation('mutation',decode('00ff','hex'),decode('01','hex'),decode('02','hex'),decode('03','hex'),decode('04','hex'),decode('05','hex'))");
@@ -24,6 +26,6 @@ try{
  await sql.unsafe('ROLLBACK');
  const after=await sql.unsafe('SELECT count(*)::text AS n FROM truss.row_home_operation');assert(after[0].n==='0','rollback removes operation custody');
  const grants=await sql.unsafe("SELECT count(*)::text AS n FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace CROSS JOIN LATERAL aclexplode(p.proacl) a WHERE n.nspname='truss' AND p.proname='runtime_admit_operation' AND a.grantee=0 AND a.privilege_type='EXECUTE'");assert(grants[0].n==='0','no public execute');
- const receipt={component:'native operation admission',engine:'PostgreSQL17.9',checks,bodySha256:new Bun.CryptoHasher('sha256').update(body).digest('hex'),qualification:'Actual xid/context/artifact bounds/single unfinished/rollback/private invocation component only. Protected issuer registration, canonical observers, finalization, deferred complete-cohort checks, installer security and public runtime remain unfinished.'};
+ const receipt={component:'native operation admission',engine:'PostgreSQL17.9',checks,bodySha256:new Bun.CryptoHasher('sha256').update(body).digest('hex'),observerSha256:new Bun.CryptoHasher('sha256').update(observer).digest('hex'),qualification:'Actual xid/context/artifact bounds/single unfinished/rollback/private invocation component only. Protected issuer registration, canonical observers, finalization, deferred complete-cohort checks, installer security and public runtime remain unfinished.'};
  await Bun.write('docs/helix/04-build/evidence/runtime-operation-admission.json',JSON.stringify(receipt,null,2)+'\n');console.log(JSON.stringify({checks:checks.length}));
 }finally{await sql.close()}
