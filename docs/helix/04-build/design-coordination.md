@@ -15,7 +15,15 @@ ddx:
 
 # Design coordination and remaining work
 
-## Latest read-only owner source review — numeric containers and complete entities (2026-10-08)
+## Latest owner qualification and existing integration review — 2026-10-08
+
+Committed Weft HEAD is `94b2de5e303fe53f0c9432458119b6fe1eef187c`; UMF primary remains `16c35e8d943769ccfa7bb57d16785aa7159abe65`. The [source sync receipt](evidence/design-audit/weft-qualified-registration-source-sync.json) pins nine original source/evidence files and verifies all eleven references in the Truss qualification record. The registration's evidence identity equals the complete record SHA-256. The owner acceptance matrix now records all thirty criteria passed. This supersedes historical compiler-registration/relational-acceptance gaps below; original historical receipts retain their scopes. This is committed source review, not a replay of owner tests.
+
+Truss already pins merged Weft source `2744531735c2a771fbe7ed24a7f67e3afc851b25`, whose merge commit records PR #9. Committed crates, spec and Cargo manifests/lock are unchanged between that pin and the observed HEAD, so no compiler rebuild or pin replacement is needed for this sync. Existing Truss fixture requests select `truss.postgresql` / `0.1.0-qualified` / `pg17.9-qualified-fixtures` with `allowCandidate:false`. Candidate and qualified feature selections conflict deliberately; preserve separate registration identities and refuse mismatches rather than changing the requested version or enabling fallback. Uncommitted Weft security/core-0.8 work is excluded.
+
+The qualified compiler record covers its binding-admitted PostgreSQL 17.9 domains: integer widths 1–64 signed/unsigned, decimal precision 1–28 with admitted scales, exact NUMERIC SUM, sequence/map/structured values, authored monomorphic relationship key bags and stable authored-key paging. Native logical null, unknown selected semantic extensions/storage homes and unregistered engine/settings remain excluded. Host integrity, authorization, same-context evaluation and buffered publication obligations remain conditions of execution. Qualified compiler semantics do not adopt Truss's private 0.15 layout, complete acceptance runtime or ordinary-role installation. Distribution ownership/license/final artifacts remain owner gates; these do not block Truss integration development.
+
+## Historical read-only owner source review — numeric containers and complete entities (2026-10-08)
 
 Weft HEAD is de606bbafcc88a3c8872b859a8283eec4e1a6eb6; UMF remains 16c35e8d. The [source review](evidence/design-audit/weft-numeric-container-entity-source-review.json) verifies every listed source pin at each original receipt commit. Truss did not rerun owner native/embedding tests. At 10bb0a3, owner evidence reports 68 native cases and 20 cases per embedding for selected signed64/decimal(28,2) maps and structured values. At de606bb, it reports 80 native cases and 40 cases per embedding for four complete entity configurations combining sequence/map/structured roots with scalar keys/note. Positive complete responses are four and eight respectively, with sixteen and thirty-two refusals and matching deterministic Python repeats.
 
