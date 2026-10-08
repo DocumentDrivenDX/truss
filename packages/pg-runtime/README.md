@@ -59,3 +59,13 @@ files in a separate process, with no database submission. The observed run has
 file hashes are recorded without publishing sensitive request/result contents.
 This is process-independent correspondence evidence, not a power-loss test or
 native transaction recovery qualification.
+
+Journal requests now include `custody.lease` (random local checkout locator) and
+`custody.ordinal` (canonical decimal text from a bigint counter, starting at zero).
+A new lease is generated for every pool checkout, including reuse of one native
+socket. Control and ordinary queries share the same counter. The offline verifier
+requires every observed checkout's sequence to be consecutive with no duplicates.
+The native run observes 50 requests across nine checkouts. These fields are local
+host provenance only: they are not native xid, backend identity, issuer epoch,
+protected operation token or recovery authority. Historical records without these
+fields are preserved, but cannot satisfy the new grouping check.

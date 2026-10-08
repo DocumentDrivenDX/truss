@@ -2,8 +2,9 @@
 import {openSync,writeSync,fsyncSync,closeSync,lstatSync} from 'node:fs';
 import {join} from 'node:path';
 import {randomUUID} from 'node:crypto';
+export interface LocalQueryCustody {readonly lease:string;readonly ordinal:string;}
 export interface OriginalQueryJournal {
- begin(text:string,values:readonly (string|null)[]):{
+ begin(text:string,values:readonly (string|null)[],custody:LocalQueryCustody):{
   frame(bytes:Uint8Array):void;
   finish(outcome:'response_complete'|'server_error'|'uncertain'):void;
  };
@@ -12,13 +13,14 @@ export interface OriginalQueryJournal {
 export function createFileQueryJournal(directory:string):OriginalQueryJournal {
  const stat=lstatSync(directory);
  if(!stat.isDirectory()||(stat.mode&0o077)!==0||stat.uid!==process.getuid?.())throw Error('Private owned journal directory required');
- return {begin(text,values){
+ return {begin(text,values,custody){
+  if(!custody||! /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(custody.lease)||! /^(0|[1-9][0-9]*)$/.test(custody.ordinal))throw Error('Local query custody required');
   const path=join(directory,randomUUID()+'.jsonl');
   const append=(record:unknown,first=false)=>{
    const fd=openSync(path,first?'wx':'a',0o600);
    try{const bytes=Buffer.from(JSON.stringify(record)+'\n');let offset=0;while(offset<bytes.length)offset+=writeSync(fd,bytes,offset,bytes.length-offset);fsyncSync(fd);}finally{closeSync(fd);}
   };
-  append({kind:'request',text,values:[...values]},true);
+  append({kind:'request',text,values:[...values],custody:{lease:custody.lease,ordinal:custody.ordinal}},true);
   // Persist directory entry before native admission, including after a machine crash.
   const dir=openSync(directory,'r');try{fsyncSync(dir);}finally{closeSync(dir);}
   let ended=false;

@@ -2,12 +2,13 @@
 import type {PoolClient} from 'pg';
 import type {Socket} from 'node:net';
 import {ResponseIngress,decodeResponseFrame} from './wire';
-import type {OriginalQueryJournal} from './journal';
-export async function originalQuery(client:PoolClient,text:string,values?:readonly (string|null)[],journal?:OriginalQueryJournal):Promise<readonly ReturnType<typeof decodeResponseFrame>[]> {
+import type {OriginalQueryJournal,LocalQueryCustody} from './journal';
+export async function originalQuery(client:PoolClient,text:string,values?:readonly (string|null)[],journal?:OriginalQueryJournal,custody?:LocalQueryCustody):Promise<readonly ReturnType<typeof decodeResponseFrame>[]> {
  const connection=(client as unknown as {connection:{stream:Socket}}).connection;
  const stream=connection?.stream;if(!stream)throw Error('Original transport unavailable');
  const handlers=stream.listeners('data');if(handlers.length!==1)throw Error('Unsupported original parser composition');
- const retained=journal?.begin(text,values??[]);
+ if(journal&&!custody)throw Error('Local query custody required before journal admission');
+ const retained=journal?.begin(text,values??[],custody!);
  let outcome:'response_complete'|'server_error'|'uncertain'='uncertain';
  const originalParser=handlers[0];
  const limits={maxFrameBytes:1048576,maxFields:2048,maxTotalBytes:4194304,maxFrames:10000};

@@ -1,5 +1,5 @@
 /** Host-only PostgreSQL driver. Portable Truss package imports no pg dependency. */
-export { createFileQueryJournal, type OriginalQueryJournal } from './journal';
+export { createFileQueryJournal, type OriginalQueryJournal, type LocalQueryCustody } from './journal';
 import type { OriginalQueryJournal } from './journal';
 import { type PoolConfig } from 'pg';
 import type { NativeConnectionSource } from '@documentdrivendx/truss-postgresql';

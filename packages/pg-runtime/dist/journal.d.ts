@@ -1,5 +1,9 @@
+export interface LocalQueryCustody {
+    readonly lease: string;
+    readonly ordinal: string;
+}
 export interface OriginalQueryJournal {
-    begin(text: string, values: readonly (string | null)[]): {
+    begin(text: string, values: readonly (string | null)[], custody: LocalQueryCustody): {
         frame(bytes: Uint8Array): void;
         finish(outcome: 'response_complete' | 'server_error' | 'uncertain'): void;
     };

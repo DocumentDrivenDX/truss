@@ -7,7 +7,9 @@ function createFileQueryJournal(directory) {
   const stat = lstatSync(directory);
   if (!stat.isDirectory() || (stat.mode & 63) !== 0 || stat.uid !== process.getuid?.())
     throw Error("Private owned journal directory required");
-  return { begin(text, values) {
+  return { begin(text, values, custody) {
+    if (!custody || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(custody.lease) || !/^(0|[1-9][0-9]*)$/.test(custody.ordinal))
+      throw Error("Local query custody required");
     const path = join(directory, randomUUID() + ".jsonl");
     const append = (record, first = false) => {
       const fd = openSync(path, first ? "wx" : "a", 384);
@@ -22,7 +24,7 @@ function createFileQueryJournal(directory) {
         closeSync(fd);
       }
     };
-    append({ kind: "request", text, values: [...values] }, true);
+    append({ kind: "request", text, values: [...values], custody: { lease: custody.lease, ordinal: custody.ordinal } }, true);
     const dir = openSync(directory, "r");
     try {
       fsyncSync(dir);
@@ -292,7 +294,7 @@ class ResponseIngress {
 }
 
 // packages/pg-runtime/src/native-query.ts
-async function originalQuery(client, text, values, journal) {
+async function originalQuery(client, text, values, journal, custody) {
   const connection = client.connection;
   const stream = connection?.stream;
   if (!stream)
@@ -300,7 +302,9 @@ async function originalQuery(client, text, values, journal) {
   const handlers = stream.listeners("data");
   if (handlers.length !== 1)
     throw Error("Unsupported original parser composition");
-  const retained = journal?.begin(text, values ?? []);
+  if (journal && !custody)
+    throw Error("Local query custody required before journal admission");
+  const retained = journal?.begin(text, values ?? [], custody);
   let outcome = "uncertain";
   const originalParser = handlers[0];
   const limits = { maxFrameBytes: 1048576, maxFields: 2048, maxTotalBytes: 4194304, maxFrames: 1e4 };
@@ -384,6 +388,7 @@ function requireOriginalCompletion(frames, status, command) {
 }
 
 // packages/pg-runtime/src/index.ts
+import { randomUUID as randomUUID2 } from "crypto";
 import { Pool, DatabaseError } from "pg";
 function createPgConnectionSource(config, options = {}) {
   const pool = new Pool({ ...config, types: { getTypeParser(_oid, format) {
@@ -396,6 +401,9 @@ function createPgConnectionSource(config, options = {}) {
     const client = await pool.connect();
     let ended = false;
     let started = false;
+    const lease = randomUUID2();
+    let ordinal = 0n;
+    const query = (sql, values) => originalQuery(client, sql, values, options.journal, { lease, ordinal: (ordinal++).toString() });
     const alive = () => {
       if (ended || quarantine.has(client))
         throw Error("Original native connection unavailable");
@@ -406,7 +414,7 @@ function createPgConnectionSource(config, options = {}) {
     client.on("error", onError);
     const control = async (sql, expected) => {
       alive();
-      const frames = await originalQuery(client, sql, undefined, options.journal);
+      const frames = await query(sql);
       try {
         requireOriginalCompletion(frames, sql === "COMMIT" || sql === "ROLLBACK" ? "I" : "T", expected);
       } catch (error) {
@@ -430,7 +438,7 @@ function createPgConnectionSource(config, options = {}) {
         alive();
         if (!started)
           throw Error("Not begun");
-        const frames = await originalQuery(client, statement.sql, statement.parameters.map((p) => p.carrier === "null" ? null : p.text), options.journal);
+        const frames = await query(statement.sql, statement.parameters.map((p) => p.carrier === "null" ? null : p.text));
         try {
           requireOriginalCompletion(frames, "T");
         } catch (error) {
