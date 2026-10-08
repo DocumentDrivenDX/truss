@@ -65,5 +65,49 @@
       "observedAdmitted": true
     }
   ],
+  "readCases": [
+    {
+      "case": "safe_integer",
+      "originalToken": "9007199254740991",
+      "expectedLossless": true,
+      "observedLossless": true
+    },
+    {
+      "case": "unsafe_integer",
+      "originalToken": "9007199254740993",
+      "expectedLossless": false,
+      "observedLossless": false
+    },
+    {
+      "case": "exact_half",
+      "originalToken": "12.5",
+      "expectedLossless": true,
+      "observedLossless": true
+    },
+    {
+      "case": "decimal_tenth",
+      "originalToken": "0.1",
+      "expectedLossless": false,
+      "observedLossless": false
+    },
+    {
+      "case": "trailing_zero",
+      "originalToken": "1.00",
+      "expectedLossless": true,
+      "observedLossless": true
+    },
+    {
+      "case": "exponent",
+      "originalToken": "1e2",
+      "expectedLossless": true,
+      "observedLossless": true
+    },
+    {
+      "case": "tiny_underflow",
+      "originalToken": "1e-400",
+      "expectedLossless": false,
+      "observedLossless": false
+    }
+  ],
   "nativeQualified": false
 }

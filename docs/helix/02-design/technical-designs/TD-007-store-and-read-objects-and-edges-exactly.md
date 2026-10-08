@@ -21,20 +21,26 @@ ddx:
 
 ## Selected decision handoff — 2026-10-07
 
-Planned numeric facade controls NAPI-01–04: safe integer number and larger bigint round-trip exactly; reject unsafe integer number before effects; admit exact decimal number 12.5 but reject 0.1 as a decimal-number input requiring approximation; preserve decimalToken 1.00 and large/nested tokens across browser, JSON transport and native readback. Explicit number conversion must reject precision loss and preserve the original token separately. Planned ID controls PID-01–03: pending IDs link records only in the same live adopted transaction; rollback leaves no committed graph identity; no durable external publication occurs before confirmed outer commit, and unknown commit waits for recovery rather than reallocation. Cases are not_run.
+Planned numeric facade controls NAPI-01–04: safe integer number and larger bigint round-trip exactly; reject unsafe integer number before effects; under decimal(3,1), admit exact decimal number 12.5 but reject the actual binary value of number 0.1; preserve decimalToken 1.00 and large/nested tokens across browser, JSON transport and native readback. Explicit number conversion must reject precision loss and preserve the original token separately. Planned ID controls PID-01–03: pending IDs link records only in the same live adopted transaction; rollback leaves no committed graph identity; no durable external publication occurs before confirmed outer commit, and unknown commit waits for recovery rather than reallocation. Cases are not_run.
 
 
 **User Story:** [[US-007]]. **Feature:** FEAT-002. **Parent:** [[SD-002]].
 
 ## Scope
 
-Build the catalog-driven exact value codec and fixed object/edge storage transport. No per-type tables or implicit driver conversions. The story includes shared identifier allocation, not edge lifecycle/cardinality rules covered by other stories. Numeric lexical preservation remains a blocking design decision, not an acceptable loss.
+Build the catalog-driven exact value codec and fixed object/edge storage transport. No per-type tables or implicit driver conversions. The story includes shared identifier allocation, not edge lifecycle/cardinality rules covered by other stories. Exact numeric token preservation and the hybrid numeric API are selected; exact source/native codec profiles remain to be composed.
 
 ## Technical Approach
 
 Inherit SD-002's lossless text boundary. Core receives typed values and a pinned catalog; the adapter passes explicit typed parameters and raw text/null result cells under CONTRACT-007. Avoid a generic host JSON parser for numeric tokens. Read object maps with an exact recursive parser that preserves presence before converting each value according to its catalog meaning.
 
 US-007-AC1 spans pure codec and actual PostgreSQL roundtrip. Binary uses canonical base64; timestamps retain authored offset text rather than native driver Date conversion. Arbitrary-precision arithmetic handles numeric validation. AC2 uses map membership plus explicit JSON null; SQL null and absent field are not interchangeable. AC3 checks nested strings as well as top-level properties before persistence and reports the governing rule. AC4 obtains identifiers exclusively from the shared native sequence; rolled-back reservations leave gaps and deleted identifiers are never recycled.
+
+## Numeric convenience implementation boundary
+
+Implement ADR-006's exact binary64 rational algorithm in the portable value adapter, before request canonicalization or native parameters. Bit inspection must be browser-compatible; number printing/JSON parsing cannot establish equality. Reuse the pinned UMF public literal/field validator for source-domain/facet admission after constructing the exact candidate. The convenience adapter does not redefine integer width, decimal scale/precision or allowed values. Public constructor names await current UMF convenience API review; the algorithm can be implemented against existing exact token primitives without an upstream feature dependency.
+
+Reads retain exact token carriers by default. Explicit number conversion is an independently checked view: compare the token's exact rational value with the candidate binary64 rational, reject any difference, and retain original spelling separately. Safe integer-number admission remains stricter than mere binary64 representability for integer input. Field/source/native and finite resource profiles still govern all conversion paths.
 
 ## Component Changes
 
@@ -79,7 +85,7 @@ Initial storage uses fresh bootstrap only. Failed writes leave no canonical rows
 
 ## Implementation Sequence
 
-1. Select the full original logical/native/home/codec/resource tuple and resolve applicable D-05 lexical carrier and FR-15 allocation durability choices. Row-home numeric_token is an authored candidate; it does not silently accept the props lexical ADR or prove durability.
+1. Select the full original logical/native/home/codec/resource tuple and apply accepted ADR-006 exact carrier direction and FR-15 provisional precommit ID rules. Row-home numeric_token is an authored candidate; it does not silently accept the props lexical ADR or prove durability.
 2. Add independent exactness/presence/U+0000/native identity cases and the NX witness/refusal corpus. Original facet and native representability expectations must be separate from mathematical/lexical equality.
 3. Implement bounded exact parsing and pure NX comparison with source bytes retained; validate the complete original token/exponent/facets before zero normalization. Run pure browser/Bun cases through the same portable output.
 4. Implement raw native descriptor/text/parameter transport, actual stored source/token/value correspondence and complete row/recursive finalization under selected original context/resource custody. Register/qualify native parsing/facet/correspondence producers before reporting database enforcement.

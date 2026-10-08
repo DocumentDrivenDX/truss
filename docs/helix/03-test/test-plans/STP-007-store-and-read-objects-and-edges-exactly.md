@@ -17,6 +17,13 @@ ddx:
 
 # STP-007: Store and read objects and edges exactly
 
+## Exact numeric convenience schedules (planned)
+
+NAPI-05–08 extend the selected NAPI-01–04: (05) evaluate 12.5 and 0.1 against decimal(3,1), then the exact binary 0.1 value against a sufficiently wide domain, distinguishing domain admission from the authored token `0.1`; (06) explicit read conversion accepts 12.5, 1.00 and 1e2 without overwriting token spelling, but rejects 0.1, 9007199254740993 and underflowing 1e-400; (07) safe integer input separately refuses unsafe-number input even where a binary value itself is integral, then validates bigint/token width/range through pinned UMF; (08) exhaust selected conversion work/size before bigint scaling and reject unknown scale/facets without native effects or request-identity disclosure. Repeat pure cases in Bun and real Chromium and nested public/native transport cases under the selected codec profiles. All are not_run.
+
+The independent Python Fraction [domain/read examples](../../04-build/evidence/design-audit/number-decimal-domain-examples.json) establish only seven write-domain and seven read-equality expectations. They do not run the future TypeScript adapter or qualify UMF/native/browser behavior. Preserve separate original token and converted-view observations; shortest printed decimal equality cannot pass these cases.
+
+
 ## Selected decision handoff — 2026-10-07
 
 Planned numeric facade controls NAPI-01–04: safe integer number and larger bigint round-trip exactly; reject unsafe integer number before effects; admit exact decimal number 12.5 but reject 0.1 as a decimal-number input requiring approximation; preserve decimalToken 1.00 and large/nested tokens across browser, JSON transport and native readback. Explicit number conversion must reject precision loss and preserve the original token separately. Planned ID controls PID-01–03: pending IDs link records only in the same live adopted transaction; rollback leaves no committed graph identity; no durable external publication occurs before confirmed outer commit, and unknown commit waits for recovery rather than reallocation. Cases are not_run.
