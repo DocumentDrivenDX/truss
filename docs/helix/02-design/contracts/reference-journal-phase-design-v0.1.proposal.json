@@ -1,0 +1,147 @@
+{
+  "interfaceVersion": "truss-reference-journal-phase-design/0.1.0",
+  "status": "selected_design_fields_incomplete_native_binding",
+  "nativeQualified": false,
+  "installerReady": false,
+  "scope": "Five private phase selectors, separate from the seven handler/validator manifest; no new physical identities or native routines are allocated.",
+  "governingSources": [
+    {
+      "path": "02-design/contracts/CONTRACT-002-journal.md",
+      "sha256": "d2893c9fa9c54393aeab3becfe69caae68996063905b06e85db7bbdb0e3324b1"
+    },
+    {
+      "path": "02-design/contracts/CONTRACT-005-module-isolation.md",
+      "sha256": "d797fe61895671134f94d0c187b1d28bbdbe3368eeec421f8daa623d681ce477"
+    },
+    {
+      "path": "02-design/contracts/bindings/truss-journal-phase-resource-v0.2.proposal.json",
+      "sha256": "a5831813b443f0d970e2ea9904637cb420929ae4a969bb2ef264996e9378ff4e"
+    }
+  ],
+  "sharedSelectedAttributes": {
+    "language": "plpgsql",
+    "volatility": "VOLATILE",
+    "parallel": "UNSAFE",
+    "nullInput": "CALLED ON NULL INPUT",
+    "leakproof": false,
+    "security": "DEFINER",
+    "searchPathRecipe": [
+      "pg_catalog",
+      {
+        "trustedInstallationNamespace": true
+      },
+      "pg_temp"
+    ],
+    "publicExecute": false,
+    "ordinaryApplicationExecute": false
+  },
+  "routines": [
+    {
+      "selector": "journal_capture_start",
+      "parameters": [
+        {
+          "name": "operation_context_bytes",
+          "type": "bytea"
+        }
+      ],
+      "returns": "bytea",
+      "stage": "start",
+      "ownerResponsibility": "journal-phase-owner",
+      "physicalIdentity": null,
+      "namespace": null,
+      "nativeRole": null,
+      "body": null,
+      "completeDependencies": null,
+      "privateCallerAcl": null,
+      "nativeEvidence": null
+    },
+    {
+      "selector": "journal_observe_transition",
+      "parameters": [
+        {
+          "name": "operation_context_bytes",
+          "type": "bytea"
+        },
+        {
+          "name": "original_effect_bytes",
+          "type": "bytea"
+        }
+      ],
+      "returns": "bytea",
+      "stage": "transition",
+      "ownerResponsibility": "journal-phase-owner",
+      "physicalIdentity": null,
+      "namespace": null,
+      "nativeRole": null,
+      "body": null,
+      "completeDependencies": null,
+      "privateCallerAcl": null,
+      "nativeEvidence": null
+    },
+    {
+      "selector": "journal_prepare_final",
+      "parameters": [
+        {
+          "name": "operation_context_bytes",
+          "type": "bytea"
+        }
+      ],
+      "returns": "bytea",
+      "stage": "final",
+      "ownerResponsibility": "journal-phase-owner",
+      "physicalIdentity": null,
+      "namespace": null,
+      "nativeRole": null,
+      "body": null,
+      "completeDependencies": null,
+      "privateCallerAcl": null,
+      "nativeEvidence": null
+    },
+    {
+      "selector": "journal_reserve_positions",
+      "parameters": [
+        {
+          "name": "operation_context_bytes",
+          "type": "bytea"
+        }
+      ],
+      "returns": "bytea",
+      "stage": "reserved",
+      "ownerResponsibility": "journal-phase-owner",
+      "physicalIdentity": null,
+      "namespace": null,
+      "nativeRole": null,
+      "body": null,
+      "completeDependencies": null,
+      "privateCallerAcl": null,
+      "nativeEvidence": null
+    },
+    {
+      "selector": "journal_append_group",
+      "parameters": [
+        {
+          "name": "operation_context_bytes",
+          "type": "bytea"
+        }
+      ],
+      "returns": "bytea",
+      "stage": "publication",
+      "ownerResponsibility": "journal-phase-owner",
+      "physicalIdentity": null,
+      "namespace": null,
+      "nativeRole": null,
+      "body": null,
+      "completeDependencies": null,
+      "privateCallerAcl": null,
+      "nativeEvidence": null
+    }
+  ],
+  "ownerForbiddenResponsibilities": [
+    "parent readiness/sealing",
+    "canonical graph/catalog/report mutation",
+    "stage deletion",
+    "sequence reset"
+  ],
+  "cleanup": "Separate administrative path; cannot invoke phase production as repair. Exact native role and complete privileges remain unresolved.",
+  "acceptance": "STP-018 JP-01\u201304, JA-01\u201303 and JS-01\u201304 plus actual installed-definition/dependency/privilege parity; source manifest is insufficient."
+}
