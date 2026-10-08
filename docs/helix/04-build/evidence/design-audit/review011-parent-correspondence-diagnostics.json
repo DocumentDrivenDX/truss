@@ -1,0 +1,1678 @@
+{
+  "inputSha256": {
+    "review011-original-node-correspondence.json": "40502795815bb2701b13d594c8a5f47499b1abf5a20fc448b0c24f9ed0e32778",
+    "review011-unmatched-identity-diagnostics.json": "a751c36304deebd749e560eefcad49b8f10380885e194153f156398a87193381",
+    "review010-prior-identity-catalogs.json": "43ff2c261507e59a8775b7341451a69ac965978fe101cae52192d85243e38d79"
+  },
+  "scope": "Diagnostic location-insensitive candidates constrained by unique original parent/creator candidate nodes with exact versus diagnostic anchor strength recorded; no name-derived ownership, identity adoption or native equivalence",
+  "counts": {
+    "no_parent_bounded_candidate": 17,
+    "no_unique_parent_or_creator_anchor": 70
+  },
+  "entries": [
+    {
+      "authoredId": "truss.edge-limit.trigger.edge_limit_edge_observe",
+      "parentId": "truss.layout.table.edge",
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [
+        "/20/stmt/CreateStmt"
+      ],
+      "parentAnchorKind": "exact",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_parent_bounded_candidate"
+    },
+    {
+      "authoredId": "truss.edge-limit.trigger.edge_limit_marker_observe",
+      "parentId": "truss.layout.table.edge_limit",
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [
+        "/23/stmt/CreateStmt"
+      ],
+      "parentAnchorKind": "exact",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_parent_bounded_candidate"
+    },
+    {
+      "authoredId": "truss.edge-limit.trigger.edge_limit_catalog_observe",
+      "parentId": "truss.layout.table.rel_def",
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.feed.trigger.feed_tx_current_union_guard",
+      "parentId": "truss.feed.table.feed_tx",
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [
+        "/78/stmt/CreateStmt"
+      ],
+      "parentAnchorKind": "exact",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_parent_bounded_candidate"
+    },
+    {
+      "authoredId": "truss.feed.trigger-constraint.feed_tx_current_union_guard",
+      "parentId": "truss.feed.table.feed_tx",
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [
+        "/78/stmt/CreateStmt"
+      ],
+      "parentAnchorKind": "exact",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_parent_bounded_candidate"
+    },
+    {
+      "authoredId": "truss.feed.trigger.feed_member_current_union_guard",
+      "parentId": "truss.feed.table.feed_member",
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [
+        "/79/stmt/CreateStmt"
+      ],
+      "parentAnchorKind": "exact",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_parent_bounded_candidate"
+    },
+    {
+      "authoredId": "truss.feed.trigger-constraint.feed_member_current_union_guard",
+      "parentId": "truss.feed.table.feed_member",
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [
+        "/79/stmt/CreateStmt"
+      ],
+      "parentAnchorKind": "exact",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_parent_bounded_candidate"
+    },
+    {
+      "authoredId": "truss.feed.trigger.feed_prerequisite_current_union_guard",
+      "parentId": "truss.feed.table.feed_prerequisite",
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [
+        "/80/stmt/CreateStmt"
+      ],
+      "parentAnchorKind": "exact",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_parent_bounded_candidate"
+    },
+    {
+      "authoredId": "truss.feed.trigger-constraint.feed_prerequisite_current_union_guard",
+      "parentId": "truss.feed.table.feed_prerequisite",
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [
+        "/80/stmt/CreateStmt"
+      ],
+      "parentAnchorKind": "exact",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_parent_bounded_candidate"
+    },
+    {
+      "authoredId": "truss.feed.trigger.feed_configuration_prerequisite_current_union_guard",
+      "parentId": "truss.feed.table.feed_configuration_prerequisite",
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [
+        "/81/stmt/CreateStmt"
+      ],
+      "parentAnchorKind": "exact",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_parent_bounded_candidate"
+    },
+    {
+      "authoredId": "truss.feed.trigger-constraint.feed_configuration_prerequisite_current_union_guard",
+      "parentId": "truss.feed.table.feed_configuration_prerequisite",
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [
+        "/81/stmt/CreateStmt"
+      ],
+      "parentAnchorKind": "exact",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_parent_bounded_candidate"
+    },
+    {
+      "authoredId": "truss.constraint.5a000bee-cacf-4262-8a50-ca421324220a",
+      "parentId": "truss.layout.table.module_access",
+      "creatingConstraintId": null,
+      "originalCandidates": [
+        "/2/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/6/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/8/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/12/stmt/CreateStmt/tableElts/1/ColumnDef/constraints/0/Constraint",
+        "/13/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/15/stmt/CreateStmt/tableElts/1/ColumnDef/constraints/0/Constraint",
+        "/20/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/28/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/46/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/53/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/62/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/69/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/74/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/76/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/83/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/86/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/89/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/92/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/97/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/99/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/2/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/6/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/8/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/12/stmt/CreateStmt/tableElts/1/ColumnDef/constraints/0/Constraint",
+        "/13/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/15/stmt/CreateStmt/tableElts/1/ColumnDef/constraints/0/Constraint",
+        "/20/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/28/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/46/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/53/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/62/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/69/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/74/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/76/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/83/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/86/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/89/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/92/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/97/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/99/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.constraint.43653790-13f4-43d9-86ac-f5181f2e654e",
+      "parentId": "truss.layout.table.module_access",
+      "creatingConstraintId": null,
+      "originalCandidates": [
+        "/5/stmt/CreateStmt/tableElts/5/Constraint"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/5/stmt/CreateStmt/tableElts/5/Constraint"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.constraint.fe9f3a11-85a6-4669-9d5e-fc39eb86859c",
+      "parentId": "truss.layout.table.type_def",
+      "creatingConstraintId": null,
+      "originalCandidates": [
+        "/2/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/6/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/8/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/12/stmt/CreateStmt/tableElts/1/ColumnDef/constraints/0/Constraint",
+        "/13/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/15/stmt/CreateStmt/tableElts/1/ColumnDef/constraints/0/Constraint",
+        "/20/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/28/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/46/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/53/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/62/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/69/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/74/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/76/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/83/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/86/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/89/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/92/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/97/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/99/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/2/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/6/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/8/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/12/stmt/CreateStmt/tableElts/1/ColumnDef/constraints/0/Constraint",
+        "/13/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/15/stmt/CreateStmt/tableElts/1/ColumnDef/constraints/0/Constraint",
+        "/20/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/28/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/46/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/53/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/62/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/69/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/74/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/76/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/83/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/86/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/89/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/92/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/97/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/99/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.constraint.59f14ba3-7b20-4e8f-9836-f0a1741b99ea",
+      "parentId": "truss.layout.table.type_def",
+      "creatingConstraintId": null,
+      "originalCandidates": [
+        "/8/stmt/CreateStmt/tableElts/1/ColumnDef/constraints/1/Constraint",
+        "/10/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/1/Constraint",
+        "/11/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/1/Constraint",
+        "/12/stmt/CreateStmt/tableElts/6/ColumnDef/constraints/1/Constraint",
+        "/12/stmt/CreateStmt/tableElts/8/ColumnDef/constraints/0/Constraint",
+        "/13/stmt/CreateStmt/tableElts/10/ColumnDef/constraints/1/Constraint",
+        "/13/stmt/CreateStmt/tableElts/12/ColumnDef/constraints/0/Constraint",
+        "/14/stmt/CreateStmt/tableElts/5/ColumnDef/constraints/1/Constraint",
+        "/14/stmt/CreateStmt/tableElts/6/ColumnDef/constraints/0/Constraint",
+        "/15/stmt/CreateStmt/tableElts/15/ColumnDef/constraints/1/Constraint",
+        "/15/stmt/CreateStmt/tableElts/17/ColumnDef/constraints/0/Constraint",
+        "/18/stmt/CreateStmt/tableElts/6/ColumnDef/constraints/1/Constraint",
+        "/20/stmt/CreateStmt/tableElts/8/ColumnDef/constraints/1/Constraint",
+        "/69/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/1/Constraint",
+        "/95/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/1/Constraint",
+        "/95/stmt/CreateStmt/tableElts/5/ColumnDef/constraints/0/Constraint",
+        "/95/stmt/CreateStmt/tableElts/6/ColumnDef/constraints/0/Constraint"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/8/stmt/CreateStmt/tableElts/1/ColumnDef/constraints/1/Constraint",
+        "/10/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/1/Constraint",
+        "/11/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/1/Constraint",
+        "/12/stmt/CreateStmt/tableElts/6/ColumnDef/constraints/1/Constraint",
+        "/12/stmt/CreateStmt/tableElts/8/ColumnDef/constraints/0/Constraint",
+        "/13/stmt/CreateStmt/tableElts/10/ColumnDef/constraints/1/Constraint",
+        "/13/stmt/CreateStmt/tableElts/12/ColumnDef/constraints/0/Constraint",
+        "/14/stmt/CreateStmt/tableElts/5/ColumnDef/constraints/1/Constraint",
+        "/14/stmt/CreateStmt/tableElts/6/ColumnDef/constraints/0/Constraint",
+        "/15/stmt/CreateStmt/tableElts/15/ColumnDef/constraints/1/Constraint",
+        "/15/stmt/CreateStmt/tableElts/17/ColumnDef/constraints/0/Constraint",
+        "/18/stmt/CreateStmt/tableElts/6/ColumnDef/constraints/1/Constraint",
+        "/20/stmt/CreateStmt/tableElts/8/ColumnDef/constraints/1/Constraint",
+        "/69/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/1/Constraint",
+        "/95/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/1/Constraint",
+        "/95/stmt/CreateStmt/tableElts/5/ColumnDef/constraints/0/Constraint",
+        "/95/stmt/CreateStmt/tableElts/6/ColumnDef/constraints/0/Constraint"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.constraint.f7835db6-3e7a-479c-9cd9-c86c5b0c1081",
+      "parentId": "truss.layout.table.type_def",
+      "creatingConstraintId": null,
+      "originalCandidates": [
+        "/8/stmt/CreateStmt/tableElts/1/ColumnDef/constraints/1/Constraint",
+        "/10/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/1/Constraint",
+        "/11/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/1/Constraint",
+        "/12/stmt/CreateStmt/tableElts/6/ColumnDef/constraints/1/Constraint",
+        "/12/stmt/CreateStmt/tableElts/8/ColumnDef/constraints/0/Constraint",
+        "/13/stmt/CreateStmt/tableElts/10/ColumnDef/constraints/1/Constraint",
+        "/13/stmt/CreateStmt/tableElts/12/ColumnDef/constraints/0/Constraint",
+        "/14/stmt/CreateStmt/tableElts/5/ColumnDef/constraints/1/Constraint",
+        "/14/stmt/CreateStmt/tableElts/6/ColumnDef/constraints/0/Constraint",
+        "/15/stmt/CreateStmt/tableElts/15/ColumnDef/constraints/1/Constraint",
+        "/15/stmt/CreateStmt/tableElts/17/ColumnDef/constraints/0/Constraint",
+        "/18/stmt/CreateStmt/tableElts/6/ColumnDef/constraints/1/Constraint",
+        "/20/stmt/CreateStmt/tableElts/8/ColumnDef/constraints/1/Constraint",
+        "/69/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/1/Constraint",
+        "/95/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/1/Constraint",
+        "/95/stmt/CreateStmt/tableElts/5/ColumnDef/constraints/0/Constraint",
+        "/95/stmt/CreateStmt/tableElts/6/ColumnDef/constraints/0/Constraint"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/8/stmt/CreateStmt/tableElts/1/ColumnDef/constraints/1/Constraint",
+        "/10/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/1/Constraint",
+        "/11/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/1/Constraint",
+        "/12/stmt/CreateStmt/tableElts/6/ColumnDef/constraints/1/Constraint",
+        "/12/stmt/CreateStmt/tableElts/8/ColumnDef/constraints/0/Constraint",
+        "/13/stmt/CreateStmt/tableElts/10/ColumnDef/constraints/1/Constraint",
+        "/13/stmt/CreateStmt/tableElts/12/ColumnDef/constraints/0/Constraint",
+        "/14/stmt/CreateStmt/tableElts/5/ColumnDef/constraints/1/Constraint",
+        "/14/stmt/CreateStmt/tableElts/6/ColumnDef/constraints/0/Constraint",
+        "/15/stmt/CreateStmt/tableElts/15/ColumnDef/constraints/1/Constraint",
+        "/15/stmt/CreateStmt/tableElts/17/ColumnDef/constraints/0/Constraint",
+        "/18/stmt/CreateStmt/tableElts/6/ColumnDef/constraints/1/Constraint",
+        "/20/stmt/CreateStmt/tableElts/8/ColumnDef/constraints/1/Constraint",
+        "/69/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/1/Constraint",
+        "/95/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/1/Constraint",
+        "/95/stmt/CreateStmt/tableElts/5/ColumnDef/constraints/0/Constraint",
+        "/95/stmt/CreateStmt/tableElts/6/ColumnDef/constraints/0/Constraint"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.constraint.f1b9b1ca-c6b3-405a-8142-3461059828bf",
+      "parentId": "truss.layout.table.type_def",
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.constraint.70a30731-a4a1-4ef6-8e40-6fed3c15830e",
+      "parentId": "truss.layout.table.type_def",
+      "creatingConstraintId": null,
+      "originalCandidates": [
+        "/12/stmt/CreateStmt/tableElts/14/Constraint",
+        "/13/stmt/CreateStmt/tableElts/15/Constraint",
+        "/15/stmt/CreateStmt/tableElts/18/Constraint"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/12/stmt/CreateStmt/tableElts/14/Constraint",
+        "/13/stmt/CreateStmt/tableElts/15/Constraint",
+        "/15/stmt/CreateStmt/tableElts/18/Constraint"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.constraint.cf210b68-0b81-4977-bd36-03e60c8a727a",
+      "parentId": "truss.layout.table.rel_def",
+      "creatingConstraintId": null,
+      "originalCandidates": [
+        "/2/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/6/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/8/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/12/stmt/CreateStmt/tableElts/1/ColumnDef/constraints/0/Constraint",
+        "/13/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/15/stmt/CreateStmt/tableElts/1/ColumnDef/constraints/0/Constraint",
+        "/20/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/28/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/46/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/53/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/62/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/69/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/74/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/76/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/83/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/86/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/89/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/92/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/97/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/99/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/2/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/6/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/8/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/12/stmt/CreateStmt/tableElts/1/ColumnDef/constraints/0/Constraint",
+        "/13/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/15/stmt/CreateStmt/tableElts/1/ColumnDef/constraints/0/Constraint",
+        "/20/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/28/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/46/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/53/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/62/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/69/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/74/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/76/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/83/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/86/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/89/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/92/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/97/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/99/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.constraint.6ea802fb-38d9-4589-baef-0e0edaa48eb9",
+      "parentId": "truss.layout.table.rel_def",
+      "creatingConstraintId": null,
+      "originalCandidates": [
+        "/13/stmt/CreateStmt/tableElts/1/ColumnDef/constraints/1/Constraint",
+        "/14/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/1/Constraint",
+        "/15/stmt/CreateStmt/tableElts/13/ColumnDef/constraints/0/Constraint",
+        "/16/stmt/CreateStmt/tableElts/1/ColumnDef/constraints/1/Constraint",
+        "/16/stmt/CreateStmt/tableElts/2/ColumnDef/constraints/1/Constraint",
+        "/18/stmt/CreateStmt/tableElts/1/ColumnDef/constraints/1/Constraint"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/13/stmt/CreateStmt/tableElts/1/ColumnDef/constraints/1/Constraint",
+        "/14/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/1/Constraint",
+        "/15/stmt/CreateStmt/tableElts/13/ColumnDef/constraints/0/Constraint",
+        "/16/stmt/CreateStmt/tableElts/1/ColumnDef/constraints/1/Constraint",
+        "/16/stmt/CreateStmt/tableElts/2/ColumnDef/constraints/1/Constraint",
+        "/18/stmt/CreateStmt/tableElts/1/ColumnDef/constraints/1/Constraint"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.constraint.9b59076c-9fdf-45ab-8dbc-222c8bda5961",
+      "parentId": "truss.layout.table.rel_def",
+      "creatingConstraintId": null,
+      "originalCandidates": [
+        "/8/stmt/CreateStmt/tableElts/1/ColumnDef/constraints/1/Constraint",
+        "/10/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/1/Constraint",
+        "/11/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/1/Constraint",
+        "/12/stmt/CreateStmt/tableElts/6/ColumnDef/constraints/1/Constraint",
+        "/12/stmt/CreateStmt/tableElts/8/ColumnDef/constraints/0/Constraint",
+        "/13/stmt/CreateStmt/tableElts/10/ColumnDef/constraints/1/Constraint",
+        "/13/stmt/CreateStmt/tableElts/12/ColumnDef/constraints/0/Constraint",
+        "/14/stmt/CreateStmt/tableElts/5/ColumnDef/constraints/1/Constraint",
+        "/14/stmt/CreateStmt/tableElts/6/ColumnDef/constraints/0/Constraint",
+        "/15/stmt/CreateStmt/tableElts/15/ColumnDef/constraints/1/Constraint",
+        "/15/stmt/CreateStmt/tableElts/17/ColumnDef/constraints/0/Constraint",
+        "/18/stmt/CreateStmt/tableElts/6/ColumnDef/constraints/1/Constraint",
+        "/20/stmt/CreateStmt/tableElts/8/ColumnDef/constraints/1/Constraint",
+        "/69/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/1/Constraint",
+        "/95/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/1/Constraint",
+        "/95/stmt/CreateStmt/tableElts/5/ColumnDef/constraints/0/Constraint",
+        "/95/stmt/CreateStmt/tableElts/6/ColumnDef/constraints/0/Constraint"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/8/stmt/CreateStmt/tableElts/1/ColumnDef/constraints/1/Constraint",
+        "/10/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/1/Constraint",
+        "/11/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/1/Constraint",
+        "/12/stmt/CreateStmt/tableElts/6/ColumnDef/constraints/1/Constraint",
+        "/12/stmt/CreateStmt/tableElts/8/ColumnDef/constraints/0/Constraint",
+        "/13/stmt/CreateStmt/tableElts/10/ColumnDef/constraints/1/Constraint",
+        "/13/stmt/CreateStmt/tableElts/12/ColumnDef/constraints/0/Constraint",
+        "/14/stmt/CreateStmt/tableElts/5/ColumnDef/constraints/1/Constraint",
+        "/14/stmt/CreateStmt/tableElts/6/ColumnDef/constraints/0/Constraint",
+        "/15/stmt/CreateStmt/tableElts/15/ColumnDef/constraints/1/Constraint",
+        "/15/stmt/CreateStmt/tableElts/17/ColumnDef/constraints/0/Constraint",
+        "/18/stmt/CreateStmt/tableElts/6/ColumnDef/constraints/1/Constraint",
+        "/20/stmt/CreateStmt/tableElts/8/ColumnDef/constraints/1/Constraint",
+        "/69/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/1/Constraint",
+        "/95/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/1/Constraint",
+        "/95/stmt/CreateStmt/tableElts/5/ColumnDef/constraints/0/Constraint",
+        "/95/stmt/CreateStmt/tableElts/6/ColumnDef/constraints/0/Constraint"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.constraint.6c5c5591-4726-4cd3-8451-7040a054de94",
+      "parentId": "truss.layout.table.rel_def",
+      "creatingConstraintId": null,
+      "originalCandidates": [
+        "/8/stmt/CreateStmt/tableElts/1/ColumnDef/constraints/1/Constraint",
+        "/10/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/1/Constraint",
+        "/11/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/1/Constraint",
+        "/12/stmt/CreateStmt/tableElts/6/ColumnDef/constraints/1/Constraint",
+        "/12/stmt/CreateStmt/tableElts/8/ColumnDef/constraints/0/Constraint",
+        "/13/stmt/CreateStmt/tableElts/10/ColumnDef/constraints/1/Constraint",
+        "/13/stmt/CreateStmt/tableElts/12/ColumnDef/constraints/0/Constraint",
+        "/14/stmt/CreateStmt/tableElts/5/ColumnDef/constraints/1/Constraint",
+        "/14/stmt/CreateStmt/tableElts/6/ColumnDef/constraints/0/Constraint",
+        "/15/stmt/CreateStmt/tableElts/15/ColumnDef/constraints/1/Constraint",
+        "/15/stmt/CreateStmt/tableElts/17/ColumnDef/constraints/0/Constraint",
+        "/18/stmt/CreateStmt/tableElts/6/ColumnDef/constraints/1/Constraint",
+        "/20/stmt/CreateStmt/tableElts/8/ColumnDef/constraints/1/Constraint",
+        "/69/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/1/Constraint",
+        "/95/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/1/Constraint",
+        "/95/stmt/CreateStmt/tableElts/5/ColumnDef/constraints/0/Constraint",
+        "/95/stmt/CreateStmt/tableElts/6/ColumnDef/constraints/0/Constraint"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/8/stmt/CreateStmt/tableElts/1/ColumnDef/constraints/1/Constraint",
+        "/10/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/1/Constraint",
+        "/11/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/1/Constraint",
+        "/12/stmt/CreateStmt/tableElts/6/ColumnDef/constraints/1/Constraint",
+        "/12/stmt/CreateStmt/tableElts/8/ColumnDef/constraints/0/Constraint",
+        "/13/stmt/CreateStmt/tableElts/10/ColumnDef/constraints/1/Constraint",
+        "/13/stmt/CreateStmt/tableElts/12/ColumnDef/constraints/0/Constraint",
+        "/14/stmt/CreateStmt/tableElts/5/ColumnDef/constraints/1/Constraint",
+        "/14/stmt/CreateStmt/tableElts/6/ColumnDef/constraints/0/Constraint",
+        "/15/stmt/CreateStmt/tableElts/15/ColumnDef/constraints/1/Constraint",
+        "/15/stmt/CreateStmt/tableElts/17/ColumnDef/constraints/0/Constraint",
+        "/18/stmt/CreateStmt/tableElts/6/ColumnDef/constraints/1/Constraint",
+        "/20/stmt/CreateStmt/tableElts/8/ColumnDef/constraints/1/Constraint",
+        "/69/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/1/Constraint",
+        "/95/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/1/Constraint",
+        "/95/stmt/CreateStmt/tableElts/5/ColumnDef/constraints/0/Constraint",
+        "/95/stmt/CreateStmt/tableElts/6/ColumnDef/constraints/0/Constraint"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.constraint.a291e953-d30f-4494-8e24-ea75abc41561",
+      "parentId": "truss.layout.table.rel_def",
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.constraint.7372458d-3d38-4ee5-87ca-ba0030304c9a",
+      "parentId": "truss.layout.table.rel_def",
+      "creatingConstraintId": null,
+      "originalCandidates": [
+        "/12/stmt/CreateStmt/tableElts/14/Constraint",
+        "/13/stmt/CreateStmt/tableElts/15/Constraint",
+        "/15/stmt/CreateStmt/tableElts/18/Constraint"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/12/stmt/CreateStmt/tableElts/14/Constraint",
+        "/13/stmt/CreateStmt/tableElts/15/Constraint",
+        "/15/stmt/CreateStmt/tableElts/18/Constraint"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.constraint.a558a095-efdd-4914-83f5-8ae9cbba2fde",
+      "parentId": "truss.layout.table.object_key",
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.constraint.9ac70487-ba0a-4381-90e2-dd35f4d35107",
+      "parentId": "truss.layout.table.object_key",
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.constraint.196c2f8e-7a6d-4554-9525-d865916c8bbe",
+      "parentId": "truss.layout.table.object_key",
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.constraint.bddd1293-fe8b-467f-ace1-242de802d14b",
+      "parentId": "truss.layout.table.object_key",
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.constraint.3a6e8755-efd2-46b6-8f1f-b5523be3648b",
+      "parentId": "truss.layout.table.key_tombstone",
+      "creatingConstraintId": null,
+      "originalCandidates": [
+        "/26/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/1/Constraint",
+        "/30/stmt/CreateStmt/tableElts/3/ColumnDef/constraints/1/Constraint"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/26/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/1/Constraint",
+        "/30/stmt/CreateStmt/tableElts/3/ColumnDef/constraints/1/Constraint"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.constraint.9270d7e4-e524-40f8-b53e-f123908a4178",
+      "parentId": "truss.layout.table.journal",
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.schema.truss.version-comment",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.table.module_access",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.table.schema_rev",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.table.type_def",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.table.rel_def",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.table.object_key",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.table.key_tombstone",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.table.journal",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.column.module_access.module",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.column.module_access.reader_role",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.column.module_access.writer_role",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.column.schema_rev.report",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.column.type_def.type_id",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [
+        "/12/stmt/CreateStmt/tableElts/1/ColumnDef"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/12/stmt/CreateStmt/tableElts/1/ColumnDef"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.column.type_def.module",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.column.type_def.element",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [
+        "/13/stmt/CreateStmt/tableElts/2/ColumnDef"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/13/stmt/CreateStmt/tableElts/2/ColumnDef"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.column.type_def.kind",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [
+        "/12/stmt/CreateStmt/tableElts/4/ColumnDef"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/12/stmt/CreateStmt/tableElts/4/ColumnDef"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.column.type_def.provisional",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [
+        "/12/stmt/CreateStmt/tableElts/5/ColumnDef"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/12/stmt/CreateStmt/tableElts/5/ColumnDef"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.column.type_def.since_rev",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [
+        "/12/stmt/CreateStmt/tableElts/6/ColumnDef",
+        "/13/stmt/CreateStmt/tableElts/10/ColumnDef",
+        "/14/stmt/CreateStmt/tableElts/5/ColumnDef",
+        "/15/stmt/CreateStmt/tableElts/15/ColumnDef"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/12/stmt/CreateStmt/tableElts/6/ColumnDef",
+        "/13/stmt/CreateStmt/tableElts/10/ColumnDef",
+        "/14/stmt/CreateStmt/tableElts/5/ColumnDef",
+        "/15/stmt/CreateStmt/tableElts/15/ColumnDef"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.column.type_def.doc_ord",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [
+        "/12/stmt/CreateStmt/tableElts/7/ColumnDef"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/12/stmt/CreateStmt/tableElts/7/ColumnDef"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.column.type_def.retired_rev",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [
+        "/12/stmt/CreateStmt/tableElts/8/ColumnDef",
+        "/13/stmt/CreateStmt/tableElts/12/ColumnDef",
+        "/14/stmt/CreateStmt/tableElts/6/ColumnDef",
+        "/15/stmt/CreateStmt/tableElts/17/ColumnDef"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/12/stmt/CreateStmt/tableElts/8/ColumnDef",
+        "/13/stmt/CreateStmt/tableElts/12/ColumnDef",
+        "/14/stmt/CreateStmt/tableElts/6/ColumnDef",
+        "/15/stmt/CreateStmt/tableElts/17/ColumnDef"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.column.rel_def.rel_type_id",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [
+        "/15/stmt/CreateStmt/tableElts/1/ColumnDef"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/15/stmt/CreateStmt/tableElts/1/ColumnDef"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.column.rel_def.module",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.column.rel_def.rel_id",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.column.rel_def.name",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [
+        "/13/stmt/CreateStmt/tableElts/3/ColumnDef",
+        "/15/stmt/CreateStmt/tableElts/4/ColumnDef"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/13/stmt/CreateStmt/tableElts/3/ColumnDef",
+        "/15/stmt/CreateStmt/tableElts/4/ColumnDef"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.column.rel_def.source_min",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [
+        "/15/stmt/CreateStmt/tableElts/5/ColumnDef"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/15/stmt/CreateStmt/tableElts/5/ColumnDef"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.column.rel_def.source_max",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [
+        "/15/stmt/CreateStmt/tableElts/6/ColumnDef"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/15/stmt/CreateStmt/tableElts/6/ColumnDef"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.column.rel_def.target_min",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [
+        "/15/stmt/CreateStmt/tableElts/7/ColumnDef"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/15/stmt/CreateStmt/tableElts/7/ColumnDef"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.column.rel_def.target_max",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [
+        "/15/stmt/CreateStmt/tableElts/8/ColumnDef"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/15/stmt/CreateStmt/tableElts/8/ColumnDef"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.column.rel_def.lifecycle",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [
+        "/15/stmt/CreateStmt/tableElts/9/ColumnDef"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/15/stmt/CreateStmt/tableElts/9/ColumnDef"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.column.rel_def.directed",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [
+        "/15/stmt/CreateStmt/tableElts/10/ColumnDef"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/15/stmt/CreateStmt/tableElts/10/ColumnDef"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.column.rel_def.target_key",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [
+        "/15/stmt/CreateStmt/tableElts/11/ColumnDef"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/15/stmt/CreateStmt/tableElts/11/ColumnDef"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.column.rel_def.composition",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [
+        "/15/stmt/CreateStmt/tableElts/12/ColumnDef"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/15/stmt/CreateStmt/tableElts/12/ColumnDef"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.column.rel_def.assoc_type_id",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [
+        "/15/stmt/CreateStmt/tableElts/13/ColumnDef"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/15/stmt/CreateStmt/tableElts/13/ColumnDef"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.column.rel_def.inverse",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [
+        "/15/stmt/CreateStmt/tableElts/14/ColumnDef"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/15/stmt/CreateStmt/tableElts/14/ColumnDef"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.column.rel_def.since_rev",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [
+        "/12/stmt/CreateStmt/tableElts/6/ColumnDef",
+        "/13/stmt/CreateStmt/tableElts/10/ColumnDef",
+        "/14/stmt/CreateStmt/tableElts/5/ColumnDef",
+        "/15/stmt/CreateStmt/tableElts/15/ColumnDef"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/12/stmt/CreateStmt/tableElts/6/ColumnDef",
+        "/13/stmt/CreateStmt/tableElts/10/ColumnDef",
+        "/14/stmt/CreateStmt/tableElts/5/ColumnDef",
+        "/15/stmt/CreateStmt/tableElts/15/ColumnDef"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.column.rel_def.doc_ord",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [
+        "/13/stmt/CreateStmt/tableElts/11/ColumnDef",
+        "/15/stmt/CreateStmt/tableElts/16/ColumnDef"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/13/stmt/CreateStmt/tableElts/11/ColumnDef",
+        "/15/stmt/CreateStmt/tableElts/16/ColumnDef"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.column.rel_def.retired_rev",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [
+        "/12/stmt/CreateStmt/tableElts/8/ColumnDef",
+        "/13/stmt/CreateStmt/tableElts/12/ColumnDef",
+        "/14/stmt/CreateStmt/tableElts/6/ColumnDef",
+        "/15/stmt/CreateStmt/tableElts/17/ColumnDef"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/12/stmt/CreateStmt/tableElts/8/ColumnDef",
+        "/13/stmt/CreateStmt/tableElts/12/ColumnDef",
+        "/14/stmt/CreateStmt/tableElts/6/ColumnDef",
+        "/15/stmt/CreateStmt/tableElts/17/ColumnDef"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.column.object_key.type_id",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [
+        "/25/stmt/CreateStmt/tableElts/1/ColumnDef",
+        "/65/stmt/CreateStmt/tableElts/1/ColumnDef",
+        "/95/stmt/CreateStmt/tableElts/2/ColumnDef"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/25/stmt/CreateStmt/tableElts/1/ColumnDef",
+        "/65/stmt/CreateStmt/tableElts/1/ColumnDef",
+        "/95/stmt/CreateStmt/tableElts/2/ColumnDef"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.column.object_key.key_num",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [
+        "/14/stmt/CreateStmt/tableElts/2/ColumnDef",
+        "/25/stmt/CreateStmt/tableElts/2/ColumnDef",
+        "/65/stmt/CreateStmt/tableElts/2/ColumnDef",
+        "/95/stmt/CreateStmt/tableElts/3/ColumnDef"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/14/stmt/CreateStmt/tableElts/2/ColumnDef",
+        "/25/stmt/CreateStmt/tableElts/2/ColumnDef",
+        "/65/stmt/CreateStmt/tableElts/2/ColumnDef",
+        "/95/stmt/CreateStmt/tableElts/3/ColumnDef"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.column.object_key.k",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [
+        "/25/stmt/CreateStmt/tableElts/3/ColumnDef"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/25/stmt/CreateStmt/tableElts/3/ColumnDef"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.column.object_key.object_id",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [
+        "/65/stmt/CreateStmt/tableElts/3/ColumnDef"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/65/stmt/CreateStmt/tableElts/3/ColumnDef"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.column.key_tombstone.entity_kind",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [
+        "/26/stmt/CreateStmt/tableElts/0/ColumnDef",
+        "/30/stmt/CreateStmt/tableElts/3/ColumnDef"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/26/stmt/CreateStmt/tableElts/0/ColumnDef",
+        "/30/stmt/CreateStmt/tableElts/3/ColumnDef"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.layout.column.journal.op",
+      "parentId": null,
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.supporting-index.105ff4d6-0d2c-4fea-a0aa-721981564dc5",
+      "parentId": "truss.layout.table.module_access",
+      "creatingConstraintId": "truss.constraint.5a000bee-cacf-4262-8a50-ca421324220a",
+      "originalCandidates": [
+        "/2/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/6/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/8/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/12/stmt/CreateStmt/tableElts/1/ColumnDef/constraints/0/Constraint",
+        "/13/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/15/stmt/CreateStmt/tableElts/1/ColumnDef/constraints/0/Constraint",
+        "/20/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/28/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/46/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/53/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/62/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/69/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/74/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/76/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/83/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/86/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/89/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/92/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/97/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/99/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/2/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/6/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/8/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/12/stmt/CreateStmt/tableElts/1/ColumnDef/constraints/0/Constraint",
+        "/13/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/15/stmt/CreateStmt/tableElts/1/ColumnDef/constraints/0/Constraint",
+        "/20/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/28/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/46/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/53/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/62/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/69/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/74/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/76/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/83/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/86/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/89/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/92/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/97/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/99/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.supporting-index.887ebc8c-2ef8-4dee-8475-eef6a223885c",
+      "parentId": "truss.layout.table.type_def",
+      "creatingConstraintId": "truss.constraint.fe9f3a11-85a6-4669-9d5e-fc39eb86859c",
+      "originalCandidates": [
+        "/2/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/6/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/8/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/12/stmt/CreateStmt/tableElts/1/ColumnDef/constraints/0/Constraint",
+        "/13/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/15/stmt/CreateStmt/tableElts/1/ColumnDef/constraints/0/Constraint",
+        "/20/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/28/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/46/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/53/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/62/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/69/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/74/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/76/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/83/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/86/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/89/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/92/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/97/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/99/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/2/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/6/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/8/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/12/stmt/CreateStmt/tableElts/1/ColumnDef/constraints/0/Constraint",
+        "/13/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/15/stmt/CreateStmt/tableElts/1/ColumnDef/constraints/0/Constraint",
+        "/20/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/28/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/46/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/53/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/62/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/69/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/74/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/76/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/83/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/86/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/89/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/92/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/97/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/99/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.supporting-index.f190859a-372a-4f71-b640-ca2b1505a599",
+      "parentId": "truss.layout.table.type_def",
+      "creatingConstraintId": "truss.constraint.f1b9b1ca-c6b3-405a-8142-3461059828bf",
+      "originalCandidates": [],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.supporting-index.4c672d95-f65b-4a5b-a85d-046e53f9441b",
+      "parentId": "truss.layout.table.rel_def",
+      "creatingConstraintId": "truss.constraint.cf210b68-0b81-4977-bd36-03e60c8a727a",
+      "originalCandidates": [
+        "/2/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/6/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/8/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/12/stmt/CreateStmt/tableElts/1/ColumnDef/constraints/0/Constraint",
+        "/13/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/15/stmt/CreateStmt/tableElts/1/ColumnDef/constraints/0/Constraint",
+        "/20/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/28/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/46/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/53/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/62/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/69/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/74/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/76/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/83/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/86/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/89/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/92/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/97/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/99/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint"
+      ],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [
+        "/2/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/6/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/8/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/12/stmt/CreateStmt/tableElts/1/ColumnDef/constraints/0/Constraint",
+        "/13/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/15/stmt/CreateStmt/tableElts/1/ColumnDef/constraints/0/Constraint",
+        "/20/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/28/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/46/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/53/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/62/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/69/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/74/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/76/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/83/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/86/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/89/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/92/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/97/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint",
+        "/99/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/0/Constraint"
+      ],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.supporting-index.b0c92a70-b276-423b-a7a7-6b879b45fdcb",
+      "parentId": "truss.layout.table.rel_def",
+      "creatingConstraintId": "truss.constraint.a291e953-d30f-4494-8e24-ea75abc41561",
+      "originalCandidates": [],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.supporting-index.9e411ef2-f7e9-4129-bf1f-809f907988ac",
+      "parentId": "truss.layout.table.object_key",
+      "creatingConstraintId": "truss.constraint.a558a095-efdd-4914-83f5-8ae9cbba2fde",
+      "originalCandidates": [],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.supporting-index.8343d5ee-d65d-47d1-9162-4f1e324b1078",
+      "parentId": "truss.layout.table.object_key",
+      "creatingConstraintId": "truss.constraint.9ac70487-ba0a-4381-90e2-dd35f4d35107",
+      "originalCandidates": [],
+      "parentCandidateAnchors": [],
+      "parentAnchorKind": "none",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_unique_parent_or_creator_anchor"
+    },
+    {
+      "authoredId": "truss.row-home.initialization.capacity-fresh",
+      "parentId": "truss.row-home.table.row_home_capacity",
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [
+        "/62/stmt/CreateStmt"
+      ],
+      "parentAnchorKind": "exact",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_parent_bounded_candidate"
+    },
+    {
+      "authoredId": "truss.row-home.trigger.row_home_state_touch_observe",
+      "parentId": "truss.row-home.table.row_home_state",
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [
+        "/46/stmt/CreateStmt"
+      ],
+      "parentAnchorKind": "exact",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_parent_bounded_candidate"
+    },
+    {
+      "authoredId": "truss.row-home.trigger.row_home_node_touch_observe",
+      "parentId": "truss.row-home.table.row_home_node",
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [
+        "/47/stmt/CreateStmt"
+      ],
+      "parentAnchorKind": "exact",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_parent_bounded_candidate"
+    },
+    {
+      "authoredId": "truss.row-home.trigger.row_home_scalar_touch_observe",
+      "parentId": "truss.row-home.table.row_home_scalar",
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [
+        "/52/stmt/CreateStmt"
+      ],
+      "parentAnchorKind": "exact",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_parent_bounded_candidate"
+    },
+    {
+      "authoredId": "truss.row-home.trigger.row_home_touch_commit_guard",
+      "parentId": "truss.row-home.table.row_home_touch",
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [
+        "/61/stmt/CreateStmt"
+      ],
+      "parentAnchorKind": "exact",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_parent_bounded_candidate"
+    },
+    {
+      "authoredId": "truss.row-home.trigger.row_home_capacity_commit_guard",
+      "parentId": "truss.row-home.table.row_home_capacity",
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [
+        "/62/stmt/CreateStmt"
+      ],
+      "parentAnchorKind": "exact",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_parent_bounded_candidate"
+    },
+    {
+      "authoredId": "truss.row-home.trigger.row_home_operation_commit_guard",
+      "parentId": "truss.row-home.table.row_home_operation",
+      "creatingConstraintId": null,
+      "originalCandidates": [],
+      "parentCandidateAnchors": [
+        "/40/stmt/CreateStmt"
+      ],
+      "parentAnchorKind": "exact",
+      "creatorCandidateAnchors": [],
+      "creatorAnchorKind": "none",
+      "restrictedDiagnosticCandidates": [],
+      "state": "no_parent_bounded_candidate"
+    }
+  ],
+  "identityAssignmentsMade": 0,
+  "nativeQualified": false
+}
