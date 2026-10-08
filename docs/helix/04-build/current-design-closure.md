@@ -31,6 +31,8 @@ Weft integration is now implemented experimentally, with six real native query s
 
 The next complete runtime handoff remains accepted native catalog identity plus original binding/profile/authority custody, followed by the protected acceptance/mutation/journal/feed chain. Component query fixtures cannot replace that work. Core physical key semantics and microsite location remain scoped dependencies for core-generated DDL/ER publication; they do not block independent executor or protected producer design. Native-null compiler interpretation remains a gate for affected complete logical projections. Preserve these separate scopes when sequencing work.
 
+Canonical entry design: use the [public native route map](../02-design/contracts/reference-public-native-route-map.proposal.md) and its exact administrative inventory, with store/private responsibility and PAC-01–06 controls in the protected access composition. The [accepted-catalog producer](../02-design/contracts/weft-accepted-catalog-producer.proposal.md) specifies original binding production and WCB-01–10. Do not treat missing native body/OID evidence as an undecided caller interface or duplicate these inventories. The [current handoff audit](remaining-design-handoff-audit.md#current-authored-closure-versus-outstanding-choices) distinguishes actual remaining design selections from implementation outputs.
+
 ## Closure by product area
 
 | Area / existing gate | Specified and reviewed source evidence | Remaining design output | Implementation/evidence after selection |
