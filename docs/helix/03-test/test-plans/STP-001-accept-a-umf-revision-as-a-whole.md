@@ -17,6 +17,11 @@ ddx:
 
 # STP-001: Whole-revision acceptance
 
+## Immutable report outcome schedules (planned)
+
+RPSEL-03–06 supplement RPSEL-01–02: (03) verified exact current-head repeat returns byte-identical original report/origin with no new revision, report row, transform or index dispatch; (04) the same historical input after another accepted head requires fresh complete validation rather than historical equality bypass; (05) fail after original events and report insertion but before head publication and require full operation-local rollback with earlier adopted caller work preserved; (06) commit acceptance and lose the response, then observe original accepted report/head through recovery without duplicate insertion or another revision. Pending savepoint completion never supplies committed report evidence. Index-job completion leaves the original pending-job report inventory unchanged. Cases are not_run and require selected native producer/recovery and independent report/event inventories.
+
+
 ## Selected decision handoff — 2026-10-07
 
 Planned report controls RPSEL-01–02: nonempty accepted report includes actual original generated event IDs, is immutable, and commits with catalog/journal/head; fail between report production and head publication and require whole-transaction rollback with no accepted report-less head. Fresh/retained legacy report conversion remains independently qualified. Cases are not_run.
