@@ -1,0 +1,44 @@
+{
+  "scope": "Selected source design admission only; no body, native privilege or installer proof.",
+  "producerSha256": "bae4291ef1f948037945082859500a3c92965f7ca96fa79d954bb3f7e496f7e3",
+  "manifestSha256": "29a94508c8884ba100e12cb66888ec6c4ef5729df23fb4d3f4edfd2401f7bb9a",
+  "originalAdmitted": true,
+  "controls": [
+    {
+      "case": "missing original effect argument",
+      "refused": true,
+      "reason": "original signature"
+    },
+    {
+      "case": "PUBLIC execute enabled",
+      "refused": true,
+      "reason": "selected security attributes"
+    },
+    {
+      "case": "null input skipped",
+      "refused": true,
+      "reason": "selected security attributes"
+    },
+    {
+      "case": "producer owner can reset sequence",
+      "refused": true,
+      "reason": "owner separation"
+    },
+    {
+      "case": "invented physical identity",
+      "refused": true,
+      "reason": "unresolved binding replaced: physicalIdentity"
+    },
+    {
+      "case": "false readiness",
+      "refused": true,
+      "reason": "unqualified design cannot claim readiness"
+    },
+    {
+      "case": "substituted governing pin",
+      "refused": true,
+      "reason": "governing source drift"
+    }
+  ],
+  "nativeQualified": false
+}
