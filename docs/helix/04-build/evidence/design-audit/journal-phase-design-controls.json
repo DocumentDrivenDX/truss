@@ -1,7 +1,7 @@
 {
   "scope": "Selected source design admission only; no body, native privilege or installer proof.",
   "producerSha256": "bae4291ef1f948037945082859500a3c92965f7ca96fa79d954bb3f7e496f7e3",
-  "manifestSha256": "29a94508c8884ba100e12cb66888ec6c4ef5729df23fb4d3f4edfd2401f7bb9a",
+  "manifestSha256": "0f19f39b315a15eb9a74e855bf54fdb531ba92beaf5a9e6698cab07279de248c",
   "originalAdmitted": true,
   "controls": [
     {

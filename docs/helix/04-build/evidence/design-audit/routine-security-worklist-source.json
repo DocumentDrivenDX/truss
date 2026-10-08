@@ -1,15 +1,15 @@
 {
   "scope": "Selected source worklist consistency only, not complete callable or native closure.",
-  "worklistSha256": "b3fc409aff5f68509799773c150db5eb1aeb4a83fc20de3e9f6434c3f7ffbb93",
+  "worklistSha256": "1a812d1940e75dfd982ac3dbf76e94b952804da0b567e36b431cef586925f561",
   "producerSha256": "a5a939e5afed81bdffd95333d99de9a03fe5f08a9e2eddd3c6844d01f2d36ca7",
   "sourcePins": [
     {
       "path": "02-design/contracts/reference-routine-design-v0.1.proposal.json",
-      "sha256": "913eb5d177f579101b9c0fd5963f2bda349001f5a676d727a173a51c25850b84"
+      "sha256": "97e425837d52c89f0f1c4e77545f84534292b0fedc2f11e5f48323cd87512fa4"
     },
     {
       "path": "02-design/contracts/reference-journal-phase-design-v0.1.proposal.json",
-      "sha256": "29a94508c8884ba100e12cb66888ec6c4ef5729df23fb4d3f4edfd2401f7bb9a"
+      "sha256": "0f19f39b315a15eb9a74e855bf54fdb531ba92beaf5a9e6698cab07279de248c"
     },
     {
       "path": "02-design/contracts/CONTRACT-001-storage-layout.md",

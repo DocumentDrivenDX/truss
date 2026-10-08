@@ -3,11 +3,11 @@
   "sourcePins": [
     {
       "path": "02-design/contracts/reference-routine-design-v0.1.proposal.json",
-      "sha256": "913eb5d177f579101b9c0fd5963f2bda349001f5a676d727a173a51c25850b84"
+      "sha256": "97e425837d52c89f0f1c4e77545f84534292b0fedc2f11e5f48323cd87512fa4"
     },
     {
       "path": "02-design/contracts/reference-journal-phase-design-v0.1.proposal.json",
-      "sha256": "29a94508c8884ba100e12cb66888ec6c4ef5729df23fb4d3f4edfd2401f7bb9a"
+      "sha256": "0f19f39b315a15eb9a74e855bf54fdb531ba92beaf5a9e6698cab07279de248c"
     },
     {
       "path": "02-design/contracts/CONTRACT-001-storage-layout.md",

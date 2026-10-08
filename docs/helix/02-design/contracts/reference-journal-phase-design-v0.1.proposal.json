@@ -11,7 +11,7 @@
     },
     {
       "path": "02-design/contracts/CONTRACT-005-module-isolation.md",
-      "sha256": "d797fe61895671134f94d0c187b1d28bbdbe3368eeec421f8daa623d681ce477"
+      "sha256": "ff03ebd23c91cdedfa5e5cacb115c9673bc612a16661f4dadf5eada423337be3"
     },
     {
       "path": "02-design/contracts/bindings/truss-journal-phase-resource-v0.2.proposal.json",
