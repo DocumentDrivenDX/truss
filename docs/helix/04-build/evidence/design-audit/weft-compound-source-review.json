@@ -1,0 +1,77 @@
+{
+  "scope": "Committed source observation; owner-reported execution was not rerun by Truss.",
+  "weftHead": "f44ff82a92fecd429e4d094dfa7164c292fc77ca",
+  "reviewedFrom": "5050d49380437784b57d7d32922a139a0f5c9afb",
+  "sourcePins": [
+    {
+      "path": "docs/helix/04-build/evidence/B-006-compound-preparation.md",
+      "sha256": "74491af15ecaa5cdeadcf43e4380854ea3afc94339783de382caac91cc18d319"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/B-006-compound-native-initial/summary.json",
+      "sha256": "6bf460fd99a2bae35a181f0188f8b176c954bd9ffbe92b9f83ee8b70777f0463"
+    },
+    {
+      "path": "crates/weft-databricks/src/candidate/compound.rs",
+      "sha256": "2fb9b3b7a6cfadb77a5f50ff89a9979b0ee8606b52d4127251665952bc10d44e"
+    },
+    {
+      "path": "crates/weft-databricks/src/candidate/application.rs",
+      "sha256": "b6ae071b56d3d3509b2be2996b9a06b72bc272dca285f8c1b2f82a6c0e413deb"
+    },
+    {
+      "path": "crates/weft-databricks/src/candidate.rs",
+      "sha256": "697ff1e4c8d1ef7cb5fef58a3d1859e8e8ec51b55273d11726fc351cbf68af00"
+    },
+    {
+      "path": "crates/weft-databricks/src/binding.rs",
+      "sha256": "1c9e641290aa1d97608e67b1ba313999ddb602eaba51a7ba1cb323b35c09e693"
+    }
+  ],
+  "changedPaths": [
+    "crates/weft-databricks/src/binding.rs",
+    "crates/weft-databricks/src/candidate.rs",
+    "crates/weft-databricks/src/candidate/application.rs",
+    "crates/weft-databricks/src/candidate/compound.rs",
+    "crates/weft-databricks/src/candidate/relationships.rs",
+    "docs/helix/04-build/evidence/B-006-compound-before.log",
+    "docs/helix/04-build/evidence/B-006-compound-native-initial/compile-artifacts.jsonl",
+    "docs/helix/04-build/evidence/B-006-compound-native-initial/fixture-state.json",
+    "docs/helix/04-build/evidence/B-006-compound-native-initial/statements.jsonl",
+    "docs/helix/04-build/evidence/B-006-compound-native-initial/summary.json",
+    "docs/helix/04-build/evidence/B-006-compound-preparation.md",
+    "docs/helix/04-build/evidence/B-006-compound-regression.log",
+    "docs/helix/04-build/evidence/B-006-recursion-probes/statements.jsonl",
+    "tests/ashlar-databricks/common.rs",
+    "tests/ashlar-databricks/compiler.rs",
+    "tests/ashlar-databricks/compound-boundaries-native.py",
+    "tests/ashlar-databricks/compound-native.py"
+  ],
+  "ownerReportedInitialReceipt": {
+    "state": "passed",
+    "cases": 133,
+    "positive": 56,
+    "refusals": 77,
+    "compilerBinarySha256": "b014c82a4d3069af1c1c196ea2061464f82b570227c8e9825d3caa0d01fb63c4",
+    "harnessSha256": "66d99df0c399bea5fdbe7e9b81ad1e81c1c45af07cefe5537e01ca83535789d3",
+    "qualification": "Synthetic pinned projection, exact recursive JSON profile; independent scalar/list/map/structured/cyclic and presence oracles. No host/production publication qualification; limit boundaries not included in this receipt."
+  },
+  "interpretation": {
+    "candidateOnly": true,
+    "nativeNull": false,
+    "depthExclusive": 128,
+    "nodesPerValue": 100000,
+    "compoundEncoding": "ashlar-weft-json-value/0.1-candidate",
+    "memberLookup": "Exact binary dictionary lookup replaces path construction; general-name regression remains pending in the reviewed owner checkpoint.",
+    "trussBackendChanged": false,
+    "trussAdopted": false,
+    "hostAndProductionQualification": false
+  },
+  "remainingOwnerWork": [
+    "dictionary-lookup revision verification against original publication",
+    "general structured-name native regression",
+    "depth/node boundary evidence",
+    "compound embeddings",
+    "actual host enforcement"
+  ]
+}
