@@ -47,3 +47,14 @@ semantic support, native catalog acceptance, authorization or generated IDs.
 No SQL is issued. The observed Bun/public-package check uses the four original
 Ashlar v1/v2/v3/unknown UMF examples and independent Bun/Web Crypto hashes. Browser
 build passes; actual browser execution of this new primitive remains unverified.
+
+`bun scripts/check-umf-semantic-ingress.ts <pinned-UMF-checkout> <Ashlar-examples>`
+builds the actual clean fac1497a UMF readDocument/validateDocument producer and
+runs original v1/v2/v3/unknown example artifacts through it after integrity ingress.
+All four observed results are valid=true, complete=false. Full original diagnostics
+are retained: experimental core warnings, v2 unknown nullability, and the unknown
+example's preserved assertion. CONTRACT-003's required-check route therefore
+remains unavailable for these actual inputs. This evidence does not introduce a
+qualified validator service or accept native IDs; suppressing warnings would not
+establish completeness. The exact supported acceptance/profile composition remains
+a required dependency. The browser-target producer is observed under Bun only.
