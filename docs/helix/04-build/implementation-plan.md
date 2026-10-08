@@ -2096,3 +2096,6 @@ The [Item.amount domain binding](../02-design/contracts/reference-amount-domain-
 
 
 The [code/key binding](../02-design/contracts/reference-code-key-binding.proposal.md) completes the four milestone fields' semantic proposals alongside note presence and amount domain. It reuses the existing UMF tuple operation/independent byte witnesses and K01–K04 schedules. Native owner-local namespace/full-byte enforcement, exact string comparator and home/codec/Weft/profile adoption remain separate deliverables. Field-level proposals do not close the broader consumer/release corpus or the complete installation tuple.
+
+
+The [reference row-home proposal](../02-design/contracts/reference-row-home-binding.proposal.md) now fixes the intended M00–M07 physical realization for all four original fields: owned state/root plus string or decimal scalar, with absent note zero-state and explicit-null note root without payload. V2 no longer starts from unspecified candidate homes for this milestone; exact home/value/codec artifacts and native admission remain open. V4 must preserve the same mapping and complete nullable meaning. The broader required props/mixed-home/recursive corpus remains in force and cannot be reduced to this milestone.
