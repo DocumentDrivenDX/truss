@@ -13,6 +13,7 @@ DECLARE
   total_new bigint;
   source_matches bigint;
   original_field_module text;
+  matched record;
 BEGIN
   SELECT * INTO STRICT op FROM truss.row_home_operation o
     WHERE o.original_writer_xid=pg_current_xact_id_if_assigned() AND o.phase<>'application_finalized' FOR UPDATE;
@@ -44,7 +45,7 @@ BEGIN
       RAISE EXCEPTION 'new property owner correspondence required' USING ERRCODE='55000';
     END IF;
     IF EXISTS(SELECT 1 FROM truss.prop_def p WHERE p.type_id=owner.type_id AND
-      ((p.declaration_module=candidate->>'fieldModule' AND p.element=candidate->'field'->>'id') OR p.name=candidate->'field'->>'name')) THEN
+      p.name=candidate->'field'->>'name' AND NOT (p.declaration_module=candidate->>'fieldModule' AND p.element=candidate->'field'->>'id')) THEN
       RAISE EXCEPTION 'existing property requires original matching' USING ERRCODE='55000';
     END IF;
   END LOOP;
@@ -68,6 +69,10 @@ BEGIN
           AND fm.value->>'id'=candidate->>'fieldModule' AND f.value=candidate->'field';
     IF source_matches<>1 THEN
       RAISE EXCEPTION 'property does not match original owner member and Field definition' USING ERRCODE='55000';
+    END IF;
+    SELECT * INTO STRICT matched FROM truss.runtime_match_property_identity(revision,owner.type_id,candidate->>'fieldModule',candidate->'field'->>'id');
+    IF matched.match_state<>'new' THEN
+      RAISE EXCEPTION 'retained property requires complete matching/lifecycle admission' USING ERRCODE='55000';
     END IF;
   END LOOP;
   SELECT greatest(coalesce(max(p.prop_id)::bigint,0),0) INTO high_water FROM truss.prop_def p;

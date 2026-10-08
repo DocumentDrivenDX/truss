@@ -19,6 +19,15 @@ ddx:
 
 # Contract: PostgreSQL storage handoff to Weft
 
+## Current property identity component candidate 0.15
+
+The [0.15 UMF model](../models/truss-layout-qualified-property-0.15.proposal.umf.json) and [owner-export DDL](../../04-build/evidence/qualified-property-layout-0.15.owner-export.sql) are the current private catalog component candidate. UMF generates the SQL through its existing PostgreSQL adapter. The [source receipt](../../04-build/evidence/design-audit/qualified-property-layout-source.json) pins the preceding 0.14 model, saved candidate and reload/export correspondence. This candidate does not replace the separately registered Weft compiler fixture profile or adopt a public installed runtime.
+
+Relative to 0.13, 0.14 adds required bounded C-collated prop_def.declaration_module; 0.15 replaces the inherited UNIQUE(type_id,element) with UNIQUE(type_id,declaration_module,element). The existing definition_document_id is the original Field's declaring document under the selected single-document reference profile, element is its authored Field ID, and type_id identifies the owning Record. Declaring module must never be inferred from owning Record module or a display name. The separate UNIQUE(type_id,name) remains unchanged. Private candidate inputs and returned property mappings carry the declaring module; authored key components resolve that complete identity in original order.
+
+The [native component receipt](../../04-build/evidence/runtime-operation-admission.json) exercises original UMF-valid cross-module Fields, equal Field IDs from different modules on one owner and ordered cross-module key correspondence on PostgreSQL 17.9. It also records rollback/refusal and retained matching components. These checks do not establish complete native privileges, populated conversion, history/report parity, public acceptance or Weft registration. Existing populated 0.13/0.14 installations need explicit original archived membership/source correspondence before adding or backfilling the module; names, today's inferred source or default module values cannot supply missing history. Weft mapping/export consumers must review the versioned qualified property tuple before adopting 0.15; prior compiler fixtures remain independently pinned.
+
+
 The current separately pinned compiler foundation is [layout 0.11](../models/truss-layout-weft-review-0.11.proposal.sql) and its [UMF model](../models/truss-layout-weft-review-0.11.proposal.umf.json), adding the owner-selected request-receipt storage direction. The [0.11 column index](weft-review-columns-v0.11.proposal.md), [feed/lifecycle/receipt chapter](weft-review-columns-v0.11.feed.proposal.md) and [source-effect inventory](weft-review-columns-v0.11.proposal.json) now document all 46 tables and 442 columns. The current 0.11 source packet is separately documented below; historical 0.10 remains preserved. Neither qualifies native replay.
 
 ## Reference history review 0.12
