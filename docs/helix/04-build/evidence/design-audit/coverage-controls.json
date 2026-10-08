@@ -1,6 +1,6 @@
 {
   "scope": "document allocation corruption sensitivity only; no semantic/native coverage",
-  "controls": 14,
+  "controls": 18,
   "failures": [],
   "results": [
     {
@@ -56,7 +56,8 @@
       "optimized": false,
       "passed": true,
       "errors": [
-        "US-001: requires exactly one acceptance declaration section"
+        "US-001: requires exactly one acceptance declaration section",
+        "US-001: missing expected story"
       ]
     },
     {
@@ -64,7 +65,8 @@
       "optimized": true,
       "passed": true,
       "errors": [
-        "US-001: requires exactly one acceptance declaration section"
+        "US-001: requires exactly one acceptance declaration section",
+        "US-001: missing expected story"
       ]
     },
     {
@@ -106,7 +108,52 @@
       "optimized": false,
       "passed": true,
       "errors": [
-        "missing story inventory"
+        "missing story inventory",
+        "US-001: missing expected story",
+        "US-002: missing expected story",
+        "US-003: missing expected story",
+        "US-004: missing expected story",
+        "US-005: missing expected story",
+        "US-006: missing expected story",
+        "US-007: missing expected story",
+        "US-008: missing expected story",
+        "US-009: missing expected story",
+        "US-010: missing expected story",
+        "US-011: missing expected story",
+        "US-012: missing expected story",
+        "US-013: missing expected story",
+        "US-014: missing expected story",
+        "US-015: missing expected story",
+        "US-016: missing expected story",
+        "US-017: missing expected story",
+        "US-018: missing expected story",
+        "US-019: missing expected story",
+        "US-020: missing expected story",
+        "US-021: missing expected story",
+        "US-022: missing expected story",
+        "US-023: missing expected story",
+        "US-024: missing expected story",
+        "US-025: missing expected story",
+        "US-026: missing expected story",
+        "US-027: missing expected story",
+        "US-028: missing expected story",
+        "US-029: missing expected story",
+        "US-030: missing expected story",
+        "US-031: missing expected story",
+        "US-032: missing expected story",
+        "US-033: missing expected story",
+        "US-034: missing expected story",
+        "US-035: missing expected story",
+        "US-036: missing expected story",
+        "US-037: missing expected story",
+        "US-038: missing expected story",
+        "US-039: missing expected story",
+        "US-040: missing expected story",
+        "US-041: missing expected story",
+        "US-042: missing expected story",
+        "US-043: missing expected story",
+        "US-044: missing expected story",
+        "US-045: missing expected story"
       ]
     },
     {
@@ -114,7 +161,84 @@
       "optimized": true,
       "passed": true,
       "errors": [
-        "missing story inventory"
+        "missing story inventory",
+        "US-001: missing expected story",
+        "US-002: missing expected story",
+        "US-003: missing expected story",
+        "US-004: missing expected story",
+        "US-005: missing expected story",
+        "US-006: missing expected story",
+        "US-007: missing expected story",
+        "US-008: missing expected story",
+        "US-009: missing expected story",
+        "US-010: missing expected story",
+        "US-011: missing expected story",
+        "US-012: missing expected story",
+        "US-013: missing expected story",
+        "US-014: missing expected story",
+        "US-015: missing expected story",
+        "US-016: missing expected story",
+        "US-017: missing expected story",
+        "US-018: missing expected story",
+        "US-019: missing expected story",
+        "US-020: missing expected story",
+        "US-021: missing expected story",
+        "US-022: missing expected story",
+        "US-023: missing expected story",
+        "US-024: missing expected story",
+        "US-025: missing expected story",
+        "US-026: missing expected story",
+        "US-027: missing expected story",
+        "US-028: missing expected story",
+        "US-029: missing expected story",
+        "US-030: missing expected story",
+        "US-031: missing expected story",
+        "US-032: missing expected story",
+        "US-033: missing expected story",
+        "US-034: missing expected story",
+        "US-035: missing expected story",
+        "US-036: missing expected story",
+        "US-037: missing expected story",
+        "US-038: missing expected story",
+        "US-039: missing expected story",
+        "US-040: missing expected story",
+        "US-041: missing expected story",
+        "US-042: missing expected story",
+        "US-043: missing expected story",
+        "US-044: missing expected story",
+        "US-045: missing expected story"
+      ]
+    },
+    {
+      "control": "missing complete trio",
+      "optimized": false,
+      "passed": true,
+      "errors": [
+        "US-001: missing expected story"
+      ]
+    },
+    {
+      "control": "missing complete trio",
+      "optimized": true,
+      "passed": true,
+      "errors": [
+        "US-001: missing expected story"
+      ]
+    },
+    {
+      "control": "removed criterion everywhere",
+      "optimized": false,
+      "passed": true,
+      "errors": [
+        "US-001: criterion membership differs from expected scope"
+      ]
+    },
+    {
+      "control": "removed criterion everywhere",
+      "optimized": true,
+      "passed": true,
+      "errors": [
+        "US-001: criterion membership differs from expected scope"
       ]
     }
   ]

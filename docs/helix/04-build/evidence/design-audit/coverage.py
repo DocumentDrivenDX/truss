@@ -3,6 +3,7 @@ from pathlib import Path
 import json
 import re
 import sys
+import hashlib
 
 ROOT = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path(__file__).resolve().parents[3]
 records = []
@@ -66,8 +67,37 @@ for story in stories:
         if unknown:
             errors.append(f'{identity}: undeclared allocation criteria {unknown}')
     records.append(entry)
+# Expectation is supplied independently of the candidate inventory. Never regenerate it here.
+expectation_path = Path(sys.argv[2]).resolve() if len(sys.argv) > 2 else Path(__file__).with_name('expected-design-scope.json')
+expectation_sha = None
+try:
+    raw_expectation = expectation_path.read_bytes()
+    expectation_sha = hashlib.sha256(raw_expectation).hexdigest()
+    expectation = json.loads(raw_expectation)
+    if expectation.get('interfaceVersion') != 'truss-design-scope/0.1.0':
+        raise ValueError('unsupported expectation version')
+    expected = {}
+    for entry in expectation['entries']:
+        identity, criteria = entry['story'], entry['criteria']
+        if identity in expected or not criteria or len(criteria) != len(set(criteria)):
+            raise ValueError('duplicate story or invalid expected criteria')
+        if not re.fullmatch(r'US-\d+', identity) or any(not re.fullmatch(re.escape(identity) + r'-AC\d+', c) for c in criteria):
+            raise ValueError('invalid expectation identity')
+        expected[identity] = set(criteria)
+    if not expected:
+        raise ValueError('empty expected scope')
+    actual = {r['story']: set(r['criteria']) for r in records}
+    for identity in sorted(set(expected) - set(actual)):
+        errors.append(f'{identity}: missing expected story')
+    for identity in sorted(set(actual) - set(expected)):
+        errors.append(f'{identity}: unexpected story; reconcile governed scope')
+    for identity in sorted(set(actual) & set(expected)):
+        if actual[identity] != expected[identity]:
+            errors.append(f'{identity}: criterion membership differs from expected scope')
+except (OSError, ValueError, KeyError, TypeError) as failure:
+    errors.append(f'invalid expected scope: {failure}')
 complete = [r for r in records if all(r['artifacts'].values()) and not any(r['missingReferences'].values())]
-result = {'scope': 'artifact existence, criterion references and primary allocation structure; no semantic/runtime qualification', 'stories': len(records),
+result = {'scope': 'artifact existence, criterion references and primary allocation structure; no semantic/runtime qualification', 'expectedScopeSha256': expectation_sha, 'stories': len(records),
           'criteria': sum(len(r['criteria']) for r in records), 'pairsWithAllReferences': len(complete),
           'criteriaWithPairReferences': sum(len(r['criteria']) for r in complete),
           'errors': errors, 'inventory': records}

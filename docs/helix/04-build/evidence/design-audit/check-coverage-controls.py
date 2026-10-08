@@ -10,7 +10,7 @@ root = Path(__file__).resolve().parents[3]
 scanner = Path(__file__).with_name('coverage.py')
 results = []
 for control in ['original', 'missing TD', 'missing STP', 'missing declaration section',
-                'duplicate criterion', 'missing primary allocation', 'empty inventory']:
+                'duplicate criterion', 'missing primary allocation', 'empty inventory', 'missing complete trio', 'removed criterion everywhere']:
     with tempfile.TemporaryDirectory(prefix='truss-coverage-control-') as temporary:
         candidate = Path(temporary)
         for directory in ['01-frame/user-stories', '02-design/technical-designs', '03-test/test-plans']:
@@ -30,6 +30,13 @@ for control in ['original', 'missing TD', 'missing STP', 'missing declaration se
         elif control == 'empty inventory':
             for file in (candidate / '01-frame/user-stories').glob('US-*.md'):
                 file.unlink()
+        elif control == 'missing complete trio':
+            story.unlink()
+            plan.unlink()
+            next((candidate / '02-design/technical-designs').glob('TD-001-*.md')).unlink()
+        elif control == 'removed criterion everywhere':
+            story.write_text('\n'.join(line for line in story.read_text().split('\n') if '**US-001-AC1**' not in line))
+            plan.write_text('\n'.join(line for line in plan.read_text().split('\n') if not line.startswith('| US-001-AC1 |')))
         for optimized in [False, True]:
             command = [sys.executable, *(['-O'] if optimized else []), str(scanner), str(candidate)]
             run = subprocess.run(command, text=True, capture_output=True)

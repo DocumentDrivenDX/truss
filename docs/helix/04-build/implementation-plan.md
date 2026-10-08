@@ -62,6 +62,8 @@ This is the current next-work sequence. Later chronological notes preserve their
 
 Precommit IDs are selected as transaction-scoped provisional values. Durable group receipts and exact/reconstructable value/history direction are owner-selected; exact native and codec/history profiles still require reviewed composition before support claims. UMF remains sufficient; Weft owns compilation. The [closure view](current-design-closure.md) and [installer matrix](../02-design/contracts/weft-review-installation-gap-matrix.proposal.md) distinguish remaining design decisions from native implementation/qualification. Do not repeatedly regenerate older evidence to substitute for these exit conditions.
 
+The document-allocation scanner now requires separately retained expected story/criterion membership, pinned in its output. The authored [design scope baseline](evidence/design-audit/expected-design-scope.json) prevents silent scope shrinkage when a complete story/design/test trio disappears. B-001/E-01 must independently review its release expectation and preserve the original digest; scanner success remains structural evidence rather than semantic or runtime acceptance.
+
 ### Product-decision application boundaries
 
 Same-qualified-identity reactivation is selected and must govern acceptance/lifecycle design; terminal retirement is historical comparison material. The selected two-property-delta plus metadata-witness rule governs event count without adopting every complete-history profile. Required managed extensions must ship on the selected RDS PostgreSQL, Aurora PostgreSQL and Lakebase profiles; a custom helper cannot become a deployment assumption through source composition.
