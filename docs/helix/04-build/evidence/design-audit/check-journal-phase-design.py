@@ -46,6 +46,14 @@ def require(condition, message):
         raise ValueError(message)
 
 def validate(document):
+    require(document.get('wireDirection') == {
+        'operation_context_bytes': 'original registered truss-row-operation-context/0.1.0 encoding; never recanonicalized as phase JSON',
+        'original_effect_bytes': 'ordered-transition request under its exact phase schema/codec; independently admitted registered engine/trigger producer only',
+        'phaseBodySchema': 'independently produced immutable stage and private reply body; request bytes are not blindly stored or returned',
+        'transitionRequestAndResult': 'same schema/codec, separately retained original request and independently produced native result; byte equality alone is not admission',
+        'otherPhaseInputs': 'original operation context only; host-supplied start/final/reservation/publication bodies forbidden',
+        'lostReply': 'original authorized phase observer only; no duplicate invocation or automatic phase replay'},
+        'original wire direction and request/result custody')
     require(document['nativeQualified'] is False and document['installerReady'] is False,
             'unqualified design cannot claim readiness')
     attributes = {'language': 'plpgsql', 'volatility': 'VOLATILE', 'parallel': 'UNSAFE',
@@ -108,6 +116,8 @@ for label, mutate in [
     ('wrong phase byte codec', lambda d: d['routines'][3]['phaseBodySchema'].update(byteEncodingProfile='event-codec')),
     ('missing recursive dependency', lambda d: d['phaseSchemaDependencies'].pop()),
     ('substituted recursive dependency', lambda d: d['phaseSchemaDependencies'][0].update(sha256='0' * 64)),
+    ('blind request echo', lambda d: d['wireDirection'].update(transitionRequestAndResult='return request unchanged')),
+    ('lost reply replay', lambda d: d['wireDirection'].update(lostReply='invoke phase again')),
 ]:
     damaged = copy.deepcopy(original)
     mutate(damaged)
@@ -121,4 +131,4 @@ receipt = {'scope': __doc__, 'producerSha256': hashlib.sha256(Path(__file__).rea
            'manifestSha256': hashlib.sha256((ROOT / PATH).read_bytes()).hexdigest(),
            'originalAdmitted': True, 'controls': controls, 'nativeQualified': False}
 (ROOT / 'docs/helix/04-build/evidence/design-audit/journal-phase-design-controls.json').write_text(json.dumps(receipt, indent=2) + '\n')
-print('Original design admitted; thirteen damaged design controls refused.')
+print('Original design admitted; fifteen damaged design controls refused.')

@@ -1,7 +1,7 @@
 {
   "scope": "Selected source design admission only; no body, native privilege or installer proof.",
-  "producerSha256": "5302b6498077d1cc53d632b19b3b305cc04a097d71c52a8be066e9070c26c094",
-  "manifestSha256": "d6b02e2ac38613d3d47fcb6e08316c065a67b05fb70204c47836cca3dda52720",
+  "producerSha256": "bb0b4c5c4d2cd016da4003defdd26f7c43caae687e2e67d633e75b2e5357b96e",
+  "manifestSha256": "978eb6a4e0cd9d6060a10c2601123a49188c6394aecb0b7a4c6fbf40718321d2",
   "originalAdmitted": true,
   "controls": [
     {
@@ -68,6 +68,16 @@
       "case": "substituted recursive dependency",
       "refused": true,
       "reason": "complete original recursive phase schema dependencies"
+    },
+    {
+      "case": "blind request echo",
+      "refused": true,
+      "reason": "original wire direction and request/result custody"
+    },
+    {
+      "case": "lost reply replay",
+      "refused": true,
+      "reason": "original wire direction and request/result custody"
     }
   ],
   "nativeQualified": false

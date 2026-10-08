@@ -235,5 +235,13 @@
       "path": "02-design/contracts/journal-start-capture-v0.2.proposal.schema.json",
       "sha256": "c3801f87fc1e07b76cd49fa33ffa0d10de58c7dff0febf454d1c4f8c7621dde9"
     }
-  ]
+  ],
+  "wireDirection": {
+    "operation_context_bytes": "original registered truss-row-operation-context/0.1.0 encoding; never recanonicalized as phase JSON",
+    "original_effect_bytes": "ordered-transition request under its exact phase schema/codec; independently admitted registered engine/trigger producer only",
+    "phaseBodySchema": "independently produced immutable stage and private reply body; request bytes are not blindly stored or returned",
+    "transitionRequestAndResult": "same schema/codec, separately retained original request and independently produced native result; byte equality alone is not admission",
+    "otherPhaseInputs": "original operation context only; host-supplied start/final/reservation/publication bodies forbidden",
+    "lostReply": "original authorized phase observer only; no duplicate invocation or automatic phase replay"
+  }
 }
