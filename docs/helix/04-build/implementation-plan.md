@@ -64,6 +64,8 @@ CH-02/04 definition production follows the [acyclic composition order](../02-des
 
 CH-02/03 policy activation follows the [public/private policy composition](../02-design/contracts/reference-policy-composition.proposal.md) and STP-045 PC-01–05, retaining complete policy applicability and original public surfaces. A filtered private integrity scope prevents readiness rather than becoming absence or a passing count.
 
+CH-02/03 uses the [complete declared-store and private-entry access plan](../02-design/contracts/reference-protected-access-composition.proposal.md) to derive exact body-specific rights. The plan covers 46 stores and sixteen known selectors; it does not replace the full callable/dependency inventory or native effective-privilege qualification.
+
 ### Current concrete component handoffs
 
 These close specific interface/procedure choices inside the existing CH work; native identity, dependency and runtime evidence remain separate exit outputs.
