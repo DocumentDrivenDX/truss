@@ -1,0 +1,126 @@
+{
+  "scope": "Explicit proposed original effect dispositions for reviewed key parents; no source/native identity adoption",
+  "sourcePins": [
+    {
+      "path": "04-build/evidence/design-audit/object_key-parent-evolution-review.json",
+      "sha256": "92ca1f95e7a8a1f633eddfb6cdd39447cc0683076bc9bfb0c6c5212807916864"
+    },
+    {
+      "path": "04-build/evidence/design-audit/key_tombstone-parent-evolution-review.json",
+      "sha256": "45eedce6cb4d0ca63f4c531105b266b3b196072dd95f3d46035b78dec5dbf6b4"
+    }
+  ],
+  "entries": [
+    {
+      "originalParentId": "truss.layout.table.object_key",
+      "originalEffectId": "truss.constraint.a558a095-efdd-4914-83f5-8ae9cbba2fde",
+      "objectKind": "constraint",
+      "creatingConstraintId": null,
+      "proposedDisposition": "retire_after_lossless_conversion",
+      "reason": "Original parent is removed and replacement stores have distinct identities",
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.object_key",
+      "originalEffectId": "truss.constraint.9ac70487-ba0a-4381-90e2-dd35f4d35107",
+      "objectKind": "constraint",
+      "creatingConstraintId": null,
+      "proposedDisposition": "retire_after_lossless_conversion",
+      "reason": "Original parent is removed and replacement stores have distinct identities",
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.object_key",
+      "originalEffectId": "truss.constraint.196c2f8e-7a6d-4554-9525-d865916c8bbe",
+      "objectKind": "constraint",
+      "creatingConstraintId": null,
+      "proposedDisposition": "retire_after_lossless_conversion",
+      "reason": "Original parent is removed and replacement stores have distinct identities",
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.object_key",
+      "originalEffectId": "truss.constraint.bddd1293-fe8b-467f-ace1-242de802d14b",
+      "objectKind": "constraint",
+      "creatingConstraintId": null,
+      "proposedDisposition": "retire_after_lossless_conversion",
+      "reason": "Original parent is removed and replacement stores have distinct identities",
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.object_key",
+      "originalEffectId": "truss.supporting-index.9e411ef2-f7e9-4129-bf1f-809f907988ac",
+      "objectKind": "supporting-index",
+      "creatingConstraintId": "truss.constraint.a558a095-efdd-4914-83f5-8ae9cbba2fde",
+      "proposedDisposition": "retire_after_lossless_conversion",
+      "reason": "Original parent is removed and replacement stores have distinct identities",
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.object_key",
+      "originalEffectId": "truss.supporting-index.8343d5ee-d65d-47d1-9162-4f1e324b1078",
+      "objectKind": "supporting-index",
+      "creatingConstraintId": "truss.constraint.9ac70487-ba0a-4381-90e2-dd35f4d35107",
+      "proposedDisposition": "retire_after_lossless_conversion",
+      "reason": "Original parent is removed and replacement stores have distinct identities",
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.key_tombstone",
+      "originalEffectId": "truss.constraint.3a6e8755-efd2-46b6-8f1f-b5523be3648b",
+      "objectKind": "constraint",
+      "creatingConstraintId": null,
+      "proposedDisposition": "retire_and_replace_after_object_reservation_conversion",
+      "reason": "Original o/e check is narrowed to e; changed effect cannot retain the old definition by name",
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.key_tombstone",
+      "originalEffectId": "truss.constraint.716d5d24-d8d3-46cd-80e6-f1db6e0101e9",
+      "objectKind": "constraint",
+      "creatingConstraintId": null,
+      "proposedDisposition": "retain_candidate_only_after_same_parent_and_full_effect_admission",
+      "reason": "Unchanged source effect remains a candidate; original parent, creator and complete native dependency correspondence must be admitted",
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.key_tombstone",
+      "originalEffectId": "truss.constraint.55e67395-d3e3-4be4-a767-556cb67371a8",
+      "objectKind": "constraint",
+      "creatingConstraintId": null,
+      "proposedDisposition": "retain_candidate_only_after_same_parent_and_full_effect_admission",
+      "reason": "Unchanged source effect remains a candidate; original parent, creator and complete native dependency correspondence must be admitted",
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.key_tombstone",
+      "originalEffectId": "truss.supporting-index.6c08e1b7-5c7c-4a00-b144-7912eb165096",
+      "objectKind": "supporting-index",
+      "creatingConstraintId": "truss.constraint.716d5d24-d8d3-46cd-80e6-f1db6e0101e9",
+      "proposedDisposition": "retain_candidate_only_after_same_parent_and_full_effect_admission",
+      "reason": "Unchanged source effect remains a candidate; original parent, creator and complete native dependency correspondence must be admitted",
+      "selectedIdentity": null,
+      "adopted": false
+    }
+  ],
+  "parentDispositions": {
+    "truss.layout.table.object_key": "retire_after_complete_atomic_live_key_and_reservation_conversion",
+    "truss.layout.table.key_tombstone": "same_parent_candidate_after_complete_object_reservation_conversion_and_effect_review"
+  },
+  "nativeQualified": false,
+  "installerReady": false,
+  "constraints": [
+    "Do not assign retired object_key effect IDs to new bucket/guard parents, surrogate primary keys or route indexes",
+    "Supporting index custody follows its original creating constraint; matching columns/names do not transfer it",
+    "Readiness requires independent complete conversion/history/reservation parity and full native parent/effect/dependency/security admission"
+  ]
+}
