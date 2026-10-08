@@ -3,6 +3,7 @@ import copy
 import hashlib
 import json
 from pathlib import Path
+from urllib.parse import unquote
 
 ROOT = Path(__file__).resolve().parents[5]
 PATH = 'docs/helix/02-design/contracts/reference-journal-phase-design-v0.1.proposal.json'
@@ -22,18 +23,36 @@ def schema_closure(routines):
         if identity in visited:
             return
         visited.add(identity)
-        walk(registry[identity][1])
-    def walk(value):
+        walk(registry[identity][1], identity)
+    def resolve_fragment(identity, fragment):
+        require(identity in registry, 'unresolved schema dependency')
+        value = registry[identity][1]
+        if not fragment:
+            return
+        fragment = unquote(fragment)
+        require(fragment.startswith('/'), 'unsupported schema reference anchor')
+        for token in fragment[1:].split('/'):
+            token = token.replace('~1', '/').replace('~0', '~')
+            if isinstance(value, list):
+                require(token.isdigit() and str(int(token)) == token and int(token) < len(value),
+                        'unresolved schema array fragment')
+                value = value[int(token)]
+            else:
+                require(isinstance(value, dict) and token in value, 'unresolved schema object fragment')
+                value = value[token]
+        require(isinstance(value, (dict, bool)), 'reference does not resolve to a schema')
+    def walk(value, owner):
         if isinstance(value, dict):
             if '$ref' in value:
-                identity = value['$ref'].split('#')[0]
-                if identity:
-                    visit(identity)
+                identity, _, fragment = value['$ref'].partition('#')
+                identity = identity or owner
+                resolve_fragment(identity, fragment)
+                visit(identity)
             for child in value.values():
-                walk(child)
+                walk(child, owner)
         elif isinstance(value, list):
             for child in value:
-                walk(child)
+                walk(child, owner)
     for routine in routines:
         visit(routine['phaseBodySchema']['schemaId'])
     return [{'schemaId': identity,
