@@ -1,5 +1,5 @@
 {
-  "stringEncoderSha256": "0828279560ac677392453a3b9c8695013232872b4977ba7775a1cbc86a6847e2",
+  "stringEncoderSha256": "e263882c49b2bf75db430a39f3362f6c35d70b6e0e72960f4cdc8e966878d479",
   "layoutPath": "docs/helix/04-build/evidence/qualified-property-layout-0.15.owner-export.sql",
   "layoutSha256": "cc725df53f0d74e13bb51fda29603f8cafe8c0cee237667778566f81b33f5011",
   "component": "native operation and owner-backed catalog staging",
@@ -39,6 +39,7 @@
     "canonical string rejects invalid UTF8 eda080",
     "canonical string rejects invalid UTF8 f4908080",
     "canonical string rejects invalid UTF8 c200",
+    "canonical chunk crossing preserves complete independently expected bytes",
     "type lineage original vector document-A",
     "type lineage original vector document-B",
     "type lineage original vector composed-unicode",
