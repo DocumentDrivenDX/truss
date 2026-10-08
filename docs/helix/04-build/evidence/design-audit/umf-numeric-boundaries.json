@@ -1,0 +1,180 @@
+{
+  "scope": "UMF 0.8.0 synthetic integer/decimal public validation and input preservation only; no convenience constructor, float meaning, browser or Truss/native qualification",
+  "umfCommit": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+  "sourceSha256": {
+    "src/model/schema-literals.ts": "e7b79989a4fed35c518d1817953d4ecff99615b49634982a74501a1d014a1164",
+    "src/model/schema-properties.ts": "893e047995830ceef82cbda52bd524d578679ee47f44b941e7fb1c4854c9cf9b"
+  },
+  "originalDocument": {
+    "umf": "0.8.0",
+    "id": "truss-numeric-boundary-review",
+    "vocabularies": {},
+    "modules": [
+      {
+        "id": "m",
+        "namespace": "m",
+        "elements": [
+          {
+            "id": "integer",
+            "kind": "field",
+            "scalarType": "integer",
+            "nullability": "required",
+            "extensions": {},
+            "facets": {
+              "integerWidth": {
+                "bits": 64,
+                "signed": true
+              }
+            }
+          },
+          {
+            "id": "decimal",
+            "kind": "field",
+            "scalarType": "decimal",
+            "nullability": "required",
+            "extensions": {},
+            "facets": {
+              "precision": 3,
+              "scale": 1
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "cases": [
+    {
+      "id": "integer-negative-zero",
+      "value": {
+        "integerToken": "-0"
+      },
+      "expectedValid": true,
+      "result": {
+        "valid": true,
+        "complete": true,
+        "diagnostics": []
+      },
+      "inputUnchanged": true
+    },
+    {
+      "id": "decimal-negative-zero",
+      "value": {
+        "decimalToken": "-0.00"
+      },
+      "expectedValid": true,
+      "result": {
+        "valid": true,
+        "complete": true,
+        "diagnostics": []
+      },
+      "inputUnchanged": true
+    },
+    {
+      "id": "decimal-exact-half",
+      "value": {
+        "decimalToken": "12.5"
+      },
+      "expectedValid": true,
+      "result": {
+        "valid": true,
+        "complete": true,
+        "diagnostics": []
+      },
+      "inputUnchanged": true
+    },
+    {
+      "id": "decimal-authored-tenth",
+      "value": {
+        "decimalToken": "0.1"
+      },
+      "expectedValid": true,
+      "result": {
+        "valid": true,
+        "complete": true,
+        "diagnostics": []
+      },
+      "inputUnchanged": true
+    },
+    {
+      "id": "decimal-rounding",
+      "value": {
+        "decimalToken": "0.125"
+      },
+      "expectedValid": false,
+      "result": {
+        "valid": false,
+        "complete": false,
+        "diagnostics": [
+          {
+            "code": "CORE_SCHEMA_PROPERTIES",
+            "path": "",
+            "message": "Numeric value would require rounding",
+            "severity": "error"
+          }
+        ]
+      },
+      "inputUnchanged": true
+    },
+    {
+      "id": "decimal-nan",
+      "value": {
+        "decimalToken": "NaN"
+      },
+      "expectedValid": false,
+      "result": {
+        "valid": false,
+        "complete": false,
+        "diagnostics": [
+          {
+            "code": "CORE_SCHEMA_PROPERTIES",
+            "path": "",
+            "message": "Invalid typed literal",
+            "severity": "error"
+          }
+        ]
+      },
+      "inputUnchanged": true
+    },
+    {
+      "id": "decimal-infinity",
+      "value": {
+        "decimalToken": "Infinity"
+      },
+      "expectedValid": false,
+      "result": {
+        "valid": false,
+        "complete": false,
+        "diagnostics": [
+          {
+            "code": "CORE_SCHEMA_PROPERTIES",
+            "path": "",
+            "message": "Invalid typed literal",
+            "severity": "error"
+          }
+        ]
+      },
+      "inputUnchanged": true
+    },
+    {
+      "id": "integer-overflow",
+      "value": {
+        "integerToken": "9223372036854775808"
+      },
+      "expectedValid": false,
+      "result": {
+        "valid": false,
+        "complete": false,
+        "diagnostics": [
+          {
+            "code": "CORE_SCHEMA_PROPERTIES",
+            "path": "",
+            "message": "Integer outside width/signedness",
+            "severity": "error"
+          }
+        ]
+      },
+      "inputUnchanged": true
+    }
+  ],
+  "nativeQualified": false
+}

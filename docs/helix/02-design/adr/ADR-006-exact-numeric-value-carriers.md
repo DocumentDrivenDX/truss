@@ -28,6 +28,12 @@ Reuse UMF's existing integer/decimal/float distinctions, facets, exact literal t
 
 **Status:** accepted carrier/API direction; codec/storage/Weft profile qualification remains required. **Date:** 2026-10-05.
 
+## Current UMF numeric boundary evidence
+
+The [eight public-validator probes](../../04-build/evidence/design-audit/umf-numeric-boundaries.json) use a separately authored UMF 0.8.0 integer/decimal model at source commit 16c35e8d. Exact integer `-0` and decimal `-0.00` tokens validate and remain unchanged; decimal(3,1) accepts authored token `0.1` and rejects rounding token `0.125`. NaN/Infinity decimal tokens and signed-64 overflow refuse. Reproduce with `bun docs/helix/04-build/evidence/design-audit/check-umf-numeric-boundaries.ts`. Source hashes and original model/results are retained. This qualifies these public validator calls in Bun, not a future convenience API, float semantics, browser or Truss native profile.
+
+Token-preserving storage already requires retaining a supplied zero sign/scale spelling while mathematical key identity follows the selected zero equivalence. For the reference number-input profile, propose detecting `Object.is(value,-0)` before rational coefficient construction and emitting exact token `-0`, with number-input provenance rather than invented authored scale. Explicit number read conversion must preserve a retained negative-zero sign when the selected token profile admits it, independently of mathematical rational equality; positive zero cannot be returned as the complete token-preserving view. Profile review must pin this rule before public convenience support. No exact grammar or float/nonfinite support is inferred from the presence of a generic floatToken wrapper.
+
 ## Exact JavaScript decimal admission algorithm
 
 The convenience adapter must evaluate the actual IEEE-754 binary64 value, not `Number.toString()` or a JSON serialization of that value. For a finite number, obtain its sign, exponent and significand through browser-compatible bit inspection and derive the exact integer rational numerator/denominator. Do not use a decimal parser on the shortest printed representation as proof of exactness.
