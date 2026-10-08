@@ -2438,3 +2438,28 @@ The private native acceptance-report store now has ALWAYS BEFORE UPDATE/DELETE r
 `packages/postgresql/native/catalog-source-immutability.sql` adds private SECURITY INVOKER, PUBLIC-revoked ALWAYS guards against UPDATE/DELETE and statement TRUNCATE on `schema_rev` and `schema_doc`. Original revision provenance, document bytes, validation evidence and order remain available to identity matching. New provisional revision/document insertion remains available; `schema_head` still has its separate publication obligations.
 
 The PostgreSQL 17.9 native suite passes 220 checks, including all four ALWAYS trigger registrations, replacement and no-op updates, deletion and cascading truncation refusal (`55000`), complete before/after archive comparison and subsequent matcher/stager execution after savepoint recovery. The receipt pins the new guard body. This is component evidence, not qualified insertion authority, complete original-source admission, retention/offload/conversion authority or installer privilege/DDL containment. Privileged administrators can still alter the installation; public positive acceptance commits remain deliberately refused until complete native finalization exists.
+
+## Ordinary-context journal native replay
+
+The actual native component now passes 53 observations and retains private file
+journals alongside an independent in-memory original request/frame/outcome capture.
+Every original file inspects as complete and matches the original capture; nine
+checkout-local lease groups have consecutive exact decimal ordinals. Actual
+ParameterStatus reports survive disk replay through the public inspector.
+Malformed context reports and missing command completion are invalid; missing
+outcome remains incomplete; raw originals are retained in each state.
+
+Deleting a complete ParameterStatus record remains structurally complete but fails
+independent original-content correspondence. This is a retained negative control
+for provenance, not source authentication or a passing receipt-security story.
+The private original/damaged files remain under the owned directory named by UMF's
+`truss-principal.json`. No startup/password frames are captured. Source/issuer
+integrity and replay/transaction authority remain separate unfinished obligations.
+
+### Native archived document integrity at identity interpretation — 2026-10-08
+
+`catalog-source-integrity.sql` provides a private STABLE, SECURITY INVOKER, PUBLIC-revoked original-document integrity check. Exactly one C-equal revision/document archive must exist, its text must fit the existing one-MiB component bound, and its stored lowercase SHA-256 must equal the digest of the original UTF-8 text. Native lineage interpretation invokes it before parsing; retained property/key interpretation invokes it before reading the defining archive. Type/relationship retained interpretation inherits the check through its original-lineage producer.
+
+PostgreSQL 17.9 passes 228 combined checks. A rollback-only malformed archive insertion exercises damaged Record/relationship candidate and missing-document refusal. A separate damaged defining revision retains all original declaration content while substituting only the archive digest; each of the four retained matchers independently refuses with `55000` and the digest-mismatch diagnostic. Savepoint recovery restores original archives and pointers, and subsequent staging checks pass. The receipt pins the helper and changed consumers. Fixtures are privileged integrity controls, not accepted revision creation or authorized pointer transitions.
+
+This closes unchecked stored-byte digest consumption in the supported private identity paths, not original producer authenticity, validation-evidence custody, document metadata/content correspondence, complete historical transition/definition parity or binding-source interpretation. Hashing is bounded after native text materialization and is not precharged resource admission. Full source/profile/privilege installation, whole-set matching, report/head/finalization and public acceptance remain unfinished. UMF continues to own portable validation/DDL production; Weft continues to own query lowering and decoders. No owner API or compiler mapping is changed.

@@ -35,6 +35,7 @@ CREATE FUNCTION truss.runtime_catalog_lineage(revision int, category text, docum
 RETURNS bytea LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE matches bigint;
 BEGIN
+ PERFORM truss.runtime_verify_catalog_document(revision,document_id);
  IF category='record' THEN
   SELECT count(*) INTO matches FROM truss.schema_doc d
    CROSS JOIN LATERAL jsonb_array_elements(d.document::jsonb->'modules') m

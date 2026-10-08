@@ -27,6 +27,7 @@ BEGIN
  IF retained.definition_source_kind IS DISTINCT FROM 'accepted_document' THEN
   RAISE EXCEPTION 'source kind requires its own admitted original interpreter' USING ERRCODE='0A000';
  END IF;
+ PERFORM truss.runtime_verify_catalog_document(retained.definition_rev,retained.definition_document_id);
  SELECT count(*) INTO source_count FROM truss.schema_doc d
   CROSS JOIN LATERAL jsonb_array_elements(d.document::jsonb->'modules') m
   CROSS JOIN LATERAL jsonb_array_elements(m.value->'elements') f
