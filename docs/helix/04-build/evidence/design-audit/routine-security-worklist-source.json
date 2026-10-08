@@ -1,11 +1,11 @@
 {
   "scope": "Selected source worklist consistency only, not complete callable or native closure.",
-  "worklistSha256": "b661e23632d83a885c68bf7f672106fb998723deb45d635b8fddeea6b8c2e968",
+  "worklistSha256": "01d35e172874e4ddc59d7479d7c7a27aeb14d78f8805ff9f5126751e7f7eb89a",
   "producerSha256": "a5a939e5afed81bdffd95333d99de9a03fe5f08a9e2eddd3c6844d01f2d36ca7",
   "sourcePins": [
     {
       "path": "02-design/contracts/reference-routine-design-v0.1.proposal.json",
-      "sha256": "97e425837d52c89f0f1c4e77545f84534292b0fedc2f11e5f48323cd87512fa4"
+      "sha256": "579841502e06cdfd91c8d50716780d461fd01bf2df6ef841eb2c2d5169481c4d"
     },
     {
       "path": "02-design/contracts/reference-journal-phase-design-v0.1.proposal.json",

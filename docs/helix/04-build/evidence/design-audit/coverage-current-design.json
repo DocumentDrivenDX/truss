@@ -1052,7 +1052,7 @@
     "03-test/test-plans/STP-016-journal-plain-sql-changes-too.md": "3e5e23c1ac4a9d3006c10134b786ea0a24b47f8a095769142a2fc2ed13eae944",
     "02-design/technical-designs/TD-017-read-the-journal-incrementally-without-missing-a-change.md": "334989f96e80c4d349109a9dd871fa35b7d0c9d765e7bf887c7f1abb13fbe40a",
     "03-test/test-plans/STP-017-read-the-journal-incrementally-without-missing-a-change.md": "5038aa0af2533d1a23ee093b950d0d3bd72fa9517c44c7546e513faa1420f71d",
-    "02-design/technical-designs/TD-018-reconstruct-a-record-as-of-a-version.md": "9c434d0e88e58fa5d3430dc688ff2f8e526097e86ae01a4c5e223377dc05c8d3",
+    "02-design/technical-designs/TD-018-reconstruct-a-record-as-of-a-version.md": "4d9d827fe89d9e2364e4a90c100abd83d11b822c2eca003138630dc6ed997ee3",
     "03-test/test-plans/STP-018-reconstruct-a-record-as-of-a-version.md": "5a38fd91e694ca89c0f498dd3553b8a171ded878186a3b2a6a789c7261eb5cfe",
     "02-design/technical-designs/TD-019-trim-the-journal-by-dropping-partitions.md": "92476ac50f246f0e5839aa57c5cfc7162a2930f9714c22db93a361f51454e00d",
     "03-test/test-plans/STP-019-trim-the-journal-by-dropping-partitions.md": "010c96c460f9a536abd2f053cfdf8144d4ccd679b816c73a9e97b1aa0c84b872",
