@@ -1,6 +1,6 @@
 /** Inert construction only. No native capability, profile or permission is inferred. */
 import type { ReferenceAssemblyConfiguration, AssemblyConstructionResult } from './contracts/truss-reference-assembly-v0.1';
-import type { Executor } from './contracts/truss-execution-v0.1';
+import type { Executor, Statement, StatementResult, TransactionOptions } from './contracts/truss-execution-v0.1';
 import type { ProfilePin } from './contracts/truss-acceptance-input-v0.1';
 import type { HostRecoveryRegistry } from './contracts/truss-recovery-registry-v0.1';
 import type { HostRequestNamespaceAuthority } from './contracts/truss-request-namespace-v0.1';
@@ -108,3 +108,18 @@ export declare class NativeDecodeBudget {
         readonly exhausted: boolean;
     };
 }
+/** Host must retain original native attempt and quarantine uncertain resources. */
+export interface NativeConnection {
+    begin(options: TransactionOptions): Promise<void>;
+    execute(statement: Statement): Promise<StatementResult>;
+    control(sql: string): Promise<void>;
+    commit(): Promise<'committed'>;
+    rollback(): Promise<'rolled_back'>;
+    release(): Promise<void>;
+    quarantine(reason: 'commit_unknown' | 'transaction_unusable'): Promise<void>;
+}
+export interface NativeConnectionSource {
+    acquire(): Promise<NativeConnection>;
+}
+/** Engine-owned executor composition. Caller adoption deliberately refuses until native custody is implemented. */
+export declare function createEngineExecutor(source: NativeConnectionSource): Executor<never>;

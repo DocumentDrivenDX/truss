@@ -150,3 +150,25 @@ COMMIT/quarantine/recovery, prepared statements, poolers and Node remain unfinis
 A future adapter cannot infer confirmed rollback or native settlement merely
 from a rejected promise. Bun API references inspected for this probe:
 https://bun.sh/docs/runtime/sql and https://bun.sh/reference/bun/TransactionSQL.
+
+
+## Engine-owned executor composition
+
+`createEngineExecutor` implements the canonical Executor interface over mandatory
+`NativeConnectionSource`/`NativeConnection` host ports. Engine handles are issued
+into a private affinity/lifetime map; ended/foreign/concurrent handles refuse.
+Savepoint identities are issuer-owned, scoped to the original entry and invalidated
+according to native rollback/release ordering. Results are copied/frozen with
+text/null cells and exact text affected-row counts. Callback exceptions propagate
+only after the host confirms rollback/release. Commit uncertainty closes admission
+and invokes original-resource quarantine, without release or guessed rollback.
+
+Eighteen package tests, 146 assertions, strict build and clean packed consumer
+pass. New executor tests use controlled native ports, not actual driver execution.
+The earlier Bun probe establishes only its separately described native subset.
+The concrete Bun bridge remains unfinished; port promises cannot constitute
+native confirmation without a qualified bridge. Caller adoption and cancellation
+explicitly refuse. Parameter-domain/JSON validation, SQLSTATE-specific error
+mapping, full native result/resource admission, current public-operation registry,
+quarantine/recovery authority and driver qualification remain unfinished. No
+complete Executor conformance or native Truss readiness is claimed.

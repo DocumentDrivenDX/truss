@@ -516,10 +516,170 @@ function nativeScalarByteLength(text) {
   }
   return bytes;
 }
+var failure = (code) => ({ status: "error", error: code === "retry" ? { code, message: code, retryScope: "whole_transaction" } : { code, message: code, retryScope: "none" } });
+function createEngineExecutor(source) {
+  const entries = new WeakMap;
+  const points = new WeakMap;
+  let sequence = 0n;
+  const call = async (handle, fn, containment = false) => {
+    const entry = entries.get(handle);
+    if (!entry || !entry.live || entry.busy || entry.failed && !containment)
+      return failure("invalid_transaction");
+    entry.busy = true;
+    try {
+      return { status: "ok", value: await fn(entry) };
+    } catch {
+      entry.failed = true;
+      return failure("transaction_unusable");
+    } finally {
+      entry.busy = false;
+    }
+  };
+  return {
+    async adoptTransaction() {
+      return failure("execution_obligation");
+    },
+    async withTransaction(options, callback) {
+      if (!["read_committed", "repeatable_read", "serializable"].includes(options.isolation) || !["read_only", "read_write"].includes(options.accessMode) || options.cancellation)
+        return failure("execution_obligation");
+      let connection;
+      try {
+        connection = await source.acquire();
+      } catch {
+        return failure("transaction_unusable");
+      }
+      let entry;
+      const quarantine = async (reason) => {
+        if (entry)
+          entry.live = false;
+        try {
+          await connection.quarantine(reason);
+        } catch {}
+        return failure(reason);
+      };
+      try {
+        await connection.begin(options);
+      } catch {
+        return quarantine("transaction_unusable");
+      }
+      const handle = Object.freeze({ ownership: "engine", isolation: options.isolation, accessMode: options.accessMode });
+      entry = { connection, live: true, busy: false, failed: false, savepoints: [] };
+      entries.set(handle, entry);
+      let value;
+      try {
+        value = await callback(handle);
+      } catch (original) {
+        entry.live = false;
+        if (entry.busy)
+          return quarantine("transaction_unusable");
+        try {
+          if (await connection.rollback() !== "rolled_back")
+            return quarantine("transaction_unusable");
+        } catch {
+          return quarantine("transaction_unusable");
+        }
+        try {
+          await connection.release();
+        } catch {
+          return quarantine("transaction_unusable");
+        }
+        throw original;
+      }
+      entry.live = false;
+      if (entry.busy)
+        return quarantine("transaction_unusable");
+      if (entry.failed) {
+        try {
+          if (await connection.rollback() !== "rolled_back")
+            return quarantine("transaction_unusable");
+          await connection.release();
+        } catch {
+          return quarantine("transaction_unusable");
+        }
+        return failure("transaction_unusable");
+      }
+      try {
+        if (await connection.commit() !== "committed")
+          return quarantine("commit_unknown");
+      } catch {
+        return quarantine("commit_unknown");
+      }
+      try {
+        await connection.release();
+      } catch {
+        return quarantine("transaction_unusable");
+      }
+      return { status: "ok", value: { value, durability: "committed" } };
+    },
+    execute(handle, statement) {
+      return call(handle, async (entry) => {
+        if (typeof statement.sql !== "string" || !statement.sql.length)
+          throw Error("invalid statement");
+        const parameters = statement.parameters.map((p, i) => {
+          if (p.position !== i + 1 || !["null", "text", "integer", "decimal", "boolean", "json"].includes(p.carrier))
+            throw Error("invalid parameter");
+          if (p.carrier === "null") {
+            if ("text" in p)
+              throw Error("invalid null");
+          } else if (typeof p.text !== "string")
+            throw Error("invalid text");
+          return Object.freeze({ ...p });
+        });
+        const result = await entry.connection.execute(Object.freeze({ sql: statement.sql, parameters: Object.freeze(parameters) }));
+        if (!/^(0|[1-9][0-9]*)$/.test(result.affectedRows) || typeof result.command !== "string" || result.columns.some((c) => typeof c !== "string"))
+          throw Error("invalid result");
+        const rows = result.rows.map((row) => {
+          if (row.length !== result.columns.length)
+            throw Error("row width");
+          return Object.freeze(row.map((cell) => {
+            if (cell.state === "null")
+              return Object.freeze({ state: "null" });
+            if (cell.state !== "text" || typeof cell.text !== "string")
+              throw Error("non-text cell");
+            return Object.freeze({ state: "text", text: cell.text });
+          }));
+        });
+        return Object.freeze({ columns: Object.freeze([...result.columns]), rows: Object.freeze(rows), affectedRows: result.affectedRows, command: result.command });
+      });
+    },
+    savepoint(handle) {
+      return call(handle, async (entry) => {
+        const name = "truss_sp_" + (++sequence).toString();
+        await entry.connection.control("SAVEPOINT " + name);
+        const point = Object.freeze({});
+        points.set(point, { entry, name });
+        entry.savepoints.push(point);
+        return point;
+      });
+    },
+    rollbackToSavepoint(handle, point) {
+      return call(handle, async (entry) => {
+        const found = points.get(point);
+        const index = entry.savepoints.indexOf(point);
+        if (!found || found.entry !== entry || index < 0)
+          throw Error("invalid savepoint");
+        await entry.connection.control("ROLLBACK TO SAVEPOINT " + found.name);
+        entry.savepoints.splice(index + 1);
+        entry.failed = false;
+      }, true);
+    },
+    releaseSavepoint(handle, point) {
+      return call(handle, async (entry) => {
+        const found = points.get(point);
+        const index = entry.savepoints.indexOf(point);
+        if (!found || found.entry !== entry || index < 0)
+          throw Error("invalid savepoint");
+        await entry.connection.control("RELEASE SAVEPOINT " + found.name);
+        entry.savepoints.splice(index);
+      });
+    }
+  };
+}
 export {
   INERT_ASSEMBLY_PROFILE,
   NativeDecodeBudget,
   NativeVectorError,
+  createEngineExecutor,
   createReferenceAssembly,
   decodeNativeRoutineCarriers,
   decodeNativeTextArray,
