@@ -13,10 +13,15 @@
     "unfinalized operation cannot commit",
     "failed commit removes custody",
     "rolled back operation preserves earlier caller work",
-    "phase flags cannot bypass unavailable complete finalizer"
+    "phase flags cannot bypass unavailable complete finalizer",
+    "native provisional catalog revision allocated",
+    "verbatim original source retained",
+    "document stage cannot publish catalog head",
+    "rollback removes staged revision and source"
   ],
   "bodySha256": "8dcb3d6f545af7046e6bc644aa58dc800615e5962c6ad99a1199bc96b9d68301",
   "observerSha256": "44962f3ca9b3ff95da87034910c74b09b6fa8c69fd214e3e97158aded3e41ce9",
   "barrierSha256": "eed4f044a241db7d70dd9cf222a3313bedd484273c18d0e7063b614ad5bab93b",
+  "catalogStageSha256": "7319b574cbd5cf393a8a27e7325fcf05815c882c01acd817cf50d0d4a4628f7f",
   "qualification": "Actual xid/context/artifact bounds/single unfinished/rollback/private invocation component only. Protected issuer registration, canonical observers, finalization, deferred complete-cohort checks, installer security and public runtime remain unfinished."
 }

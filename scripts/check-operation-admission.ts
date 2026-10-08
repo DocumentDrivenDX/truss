@@ -39,6 +39,17 @@ try{
  await sql.unsafe("UPDATE truss.row_home_operation SET phase='application_finalized',readiness_generation=0,sealed_generation=0,application_generation=0,application_result_bytes=decode('01','hex')");
  let forgedCode='';try{await sql.unsafe('COMMIT')}catch(e){forgedCode=(e as any).errno??(e as any).code}
  assert(forgedCode==='55000','phase flags cannot bypass unavailable complete finalizer');
- const receipt={component:'native operation admission',engine:'PostgreSQL17.9',checks,bodySha256:new Bun.CryptoHasher('sha256').update(body).digest('hex'),observerSha256:new Bun.CryptoHasher('sha256').update(observer).digest('hex'),barrierSha256:new Bun.CryptoHasher('sha256').update(barrier).digest('hex'),qualification:'Actual xid/context/artifact bounds/single unfinished/rollback/private invocation component only. Protected issuer registration, canonical observers, finalization, deferred complete-cohort checks, installer security and public runtime remain unfinished.'};
+ const catalogStage=await Bun.file('packages/postgresql/native/catalog-document-stage.sql').text();await sql.unsafe(catalogStage);
+ const beforeHead=await sql.unsafe('SELECT rev::text AS rev FROM truss.schema_head');const beforeRevisions=await sql.unsafe('SELECT count(*)::text AS n FROM truss.schema_rev');
+ await sql.unsafe('BEGIN');
+ await sql.unsafe(admit.replace("'mutation'","'catalog-acceptance'"));
+ const originalDocument='{"umf":"0.7.0","opaque":"雪\\u0000"}';
+ const staged=await sql.unsafe("SELECT * FROM truss.runtime_stage_catalog_document('original-document','r1','0.7.0',$1::text,'{}'::jsonb,'{}'::jsonb)",[originalDocument]);
+ assert(staged.length===1&&staged[0].provisional_revision==='1','native provisional catalog revision allocated');
+ const retained=await sql.unsafe('SELECT document FROM truss.schema_doc');assert(retained[0].document===originalDocument,'verbatim original source retained');
+ const head=await sql.unsafe('SELECT rev::text AS rev FROM truss.schema_head');assert(JSON.stringify(head)===JSON.stringify(beforeHead),'document stage cannot publish catalog head');
+ await sql.unsafe('ROLLBACK');
+ const remaining=await sql.unsafe('SELECT count(*)::text AS n FROM truss.schema_rev');assert(remaining[0].n===beforeRevisions[0].n,'rollback removes staged revision and source');
+ const receipt={component:'native operation admission',engine:'PostgreSQL17.9',checks,bodySha256:new Bun.CryptoHasher('sha256').update(body).digest('hex'),observerSha256:new Bun.CryptoHasher('sha256').update(observer).digest('hex'),barrierSha256:new Bun.CryptoHasher('sha256').update(barrier).digest('hex'),catalogStageSha256:new Bun.CryptoHasher('sha256').update(catalogStage).digest('hex'),qualification:'Actual xid/context/artifact bounds/single unfinished/rollback/private invocation component only. Protected issuer registration, canonical observers, finalization, deferred complete-cohort checks, installer security and public runtime remain unfinished.'};
  await Bun.write('docs/helix/04-build/evidence/runtime-operation-admission.json',JSON.stringify(receipt,null,2)+'\n');console.log(JSON.stringify({checks:checks.length}));
 }finally{await sql.close()}
