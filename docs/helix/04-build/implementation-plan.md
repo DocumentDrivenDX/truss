@@ -60,6 +60,8 @@ This is the current next-work sequence. Later chronological notes preserve their
 | CH-05 public packaging / B-014 | Existing draft bindings and package delivery PD-01–08; exact driver hook handoff and STP-044 DH-01–05 alongside OL/LR/SB lease cases | Separate compiled ESM/declaration exports, clean packed consumers and inert construction/import evidence; reference host uses public interfaces | Build/import work can proceed now; native scenario requires CH-02/03 and selected driver; Node remains separately qualified |
 | CH-06 complete product qualification / B-001/015 | Independently authored corpus, all 45 story/STP pairs and public reference S01–S09 | Exact original per-case state/journal/report/fault/concurrency/resource/consumer receipts and complete assessor output | Required owner choices, selected corpus/deployment and implementation; unavailable prerequisites cannot be skipped into green status |
 
+CH-02/04 definition production follows the [acyclic composition order](../02-design/contracts/reference-definition-composition-order.proposal.md): original scalar-shape leaf, presence, scalar codec, then composite row value. Presence cannot reference the composite that embeds it. Full original source/physical/authority/resource and compiler admission still occurs atomically after construction.
+
 ### Current concrete component handoffs
 
 These close specific interface/procedure choices inside the existing CH work; native identity, dependency and runtime evidence remain separate exit outputs.
