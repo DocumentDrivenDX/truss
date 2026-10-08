@@ -1,13 +1,15 @@
-import {createPgConnectionSource} from '@documentdrivendx/truss-pg-runtime';
+import {createPgConnectionSource,createFileQueryJournal} from '@documentdrivendx/truss-pg-runtime';
 import {createEngineExecutor,decodeOperationRegistry} from '@documentdrivendx/truss-postgresql';
+import {mkdtemp} from 'node:fs/promises';
 import {writeFile,readFile} from 'node:fs/promises';
 const probe=Bun.spawnSync(['/usr/local/bin/docker','inspect','ashlar-e2e-truss-pg17']);
 if(probe.exitCode)throw Error('Existing sandbox unavailable');
 const container=JSON.parse(new TextDecoder().decode(probe.stdout))[0];
 if(container.Config.Labels['ashlar.purpose']!=='end-to-end-development')throw Error('Wrong sandbox');
 const password=container.Config.Env.find((s:string)=>s.startsWith('POSTGRES_PASSWORD=')).slice(18);
+const journalDirectory=await mkdtemp('/private/tmp/truss-original-query-');
 const host=createPgConnectionSource({host:'127.0.0.1',port:15432,user:'postgres',password,database:'truss_e2e',max:2,
-connectionTimeoutMillis:5000,options:'-c statement_timeout=5000 -c lock_timeout=1000'});
+connectionTimeoutMillis:5000,options:'-c statement_timeout=5000 -c lock_timeout=1000'},{journal:createFileQueryJournal(journalDirectory)});
 const executor=createEngineExecutor(host.source);
 try{
  const result=await executor.withTransaction({isolation:'serializable',accessMode:'read_only'},async tx=>{

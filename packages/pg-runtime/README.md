@@ -51,3 +51,11 @@ failure closes the transport; no automatic replay, cleanup or deletion is offere
 Synchronous disk I/O is experimental and unbenchmarked. Local random filenames
 are locators only; native issuer/epoch/transaction authority and full recovery
 integration remain unfinished. Without explicit opt-in there is no journal I/O.
+
+The existing small PostgreSQL 17.9 executor probe now opts into a private original
+journal. `bun scripts/check-query-journal.ts <private-directory>` verifies retained
+files in a separate process, with no database submission. The observed run has
+50 requests and three original server errors (23505, 40P01, 23503); exact original
+file hashes are recorded without publishing sensitive request/result contents.
+This is process-independent correspondence evidence, not a power-loss test or
+native transaction recovery qualification.
