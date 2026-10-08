@@ -499,7 +499,14 @@ export function createEngineExecutor(source:NativeConnectionSource):Executor<nev
       const parameters=statement.parameters.map((p,i)=>{
         if(p.position!==i+1||!['null','text','integer','decimal','boolean','json'].includes(p.carrier))throw Error('invalid parameter');
         if(p.carrier==='null'){if('text'in p)throw Error('invalid null');}
-        else if(typeof p.text!=='string')throw Error('invalid text');
+        else {
+          if(typeof p.text!=='string')throw Error('invalid text');
+          if(p.carrier==='integer'&&!/^-?(0|[1-9][0-9]*)$/.test(p.text))throw Error('invalid integer');
+          if(p.carrier==='decimal'&&!/^-?(0|[1-9][0-9]*)(\.[0-9]+)?$/.test(p.text))throw Error('invalid decimal');
+          if(p.carrier==='boolean'&&p.text!=='true'&&p.text!=='false')throw Error('invalid boolean');
+          // Syntax check only: retain and transmit the original JSON text, never the decoded tree.
+          if(p.carrier==='json'){try{JSON.parse(p.text);}catch{throw Error('invalid JSON');}}
+        }
         return Object.freeze({...p});
       });
       const result=await entry.connection.execute(Object.freeze({sql:statement.sql,parameters:Object.freeze(parameters)}));

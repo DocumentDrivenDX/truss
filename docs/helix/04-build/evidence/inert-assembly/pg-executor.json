@@ -41,5 +41,59 @@
       "durability": "committed"
     }
   },
-  "qualification": "Actual engine executor + direct pg driver on existing local PostgreSQL 17.9. Exact native numeric text cells, duplicate/empty column descriptions, savepoints and confirmed read-only commit. No caller adoption/cancellation, lost-commit native containment, pooler/Node or full Truss bootstrap qualification."
+  "writes": {
+    "status": "ok",
+    "value": {
+      "value": {
+        "insert": {
+          "columns": [],
+          "rows": [],
+          "affectedRows": "1",
+          "command": "INSERT"
+        },
+        "retained": {
+          "columns": [
+            "id",
+            "value"
+          ],
+          "rows": [
+            [
+              {
+                "state": "text",
+                "text": "9007199254740993123"
+              },
+              {
+                "state": "text",
+                "text": "{\"large\": 9007199254740993123456789, \"unknown\": null}"
+              }
+            ]
+          ],
+          "affectedRows": "1",
+          "command": "SELECT"
+        }
+      },
+      "durability": "committed"
+    }
+  },
+  "rollback": {
+    "status": "ok",
+    "value": {
+      "value": {
+        "columns": [
+          "absent"
+        ],
+        "rows": [
+          [
+            {
+              "state": "null"
+            }
+          ]
+        ],
+        "affectedRows": "1",
+        "command": "SELECT"
+      },
+      "durability": "committed"
+    }
+  },
+  "qualification": "Actual engine executor + direct pg driver on existing local PostgreSQL 17.9. Exact native numeric text cells, duplicate/empty column descriptions, savepoints, confirmed read-only/write commit, exact parameterized write, uniqueness-error savepoint containment preserving prior work and independently observed callback rollback. No caller adoption/cancellation, lost-commit native containment, pooler/Node or full Truss bootstrap qualification."
 }

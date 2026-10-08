@@ -33,3 +33,11 @@ test('foreign adapter handle and unsupported adoption never touch native ports',
   await a.executor.withTransaction(options,async handle=>{expect((await b.executor.execute(handle,{sql:'SELECT 1',parameters:[]})).status).toBe('error');});
   expect(b.calls).toEqual([]);
 });
+
+test('invalid carrier domains refuse before native execution',async()=>{
+  for(const parameter of [{carrier:'integer',text:'1.5'},{carrier:'decimal',text:'NaN'},{carrier:'boolean',text:'yes'},{carrier:'json',text:'{broken'}]){
+    const f=fixture();
+    const result=await f.executor.withTransaction(options,async handle=>f.executor.execute(handle,{sql:'SELECT $1',parameters:[{position:1,...parameter} as any]}));
+    expect(result.status).toBe('error');expect(f.calls).toEqual(['begin','rollback','release']);
+  }
+});

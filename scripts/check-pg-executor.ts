@@ -22,7 +22,29 @@ try{
    return {value:value.value,empty:empty.value};
  });
  if(result.status!=='ok'||result.value.durability!=='committed')throw Error('Native settlement failed');
- await writeFile(new URL('../docs/helix/04-build/evidence/inert-assembly/pg-executor.json',import.meta.url),JSON.stringify({driver:'pg/8.16.3',loader:'bun/'+Bun.version,result,
- qualification:'Actual engine executor + direct pg driver on existing local PostgreSQL 17.9. Exact native numeric text cells, duplicate/empty column descriptions, savepoints and confirmed read-only commit. No caller adoption/cancellation, lost-commit native containment, pooler/Node or full Truss bootstrap qualification.'},null,2)+'\n');
+ const run = async (tx:any,sql:string,parameters:any[]=[])=>{const r=await executor.execute(tx,{sql,parameters});if(r.status!=='ok')throw Error('Native statement refused');return r.value;};
+ const writes=await executor.withTransaction({isolation:'read_committed',accessMode:'read_write'},async tx=>{
+   await run(tx,'CREATE TEMP TABLE truss_pg_write_probe(id bigint PRIMARY KEY,value jsonb)');
+   const original='{"large":9007199254740993123456789,"unknown":null}';
+   const insert=await run(tx,'INSERT INTO truss_pg_write_probe VALUES($1::bigint,$2::jsonb)',[{position:1,carrier:'integer',text:'9007199254740993123'},{position:2,carrier:'json',text:original}]);
+   if(insert.affectedRows!=='1'||insert.command!=='INSERT')throw Error('Write command correspondence');
+   const point=await executor.savepoint(tx);if(point.status!=='ok')throw Error('Write savepoint refused');
+   const duplicate=await executor.execute(tx,{sql:'INSERT INTO truss_pg_write_probe VALUES(9007199254740993123,NULL)',parameters:[]});
+   if(duplicate.status!=='error')throw Error('Native duplicate did not fail');
+   if((await executor.rollbackToSavepoint(tx,point.value)).status!=='ok'||(await executor.releaseSavepoint(tx,point.value)).status!=='ok')throw Error('Native error containment failed');
+   const retained=await run(tx,'SELECT id,value FROM truss_pg_write_probe');
+   if(retained.rows.length!==1||retained.rows[0][0].text!=='9007199254740993123'||!retained.rows[0][1].text.includes('9007199254740993123456789'))throw Error('Prior write not preserved exactly');
+   await run(tx,'DROP TABLE truss_pg_write_probe');return {insert,retained};
+ });
+ if(writes.status!=='ok')throw Error('Write settlement failed');
+ const sentinel=Error('controlled native rollback');
+ try{await executor.withTransaction({isolation:'read_committed',accessMode:'read_write'},async tx=>{
+   await run(tx,'CREATE TEMP TABLE truss_pg_rollback_probe(id integer)');
+   await run(tx,'INSERT INTO truss_pg_rollback_probe VALUES(1)');throw sentinel;
+ });throw Error('Unexpected callback completion');}catch(error){if(error!==sentinel)throw Error('Original callback exception not preserved');}
+ const rollback=await executor.withTransaction({isolation:'read_committed',accessMode:'read_only'},async tx=>run(tx,"SELECT to_regclass('pg_temp.truss_pg_rollback_probe')::text AS absent"));
+ if(rollback.status!=='ok'||rollback.value.value.rows[0][0].state!=='null')throw Error('Original rollback not observed');
+ await writeFile(new URL('../docs/helix/04-build/evidence/inert-assembly/pg-executor.json',import.meta.url),JSON.stringify({driver:'pg/8.16.3',loader:'bun/'+Bun.version,result,writes,rollback,
+ qualification:'Actual engine executor + direct pg driver on existing local PostgreSQL 17.9. Exact native numeric text cells, duplicate/empty column descriptions, savepoints, confirmed read-only/write commit, exact parameterized write, uniqueness-error savepoint containment preserving prior work and independently observed callback rollback. No caller adoption/cancellation, lost-commit native containment, pooler/Node or full Truss bootstrap qualification.'},null,2)+'\n');
  console.log('Native pg executor exact transport/columns/savepoints/commit passed.');
 }finally{await host.close();}

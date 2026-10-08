@@ -199,3 +199,25 @@ The host package remains source-only. Caller adoption/cancellation, native lost
 COMMIT/rollback termination/recovery settlement, parameter domains, complete
 resource/error/current-operation admission and prepared/pooler/Node qualification
 remain open. This is actual engine executor integration, not native Truss bootstrap.
+
+
+## Native writes and error containment
+
+The pg executor probe now includes actual parameterized bigint/JSON writes,
+a deliberate uniqueness violation followed by rollback/release of its original
+savepoint, and exact retained prior-write observation. A controlled callback
+exception rolls back temporary-table creation and insertion; a following
+transaction independently observes absence. Successful write scope drops its
+temporary table before confirmed commit. No persistent native tables remain.
+Known rowless CREATE/DROP/ALTER/SET/GRANT/REVOKE/COMMENT commands with absent
+command counts return zero affected data rows; unknown absent-count commands
+still refuse. This fixes DDL execution needed by bootstrap without treating
+unknown metadata as a known count.
+
+Integer, decimal, boolean and JSON carrier domains now validate before native
+execution. JSON syntax validation transmits original text unchanged; no decoded
+JSON tree becomes storage authority. Nineteen tests/154 assertions, strict host
+typecheck, portable build and packed consumer pass. The final native probe was
+rerun after validation changes. Native error-to-SQLSTATE mapping, exact resource
+admission, caller adoption/cancellation, uncertain native settlement and full
+bootstrap remain unfinished. No cloud/settings change occurred.

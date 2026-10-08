@@ -621,8 +621,23 @@ function createEngineExecutor(source) {
           if (p.carrier === "null") {
             if ("text" in p)
               throw Error("invalid null");
-          } else if (typeof p.text !== "string")
-            throw Error("invalid text");
+          } else {
+            if (typeof p.text !== "string")
+              throw Error("invalid text");
+            if (p.carrier === "integer" && !/^-?(0|[1-9][0-9]*)$/.test(p.text))
+              throw Error("invalid integer");
+            if (p.carrier === "decimal" && !/^-?(0|[1-9][0-9]*)(\.[0-9]+)?$/.test(p.text))
+              throw Error("invalid decimal");
+            if (p.carrier === "boolean" && p.text !== "true" && p.text !== "false")
+              throw Error("invalid boolean");
+            if (p.carrier === "json") {
+              try {
+                JSON.parse(p.text);
+              } catch {
+                throw Error("invalid JSON");
+              }
+            }
+          }
           return Object.freeze({ ...p });
         });
         const result = await entry.connection.execute(Object.freeze({ sql: statement.sql, parameters: Object.freeze(parameters) }));

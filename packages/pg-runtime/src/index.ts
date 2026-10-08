@@ -28,14 +28,16 @@ export function createPgConnectionSource(config:PoolConfig): {
       },
       async execute(statement):Promise<StatementResult>{alive();if(!started)throw Error('Not begun');
         const result=await client.query({text:statement.sql,values:statement.parameters.map(p=>p.carrier==='null'?null:p.text),rowMode:'array'});
-        if(Array.isArray(result)||result.rowCount===null||!Number.isSafeInteger(result.rowCount)||result.rowCount<0)throw Error('Unsupported native count/result');
+        if(Array.isArray(result))throw Error('Multiple native results unsupported');
+        const noCount = result.rowCount===null && result.rows.length===0 && ['CREATE','DROP','ALTER','SET','GRANT','REVOKE','COMMENT'].includes(result.command);
+        if(!noCount&&(result.rowCount===null||!Number.isSafeInteger(result.rowCount)||result.rowCount<0))throw Error('Unsupported native count/result');
         // Command-tag count is protocol metadata, never a stored numeric cell.
         const rows=result.rows.map((row:unknown[])=>row.map(value=>{
           if(value===null)return {state:'null' as const};
           if(typeof value!=='string')throw Error('Non-text native cell');
           return {state:'text' as const,text:value};
         }));
-        return {columns:result.fields.map(field=>field.name),rows,affectedRows:String(result.rowCount),command:result.command};
+        return {columns:result.fields.map(field=>field.name),rows,affectedRows:noCount?'0':String(result.rowCount),command:result.command};
       },
       async control(sql){if(!/^((SAVEPOINT|RELEASE SAVEPOINT|ROLLBACK TO SAVEPOINT) truss_sp_[1-9][0-9]*)$/.test(sql))throw Error('Unregistered control SQL');await control(sql);},
       async commit(){await control('COMMIT','COMMIT');started=false;return 'committed';},
