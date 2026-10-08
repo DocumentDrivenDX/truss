@@ -1,0 +1,16 @@
+{
+  "scope": "ordered complete source AST plus output custody; no native installation or replay qualification",
+  "statements": 106,
+  "tables": 46,
+  "columns": 442,
+  "addedTables": [
+    "request_receipt_route_guard",
+    "request_receipt",
+    "request_receipt_protection"
+  ],
+  "indexes": 24,
+  "sequences": 11,
+  "columnCountScope": "CREATE TABLE plus ALTER TABLE ADD COLUMN, not ALTER TYPE replacement nodes",
+  "nativeQualified": false,
+  "installationReady": false
+}

@@ -1,5 +1,8 @@
 # truss project documentation
 
+Current storage source handoff: [CONTRACT-012](02-design/contracts/CONTRACT-012-weft-storage-handoff.md) now includes layout 0.11 with approved fixed request-receipt stores (46 tables, 442 columns). Existing Weft packet 0.10 remains separately pinned; native installation, replay qualification and mapping adoption are unfinished.
+
+
 truss is a planned property-oriented graph engine that runs on SQL databases,
 with its schemas supplied by [UMF](https://github.com/DocumentDrivenDX/umf).
 It starts as a fixed, portable set of tables with mutation, constraint and
