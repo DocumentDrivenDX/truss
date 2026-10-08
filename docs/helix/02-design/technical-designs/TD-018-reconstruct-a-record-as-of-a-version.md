@@ -82,3 +82,8 @@ Pure reducer inputs retain original exact values and source meaning; hashing or 
 
 
 The selected metadata witness is a boundary comparison, not a second reducer instruction. Derive the final values by consuming every original property/transform/rebind delta in sequence; independently compare complete group-start/group-final metadata and required exposed version/ownership/endpoint/order changes. A matching final snapshot cannot compensate for a missing required delta, and an intermediate before image is not today's canonical row. Two changed properties retain two deltas plus one witness. Exact source/native event schemas, retained additions under their separate version and full codec/reducer qualification remain explicit profile inputs.
+
+
+### Selected reference position publication
+
+Follow CONTRACT-002’s protected prepublication reservation: independently freeze complete ordered semantic siblings after final capture, reserve actual native positions once, calculate each boundary’s complete ordered digest, then append immutable events and verify physical parity. This is a reference algorithm selection, not an installed allocator profile. Position gaps and interleaving across producers are valid; sequence arithmetic cannot establish group completeness or commit. On a lost reservation/append response, observe original operation custody without repeating the phase. Only confirmed rollback plus an explicitly authorized new operation permits fresh allocation under fresh start evidence. Actual native allocator/staging/resource/privilege realization and unavoidable commit checks remain B-007/B-011 outputs.
