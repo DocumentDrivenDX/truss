@@ -50,7 +50,7 @@ try{
  const originalModel={umf:'0.7.0',id:'original-document',vocabularies:{},extensions:{},modules:[{id:'m',namespace:'m',elements:[
   ...['a','b','z'].map(id=>({id,kind:'record',extensions:{},...(id==='a'?{keys:[{id:'label-key',name:'label-key',fields:[{module:'m',element:'label'}],primary:true}]}:{}),members:id==='a'?[{module:'m',element:'label'},{module:'m',element:'caption'}]:[]})),
   {id:'label',name:'label',kind:'field',extensions:{},scalarType:'string',nullability:'required',cardinality:'one'},
-  {id:'caption',name:'caption',kind:'field',extensions:{},scalarType:'string',nullability:'absent-allowed',cardinality:'one'}]}]};
+  {id:'caption',name:'caption',kind:'field',extensions:{},scalarType:'string',nullability:'absent-allowed',cardinality:'one'}],relationships:[{id:'a-z',name:'a-z',source:[{module:'m',element:'a'}],target:[{module:'m',element:'a',key:'label-key'}],sourceMultiplicity:{min:0,max:1},targetMultiplicity:{min:0,max:2},targetLifecycle:'independent',directed:true}]}]};
  const originalDocument=JSON.stringify(originalModel);const originalInspection=producer.inspect(originalDocument);
  assert(originalInspection.sourceValidation.valid&&originalInspection.targetValidation.valid,'actual original UMF source and transition validate');
  const recordCheck=producer.checkRecord(originalInspection.target,{module:'m',element:'a'},[{field:{module:'m',element:'label'},state:'present',value:{string:'雪🙂'}}]);
@@ -112,6 +112,25 @@ try{
   {...originalKeys[0],keyId:'a-secondary',primary:false}
  ])]);assert(orderedKeys.length===2&&orderedKeys[0].key_id==='a-secondary'&&orderedKeys[0].key_number==='2'&&orderedKeys[1].key_number==='3','internal batch allocates key numbers in original identity byte order');
  const fieldState=await sql.unsafe("SELECT nullability FROM truss.prop_def WHERE element='caption'");assert(fieldState[0].nullability==='absent-allowed','original field availability retained');
+ const relationshipStage=await Bun.file('packages/postgresql/native/catalog-relationship-stage.sql').text();await sql.unsafe(relationshipStage);
+ const relationship=originalModel.modules[0].relationships[0];
+ const stageRelationship="SELECT truss.runtime_stage_new_relationship($1::int,'original-document','m',$2::text::jsonb,ARRAY[$3::int],ARRAY[$4::int],'test-original-bytes',decode('aabb','hex')) AS id";
+ const relationshipInputs=[staged[0].provisional_revision,JSON.stringify(relationship),allocated[0].type_id,allocated[0].type_id];
+ const stagedRelationship=await sql.unsafe(stageRelationship,relationshipInputs);assert(stagedRelationship[0].id==='1','native authored relationship ID allocated');
+ const endpoints=await sql.unsafe('SELECT source_type::text AS source,target_type::text AS target FROM truss.rel_endpoint');assert(endpoints.length===1&&endpoints[0].source===allocated[0].type_id&&endpoints[0].target===allocated[0].type_id,'resolved original endpoint identities persisted');
+ const relationshipCustody=await sql.unsafe("SELECT r.document_id,encode(l.original_identity_bytes,'hex') AS bytes,r.source_max::text AS source_max,r.target_max::text AS target_max FROM truss.rel_def r JOIN truss.relationship_lineage l USING(rel_type_id)");assert(relationshipCustody[0].document_id==='original-document'&&relationshipCustody[0].bytes==='aabb'&&relationshipCustody[0].source_max==='1'&&relationshipCustody[0].target_max==='2','declaring owner lineage and original multiplicities retained');
+ await sql.unsafe('SAVEPOINT duplicate_relationship');let relationshipCode='';try{await sql.unsafe(stageRelationship,relationshipInputs)}catch(e){relationshipCode=(e as any).errno??(e as any).code}assert(relationshipCode==='55000','existing relationship refuses new allocation');await sql.unsafe('ROLLBACK TO SAVEPOINT duplicate_relationship');
+ for(const [label,original,sourceId,expected] of [
+  ['missing resolved relationship endpoint refuses',{...relationship,id:'other'},'2147483647','55000'],
+  ['inverted relationship multiplicity refuses',{...relationship,id:'other',sourceMultiplicity:{min:2,max:1}},allocated[0].type_id,'22023'],
+  ['null relationship maximum refuses',{...relationship,id:'other',sourceMultiplicity:{min:0,max:null}},allocated[0].type_id,'22023'],
+  ['unsupported relationship member refuses',{...relationship,id:'other',inverse:'unknown'},allocated[0].type_id,'22023'],
+ ] as const){
+  await sql.unsafe('SAVEPOINT invalid_relationship');let refusal='';
+  try{await sql.unsafe(stageRelationship.replace("'aabb'","'ccdd'"),[staged[0].provisional_revision,JSON.stringify(original),sourceId,allocated[0].type_id])}catch(e){refusal=(e as any).errno??(e as any).code}
+  assert(refusal===expected,label);await sql.unsafe('ROLLBACK TO SAVEPOINT invalid_relationship');
+ }
+ const survivingRelationships=await sql.unsafe('SELECT count(*)::text AS n FROM truss.rel_def');assert(survivingRelationships[0].n==='1','refused relationships leave original declaration intact');
  await sql.unsafe('UPDATE truss.type_def SET retired_rev=since_rev');
  const next=await sql.unsafe('SELECT * FROM truss.runtime_stage_new_types($1::int,$2::text::jsonb)',[staged[0].provisional_revision,JSON.stringify([{...candidates[0],elementId:'b'}])]);assert(next[0].type_id==='3','retired retained IDs remain high-water contributors');
  const originalLineage=await sql.unsafe("SELECT encode(lineage_bytes,'hex') AS bytes FROM truss.type_def WHERE element='z'");assert(originalLineage[0].bytes==='00ff','original lineage bytes retained');
@@ -119,6 +138,7 @@ try{
  const head=await sql.unsafe('SELECT rev::text AS rev FROM truss.schema_head');assert(JSON.stringify(head)===JSON.stringify(beforeHead),'document stage cannot publish catalog head');
  await sql.unsafe('ROLLBACK');
  const remaining=await sql.unsafe('SELECT count(*)::text AS n FROM truss.schema_rev');assert(remaining[0].n===beforeRevisions[0].n,'rollback removes staged revision and source');
- const receipt={component:'native operation and owner-backed catalog staging',engine:'PostgreSQL17.9',umfSource:producer.sourceRevision,umfBundleSha256:producer.bundleSha256,checks,bodySha256:new Bun.CryptoHasher('sha256').update(body).digest('hex'),observerSha256:new Bun.CryptoHasher('sha256').update(observer).digest('hex'),barrierSha256:new Bun.CryptoHasher('sha256').update(barrier).digest('hex'),catalogStageSha256:new Bun.CryptoHasher('sha256').update(catalogStage).digest('hex'),documentBatchSha256:new Bun.CryptoHasher('sha256').update(documentBatch).digest('hex'),typeStageSha256:new Bun.CryptoHasher('sha256').update(typeStage).digest('hex'),propertyStageSha256:new Bun.CryptoHasher('sha256').update(propertyStage).digest('hex'),keyBatchSha256:new Bun.CryptoHasher('sha256').update(keyBatch).digest('hex'),keyStageSha256:new Bun.CryptoHasher('sha256').update(keyStage).digest('hex'),qualification:'Actual xid/context/artifact bounds/single unfinished/rollback/private invocation component only. Protected issuer registration, canonical observers, finalization, deferred complete-cohort checks, installer security and public runtime remain unfinished.'};
+ const rolledRelationships=await sql.unsafe('SELECT count(*)::text AS n FROM truss.relationship_lineage');assert(rolledRelationships[0].n==='0','rollback removes staged relationship lineage');
+ const receipt={component:'native operation and owner-backed catalog staging',engine:'PostgreSQL17.9',umfSource:producer.sourceRevision,umfBundleSha256:producer.bundleSha256,checks,bodySha256:new Bun.CryptoHasher('sha256').update(body).digest('hex'),observerSha256:new Bun.CryptoHasher('sha256').update(observer).digest('hex'),barrierSha256:new Bun.CryptoHasher('sha256').update(barrier).digest('hex'),catalogStageSha256:new Bun.CryptoHasher('sha256').update(catalogStage).digest('hex'),documentBatchSha256:new Bun.CryptoHasher('sha256').update(documentBatch).digest('hex'),typeStageSha256:new Bun.CryptoHasher('sha256').update(typeStage).digest('hex'),propertyStageSha256:new Bun.CryptoHasher('sha256').update(propertyStage).digest('hex'),relationshipStageSha256:new Bun.CryptoHasher('sha256').update(relationshipStage).digest('hex'),keyBatchSha256:new Bun.CryptoHasher('sha256').update(keyBatch).digest('hex'),keyStageSha256:new Bun.CryptoHasher('sha256').update(keyStage).digest('hex'),qualification:'Actual xid/context/artifact bounds/single unfinished/rollback/private invocation component only. Protected issuer registration, canonical observers, finalization, deferred complete-cohort checks, installer security and public runtime remain unfinished.'};
  await Bun.write('docs/helix/04-build/evidence/runtime-operation-admission.json',JSON.stringify(receipt,null,2)+'\n');console.log(JSON.stringify({checks:checks.length}));
 }finally{await sql.close()}
