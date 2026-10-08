@@ -15,7 +15,13 @@ ddx:
 
 # Design coordination and remaining work
 
-## Latest read-only owner source review — recursive numeric sequences (2026-10-08)
+## Latest read-only owner source review — numeric containers and complete entities (2026-10-08)
+
+Weft HEAD is de606bbafcc88a3c8872b859a8283eec4e1a6eb6; UMF remains 16c35e8d. The [source review](evidence/design-audit/weft-numeric-container-entity-source-review.json) verifies every listed source pin at each original receipt commit. Truss did not rerun owner native/embedding tests. At 10bb0a3, owner evidence reports 68 native cases and 20 cases per embedding for selected signed64/decimal(28,2) maps and structured values. At de606bb, it reports 80 native cases and 40 cases per embedding for four complete entity configurations combining sequence/map/structured roots with scalar keys/note. Positive complete responses are four and eight respectively, with sixteen and thirty-two refusals and matching deterministic Python repeats.
+
+These extend the prior sequence evidence under exact test-original configurations. Both receipts report reuse of the sequence native/WASM binaries; new fixtures/tests do not establish newly released generic registration. Original relational composition/final story acceptance remain under audit, and no installed/production Truss claim is made. Do not continue describing all map/structured/entity evidence as missing, or extend the scoped decimal(28,2) evidence to Truss’s decimal(3,1) RN fixture. Actual original Truss mapping/domain/codec/home/security/executor and native installation admission remain required. Weft owns lowering; Truss must qualify its own selected binding and public execution.
+
+## Historical read-only owner source review — recursive numeric sequences (2026-10-08)
 
 Weft HEAD is 92600b34209b92f4749adc6aee4643407a851eca; UMF remains at 16c35e8d943769ccfa7bb57d16785aa7159abe65. The [source review receipt](evidence/design-audit/weft-numeric-sequence-source-review.json) verifies all ten source pins in the committed owner receipt. Truss inspected the native leaf procedure change but did not rerun owner tests. The test-original leaf now retains decimal token text and selects signed integer grammar from the original authored Field rather than requiring every integer to be nonnegative.
 
