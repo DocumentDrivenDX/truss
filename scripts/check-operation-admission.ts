@@ -166,6 +166,22 @@ try{
   originalKeys.find(key=>key.keyId==='a-secondary')!
  ])]);assert(orderedKeys.length===2&&orderedKeys[0].key_id==='a-secondary'&&orderedKeys[0].key_number==='2'&&orderedKeys[1].key_number==='3','internal batch allocates key numbers in original identity byte order');
  const fieldState=await sql.unsafe("SELECT nullability FROM truss.prop_def WHERE element='caption'");assert(fieldState[0].nullability==='absent-allowed','original field availability retained');
+ const historyTypes=await sql.unsafe("SELECT a.attname,t.typname FROM pg_attribute a JOIN pg_type t ON t.oid=a.atttypid WHERE a.attrelid='truss.key_lifecycle_history'::regclass AND a.attnum>0 AND NOT a.attisdropped ORDER BY a.attnum");
+ assert(historyTypes.map((r:any)=>r.typname).join(',')==='int4,int4,int4,int2,text,int4,int4,bytea,bytea','key history exact native column domains');
+ const historyInsert="INSERT INTO truss.key_lifecycle_history(rev,seq,type_id,key_num,transition_kind,before_retired_rev,after_retired_rev,before_definition_bytes,after_definition_bytes) VALUES (1,0,$1::int,1,$2::text,$3::int,$4::int,decode('01','hex'),decode('02','hex'))";
+ for(const [tag,before,after,owner,expected,label] of [
+  ['retirement',null,1,allocated[0].type_id,'','retirement history explicit interval'],
+  ['reactivation',0,null,allocated[0].type_id,'','reactivation history earlier interval'],
+  ['definition_change',null,null,allocated[0].type_id,'','active edit history explicit null state'],
+  ['retirement',null,null,allocated[0].type_id,'23514','retirement history rejects ambiguous null result'],
+  ['reactivation',1,null,allocated[0].type_id,'23514','reactivation history rejects same-revision retirement'],
+  ['reactivation',null,null,allocated[0].type_id,'23514','reactivation history rejects missing prior interval'],
+  ['definition_change',0,null,allocated[0].type_id,'23514','definition edit cannot masquerade as reactivation'],
+  ['retirement',null,1,allocated[1].type_id,'23503','key history requires exact owning key tuple'],
+ ] as const){
+  await sql.unsafe('SAVEPOINT history_shape');let historyCode='';try{await sql.unsafe(historyInsert,[owner,tag,before,after])}catch(e){historyCode=(e as any).errno??(e as any).code}assert(historyCode===expected,label);await sql.unsafe('ROLLBACK TO SAVEPOINT history_shape');
+ }
+ const historyAfter=await sql.unsafe('SELECT count(*)::text AS n FROM truss.key_lifecycle_history');assert(historyAfter[0].n==='0','component history probes retain no fabricated lifecycle rows');
  const relationshipStage=await Bun.file('packages/postgresql/native/catalog-relationship-stage.sql').text();await sql.unsafe(relationshipStage);
  const relationship=originalModel.modules[0].relationships[0];
  const stageRelationship="SELECT truss.runtime_stage_new_relationship($1::int,'original-document','m',$2::text::jsonb,ARRAY[$3::int],ARRAY[$4::int]) AS id";
