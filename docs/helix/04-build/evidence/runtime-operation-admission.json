@@ -65,6 +65,14 @@
     "null relationship maximum refuses",
     "unsupported relationship member refuses",
     "refused relationships leave original declaration intact",
+    "actual state node and scalar inserts each advance operation generation",
+    "actual scalar update invalidates prior readiness generation",
+    "savepoint-local canonical update advances generation",
+    "savepoint rollback restores original generation and scalar together",
+    "actual canonical event refuses generation exhaustion",
+    "canonical update without original operation refuses",
+    "actual state node and scalar cascaded deletes each advance generation",
+    "canonical cascade removes original state",
     "retired retained IDs remain high-water contributors",
     "original lineage bytes retained",
     "original transition and checker result retained natively",
@@ -83,5 +91,5 @@
   "relationshipStageSha256": "3dc1aed0c03a48758aa7a3bc1089a63f24d1e99c0409a20218505f8c96f32490",
   "keyBatchSha256": "e31a769cf820ca00035b3c4e96f75078d6696fca8eb1bd62c8c4dc136303ae18",
   "keyStageSha256": "2e0b6d625cb90a3ad50fb94833d00b0be1baca9fec154830e459714aa2a4463c",
-  "qualification": "Actual xid/context/artifact bounds/single unfinished/rollback/private invocation component only. Protected issuer registration, canonical observers, finalization, deferred complete-cohort checks, installer security and public runtime remain unfinished."
+  "qualification": "Actual xid/context/artifact bounds/single unfinished/rollback/private invocation and actual canonical generation dispatch component only. Canonical fixture carrier bytes are not admitted codec/layout authority. Protected issuer registration, canonical observers, finalization, deferred complete-cohort checks, installer security and public runtime remain unfinished."
 }
