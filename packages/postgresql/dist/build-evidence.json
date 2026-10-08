@@ -3,8 +3,8 @@
   "compiler": "typescript/7.0.2",
   "loader": "bun/1.4.2",
   "nativeCapabilities": "none",
-  "jsSha256": "d19258b9a20a1f764a3e7027df95d0f49e239d737929ad0c06475f4cde52c082",
-  "declarationsSha256": "7a23e3b73c224d28e1711b32367fa84073bce8ce9fc895f7e6cfa5d9e28933f8",
+  "jsSha256": "bb84cd9e40c69ab12515c51386c82ec9fbc20c6b177af6d717d5d8a5e854b59d",
+  "declarationsSha256": "489193d17d5787badf2938622b8428f123f5bbecf3b9389c88e53cbd910dbb81",
   "bindingSourceSha256": {
     "truss-recovery-registry-v0.1.d.ts": "20c2b0bd54045f7e8c3f199db865bea75fe526ed4e47092ab7cc7f0e1e2ef0a5",
     "truss-acceptance-input-v0.1.d.ts": "bde6c1a386b41efc24cee68495ee878656e35bca1072ff0fdd3ad14179b48db3",

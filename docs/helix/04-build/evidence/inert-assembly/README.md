@@ -33,3 +33,23 @@ Reproduce with the commands in the package README. Generated `dist` artifacts ar
 retained for review; build evidence records their hashes and the original owning
 binding digests. Future tooling/adapters must consume the same public PostgreSQL
 brand identity; they cannot independently copy its declaration closure.
+
+
+## Native vector decoder prerequisite
+
+The package now exports `decodeNativeVector` for CONTRACT-008's proposed
+`truss-bootstrap-native-vector-decoder/0.1.0` output grammar. Original text and
+ordered canonical tokens remain immutable. OID/int2 domains use bounded exact
+BigInt arithmetic, with byte/token limits and optional exact count correspondence.
+All eight original independently authored vectors are exercised; additional
+controls refuse normalization, malformed spelling and exceeded limits. The
+combined suite has five tests and 45 assertions. Strict build and clean packed
+consumer checks pass.
+
+`native-vector.json` retains exact SQL/stdout and decoded correspondence from
+three constant vector observations on the existing local PostgreSQL 17.9 sandbox.
+The empty OID vector is observed as empty text with bounds `[0:-1]`. No mutation
+occurs. Reproduce with `bun scripts/check-native-vector.ts` against that sandbox.
+This narrow observation does not qualify complete catalog collection, index or
+signature field semantics, all dimensions/JSON correspondence, native installation
+or driver/resource/containment support. Those obligations remain explicit.

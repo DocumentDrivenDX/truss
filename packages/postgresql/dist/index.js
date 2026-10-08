@@ -157,7 +157,54 @@ function createReferenceAssembly(input, executor, services) {
   });
   return Object.freeze({ status: "ok", value: assembly });
 }
+
+class NativeVectorError extends Error {
+  code;
+  constructor(code) {
+    super(code);
+    this.code = code;
+    this.name = "NativeVectorError";
+  }
+}
+function decodeNativeVector(family, text, limits, declaredCount) {
+  if (family !== "oidvector" && family !== "int2vector")
+    throw new NativeVectorError("output-grammar");
+  if (typeof text !== "string")
+    throw new NativeVectorError("output-grammar");
+  if (!Number.isSafeInteger(limits.maxBytes) || limits.maxBytes < 0 || !Number.isSafeInteger(limits.maxTokens) || limits.maxTokens < 0 || text.length > limits.maxBytes)
+    throw new NativeVectorError("resource-limit");
+  if (declaredCount !== undefined && (typeof declaredCount !== "string" || !/^(0|[1-9][0-9]*)$/.test(declaredCount)))
+    throw new NativeVectorError("count-correspondence");
+  if (declaredCount !== undefined && (declaredCount.length > String(limits.maxTokens).length || BigInt(declaredCount) > BigInt(limits.maxTokens)))
+    throw new NativeVectorError("resource-limit");
+  const tokens = [];
+  let start = 0;
+  for (let end = 0;end <= text.length; end++) {
+    if (end < text.length && text.charCodeAt(end) !== 32)
+      continue;
+    if (text.length === 0)
+      break;
+    if (tokens.length === limits.maxTokens)
+      throw new NativeVectorError("resource-limit");
+    const token = text.slice(start, end);
+    const grammar = family === "oidvector" ? /^(0|[1-9][0-9]*)$/ : /^(0|-?[1-9][0-9]*)$/;
+    if (!grammar.test(token))
+      throw new NativeVectorError("output-grammar");
+    if (token.length > (family === "oidvector" ? 10 : 6))
+      throw new NativeVectorError("native-domain");
+    const value = BigInt(token);
+    if (family === "oidvector" ? value > 4294967295n : value < -32768n || value > 32767n)
+      throw new NativeVectorError("native-domain");
+    tokens.push(token);
+    start = end + 1;
+  }
+  if (declaredCount !== undefined && BigInt(declaredCount) !== BigInt(tokens.length))
+    throw new NativeVectorError("count-correspondence");
+  return Object.freeze({ family, originalText: text, tokens: Object.freeze(tokens) });
+}
 export {
   INERT_ASSEMBLY_PROFILE,
-  createReferenceAssembly
+  NativeVectorError,
+  createReferenceAssembly,
+  decodeNativeVector
 };

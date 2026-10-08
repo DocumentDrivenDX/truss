@@ -136,3 +136,53 @@ export function createReferenceAssembly<HostTransaction>(
   });
   return Object.freeze({status: 'ok', value: assembly});
 }
+
+/** CONTRACT-008 proposed native-output grammar only; caller admits field semantics. */
+export type NativeVectorFamily = 'oidvector' | 'int2vector';
+export interface NativeVectorLimits {
+  readonly maxBytes: number;
+  readonly maxTokens: number;
+}
+export interface NativeVector {
+  readonly family: NativeVectorFamily;
+  readonly originalText: string;
+  readonly tokens: readonly string[];
+}
+export class NativeVectorError extends Error {
+  constructor(readonly code: 'output-grammar' | 'native-domain' | 'resource-limit' | 'count-correspondence') {
+    super(code); this.name = 'NativeVectorError';
+  }
+}
+/** ASCII grammar makes admitted byte count equal to code-unit count. No normalization. */
+export function decodeNativeVector(family: NativeVectorFamily, text: string,
+  limits: NativeVectorLimits, declaredCount?: string): NativeVector {
+  if (family !== 'oidvector' && family !== 'int2vector') throw new NativeVectorError('output-grammar');
+  if (typeof text !== 'string') throw new NativeVectorError('output-grammar');
+  if (!Number.isSafeInteger(limits.maxBytes) || limits.maxBytes < 0 ||
+      !Number.isSafeInteger(limits.maxTokens) || limits.maxTokens < 0 ||
+      text.length > limits.maxBytes) throw new NativeVectorError('resource-limit');
+  if (declaredCount !== undefined && (typeof declaredCount !== 'string' ||
+      !/^(0|[1-9][0-9]*)$/.test(declaredCount))) throw new NativeVectorError('count-correspondence');
+  // Bound count conversion independently: no unbounded bigint allocation.
+  if (declaredCount !== undefined && (declaredCount.length > String(limits.maxTokens).length ||
+      BigInt(declaredCount) > BigInt(limits.maxTokens))) throw new NativeVectorError('resource-limit');
+  const tokens: string[] = [];
+  let start = 0;
+  for (let end = 0; end <= text.length; end++) {
+    if (end < text.length && text.charCodeAt(end) !== 32) continue;
+    if (text.length === 0) break;
+    if (tokens.length === limits.maxTokens) throw new NativeVectorError('resource-limit');
+    const token = text.slice(start, end);
+    const grammar = family === 'oidvector' ? /^(0|[1-9][0-9]*)$/ : /^(0|-?[1-9][0-9]*)$/;
+    if (!grammar.test(token)) throw new NativeVectorError('output-grammar');
+    // Reject oversized tokens before exact integer allocation.
+    if (token.length > (family === 'oidvector' ? 10 : 6)) throw new NativeVectorError('native-domain');
+    const value = BigInt(token);
+    if (family === 'oidvector' ? value > 4294967295n : value < -32768n || value > 32767n)
+      throw new NativeVectorError('native-domain');
+    tokens.push(token); start = end + 1;
+  }
+  if (declaredCount !== undefined && BigInt(declaredCount) !== BigInt(tokens.length))
+    throw new NativeVectorError('count-correspondence');
+  return Object.freeze({family, originalText: text, tokens: Object.freeze(tokens)});
+}

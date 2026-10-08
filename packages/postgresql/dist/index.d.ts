@@ -16,3 +16,20 @@ export declare function createReferenceAssembly<HostTransaction>(input: Referenc
     readonly feedProofVerifiers?: readonly FeedProofVerifierRegistration[];
     readonly requestNamespaceAuthority?: HostRequestNamespaceAuthority;
 }): AssemblyConstructionResult;
+/** CONTRACT-008 proposed native-output grammar only; caller admits field semantics. */
+export type NativeVectorFamily = 'oidvector' | 'int2vector';
+export interface NativeVectorLimits {
+    readonly maxBytes: number;
+    readonly maxTokens: number;
+}
+export interface NativeVector {
+    readonly family: NativeVectorFamily;
+    readonly originalText: string;
+    readonly tokens: readonly string[];
+}
+export declare class NativeVectorError extends Error {
+    readonly code: 'output-grammar' | 'native-domain' | 'resource-limit' | 'count-correspondence';
+    constructor(code: 'output-grammar' | 'native-domain' | 'resource-limit' | 'count-correspondence');
+}
+/** ASCII grammar makes admitted byte count equal to code-unit count. No normalization. */
+export declare function decodeNativeVector(family: NativeVectorFamily, text: string, limits: NativeVectorLimits, declaredCount?: string): NativeVector;
