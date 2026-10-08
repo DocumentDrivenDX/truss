@@ -353,3 +353,39 @@ export function decodeNativeTriggerArguments(count: string, hex: string | null,
   if(BigInt(arguments_.length) !== BigInt(count)) refuse('count');
   return Object.freeze({count,byteLength:byteLength!,originalHex:hex!,encoding,arguments:Object.freeze(arguments_)});
 }
+
+export interface NativeRoutineCarrier {
+  readonly originalCatalogRowJson: string;
+  readonly inputCount: string;
+  readonly inputTypesText: string;
+  readonly inputTypesDimensions: string;
+  readonly names: {readonly text: string|null; readonly dimensions: string|null; readonly rawJson: string};
+  readonly modes: {readonly text: string|null; readonly dimensions: string|null; readonly rawJson: string};
+  readonly settings: {readonly text: string|null; readonly dimensions: string|null; readonly rawJson: string};
+}
+/** Composition of selected carrier codecs; full raw row is opaque custody, not accepted semantics. */
+export function decodeNativeRoutineCarriers(input: NativeRoutineCarrier,
+  limits: NativeArrayLimits & {readonly maxTokens:number}): {
+    readonly originalCatalogRowJson:string; readonly inputTypes:NativeVector;
+    readonly names:NativeArray; readonly modes:NativeArray; readonly settings:NativeArray;
+  } {
+  const fail = ():never=>{throw new Error('routine-carriers:native-correspondence');};
+  if(typeof input.originalCatalogRowJson!=='string' || input.originalCatalogRowJson.length>limits.maxBytes) fail();
+  if(!/^(0|[1-9][0-9]*)$/.test(input.inputCount) || input.inputCount.length>5 || BigInt(input.inputCount)>32767n) fail();
+  const inputTypes=decodeNativeVector('oidvector',input.inputTypesText,limits,input.inputCount);
+  const upper=(BigInt(input.inputCount)-1n).toString();
+  if(input.inputTypesDimensions!==`[0:${upper}]`) fail();
+  const decode = (carrier:NativeRoutineCarrier['names']):NativeArray=>{
+    const array=decodeNativeTextArray(carrier.text,carrier.dimensions,limits);
+    if(typeof carrier.rawJson!=='string' || carrier.rawJson.length>limits.maxBytes) fail();
+    let raw:unknown;
+    try{raw=JSON.parse(carrier.rawJson);}catch{return fail();}
+    // This profile only interprets text leaves; original native row remains untouched.
+    const expected=array.kind==='native-null'?null:array.elements;
+    if(JSON.stringify(raw)!==JSON.stringify(expected)) fail();
+    if(array.kind==='array' && array.bounds.length!==1 && array.elements.length) fail();
+    return array;
+  };
+  return Object.freeze({originalCatalogRowJson:input.originalCatalogRowJson,inputTypes,
+    names:decode(input.names),modes:decode(input.modes),settings:decode(input.settings)});
+}

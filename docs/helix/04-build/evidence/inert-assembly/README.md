@@ -87,3 +87,26 @@ argument correspondence from one actual temporary trigger on local PostgreSQL
 17.9 UTF8. The entire probe transaction rolls back. Reproduce using
 `bun scripts/check-native-trigger.ts`. No Truss triggers are installed; complete
 trigger definition, WHEN/dependency admission and native bootstrap remain open.
+
+
+## Actual routine carrier composition
+
+`decodeNativeRoutineCarriers` composes the selected vector/text-array decoders
+for input argument OIDs and names/modes/settings. Count and zero-based input
+vector dimensions must match; native text-array elements must correspond exactly
+to their original JSON projections. Full original catalog row text remains opaque
+and unchanged, including unknown content. No integer JSON parsing of that full
+row occurs. This subset does not admit other routine fields or grant authority.
+
+Eleven package tests with 124 assertions, strict build and clean packed consumer
+pass. `native-routine.json` retains the original observation query hash, executed
+SQL, exact original stdout and decoded values. `check-native-routine.ts` executes
+the governing proposal query for one temporary routine on existing local
+PostgreSQL 17.9 and rolls back the full transaction. The actual signature/name
+values independently match the authored probe. Exact source query parameter is
+bound to the current temporary namespace; no expected-name routine filter is used.
+
+This is carrier composition only. Other fields/all-argument types/ACLs, full native
+dependencies/security, aggregate collector memory/work/cut/transport custody and
+Truss installation remain unfinished. Per-carrier decoder limits cannot establish
+the full collector resource ledger.

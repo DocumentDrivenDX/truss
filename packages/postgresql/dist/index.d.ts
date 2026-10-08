@@ -62,3 +62,34 @@ export declare function decodeNativeTriggerArguments(count: string, hex: string 
     readonly maxBytes: number;
     readonly maxArguments: number;
 }, encoding: 'UTF8'): NativeTriggerArguments;
+export interface NativeRoutineCarrier {
+    readonly originalCatalogRowJson: string;
+    readonly inputCount: string;
+    readonly inputTypesText: string;
+    readonly inputTypesDimensions: string;
+    readonly names: {
+        readonly text: string | null;
+        readonly dimensions: string | null;
+        readonly rawJson: string;
+    };
+    readonly modes: {
+        readonly text: string | null;
+        readonly dimensions: string | null;
+        readonly rawJson: string;
+    };
+    readonly settings: {
+        readonly text: string | null;
+        readonly dimensions: string | null;
+        readonly rawJson: string;
+    };
+}
+/** Composition of selected carrier codecs; full raw row is opaque custody, not accepted semantics. */
+export declare function decodeNativeRoutineCarriers(input: NativeRoutineCarrier, limits: NativeArrayLimits & {
+    readonly maxTokens: number;
+}): {
+    readonly originalCatalogRowJson: string;
+    readonly inputTypes: NativeVector;
+    readonly names: NativeArray;
+    readonly modes: NativeArray;
+    readonly settings: NativeArray;
+};
