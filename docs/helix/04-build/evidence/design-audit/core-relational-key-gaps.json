@@ -1,0 +1,530 @@
+{
+  "scope": "Exact failed key components from original authored core candidate; no semantic substitution",
+  "entries": [
+    {
+      "code": "KEY_EQUALITY",
+      "corePath": "/modules/1/elements/166/keys/0/fields/0",
+      "record": "journal",
+      "key": "journal_pkey",
+      "field": "journal.at",
+      "coreScalarType": "timestamp",
+      "coreNullability": "required",
+      "originalNative": {
+        "sourcePointer": "/30/stmt/CreateStmt/tableElts/1/ColumnDef",
+        "nativeType": {
+          "names": [
+            {
+              "String": {
+                "sval": "timestamptz"
+              }
+            }
+          ],
+          "typemod": -1,
+          "location": 13444
+        },
+        "collation": null,
+        "constraints": [
+          {
+            "Constraint": {
+              "contype": "CONSTR_NOTNULL",
+              "location": 13456
+            }
+          },
+          {
+            "Constraint": {
+              "contype": "CONSTR_DEFAULT",
+              "raw_expr": {
+                "FuncCall": {
+                  "funcname": [
+                    {
+                      "String": {
+                        "sval": "clock_timestamp"
+                      }
+                    }
+                  ],
+                  "funcformat": "COERCE_EXPLICIT_CALL",
+                  "location": 13473
+                }
+              },
+              "location": 13465
+            }
+          }
+        ],
+        "sqlNullMeaning": "retained-native-constraints; not core absence"
+      }
+    },
+    {
+      "code": "KEY_EQUALITY",
+      "corePath": "/modules/1/elements/180/keys/0/fields/0",
+      "record": "row_home_operation",
+      "key": "row_home_operation_pk",
+      "field": "row_home_operation.original_writer_xid",
+      "coreScalarType": "postgresql.xid8",
+      "coreNullability": "required",
+      "originalNative": {
+        "sourcePointer": "/40/stmt/CreateStmt/tableElts/0/ColumnDef",
+        "nativeType": {
+          "names": [
+            {
+              "String": {
+                "sval": "xid8"
+              }
+            }
+          ],
+          "typemod": -1,
+          "location": 136
+        },
+        "collation": null,
+        "constraints": [
+          {
+            "Constraint": {
+              "contype": "CONSTR_NOTNULL",
+              "location": 141
+            }
+          }
+        ],
+        "sqlNullMeaning": "retained-native-constraints; not core absence"
+      }
+    },
+    {
+      "code": "KEY_EQUALITY",
+      "corePath": "/modules/1/elements/197/keys/0/fields/0",
+      "record": "row_home_journal_stage",
+      "key": "row_home_journal_stage_pk",
+      "field": "row_home_journal_stage.original_writer_xid",
+      "coreScalarType": "postgresql.xid8",
+      "coreNullability": "required",
+      "originalNative": {
+        "sourcePointer": "/41/stmt/CreateStmt/tableElts/0/ColumnDef",
+        "nativeType": {
+          "names": [
+            {
+              "String": {
+                "sval": "pg_catalog"
+              }
+            },
+            {
+              "String": {
+                "sval": "xid8"
+              }
+            }
+          ],
+          "typemod": -1,
+          "location": 320
+        },
+        "collation": null,
+        "constraints": [
+          {
+            "Constraint": {
+              "contype": "CONSTR_NOTNULL",
+              "location": 336
+            }
+          }
+        ],
+        "sqlNullMeaning": "retained-native-constraints; not core absence"
+      }
+    },
+    {
+      "code": "KEY_FIELD_REQUIRED",
+      "corePath": "/modules/1/elements/204/keys/1/fields/0",
+      "record": "row_home_state",
+      "key": "row_home_state_object_property",
+      "field": "row_home_state.object_id",
+      "coreScalarType": "integer",
+      "coreNullability": "unspecified",
+      "originalNative": {
+        "sourcePointer": "/46/stmt/CreateStmt/tableElts/2/ColumnDef",
+        "nativeType": {
+          "names": [
+            {
+              "String": {
+                "sval": "pg_catalog"
+              }
+            },
+            {
+              "String": {
+                "sval": "int8"
+              }
+            }
+          ],
+          "typemod": -1,
+          "location": 759
+        },
+        "collation": null,
+        "constraints": [],
+        "sqlNullMeaning": "retained-native-constraints; not core absence"
+      }
+    },
+    {
+      "code": "KEY_FIELD_REQUIRED",
+      "corePath": "/modules/1/elements/204/keys/1/fields/1",
+      "record": "row_home_state",
+      "key": "row_home_state_object_property",
+      "field": "row_home_state.object_type_id",
+      "coreScalarType": "integer",
+      "coreNullability": "unspecified",
+      "originalNative": {
+        "sourcePointer": "/46/stmt/CreateStmt/tableElts/3/ColumnDef",
+        "nativeType": {
+          "names": [
+            {
+              "String": {
+                "sval": "pg_catalog"
+              }
+            },
+            {
+              "String": {
+                "sval": "int4"
+              }
+            }
+          ],
+          "typemod": -1,
+          "location": 784
+        },
+        "collation": null,
+        "constraints": [],
+        "sqlNullMeaning": "retained-native-constraints; not core absence"
+      }
+    },
+    {
+      "code": "KEY_FIELD_REQUIRED",
+      "corePath": "/modules/1/elements/204/keys/2/fields/0",
+      "record": "row_home_state",
+      "key": "row_home_state_edge_property",
+      "field": "row_home_state.edge_id",
+      "coreScalarType": "integer",
+      "coreNullability": "unspecified",
+      "originalNative": {
+        "sourcePointer": "/46/stmt/CreateStmt/tableElts/4/ColumnDef",
+        "nativeType": {
+          "names": [
+            {
+              "String": {
+                "sval": "pg_catalog"
+              }
+            },
+            {
+              "String": {
+                "sval": "int8"
+              }
+            }
+          ],
+          "typemod": -1,
+          "location": 799
+        },
+        "collation": null,
+        "constraints": [],
+        "sqlNullMeaning": "retained-native-constraints; not core absence"
+      }
+    },
+    {
+      "code": "KEY_FIELD_REQUIRED",
+      "corePath": "/modules/1/elements/204/keys/2/fields/1",
+      "record": "row_home_state",
+      "key": "row_home_state_edge_property",
+      "field": "row_home_state.relationship_type_id",
+      "coreScalarType": "integer",
+      "coreNullability": "unspecified",
+      "originalNative": {
+        "sourcePointer": "/46/stmt/CreateStmt/tableElts/5/ColumnDef",
+        "nativeType": {
+          "names": [
+            {
+              "String": {
+                "sval": "pg_catalog"
+              }
+            },
+            {
+              "String": {
+                "sval": "int4"
+              }
+            }
+          ],
+          "typemod": -1,
+          "location": 830
+        },
+        "collation": null,
+        "constraints": [],
+        "sqlNullMeaning": "retained-native-constraints; not core absence"
+      }
+    },
+    {
+      "code": "KEY_EQUALITY",
+      "corePath": "/modules/1/elements/249/keys/0/fields/0",
+      "record": "row_home_touch",
+      "key": "row_home_touch_pk",
+      "field": "row_home_touch.transaction_id",
+      "coreScalarType": "postgresql.xid8",
+      "coreNullability": "required",
+      "originalNative": {
+        "sourcePointer": "/61/stmt/CreateStmt/tableElts/0/ColumnDef",
+        "nativeType": {
+          "names": [
+            {
+              "String": {
+                "sval": "xid8"
+              }
+            }
+          ],
+          "typemod": -1,
+          "location": 206
+        },
+        "collation": null,
+        "constraints": [
+          {
+            "Constraint": {
+              "contype": "CONSTR_NOTNULL",
+              "location": 211
+            }
+          },
+          {
+            "Constraint": {
+              "contype": "CONSTR_DEFAULT",
+              "raw_expr": {
+                "FuncCall": {
+                  "funcname": [
+                    {
+                      "String": {
+                        "sval": "pg_catalog"
+                      }
+                    },
+                    {
+                      "String": {
+                        "sval": "pg_current_xact_id"
+                      }
+                    }
+                  ],
+                  "funcformat": "COERCE_EXPLICIT_CALL",
+                  "location": 228
+                }
+              },
+              "location": 220
+            }
+          }
+        ],
+        "sqlNullMeaning": "retained-native-constraints; not core absence"
+      }
+    },
+    {
+      "code": "KEY_EQUALITY",
+      "corePath": "/modules/1/elements/314/keys/0/fields/2",
+      "record": "feed_tx",
+      "key": "feed_tx_pk",
+      "field": "feed_tx.original_writer_xid",
+      "coreScalarType": "postgresql.xid8",
+      "coreNullability": "required",
+      "originalNative": {
+        "sourcePointer": "/78/stmt/CreateStmt/tableElts/2/ColumnDef",
+        "nativeType": {
+          "names": [
+            {
+              "String": {
+                "sval": "pg_catalog"
+              }
+            },
+            {
+              "String": {
+                "sval": "xid8"
+              }
+            }
+          ],
+          "typemod": -1,
+          "location": 433
+        },
+        "collation": null,
+        "constraints": [
+          {
+            "Constraint": {
+              "contype": "CONSTR_NOTNULL",
+              "location": 449
+            }
+          }
+        ],
+        "sqlNullMeaning": "retained-native-constraints; not core absence"
+      }
+    },
+    {
+      "code": "KEY_EQUALITY",
+      "corePath": "/modules/1/elements/327/keys/0/fields/2",
+      "record": "feed_member",
+      "key": "feed_member_pk",
+      "field": "feed_member.original_writer_xid",
+      "coreScalarType": "postgresql.xid8",
+      "coreNullability": "required",
+      "originalNative": {
+        "sourcePointer": "/79/stmt/CreateStmt/tableElts/2/ColumnDef",
+        "nativeType": {
+          "names": [
+            {
+              "String": {
+                "sval": "pg_catalog"
+              }
+            },
+            {
+              "String": {
+                "sval": "xid8"
+              }
+            }
+          ],
+          "typemod": -1,
+          "location": 2155
+        },
+        "collation": null,
+        "constraints": [
+          {
+            "Constraint": {
+              "contype": "CONSTR_NOTNULL",
+              "location": 2171
+            }
+          }
+        ],
+        "sqlNullMeaning": "retained-native-constraints; not core absence"
+      }
+    },
+    {
+      "code": "KEY_EQUALITY",
+      "corePath": "/modules/1/elements/327/keys/1/fields/2",
+      "record": "feed_member",
+      "key": "feed_member_delivery_unique",
+      "field": "feed_member.original_writer_xid",
+      "coreScalarType": "postgresql.xid8",
+      "coreNullability": "required",
+      "originalNative": {
+        "sourcePointer": "/79/stmt/CreateStmt/tableElts/2/ColumnDef",
+        "nativeType": {
+          "names": [
+            {
+              "String": {
+                "sval": "pg_catalog"
+              }
+            },
+            {
+              "String": {
+                "sval": "xid8"
+              }
+            }
+          ],
+          "typemod": -1,
+          "location": 2155
+        },
+        "collation": null,
+        "constraints": [
+          {
+            "Constraint": {
+              "contype": "CONSTR_NOTNULL",
+              "location": 2171
+            }
+          }
+        ],
+        "sqlNullMeaning": "retained-native-constraints; not core absence"
+      }
+    },
+    {
+      "code": "KEY_FIELD_REQUIRED",
+      "corePath": "/modules/1/elements/327/keys/1/fields/3",
+      "record": "feed_member",
+      "key": "feed_member_delivery_unique",
+      "field": "feed_member.delivery_ordinal",
+      "coreScalarType": "integer",
+      "coreNullability": "unspecified",
+      "originalNative": {
+        "sourcePointer": "/79/stmt/CreateStmt/tableElts/13/ColumnDef",
+        "nativeType": {
+          "names": [
+            {
+              "String": {
+                "sval": "pg_catalog"
+              }
+            },
+            {
+              "String": {
+                "sval": "int8"
+              }
+            }
+          ],
+          "typemod": -1,
+          "location": 2755
+        },
+        "collation": null,
+        "constraints": [],
+        "sqlNullMeaning": "retained-native-constraints; not core absence"
+      }
+    },
+    {
+      "code": "KEY_EQUALITY",
+      "corePath": "/modules/1/elements/342/keys/0/fields/2",
+      "record": "feed_prerequisite",
+      "key": "feed_prerequisite_pk",
+      "field": "feed_prerequisite.original_writer_xid",
+      "coreScalarType": "postgresql.xid8",
+      "coreNullability": "required",
+      "originalNative": {
+        "sourcePointer": "/80/stmt/CreateStmt/tableElts/2/ColumnDef",
+        "nativeType": {
+          "names": [
+            {
+              "String": {
+                "sval": "pg_catalog"
+              }
+            },
+            {
+              "String": {
+                "sval": "xid8"
+              }
+            }
+          ],
+          "typemod": -1,
+          "location": 4495
+        },
+        "collation": null,
+        "constraints": [
+          {
+            "Constraint": {
+              "contype": "CONSTR_NOTNULL",
+              "location": 4511
+            }
+          }
+        ],
+        "sqlNullMeaning": "retained-native-constraints; not core absence"
+      }
+    },
+    {
+      "code": "KEY_EQUALITY",
+      "corePath": "/modules/1/elements/353/keys/0/fields/2",
+      "record": "feed_configuration_prerequisite",
+      "key": "feed_configuration_prerequisite_pk",
+      "field": "feed_configuration_prerequisite.original_writer_xid",
+      "coreScalarType": "postgresql.xid8",
+      "coreNullability": "required",
+      "originalNative": {
+        "sourcePointer": "/81/stmt/CreateStmt/tableElts/2/ColumnDef",
+        "nativeType": {
+          "names": [
+            {
+              "String": {
+                "sval": "pg_catalog"
+              }
+            },
+            {
+              "String": {
+                "sval": "xid8"
+              }
+            }
+          ],
+          "typemod": -1,
+          "location": 5916
+        },
+        "collation": null,
+        "constraints": [
+          {
+            "Constraint": {
+              "contype": "CONSTR_NOTNULL",
+              "location": 5932
+            }
+          }
+        ],
+        "sqlNullMeaning": "retained-native-constraints; not core absence"
+      }
+    }
+  ]
+}
