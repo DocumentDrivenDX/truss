@@ -2156,3 +2156,6 @@ B-006/010/012 now consume the selected original-home retired-property custody, s
 
 
 CH-02/B-008 now has a distinct [reference maximum-two producer handoff](../02-design/contracts/weft-review-installation-gap-matrix.proposal.md#reference-maximum-two-participation-producer-handoff): complete protected native edge counting under original endpoint exclusions, alongside unchanged maximum-one marker correspondence. Select/version its actual mutation/group/catalog and current-union commit composition before full installer readiness. Seven handler signatures cannot imply this broader dependency. STP-040 last-slot, hidden/parallel-edge, snapshot and replacement controls qualify the full original native tuple; engine preview alone cannot yield a database-enforcement report.
+
+
+B-004/B-014 now has a concrete [pure lossless number-view operation proposal](../02-design/contracts/core-numeric-number-view.proposal.md), alongside the existing data entry. Resolve its exact declaration/error/resource and parser binding before export, implement the existing exact binary-rational procedure and verify the packed public helper in Chromium. Field-domain admission stays UMF-owned and default reads retain original tokens. This supplies one concrete pure surface without implying a complete core API or numerical/native support.
