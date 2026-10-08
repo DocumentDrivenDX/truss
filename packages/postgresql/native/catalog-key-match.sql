@@ -19,6 +19,9 @@ BEGIN
  IF source_count<>1 THEN RAISE EXCEPTION 'unique original owner key required' USING ERRCODE='55000'; END IF;
  SELECT k.* INTO retained FROM truss.key_def k WHERE k.type_id=owner_id AND k.key_id COLLATE "C"=key_identity COLLATE "C" FOR SHARE;
  IF NOT FOUND THEN RETURN QUERY SELECT 'new'::text,owner_id::text,NULL::text,NULL::text,NULL::text; RETURN; END IF;
+ IF retained.definition_source_kind IS DISTINCT FROM 'accepted_document' THEN
+  RAISE EXCEPTION 'source kind requires its own admitted original interpreter' USING ERRCODE='0A000';
+ END IF;
  SELECT count(*) INTO source_count FROM truss.schema_doc d
   CROSS JOIN LATERAL jsonb_array_elements(d.document::jsonb->'modules') m
   CROSS JOIN LATERAL jsonb_array_elements(m.value->'elements') r

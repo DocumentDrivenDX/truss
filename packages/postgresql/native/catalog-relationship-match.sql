@@ -17,6 +17,9 @@ BEGIN
    AND r.module COLLATE "C"=runtime_match_relationship_identity.module_id COLLATE "C"
    AND r.rel_id COLLATE "C"=runtime_match_relationship_identity.element_id COLLATE "C" FOR SHARE;
  IF NOT FOUND THEN RETURN QUERY SELECT 'new'::text,NULL::text,NULL::text,NULL::text; RETURN; END IF;
+ IF retained.definition_source_kind IS DISTINCT FROM 'accepted_document' THEN
+  RAISE EXCEPTION 'source kind requires its own admitted original interpreter' USING ERRCODE='0A000';
+ END IF;
  SELECT l.* INTO lineage FROM truss.relationship_lineage l WHERE l.rel_type_id=retained.rel_type_id FOR SHARE;
  IF NOT FOUND THEN RAISE EXCEPTION 'missing original relationship lineage' USING ERRCODE='55000'; END IF;
  IF retained.composition OR lineage.lineage_category COLLATE "C"<>'authored' COLLATE "C"

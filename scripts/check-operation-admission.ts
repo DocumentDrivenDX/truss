@@ -252,6 +252,14 @@ try{
  const survivingRelationships=await sql.unsafe('SELECT count(*)::text AS n FROM truss.rel_def');assert(survivingRelationships[0].n==='1','refused relationships leave original declaration intact');
  // Actual canonical event dispatch, still under a rollback-only component operation.
  const objectProps=Object.fromEntries(properties.filter((p:any)=>p.field_id!=='caption').map((p:any)=>[p.property_id,p.field_id==='label'?'雪🙂':p.field_id.slice(3)]));
+ for(const [table,statement,parameters] of [
+  ['type_def',matchRecord,['a']],
+  ['prop_def',matchProperty,[allocated[0].type_id,'m','label']],
+  ['key_def',matchKey,[allocated[0].type_id,'label-key']],
+  ['rel_def',matchRelationship,[]],
+ ] as const){
+  await sql.unsafe('SAVEPOINT unavailable_source_profile');await sql.unsafe(`UPDATE truss.${table} SET definition_source_kind='accepted_binding',definition_rev=NULL,definition_doc_ord=NULL,definition_document_id=NULL,binding_source_rev=1,binding_source_pointer='component-binding-fixture',binding_source_bytes=decode('01','hex')`);let unavailableProfile='';try{await sql.unsafe(statement,[...parameters])}catch(e){unavailableProfile=(e as any).errno??(e as any).code}assert(unavailableProfile==='0A000',`${table} matching explicitly refuses unregistered binding source interpretation`);await sql.unsafe('ROLLBACK TO SAVEPOINT unavailable_source_profile');
+ }
  const object=await sql.unsafe('INSERT INTO truss.object(type_id,props,rev) VALUES($1::int,$2::text::jsonb,$3::int) RETURNING id::text AS id',[allocated[0].type_id,JSON.stringify(objectProps),staged[0].provisional_revision]);
  const nodeIds=await sql.unsafe("SELECT nextval('truss.row_home_id_seq')::text AS state_id,nextval('truss.row_home_id_seq')::text AS node_id");
  const captionProperty=properties.find((p:any)=>p.field_id==='caption').property_id;

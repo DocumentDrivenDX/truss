@@ -17,6 +17,9 @@ BEGIN
  IF NOT FOUND THEN
   RETURN QUERY SELECT 'new'::text,NULL::text,NULL::text,NULL::text; RETURN;
  END IF;
+ IF retained.definition_source_kind IS DISTINCT FROM 'accepted_document' THEN
+  RAISE EXCEPTION 'source kind requires its own admitted original interpreter' USING ERRCODE='0A000';
+ END IF;
  IF retained.kind<>'record' OR retained.provisional
    OR retained.lineage_profile COLLATE "C"<>'truss-type-lineage/0.1.0' COLLATE "C"
    OR retained.lineage_bytes IS DISTINCT FROM original
