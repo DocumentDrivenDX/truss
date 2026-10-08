@@ -83,8 +83,19 @@ try{
  const properties=await sql.unsafe('SELECT * FROM truss.runtime_stage_new_properties($1::int,$2::text::jsonb)',[staged[0].provisional_revision,JSON.stringify(fields)]);assert(properties.length===2&&properties[0].field_id==='caption'&&properties[0].property_id==='1'&&properties[1].property_id==='2','native owner property IDs allocated in field order');
  const keyStage=await Bun.file('packages/postgresql/native/catalog-key-stage.sql').text();await sql.unsafe(keyStage);
  const labelProperty=properties.find((p:any)=>p.field_id==='label').property_id;
- const key=await sql.unsafe("SELECT truss.runtime_stage_new_key($1::int,$2::int,'label-key',ARRAY[$3::int],true) AS key_number",[staged[0].provisional_revision,allocated[0].type_id,labelProperty]);assert(key[0].key_number==='1','native owner-local key number allocated');
+ const keyBatch=await Bun.file('packages/postgresql/native/catalog-key-batch.sql').text();await sql.unsafe(keyBatch);
+ const originalOwner=originalModel.modules[0].elements.find(element=>element.id==='a')!;
+ const originalKeys=originalOwner.keys!.map(key=>({ownerTypeId:allocated[0].type_id,keyId:key.id,primary:key.primary,
+  propertyIds:key.fields.map(field=>{const match=properties.filter((p:any)=>p.field_id===field.element);if(field.module!=='m'||match.length!==1)throw Error('Original key field correspondence');return match[0].property_id})}));
+ const key=await sql.unsafe('SELECT * FROM truss.runtime_stage_new_keys($1::int,$2::text::jsonb)',[staged[0].provisional_revision,JSON.stringify(originalKeys)]);assert(key[0].key_number==='1','native owner-local key number allocated');
  const nativeKey=await sql.unsafe('SELECT prop_ids::text AS ids FROM truss.key_def');assert(nativeKey[0].ids==='{'+labelProperty+'}','original key component order and native property identity retained');
+ await sql.unsafe('SAVEPOINT invalid_key_batch');let keyBatchCode='';
+ try{await sql.unsafe('SELECT * FROM truss.runtime_stage_new_keys($1::int,$2::text::jsonb)',[staged[0].provisional_revision,JSON.stringify([
+  {...originalKeys[0],keyId:'aaa-secondary',primary:false},
+  {...originalKeys[0],keyId:'zzz-invalid',primary:false,propertyIds:['2147483647']}
+ ])])}catch(e){keyBatchCode=(e as any).errno??(e as any).code}
+ assert(keyBatchCode==='55000','invalid later key refuses whole batch');await sql.unsafe('ROLLBACK TO SAVEPOINT invalid_key_batch');
+ const partialKey=await sql.unsafe("SELECT count(*)::text AS n FROM truss.key_def WHERE key_id='aaa-secondary'");assert(partialKey[0].n==='0','earlier key in failed batch leaves no partial declaration');
  for(const [label,statement,expected] of [
   ['duplicate key identity refuses',"SELECT truss.runtime_stage_new_key($1::int,$2::int,'label-key',ARRAY[$3::int],true)",'55000'],
   ['duplicate key component refuses',"SELECT truss.runtime_stage_new_key($1::int,$2::int,'other-key',ARRAY[$3::int,$3::int],false)",'22023'],
@@ -96,6 +107,10 @@ try{
   assert(refusal===expected,label);await sql.unsafe('ROLLBACK TO SAVEPOINT invalid_key');
  }
  const keyInventory=await sql.unsafe('SELECT count(*)::text AS n FROM truss.key_def');assert(keyInventory[0].n==='1','refused keys preserve earlier key declaration');
+ const orderedKeys=await sql.unsafe('SELECT * FROM truss.runtime_stage_new_keys($1::int,$2::text::jsonb)',[staged[0].provisional_revision,JSON.stringify([
+  {...originalKeys[0],keyId:'z-secondary',primary:false},
+  {...originalKeys[0],keyId:'a-secondary',primary:false}
+ ])]);assert(orderedKeys.length===2&&orderedKeys[0].key_id==='a-secondary'&&orderedKeys[0].key_number==='2'&&orderedKeys[1].key_number==='3','internal batch allocates key numbers in original identity byte order');
  const fieldState=await sql.unsafe("SELECT nullability FROM truss.prop_def WHERE element='caption'");assert(fieldState[0].nullability==='absent-allowed','original field availability retained');
  await sql.unsafe('UPDATE truss.type_def SET retired_rev=since_rev');
  const next=await sql.unsafe('SELECT * FROM truss.runtime_stage_new_types($1::int,$2::text::jsonb)',[staged[0].provisional_revision,JSON.stringify([{...candidates[0],elementId:'b'}])]);assert(next[0].type_id==='3','retired retained IDs remain high-water contributors');
@@ -104,6 +119,6 @@ try{
  const head=await sql.unsafe('SELECT rev::text AS rev FROM truss.schema_head');assert(JSON.stringify(head)===JSON.stringify(beforeHead),'document stage cannot publish catalog head');
  await sql.unsafe('ROLLBACK');
  const remaining=await sql.unsafe('SELECT count(*)::text AS n FROM truss.schema_rev');assert(remaining[0].n===beforeRevisions[0].n,'rollback removes staged revision and source');
- const receipt={component:'native operation and owner-backed catalog staging',engine:'PostgreSQL17.9',umfSource:producer.sourceRevision,umfBundleSha256:producer.bundleSha256,checks,bodySha256:new Bun.CryptoHasher('sha256').update(body).digest('hex'),observerSha256:new Bun.CryptoHasher('sha256').update(observer).digest('hex'),barrierSha256:new Bun.CryptoHasher('sha256').update(barrier).digest('hex'),catalogStageSha256:new Bun.CryptoHasher('sha256').update(catalogStage).digest('hex'),documentBatchSha256:new Bun.CryptoHasher('sha256').update(documentBatch).digest('hex'),typeStageSha256:new Bun.CryptoHasher('sha256').update(typeStage).digest('hex'),propertyStageSha256:new Bun.CryptoHasher('sha256').update(propertyStage).digest('hex'),keyStageSha256:new Bun.CryptoHasher('sha256').update(keyStage).digest('hex'),qualification:'Actual xid/context/artifact bounds/single unfinished/rollback/private invocation component only. Protected issuer registration, canonical observers, finalization, deferred complete-cohort checks, installer security and public runtime remain unfinished.'};
+ const receipt={component:'native operation and owner-backed catalog staging',engine:'PostgreSQL17.9',umfSource:producer.sourceRevision,umfBundleSha256:producer.bundleSha256,checks,bodySha256:new Bun.CryptoHasher('sha256').update(body).digest('hex'),observerSha256:new Bun.CryptoHasher('sha256').update(observer).digest('hex'),barrierSha256:new Bun.CryptoHasher('sha256').update(barrier).digest('hex'),catalogStageSha256:new Bun.CryptoHasher('sha256').update(catalogStage).digest('hex'),documentBatchSha256:new Bun.CryptoHasher('sha256').update(documentBatch).digest('hex'),typeStageSha256:new Bun.CryptoHasher('sha256').update(typeStage).digest('hex'),propertyStageSha256:new Bun.CryptoHasher('sha256').update(propertyStage).digest('hex'),keyBatchSha256:new Bun.CryptoHasher('sha256').update(keyBatch).digest('hex'),keyStageSha256:new Bun.CryptoHasher('sha256').update(keyStage).digest('hex'),qualification:'Actual xid/context/artifact bounds/single unfinished/rollback/private invocation component only. Protected issuer registration, canonical observers, finalization, deferred complete-cohort checks, installer security and public runtime remain unfinished.'};
  await Bun.write('docs/helix/04-build/evidence/runtime-operation-admission.json',JSON.stringify(receipt,null,2)+'\n');console.log(JSON.stringify({checks:checks.length}));
 }finally{await sql.close()}
