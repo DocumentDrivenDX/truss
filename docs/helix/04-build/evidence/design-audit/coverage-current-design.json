@@ -1035,7 +1035,7 @@
     "02-design/technical-designs/TD-008-keep-what-the-schema-does-not-define.md": "11d0c71fcc8b08f52c57d2f50a679aa4e3d9ac3f8a371de00a2ea16f2854261f",
     "03-test/test-plans/STP-008-keep-what-the-schema-does-not-define.md": "d5821646c96140848c481c5d2b61392114d212aaebc2fee14450e89440b2f4bf",
     "02-design/technical-designs/TD-009-find-an-object-by-its-key.md": "25ed3ec38b49bd477065d3786ee529f092ddc8b7661e3433fe99a7784890a2d7",
-    "03-test/test-plans/STP-009-find-an-object-by-its-key.md": "7933bcf0457901e193045e17f89269d00938fda9d441da98b3d5ba2887ce5259",
+    "03-test/test-plans/STP-009-find-an-object-by-its-key.md": "5c65ad7cbfaa61ae074c146eb21b6e78b2f6139b7abad7477df9472358189428",
     "02-design/technical-designs/TD-010-refuse-bad-edges-and-protect-connected-objects.md": "e67e3592998f0ec7cc92f5c96835ffb20e81f70c95cb5fafd039efdde9ec7a3d",
     "03-test/test-plans/STP-010-refuse-bad-edges-and-protect-connected-objects.md": "039bc86ea67bd0e4b9a3a598a9316e32eb151d9cd1c003c9577ed45ee121ad88",
     "02-design/technical-designs/TD-011-limit-an-edges-multiplicity.md": "a6844d5eb289963466833406f77dfc22bdfb4b8c2ef90aa077091d2e1d443b3e",
