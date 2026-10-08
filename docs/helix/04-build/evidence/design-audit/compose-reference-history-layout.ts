@@ -2,7 +2,10 @@
 import {backend} from '/Users/erik/Projects/umf/native/postgresql/runtime';
 import {getPostgresqlNode,proposePostgresqlNodeEdit,exportPostgresqlSql,getPostgresqlSource,importPostgresqlSql} from '/Users/erik/Projects/umf/src/adapters/postgresql';
 import {renderTree} from '/Users/erik/Projects/umf/src/model/native-json';
-import {readDocument,writeDocument} from '/Users/erik/Projects/umf/src/model/document';
+import {readDocument} from '/Users/erik/Projects/umf/src/model/document';
+const checkOnly=Bun.argv.includes('--check');
+const producerPath='docs/helix/04-build/evidence/design-audit/compose-reference-history-layout.ts';
+const producerBytes=await Bun.file(producerPath).text();
 const hash=(s:string)=>new Bun.CryptoHasher('sha256').update(s).digest('hex');
 const ownerRoot='/Users/erik/Projects/umf';
 const ownerPaths=['src/adapters/postgresql/index.ts','src/model/native-json.ts','src/model/document.ts','native/postgresql/runtime.ts','bun.lock'];
@@ -39,6 +42,9 @@ if(tables.filter(n=>n==='row_home_operation').length!==1||tables.filter(n=>n==='
 const stageNode=JSON.parse(renderTree(stage.items[0]));
 if(stageNode.stmt?.CreateStmt?.relation?.relname!=='row_home_journal_stage'||stageNode.stmt.CreateStmt.tableElts.filter((n:any)=>n.ColumnDef).length!==6)throw Error('child inventory');
 if(original.items.filter(n=>renderTree(n)===renderTree(stage.items[0])).length!==1)throw Error('stage fragment correspondence');
+const parentIndex=nodes.findIndex(n=>n.stmt?.CreateStmt?.relation?.relname==='row_home_operation');
+const stageIndex=nodes.findIndex(n=>n.stmt?.CreateStmt?.relation?.relname==='row_home_journal_stage');
+if(parentIndex<0||stageIndex<=parentIndex)throw Error('parent declaration order');
 const sequences=nodes.filter(n=>n.stmt?.CreateSeqStmt?.sequence?.schemaname==='truss'&&n.stmt.CreateSeqStmt.sequence.relname==='journal_seq');
 if(sequences.length!==1||sequences[0].stmt.CreateSeqStmt.options)throw Error('original sequence declaration drift');
 const selected=await importPostgresqlSql('CREATE SEQUENCE truss.journal_seq AS bigint INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 START WITH 1 NO CYCLE CACHE 1;',backend,{id:'selected-journal-sequence-review'});
@@ -59,11 +65,14 @@ const modelPath='docs/helix/02-design/models/truss-layout-reference-history-0.12
 const exportPath='docs/helix/04-build/evidence/design-audit/truss-layout-reference-history-0.12.owner-export.sql';
 // Compact JSON remains within the existing UMF input bound; reload validates it.
 const modelBytes=JSON.stringify(candidate)+'\n';
-await Bun.write(modelPath,modelBytes);await Bun.write(exportPath,output);
+if(checkOnly){if(await Bun.file(modelPath).text()!==modelBytes||await Bun.file(exportPath).text()!==output)throw Error('generated output drift');}
+else{await Bun.write(modelPath,modelBytes);await Bun.write(exportPath,output);}
 const reloaded=readDocument(await Bun.file(modelPath).text(),'json');
 if(await exportPostgresqlSql(reloaded,backend)!==output)throw Error('edited model reload mismatch');
 const after=await owner();if(JSON.stringify(before)!==JSON.stringify(after))throw Error('owner changed');
-if(await Bun.file(baselinePath).text()!==baselineBytes||await Bun.file(fragmentPath).text()!==fragmentBytes)throw Error('input changed');
-const receipt={scope:'existing UMF edited native statement-array export and JSON reload only; no complete required physical inventory, catalog resolution, native execution, migration or runtime adoption',ownerSource:before,bunVersion:Bun.version,backend:backend.identity,recipe:{path:recipePath,sha256:hash(recipeBytes)},inputs:[{path:stagePath,sha256:hash(stageBytes)},{path:baselinePath,sha256:hash(baselineBytes)},{path:fragmentPath,sha256:hash(fragmentBytes)}],modelPath,modelSha256:hash(modelBytes),exportPath,exportSha256:hash(output),originalStatements:original.items.length,addedStatements:0,actualStatements:nodes.length,selectedSequenceSettings:true,existingParentReused:true,reviewMarker:true,metadataOpPreserved:true,baselineArchivePreserved:true,foundationDeltaVerified:true,carrierAndStageExactOriginal:true,editedAstExport:true,reloadedExportExact:true,installationReady:false};
-await Bun.write('docs/helix/04-build/evidence/design-audit/reference-history-layout-model-source.json',JSON.stringify(receipt,null,2)+'\n');
+if(await Bun.file(baselinePath).text()!==baselineBytes||await Bun.file(fragmentPath).text()!==fragmentBytes||await Bun.file(stagePath).text()!==stageBytes||await Bun.file(recipePath).text()!==recipeBytes||await Bun.file(producerPath).text()!==producerBytes)throw Error('input changed');
+const receipt={scope:'existing UMF edited native statement-array export and JSON reload only; no complete required physical inventory, catalog resolution, native execution, migration or runtime adoption',producer:{path:producerPath,sha256:hash(producerBytes)},parentBeforeChild:true,ownerSource:before,bunVersion:Bun.version,backend:backend.identity,recipe:{path:recipePath,sha256:hash(recipeBytes)},inputs:[{path:stagePath,sha256:hash(stageBytes)},{path:baselinePath,sha256:hash(baselineBytes)},{path:fragmentPath,sha256:hash(fragmentBytes)}],modelPath,modelSha256:hash(modelBytes),exportPath,exportSha256:hash(output),originalStatements:original.items.length,addedStatements:0,actualStatements:nodes.length,selectedSequenceSettings:true,existingParentReused:true,reviewMarker:true,metadataOpPreserved:true,baselineArchivePreserved:true,foundationDeltaVerified:true,carrierAndStageExactOriginal:true,editedAstExport:true,reloadedExportExact:true,installationReady:false};
+const receiptPath='docs/helix/04-build/evidence/design-audit/reference-history-layout-model-source.json',receiptBytes=JSON.stringify(receipt,null,2)+'\n';
+if(checkOnly){if(await Bun.file(receiptPath).text()!==receiptBytes)throw Error('source receipt drift');}
+else await Bun.write(receiptPath,receiptBytes);
 console.log(JSON.stringify({originalStatements:original.items.length,addedStatements:0,actualStatements:nodes.length,selectedSequenceSettings:true,existingParentReused:true,foundationDeltaVerified:true,carrierAndStageExactOriginal:true,editedAstExport:true,reloadedExportExact:true,installationReady:false}));

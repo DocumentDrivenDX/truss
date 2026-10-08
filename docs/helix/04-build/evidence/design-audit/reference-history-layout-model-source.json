@@ -1,5 +1,10 @@
 {
   "scope": "existing UMF edited native statement-array export and JSON reload only; no complete required physical inventory, catalog resolution, native execution, migration or runtime adoption",
+  "producer": {
+    "path": "docs/helix/04-build/evidence/design-audit/compose-reference-history-layout.ts",
+    "sha256": "00763a36b289a73686df37bc34aaf6c305917fb184db0939a40baa0c49318ae4"
+  },
+  "parentBeforeChild": true,
   "ownerSource": {
     "root": "/Users/erik/Projects/umf",
     "commit": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
