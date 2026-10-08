@@ -68,3 +68,13 @@ and noncanonical base64 refuse; unknown assertion stays preserved and Node globa
 are absent. `check-umf-browser-ingress.ts` records exact bundle hashes. This verifies
 browser execution for the exercised subset, not selected semantic-check admission,
 qualified isolation/termination/resource accounting or native catalog readiness.
+
+The semantic probe now also emits a source-qualified interpretation/check inventory
+using actual UMF inspectCoreNullability/Cardinality/Facets/Keys/Relationships results.
+Twenty-six full original inspection results across the four examples are anchored
+to exact artifact hashes/pointers; raw original inputs and unknown diagnostics are
+retained. Real Chromium reproduces every Bun operation result. Required-check
+producer, native binding and support-profile slots are explicitly unresolved;
+inspectors carry unverified provenance and cannot supply complete value validation,
+original author authority or native acceptance. This implements the inventory
+prerequisite requested by the Truss profile review without a Truss semantic validator.

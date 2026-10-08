@@ -44,7 +44,8 @@
             "severity": "warning"
           }
         ]
-      }
+      },
+      "originalInspectionsVerified": 5
     },
     {
       "identity": "schema-v2.umf.json",
@@ -89,7 +90,8 @@
             "severity": "warning"
           }
         ]
-      }
+      },
+      "originalInspectionsVerified": 8
     },
     {
       "identity": "schema-v3.umf.json",
@@ -128,7 +130,8 @@
             "severity": "warning"
           }
         ]
-      }
+      },
+      "originalInspectionsVerified": 8
     },
     {
       "identity": "schema-unknown.umf.json",
@@ -173,12 +176,13 @@
             "severity": "warning"
           }
         ]
-      }
+      },
+      "originalInspectionsVerified": 5
     }
   ],
   "browser": "153.0.8010.12",
   "umfSourceRevision": "fac1497a5ac5cb39bbaaac34eb0da8dc8b208c69",
-  "producerBundleSha256": "209c4074042f32c296d9b672c782ca0e39dc9747563e22281072aa5385eb5568",
+  "producerBundleSha256": "d935446542e88784c8f0ecbc4fb397cf28eb10768ca2f671e0da1f88ec84e220",
   "trussBundleSha256": "7ca7d551d3f610d6eeb0121a44cd048bca301f64444001298bf88d7855f3fda9",
   "qualification": "Real Chromium original UMF examples through built portable Truss integrity ingress and exact pinned UMF producer. All original validity/completeness/diagnostics agree with Bun; no native acceptance, installation, qualified validator isolation or source stream authority."
 }

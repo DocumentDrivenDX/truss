@@ -1,0 +1,2060 @@
+{
+  "umfSourceRevision": "fac1497a5ac5cb39bbaaac34eb0da8dc8b208c69",
+  "producerBundleSha256": "d935446542e88784c8f0ecbc4fb397cf28eb10768ca2f671e0da1f88ec84e220",
+  "inventories": [
+    {
+      "identity": "schema-v1.umf.json",
+      "originalArtifact": {
+        "identity": "schema-v1.umf.json",
+        "bytesBase64": "eyJ1bWYiOiIwLjcuMCIsImlkIjoidHJ1c3Mtd2VmdC1zb3VyY2UtcmV2aWV3LWZpeHR1cmUiLCJ2b2NhYnVsYXJpZXMiOnt9LCJtb2R1bGVzIjpbeyJpZCI6ImZpeHR1cmUiLCJuYW1lc3BhY2UiOiJmaXh0dXJlIiwiZWxlbWVudHMiOlt7ImlkIjoiaXRlbSIsIm5hbWUiOiJJdGVtIiwia2luZCI6InJlY29yZCIsIm1lbWJlcnMiOlt7Im1vZHVsZSI6ImZpeHR1cmUiLCJlbGVtZW50IjoibGFiZWwifV0sImV4dGVuc2lvbnMiOnt9fSx7ImlkIjoibGFiZWwiLCJuYW1lIjoibGFiZWwiLCJraW5kIjoiZmllbGQiLCJzY2FsYXJUeXBlIjoic3RyaW5nIiwibnVsbGFiaWxpdHkiOiJyZXF1aXJlZCIsImNhcmRpbmFsaXR5Ijoib25lIiwiZXh0ZW5zaW9ucyI6e319XX1dfQ==",
+        "sha256": "bc5357b1eb99bddac4f1d1d1ce6d9727dbc98d8ca3a56b644510d07117919aec"
+      },
+      "originalValidation": {
+        "valid": true,
+        "complete": false,
+        "diagnostics": [
+          {
+            "code": "EXPERIMENTAL_CORE_NULLABILITY",
+            "path": "/umf",
+            "message": "Nullability envelope is experimental; no native absence encoding or default execution is implied",
+            "severity": "warning"
+          },
+          {
+            "code": "EXPERIMENTAL_CORE_CARDINALITY",
+            "path": "/umf",
+            "message": "Cardinality envelope is experimental; native shape and item semantics require explicit bindings",
+            "severity": "warning"
+          },
+          {
+            "code": "EXPERIMENTAL_CORE_FACETS",
+            "path": "/umf",
+            "message": "Facet envelope is experimental; bounds do not establish native enforcement or value conversion",
+            "severity": "warning"
+          },
+          {
+            "code": "EXPERIMENTAL_CORE_KEYS",
+            "path": "/umf",
+            "message": "Candidate key profile; native uniqueness and author provenance are not inferred",
+            "severity": "warning"
+          },
+          {
+            "code": "EXPERIMENTAL_CORE_RELATIONSHIPS",
+            "path": "/umf",
+            "message": "Candidate authored relationship profile; native enforcement and storage are not inferred",
+            "severity": "warning"
+          }
+        ]
+      },
+      "entries": [
+        {
+          "definition": {
+            "artifactSha256": "bc5357b1eb99bddac4f1d1d1ce6d9727dbc98d8ca3a56b644510d07117919aec",
+            "path": "/modules/0"
+          },
+          "producer": "inspectCoreRelationships",
+          "originalResult": {
+            "operation": "inspect-core-relationships",
+            "version": "1.0.0",
+            "source": {
+              "umf": "0.7.0",
+              "id": "truss-weft-source-review-fixture",
+              "vocabularies": {},
+              "modules": [
+                {
+                  "id": "fixture",
+                  "namespace": "fixture",
+                  "elements": [
+                    {
+                      "id": "item",
+                      "name": "Item",
+                      "kind": "record",
+                      "members": [
+                        {
+                          "module": "fixture",
+                          "element": "label"
+                        }
+                      ],
+                      "extensions": {}
+                    },
+                    {
+                      "id": "label",
+                      "name": "label",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "required",
+                      "cardinality": "one",
+                      "extensions": {}
+                    }
+                  ]
+                }
+              ]
+            },
+            "identity": {
+              "module": "fixture"
+            },
+            "path": "/modules/0/relationships",
+            "meaning": {
+              "state": "missing"
+            },
+            "provenance": "unverified",
+            "diagnostics": [
+              {
+                "code": "EXPERIMENTAL_CORE_NULLABILITY",
+                "path": "/umf",
+                "message": "Nullability envelope is experimental; no native absence encoding or default execution is implied",
+                "severity": "warning"
+              },
+              {
+                "code": "EXPERIMENTAL_CORE_CARDINALITY",
+                "path": "/umf",
+                "message": "Cardinality envelope is experimental; native shape and item semantics require explicit bindings",
+                "severity": "warning"
+              },
+              {
+                "code": "EXPERIMENTAL_CORE_FACETS",
+                "path": "/umf",
+                "message": "Facet envelope is experimental; bounds do not establish native enforcement or value conversion",
+                "severity": "warning"
+              },
+              {
+                "code": "EXPERIMENTAL_CORE_KEYS",
+                "path": "/umf",
+                "message": "Candidate key profile; native uniqueness and author provenance are not inferred",
+                "severity": "warning"
+              },
+              {
+                "code": "EXPERIMENTAL_CORE_RELATIONSHIPS",
+                "path": "/umf",
+                "message": "Candidate authored relationship profile; native enforcement and storage are not inferred",
+                "severity": "warning"
+              }
+            ],
+            "residuals": []
+          },
+          "requiredCheckProducer": null,
+          "nativeBinding": null
+        },
+        {
+          "definition": {
+            "artifactSha256": "bc5357b1eb99bddac4f1d1d1ce6d9727dbc98d8ca3a56b644510d07117919aec",
+            "path": "/modules/0/elements/0"
+          },
+          "producer": "inspectCoreKeys",
+          "originalResult": {
+            "operation": "inspect-core-keys",
+            "version": "2.0.0",
+            "source": {
+              "umf": "0.7.0",
+              "id": "truss-weft-source-review-fixture",
+              "vocabularies": {},
+              "modules": [
+                {
+                  "id": "fixture",
+                  "namespace": "fixture",
+                  "elements": [
+                    {
+                      "id": "item",
+                      "name": "Item",
+                      "kind": "record",
+                      "members": [
+                        {
+                          "module": "fixture",
+                          "element": "label"
+                        }
+                      ],
+                      "extensions": {}
+                    },
+                    {
+                      "id": "label",
+                      "name": "label",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "required",
+                      "cardinality": "one",
+                      "extensions": {}
+                    }
+                  ]
+                }
+              ]
+            },
+            "identity": {
+              "module": "fixture",
+              "element": "item"
+            },
+            "path": "/modules/0/elements/0/keys",
+            "meaning": {
+              "state": "missing"
+            },
+            "provenance": "unverified"
+          },
+          "requiredCheckProducer": null,
+          "nativeBinding": null
+        },
+        {
+          "definition": {
+            "artifactSha256": "bc5357b1eb99bddac4f1d1d1ce6d9727dbc98d8ca3a56b644510d07117919aec",
+            "path": "/modules/0/elements/1"
+          },
+          "producer": "inspectCoreNullability",
+          "originalResult": {
+            "operation": "inspect-core-nullability",
+            "version": "5.0.0",
+            "source": {
+              "umf": "0.7.0",
+              "id": "truss-weft-source-review-fixture",
+              "vocabularies": {},
+              "modules": [
+                {
+                  "id": "fixture",
+                  "namespace": "fixture",
+                  "elements": [
+                    {
+                      "id": "item",
+                      "name": "Item",
+                      "kind": "record",
+                      "members": [
+                        {
+                          "module": "fixture",
+                          "element": "label"
+                        }
+                      ],
+                      "extensions": {}
+                    },
+                    {
+                      "id": "label",
+                      "name": "label",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "required",
+                      "cardinality": "one",
+                      "extensions": {}
+                    }
+                  ]
+                }
+              ]
+            },
+            "identity": {
+              "module": "fixture",
+              "element": "label"
+            },
+            "path": "/modules/0/elements/1/nullability",
+            "meaning": {
+              "state": "known",
+              "nullability": "required"
+            },
+            "provenance": "unverified"
+          },
+          "requiredCheckProducer": null,
+          "nativeBinding": null
+        },
+        {
+          "definition": {
+            "artifactSha256": "bc5357b1eb99bddac4f1d1d1ce6d9727dbc98d8ca3a56b644510d07117919aec",
+            "path": "/modules/0/elements/1"
+          },
+          "producer": "inspectCoreCardinality",
+          "originalResult": {
+            "operation": "inspect-core-cardinality",
+            "version": "4.0.0",
+            "source": {
+              "umf": "0.7.0",
+              "id": "truss-weft-source-review-fixture",
+              "vocabularies": {},
+              "modules": [
+                {
+                  "id": "fixture",
+                  "namespace": "fixture",
+                  "elements": [
+                    {
+                      "id": "item",
+                      "name": "Item",
+                      "kind": "record",
+                      "members": [
+                        {
+                          "module": "fixture",
+                          "element": "label"
+                        }
+                      ],
+                      "extensions": {}
+                    },
+                    {
+                      "id": "label",
+                      "name": "label",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "required",
+                      "cardinality": "one",
+                      "extensions": {}
+                    }
+                  ]
+                }
+              ]
+            },
+            "identity": {
+              "module": "fixture",
+              "element": "label"
+            },
+            "path": "/modules/0/elements/1/cardinality",
+            "meaning": {
+              "state": "known",
+              "cardinality": "one"
+            },
+            "provenance": "unverified"
+          },
+          "requiredCheckProducer": null,
+          "nativeBinding": null
+        },
+        {
+          "definition": {
+            "artifactSha256": "bc5357b1eb99bddac4f1d1d1ce6d9727dbc98d8ca3a56b644510d07117919aec",
+            "path": "/modules/0/elements/1"
+          },
+          "producer": "inspectCoreFacets",
+          "originalResult": {
+            "operation": "inspect-core-facets",
+            "version": "3.0.0",
+            "source": {
+              "umf": "0.7.0",
+              "id": "truss-weft-source-review-fixture",
+              "vocabularies": {},
+              "modules": [
+                {
+                  "id": "fixture",
+                  "namespace": "fixture",
+                  "elements": [
+                    {
+                      "id": "item",
+                      "name": "Item",
+                      "kind": "record",
+                      "members": [
+                        {
+                          "module": "fixture",
+                          "element": "label"
+                        }
+                      ],
+                      "extensions": {}
+                    },
+                    {
+                      "id": "label",
+                      "name": "label",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "required",
+                      "cardinality": "one",
+                      "extensions": {}
+                    }
+                  ]
+                }
+              ]
+            },
+            "identity": {
+              "module": "fixture",
+              "element": "label"
+            },
+            "path": "/modules/0/elements/1/facets",
+            "meaning": {
+              "state": "missing"
+            },
+            "provenance": "unverified"
+          },
+          "requiredCheckProducer": null,
+          "nativeBinding": null
+        }
+      ],
+      "uninterpretedDiagnostics": [],
+      "supportProfile": null,
+      "writableAcceptance": "unavailable_no_qualified_semantic_check_composition"
+    },
+    {
+      "identity": "schema-v2.umf.json",
+      "originalArtifact": {
+        "identity": "schema-v2.umf.json",
+        "bytesBase64": "eyJ1bWYiOiIwLjcuMCIsImlkIjoidHJ1c3Mtd2VmdC1zb3VyY2UtcmV2aWV3LWZpeHR1cmUiLCJ2b2NhYnVsYXJpZXMiOnt9LCJtb2R1bGVzIjpbeyJpZCI6ImZpeHR1cmUiLCJuYW1lc3BhY2UiOiJmaXh0dXJlIiwiZWxlbWVudHMiOlt7ImlkIjoiaXRlbSIsIm5hbWUiOiJJdGVtIiwia2luZCI6InJlY29yZCIsIm1lbWJlcnMiOlt7Im1vZHVsZSI6ImZpeHR1cmUiLCJlbGVtZW50IjoibGFiZWwifSx7Im1vZHVsZSI6ImZpeHR1cmUiLCJlbGVtZW50IjoiY2FwdGlvbiJ9XSwiZXh0ZW5zaW9ucyI6e319LHsiaWQiOiJsYWJlbCIsIm5hbWUiOiJsYWJlbCIsImtpbmQiOiJmaWVsZCIsInNjYWxhclR5cGUiOiJzdHJpbmciLCJudWxsYWJpbGl0eSI6InJlcXVpcmVkIiwiY2FyZGluYWxpdHkiOiJvbmUiLCJleHRlbnNpb25zIjp7fX0seyJpZCI6ImNhcHRpb24iLCJuYW1lIjoiY2FwdGlvbiIsImtpbmQiOiJmaWVsZCIsInNjYWxhclR5cGUiOiJzdHJpbmciLCJudWxsYWJpbGl0eSI6Im9wdGlvbmFsIiwiY2FyZGluYWxpdHkiOiJvbmUiLCJleHRlbnNpb25zIjp7fX1dfV19Cg==",
+        "sha256": "59e4d58b5254df2291156a5b73ef0e04d4c74668b3818e8ecf630e4d104982d0"
+      },
+      "originalValidation": {
+        "valid": true,
+        "complete": false,
+        "diagnostics": [
+          {
+            "code": "EXPERIMENTAL_CORE_NULLABILITY",
+            "path": "/umf",
+            "message": "Nullability envelope is experimental; no native absence encoding or default execution is implied",
+            "severity": "warning"
+          },
+          {
+            "code": "EXPERIMENTAL_CORE_CARDINALITY",
+            "path": "/umf",
+            "message": "Cardinality envelope is experimental; native shape and item semantics require explicit bindings",
+            "severity": "warning"
+          },
+          {
+            "code": "EXPERIMENTAL_CORE_FACETS",
+            "path": "/umf",
+            "message": "Facet envelope is experimental; bounds do not establish native enforcement or value conversion",
+            "severity": "warning"
+          },
+          {
+            "code": "UNKNOWN_NULLABILITY",
+            "path": "/modules/0/elements/2/nullability",
+            "message": "Availability label retained without interpretation",
+            "severity": "warning"
+          },
+          {
+            "code": "EXPERIMENTAL_CORE_KEYS",
+            "path": "/umf",
+            "message": "Candidate key profile; native uniqueness and author provenance are not inferred",
+            "severity": "warning"
+          },
+          {
+            "code": "EXPERIMENTAL_CORE_RELATIONSHIPS",
+            "path": "/umf",
+            "message": "Candidate authored relationship profile; native enforcement and storage are not inferred",
+            "severity": "warning"
+          }
+        ]
+      },
+      "entries": [
+        {
+          "definition": {
+            "artifactSha256": "59e4d58b5254df2291156a5b73ef0e04d4c74668b3818e8ecf630e4d104982d0",
+            "path": "/modules/0"
+          },
+          "producer": "inspectCoreRelationships",
+          "originalResult": {
+            "operation": "inspect-core-relationships",
+            "version": "1.0.0",
+            "source": {
+              "umf": "0.7.0",
+              "id": "truss-weft-source-review-fixture",
+              "vocabularies": {},
+              "modules": [
+                {
+                  "id": "fixture",
+                  "namespace": "fixture",
+                  "elements": [
+                    {
+                      "id": "item",
+                      "name": "Item",
+                      "kind": "record",
+                      "members": [
+                        {
+                          "module": "fixture",
+                          "element": "label"
+                        },
+                        {
+                          "module": "fixture",
+                          "element": "caption"
+                        }
+                      ],
+                      "extensions": {}
+                    },
+                    {
+                      "id": "label",
+                      "name": "label",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "required",
+                      "cardinality": "one",
+                      "extensions": {}
+                    },
+                    {
+                      "id": "caption",
+                      "name": "caption",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "optional",
+                      "cardinality": "one",
+                      "extensions": {}
+                    }
+                  ]
+                }
+              ]
+            },
+            "identity": {
+              "module": "fixture"
+            },
+            "path": "/modules/0/relationships",
+            "meaning": {
+              "state": "missing"
+            },
+            "provenance": "unverified",
+            "diagnostics": [
+              {
+                "code": "EXPERIMENTAL_CORE_NULLABILITY",
+                "path": "/umf",
+                "message": "Nullability envelope is experimental; no native absence encoding or default execution is implied",
+                "severity": "warning"
+              },
+              {
+                "code": "EXPERIMENTAL_CORE_CARDINALITY",
+                "path": "/umf",
+                "message": "Cardinality envelope is experimental; native shape and item semantics require explicit bindings",
+                "severity": "warning"
+              },
+              {
+                "code": "EXPERIMENTAL_CORE_FACETS",
+                "path": "/umf",
+                "message": "Facet envelope is experimental; bounds do not establish native enforcement or value conversion",
+                "severity": "warning"
+              },
+              {
+                "code": "UNKNOWN_NULLABILITY",
+                "path": "/modules/0/elements/2/nullability",
+                "message": "Availability label retained without interpretation",
+                "severity": "warning"
+              },
+              {
+                "code": "EXPERIMENTAL_CORE_KEYS",
+                "path": "/umf",
+                "message": "Candidate key profile; native uniqueness and author provenance are not inferred",
+                "severity": "warning"
+              },
+              {
+                "code": "EXPERIMENTAL_CORE_RELATIONSHIPS",
+                "path": "/umf",
+                "message": "Candidate authored relationship profile; native enforcement and storage are not inferred",
+                "severity": "warning"
+              }
+            ],
+            "residuals": []
+          },
+          "requiredCheckProducer": null,
+          "nativeBinding": null
+        },
+        {
+          "definition": {
+            "artifactSha256": "59e4d58b5254df2291156a5b73ef0e04d4c74668b3818e8ecf630e4d104982d0",
+            "path": "/modules/0/elements/0"
+          },
+          "producer": "inspectCoreKeys",
+          "originalResult": {
+            "operation": "inspect-core-keys",
+            "version": "2.0.0",
+            "source": {
+              "umf": "0.7.0",
+              "id": "truss-weft-source-review-fixture",
+              "vocabularies": {},
+              "modules": [
+                {
+                  "id": "fixture",
+                  "namespace": "fixture",
+                  "elements": [
+                    {
+                      "id": "item",
+                      "name": "Item",
+                      "kind": "record",
+                      "members": [
+                        {
+                          "module": "fixture",
+                          "element": "label"
+                        },
+                        {
+                          "module": "fixture",
+                          "element": "caption"
+                        }
+                      ],
+                      "extensions": {}
+                    },
+                    {
+                      "id": "label",
+                      "name": "label",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "required",
+                      "cardinality": "one",
+                      "extensions": {}
+                    },
+                    {
+                      "id": "caption",
+                      "name": "caption",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "optional",
+                      "cardinality": "one",
+                      "extensions": {}
+                    }
+                  ]
+                }
+              ]
+            },
+            "identity": {
+              "module": "fixture",
+              "element": "item"
+            },
+            "path": "/modules/0/elements/0/keys",
+            "meaning": {
+              "state": "missing"
+            },
+            "provenance": "unverified"
+          },
+          "requiredCheckProducer": null,
+          "nativeBinding": null
+        },
+        {
+          "definition": {
+            "artifactSha256": "59e4d58b5254df2291156a5b73ef0e04d4c74668b3818e8ecf630e4d104982d0",
+            "path": "/modules/0/elements/1"
+          },
+          "producer": "inspectCoreNullability",
+          "originalResult": {
+            "operation": "inspect-core-nullability",
+            "version": "5.0.0",
+            "source": {
+              "umf": "0.7.0",
+              "id": "truss-weft-source-review-fixture",
+              "vocabularies": {},
+              "modules": [
+                {
+                  "id": "fixture",
+                  "namespace": "fixture",
+                  "elements": [
+                    {
+                      "id": "item",
+                      "name": "Item",
+                      "kind": "record",
+                      "members": [
+                        {
+                          "module": "fixture",
+                          "element": "label"
+                        },
+                        {
+                          "module": "fixture",
+                          "element": "caption"
+                        }
+                      ],
+                      "extensions": {}
+                    },
+                    {
+                      "id": "label",
+                      "name": "label",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "required",
+                      "cardinality": "one",
+                      "extensions": {}
+                    },
+                    {
+                      "id": "caption",
+                      "name": "caption",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "optional",
+                      "cardinality": "one",
+                      "extensions": {}
+                    }
+                  ]
+                }
+              ]
+            },
+            "identity": {
+              "module": "fixture",
+              "element": "label"
+            },
+            "path": "/modules/0/elements/1/nullability",
+            "meaning": {
+              "state": "known",
+              "nullability": "required"
+            },
+            "provenance": "unverified"
+          },
+          "requiredCheckProducer": null,
+          "nativeBinding": null
+        },
+        {
+          "definition": {
+            "artifactSha256": "59e4d58b5254df2291156a5b73ef0e04d4c74668b3818e8ecf630e4d104982d0",
+            "path": "/modules/0/elements/1"
+          },
+          "producer": "inspectCoreCardinality",
+          "originalResult": {
+            "operation": "inspect-core-cardinality",
+            "version": "4.0.0",
+            "source": {
+              "umf": "0.7.0",
+              "id": "truss-weft-source-review-fixture",
+              "vocabularies": {},
+              "modules": [
+                {
+                  "id": "fixture",
+                  "namespace": "fixture",
+                  "elements": [
+                    {
+                      "id": "item",
+                      "name": "Item",
+                      "kind": "record",
+                      "members": [
+                        {
+                          "module": "fixture",
+                          "element": "label"
+                        },
+                        {
+                          "module": "fixture",
+                          "element": "caption"
+                        }
+                      ],
+                      "extensions": {}
+                    },
+                    {
+                      "id": "label",
+                      "name": "label",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "required",
+                      "cardinality": "one",
+                      "extensions": {}
+                    },
+                    {
+                      "id": "caption",
+                      "name": "caption",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "optional",
+                      "cardinality": "one",
+                      "extensions": {}
+                    }
+                  ]
+                }
+              ]
+            },
+            "identity": {
+              "module": "fixture",
+              "element": "label"
+            },
+            "path": "/modules/0/elements/1/cardinality",
+            "meaning": {
+              "state": "known",
+              "cardinality": "one"
+            },
+            "provenance": "unverified"
+          },
+          "requiredCheckProducer": null,
+          "nativeBinding": null
+        },
+        {
+          "definition": {
+            "artifactSha256": "59e4d58b5254df2291156a5b73ef0e04d4c74668b3818e8ecf630e4d104982d0",
+            "path": "/modules/0/elements/1"
+          },
+          "producer": "inspectCoreFacets",
+          "originalResult": {
+            "operation": "inspect-core-facets",
+            "version": "3.0.0",
+            "source": {
+              "umf": "0.7.0",
+              "id": "truss-weft-source-review-fixture",
+              "vocabularies": {},
+              "modules": [
+                {
+                  "id": "fixture",
+                  "namespace": "fixture",
+                  "elements": [
+                    {
+                      "id": "item",
+                      "name": "Item",
+                      "kind": "record",
+                      "members": [
+                        {
+                          "module": "fixture",
+                          "element": "label"
+                        },
+                        {
+                          "module": "fixture",
+                          "element": "caption"
+                        }
+                      ],
+                      "extensions": {}
+                    },
+                    {
+                      "id": "label",
+                      "name": "label",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "required",
+                      "cardinality": "one",
+                      "extensions": {}
+                    },
+                    {
+                      "id": "caption",
+                      "name": "caption",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "optional",
+                      "cardinality": "one",
+                      "extensions": {}
+                    }
+                  ]
+                }
+              ]
+            },
+            "identity": {
+              "module": "fixture",
+              "element": "label"
+            },
+            "path": "/modules/0/elements/1/facets",
+            "meaning": {
+              "state": "missing"
+            },
+            "provenance": "unverified"
+          },
+          "requiredCheckProducer": null,
+          "nativeBinding": null
+        },
+        {
+          "definition": {
+            "artifactSha256": "59e4d58b5254df2291156a5b73ef0e04d4c74668b3818e8ecf630e4d104982d0",
+            "path": "/modules/0/elements/2"
+          },
+          "producer": "inspectCoreNullability",
+          "originalResult": {
+            "operation": "inspect-core-nullability",
+            "version": "5.0.0",
+            "source": {
+              "umf": "0.7.0",
+              "id": "truss-weft-source-review-fixture",
+              "vocabularies": {},
+              "modules": [
+                {
+                  "id": "fixture",
+                  "namespace": "fixture",
+                  "elements": [
+                    {
+                      "id": "item",
+                      "name": "Item",
+                      "kind": "record",
+                      "members": [
+                        {
+                          "module": "fixture",
+                          "element": "label"
+                        },
+                        {
+                          "module": "fixture",
+                          "element": "caption"
+                        }
+                      ],
+                      "extensions": {}
+                    },
+                    {
+                      "id": "label",
+                      "name": "label",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "required",
+                      "cardinality": "one",
+                      "extensions": {}
+                    },
+                    {
+                      "id": "caption",
+                      "name": "caption",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "optional",
+                      "cardinality": "one",
+                      "extensions": {}
+                    }
+                  ]
+                }
+              ]
+            },
+            "identity": {
+              "module": "fixture",
+              "element": "caption"
+            },
+            "path": "/modules/0/elements/2/nullability",
+            "meaning": {
+              "state": "unknown",
+              "value": "optional"
+            },
+            "provenance": "unverified"
+          },
+          "requiredCheckProducer": null,
+          "nativeBinding": null
+        },
+        {
+          "definition": {
+            "artifactSha256": "59e4d58b5254df2291156a5b73ef0e04d4c74668b3818e8ecf630e4d104982d0",
+            "path": "/modules/0/elements/2"
+          },
+          "producer": "inspectCoreCardinality",
+          "originalResult": {
+            "operation": "inspect-core-cardinality",
+            "version": "4.0.0",
+            "source": {
+              "umf": "0.7.0",
+              "id": "truss-weft-source-review-fixture",
+              "vocabularies": {},
+              "modules": [
+                {
+                  "id": "fixture",
+                  "namespace": "fixture",
+                  "elements": [
+                    {
+                      "id": "item",
+                      "name": "Item",
+                      "kind": "record",
+                      "members": [
+                        {
+                          "module": "fixture",
+                          "element": "label"
+                        },
+                        {
+                          "module": "fixture",
+                          "element": "caption"
+                        }
+                      ],
+                      "extensions": {}
+                    },
+                    {
+                      "id": "label",
+                      "name": "label",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "required",
+                      "cardinality": "one",
+                      "extensions": {}
+                    },
+                    {
+                      "id": "caption",
+                      "name": "caption",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "optional",
+                      "cardinality": "one",
+                      "extensions": {}
+                    }
+                  ]
+                }
+              ]
+            },
+            "identity": {
+              "module": "fixture",
+              "element": "caption"
+            },
+            "path": "/modules/0/elements/2/cardinality",
+            "meaning": {
+              "state": "known",
+              "cardinality": "one"
+            },
+            "provenance": "unverified"
+          },
+          "requiredCheckProducer": null,
+          "nativeBinding": null
+        },
+        {
+          "definition": {
+            "artifactSha256": "59e4d58b5254df2291156a5b73ef0e04d4c74668b3818e8ecf630e4d104982d0",
+            "path": "/modules/0/elements/2"
+          },
+          "producer": "inspectCoreFacets",
+          "originalResult": {
+            "operation": "inspect-core-facets",
+            "version": "3.0.0",
+            "source": {
+              "umf": "0.7.0",
+              "id": "truss-weft-source-review-fixture",
+              "vocabularies": {},
+              "modules": [
+                {
+                  "id": "fixture",
+                  "namespace": "fixture",
+                  "elements": [
+                    {
+                      "id": "item",
+                      "name": "Item",
+                      "kind": "record",
+                      "members": [
+                        {
+                          "module": "fixture",
+                          "element": "label"
+                        },
+                        {
+                          "module": "fixture",
+                          "element": "caption"
+                        }
+                      ],
+                      "extensions": {}
+                    },
+                    {
+                      "id": "label",
+                      "name": "label",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "required",
+                      "cardinality": "one",
+                      "extensions": {}
+                    },
+                    {
+                      "id": "caption",
+                      "name": "caption",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "optional",
+                      "cardinality": "one",
+                      "extensions": {}
+                    }
+                  ]
+                }
+              ]
+            },
+            "identity": {
+              "module": "fixture",
+              "element": "caption"
+            },
+            "path": "/modules/0/elements/2/facets",
+            "meaning": {
+              "state": "missing"
+            },
+            "provenance": "unverified"
+          },
+          "requiredCheckProducer": null,
+          "nativeBinding": null
+        }
+      ],
+      "uninterpretedDiagnostics": [
+        {
+          "code": "UNKNOWN_NULLABILITY",
+          "path": "/modules/0/elements/2/nullability",
+          "message": "Availability label retained without interpretation",
+          "severity": "warning"
+        }
+      ],
+      "supportProfile": null,
+      "writableAcceptance": "unavailable_no_qualified_semantic_check_composition"
+    },
+    {
+      "identity": "schema-v3.umf.json",
+      "originalArtifact": {
+        "identity": "schema-v3.umf.json",
+        "bytesBase64": "eyJ1bWYiOiIwLjcuMCIsImlkIjoidHJ1c3Mtd2VmdC1zb3VyY2UtcmV2aWV3LWZpeHR1cmUiLCJ2b2NhYnVsYXJpZXMiOnt9LCJtb2R1bGVzIjpbeyJpZCI6ImZpeHR1cmUiLCJuYW1lc3BhY2UiOiJmaXh0dXJlIiwiZWxlbWVudHMiOlt7ImlkIjoiaXRlbSIsIm5hbWUiOiJJdGVtIiwia2luZCI6InJlY29yZCIsIm1lbWJlcnMiOlt7Im1vZHVsZSI6ImZpeHR1cmUiLCJlbGVtZW50IjoibGFiZWwifSx7Im1vZHVsZSI6ImZpeHR1cmUiLCJlbGVtZW50IjoiY2FwdGlvbiJ9XSwiZXh0ZW5zaW9ucyI6e319LHsiaWQiOiJsYWJlbCIsIm5hbWUiOiJsYWJlbCIsImtpbmQiOiJmaWVsZCIsInNjYWxhclR5cGUiOiJzdHJpbmciLCJudWxsYWJpbGl0eSI6InJlcXVpcmVkIiwiY2FyZGluYWxpdHkiOiJvbmUiLCJleHRlbnNpb25zIjp7fX0seyJpZCI6ImNhcHRpb24iLCJuYW1lIjoiY2FwdGlvbiIsImtpbmQiOiJmaWVsZCIsInNjYWxhclR5cGUiOiJzdHJpbmciLCJudWxsYWJpbGl0eSI6ImFic2VudC1hbGxvd2VkIiwiY2FyZGluYWxpdHkiOiJvbmUiLCJleHRlbnNpb25zIjp7fX1dfV19",
+        "sha256": "60d446310ba1bdebf36a1d066aadeb099336c7a551b3e563bd50ae938eeff085"
+      },
+      "originalValidation": {
+        "valid": true,
+        "complete": false,
+        "diagnostics": [
+          {
+            "code": "EXPERIMENTAL_CORE_NULLABILITY",
+            "path": "/umf",
+            "message": "Nullability envelope is experimental; no native absence encoding or default execution is implied",
+            "severity": "warning"
+          },
+          {
+            "code": "EXPERIMENTAL_CORE_CARDINALITY",
+            "path": "/umf",
+            "message": "Cardinality envelope is experimental; native shape and item semantics require explicit bindings",
+            "severity": "warning"
+          },
+          {
+            "code": "EXPERIMENTAL_CORE_FACETS",
+            "path": "/umf",
+            "message": "Facet envelope is experimental; bounds do not establish native enforcement or value conversion",
+            "severity": "warning"
+          },
+          {
+            "code": "EXPERIMENTAL_CORE_KEYS",
+            "path": "/umf",
+            "message": "Candidate key profile; native uniqueness and author provenance are not inferred",
+            "severity": "warning"
+          },
+          {
+            "code": "EXPERIMENTAL_CORE_RELATIONSHIPS",
+            "path": "/umf",
+            "message": "Candidate authored relationship profile; native enforcement and storage are not inferred",
+            "severity": "warning"
+          }
+        ]
+      },
+      "entries": [
+        {
+          "definition": {
+            "artifactSha256": "60d446310ba1bdebf36a1d066aadeb099336c7a551b3e563bd50ae938eeff085",
+            "path": "/modules/0"
+          },
+          "producer": "inspectCoreRelationships",
+          "originalResult": {
+            "operation": "inspect-core-relationships",
+            "version": "1.0.0",
+            "source": {
+              "umf": "0.7.0",
+              "id": "truss-weft-source-review-fixture",
+              "vocabularies": {},
+              "modules": [
+                {
+                  "id": "fixture",
+                  "namespace": "fixture",
+                  "elements": [
+                    {
+                      "id": "item",
+                      "name": "Item",
+                      "kind": "record",
+                      "members": [
+                        {
+                          "module": "fixture",
+                          "element": "label"
+                        },
+                        {
+                          "module": "fixture",
+                          "element": "caption"
+                        }
+                      ],
+                      "extensions": {}
+                    },
+                    {
+                      "id": "label",
+                      "name": "label",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "required",
+                      "cardinality": "one",
+                      "extensions": {}
+                    },
+                    {
+                      "id": "caption",
+                      "name": "caption",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "absent-allowed",
+                      "cardinality": "one",
+                      "extensions": {}
+                    }
+                  ]
+                }
+              ]
+            },
+            "identity": {
+              "module": "fixture"
+            },
+            "path": "/modules/0/relationships",
+            "meaning": {
+              "state": "missing"
+            },
+            "provenance": "unverified",
+            "diagnostics": [
+              {
+                "code": "EXPERIMENTAL_CORE_NULLABILITY",
+                "path": "/umf",
+                "message": "Nullability envelope is experimental; no native absence encoding or default execution is implied",
+                "severity": "warning"
+              },
+              {
+                "code": "EXPERIMENTAL_CORE_CARDINALITY",
+                "path": "/umf",
+                "message": "Cardinality envelope is experimental; native shape and item semantics require explicit bindings",
+                "severity": "warning"
+              },
+              {
+                "code": "EXPERIMENTAL_CORE_FACETS",
+                "path": "/umf",
+                "message": "Facet envelope is experimental; bounds do not establish native enforcement or value conversion",
+                "severity": "warning"
+              },
+              {
+                "code": "EXPERIMENTAL_CORE_KEYS",
+                "path": "/umf",
+                "message": "Candidate key profile; native uniqueness and author provenance are not inferred",
+                "severity": "warning"
+              },
+              {
+                "code": "EXPERIMENTAL_CORE_RELATIONSHIPS",
+                "path": "/umf",
+                "message": "Candidate authored relationship profile; native enforcement and storage are not inferred",
+                "severity": "warning"
+              }
+            ],
+            "residuals": []
+          },
+          "requiredCheckProducer": null,
+          "nativeBinding": null
+        },
+        {
+          "definition": {
+            "artifactSha256": "60d446310ba1bdebf36a1d066aadeb099336c7a551b3e563bd50ae938eeff085",
+            "path": "/modules/0/elements/0"
+          },
+          "producer": "inspectCoreKeys",
+          "originalResult": {
+            "operation": "inspect-core-keys",
+            "version": "2.0.0",
+            "source": {
+              "umf": "0.7.0",
+              "id": "truss-weft-source-review-fixture",
+              "vocabularies": {},
+              "modules": [
+                {
+                  "id": "fixture",
+                  "namespace": "fixture",
+                  "elements": [
+                    {
+                      "id": "item",
+                      "name": "Item",
+                      "kind": "record",
+                      "members": [
+                        {
+                          "module": "fixture",
+                          "element": "label"
+                        },
+                        {
+                          "module": "fixture",
+                          "element": "caption"
+                        }
+                      ],
+                      "extensions": {}
+                    },
+                    {
+                      "id": "label",
+                      "name": "label",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "required",
+                      "cardinality": "one",
+                      "extensions": {}
+                    },
+                    {
+                      "id": "caption",
+                      "name": "caption",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "absent-allowed",
+                      "cardinality": "one",
+                      "extensions": {}
+                    }
+                  ]
+                }
+              ]
+            },
+            "identity": {
+              "module": "fixture",
+              "element": "item"
+            },
+            "path": "/modules/0/elements/0/keys",
+            "meaning": {
+              "state": "missing"
+            },
+            "provenance": "unverified"
+          },
+          "requiredCheckProducer": null,
+          "nativeBinding": null
+        },
+        {
+          "definition": {
+            "artifactSha256": "60d446310ba1bdebf36a1d066aadeb099336c7a551b3e563bd50ae938eeff085",
+            "path": "/modules/0/elements/1"
+          },
+          "producer": "inspectCoreNullability",
+          "originalResult": {
+            "operation": "inspect-core-nullability",
+            "version": "5.0.0",
+            "source": {
+              "umf": "0.7.0",
+              "id": "truss-weft-source-review-fixture",
+              "vocabularies": {},
+              "modules": [
+                {
+                  "id": "fixture",
+                  "namespace": "fixture",
+                  "elements": [
+                    {
+                      "id": "item",
+                      "name": "Item",
+                      "kind": "record",
+                      "members": [
+                        {
+                          "module": "fixture",
+                          "element": "label"
+                        },
+                        {
+                          "module": "fixture",
+                          "element": "caption"
+                        }
+                      ],
+                      "extensions": {}
+                    },
+                    {
+                      "id": "label",
+                      "name": "label",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "required",
+                      "cardinality": "one",
+                      "extensions": {}
+                    },
+                    {
+                      "id": "caption",
+                      "name": "caption",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "absent-allowed",
+                      "cardinality": "one",
+                      "extensions": {}
+                    }
+                  ]
+                }
+              ]
+            },
+            "identity": {
+              "module": "fixture",
+              "element": "label"
+            },
+            "path": "/modules/0/elements/1/nullability",
+            "meaning": {
+              "state": "known",
+              "nullability": "required"
+            },
+            "provenance": "unverified"
+          },
+          "requiredCheckProducer": null,
+          "nativeBinding": null
+        },
+        {
+          "definition": {
+            "artifactSha256": "60d446310ba1bdebf36a1d066aadeb099336c7a551b3e563bd50ae938eeff085",
+            "path": "/modules/0/elements/1"
+          },
+          "producer": "inspectCoreCardinality",
+          "originalResult": {
+            "operation": "inspect-core-cardinality",
+            "version": "4.0.0",
+            "source": {
+              "umf": "0.7.0",
+              "id": "truss-weft-source-review-fixture",
+              "vocabularies": {},
+              "modules": [
+                {
+                  "id": "fixture",
+                  "namespace": "fixture",
+                  "elements": [
+                    {
+                      "id": "item",
+                      "name": "Item",
+                      "kind": "record",
+                      "members": [
+                        {
+                          "module": "fixture",
+                          "element": "label"
+                        },
+                        {
+                          "module": "fixture",
+                          "element": "caption"
+                        }
+                      ],
+                      "extensions": {}
+                    },
+                    {
+                      "id": "label",
+                      "name": "label",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "required",
+                      "cardinality": "one",
+                      "extensions": {}
+                    },
+                    {
+                      "id": "caption",
+                      "name": "caption",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "absent-allowed",
+                      "cardinality": "one",
+                      "extensions": {}
+                    }
+                  ]
+                }
+              ]
+            },
+            "identity": {
+              "module": "fixture",
+              "element": "label"
+            },
+            "path": "/modules/0/elements/1/cardinality",
+            "meaning": {
+              "state": "known",
+              "cardinality": "one"
+            },
+            "provenance": "unverified"
+          },
+          "requiredCheckProducer": null,
+          "nativeBinding": null
+        },
+        {
+          "definition": {
+            "artifactSha256": "60d446310ba1bdebf36a1d066aadeb099336c7a551b3e563bd50ae938eeff085",
+            "path": "/modules/0/elements/1"
+          },
+          "producer": "inspectCoreFacets",
+          "originalResult": {
+            "operation": "inspect-core-facets",
+            "version": "3.0.0",
+            "source": {
+              "umf": "0.7.0",
+              "id": "truss-weft-source-review-fixture",
+              "vocabularies": {},
+              "modules": [
+                {
+                  "id": "fixture",
+                  "namespace": "fixture",
+                  "elements": [
+                    {
+                      "id": "item",
+                      "name": "Item",
+                      "kind": "record",
+                      "members": [
+                        {
+                          "module": "fixture",
+                          "element": "label"
+                        },
+                        {
+                          "module": "fixture",
+                          "element": "caption"
+                        }
+                      ],
+                      "extensions": {}
+                    },
+                    {
+                      "id": "label",
+                      "name": "label",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "required",
+                      "cardinality": "one",
+                      "extensions": {}
+                    },
+                    {
+                      "id": "caption",
+                      "name": "caption",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "absent-allowed",
+                      "cardinality": "one",
+                      "extensions": {}
+                    }
+                  ]
+                }
+              ]
+            },
+            "identity": {
+              "module": "fixture",
+              "element": "label"
+            },
+            "path": "/modules/0/elements/1/facets",
+            "meaning": {
+              "state": "missing"
+            },
+            "provenance": "unverified"
+          },
+          "requiredCheckProducer": null,
+          "nativeBinding": null
+        },
+        {
+          "definition": {
+            "artifactSha256": "60d446310ba1bdebf36a1d066aadeb099336c7a551b3e563bd50ae938eeff085",
+            "path": "/modules/0/elements/2"
+          },
+          "producer": "inspectCoreNullability",
+          "originalResult": {
+            "operation": "inspect-core-nullability",
+            "version": "5.0.0",
+            "source": {
+              "umf": "0.7.0",
+              "id": "truss-weft-source-review-fixture",
+              "vocabularies": {},
+              "modules": [
+                {
+                  "id": "fixture",
+                  "namespace": "fixture",
+                  "elements": [
+                    {
+                      "id": "item",
+                      "name": "Item",
+                      "kind": "record",
+                      "members": [
+                        {
+                          "module": "fixture",
+                          "element": "label"
+                        },
+                        {
+                          "module": "fixture",
+                          "element": "caption"
+                        }
+                      ],
+                      "extensions": {}
+                    },
+                    {
+                      "id": "label",
+                      "name": "label",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "required",
+                      "cardinality": "one",
+                      "extensions": {}
+                    },
+                    {
+                      "id": "caption",
+                      "name": "caption",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "absent-allowed",
+                      "cardinality": "one",
+                      "extensions": {}
+                    }
+                  ]
+                }
+              ]
+            },
+            "identity": {
+              "module": "fixture",
+              "element": "caption"
+            },
+            "path": "/modules/0/elements/2/nullability",
+            "meaning": {
+              "state": "known",
+              "nullability": "absent-allowed"
+            },
+            "provenance": "unverified"
+          },
+          "requiredCheckProducer": null,
+          "nativeBinding": null
+        },
+        {
+          "definition": {
+            "artifactSha256": "60d446310ba1bdebf36a1d066aadeb099336c7a551b3e563bd50ae938eeff085",
+            "path": "/modules/0/elements/2"
+          },
+          "producer": "inspectCoreCardinality",
+          "originalResult": {
+            "operation": "inspect-core-cardinality",
+            "version": "4.0.0",
+            "source": {
+              "umf": "0.7.0",
+              "id": "truss-weft-source-review-fixture",
+              "vocabularies": {},
+              "modules": [
+                {
+                  "id": "fixture",
+                  "namespace": "fixture",
+                  "elements": [
+                    {
+                      "id": "item",
+                      "name": "Item",
+                      "kind": "record",
+                      "members": [
+                        {
+                          "module": "fixture",
+                          "element": "label"
+                        },
+                        {
+                          "module": "fixture",
+                          "element": "caption"
+                        }
+                      ],
+                      "extensions": {}
+                    },
+                    {
+                      "id": "label",
+                      "name": "label",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "required",
+                      "cardinality": "one",
+                      "extensions": {}
+                    },
+                    {
+                      "id": "caption",
+                      "name": "caption",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "absent-allowed",
+                      "cardinality": "one",
+                      "extensions": {}
+                    }
+                  ]
+                }
+              ]
+            },
+            "identity": {
+              "module": "fixture",
+              "element": "caption"
+            },
+            "path": "/modules/0/elements/2/cardinality",
+            "meaning": {
+              "state": "known",
+              "cardinality": "one"
+            },
+            "provenance": "unverified"
+          },
+          "requiredCheckProducer": null,
+          "nativeBinding": null
+        },
+        {
+          "definition": {
+            "artifactSha256": "60d446310ba1bdebf36a1d066aadeb099336c7a551b3e563bd50ae938eeff085",
+            "path": "/modules/0/elements/2"
+          },
+          "producer": "inspectCoreFacets",
+          "originalResult": {
+            "operation": "inspect-core-facets",
+            "version": "3.0.0",
+            "source": {
+              "umf": "0.7.0",
+              "id": "truss-weft-source-review-fixture",
+              "vocabularies": {},
+              "modules": [
+                {
+                  "id": "fixture",
+                  "namespace": "fixture",
+                  "elements": [
+                    {
+                      "id": "item",
+                      "name": "Item",
+                      "kind": "record",
+                      "members": [
+                        {
+                          "module": "fixture",
+                          "element": "label"
+                        },
+                        {
+                          "module": "fixture",
+                          "element": "caption"
+                        }
+                      ],
+                      "extensions": {}
+                    },
+                    {
+                      "id": "label",
+                      "name": "label",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "required",
+                      "cardinality": "one",
+                      "extensions": {}
+                    },
+                    {
+                      "id": "caption",
+                      "name": "caption",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "absent-allowed",
+                      "cardinality": "one",
+                      "extensions": {}
+                    }
+                  ]
+                }
+              ]
+            },
+            "identity": {
+              "module": "fixture",
+              "element": "caption"
+            },
+            "path": "/modules/0/elements/2/facets",
+            "meaning": {
+              "state": "missing"
+            },
+            "provenance": "unverified"
+          },
+          "requiredCheckProducer": null,
+          "nativeBinding": null
+        }
+      ],
+      "uninterpretedDiagnostics": [],
+      "supportProfile": null,
+      "writableAcceptance": "unavailable_no_qualified_semantic_check_composition"
+    },
+    {
+      "identity": "schema-unknown.umf.json",
+      "originalArtifact": {
+        "identity": "schema-unknown.umf.json",
+        "bytesBase64": "eyJ1bWYiOiIwLjcuMCIsImlkIjoidHJ1c3Mtd2VmdC1zb3VyY2UtcmV2aWV3LWZpeHR1cmUiLCJ2b2NhYnVsYXJpZXMiOnt9LCJtb2R1bGVzIjpbeyJpZCI6ImZpeHR1cmUiLCJuYW1lc3BhY2UiOiJmaXh0dXJlIiwiZWxlbWVudHMiOlt7ImlkIjoiaXRlbSIsIm5hbWUiOiJJdGVtIiwia2luZCI6InJlY29yZCIsIm1lbWJlcnMiOlt7Im1vZHVsZSI6ImZpeHR1cmUiLCJlbGVtZW50IjoibGFiZWwifV0sImV4dGVuc2lvbnMiOnt9fSx7ImlkIjoibGFiZWwiLCJuYW1lIjoibGFiZWwiLCJraW5kIjoiZmllbGQiLCJzY2FsYXJUeXBlIjoic3RyaW5nIiwibnVsbGFiaWxpdHkiOiJyZXF1aXJlZCIsImNhcmRpbmFsaXR5Ijoib25lIiwiZXh0ZW5zaW9ucyI6e319XX1dLCJ4LWZ1dHVyZS1hc3NlcnRpb24iOnsibWVhbmluZyI6InJldGFpbmVkIHVudGlsIHN1cHBvcnRlZCJ9fQo=",
+        "sha256": "5221c59ad5c35bf25dda8b79e9de88b2ab096c003dc5bae74254a68b22c4d427"
+      },
+      "originalValidation": {
+        "valid": true,
+        "complete": false,
+        "diagnostics": [
+          {
+            "code": "EXPERIMENTAL_CORE_NULLABILITY",
+            "path": "/umf",
+            "message": "Nullability envelope is experimental; no native absence encoding or default execution is implied",
+            "severity": "warning"
+          },
+          {
+            "code": "EXPERIMENTAL_CORE_CARDINALITY",
+            "path": "/umf",
+            "message": "Cardinality envelope is experimental; native shape and item semantics require explicit bindings",
+            "severity": "warning"
+          },
+          {
+            "code": "EXPERIMENTAL_CORE_FACETS",
+            "path": "/umf",
+            "message": "Facet envelope is experimental; bounds do not establish native enforcement or value conversion",
+            "severity": "warning"
+          },
+          {
+            "code": "UNKNOWN_CORE_FIELD",
+            "path": "/x-future-assertion",
+            "message": "Field retained without interpretation",
+            "severity": "warning"
+          },
+          {
+            "code": "EXPERIMENTAL_CORE_KEYS",
+            "path": "/umf",
+            "message": "Candidate key profile; native uniqueness and author provenance are not inferred",
+            "severity": "warning"
+          },
+          {
+            "code": "EXPERIMENTAL_CORE_RELATIONSHIPS",
+            "path": "/umf",
+            "message": "Candidate authored relationship profile; native enforcement and storage are not inferred",
+            "severity": "warning"
+          }
+        ]
+      },
+      "entries": [
+        {
+          "definition": {
+            "artifactSha256": "5221c59ad5c35bf25dda8b79e9de88b2ab096c003dc5bae74254a68b22c4d427",
+            "path": "/modules/0"
+          },
+          "producer": "inspectCoreRelationships",
+          "originalResult": {
+            "operation": "inspect-core-relationships",
+            "version": "1.0.0",
+            "source": {
+              "umf": "0.7.0",
+              "id": "truss-weft-source-review-fixture",
+              "vocabularies": {},
+              "modules": [
+                {
+                  "id": "fixture",
+                  "namespace": "fixture",
+                  "elements": [
+                    {
+                      "id": "item",
+                      "name": "Item",
+                      "kind": "record",
+                      "members": [
+                        {
+                          "module": "fixture",
+                          "element": "label"
+                        }
+                      ],
+                      "extensions": {}
+                    },
+                    {
+                      "id": "label",
+                      "name": "label",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "required",
+                      "cardinality": "one",
+                      "extensions": {}
+                    }
+                  ]
+                }
+              ],
+              "x-future-assertion": {
+                "meaning": "retained until supported"
+              }
+            },
+            "identity": {
+              "module": "fixture"
+            },
+            "path": "/modules/0/relationships",
+            "meaning": {
+              "state": "missing"
+            },
+            "provenance": "unverified",
+            "diagnostics": [
+              {
+                "code": "EXPERIMENTAL_CORE_NULLABILITY",
+                "path": "/umf",
+                "message": "Nullability envelope is experimental; no native absence encoding or default execution is implied",
+                "severity": "warning"
+              },
+              {
+                "code": "EXPERIMENTAL_CORE_CARDINALITY",
+                "path": "/umf",
+                "message": "Cardinality envelope is experimental; native shape and item semantics require explicit bindings",
+                "severity": "warning"
+              },
+              {
+                "code": "EXPERIMENTAL_CORE_FACETS",
+                "path": "/umf",
+                "message": "Facet envelope is experimental; bounds do not establish native enforcement or value conversion",
+                "severity": "warning"
+              },
+              {
+                "code": "UNKNOWN_CORE_FIELD",
+                "path": "/x-future-assertion",
+                "message": "Field retained without interpretation",
+                "severity": "warning"
+              },
+              {
+                "code": "EXPERIMENTAL_CORE_KEYS",
+                "path": "/umf",
+                "message": "Candidate key profile; native uniqueness and author provenance are not inferred",
+                "severity": "warning"
+              },
+              {
+                "code": "EXPERIMENTAL_CORE_RELATIONSHIPS",
+                "path": "/umf",
+                "message": "Candidate authored relationship profile; native enforcement and storage are not inferred",
+                "severity": "warning"
+              }
+            ],
+            "residuals": []
+          },
+          "requiredCheckProducer": null,
+          "nativeBinding": null
+        },
+        {
+          "definition": {
+            "artifactSha256": "5221c59ad5c35bf25dda8b79e9de88b2ab096c003dc5bae74254a68b22c4d427",
+            "path": "/modules/0/elements/0"
+          },
+          "producer": "inspectCoreKeys",
+          "originalResult": {
+            "operation": "inspect-core-keys",
+            "version": "2.0.0",
+            "source": {
+              "umf": "0.7.0",
+              "id": "truss-weft-source-review-fixture",
+              "vocabularies": {},
+              "modules": [
+                {
+                  "id": "fixture",
+                  "namespace": "fixture",
+                  "elements": [
+                    {
+                      "id": "item",
+                      "name": "Item",
+                      "kind": "record",
+                      "members": [
+                        {
+                          "module": "fixture",
+                          "element": "label"
+                        }
+                      ],
+                      "extensions": {}
+                    },
+                    {
+                      "id": "label",
+                      "name": "label",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "required",
+                      "cardinality": "one",
+                      "extensions": {}
+                    }
+                  ]
+                }
+              ],
+              "x-future-assertion": {
+                "meaning": "retained until supported"
+              }
+            },
+            "identity": {
+              "module": "fixture",
+              "element": "item"
+            },
+            "path": "/modules/0/elements/0/keys",
+            "meaning": {
+              "state": "missing"
+            },
+            "provenance": "unverified"
+          },
+          "requiredCheckProducer": null,
+          "nativeBinding": null
+        },
+        {
+          "definition": {
+            "artifactSha256": "5221c59ad5c35bf25dda8b79e9de88b2ab096c003dc5bae74254a68b22c4d427",
+            "path": "/modules/0/elements/1"
+          },
+          "producer": "inspectCoreNullability",
+          "originalResult": {
+            "operation": "inspect-core-nullability",
+            "version": "5.0.0",
+            "source": {
+              "umf": "0.7.0",
+              "id": "truss-weft-source-review-fixture",
+              "vocabularies": {},
+              "modules": [
+                {
+                  "id": "fixture",
+                  "namespace": "fixture",
+                  "elements": [
+                    {
+                      "id": "item",
+                      "name": "Item",
+                      "kind": "record",
+                      "members": [
+                        {
+                          "module": "fixture",
+                          "element": "label"
+                        }
+                      ],
+                      "extensions": {}
+                    },
+                    {
+                      "id": "label",
+                      "name": "label",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "required",
+                      "cardinality": "one",
+                      "extensions": {}
+                    }
+                  ]
+                }
+              ],
+              "x-future-assertion": {
+                "meaning": "retained until supported"
+              }
+            },
+            "identity": {
+              "module": "fixture",
+              "element": "label"
+            },
+            "path": "/modules/0/elements/1/nullability",
+            "meaning": {
+              "state": "known",
+              "nullability": "required"
+            },
+            "provenance": "unverified"
+          },
+          "requiredCheckProducer": null,
+          "nativeBinding": null
+        },
+        {
+          "definition": {
+            "artifactSha256": "5221c59ad5c35bf25dda8b79e9de88b2ab096c003dc5bae74254a68b22c4d427",
+            "path": "/modules/0/elements/1"
+          },
+          "producer": "inspectCoreCardinality",
+          "originalResult": {
+            "operation": "inspect-core-cardinality",
+            "version": "4.0.0",
+            "source": {
+              "umf": "0.7.0",
+              "id": "truss-weft-source-review-fixture",
+              "vocabularies": {},
+              "modules": [
+                {
+                  "id": "fixture",
+                  "namespace": "fixture",
+                  "elements": [
+                    {
+                      "id": "item",
+                      "name": "Item",
+                      "kind": "record",
+                      "members": [
+                        {
+                          "module": "fixture",
+                          "element": "label"
+                        }
+                      ],
+                      "extensions": {}
+                    },
+                    {
+                      "id": "label",
+                      "name": "label",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "required",
+                      "cardinality": "one",
+                      "extensions": {}
+                    }
+                  ]
+                }
+              ],
+              "x-future-assertion": {
+                "meaning": "retained until supported"
+              }
+            },
+            "identity": {
+              "module": "fixture",
+              "element": "label"
+            },
+            "path": "/modules/0/elements/1/cardinality",
+            "meaning": {
+              "state": "known",
+              "cardinality": "one"
+            },
+            "provenance": "unverified"
+          },
+          "requiredCheckProducer": null,
+          "nativeBinding": null
+        },
+        {
+          "definition": {
+            "artifactSha256": "5221c59ad5c35bf25dda8b79e9de88b2ab096c003dc5bae74254a68b22c4d427",
+            "path": "/modules/0/elements/1"
+          },
+          "producer": "inspectCoreFacets",
+          "originalResult": {
+            "operation": "inspect-core-facets",
+            "version": "3.0.0",
+            "source": {
+              "umf": "0.7.0",
+              "id": "truss-weft-source-review-fixture",
+              "vocabularies": {},
+              "modules": [
+                {
+                  "id": "fixture",
+                  "namespace": "fixture",
+                  "elements": [
+                    {
+                      "id": "item",
+                      "name": "Item",
+                      "kind": "record",
+                      "members": [
+                        {
+                          "module": "fixture",
+                          "element": "label"
+                        }
+                      ],
+                      "extensions": {}
+                    },
+                    {
+                      "id": "label",
+                      "name": "label",
+                      "kind": "field",
+                      "scalarType": "string",
+                      "nullability": "required",
+                      "cardinality": "one",
+                      "extensions": {}
+                    }
+                  ]
+                }
+              ],
+              "x-future-assertion": {
+                "meaning": "retained until supported"
+              }
+            },
+            "identity": {
+              "module": "fixture",
+              "element": "label"
+            },
+            "path": "/modules/0/elements/1/facets",
+            "meaning": {
+              "state": "missing"
+            },
+            "provenance": "unverified"
+          },
+          "requiredCheckProducer": null,
+          "nativeBinding": null
+        }
+      ],
+      "uninterpretedDiagnostics": [
+        {
+          "code": "UNKNOWN_CORE_FIELD",
+          "path": "/x-future-assertion",
+          "message": "Field retained without interpretation",
+          "severity": "warning"
+        }
+      ],
+      "supportProfile": null,
+      "writableAcceptance": "unavailable_no_qualified_semantic_check_composition"
+    }
+  ],
+  "qualification": "Actual UMF inspectors enumerate original declaration meanings with exact source artifact/pointer and full original operation results. Inspection is not a complete semantic value check or original author/native provenance. No required-check producer or native binding is fabricated; support profile remains unselected. Unknown scopes and original diagnostics remain preserved. This inventory is a prerequisite, not writable catalog acceptance."
+}

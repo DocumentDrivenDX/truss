@@ -1,6 +1,6 @@
 {
   "umfSourceRevision": "fac1497a5ac5cb39bbaaac34eb0da8dc8b208c69",
-  "producerBundleSha256": "209c4074042f32c296d9b672c782ca0e39dc9747563e22281072aa5385eb5568",
+  "producerBundleSha256": "d935446542e88784c8f0ecbc4fb397cf28eb10768ca2f671e0da1f88ec84e220",
   "loader": "bun/1.4.2",
   "results": [
     {
