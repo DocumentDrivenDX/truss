@@ -2248,3 +2248,9 @@ Owner-binding API checkpoint: serializeStorageBinding now retains the supplied c
 
 
 Native Weft iteration follow-up: four actual scenarios now cover COUNT, duplicate-preserving exact join SUM, empty global SUM and corrupt-decimal refusal before user SQL/publication. Sparse shared integrity parameters exposed PostgreSQL42P18 with inferred types; the component uses explicit text PREPARE without changing emitted SQL/vector. Extended Bind/transport qualification remains open. The [iteration feedback](../02-design/contracts/weft-integration-iteration-feedback.proposal.md) preserves that host gap and the actual unsupported filtered-SUM compiler case instead of hiding it with a fallback. Nine compiler/host unit tests remain separate from native/profile adoption.
+
+
+CONTRACT-008 now reconciles the actual generated-column installation defect with a native-derived checked identity digest. The proposed archive insertion component computes the digest from original input, without adding a caller digest field or weakening exactness/collision/full-inventory obligations. Historical metadata0.1 remains retained and noninstallable unchanged; populated conversion, original authority/account and atomic marker membership need their independent planned/native evidence. This is the required writer handoff accompanying model0.13, not a complete installer.
+
+
+The exact proposed archive statement now executes in fresh PostgreSQL17.9. Independent binary/Unicode digest expectations match; explicit rollback and missing deferred marker at commit both leave zero rows. Retained native component receipt does not qualify successful marker production, permissions/exclusion/resource or populated conversion. This closes the repaired-column writer statement ambiguity without claiming a complete installation path.
