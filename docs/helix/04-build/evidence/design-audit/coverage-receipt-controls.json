@@ -1,0 +1,20 @@
+{
+  "scope": "Exact allocation receipt substitution controls only; no semantic or runtime qualification",
+  "results": [
+    {
+      "control": "original",
+      "passed": true,
+      "returncode": 0
+    },
+    {
+      "control": "artifact pin substitution",
+      "passed": true,
+      "returncode": 1
+    },
+    {
+      "control": "expected scope pin substitution",
+      "passed": true,
+      "returncode": 1
+    }
+  ]
+}

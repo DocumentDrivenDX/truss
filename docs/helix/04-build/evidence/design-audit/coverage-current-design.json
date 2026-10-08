@@ -1,5 +1,6 @@
 {
   "scope": "artifact existence, criterion references and primary allocation structure; no semantic/runtime qualification",
+  "expectedScopeSha256": "564c0011404b09ec0eb04deffa30f43bc73a5d067fe9531ea4e8b4f9482167aa",
   "stories": 45,
   "criteria": 167,
   "pairsWithAllReferences": 45,
@@ -1017,20 +1018,20 @@
     }
   ],
   "artifactSha256": {
-    "02-design/technical-designs/TD-001-accept-a-umf-revision-as-a-whole.md": "dfd0030d419760b0ec964d9931913b76788dc7550e56834d44a5cd4ae13594a2",
-    "03-test/test-plans/STP-001-accept-a-umf-revision-as-a-whole.md": "57b702a2be1dd88173ddf2d008f4d9f43f00cc5498a7393dd2a56f39e3d93962",
+    "02-design/technical-designs/TD-001-accept-a-umf-revision-as-a-whole.md": "269c8c78868218d01bef902f4747cb745880fbb34fd96c378ece72559819bcef",
+    "03-test/test-plans/STP-001-accept-a-umf-revision-as-a-whole.md": "5858b2708a654b5b756514c886c5ae4e66ea5ad45a86153d0da043e771b44a28",
     "02-design/technical-designs/TD-002-import-documents-that-depend-on-each-other.md": "1d93cda1f65f88b51851a9d4c32cd1b4bff0758f4556a78708dcd572fe09647d",
     "03-test/test-plans/STP-002-import-documents-that-depend-on-each-other.md": "2311d9c7f342ae12aa1bb3868bd593944c0ce420db6562ae448ae4f46f9b38d2",
     "02-design/technical-designs/TD-003-decide-what-happens-to-an-unknown-entity-type.md": "37ee82d66c860c439319968d39729cc174136f02f676e847a1a1caabff21c7b6",
     "03-test/test-plans/STP-003-decide-what-happens-to-an-unknown-entity-type.md": "a979ebb116d2090d82b5bc080ad1782c7dc4a6654440a809dff36b171d145b30",
-    "02-design/technical-designs/TD-004-keep-identifiers-stable-across-revisions.md": "71abd00b101400dec1d78329213ef150a1cad7975dcbff746a734d35e6d27d99",
+    "02-design/technical-designs/TD-004-keep-identifiers-stable-across-revisions.md": "bb4fd6cfafcfb4b680d96ac7f5128307f6af452bfdbdf01e95eb48990d520e56",
     "03-test/test-plans/STP-004-keep-identifiers-stable-across-revisions.md": "bcf3c6065e7e8ed730e95e03dcb97ff9dbb75d4d489ca61af5e8ed9fc3b1b6c1",
     "02-design/technical-designs/TD-005-see-every-violator-before-a-tightening-is-accepted.md": "0dd0079760ab9ac29d433da0696485ea62e86071cefd3e5836ccdb0306185b69",
     "03-test/test-plans/STP-005-see-every-violator-before-a-tightening-is-accepted.md": "b16b9a214471012259e53a579bcc9e37bd5f5c857e91648bb35f7bfbfdbb44f5",
     "02-design/technical-designs/TD-006-add-a-type-without-ddl.md": "0e44cfd39f4306b5986e4a5254458c86d8b15b0bde1dfbd031288f8830d71065",
     "03-test/test-plans/STP-006-add-a-type-without-ddl.md": "edd9b1b969fca00571080e7945315baa2e913509155d0a3c642680b85ed13ca4",
     "02-design/technical-designs/TD-007-store-and-read-objects-and-edges-exactly.md": "f23895f047c9a2346b609d9873ef5aadaee063219c99561cd6fc6bf8a468439e",
-    "03-test/test-plans/STP-007-store-and-read-objects-and-edges-exactly.md": "cddbe47061ca8f586454d1aa2348139d9f25d5b200b62975757b39fd757ebad8",
+    "03-test/test-plans/STP-007-store-and-read-objects-and-edges-exactly.md": "2cd89f80f9204ebb1c88107a87f6f564facb4164e55d2c1605a4705c4831e037",
     "02-design/technical-designs/TD-008-keep-what-the-schema-does-not-define.md": "11d0c71fcc8b08f52c57d2f50a679aa4e3d9ac3f8a371de00a2ea16f2854261f",
     "03-test/test-plans/STP-008-keep-what-the-schema-does-not-define.md": "d5821646c96140848c481c5d2b61392114d212aaebc2fee14450e89440b2f4bf",
     "02-design/technical-designs/TD-009-find-an-object-by-its-key.md": "25ed3ec38b49bd477065d3786ee529f092ddc8b7661e3433fe99a7784890a2d7",
@@ -1076,7 +1077,7 @@
     "02-design/technical-designs/TD-029-declare-the-layout-version-and-check-the-ddl-on-every-version.md": "6fca2bba36afaa3f256b9b5749c4131bbb3e4f34de28cc165ef62881d590a90e",
     "03-test/test-plans/STP-029-declare-the-layout-version-and-check-the-ddl-on-every-version.md": "a43b5fe40adb5dcf850fd1f422d2c7cb110813d6245771bdc403ac0bcfd6d447",
     "02-design/technical-designs/TD-030-extend-the-layout-from-a-host.md": "3f4f1edc5a86425a13bb669e52bc3ee4d8942ad796d7b927ea7079858bee414d",
-    "03-test/test-plans/STP-030-extend-the-layout-from-a-host.md": "a1286bff7a23758390fabe1cfec32e51cb12219fb6d7f18143f0d8912ce13cc5",
+    "03-test/test-plans/STP-030-extend-the-layout-from-a-host.md": "e75eae3c4524456a5e20d6d6f921e58432b3f0ab103ff98b0a951c26e97e5638",
     "02-design/technical-designs/TD-031-govern-writes-by-role-grants.md": "dd4e1fe3a47a43d808a30b3f548e90e5e460d186adf3c277463777baeb5ce41f",
     "03-test/test-plans/STP-031-govern-writes-by-role-grants.md": "0e706ffc933411a0e4e3a652d770aa8a8f443cff1bc8538fc0417d84a755eb37",
     "02-design/technical-designs/TD-032-work-behind-a-transaction-mode-pooler.md": "392c6085425bbebb88a8782d0dce6f2f474daccdc1963a7a82e922f45a31ff0c",
@@ -1094,7 +1095,7 @@
     "02-design/technical-designs/TD-038-link-modules-and-see-the-link-only-with-both.md": "517cdd18365d3c17bfc66ae2fd3bde797c5027ab232f4f024d6d1f1df93d99e7",
     "03-test/test-plans/STP-038-link-modules-and-see-the-link-only-with-both.md": "3774a2d2751356b55b02921d5c41c9b35cacbca6642fdc9e160fedc13596e326",
     "02-design/technical-designs/TD-039-read-umf-the-same-way-as-the-reference.md": "f51034b3ac86929ba3dfa3cf07b280de7b1bfa19f740f3dc9bf62ac5c9ddbde0",
-    "03-test/test-plans/STP-039-read-umf-the-same-way-as-the-reference.md": "8ee2b7ab9760c293586466ed0fc29b6a86cd545562e4330d13794a33071fbe2a",
+    "03-test/test-plans/STP-039-read-umf-the-same-way-as-the-reference.md": "ad345bba10c72324d4c74bf336acf621cf74a99a3152db12b5f269fb517e2b04",
     "02-design/technical-designs/TD-040-apply-operations-as-one-atomic-group.md": "114a5717da520042602d78be26591f1ef2e67f0a2b5eca9b249f5f11e442315e",
     "03-test/test-plans/STP-040-apply-operations-as-one-atomic-group.md": "31ab6034b193753be070cc0678e2f3f6592542ee7bf06d485ef50b2ee2ebf6bc",
     "02-design/technical-designs/TD-041-publish-the-journal-without-losing-or-reordering-a-change.md": "f514a4c26c62ceba08c880bdc74d55758737436a31ca86d774d8ea96f3cedd27",
@@ -1106,7 +1107,7 @@
     "02-design/technical-designs/TD-044-run-a-change-in-a-transaction-and-roll-it-back.md": "81d6a4421e2c824f1161a4912afbd758e6824031f37f0469ef4f63f713714f8a",
     "03-test/test-plans/STP-044-run-a-change-in-a-transaction-and-roll-it-back.md": "6ee64b306a1692ab05e00d25b40b2ea75957e8681bfbcb6ae123a02d140b9423",
     "02-design/technical-designs/TD-045-bootstrap-the-internal-layout-from-umf.md": "ca24959bde1ba9c23f15f856f2a61c882ac37d8377d4b73905ce5a4f0f859869",
-    "03-test/test-plans/STP-045-bootstrap-the-internal-layout-from-umf.md": "41319f7d66828ffe067337a445a721f486b34c27d5ea73eba2f117c73bfe7801"
+    "03-test/test-plans/STP-045-bootstrap-the-internal-layout-from-umf.md": "da5581103389cadd09491baddc5cd0e8523bebfc3743f15bd5e1573676af4305"
   },
   "storySha256": {
     "01-frame/user-stories/US-001-accept-a-umf-revision-as-a-whole.md": "faa9173cc8ab9cb8c0945c2492b207ffc8ee6953cf5efef16a821a71a7a35b12",
@@ -1154,5 +1155,8 @@
     "01-frame/user-stories/US-043-make-a-group-safe-to-repeat.md": "9a9e32922205511110359246de13070caf695ad26f944a3b5aaa689b2f35b98f",
     "01-frame/user-stories/US-044-run-a-change-in-a-transaction-and-roll-it-back.md": "d4b77f4b255eb5d99852e6507da40b14b2de40b6f6748a64e3a09711e53d66a2",
     "01-frame/user-stories/US-045-bootstrap-the-internal-layout-from-umf.md": "7c766bfb28b6159dff9d6b8b237a8018d0af69aaf7a7e25e38129158e6209053"
-  }
+  },
+  "producerSha256": "3c19b4b417c495ac19b98304d13ff995e3043226e7e7706acf7f25cc01cec634",
+  "scannerSha256": "e128b88779e96499bd44a2e769255aedb22fc15325b0ed9669c5feb3cc88359d",
+  "expectationPath": "04-build/evidence/design-audit/expected-design-scope.json"
 }
