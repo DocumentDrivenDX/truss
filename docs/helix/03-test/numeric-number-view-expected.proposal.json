@@ -349,5 +349,39 @@
     "packed Chromium and selected server runtime parity"
   ],
   "execution": "not_run",
-  "boundaryOracleMethod": "Exact integer arithmetic constructs 2^-n as 5^n / 10^n and maximum finite as (2^53-1)*2^971. No converter or floating-point formatter supplies expected outcomes. Half the minimum subnormal is nonzero and cannot be represented; maximum finite plus one differs from the rounded finite candidate."
+  "boundaryOracleMethod": "Exact integer arithmetic constructs 2^-n as 5^n / 10^n and maximum finite as (2^53-1)*2^971. No converter or floating-point formatter supplies expected outcomes. Half the minimum subnormal is nonzero and cannot be represented; maximum finite plus one differs from the rounded finite candidate.",
+  "independentBinaryStageWitnesses": [
+    {
+      "bitsHex": "0000000000000000",
+      "expected": "positive-zero"
+    },
+    {
+      "bitsHex": "8000000000000000",
+      "expected": "negative-zero"
+    },
+    {
+      "bitsHex": "3fe0000000000000",
+      "expected": "2^-1"
+    },
+    {
+      "bitsHex": "0000000000000001",
+      "expected": "2^-1074"
+    },
+    {
+      "bitsHex": "0010000000000000",
+      "expected": "2^-1022"
+    },
+    {
+      "bitsHex": "7fefffffffffffff",
+      "expected": "(2^53-1)*2^971"
+    },
+    {
+      "bitsHex": "7ff0000000000000",
+      "expected": "nonfinite_number"
+    },
+    {
+      "bitsHex": "7ff8000000000000",
+      "expected": "nonfinite_number"
+    }
+  ]
 }
