@@ -76,3 +76,12 @@ PD-01/05 compares the selected runtime/type export inventory with these governin
 
 
 Core owns the selected draft ExactIntegerToken, ExactDecimalToken, ExactNumericToken, NumericInput, NumericReadValue, LosslessNumericNumberView and NumericInputOrigin declarations from ADR-006. Their emitted declarations have no PostgreSQL/executor/driver dependency. Preserve the UMF-compatible wrapper fields and exact-token read default; constructor/admission implementation still reuses pinned UMF semantics and the selected bounded domain algorithm. These are type exports, not new runtime functions or qualified numeric support.
+
+
+## Selected draft core data entry
+
+The [core data declaration entry](contracts/bindings/truss-core-data-v0.1.d.ts) explicitly exports foundational profile/artifact/canonical-tree, exact value/presence/identity, numeric convenience carrier, ordered group input/reference and exact group result types from their canonical owning declarations. All exports are type-only; it exposes no executor/transaction/savepoint handles, host recovery service or runtime factory. Do not replace this explicit list with export-star over every contract file, which could leak protocol/host responsibilities or silently add exports when a draft changes.
+
+This is the selected initial pure-data export entry for B-004/B-014, with no published package name or runtime support claim. Emit its declaration closure through the public core package; PostgreSQL/tooling consumers use those canonical data types instead of copying them. Execution nominal brands remain owned by the PostgreSQL entry. Additional core callable/domain APIs still require explicit design and independent admission evidence; a data barrel does not supply numeric conversion or catalog planning.
+
+The [compile-only consumer](contracts/bindings/truss-core-data-v0.1.typecheck.ts) resolves the selected data exports and refuses importing Executor/TransactionHandle through core. The full existing declaration witness set compiles together. This proves declaration membership/consistency only; PD-01/02/05 must independently verify packed runtime/declaration closures and actual Chromium imports once implementation exists.

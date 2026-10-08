@@ -74,6 +74,8 @@ CH-04/B-012 retains recursive signed/decimal native support as an explicit remai
 
 ADR-006 now selects reference signed-zero behavior: detect number -0 before rational conversion, preserve admitted exact token spelling and return negative zero in explicit sign-preserving lossless views. NAPI-09 covers it independently from mathematical/key zero equality. Exact field/facet/storage profile validation still applies; implementation does not wait on another signed-zero choice or a new UMF constructor.
 
+B-004/B-014 now have an explicit [core data type entry](../02-design/contracts/bindings/truss-core-data-v0.1.d.ts) and compile-only consumer witness. Emit the canonical foundational/numeric/group data declarations without adding PostgreSQL host/transaction types or runtime factories to core. Packed/runtime/browser closure remains PD-01/02/05 work; additional pure callable API design remains separate.
+
 ### Product-decision application boundaries
 
 Same-qualified-identity reactivation is selected and must govern acceptance/lifecycle design; terminal retirement is historical comparison material. The selected two-property-delta plus metadata-witness rule governs event count without adopting every complete-history profile. Required managed extensions must ship on the selected RDS PostgreSQL, Aurora PostgreSQL and Lakebase profiles; a custom helper cannot become a deployment assumption through source composition.
