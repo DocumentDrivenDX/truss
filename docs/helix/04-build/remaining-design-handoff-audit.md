@@ -69,3 +69,6 @@ The human explicitly authorized implementing Weft in Truss. Main checkout now co
 
 
 Public capability caller closure is now enumerated in the [protected access composition](../02-design/contracts/reference-protected-access-composition.proposal.md#public-capability-caller-closure), including all eight assembly families, traversal lifecycle, explicit readiness/disposal and separate administrative callers. PAC-01–05 independently test effective/private/transitive entry and disclosure boundaries. Exact tooling method/body and native inventory remain required; the sixteen-selector source worklist is still not a complete installed closure. No standalone typed view or raw store access is implicitly advertised by this design.
+
+
+The administrative method matrix in the protected access composition now identifies bootstrap/migration, physical optimization/job, retention, receipt protection/expiry, feed administration/registration/workers/seed lifecycle, separate feed0.2/downstream and conformance caller boundaries. PAC-06 adds per-method administrator/ordinary/stale/foreign custody controls. Remaining exact method-to-native-body identity and effective transitive privileges are implementation inventory, not unspecified caller classes. Keep versioned subinterface selections explicit.
