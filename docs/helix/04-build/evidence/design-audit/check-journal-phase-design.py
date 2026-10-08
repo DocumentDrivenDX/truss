@@ -8,6 +8,39 @@ ROOT = Path(__file__).resolve().parents[5]
 PATH = 'docs/helix/02-design/contracts/reference-journal-phase-design-v0.1.proposal.json'
 original = json.loads((ROOT / PATH).read_text())
 
+def schema_closure(routines):
+    registry = {}
+    for path in (ROOT / 'docs/helix/02-design/contracts').rglob('*.schema.json'):
+        body = json.loads(path.read_text())
+        if '$id' in body:
+            if body['$id'] in registry:
+                raise ValueError('duplicate schema identity')
+            registry[body['$id']] = (path, body)
+    visited = set()
+    def visit(identity):
+        require(identity in registry, 'unresolved schema dependency')
+        if identity in visited:
+            return
+        visited.add(identity)
+        walk(registry[identity][1])
+    def walk(value):
+        if isinstance(value, dict):
+            if '$ref' in value:
+                identity = value['$ref'].split('#')[0]
+                if identity:
+                    visit(identity)
+            for child in value.values():
+                walk(child)
+        elif isinstance(value, list):
+            for child in value:
+                walk(child)
+    for routine in routines:
+        visit(routine['phaseBodySchema']['schemaId'])
+    return [{'schemaId': identity,
+             'path': str(registry[identity][0].relative_to(ROOT / 'docs/helix')),
+             'sha256': hashlib.sha256(registry[identity][0].read_bytes()).hexdigest()}
+            for identity in sorted(visited)]
+
 def require(condition, message):
     if not condition:
         raise ValueError(message)
@@ -56,6 +89,8 @@ def validate(document):
             require(routine[field] is None, 'unresolved binding replaced: ' + field)
     require(document['ownerForbiddenResponsibilities'] == ['parent readiness/sealing',
             'canonical graph/catalog/report mutation', 'stage deletion', 'sequence reset'], 'owner separation')
+    require(document.get('phaseSchemaDependencies') == schema_closure(document['routines']),
+            'complete original recursive phase schema dependencies')
 
 validate(original)
 controls = []
@@ -71,6 +106,8 @@ for label, mutate in [
     ('swapped phase schema', lambda d: d['routines'][0].update(phaseBodySchema=d['routines'][1]['phaseBodySchema'])),
     ('stale phase schema bytes', lambda d: d['routines'][2]['phaseBodySchema'].update(sha256='0' * 64)),
     ('wrong phase byte codec', lambda d: d['routines'][3]['phaseBodySchema'].update(byteEncodingProfile='event-codec')),
+    ('missing recursive dependency', lambda d: d['phaseSchemaDependencies'].pop()),
+    ('substituted recursive dependency', lambda d: d['phaseSchemaDependencies'][0].update(sha256='0' * 64)),
 ]:
     damaged = copy.deepcopy(original)
     mutate(damaged)
@@ -84,4 +121,4 @@ receipt = {'scope': __doc__, 'producerSha256': hashlib.sha256(Path(__file__).rea
            'manifestSha256': hashlib.sha256((ROOT / PATH).read_bytes()).hexdigest(),
            'originalAdmitted': True, 'controls': controls, 'nativeQualified': False}
 (ROOT / 'docs/helix/04-build/evidence/design-audit/journal-phase-design-controls.json').write_text(json.dumps(receipt, indent=2) + '\n')
-print('Original design admitted; eleven damaged design controls refused.')
+print('Original design admitted; thirteen damaged design controls refused.')

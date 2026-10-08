@@ -1,7 +1,7 @@
 {
   "scope": "Selected source design admission only; no body, native privilege or installer proof.",
-  "producerSha256": "a792c4488b2d78d252efc6ed5099c4c0b9149de09dc2a9b1f960d7e1bb946bc2",
-  "manifestSha256": "d2837d5c9aa978f047443f2927d4f60cb9ff25a4cedbf7a540cae85e0dd49f13",
+  "producerSha256": "5302b6498077d1cc53d632b19b3b305cc04a097d71c52a8be066e9070c26c094",
+  "manifestSha256": "d6b02e2ac38613d3d47fcb6e08316c065a67b05fb70204c47836cca3dda52720",
   "originalAdmitted": true,
   "controls": [
     {
@@ -58,6 +58,16 @@
       "case": "wrong phase byte codec",
       "refused": true,
       "reason": "original phase schema and byte codec correspondence"
+    },
+    {
+      "case": "missing recursive dependency",
+      "refused": true,
+      "reason": "complete original recursive phase schema dependencies"
+    },
+    {
+      "case": "substituted recursive dependency",
+      "refused": true,
+      "reason": "complete original recursive phase schema dependencies"
     }
   ],
   "nativeQualified": false

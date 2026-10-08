@@ -173,5 +173,67 @@
     "sequence reset"
   ],
   "cleanup": "Separate administrative path; cannot invoke phase production as repair. Exact native role and complete privileges remain unresolved.",
-  "acceptance": "STP-018 JP-01\u201304, JA-01\u201303 and JS-01\u201304 plus actual installed-definition/dependency/privilege parity; source manifest is insufficient."
+  "acceptance": "STP-018 JP-01\u201304, JA-01\u201303 and JS-01\u201304 plus actual installed-definition/dependency/privilege parity; source manifest is insufficient.",
+  "phaseSchemaDependencies": [
+    {
+      "schemaId": "urn:truss:acceptance-input:0.1.0",
+      "path": "02-design/contracts/acceptance-input-v0.1.schema.json",
+      "sha256": "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd"
+    },
+    {
+      "schemaId": "urn:truss:draft:exact-value:0.1.0",
+      "path": "02-design/contracts/exact-value-v0.1.schema.json",
+      "sha256": "0c804796bfbf68339c299f0c55d24db58fcfcc929bffe2d5ffaf4a2f27e24880"
+    },
+    {
+      "schemaId": "urn:truss:draft:history-record:0.1.0",
+      "path": "02-design/contracts/history-record-v0.1.schema.json",
+      "sha256": "c35c1258028cc4c8c95dcd16b561caed4f2a347c086f72ebfc7bfc4f2dfcf2fe"
+    },
+    {
+      "schemaId": "urn:truss:draft:row-operation-context:0.1.0",
+      "path": "02-design/contracts/truss-row-operation-context-v0.1.proposal.schema.json",
+      "sha256": "e5b906ada259af29afe28f6cf29b7f5b980ec84af6eaf6a96ab6c879e0b6be50"
+    },
+    {
+      "schemaId": "urn:truss:proposal:history-event:0.2.0",
+      "path": "02-design/contracts/history-event-v0.2.proposal.schema.json",
+      "sha256": "714923be0f86bd3508a097cabfee63a180e03b19651ebbfa38844bb3e637b425"
+    },
+    {
+      "schemaId": "urn:truss:proposal:history-retain-payload:0.1.0",
+      "path": "02-design/contracts/history-retain-payload-v0.1.proposal.schema.json",
+      "sha256": "fc08e07a4b09636ac234737be9bb2cf3a9a3c26120baad612176574c17659605"
+    },
+    {
+      "schemaId": "urn:truss:proposal:journal-exact-bytes:0.2.0",
+      "path": "02-design/contracts/journal-exact-bytes-v0.2.proposal.schema.json",
+      "sha256": "68d0a5bfae1305320a8b63542fdbcc80ba5c129b122f0d691dadbad44c902d5f"
+    },
+    {
+      "schemaId": "urn:truss:proposal:journal-final-preparation:0.2.0",
+      "path": "02-design/contracts/journal-final-preparation-v0.2.proposal.schema.json",
+      "sha256": "583ab54efb3370f70743c5127016f2b71cb0464f19ab1d807eb610be73e7a9da"
+    },
+    {
+      "schemaId": "urn:truss:proposal:journal-ordered-transition:0.2.0",
+      "path": "02-design/contracts/journal-ordered-transition-v0.2.proposal.schema.json",
+      "sha256": "cde879b15cfefb282da03d8d253b39ff506e1c2b11ca1e7834a9d51ad34c4cd2"
+    },
+    {
+      "schemaId": "urn:truss:proposal:journal-pending-publication:0.2.0",
+      "path": "02-design/contracts/journal-pending-publication-v0.2.proposal.schema.json",
+      "sha256": "2efecefbfaa47b3e824c88c3546cee1d7a4e0dfc780f1ab06a3021ff95f2cc97"
+    },
+    {
+      "schemaId": "urn:truss:proposal:journal-reserved-positions:0.2.0",
+      "path": "02-design/contracts/journal-reserved-positions-v0.2.proposal.schema.json",
+      "sha256": "5f2dfe1204c26ca462edee3f03d5034e550369133818ad071527aa2629390b31"
+    },
+    {
+      "schemaId": "urn:truss:proposal:journal-start-capture:0.2.0",
+      "path": "02-design/contracts/journal-start-capture-v0.2.proposal.schema.json",
+      "sha256": "c3801f87fc1e07b76cd49fa33ffa0d10de58c7dff0febf454d1c4f8c7621dde9"
+    }
+  ]
 }
