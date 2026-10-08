@@ -72,6 +72,8 @@ These close specific interface/procedure choices inside the existing CH work; na
 | B-005/013 / CH-02 actor custody | [Original actor handoff](../02-design/contracts/reference-actor-custody.proposal.md) | Actual original observation boundary, role/session/identity correspondence and protected transitive command/settings paths; no request role or helper-owner substitution |
 | B-012 / CH-04 owner compiler | Weft main 1ed1c24 accepts B-006, recorded in the [merge review](evidence/design-audit/weft-b006-merge-source-review.json) | Truss layout/codec/authority adoption and explicit-null registration remain separate; B-007 release scope is still open |
 
+The [network batch host handoff](../02-design/contracts/reference-network-batch-host.proposal.md) composes B-009 receipts with CH-05/06 reference-host execution: one complete request, owned outer transaction, commit-before-ack and original equal-input recovery. Its NB-01–06 controls retain transport failure versus native settlement distinctions without adding remote transaction handles.
+
 ### Concrete independent scenario inputs for execution
 
 These authored scenarios belong to the existing work packages and must be retained before implementation-generated observations. They are planned expectations, not runtime receipts. Actual native identity/version/clock and profile correspondence are independently observed; missing evidence cannot be filled with reader-derived expected values.
