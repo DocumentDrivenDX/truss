@@ -1,0 +1,56 @@
+{
+  "scope": "Independently authored semantic journal expectations for B note absent-to-null mutation only; complete native/source/origin/version/clock/group facts remain separately required; not executed evidence",
+  "logicalOraclePath": "docs/helix/03-test/reference-account-items-expected-states.proposal.json",
+  "logicalOracleSha256": "15716233428d3fe0716c52a44a89b74232cf18e5dae803ba4d6245a347b7a4ac",
+  "typedEntity": {
+    "symbol": "B",
+    "record": "Item",
+    "document": "truss.integration.account-items.v1",
+    "module": "integration"
+  },
+  "field": "Item.note",
+  "expectedOrderedSiblings": [
+    {
+      "ordinal": "0",
+      "kind": "property",
+      "before": {
+        "present": false
+      },
+      "after": {
+        "present": true,
+        "value": {
+          "kind": "null"
+        }
+      }
+    },
+    {
+      "ordinal": "1",
+      "kind": "metadata",
+      "beforeLogicalStatePointer": "/expectedStates/M03_committed/objects/1",
+      "afterLogicalStatePointer": "/expectedStates/M06_after_confirmed_commit/objects/1",
+      "boundaryMeaning": "complete original mutation-start and final HistoricalRecord snapshots, not just the logical value fragments referenced here"
+    }
+  ],
+  "cuts": {
+    "M05_original_transaction_pending": "two original pending siblings under the original live transaction only",
+    "M05_independent_committed_observer": "no committed contribution from the pending update",
+    "M05_after_confirmed_rollback": "no contribution from the rolled-back update; original committed history unchanged",
+    "M06_after_confirmed_commit": "exactly two committed siblings for this original B mutation; complete metadata and group evidence required"
+  },
+  "requiredIndependentFacts": [
+    "original typed native entity identity and full historical definitions/source/presence",
+    "original producing transaction/operation identity and generation",
+    "actual original increasing unique native positions; gaps permitted, no assigned example seq",
+    "exact original B start/final versions and metadata, with one version advance",
+    "complete original event/origin bytes and recomputed full sibling group manifest",
+    "actual native append parity and confirmed original outer settlement",
+    "current disclosure authority and complete reconstruction closure"
+  ],
+  "forbiddenRepairs": [
+    "metadata snapshot replacing a missing property delta",
+    "current rows filling missing original history",
+    "count or digest alone proving complete group membership",
+    "pending stage presence proving outer commit"
+  ],
+  "nativeExecuted": false
+}
