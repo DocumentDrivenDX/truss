@@ -131,3 +131,10 @@ Reuse the compiler-owned descriptor graph, capability and prerequisite machinery
 
 
 The reference property lifecycle now explicitly preserves retired values in their original qualified home/definition custody, validates them before same-ID reactivation and prevents same-name fresh identities from inheriting them. CONTRACT-003 integrates this selected disposition with complete private collection versus active projection, revoked-grant preservation and fresh binding admission after reactivation. Concrete lifecycle UMF sources and original validation evidence are retained under STP-004; complete=false experimental warnings remain explicit. Exact native lifecycle/decoder/security composition and broad type/key/relationship cases remain unfinished.
+
+
+### Subsequent compound boundary and embedding evidence
+
+Weft dc9b709 supersedes the pending owner test observations at f44ff82 for its Ashlar candidate, recorded in the [separate boundary source review](evidence/design-audit/weft-compound-boundary-source-review.json). The owner reports the revised dictionary codec's 133 native cases pass, plus six member-name/unknown-member/depth/node-boundary controls and 415 full-artifact parity cases in native Python and Chromium/WASM. Its test-only buffered host passes 49 phase/transport/unknown-meaning controls; actual native host transport enforcement and compound entity/keyset combinations remain in progress. Truss did not rerun those executions or verify binaries. No Truss PostgreSQL backend changes occur in the reviewed range.
+
+Do not continue describing those owner boundary/embedding tests as missing, and do not treat their completion as Truss host or original row-home qualification. The older source review retains its historical scope. Explicit native null remains excluded; compiler-owned registration and exact original Truss definition/driver/security/resource admission remain required. Native result depth/node refusal is separately scoped from pre-materialization transport bounds. UMF primary remains unchanged at 16c35e8d.
