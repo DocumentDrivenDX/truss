@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:reference-scalar-shape:0.1.0",
+  "title": "Original reference scalar shape leaf",
+  "description": "Acyclic scalar shape serialization. No presence/codec/composite references. Original Field/source/root/native agreement and complete resolved artifact graph require semantic admission; shape validity cannot establish custody or support.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-reference-scalar-shape/0.1.0"
+    },
+    "fieldIdentity": {
+      "$ref": "urn:truss:draft:value-definition:0.1.0#/$defs/identity"
+    },
+    "scalarFamily": {
+      "enum": [
+        "string",
+        "decimal"
+      ]
+    },
+    "scalarRoot": {
+      "const": "one-original-owned-root-no-children-one-qualified-scalar-payload"
+    },
+    "nullRoot": {
+      "enum": [
+        "refuse",
+        "explicit-owned-null-root-no-children-no-payload"
+      ]
+    },
+    "absence": {
+      "const": "outside-value-shape-presence-admission"
+    },
+    "scope": {
+      "const": "original-account-item-four-scalar-fields-only"
+    },
+    "acceptedDefinition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "authoredDefinition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "physicalDefinition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "fieldIdentity",
+    "scalarFamily",
+    "scalarRoot",
+    "nullRoot",
+    "absence",
+    "scope",
+    "acceptedDefinition",
+    "authoredDefinition",
+    "physicalDefinition"
+  ],
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "scalarFamily": {
+            "const": "decimal"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "nullRoot": {
+            "const": "refuse"
+          }
+        }
+      }
+    }
+  ]
+}
