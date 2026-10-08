@@ -51,3 +51,6 @@ Work order: resolve the core physical-key representation with UMF; complete the 
 
 
 Read-route reconciliation: the public native route map's earlier “pending typed SQL decision” and “remaining family routes” wording was stale relative to its own later direct/compiled/bootstrap sections and the 35-method administrative inventory. It now records the selected Truss logical access and authored responsibility routes. Complete body/dependency closure and admission of each actually advertised SQL surface remain open; do not treat resolved family routing as a fresh product choice or installed callable inventory.
+
+
+Dependency separation: microsite source/rendering blocks only that independent deliverable. Core physical-key representation blocks core-driven replacement DDL/full ER interpretation, not authoring native bodies against the retained source. Weft three-state registration blocks its affected compiled projection, not every direct mutation/feed path. The [runtime eligibility review](../02-design/contracts/ashlar-runtime-candidate-design-review.proposal.md#runtime-implementation-eligibility-versus-independent-deliverables) identifies already selected implementation directions and exact remaining runtime profile outputs. The full design goal still includes all these deliverables, but no UI prerequisite is imposed on engine implementation.
