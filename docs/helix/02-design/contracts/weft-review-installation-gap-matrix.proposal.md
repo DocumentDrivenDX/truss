@@ -1,6 +1,6 @@
 # Review layout installation gap matrix
 
-Companion to CONTRACT-008/012. Profile 0.7 is a 94-statement source composition, not an installation bundle. This matrix identifies concrete missing outputs without treating every unexecuted test as missing design. Historical profiles remain separately pinned.
+Companion to CONTRACT-008/012. Current profile 0.11 is a 106-statement source composition with 46 tables and 442 columns, not an installation bundle. This matrix identifies concrete missing outputs without treating every unexecuted test as missing design. Historical profiles remain separately pinned.
 
 | Family | Declared source home | Required design/implementation output before installer admission |
 | --- | --- | --- |
@@ -16,7 +16,7 @@ Companion to CONTRACT-008/012. Profile 0.7 is a 94-statement source composition,
 
 ### Exact trigger-to-routine composition worklist
 
-The preserved trigger fragments describe thirteen source events referencing five trigger-returning routines. Source identities already exist for all thirteen: six row-home and three edge-limit triggers in their physical-ID catalogs, plus four feed triggers and four associated constraint effects in truss-feed-current-union-trigger-effects.proposal.json. The earlier physical-ids filename scan missed that effects catalog; reuse these existing IDs. None of these fragments is in layout 0.10, and matching table presence does not install their behavior.
+The preserved trigger fragments describe thirteen source events referencing five trigger-returning routines. Source identities already exist for all thirteen: six row-home and three edge-limit triggers in their physical-ID catalogs, plus four feed triggers and four associated constraint effects in truss-feed-current-union-trigger-effects.proposal.json. The earlier physical-ids filename scan missed that effects catalog; reuse these existing IDs. None of these fragments is in layout 0.11, and matching table presence does not install their behavior.
 
 | Trigger source family | Registered targets / events | Referenced private routine and required dependency |
 | --- | --- | --- |
@@ -33,6 +33,24 @@ CH-01 must cover source trigger identities and actual installed trigger/partitio
 CONTRACT-005's qualified policy selects `grant_module_roles(document_id,module,writes)`. The current profile AST declares only two custom ordinary functions, catalog_global_high_water_v01 and catalog_key_high_water_v01. It does not declare the grant helper or the five trigger bodies. Source table presence therefore cannot establish policy installation.
 
 The administrative helper must resolve exact document/module and native role identities, reject missing/ambiguous mappings and apply only privileges admitted by the selected protected-writer profile. `writes` must not grant raw DML that bypasses canonical writer/finalizer/receipt/seed enforcement. Fixed schema usage and qualified callable privileges are distinct from document-specific row authority; policies require current complete owner union. Select exact routine identity, owner, search path, argument/result types, effective role paths and authorized invocation before including its body/grants in the bundle. Do not grant blanket access to archive/recovery evidence as a workaround for a missing reader.
+
+## Installer dependency order and publication boundary
+
+CH-03 must derive a dependency graph from the exact selected authored inventory, including the thirteen trigger declarations, their associated constraint objects, five handlers, two ordinary validators and underlying protected collectors/producers/codecs. Builtin functions/types/operators and implicit backing objects remain separately bound native dependencies. A same-name routine or a source count cannot satisfy an edge.
+
+| Stage | Required original inputs and installation action | Independent exit observation |
+| --- | --- | --- |
+| 1 selected tuple | Admit exact layout/source/body/codec/driver/security/resource versions and existing authored identities; reserve original installation attempt/epoch under the qualified bootstrap protocol | No unresolved required dependency, mixed profile or fabricated registration; preserve original attempt on uncertain completion |
+| 2 private foundations | Establish selected protected roles/schema and declared table/index/sequence/type dependencies under installation exclusion, with no application capability admission | Actual native owner/type/constraint/index/sequence and effective privilege correspondence; no PUBLIC or inherited bypass |
+| 3 producer and validator bodies | Install protected context/operation collectors, finite controlled-work admission, original value/history/receipt producers and the two ordinary validators in dependency order | Exact routine identity, argument/result overload, language/body/hash, owner/search path and full callable dependency closure |
+| 4 trigger handlers and events | Install the five handlers only after their dependencies; attach all selected trigger events with existing source identities and associated constraints | Native target/partition/enabled/event/timing/deferral and handler OID correspondence; missing DELETE/UPDATE path or substituted overload refuses |
+| 5 initialization and conversion | Run original marker/admission/capacity/epoch initialization and required retained-state conversion through the admitted bootstrap path | Complete original before/after graph/catalog/history/report/receipt/feed inventory and protected dependency parity; no upsert or invented continuity |
+| 6 enforcement and authority | Independently inspect complete native effects, role graph and callable paths; run required installation acceptance probes in the selected disposable harness before declaring supported installation | Immediate/deferred firing, dirty-after-finalize, savepoint rollback and caller-owned transaction boundaries; read-only validators perform no repair. Native probe evidence remains future build work |
+| 7 publish | Archive the exact complete selected bundle/inventory and publish ready last under the installation protocol | Marker/archive/admission originals agree; failure rolls back pending publication. Only independently observed committed readiness admits public capability construction |
+
+Stages express dependency/publication ordering, not permission to run a deployment or a guarantee that all stages use separate transactions. CONTRACT-008 owns atomic installer/conversion and recovery semantics; the selected native harness/profile must spell out which prepublication probes run inside the installation attempt and which qualify the tuple beforehand. Avoid a circular rule requiring application-visible readiness to test private installation behavior: administrative harness observation is separately authorized and never supplies production authority.
+
+Partial body installation, a trigger attached to the wrong relation/partition, an absent ordinary validator, or a broader privilege path leaves readiness unavailable. Existing installation repair/conversion must preserve original protected receipts/history and cannot publish readiness merely because CREATE statements succeed. Handler functions returning trigger remain inaccessible as ordinary public SELECT helpers; validator installation does not expose a new public toolkit family.
 
 ## Next composition outputs
 
@@ -55,7 +73,7 @@ The receipt producer preserves exact original request/attempt/result and checked
 3. Compose a versioned full installer with initialization and conversion, then independently compare the actual native inventory. Publish the ready marker only after complete parity.
 4. Submit the exact versioned storage/binding scope for Weft review when authorized. Accepted compiler mapping, installed layout and support qualification are independent evidence.
 
-Native routine implementation and execution are future build work. Remaining unspecified codec, operation registry, driver observation and security/deployment selections are design gaps. This matrix neither adopts ADR-005/006/007 nor turns optional compiler capabilities into required upstream changes.
+Native routine implementation and execution are future build work. Remaining unspecified codec, operation registry, driver observation and security/deployment selections are design gaps. ADR-005/006/007 record accepted product directions; this matrix does not adopt their exact native profiles or turn optional compiler capabilities into required upstream changes.
 
 
 Reactivation audit: key_lifecycle_history is an existing separately captured source home absent from profile 0.8. [Selected persistence](catalog-reactivation-persistence.proposal.md) requires its composition plus owner-local transition producers and explicit reactivation report inventory before claiming key lifecycle support.

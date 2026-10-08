@@ -17,6 +17,13 @@ ddx:
 
 # STP-045: Bootstrap the internal layout from UMF
 
+## Complete enforcement dependency ordering (planned)
+
+The [current installer gap matrix](../../02-design/contracts/weft-review-installation-gap-matrix.proposal.md) supplies stage ordering for the selected full tuple. IDO-01–04 supplement the existing bootstrap cases: (01) omit one ordinary validator or protected collector while preserving all thirteen trigger declarations and require no installable/ready result; (02) substitute same-name wrong-overload/wrong-owner handler, wrong partition target or disabled required event and refuse independent native parity; (03) inject broader PUBLIC/inherited/direct-DML privileges after otherwise correct body installation and refuse readiness without exposing private evidence through ordinary callers; (04) fail after initialization/conversion but before archive/ready publication, requiring atomic containment of pending installation effects and preservation of earlier retained receipt/history custody. Repeat unknown-commit observation through the original installation recovery path, never create another epoch to bypass it.
+
+Native probes must name the selected server/profile, actual routine and event OIDs, exact source/body hashes, effective role graph and independently expected complete inventory. Prequalification harness access is separately admitted; an application-visible ready marker cannot be a prerequisite for privately testing installation behavior. All cases are not_run; source composition and dependency-name checks cannot pass them.
+
+
 ## Migration admission initialization (planned native schedules)
 
 Exercise the [original initializer](../../02-design/contracts/migration-admission-initialize-v0.1.proposal.sql) within the complete selected installation, separately from source capture. These cases are not_run and supplement IM-T01–08.
