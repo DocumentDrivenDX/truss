@@ -1057,7 +1057,7 @@
     "02-design/technical-designs/TD-019-trim-the-journal-by-dropping-partitions.md": "92476ac50f246f0e5839aa57c5cfc7162a2930f9714c22db93a361f51454e00d",
     "03-test/test-plans/STP-019-trim-the-journal-by-dropping-partitions.md": "010c96c460f9a536abd2f053cfdf8144d4ccd679b816c73a9e97b1aa0c84b872",
     "02-design/technical-designs/TD-020-read-an-object-by-identifier-or-key.md": "4ec42330c6a243f93435bf31b5de05849ac495dd723ad767a3bc9676809d7908",
-    "03-test/test-plans/STP-020-read-an-object-by-identifier-or-key.md": "8bec4cb4d8f59ced92fc9c2ecce9e5d6f828384133a56eea9d345e3bd5e1a847",
+    "03-test/test-plans/STP-020-read-an-object-by-identifier-or-key.md": "3ffb5727946fbafbd84916c32152705a461d0be57a79411396012c0bab1e8563",
     "02-design/technical-designs/TD-021-list-a-types-objects-in-pages.md": "d8715cf23bc1d5fa65d8e58de487f549b1d9339f9cf531f7cda2a09ff9e43bb8",
     "03-test/test-plans/STP-021-list-a-types-objects-in-pages.md": "1b458f26b49d6d2a4673fa910c7f91fe1c56252385398bb2f10b0053d9c3b6c2",
     "02-design/technical-designs/TD-022-list-an-objects-edges-bounded.md": "c89ec2db85c7aabd05329b93f9126da4e728cfc0041b037c59d7735a708052fd",
