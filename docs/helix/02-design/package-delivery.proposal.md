@@ -63,3 +63,6 @@ PD-05: compile a consumer's declared types for every selected export/data subpat
 PD-06: retain original package/build/dependency/configuration/corpus hashes per run; modify one packed artifact or profile after admission and require mismatch refusal. A passing workspace import is not packed-consumer evidence.
 
 All schedules are planned. B-014 can implement build/export and inert consumer checks under the selected provisional-ID policy; native PD-04 still requires the complete original deployment and installation tuple. Package construction does not qualify missing routines or Weft binding adoption.
+
+
+Configuration capture is implemented under CONTRACT-007's assembly boundary before PD-03 can pass. Include STP-030 CC-01–04 in the packed construction consumer: exact nested-data capture, accessor refusal, stable original service-reference selection and separate continuing custody checks. The package does not serialize/freeze injected host services or expose the caller's mutable configuration as its captured state.
