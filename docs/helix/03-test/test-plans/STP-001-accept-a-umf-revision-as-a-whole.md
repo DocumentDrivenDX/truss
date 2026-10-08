@@ -176,3 +176,8 @@ RCSEL-01–10 follow CONTRACT-003 and the [selected example coverage boundary](.
 Containment controls supplement RCSEL-04/05: malformed/thrown/nonterminating producer, attempted code registration from input, source-size overflow and unavailable account/termination evidence refuse within the admitted bounded profile. Inspect actual preallocation/isolation/cleanup evidence; a timeout after allocations or a description of a pure callback does not qualify containment. Keep original producer failure distinct from invalid UMF document status.
 
 The native runner must capture actual installation/layout/profile/body/security revisions, original transaction/role/source custody, logical inputs/results, independent before/after catalog and report inventories, true complete journal/feed membership and observed outer commit. Component Bun/Chromium parity remains separate evidence; neither a green logical checker nor matching stored readiness flags proves protected-chain installation.
+
+
+## Accepted catalog binding custody (planned)
+
+WCB-01–04 and WCB-07 from the [accepted catalog producer](../../02-design/contracts/weft-accepted-catalog-producer.proposal.md) supplement RCSEL-01–10: independently verify qualified original IDs/documents/report bytes, substitution/incomplete-report refusal, exact revision/evolution context and provisional versus confirmed outer-commit publication. Native acceptance must precede owner binding production; a positive serializer revision or hash check cannot supply acceptance. Inspect original catalog/report/head and recovery effects independently. All cases remain not_run.

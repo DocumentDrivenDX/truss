@@ -1019,7 +1019,7 @@
   ],
   "artifactSha256": {
     "02-design/technical-designs/TD-001-accept-a-umf-revision-as-a-whole.md": "269c8c78868218d01bef902f4747cb745880fbb34fd96c378ece72559819bcef",
-    "03-test/test-plans/STP-001-accept-a-umf-revision-as-a-whole.md": "9352c315463a283307c6b7397e443129fbaba2807912ef81ca17658394dfb83c",
+    "03-test/test-plans/STP-001-accept-a-umf-revision-as-a-whole.md": "2cdf8f9a1ab80e89812255b52e99e584379355c6a6be5dbda35bc39a1720acd6",
     "02-design/technical-designs/TD-002-import-documents-that-depend-on-each-other.md": "1d93cda1f65f88b51851a9d4c32cd1b4bff0758f4556a78708dcd572fe09647d",
     "03-test/test-plans/STP-002-import-documents-that-depend-on-each-other.md": "2311d9c7f342ae12aa1bb3868bd593944c0ce420db6562ae448ae4f46f9b38d2",
     "02-design/technical-designs/TD-003-decide-what-happens-to-an-unknown-entity-type.md": "37ee82d66c860c439319968d39729cc174136f02f676e847a1a1caabff21c7b6",
@@ -1077,7 +1077,7 @@
     "02-design/technical-designs/TD-029-declare-the-layout-version-and-check-the-ddl-on-every-version.md": "6fca2bba36afaa3f256b9b5749c4131bbb3e4f34de28cc165ef62881d590a90e",
     "03-test/test-plans/STP-029-declare-the-layout-version-and-check-the-ddl-on-every-version.md": "a43b5fe40adb5dcf850fd1f422d2c7cb110813d6245771bdc403ac0bcfd6d447",
     "02-design/technical-designs/TD-030-extend-the-layout-from-a-host.md": "3f4f1edc5a86425a13bb669e52bc3ee4d8942ad796d7b927ea7079858bee414d",
-    "03-test/test-plans/STP-030-extend-the-layout-from-a-host.md": "e75eae3c4524456a5e20d6d6f921e58432b3f0ab103ff98b0a951c26e97e5638",
+    "03-test/test-plans/STP-030-extend-the-layout-from-a-host.md": "66630aec0f6d658a3759e24eec8da0581f41cd366aa000e630fcef885a89e739",
     "02-design/technical-designs/TD-031-govern-writes-by-role-grants.md": "dd4e1fe3a47a43d808a30b3f548e90e5e460d186adf3c277463777baeb5ce41f",
     "03-test/test-plans/STP-031-govern-writes-by-role-grants.md": "0e706ffc933411a0e4e3a652d770aa8a8f443cff1bc8538fc0417d84a755eb37",
     "02-design/technical-designs/TD-032-work-behind-a-transaction-mode-pooler.md": "392c6085425bbebb88a8782d0dce6f2f474daccdc1963a7a82e922f45a31ff0c",
@@ -1093,9 +1093,9 @@
     "02-design/technical-designs/TD-037-give-roles-access-to-modules-only.md": "abc0751c5652a9584e3bca932bcf83ffb8bafc79e318e35f48b80feaed5f812e",
     "03-test/test-plans/STP-037-give-roles-access-to-modules-only.md": "0ac4027219c8ba0483b4130c608f66e0fe63cc11bda7b241fb36dc84d2b9ac92",
     "02-design/technical-designs/TD-038-link-modules-and-see-the-link-only-with-both.md": "517cdd18365d3c17bfc66ae2fd3bde797c5027ab232f4f024d6d1f1df93d99e7",
-    "03-test/test-plans/STP-038-link-modules-and-see-the-link-only-with-both.md": "26f98ae7888c54328b4a502e12bc3539d2f4595174349b94891c0a926a15a325",
+    "03-test/test-plans/STP-038-link-modules-and-see-the-link-only-with-both.md": "7abffe2b9fb4bd252cfcf17aaf2833104bd3867b8d62f7eab222357169b684e1",
     "02-design/technical-designs/TD-039-read-umf-the-same-way-as-the-reference.md": "e3146f575b9b1edd866169b19e34cd2443eaeee410ad3b773cb5bd6c08b7e6eb",
-    "03-test/test-plans/STP-039-read-umf-the-same-way-as-the-reference.md": "17b19e069da3c1be95fc5843d84266836df81531d7863696425209dc35dab0b6",
+    "03-test/test-plans/STP-039-read-umf-the-same-way-as-the-reference.md": "f2272d4a97969dd03c3227992c72e05e410d34fd95550241c0760848f2a6c006",
     "02-design/technical-designs/TD-040-apply-operations-as-one-atomic-group.md": "a700d25ee591f89258965ef2bbcbadabd7dc026ac222140d2c20e860c74079e9",
     "03-test/test-plans/STP-040-apply-operations-as-one-atomic-group.md": "7031d9ecdac0e8fcca7830ac3808bce196f10f522ee7e8bf85d2d81a0b20143a",
     "02-design/technical-designs/TD-041-publish-the-journal-without-losing-or-reordering-a-change.md": "5a977cd0ee2e19a2537601a017317c6f65cb5bfb6b65531510234b0df7155d16",
@@ -1107,7 +1107,7 @@
     "02-design/technical-designs/TD-044-run-a-change-in-a-transaction-and-roll-it-back.md": "81d6a4421e2c824f1161a4912afbd758e6824031f37f0469ef4f63f713714f8a",
     "03-test/test-plans/STP-044-run-a-change-in-a-transaction-and-roll-it-back.md": "ecfbc925fc377cbbca72b5608516f8b5cc974ed06d333d076eb1c9d9657b1f42",
     "02-design/technical-designs/TD-045-bootstrap-the-internal-layout-from-umf.md": "ca24959bde1ba9c23f15f856f2a61c882ac37d8377d4b73905ce5a4f0f859869",
-    "03-test/test-plans/STP-045-bootstrap-the-internal-layout-from-umf.md": "d97f760515bfbfd1d27eda8296775fef2ed4d747735108c6c1e8eea71794d186"
+    "03-test/test-plans/STP-045-bootstrap-the-internal-layout-from-umf.md": "7bb58b234378017b5307cac0e575e78085874f370867ca0b1327272d457c7f6c"
   },
   "storySha256": {
     "01-frame/user-stories/US-001-accept-a-umf-revision-as-a-whole.md": "faa9173cc8ab9cb8c0945c2492b207ffc8ee6953cf5efef16a821a71a7a35b12",
