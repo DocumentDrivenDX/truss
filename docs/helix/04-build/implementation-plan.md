@@ -2182,3 +2182,5 @@ B-004/B-014 now has a concrete [pure lossless number-view operation proposal](..
 
 
 B-014's proposed [primary core entry](../02-design/contracts/bindings/truss-core-v0.1.d.ts) composes the existing pure data entry with viewNumericAsNumber and its closed result type. The consumer witness now imports through that entry. The earlier eighteen-function checkpoint predates this additional core operation; other factories retain their package ownership. Emit actual compiled ESM/types only after parser/resource/build admission and packed browser verification. This is declaration/export design, not an existing published package.
+
+CH-02/05 driver integration implements the [private producer port](../02-design/contracts/reference-driver-producer-port.proposal.md) inside the pinned ingress/parser boundary. Reservation precedes reads/copies, original backing lifetimes govern occupancy, and one-use frame consumption remains synchronous. STP-044 independently verifies ticket forgery/reuse, mutation, lifetime and post-forward containment rather than trusting adapter receipts.

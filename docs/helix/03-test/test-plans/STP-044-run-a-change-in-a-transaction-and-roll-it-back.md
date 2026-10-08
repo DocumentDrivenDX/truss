@@ -202,3 +202,9 @@ This supplements US-044 lifetime/rollback controls and B-014 packed delivery; it
 
 
 Selected complete-frame controls additionally split each header/body/UTF-8 field at every boundary and assert zero partial parser forwards; combine multiple complete frames with a trailing partial frame and assert original ordered single forwarding under shared budgets. Inject pre-forward residual, post-forward residual, double/missing callback, wrong cycle and reentrant query submission. Missing no-residual assertions refuse the selected profile rather than activating an instrumented alternative. After any post-forward fault, independently verify possible-effects/containment custody, no frame replay, no result publication and no premature pool release. These supplement DH-01–05 and remain not_run.
+
+### Original driver producer port controls
+
+Extend DH-02/05 with the [private producer port](../../02-design/contracts/reference-driver-producer-port.proposal.md). Independently instrument original ingress allocation and parser entry while submitting forged, foreign-issuer, reused, stale-epoch and stale-generation tickets. No rejected precondition forwards bytes or admits a replacement account. Mutate an admitted frame through an upstream shared view and require refusal or prevention by the selected actual ownership mechanism; a readonly type is insufficient.
+
+Exercise two retained spans sharing one backing, release one while parser/capture evidence retains the other, and independently verify no premature occupancy refund. Inject parser exceptions, post-forward residual and reentrant callbacks; require at most one original forward, no frame replay/public result/pool return and retained original possible-effects/containment custody. Missing instrumentation or unbounded pre-hook ingress refuses the profile. These schedules remain planned, not runtime evidence.
