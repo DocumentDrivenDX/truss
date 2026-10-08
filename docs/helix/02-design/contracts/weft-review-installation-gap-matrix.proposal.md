@@ -258,3 +258,16 @@ The source review captures CREATE/index/ALTER and original effect IDs; exact ext
 
 
 Populated-fixture boundary: valid baseline type_def rows still satisfy UNIQUE(module,element). The positive conversion does not start with duplicate labels that the old layout could not admit, and cannot invent new catalog rows to demonstrate qualified identity. Equal module/element spellings across distinct documents are tested through a separate post-conversion ordinary acceptance (STP-045 TC-04) under the selected qualified catalog profile. Corrupt baseline fixtures remain explicit refusal controls. Conversion itself preserves the complete original row/ID inventory and does not allocate or reactivate types.
+
+## Related original-parent review units
+
+The same pinned source capture now accepts an explicit original parent selector for rel_def, module_access, schema_rev and journal. Each review retains complete original tagged/decoded CREATE, original constraint/creator-linked index custody, selected direct qualified-relation statements and CREATE-column comparison. Selectors locate review candidates only; they assign no physical identities.
+
+| Parent / retained review | Direct selected statements | Original constraint/index IDs | CREATE-column changes |
+| --- | --- | --- | --- |
+| [rel_def](../../04-build/evidence/design-audit/rel_def-parent-evolution-review.json) | 2 | 8 | 1 added, 2 changed, 15 unchanged except positions |
+| [module_access](../../04-build/evidence/design-audit/module_access-parent-evolution-review.json) | 1 | 3 | 1 added, 3 changed |
+| [schema_rev](../../04-build/evidence/design-audit/schema_rev-parent-evolution-review.json) | 2 | 3 | report removed, 3 unchanged except positions |
+| [journal](../../04-build/evidence/design-audit/journal-parent-evolution-review.json) | 8 | 5 | op changed, 12 unchanged except positions |
+
+These are coupled review units: document-qualified policy/relationship ownership must agree with preserved original type lineage; report removal requires the selected immutable home and retained-report conversion; journal op/carrier changes require the selected full history producer/consumer profiles. Direct relation statements exclude foreign referencing objects, partitions, sequence/default dependencies, policies, routines and grants without that direct relation member. CREATE column counts omit later ALTER additions. Complete installation closure must account for those transitive and implicit effects before adoption. Source differences do not authorize populated conversion, restore grants, manufacture historical reports or promote old partial journal rows to complete history.
