@@ -11,6 +11,8 @@ DECLARE
   high_water bigint;
   assigned bigint;
   total_new bigint;
+  source_matches bigint;
+  field_module text;
 BEGIN
   SELECT * INTO STRICT op FROM truss.row_home_operation o
     WHERE o.original_writer_xid=pg_current_xact_id_if_assigned() AND o.phase<>'application_finalized' FOR UPDATE;
@@ -52,7 +54,7 @@ BEGIN
   -- JSON extraction checks correspondence; UMF validity remains the owner's check.
   FOR candidate IN SELECT value FROM jsonb_array_elements(candidates) LOOP
     SELECT * INTO STRICT owner FROM truss.type_def t WHERE t.type_id=(candidate->>'ownerTypeId')::int;
-    IF (SELECT count(*) FROM truss.schema_doc d
+    SELECT count(*),min(fm.value->>'id') INTO source_matches,field_module FROM truss.schema_doc d
         CROSS JOIN LATERAL jsonb_array_elements(d.document::jsonb->'modules') m
         CROSS JOIN LATERAL jsonb_array_elements(m.value->'elements') r
         CROSS JOIN LATERAL jsonb_array_elements(r.value->'members') member
@@ -61,8 +63,12 @@ BEGIN
         WHERE d.rev=revision AND d.ord=owner.doc_ord AND d.doc_id=owner.document_id
           AND m.value->>'id'=owner.module AND r.value->>'id'=owner.element AND r.value->>'kind'='record'
           AND fm.value->>'id'=member.value->>'module' AND f.value->>'id'=member.value->>'element'
-          AND f.value=candidate->'field')<>1 THEN
+          AND f.value=candidate->'field';
+    IF source_matches<>1 THEN
       RAISE EXCEPTION 'property does not match original owner member and Field definition' USING ERRCODE='55000';
+    END IF;
+    IF field_module COLLATE "C"<>owner.module COLLATE "C" THEN
+      RAISE EXCEPTION 'cross-module Field identity requires an admitted independent declaration-module home' USING ERRCODE='0A000';
     END IF;
   END LOOP;
   SELECT greatest(coalesce(max(p.prop_id)::bigint,0),0) INTO high_water FROM truss.prop_def p;
