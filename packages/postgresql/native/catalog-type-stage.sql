@@ -13,6 +13,7 @@ DECLARE
   high_water bigint;
   assigned bigint;
   doc_ordinal int;
+  matched record;
 BEGIN
   SELECT * INTO STRICT op FROM truss.row_home_operation AS o
     WHERE o.original_writer_xid=actual_xid AND o.phase<>'application_finalized' FOR UPDATE;
@@ -35,10 +36,9 @@ BEGIN
     END IF;
     PERFORM 1 FROM truss.schema_doc d WHERE d.rev=revision AND d.doc_id=candidate->>'documentId';
     IF NOT FOUND THEN RAISE EXCEPTION 'missing original document' USING ERRCODE='55000'; END IF;
-    PERFORM truss.runtime_catalog_lineage(revision,'record',candidate->>'documentId',candidate->>'moduleId',candidate->>'elementId');
-    IF EXISTS(SELECT 1 FROM truss.type_def t WHERE t.document_id=candidate->>'documentId'
-        AND t.module=candidate->>'moduleId' AND t.element=candidate->>'elementId') THEN
-      RAISE EXCEPTION 'existing identity requires original matching, not new allocation' USING ERRCODE='55000';
+    SELECT * INTO STRICT matched FROM truss.runtime_match_record_identity(revision,candidate->>'documentId',candidate->>'moduleId',candidate->>'elementId');
+    IF matched.match_state<>'new' THEN
+      RAISE EXCEPTION 'retained identity requires full matching/lifecycle admission, not new allocation' USING ERRCODE='55000';
     END IF;
   END LOOP;
   SELECT count(*) INTO count_new FROM (SELECT DISTINCT value->>'documentId',value->>'moduleId',value->>'elementId' FROM jsonb_array_elements(candidates)) q;
