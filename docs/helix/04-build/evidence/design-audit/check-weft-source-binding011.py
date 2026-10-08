@@ -36,7 +36,8 @@ inv=json.loads(decode(b['basis']['layoutInventory']));source=(R/inv['sourceInven
 if sha(source)!=inv['sourceInventory']['sha256']:raise ValueError('stale inventory source')
 layout=json.loads(source)
 if sha((R/inv['astPath']).read_bytes())!=inv['astSha256']:raise ValueError('stale AST')
-if decode(b['basis']['layoutSql'])!=(R/'docs/helix/02-design/models/truss-layout-weft-review-0.11.proposal.sql').read_bytes():raise ValueError('wrong layout SQL')
+layout_sql='docs/helix/04-build/evidence/design-audit/truss-layout-reference-history-0.12.owner-export.sql' if b['bindingProfileId']=='truss-postgresql-source-review/0.12.0-fixture' else 'docs/helix/02-design/models/truss-layout-weft-review-0.11.proposal.sql'
+if decode(b['basis']['layoutSql'])!=(R/layout_sql).read_bytes():raise ValueError('wrong layout SQL')
 if [(t['name'],t['createPointer']) for t in inv['tables']]!=[(t['name'],t['createPointer']) for t in layout['tables']]:raise ValueError('table custody/order mismatch')
 physical_ids=[t['physicalIdentity'] for t in inv['tables']]+[c['physicalIdentity'] for t in inv['tables'] for c in t['columns']]
 if len(physical_ids)!=len(set(physical_ids)):raise ValueError('duplicate source physical identity')
