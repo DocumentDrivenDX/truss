@@ -1,0 +1,29 @@
+{
+  "schema_version": "1",
+  "issuer": {
+    "id": "truss",
+    "name": "Truss",
+    "key_id": "ed25519:5bc28375157046d0fd142abf3b834116",
+    "key_url": "https://documentdrivendx.github.io/truss/.well-known/innsigle/keys.json",
+    "public_key": "dJdkmBFqTPnBe9aJCl1ERsdCL7PbILTLZEvJu1tMghM"
+  },
+  "paths": {
+    "public": ".innsigle/public",
+    "keys": ".innsigle/public/keys.json",
+    "claims_dir": ".innsigle/public/claims"
+  },
+  "publish": {
+    "site_keys_path": "/.well-known/innsigle/keys.json",
+    "copy": {
+      "from": ".innsigle/public",
+      "to": ".well-known/innsigle"
+    }
+  },
+  "content_root": "website/content",
+  "content_globs": [
+    "website/content/**/*.md"
+  ],
+  "kind_from_frontmatter": {
+    "field": "composition"
+  }
+}

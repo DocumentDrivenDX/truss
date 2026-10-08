@@ -1,0 +1,9 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{ if not .IsHome }}{{ .Title }} · {{ end }}Truss — Connected data. Grounded in PostgreSQL.</title>
+<meta name="description" content="{{ .Description }}"><meta property="og:title" content="{{ .Title }} · Truss"><meta property="og:description" content="{{ .Description }}"><meta property="og:url" content="{{ .Permalink }}"><meta property="og:type" content="website">
+<link rel="canonical" href="{{ .Permalink }}"><link rel="icon" href="{{ "favicon.svg" | relURL }}">
+{{ $css := slice (resources.Get "css/site.css") (resources.Get "css/innsigle.css") | resources.Concat "css/truss.css" | minify | fingerprint }}<link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+</head><body><a class="skip" href="#main">Skip to content</a><header><a class="brand" href="{{ site.Home.RelPermalink }}"><svg viewBox="0 0 60 30" aria-hidden="true"><path d="M2 26L16 3l14 23L44 3l14 23H2M16 3h28M30 26V3"/></svg>truss</a><nav aria-label="Primary">{{ $current := .RelPermalink }}{{ range slice (dict "path" "" "name" "Overview") (dict "path" "model/" "name" "Model") (dict "path" "evidence/" "name" "Evidence") (dict "path" "start/" "name" "Start here") }}{{ $url := .path | relURL }}<a href="{{ $url }}"{{ if eq $current $url }} aria-current="page"{{ end }}>{{ .name }}</a>{{ end }}<a href="https://github.com/DocumentDrivenDX/truss">Source ↗</a></nav></header>
+<main id="main">{{ block "main" . }}{{ end }}<div class="seal-wrap">{{ partial "innsigle-colophon.html" . }}</div></main>
+<footer><span>Truss / DocumentDrivenDX</span><span>Connected data. Grounded in PostgreSQL.</span><a href="https://github.com/DocumentDrivenDX/truss/blob/main/LICENSE">Apache 2.0 ↗</a></footer></body></html>

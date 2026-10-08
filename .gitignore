@@ -1,0 +1,5 @@
+
+# Microsite generated files
+website/public/
+website/resources/
+website/.hugo_build.lock

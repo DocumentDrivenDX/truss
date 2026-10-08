@@ -1,0 +1,22 @@
+{
+  "schema_version": "1",
+  "composition": "model-primary",
+  "ingredients": [
+    {
+      "kind": "model",
+      "name": "Codex",
+      "role": "brand voice, design, copy and implementation"
+    },
+    {
+      "kind": "human",
+      "name": "project owner",
+      "role": "direction and publication request"
+    },
+    {
+      "kind": "tool",
+      "name": "HELIX",
+      "role": "governed source and design guidance"
+    }
+  ],
+  "notes": "Codex authored this microsite from Truss repository artifacts under the project owner\u2019s direction. The seal covers page source, including inline diagrams, and does not certify product support or performance. No human-input percentage is asserted."
+}

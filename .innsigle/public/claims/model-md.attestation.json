@@ -1,0 +1,53 @@
+{
+  "payload": {
+    "innsigle": "1",
+    "type": "https://innsigle.dev/claim/colophon/v1",
+    "issued_at": "2026-10-08T22:27:08Z",
+    "issuer": {
+      "id": "truss",
+      "name": "Truss",
+      "key_id": "ed25519:5bc28375157046d0fd142abf3b834116",
+      "key_url": "https://documentdrivendx.github.io/truss/.well-known/innsigle/keys.json"
+    },
+    "subjects": [
+      {
+        "uri": "https://documentdrivendx.github.io/truss/model/",
+        "digest": {
+          "alg": "sha256",
+          "value": "eb231a37ab1735e87f62812103cccb1cde006ec31ea9bff9e22930c865de789d"
+        }
+      }
+    ],
+    "colophon": {
+      "schema_version": "1",
+      "composition": "model-primary",
+      "ingredients": [
+        {
+          "kind": "model",
+          "name": "Codex",
+          "role": "brand voice, design, copy and implementation"
+        },
+        {
+          "kind": "human",
+          "name": "project owner",
+          "role": "direction and publication request"
+        },
+        {
+          "kind": "tool",
+          "name": "HELIX",
+          "role": "governed source and design guidance"
+        }
+      ],
+      "notes": "Codex authored this microsite from Truss repository artifacts under the project owner’s direction. The seal covers page source, including inline diagrams, and does not certify product support or performance. No human-input percentage is asserted."
+    }
+  },
+  "payload_encoding": "json",
+  "signatures": [
+    {
+      "key_id": "ed25519:5bc28375157046d0fd142abf3b834116",
+      "alg": "ed25519",
+      "sig": "WnyaX--UkFK3Fc26iK7zms3Mx06sOSym5f-AGBido-vh-SXM1OMvcihBjA_wAWm9DfrCC9hUCAA5hfRywgYwAw",
+      "signed_at": "2026-10-08T22:27:08Z"
+    }
+  ]
+}
