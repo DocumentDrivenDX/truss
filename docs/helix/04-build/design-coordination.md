@@ -15,7 +15,18 @@ ddx:
 
 # Design coordination and remaining work
 
-## Latest read-only owner source review (2026-10-07)
+## Latest read-only owner source review — multi-root native cut
+
+UMF primary remains `16c35e8d943769ccfa7bb57d16785aa7159abe65`. Inspected Weft HEAD is `320a597398a429d8dc1e61cd225be403a48d154c`. The [source correspondence receipt](evidence/design-audit/weft-multi-root-source-review.json) independently verifies thirteen file hashes from two owner receipts against the original files at their respective commits. Truss did not rerun the owner's Rust, PostgreSQL, Python or browser tests.
+
+The Boolean-sequence receipt at `9810ffd` reports 151 Rust tests and 334 fresh Python/browser embedding cases for thirty-seven exact configurations: eighty-two complete responses, 246 refusal cases and six Boolean SUM refusals. Its selected sequence preserves actual Boolean values, duplicate false values and order. This supersedes the earlier general missing-Python/WASM statement only for the owner's exact admitted configurations.
+
+The latest multi-root receipt reports 152 Rust tests and sixteen PostgreSQL 17.9 cases for a synthetic complete entity combining native Boolean tags, numeric structured address, optional Unicode note and exact uint64/string keys in declared member order. Each root retains separate original definition, graph, presence, codec and physical-home custody. Missing either root admission refuses the whole entity; malformed unprojected second-owner roots block even a one-row page. Empty sequence, absent optional address and absent note remain distinct. Public runtime allowlisting and fresh Python/browser verification of this multi-root cut remain pending at the inspected commit.
+
+Truss must consume compiler-owned lowering, ordered parameters, complete-owner prerequisites and decoding. Its task is exact physical/definition/codec mapping, adapter execution and publication/cleanup enforcement under an accepted binding. No native-row or embedding support for Truss follows from synthetic owner fixtures. Layout 0.11 remains the current source composition; the existing Weft packet is still pinned to 0.10. STP-039 MR-01–05 allocates the new integration schedules, all not_run. No new UMF capability or duplicate compiler is assigned.
+
+## Historical read-only owner source review (2026-10-07)
+
 
 UMF primary remains 16c35e8d. Latest inspected Weft commit is `7b52a5933167d58e379cc21d85feeaf921984767`, original UMF map SELECT through public Registry. The owner reports 86 PostgreSQL crate tests, 12 native sequence/structured cases for each one-call/public emission path and seven native map cases for each path. Truss inspected the committed capability/property source changes and owner receipts without rerunning those tests. Earlier observation/member-slot evidence is preserved under its original scope; current compound fixtures now use admitted original homes and complete-owner prerequisites rather than placeholder homes.
 

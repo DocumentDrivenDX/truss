@@ -49,6 +49,20 @@ Consume Weft `1d914b86aed571759d16f8773686ffd23cad53a4` only after exact binding
 
 For each case retain the original binding/model/codec pins, complete-owner selection, compiled parameter custody, independent stored input and expected outcome, actual executor profile and cleanup observations. Native work measurements belong to the selected Truss enforcement/adapter profile. No compiler-owned recursive SQL is reimplemented by this plan; all cases remain not_run.
 
+## Multiple recursive roots and Boolean integration (planned)
+
+Consume the exact Weft multi-root cut at `320a597398a429d8dc1e61cd225be403a48d154c` only after original Truss binding and codec/native-home admission. Owner-reported synthetic PostgreSQL and separate Boolean embedding receipts do not qualify Truss storage or the multi-root embedding path. These B-012 schedules extend MS/RO without implementing compiler-owned traversal.
+
+| Case | Independent fixture or fault | Required Truss outcome |
+| --- | --- | --- |
+| MR-01 separate root custody | One entity with Boolean sequence and numeric structured roots, independently pinned definitions, discriminators, presence and payload homes | Preserve complete declared member order and exact values; reject swapped or missing root correspondence before publication |
+| MR-02 Boolean values | Ordered false,true,false and empty sequence alongside exact numeric strings | Return actual Booleans with duplicates/order preserved; reject text/numeric substitution and competing payload columns under the selected codec |
+| MR-03 independent absence | Empty required sequence, absent optional structure, absent optional scalar and supported explicit-null variants | Preserve each selected meaning independently; unsupported null/root profiles refuse without collapsing absence into empty or null |
+| MR-04 complete owner beyond page | Valid first owner and corrupt second owner's sequence/address/key codec under a one-row limit | Consume complete-owner preflight before result publication; no page/filter bypass or partial successful entity |
+| MR-05 embedded parity | Same admitted full entity through TypeScript host and selected Python/WASM compiler integrations, then remove one root admission | Compare original compiled response/parameters and independent decoded state; refuse incomplete admission everywhere. Separate fresh evidence is required for the multi-root cut |
+
+Pin original source/model/binding, each root's codec/profile/home, full-owner selection and actual adapter/publication observations. Keep native work containment and current-authority checks from RO/MS. All five cases are not_run; unsupported host combinations remain explicit rather than assumed from owner preset counts.
+
 ## Story Reference and Scope
 
 US-039, TD-039, SD-007, TP-001 and CONTRACT-003/004. Tests are planned. Pin exact oracle/version/subset and distinguish validity from Truss support.

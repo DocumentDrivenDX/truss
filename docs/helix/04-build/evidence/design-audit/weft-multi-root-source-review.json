@@ -1,0 +1,72 @@
+{
+  "scope": "Read-only committed owner receipt/file pin correspondence; no test rerun, runtime execution, Truss mapping adoption or production qualification",
+  "weftHead": "320a597398a429d8dc1e61cd225be403a48d154c",
+  "umfHead": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+  "verifiedFilePins": [
+    {
+      "commit": "320a597398a429d8dc1e61cd225be403a48d154c",
+      "path": "crates/weft-postgresql/src/conformance_original.rs",
+      "sha256": "65c265444d124a3456a70a6bc7d454eb4844af8b0b94636c81920c7609c495b2"
+    },
+    {
+      "commit": "320a597398a429d8dc1e61cd225be403a48d154c",
+      "path": "tests/truss-postgresql/build-multi-recursive-entity-fixture.py",
+      "sha256": "ebf2318269fa18313075c0cbb423c888722b79c3dc96a60c99e97dcd7074cbe6"
+    },
+    {
+      "commit": "320a597398a429d8dc1e61cd225be403a48d154c",
+      "path": "tests/truss-postgresql/multi-recursive-entity-native.py",
+      "sha256": "a1b97aed43ecddb98efc6b75b5e4397875c99ff612b56930aeaccfbbab952192"
+    },
+    {
+      "commit": "320a597398a429d8dc1e61cd225be403a48d154c",
+      "path": "tests/truss-postgresql/fixtures/original-multi-recursive-entity-inputs.json",
+      "sha256": "56c999c2a467973e6fa1368f564d0f48b218f9641046b118c830de3216c58c87"
+    },
+    {
+      "commit": "320a597398a429d8dc1e61cd225be403a48d154c",
+      "path": "tests/truss-postgresql/fixtures/original-multi-recursive-entity-public.json",
+      "sha256": "81ea944bb9d58637c3c3ab0873fac302549c59f72bb708149b9945c8337fa1d9"
+    },
+    {
+      "commit": "9810ffdf1ca7b5156fe61a09d5d0ae40064defae",
+      "path": "crates/weft-postgresql/src/conformance_original.rs",
+      "sha256": "0cdb17e2c9399de6dbfb3dea40507a4b157cdb8d538c45e17f734aa715bbba58"
+    },
+    {
+      "commit": "9810ffdf1ca7b5156fe61a09d5d0ae40064defae",
+      "path": "crates/weft-runtime/src/lib.rs",
+      "sha256": "f9af171b0a269c9c3f22892c97ec5e34bc333a3f36660bce4c0cf621e8d8931c"
+    },
+    {
+      "commit": "9810ffdf1ca7b5156fe61a09d5d0ae40064defae",
+      "path": "tests/truss-postgresql/check-composition-custody.py",
+      "sha256": "71a7c26af0d3be720e8f567c288b729daafc2820493cb6ad4810422b1faf4f20"
+    },
+    {
+      "commit": "9810ffdf1ca7b5156fe61a09d5d0ae40064defae",
+      "path": "tests/truss-postgresql/original-embedding-check.py",
+      "sha256": "5a44cff7e50b0e5326b52298a40d0ec1a9c6a24ac9937110ebf99adb449a81ab"
+    },
+    {
+      "commit": "9810ffdf1ca7b5156fe61a09d5d0ae40064defae",
+      "path": "tests/truss-postgresql/fixtures/original-boolean-sequence-composition.json",
+      "sha256": "85b178c8f066f5ca43a36af7feed90dd11cdbf051773fc5c135801e4c4cb98a7"
+    },
+    {
+      "commit": "9810ffdf1ca7b5156fe61a09d5d0ae40064defae",
+      "path": "tests/truss-postgresql/fixtures/original-boolean-sequence-compile-transport.json",
+      "sha256": "0fd3b2bde5d23639e9cf33dfcbb2496232914cb9893912f9465af6bb0b5ba3b0"
+    },
+    {
+      "commit": "9810ffdf1ca7b5156fe61a09d5d0ae40064defae",
+      "path": "tests/truss-postgresql/evidence/boolean-sequence-embedding/python-summary.json",
+      "sha256": "5034d1e7db883610f396170860f61ad537714411cd02eff83685b8f35d1830b5"
+    },
+    {
+      "commit": "9810ffdf1ca7b5156fe61a09d5d0ae40064defae",
+      "path": "tests/truss-postgresql/evidence/boolean-sequence-embedding/browser-summary.json",
+      "sha256": "4f078d1aabc5fb0d21082559303495ed89a264b98a3cce23263ae2730cb98e21"
+    }
+  ]
+}
