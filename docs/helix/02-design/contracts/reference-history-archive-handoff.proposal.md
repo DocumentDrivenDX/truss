@@ -1,5 +1,7 @@
 # Reference durable history archive handoff proposal
 
+The [S3 provider candidate](reference-history-s3-profile.proposal.md) makes version custody, conditional submission and retention/recovery obligations concrete. It remains proposed and unqualified; this provider-neutral procedure remains governing.
+
 This is the provider-neutral reference procedure for CONTRACT-002's selected reconstructable history and short/zero local retention. Reuse the existing retained-history-archive v0.2 candidate and retention tooling request/result; introduce no parallel archive wire or drop-by-certificate API. Exact provider/build/durability/retrieval/resource/security qualification remains required before activation.
 
 1. Through a protected bounded export operation, admit one original complete committed history cut and every required entity/version group, source/definition/owner dependency and retained baseline. Preserve the exact archive bytes and original profile tuple; row pages, live state or a matching digest count cannot supply missing group membership. Reserve the complete original collection/encoding/copy account and retain immutable export custody. Do not hold an open Truss transaction merely to wait for external storage.
