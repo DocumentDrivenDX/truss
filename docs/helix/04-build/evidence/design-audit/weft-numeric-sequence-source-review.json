@@ -1,0 +1,83 @@
+{
+  "scope": "Read-only owner receipt and ten committed source-pin checks; owner native/embedding tests not rerun by Truss",
+  "ownerCommit": "92600b34209b92f4749adc6aee4643407a851eca",
+  "ownerReceiptPath": "docs/helix/04-build/evidence/B-005-numeric-sequence.json",
+  "ownerReceiptSha256": "5c0877e90bf2c6c2fc5407f80490640b1e714e7a9f0db01af7ceacb0ad244e39",
+  "sources": [
+    {
+      "path": "crates/weft-postgresql/src/conformance_original.rs",
+      "expectedSha256": "ded3d92c7933c426bc91bdf9af70bee3f3152c7b216a97ae82af1c93bb04aea1",
+      "observedSha256": "ded3d92c7933c426bc91bdf9af70bee3f3152c7b216a97ae82af1c93bb04aea1",
+      "bytes": 65599
+    },
+    {
+      "path": "tests/truss-postgresql/build-numeric-sequence-fixtures.py",
+      "expectedSha256": "b862bb0ab0b15d955fef313ddd9a685c4f4522cf4f1fed7def9b8d01d269d40f",
+      "observedSha256": "b862bb0ab0b15d955fef313ddd9a685c4f4522cf4f1fed7def9b8d01d269d40f",
+      "bytes": 3862
+    },
+    {
+      "path": "tests/truss-postgresql/original-numeric-sequence-native.py",
+      "expectedSha256": "60c568f74b1d132d716ce2ee09661485c61ab376284777b55ccdd770cccd04a8",
+      "observedSha256": "60c568f74b1d132d716ce2ee09661485c61ab376284777b55ccdd770cccd04a8",
+      "bytes": 5592
+    },
+    {
+      "path": "tests/truss-postgresql/numeric-sequence-embedding-check.py",
+      "expectedSha256": "65cc9bab5240abc6032891556c376bd3df8250b19d3dc67d63896da04f0e8010",
+      "observedSha256": "65cc9bab5240abc6032891556c376bd3df8250b19d3dc67d63896da04f0e8010",
+      "bytes": 3198
+    },
+    {
+      "path": "tests/truss-postgresql/fixtures/original-decimal-sequence-inputs.json",
+      "expectedSha256": "2bdb4569232a10792d34858107b4f1a88b26f27a159e381a76064a01673cfcbb",
+      "observedSha256": "2bdb4569232a10792d34858107b4f1a88b26f27a159e381a76064a01673cfcbb",
+      "bytes": 157603
+    },
+    {
+      "path": "tests/truss-postgresql/fixtures/original-decimal-sequence-public.json",
+      "expectedSha256": "cd6afbce566329031e56e6e85d87514019675347fcf77f987ca339c7fbda72f2",
+      "observedSha256": "cd6afbce566329031e56e6e85d87514019675347fcf77f987ca339c7fbda72f2",
+      "bytes": 231149
+    },
+    {
+      "path": "tests/truss-postgresql/fixtures/original-decimal-sequence-tree.json",
+      "expectedSha256": "87f8030b29de7c6031fc11264cf5b0d5c3993b2f468f70244960e6ffcff53b27",
+      "observedSha256": "87f8030b29de7c6031fc11264cf5b0d5c3993b2f468f70244960e6ffcff53b27",
+      "bytes": 165161
+    },
+    {
+      "path": "tests/truss-postgresql/fixtures/original-signed-sequence-inputs.json",
+      "expectedSha256": "53ef2dbfca465fa9b591d3702a8a0cd8ef76df03b3bc94d894d9c976809352b7",
+      "observedSha256": "53ef2dbfca465fa9b591d3702a8a0cd8ef76df03b3bc94d894d9c976809352b7",
+      "bytes": 158071
+    },
+    {
+      "path": "tests/truss-postgresql/fixtures/original-signed-sequence-public.json",
+      "expectedSha256": "db461a504bb36cf3d204f03ebbb4d36029acc42e7c2080584d21c6a767e2034c",
+      "observedSha256": "db461a504bb36cf3d204f03ebbb4d36029acc42e7c2080584d21c6a767e2034c",
+      "bytes": 231988
+    },
+    {
+      "path": "tests/truss-postgresql/fixtures/original-signed-sequence-tree.json",
+      "expectedSha256": "668b57323d9323c86c6febfa90d8d845b8ed68fabb1483cddccbf9949afd142d",
+      "observedSha256": "668b57323d9323c86c6febfa90d8d845b8ed68fabb1483cddccbf9949afd142d",
+      "bytes": 165679
+    }
+  ],
+  "ownerReported": {
+    "nativeCases": 34,
+    "embeddingCasesPerRuntime": 10,
+    "positiveFullResponses": 2,
+    "embeddingRefusals": 8,
+    "pythonDeterministicRepeats": 2,
+    "rustRegressionsPassed": 157,
+    "rustNote": "Unchanged exhaustive decimal composition test excluded; retained separate prior evidence",
+    "limitations": [
+      "Only selected sequence roots and canonical numeric token subset",
+      "Map/structured/whole-entity signed/decimal paths still require evidence",
+      "No production storage, installed Truss or released host configuration claim"
+    ]
+  },
+  "nativeQualifiedByTruss": false
+}

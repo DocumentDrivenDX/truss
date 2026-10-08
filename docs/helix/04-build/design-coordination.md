@@ -15,13 +15,21 @@ ddx:
 
 # Design coordination and remaining work
 
-## Latest read-only owner source review — exhaustive decimal embedding (2026-10-08)
+## Latest read-only owner source review — recursive numeric sequences (2026-10-08)
+
+Weft HEAD is 92600b34209b92f4749adc6aee4643407a851eca; UMF remains at 16c35e8d943769ccfa7bb57d16785aa7159abe65. The [source review receipt](evidence/design-audit/weft-numeric-sequence-source-review.json) verifies all ten source pins in the committed owner receipt. Truss inspected the native leaf procedure change but did not rerun owner tests. The test-original leaf now retains decimal token text and selects signed integer grammar from the original authored Field rather than requiring every integer to be nonnegative.
+
+Owner receipts report 34 PostgreSQL 17.9 native cases over synthetic pinned source/codec procedures, ten cases each in fresh Python and Chromium WASM embeddings (two complete positive responses and eight refusals), two deterministic Python repeats and 157 Rust regressions. The exhaustive decimal composition regression was excluded from this run and retains its earlier separate evidence. These results cover selected signed64 and decimal(28,2) sequence roots, exact token order/multiplicity and scoped integrity/domain refusals.
+
+This closes the owner's previously missing sequence-leaf evidence only for that exact conformance subset. STP-039's broader RN matrix still requires map/structured/whole-entity paths, original Truss codec/domain/home admission, independent values and installed native enforcement. Released generic registration and the current 0.11 Truss binding packet remain unqualified. Preserve the earlier receipt's source version as historical evidence; do not extend its results to the changed binary or claim all recursive numeric paths now pass. Weft continues to own lowering; Truss owns source/storage/profile adoption and integration qualification.
+
+## Historical read-only owner source review — exhaustive decimal embedding (2026-10-08)
 
 Weft HEAD is 8de43d0bbf7b765efb220444b0ac6309ea405441. The [source review receipt](evidence/design-audit/weft-decimal-embedding-source-review.json) verifies three original source pins from the committed owner receipt. Truss has not rerun these tests or independently inspected all 868 native captures. UMF remains at the prior reviewed 16c35e8d baseline.
 
 Owner evidence reports 4,340 cases per Python and Chromium embedding: 868 complete responses across 434 precision/scale pairs and two storage homes, plus 3,472 malformed/version/candidate/digest refusals. Python repeats all 868 positive responses deterministically. The initial browser JSON-array read failed before compilation because of its single-string size; unchanged records subsequently passed through streamed JSON Lines, in batches of eight through one WASM instance. Runtime binaries are reused from the earlier host-configuration proof; this commit changes tests/capture/harness transport. Existing JSON-array inputs separately pass 342 legacy cases.
 
-This supersedes the earlier missing decimal-domain embedding evidence only for the owner's exact scalar property SUM configurations under the test-original export. Released generic registration, Truss native installation/codec/binding adoption and recursive signed/decimal native procedures remain unqualified. Weft explicitly records that its current native-tree conformance leaf procedure refuses decimal and requires nonnegative canonical integer tokens. Scalar SUM evidence cannot qualify Truss's recursive exact-value carriers. Preserve that distinction in CH-04 and STP-039 rather than adding local compiler lowering or inferring recursive support.
+This supersedes the earlier missing decimal-domain embedding evidence only for the owner's exact scalar property SUM configurations under the test-original export. Released generic registration, Truss native installation/codec/binding adoption and recursive signed/decimal native procedures remain unqualified. At that reviewed commit, Weft’s native-tree conformance leaf procedure refused decimal and required nonnegative canonical integer tokens; the later sequence review above supersedes that limitation only within its explicit subset. Scalar SUM evidence cannot qualify Truss's recursive exact-value carriers. Preserve that distinction in CH-04 and STP-039 rather than adding local compiler lowering or inferring recursive support.
 
 ## Historical read-only owner source review — explicit conformance configuration
 
