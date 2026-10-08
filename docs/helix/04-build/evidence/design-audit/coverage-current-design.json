@@ -1095,7 +1095,7 @@
     "02-design/technical-designs/TD-038-link-modules-and-see-the-link-only-with-both.md": "517cdd18365d3c17bfc66ae2fd3bde797c5027ab232f4f024d6d1f1df93d99e7",
     "03-test/test-plans/STP-038-link-modules-and-see-the-link-only-with-both.md": "3774a2d2751356b55b02921d5c41c9b35cacbca6642fdc9e160fedc13596e326",
     "02-design/technical-designs/TD-039-read-umf-the-same-way-as-the-reference.md": "e3146f575b9b1edd866169b19e34cd2443eaeee410ad3b773cb5bd6c08b7e6eb",
-    "03-test/test-plans/STP-039-read-umf-the-same-way-as-the-reference.md": "7761a1e5c9c33779621f614071b7f38def3d540fc35e033c1acc55df72992140",
+    "03-test/test-plans/STP-039-read-umf-the-same-way-as-the-reference.md": "f8596d7842ed3430224d53b0a15732095fa2c7dbf43ef257151767d90d9a88ed",
     "02-design/technical-designs/TD-040-apply-operations-as-one-atomic-group.md": "114a5717da520042602d78be26591f1ef2e67f0a2b5eca9b249f5f11e442315e",
     "03-test/test-plans/STP-040-apply-operations-as-one-atomic-group.md": "31ab6034b193753be070cc0678e2f3f6592542ee7bf06d485ef50b2ee2ebf6bc",
     "02-design/technical-designs/TD-041-publish-the-journal-without-losing-or-reordering-a-change.md": "f514a4c26c62ceba08c880bdc74d55758737436a31ca86d774d8ea96f3cedd27",
