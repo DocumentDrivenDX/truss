@@ -32,7 +32,19 @@ def validate(document):
     names = ['journal_capture_start', 'journal_observe_transition', 'journal_prepare_final',
              'journal_reserve_positions', 'journal_append_group']
     require([r['selector'] for r in document['routines']] == names, 'phase membership/order')
+    schemas = dict(zip(names, ['journal-start-capture-v0.2.proposal.schema.json',
+        'journal-ordered-transition-v0.2.proposal.schema.json',
+        'journal-final-preparation-v0.2.proposal.schema.json',
+        'journal-reserved-positions-v0.2.proposal.schema.json',
+        'journal-pending-publication-v0.2.proposal.schema.json']))
     for routine, stage in zip(document['routines'], ['start', 'transition', 'final', 'reserved', 'publication']):
+        path = '02-design/contracts/' + schemas[routine['selector']]
+        schema_bytes = (ROOT / 'docs/helix' / path).read_bytes()
+        schema = json.loads(schema_bytes)
+        require(routine.get('phaseBodySchema') == {'path': path, 'schemaId': schema['$id'],
+                'sha256': hashlib.sha256(schema_bytes).hexdigest(),
+                'byteEncodingProfile': 'truss-journal-phase-json/0.2.0-proposal'},
+                'original phase schema and byte codec correspondence')
         args = [{'name': 'operation_context_bytes', 'type': 'bytea'}]
         if routine['selector'] == 'journal_observe_transition':
             args.append({'name': 'original_effect_bytes', 'type': 'bytea'})
@@ -55,6 +67,10 @@ for label, mutate in [
     ('invented physical identity', lambda d: d['routines'][0].update(physicalIdentity='new.phase.id')),
     ('false readiness', lambda d: d.update(installerReady=True)),
     ('substituted governing pin', lambda d: d['governingSources'][0].update(sha256='0' * 64)),
+    ('missing phase schema', lambda d: d['routines'][0].pop('phaseBodySchema')),
+    ('swapped phase schema', lambda d: d['routines'][0].update(phaseBodySchema=d['routines'][1]['phaseBodySchema'])),
+    ('stale phase schema bytes', lambda d: d['routines'][2]['phaseBodySchema'].update(sha256='0' * 64)),
+    ('wrong phase byte codec', lambda d: d['routines'][3]['phaseBodySchema'].update(byteEncodingProfile='event-codec')),
 ]:
     damaged = copy.deepcopy(original)
     mutate(damaged)
@@ -68,4 +84,4 @@ receipt = {'scope': __doc__, 'producerSha256': hashlib.sha256(Path(__file__).rea
            'manifestSha256': hashlib.sha256((ROOT / PATH).read_bytes()).hexdigest(),
            'originalAdmitted': True, 'controls': controls, 'nativeQualified': False}
 (ROOT / 'docs/helix/04-build/evidence/design-audit/journal-phase-design-controls.json').write_text(json.dumps(receipt, indent=2) + '\n')
-print('Original design admitted; seven damaged design controls refused.')
+print('Original design admitted; eleven damaged design controls refused.')

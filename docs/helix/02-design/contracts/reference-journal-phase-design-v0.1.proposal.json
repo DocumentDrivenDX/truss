@@ -53,7 +53,13 @@
       "body": null,
       "completeDependencies": null,
       "privateCallerAcl": null,
-      "nativeEvidence": null
+      "nativeEvidence": null,
+      "phaseBodySchema": {
+        "path": "02-design/contracts/journal-start-capture-v0.2.proposal.schema.json",
+        "schemaId": "urn:truss:proposal:journal-start-capture:0.2.0",
+        "sha256": "c3801f87fc1e07b76cd49fa33ffa0d10de58c7dff0febf454d1c4f8c7621dde9",
+        "byteEncodingProfile": "truss-journal-phase-json/0.2.0-proposal"
+      }
     },
     {
       "selector": "journal_observe_transition",
@@ -76,7 +82,13 @@
       "body": null,
       "completeDependencies": null,
       "privateCallerAcl": null,
-      "nativeEvidence": null
+      "nativeEvidence": null,
+      "phaseBodySchema": {
+        "path": "02-design/contracts/journal-ordered-transition-v0.2.proposal.schema.json",
+        "schemaId": "urn:truss:proposal:journal-ordered-transition:0.2.0",
+        "sha256": "cde879b15cfefb282da03d8d253b39ff506e1c2b11ca1e7834a9d51ad34c4cd2",
+        "byteEncodingProfile": "truss-journal-phase-json/0.2.0-proposal"
+      }
     },
     {
       "selector": "journal_prepare_final",
@@ -95,7 +107,13 @@
       "body": null,
       "completeDependencies": null,
       "privateCallerAcl": null,
-      "nativeEvidence": null
+      "nativeEvidence": null,
+      "phaseBodySchema": {
+        "path": "02-design/contracts/journal-final-preparation-v0.2.proposal.schema.json",
+        "schemaId": "urn:truss:proposal:journal-final-preparation:0.2.0",
+        "sha256": "583ab54efb3370f70743c5127016f2b71cb0464f19ab1d807eb610be73e7a9da",
+        "byteEncodingProfile": "truss-journal-phase-json/0.2.0-proposal"
+      }
     },
     {
       "selector": "journal_reserve_positions",
@@ -114,7 +132,13 @@
       "body": null,
       "completeDependencies": null,
       "privateCallerAcl": null,
-      "nativeEvidence": null
+      "nativeEvidence": null,
+      "phaseBodySchema": {
+        "path": "02-design/contracts/journal-reserved-positions-v0.2.proposal.schema.json",
+        "schemaId": "urn:truss:proposal:journal-reserved-positions:0.2.0",
+        "sha256": "5f2dfe1204c26ca462edee3f03d5034e550369133818ad071527aa2629390b31",
+        "byteEncodingProfile": "truss-journal-phase-json/0.2.0-proposal"
+      }
     },
     {
       "selector": "journal_append_group",
@@ -133,7 +157,13 @@
       "body": null,
       "completeDependencies": null,
       "privateCallerAcl": null,
-      "nativeEvidence": null
+      "nativeEvidence": null,
+      "phaseBodySchema": {
+        "path": "02-design/contracts/journal-pending-publication-v0.2.proposal.schema.json",
+        "schemaId": "urn:truss:proposal:journal-pending-publication:0.2.0",
+        "sha256": "2efecefbfaa47b3e824c88c3546cee1d7a4e0dfc780f1ab06a3021ff95f2cc97",
+        "byteEncodingProfile": "truss-journal-phase-json/0.2.0-proposal"
+      }
     }
   ],
   "ownerForbiddenResponsibilities": [
