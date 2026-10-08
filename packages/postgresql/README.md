@@ -90,3 +90,14 @@ one actual upstream producer, not whole-record/availability/key/relationship or
 native binding support. A present-value result for v2's unknown availability or the
 unknown document assertion does not qualify those unresolved meanings. Fixture
 property mappings are local development IDs, not accepted Truss catalog identities.
+
+UMF branch codex/core-record-value-check at c45c72a2 adds the reusable
+validateCoreRecordValues operation under CONTRACT-049. It composes actual Field
+checks with logical membership/presence, preserving original incomplete document
+results separately. `check-umf-record-values.ts` consumes that exact clean source
+and verified explicit upgrades: all three actual create/replace records in the
+local source receive valid/complete logical results in Bun and real Chromium.
+Unknown v2 availability/document assertion remain incomplete; dataset keys and
+relationships require separate context. Delete remains a source operation. No
+native accepted IDs, automatic defaults, writable catalog profile or source ACK
+is supplied by these results. The UMF branch is pushed separately, not merged.
