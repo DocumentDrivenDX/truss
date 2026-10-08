@@ -17,6 +17,7 @@ DECLARE
   endpoint_ordinal int;
   identity_profile constant text := 'truss-relationship-lineage-bytes/0.1.0';
   identity_bytes bytea;
+  matched record;
 BEGIN
   SELECT * INTO STRICT op FROM truss.row_home_operation o
     WHERE o.original_writer_xid=pg_current_xact_id_if_assigned() AND o.phase<>'application_finalized' FOR UPDATE;
@@ -92,7 +93,8 @@ BEGIN
       AND t.module=original_endpoint->>'module' AND t.element=original_endpoint->>'element';
     IF NOT FOUND THEN RAISE EXCEPTION 'original target endpoint correspondence' USING ERRCODE='55000'; END IF;
   END LOOP;
-  IF EXISTS(SELECT 1 FROM truss.rel_def r WHERE r.document_id=runtime_stage_new_relationship.document_id AND r.module=module_id AND r.rel_id=relationship->>'id')
+  SELECT * INTO STRICT matched FROM truss.runtime_match_relationship_identity(revision,document_id,module_id,relationship->>'id');
+  IF matched.match_state<>'new'
       OR EXISTS(SELECT 1 FROM truss.relationship_lineage l WHERE l.identity_profile='truss-relationship-lineage-bytes/0.1.0' AND l.original_identity_bytes=identity_bytes) THEN
     RAISE EXCEPTION 'existing relationship requires original matching' USING ERRCODE='55000';
   END IF;
