@@ -1,4 +1,6 @@
 {
+  "layoutPath": "docs/helix/04-build/evidence/qualified-property-layout-0.15.owner-export.sql",
+  "layoutSha256": "cc725df53f0d74e13bb51fda29603f8cafe8c0cee237667778566f81b33f5011",
   "component": "native operation and owner-backed catalog staging",
   "engine": "PostgreSQL17.9",
   "umfSource": "c45c72a2a8a3c4fba61c40c5927dd9091acf8cc3",

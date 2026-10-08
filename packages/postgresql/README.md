@@ -101,3 +101,62 @@ Unknown v2 availability/document assertion remain incomplete; dataset keys and
 relationships require separate context. Delete remains a source operation. No
 native accepted IDs, automatic defaults, writable catalog profile or source ACK
 is supplied by these results. The UMF branch is pushed separately, not merged.
+
+## Private native catalog components
+
+The internal SQL under `native/` is exercised independently of the public inert
+assembly. It is not an installer or a granted application API. The isolated
+harness currently selects the UMF-generated qualified-property layout 0.15;
+Weft's separately tested query fixture registration retains its original layout.
+The harness installs actual ALWAYS generation observers and a deferred commit
+barrier. Unfinalized operations and forged finalized flags both refuse COMMIT
+with SQLSTATE 55000 because the complete runtime finalizer is unfinished.
+Rollback/savepoint containment is part of the expected successful test result.
+
+From the repository root, build the original owner bundles from a local UMF Git
+repository containing the required commits and installed build dependencies:
+
+```sh
+bun scripts/build-umf-runtime.ts /path/to/umf record
+bun scripts/build-umf-runtime.ts /path/to/umf values
+```
+
+Each command prints its separate temporary bundle directory. Record uses
+c45c72a2a8a3c4fba61c40c5927dd9091acf8cc3; values uses
+9e4bed3efe922c11e4b5a888ba6854de14f1b29f. The builder archives committed source
+and records source/bundle hashes and build dependencies. Current-core Field/key
+checks do not promote the older Record producer to current-core qualification.
+Keep both original manifests; do not substitute a sibling working tree bundle.
+
+Use a fresh disposable PostgreSQL 17.9 instance on the harness's fixed loopback
+port. The layout creates its own schema and genesis rows, so reruns need a fresh
+instance. These commands use synthetic fixtures only:
+
+```sh
+docker run --rm -d --name truss-runtime-admission \
+  -e POSTGRES_HOST_AUTH_METHOD=trust \
+  -e 'POSTGRES_INITDB_ARGS=--locale=C --encoding=UTF8' \
+  -p 127.0.0.1:15434:5432 postgres:17.9
+docker exec truss-runtime-admission pg_isready -h 127.0.0.1
+```
+
+Wait for readiness, then supply the exact directories printed by the two builds:
+
+```sh
+TRUSS_UMF_PRODUCER=/path/to/record-bundle \
+TRUSS_UMF_VALUE_PRODUCER=/path/to/values-bundle \
+TRUSS_OPERATION_TEST_URL=postgres://postgres@127.0.0.1:15434/postgres \
+  bun scripts/check-operation-admission.ts
+docker stop truss-runtime-admission
+```
+
+The harness writes `docs/helix/04-build/evidence/runtime-operation-admission.json`,
+pinning layout/native body/owner bundle hashes and original observed checks.
+A green run proves those component checks only. It covers original operation
+custody/exclusion, archive-backed catalog staging and identity classification,
+qualified cross-module Fields/ordered keys, generation events, key buckets,
+prestate snapshots and rollback. It does not establish complete current-data
+validation, whole-set matching, reactivation, immutable reports, journal/feed/ACK,
+effective-role installation, resource/deadline enforcement or public runtime
+readiness. Internal allocated IDs remain transaction-local. Keep this evidence
+separate from compiler fixture results and from production installation claims.
