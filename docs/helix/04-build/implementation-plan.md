@@ -2093,3 +2093,6 @@ The [Item.note presence binding](../02-design/contracts/reference-note-presence-
 
 
 The [Item.amount domain binding](../02-design/contracts/reference-amount-domain-binding.proposal.md) supplies concrete decimal(21,3) admission and independent boundary/scale/token expectations for V2/V4. It consumes UMF's exact fixed-scale coefficient meaning and preserves M03 lexical tokens. Native projection must be checked before narrowing/rounding; the selected owner-wide compiler prerequisites remain mandatory. Storage/readback, comparator/key/SUM and compiler registration are separate capabilities, and the sales decimal(28,2) evidence cannot substitute for this original field.
+
+
+The [code/key binding](../02-design/contracts/reference-code-key-binding.proposal.md) completes the four milestone fields' semantic proposals alongside note presence and amount domain. It reuses the existing UMF tuple operation/independent byte witnesses and K01–K04 schedules. Native owner-local namespace/full-byte enforcement, exact string comparator and home/codec/Weft/profile adoption remain separate deliverables. Field-level proposals do not close the broader consumer/release corpus or the complete installation tuple.
