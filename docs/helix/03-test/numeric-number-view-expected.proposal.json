@@ -1,0 +1,205 @@
+{
+  "scope": "Independently authored standalone-helper expectations; no converter execution, resource qualification, UMF Field or native admission.",
+  "originalPreservation": "Every lossless view retains the exact original wrapper/spelling; numberMeaning is an oracle label, not a transport number or shortest-text equality proof.",
+  "admissionPrecondition": "Apply semantic expected outcomes only under the exact admitted lexical/profile and complete resource/producer preflight. Resource or unsupported-profile refusal is separately observed; do not turn missing prerequisite evidence into a semantic pass.",
+  "integerSafety": "Unsafe integer convenience refuses even when the mathematical integer is exactly representable by binary64.",
+  "cases": [
+    {
+      "case": "integer-zero",
+      "input": {
+        "integerToken": "0"
+      },
+      "expected": {
+        "status": "lossless",
+        "original": {
+          "integerToken": "0"
+        },
+        "numberMeaning": "0",
+        "negativeZero": false
+      }
+    },
+    {
+      "case": "integer-42",
+      "input": {
+        "integerToken": "42"
+      },
+      "expected": {
+        "status": "lossless",
+        "original": {
+          "integerToken": "42"
+        },
+        "numberMeaning": "42",
+        "negativeZero": false
+      }
+    },
+    {
+      "case": "integer-safe-max",
+      "input": {
+        "integerToken": "9007199254740991"
+      },
+      "expected": {
+        "status": "lossless",
+        "original": {
+          "integerToken": "9007199254740991"
+        },
+        "numberMeaning": "9007199254740991",
+        "negativeZero": false
+      }
+    },
+    {
+      "case": "decimal-half",
+      "input": {
+        "decimalToken": "0.5"
+      },
+      "expected": {
+        "status": "lossless",
+        "original": {
+          "decimalToken": "0.5"
+        },
+        "numberMeaning": "0.5",
+        "negativeZero": false
+      }
+    },
+    {
+      "case": "decimal-quarter",
+      "input": {
+        "decimalToken": "0.2500"
+      },
+      "expected": {
+        "status": "lossless",
+        "original": {
+          "decimalToken": "0.2500"
+        },
+        "numberMeaning": "0.25",
+        "negativeZero": false
+      }
+    },
+    {
+      "case": "decimal-exponent-half",
+      "input": {
+        "decimalToken": "5e-1"
+      },
+      "expected": {
+        "status": "lossless",
+        "original": {
+          "decimalToken": "5e-1"
+        },
+        "numberMeaning": "0.5",
+        "negativeZero": false
+      }
+    },
+    {
+      "case": "decimal-negative-zero",
+      "input": {
+        "decimalToken": "-0.00"
+      },
+      "expected": {
+        "status": "lossless",
+        "original": {
+          "decimalToken": "-0.00"
+        },
+        "numberMeaning": "-0",
+        "negativeZero": true
+      }
+    },
+    {
+      "case": "integer-unsafe-exact",
+      "input": {
+        "integerToken": "9007199254740992"
+      },
+      "expected": {
+        "status": "refused",
+        "reason": "lossy_number"
+      }
+    },
+    {
+      "case": "integer-rounded",
+      "input": {
+        "integerToken": "9007199254740993"
+      },
+      "expected": {
+        "status": "refused",
+        "reason": "lossy_number"
+      }
+    },
+    {
+      "case": "decimal-tenth",
+      "input": {
+        "decimalToken": "0.1"
+      },
+      "expected": {
+        "status": "refused",
+        "reason": "lossy_number"
+      }
+    },
+    {
+      "case": "decimal-hundredth",
+      "input": {
+        "decimalToken": "0.01"
+      },
+      "expected": {
+        "status": "refused",
+        "reason": "lossy_number"
+      }
+    },
+    {
+      "case": "decimal-overflow",
+      "input": {
+        "decimalToken": "1e309"
+      },
+      "expected": {
+        "status": "refused",
+        "reason": "nonfinite_number"
+      }
+    },
+    {
+      "case": "decimal-underflow",
+      "input": {
+        "decimalToken": "1e-400"
+      },
+      "expected": {
+        "status": "refused",
+        "reason": "lossy_number"
+      }
+    },
+    {
+      "case": "empty",
+      "input": {
+        "decimalToken": ""
+      },
+      "expected": {
+        "status": "refused",
+        "reason": "invalid_token"
+      }
+    },
+    {
+      "case": "leading-whitespace",
+      "input": {
+        "decimalToken": " 1"
+      },
+      "expected": {
+        "status": "refused",
+        "reason": "invalid_token"
+      }
+    },
+    {
+      "case": "nonfinite-spelling",
+      "input": {
+        "decimalToken": "NaN"
+      },
+      "expected": {
+        "status": "refused",
+        "reason": "invalid_token"
+      }
+    }
+  ],
+  "requiredAdditionalCases": [
+    "independently authored exact subnormal boundaries",
+    "maximum finite binary64 boundaries",
+    "combined token/work/peak limits",
+    "large-exponent zero grammar and bounded shortcut",
+    "repeated enclosing-account failures",
+    "packed Chromium and selected server runtime parity"
+  ],
+  "execution": "not_run"
+}
