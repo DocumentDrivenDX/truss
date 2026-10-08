@@ -104,7 +104,7 @@
   "trustBoundary": "This design handoff is not a runtime registry or serialized Rust Configuration. Unresolved entries cannot be loaded as installed support.",
   "authoredCompositionRecipe": {
     "path": "02-design/contracts/reference-definition-recipes.proposal.json",
-    "sha256": "4e30b6e217f0deb97bde0eb86f0db36db433a481cf4827e15ac5c80d3a380428",
+    "sha256": "ac4076ee8a2468bdbb1e4bb028df075e5bdbffe042591706f372985e0a5b3e3b",
     "scope": "Known original choices and late-bound prerequisites; no accepted/native/Weft registration instances"
   }
 }
