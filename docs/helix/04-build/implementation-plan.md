@@ -64,6 +64,8 @@ Precommit IDs are selected as transaction-scoped provisional values. Durable gro
 
 The document-allocation scanner now requires separately retained expected story/criterion membership, pinned in its output. The authored [design scope baseline](evidence/design-audit/expected-design-scope.json) prevents silent scope shrinkage when a complete story/design/test trio disappears. B-001/E-01 must independently review its release expectation and preserve the original digest; scanner success remains structural evidence rather than semantic or runtime acceptance.
 
+CH-02 implementation-language handoff: the architecture selects SQL fixed observations and PL/pgSQL protected orchestration for the reference PostgreSQL implementation, retaining ADR-001 TypeScript portable core and Weft-owned compilation. Author the five handlers, two ordinary complete-scope validators and protected producers in that orchestration path. Exact codec/resource helper realization, bodies/security/dependencies and managed driver/provider qualification remain required; general language selection is no longer a prerequisite to starting those source bodies.
+
 ### Product-decision application boundaries
 
 Same-qualified-identity reactivation is selected and must govern acceptance/lifecycle design; terminal retirement is historical comparison material. The selected two-property-delta plus metadata-witness rule governs event count without adopting every complete-history profile. Required managed extensions must ship on the selected RDS PostgreSQL, Aurora PostgreSQL and Lakebase profiles; a custom helper cannot become a deployment assumption through source composition.
