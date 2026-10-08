@@ -1,0 +1,18 @@
+{
+  "scope": "Original authored identity/source custody preserved from 0.10 to 0.11; exact-node candidates only, not reviewed identity adoption or native qualification",
+  "previousCounts": {
+    "unique_exact_node_candidate": 431,
+    "no_exact_node_candidate": 136
+  },
+  "currentCounts": {
+    "unique_exact_node_candidate": 480,
+    "no_exact_node_candidate": 87
+  },
+  "unchangedPriorUniqueCandidates": 431,
+  "newReceiptUniqueCandidates": 49,
+  "changedCatalogs": {
+    "docs/helix/02-design/models/truss-receipt-candidate.physical-ids.draft.json": 49
+  },
+  "identityAssignmentsMade": 0,
+  "nativeQualified": false
+}

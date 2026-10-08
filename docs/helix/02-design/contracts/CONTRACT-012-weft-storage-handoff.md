@@ -21,6 +21,12 @@ ddx:
 
 Latest source composition is [layout 0.11](../models/truss-layout-weft-review-0.11.proposal.sql) and its [UMF model](../models/truss-layout-weft-review-0.11.proposal.umf.json), adding the owner-selected request-receipt storage direction. The [0.11 column index](weft-review-columns-v0.11.proposal.md), [feed/lifecycle/receipt chapter](weft-review-columns-v0.11.feed.proposal.md) and [source-effect inventory](weft-review-columns-v0.11.proposal.json) now document all 46 tables and 442 columns. The current 0.11 source packet is separately documented below; historical 0.10 remains preserved. Neither qualifies native replay.
 
+## Original authored identity correspondence in 0.11
+
+The [current exact-node correspondence](../../04-build/evidence/design-audit/review011-original-node-correspondence.json) uses the existing content-discovered, hash-pinned authored catalogs and original model locators. It finds 480 unique exact-node candidates and 87 entries without an exact candidate. The [0.10-to-0.11 transition receipt](../../04-build/evidence/design-audit/review011-original-node-transition.json) verifies unchanged original custody and selected pointers for all 431 prior unique candidates; the additional 49 candidates are exactly the existing receipt catalog identities. No identity is allocated or replaced.
+
+Reproduce with `python3 docs/helix/04-build/evidence/design-audit/find-review011-original-node-correspondence.py`. Exact matching includes parser locations; unmatched entries retain original definitions and baseline diagnostics. Parent, evolution and composition review remains mandatory before adopting identity correspondence. The packet's source-only review011 selectors cannot replace these authored identities; neither candidate counts nor this transition proves an installed native inventory.
+
 ## Current 0.11 declaration dependency checks
 
 The [foreign-key source receipt](../../04-build/evidence/design-audit/layout-foreign-key-closure-v0.11.json) resolves all 61 declared inline/table foreign-key tuples to declared columns and nondeferrable primary/unique keys. Missing-target control and three receipt-specific corruptions refuse: missing request receipt target, removed receipt unique key and wrong target column. The [index/allocator source receipt](../../04-build/evidence/design-audit/layout-index-sequence-closure-v0.11.json) resolves 24 explicit indexes and fourteen literal nextval defaults against eleven declared sequences. Both receipts pin the current source inventory and verify its AST digest.
