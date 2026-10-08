@@ -3,7 +3,7 @@ ddx:
   id: ADR-005
   type: adr
   activity: design
-  status: proposed
+  status: accepted
   authoring:
     home: repo
   links:
@@ -19,7 +19,12 @@ ddx:
 
 # ADR-005: Complete durable group request receipts
 
-**Status:** proposed; explicitly supersedes the journal-only assumption only if accepted. **Date:** 2026-10-05.
+## Owner decisions — 2026-10-07
+
+Accepted by the owner: request-enabled atomic batches use a fixed durable receipt home. Effects and the complete original ordered result, including all-no-op entries, commit together. Equal request identity and complete input replay the original result; unequal input conflicts. Lost network acknowledgment uses the same request identity for retry/lookup rather than blind reapplication. Expired identities never become reusable absence. Request-free groups remain receipt-free. Native bodies, exact selected wire/profile and qualification remain implementation gates; the old journal-only persistence alternative is superseded.
+
+
+**Status:** accepted product decision; supersedes journal-only complete-result replay. **Date:** 2026-10-05.
 
 ## Problem and proposed decision
 

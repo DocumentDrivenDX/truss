@@ -19,6 +19,11 @@ ddx:
 
 # TD-001: Whole-revision acceptance
 
+## Selected decision handoff — 2026-10-07
+
+Implement selected immutable separate reports after original event production and before atomic head publication. Legacy report-column conversion and exact native report producer remain installer prerequisites.
+
+
 ## Technical Approach
 
 Acceptance repeat detection follows CONTRACT-003's complete-input/current-head rule, not equality of derived rows. Retain exact compared document/binding/policy/profile/transform inputs and preserve the original report/origin on repeat. A changed source archive or historical match requires current acceptance validation. The complete acceptance-input schema and canonical/domain-frame proposal are authored in CONTRACT-003/009. Original profile adoption, bounded producer/decoder and persisted-input/archive realization remain unresolved; no inferred partial fingerprint may claim the repeat capability.

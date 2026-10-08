@@ -21,6 +21,11 @@ ddx:
 
 # TD-043: Request identity and exact replay
 
+## Selected decision handoff — 2026-10-07
+
+Implement accepted ADR-005 fixed complete-result receipts; exact native/profile/security and retention producer composition precede replay readiness. The journal-only spike is historical source evidence, not the selected persistence strategy.
+
+
 ## Technical Approach
 
 Admit the head, complete policy owner guards and trusted namespace lifecycle before serializing identical full request identities, then acquire business/root/row locks only for new application under CONTRACT-009. Receipt provisional discovery grants neither disclosure nor final absence; reobserve complete original state/owner closure after the full ordered guards. New earlier scope requires containment/restart. Verify canonical input/digest and retained input integrity, then compare the complete compatible semantic input before either applying once or returning an immutable original ordered result. Equal digest alone cannot establish equality; conflicting complete inputs produce no graph effects or receipt replacement. A caller-supplied hash is a claim to verify, not authority to identify different inputs as equal. Transaction rollback removes all pending replay evidence; uncertain commit requires lookup through the same qualified identity protocol.

@@ -15,6 +15,11 @@ ddx:
 
 # US-043: Make a group safe to repeat
 
+## Selected decision handoff — 2026-10-07
+
+ADR-005 is selected. Every request-enabled batch, including all-no-op batches, atomically stores complete original ordered results with its effects. Matching identity/full input replays, different input conflicts, and acknowledgment loss resolves through same-ID retry/lookup. Expired identities never silently reapply. Request-free groups remain receipt-free; existing complete-result protection remains independent of journal trimming.
+
+
 **Feature**: FEAT-003 — Mutation and Concurrency
 **Feature Requirements**: MUT-08
 **PRD Requirements**: FR-54

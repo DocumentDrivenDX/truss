@@ -17,6 +17,13 @@ ddx:
 
 # CONTRACT-010: Exact recursive value transport
 
+## Owner decisions — 2026-10-07
+
+Accepted numeric direction: preserve exact authored integer/decimal tokens and reject silent precision loss. The JavaScript facade uses safe number values by default where lossless, bigint for larger integers and an exact decimal carrier preserving spelling. A number supplied for a decimal is admitted only when its actual binary value is exactly representable in the selected declared decimal domain; unsafe integer numbers, out-of-domain values and rounding refuse. Explicit float domains remain separately qualified. Number-origin input cannot recover spelling already lost before admission. Reads preserve original token custody and permit number conversion only with an explicit lossless check.
+
+Reuse UMF's existing integer/decimal/float distinctions, facets, exact literal tokens and portable key semantics. The owner reports UMF is adding decimalToken-related convenience primitives; a daily follow-up is scheduled. Pin and review their actual public API/evidence before reuse, without waiting for unspecified core changes or duplicating UMF semantics. This accepts the carrier/API direction, not the separate proposed Truss compact decimal key profile or unqualified float/record/native support.
+
+
 **Version:** proposed truss-value/0.1.0. **Status:** draft; wire transport, not an accepted storage encoding.
 
 ## Surface

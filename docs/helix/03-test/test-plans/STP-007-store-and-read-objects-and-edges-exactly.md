@@ -17,6 +17,11 @@ ddx:
 
 # STP-007: Store and read objects and edges exactly
 
+## Selected decision handoff — 2026-10-07
+
+Planned numeric facade controls NAPI-01–04: safe integer number and larger bigint round-trip exactly; reject unsafe integer number before effects; admit exact decimal number 12.5 but reject 0.1 as a decimal-number input requiring approximation; preserve decimalToken 1.00 and large/nested tokens across browser, JSON transport and native readback. Explicit number conversion must reject precision loss and preserve the original token separately. Planned ID controls PID-01–03: pending IDs link records only in the same live adopted transaction; rollback leaves no committed graph identity; no durable external publication occurs before confirmed outer commit, and unknown commit waits for recovery rather than reallocation. Cases are not_run.
+
+
 ## Story Reference
 
 US-007, TD-007, SD-002, TP-001 and CONTRACT-001/004/007. All named tests are planned; no runtime evidence is claimed.

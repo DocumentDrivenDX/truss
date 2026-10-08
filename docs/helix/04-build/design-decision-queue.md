@@ -15,6 +15,13 @@ ddx:
 
 # Remaining semantic decision queue
 
+## Selected decision handoff — 2026-10-07
+
+The owner has resolved the six product choices: bounded Truss-controlled work with separately classified arbitrary native resource guarantees; provisional transaction-scoped precommit IDs and committed-ID nonreuse; complete durable request receipts; exact numeric carriers with lossless JavaScript number/bigint convenience; reconstructable history with configurable short/zero local retention; and separate immutable acceptance reports. Embedded execution uses live transaction scopes; network mutation execution receives complete atomic batches and acknowledges confirmed commit. ADR-005/006/007 now record accepted product direction. Older pending-choice passages below are historical where superseded by this handoff.
+
+Remaining work is exact coherent source/native/driver/codec/security/corpus profile composition, not another vote on those product guarantees. Review current UMF decimalToken convenience work when it lands, preserving existing core meanings and qualified support limits. Weft still owns compiler implementation; source packets remain unadopted until exact mapping/interface review. Native routines, complete installer/conversion and independent test execution remain required before support claims.
+
+
 Use [current design closure](current-design-closure.md) for the consolidated eleven-area status, pending choices and implementation-ready boundaries. Chronological evidence below retains its original version scope.
 
 ## Immediate priority: one complete physical profile for Weft

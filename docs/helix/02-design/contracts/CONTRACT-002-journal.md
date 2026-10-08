@@ -19,6 +19,11 @@ ddx:
 
 # Contract: Journal
 
+## Owner decisions — 2026-10-07
+
+Accepted by the owner: history supports reconstruction without current rows. Creates retain complete new records; deletes retain complete prior records; updates retain ordered property deltas plus the selected complete metadata boundary witness. The selected two-property mutation emits two property deltas and one witness. Local retention is deployment-configurable, including very short or zero retention. Continued reconstruction after local deletion requires a qualified durable archive handoff; otherwise return explicit unavailable history. Required consumer/receipt protections and atomic history production are not bypassed by a zero-retention setting. Native producers, archive continuity and selected encoding/profile qualification remain build gates.
+
+
 **Contract ID**: CONTRACT-002
 **Type**: schema
 **Version**: layout 0.2 (draft)

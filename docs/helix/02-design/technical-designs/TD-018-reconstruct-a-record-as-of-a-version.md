@@ -17,6 +17,11 @@ ddx:
 
 # TD-018: Version-qualified reconstruction
 
+## Selected decision handoff — 2026-10-07
+
+Implement accepted ADR-007 complete event/group reconstruction and configurable local retention with qualified archive handoff or explicit unavailability. No current-row dependency or partial group publication may substitute for original history.
+
+
 **Story:** [[US-018]]. **Parent:** [[SD-004]]. **Feature:** FEAT-004.
 
 ## Technical Approach

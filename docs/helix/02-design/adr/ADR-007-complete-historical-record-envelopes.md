@@ -3,7 +3,7 @@ ddx:
   id: ADR-007
   type: adr
   activity: design
-  status: proposed
+  status: accepted
   authoring:
     home: repo
   links:
@@ -21,7 +21,12 @@ ddx:
 
 # ADR-007: Complete historical record envelopes
 
-**Status:** proposed; versioned journal profile required. **Date:** 2026-10-05.
+## Owner decisions — 2026-10-07
+
+Accepted by the owner: history supports reconstruction without current rows. Creates retain complete new records; deletes retain complete prior records; updates retain ordered property deltas plus the selected complete metadata boundary witness. The selected two-property mutation emits two property deltas and one witness. Local retention is deployment-configurable, including very short or zero retention. Continued reconstruction after local deletion requires a qualified durable archive handoff; otherwise return explicit unavailable history. Required consumer/receipt protections and atomic history production are not bypassed by a zero-retention setting. Native producers, archive continuity and selected encoding/profile qualification remain build gates.
+
+
+**Status:** accepted reconstruction/retention direction; qualified versioned journal profile required. **Date:** 2026-10-05.
 
 ## Problem and proposed decision
 

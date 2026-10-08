@@ -19,6 +19,11 @@ ddx:
 
 # Contract: Change feed
 
+## Owner decisions — 2026-10-07
+
+Complete reconstructable history is selected under ADR-007. Local retention may be short or zero, but required durable archive/consumer handoff precedes deletion when continued reconstruction/delivery is promised. Transactional event production, complete group/transaction boundaries and registered consumer protection still apply. Missing both local and qualified archive history yields explicit unavailable history. Request-receipt replay/protection is independent of local journal retention; trimming cannot make an old request reapply.
+
+
 **Contract ID**: CONTRACT-006
 **Type**: schema
 **Version**: layout 0.2 (draft)

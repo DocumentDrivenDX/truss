@@ -1,5 +1,10 @@
 # Resource account and host requirement reconciliation
 
+## Owner decisions — 2026-10-07
+
+The owner selects bounds for work controlled by the toolkit and its protected procedures, with database-wide/arbitrary bypass work guarantees reported separately. Universal rollback-resistant cumulative accounting is not a required default deployment dependency. Preserve FR-43 pooling/no-session-state and database-level graph integrity. Each selected operation still needs finite admission/cancellation/cleanup and honest enforcement evidence. Historical native-account designs remain optional unadopted realizations, not assumed managed-service capabilities.
+
+
 PRD FR-43 requires no session state and transaction-mode pooling with and without prepared statements. FR-33–35 require honest enforcement classification and bypass evidence. FR-56 requires complete reproducible physical layout plus parity/behavior evidence. CONTRACT-007's backend-local cumulative account is an unadopted realization proposal; it cannot override those requirements by excluding poolers or calling its backend affinity an accepted support restriction.
 
 ## Composition gate

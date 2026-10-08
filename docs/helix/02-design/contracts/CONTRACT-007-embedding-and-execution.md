@@ -21,6 +21,13 @@ ddx:
 
 # Contract: Embedding and execution
 
+## Owner decisions — 2026-10-07
+
+Selected execution boundary: engine-owned callback transactions commit before returning committed results; adopted transactions remain caller-owned and return explicit pending results. Pending object/edge IDs are usable only within the same live transaction. Only confirmed outer commit authorizes durable external publication; savepoint release and successful Truss operations do not. Unknown commit requires original recovery/receipt observation. No commit-by-string-ID or live cross-network transaction protocol is selected.
+
+A host network adapter accepts one complete bounded atomic mutation batch, invokes the embedded engine-owned transaction and acknowledges success after confirmed commit. It preserves request ID/input for receipt-based retries and does not silently split one atomic request into independent commits. Resource bounds cover work the toolkit/protected procedures control; report arbitrary native/bypass resource guarantees separately. Existing graph integrity, current authority, pooling and cleanup requirements remain.
+
+
 **Contract ID:** CONTRACT-007. **Type:** library/boundary. **Version:** proposed `truss-execution/0.1.0`. **Status:** draft.
 
 ## Purpose

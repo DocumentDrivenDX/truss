@@ -17,6 +17,11 @@ ddx:
 
 # STP-001: Whole-revision acceptance
 
+## Selected decision handoff — 2026-10-07
+
+Planned report controls RPSEL-01–02: nonempty accepted report includes actual original generated event IDs, is immutable, and commits with catalog/journal/head; fail between report production and head publication and require whole-transaction rollback with no accepted report-less head. Fresh/retained legacy report conversion remains independently qualified. Cases are not_run.
+
+
 ## Story Reference and Scope
 
 US-001, TD-001, SD-001, TP-001 and CONTRACT-003/007. Tests are planned. Complete expected diagnostics/assertions are authored independently of output enumeration.

@@ -21,6 +21,11 @@ ddx:
 
 # Contract: Catalog revision
 
+## Owner decisions — 2026-10-07
+
+The owner selected the separate immutable complete acceptance-report home. Create the qualified revision parent, perform admitted effects and obtain original generated event identities, persist the complete report once, then publish/verify the head in the same transaction. No placeholder report or report-less accepted head is permitted. The legacy schema_rev.report disposition, retained conversion, exact report version/producer/security and installed inventory must be reconciled before readiness. Separate storage is selected; the physical/source candidates do not by themselves qualify native support.
+
+
 **Contract ID**: CONTRACT-003
 **Type**: library
 **Version**: 0.1 (draft)

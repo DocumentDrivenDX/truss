@@ -22,6 +22,15 @@ kind: product
 
 # Product Requirements Document
 
+## Owner decisions — 2026-10-07
+
+The owner selected bounded work for toolkit and protected procedures Truss controls; arbitrary native/bypass work has separately reported database-wide guarantees. Database-enforced graph integrity remains required and every enforcement claim keeps its database/engine/none classification. No rollback-resistant universal native account or custom extension is selected.
+
+Embedded execution supports engine-owned callback transactions and adoption of caller-owned live transactions. Handles are connection/lifetime-bound, not commit-by-string-ID resources. Pending numeric object/edge IDs may be used only within their original transaction; durable external publication requires confirmed outer commit. Unknown commit remains unresolved. Network mutation consumers submit complete atomic batches in one request; no live transaction handle crosses the network, and success acknowledgment follows confirmed commit.
+
+ADR-005 durable complete-result receipts, ADR-006 exact numeric carriers with lossless JavaScript convenience, and ADR-007 reconstructable history are selected. Catalog acceptance uses a separate immutable complete-report home in the same transaction as catalog/journal effects, publishing the head only after report completion. Very short/zero local history retention is allowed subject to required durable handoff and consumer/receipt protections; history unavailable is explicit when required retained/archive evidence is absent. Exact deployment/profile selection and implementation qualification remain separate.
+
+
 ## Summary
 
 truss stores connected data, typed by UMF (DocumentDrivenDX's machine-readable metamodel and schema interchange fabric) schemas, in a fixed set of PostgreSQL tables. A team adds an entity type, property or relationship by publishing a UMF schema revision, never by migrating tables. Every value is kept exactly, every change is journaled in the transaction that made it, nothing the schema does not define is dropped, and for every rule truss reports whether PostgreSQL enforces it, truss enforces it, or nothing does.
@@ -137,7 +146,7 @@ Deferred items are tracked in `docs/helix/parking-lot.md` when it exists.
 - **FR-12** — An object may hold named keys. A key value is unique within its type, is held in a way the database enforces, and is looked up by its canonical text, which is equal for equal values of the declared type.
 - **FR-13** — An edge connects two existing objects of types its relationship allows, and the database refuses any other. There is at most one edge for a relationship, a source and a target, enforced by the database even under concurrent creates. An object that still has edges cannot be deleted.
 - **FR-14** — A maximum multiplicity of one on a relationship is enforced by the database, without a per-relationship index; larger maxima are enforced in the write protocol under the parent lock.
-- **FR-15** — Every identifier of an object or an edge comes from one sequence and is never reused.
+- **FR-15** — Every object/edge identifier comes from one sequence. Committed identifiers are never reused. Precommit identifiers are transaction-scoped provisional values and must not be published as durable external identities before confirmed outer commit; rollback/crash before commit supplies no permanent reservation guarantee.
 - **FR-45** — Importing the same records again changes nothing: a record is identified by its type and primary key (an edge by its relationship and endpoints); one that is held or was deleted is skipped; and the import reports what was created, skipped and rejected. A deployment chooses whether a key an object has held stays reserved against a direct create.
 - **FR-46** — An imported record keeps the load it came from and the source's own facts (author, time, system), recorded once and never changed, apart from the actor recorded in the journal.
 
@@ -150,7 +159,7 @@ Deferred items are tracked in `docs/helix/parking-lot.md` when it exists.
 - **FR-20** — Errors are of defined kinds (invalid, endpoint violation, has edges, key conflict, version conflict, catalog changed, retry, not found, unavailable), each with a stated retry rule.
 - **FR-21** — Cross-row rules lock the parent object or run serializable; a deferred trigger under READ COMMITTED alone is never reported as database enforcement.
 - **FR-51** — A caller can apply several operations as one atomic group that commits or fails as a whole, with one origin and one catalog check; a failure names the failing operation. *(P1)*
-- **FR-54** — A caller can give a group a request identifier so that applying it again returns the original results and changes nothing, even when two identical requests arrive at once, and so that reusing the identifier with different inputs is refused. *(P1)*
+- **FR-54** — A caller can give a group a request identifier so that retries within its protected replay lifetime return the complete original ordered results and change nothing, including all-no-op groups and concurrent identical requests. Reusing the identifier with different inputs is refused. After eligible result expiry, retained request identity yields explicit expiry/conflict rather than silently reapplying the group. *(P1)*
 - **FR-55** — A caller can run any operation or group inside a transaction it controls, see its effects there, and roll it back; a rolled-back operation leaves no object, edge, key, journal row, tombstone, request record or lock. *(P1)*
 
 ### Subsystem: Journal and history

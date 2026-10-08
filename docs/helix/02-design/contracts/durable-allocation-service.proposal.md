@@ -1,5 +1,10 @@
 # Conditional durable allocation service
 
+## Owner decisions — 2026-10-07
+
+The owner selected transaction-scoped provisional precommit IDs and permanent nonreuse of committed IDs. Durable external publication waits for confirmed outer commit, including caller-owned transactions. This stronger independent allocation service remains optional and is not selected for the reference host; its receipt home must not enter the default installer by implication.
+
+
 Companion to CONTRACT-009 AP03. This design applies only if the owner selects permanent reservation of precommit disclosed IDs. That choice is pending. It does not alter FR-15 or adopt a service in the default toolkit. UMF interpretation and Weft compilation are unaffected.
 
 ## Host interface and custody

@@ -15,6 +15,11 @@ ddx:
 
 # US-007: Store and read objects and edges exactly
 
+## Selected decision handoff — 2026-10-07
+
+Safe number convenience is permitted only at a lossless public boundary. Unsafe integer numbers and decimal number conversions requiring rounding refuse; exact integer/decimal carriers preserve original spelling and declared domains. Committed IDs are never reused; pending IDs remain usable only within their original transaction and are not durably published before outer commit. Internal stored numeric/time custody remains exact text/token rather than JavaScript number/Date.
+
+
 **Feature**: FEAT-002 — Storage, Identity and Exactness
 **Feature Requirements**: STO-01, STO-02, STO-07
 **PRD Requirements**: FR-9, FR-10, FR-15

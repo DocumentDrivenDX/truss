@@ -17,6 +17,11 @@ ddx:
 
 # STP-018: Version-qualified reconstruction
 
+## Selected decision handoff — 2026-10-07
+
+Planned selected-history controls HSEL-01–03: reconstruct object ownership and edge endpoints/order after deletion without current-row access; independently observe very short/zero local retention with durable archive confirmation before deletion and reconstruct through the admitted archive; remove both local and archive evidence and require explicit unavailable history, never partial success. Consumer/receipt protections and complete mutation/transaction boundaries remain enforced. Cases are not_run.
+
+
 ## Story Reference
 
 US-018, TD-018, SD-004, TP-001 and CONTRACT-002/003/007. Tests are planned, not native reconstruction evidence.

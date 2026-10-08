@@ -19,6 +19,13 @@ ddx:
 
 # Contract: Group planning and locks
 
+## Owner decisions — 2026-10-07
+
+ADR-005 is owner-selected: request-enabled groups require a complete immutable request receipt persisted atomically with effects, including all-no-op results. Exact equal identity/input replays; unequal full input conflicts; unknown commit uses original lookup/retry custody. Retired/expired request identity cannot silently reapply. Receipt storage and its native protocol must join the selected installer before replay readiness; request-free groups remain independent.
+
+Precommit allocation uses the original graph transaction/sequence and returns only transaction-scoped pending identities. Committed identities are never reused; pending IDs are not durably published before confirmed outer commit. The independently committed allocation service is an optional stronger proposal, not a default dependency. Network hosts submit complete atomic batches and acknowledge only confirmed commit.
+
+
 **Contract ID:** CONTRACT-009. **Type:** mutation protocol. **Version:** proposed `truss-group/0.1.0`. **Status:** draft; request-receipt persistence remains a decision gate.
 
 ## Purpose

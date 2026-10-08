@@ -3,7 +3,7 @@ ddx:
   id: ADR-006
   type: adr
   activity: design
-  status: proposed
+  status: accepted
   authoring:
     home: repo
   links:
@@ -19,7 +19,14 @@ ddx:
 
 # ADR-006: Exact numeric tokens in typed value carriers
 
-**Status:** proposed; requires codec/storage/Weft owner review. **Date:** 2026-10-05.
+## Owner decisions — 2026-10-07
+
+Accepted numeric direction: preserve exact authored integer/decimal tokens and reject silent precision loss. The JavaScript facade uses safe number values by default where lossless, bigint for larger integers and an exact decimal carrier preserving spelling. A number supplied for a decimal is admitted only when its actual binary value is exactly representable in the selected declared decimal domain; unsafe integer numbers, out-of-domain values and rounding refuse. Explicit float domains remain separately qualified. Number-origin input cannot recover spelling already lost before admission. Reads preserve original token custody and permit number conversion only with an explicit lossless check.
+
+Reuse UMF's existing integer/decimal/float distinctions, facets, exact literal tokens and portable key semantics. The owner reports UMF is adding decimalToken-related convenience primitives; a daily follow-up is scheduled. Pin and review their actual public API/evidence before reuse, without waiting for unspecified core changes or duplicating UMF semantics. This accepts the carrier/API direction, not the separate proposed Truss compact decimal key profile or unqualified float/record/native support.
+
+
+**Status:** accepted carrier/API direction; codec/storage/Weft profile qualification remains required. **Date:** 2026-10-05.
 
 ## Problem
 
@@ -87,4 +94,4 @@ Migration reads old values exactly and records any lexical information already l
 
 A separate lexical receipt alongside numeric JSONB permits convenient SQL access but doubles consistency obligations and requires every raw SQL/journal path to maintain the receipt. Exact raw JSON text per value preserves unknown tokens but changes access/index/domain strategy. Both remain explicit alternatives for review; a raw JSONB numeric-only profile cannot satisfy the full lexical requirement.
 
-Before acceptance, publish exact recursive value schema, grammar/facets/null/resource rules, unknown opaque carrier, no-op equality and Weft extraction/decoder profile. Independent examples must cover nested numbers, real numeric-looking strings, duplicate/missing members, lexical-only edits, invalid native writes and mathematical key collisions. Real browser and PostgreSQL evidence is a build gate, not supplied by this proposal.
+Before profile activation, publish exact recursive value schema, grammar/facets/null/resource rules, unknown opaque carrier, no-op equality and Weft extraction/decoder profile. Independent examples must cover nested numbers, real numeric-looking strings, duplicate/missing members, lexical-only edits, invalid native writes and mathematical key collisions. Real browser and PostgreSQL evidence is a build gate, not supplied by this proposal.

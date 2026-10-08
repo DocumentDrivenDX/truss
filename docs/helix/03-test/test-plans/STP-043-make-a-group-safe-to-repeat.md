@@ -17,6 +17,11 @@ ddx:
 
 # STP-043: Idempotent group replay
 
+## Selected decision handoff — 2026-10-07
+
+Planned receipt controls RSEL-01–04: all-no-op and mixed batches return identical original ordered results on retry; drop network acknowledgment after actual commit and retry the complete same-ID batch without new effects; concurrent equal batches have one effect/receipt winner while unequal input conflicts; purge eligible payload under short/zero journal retention and require retained expiry/conflict identity to prevent reapplication. Receipt/effects rollback and unknown-commit observation retain their existing schedules. Cases are not_run.
+
+
 ## Story Reference and Scope
 
 US-043, TD-043, SD-003, TP-001 and CONTRACT-004/007/009. Tests are planned and receipt persistence remains D-06-gated.
