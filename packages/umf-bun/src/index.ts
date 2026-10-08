@@ -25,3 +25,21 @@ export async function loadUmfProducer(directory:string){
   checkRecord(target:unknown,identity:unknown,values:unknown){return captured.validateCoreRecordValues(target,identity,values)}
  });
 }
+
+
+/** Independently pinned current-core numeric conveniences; no Record-source substitution. */
+export const UMF_NUMERIC_SOURCE='9e4bed3efe922c11e4b5a888ba6854de14f1b29f';
+export async function loadUmfNumericProducer(directory:string){
+ const root=resolve(directory);const manifest=await Bun.file(root+'/producer-manifest.json').json();
+ const bytes=await Bun.file(root+'/producer.js').arrayBuffer();
+ const hash=new Bun.CryptoHasher('sha256').update(bytes).digest('hex');
+ if(manifest.revision!==UMF_NUMERIC_SOURCE||manifest.producerMode!=='numeric'||manifest.bundleSha256!==hash)throw Error('Original UMF numeric producer pin mismatch');
+ const owner=await import(root+'/producer.js');
+ const names=['exactDecimal','integerFromBigInt','integerToBigInt','admitJavascriptNumber','numericToNumberLossless'] as const;
+ const captured=Object.fromEntries(names.map(name=>{if(typeof owner[name]!=='function')throw Error('Missing original numeric producer');return [name,owner[name].bind(owner)]}));
+ return Object.freeze({sourceRevision:UMF_NUMERIC_SOURCE,bundleSha256:hash,
+  exactDecimal:captured.exactDecimal,integerFromBigInt:captured.integerFromBigInt,
+  integerToBigInt:captured.integerToBigInt,admitJavascriptNumber:captured.admitJavascriptNumber,
+  numericToNumberLossless:captured.numericToNumberLossless,
+ });
+}
