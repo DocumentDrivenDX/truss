@@ -2254,3 +2254,6 @@ CONTRACT-008 now reconciles the actual generated-column installation defect with
 
 
 The exact proposed archive statement now executes in fresh PostgreSQL17.9. Independent binary/Unicode digest expectations match; explicit rollback and missing deferred marker at commit both leave zero rows. Retained native component receipt does not qualify successful marker production, permissions/exclusion/resource or populated conversion. This closes the repaired-column writer statement ambiguity without claiming a complete installation path.
+
+
+Query lifetime/registration implementation: construction now captures original compiler/host/decoder/handler functions before asynchronous admission, and disposal closes new work plus plan/result publication without silently settling host transactions. Independent controls cover retained plans, in-flight compile/check/settlement and postconstruction function replacement. Fourteen tests/35 assertions and strict portable package build pass; issuer-wide native arbitration and cancellation/recovery remain separate host requirements.

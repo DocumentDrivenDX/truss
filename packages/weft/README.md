@@ -23,3 +23,6 @@ The build uses locked offline dependencies and `truss-postgresql-qualified`, nev
 
 
 `serializeStorageBinding` serializes a trusted owner-produced composition, verifies every embedded original artifact hash and requires a positive catalog revision. It retains supplied native/home/key/relationship definitions and never allocates IDs or infers bindings. Byte integrity and a positive revision do not establish authenticity: the host must obtain the composition from actual admitted catalog/installation custody. Rust remains responsible for binding semantics, and native host admission still verifies current original context. The serializer is not an acceptance service.
+
+
+Engine construction captures the original compiler, host, decoder and handler functions before asynchronous admission. `dispose()` refuses new compilation/execution and buffered publication, including disposal during compilation, checks or host settlement. It does not commit, roll back or cancel an adopted native transaction: the original host retains settlement/recovery/cleanup responsibility. These lifecycle checks do not replace issuer-wide arbitration or native context/authority checks.

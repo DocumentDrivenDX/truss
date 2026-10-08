@@ -19,9 +19,10 @@ try {
   const sql=['SELECT COUNT(*) AS total FROM Customer c','SELECT SUM(o.total) AS total FROM Orders o','SELECT c.* FROM Customer c ORDER BY c.id LIMIT 10'];
   const out=[];for(const query of sql){const p=await engine.compile(query);out.push({query,response:p.originalResponse});
    try{await engine.execute(p);throw Error('Unavailable runtime executed')}catch(e){if(e.code!=='runtime_unavailable')throw e}}
+  engine.dispose();try{await engine.compile(sql[0]);throw Error('Disposed engine compiled')}catch(e){if(e.code!=='disposed')throw e}
   return out;
  },request);
- const receipt={sourceRevision:'2744531735c2a771fbe7ed24a7f67e3afc851b25',browser:browser.version(),cases:results,
+ const receipt={sourceRevision:'2744531735c2a771fbe7ed24a7f67e3afc851b25',browser:browser.version(),cases:results,disposedCompilationRefused:true,
   qualification:'Real Chromium WASM compiler plus portable Truss API. Synthetic upstream binding only; no native execution/installed Truss qualification.'};
  await Bun.write('docs/helix/04-build/evidence/weft-integration-browser.json',JSON.stringify(receipt,null,2)+'\n');
  console.log(JSON.stringify({browser:receipt.browser,compiled:results.length,nativeHost:'unavailable'}));

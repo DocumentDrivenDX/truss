@@ -68,3 +68,41 @@ test('unsupported aggregate filter is an explicit compiler refusal, never host r
  const engine=await createQueryEngine(compiler,input);
  await expect(engine.compile('SELECT SUM(o.total) AS total FROM Orders o WHERE o.id < :cursor',{cursor:{family:'integer',value:'0'}})).rejects.toThrow('WFT-UNSUPPORTED');
 });
+
+test('dispose refuses retained plans and new compiler calls',async()=>{
+ const engine=await createQueryEngine(compiler,input);const plan=await engine.compile('SELECT COUNT(*) AS total FROM Customer c');engine.dispose();engine.dispose();
+ await expect(engine.compile('SELECT COUNT(*) AS total FROM Customer c')).rejects.toThrow('Query engine disposed');
+ await expect(engine.execute(plan)).rejects.toThrow('Query engine disposed');
+});
+test('dispose during compilation prevents plan publication',async()=>{
+ let finish!:(value:string)=>void;
+ const delayed:Compiler={compileJson(){return new Promise(resolve=>{finish=resolve})}};
+ const engine=await createQueryEngine(delayed,input);const pending=engine.compile('SELECT COUNT(*) AS total FROM Customer c');engine.dispose();
+ finish('{}');await expect(pending).rejects.toThrow('Query engine disposed');
+});
+test('registered compiler and host functions cannot be replaced after construction',async()=>{
+ const original=await createQueryEngine(compiler,input);const plan=await original.compile('SELECT COUNT(*) AS total FROM Customer c');
+ const mutable={compileJson:compiler.compileJson};
+ const handlers=Object.fromEntries(plan.artifact.obligations.map(o=>[o.id,{accepts:()=>true,async check(){}}]));
+ const host:Host={handlers,async withReadContext(body){return body({async verifyContext(){},async query(){return [['2']]}})},async decode(){return [{integerToken:'2'}]}};
+ const engine=await createQueryEngine(mutable,input,host);
+ mutable.compileJson=()=>{throw Error('replaced compiler')};host.withReadContext=async()=>{throw Error('replaced host')};host.decode=async()=>{throw Error('replaced decoder')};host.handlers={};
+ const admitted=await engine.compile('SELECT COUNT(*) AS total FROM Customer c');expect(await engine.execute(admitted)).toEqual([{integerToken:'2'}]);
+});
+
+test('disposal during a native check stops data SQL without settling host transaction',async()=>{
+ const seed=await createQueryEngine(compiler,input);const plan=await seed.compile('SELECT COUNT(*) AS total FROM Customer c');let queried=false,settled=false;
+ let engine:Awaited<ReturnType<typeof createQueryEngine>>;
+ const handlers=Object.fromEntries(plan.artifact.obligations.map(o=>[o.id,{accepts:()=>true,async check(){engine.dispose()}}]));
+ const host:Host={handlers,async withReadContext(body){try{return await body({async verifyContext(){},async query(){queried=true;return [['2']]}})}finally{settled=true}},async decode(){throw Error('unexpected decoder')}};
+ engine=await createQueryEngine(compiler,input,host);const admitted=await engine.compile('SELECT COUNT(*) AS total FROM Customer c');
+ await expect(engine.execute(admitted)).rejects.toThrow('Query engine disposed');expect(queried).toBe(false);expect(settled).toBe(true);
+});
+test('disposal during host settlement withholds its buffered result',async()=>{
+ const seed=await createQueryEngine(compiler,input);const plan=await seed.compile('SELECT COUNT(*) AS total FROM Customer c');
+ let engine:Awaited<ReturnType<typeof createQueryEngine>>;
+ const handlers=Object.fromEntries(plan.artifact.obligations.map(o=>[o.id,{accepts:()=>true,async check(){}}]));
+ const host:Host={handlers,async withReadContext(body){const result=await body({async verifyContext(){},async query(){return [['2']]}});engine.dispose();return result},async decode(){return [{integerToken:'2'}]}};
+ engine=await createQueryEngine(compiler,input,host);const admitted=await engine.compile('SELECT COUNT(*) AS total FROM Customer c');
+ await expect(engine.execute(admitted)).rejects.toThrow('Query engine disposed');
+});

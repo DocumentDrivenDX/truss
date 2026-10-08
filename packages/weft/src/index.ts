@@ -69,6 +69,12 @@ function canonical(value: any): string {
 const clone = <T>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
 /** Trusted host supplies original owner binding bytes. Rust performs full binding semantics. */
 export async function createQueryEngine(compiler: Compiler, input: BindingInput, host?: Host) {
+  const compileJson=compiler.compileJson.bind(compiler);
+  const withReadContext=host?.withReadContext.bind(host),decode=host?.decode.bind(host);
+  const registered=host ? Object.freeze(Object.fromEntries(Object.entries(host.handlers).map(([id,h])=>
+    [id,Object.freeze({accepts:h.accepts.bind(h),check:h.check.bind(h)})]))) : undefined;
+  let disposed=false;
+  const admitting=()=>{if(disposed)refuse('disposed','Query engine disposed')};
   const binding=immutable(clone(input));
   text(binding.bindingJson,4_194_304);
   if(await sha256(binding.bindingJson)!==binding.bindingSha256)refuse('binding_pin','Binding bytes/hash mismatch');
@@ -79,16 +85,16 @@ export async function createQueryEngine(compiler: Compiler, input: BindingInput,
     if(await sha256(module.documentJson)!==module.pin.sha256)refuse('model_pin','Original module bytes/hash mismatch');
   }
   const plans=new WeakSet<object>();
-  const registered=host ? Object.freeze(Object.fromEntries(Object.entries(host.handlers).map(([id,h])=>
-    [id,Object.freeze({accepts:h.accepts.bind(h),check:h.check.bind(h)})]))) : undefined;
   return Object.freeze({
+    /** Closes new work/publication; original host still owns in-flight settlement and cleanup. */
+    dispose(): void {disposed=true},
     async compile(sql: string, parameters: Readonly<Record<string, {family: string; value: string}>> = {}): Promise<Plan> {
-      text(sql,262_144);
+      admitting();text(sql,262_144);
       const request={interfaceVersion:'weft-compile/0.2.0',dialect:'weft-sql/0.2.0',sql,
         modules:binding.modules,target:{backendId:'truss.postgresql',backendVersion:binding.backendVersion,
           targetProfile:binding.targetProfile,bindingJson:binding.bindingJson,bindingSha256:binding.bindingSha256},
         options:{allowCandidate:false},parameters:clone(parameters)};
-      const response=await compiler.compileJson(JSON.stringify(request));text(response,8_388_608);
+      const response=await compileJson(JSON.stringify(request));admitting();text(response,8_388_608);
       let value: any;try {value=JSON.parse(response)}catch {refuse('compiler','Malformed compiler response')}
       if(value.status!=='compiled')refuse('compiler_blocked',response);
       if(value.interfaceVersion!=='weft-compile/0.2.0'||value.dialect!=='weft-sql/0.2.0'||
@@ -102,7 +108,7 @@ export async function createQueryEngine(compiler: Compiler, input: BindingInput,
       const plan=immutable({artifact:value as Artifact,originalResponse:response});plans.add(plan);return plan;
     },
     async execute(plan: Plan): Promise<readonly Json[]> {
-      if(!plans.has(plan))refuse('plan','Foreign or substituted query plan');
+      admitting();if(!plans.has(plan))refuse('plan','Foreign or substituted query plan');
       if(!host)refuse('runtime_unavailable','Original native query host not installed');
       const artifact=plan.artifact;
       const selected=artifact.obligations.map(o=>{
@@ -111,21 +117,22 @@ export async function createQueryEngine(compiler: Compiler, input: BindingInput,
         if(!handler||!handler.accepts(o,artifact))refuse('obligation','Unknown obligation meaning: '+o.id);
         return {obligation:o,handler};
       });
-      return host.withReadContext(async scope=>{
-        await scope.verifyContext(artifact);
-        for(const entry of selected)await entry.handler.check(scope,entry.obligation,artifact);
+      const result=await withReadContext!(async scope=>{
+        admitting();await scope.verifyContext(artifact);admitting();
+        for(const entry of selected){await entry.handler.check(scope,entry.obligation,artifact);admitting()}
         const rows=await scope.query(artifact.sql,artifact.parameters.map(p=>p.value));
         if(rows.some(row=>row.length!==artifact.columns.length||row.some(v=>v!==null&&typeof v!=='string')))
           refuse('transport','Result cells must retain exact text/null shape');
-        const decoded=await host.decode(artifact,rows);
+        admitting();const decoded=await decode!(artifact,rows);
         await scope.verifyContext(artifact);
         const rejectNumeric=(v: unknown):void=>{
           if(typeof v==='number')refuse('decoder','Decoded stored values must use exact carriers, not JavaScript numbers');
           if(v&&typeof v==='object')for(const child of Object.values(v))rejectNumeric(child);
         };
-        rejectNumeric(decoded);
+        admitting();rejectNumeric(decoded);
         return immutable(clone(decoded));
       });
+      admitting();return result;
     }
   });
 }
