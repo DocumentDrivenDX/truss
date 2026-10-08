@@ -202,9 +202,185 @@ function decodeNativeVector(family, text, limits, declaredCount) {
     throw new NativeVectorError("count-correspondence");
   return Object.freeze({ family, originalText: text, tokens: Object.freeze(tokens) });
 }
+function decodeNativeTextArray(text, dimensions, limits) {
+  const refuse = (reason) => {
+    throw new Error("native-array:" + reason);
+  };
+  for (const n of [limits.maxBytes, limits.maxNodes, limits.maxDepth])
+    if (!Number.isSafeInteger(n) || n < 0)
+      refuse("resource-limit");
+  if (limits.maxDepth > 6)
+    refuse("resource-limit");
+  if (text === null) {
+    if (dimensions !== null)
+      refuse("native-correspondence");
+    return Object.freeze({ kind: "native-null", originalText: null });
+  }
+  if (typeof text !== "string" || dimensions !== null && typeof dimensions !== "string")
+    refuse("grammar");
+  let bytes = 0;
+  for (let i = 0;i < text.length; i++) {
+    const c = text.charCodeAt(i);
+    if (c === 0)
+      refuse("grammar");
+    if (c >= 55296 && c <= 56319) {
+      const low = text.charCodeAt(++i);
+      if (!(low >= 56320 && low <= 57343))
+        refuse("grammar");
+      bytes += 4;
+    } else if (c >= 56320 && c <= 57343)
+      refuse("grammar");
+    else
+      bytes += c < 128 ? 1 : c < 2048 ? 2 : 3;
+    if (bytes > limits.maxBytes)
+      refuse("resource-limit");
+  }
+  const parseBounds = (source) => {
+    if (source.length > 6 * 26)
+      refuse("resource-limit");
+    const result = [];
+    const re = /\[(-?(?:0|[1-9][0-9]*)):(-?(?:0|[1-9][0-9]*))\]/g;
+    let used = 0;
+    for (const m of source.matchAll(re)) {
+      if (m.index !== used || result.length === 6)
+        refuse("grammar");
+      for (const s of [m[1], m[2]]) {
+        if (s === "-0" || s.length > 11)
+          refuse("grammar");
+        const n = BigInt(s);
+        if (n < -2147483648n || n > 2147483647n)
+          refuse("native-domain");
+      }
+      if (BigInt(m[2]) < BigInt(m[1]))
+        refuse("native-correspondence");
+      result.push([m[1], m[2]]);
+      used += m[0].length;
+    }
+    if (!result.length || used !== source.length)
+      refuse("grammar");
+    return result;
+  };
+  let offset = 0;
+  let prefix;
+  if (text.startsWith("[")) {
+    const end = text.indexOf("=");
+    if (end < 0 || end > 6 * 26)
+      refuse("grammar");
+    prefix = parseBounds(text.slice(0, end));
+    offset = end + 1;
+  }
+  let nodes = 0;
+  const node = () => {
+    if (++nodes > limits.maxNodes)
+      refuse("resource-limit");
+  };
+  const array = (depth) => {
+    node();
+    if (depth > limits.maxDepth)
+      refuse("resource-limit");
+    if (text[offset++] !== "{")
+      refuse("grammar");
+    const values = [];
+    if (text[offset] === "}") {
+      offset++;
+      return Object.freeze(values);
+    }
+    while (true) {
+      if (text[offset] === "{")
+        values.push(array(depth + 1));
+      else {
+        node();
+        let value = "";
+        let escaped = false;
+        const quoted = text[offset] === '"';
+        if (quoted) {
+          offset++;
+          let closed = false;
+          while (offset < text.length) {
+            let c = text[offset++];
+            if (c === '"') {
+              closed = true;
+              break;
+            }
+            if (c === "\\") {
+              if (offset === text.length)
+                refuse("grammar");
+              c = text[offset++];
+            }
+            value += c;
+          }
+          if (!closed)
+            refuse("grammar");
+        } else {
+          while (offset < text.length && text[offset] !== "," && text[offset] !== "}") {
+            let c = text[offset++];
+            if (c === "\\") {
+              escaped = true;
+              if (offset === text.length)
+                refuse("grammar");
+              c = text[offset++];
+            } else if (c === "{" || c === '"' || /\s/.test(c))
+              refuse("grammar");
+            value += c;
+          }
+          if (!value.length)
+            refuse("grammar");
+        }
+        values.push(!quoted && !escaped && value === "NULL" ? null : value);
+      }
+      const separator = text[offset++];
+      if (separator === "}")
+        break;
+      if (separator !== ",")
+        refuse("grammar");
+    }
+    return Object.freeze(values);
+  };
+  const elements = array(1);
+  if (offset !== text.length)
+    refuse("grammar");
+  const shape = (items) => {
+    if (!items.length)
+      return [0];
+    const nested = Array.isArray(items[0]);
+    let child = [];
+    for (const item of items) {
+      if (Array.isArray(item) !== nested)
+        refuse("native-correspondence");
+      if (Array.isArray(item)) {
+        const next = shape(item);
+        if (next.includes(0))
+          refuse("native-correspondence");
+        if (child.length && (child.length !== next.length || child.some((n, i) => n !== next[i])))
+          refuse("native-correspondence");
+        child = next;
+      }
+    }
+    return [items.length, ...child];
+  };
+  const sizes = shape(elements);
+  const bounds = dimensions === null ? [] : parseBounds(dimensions);
+  if (!elements.length) {
+    if (bounds.length || prefix)
+      refuse("native-correspondence");
+  } else {
+    if (bounds.length !== sizes.length)
+      refuse("native-correspondence");
+    for (let i = 0;i < sizes.length; i++) {
+      if (BigInt(bounds[i][1]) - BigInt(bounds[i][0]) + 1n !== BigInt(sizes[i]))
+        refuse("native-correspondence");
+      if (prefix ? prefix[i]?.[0] !== bounds[i][0] || prefix[i]?.[1] !== bounds[i][1] : bounds[i][0] !== "1")
+        refuse("native-correspondence");
+    }
+    if (prefix && prefix.length !== bounds.length)
+      refuse("native-correspondence");
+  }
+  return Object.freeze({ kind: "array", originalText: text, bounds: Object.freeze(bounds.map((b) => Object.freeze(b))), elements });
+}
 export {
   INERT_ASSEMBLY_PROFILE,
   NativeVectorError,
   createReferenceAssembly,
+  decodeNativeTextArray,
   decodeNativeVector
 };

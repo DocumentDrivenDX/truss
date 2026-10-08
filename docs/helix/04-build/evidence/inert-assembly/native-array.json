@@ -1,0 +1,118 @@
+{
+  "profile": "truss-bootstrap-native-array-decoder/0.1.0",
+  "sql": "SELECT json_agg(json_build_object('label',label,'text',a::text,'dimensions',array_dims(a),'raw',array_to_json(a))) FROM (VALUES ('null',NULL::text[]),('empty','{}'::text[]),('null-text','{NULL,\"NULL\"}'::text[]),('empty-text','{\"\"}'::text[]),('bounds','[0:1]={a,b}'::text[]),('quoted','{\"a,b\",\"{c}\"}'::text[]),('nested','{{a,b},{c,d}}'::text[])) AS v(label,a);",
+  "originalStdout": "[{\"label\" : \"null\", \"text\" : null, \"dimensions\" : null, \"raw\" : null}, {\"label\" : \"empty\", \"text\" : \"{}\", \"dimensions\" : null, \"raw\" : []}, {\"label\" : \"null-text\", \"text\" : \"{NULL,\\\"NULL\\\"}\", \"dimensions\" : \"[1:2]\", \"raw\" : [null,\"NULL\"]}, {\"label\" : \"empty-text\", \"text\" : \"{\\\"\\\"}\", \"dimensions\" : \"[1:1]\", \"raw\" : [\"\"]}, {\"label\" : \"bounds\", \"text\" : \"[0:1]={a,b}\", \"dimensions\" : \"[0:1]\", \"raw\" : [\"a\",\"b\"]}, {\"label\" : \"quoted\", \"text\" : \"{\\\"a,b\\\",\\\"{c}\\\"}\", \"dimensions\" : \"[1:2]\", \"raw\" : [\"a,b\",\"{c}\"]}, {\"label\" : \"nested\", \"text\" : \"{{a,b},{c,d}}\", \"dimensions\" : \"[1:2][1:2]\", \"raw\" : [[\"a\",\"b\"],[\"c\",\"d\"]]}]\n",
+  "decoded": [
+    {
+      "label": "null",
+      "value": {
+        "kind": "native-null",
+        "originalText": null
+      }
+    },
+    {
+      "label": "empty",
+      "value": {
+        "kind": "array",
+        "originalText": "{}",
+        "bounds": [],
+        "elements": []
+      }
+    },
+    {
+      "label": "null-text",
+      "value": {
+        "kind": "array",
+        "originalText": "{NULL,\"NULL\"}",
+        "bounds": [
+          [
+            "1",
+            "2"
+          ]
+        ],
+        "elements": [
+          null,
+          "NULL"
+        ]
+      }
+    },
+    {
+      "label": "empty-text",
+      "value": {
+        "kind": "array",
+        "originalText": "{\"\"}",
+        "bounds": [
+          [
+            "1",
+            "1"
+          ]
+        ],
+        "elements": [
+          ""
+        ]
+      }
+    },
+    {
+      "label": "bounds",
+      "value": {
+        "kind": "array",
+        "originalText": "[0:1]={a,b}",
+        "bounds": [
+          [
+            "0",
+            "1"
+          ]
+        ],
+        "elements": [
+          "a",
+          "b"
+        ]
+      }
+    },
+    {
+      "label": "quoted",
+      "value": {
+        "kind": "array",
+        "originalText": "{\"a,b\",\"{c}\"}",
+        "bounds": [
+          [
+            "1",
+            "2"
+          ]
+        ],
+        "elements": [
+          "a,b",
+          "{c}"
+        ]
+      }
+    },
+    {
+      "label": "nested",
+      "value": {
+        "kind": "array",
+        "originalText": "{{a,b},{c,d}}",
+        "bounds": [
+          [
+            "1",
+            "2"
+          ],
+          [
+            "1",
+            "2"
+          ]
+        ],
+        "elements": [
+          [
+            "a",
+            "b"
+          ],
+          [
+            "c",
+            "d"
+          ]
+        ]
+      }
+    }
+  ],
+  "qualification": "Seven constant ordinary text-array observations on existing local PostgreSQL 17.9; exact decoded JSON correspondence. No ACL interpretation, complete catalog collection, native installation or driver/resource qualification."
+}

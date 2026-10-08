@@ -33,3 +33,20 @@ export declare class NativeVectorError extends Error {
 }
 /** ASCII grammar makes admitted byte count equal to code-unit count. No normalization. */
 export declare function decodeNativeVector(family: NativeVectorFamily, text: string, limits: NativeVectorLimits, declaredCount?: string): NativeVector;
+export type NativeArrayElement = string | null | readonly NativeArrayElement[];
+export type NativeArray = {
+    readonly kind: 'native-null';
+    readonly originalText: null;
+} | {
+    readonly kind: 'array';
+    readonly originalText: string;
+    readonly bounds: readonly (readonly [string, string])[];
+    readonly elements: readonly NativeArrayElement[];
+};
+export interface NativeArrayLimits {
+    readonly maxBytes: number;
+    readonly maxNodes: number;
+    readonly maxDepth: number;
+}
+/** Selected comma-delimited text element output. Type/ACL authority is independently admitted. */
+export declare function decodeNativeTextArray(text: string | null, dimensions: string | null, limits: NativeArrayLimits): NativeArray;

@@ -53,3 +53,22 @@ occurs. Reproduce with `bun scripts/check-native-vector.ts` against that sandbox
 This narrow observation does not qualify complete catalog collection, index or
 signature field semantics, all dimensions/JSON correspondence, native installation
 or driver/resource/containment support. Those obligations remain explicit.
+
+
+## Ordinary native array decoder prerequisite
+
+`decodeNativeTextArray` implements CONTRACT-008's proposed comma-delimited
+text-element output subset. It retains exact original text, ordered nested
+elements, native-null distinctions and exact signed bounds. Rectangular shape
+and supplied native dimensions must correspond. UTF-8 scalar validation and
+explicit byte/node/depth limits bound parsing; decoded values are frozen.
+Unknown output syntax refuses. Element/array type selection remains a separate
+admission obligation; no generic parser grants ACL authority or interprets UMF.
+
+All eight original independently authored array vectors and further escape,
+shape, scalar and resource controls pass. Combined package suite: seven tests,
+88 assertions; strict build and clean packed consumer pass. `native-array.json`
+retains one read-only SQL query, exact original stdout and seven decoded native
+arrays with exact original JSON correspondence on local PostgreSQL 17.9.
+Reproduce with `bun scripts/check-native-array.ts`. Complete catalog field/type
+coverage, aggregate collector custody and installation remain unfinished.
