@@ -476,3 +476,21 @@ refusal/unknown termination recovery, binary/prepared/named/pooler/Node profiles
 and full E06/protected producer/bootstrap/feed readiness remain unfinished.
 The installed pg 8.16.3 private integration is separately experimental; it does
 not adopt the frozen 8.23.0 review.
+
+
+## Original control and transaction-state correspondence
+
+The experimental bridge now requires exactly one original command completion and
+ReadyForQuery with the expected state: BEGIN/savepoint/rollback-to/release stay T;
+COMMIT/whole ROLLBACK end I. Savepoint controls verify their original command tag
+as well. Ordinary execute also requires T, preventing local started flags from
+substituting for observed native transaction state. A mismatch quarantines the
+original connection before subsequent native cleanup can guess settlement.
+
+Thirty-four tests/225 assertions, strict host build, clean packed consumer and
+existing small actual native executor checks pass. Synthetic controls show COMMIT
+text with status T cannot become committed confirmation, and duplicate/wrong
+ready states refuse. No persistent tables/cloud/settings change occurred. This
+strengthens the observed direct subset only; original issuer/epoch, native
+uncertainty recovery/durable transcripts, shared resource accounting, adoption/
+cancellation, complete protected producers/bootstrap/feed remain unfinished.

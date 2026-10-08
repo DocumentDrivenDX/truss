@@ -41,3 +41,10 @@ export async function originalQuery(client:PoolClient,text:string,values?:readon
    if(!stream.destroyed)stream.on('data',originalParser);
  }
 }
+
+/** Original frame correspondence, not independent transaction/issuer authority. */
+export function requireOriginalCompletion(frames:readonly ReturnType<typeof decodeResponseFrame>[],status:'I'|'T',command?:string):void {
+ const ready=frames.filter(frame=>frame.kind==='Z'),commands=frames.filter(frame=>frame.kind==='C');
+ if(ready.length!==1||ready[0].fields[0].status!==status||commands.length!==1||command&&commands[0].fields[0].command!==command)
+   throw Error('Original transaction completion mismatch');
+}

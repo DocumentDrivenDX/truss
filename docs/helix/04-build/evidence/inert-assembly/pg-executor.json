@@ -97,6 +97,15 @@
   },
   "deadlock": [
     {
+      "status": "error",
+      "error": {
+        "code": "retry",
+        "message": "Native transaction must retry",
+        "retryScope": "whole_transaction",
+        "sqlState": "40P01"
+      }
+    },
+    {
       "status": "ok",
       "value": {
         "value": {
@@ -118,15 +127,6 @@
           }
         },
         "durability": "committed"
-      }
-    },
-    {
-      "status": "error",
-      "error": {
-        "code": "retry",
-        "message": "Native transaction must retry",
-        "retryScope": "whole_transaction",
-        "sqlState": "40P01"
       }
     }
   ],
@@ -175,7 +175,7 @@
             [
               {
                 "state": "text",
-                "text": "859"
+                "text": "865"
               }
             ]
           ],
@@ -205,7 +205,7 @@
             [
               {
                 "state": "text",
-                "text": "859"
+                "text": "865"
               },
               {
                 "state": "text",
@@ -270,7 +270,7 @@
         },
         "decoded": [
           [
-            "859",
+            "865",
             "0",
             "mutation",
             "admitted",

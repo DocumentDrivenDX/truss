@@ -85,3 +85,14 @@ test('unnamed extended response requires parse/bind before no-data completion',(
  const foreign=new ResponseIngress(limits_);expect(()=>foreign.feed(frame('2',[]),()=>{})).toThrow('response-order');
  expect(()=>decodeResponseFrame(frame('1',[0]),limits)).toThrow();
 });
+
+
+import {requireOriginalCompletion} from '../packages/pg-runtime/src/native-query';
+test('matching command cannot conceal wrong original transaction status',()=>{
+ const commit=decodeResponseFrame(frame('C',[...new TextEncoder().encode('COMMIT\0')]),limits);
+ const active=decodeResponseFrame(frame('Z',[84]),limits),idle=decodeResponseFrame(frame('Z',[73]),limits);
+ expect(()=>requireOriginalCompletion([commit,active],'I','COMMIT')).toThrow('completion mismatch');
+ expect(()=>requireOriginalCompletion([commit,idle],'I','COMMIT')).not.toThrow();
+ expect(()=>requireOriginalCompletion([commit,idle,idle],'I','COMMIT')).toThrow();
+ expect(()=>requireOriginalCompletion([commit,idle],'T','SAVEPOINT')).toThrow();
+});

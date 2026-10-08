@@ -1,5 +1,5 @@
 /** Host-only PostgreSQL driver. Portable Truss package imports no pg dependency. */
-import {originalQuery} from './native-query';
+import {originalQuery,requireOriginalCompletion} from './native-query';
 import {Pool, DatabaseError, type PoolClient, type PoolConfig} from 'pg';
 import type {NativeConnectionSource,NativeConnection,StatementResult} from '@documentdrivendx/truss-postgresql';
 export function createPgConnectionSource(config:PoolConfig): {
@@ -18,8 +18,8 @@ export function createPgConnectionSource(config:PoolConfig): {
     const onError=()=>{quarantine.add(client);};client.on('error',onError);
     const control=async(sql:string,expected?:string)=>{
       alive();const frames=await originalQuery(client,sql);
-      const commands=frames.filter(frame=>frame.kind==='C');
-      if(commands.length!==1||expected&&commands[0].fields[0].command!==expected)throw Error('Native command correspondence');
+      try{requireOriginalCompletion(frames,sql==='COMMIT'||sql==='ROLLBACK'?'I':'T',expected);}
+      catch(error){quarantine.add(client);throw error;}
     };
     const connection:NativeConnection={
       async begin(options){alive();if(started)throw Error('Already begun');
@@ -30,6 +30,7 @@ export function createPgConnectionSource(config:PoolConfig): {
       },
       async execute(statement):Promise<StatementResult>{alive();if(!started)throw Error('Not begun');
         const frames=await originalQuery(client,statement.sql,statement.parameters.map(p=>p.carrier==='null'?null:p.text));
+        try{requireOriginalCompletion(frames,'T');}catch(error){quarantine.add(client);throw error;}
         const descriptions=frames.filter(frame=>frame.kind==='T'),commands=frames.filter(frame=>frame.kind==='C');
         if(descriptions.length>1||commands.length!==1)throw Error('Unsupported original response inventory');
         const original=commands[0].fields[0];const command=original.command!.split(' ')[0];
@@ -41,7 +42,7 @@ export function createPgConnectionSource(config:PoolConfig): {
         }));
         return {columns:descriptions[0]?.fields.map(field=>field.name!)??[],rows,affectedRows:noCount?'0':original.affectedRows!,command};
       },
-      async control(sql){if(!/^((SAVEPOINT|RELEASE SAVEPOINT|ROLLBACK TO SAVEPOINT) truss_sp_[1-9][0-9]*)$/.test(sql))throw Error('Unregistered control SQL');await control(sql);},
+      async control(sql){if(!/^((SAVEPOINT|RELEASE SAVEPOINT|ROLLBACK TO SAVEPOINT) truss_sp_[1-9][0-9]*)$/.test(sql))throw Error('Unregistered control SQL');await control(sql,sql.startsWith('SAVEPOINT ')?'SAVEPOINT':sql.startsWith('RELEASE ')?'RELEASE':'ROLLBACK');},
       async commit(){
         try{await control('COMMIT','COMMIT');started=false;return 'committed';}
         catch(error){

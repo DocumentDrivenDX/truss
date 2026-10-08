@@ -320,6 +320,11 @@ async function originalQuery(client, text, values) {
       stream.on("data", originalParser);
   }
 }
+function requireOriginalCompletion(frames, status, command) {
+  const ready = frames.filter((frame) => frame.kind === "Z"), commands = frames.filter((frame) => frame.kind === "C");
+  if (ready.length !== 1 || ready[0].fields[0].status !== status || commands.length !== 1 || command && commands[0].fields[0].command !== command)
+    throw Error("Original transaction completion mismatch");
+}
 
 // packages/pg-runtime/src/index.ts
 import { Pool, DatabaseError } from "pg";
@@ -345,9 +350,12 @@ function createPgConnectionSource(config) {
     const control = async (sql, expected) => {
       alive();
       const frames = await originalQuery(client, sql);
-      const commands = frames.filter((frame) => frame.kind === "C");
-      if (commands.length !== 1 || expected && commands[0].fields[0].command !== expected)
-        throw Error("Native command correspondence");
+      try {
+        requireOriginalCompletion(frames, sql === "COMMIT" || sql === "ROLLBACK" ? "I" : "T", expected);
+      } catch (error) {
+        quarantine.add(client);
+        throw error;
+      }
     };
     const connection = {
       async begin(options) {
@@ -366,6 +374,12 @@ function createPgConnectionSource(config) {
         if (!started)
           throw Error("Not begun");
         const frames = await originalQuery(client, statement.sql, statement.parameters.map((p) => p.carrier === "null" ? null : p.text));
+        try {
+          requireOriginalCompletion(frames, "T");
+        } catch (error) {
+          quarantine.add(client);
+          throw error;
+        }
         const descriptions = frames.filter((frame) => frame.kind === "T"), commands = frames.filter((frame) => frame.kind === "C");
         if (descriptions.length > 1 || commands.length !== 1)
           throw Error("Unsupported original response inventory");
@@ -384,7 +398,7 @@ function createPgConnectionSource(config) {
       async control(sql) {
         if (!/^((SAVEPOINT|RELEASE SAVEPOINT|ROLLBACK TO SAVEPOINT) truss_sp_[1-9][0-9]*)$/.test(sql))
           throw Error("Unregistered control SQL");
-        await control(sql);
+        await control(sql, sql.startsWith("SAVEPOINT ") ? "SAVEPOINT" : sql.startsWith("RELEASE ") ? "RELEASE" : "ROLLBACK");
       },
       async commit() {
         try {
