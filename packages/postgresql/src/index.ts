@@ -544,13 +544,19 @@ export function createEngineExecutor(source:NativeConnectionSource):Executor<nev
       const point=Object.freeze({}) as SavepointHandle;
       points.set(point,{entry,name});entry.savepoints.push(point);return point;
     });},
-    rollbackToSavepoint(handle,point){return call(handle,async entry=>{
+    rollbackToSavepoint(handle,point){
+      const owner=entries.get(handle),original=points.get(point);
+      if(!owner||!original||original.entry!==owner||!owner.savepoints.includes(point))return Promise.resolve(failure('invalid_transaction'));
+      return call(handle,async entry=>{
       const found=points.get(point);const index=entry.savepoints.indexOf(point);
       if(!found||found.entry!==entry||index<0)throw Error('invalid savepoint');
       await entry.connection.control('ROLLBACK TO SAVEPOINT '+found.name);
       entry.savepoints.splice(index+1);entry.failed=false;entry.nativeFailure=undefined;
     },true);},
-    releaseSavepoint(handle,point){return call(handle,async entry=>{
+    releaseSavepoint(handle,point){
+      const owner=entries.get(handle),original=points.get(point);
+      if(!owner||!original||original.entry!==owner||!owner.savepoints.includes(point))return Promise.resolve(failure('invalid_transaction'));
+      return call(handle,async entry=>{
       const found=points.get(point);const index=entry.savepoints.indexOf(point);
       if(!found||found.entry!==entry||index<0)throw Error('invalid savepoint');
       await entry.connection.control('RELEASE SAVEPOINT '+found.name);entry.savepoints.splice(index);

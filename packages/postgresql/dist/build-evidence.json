@@ -3,7 +3,7 @@
   "compiler": "typescript/7.0.2",
   "loader": "bun/1.4.2",
   "nativeCapabilities": "none",
-  "jsSha256": "799d417a858b11f9bd71c9d224aa9315dbb2200177ce4ea53fdb798918835b58",
+  "jsSha256": "b94b9d76807944e4169f2f935f618be8d67ae8546c8ba8fb5fa9e9ff6c81ad3d",
   "declarationsSha256": "10267d8f9e55dbf4223e020ea8a2b7467bba863875be6a681ce34e09cf741910",
   "bindingSourceSha256": {
     "truss-recovery-registry-v0.1.d.ts": "20c2b0bd54045f7e8c3f199db865bea75fe526ed4e47092ab7cc7f0e1e2ef0a5",

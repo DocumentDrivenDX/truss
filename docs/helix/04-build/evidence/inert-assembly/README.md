@@ -334,3 +334,21 @@ No partial selected Truss layout is installed. The original fixture bytes do not
 prove full context/effect/group codecs or protected admission. Exact native
 producer/security/body composition remains unfinished, as does full bootstrap
 and feed integration. No persistent tables/cloud/deployment changes occur.
+
+
+## Savepoint lifetime refusal correction
+
+Released/foreign savepoint checks now precede native-call admission. Invalid
+rollback/release returns invalid_transaction without SQL or changing the live
+outer transaction's failure state. Previously this local lifetime mistake was
+classified as transaction_unusable and could force rollback of otherwise valid
+work. The focused test proves zero native calls for both stale operations and
+a later valid read/confirmed commit. Twenty-four tests/188 assertions, both
+builds and portable packed check pass; no new native workload occurred.
+
+The authorized Truss Impl design review of the candidate is live as of this
+iteration. Its initial findings confirm shared operation arbitration and selected
+predecode/native-protocol capture are still unfinished, consistent with the
+candidate's incomplete readiness. Do not elevate public driver-result evidence
+into those stronger original custody/resource claims. Full protected producers,
+trigger bodies and native bootstrap/feed remain unfinished.

@@ -63,3 +63,18 @@ test('confirmed commit rejection returns classified outcome after release',async
   expect(f.calls).toEqual(['begin','rejected-and-rolled-back','release']);
  }
 });
+
+test('released savepoint refusal preserves the valid outer transaction',async()=>{
+ const f=fixture();const result=await f.executor.withTransaction(options,async handle=>{
+   const point=await f.executor.savepoint(handle);if(point.status!=='ok')throw Error();
+   expect((await f.executor.releaseSavepoint(handle,point.value)).status).toBe('ok');
+   const before=f.calls.length;
+   expect(await f.executor.releaseSavepoint(handle,point.value)).toMatchObject({status:'error',error:{code:'invalid_transaction'}});
+   expect(await f.executor.rollbackToSavepoint(handle,point.value)).toMatchObject({status:'error',error:{code:'invalid_transaction'}});
+   expect(f.calls.length).toBe(before);
+   expect((await f.executor.execute(handle,{sql:'SELECT id',parameters:[]})).status).toBe('ok');
+   return 'preserved';
+ });
+ expect(result).toMatchObject({status:'ok',value:{value:'preserved',durability:'committed'}});
+ expect(f.calls.slice(-2)).toEqual(['commit','release']);
+});

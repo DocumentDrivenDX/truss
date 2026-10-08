@@ -680,6 +680,9 @@ function createEngineExecutor(source) {
       });
     },
     rollbackToSavepoint(handle, point) {
+      const owner = entries.get(handle), original = points.get(point);
+      if (!owner || !original || original.entry !== owner || !owner.savepoints.includes(point))
+        return Promise.resolve(failure("invalid_transaction"));
       return call(handle, async (entry) => {
         const found = points.get(point);
         const index = entry.savepoints.indexOf(point);
@@ -692,6 +695,9 @@ function createEngineExecutor(source) {
       }, true);
     },
     releaseSavepoint(handle, point) {
+      const owner = entries.get(handle), original = points.get(point);
+      if (!owner || !original || original.entry !== owner || !owner.savepoints.includes(point))
+        return Promise.resolve(failure("invalid_transaction"));
       return call(handle, async (entry) => {
         const found = points.get(point);
         const index = entry.savepoints.indexOf(point);
