@@ -23,6 +23,14 @@ Independently compare finite `numeric_value` with the exact admitted token value
 | `+1`, `01`, `.1`, `1.`, `NaN`, `Infinity`, `1e`, `1\n` | Refuse lexical admission without coercion. The final example denotes an actual trailing newline. |
 | `1e-4`, `1e18` | Lexically valid, then refuse scale or precision respectively. |
 
+## Original token work and zero-exponent boundary
+
+Admit original token byte length and the enclosing operation’s cumulative scan/copy budget before invoking the owner coefficient function. Charge the retained original token, UTF-8 transport copy, regex/mantissa intermediates and coefficient/native projection simultaneously where live; the 23-byte native projection does not bound the original source. A refused resource admission cannot retry the same operation with a reset per-field account. No public numeric coercion, exponent-sized padding or native cast may precede admission.
+
+Preserve the pinned UMF function’s exact control order: after full grammar validation, an all-zero mantissa yields coefficient zero before the nonzero exponent-length check. Thus `0e999999999999999999999999999999999` and its negative-zero counterpart are mathematically zero if their original source/work budget is admitted; retain the entire lexical spelling. A nonzero token with that same 33-digit exponent is refused by the pinned owner function’s bounded exponent rule. Do not apply an unconditional exponent-length filter that silently narrows admitted zero semantics, and do not claim arbitrarily long zero tokens are free: source and scan admission still bounds them.
+
+For nonzero values, reuse the owner’s exact coefficient interpretation after original budget admission. The owner’s existing 32-character exponent limit is a pinned implementation capability bound, not a new UMF field facet or permission to allocate large padding. Native producer/parser implementations must establish equivalent admitted meaning under their own finite resource profiles. Keep resource exhaustion, unsupported implementation subset, lexical invalidity and decimal domain violation separately observable under the existing refusal contract.
+
 ## Producer and qualification obligations
 
 ### Proposed native decimal construction
