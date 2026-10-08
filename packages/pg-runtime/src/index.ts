@@ -1,4 +1,5 @@
 /** Host-only PostgreSQL driver. Portable Truss package imports no pg dependency. */
+import {originalQuery} from './native-query';
 import {Pool, DatabaseError, type PoolClient, type PoolConfig} from 'pg';
 import type {NativeConnectionSource,NativeConnection,StatementResult} from '@documentdrivendx/truss-postgresql';
 export function createPgConnectionSource(config:PoolConfig): {
@@ -16,8 +17,9 @@ export function createPgConnectionSource(config:PoolConfig): {
     const alive=()=>{if(ended||quarantine.has(client))throw Error('Original native connection unavailable');};
     const onError=()=>{quarantine.add(client);};client.on('error',onError);
     const control=async(sql:string,expected?:string)=>{
-      alive();const result=await client.query({text:sql,rowMode:'array'});
-      if(Array.isArray(result)||expected&&result.command!==expected)throw Error('Native command correspondence');
+      alive();const frames=await originalQuery(client,sql);
+      const commands=frames.filter(frame=>frame.kind==='C');
+      if(commands.length!==1||expected&&commands[0].fields[0].command!==expected)throw Error('Native command correspondence');
     };
     const connection:NativeConnection={
       async begin(options){alive();if(started)throw Error('Already begun');
@@ -27,17 +29,17 @@ export function createPgConnectionSource(config:PoolConfig): {
         await control('BEGIN ISOLATION LEVEL '+isolation+' '+mode,'BEGIN');started=true;
       },
       async execute(statement):Promise<StatementResult>{alive();if(!started)throw Error('Not begun');
-        const result=await client.query({text:statement.sql,values:statement.parameters.map(p=>p.carrier==='null'?null:p.text),rowMode:'array'});
-        if(Array.isArray(result))throw Error('Multiple native results unsupported');
-        const noCount = result.rowCount===null && result.rows.length===0 && ['CREATE','DROP','ALTER','SET','GRANT','REVOKE','COMMENT'].includes(result.command);
-        if(!noCount&&(result.rowCount===null||!Number.isSafeInteger(result.rowCount)||result.rowCount<0))throw Error('Unsupported native count/result');
-        // Command-tag count is protocol metadata, never a stored numeric cell.
-        const rows=result.rows.map((row:unknown[])=>row.map(value=>{
-          if(value===null)return {state:'null' as const};
-          if(typeof value!=='string')throw Error('Non-text native cell');
-          return {state:'text' as const,text:value};
+        const frames=await originalQuery(client,statement.sql,statement.parameters.map(p=>p.carrier==='null'?null:p.text));
+        const descriptions=frames.filter(frame=>frame.kind==='T'),commands=frames.filter(frame=>frame.kind==='C');
+        if(descriptions.length>1||commands.length!==1)throw Error('Unsupported original response inventory');
+        const original=commands[0].fields[0];const command=original.command!.split(' ')[0];
+        const noCount=original.affectedRows===null&&['CREATE','DROP','ALTER','SET','GRANT','REVOKE','COMMENT'].includes(command);
+        if(original.affectedRows===null&&!noCount)throw Error('Unknown original command count');
+        const rows=frames.filter(frame=>frame.kind==='D').map(frame=>frame.fields.map(field=>{
+          if(field.hex===null)return {state:'null' as const};
+          return {state:'text' as const,text:new TextDecoder('utf-8',{fatal:true,ignoreBOM:true}).decode(Buffer.from(field.hex!,'hex'))};
         }));
-        return {columns:result.fields.map(field=>field.name),rows,affectedRows:noCount?'0':String(result.rowCount),command:result.command};
+        return {columns:descriptions[0]?.fields.map(field=>field.name!)??[],rows,affectedRows:noCount?'0':original.affectedRows!,command};
       },
       async control(sql){if(!/^((SAVEPOINT|RELEASE SAVEPOINT|ROLLBACK TO SAVEPOINT) truss_sp_[1-9][0-9]*)$/.test(sql))throw Error('Unregistered control SQL');await control(sql);},
       async commit(){

@@ -1,7 +1,4 @@
 // @bun
-// packages/pg-runtime/src/index.ts
-import { Pool, DatabaseError } from "pg";
-
 // packages/pg-runtime/src/wire.ts
 function decodeResponseFrame(frame, limits) {
   const fail = () => {
@@ -79,6 +76,9 @@ function decodeResponseFrame(frame, limits) {
         fail();
       fields[0] = Object.freeze({ command, affectedRows: parts[2] });
     }
+  } else if (kind === "1" || kind === "2" || kind === "n") {
+    if (offset !== frame.length)
+      fail();
   } else if (kind === "E" || kind === "N") {
     const tags = new Set;
     let terminated = false;
@@ -127,6 +127,8 @@ class ResponseIngress {
   #columns;
   #phase = "start";
   #rowCount = 0n;
+  #parsed = false;
+  #bound = false;
   constructor(limits) {
     this.limits = limits;
     if (![limits.maxFrameBytes, limits.maxFields, limits.maxTotalBytes, limits.maxFrames].every((n) => Number.isSafeInteger(n) && n >= 0))
@@ -156,7 +158,7 @@ class ResponseIngress {
             size = size * 256n + BigInt(this.#header[i]);
           if (size < 4n || size + 1n > BigInt(this.limits.maxFrameBytes) || this.#frames === this.limits.maxFrames)
             throw Error("pg-ingress:frame-limit");
-          if (![84, 68, 67, 90, 69, 78].includes(this.#header[0]))
+          if (![84, 68, 67, 90, 69, 78, 49, 50, 110].includes(this.#header[0]))
             throw Error("pg-ingress:unsupported-kind");
           this.#frame = new Uint8Array(Number(size) + 1);
           this.#frame.set(this.#header);
@@ -169,8 +171,20 @@ class ResponseIngress {
         at += take;
         if (this.#used === this.#frame.length) {
           const decoded = decodeResponseFrame(this.#frame, this.limits);
-          if (decoded.kind === "T") {
-            if (this.#phase !== "start")
+          if (decoded.kind === "1") {
+            if (this.#phase !== "start" || this.#parsed)
+              throw Error("pg-ingress:response-order");
+            this.#parsed = true;
+          } else if (decoded.kind === "2") {
+            if (this.#phase !== "start" || !this.#parsed || this.#bound)
+              throw Error("pg-ingress:response-order");
+            this.#bound = true;
+          } else if (decoded.kind === "n") {
+            if (this.#phase !== "start" || !this.#bound)
+              throw Error("pg-ingress:response-order");
+            this.#phase = "rows";
+          } else if (decoded.kind === "T") {
+            if (this.#phase !== "start" || this.#parsed !== this.#bound)
               throw Error("pg-ingress:response-order");
             this.#phase = "rows";
             if (decoded.fields.some((field) => field.format !== "0"))
@@ -231,7 +245,84 @@ class ResponseIngress {
   }
 }
 
+// packages/pg-runtime/src/native-query.ts
+async function originalQuery(client, text, values) {
+  const connection = client.connection;
+  const stream = connection?.stream;
+  if (!stream)
+    throw Error("Original transport unavailable");
+  const handlers = stream.listeners("data");
+  if (handlers.length !== 1)
+    throw Error("Unsupported original parser composition");
+  const originalParser = handlers[0];
+  const limits = { maxFrameBytes: 1048576, maxFields: 2048, maxTotalBytes: 4194304, maxFrames: 1e4 };
+  const ingress = new ResponseIngress(limits);
+  const frames = [];
+  let resolveReady = () => {};
+  let rejectReady = () => {};
+  const ready = new Promise((resolve, reject) => {
+    resolveReady = resolve;
+    rejectReady = reject;
+  });
+  const observedReady = ready.then(() => ({ ok: true }), (error) => ({ ok: false, error }));
+  const timeout = setTimeout(() => {
+    const error = Error("Original response deadline");
+    rejectReady(error);
+    stream.destroy(error);
+  }, 5000);
+  const guarded = (chunk) => {
+    try {
+      ingress.feed(chunk, (frame) => {
+        const decoded = decodeResponseFrame(frame, limits);
+        frames.push(decoded);
+        originalParser.call(stream, Buffer.from(frame));
+        if (decoded.kind === "Z")
+          resolveReady();
+      });
+    } catch {
+      const error = Error("Original response refused");
+      rejectReady(error);
+      stream.destroy(error);
+    }
+  };
+  const ended = () => rejectReady(Error("Original transport ended"));
+  stream.removeListener("data", originalParser);
+  stream.on("data", guarded);
+  stream.once("close", ended);
+  let failed = false;
+  let failure;
+  try {
+    try {
+      await client.query({ text, values: values ? [...values] : undefined, rowMode: "array" });
+    } catch (error) {
+      failed = true;
+      failure = error;
+    }
+    const observed = await observedReady;
+    if (!observed.ok)
+      throw observed.error;
+    ingress.finish();
+    const errors = frames.filter((frame) => frame.kind === "E");
+    if (failed) {
+      const code = failure && typeof failure === "object" ? Object.getOwnPropertyDescriptor(failure, "code")?.value : undefined;
+      if (errors.length !== 1 || errors[0].fields.find((field) => field.tag === "C")?.value !== code)
+        throw Error("Original error correspondence unavailable");
+      throw failure;
+    }
+    if (errors.length)
+      throw Error("Original error lost by driver");
+    return Object.freeze(frames);
+  } finally {
+    clearTimeout(timeout);
+    stream.off("data", guarded);
+    stream.off("close", ended);
+    if (!stream.destroyed)
+      stream.on("data", originalParser);
+  }
+}
+
 // packages/pg-runtime/src/index.ts
+import { Pool, DatabaseError } from "pg";
 function createPgConnectionSource(config) {
   const pool = new Pool({ ...config, types: { getTypeParser(_oid, format) {
     if (format === "binary")
@@ -253,8 +344,9 @@ function createPgConnectionSource(config) {
     client.on("error", onError);
     const control = async (sql, expected) => {
       alive();
-      const result = await client.query({ text: sql, rowMode: "array" });
-      if (Array.isArray(result) || expected && result.command !== expected)
+      const frames = await originalQuery(client, sql);
+      const commands = frames.filter((frame) => frame.kind === "C");
+      if (commands.length !== 1 || expected && commands[0].fields[0].command !== expected)
         throw Error("Native command correspondence");
     };
     const connection = {
@@ -273,20 +365,21 @@ function createPgConnectionSource(config) {
         alive();
         if (!started)
           throw Error("Not begun");
-        const result = await client.query({ text: statement.sql, values: statement.parameters.map((p) => p.carrier === "null" ? null : p.text), rowMode: "array" });
-        if (Array.isArray(result))
-          throw Error("Multiple native results unsupported");
-        const noCount = result.rowCount === null && result.rows.length === 0 && ["CREATE", "DROP", "ALTER", "SET", "GRANT", "REVOKE", "COMMENT"].includes(result.command);
-        if (!noCount && (result.rowCount === null || !Number.isSafeInteger(result.rowCount) || result.rowCount < 0))
-          throw Error("Unsupported native count/result");
-        const rows = result.rows.map((row) => row.map((value) => {
-          if (value === null)
+        const frames = await originalQuery(client, statement.sql, statement.parameters.map((p) => p.carrier === "null" ? null : p.text));
+        const descriptions = frames.filter((frame) => frame.kind === "T"), commands = frames.filter((frame) => frame.kind === "C");
+        if (descriptions.length > 1 || commands.length !== 1)
+          throw Error("Unsupported original response inventory");
+        const original = commands[0].fields[0];
+        const command = original.command.split(" ")[0];
+        const noCount = original.affectedRows === null && ["CREATE", "DROP", "ALTER", "SET", "GRANT", "REVOKE", "COMMENT"].includes(command);
+        if (original.affectedRows === null && !noCount)
+          throw Error("Unknown original command count");
+        const rows = frames.filter((frame) => frame.kind === "D").map((frame) => frame.fields.map((field) => {
+          if (field.hex === null)
             return { state: "null" };
-          if (typeof value !== "string")
-            throw Error("Non-text native cell");
-          return { state: "text", text: value };
+          return { state: "text", text: new TextDecoder("utf-8", { fatal: true, ignoreBOM: true }).decode(Buffer.from(field.hex, "hex")) };
         }));
-        return { columns: result.fields.map((field) => field.name), rows, affectedRows: noCount ? "0" : String(result.rowCount), command: result.command };
+        return { columns: descriptions[0]?.fields.map((field) => field.name) ?? [], rows, affectedRows: noCount ? "0" : original.affectedRows, command };
       },
       async control(sql) {
         if (!/^((SAVEPOINT|RELEASE SAVEPOINT|ROLLBACK TO SAVEPOINT) truss_sp_[1-9][0-9]*)$/.test(sql))

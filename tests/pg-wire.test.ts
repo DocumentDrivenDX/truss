@@ -77,3 +77,11 @@ test('notice is retained without replacing original command completion',()=>{
  ingress.feed(frame('Z',[73]),frame=>kinds.push(String.fromCharCode(frame[0])));ingress.finish();
  expect(kinds).toEqual(['N','C','Z']);
 });
+
+test('unnamed extended response requires parse/bind before no-data completion',()=>{
+ const limits_={...limits,maxTotalBytes:4096,maxFrames:8};const ingress=new ResponseIngress(limits_);let calls=0;
+ for(const packet of [frame('1',[]),frame('2',[]),frame('n',[]),frame('C',[...new TextEncoder().encode('INSERT 0 1\0')]),frame('Z',[73])])ingress.feed(packet,()=>calls++);
+ ingress.finish();expect(calls).toBe(5);
+ const foreign=new ResponseIngress(limits_);expect(()=>foreign.feed(frame('2',[]),()=>{})).toThrow('response-order');
+ expect(()=>decodeResponseFrame(frame('1',[0]),limits)).toThrow();
+});

@@ -447,3 +447,32 @@ establish original issuer/epoch/transport-allocation/refusal-settlement authorit
 Other extended-query/binary/asynchronous kinds, full arbitration/protected
 producers/bootstrap and actual Truss streaming remain unfinished. Error fields
 are private evidence and not a public authorization/disclosure result.
+
+
+## Original-response integration into experimental adapter
+
+The host adapter now uses internal originalQuery for every native control/statement.
+It verifies exactly one original pg data listener, installs bounded incremental
+admission before forwarding complete frames, and restores the listener after
+response completion. Error rejection waits for original ReadyForQuery and compares
+original SQLSTATE to the driver error before returning that original error.
+Unknown/refused/incomplete responses close the transport and stay unavailable.
+Columns/raw text/null cells and exact decimal command counts derive from original
+frames, replacing public Result/rowCount coercion. Unnamed ParseComplete,
+BindComplete and NoData now have exact empty-body/order checks.
+
+Thirty-three tests/221 assertions, strict host build and clean packed consumer
+pass. The actual executor probe reruns exact values/duplicate/empty descriptions,
+parameterized writes, savepoint/callback rollback, deadlock and deferred-COMMIT
+rejection through this integrated path. No persistent tables/cloud/deployment
+changes. Native limits apply per query: 1 MiB frame, 4 MiB delivered bytes, 2048
+fields, 10000 frames and five-second response observation. An initial strict
+Buffer typing failure was corrected with a bounded explicit forwarding copy.
+
+This supersedes the previous probe-only bridge-integration gap, not the full
+selected producer contract. Original socket allocation, total heap/shared-account
+work, durable native transcript/attempt custody, issuer/epoch/cut authority,
+refusal/unknown termination recovery, binary/prepared/named/pooler/Node profiles
+and full E06/protected producer/bootstrap/feed readiness remain unfinished.
+The installed pg 8.16.3 private integration is separately experimental; it does
+not adopt the frozen 8.23.0 review.

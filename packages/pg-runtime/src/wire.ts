@@ -32,6 +32,8 @@ export function decodeResponseFrame(frame:Uint8Array,limits:WireLimits): {
    fields.push(Object.freeze({command,affectedRows:match?match[2]??match[1]:null}));
    // INSERT's capture differs from other command tags; preserve exact original tag regardless.
    if(command.startsWith('INSERT ')){const parts=command.split(' ');if(parts.length!==3||!parts.every((p,i)=>i===0||/^(0|[1-9][0-9]*)$/.test(p)))fail();fields[0]=Object.freeze({command,affectedRows:parts[2]});}
+ }else if(kind==='1'||kind==='2'||kind==='n'){
+   if(offset!==frame.length)fail();
  }else if(kind==='E'||kind==='N'){
    const tags=new Set<string>();let terminated=false;
    while(offset<frame.length){
@@ -52,7 +54,7 @@ export function decodeResponseFrame(frame:Uint8Array,limits:WireLimits): {
 /** Complete-frame admission before forwarding; delivered socket chunks already exist. */
 export class ResponseIngress {
  #header=new Uint8Array(5);#headerUsed=0;#frame:Uint8Array|undefined;#used=0;
- #bytes=0;#frames=0;#failed=false;#columns:number|undefined;#phase:'start'|'rows'|'command'|'error'|'ended'='start';#rowCount=0n;
+ #bytes=0;#frames=0;#failed=false;#columns:number|undefined;#phase:'start'|'rows'|'command'|'error'|'ended'='start';#rowCount=0n;#parsed=false;#bound=false;
  constructor(readonly limits:WireLimits&{readonly maxTotalBytes:number;readonly maxFrames:number}){
    if(![limits.maxFrameBytes,limits.maxFields,limits.maxTotalBytes,limits.maxFrames].every(n=>Number.isSafeInteger(n)&&n>=0))throw Error('pg-ingress:invalid-limits');
    this.limits=Object.freeze({...limits});
@@ -69,14 +71,20 @@ export class ResponseIngress {
          if(this.#headerUsed<5)continue;
          let size=0n;for(let i=1;i<5;i++)size=size*256n+BigInt(this.#header[i]);
          if(size<4n||size+1n>BigInt(this.limits.maxFrameBytes)||this.#frames===this.limits.maxFrames)throw Error('pg-ingress:frame-limit');
-         if(![84,68,67,90,69,78].includes(this.#header[0]))throw Error('pg-ingress:unsupported-kind');
+         if(![84,68,67,90,69,78,49,50,110].includes(this.#header[0]))throw Error('pg-ingress:unsupported-kind');
          this.#frame=new Uint8Array(Number(size)+1);this.#frame.set(this.#header);this.#used=5;this.#headerUsed=0;
        }
        const take=Math.min(this.#frame.length-this.#used,chunk.length-at);this.#frame.set(chunk.subarray(at,at+take),this.#used);this.#used+=take;at+=take;
        if(this.#used===this.#frame.length){
          const decoded=decodeResponseFrame(this.#frame,this.limits);
-         if(decoded.kind==='T'){
-           if(this.#phase!=='start')throw Error('pg-ingress:response-order');
+         if(decoded.kind==='1'){
+           if(this.#phase!=='start'||this.#parsed)throw Error('pg-ingress:response-order');this.#parsed=true;
+         }else if(decoded.kind==='2'){
+           if(this.#phase!=='start'||!this.#parsed||this.#bound)throw Error('pg-ingress:response-order');this.#bound=true;
+         }else if(decoded.kind==='n'){
+           if(this.#phase!=='start'||!this.#bound)throw Error('pg-ingress:response-order');this.#phase='rows';
+         }else if(decoded.kind==='T'){
+           if(this.#phase!=='start'||this.#parsed!==this.#bound)throw Error('pg-ingress:response-order');
            this.#phase='rows';
            if(decoded.fields.some(field=>field.format!=='0'))throw Error('pg-ingress:binary-unqualified');
            this.#columns=decoded.fields.length;

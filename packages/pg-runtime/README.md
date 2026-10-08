@@ -2,8 +2,8 @@
 
 `src/index.ts` supplies native connection ports to `createEngineExecutor` in the
 portable package. It uses pinned pg 8.16.3 with text parsers for every text-format
-native type, ordered rows and native field descriptions. Command-tag counts are
-accepted only as nonnegative safe integers and exposed as decimal text; stored
+native type, ordered rows and native field descriptions. Command-tag counts now come from original admitted protocol text, including
+values beyond host numeric precision; stored
 numeric/temporal/JSON cells are never decoded into host numbers or dates.
 
 The native probe is `bun scripts/check-pg-executor.ts`. It uses the existing
@@ -28,3 +28,12 @@ Confirmed pg server COMMIT errors in SQLSTATE classes 23/40 are classified only
 after same-connection ROLLBACK command confirmation. Other COMMIT failures remain
 unknown and retain quarantine. Deferred-FK rejection is natively verified; lost
 transport and commit-time serialization schedules remain unfinished.
+
+
+The experimental bridge now validates complete original frames before invoking
+the existing pg parser on every native query. It derives public columns/raw cells/
+command counts from those frames and waits for original ReadyForQuery after errors.
+Unnamed parse/bind/no-data responses are supported in the observed subset.
+Per-query limits: 1 MiB frame, 4 MiB delivered response, 2048 fields, 10000 frames,
+five-second response observation. Socket allocation, total heap/shared-operation
+accounting and original issuer/epoch/recovery custody remain unqualified.
