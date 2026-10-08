@@ -25,6 +25,8 @@ The separately enabled test-original build exports compile_json_with_conformance
 
 Truss may plan additional conformance configurations under this explicit test boundary without requesting another compiler preset or implementing its own lowering. Actual original codec/source/native-home admission and independently expected Truss data remain required. Production packaging must exclude dependence on test-only exports; release registration needs explicit reviewed owner scope. STP-039 HC-01–05 allocates those distinctions. Current 0.11 packet remains unregistered and one-string only; current schema corrections require their own exact source pins and review.
 
+CONTRACT-007 now explicitly separates decimal storage admission from compiler admission: preserving a broader exact source domain never authorizes coercion into the compiler's tested subset, and compiler acceptance never bypasses source/native validation. STP-007 ND-01–04 allocates precision-29 retention versus SUM refusal, admitted boundary pairs with invalid values, additional-facet refusal and test/release configuration separation. These are planned integration cases, not newly executed numeric support.
+
 ## Historical read-only owner source review — multi-root native cut
 
 UMF primary remains `16c35e8d943769ccfa7bb57d16785aa7159abe65`. Inspected Weft HEAD is `320a597398a429d8dc1e61cd225be403a48d154c`. The [source correspondence receipt](evidence/design-audit/weft-multi-root-source-review.json) independently verifies thirteen file hashes from two owner receipts against the original files at their respective commits. Truss did not rerun the owner's Rust, PostgreSQL, Python or browser tests.
