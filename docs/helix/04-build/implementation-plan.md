@@ -2406,3 +2406,17 @@ The private native canonical string component now emits into bounded 65,536-byte
 
 
 A private native inert-tree canonical encoder now uses an explicit task stack, scalar UTF-8 hex carriers, unsigned bytea object-key ordering, duplicate decoded-key refusal and a 65,536-byte segmented output sink. Arrays preserve original order; null/boolean/string/container tags are explicit, numeric nodes and extra/noncanonical content refuse. Internal depth/task/container/input/output bounds prevent unbounded traversal at the declared component checks. PostgreSQL 17.9 passes 167 combined checks, including independently expected nested canonical bytes, empty containers, exact large-integer string spelling, Unicode/NUL and invalid numeric/extra/malformed/duplicate-member controls. This component's JSONB is an internal tagged tree with object keys represented as an explicit member array, not a direct report/source JSONB serializer or admitted caller representation. Complete immutable producer ownership, full report schema and original event/source/effect correspondence, exact task/source/sort/detoast/allocation accounting and registered native privilege/finalization remain unfinished. Bounds do not establish precharged native resource behavior, and this helper cannot publish accepted reports or advance the head.
+
+The final ordinary-context probe now has 42 observations. It additionally refuses
+pool release after an incompatible LATIN1 client-encoding change; identity probes
+require the selected UTF8 response profile. It verifies the pinned actor after
+BEGIN as well as checkout/release, and uses explicit pg_catalog casts/settings
+lookup. The first default-root typecheck could not resolve this checkout's absent
+pg/type workspaces; explicit existing cached pinned dependencies and the actual
+source paths compile successfully without installing or copying dependencies.
+ParameterStatus frames observed during native reset are retained in the shared
+receipt. The initial unsupported-response and masked-cleanup diagnostics remain
+recorded above; no earlier failed run is a passing result.
+
+
+Native inert-tree encoding now matches all ten pre-existing canonical-byte/input contract vectors and their independently authored domain-framed SHA-256 digests. Test input member order is deliberately reversed before native encoding; the original expected bytes remain the corpus authority. Exact depth 256 emits the complete expected nested value, while 257 refuses with 54000; 179 PostgreSQL 17.9 component checks pass. The fixture-only host conversion constructs tagged nodes from trusted numeric-free corpus data and is not a production report parser/issuer. The acceptance/group shape corpus contains placeholder profile/artifact identities and an intentionally out-of-shape domain-separation case, so matching canonical bytes does not qualify report/input schema, original acceptance/source/event meaning or group execution. Complete report producer/semantic parity/resource/privilege/storage/finalizer and broader capacity/fault schedules remain required.
