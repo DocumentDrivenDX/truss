@@ -38,9 +38,9 @@ The administrative helper must resolve exact document/module and native role ide
 
 CH-02 routine work must include CONTRACT-005's eight-field native role/callable binding in the same review unit as the body. The existing responsibility matrix supplies the allowed behavior; actual managed role attributes, membership/SET paths, exact overload and transitive call graph establish its realization. CH-01 includes those identities and dependencies, and CH-03 independently inspects actual effective privileges before readiness. A body-only source artifact or later blanket application grant cannot close this output. The selected immutable report protection now applies directly rather than waiting for another report-storage decision.
 
-## Reference routine language candidate
+## Selected reference orchestration languages
 
-The [managed source review](managed-extension-source-review.md) now records common documented PL/pgSQL availability and the current builtin SHA-256 dependency. Start CH-02 body authoring with fixed SQL observations and protected PL/pgSQL handlers/validators/producers under the selected controlled-work scope. No custom native module or pgcrypto digest dependency is implied by the current layout. This is a concrete recommended realization; exact body/codec/collector/security/driver evidence must still admit each boundary, and provider language availability cannot qualify correctness or arbitrary native resource bounds.
+The [managed source review](managed-extension-source-review.md) now records common documented PL/pgSQL availability and the current builtin SHA-256 dependency. Start CH-02 body authoring with fixed SQL observations and protected PL/pgSQL handlers/validators/producers under the selected controlled-work scope. No custom native module or pgcrypto digest dependency is implied by the current layout. The architecture selects these orchestration languages; exact body/codec/collector/security/driver evidence must still admit each boundary, and provider language availability cannot qualify correctness or arbitrary native resource bounds.
 
 ## Installer dependency order and publication boundary
 
@@ -91,3 +91,20 @@ Current source correction: profile 0.9 now composes the key_lifecycle_history ta
 
 
 Current composition correction: profile 0.10 now includes both migration homes, allocator and route. The 0.9 omission is historical; original marker/admission initialization and continuity, protected receipt/feed producers and complete native qualification remain required.
+
+
+## Selected handler and validator attributes
+
+The following seven orchestration routines use PL/pgSQL, `VOLATILE`, `PARALLEL UNSAFE`, `CALLED ON NULL INPUT` and `NOT LEAKPROOF`. Specify these explicitly in authored CREATE FUNCTION definitions and independently compare actual pg_proc attributes before readiness. This closes their language/optimizer/null/disclosure attribute choices; exact bodies, security modes, native owners, search paths, ACLs and complete dependencies remain separately required under CONTRACT-005. No installed function or privilege is implied.
+
+| Original callable | Exact input/return boundary | Attribute selection basis |
+| --- | --- | --- |
+| row_touch_observe | () RETURNS trigger | Current operation attribution and touch/capacity effects |
+| row_touch_commit_check | () RETURNS trigger | Current complete-scope validation and deferred completion |
+| edge_limit_observe | () RETURNS trigger | Current edge/marker scope and contribution custody |
+| edge_limit_catalog_observe | () RETURNS trigger | Current catalog-operation and affected-relationship scope |
+| feed_current_union_check | () RETURNS trigger | Current complete feed union and original event attribution |
+| feed_union_validate_current_scope | () RETURNS void | Ordinary write-free full-scope validator; current-state reads remain volatile |
+| edge_limit_verify_current_scope | () RETURNS void | Ordinary write-free full-scope validator; current-state reads remain volatile |
+
+Trigger OLD/NEW and operation context are not nullable SQL arguments to be skipped by STRICT. The ordinary zero-argument validators must remain callable as ordinary functions; the five handlers remain trigger-returning functions. No wrapper may weaken these attributes or introduce cached current-state proof. PARALLEL UNSAFE prevents an unreviewed worker path for these stateful/private orchestration boundaries; it does not remove a user's unrelated query capabilities or qualify native resource bounds. Pure immutable codec helpers and optional resource-account modules require their own reviewed attributes and do not inherit this table by name.
