@@ -2057,6 +2057,10 @@ B-005/B-014 reference-owned transaction wiring uses CONTRACT-007’s selected ad
 
 ## Exact value/profile composition handoff
 
+Before V1, select and retain the complete reference schema/source fixture independently of emitted SQL or existing compiler positives. The M00–M07 integration and S01–S09 release checkpoints specify scenario obligations; they do not supply field definitions or select their domains. The selection output must include exact original UMF document bytes and digest, all required authored field/relationship/key identities, scenario-to-field membership, independent expected values/state, and explicit unsupported required meanings. Reconcile the merged consumer requirements and all required story criteria against that inventory before adopting a profile. Do not infer a Customer/Orders model from Weft's selected grouped-join evidence or reuse its UInt64/domain choices as Truss product decisions.
+
+Schema selection is a concrete remaining design output; source experiments may continue under their existing scope but cannot close V1 with null original definitions or zero required fields. Record the selected fixture and original evidence once, then resolve all V1–V4 entries from it without rewriting source meanings to fit current native/compiler limits.
+
 V1–V4 refine CH-02/CH-04 without adding another codec or compiler. Use CONTRACT-010's existing seven-dispatch, CR01–CR06, NC01–NC04 and TCA01–TCA07 algorithms; their existence is not a populated reference profile.
 
 | Work | Required concrete output | Review gate |
