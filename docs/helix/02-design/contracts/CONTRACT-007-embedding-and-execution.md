@@ -30,6 +30,14 @@ A host network adapter accepts one complete bounded atomic mutation batch, invok
 
 **Contract ID:** CONTRACT-007. **Type:** library/boundary. **Version:** proposed `truss-execution/0.1.0`. **Status:** draft.
 
+## Embedded public draft example
+
+The [compile-only batch example](bindings/truss-embedded-group-example-v0.1.ts) consumes Executor.adoptTransaction and GroupCapability.applyInTransaction with the actual host transaction, full semantic input and explicit request selection. It preserves execution failure versus domain failure/unavailable versus semantic success. It neither commits the caller nor reruns its callback. A pending created-identity view is useful only under original live-transaction custody; TypeScript identity data alone cannot enforce that lifetime.
+
+The host may perform its earlier work and later Truss operations in the same adopted transaction, but actual outer commit/rollback remains its responsibility. The group facade owns operation-local containment under CONTRACT-009, including rollback of failed group effects while preserving prior host work. Host commit confirmation must settle the original pending result through the selected executor/recovery boundary before durable publication. The example uses declared public draft interfaces only; no driver/package implementation or native readiness is claimed.
+
+Compile with the selected TypeScript compiler using `--ignoreConfig --noEmit --strict --target ES2022 --moduleResolution bundler --module ESNext` and the example path. Public package export names and packed-consumer/native tests remain PD/CH-05 outputs. A future network wrapper additionally needs committed-only projection and exact original request receipt/recovery; returning this embedded pending result directly over the network is invalid.
+
 ## Network response projection and cancellation
 
 A host network success response carries only the committed projection of the existing GroupResponse: applied/committed after original engine-owned commit, or replayed/committed after qualified original receipt observation. The [CommittedGroupResponse draft type](bindings/truss-group-result-v0.1.d.ts) excludes pending execution and same-transaction replay. Its narrowing is not commit evidence; the host must obtain the original executor/receipt proof before serialization. No new toolkit capability family or commit-by-ID protocol is introduced.
