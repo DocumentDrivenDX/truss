@@ -433,7 +433,7 @@ export interface NativeConnection {
   begin(options:TransactionOptions):Promise<void>;
   execute(statement:Statement):Promise<StatementResult>;
   control(sql:string):Promise<void>;
-  commit():Promise<'committed'>;
+  commit():Promise<'committed'|{readonly status:'rejected';readonly sqlState:string}>;
   rollback():Promise<'rolled_back'>;
   release():Promise<void>;
   quarantine(reason:'commit_unknown'|'transaction_unusable'):Promise<void>;
@@ -496,8 +496,17 @@ export function createEngineExecutor(source:NativeConnectionSource):Executor<nev
         catch{return quarantine('transaction_unusable');}
         return entry.nativeFailure ? {status:'error' as const,error:entry.nativeFailure} : failure('transaction_unusable');
       }
-      try{if(await connection.commit()!=='committed')return quarantine('commit_unknown');}
-      catch{return quarantine('commit_unknown');}
+      try{
+        const settlement=await connection.commit();
+        if(settlement!=='committed'){
+          if(settlement.status!=='rejected'||! /^(23|40)[0-9A-Z]{3}$/.test(settlement.sqlState))return quarantine('commit_unknown');
+          // Rejection port requires original server ErrorResponse plus confirmed rollback.
+          try{await connection.release();}catch{return quarantine('transaction_unusable');}
+          return {status:'error' as const,error:settlement.sqlState==='40001'||settlement.sqlState==='40P01'
+            ? {code:'retry' as const,message:'Native commit rejected',retryScope:'whole_transaction' as const,sqlState:settlement.sqlState}
+            : {code:'transaction_unusable' as const,message:'Native commit rejected',retryScope:'none' as const,sqlState:settlement.sqlState}};
+        }
+      }catch{return quarantine('commit_unknown');}
       // Cleanup failure cannot cause a retry of an already confirmed commit.
       try{await connection.release();}catch{return quarantine('transaction_unusable');}
       return {status:'ok' as const,value:{value,durability:'committed' as const}};

@@ -97,15 +97,6 @@
   },
   "deadlock": [
     {
-      "status": "error",
-      "error": {
-        "code": "retry",
-        "message": "Native transaction must retry",
-        "retryScope": "whole_transaction",
-        "sqlState": "40P01"
-      }
-    },
-    {
       "status": "ok",
       "value": {
         "value": {
@@ -128,7 +119,49 @@
         },
         "durability": "committed"
       }
+    },
+    {
+      "status": "error",
+      "error": {
+        "code": "retry",
+        "message": "Native transaction must retry",
+        "retryScope": "whole_transaction",
+        "sqlState": "40P01"
+      }
     }
   ],
-  "qualification": "Actual engine executor + direct pg driver on existing local PostgreSQL 17.9. Exact native numeric text cells, duplicate/empty column descriptions, savepoints, confirmed read-only/write commit, exact parameterized write, uniqueness-error savepoint containment preserving prior work and independently observed callback rollback and one actual advisory-lock deadlock with whole-transaction retry outcome. No caller adoption/cancellation, lost-commit native containment, pooler/Node or full Truss bootstrap qualification."
+  "commitRejection": {
+    "status": "error",
+    "error": {
+      "code": "transaction_unusable",
+      "message": "Native commit rejected",
+      "retryScope": "none",
+      "sqlState": "23503"
+    }
+  },
+  "rejectionRollback": {
+    "status": "ok",
+    "value": {
+      "value": {
+        "columns": [
+          "parent",
+          "child"
+        ],
+        "rows": [
+          [
+            {
+              "state": "null"
+            },
+            {
+              "state": "null"
+            }
+          ]
+        ],
+        "affectedRows": "1",
+        "command": "SELECT"
+      },
+      "durability": "committed"
+    }
+  },
+  "qualification": "Actual engine executor + direct pg driver on existing local PostgreSQL 17.9. Exact native numeric text cells, duplicate/empty column descriptions, savepoints, confirmed read-only/write commit, exact parameterized write, uniqueness-error savepoint containment preserving prior work and independently observed callback rollback and one actual advisory-lock deadlock with whole-transaction retry outcome; actual deferred-FK commit rejection with confirmed rollback and independent absent-table observation. No caller adoption/cancellation, lost-commit native containment, pooler/Node or full Truss bootstrap qualification."
 }

@@ -56,7 +56,15 @@ try{
  const deadlock=await Promise.all([lockPair('1890033411','1890033412'),lockPair('1890033412','1890033411')]);
  if(deadlock.filter(r=>r.status==='error'&&r.error.code==='retry'&&r.error.sqlState==='40P01'&&r.error.retryScope==='whole_transaction').length!==1||
     deadlock.filter(r=>r.status==='ok'&&r.value.durability==='committed').length!==1)throw Error('Native deadlock settlement correspondence');
- await writeFile(new URL('../docs/helix/04-build/evidence/inert-assembly/pg-executor.json',import.meta.url),JSON.stringify({driver:'pg/8.16.3',loader:'bun/'+Bun.version,result,writes,rollback,deadlock,
- qualification:'Actual engine executor + direct pg driver on existing local PostgreSQL 17.9. Exact native numeric text cells, duplicate/empty column descriptions, savepoints, confirmed read-only/write commit, exact parameterized write, uniqueness-error savepoint containment preserving prior work and independently observed callback rollback and one actual advisory-lock deadlock with whole-transaction retry outcome. No caller adoption/cancellation, lost-commit native containment, pooler/Node or full Truss bootstrap qualification.'},null,2)+'\n');
+ const commitRejection=await executor.withTransaction({isolation:'read_committed',accessMode:'read_write'},async tx=>{
+   await run(tx,'CREATE TEMP TABLE truss_pg_deferred_parent(id integer PRIMARY KEY)');
+   await run(tx,'CREATE TEMP TABLE truss_pg_deferred_child(id integer REFERENCES truss_pg_deferred_parent(id) DEFERRABLE INITIALLY DEFERRED)');
+   await run(tx,'INSERT INTO truss_pg_deferred_child VALUES(1)');return 'pending-only';
+ });
+ if(commitRejection.status!=='error'||commitRejection.error.sqlState!=='23503'||commitRejection.error.retryScope!=='none'||host.quarantinedCount()!==0)throw Error('Commit rejection not settled');
+ const rejectionRollback=await executor.withTransaction({isolation:'read_committed',accessMode:'read_only'},async tx=>run(tx,"SELECT to_regclass('pg_temp.truss_pg_deferred_parent')::text AS parent,to_regclass('pg_temp.truss_pg_deferred_child')::text AS child"));
+ if(rejectionRollback.status!=='ok'||rejectionRollback.value.value.rows[0].some(c=>c.state!=='null'))throw Error('Rejected commit effects survived');
+ await writeFile(new URL('../docs/helix/04-build/evidence/inert-assembly/pg-executor.json',import.meta.url),JSON.stringify({driver:'pg/8.16.3',loader:'bun/'+Bun.version,result,writes,rollback,deadlock,commitRejection,rejectionRollback,
+ qualification:'Actual engine executor + direct pg driver on existing local PostgreSQL 17.9. Exact native numeric text cells, duplicate/empty column descriptions, savepoints, confirmed read-only/write commit, exact parameterized write, uniqueness-error savepoint containment preserving prior work and independently observed callback rollback and one actual advisory-lock deadlock with whole-transaction retry outcome; actual deferred-FK commit rejection with confirmed rollback and independent absent-table observation. No caller adoption/cancellation, lost-commit native containment, pooler/Node or full Truss bootstrap qualification.'},null,2)+'\n');
  console.log('Native pg executor exact transport/columns/savepoints/commit passed.');
 }finally{await host.close();}

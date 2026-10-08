@@ -243,3 +243,24 @@ The successful probe uses a three-second transaction-local lock timeout under
 the existing five-second statement limit; no deployment setting changes. Final
 original outcomes are retained in pg-executor.json. COMMIT-phase SQLSTATE-specific
 settlement, cancellation and full native recovery/bootstrap remain unfinished.
+
+
+## Native COMMIT rejection settlement
+
+The mandatory native commit port now distinguishes committed from rejected only
+after original server error and confirmed same-connection rollback. The pg bridge
+recognizes actual pg DatabaseError instances in SQLSTATE classes 23/40, queues
+ROLLBACK on that original connection and checks its command response before
+returning rejected. Unknown error/transport/rollback remains commit_unknown and
+quarantined. The executor releases a confirmed rejected resource and returns
+40001/40P01 as whole-transaction retry; other admitted constraint rejections
+return transaction_unusable with no retry. Successful callback data remains withheld.
+
+Twenty-one tests/168 assertions, strict host typecheck, build and packed consumer
+pass. Actual deferred-FK COMMIT rejection returns 23503 with zero quarantined
+resources after confirmed rollback; a following transaction independently verifies
+that both temporary tables are absent. Native evidence remains in pg-executor.json.
+No persistent tables or deployment/cloud changes occur. Actual native 40001 at
+COMMIT, lost transport/containment/settlement, adoption/cancellation, resource
+admission and complete bootstrap remain unqualified. A caller-fabricated error
+code is not sufficient native rejection evidence in the bridge.

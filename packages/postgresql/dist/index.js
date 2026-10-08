@@ -602,8 +602,17 @@ function createEngineExecutor(source) {
         return entry.nativeFailure ? { status: "error", error: entry.nativeFailure } : failure("transaction_unusable");
       }
       try {
-        if (await connection.commit() !== "committed")
-          return quarantine("commit_unknown");
+        const settlement = await connection.commit();
+        if (settlement !== "committed") {
+          if (settlement.status !== "rejected" || !/^(23|40)[0-9A-Z]{3}$/.test(settlement.sqlState))
+            return quarantine("commit_unknown");
+          try {
+            await connection.release();
+          } catch {
+            return quarantine("transaction_unusable");
+          }
+          return { status: "error", error: settlement.sqlState === "40001" || settlement.sqlState === "40P01" ? { code: "retry", message: "Native commit rejected", retryScope: "whole_transaction", sqlState: settlement.sqlState } : { code: "transaction_unusable", message: "Native commit rejected", retryScope: "none", sqlState: settlement.sqlState } };
+        }
       } catch {
         return quarantine("commit_unknown");
       }

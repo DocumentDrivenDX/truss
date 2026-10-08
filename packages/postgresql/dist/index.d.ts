@@ -113,7 +113,10 @@ export interface NativeConnection {
     begin(options: TransactionOptions): Promise<void>;
     execute(statement: Statement): Promise<StatementResult>;
     control(sql: string): Promise<void>;
-    commit(): Promise<'committed'>;
+    commit(): Promise<'committed' | {
+        readonly status: 'rejected';
+        readonly sqlState: string;
+    }>;
     rollback(): Promise<'rolled_back'>;
     release(): Promise<void>;
     quarantine(reason: 'commit_unknown' | 'transaction_unusable'): Promise<void>;

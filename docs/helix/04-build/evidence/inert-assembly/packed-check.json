@@ -1,7 +1,7 @@
 {
   "interfaceVersion": "truss-packed-inert-check/0.1.0",
   "loader": "bun/1.4.2",
-  "archiveSha256": "7d34767bf9b0290fded5688131a7dd6579031d5ba60b59e19f023a74f41078fe",
+  "archiveSha256": "135b7ef1c342de4701b3f4a925e1ef794d7a060468a2fe9768f5ba0171a9e127",
   "declarationFiles": 37,
   "transactionBrandDeclarations": 1,
   "cleanConsumerTypecheck": true,

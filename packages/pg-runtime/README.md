@@ -20,3 +20,9 @@ required. Full resource limits, driver loss/termination behavior, native error
 mapping, prepared/pooler/Node support and full Truss bootstrap are unfinished.
 Internal SQL templates are trusted implementation code; this is not an arbitrary
 SQL authorization boundary. The pg package stays outside the portable library.
+
+
+Confirmed pg server COMMIT errors in SQLSTATE classes 23/40 are classified only
+after same-connection ROLLBACK command confirmation. Other COMMIT failures remain
+unknown and retain quarantine. Deferred-FK rejection is natively verified; lost
+transport and commit-time serialization schedules remain unfinished.

@@ -54,3 +54,12 @@ test('native retry SQLSTATE cannot be cleared by a savepoint',async()=>{
     expect(f.calls.slice(-2)).toEqual(['rollback','release']);expect(f.calls).not.toContain('commit');
   }
 });
+
+test('confirmed commit rejection returns classified outcome after release',async()=>{
+ for(const sqlState of ['40001','23503']){const f=fixture();
+  f.connection.commit=async()=>{f.calls.push('rejected-and-rolled-back');return {status:'rejected',sqlState};};
+  const result=await f.executor.withTransaction(options,async()=> 'pending');
+  expect(result).toMatchObject({status:'error',error:{code:sqlState==='40001'?'retry':'transaction_unusable',retryScope:sqlState==='40001'?'whole_transaction':'none',sqlState}});
+  expect(f.calls).toEqual(['begin','rejected-and-rolled-back','release']);
+ }
+});

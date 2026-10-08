@@ -1,5 +1,5 @@
 /** Host-only PostgreSQL driver. Portable Truss package imports no pg dependency. */
-import {Pool, type PoolClient, type PoolConfig} from 'pg';
+import {Pool, DatabaseError, type PoolClient, type PoolConfig} from 'pg';
 import type {NativeConnectionSource,NativeConnection,StatementResult} from '../../postgresql/src/index';
 export function createPgConnectionSource(config:PoolConfig): {
   readonly source:NativeConnectionSource;
@@ -40,7 +40,15 @@ export function createPgConnectionSource(config:PoolConfig): {
         return {columns:result.fields.map(field=>field.name),rows,affectedRows:noCount?'0':String(result.rowCount),command:result.command};
       },
       async control(sql){if(!/^((SAVEPOINT|RELEASE SAVEPOINT|ROLLBACK TO SAVEPOINT) truss_sp_[1-9][0-9]*)$/.test(sql))throw Error('Unregistered control SQL');await control(sql);},
-      async commit(){await control('COMMIT','COMMIT');started=false;return 'committed';},
+      async commit(){
+        try{await control('COMMIT','COMMIT');started=false;return 'committed';}
+        catch(error){
+          if(!(error instanceof DatabaseError)||!error.code||! /^(23|40)[0-9A-Z]{3}$/.test(error.code))throw error;
+          // Queue on this original connection and confirm rollback before classified settlement.
+          await control('ROLLBACK','ROLLBACK');started=false;
+          return {status:'rejected',sqlState:error.code};
+        }
+      },
       async rollback(){await control('ROLLBACK','ROLLBACK');started=false;return 'rolled_back';},
       async release(){alive();if(started)throw Error('Active connection cannot release');ended=true;client.off('error',onError);client.release();},
       async quarantine(){quarantine.add(client);}
