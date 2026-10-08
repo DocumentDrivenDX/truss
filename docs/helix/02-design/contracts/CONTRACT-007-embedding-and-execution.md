@@ -30,6 +30,16 @@ A host network adapter accepts one complete bounded atomic mutation batch, invok
 
 **Contract ID:** CONTRACT-007. **Type:** library/boundary. **Version:** proposed `truss-execution/0.1.0`. **Status:** draft.
 
+## Network response projection and cancellation
+
+A host network success response carries only the committed projection of the existing GroupResponse: applied/committed after original engine-owned commit, or replayed/committed after qualified original receipt observation. The [CommittedGroupResponse draft type](bindings/truss-group-result-v0.1.d.ts) excludes pending execution and same-transaction replay. Its narrowing is not commit evidence; the host must obtain the original executor/receipt proof before serialization. No new toolkit capability family or commit-by-ID protocol is introduced.
+
+Before transaction execution, admit the complete request identity/input and selected lossless transport profile under finite body/decoded limits; preserve original semantic operation order and exact numeric tokens. A network bigint uses the selected exact text/token wire rather than an untagged JSON number. HTTP status codes and endpoint/authentication naming belong to the host's selected protocol, not a second mutation meaning.
+
+A client disconnect or canceled response delivery does not establish native rollback. If commit already succeeded, preserve the original committed receipt and permit same-ID/input recovery; never delete the receipt to compensate for acknowledgment failure. If execution or commit remains uncertain, withhold successful semantic output and preserve original recovery custody. A retry cannot silently substitute a new request ID or changed input. Request-free uncertainty cannot be recovered through a receipt that was never requested.
+
+Cancellation before commit follows the original executor containment protocol; client closure alone cannot prove cleanup, connection reuse or release. Response encoding/resource failure after commit reports transport failure while preserving committed effects/receipt. It cannot become group rollback or partial semantic success. Host diagnostics and recovery lookup still obey current namespace/owner authorization and cannot disclose receipt existence across forbidden scopes.
+
 ## Purpose
 
 Specify the executor and transaction boundary used by an embedded implementation. Hosts can combine Truss changes with their own database writes and retain control of commit, rollback, role and cancellation. This is a semantic contract across language bindings; TypeScript types must express it without importing a driver into core.

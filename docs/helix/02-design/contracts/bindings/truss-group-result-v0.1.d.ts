@@ -59,3 +59,9 @@ export type GroupResponse = {
   readonly durability:'committed';
   readonly replay:{readonly basis:'committed_receipt'; readonly observationProfile:ProfilePin; readonly evidence:ExactArtifact};
 });
+
+/** Host network success projection, admitted only after confirmed outer commit.
+ * Narrowing this type alone is not native commit evidence. */
+export type CommittedGroupResponse = GroupResponse & {
+  readonly durability:'committed';
+};

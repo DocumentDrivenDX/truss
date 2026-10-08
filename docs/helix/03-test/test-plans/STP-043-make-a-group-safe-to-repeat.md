@@ -22,6 +22,12 @@ ddx:
 Planned receipt controls RSEL-01–04: all-no-op and mixed batches return identical original ordered results on retry; drop network acknowledgment after actual commit and retry the complete same-ID batch without new effects; concurrent equal batches have one effect/receipt winner while unequal input conflicts; purge eligible payload under short/zero journal retention and require retained expiry/conflict identity to prevent reapplication. Receipt/effects rollback and unknown-commit observation retain their existing schedules. Cases are not_run.
 
 
+## Network acknowledgment failure schedules (planned)
+
+NET-01–04 apply CONTRACT-007's committed-only network projection: (01) block before native commit and require no pending/same-transaction result or ID in successful response bytes; (02) commit then disconnect before acknowledgment, retry the same ID/full input and return original ordered results with no new graph/journal effects; (03) fail response encoding after confirmed commit and preserve the committed receipt for authorized retry, without rollback classification or partial semantic output; (04) disconnect during commit/containment and retain original unknown-outcome recovery until qualified observation settles it, with no blind callback rerun or connection release. Repeat request-free uncertainty and require no fabricated receipt recovery. All cases are not_run.
+
+The draft committed response type has three negative compile controls excluding pending application, same-transaction replay and commit_unknown-as-success. These controls qualify declaration narrowing only; actual native observation, cancellation, byte disclosure and transport behavior require the selected public host harness.
+
 ## Story Reference and Scope
 
 US-043, TD-043, SD-003, TP-001 and CONTRACT-004/007/009. Tests are planned and receipt persistence remains D-06-gated.
