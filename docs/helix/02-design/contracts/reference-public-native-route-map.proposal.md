@@ -34,3 +34,34 @@ Native command success remains distinct from operation success and confirmed out
 This map closes the named six-facade responsibility routes; it does not claim the complete public API inventory. Direct read/traversal, compiled execution, acceptance/runtime construction and separately imported bootstrap/migration/retention/receipt/feed administrative tooling each need their own exact registered route inventory. The public/private access plan and sixteen-selector worklist are inputs to each route's body closure, not a license to grant a family role every helper. The typed SQL view decision remains separate and pending.
 
 Implementation must retain the method→exact native callable/statement→private dependency→store/column/sequence→actor/resource/publication correspondence and independently observe it under the existing per-story test allocations. Missing or extra native paths prevent readiness; a successful facade typecheck is not that evidence.
+
+## Direct and compiled read entries
+
+| Existing selector | Native route and original obligations |
+| --- | --- |
+| DirectReadCapability.lookup | Ordinary qualified key reader. Observe the complete routed collision cohort, compare original full namespace/tuple bytes using the admitted UMF encoding and decode the complete owned value. Reservations/guards never become live results; hidden integrity scope cannot become public disclosure. |
+| DirectReadCapability.page | Ordinary qualified bounded record reader with complete selected definition/decoder and original cursor context. Each page independently admits authority and native completion; a cursor does not promise cross-page snapshot continuity. |
+| DirectReadCapability.catalogView | Qualified catalog reader preserving original source/accepted revision/report owner meaning. Filtered visibility cannot claim a complete catalog inventory. |
+| DirectReadCapability.traverse | Qualified bounded graph reader plus original private stage producer when selected. Complete endpoint/relationship authority and original stage/account custody remain required; stage creation is not graph mutation authority. |
+| DirectReadCapability.resumeTraversal; nextTraversalPage | Original stage service verifies issuer, stage identity, generation, source/context and current authority. No reconstructed caller handle, replacement stage or stale cursor acquires continuity. |
+| DirectReadCapability.releaseTraversal | Original stage service releases only its retained traversal resource under original issuer custody. This selector has no TransactionHandle and must not manufacture one, settle a host transaction or interpret resource release as rollback. |
+| CompiledExecutionCapability.executeInTransaction | Registered Weft artifact bridge: exact artifact/obligation admission, native original preparation, ordered owner-wide guards, unchanged data SQL, complete private result and prepublication rechecks in the same supplied transaction. Unknown obligations refuse; this route never compiles or rewrites SQL. |
+
+## Separately imported construction and administration
+
+createReferenceAssembly and capability-handle selection are inert and confer no native authority. observeReadiness explicitly observes the selected original installation/profile; it cannot install objects or replace per-call admission. dispose closes assembly admission and follows original resource/recovery custody without ending adopted host transactions. Recreating an assembly cannot acquire unresolved predecessor custody.
+
+createFeedLifecycleTooling and createReceiptLifecycleTooling are also inert projections of an existing assembly. Their configuration/profile bytes are not privilege grants. Administrative methods require their own original acting administrator, exact current native procedure rights, exclusion and recovery. Ordinary application membership cannot reach those rights through the construction export.
+
+| Existing declared tooling family | Administrative native responsibility and mandatory separation |
+| --- | --- |
+| Bootstrap definition/generation/inventory/dependency reconciliation | Installation administrator enumerates full source/native effects, converts original populated state and publishes readiness only after complete correspondence. A collector/report cannot write the marker by itself. |
+| KeyProfileMigrationTooling.migrate; reconcile | Original key migration administrator retains complete old/new source/key/owner/high-water custody and exact original attempt recovery. A recovery reference is a lookup locator, not permission to rerun migration. |
+| RetentionTooling.dropInTransaction | Retention administrator validates original complete protection/coverage and complete selected cleanup cohort before deletion/horizon advancement. Archive observation cannot settle native commit; successful effects remain subject to supplied outer transaction. |
+| ReceiptLifecycleTooling.protection; expiry | Original receipt protection/expiry coordinator enforces trusted committed observation clock, full namespace/input/result custody and monotonic protection. This is separate from graph mutation and request-free execution; expiry cannot authorize reapplication. |
+| FeedLifecycleTooling.administration; registration; workers | Original consumer/configuration/worker administrator validates exact generation, proof-verifier registration and durable source/target boundaries. Admin possession cannot fabricate verified downstream application evidence. |
+| FeedLifecycleTooling.extraction; confirmation; abandonment; restart | Original seed lifecycle producer retains complete seed/source/protection/cancellation and attempt custody. Independent current-authority rechecks and actual source settlement govern activation; restart cannot erase unresolved prior attempt. |
+| PhysicalJobTooling admit/observe/run index/statistics methods | Physical optimization administrator admits original job in a transaction, independently observes committed admission and dispatches only that exact committed attempt. Do not run a pending attempt or change canonical meaning to make an index/statistics job pass. |
+| ConformanceTooling | Explicit assessor/runner invocation over exact original corpus and selected profiles. Test/probe privileges are separately admitted; construction/import cannot provision, mutate or start a worker. Unavailable native prerequisites remain unavailable outcomes. |
+
+This extension supplies the remaining read and administrative responsibility boundaries. The body author must still expand every tooling sub-interface to exact methods/signatures and full native callable/statement dependencies, preserving its existing declaration. Do not call the resulting inventory complete until its original declaration export closure and advertised SQL surfaces have been compared bidirectionally. Optional typed views and unresolved owner semantics cannot be silently included or omitted.
