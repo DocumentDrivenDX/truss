@@ -23,8 +23,10 @@ BEGIN
   END IF;
   LOCK TABLE truss.schema_head IN EXCLUSIVE MODE;
   FOR candidate IN SELECT value FROM jsonb_array_elements(candidates) LOOP
-    IF jsonb_typeof(candidate)<>'object' OR NOT candidate ?& ARRAY['ownerTypeId','field','home']
-        OR (SELECT count(*) FROM jsonb_object_keys(candidate))<>3
+    IF jsonb_typeof(candidate)<>'object' OR NOT candidate ?& ARRAY['ownerTypeId','fieldModule','field','home']
+        OR (SELECT count(*) FROM jsonb_object_keys(candidate))<>4
+        OR jsonb_typeof(candidate->'fieldModule')<>'string'
+        OR octet_length(candidate->>'fieldModule') NOT BETWEEN 1 AND 65536
         OR jsonb_typeof(candidate->'ownerTypeId')<>'string'
         OR candidate->>'ownerTypeId' !~ '^[1-9][0-9]{0,9}$'
         OR (candidate->>'ownerTypeId')::bigint>2147483647
@@ -63,7 +65,7 @@ BEGIN
         WHERE d.rev=revision AND d.ord=owner.doc_ord AND d.doc_id=owner.document_id
           AND m.value->>'id'=owner.module AND r.value->>'id'=owner.element AND r.value->>'kind'='record'
           AND fm.value->>'id'=member.value->>'module' AND f.value->>'id'=member.value->>'element'
-          AND f.value=candidate->'field';
+          AND fm.value->>'id'=candidate->>'fieldModule' AND f.value=candidate->'field';
     IF source_matches<>1 THEN
       RAISE EXCEPTION 'property does not match original owner member and Field definition' USING ERRCODE='55000';
     END IF;
@@ -73,14 +75,14 @@ BEGIN
   assigned:=high_water;
   FOR candidate IN SELECT v.value FROM jsonb_array_elements(candidates) v
       JOIN truss.type_def t ON t.type_id=(v.value->>'ownerTypeId')::int
-      ORDER BY t.document_id COLLATE "C",t.module COLLATE "C",t.element COLLATE "C",(v.value->'field'->>'id') COLLATE "C" LOOP
+      ORDER BY t.document_id COLLATE "C",t.module COLLATE "C",t.element COLLATE "C",(v.value->>'fieldModule') COLLATE "C",(v.value->'field'->>'id') COLLATE "C" LOOP
     assigned:=assigned+1;
     SELECT * INTO STRICT owner FROM truss.type_def t WHERE t.type_id=(candidate->>'ownerTypeId')::int;
     SELECT fm.value->>'id' INTO STRICT field_module FROM truss.schema_doc d
       CROSS JOIN LATERAL jsonb_array_elements(d.document::jsonb->'modules') fm
       CROSS JOIN LATERAL jsonb_array_elements(fm.value->'elements') f
       WHERE d.rev=revision AND d.ord=owner.doc_ord AND d.doc_id=owner.document_id
-        AND f.value=candidate->'field';
+        AND fm.value->>'id'=candidate->>'fieldModule' AND f.value=candidate->'field';
     INSERT INTO truss.prop_def(prop_id,type_id,element,declaration_module,name,scalar_type,nullability,cardinality,facets,item,home,
       since_rev,doc_ord,definition_source_kind,definition_rev,definition_doc_ord,definition_document_id)
     VALUES(assigned::int,owner.type_id,candidate->'field'->>'id',field_module,candidate->'field'->>'name',candidate->'field'->>'scalarType',
