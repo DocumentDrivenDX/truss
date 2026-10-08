@@ -1,0 +1,111 @@
+{
+  "model": {
+    "umf": "0.8.0",
+    "id": "truss-value-owner",
+    "vocabularies": {},
+    "extensions": {},
+    "modules": [
+      {
+        "id": "m",
+        "namespace": "m",
+        "elements": [
+          {
+            "id": "code",
+            "name": "code",
+            "kind": "field",
+            "scalarType": "string",
+            "nullability": "required",
+            "cardinality": "one",
+            "extensions": {}
+          },
+          {
+            "id": "amount",
+            "name": "amount",
+            "kind": "field",
+            "scalarType": "decimal",
+            "nullability": "required",
+            "cardinality": "one",
+            "extensions": {},
+            "facets": {
+              "precision": 21,
+              "scale": 3
+            }
+          },
+          {
+            "id": "count",
+            "name": "count",
+            "kind": "field",
+            "scalarType": "integer",
+            "nullability": "required",
+            "cardinality": "one",
+            "extensions": {},
+            "facets": {
+              "integerWidth": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "id": "Invoice",
+            "name": "Invoice",
+            "kind": "record",
+            "members": [
+              {
+                "module": "m",
+                "element": "code"
+              },
+              {
+                "module": "m",
+                "element": "amount"
+              },
+              {
+                "module": "m",
+                "element": "count"
+              }
+            ],
+            "keys": [
+              {
+                "id": "identity",
+                "name": "identity",
+                "fields": [
+                  {
+                    "module": "m",
+                    "element": "amount"
+                  },
+                  {
+                    "module": "m",
+                    "element": "code"
+                  },
+                  {
+                    "module": "m",
+                    "element": "count"
+                  }
+                ],
+                "primary": true
+              }
+            ],
+            "extensions": {}
+          }
+        ]
+      }
+    ]
+  },
+  "identity": {
+    "module": "m",
+    "element": "Invoice",
+    "key": "identity"
+  },
+  "values": [
+    {
+      "decimalToken": "12.340"
+    },
+    {
+      "string": "雪🙂"
+    },
+    {
+      "integerToken": "9007199254740993"
+    }
+  ],
+  "expectedHex": "554d464b310303060331323334300407e99baaf09f9982021039303037313939323534373430393933"
+}

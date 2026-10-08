@@ -2,13 +2,7 @@
 import {resolve} from 'node:path';
 export const UMF_RUNTIME_SOURCE='c45c72a2a8a3c4fba61c40c5927dd9091acf8cc3';
 export async function loadUmfProducer(directory:string){
- const root=resolve(directory);const manifest=await Bun.file(root+'/producer-manifest.json').json();
- const bytes=await Bun.file(root+'/producer.js').arrayBuffer();
- const hash=new Bun.CryptoHasher('sha256').update(bytes).digest('hex');
- if(manifest.revision!==UMF_RUNTIME_SOURCE||manifest.bundleSha256!==hash)throw Error('Original UMF producer pin mismatch');
- const owner=await import(root+'/producer.js');
- const names=['readDocument','validateDocument','validateCoreRecordValues','upgradeSchemaPropertiesEnvelope','verifySchemaPropertiesUpgrade','rollbackSchemaPropertiesEnvelope'];
- const captured=Object.fromEntries(names.map(name=>{if(typeof owner[name]!=='function')throw Error('Missing original producer');return [name,owner[name].bind(owner)]}));
+ const {hash,captured}=await loadPinnedFunctions(directory,UMF_RUNTIME_SOURCE,'record',['readDocument','validateDocument','validateCoreRecordValues','upgradeSchemaPropertiesEnvelope','verifySchemaPropertiesUpgrade','rollbackSchemaPropertiesEnvelope']);
  return Object.freeze({sourceRevision:UMF_RUNTIME_SOURCE,bundleSha256:hash,
   inspect(originalText:string){
    if(typeof originalText!=='string'||Buffer.byteLength(originalText)>1048576)throw Error('Original document bound');
@@ -30,16 +24,30 @@ export async function loadUmfProducer(directory:string){
 /** Independently pinned current-core numeric conveniences; no Record-source substitution. */
 export const UMF_NUMERIC_SOURCE='9e4bed3efe922c11e4b5a888ba6854de14f1b29f';
 export async function loadUmfNumericProducer(directory:string){
- const root=resolve(directory);const manifest=await Bun.file(root+'/producer-manifest.json').json();
- const bytes=await Bun.file(root+'/producer.js').arrayBuffer();
- const hash=new Bun.CryptoHasher('sha256').update(bytes).digest('hex');
- if(manifest.revision!==UMF_NUMERIC_SOURCE||manifest.producerMode!=='numeric'||manifest.bundleSha256!==hash)throw Error('Original UMF numeric producer pin mismatch');
- const owner=await import(root+'/producer.js');
- const names=['exactDecimal','integerFromBigInt','integerToBigInt','admitJavascriptNumber','numericToNumberLossless'] as const;
- const captured=Object.fromEntries(names.map(name=>{if(typeof owner[name]!=='function')throw Error('Missing original numeric producer');return [name,owner[name].bind(owner)]}));
+ const {hash,captured}=await loadPinnedFunctions(directory,UMF_NUMERIC_SOURCE,'numeric',['exactDecimal','integerFromBigInt','integerToBigInt','admitJavascriptNumber','numericToNumberLossless']);
  return Object.freeze({sourceRevision:UMF_NUMERIC_SOURCE,bundleSha256:hash,
   exactDecimal:captured.exactDecimal,integerFromBigInt:captured.integerFromBigInt,
   integerToBigInt:captured.integerToBigInt,admitJavascriptNumber:captured.admitJavascriptNumber,
   numericToNumberLossless:captured.numericToNumberLossless,
  });
+}
+
+
+export const UMF_VALUE_SOURCE=UMF_NUMERIC_SOURCE;
+/** Original current-core Field and tuple semantics, separate from native persistence. */
+export async function loadUmfValueProducer(directory:string){
+ const {hash,captured}=await loadPinnedFunctions(directory,UMF_VALUE_SOURCE,'values',['validateCoreFieldValue','encodeCoreKeyTuple','verifyCoreKeyTuple']);
+ return Object.freeze({sourceRevision:UMF_VALUE_SOURCE,bundleSha256:hash,
+  validateCoreFieldValue:captured.validateCoreFieldValue,
+  encodeCoreKeyTuple:captured.encodeCoreKeyTuple,verifyCoreKeyTuple:captured.verifyCoreKeyTuple,
+ });
+}
+async function loadPinnedFunctions(directory:string,revision:string,mode:string,names:readonly string[]){
+ const root=resolve(directory);const manifest=await Bun.file(root+'/producer-manifest.json').json();
+ const bytes=await Bun.file(root+'/producer.js').arrayBuffer();
+ const hash=new Bun.CryptoHasher('sha256').update(bytes).digest('hex');
+ if(manifest.revision!==revision||(manifest.producerMode??'record')!==mode||manifest.bundleSha256!==hash)throw Error('Original UMF producer pin mismatch');
+ const owner=await import(root+'/producer.js');
+ const captured=Object.fromEntries(names.map(name=>{if(typeof owner[name]!=='function')throw Error('Missing original producer');return [name,owner[name].bind(owner)]}));
+ return {hash,captured};
 }

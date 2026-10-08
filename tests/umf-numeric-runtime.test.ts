@@ -1,5 +1,5 @@
 import {test,expect} from 'bun:test';
-import {loadUmfNumericProducer,UMF_NUMERIC_SOURCE} from '../packages/umf-bun/src/index';
+import {loadUmfNumericProducer,loadUmfValueProducer,UMF_NUMERIC_SOURCE} from '../packages/umf-bun/src/index';
 const directory=process.env.TRUSS_UMF_NUMERIC_PRODUCER;
 if(!directory)throw Error('Pinned original UMF numeric producer required');
 const producer=await loadUmfNumericProducer(directory);
@@ -31,4 +31,8 @@ test('original current-core Field validation remains authoritative for numeric c
  expect(producer.admitJavascriptNumber(1.25,'decimal',context)).toEqual({decimalToken:'1.25'});
  expect(()=>producer.exactDecimal('1.2345',context)).toThrow();
  expect(()=>producer.exactDecimal('1000000000000000000',context)).toThrow();
+});
+
+test('numeric registration cannot substitute for current-core value registration',async()=>{
+ await expect(loadUmfValueProducer(directory)).rejects.toThrow('Original UMF producer pin mismatch');
 });

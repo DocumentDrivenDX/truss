@@ -1,0 +1,62 @@
+{
+  "producer": {
+    "revision": "9e4bed3efe922c11e4b5a888ba6854de14f1b29f",
+    "producerMode": "values",
+    "buildDependencies": {
+      "yaml": {
+        "version": "2.9.1",
+        "packageSha256": "1c6441703d8204a23ded0d37ddf57c3b69d821dc392f20852d1f605bb9b8861c"
+      },
+      "ajv": {
+        "version": "8.20.0",
+        "packageSha256": "1f9033ee5a6515e7d76938b7072941862d1ed228a6879cc7fe10cdeb75107989"
+      }
+    },
+    "archiveSha256": "b868efe48fda9f3870587367fc7bb2adcdcdafbceca750d093c722b89cb6361b",
+    "bundleSha256": "0a5c81094f4cb153d8d847701e9f73dc96ddd3d03eeb6488251fc696a95ad775",
+    "operations": [
+      "validateCoreFieldValue",
+      "encodeCoreKeyTuple",
+      "verifyCoreKeyTuple"
+    ],
+    "scope": "Original logical UMF producers only; no native acceptance/containment qualification."
+  },
+  "tests": {
+    "runtime": "Bun1.4.2",
+    "tests": 7,
+    "assertions": 46,
+    "result": "pass",
+    "scope": "Independent original Record/numeric/current-core Field/key producer registrations; no merged Record/current-core semantics claim"
+  },
+  "browserEvidence": {
+    "path": "docs/helix/04-build/evidence/umf-value-browser.json",
+    "sha256": "10a07dcff3ffbd02a7f223306101642266489fb56c8aeffedcce506e1fa7c5ee"
+  },
+  "sources": [
+    {
+      "path": "scripts/build-umf-runtime.ts",
+      "sha256": "5081065c903c920af25444777b1a13592298d0abbf21f53ad0ac699d49651c69"
+    },
+    {
+      "path": "packages/umf-bun/src/index.ts",
+      "sha256": "3eada55ece5b6a6996e126c9c7a4c398181418157cae961f12bf451743bf5369"
+    },
+    {
+      "path": "tests/umf-value-runtime.test.ts",
+      "sha256": "fb4787b44d5be98b724a1ef9a5e5808d38b23e2639e9107d29178439be4a5960"
+    },
+    {
+      "path": "tests/umf-numeric-runtime.test.ts",
+      "sha256": "f601cd20d921b533701102ad8a1dc237bb3aba06ed6455b215e41c410b48ba23"
+    },
+    {
+      "path": "tests/umf-fixtures/value-key.json",
+      "sha256": "f7696dcb6e46e158b82e238eb04de3e37609dcf02ed122fc6435b66c6189bafa"
+    },
+    {
+      "path": "scripts/check-umf-value-browser.ts",
+      "sha256": "dce9f4d3dcbf319959e0e1c730a9f897e2ecf69ed1d4d4323311fa86192b4ed3"
+    }
+  ],
+  "qualification": "Current-core0.8 Field validation and key tuple v3 original owner API consumption. Source/version custody and fixture semantics only; not native key uniqueness, comparator, storage or full installed runtime."
+}
