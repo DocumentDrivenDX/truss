@@ -3,7 +3,7 @@ import hashlib,json,sys
 from pathlib import Path
 R=Path(__file__).resolve().parents[5]
 version=sys.argv[1] if len(sys.argv)>1 else '0.9'
-if version not in ('0.9','0.10','0.11'):raise ValueError('unsupported inventory version')
+if version not in ('0.9','0.10','0.11','0.12'):raise ValueError('unsupported inventory version')
 P=R/f'docs/helix/02-design/contracts/weft-review-columns-v{version}.proposal.json'
 inv=json.loads(P.read_bytes());astbytes=(R/inv['astPath']).read_bytes()
 if hashlib.sha256(astbytes).hexdigest()!=inv['astSha256']:raise ValueError('stale AST')

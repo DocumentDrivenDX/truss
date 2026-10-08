@@ -2,7 +2,8 @@
 import json,hashlib,sys
 from pathlib import Path
 R=Path(__file__).resolve().parents[5]
-receipt_profile='--request-receipts' in sys.argv
+history_profile='--reference-history' in sys.argv
+receipt_profile='--request-receipts' in sys.argv or history_profile
 migration_profile='--migration-homes' in sys.argv or receipt_profile
 lifecycle_profile='--key-lifecycle' in sys.argv or migration_profile
 operation_profile='--operation-uniqueness' in sys.argv or lifecycle_profile
@@ -10,9 +11,25 @@ recovery_profile='--feed-recovery' in sys.argv or operation_profile
 feed_profile='--complete-feed' in sys.argv or recovery_profile
 metadata_profile='--installation-metadata' in sys.argv
 key_profile='--key-profile' in sys.argv
-version='0.11' if receipt_profile else '0.10' if migration_profile else '0.9' if lifecycle_profile else '0.8' if operation_profile else '0.7' if recovery_profile else '0.6' if feed_profile else '0.5' if metadata_profile else '0.4' if key_profile else '0.3'
+version='0.12' if history_profile else '0.11' if receipt_profile else '0.10' if migration_profile else '0.9' if lifecycle_profile else '0.8' if operation_profile else '0.7' if recovery_profile else '0.6' if feed_profile else '0.5' if metadata_profile else '0.4' if key_profile else '0.3'
 receipt_name='request-receipt-layout-profile-composition.json' if receipt_profile else 'migration-homes-layout-profile-composition.json' if migration_profile else 'key-lifecycle-layout-profile-composition.json' if lifecycle_profile else 'operation-uniqueness-layout-profile-composition.json' if operation_profile else 'feed-recovery-layout-profile-composition.json' if recovery_profile else 'complete-feed-layout-profile-composition.json' if feed_profile else 'installation-metadata-profile-composition.json' if metadata_profile else 'weft-key-profile-composition.json' if key_profile else 'weft-review-layout-composition.json'
 receipt=json.loads((R/'docs/helix/04-build/evidence/design-audit'/receipt_name).read_text())
+if history_profile:
+ receipt=json.loads((R/'docs/helix/04-build/evidence/design-audit/reference-history-layout-model-source.json').read_text())
+ model_bytes=(R/receipt['modelPath']).read_bytes()
+ if hashlib.sha256(model_bytes).hexdigest()!=receipt['modelSha256']:raise ValueError('stale history model')
+ def decode(node):
+  if node['kind']=='object':return {k:decode(v) for k,v in node['members'].items()}
+  if node['kind']=='array':return [decode(v) for v in node['items']]
+  if node['kind']=='number':return json.loads(node['value'])
+  return node.get('value')
+ model=json.loads(model_bytes)
+ tree=model['modules'][0]['elements'][0]['extensions']['umf.postgresql']['root']['members']['stmts']
+ ast=decode(tree)
+ ast_path='docs/helix/04-build/evidence/design-audit/reference-history-layout-native-ast.json'
+ ast_bytes=(json.dumps(ast,separators=(',',':'))+'\n').encode()
+ (R/ast_path).write_bytes(ast_bytes)
+ receipt=dict(receipt,astPath=ast_path,astSha256=hashlib.sha256(ast_bytes).hexdigest())
 b=(R/receipt['astPath']).read_bytes()
 if hashlib.sha256(b).hexdigest()!=receipt['astSha256']:raise ValueError('stale AST')
 a=json.loads(b);tables={};indexes=[];other=[]

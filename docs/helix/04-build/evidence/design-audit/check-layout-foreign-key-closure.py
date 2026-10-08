@@ -3,7 +3,7 @@ import copy,hashlib,json,sys
 from pathlib import Path
 R=Path(__file__).resolve().parents[5]
 version=sys.argv[1] if len(sys.argv)>1 else '0.9'
-if version not in ('0.9','0.10','0.11'):raise ValueError('unsupported inventory version')
+if version not in ('0.9','0.10','0.11','0.12'):raise ValueError('unsupported inventory version')
 P=R/f'docs/helix/02-design/contracts/weft-review-columns-v{version}.proposal.json'
 inventory=json.loads(P.read_bytes())
 if hashlib.sha256((R/inventory['astPath']).read_bytes()).hexdigest()!=inventory['astSha256']:raise ValueError('stale source AST')
@@ -57,7 +57,7 @@ try:audit(damaged)
 except ValueError:pass
 else:raise ValueError('missing target accepted')
 receipt_controls=[]
-if version=='0.11':
+if version in ('0.11','0.12'):
  for fault in ['missing_receipt_target','missing_receipt_unique_key','wrong_receipt_column']:
   damaged=copy.deepcopy(inventory)
   protection=next(t for t in damaged['tables'] if t['name']=='request_receipt_protection')
