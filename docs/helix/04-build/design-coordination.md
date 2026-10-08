@@ -15,7 +15,15 @@ ddx:
 
 # Design coordination and remaining work
 
-## Latest read-only owner source review — explicit conformance configuration
+## Latest read-only owner source review — exhaustive decimal embedding (2026-10-08)
+
+Weft HEAD is 8de43d0bbf7b765efb220444b0ac6309ea405441. The [source review receipt](evidence/design-audit/weft-decimal-embedding-source-review.json) verifies three original source pins from the committed owner receipt. Truss has not rerun these tests or independently inspected all 868 native captures. UMF remains at the prior reviewed 16c35e8d baseline.
+
+Owner evidence reports 4,340 cases per Python and Chromium embedding: 868 complete responses across 434 precision/scale pairs and two storage homes, plus 3,472 malformed/version/candidate/digest refusals. Python repeats all 868 positive responses deterministically. The initial browser JSON-array read failed before compilation because of its single-string size; unchanged records subsequently passed through streamed JSON Lines, in batches of eight through one WASM instance. Runtime binaries are reused from the earlier host-configuration proof; this commit changes tests/capture/harness transport. Existing JSON-array inputs separately pass 342 legacy cases.
+
+This supersedes the earlier missing decimal-domain embedding evidence only for the owner's exact scalar property SUM configurations under the test-original export. Released generic registration, Truss native installation/codec/binding adoption and recursive signed/decimal native procedures remain unqualified. Weft explicitly records that its current native-tree conformance leaf procedure refuses decimal and requires nonnegative canonical integer tokens. Scalar SUM evidence cannot qualify Truss's recursive exact-value carriers. Preserve that distinction in CH-04 and STP-039 rather than adding local compiler lowering or inferring recursive support.
+
+## Historical read-only owner source review — explicit conformance configuration
 
 Inspected Weft HEAD is `b31101889f1078ce0d12da98b51c458e16c9a4a1`; UMF primary remains 16c35e8d. The [source review receipt](evidence/design-audit/weft-host-configuration-source-review.json) verifies eight original source-file pins at the two relevant receipt commits. Truss did not rerun owner Rust/PostgreSQL/Python/browser tests or independently check the 868 decimal capture files.
 

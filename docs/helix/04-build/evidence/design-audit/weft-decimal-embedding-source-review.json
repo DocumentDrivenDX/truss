@@ -1,0 +1,39 @@
+{
+  "scope": "Read-only original owner receipt and three committed source-pin checks; owner tests not rerun and 868 captures not independently inspected",
+  "ownerCommit": "8de43d0bbf7b765efb220444b0ac6309ea405441",
+  "ownerReceiptPath": "docs/helix/04-build/evidence/B-005-decimal-configuration-embedding.json",
+  "ownerReceiptSha256": "2bde61a1e2738c906f87d543c3377f566567c2058de2e8882730bdee011105c9",
+  "sources": [
+    {
+      "path": "tests/truss-postgresql/decimal-configuration-embedding-check.py",
+      "expectedSha256": "3f7552f0305325483219a4f788186427110fee75b19f58b19c51ee99e4a36edd",
+      "observedSha256": "3f7552f0305325483219a4f788186427110fee75b19f58b19c51ee99e4a36edd",
+      "bytes": 5125
+    },
+    {
+      "path": "tests/compile/browser-check.mjs",
+      "expectedSha256": "140427a4807fa6fe570a43fabaa234f6aac0063926a9f2219fd958954531e803",
+      "observedSha256": "140427a4807fa6fe570a43fabaa234f6aac0063926a9f2219fd958954531e803",
+      "bytes": 7364
+    },
+    {
+      "path": "tests/compile/json-array-to-lines.py",
+      "expectedSha256": "21ce4a3dc70cf32a9b1d6a51de0e0331990c7418a757848a2855c3222d7ffdc8",
+      "observedSha256": "21ce4a3dc70cf32a9b1d6a51de0e0331990c7418a757848a2855c3222d7ffdc8",
+      "bytes": 632
+    }
+  ],
+  "ownerReported": {
+    "domainPairs": 434,
+    "positiveFullResponses": 868,
+    "refusals": 3472,
+    "casesPerEmbedding": 4340,
+    "pythonDeterministicRepeats": 868,
+    "limitations": [
+      "Explicit test-original conformance export only",
+      "No native null or installed/production Truss qualification",
+      "Recursive signed/decimal native procedures still require original/native/embedding evidence"
+    ]
+  },
+  "nativeQualifiedByTruss": false
+}

@@ -9,7 +9,7 @@ It starts as a fixed, portable set of tables with mutation, constraint and
 direct-read tooling. Compiled logical queries use Weft. It consumes UMF and
 never defines UMF semantics.
 
-**Current state (2026-10-06):** requirements, architecture, contracts and
+**Current state (2026-10-08):** requirements, architecture, contracts and
 implementation/test sequencing are authored drafts for an embeddable toolkit
 and TypeScript reference implementation. UMF owns metadata interpretation and
 portable key encoding; Weft owns SQL compilation. UMF is sufficient for the current scope; Truss owns composing its existing APIs
@@ -97,10 +97,10 @@ qualification follows the selected implementation/test prerequisites.
 
 Recent acceptance work specifies protected native phases, fixed catalog update
 masks, semantic effect inventories and complete exact-repeat byte comparison.
-One concrete conflict remains: the accepted report embeds actual rebind events,
-but the proposed immutable parent report precedes insertion-generated journal
-metadata. The report/storage reconciliation preference is pending; the phases
-are not execution-ready while that conflict remains.
+Separate immutable acceptance-report storage is selected: produce the complete
+report after original events and before head publication, atomically with the
+catalog and journal. Exact producer/security/conversion profiles and native
+qualification remain open; the report-storage product decision is settled.
 
 Direct-read work now includes fixed page/lookup SQL, native-to-record projection,
 separate finite page/lookup budgets and protected private bucket-context rules.
@@ -111,3 +111,8 @@ are authored proposals and scoped source evidence, with exact decoder, native
 entrypoint, original-context registry and deployed profile adoption still open.
 
 Current feed handoff includes explicit registration/finalization sources, four-store trigger scheduling, distinct proposed physical/reference identity inventories and shared write-free validation/authority/test procedures. The decision queue now separates these authored inputs from still-unselected native helper/profile/producer/privilege composition. Weft’s committed original Record preparation and projection metadata bridge are reflected in coordination; executable codecs, public result integration and genuine Truss native qualification remain open. These refinements add no UMF work prerequisite or alternate SQL compiler.
+
+
+Current implementation handoffs select SQL/PLpgSQL orchestration, explicit attributes and protected ownership for seven required routines, with [source-pinned routine design](02-design/contracts/reference-routine-design-v0.1.proposal.json) and thirteen original trigger links. The [package delivery design](02-design/package-delivery.proposal.md) maps all eighteen authored function exports and the selected core numeric carrier types. Exact native bodies/profiles and published package/dependency selection remain open.
+
+Latest Weft review at 8de43d0 reports exhaustive scalar decimal Python/browser conformance evidence. Recursive signed/decimal native procedures and released generic registration remain separate gaps; Truss source layout and one-string review packet are not adopted native/compiler support. See [current coordination](04-build/design-coordination.md) for the original scope and source pins.
