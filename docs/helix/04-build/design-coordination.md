@@ -683,3 +683,9 @@ Read-only review of current Weft head `e4800a81021e8e759b1b45d945add5a74320eb15`
 
 
 Current layout handoff now has a separate [0.8 source packet](evidence/weft-source-binding08/README.md), preserving the earlier 0.4 evidence. Exact versioned grammar/selector/profile review remains pending. Source integrity/schema checks and corruption refusals are scoped local evidence; no owner message, adoption or native support is inferred.
+
+## Weft original grouped-join checkpoint — 2026-10-08
+
+Reviewed owner commit `27d6b907b87d9b5336a4c432929e85128fdc9267`: six self-join and eight cross-record cases use actual Python compilation and PostgreSQL 17.9, with independent nested-loop/arbitrary-precision expected results. Selected UInt64/Unicode-C fields cover bag multiplicity, exact large sums, spaces/Unicode, unrelated types and selected codec/domain refusals. The [source review](evidence/design-audit/weft-grouped-join-source-review.json) verifies five committed source pins and both receipt-to-harness/fixture hashes. Truss did not rerun the owner harness. Existing numeric-sequence binaries are reused; no fresh Chromium evidence is claimed.
+
+Original name/customer_id/total and mixed-home queries, final story acceptance, released registration and Truss-specific native integration remain open. Do not replace Truss’s original-domain/codec obligations with this selected UInt64 fixture or duplicate Weft’s compiler work. The earlier numeric container/entity receipts retain their separate scope.
