@@ -7,7 +7,7 @@
   "governingSources": [
     {
       "path": "02-design/contracts/CONTRACT-002-journal.md",
-      "sha256": "d2893c9fa9c54393aeab3becfe69caae68996063905b06e85db7bbdb0e3324b1"
+      "sha256": "87f4130ad1954cf2f6804c6ba9cac5e9177859072457310fb77f69fb41774ecc"
     },
     {
       "path": "02-design/contracts/CONTRACT-005-module-isolation.md",
