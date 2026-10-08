@@ -1,4 +1,5 @@
 {
+  "treeEncoderSha256": "39678f725b516220094429ed759c3b393c039a749c9eef6085fbadc74129848e",
   "stringEncoderSha256": "e263882c49b2bf75db430a39f3362f6c35d70b6e0e72960f4cdc8e966878d479",
   "layoutPath": "docs/helix/04-build/evidence/qualified-property-layout-0.15.owner-export.sql",
   "layoutSha256": "cc725df53f0d74e13bb51fda29603f8cafe8c0cee237667778566f81b33f5011",
@@ -40,6 +41,11 @@
     "canonical string rejects invalid UTF8 f4908080",
     "canonical string rejects invalid UTF8 c200",
     "canonical chunk crossing preserves complete independently expected bytes",
+    "native canonical tree sorts unsigned UTF8 keys preserves arrays exact string tokens and NUL",
+    "native tree refuses unsupported numeric extra noncanonical or duplicate-key content {\"kind\":\"number\",\"value\":\"1\"}",
+    "native tree refuses unsupported numeric extra noncanonical or duplicate-key content {\"kind\":\"null\",\"extra\":true}",
+    "native tree refuses unsupported numeric extra noncanonical or duplicate-key content {\"kind\":\"array\",\"items\":[{\"kind\":\"string\",\"utf8Hex\":\"AA\"}]}",
+    "native tree refuses unsupported numeric extra noncanonical or duplicate-key content {\"kind\":\"object\",\"members\":[{\"keyUtf8Hex\":\"c3a9\",\"node\":{\"kind\":\"string\",\"utf8Hex\":\"00\"}},{\"keyUtf8Hex\":\"c3a9\",\"node\":{\"kind\":\"string\",\"utf8Hex\":\"00\"}}]}",
     "type lineage original vector document-A",
     "type lineage original vector document-B",
     "type lineage original vector composed-unicode",
