@@ -76,7 +76,21 @@ interrupts forwarding to the driver parser, and observes the committed row from
 an independent connection. The executor returns `commit_unknown`/no retry, keeps
 quarantine and refuses ordinary host close. Original records prove one ordered
 checkout with BEGIN/INSERT/COMMIT, one commit submission and no guessed rollback.
-A unique fixture table is removed in finally; the isolated child then exits with
-unresolved host bookkeeping. Process exit is not a library settlement API. This
+A unique fixture table is removed in finally; explicit local transport shutdown
+retains unresolved native custody and the isolated probe exits normally. This
 qualifies deliberate completion-loss containment, not natural packet loss,
 power-loss recovery, protected native producers, source ACK or automatic replay.
+
+`shutdownQuarantinedTransports()` explicitly closes host admission and destroys
+only quarantined local transports, awaiting their actual local close with a
+five-second observation bound. Healthy active checkouts refuse before admission
+changes. Closed dead checkouts are removed from the pool; original quarantine
+objects and uncertain native outcomes remain retained. Repeated successful
+shutdown is inert. Timeout/missing original transport preserves uncertainty and
+closed admission. Local socket close does not prove native backend termination,
+rollback, commit outcome, protected source fencing or permission to replay.
+Ordinary `close()` still refuses unresolved quarantine; it now also refuses live
+checkouts rather than silently waiting for their owners. No automatic native SQL,
+recovery settlement or retry is introduced. The native commit-loss probe verifies
+healthy-checkout refusal, normal bounded teardown, retained quarantine, closed
+admission and repeated teardown; no forced process exit is used.

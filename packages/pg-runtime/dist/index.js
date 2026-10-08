@@ -397,8 +397,18 @@ function createPgConnectionSource(config, options = {}) {
     return (text) => text;
   } } });
   const quarantine = new Set;
+  const active = new Set;
+  let admissionClosed = false;
+  let poolEnded = false;
   const source = { async acquire() {
+    if (admissionClosed)
+      throw Error("Host admission closed");
     const client = await pool.connect();
+    if (admissionClosed) {
+      client.release();
+      throw Error("Host admission closed");
+    }
+    active.add(client);
     let ended = false;
     let started = false;
     const lease = randomUUID2();
@@ -490,6 +500,7 @@ function createPgConnectionSource(config, options = {}) {
         ended = true;
         client.off("error", onError);
         client.release();
+        active.delete(client);
       },
       async quarantine() {
         quarantine.add(client);
@@ -500,7 +511,43 @@ function createPgConnectionSource(config, options = {}) {
   return { source, quarantinedCount: () => quarantine.size, async close() {
     if (quarantine.size)
       throw Error("Original quarantined custody needs explicit settlement");
+    if (active.size)
+      throw Error("Original active checkout still held");
+    admissionClosed = true;
+    if (!poolEnded) {
+      await pool.end();
+      poolEnded = true;
+    }
+  }, async shutdownQuarantinedTransports() {
+    if (poolEnded)
+      return;
+    if ([...active].some((client) => !quarantine.has(client)))
+      throw Error("Healthy active checkout cannot be shut down through quarantine");
+    admissionClosed = true;
+    for (const client of quarantine) {
+      if (!active.has(client))
+        continue;
+      const stream = client.connection?.stream;
+      if (!stream)
+        throw Error("Original transport unavailable for shutdown");
+      if (!stream.closed)
+        await new Promise((resolve, reject) => {
+          const timeout = setTimeout(() => {
+            stream.off("close", closed);
+            reject(Error("Original transport shutdown unresolved"));
+          }, 5000);
+          const closed = () => {
+            clearTimeout(timeout);
+            resolve();
+          };
+          stream.once("close", closed);
+          stream.destroy();
+        });
+      client.release(true);
+      active.delete(client);
+    }
     await pool.end();
+    poolEnded = true;
   } };
 }
 export {

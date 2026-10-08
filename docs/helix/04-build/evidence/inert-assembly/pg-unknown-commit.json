@@ -1,7 +1,7 @@
 {
   "driver": "pg/8.16.3",
   "loader": "bun/1.4.2",
-  "originalJournalDirectory": "/private/tmp/truss-unknown-commit-KvpgQa",
+  "originalJournalDirectory": "/private/tmp/truss-unknown-commit-8Aqt42",
   "result": {
     "status": "error",
     "error": {
@@ -12,32 +12,36 @@
   },
   "quarantined": 1,
   "closeRefused": true,
+  "healthyShutdownRefused": true,
+  "localTransportShutdown": true,
+  "uncertaintyRetained": true,
+  "admissionRefused": true,
   "independentCommittedRows": "1",
   "requests": 3,
   "commitSubmissions": 1,
   "rollbackSubmissions": 0,
   "retained": [
     {
-      "sha256": "a54d47afd11e320aba38bae28bd5f9dae871a8cdf9e426094f337bd12ce5573b",
+      "sha256": "ececd9edc7532776f73d0ac3ad4abafba4ff0324ec6d4278a9fbb51e2533d5c9",
       "outcome": {
         "kind": "outcome",
         "outcome": "response_complete"
       }
     },
     {
-      "sha256": "59b8a678aff4cb987703fc90a6da61b48ceb46e9d505a40f78a3cbf18fb12abe",
+      "sha256": "6a42a84dd3a2e1f11c5354384938717b98f6dfdec393200caf76df9fc43829b0",
       "outcome": {
         "kind": "outcome",
         "outcome": "uncertain"
       }
     },
     {
-      "sha256": "dc1b39c48869ca8802b6103a412435331c817ea79021e25bce52f854245a23b6",
+      "sha256": "6a9dc001a46de9f6fa0c50b4dca3a1e6d665bbfc87b7dd8ad6cf2d7be090f0e5",
       "outcome": {
         "kind": "outcome",
         "outcome": "response_complete"
       }
     }
   ],
-  "qualification": "Actual local PostgreSQL 17.9 commit effect independently observed after deliberate driver completion loss at retained original CommandComplete before parser forwarding. Adapter reports commit_unknown/no retry and keeps quarantine. Private originals retained; isolated child exits after fixture removal. This is not natural packet-loss/crash testing, general uncertainty settlement, protected Truss installation or source ACK authority."
+  "qualification": "Actual local PostgreSQL 17.9 commit effect independently observed after deliberate driver completion loss at retained original CommandComplete before parser forwarding. Adapter reports commit_unknown/no retry and keeps quarantine. Private originals retained; explicit local transport shutdown retains original uncertainty and closes admission after fixture removal. This is not natural packet-loss/crash testing, general uncertainty settlement, protected Truss installation or source ACK authority."
 }

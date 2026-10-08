@@ -9,6 +9,8 @@ export declare function createPgConnectionSource(config: PoolConfig, options?: {
     readonly source: NativeConnectionSource;
     readonly quarantinedCount: () => number;
     readonly close: () => Promise<void>;
+    /** Explicit transport shutdown only; uncertain native outcomes remain unresolved. */
+    readonly shutdownQuarantinedTransports: () => Promise<void>;
 };
 export { decodeResponseFrame } from './wire';
 export type { WireLimits } from './wire';
