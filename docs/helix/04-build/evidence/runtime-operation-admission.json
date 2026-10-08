@@ -79,6 +79,10 @@
     "valid but wrong original key property refuses",
     "source mismatch cannot allocate a key declaration",
     "native owner-local key number allocated",
+    "retained key matching preserves original owner-local tuple",
+    "new authored key has no allocated local number",
+    "retired key matching preserves original tuple without clearance",
+    "key matching cannot borrow another Record declaration",
     "original key component order and native property identity retained",
     "invalid later key refuses whole batch",
     "earlier key in failed batch leaves no partial declaration",
@@ -164,6 +168,7 @@
   "relationshipMatchSha256": "7972a5182aa3ef9dbd4fa47f1a5af451faab1a843bbd9e95363f3eabf20d4557",
   "relationshipStageSha256": "d32c213f607d4f8ca9dd4afcdc7bb4fd2bb7cf39dbf35057a82987859632933e",
   "keyBatchSha256": "e31a769cf820ca00035b3c4e96f75078d6696fca8eb1bd62c8c4dc136303ae18",
-  "keyStageSha256": "69239689757f93884df262470f94aaeaf4cf70bee08186e0dc10f348779260d0",
+  "keyMatchSha256": "0dc8a64322b8caaf223c762425010825b95aff54ea9f61d2c5a61c230d5b8e00",
+  "keyStageSha256": "bc345b25a15668fbaac06b0a2f2f6ed1562b90b9fd3f09eb445c3b5d4a2d885a",
   "qualification": "Actual xid/context/artifact bounds/single unfinished/rollback/private invocation and actual canonical generation dispatch component only. Canonical fixture carrier bytes, component namespace and reservation fixture are not admitted codec/layout/installation/historical reservation authority. Full-byte key stage and actual membership generation are component evidence only. Protected issuer registration, canonical observers, finalization, deferred complete-cohort checks, installer security and public runtime remain unfinished."
 }

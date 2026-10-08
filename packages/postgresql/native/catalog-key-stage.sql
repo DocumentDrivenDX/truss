@@ -12,6 +12,7 @@ DECLARE
   original_key jsonb;
   original_field jsonb;
   component_ordinal int;
+  matched record;
 BEGIN
   SELECT * INTO STRICT op FROM truss.row_home_operation o
     WHERE o.original_writer_xid=pg_current_xact_id_if_assigned() AND o.phase<>'application_finalized' FOR UPDATE;
@@ -58,7 +59,8 @@ BEGIN
       AND p.definition_document_id=owner.document_id;
     IF NOT FOUND THEN RAISE EXCEPTION 'original ordered key field correspondence' USING ERRCODE='55000'; END IF;
   END LOOP;
-  IF EXISTS(SELECT 1 FROM truss.key_def k WHERE k.type_id=owner_id AND (k.key_id=original_key_id OR (primary_key AND k.is_primary AND k.retired_rev IS NULL))) THEN
+  SELECT * INTO STRICT matched FROM truss.runtime_match_key_identity(revision,owner_id,original_key_id);
+  IF matched.match_state<>'new' OR EXISTS(SELECT 1 FROM truss.key_def k WHERE k.type_id=owner_id AND primary_key AND k.is_primary AND k.retired_rev IS NULL) THEN
     RAISE EXCEPTION 'existing key requires original matching' USING ERRCODE='55000';
   END IF;
   SELECT greatest(coalesce(max(k.key_num)::bigint,0),0)+1 INTO next_number FROM truss.key_def k WHERE k.type_id=owner_id;
