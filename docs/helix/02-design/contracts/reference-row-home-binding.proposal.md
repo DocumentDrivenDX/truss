@@ -2,6 +2,8 @@
 
 For M00–M07, propose the existing row_home_state/row_home_node/row_home_scalar realization for all four original fields in the [source inventory](reference-account-items-field-inventory.proposal.json). This makes the reference storage design concrete while retaining the original fixture and broader props/mixed-home/recursive release requirements. It is a source/profile proposal, not native adoption, a fallback policy or a change to UMF meanings.
 
+The [scalar codec proposal](reference-scalar-codec.proposal.md) supplies exact string admission and the fixture-specific decimal token grammar. Original registered codec bytes, native bindings and qualification remain separate required outputs.
+
 Resolve every property through its original document/module/Record/Field definition and allocated catalog identity. No storage IDs are assigned here. A state binds actual instance owner plus original property-owner type/property identity, root_node_id and complete definition/home/value/source bytes. The root binds the same state/node identities, original definition/source bytes and root slot/parent semantics. Full native/source/authority correspondence precedes decoding; matching a field name or value is insufficient.
 
 | Original field / meaning | Required proposed native projection |
