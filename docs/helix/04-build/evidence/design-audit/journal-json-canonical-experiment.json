@@ -1,7 +1,7 @@
 {
-  "scope": "eight independently specified canonical-byte cases and twelve refusal cases only; 64-depth/65536-byte experiment guards are not production resource proof",
+  "scope": "nine independently specified canonical-byte component cases and fourteen refusals only; generic non-ASCII member-name vector does not qualify closed event/phase schemas; 64-depth/65536-byte experiment guards are not production resource proof",
   "pythonVersion": "3.9.6",
-  "helperSha256": "15341d8a0a4c7e4582808ba6d030f33c87e324cb1705ee68ffe5e0cd26ad4703",
+  "helperSha256": "5ab8b61f89f0852bf14e5c1da1c4933c3a1a458adde040896a9879d0f0352d3c",
   "outcomes": [
     {
       "name": "structural order",
@@ -42,6 +42,11 @@
       "name": "empty structures",
       "passed": true,
       "expectedSha256": "9959f7ea5ff37e0cf81634a894845a335eb6e26fbad0877944e9bc009b4f0644"
+    },
+    {
+      "name": "UTF8 structural order component",
+      "passed": true,
+      "expectedSha256": "24cb5efd2ea2b5b20fb9e31c8ede796d2ea1913b607cb6414a4dfacd843c3ce0"
     },
     {
       "name": "duplicate keys",
@@ -89,6 +94,14 @@
     },
     {
       "name": "extra whitespace",
+      "refused": true
+    },
+    {
+      "name": "UTF16 structural ordering",
+      "refused": true
+    },
+    {
+      "name": "escaped equivalent duplicate key",
       "refused": true
     }
   ],

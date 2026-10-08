@@ -45,7 +45,8 @@ positives=[
  ('Unicode scalar',{'text':'é雪😀'},'{"text":"é雪😀"}'),
  ('decomposed Unicode',{'text':'e\u0301'},'{"text":"e\u0301"}'),
  ('ordered domain members',{'members':[{'name':'z'},{'name':'a'}]},'{"members":[{"name":"z"},{"name":"a"}]}'),
- ('empty structures',{'a':[],'b':{}},'{"a":[],"b":{}}')
+ ('empty structures',{'a':[],'b':{}},'{"a":[],"b":{}}'),
+ ('UTF8 structural order component',{'\U00010000':True,'\ue000':False},'{"\ue000":false,"\U00010000":true}')
 ]
 outcomes=[]
 for name,value,expected in positives:
@@ -54,8 +55,10 @@ for name,value,expected in positives:
     require(admit(raw)==value,'decoded semantic tree '+name)
     outcomes.append({'name':name,'passed':True,'expectedSha256':hashlib.sha256(expected.encode()).hexdigest()})
 negatives=[('duplicate keys',b'{"a":null,"a":true}'),('wrong structural order',b'{"z":false,"a":null}'),('short control escape',b'{"text":"\\n"}'),('escaped solidus',b'{"text":"\\/"}'),('escaped admitted Unicode',b'{"text":"\\u00e9"}'),('integer node',b'{"v":1}'),('floating node',b'{"v":1.0}'),('nonfinite node',b'{"v":NaN}'),('trailing data',b'{}{}'),('invalid UTF8',b'{"text":"\xff"}'),('unpaired surrogate',b'{"text":"\\ud800"}'),('extra whitespace',b'{ "a":null}')]
+negatives.extend([('UTF16 structural ordering', '{"\U00010000":true,"\ue000":false}'.encode('utf-8')),
+                  ('escaped equivalent duplicate key', b'{"a":null,"\\u0061":true}')])
 for name,raw in negatives:
     try: admit(raw)
     except (ValueError,UnicodeError): outcomes.append({'name':name,'refused':True})
     else: raise ValueError('invalid canonical input admitted '+name)
-print(json.dumps({'scope':'eight independently specified canonical-byte cases and twelve refusal cases only; 64-depth/65536-byte experiment guards are not production resource proof','pythonVersion':sys.version.split()[0],'helperSha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),'outcomes':outcomes,'profile':'truss-journal-json/0.2.0-proposal','nativeExecuted':False,'productionParserQualified':False,'adopted':False},indent=2))
+print(json.dumps({'scope':'nine independently specified canonical-byte component cases and fourteen refusals only; generic non-ASCII member-name vector does not qualify closed event/phase schemas; 64-depth/65536-byte experiment guards are not production resource proof','pythonVersion':sys.version.split()[0],'helperSha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),'outcomes':outcomes,'profile':'truss-journal-json/0.2.0-proposal','nativeExecuted':False,'productionParserQualified':False,'adopted':False},indent=2))
