@@ -15,6 +15,10 @@
     "rolled back operation preserves earlier caller work",
     "phase flags cannot bypass unavailable complete finalizer",
     "native provisional catalog revision allocated",
+    "native IDs follow original qualified byte order",
+    "existing identities refuse new allocation",
+    "retired retained IDs remain high-water contributors",
+    "original lineage bytes retained",
     "verbatim original source retained",
     "document stage cannot publish catalog head",
     "rollback removes staged revision and source"
@@ -23,5 +27,6 @@
   "observerSha256": "44962f3ca9b3ff95da87034910c74b09b6fa8c69fd214e3e97158aded3e41ce9",
   "barrierSha256": "eed4f044a241db7d70dd9cf222a3313bedd484273c18d0e7063b614ad5bab93b",
   "catalogStageSha256": "7319b574cbd5cf393a8a27e7325fcf05815c882c01acd817cf50d0d4a4628f7f",
+  "typeStageSha256": "64aaa9ba6127b4bfcba0296aad679a24e9a0d561b94931d9d23d43311e329e51",
   "qualification": "Actual xid/context/artifact bounds/single unfinished/rollback/private invocation component only. Protected issuer registration, canonical observers, finalization, deferred complete-cohort checks, installer security and public runtime remain unfinished."
 }
