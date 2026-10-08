@@ -84,5 +84,11 @@
     "tests/ashlar-databricks/optional-native.py": "7bdff10794ce71672d065ff73452e140284af46657b001c60ee29c553d93b516",
     "tests/ashlar-databricks/python-check.py": "ae43d312ebd40e4a6b3601e794547287ef95333a74ffb6a4e90943b31abf8e9b"
   },
-  "scope": "Committed Ashlar optional scalar candidate source and owner-reported evidence only; Truss did not rerun native or embedding tests. B006 acceptance and B007 release remain open. No Truss nullable registration or installed support is established."
+  "scope": "Committed Ashlar optional scalar candidate source and owner-reported evidence only; Truss did not rerun native or embedding tests. B006 acceptance and B007 release remain open. No Truss nullable registration or installed support is established.",
+  "reviewedPresenceSources": {
+    "crates/weft-databricks/src/candidate.rs": "b7de7f16175f7bd743ae66df8663465ec848f30f5405d42969823d652ca794ad",
+    "crates/weft-databricks/src/candidate/application.rs": "e976189f336efd5611c6adc1549d7d3218e9ae7668f59c4740e441afa8445543",
+    "docs/helix/04-build/evidence/B-006-native-preparation.md": "c0c8dbadaa82c2665ec97914957f3c733295284644b3fe760036e77f80926ee5"
+  },
+  "presenceBoundary": "B006 optional scalar capability admits absent/value only; explicit native null refuses; application Representation::Value has native_null false. Truss requires absent/null/string and backend-specific row-home provenance."
 }
