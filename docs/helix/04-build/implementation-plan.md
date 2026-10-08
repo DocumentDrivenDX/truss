@@ -72,6 +72,8 @@ B-014 export ownership closure now includes all eighteen authored declared funct
 
 CH-04/B-012 retains recursive signed/decimal native support as an explicit remaining compiler-owner dependency after Weft 8de43d0's scalar decimal embedding evidence. Implement STP-039 RN-01–06 with original independently authored definitions/native homes/expected results after the owner procedure is admitted. Current native-tree conformance restrictions cannot narrow Truss's required recursive scope or be bypassed with JSONB/local lowering.
 
+ADR-006 now selects reference signed-zero behavior: detect number -0 before rational conversion, preserve admitted exact token spelling and return negative zero in explicit sign-preserving lossless views. NAPI-09 covers it independently from mathematical/key zero equality. Exact field/facet/storage profile validation still applies; implementation does not wait on another signed-zero choice or a new UMF constructor.
+
 ### Product-decision application boundaries
 
 Same-qualified-identity reactivation is selected and must govern acceptance/lifecycle design; terminal retirement is historical comparison material. The selected two-property-delta plus metadata-witness rule governs event count without adopting every complete-history profile. Required managed extensions must ship on the selected RDS PostgreSQL, Aurora PostgreSQL and Lakebase profiles; a custom helper cannot become a deployment assumption through source composition.
