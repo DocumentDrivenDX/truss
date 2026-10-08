@@ -1105,7 +1105,7 @@
     "02-design/technical-designs/TD-043-make-a-group-safe-to-repeat.md": "06fdb6b5a62098e464965112ed76561479faedd4e07d88e85e727ef66d713d93",
     "03-test/test-plans/STP-043-make-a-group-safe-to-repeat.md": "9a7e555c77e41e4878a1f8a2bb7fafbdb922389ec5552e9d62ab00bb39d34d14",
     "02-design/technical-designs/TD-044-run-a-change-in-a-transaction-and-roll-it-back.md": "81d6a4421e2c824f1161a4912afbd758e6824031f37f0469ef4f63f713714f8a",
-    "03-test/test-plans/STP-044-run-a-change-in-a-transaction-and-roll-it-back.md": "7bf94ef58a3bcc9e9ce48bfa1bc0b915009d061f3832d96e1010eedd80742c74",
+    "03-test/test-plans/STP-044-run-a-change-in-a-transaction-and-roll-it-back.md": "8228e2410dfe80d93065b74f02966dd60fd638b5ef537ca60bb92730e0bf366c",
     "02-design/technical-designs/TD-045-bootstrap-the-internal-layout-from-umf.md": "ca24959bde1ba9c23f15f856f2a61c882ac37d8377d4b73905ce5a4f0f859869",
     "03-test/test-plans/STP-045-bootstrap-the-internal-layout-from-umf.md": "64968a38aad035b8b823942e3d8bc60a3245b8283872fc7096bfdef75d5305e5"
   },
