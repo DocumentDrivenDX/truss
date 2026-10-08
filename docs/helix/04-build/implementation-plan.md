@@ -68,6 +68,8 @@ CH-02 implementation-language handoff: the architecture selects SQL fixed observ
 
 CH-01/02 consume the [machine-readable seven-routine design input](../02-design/contracts/reference-routine-design-v0.1.proposal.json). It captures selected signatures/attributes/responsibilities and known validator dependencies, with source pins and explicit unresolved native fields. Complete identity/body/role/ACL/dependency binding remains mandatory before installer admission; no null field may be silently defaulted into support.
 
+B-014 export ownership closure now includes all eighteen authored declared functions. PostgreSQL owns assembly, operation arbitration, catalog transform and traversal-stage registration; tooling owns administrative physical-job service/facade registration alongside its existing exports. Conformance owns its two factories. Follow the architecture/package map rather than implementing omitted registrations in a private reference-only layer. Actual published names, core callable API selection, exact dependency pins and packed/native qualification remain open.
+
 ### Product-decision application boundaries
 
 Same-qualified-identity reactivation is selected and must govern acceptance/lifecycle design; terminal retirement is historical comparison material. The selected two-property-delta plus metadata-witness rule governs event count without adopting every complete-history profile. Required managed extensions must ship on the selected RDS PostgreSQL, Aurora PostgreSQL and Lakebase profiles; a custom helper cannot become a deployment assumption through source composition.

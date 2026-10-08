@@ -66,3 +66,10 @@ All schedules are planned. B-014 can implement build/export and inert consumer c
 
 
 Configuration capture is implemented under CONTRACT-007's assembly boundary before PD-03 can pass. Include STP-030 CC-01–04 in the packed construction consumer: exact nested-data capture, accessor refusal, stable original service-reference selection and separate continuing custody checks. The package does not serialize/freeze injected host services or expose the caller's mutable configuration as its captured state.
+
+
+## Authored registration export closure
+
+The PostgreSQL package owns createReferenceAssembly, registerOperationArbitration, registerCatalogTransform and registerTraversalStageService as driver-neutral assembly/protocol integration. Tooling owns explicit bootstrap, physical optimization/job, key migration, receipt observation/lifecycle, retention and versioned feed registration/facade exports. Conformance owns the two conformance factories. This assigns all eighteen currently authored `export declare function` surfaces to an implementation owner; it does not invent a core factory, adapter constructor, published package identifier or final data subpath.
+
+PD-01/05 compares the selected runtime/type export inventory with these governing declarations, preserving nominal registration/transaction brands through one canonical public identity. A package build cannot omit a required authored export merely because a reference scenario does not call it. Selection/version compatibility and support qualification remain explicit; historical/unselected feed variants must retain their version scope rather than be merged by renaming. Registration exports remain inert and assembly-scoped; the host supplies executable services and a registry does not grant native readiness or disclosure authority. No PostgreSQL runtime import of tooling is introduced to reach an administrative registration.
