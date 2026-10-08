@@ -29,6 +29,8 @@ Admit original token byte length and the enclosing operation’s cumulative scan
 
 Preserve the pinned UMF function’s exact control order: after full grammar validation, an all-zero mantissa yields coefficient zero before the nonzero exponent-length check. Thus `0e999999999999999999999999999999999` and its negative-zero counterpart are mathematically zero if their original source/work budget is admitted; retain the entire lexical spelling. A nonzero token with that same 33-digit exponent is refused by the pinned owner function’s bounded exponent rule. Do not apply an unconditional exponent-length filter that silently narrows admitted zero semantics, and do not claim arbitrarily long zero tokens are free: source and scan admission still bounds them.
 
+The [owner observation](../../04-build/evidence/design-audit/reference-zero-exponent-owner-observation.json) confirms these three independently expected outcomes by directly invoking the pinned UMF function. It covers coefficient behavior only; actual resource admission and native parity remain planned.
+
 For nonzero values, reuse the owner’s exact coefficient interpretation after original budget admission. The owner’s existing 32-character exponent limit is a pinned implementation capability bound, not a new UMF field facet or permission to allocate large padding. Native producer/parser implementations must establish equivalent admitted meaning under their own finite resource profiles. Keep resource exhaustion, unsupported implementation subset, lexical invalidity and decimal domain violation separately observable under the existing refusal contract.
 
 ## Producer and qualification obligations
