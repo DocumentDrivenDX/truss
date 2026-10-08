@@ -1,5 +1,7 @@
 # Review layout installation gap matrix
 
+Bootstrap planning starts with the [first local deployment target](reference-local-deployment.proposal.md): proposed PostgreSQL 17.11 plus the actual admitted adapter-hook/transport/resource tuple. This does not close any native inventory or authority gap below, and existing 17.9 evidence remains separately scoped.
+
 Companion to CONTRACT-008/012. Profile 0.11 is the separately pinned compiler foundation with 106 statements, 46 tables and 442 columns. The 0.12 history review preserves that declaration inventory and makes journal sequence settings explicit; neither is an installation bundle. This matrix identifies concrete missing outputs without treating every unexecuted test as missing design. Historical profiles remain separately pinned.
 
 | Family | Declared source home | Required design/implementation output before installer admission |

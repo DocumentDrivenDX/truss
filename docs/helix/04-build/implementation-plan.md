@@ -1387,6 +1387,8 @@ Use this concrete proposed logical fixture alongside the milestone's complete re
 
 The fixture declares one Account type with exact text key code, one Item type with exact text key code, exact decimal amount and optional nullable text note, and Account→Item relationship items with selected maximum two targets per Account. Authored identities are document-qualified. Test symbols A, B, C and D denote independently tracked stored identities, never literal portable native IDs or business keys. A has code account-α. B/C/D have codes item-b/item-c/item-d; amounts are exact tokens 9007199254740993.000, 0.00 and -0.01. B's note is absent, C's note is explicit null and D's note is empty text. Numeric scale is retained according to the selected exact carrier profile; comparison/key capabilities remain separately admitted.
 
+Before M00/M01, use the [first local deployment planning target](../02-design/contracts/reference-local-deployment.proposal.md) to assemble the proposed PostgreSQL 17.11 tuple. Retain the actual server/runtime/adapter-hook builds, original transport and resource observations, and complete installer authority inventory before qualification. The target is revisable; prior 17.9 evidence does not qualify it. Construction remains free of native calls, and installation readiness requires independently verified complete native composition rather than the 0.12 review SQL alone.
+
 | Checkpoint | Public operation / host action | Independently expected logical state |
 | --- | --- | --- |
 | M00 | Construct reference assembly and inspect fresh uninstalled namespace | Zero toolkit native calls on construction; readiness absent, no graph/catalog writes allowed. Host pool/compiler/services remain owned by host. |
