@@ -18,6 +18,9 @@
     "phase flags cannot bypass unavailable complete finalizer",
     "actual original UMF source and transition validate",
     "actual original owner Record producer passes selected logical input",
+    "second original document validated",
+    "complete ordered document set shares one native revision",
+    "original document order retained",
     "native provisional catalog revision allocated",
     "native IDs follow original qualified byte order",
     "existing identities refuse new allocation",
@@ -34,6 +37,7 @@
   "observerSha256": "44962f3ca9b3ff95da87034910c74b09b6fa8c69fd214e3e97158aded3e41ce9",
   "barrierSha256": "eed4f044a241db7d70dd9cf222a3313bedd484273c18d0e7063b614ad5bab93b",
   "catalogStageSha256": "7319b574cbd5cf393a8a27e7325fcf05815c882c01acd817cf50d0d4a4628f7f",
+  "documentBatchSha256": "fe6754c5d4fbf054f17f5529387eb0f1ca4531e05c28c1ab31d6902251021000",
   "typeStageSha256": "64aaa9ba6127b4bfcba0296aad679a24e9a0d561b94931d9d23d43311e329e51",
   "propertyStageSha256": "c25fc824fe08c531bd4b24f80a06b2ea8eb7236025a66b7eca505a6a15752788",
   "qualification": "Actual xid/context/artifact bounds/single unfinished/rollback/private invocation component only. Protected issuer registration, canonical observers, finalization, deferred complete-cohort checks, installer security and public runtime remain unfinished."
