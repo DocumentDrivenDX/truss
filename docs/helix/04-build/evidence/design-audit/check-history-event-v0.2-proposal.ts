@@ -16,8 +16,22 @@ const retain={...context,operation:'retain',retainedChanges:[member]};
 const cases:[string,unknown,boolean][]=[['complete retain',retain,true],['multiple names one event',{...retain,retainedChanges:[member,{...member,retainedName:'é'}]},true],['payload without custody',{interfaceVersion:context.interfaceVersion,operation:'retain',retainedChanges:[member]},false],['missing group',Object.fromEntries(Object.entries(retain).filter(([k])=>k!=='mutationGroup')),false],['missing original context',{...retain,retainedChanges:[{...member,sourceContext:''}]},false],['empty changes',{...retain,retainedChanges:[]},false],['replacement',{...retain,retainedChanges:[{...member,before:present}]},false],['removal',{...retain,retainedChanges:[{...member,after:absent}]},false],['unknown root',{...retain,extra:true},false],['duplicate names need semantic refusal',{...retain,retainedChanges:[member,member]},true],['forged original context needs semantic admission',{...retain,retainedChanges:[{...member,sourceContext:'forged'}]},true]];
 for(const [name,value,expected] of cases){const actual=Boolean(proposal(value));if(actual!==expected)throw Error(name+' '+JSON.stringify(proposal.errors));outcomes.push({name,expected,actual});}
 if(current(retain)||current({...retain,interfaceVersion:'truss-history-event/0.1.0'}))throw Error('retain entered old union');
+// Independent envelope admission controls: payload validity cannot replace common custody.
+let envelopeRefusals=0;
+for(const variant of [...variants,{operation:'retain',retainedChanges:[member]}]){
+ const event={...context,...variant};
+ for(const key of ['sourceEpoch','historyProfile','xid','seq','identity','eventVersion','eventCatalogRevision','mutationGroup','origin']){
+  const missing=Object.fromEntries(Object.entries(event).filter(([name])=>name!==key));
+  if(proposal(missing))throw Error('missing custody accepted '+variant.operation+' '+key);
+  outcomes.push({name:variant.operation+' missing '+key,expected:false,actual:false});envelopeRefusals++;
+ }
+ if(variant.operation!=='retain'){
+  if(proposal({...event,retainedChanges:[member]}))throw Error('mixed retain accepted '+variant.operation);
+  outcomes.push({name:variant.operation+' mixed retain payload',expected:false,actual:false});envelopeRefusals++;
+ }
+}
 const hash=(s:string)=>new Bun.CryptoHasher('sha256').update(s).digest('hex');
 const helper='docs/helix/04-build/evidence/design-audit/check-history-event-v0.2-proposal.ts';
 const pins=await Promise.all([...names.map(n=>root+n),helper].map(async path=>({path,sha256:hash(await Bun.file(path).text())})));
 await Bun.write('docs/helix/04-build/evidence/design-audit/history-event-v0.2-proposal-audit.json',JSON.stringify({scope:'strict Draft 2020-12 complete event proposal shape and old/new version isolation only',bunVersion:Bun.version,sourcePins:pins,outcomes,nativeExecuted:false,adopted:false},null,2)+'\n');
-console.log(JSON.stringify({priorVariants:6,retainCases:cases.length,oldVersionRejectsRetain:true,passed:true,nativeExecuted:false,adopted:false}));
+console.log(JSON.stringify({priorVariants:6,retainCases:cases.length,envelopeRefusals,oldVersionRejectsRetain:true,passed:true,nativeExecuted:false,adopted:false}));

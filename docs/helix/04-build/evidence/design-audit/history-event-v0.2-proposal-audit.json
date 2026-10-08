@@ -24,7 +24,7 @@
     },
     {
       "path": "docs/helix/04-build/evidence/design-audit/check-history-event-v0.2-proposal.ts",
-      "sha256": "206226d7102005371e147a2255804da51de0c09ac9f57ef39aa2979ed778d46a"
+      "sha256": "2a2c7ca522f221c61c8d92408ce130801e2a1756c1f0eb9a64bafda98a995e76"
     }
   ],
   "outcomes": [
@@ -112,6 +112,351 @@
       "name": "forged original context needs semantic admission",
       "expected": true,
       "actual": true
+    },
+    {
+      "name": "create missing sourceEpoch",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "create missing historyProfile",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "create missing xid",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "create missing seq",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "create missing identity",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "create missing eventVersion",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "create missing eventCatalogRevision",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "create missing mutationGroup",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "create missing origin",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "create mixed retain payload",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "delete missing sourceEpoch",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "delete missing historyProfile",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "delete missing xid",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "delete missing seq",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "delete missing identity",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "delete missing eventVersion",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "delete missing eventCatalogRevision",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "delete missing mutationGroup",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "delete missing origin",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "delete mixed retain payload",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "property missing sourceEpoch",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "property missing historyProfile",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "property missing xid",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "property missing seq",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "property missing identity",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "property missing eventVersion",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "property missing eventCatalogRevision",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "property missing mutationGroup",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "property missing origin",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "property mixed retain payload",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "transform missing sourceEpoch",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "transform missing historyProfile",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "transform missing xid",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "transform missing seq",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "transform missing identity",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "transform missing eventVersion",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "transform missing eventCatalogRevision",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "transform missing mutationGroup",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "transform missing origin",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "transform mixed retain payload",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "rebind missing sourceEpoch",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "rebind missing historyProfile",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "rebind missing xid",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "rebind missing seq",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "rebind missing identity",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "rebind missing eventVersion",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "rebind missing eventCatalogRevision",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "rebind missing mutationGroup",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "rebind missing origin",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "rebind mixed retain payload",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "metadata missing sourceEpoch",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "metadata missing historyProfile",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "metadata missing xid",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "metadata missing seq",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "metadata missing identity",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "metadata missing eventVersion",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "metadata missing eventCatalogRevision",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "metadata missing mutationGroup",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "metadata missing origin",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "metadata mixed retain payload",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "retain missing sourceEpoch",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "retain missing historyProfile",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "retain missing xid",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "retain missing seq",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "retain missing identity",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "retain missing eventVersion",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "retain missing eventCatalogRevision",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "retain missing mutationGroup",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "retain missing origin",
+      "expected": false,
+      "actual": false
     }
   ],
   "nativeExecuted": false,
