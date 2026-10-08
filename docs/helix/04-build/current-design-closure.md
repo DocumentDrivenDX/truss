@@ -17,7 +17,7 @@ ddx:
 
 # Current design closure
 
-Current source checkpoint: layout 0.11, 106 statements, 46 tables, 442 columns and 24 explicit indexes. These counts describe preserved declarations, not a full installer or supported deployment. The latest Weft source review packet remains separately pinned to layout 0.10; it does not automatically map the 0.11 receipt additions. older 0.8/0.4 packets remain preserved and none is adopted. No complete design or native qualification claim is made.
+Current source checkpoint: layout 0.11, 106 statements, 46 tables, 442 columns and 24 explicit indexes. These counts describe preserved declarations, not a full installer or supported deployment. The [current column inventory](../02-design/contracts/weft-review-columns-v0.11.proposal.md) covers the 0.11 declarations. The latest Weft source review packet remains separately pinned to layout 0.10; it does not automatically map the 0.11 receipt additions. older 0.8/0.4 packets remain preserved and none is adopted. No complete design or native qualification claim is made.
 
 ## Closure by product area
 

@@ -2,15 +2,16 @@
 import json,hashlib,sys
 from pathlib import Path
 R=Path(__file__).resolve().parents[5]
-migration_profile='--migration-homes' in sys.argv
+receipt_profile='--request-receipts' in sys.argv
+migration_profile='--migration-homes' in sys.argv or receipt_profile
 lifecycle_profile='--key-lifecycle' in sys.argv or migration_profile
 operation_profile='--operation-uniqueness' in sys.argv or lifecycle_profile
 recovery_profile='--feed-recovery' in sys.argv or operation_profile
 feed_profile='--complete-feed' in sys.argv or recovery_profile
 metadata_profile='--installation-metadata' in sys.argv
 key_profile='--key-profile' in sys.argv
-version='0.10' if migration_profile else '0.9' if lifecycle_profile else '0.8' if operation_profile else '0.7' if recovery_profile else '0.6' if feed_profile else '0.5' if metadata_profile else '0.4' if key_profile else '0.3'
-receipt_name='migration-homes-layout-profile-composition.json' if migration_profile else 'key-lifecycle-layout-profile-composition.json' if lifecycle_profile else 'operation-uniqueness-layout-profile-composition.json' if operation_profile else 'feed-recovery-layout-profile-composition.json' if recovery_profile else 'complete-feed-layout-profile-composition.json' if feed_profile else 'installation-metadata-profile-composition.json' if metadata_profile else 'weft-key-profile-composition.json' if key_profile else 'weft-review-layout-composition.json'
+version='0.11' if receipt_profile else '0.10' if migration_profile else '0.9' if lifecycle_profile else '0.8' if operation_profile else '0.7' if recovery_profile else '0.6' if feed_profile else '0.5' if metadata_profile else '0.4' if key_profile else '0.3'
+receipt_name='request-receipt-layout-profile-composition.json' if receipt_profile else 'migration-homes-layout-profile-composition.json' if migration_profile else 'key-lifecycle-layout-profile-composition.json' if lifecycle_profile else 'operation-uniqueness-layout-profile-composition.json' if operation_profile else 'feed-recovery-layout-profile-composition.json' if recovery_profile else 'complete-feed-layout-profile-composition.json' if feed_profile else 'installation-metadata-profile-composition.json' if metadata_profile else 'weft-key-profile-composition.json' if key_profile else 'weft-review-layout-composition.json'
 receipt=json.loads((R/'docs/helix/04-build/evidence/design-audit'/receipt_name).read_text())
 b=(R/receipt['astPath']).read_bytes()
 if hashlib.sha256(b).hexdigest()!=receipt['astSha256']:raise ValueError('stale AST')
@@ -52,7 +53,7 @@ for name,t in tables.items():lines.append(f'| `{name}` | {len(t["columns"])} |')
 feed_lines=[f'# Feed and lifecycle columns ({version} proposal)','',f'Companion to [full column index](weft-review-columns-v{version}.proposal.md).','']
 if feed_profile:lines.extend(['',f'Complete-feed table column definitions are in the [feed chapter](weft-review-columns-v{version}.feed.proposal.md).'])
 for name,t in tables.items():
- target=feed_lines if feed_profile and (name.startswith('feed_') and name!='feed_consumer' or name.startswith('complete_feed_') or name in ('key_lifecycle_history','installation_admission','key_migration_receipt')) else lines
+ target=feed_lines if feed_profile and (name.startswith('feed_') and name!='feed_consumer' or name.startswith('complete_feed_') or name in ('key_lifecycle_history','installation_admission','key_migration_receipt','request_receipt_route_guard','request_receipt','request_receipt_protection')) else lines
  target.extend(['',f'## {name}','','| Column | Declared native type | SQL NULL allowed by declaration |','| --- | --- | --- |'])
  pk={k['String']['sval'] for c in t['constraints'] if c['definition']['contype']=='CONSTR_PRIMARY' for k in c['definition']['keys']}
  for c in t['columns']:
@@ -62,6 +63,8 @@ for name,t in tables.items():
   cons=[x['Constraint'] for x in c['constraints']]
   nn=c['name'] in pk or any(x['contype'] in ('CONSTR_PRIMARY','CONSTR_NOTNULL') for x in cons)
   target.append(f'| `{c["name"]}` | `{typ}` | {"no" if nn else "yes"} |')
+if receipt_profile:
+ lines[3:7]=[' '.join(lines[3:7])]
 if feed_profile:(base/f'weft-review-columns-v{version}.feed.proposal.md').write_text('\n'.join(feed_lines)+'\n')
 if len(lines)>=500:raise ValueError('reference exceeds single-edit size')
 (base/f'weft-review-columns-v{version}.proposal.md').write_text('\n'.join(lines)+'\n')

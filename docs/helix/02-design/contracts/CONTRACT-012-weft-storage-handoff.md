@@ -19,9 +19,11 @@ ddx:
 
 # Contract: PostgreSQL storage handoff to Weft
 
-Latest source composition is [layout 0.11](../models/truss-layout-weft-review-0.11.proposal.sql) and its [UMF model](../models/truss-layout-weft-review-0.11.proposal.umf.json), adding the owner-selected request-receipt storage direction. The existing 0.10 binding packet and column index remain pinned historical review inputs; they do not automatically map 0.11 or qualify replay.
+Latest source composition is [layout 0.11](../models/truss-layout-weft-review-0.11.proposal.sql) and its [UMF model](../models/truss-layout-weft-review-0.11.proposal.umf.json), adding the owner-selected request-receipt storage direction. The [0.11 column index](weft-review-columns-v0.11.proposal.md), [feed/lifecycle/receipt chapter](weft-review-columns-v0.11.feed.proposal.md) and [source-effect inventory](weft-review-columns-v0.11.proposal.json) now document all 46 tables and 442 columns. The existing 0.10 binding packet remains a separately pinned review input; it does not automatically map 0.11 or qualify replay.
 
 ## Receipt storage composition 0.11
+
+Reproduce the current declaration references with `python3 docs/helix/04-build/evidence/design-audit/collect-weft-review-columns.py --request-receipts`. The collector verifies the original AST digest, preserves CREATE/ALTER effects and retains other statements by original pointer. An independent comparison confirms all prior 0.10 table/index entries remain unchanged and the three receipt tables add exactly 3/13/6 columns. Explicit declaration nullability is distinct from CHECK/protected-procedure acceptance. Native routines, roles and implicit effects remain outside this column inventory.
 
 The full ordered 0.10 statement array is preserved and the existing receipt candidate adds five statements: request_receipt_route_guard, request_receipt, request_receipt_protection, a positive bigint allocator and a nonunique digest route index. The resulting source has 106 statements, 46 tables, 442 columns (CREATE plus ALTER ADD), 24 explicit indexes and eleven sequences. Existing UMF capture APIs compose/save/reload/export under unchanged limits; independent full ordered AST comparison and all output/source hash checks pass. This is source evidence, not an installed or accepted compiler profile.
 
@@ -29,7 +31,7 @@ Route digest pairs serialize collisions; only full namespace/request bytes estab
 
 Reuse the 49 already-authored receipt candidate identities through original source/creator/parent reconciliation. The receipt direction is now selected by ADR-005; the private routine/security/resource/clock/namespace profile remains to be composed. All-no-op groups still persist a complete receipt in the same transaction; request-free groups invoke no receipt home. Native expiry must never turn retained identity into reusable absence. Include source generation, initialization, protected producers/readers, privileges and independent retry/rollback/lost-acknowledgment/expiry schedules before enabling replay readiness.
 
-Current review entry: [layout 0.10](../models/truss-layout-weft-review-0.10.proposal.sql), [420-column index](weft-review-columns-v0.10.proposal.md), and [matching source packet](../../04-build/evidence/weft-source-binding010/README.md). Earlier sections preserve historical checkpoints; their packet/version statements do not select the current input. This contract remains draft and the packet remains unregistered.
+Historical 0.10 review entry: [layout 0.10](../models/truss-layout-weft-review-0.10.proposal.sql), [420-column index](weft-review-columns-v0.10.proposal.md), and [matching source packet](../../04-build/evidence/weft-source-binding010/README.md). Earlier sections preserve historical checkpoints; their packet/version statements do not select the current input. This contract remains draft and the packet remains unregistered.
 
 **Contract ID**: CONTRACT-012  
 **Type**: schema / compiler boundary  
