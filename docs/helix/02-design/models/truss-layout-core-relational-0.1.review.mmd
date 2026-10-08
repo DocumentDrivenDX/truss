@@ -1,0 +1,109 @@
+flowchart LR
+  REVIEW["DRAFT CORE STRUCTURE — native key interpretation unresolved"]
+  T0["setting<br/>key : string [PK]<br/>value : postgresql.jsonb"]
+  T1["module_access<br/>document_id : string [PK]<br/>module : string [PK]<br/>reader_role : string<br/>writer_role : string"]
+  T2["schema_rev<br/>rev : integer [PK]<br/>accepted_at : timestamp<br/>origin : postgresql.jsonb"]
+  T3["schema_head<br/>id : integer [PK]<br/>rev : integer"]
+  T4["schema_doc<br/>rev : integer [PK/UK]<br/>ord : integer [PK/UK]<br/>doc_id : string [UK]<br/>doc_revision : string<br/>umf_version : string<br/>content_sha256 : string<br/>document : string<br/>validation : postgresql.jsonb"]
+  T5["schema_change<br/>rev : integer [PK]<br/>seq : integer [PK]<br/>kind : string<br/>def_id : integer<br/>before : postgresql.jsonb<br/>after : postgresql.jsonb"]
+  T6["type_def<br/>document_id : string<br/>type_id : integer [PK]<br/>module : string<br/>element : string<br/>kind : string<br/>provisional : boolean<br/>since_rev : integer<br/>doc_ord : integer<br/>retired_rev : integer<br/>lineage_profile : string<br/>lineage_bytes : binary<br/>lineage_sha256 : binary<br/>definition_source_kind : string<br/>definition_rev : integer<br/>definition_doc_ord : integer<br/>definition_document_id : string<br/>binding_source_rev : integer<br/>binding_source_pointer : string<br/>binding_source_bytes : binary"]
+  T7["prop_def<br/>prop_id : integer [PK/UK]<br/>type_id : integer [UK]<br/>element : string [UK]<br/>name : string [UK]<br/>scalar_type : string<br/>nullability : string<br/>cardinality : string<br/>facets : postgresql.jsonb<br/>item : postgresql.jsonb<br/>home : string<br/>since_rev : integer<br/>doc_ord : integer<br/>retired_rev : integer<br/>definition_source_kind : string<br/>definition_rev : integer<br/>definition_doc_ord : integer<br/>definition_document_id : string<br/>binding_source_rev : integer<br/>binding_source_pointer : string<br/>binding_source_bytes : binary"]
+  T8["key_def<br/>type_id : integer [PK/UK]<br/>key_id : string [PK]<br/>key_num : integer [UK]<br/>prop_ids : integer<br/>is_primary : boolean<br/>since_rev : integer<br/>retired_rev : integer<br/>definition_source_kind : string<br/>definition_rev : integer<br/>definition_doc_ord : integer<br/>definition_document_id : string<br/>binding_source_rev : integer<br/>binding_source_pointer : string<br/>binding_source_bytes : binary"]
+  T9["rel_def<br/>document_id : string<br/>rel_type_id : integer [PK]<br/>module : string<br/>rel_id : string<br/>name : string<br/>source_min : integer<br/>source_max : integer<br/>target_min : integer<br/>target_max : integer<br/>lifecycle : string<br/>directed : boolean<br/>target_key : string<br/>composition : boolean<br/>assoc_type_id : integer<br/>inverse : string<br/>since_rev : integer<br/>doc_ord : integer<br/>retired_rev : integer<br/>definition_source_kind : string<br/>definition_rev : integer<br/>definition_doc_ord : integer<br/>definition_document_id : string<br/>binding_source_rev : integer<br/>binding_source_pointer : string<br/>binding_source_bytes : binary"]
+  T10["rel_endpoint<br/>rel_type_id : integer [PK]<br/>source_type : integer [PK]<br/>target_type : integer [PK]"]
+  T11["object<br/>id : integer [PK]<br/>type_id : integer [PK]<br/>props : postgresql.jsonb<br/>retained : postgresql.jsonb<br/>root_id : integer<br/>root_type : integer<br/>rev : integer<br/>ver : integer<br/>created_at : timestamp<br/>updated_at : timestamp"]
+  T12["edge<br/>id : integer [PK/UK]<br/>rel_type_id : integer [UK]<br/>source_id : integer<br/>source_type : integer<br/>target_id : integer<br/>target_type : integer<br/>props : postgresql.jsonb<br/>order_key : string<br/>rev : integer<br/>ver : integer<br/>created_at : timestamp<br/>updated_at : timestamp<br/>retained : postgresql.jsonb"]
+  T13["edge_limit<br/>rel_type_id : integer [PK]<br/>side : string [PK]<br/>endpoint_id : integer [PK]<br/>edge_id : integer"]
+  T14["key_tombstone<br/>entity_kind : string [PK]<br/>type_id : integer [PK]<br/>key_num : integer [PK]<br/>k : string [PK]<br/>entity_id : integer<br/>ver : integer<br/>at : timestamp"]
+  T15["record_source<br/>entity_kind : string [PK]<br/>entity_id : integer [PK]<br/>load_id : string<br/>source : postgresql.jsonb<br/>imported_at : timestamp"]
+  T16["feed_consumer<br/>consumer : string [PK]<br/>xid : postgresql.xid8<br/>seq : integer<br/>updated_at : timestamp"]
+  T17["journal<br/>seq : integer [PK]<br/>at : timestamp [PK]<br/>xid : postgresql.xid8<br/>entity_kind : string<br/>entity_id : integer<br/>entity_type : integer<br/>ver : integer<br/>op : string<br/>prop_id : integer<br/>old_value : postgresql.jsonb<br/>new_value : postgresql.jsonb<br/>rev : integer<br/>origin : postgresql.jsonb"]
+  T18["row_home_operation<br/>original_writer_xid : postgresql.xid8 [PK]<br/>operation_ordinal : integer [PK]<br/>operation_kind : string<br/>phase : string<br/>effect_generation : integer<br/>readiness_generation : integer<br/>sealed_generation : integer<br/>application_generation : integer<br/>original_context_bytes : binary<br/>original_definition_bytes : binary<br/>original_input_bytes : binary<br/>original_prestate_bytes : binary<br/>admitted_candidate_bytes : binary<br/>effect_obligation_bytes : binary<br/>original_group_custody_bytes : binary<br/>application_result_bytes : binary"]
+  T19["row_home_journal_stage<br/>original_writer_xid : postgresql.xid8 [PK]<br/>operation_ordinal : integer [PK]<br/>stage_name : string [PK]<br/>stage_ordinal : integer [PK]<br/>effect_generation : integer<br/>body_bytes : binary"]
+  T20["row_home_state<br/>state_id : integer [PK]<br/>owner_kind : string<br/>object_id : integer [UK]<br/>object_type_id : integer [UK]<br/>edge_id : integer [UK]<br/>relationship_type_id : integer [UK]<br/>property_owner_type_id : integer<br/>property_id : integer [UK]<br/>root_node_id : integer<br/>definition_bytes : binary<br/>home_profile_bytes : binary<br/>value_profile_bytes : binary<br/>source_bytes : binary"]
+  T21["row_home_node<br/>state_id : integer [PK]<br/>node_id : integer [PK/UK]<br/>parent_node_id : integer<br/>slot_kind : string<br/>sequence_ordinal : integer<br/>map_key : string<br/>record_field_identity_bytes : binary<br/>value_kind : string<br/>definition_bytes : binary<br/>source_bytes : binary"]
+  T22["row_home_scalar<br/>state_id : integer [PK]<br/>node_id : integer [PK]<br/>scalar_kind : string<br/>text_value : string<br/>boolean_value : boolean<br/>numeric_value : decimal<br/>numeric_token : string<br/>binary_value : binary<br/>temporal_text : string<br/>temporal_instant : timestamp<br/>opaque_bytes : binary<br/>codec_definition_bytes : binary<br/>original_source_bytes : binary"]
+  T23["relationship_lineage<br/>rel_type_id : integer [PK]<br/>lineage_category : string<br/>identity_profile : string<br/>original_identity_bytes : binary<br/>identity_sha256 : binary"]
+  T24["row_home_touch<br/>transaction_id : postgresql.xid8 [PK]<br/>owner_kind : string [PK]<br/>owner_id : integer [PK]<br/>owner_discriminator_id : integer [PK]<br/>property_owner_type_id : integer [PK]<br/>property_id : integer [PK]<br/>dirty_generation : integer<br/>sealed_generation : integer<br/>original_layout_bytes : binary<br/>original_home_bytes : binary<br/>original_owner_property_bytes : binary<br/>original_operation_bytes : binary"]
+  T25["row_home_capacity<br/>singleton_id : integer [PK]<br/>retained_rows : integer<br/>retained_custody_bytes : integer<br/>reserved_rows : integer<br/>reserved_custody_bytes : integer<br/>original_layout_bytes : binary<br/>original_resource_profile_bytes : binary"]
+  T26["key_bucket_guard<br/>namespace_sha256 : binary [PK]<br/>key_sha256 : binary [PK]<br/>generation : integer"]
+  T27["object_key_bucket<br/>storage_row_id : integer [PK]<br/>type_id : integer [UK]<br/>key_num : integer [UK]<br/>object_id : integer [UK]<br/>namespace_bytes : binary<br/>key_bytes : binary<br/>original_context_bytes : binary<br/>namespace_sha256 : binary<br/>key_sha256 : binary"]
+  T28["object_key_reservation_bucket<br/>storage_row_id : integer [PK]<br/>namespace_bytes : binary<br/>key_bytes : binary<br/>original_reservation_bytes : binary<br/>namespace_sha256 : binary<br/>key_sha256 : binary"]
+  T29["catalog_acceptance_report<br/>rev : integer [PK]<br/>report_bytes : binary"]
+  T30["installation_marker<br/>singleton_id : integer [PK]<br/>marker_interface_version : string<br/>installation_id : string [UK]<br/>layout_version : string<br/>bundle_sha256 : binary<br/>inventory_profile : string<br/>inventory_sha256 : binary<br/>database_identity : string<br/>schema_name : string<br/>installed_at : timestamp<br/>installed_at_text : string"]
+  T31["installation_archive<br/>archive_row_id : integer [PK]<br/>installation_id : string<br/>artifact_role : string<br/>artifact_identity : string<br/>artifact_bytes : binary<br/>artifact_sha256 : binary<br/>artifact_identity_sha256 : binary"]
+  T32["feed_tx<br/>source_epoch : string [PK]<br/>feed_profile : string [PK]<br/>original_writer_xid : postgresql.xid8 [PK]<br/>registration_counter : integer<br/>prerequisite_registration_counter : integer<br/>configuration_registration_counter : integer<br/>membership_generation : integer<br/>finalized_generation : integer<br/>original_context_bytes : binary<br/>manifest_profile_bytes : binary<br/>manifest_bytes : binary<br/>manifest_sha256 : binary"]
+  T33["feed_member<br/>source_epoch : string [PK/UK]<br/>feed_profile : string [PK/UK]<br/>original_writer_xid : postgresql.xid8 [PK/UK]<br/>registration_address : integer [PK]<br/>fact_kind : string<br/>original_fact_key_bytes : binary<br/>original_fact_key_profile_bytes : binary<br/>original_payload_bytes : binary<br/>original_payload_profile_bytes : binary<br/>original_payload_sha256 : binary<br/>original_owner_context_bytes : binary<br/>original_write_at : timestamp<br/>original_fact_clock_bytes : binary<br/>delivery_ordinal : integer [UK]"]
+  T34["feed_prerequisite<br/>source_epoch : string [PK]<br/>feed_profile : string [PK]<br/>original_writer_xid : postgresql.xid8 [PK]<br/>prerequisite_address : integer [PK]<br/>original_revision : integer<br/>original_artifact_identity_bytes : binary<br/>original_definition_bytes : binary<br/>original_definition_profile_bytes : binary<br/>original_definition_sha256 : binary<br/>original_owner_context_bytes : binary"]
+  T35["feed_configuration_prerequisite<br/>source_epoch : string [PK]<br/>feed_profile : string [PK]<br/>original_writer_xid : postgresql.xid8 [PK]<br/>configuration_address : integer [PK]<br/>original_installation_identity_bytes : binary<br/>original_configuration_generation : integer<br/>original_configuration_profile_bytes : binary<br/>original_configuration_bytes : binary<br/>original_producer_inventory_bytes : binary<br/>original_configuration_sha256 : binary<br/>original_owner_context_bytes : binary"]
+  T36["complete_feed_consumer<br/>storage_row_id : integer [PK]<br/>source_epoch : string<br/>feed_profile : string<br/>scope_identity : string<br/>consumer_id : string<br/>registration_id : string<br/>worker_generation : integer<br/>state_kind : string<br/>consumer_identity_bytes : binary<br/>consumer_identity_sha256 : binary<br/>original_registration_bytes : binary<br/>current_state_bytes : binary<br/>current_state_sha256 : binary<br/>applied_boundary_bytes : binary<br/>applied_boundary_profile_bytes : binary<br/>inclusive_protection_xid : postgresql.xid8<br/>protection_evidence_bytes : binary<br/>procedure_profile_bytes : binary<br/>downstream_profile_bytes : binary<br/>registered_at : timestamp<br/>acknowledged_at : timestamp"]
+  T37["complete_feed_administration_receipt<br/>storage_row_id : integer [PK]<br/>source_epoch : string<br/>administrative_namespace : string<br/>request_id : string<br/>identity_bytes : binary<br/>identity_sha256 : binary<br/>canonical_input_bytes : binary<br/>input_profile_bytes : binary<br/>receipt_bytes : binary<br/>receipt_profile_bytes : binary<br/>actual_database_role : string<br/>authorization_evidence_bytes : binary<br/>producing_xid : postgresql.xid8<br/>original_production_evidence_bytes : binary"]
+  T38["complete_feed_seed_attempt<br/>storage_row_id : integer [PK]<br/>attempt_identity_bytes : binary<br/>attempt_identity_sha256 : binary<br/>activation_profile_bytes : binary<br/>source_context_bytes : binary<br/>original_worker_bytes : binary<br/>state_kind : string<br/>current_state_bytes : binary<br/>inclusive_replay_xmin : postgresql.xid8<br/>protection_evidence_bytes : binary<br/>invalidation_evidence_bytes : binary<br/>classifier_retirement_evidence_bytes : binary"]
+  T39["complete_feed_seed_artifact<br/>storage_row_id : integer [PK]<br/>attempt_row_id : integer<br/>artifact_role : string<br/>artifact_ordinal : integer<br/>artifact_identity_bytes : binary<br/>artifact_identity_sha256 : binary<br/>artifact_profile_bytes : binary<br/>payload_bytes : binary<br/>payload_sha256 : binary<br/>production_custody_evidence_bytes : binary"]
+  T40["key_lifecycle_history<br/>rev : integer [PK]<br/>seq : integer [PK]<br/>type_id : integer<br/>key_num : integer<br/>transition_kind : string<br/>before_retired_rev : integer<br/>after_retired_rev : integer<br/>before_definition_bytes : binary<br/>after_definition_bytes : binary"]
+  T41["installation_admission<br/>head_id : integer [PK]<br/>installation_id_utf8 : binary<br/>source_epoch_utf8 : binary<br/>configuration_generation : integer<br/>key_reuse : string<br/>journal_mode : string<br/>configuration_bytes : binary<br/>selected_binding_bytes : binary<br/>installed_inventory_bytes : binary<br/>configuration_sha256 : binary<br/>selected_binding_sha256 : binary<br/>installed_inventory_sha256 : binary"]
+  T42["key_migration_receipt<br/>storage_row_id : integer [PK]<br/>installation_id_utf8 : binary<br/>source_epoch_utf8 : binary<br/>migration_attempt_id_utf8 : binary<br/>original_request_bytes : binary<br/>original_attempt_bytes : binary<br/>receipt_bytes : binary<br/>prior_generation : integer<br/>resulting_generation : integer<br/>installation_sha256 : binary<br/>epoch_sha256 : binary<br/>attempt_sha256 : binary<br/>receipt_sha256 : binary"]
+  T43["request_receipt_route_guard<br/>namespace_sha256 : binary [PK]<br/>request_sha256 : binary [PK]<br/>generation : integer"]
+  T44["request_receipt<br/>storage_row_id : integer [PK]<br/>namespace_identity_utf8 : binary<br/>request_id_utf8 : binary<br/>original_writer_xid : postgresql.xid8<br/>original_writer_context_bytes : binary<br/>lifecycle_generation : integer<br/>payload_state : string<br/>original_receipt_bytes : binary<br/>expired_identity_bytes : binary<br/>namespace_sha256 : binary<br/>request_sha256 : binary<br/>expiry_writer_xid : postgresql.xid8<br/>expiry_writer_context_bytes : binary"]
+  T45["request_receipt_protection<br/>receipt_storage_row_id : integer [PK]<br/>protection_generation : integer<br/>original_protection_bytes : binary<br/>original_update_evidence_bytes : binary<br/>original_update_writer_xid : postgresql.xid8<br/>original_update_writer_context_bytes : binary"]
+  T3 -->|"fk-1"| T2
+  T4 -->|"fk-2"| T2
+  T5 -->|"fk-3"| T2
+  T6 -->|"fk-4"| T2
+  T6 -->|"fk-5"| T2
+  T6 -->|"fk-6"| T4
+  T6 -->|"type_def_definition_document_fk"| T4
+  T6 -->|"type_def_definition_binding_revision_fk"| T2
+  T7 -->|"fk-9"| T6
+  T7 -->|"fk-10"| T2
+  T7 -->|"fk-11"| T2
+  T7 -->|"fk-12"| T4
+  T7 -->|"prop_def_definition_document_fk"| T4
+  T7 -->|"prop_def_definition_binding_revision_fk"| T2
+  T8 -->|"fk-15"| T6
+  T8 -->|"fk-16"| T2
+  T8 -->|"fk-17"| T2
+  T8 -->|"key_def_definition_document_fk"| T4
+  T8 -->|"key_def_definition_binding_revision_fk"| T2
+  T9 -->|"fk-20"| T6
+  T9 -->|"fk-21"| T2
+  T9 -->|"fk-22"| T2
+  T9 -->|"fk-23"| T4
+  T9 -->|"rel_def_definition_document_fk"| T4
+  T9 -->|"rel_def_definition_binding_revision_fk"| T2
+  T10 -->|"fk-26"| T9
+  T10 -->|"fk-27"| T6
+  T10 -->|"fk-28"| T6
+  T11 -->|"fk-29"| T6
+  T11 -->|"fk-30"| T2
+  T11 -->|"object_root_fk"| T11
+  T12 -->|"fk-32"| T2
+  T12 -->|"edge_source_fk"| T11
+  T12 -->|"edge_target_fk"| T11
+  T12 -->|"edge_endpoint_types_fk"| T10
+  T13 -->|"fk-36"| T12
+  T19 -->|"row_home_journal_stage_operation_fk"| T18
+  T20 -->|"row_home_state_property_fk"| T7
+  T20 -->|"row_home_state_object_fk"| T11
+  T20 -->|"row_home_state_edge_fk"| T12
+  T20 -->|"row_home_state_root_fk"| T21
+  T21 -->|"fk-42"| T20
+  T21 -->|"row_home_node_parent_fk"| T21
+  T22 -->|"row_home_scalar_node_fk"| T21
+  T23 -->|"fk-45"| T9
+  T27 -->|"object_key_bucket_definition_fk"| T8
+  T27 -->|"object_key_bucket_object_fk"| T11
+  T27 -->|"object_key_bucket_guard_fk"| T26
+  T28 -->|"object_key_reservation_guard_fk"| T26
+  T29 -->|"fk-50"| T2
+  T31 -->|"installation_archive_marker_fk"| T30
+  T33 -->|"feed_member_tx_fk"| T32
+  T34 -->|"feed_prerequisite_tx_fk"| T32
+  T35 -->|"feed_configuration_prerequisite_tx_fk"| T32
+  T39 -->|"fk-55"| T38
+  T40 -->|"fk-56"| T2
+  T40 -->|"fk-57"| T2
+  T40 -->|"fk-58"| T2
+  T40 -->|"fk-59"| T8
+  T41 -->|"fk-60"| T3
+  T45 -->|"rr_protection_receipt_fk"| T44
