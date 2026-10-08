@@ -19,6 +19,8 @@ ddx:
 
 Current source checkpoint: layout 0.11, 106 statements, 46 tables, 442 columns and 24 explicit indexes. These counts describe preserved declarations, not a full installer or supported deployment. The [current column inventory](../02-design/contracts/weft-review-columns-v0.11.proposal.md) covers the 0.11 declarations. The [matching source review packet](evidence/weft-source-binding011/README.md) maps all 0.11 declarations; earlier packets remain separately pinned. Source mapping does not qualify receipt replay or native/compiler adoption. older 0.8/0.4 packets remain preserved and none is adopted. No complete design or native qualification claim is made.
 
+Source reconciliation: the [0.12 history review](../02-design/models/truss-layout-reference-history-0.12.proposal.umf.json) retains the 106-statement foundation, with no new tables, columns or carrier constraints. Exact source comparison confirms that 0.11 already contains the stage child, four carrier ALTERs and metadata operation. Only the journal sequence settings and review marker/identity change. The [receipt](evidence/design-audit/reference-history-layout-model-source.json) verifies this delta and exact export/reload equality; the existing 0.11 compiler packet remains separately pinned and cannot establish 0.12 adoption.
+
 ## Closure by product area
 
 | Area / existing gate | Specified and reviewed source evidence | Remaining design output | Implementation/evidence after selection |
@@ -64,7 +66,7 @@ The architecture selects SQL/PLpgSQL for reference PostgreSQL observations and p
 The seven required routines now have selected optimizer/null/disclosure attributes and SECURITY DEFINER responsibility ownership with private invocation and trusted resolution. Their actual native roles, rights and bodies remain unqualified. The [current allocation receipt](evidence/design-audit/coverage-current-design.json) pins these revised test plans and the separately authored scope expectation; its reproducible check refuses stale receipts. It proves structural allocation only and cannot close the remaining semantic/profile gates.
 
 
-First complete reference installation uses the 0.11 review source as its foundation, then composes required bodies, original trigger/constraint identities, complete security/dependency inventory and initialization/conversion into a separately versioned full bundle. Historical fragments cannot substitute for that bundle. The integration milestone now applies settled lexical/receipt/report choices and makes packed assembly delivery independent of any unqualified Node adapter; actual Bun/Node/native support remains separately evidenced.
+First complete reference installation uses the reconciled 0.12 history review over the separately pinned 0.11 compiler foundation, then composes required bodies, original trigger/constraint identities, complete security/dependency inventory and initialization/conversion into a separately versioned full bundle. Historical fragments cannot substitute for that bundle. The integration milestone now applies settled lexical/receipt/report choices and makes packed assembly delivery independent of any unqualified Node adapter; actual Bun/Node/native support remains separately evidenced.
 
 
 ### Journal reference decisions and concrete remaining composition
