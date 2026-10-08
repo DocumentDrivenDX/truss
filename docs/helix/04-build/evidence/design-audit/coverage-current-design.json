@@ -1091,7 +1091,7 @@
     "02-design/technical-designs/TD-036-record-who-accepted-a-revision.md": "7104f430928314f81b626297bd7708bb04b74ee063cbe9b8f6bdb055a0d412ff",
     "03-test/test-plans/STP-036-record-who-accepted-a-revision.md": "b209c8c82c5e0709df79baa6f08ddab71386c72b688775603e38caf6dbb2faa5",
     "02-design/technical-designs/TD-037-give-roles-access-to-modules-only.md": "abc0751c5652a9584e3bca932bcf83ffb8bafc79e318e35f48b80feaed5f812e",
-    "03-test/test-plans/STP-037-give-roles-access-to-modules-only.md": "cd91a887067365882b2568762242696b2f9753672e6a9fe197cd3878d7cdb750",
+    "03-test/test-plans/STP-037-give-roles-access-to-modules-only.md": "409a0253f43f3e5f54eb004b3991d236e086bea48ac598e5c4422a805a2aa1a2",
     "02-design/technical-designs/TD-038-link-modules-and-see-the-link-only-with-both.md": "517cdd18365d3c17bfc66ae2fd3bde797c5027ab232f4f024d6d1f1df93d99e7",
     "03-test/test-plans/STP-038-link-modules-and-see-the-link-only-with-both.md": "3774a2d2751356b55b02921d5c41c9b35cacbca6642fdc9e160fedc13596e326",
     "02-design/technical-designs/TD-039-read-umf-the-same-way-as-the-reference.md": "e3146f575b9b1edd866169b19e34cd2443eaeee410ad3b773cb5bd6c08b7e6eb",
