@@ -68,6 +68,8 @@
     "invented Field declaration refuses",
     "field source mismatch leaves no partial property allocation",
     "native owner property IDs allocated in field order",
+    "same Field IDs cannot conceal swapped key declaring modules",
+    "authored cross-module key retains exact original ordered qualified components",
     "invented key declaration refuses",
     "changed original primary flag refuses",
     "valid but wrong original key property refuses",
@@ -157,6 +159,6 @@
   "relationshipMatchSha256": "7972a5182aa3ef9dbd4fa47f1a5af451faab1a843bbd9e95363f3eabf20d4557",
   "relationshipStageSha256": "d32c213f607d4f8ca9dd4afcdc7bb4fd2bb7cf39dbf35057a82987859632933e",
   "keyBatchSha256": "e31a769cf820ca00035b3c4e96f75078d6696fca8eb1bd62c8c4dc136303ae18",
-  "keyStageSha256": "2e0b6d625cb90a3ad50fb94833d00b0be1baca9fec154830e459714aa2a4463c",
+  "keyStageSha256": "69239689757f93884df262470f94aaeaf4cf70bee08186e0dc10f348779260d0",
   "qualification": "Actual xid/context/artifact bounds/single unfinished/rollback/private invocation and actual canonical generation dispatch component only. Canonical fixture carrier bytes, component namespace and reservation fixture are not admitted codec/layout/installation/historical reservation authority. Full-byte key stage and actual membership generation are component evidence only. Protected issuer registration, canonical observers, finalization, deferred complete-cohort checks, installer security and public runtime remain unfinished."
 }

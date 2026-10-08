@@ -60,15 +60,16 @@ try{
   ...['a','b','z'].map(id=>({id,kind:'record',extensions:{},...(id==='a'?{keys:[{id:'label-key',name:'label-key',fields:[{module:'m',element:'label'}],primary:true},...['aaa-secondary','a-secondary','z-secondary'].map(keyId=>({id:keyId,name:keyId,fields:[{module:'m',element:'zz-'+keyId}],primary:false}))]}:{}),members:id==='a'?[{module:'m',element:'label'},{module:'m',element:'caption'},...['aaa-secondary','a-secondary','z-secondary'].map(keyId=>({module:'m',element:'zz-'+keyId}))]:[]})),
   {id:'label',name:'label',kind:'field',extensions:{},scalarType:'string',nullability:'required',cardinality:'one'},
   {id:'caption',name:'caption',kind:'field',extensions:{},scalarType:'string',nullability:'absent-allowed',cardinality:'one'},...['aaa-secondary','a-secondary','z-secondary'].map(keyId=>({id:'zz-'+keyId,name:'zz-'+keyId,kind:'field',extensions:{},scalarType:'string',nullability:'required',cardinality:'one'}))],relationships:[{id:'a-z',name:'a-z',source:[{module:'m',element:'a'}],target:[{module:'m',element:'a',key:'label-key'}],sourceMultiplicity:{min:0,max:1},targetMultiplicity:{min:0,max:2},targetLifecycle:'independent',directed:true}]}]};
- const foreignField={id:'foreign-note',name:'foreign-note',kind:'field',extensions:{},scalarType:'string',nullability:'absent-allowed',cardinality:'one'};
+ const foreignField={id:'foreign-note',name:'foreign-note',kind:'field',extensions:{},scalarType:'string',nullability:'required',cardinality:'one'};
  (originalModel.modules[0].elements.find(e=>e.id==='a') as any).members.push({module:'other',element:'foreign-note'});
  (originalModel.modules as any[]).push({id:'other',namespace:'other',elements:[foreignField]},{id:'shadow',namespace:'shadow',elements:[{...foreignField}]});
  const twinField={...foreignField,name:'twin-note'};
  (originalModel.modules as any[]).push({id:'twin',namespace:'twin',elements:[twinField]});
  (originalModel.modules[0].elements.find(e=>e.id==='a') as any).members.push({module:'twin',element:'foreign-note'});
+ (originalModel.modules[0].elements.find(e=>e.id==='a') as any).keys.push({id:'module-twin-key',name:'module-twin-key',fields:[{module:'twin',element:'foreign-note'},{module:'other',element:'foreign-note'}],primary:false});
  const originalDocument=JSON.stringify(originalModel);const originalInspection=producer.inspect(originalDocument);
  assert(originalInspection.sourceValidation.valid&&originalInspection.targetValidation.valid,'actual original UMF source and transition validate');
- const recordCheck=producer.checkRecord(originalInspection.target,{module:'m',element:'a'},[{field:{module:'m',element:'label'},state:'present',value:{string:'雪🙂'}},...['aaa-secondary','a-secondary','z-secondary'].map(keyId=>({field:{module:'m',element:'zz-'+keyId},state:'present',value:{string:keyId}}))]);
+ const recordCheck=producer.checkRecord(originalInspection.target,{module:'m',element:'a'},[...['other','twin'].map(module=>({field:{module,element:'foreign-note'},state:'present' as const,value:{string:module}})),{field:{module:'m',element:'label'},state:'present',value:{string:'雪🙂'}},...['aaa-secondary','a-secondary','z-secondary'].map(keyId=>({field:{module:'m',element:'zz-'+keyId},state:'present',value:{string:keyId}}))]);
  assert(recordCheck.validation.valid&&!recordCheck.validation.complete,'actual owner producer retains declared-key dataset incompleteness');
  const originalValidation={producerSource:producer.sourceRevision,producerBundleSha256:producer.bundleSha256,sourceValidation:originalInspection.sourceValidation,transition:originalInspection.transition,targetValidation:originalInspection.targetValidation,recordChecks:[recordCheck]};
  const secondText=JSON.stringify({...originalModel,id:'second-document'});const secondInspection=producer.inspect(secondText);
@@ -144,8 +145,11 @@ try{
  const labelProperty=properties.find((p:any)=>p.field_id==='label').property_id;
  const keyBatch=await Bun.file('packages/postgresql/native/catalog-key-batch.sql').text();await sql.unsafe(keyBatch);
  const originalOwner=originalModel.modules[0].elements.find(element=>element.id==='a')!;
- const originalKeys=originalOwner.keys!.map(key=>({ownerTypeId:allocated[0].type_id,keyId:key.id,primary:key.primary,
+ const originalKeys=originalOwner.keys!.filter(key=>key.id!=='module-twin-key').map(key=>({ownerTypeId:allocated[0].type_id,keyId:key.id,primary:key.primary,
   propertyIds:key.fields.map(field=>{const match=properties.filter((p:any)=>p.field_id===field.element);if(field.module!=='m'||match.length!==1)throw Error('Original key field correspondence');return match[0].property_id})}));
+ await sql.unsafe('SAVEPOINT cross_module_key');const keyFields=await sql.unsafe('SELECT * FROM truss.runtime_stage_new_properties(1,$1::text::jsonb)',[JSON.stringify([{ownerTypeId:allocated[0].type_id,fieldModule:'twin',home:'json',field:twinField},{ownerTypeId:allocated[0].type_id,fieldModule:'other',home:'json',field:foreignField}])]);const otherProperty=keyFields.find((p:any)=>p.field_module==='other').property_id;const twinProperty=keyFields.find((p:any)=>p.field_module==='twin').property_id;
+ await sql.unsafe('SAVEPOINT swapped_module_key');let swappedModuleKey='';try{await sql.unsafe("SELECT truss.runtime_stage_new_key(1,$1::int,'module-twin-key',ARRAY[$2::int,$3::int],false)",[allocated[0].type_id,otherProperty,twinProperty])}catch(e){swappedModuleKey=(e as any).errno??(e as any).code}assert(swappedModuleKey==='55000','same Field IDs cannot conceal swapped key declaring modules');await sql.unsafe('ROLLBACK TO SAVEPOINT swapped_module_key');
+ const moduleKey=await sql.unsafe("SELECT truss.runtime_stage_new_key(1,$1::int,'module-twin-key',ARRAY[$2::int,$3::int],false) AS number",[allocated[0].type_id,twinProperty,otherProperty]);const moduleKeyStored=await sql.unsafe("SELECT prop_ids::text AS ids FROM truss.key_def WHERE key_id='module-twin-key'");assert(moduleKey[0].number==='1'&&moduleKeyStored[0].ids==='{'+twinProperty+','+otherProperty+'}','authored cross-module key retains exact original ordered qualified components');await sql.unsafe('ROLLBACK TO SAVEPOINT cross_module_key');
  for(const [label,keyId,propertyId,primary] of [
   ['invented key declaration refuses','invented-key',labelProperty,false],
   ['changed original primary flag refuses','label-key',labelProperty,false],

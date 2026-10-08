@@ -52,13 +52,9 @@ BEGIN
   END IF;
   FOR component_ordinal IN 1..cardinality(ordered_property_ids) LOOP
     original_field:=original_key->'fields'->(component_ordinal-1);
-    -- Current native property source has no independent field-module column.
-    -- Do not infer cross-module field correspondence from an element name.
-    IF original_field->>'module'<>owner.module THEN
-      RAISE EXCEPTION 'cross-module key fields require an admitted source correspondence profile' USING ERRCODE='0A000';
-    END IF;
     PERFORM 1 FROM truss.prop_def p WHERE p.prop_id=ordered_property_ids[component_ordinal]
-      AND p.type_id=owner_id AND p.element=original_field->>'element'
+      AND p.type_id=owner_id AND p.element COLLATE "C"= (original_field->>'element') COLLATE "C"
+      AND p.declaration_module COLLATE "C"=(original_field->>'module') COLLATE "C"
       AND p.definition_document_id=owner.document_id;
     IF NOT FOUND THEN RAISE EXCEPTION 'original ordered key field correspondence' USING ERRCODE='55000'; END IF;
   END LOOP;
