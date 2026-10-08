@@ -28,6 +28,13 @@ def decode(v):
 if decode(tagged)!=e['originalNativeDefinition']:raise ValueError('original decoded parent mismatch')
 # Original diagnostic keeps decoded semantics; retain original tagged bytes too.
 a,ah=load(B+'reference-history-layout-native-ast.json')
+composition,cph=load(B+'reference-history-layout-model-source.json')
+selected_model,smh=load(composition['modelPath'])
+if smh!=composition['modelSha256']:raise ValueError('selected model source drift')
+selected_tree=at(selected_model,'/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts')
+if decode(selected_tree)!=a:raise ValueError('selected AST/model semantic correspondence mismatch')
+column_inventory,cih=load('docs/helix/02-design/contracts/weft-review-columns-v0.12.proposal.json')
+if column_inventory['astPath']!=B+'reference-history-layout-native-ast.json' or column_inventory['astSha256']!=ah:raise ValueError('selected column inventory custody mismatch')
 candidates=[(i,x['stmt']['CreateStmt']) for i,x in enumerate(a) if 'CreateStmt' in x['stmt'] and x['stmt']['CreateStmt']['relation'].get('schemaname')=='truss' and x['stmt']['CreateStmt']['relation']['relname']==table]
 if len(candidates)!=1:raise ValueError('selected qualified parent count')
 i,new=candidates[0];old=e['originalNativeDefinition']
@@ -47,6 +54,6 @@ for file in ['truss-layout-0.2.constraint-ids.draft.json','truss-layout-0.2.supp
   if item['objectKind']=='constraint' and node!=item['originalNativeNode']:raise ValueError('original constraint mismatch')
   original_effect_ids.append(item)
 if table=='type_def' and len(original_effect_ids)!=7:raise ValueError('original effect identity inventory drift')
-out={'originalEffectIdentities':original_effect_ids,'originalEffectCatalogPins':catalog_pins,'scope':'explicit qualified '+table+' parent evolution review candidate; complete direct qualified relation CREATE/index/ALTER source effects, implicit/transitive/native dependencies remain open','selectedDirectEffects':effects,'authoredId':e['authoredId'],'originalLocator':e['originalLocator'],'selectedLocator':{'astPath':B+'reference-history-layout-native-ast.json','jsonPointer':'/'+str(i)+'/stmt/CreateStmt'},'sourcePins':{'diagnostic':dh,'originalModel':mh,'selectedAst':ah,'producer':hashlib.sha256(Path(__file__).read_bytes()).hexdigest()},'originalTaggedParent':tagged,'originalNativeParent':old,'selectedNativeParent':new,'columnComparisons':rows,'parentIdentityAdopted':False,'nativeQualified':False}
+out={'originalEffectIdentities':original_effect_ids,'originalEffectCatalogPins':catalog_pins,'scope':'explicit qualified '+table+' parent evolution review candidate; complete direct qualified relation CREATE/index/ALTER source effects, implicit/transitive/native dependencies remain open','selectedDirectEffects':effects,'authoredId':e['authoredId'],'originalLocator':e['originalLocator'],'selectedLocator':{'astPath':B+'reference-history-layout-native-ast.json','jsonPointer':'/'+str(i)+'/stmt/CreateStmt'},'sourcePins':{'diagnostic':dh,'originalModel':mh,'selectedAst':ah,'selectedModel':smh,'compositionReceipt':cph,'columnInventory':cih,'producer':hashlib.sha256(Path(__file__).read_bytes()).hexdigest()},'originalTaggedParent':tagged,'originalNativeParent':old,'selectedNativeParent':new,'columnComparisons':rows,'parentIdentityAdopted':False,'nativeQualified':False}
 (R/(B+('type-definition' if table=='type_def' else table)+'-parent-evolution-review.json')).write_text(json.dumps(out,separators=(',',':'))+'\n')
 print(json.dumps({'table':table,'directStatements':len(effects),'originalEffectIds':len(original_effect_ids),'columns':{x:sum(r['state']==x for r in rows) for x in sorted({r['state'] for r in rows})}}))
