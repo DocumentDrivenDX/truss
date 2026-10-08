@@ -17,6 +17,8 @@
     "native provisional catalog revision allocated",
     "native IDs follow original qualified byte order",
     "existing identities refuse new allocation",
+    "native owner property IDs allocated in field order",
+    "original field availability retained",
     "retired retained IDs remain high-water contributors",
     "original lineage bytes retained",
     "verbatim original source retained",
@@ -28,5 +30,6 @@
   "barrierSha256": "eed4f044a241db7d70dd9cf222a3313bedd484273c18d0e7063b614ad5bab93b",
   "catalogStageSha256": "7319b574cbd5cf393a8a27e7325fcf05815c882c01acd817cf50d0d4a4628f7f",
   "typeStageSha256": "64aaa9ba6127b4bfcba0296aad679a24e9a0d561b94931d9d23d43311e329e51",
+  "propertyStageSha256": "c25fc824fe08c531bd4b24f80a06b2ea8eb7236025a66b7eca505a6a15752788",
   "qualification": "Actual xid/context/artifact bounds/single unfinished/rollback/private invocation component only. Protected issuer registration, canonical observers, finalization, deferred complete-cohort checks, installer security and public runtime remain unfinished."
 }
