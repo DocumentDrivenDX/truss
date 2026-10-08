@@ -3,9 +3,9 @@ import hashlib,json,sys
 from pathlib import Path
 R=Path(__file__).resolve().parents[5]
 B='docs/helix/04-build/evidence/design-audit/'
-if len(sys.argv)>2:raise SystemExit('usage: capture-type-definition-parent-evolution.py [type_def|rel_def|module_access|schema_rev|journal|key_tombstone]')
+if len(sys.argv)>2:raise SystemExit('usage: capture-type-definition-parent-evolution.py [type_def|rel_def|module_access|schema_rev|journal|key_tombstone|object_key]')
 table=sys.argv[1] if len(sys.argv)==2 else 'type_def'
-if table not in ('type_def','rel_def','module_access','schema_rev','journal','key_tombstone'):raise ValueError('unreviewed parent selection')
+if table not in ('type_def','rel_def','module_access','schema_rev','journal','key_tombstone','object_key'):raise ValueError('unreviewed parent selection')
 identity='truss.layout.table.'+table
 def load(p):
  raw=(R/p).read_bytes();return json.loads(raw),hashlib.sha256(raw).hexdigest()
@@ -35,13 +35,15 @@ selected_tree=at(selected_model,'/modules/0/elements/0/extensions/umf.postgresql
 if decode(selected_tree)!=a:raise ValueError('selected AST/model semantic correspondence mismatch')
 column_inventory,cih=load('docs/helix/02-design/contracts/weft-review-columns-v0.12.proposal.json')
 if column_inventory['astPath']!=B+'reference-history-layout-native-ast.json' or column_inventory['astSha256']!=ah:raise ValueError('selected column inventory custody mismatch')
-candidates=[(i,x['stmt']['CreateStmt']) for i,x in enumerate(a) if 'CreateStmt' in x['stmt'] and x['stmt']['CreateStmt']['relation'].get('schemaname')=='truss' and x['stmt']['CreateStmt']['relation']['relname']==table]
-if len(candidates)!=1:raise ValueError('selected qualified parent count')
-i,new=candidates[0];old=e['originalNativeDefinition']
+target_tables=['object_key_bucket','object_key_reservation_bucket','key_bucket_guard'] if table=='object_key' else [table]
+candidates=[(i,x['stmt']['CreateStmt']) for i,x in enumerate(a) if 'CreateStmt' in x['stmt'] and x['stmt']['CreateStmt']['relation'].get('schemaname')=='truss' and x['stmt']['CreateStmt']['relation']['relname'] in target_tables]
+if len(candidates)!=len(target_tables) or {n['relation']['relname'] for _,n in candidates}!=set(target_tables):raise ValueError('selected qualified parent count')
+if table=='object_key' and any(x.get('stmt',{}).get('CreateStmt',{}).get('relation',{}).get('relname')=='object_key' for x in a):raise ValueError('old object_key unexpectedly retained')
+i,new=next((i,n) for i,n in candidates if n['relation']['relname']==target_tables[0]);old=e['originalNativeDefinition']
 def columns(v):return {x['ColumnDef']['colname']:x['ColumnDef'] for x in v['tableElts'] if 'ColumnDef' in x}
 o,n=columns(old),columns(new)
 rows=[{'name':name,'state':'added' if name not in o else 'removed' if name not in n else 'same_definition_except_parser_positions' if strip(o[name])==strip(n[name]) else 'definition_changed','original':o.get(name),'selected':n.get(name)} for name in sorted(set(o)|set(n))]
-effects=[{'statementIndex':j,'kind':kind,'definition':v} for j,x in enumerate(a) for kind,v in x['stmt'].items() if isinstance(v,dict) and v.get('relation',{}).get('schemaname')=='truss' and v.get('relation',{}).get('relname')==table]
+effects=[{'statementIndex':j,'kind':kind,'definition':v} for j,x in enumerate(a) for kind,v in x['stmt'].items() if isinstance(v,dict) and v.get('relation',{}).get('schemaname')=='truss' and v.get('relation',{}).get('relname') in target_tables]
 if table=='type_def' and [x['kind'] for x in effects]!=['CreateStmt','IndexStmt','AlterTableStmt']:raise ValueError('direct table effect inventory drift')
 original_effect_ids=[];catalog_pins={}
 for file in ['truss-layout-0.2.constraint-ids.draft.json','truss-layout-0.2.supporting-index-ids.draft.json']:
@@ -54,6 +56,6 @@ for file in ['truss-layout-0.2.constraint-ids.draft.json','truss-layout-0.2.supp
   if item['objectKind']=='constraint' and node!=item['originalNativeNode']:raise ValueError('original constraint mismatch')
   original_effect_ids.append(item)
 if table=='type_def' and len(original_effect_ids)!=7:raise ValueError('original effect identity inventory drift')
-out={'originalEffectIdentities':original_effect_ids,'originalEffectCatalogPins':catalog_pins,'scope':'explicit qualified '+table+' parent evolution review candidate; complete direct qualified relation CREATE/index/ALTER source effects, implicit/transitive/native dependencies remain open','selectedDirectEffects':effects,'authoredId':e['authoredId'],'originalLocator':e['originalLocator'],'selectedLocator':{'astPath':B+'reference-history-layout-native-ast.json','jsonPointer':'/'+str(i)+'/stmt/CreateStmt'},'sourcePins':{'diagnostic':dh,'originalModel':mh,'selectedAst':ah,'selectedModel':smh,'compositionReceipt':cph,'columnInventory':cih,'producer':hashlib.sha256(Path(__file__).read_bytes()).hexdigest()},'originalTaggedParent':tagged,'originalNativeParent':old,'selectedNativeParent':new,'columnComparisons':rows,'parentIdentityAdopted':False,'nativeQualified':False}
+out={'evolutionKind':'explicit_split_replacement_no_identity_transfer' if table=='object_key' else 'same_qualified_parent_candidate','selectedParentInventory':[{'name':n['relation']['relname'],'jsonPointer':'/'+str(j)+'/stmt/CreateStmt','originalNativeDefinition':n} for j,n in candidates],'originalEffectIdentities':original_effect_ids,'originalEffectCatalogPins':catalog_pins,'scope':'explicit qualified '+table+' parent evolution review candidate; complete direct qualified relation CREATE/index/ALTER source effects, implicit/transitive/native dependencies remain open','selectedDirectEffects':effects,'authoredId':e['authoredId'],'originalLocator':e['originalLocator'],'selectedLocator':{'astPath':B+'reference-history-layout-native-ast.json','jsonPointer':'/'+str(i)+'/stmt/CreateStmt'},'sourcePins':{'diagnostic':dh,'originalModel':mh,'selectedAst':ah,'selectedModel':smh,'compositionReceipt':cph,'columnInventory':cih,'producer':hashlib.sha256(Path(__file__).read_bytes()).hexdigest()},'originalTaggedParent':tagged,'originalNativeParent':old,'selectedNativeParent':new,'columnComparisons':rows,'parentIdentityAdopted':False,'nativeQualified':False}
 (R/(B+('type-definition' if table=='type_def' else table)+'-parent-evolution-review.json')).write_text(json.dumps(out,separators=(',',':'))+'\n')
 print(json.dumps({'table':table,'directStatements':len(effects),'originalEffectIds':len(original_effect_ids),'columns':{x:sum(r['state']==x for r in rows) for x in sorted({r['state'] for r in rows})}}))
