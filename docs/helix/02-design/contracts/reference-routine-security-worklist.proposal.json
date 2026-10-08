@@ -1,5 +1,5 @@
 {
-  "scope": "Twelve selected handler/validator/phase design entries only; not complete installer callable closure",
+  "scope": "Sixteen known private handler/validator/phase/operation-custody selectors; not complete installer callable closure",
   "sourcePins": [
     {
       "path": "02-design/contracts/reference-routine-design-v0.1.proposal.json",
@@ -8,9 +8,13 @@
     {
       "path": "02-design/contracts/reference-journal-phase-design-v0.1.proposal.json",
       "sha256": "29a94508c8884ba100e12cb66888ec6c4ef5729df23fb4d3f4edfd2401f7bb9a"
+    },
+    {
+      "path": "02-design/contracts/CONTRACT-001-storage-layout.md",
+      "sha256": "a50d804123d549fc6dd02679b6b97b5c23ef36f10d93eb6c8c32a31e319a0aae"
     }
   ],
-  "knownRoutineCount": 12,
+  "knownRoutineCount": 16,
   "entries": [
     {
       "selector": "row_touch_observe",
@@ -130,6 +134,66 @@
       "sourceManifest": "02-design/contracts/reference-journal-phase-design-v0.1.proposal.json",
       "nativeRoleBinding": null,
       "effectivePrivilegeEvidence": null
+    },
+    {
+      "selector": "row_touch_reserve",
+      "argumentTypes": [
+        "bytea",
+        "bytea",
+        "bigint",
+        "bigint"
+      ],
+      "resultType": "void",
+      "ownerResponsibility": "Canonical operation admission; exact owner unresolved",
+      "sourceContract": "02-design/contracts/CONTRACT-001-storage-layout.md",
+      "originalSignature": "row_touch_reserve(operation_identity bytea, operation_custody bytea, max_new_rows bigint, max_growth_bytes bigint) -> void",
+      "nativeRoleBinding": null,
+      "effectivePrivilegeEvidence": null,
+      "attributesAndCompleteDependencies": null
+    },
+    {
+      "selector": "row_touch_seal",
+      "argumentTypes": [
+        "text",
+        "bigint",
+        "int",
+        "int",
+        "int",
+        "bigint"
+      ],
+      "resultType": "void",
+      "ownerResponsibility": "Integrity/finalization owner",
+      "sourceContract": "02-design/contracts/CONTRACT-001-storage-layout.md",
+      "originalSignature": "row_touch_seal(owner_kind text, owner_id bigint, owner_discriminator_id int, property_owner_type_id int, property_id int, expected_dirty_generation bigint) -> void",
+      "nativeRoleBinding": null,
+      "effectivePrivilegeEvidence": null,
+      "attributesAndCompleteDependencies": null
+    },
+    {
+      "selector": "row_touch_cleanup",
+      "argumentTypes": [
+        "bytea"
+      ],
+      "resultType": "bytea",
+      "ownerResponsibility": "Retention administrator",
+      "sourceContract": "02-design/contracts/CONTRACT-001-storage-layout.md",
+      "originalSignature": "row_touch_cleanup(selection_bytes bytea) -> bytea",
+      "nativeRoleBinding": null,
+      "effectivePrivilegeEvidence": null,
+      "attributesAndCompleteDependencies": null
+    },
+    {
+      "selector": "row_journal_stage_cleanup",
+      "argumentTypes": [
+        "bytea"
+      ],
+      "resultType": "bytea",
+      "ownerResponsibility": "Retention administrator",
+      "sourceContract": "02-design/contracts/CONTRACT-001-storage-layout.md",
+      "originalSignature": "row_journal_stage_cleanup(cohort_bytes bytea) -> bytea",
+      "nativeRoleBinding": null,
+      "effectivePrivilegeEvidence": null,
+      "attributesAndCompleteDependencies": null
     }
   ],
   "requiredBindingFields": [
@@ -143,7 +207,7 @@
     "administrative exception"
   ],
   "remainingScope": [
-    "original operation admission/observation/seal/cleanup procedures",
+    "original operation registry admission/generation/observation/publication procedures beyond the four newly captured custody signatures",
     "public read/mutation/import/catalog/report producers",
     "retention/archive/recovery administration",
     "all transitive native dependencies and effective role membership paths"
