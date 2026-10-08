@@ -375,3 +375,10 @@ Before M03/M06, independently admit the selected profile and complete expected e
 
 
 The [independently authored Account/Item state oracle](reference-account-items-expected-states.proposal.json) fixes complete logical object/edge/business-key membership and exact field presence/token expectations for M03–M06, including pending versus independently committed M05 observations. It preserves B absence, C null and D empty text. Expected values are authored from the original milestone, not generated from Truss readers/compiler outputs. Native IDs and initial versions require independent original symbol binding; full source/journal/report/authority and settlement evidence remain separate required oracles. This artifact cannot pass the whole milestone by logical graph equality alone.
+
+
+## Pure numeric convenience operation qualification
+
+For the proposed public core viewNumericAsNumber helper, compare exact rational meaning independently for integer 42/decimal 0.5 success, integer 9007199254740993 and decimal 0.1 refusal, signed-zero original preservation and subnormal/underflow/overflow boundaries. Resource cases use the existing numeric-admission-resources profile: combined token/work/peak boundaries, preflight before scaling, complete grammar before zero shortcut and repeated failed conversions within one enclosing account. A full token ceiling that exceeds remaining work must refuse before traversal rather than refresh the budget. Source validity, numeric lossiness, unsupported profile and resource refusal remain distinct.
+
+Run the actual packed public helper in Chromium and selected server runtimes with no I/O/host-global dependency. Retain exact helper/resource/parser/build definitions and original token bytes, independently authored rational outcomes and actual work/peak observations. Type shape or Number formatting cannot establish equality. Field/native admission, shared executor accounting and complete browser-core qualification retain their separate required evidence; these planned helper cases do not replace them.
