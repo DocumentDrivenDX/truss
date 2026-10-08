@@ -99,7 +99,7 @@
   "governingSelectionSources": [
     {
       "path": "docs/helix/02-design/contracts/CONTRACT-002-journal.md",
-      "sha256": "26fd43a5fc55eac65b2a2d8440bde6aee3fb52d18597c610855e0250d76228f4"
+      "sha256": "d2893c9fa9c54393aeab3becfe69caae68996063905b06e85db7bbdb0e3324b1"
     },
     {
       "path": "docs/helix/02-design/contracts/CONTRACT-005-module-isolation.md",
