@@ -151,3 +151,10 @@ The parity procedure explicitly amends the value.presence declaration in 172 his
 
 
 The two concrete reference participation/equality observations now pass the pinned UMF PostgreSQL parser, original JSON/YAML source/tree preservation and guarded native export/reparse AST comparison. The [source review receipt](evidence/design-audit/reference-observation-sql-source-review.json) retains both exact SQL inputs, original parameter inventories and four dependency hashes; the [reproducer](evidence/design-audit/check-reference-observation-sql.ts) refuses changed/dirty UMF source or a stale receipt. Run with `bun docs/helix/04-build/evidence/design-audit/check-reference-observation-sql.ts /path/to/pinned/umf`. Its parser tree version is 170004, separate from the PostgreSQL 17.11 planning target. This proves source/AST correspondence, not installed type/operator/collation resolution, native query execution, complete visibility or resource qualification.
+
+
+### Weft release-conformance work started
+
+Weft 22d3d8c starts B-007 with a trusted local support-evidence auditor. The [source checkpoint](evidence/design-audit/weft-b007-preparation-source-review.json) verifies four committed files and the complete eight-file change range from B-006 merge; no compiler backend changes occur. The owner reports 41 synthetic consistency/profile/digest/bag/order/refusal controls. Truss did not rerun them. B-007 is now in progress, superseding earlier not-started observations; its full criterion, expanded/property/mutation/fuzz, native support inventory and packaging/license gates remain open.
+
+Truss's assessor must preserve the same distinction between trusted report consistency and independently established producer/oracle provenance. A complete per-layer report and exact context agreement cannot by themselves prove native execution or oracle independence. Do not copy Weft's test auditor into the compiler or substitute it for Truss's original state/authority/driver/native evidence. The explicit-null and exact Truss mapping adoption gaps remain unchanged.
