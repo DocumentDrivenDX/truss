@@ -2099,3 +2099,6 @@ The [code/key binding](../02-design/contracts/reference-code-key-binding.proposa
 
 
 The [reference row-home proposal](../02-design/contracts/reference-row-home-binding.proposal.md) now fixes the intended M00–M07 physical realization for all four original fields: owned state/root plus string or decimal scalar, with absent note zero-state and explicit-null note root without payload. V2 no longer starts from unspecified candidate homes for this milestone; exact home/value/codec artifacts and native admission remain open. V4 must preserve the same mapping and complete nullable meaning. The broader required props/mixed-home/recursive corpus remains in force and cannot be reduced to this milestone.
+
+
+History H6 consumes the [durable archive handoff](../02-design/contracts/reference-history-archive-handoff.proposal.md): bounded immutable export, external original-attempt submission/observation, independent complete retrieval/durability verification, and fresh protected transactional retention recheck. It reuses archive v0.2 and retention tooling, keeping network waits outside database transactions. Exact provider profile/mechanisms/lifetimes and independent fault qualification remain open; zero local retention does not waive complete writer history, consumer or request-receipt protections.
