@@ -37,3 +37,17 @@ Unnamed parse/bind/no-data responses are supported in the observed subset.
 Per-query limits: 1 MiB frame, 4 MiB delivered response, 2048 fields, 10000 frames,
 five-second response observation. Socket allocation, total heap/shared-operation
 accounting and original issuer/epoch/recovery custody remain unqualified.
+
+Optional `createFileQueryJournal(privateDirectory)` can be passed as the second
+`createPgConnectionSource` argument `{journal}`. The existing directory must be
+owned by the current host user with no group/other permissions. Each request is
+written exclusively to a private JSONL file and fsynced (including its directory
+entry) before submission; each validated original frame is fsynced before parser
+forwarding. Files contain sensitive SQL/parameters/result bytes; use a trusted
+local directory without concurrent writers. No credentials or startup frames
+are collected. Missing outcome records remain uncertain. Outcomes describe
+response observation, not native durability or permission to replay. Journal
+failure closes the transport; no automatic replay, cleanup or deletion is offered.
+Synchronous disk I/O is experimental and unbenchmarked. Local random filenames
+are locators only; native issuer/epoch/transaction authority and full recovery
+integration remain unfinished. Without explicit opt-in there is no journal I/O.

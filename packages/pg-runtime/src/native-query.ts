@@ -2,10 +2,13 @@
 import type {PoolClient} from 'pg';
 import type {Socket} from 'node:net';
 import {ResponseIngress,decodeResponseFrame} from './wire';
-export async function originalQuery(client:PoolClient,text:string,values?:readonly (string|null)[]):Promise<readonly ReturnType<typeof decodeResponseFrame>[]> {
+import type {OriginalQueryJournal} from './journal';
+export async function originalQuery(client:PoolClient,text:string,values?:readonly (string|null)[],journal?:OriginalQueryJournal):Promise<readonly ReturnType<typeof decodeResponseFrame>[]> {
  const connection=(client as unknown as {connection:{stream:Socket}}).connection;
  const stream=connection?.stream;if(!stream)throw Error('Original transport unavailable');
  const handlers=stream.listeners('data');if(handlers.length!==1)throw Error('Unsupported original parser composition');
+ const retained=journal?.begin(text,values??[]);
+ let outcome:'response_complete'|'server_error'|'uncertain'='uncertain';
  const originalParser=handlers[0];
  const limits={maxFrameBytes:1048576,maxFields:2048,maxTotalBytes:4194304,maxFrames:10000};
  const ingress=new ResponseIngress(limits);const frames:ReturnType<typeof decodeResponseFrame>[]=[];
@@ -17,6 +20,7 @@ export async function originalQuery(client:PoolClient,text:string,values?:readon
  const guarded=(chunk:Buffer)=>{
    try{ingress.feed(chunk,frame=>{
      const decoded=decodeResponseFrame(frame,limits);frames.push(decoded);
+     retained?.frame(frame);
      originalParser.call(stream,Buffer.from(frame));
      if(decoded.kind==='Z')resolveReady();
    });}catch{const error=Error('Original response refused');rejectReady(error);stream.destroy(error);}
@@ -32,13 +36,14 @@ export async function originalQuery(client:PoolClient,text:string,values?:readon
    if(failed){
      const code=failure&&typeof failure==='object'?Object.getOwnPropertyDescriptor(failure,'code')?.value:undefined;
      if(errors.length!==1||errors[0].fields.find(field=>field.tag==='C')?.value!==code)throw Error('Original error correspondence unavailable');
-     throw failure;
+     outcome='server_error';throw failure;
    }
    if(errors.length)throw Error('Original error lost by driver');
-   return Object.freeze(frames);
+   outcome='response_complete';return Object.freeze(frames);
  }finally{
    clearTimeout(timeout);stream.off('data',guarded);stream.off('close',ended);
    if(!stream.destroyed)stream.on('data',originalParser);
+   try{retained?.finish(outcome);}catch(error){stream.destroy();throw error;}
  }
 }
 

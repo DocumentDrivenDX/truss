@@ -1,4 +1,50 @@
 // @bun
+// packages/pg-runtime/src/journal.ts
+import { openSync, writeSync, fsyncSync, closeSync, lstatSync } from "fs";
+import { join } from "path";
+import { randomUUID } from "crypto";
+function createFileQueryJournal(directory) {
+  const stat = lstatSync(directory);
+  if (!stat.isDirectory() || (stat.mode & 63) !== 0 || stat.uid !== process.getuid?.())
+    throw Error("Private owned journal directory required");
+  return { begin(text, values) {
+    const path = join(directory, randomUUID() + ".jsonl");
+    const append = (record, first = false) => {
+      const fd = openSync(path, first ? "wx" : "a", 384);
+      try {
+        const bytes = Buffer.from(JSON.stringify(record) + `
+`);
+        let offset = 0;
+        while (offset < bytes.length)
+          offset += writeSync(fd, bytes, offset, bytes.length - offset);
+        fsyncSync(fd);
+      } finally {
+        closeSync(fd);
+      }
+    };
+    append({ kind: "request", text, values: [...values] }, true);
+    const dir = openSync(directory, "r");
+    try {
+      fsyncSync(dir);
+    } finally {
+      closeSync(dir);
+    }
+    let ended = false;
+    return {
+      frame(bytes) {
+        if (ended)
+          throw Error("Journal ended");
+        append({ kind: "frame", hex: Buffer.from(bytes).toString("hex") });
+      },
+      finish(outcome) {
+        if (ended)
+          throw Error("Journal ended");
+        append({ kind: "outcome", outcome });
+        ended = true;
+      }
+    };
+  } };
+}
 // packages/pg-runtime/src/wire.ts
 function decodeResponseFrame(frame, limits) {
   const fail = () => {
@@ -246,7 +292,7 @@ class ResponseIngress {
 }
 
 // packages/pg-runtime/src/native-query.ts
-async function originalQuery(client, text, values) {
+async function originalQuery(client, text, values, journal) {
   const connection = client.connection;
   const stream = connection?.stream;
   if (!stream)
@@ -254,6 +300,8 @@ async function originalQuery(client, text, values) {
   const handlers = stream.listeners("data");
   if (handlers.length !== 1)
     throw Error("Unsupported original parser composition");
+  const retained = journal?.begin(text, values ?? []);
+  let outcome = "uncertain";
   const originalParser = handlers[0];
   const limits = { maxFrameBytes: 1048576, maxFields: 2048, maxTotalBytes: 4194304, maxFrames: 1e4 };
   const ingress = new ResponseIngress(limits);
@@ -275,6 +323,7 @@ async function originalQuery(client, text, values) {
       ingress.feed(chunk, (frame) => {
         const decoded = decodeResponseFrame(frame, limits);
         frames.push(decoded);
+        retained?.frame(frame);
         originalParser.call(stream, Buffer.from(frame));
         if (decoded.kind === "Z")
           resolveReady();
@@ -307,10 +356,12 @@ async function originalQuery(client, text, values) {
       const code = failure && typeof failure === "object" ? Object.getOwnPropertyDescriptor(failure, "code")?.value : undefined;
       if (errors.length !== 1 || errors[0].fields.find((field) => field.tag === "C")?.value !== code)
         throw Error("Original error correspondence unavailable");
+      outcome = "server_error";
       throw failure;
     }
     if (errors.length)
       throw Error("Original error lost by driver");
+    outcome = "response_complete";
     return Object.freeze(frames);
   } finally {
     clearTimeout(timeout);
@@ -318,6 +369,12 @@ async function originalQuery(client, text, values) {
     stream.off("close", ended);
     if (!stream.destroyed)
       stream.on("data", originalParser);
+    try {
+      retained?.finish(outcome);
+    } catch (error) {
+      stream.destroy();
+      throw error;
+    }
   }
 }
 function requireOriginalCompletion(frames, status, command) {
@@ -328,7 +385,7 @@ function requireOriginalCompletion(frames, status, command) {
 
 // packages/pg-runtime/src/index.ts
 import { Pool, DatabaseError } from "pg";
-function createPgConnectionSource(config) {
+function createPgConnectionSource(config, options = {}) {
   const pool = new Pool({ ...config, types: { getTypeParser(_oid, format) {
     if (format === "binary")
       throw Error("Binary native carriers unsupported");
@@ -349,7 +406,7 @@ function createPgConnectionSource(config) {
     client.on("error", onError);
     const control = async (sql, expected) => {
       alive();
-      const frames = await originalQuery(client, sql);
+      const frames = await originalQuery(client, sql, undefined, options.journal);
       try {
         requireOriginalCompletion(frames, sql === "COMMIT" || sql === "ROLLBACK" ? "I" : "T", expected);
       } catch (error) {
@@ -373,7 +430,7 @@ function createPgConnectionSource(config) {
         alive();
         if (!started)
           throw Error("Not begun");
-        const frames = await originalQuery(client, statement.sql, statement.parameters.map((p) => p.carrier === "null" ? null : p.text));
+        const frames = await originalQuery(client, statement.sql, statement.parameters.map((p) => p.carrier === "null" ? null : p.text), options.journal);
         try {
           requireOriginalCompletion(frames, "T");
         } catch (error) {
@@ -440,6 +497,7 @@ function createPgConnectionSource(config) {
 }
 export {
   ResponseIngress,
+  createFileQueryJournal,
   createPgConnectionSource,
   decodeResponseFrame
 };

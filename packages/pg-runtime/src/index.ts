@@ -1,8 +1,10 @@
 /** Host-only PostgreSQL driver. Portable Truss package imports no pg dependency. */
+export {createFileQueryJournal,type OriginalQueryJournal} from './journal';
+import type {OriginalQueryJournal} from './journal';
 import {originalQuery,requireOriginalCompletion} from './native-query';
 import {Pool, DatabaseError, type PoolClient, type PoolConfig} from 'pg';
 import type {NativeConnectionSource,NativeConnection,StatementResult} from '@documentdrivendx/truss-postgresql';
-export function createPgConnectionSource(config:PoolConfig): {
+export function createPgConnectionSource(config:PoolConfig,options:{journal?:OriginalQueryJournal}={}): {
   readonly source:NativeConnectionSource;
   readonly quarantinedCount:()=>number;
   readonly close:()=>Promise<void>;
@@ -17,7 +19,7 @@ export function createPgConnectionSource(config:PoolConfig): {
     const alive=()=>{if(ended||quarantine.has(client))throw Error('Original native connection unavailable');};
     const onError=()=>{quarantine.add(client);};client.on('error',onError);
     const control=async(sql:string,expected?:string)=>{
-      alive();const frames=await originalQuery(client,sql);
+      alive();const frames=await originalQuery(client,sql,undefined,options.journal);
       try{requireOriginalCompletion(frames,sql==='COMMIT'||sql==='ROLLBACK'?'I':'T',expected);}
       catch(error){quarantine.add(client);throw error;}
     };
@@ -29,7 +31,7 @@ export function createPgConnectionSource(config:PoolConfig): {
         await control('BEGIN ISOLATION LEVEL '+isolation+' '+mode,'BEGIN');started=true;
       },
       async execute(statement):Promise<StatementResult>{alive();if(!started)throw Error('Not begun');
-        const frames=await originalQuery(client,statement.sql,statement.parameters.map(p=>p.carrier==='null'?null:p.text));
+        const frames=await originalQuery(client,statement.sql,statement.parameters.map(p=>p.carrier==='null'?null:p.text),options.journal);
         try{requireOriginalCompletion(frames,'T');}catch(error){quarantine.add(client);throw error;}
         const descriptions=frames.filter(frame=>frame.kind==='T'),commands=frames.filter(frame=>frame.kind==='C');
         if(descriptions.length>1||commands.length!==1)throw Error('Unsupported original response inventory');
