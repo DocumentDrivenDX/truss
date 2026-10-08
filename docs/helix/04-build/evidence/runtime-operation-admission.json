@@ -72,6 +72,7 @@
     "refused keys preserve earlier key declaration",
     "internal batch allocates key numbers in original identity byte order",
     "original field availability retained",
+    "relationship staging exposes no caller lineage signature",
     "active but wrong original source endpoint refuses",
     "wrong endpoint leaves no partial relationship",
     "invented relationship definition refuses original source mismatch",
@@ -127,7 +128,7 @@
   "documentBatchSha256": "fe6754c5d4fbf054f17f5529387eb0f1ca4531e05c28c1ab31d6902251021000",
   "typeStageSha256": "a808deb3d2f9372a85cd4f4bb7c79d6a0adefd0207c0e28703c863e0bbab0d1b",
   "propertyStageSha256": "16a0e32fbc3b0265968c094d8c9255a4631ebcc82f0c998b72d9bed494b1305d",
-  "relationshipStageSha256": "3dc1aed0c03a48758aa7a3bc1089a63f24d1e99c0409a20218505f8c96f32490",
+  "relationshipStageSha256": "74fd57e575579d53a0e2b5b32f6f286ad51073440dbd50d67dab711ec195678d",
   "keyBatchSha256": "e31a769cf820ca00035b3c4e96f75078d6696fca8eb1bd62c8c4dc136303ae18",
   "keyStageSha256": "2e0b6d625cb90a3ad50fb94833d00b0be1baca9fec154830e459714aa2a4463c",
   "qualification": "Actual xid/context/artifact bounds/single unfinished/rollback/private invocation and actual canonical generation dispatch component only. Canonical fixture carrier bytes, component namespace and reservation fixture are not admitted codec/layout/installation/historical reservation authority. Full-byte key stage and actual membership generation are component evidence only. Protected issuer registration, canonical observers, finalization, deferred complete-cohort checks, installer security and public runtime remain unfinished."

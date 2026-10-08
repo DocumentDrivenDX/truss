@@ -1,7 +1,7 @@
 -- Internal already-resolved authored relationship persistence, not public acceptance.
--- Original identity bytes and endpoint correspondence require the protected producer.
+-- Candidate lineage is derived from the archived original authored declaration.
 CREATE FUNCTION truss.runtime_stage_new_relationship(revision int,document_id text,module_id text,
-  relationship jsonb,source_ids int[],target_ids int[],identity_profile text,identity_bytes bytea)
+  relationship jsonb,source_ids int[],target_ids int[])
 RETURNS text LANGUAGE plpgsql VOLATILE SECURITY INVOKER
 SET search_path = pg_catalog, pg_temp
 AS $$
@@ -15,14 +15,14 @@ DECLARE
   original_document jsonb;
   original_endpoint jsonb;
   endpoint_ordinal int;
+  identity_profile constant text := 'truss-relationship-lineage-bytes/0.1.0';
+  identity_bytes bytea;
 BEGIN
   SELECT * INTO STRICT op FROM truss.row_home_operation o
     WHERE o.original_writer_xid=pg_current_xact_id_if_assigned() AND o.phase<>'application_finalized' FOR UPDATE;
   IF op.operation_kind<>'catalog-acceptance' OR op.phase<>'admitted' OR revision IS NULL
       OR document_id IS NULL OR octet_length(document_id) NOT BETWEEN 1 AND 4096
       OR module_id IS NULL OR octet_length(module_id) NOT BETWEEN 1 AND 4096
-      OR identity_profile IS NULL OR octet_length(identity_profile) NOT BETWEEN 1 AND 4096
-      OR identity_bytes IS NULL OR octet_length(identity_bytes) NOT BETWEEN 1 AND 65536
       OR relationship IS NULL OR jsonb_typeof(relationship)<>'object'
       OR octet_length(relationship::text)>1048576 THEN
     RAISE EXCEPTION 'original relationship admission required' USING ERRCODE='22023';
@@ -73,6 +73,7 @@ BEGIN
       WHERE m.value->>'id'=module_id AND r.value=relationship)<>1 THEN
     RAISE EXCEPTION 'relationship does not match original declaring module source' USING ERRCODE='55000';
   END IF;
+  identity_bytes:=truss.runtime_catalog_lineage(revision,'authored',document_id,module_id,relationship->>'id');
   -- This JSON-source profile resolves UMF module/element references inside their
   -- original document. Cross-document resolution requires an explicit later profile.
   FOR endpoint_ordinal IN 1..cardinality(source_ids) LOOP
@@ -92,7 +93,7 @@ BEGIN
     IF NOT FOUND THEN RAISE EXCEPTION 'original target endpoint correspondence' USING ERRCODE='55000'; END IF;
   END LOOP;
   IF EXISTS(SELECT 1 FROM truss.rel_def r WHERE r.document_id=runtime_stage_new_relationship.document_id AND r.module=module_id AND r.rel_id=relationship->>'id')
-      OR EXISTS(SELECT 1 FROM truss.relationship_lineage l WHERE l.identity_profile=runtime_stage_new_relationship.identity_profile AND l.original_identity_bytes=identity_bytes) THEN
+      OR EXISTS(SELECT 1 FROM truss.relationship_lineage l WHERE l.identity_profile='truss-relationship-lineage-bytes/0.1.0' AND l.original_identity_bytes=identity_bytes) THEN
     RAISE EXCEPTION 'existing relationship requires original matching' USING ERRCODE='55000';
   END IF;
   FOREACH endpoint IN ARRAY source_ids || target_ids LOOP
@@ -126,4 +127,4 @@ BEGIN
   RETURN assigned::text;
 END;
 $$;
-REVOKE ALL ON FUNCTION truss.runtime_stage_new_relationship(int,text,text,jsonb,int[],int[],text,bytea) FROM PUBLIC;
+REVOKE ALL ON FUNCTION truss.runtime_stage_new_relationship(int,text,text,jsonb,int[],int[]) FROM PUBLIC;
