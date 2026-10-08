@@ -62,3 +62,6 @@ The architecture selects SQL/PLpgSQL for reference PostgreSQL observations and p
 
 
 The seven required routines now have selected optimizer/null/disclosure attributes and SECURITY DEFINER responsibility ownership with private invocation and trusted resolution. Their actual native roles, rights and bodies remain unqualified. The [current allocation receipt](evidence/design-audit/coverage-current-design.json) pins these revised test plans and the separately authored scope expectation; its reproducible check refuses stale receipts. It proves structural allocation only and cannot close the remaining semantic/profile gates.
+
+
+First complete reference installation uses the 0.11 review source as its foundation, then composes required bodies, original trigger/constraint identities, complete security/dependency inventory and initialization/conversion into a separately versioned full bundle. Historical fragments cannot substitute for that bundle. The integration milestone now applies settled lexical/receipt/report choices and makes packed assembly delivery independent of any unqualified Node adapter; actual Bun/Node/native support remains separately evidenced.
