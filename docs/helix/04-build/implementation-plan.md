@@ -62,6 +62,8 @@ This is the current next-work sequence. Later chronological notes preserve their
 
 CH-02/04 definition production follows the [acyclic composition order](../02-design/contracts/reference-definition-composition-order.proposal.md): original scalar-shape leaf, presence, scalar codec, then composite row value. Presence cannot reference the composite that embeds it. Full original source/physical/authority/resource and compiler admission still occurs atomically after construction.
 
+CH-02/03 policy activation follows the [public/private policy composition](../02-design/contracts/reference-policy-composition.proposal.md) and STP-045 PC-01–05, retaining complete policy applicability and original public surfaces. A filtered private integrity scope prevents readiness rather than becoming absence or a passing count.
+
 ### Current concrete component handoffs
 
 These close specific interface/procedure choices inside the existing CH work; native identity, dependency and runtime evidence remain separate exit outputs.
