@@ -87,3 +87,40 @@ These routes cover sixteen existing selectors, not the entire future callable cl
 5. Installation compares its complete intended inventory against actual installed bodies, dependencies, roles, grants, policies, triggers and administrative/restore/replication paths before readiness. Missing, additional or changed access invalidates the affected capability. Unknown installation settlement retains original recovery custody.
 
 This selects the responsibility and routing composition while preserving unresolved physical names, exact body-specific rights and native evidence. It does not grant unrestricted administrator escape paths ordinary-writer qualification, infer absence from inaccessible rows, or assert database isolation/resource behavior from source text.
+
+
+## Public capability caller closure
+
+This matrix resolves caller classes and private dependency routes for the existing ReferenceAssembly capability declarations. It does not invent SQL routine names: exact signatures/bodies must be bound from the installer inventory before readiness. Every reached function, trigger, view, operator, cast and effective role path belongs to that inventory, including dependencies not named in the sixteen-selector worklist. Ordinary callers may invoke only the selected public facade; private producer invocation remains original operation/issuer custody, not permission inferred from a function name.
+
+| Original public capability surface | Original admission and caller boundary | Complete private dependency route |
+| --- | --- | --- |
+| directReads.lookup/page/catalogView | Supplied transaction; current qualified owner disclosure; exact selected read/profile/budget | Catalog/source selection, exact full-context key lookup where requested, private integrity observation, complete logical projection and publication recheck; no observer rows or guard disclosure |
+| directReads.traverse/resumeTraversal/nextTraversalPage/releaseTraversal | Original admitted traversal identity/generation, selected transaction where declared; release retains its separate lifecycle admission | Original stage service, retained frontier/exclusion/protection and authority, bounded decoder/publication; release cannot mutate graph or settle caller transaction |
+| catalog.acceptInTransaction/report | Supplied transaction; catalog exclusion, original acceptance producer and complete owner union; report has independent disclosure admission | UMF checks/transition, full native Validate/Transform, identity/key/relationship lineage, row/edge observers, immutable report before head, journal/feed complete publication; exact retry retains original report |
+| groups.applyInTransaction; mutations.applyInTransaction | Supplied transaction; original actor, complete owner union, operation/generation and capacity admission | Key arbitration, canonical graph/row-home writes, unavoidable OLD/NEW touch observation, final integrity/row sealing, journal capture/reservation/append, complete feed union and deferred checks; receipt paths only when replay is selected |
+| imports.applyInTransaction/runBatches | Adopted transaction for apply; explicitly owned whole batches for run; exact import origin and group semantics | Same mutation/group producer chain plus bounded source decoder and original batch result/settlement; no alternate bulk-DML path that omits triggers, reports or feed membership |
+| history.pageJournal/reconstruct/historicalSource | Supplied transaction; complete retained owner/source authority, selected reconstruction/retention profile | Original complete journal groups, historical source/definition/value decoder and admitted archive provider when selected; current rows never repair missing history |
+| feed.discoverNext/observeFreshness/readFragment | Supplied transaction; original registered consumer/generation and complete owner/configuration/prerequisite scope | Complete committed transaction/member/prerequisite inventory, current authority/fencing and bounded fragment decoder; filtered visible subset cannot establish complete feed |
+| feed.acknowledgeInTransaction | Supplied transaction; original consumer generation and admitted applied-boundary/proof verification | Exact descriptor/application evidence, verifier registration, atomic fenced checkpoint/protection effects and deferred union checks; downstream receipt alone cannot advance source ACK |
+| compiledExecution.executeInTransaction | Supplied original transaction; engine-issued artifact provenance, admitted binding/profile/parameter/decoder tuple | Accepted-catalog producer, same-context native profile/authority/integrity obligations, original SQL/Bind and buffered publication recheck; no arbitrary SQL entry or logical-to-physical fallback |
+
+Assembly construction, capability selection and registration remain inert. observeReadiness is explicit read-only observation; it neither grants rights nor installs objects. dispose closes admission and releases only owned resources, preserving caller transaction/pool ownership and quarantining unresolved native work. These host surfaces require issuer-wide executor checks even when they have no SQL routine of their own.
+
+Administrative tooling is a separate admitted caller class: bootstrap/conversion, policy transitions, physical jobs, key migration, feed registration/seed/generation transitions, receipt protection/expiry and retention/recovery. Bind each exact declared tooling method to its own original profile/authority/cohort and transitive body closure; do not grant these rights through graph mutation or read capability selection. Conformance and test fixtures are not administrative bypasses.
+
+Initial compiled logical reads advertise no standalone SQL view. The protected profile exposes no implicit raw SELECT or canonical DML to ordinary callers. Any separately selected direct-DML or SQL-client read profile retains CONTRACT-005 obligations and requires an explicit original surface inventory; this candidate cannot silently revoke or replace it. Thus no table/view is licensed for public disclosure solely by the store responsibility table above.
+
+### Native closure acceptance
+
+PAC-01: invoke every declared public capability through its original admitted caller and independently inspect reached objects/roles; refuse any unregistered transitive callable or widened right before readiness. A positive public result alone is insufficient.
+
+PAC-02: attempt direct invocation of private trigger/finalizer/journal/cleanup helpers and direct canonical DML/sequence manipulation as ordinary actor, including inherited/SET-capable roles and function-owner paths. Refuse all prohibited routes without effects; independently inspect actual effective rights.
+
+PAC-03: inject an additional callable/operator/cast or advertised read surface into the installation while retaining the old inventory. Native correspondence/readiness must refuse rather than ignore the new entry.
+
+PAC-04: use a permitted facade to reach hidden staging, guard, receipt protection, observer count or another owner's source/report through errors/results. Require full original disclosure enforcement, including after authority changes before publication.
+
+PAC-05: exercise owned versus adopted transaction failure, savepoint rollback and outer commit for mutation/import/catalog/feed ACK; inspect complete surviving journal/feed cohort and earlier caller sentinel work. A shared private helper must not change settlement ownership.
+
+These schedules remain not_run. Exact body-specific rights and transitive native closure are implementation outputs. The matrix closes the public capability caller/dependency design; tooling's complete method/body inventory and native security qualification remain separate required work.
