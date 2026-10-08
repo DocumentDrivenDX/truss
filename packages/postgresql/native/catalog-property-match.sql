@@ -27,9 +27,14 @@ BEGIN
  SELECT count(*) INTO source_count FROM truss.schema_doc d
   CROSS JOIN LATERAL jsonb_array_elements(d.document::jsonb->'modules') m
   CROSS JOIN LATERAL jsonb_array_elements(m.value->'elements') f
+  CROSS JOIN LATERAL jsonb_array_elements(d.document::jsonb->'modules') om
+  CROSS JOIN LATERAL jsonb_array_elements(om.value->'elements') r
+  CROSS JOIN LATERAL jsonb_array_elements(r.value->'members') member
   WHERE d.rev=retained.definition_rev AND d.ord=retained.definition_doc_ord
    AND d.doc_id=retained.definition_document_id AND d.doc_id=owner.document_id
-   AND m.value->>'id'=retained.declaration_module AND f.value->>'id'=retained.element AND f.value->>'kind'='field';
+   AND m.value->>'id'=retained.declaration_module AND f.value->>'id'=retained.element AND f.value->>'kind'='field'
+   AND om.value->>'id'=owner.module AND r.value->>'id'=owner.element AND r.value->>'kind'='record'
+   AND member.value->>'module'=retained.declaration_module AND member.value->>'element'=retained.element;
  IF source_count<>1 THEN RAISE EXCEPTION 'retained original Field source correspondence required' USING ERRCODE='55000'; END IF;
  RETURN QUERY SELECT CASE WHEN retained.retired_rev IS NULL THEN 'active' ELSE 'retired' END,
   retained.prop_id::text,retained.since_rev::text,retained.retired_rev::text;
