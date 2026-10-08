@@ -6,7 +6,8 @@
     "simultaneousOwnedLeases": 64,
     "retainedSettlementRecords": 128,
     "oneSettlementRecordOwnedBytes": 65536,
-    "aggregateSettlementOwnedBytes": 8388608
+    "aggregateSettlementOwnedBytes": 8388608,
+    "acquisitionWaitMilliseconds": 30000
   },
   "scope": "One original executor/issuer arbitration domain shared across assemblies; not a database connection or arbitrary driver/native memory guarantee",
   "rules": {
@@ -14,7 +15,9 @@
     "records": "Count original record bytes and all retained copies; no digest-only replacement, truncation or native error detail projection can establish complete recovery custody.",
     "release": "Confirmed clean pool return or confirmed physical termination releases physical lease occupancy only. Retained unknown outcome continues occupying settlement capacity until qualified original resolution and its retention obligations are discharged.",
     "reconstruction": "New facade/assembly does not reset original executor limits or transfer unknown custody to another executor.",
-    "saturation": "Refuse new owned work before pool acquisition; no eviction, guessed expiry, callback retry or recycle of quarantined clients."
+    "saturation": "Refuse new owned work before pool acquisition; no eviction, guessed expiry, callback retry or recycle of quarantined clients.",
+    "acquisitionDeadline": "Minimum of reference 30000ms, original caller deadline and host/pool deadline. Public wait expiry closes the original admission but does not release an unresolved pool acquisition reservation or start another acquisition.",
+    "lateAcquisition": "Retain original attempt recognition until actual pool completion. A late client after cancellation/disposal/deadline is never given BEGIN/callback; original custody performs qualified clean release or quarantine/termination. No phantom pool return before a client exists."
   },
   "qualification": "Pin actual adapter/pool/issuer/account/build producers and independent exact/one-over mixed active/quarantined/terminated-unknown schedules; no native qualification supplied."
 }
