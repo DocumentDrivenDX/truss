@@ -17,6 +17,18 @@ ddx:
 
 # STP-037: Module isolation
 
+## Prepared-plan authority changes (planned)
+
+RP-01–03 qualify the [local deployment planning target](../../02-design/contracts/reference-local-deployment.proposal.md) in `tests/security/prepared-authority.test.ts`, citing `@covers US-037-AC1`; all remain not_run. Pin actual server/build, role-policy definitions, prepared SQL/compiled artifact bytes, physical session/cycle and original authority observations. PostgreSQL 17.11's role-dependent cached-plan correction does not replace Truss's protected current-authority admission. Earlier 17.9 owner compiler evidence cannot pass these cases.
+
+| Case | Independent native schedule and required observation |
+| --- | --- |
+| RP-01 | Prepare and execute an authorized module read on the original physical session. Independently revoke the relevant membership/access and confirm the administrative commit. Re-execute the same original prepared statement with unchanged bytes and role context under the selected qualified fresh observation procedure. Neither a cached plan nor cached host capability may disclose the now-hidden objects, keys, source/history or private diagnostics. Require actual current policy/authority evidence and native result descriptors, not a new query that evades the cache test. |
+| RP-02 | After complete authorized native result staging but before public disclosure, barrier an independently committed authority change. The protected publication recheck must withhold the complete result, including supplemental row-home/archived facts. Repeat on the supported held-snapshot profile: an old snapshot cannot establish current authority, and the toolkit cannot change caller isolation to make the case pass. Missing qualified observation makes this profile unavailable. |
+| RP-03 | Under explicitly admitted session/role setup, use the same physical session and prepared read across two acting roles with different module permissions. Observe the actual original acting role before definer execution and independently verify each complete visibility set. Former-role cached results/plans/authority artifacts cannot grant the later role access. Ended/foreign transaction handles and unsupported role-baseline changes refuse through the existing executor rules rather than silently reusing a prepared result. |
+
+Configure generic/custom plan variants only through the test profile's explicit setup, retain their exact settings and restore/contain original session state under the existing lease procedure. Record actual protected refusal, native completion and original transaction settlement separately. A permission error from an unrelated principal or an unavailable setup cannot satisfy a demonstrated role-change schedule. These supplement the complete native policy/callable/bypass matrix, preserving cross-module endpoint requirements and independent expected visibility.
+
 ## Story Reference and Scope
 
 US-037, TD-037, SD-008, TP-001 and CONTRACT-005/007. Tests are planned. Direct native attacks and complete visibility sets qualify a concrete policy profile.
