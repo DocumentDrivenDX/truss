@@ -1103,7 +1103,7 @@
     "02-design/technical-designs/TD-042-read-how-far-behind-a-downstream-copy-is.md": "2b36eb214a7741a71f0d23a7b612e4c147e4f95d72a7bc40784c5ef4c80ab36e",
     "03-test/test-plans/STP-042-read-how-far-behind-a-downstream-copy-is.md": "e1d0b529dd8db841d7e17633540c444c6e631bb93c654d24ba29fc95df8927ce",
     "02-design/technical-designs/TD-043-make-a-group-safe-to-repeat.md": "06fdb6b5a62098e464965112ed76561479faedd4e07d88e85e727ef66d713d93",
-    "03-test/test-plans/STP-043-make-a-group-safe-to-repeat.md": "40fac45e99d9ef1c7e30836e471f3e58b92d417bdf7afa64adac48d8e8be5799",
+    "03-test/test-plans/STP-043-make-a-group-safe-to-repeat.md": "06b27b3f54e6b17d240c9bcd72aee68752e99d361b5c72daf8f5672329c651c3",
     "02-design/technical-designs/TD-044-run-a-change-in-a-transaction-and-roll-it-back.md": "81d6a4421e2c824f1161a4912afbd758e6824031f37f0469ef4f63f713714f8a",
     "03-test/test-plans/STP-044-run-a-change-in-a-transaction-and-roll-it-back.md": "1d870c89c77f1dff7f1819616610a4e39eec220ed421e2692225bbe5dd4dd520",
     "02-design/technical-designs/TD-045-bootstrap-the-internal-layout-from-umf.md": "ca24959bde1ba9c23f15f856f2a61c882ac37d8377d4b73905ce5a4f0f859869",
