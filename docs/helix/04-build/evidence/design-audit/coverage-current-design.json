@@ -1053,7 +1053,7 @@
     "02-design/technical-designs/TD-017-read-the-journal-incrementally-without-missing-a-change.md": "334989f96e80c4d349109a9dd871fa35b7d0c9d765e7bf887c7f1abb13fbe40a",
     "03-test/test-plans/STP-017-read-the-journal-incrementally-without-missing-a-change.md": "5038aa0af2533d1a23ee093b950d0d3bd72fa9517c44c7546e513faa1420f71d",
     "02-design/technical-designs/TD-018-reconstruct-a-record-as-of-a-version.md": "4d9d827fe89d9e2364e4a90c100abd83d11b822c2eca003138630dc6ed997ee3",
-    "03-test/test-plans/STP-018-reconstruct-a-record-as-of-a-version.md": "5a38fd91e694ca89c0f498dd3553b8a171ded878186a3b2a6a789c7261eb5cfe",
+    "03-test/test-plans/STP-018-reconstruct-a-record-as-of-a-version.md": "7233a1ac81c2ff6d64138ec90650385c999ca5ec8b05c7dc36439acf00352721",
     "02-design/technical-designs/TD-019-trim-the-journal-by-dropping-partitions.md": "92476ac50f246f0e5839aa57c5cfc7162a2930f9714c22db93a361f51454e00d",
     "03-test/test-plans/STP-019-trim-the-journal-by-dropping-partitions.md": "010c96c460f9a536abd2f053cfdf8144d4ccd679b816c73a9e97b1aa0c84b872",
     "02-design/technical-designs/TD-020-read-an-object-by-identifier-or-key.md": "4ec42330c6a243f93435bf31b5de05849ac495dd723ad767a3bc9676809d7908",
