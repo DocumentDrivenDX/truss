@@ -22,26 +22,79 @@ try {
   catch(error){if((error as any).errno!=='23514')throw error;forgedDigestRefused=true}
  });
  if(!forgedDigestRefused)throw Error('Forged UTF-8 identity digest admitted');
- const probe=await createQueryEngine(compiler,input);const plan=await probe.compile('SELECT COUNT(*) AS total FROM Customer c');
- let contexts=0;const handlers=Object.fromEntries(plan.artifact.obligations.map(obligation=>[obligation.id,{
-  accepts:(incoming:any)=>JSON.stringify(incoming)===JSON.stringify(obligation),async check(){
-   if(obligation.id==='truss.candidate.scalarIntegrity'&&JSON.stringify(obligation.parameters)!==JSON.stringify({checks:[],context:'same snapshot before casts/user filters',domainQualification:'separate exact facets/codec obligation'}))throw Error('Unsupported component integrity');
+ const probe=await createQueryEngine(compiler,input);
+ const cases=[
+  {sql:'SELECT COUNT(*) AS total FROM Customer c',expected:[[{integerToken:'2'}]]},
+  {sql:'SELECT c.name,SUM(o.total) AS total FROM Customer c JOIN Orders o ON o.customer_id=c.id GROUP BY c.name',expected:[['Ada',{decimalToken:'25.00'}]]},
+  {sql:'SELECT SUM(o.total) AS total FROM Orders o',emptyOrders:true,expected:[[null]]},
+  {sql:'SELECT c.name,SUM(o.total) AS total FROM Customer c JOIN Orders o ON o.customer_id=c.id GROUP BY c.name',corruptDecimal:true,expected:[],refuse:true}
+ ];
+ let contexts=0,integrityChecks=0;const observations=[];const nativeProfiles:any[]=[];
+ for(const scenario of cases){
+  const original=await probe.compile(scenario.sql);let dataCommands=0;
+  const handlers=Object.fromEntries(original.artifact.obligations.map(obligation=>[obligation.id,{
+   accepts:(incoming:any)=>JSON.stringify(incoming)===JSON.stringify(obligation),async check(scope:any,_o:any,artifact:any){
+    if(obligation.id==='truss.candidate.scalarIntegrity'){
+     const checks=(obligation.parameters as any).checks;
+     if(!Array.isArray(checks))throw Error('Unsupported component integrity');
+     for(const check of checks){
+      if(Object.keys(check).sort().join(',')!=='requiredViolations,sql'||check.requiredViolations!=='0'||typeof check.sql!=='string')throw Error('Unsupported integrity meaning');
+      const rows=await scope.query(check.sql,artifact.parameters.map((p:any)=>p.value));
+      if(JSON.stringify(rows)!==JSON.stringify([['0']]))throw Error('Native integrity violation');integrityChecks++;
+     }
+    }
+   }
+  }]));
+  // Entire private relation is fixture-owned. This is not production authorization evidence.
+  const host:Host={handlers,async withReadContext(body){return sql.begin(async tx=>{
+   await tx.unsafe('SET TRANSACTION ISOLATION LEVEL REPEATABLE READ');
+   await tx.unsafe('CREATE TEMP TABLE object (LIKE truss.object INCLUDING ALL) ON COMMIT DROP');
+   await tx.unsafe(`INSERT INTO object (id,type_id,props,rev) VALUES
+     (100,-1,'{"0":9007199254740993,"1":"Ada","2":true,"4":[]}'::jsonb,1),
+     (101,-1,'{"0":9007199254740994,"1":"Bea","2":true,"4":[]}'::jsonb,1),
+     (200,-2,'{"6":1,"7":9007199254740993,"8":12.50}'::jsonb,1),
+     (201,-2,'{"6":2,"7":9007199254740993,"8":12.50}'::jsonb,1)`);
+   if(scenario.emptyOrders)await tx.unsafe('DELETE FROM object WHERE type_id=-2');
+   if(scenario.corruptDecimal)await tx.unsafe(`UPDATE object SET props=jsonb_set(props,'{8}','\"invalid-decimal\"'::jsonb) WHERE id=200`);
+   const observe=()=>tx.unsafe(`SELECT current_setting('server_version') AS version,current_setting('server_encoding') AS encoding,(SELECT datcollate FROM pg_catalog.pg_database WHERE datname=current_database()) AS collate,(SELECT datctype FROM pg_catalog.pg_database WHERE datname=current_database()) AS ctype,current_setting('transaction_isolation') AS isolation,current_setting('standard_conforming_strings') AS strings,current_user::text AS actor,txid_current_snapshot()::text AS snapshot`);
+   const before=await observe(),profile=before[0];
+   if(profile.version.split(' ')[0]!=='17.9'||profile.encoding!=='UTF8'||profile.collate!=='C'||profile.ctype!=='C'||profile.isolation!=='repeatable read'||profile.strings!=='on')throw Error('Native profile mismatch');
+   nativeProfiles.push({...profile});const baseline=JSON.stringify(profile);let statementOrdinal=0;
+   return body({async verifyContext(){contexts++;const after=await observe();if(JSON.stringify(after[0])!==baseline)throw Error('Native context changed')},
+    async query(text,values){
+     if(text===original.artifact.sql)dataCommands++;
+     // Original compiler SQL is unchanged. Explicit text parameter types also cover sparse check vectors.
+     if(!values.length)return tx.unsafe(text).values() as any;
+     const name='truss_component_'+(++statementOrdinal);
+     if(values.some(v=>v.includes('\0')))throw Error('PostgreSQL text cannot carry NUL');
+     await tx.unsafe('PREPARE '+name+' ('+values.map(()=> 'text').join(',')+') AS '+text).simple();
+     try{return await tx.unsafe('EXECUTE '+name+' ('+values.map(v=>"'"+v.replaceAll("'","''")+"'").join(',')+')').values() as any}
+     finally{await tx.unsafe('DEALLOCATE '+name)}
+    }});
+  })},async decode(artifact,rows){return rows.map(row=>row.map((value,index)=>{
+   const column=artifact.columns[index] as any,representation=column.representation;
+   if(representation.kind!=='scalar'||representation.carrier!=='text')throw Error('Unsupported component decoder');
+   if(value===null){if(!column.nullable)throw Error('Unexpected native null');return null}
+   if(typeof value!=='string')throw Error('Nonexact scalar transport');
+   switch(representation.decoder){
+    case 'text':return value;
+    case 'exact-integer':if(!/^-?\d+$/.test(value))throw Error('Nonexact integer');return {integerToken:value};
+    case 'exact-decimal':if(!/^-?\d+(?:\.\d+)?$/.test(value))throw Error('Nonexact decimal');return {decimalToken:value};
+    default:throw Error('Unsupported component decoder');
+   }
+  }))}};
+  const engine=await createQueryEngine(compiler,input,host);const admitted=await engine.compile(scenario.sql);
+  if(scenario.refuse){
+   let refused=false;try{await engine.execute(admitted)}catch(error){if((error as Error).message!=='Native integrity violation')throw error;refused=true}
+   if(!refused||dataCommands!==0)throw Error('Corrupt native data reached user SQL/publication');
+   observations.push({query:scenario.sql,refused:'native integrity',dataCommands,originalResponse:admitted.originalResponse});continue;
   }
- }]));
- // Trusted fixture host controls the entire private temp relation. No production authorization claim.
- const host:Host={handlers,async withReadContext(body){return sql.begin(async tx=>{
-  await tx.unsafe('SET TRANSACTION ISOLATION LEVEL REPEATABLE READ');
-  await tx.unsafe('CREATE TEMP TABLE object (LIKE truss.object INCLUDING ALL)');
-  await tx.unsafe(`INSERT INTO object (id,type_id,props,rev) VALUES (100,-1,'{}'::jsonb,1),(101,-1,'{}'::jsonb,1)`);
-  const before=await tx.unsafe(`SELECT current_setting('server_version') AS version,current_setting('server_encoding') AS encoding,(SELECT datcollate FROM pg_catalog.pg_database WHERE datname=current_database()) AS collate,(SELECT datctype FROM pg_catalog.pg_database WHERE datname=current_database()) AS ctype,current_setting('transaction_isolation') AS isolation,current_setting('standard_conforming_strings') AS strings,current_user::text AS actor,txid_current_snapshot()::text AS snapshot`);
-  const profile=before[0];if(!profile.version.startsWith('17.9')||profile.encoding!=='UTF8'||profile.collate!=='C'||profile.ctype!=='C'||profile.isolation!=='repeatable read'||profile.strings!=='on')throw Error('Native profile mismatch');
-  const baseline=JSON.stringify(profile);
-  return body({async verifyContext(){contexts++;const after=await tx.unsafe(`SELECT current_setting('server_version') AS version,current_setting('server_encoding') AS encoding,(SELECT datcollate FROM pg_catalog.pg_database WHERE datname=current_database()) AS collate,(SELECT datctype FROM pg_catalog.pg_database WHERE datname=current_database()) AS ctype,current_setting('transaction_isolation') AS isolation,current_setting('standard_conforming_strings') AS strings,current_user::text AS actor,txid_current_snapshot()::text AS snapshot`);if(JSON.stringify(after[0])!==baseline)throw Error('Native context changed')},
-   async query(text,values){return tx.unsafe(text,[...values]).values() as any}});
- })},async decode(artifact,rows){if(artifact.columns.length!==1||(artifact.columns[0] as any).representation.decoder!=='exact-integer')throw Error('Unsupported component decoder');return rows.map(row=>{if(typeof row[0]!=='string'||!/^\d+$/.test(row[0]))throw Error('Nonexact COUNT');return {integerToken:row[0]}})}};
- const engine=await createQueryEngine(compiler,input,host);const admitted=await engine.compile('SELECT COUNT(*) AS total FROM Customer c');const result=await engine.execute(admitted);
- if(JSON.stringify(result)!==JSON.stringify([{integerToken:'2'}])||contexts!==2)throw Error('Native result/context mismatch');
- const receipt={sourceRevision:'2744531735c2a771fbe7ed24a7f67e3afc851b25',ddlSha256:new Bun.CryptoHasher('sha256').update(ddl).digest('hex'),result,contextChecks:contexts,forgedDigestRefused,
-  qualification:'Component COUNT execution against temp object LIKE actual owner 0.13 repair definition in isolated PostgreSQL17.9. Fixture bindings/IDs only; no accepted catalog, protected mutations/feed, production authorization, complete transport/resource or installed runtime qualification.'};
- await Bun.write('docs/helix/04-build/evidence/weft-integration-native-component.json',JSON.stringify(receipt,null,2)+'\n');console.log(JSON.stringify(receipt));
+  const result=await engine.execute(admitted);
+  if(JSON.stringify(result)!==JSON.stringify(scenario.expected))throw Error('Independent native expected result mismatch: '+JSON.stringify(result));
+  observations.push({query:scenario.sql,result,originalResponse:admitted.originalResponse});
+ }
+ if(contexts!==7||integrityChecks<2)throw Error('Incomplete native checks');
+ const receipt={sourceRevision:'2744531735c2a771fbe7ed24a7f67e3afc851b25',ddlSha256:new Bun.CryptoHasher('sha256').update(ddl).digest('hex'),observations,nativeProfiles,contextChecks:contexts,integrityChecks,forgedDigestRefused,parameterTransport:'native PREPARE with explicit text types; EXECUTE exact escaped text under verified standard_conforming_strings; not extended-protocol Bind qualification',
+  qualification:'Component COUNT, duplicate-preserving join SUM and empty SUM execution against temp object LIKE actual owner 0.13 repair definition in isolated PostgreSQL17.9. Fixture bindings/IDs only; no accepted catalog, protected mutations/feed, production authorization, complete transport/resource or installed runtime qualification.'};
+ await Bun.write('docs/helix/04-build/evidence/weft-integration-native-component.json',JSON.stringify(receipt,null,2)+'\n');console.log(JSON.stringify({cases:observations.length,contextChecks:contexts,integrityChecks,forgedDigestRefused}));
 }finally{await sql.close()}

@@ -63,3 +63,8 @@ test('owner binding serializer refuses fixture catalog and altered embedded arti
  binding.basis.catalogRevision='1';binding.basis.acceptedCatalog.bytesBase64='W10=';
  await expect(serializeStorageBinding(source)).rejects.toThrow('Original artifact hash mismatch');
 });
+
+test('unsupported aggregate filter is an explicit compiler refusal, never host rewrite',async()=>{
+ const engine=await createQueryEngine(compiler,input);
+ await expect(engine.compile('SELECT SUM(o.total) AS total FROM Orders o WHERE o.id < :cursor',{cursor:{family:'integer',value:'0'}})).rejects.toThrow('WFT-UNSUPPORTED');
+});
