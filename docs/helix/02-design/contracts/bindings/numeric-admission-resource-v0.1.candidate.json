@@ -1,0 +1,31 @@
+{
+  "identity": "truss-numeric-admission-resources",
+  "version": "0.1.0",
+  "status": "selected_reference_budget_requires_producer_qualification",
+  "scope": "Pure numeric admission owned work and dependency composition; no native memory/work guarantee or universal UMF domain restriction",
+  "limits": {
+    "originalUmfUtf8Bytes": 4194304,
+    "inputTokenAsciiBytes": 4096,
+    "selectedDecimalPrecision": 1000,
+    "selectedDecimalScale": 1000,
+    "intermediateIntegerBits": 65536,
+    "derivedTokenAsciiBytes": 4096,
+    "diagnosticArtifactBytes": 1048576,
+    "simultaneouslyRetainedOwnedBytes": 33554432,
+    "cumulativeChargedWorkUnits": 2000000
+  },
+  "workRules": {
+    "textVisit": "Charge each visited source/token/diagnostic byte on every pass; cached identity cannot waive performed work",
+    "integerArithmetic": "Before each bigint operation reserve the conservative selected producer bound from operand/result bit lengths; one operation is not automatically one work unit",
+    "dependencyCalls": "Admit and reserve actual pinned UMF/parser/hash/copy/encoder worst-case work and peak before invocation; absent qualified bound refuses the affected call",
+    "scaling": "Check precision/scale and predicted result bit/token size before pow10/multiplication or output allocation; no float-based bound approximation",
+    "peak": "Include original input, decoded source, copied UMF values, intermediate/result/token/diagnostic buffers while they coexist; serialized output length alone is insufficient"
+  },
+  "failure": "resource refusal; no candidate value, truncation, facet deletion, domain narrowing or native/host I/O",
+  "qualificationRequired": [
+    "Pinned implementation/dependency producer bounds and actual allocation accounting",
+    "Independent exact/one-over limits across simultaneous buffers and repeated passes",
+    "Public Bun and Chromium equivalence with original UMF diagnostics",
+    "Complete packaged resource definition and exact digest/profile admission"
+  ]
+}
