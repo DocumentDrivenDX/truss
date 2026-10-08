@@ -3,7 +3,7 @@
   "testPlan": "docs/helix/03-test/test-plans/STP-015-journal-every-change-atomically-with-its-origin.md",
   "testPlanSha256": "591b13724e9f49c0b20e3610605907b1cf7e3e5ea328e55571739eff04d05b7d",
   "plannedTestFile": "tests/journal/atomic.test.ts",
-  "profileSelection": "unresolved",
+  "profileSelection": "reference algorithm/storage/codec/resource/security selected; exact native producer/account/driver/installation tuple unqualified",
   "cases": [
     {
       "id": "JP-01",
@@ -87,6 +87,23 @@
   ],
   "phaseResourceProposal": {
     "path": "docs/helix/02-design/contracts/bindings/truss-journal-phase-resource-v0.2.proposal.json",
-    "sha256": "fa63dacc89561589574c3cdd3457272e1b17bbc5661cd2494db860b8203f94f1"
-  }
+    "sha256": "a5831813b443f0d970e2ea9904637cb420929ae4a969bb2ef264996e9378ff4e"
+  },
+  "referenceSelections": {
+    "allocation": "original journal_seq; protected one-time reservation; explicit seq append",
+    "staging": "row_home_journal_stage explicit-start branch under original row_home_operation",
+    "codec": "truss-journal-phase-json/0.2.0-proposal",
+    "resources": "truss-journal-phase-resource/0.2.0-proposal shared cumulative account",
+    "security": "private PL/pgSQL SECURITY DEFINER journal-phase owner; no sealing/canonical mutation/cleanup/reset authority"
+  },
+  "governingSelectionSources": [
+    {
+      "path": "docs/helix/02-design/contracts/CONTRACT-002-journal.md",
+      "sha256": "26fd43a5fc55eac65b2a2d8440bde6aee3fb52d18597c610855e0250d76228f4"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/CONTRACT-005-module-isolation.md",
+      "sha256": "d797fe61895671134f94d0c187b1d28bbdbe3368eeec421f8daa623d681ce477"
+    }
+  ]
 }
