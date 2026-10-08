@@ -4,6 +4,8 @@ For M00–M07, propose the existing row_home_state/row_home_node/row_home_scalar
 
 The [scalar codec proposal](reference-scalar-codec.proposal.md) supplies exact string admission and the fixture-specific decimal token grammar. Original registered codec bytes, native bindings and qualification remain separate required outputs.
 
+The [reference decoder procedure](reference-row-decoder.proposal.md) defines complete owner collection, state/tree/payload decisions and private whole-Record staging before publication. It consumes these same homes and existing public carriers; Weft retains compiled decoder ownership.
+
 Resolve every property through its original document/module/Record/Field definition and allocated catalog identity. No storage IDs are assigned here. A state binds actual instance owner plus original property-owner type/property identity, root_node_id and complete definition/home/value/source bytes. The root binds the same state/node identities, original definition/source bytes and root slot/parent semantics. Full native/source/authority correspondence precedes decoding; matching a field name or value is insufficient.
 
 | Original field / meaning | Required proposed native projection |
