@@ -1,6 +1,6 @@
 {
   "interfaceVersion": "truss-journal-phase-resource/0.2.0-proposal",
-  "status": "unadopted; native phase parser/encoder/account/staging unqualified",
+  "status": "selected_reference_policy; native phase parser/encoder/account/staging unqualified",
   "scope": "One private journal phase parse/encode occurrence and its actual staging/copies within the original operation/group/transaction/retention account; never an independent budget",
   "derivedConstraints": [
     {
