@@ -2525,3 +2525,7 @@ The [source-to-reference handoff](remaining-design-handoff-audit.md#consumer-dis
 ### Existing-core structural layout projection — 2026-10-08
 
 The [core layout review](../02-design/contracts/core-relational-layout-gap-review.proposal.md#valid-structural-projection-using-existing-umf--2026-10-08) now supplies a separately versioned validated 0.2 structural model. All historical columns and original native keys/FKs survive, with explicit core endpoint links for physical-only FK descriptors. Existing UMF validates zero errors and complete=false; no new portable equality or core capability is requested. Next refresh against current 0.15 source, extend core-driven diagram rendering to the explicit physical-reference branch and independently check all original associations before publishing. Complete native interpretation/DDL equivalence remains open.
+
+### Core structural ER rendering — 2026-10-08
+
+The valid historical 0.2 projection now has a rendered SVG/DOT pair, complete original 61-association endpoint/ordered-field comparison and source/output/renderer receipt. Both portable core relationships and four explicit physical-FK reference paths render, with unresolved native semantics visibly distinguished. Rendering and XML inventory checks pass; full-size raster inspection prompted compact disconnected-component packing. Current 0.15 model refresh and microsite integration remain required before a current on-disk layout diagram claim.
