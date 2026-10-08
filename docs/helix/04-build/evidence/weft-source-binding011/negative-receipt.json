@@ -1,5 +1,5 @@
 {
-  "scope": "seven deliberately corrupted source packet copies rejected by independent integrity/source validator; no compiler/native execution",
+  "scope": "eleven deliberately corrupted source packet copies rejected by independent integrity/source validator; no compiler/native execution",
   "cases": [
     {
       "case": "payload_corruption",
@@ -27,6 +27,22 @@
     },
     {
       "case": "wrong_table_pointer",
+      "rejected": true
+    },
+    {
+      "case": "wrong_value_family",
+      "rejected": true
+    },
+    {
+      "case": "wrong_value_root",
+      "rejected": true
+    },
+    {
+      "case": "wrong_presence_profile",
+      "rejected": true
+    },
+    {
+      "case": "wrong_codec_family",
       "rejected": true
     }
   ],

@@ -62,7 +62,7 @@ Reproduce with `python3 docs/helix/04-build/evidence/design-audit/check-layout-f
 
 ## Current 0.11 source binding packet
 
-The [matching source packet](../../04-build/evidence/weft-source-binding011/README.md) carries actual 0.11 SQL and all 442 declared columns. Six strict schemas, original UMF model validation, independent artifact/profile/source and exact SQL/table-pointer/unique-selector checks pass. Seven damaged-packet controls refuse. Source-only review011 selectors do not replace authored physical IDs or admit native correspondence. The 346965-byte envelope and 341497-byte decoded occurrence closure fit the inspected limits. This remains an unregistered one-string fixture; compiler/native execution and owner adoption are open. Earlier packets remain unchanged.
+The [matching source packet](../../04-build/evidence/weft-source-binding011/README.md) carries actual 0.11 SQL and all 442 declared columns. Six strict schemas, original UMF model validation, independent artifact/profile/source and exact SQL/table-pointer/unique-selector checks pass. Eleven damaged-packet controls refuse, including original value-root/family, presence-profile and codec-family correspondence. Source-only review011 selectors do not replace authored physical IDs or admit native correspondence. The 346965-byte envelope and 341497-byte decoded occurrence closure fit the inspected limits. This remains an unregistered one-string fixture; compiler/native execution and owner adoption are open. Earlier packets remain unchanged.
 
 ## Receipt storage composition 0.11
 

@@ -49,7 +49,18 @@ if decode(home['layoutInventory'])!=decode(b['basis']['layoutInventory']):raise 
 if home['ownerCatalogId']!=entity['typeId'] or home['propertyCatalogId']!=prop['propertyId'] or prop['ownerTypeId']!=entity['typeId']:raise ValueError('mixed typed owner')
 cols={c['physicalIdentity']:(t['name'],c['name']) for t in inv['tables'] for c in t['columns']}
 if cols.get(home['propsColumnPhysicalIdentity'])!=('object','props') or cols.get(home['discriminatorColumnPhysicalIdentity'])!=('object','type_id'):raise ValueError('wrong physical selector')
+value=json.loads(decode(prop['valueDefinition']))
+presence=json.loads(decode(prop['presenceDefinition']))
+if value['profile']!=prop['valueProfile'] or presence['profile']!=prop['presenceProfile'] or home['valueProfile']!=prop['valueProfile'] or home['presenceProfile']!=prop['presenceProfile']:raise ValueError('mixed value/presence profiles')
+if value['rootNodeId']!='label' or len(value['nodes'])!=1:raise ValueError('wrong fixture root')
+node=value['nodes'][0]
+if node['nodeId']!=value['rootNodeId'] or node['authoredIdentity']!=prop['logical']:raise ValueError('wrong original value node')
+for a in [value['acceptedDefinition'],presence['acceptedDefinition'],node['authoredDefinition']]:
+ if json.loads(decode(a))!=field:raise ValueError('mixed original field definitions')
+codec=json.loads(decode(node['codecDefinition']))
+if codec['profile']!=node['codecProfile'] or json.loads(decode(codec['authoredDefinition']))!=field:raise ValueError('mixed original codec custody')
+if node['shape']!={'kind':'scalar','family':field['scalarType'],'storageRepresentation':'json-string'} or codec['rule']!={'family':field['scalarType'],'storageRepresentation':'json-string','encoding':'preserve-unicode-scalars','decodedCarrierKind':field['scalarType']}:raise ValueError('fixture scalar/codec family mismatch')
 qualification=json.loads(decode(b['qualification'][0]))
 if qualification['nativeQualified'] or qualification['bindingAdopted'] or qualification['queryExecuted']:raise ValueError('unsupported support claim')
-receipt={'scope':'Exact original source/profile/artifact closure and complete declared column-map correspondence only; no compiler execution, native catalog or registry admission','bindingSha256':sha(binding_bytes),'bindingBytes':len(binding_bytes),'recursiveArtifactOccurrences':count,'decodedOccurrenceBytes':decoded_bytes,'declaredColumns':len(observed),'nativeQualified':False}
+receipt={'scope':'Exact original source/profile/artifact closure, original single-string root/field/presence/codec correspondence and complete declared column-map correspondence only; no compiler execution, native catalog or registry admission','bindingSha256':sha(binding_bytes),'bindingBytes':len(binding_bytes),'recursiveArtifactOccurrences':count,'decodedOccurrenceBytes':decoded_bytes,'declaredColumns':len(observed),'nativeQualified':False}
 (P/'integrity-receipt.json').write_text(json.dumps(receipt,indent=2)+'\n');print(json.dumps(receipt))

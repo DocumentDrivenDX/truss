@@ -1,5 +1,5 @@
 {
-  "scope": "Exact original source/profile/artifact closure and complete declared column-map correspondence only; no compiler execution, native catalog or registry admission",
+  "scope": "Exact original source/profile/artifact closure, original single-string root/field/presence/codec correspondence and complete declared column-map correspondence only; no compiler execution, native catalog or registry admission",
   "bindingSha256": "c96aac6bd34f1b1c2198f233db5a99059ae2b3f2b8811c03c756a31052f646c9",
   "bindingBytes": 346965,
   "recursiveArtifactOccurrences": 23,
