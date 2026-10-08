@@ -34,6 +34,10 @@ CONTRACT-005's qualified policy selects `grant_module_roles(document_id,module,w
 
 The administrative helper must resolve exact document/module and native role identities, reject missing/ambiguous mappings and apply only privileges admitted by the selected protected-writer profile. `writes` must not grant raw DML that bypasses canonical writer/finalizer/receipt/seed enforcement. Fixed schema usage and qualified callable privileges are distinct from document-specific row authority; policies require current complete owner union. Select exact routine identity, owner, search path, argument/result types, effective role paths and authorized invocation before including its body/grants in the bundle. Do not grant blanket access to archive/recovery evidence as a workaround for a missing reader.
 
+## Body and privilege review unit
+
+CH-02 routine work must include CONTRACT-005's eight-field native role/callable binding in the same review unit as the body. The existing responsibility matrix supplies the allowed behavior; actual managed role attributes, membership/SET paths, exact overload and transitive call graph establish its realization. CH-01 includes those identities and dependencies, and CH-03 independently inspects actual effective privileges before readiness. A body-only source artifact or later blanket application grant cannot close this output. The selected immutable report protection now applies directly rather than waiting for another report-storage decision.
+
 ## Reference routine language candidate
 
 The [managed source review](managed-extension-source-review.md) now records common documented PL/pgSQL availability and the current builtin SHA-256 dependency. Start CH-02 body authoring with fixed SQL observations and protected PL/pgSQL handlers/validators/producers under the selected controlled-work scope. No custom native module or pgcrypto digest dependency is implied by the current layout. This is a concrete recommended realization; exact body/codec/collector/security/driver evidence must still admit each boundary, and provider language availability cannot qualify correctness or arbitrary native resource bounds.

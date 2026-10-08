@@ -62,7 +62,24 @@ Native table/routine owners and administrative DDL roles are outside ordinary-wr
 
 Integrity completeness and public disclosure use different entrypoints/custody. The private finalizer may need complete hidden state to reject broken values, but it returns only the governing authorized outcome/diagnostic projection; it cannot disclose hidden node counts, value bytes, group identity or provenance. The public read path cannot reuse that privilege to turn a hidden state into absence. Actual caller capture remains the original data caller through nested helpers, with fresh current-policy admission and complete retained owner union for history/deletion/report disclosure.
 
-This candidate deliberately restricts canonical table writes to admitted protected procedures. A baseline deployment allowing direct ordinary table DML is a distinct profile and cannot acquire row-home database-enforcement support just by installing the new tables. Activation must reconcile complete old/new grants, triggers, owners, routines and participating producer paths under the governing layout/policy exclusion; failure preserves the original profile. Request-free operations remain request-free; internal touch/group custody does not create a replay request or adopt ADR-005. Tests must separately report database versus engine enforcement when native codec/producer closure is unavailable.
+This candidate deliberately restricts canonical table writes to admitted protected procedures. A baseline deployment allowing direct ordinary table DML is a distinct profile and cannot acquire row-home database-enforcement support just by installing the new tables. Activation must reconcile complete old/new grants, triggers, owners, routines and participating producer paths under the governing layout/policy exclusion; failure preserves the original profile. Request-free operations remain request-free; internal touch/group custody does not create a replay request; accepted ADR-005 applies only when request-present is selected. Tests must separately report database versus engine enforcement when native codec/producer closure is unavailable.
+
+### Concrete role and callable binding required for body authoring
+
+For the SQL/PL/pgSQL reference candidate, author each protected routine together with its exact ownership/privilege binding rather than attaching grants after the body. The installation manifest must bind the following original fields before CH-02 can claim that routine ready for composition:
+
+| Binding field | Required original evidence |
+| --- | --- |
+| Native owner role | Actual role identity and login/superuser/BYPASSRLS/CREATEROLE/replication attributes, ownership and complete inherited/SET/admin membership paths |
+| Callable identity | Schema-qualified name, ordered argument type identities, result type, language, exact body/hash and security mode; name-only EXECUTE targets cannot choose an overload |
+| Table/column/sequence rights | Exact readable/writable columns and allocator USAGE; exclude reset/ownership/DML paths outside the responsibility matrix |
+| Current caller | Original native actor capture before definer entry and preserved custody through nested private calls; routine owner is never substituted as the application actor |
+| Trusted resolution | Fixed qualified relation/routine/operator/type dependencies and secure search-path behavior, including pg_temp/public shadowing refusal |
+| Reachable private calls | Complete transitive callable graph with role transitions and separate integrity versus disclosure rights; internal helper access is not permission for public invocation |
+| Public entry | Exact authorized application procedure/read surface and current module/owner policy; PUBLIC/default grants and inherited broad rights are independently absent where excluded |
+| Administrative exception | Explicit deployment/DDL/retention/recovery authority, invalidation and original change-control path; never counted as ordinary writer enforcement |
+
+Nonlogin internal roles are the recommended realization where the managed target permits their creation and ownership; nonlogin alone does not prevent inheritance or SET ROLE escalation. Table ownership, RLS bypass and definer execution are separate native facts. If a managed target cannot realize the selected separation, refuse that profile or author an explicit alternative with complete disclosure/integrity evidence; do not grant application ownership to make installation succeed. This binding design does not select role names, provider accounts or live grants, and it cannot qualify bodies whose collector/codec/custody dependencies remain unresolved.
 
 ### Proposed document-qualified grant home
 
@@ -289,9 +306,9 @@ Do not fix an unsafe composition by transferring serialized lock metadata, openi
 Native test matrices must distinguish same-transaction retained admission, independent coordinator transaction, an exclusive waiter between them, and original cancellation/termination. Optional queue qualification and read-only coordinator qualification remain separate; passing either independently cannot qualify their composition.
 
 
-## Conditional separate acceptance-report protection
+## Selected separate acceptance-report protection
 
-CONTRACT-003's separate report-home option remains unadopted. If selected, its report_bytes is protected complete acceptance content, not an application-readable blob merely because the corresponding revision or one document is visible. The complete original accepted input, affected assertion/catalog/source owners and every reported transform/rebind event's retained declaring/root/endpoint owners define the required disclosure union under the selected report profile. Resolve that union from original admitted report/definition/source custody; current live catalog labels, surviving endpoints and caller-supplied owner arrays cannot replace it. Missing/ambiguous original ownership makes complete report interpretation/disclosure unavailable.
+CONTRACT-003's separate immutable report home is owner-selected. Its report_bytes is protected complete acceptance content, not an application-readable blob merely because the corresponding revision or one document is visible. The complete original accepted input, affected assertion/catalog/source owners and every reported transform/rebind event's retained declaring/root/endpoint owners define the required disclosure union under the selected report profile. Resolve that union from original admitted report/definition/source custody; current live catalog labels, surviving endpoints and caller-supplied owner arrays cannot replace it. Missing/ambiguous original ownership makes complete report interpretation/disclosure unavailable.
 
 | Principal / path | Proposed access boundary | Required independent evidence |
 | --- | --- | --- |
