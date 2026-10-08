@@ -2222,3 +2222,19 @@ UMF already owns exportPostgresqlSql plus authored Record/Field/Key/Relationship
 Before requesting new core primitives, exercise the existing projections against the complete 46-table/442-column/61-FK layout and record unsupported correspondence. Current Record/Field native classifiers explicitly exclude raw DDL; core projections have scoped subsets and require explicit native carrier/identity choices. Likely integration work is an UMF-owned whole-schema composition/native-core correspondence API and supported subset expansion, rather than inventing new Record/Field/Relationship kinds. New core meaning is requested only for a concrete irreducible gap. Preserve the current native layout until full source/core/native correspondence is reviewed; no lossy replacement or guessed multiplicity is admitted.
 
 Core-layout prototype now exists with 46 Records, 442 Fields, 59 Keys and 61 FK Relationships. It is explicitly blocked by nine native key-equality errors (eight xid8 components and one timestamp component) and five nullable-unique component errors; see the [concrete gap review](../02-design/contracts/core-relational-layout-gap-review.proposal.md). Resolve these through reusable UMF key/binding interpretation before replacement DDL or a fully understood ER claim. This is actual model/validator evidence, not a hypothetical request for new core primitives.
+
+## Ashlar-directed runtime implementation start — 2026-10-08
+
+The human Ashlar goal explicitly requests standing up Truss and real UMF/schema,
+mutation/feed/ACK integration. Work starts in an isolated `codex/ashlar-runtime`
+checkout; the Truss Impl planning checkout remains untouched. The first actual
+package is the governed inert construction/lifetime surface under ADR-001,
+CONTRACT-007 and package delivery. [Evidence](evidence/inert-assembly/README.md)
+records the strict ESM/declaration build, three focused tests and packed consumer.
+
+This is implementation movement, not native readiness. CONTRACT-008 IM01/PI01
+remain closed until the selected 0.12 complete body/security/codec/driver/resource
+bundle is supplied and qualified. No old-layout fallback, placeholder native
+guard, fixture catalog registration, native source mutation or Truss feed is
+installed by this package. Continue the selected required native composition
+and public schema/mutation/feed paths; the full end-to-end goal remains open.

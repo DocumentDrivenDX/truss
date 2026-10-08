@@ -1,6 +1,6 @@
 # Embeddable package delivery design
 
-Architecture and ADR-001 govern this proposal. Workspace paths are internal locations, not published package names. The repository currently has no root package.json or implementation workspace. This document specifies the B-014 build outputs rather than claiming packages exist.
+Architecture and ADR-001 govern this proposal. Workspace paths are internal locations, not published package names. An experimental root workspace and inert PostgreSQL assembly now exist; see [the scoped build evidence](../04-build/evidence/inert-assembly/README.md). Native adapters, core value/catalog implementation, tooling and full B-014 delivery remain unfinished. This document specifies their required outputs rather than claiming native packages or support exist.
 
 ## Build and export boundaries
 

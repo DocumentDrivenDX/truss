@@ -20,3 +20,10 @@ decisions are in [`docs/helix/`](docs/helix/README.md), starting with the
 ## License
 
 [Apache License 2.0](LICENSE).
+
+## Experimental runtime build
+
+An initial private [inert PostgreSQL assembly package](packages/postgresql/README.md)
+can be built and consumed as ESM with public declarations. It deliberately has
+no native capability or installed Truss runtime. See the scoped
+[build evidence](docs/helix/04-build/evidence/inert-assembly/README.md).

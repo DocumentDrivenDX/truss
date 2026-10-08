@@ -1,0 +1,15 @@
+{
+  "name": "truss-runtime-workspace",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "test": "bun test",
+    "build": "bun scripts/build.ts"
+  },
+  "devDependencies": {
+    "typescript": "7.0.2"
+  }
+}

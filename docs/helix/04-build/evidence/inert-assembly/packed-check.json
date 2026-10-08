@@ -1,0 +1,12 @@
+{
+  "interfaceVersion": "truss-packed-inert-check/0.1.0",
+  "loader": "bun/1.4.2",
+  "archiveSha256": "0a2045d96499e6cb3255683e488487597c5933072a59e090b64a702479f58e97",
+  "declarationFiles": 37,
+  "transactionBrandDeclarations": 1,
+  "cleanConsumerTypecheck": true,
+  "cleanConsumerRuntime": true,
+  "counterfeitBrandRefused": true,
+  "nativeCalls": 0,
+  "qualification": "Private experimental inert assembly only. No native installation, UMF interpretation, schema/data mutation/feed, Node/browser or release support."
+}
