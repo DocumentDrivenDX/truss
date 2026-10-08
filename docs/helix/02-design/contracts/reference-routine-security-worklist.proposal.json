@@ -1,0 +1,153 @@
+{
+  "scope": "Twelve selected handler/validator/phase design entries only; not complete installer callable closure",
+  "sourcePins": [
+    {
+      "path": "02-design/contracts/reference-routine-design-v0.1.proposal.json",
+      "sha256": "913eb5d177f579101b9c0fd5963f2bda349001f5a676d727a173a51c25850b84"
+    },
+    {
+      "path": "02-design/contracts/reference-journal-phase-design-v0.1.proposal.json",
+      "sha256": "29a94508c8884ba100e12cb66888ec6c4ef5729df23fb4d3f4edfd2401f7bb9a"
+    }
+  ],
+  "knownRoutineCount": 12,
+  "entries": [
+    {
+      "selector": "row_touch_observe",
+      "argumentTypes": [],
+      "resultType": "trigger",
+      "ownerResponsibility": "Touch observation owner",
+      "sourceManifest": "02-design/contracts/reference-routine-design-v0.1.proposal.json",
+      "nativeRoleBinding": null,
+      "effectivePrivilegeEvidence": null
+    },
+    {
+      "selector": "row_touch_commit_check",
+      "argumentTypes": [],
+      "resultType": "trigger",
+      "ownerResponsibility": "Commit-check owner",
+      "sourceManifest": "02-design/contracts/reference-routine-design-v0.1.proposal.json",
+      "nativeRoleBinding": null,
+      "effectivePrivilegeEvidence": null
+    },
+    {
+      "selector": "edge_limit_observe",
+      "argumentTypes": [],
+      "resultType": "trigger",
+      "ownerResponsibility": "Touch observation owner",
+      "sourceManifest": "02-design/contracts/reference-routine-design-v0.1.proposal.json",
+      "nativeRoleBinding": null,
+      "effectivePrivilegeEvidence": null
+    },
+    {
+      "selector": "edge_limit_catalog_observe",
+      "argumentTypes": [],
+      "resultType": "trigger",
+      "ownerResponsibility": "Touch observation owner",
+      "sourceManifest": "02-design/contracts/reference-routine-design-v0.1.proposal.json",
+      "nativeRoleBinding": null,
+      "effectivePrivilegeEvidence": null
+    },
+    {
+      "selector": "feed_current_union_check",
+      "argumentTypes": [],
+      "resultType": "trigger",
+      "ownerResponsibility": "Commit-check owner",
+      "sourceManifest": "02-design/contracts/reference-routine-design-v0.1.proposal.json",
+      "nativeRoleBinding": null,
+      "effectivePrivilegeEvidence": null
+    },
+    {
+      "selector": "feed_union_validate_current_scope",
+      "argumentTypes": [],
+      "resultType": "void",
+      "ownerResponsibility": "Integrity/finalization owner",
+      "sourceManifest": "02-design/contracts/reference-routine-design-v0.1.proposal.json",
+      "nativeRoleBinding": null,
+      "effectivePrivilegeEvidence": null
+    },
+    {
+      "selector": "edge_limit_verify_current_scope",
+      "argumentTypes": [],
+      "resultType": "void",
+      "ownerResponsibility": "Integrity/finalization owner",
+      "sourceManifest": "02-design/contracts/reference-routine-design-v0.1.proposal.json",
+      "nativeRoleBinding": null,
+      "effectivePrivilegeEvidence": null
+    },
+    {
+      "selector": "journal_capture_start",
+      "argumentTypes": [
+        "bytea"
+      ],
+      "resultType": "bytea",
+      "ownerResponsibility": "journal-phase-owner",
+      "sourceManifest": "02-design/contracts/reference-journal-phase-design-v0.1.proposal.json",
+      "nativeRoleBinding": null,
+      "effectivePrivilegeEvidence": null
+    },
+    {
+      "selector": "journal_observe_transition",
+      "argumentTypes": [
+        "bytea",
+        "bytea"
+      ],
+      "resultType": "bytea",
+      "ownerResponsibility": "journal-phase-owner",
+      "sourceManifest": "02-design/contracts/reference-journal-phase-design-v0.1.proposal.json",
+      "nativeRoleBinding": null,
+      "effectivePrivilegeEvidence": null
+    },
+    {
+      "selector": "journal_prepare_final",
+      "argumentTypes": [
+        "bytea"
+      ],
+      "resultType": "bytea",
+      "ownerResponsibility": "journal-phase-owner",
+      "sourceManifest": "02-design/contracts/reference-journal-phase-design-v0.1.proposal.json",
+      "nativeRoleBinding": null,
+      "effectivePrivilegeEvidence": null
+    },
+    {
+      "selector": "journal_reserve_positions",
+      "argumentTypes": [
+        "bytea"
+      ],
+      "resultType": "bytea",
+      "ownerResponsibility": "journal-phase-owner",
+      "sourceManifest": "02-design/contracts/reference-journal-phase-design-v0.1.proposal.json",
+      "nativeRoleBinding": null,
+      "effectivePrivilegeEvidence": null
+    },
+    {
+      "selector": "journal_append_group",
+      "argumentTypes": [
+        "bytea"
+      ],
+      "resultType": "bytea",
+      "ownerResponsibility": "journal-phase-owner",
+      "sourceManifest": "02-design/contracts/reference-journal-phase-design-v0.1.proposal.json",
+      "nativeRoleBinding": null,
+      "effectivePrivilegeEvidence": null
+    }
+  ],
+  "requiredBindingFields": [
+    "native owner role",
+    "callable identity",
+    "table/column/sequence rights",
+    "current caller",
+    "trusted resolution",
+    "reachable private calls",
+    "public entry",
+    "administrative exception"
+  ],
+  "remainingScope": [
+    "original operation admission/observation/seal/cleanup procedures",
+    "public read/mutation/import/catalog/report producers",
+    "retention/archive/recovery administration",
+    "all transitive native dependencies and effective role membership paths"
+  ],
+  "nativeQualified": false,
+  "installerReady": false
+}
