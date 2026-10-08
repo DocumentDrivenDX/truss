@@ -1,6 +1,6 @@
 import {createPgConnectionSource} from '@documentdrivendx/truss-pg-runtime';
-import {createEngineExecutor} from '@documentdrivendx/truss-postgresql';
-import {writeFile} from 'node:fs/promises';
+import {createEngineExecutor,decodeOperationRegistry} from '@documentdrivendx/truss-postgresql';
+import {writeFile,readFile} from 'node:fs/promises';
 const probe=Bun.spawnSync(['/usr/local/bin/docker','inspect','ashlar-e2e-truss-pg17']);
 if(probe.exitCode)throw Error('Existing sandbox unavailable');
 const container=JSON.parse(new TextDecoder().decode(probe.stdout))[0];
@@ -64,7 +64,24 @@ try{
  if(commitRejection.status!=='error'||commitRejection.error.sqlState!=='23503'||commitRejection.error.retryScope!=='none'||host.quarantinedCount()!==0)throw Error('Commit rejection not settled');
  const rejectionRollback=await executor.withTransaction({isolation:'read_committed',accessMode:'read_only'},async tx=>run(tx,"SELECT to_regclass('pg_temp.truss_pg_deferred_parent')::text AS parent,to_regclass('pg_temp.truss_pg_deferred_child')::text AS child"));
  if(rejectionRollback.status!=='ok'||rejectionRollback.value.value.rows[0].some(c=>c.state!=='null'))throw Error('Rejected commit effects survived');
- await writeFile(new URL('../docs/helix/04-build/evidence/inert-assembly/pg-executor.json',import.meta.url),JSON.stringify({driver:'pg/8.16.3',loader:'bun/'+Bun.version,result,writes,rollback,deadlock,commitRejection,rejectionRollback,
- qualification:'Actual engine executor + direct pg driver on existing local PostgreSQL 17.9. Exact native numeric text cells, duplicate/empty column descriptions, savepoints, confirmed read-only/write commit, exact parameterized write, uniqueness-error savepoint containment preserving prior work and independently observed callback rollback and one actual advisory-lock deadlock with whole-transaction retry outcome; actual deferred-FK commit rejection with confirmed rollback and independent absent-table observation. No caller adoption/cancellation, lost-commit native containment, pooler/Node or full Truss bootstrap qualification.'},null,2)+'\n');
+ const registryDdl=await readFile(new URL('../docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.sql',import.meta.url),'utf8');
+ const registryObservation=await readFile(new URL('../docs/helix/02-design/contracts/row-operation-registry-observation-v0.1.proposal.sql',import.meta.url),'utf8');
+ const registry=await executor.withTransaction({isolation:'read_committed',accessMode:'read_write'},async tx=>{
+   await run(tx,registryDdl.replace('CREATE TABLE truss.row_home_operation','CREATE TEMP TABLE row_home_operation'));
+   await run(tx,`INSERT INTO pg_temp.row_home_operation VALUES(pg_current_xact_id(),0,'mutation','admitted',0,NULL,NULL,NULL,decode('61','hex'),decode('62','hex'),decode('63','hex'),decode('64','hex'),decode('65','hex'),decode('66','hex'),decode('67','hex'),NULL)`);
+   // Exact known SELECT locators; semicolons in source comments are not statement delimiters.
+   const first=registryObservation.indexOf('SELECT pg_catalog.pg_current_xact_id_if_assigned()');
+   const second=registryObservation.indexOf('SELECT\n');
+   if(first<0||second<0)throw Error('Original query locators changed');
+   const actual=await run(tx,registryObservation.slice(first,registryObservation.indexOf(';',first)+1));
+   if(actual.columns[0]!=='original_writer_xid'||actual.rows.length!==1||actual.rows[0][0].state!=='text')throw Error('Native assigned xid unavailable');
+   const original=await run(tx,registryObservation.slice(second,registryObservation.indexOf(';',second)+1).replace('FROM truss.row_home_operation','FROM pg_temp.row_home_operation'));
+   const decoded=decodeOperationRegistry(actual.rows[0][0].text,original,{maxRows:8,maxBytes:4096});
+   if(decoded.length!==1||decoded[0][1]!=='0'||decoded[0][8]!=='61')throw Error('Native registry correspondence');
+   await run(tx,'DROP TABLE pg_temp.row_home_operation');return {actual,original,decoded};
+ });
+ if(registry.status!=='ok')throw Error('Native registry probe failed');
+ await writeFile(new URL('../docs/helix/04-build/evidence/inert-assembly/pg-executor.json',import.meta.url),JSON.stringify({driver:'pg/8.16.3',loader:'bun/'+Bun.version,result,writes,rollback,deadlock,commitRejection,rejectionRollback,registry,registryDdlSha256:new Bun.CryptoHasher('sha256').update(registryDdl).digest('hex'),registryObservationSha256:new Bun.CryptoHasher('sha256').update(registryObservation).digest('hex'),
+ qualification:'Actual engine executor + direct pg driver on existing local PostgreSQL 17.9. Exact native numeric text cells, duplicate/empty column descriptions, savepoints, confirmed read-only/write commit, exact parameterized write, uniqueness-error savepoint containment preserving prior work and independently observed callback rollback and one actual advisory-lock deadlock with whole-transaction retry outcome; actual deferred-FK commit rejection with confirmed rollback and independent absent-table observation; exact sixteen-field operation-registry decoder against temporary copy of original table/query. Opaque fixture custody bytes are unqualified. No caller adoption/cancellation, lost-commit native containment, pooler/Node or full Truss bootstrap qualification.'},null,2)+'\n');
  console.log('Native pg executor exact transport/columns/savepoints/commit passed.');
 }finally{await host.close();}

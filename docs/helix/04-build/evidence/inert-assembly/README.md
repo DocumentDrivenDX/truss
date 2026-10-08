@@ -308,3 +308,29 @@ from the repository root, fixing the earlier compiler-export/consumer-cwd issue.
 This supersedes the previous clean-packed-host gap only. Release publication,
 Node/pooler/runtime recovery/adoption/cancellation and full bootstrap/feed remain
 unverified. No native/cloud workload or deployment change occurred.
+
+
+## Original operation-registry decoder
+
+`decodeOperationRegistry` implements the sixteen-field decoder handoff from
+CONTRACT-001. Ordered result descriptors, exact SELECT count, native assigned xid,
+unique full row identities, signed-bigint/unsigned-xid bounds, selected phase/kind,
+generation equality/null rules and lowercase nonempty original hex carriers must
+correspond. Output retains immutable original strings/nulls and row occurrences;
+it does not choose a latest ordinal, normalize bytes or decode unknown custody.
+Explicit row/input-byte limits apply; native scan/transport/aggregate resource
+completion and producer/role/installation authority remain separate.
+
+Twenty-three tests/181 assertions, both package builds and packed consumers pass.
+The native executor probe creates a temporary copy of the original table, inserts
+one explicitly unqualified fixture with actual native xid, executes both original
+SELECT bodies (only the registry parent changes to pg_temp), decodes all original
+fields, and drops the table before commit. Source DDL/query hashes and original
+results are retained in pg-executor.json. The first probe incorrectly split source
+comments at semicolons, refused, and rolled back; exact known SELECT locators
+fixed that tooling issue. These locators are not a general SQL parser.
+
+No partial selected Truss layout is installed. The original fixture bytes do not
+prove full context/effect/group codecs or protected admission. Exact native
+producer/security/body composition remains unfinished, as does full bootstrap
+and feed integration. No persistent tables/cloud/deployment changes occur.

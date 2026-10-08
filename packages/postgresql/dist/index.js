@@ -703,14 +703,77 @@ function createEngineExecutor(source) {
     }
   };
 }
+var OPERATION_REGISTRY_COLUMNS = Object.freeze(["original_writer_xid", "operation_ordinal", "operation_kind", "phase", "effect_generation", "readiness_generation", "sealed_generation", "application_generation", "original_context_bytes_hex", "original_definition_bytes_hex", "original_input_bytes_hex", "original_prestate_bytes_hex", "admitted_candidate_bytes_hex", "effect_obligation_bytes_hex", "original_group_custody_bytes_hex", "application_result_bytes_hex"]);
+function decodeOperationRegistry(actualXid, result, limits) {
+  const refuse = () => {
+    throw Error("operation-registry:unavailable");
+  };
+  const integer = (text, max) => {
+    if (!/^(0|[1-9][0-9]*)$/.test(text) || text.length > 20 || BigInt(text) > max)
+      refuse();
+  };
+  if (actualXid === null)
+    refuse();
+  integer(actualXid, 18446744073709551615n);
+  if (![limits.maxRows, limits.maxBytes].every((n) => Number.isSafeInteger(n) && n >= 0) || result.rows.length > limits.maxRows || result.command !== "SELECT" || result.affectedRows !== String(result.rows.length) || result.columns.length !== 16 || result.columns.some((name, i) => name !== OPERATION_REGISTRY_COLUMNS[i]))
+    refuse();
+  let bytes = 0;
+  const identities = new Set;
+  const output = [];
+  for (const row of result.rows) {
+    if (row.length !== 16)
+      refuse();
+    const values = row.map((cell, i) => {
+      if (cell.state === "null") {
+        if (![5, 6, 7, 15].includes(i))
+          refuse();
+        return null;
+      }
+      if (cell.state !== "text" || typeof cell.text !== "string")
+        refuse();
+      bytes += nativeScalarByteLength(cell.text);
+      if (bytes > limits.maxBytes)
+        refuse();
+      return cell.text;
+    });
+    if (values[0] !== actualXid)
+      refuse();
+    integer(values[1], 9223372036854775807n);
+    if (identities.has(values[1]))
+      refuse();
+    identities.add(values[1]);
+    if (!["mutation", "import", "catalog-transform", "catalog-acceptance", "home-migration", "administrative-repair"].includes(values[2]))
+      refuse();
+    integer(values[4], 9223372036854775807n);
+    for (const i of [5, 6, 7])
+      if (values[i] !== null) {
+        integer(values[i], 9223372036854775807n);
+        if (values[i] !== values[4])
+          refuse();
+      }
+    for (let i = 8;i < 16; i++)
+      if (values[i] !== null) {
+        if (!/^(?:[0-9a-f]{2})+$/.test(values[i]))
+          refuse();
+      }
+    const phase = values[3];
+    const expected = phase === "admitted" ? [false, false, false, false] : phase === "effects_ready" ? [true, false, false, false] : phase === "row_sealed" ? [true, true, false, false] : phase === "application_finalized" ? [true, true, true, true] : refuse();
+    if ([5, 6, 7, 15].some((column, i) => values[column] !== null !== expected[i]))
+      refuse();
+    output.push(Object.freeze(values));
+  }
+  return Object.freeze(output);
+}
 export {
   INERT_ASSEMBLY_PROFILE,
   NativeDecodeBudget,
   NativeVectorError,
+  OPERATION_REGISTRY_COLUMNS,
   createEngineExecutor,
   createReferenceAssembly,
   decodeNativeRoutineCarriers,
   decodeNativeTextArray,
   decodeNativeTriggerArguments,
-  decodeNativeVector
+  decodeNativeVector,
+  decodeOperationRegistry
 };

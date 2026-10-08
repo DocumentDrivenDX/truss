@@ -126,3 +126,9 @@ export interface NativeConnectionSource {
 }
 /** Engine-owned executor composition. Caller adoption deliberately refuses until native custody is implemented. */
 export declare function createEngineExecutor(source: NativeConnectionSource): Executor<never>;
+export declare const OPERATION_REGISTRY_COLUMNS: readonly string[];
+/** Structural original-row interpretation only; native completeness/producer authority remain mandatory. */
+export declare function decodeOperationRegistry(actualXid: string | null, result: StatementResult, limits: {
+    readonly maxRows: number;
+    readonly maxBytes: number;
+}): readonly (readonly (string | null)[])[];
