@@ -130,3 +130,23 @@ materialization, work/deadlines/cancellation/native containment and collector
 completion remain separate obligations. Callers without the optional ledger
 retain only per-carrier limits. Existing native receipts qualify the original
 observations, not native deployment of this aggregate accounting.
+
+
+## Native Bun execution foundation
+
+`bun-execution.json` records a small actual Bun 1.4.2 SQL probe on the existing
+local PostgreSQL 17.9 sandbox. `scripts/check-bun-execution.ts` verifies explicit
+text transport for large integer/decimal/timestamp/JSON parameter values and SQL
+NULL, native SERIALIZABLE/read-only settings, same-transaction backend affinity,
+original controlled callback exception with independently observed temporary-table
+rollback, and savepoint rollback preserving earlier work. Credentials are read
+in memory from the explicitly labeled private sandbox and never retained. No
+persistent table remains; no cloud or configuration change occurs.
+
+This establishes the direct unprepared driver path for the next executor
+implementation. It is not an Executor conformance claim: original caller adoption,
+transaction generation/public-operation arbitration, cancellation/cleanup, unknown
+COMMIT/quarantine/recovery, prepared statements, poolers and Node remain unfinished.
+A future adapter cannot infer confirmed rollback or native settlement merely
+from a rejected promise. Bun API references inspected for this probe:
+https://bun.sh/docs/runtime/sql and https://bun.sh/reference/bun/TransactionSQL.

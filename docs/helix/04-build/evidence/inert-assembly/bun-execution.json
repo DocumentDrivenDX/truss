@@ -1,0 +1,19 @@
+{
+  "driver": "bun/1.4.2",
+  "profile": "private-direct-postgresql-probe/0.1",
+  "prepare": false,
+  "committedTextResult": [
+    "17.9 (Debian 17.9-1.pgdg13+1)",
+    "serializable",
+    "on",
+    "9007199254740993123",
+    "12345678901234567890.123456789",
+    "2026-10-08 12:34:56.123456",
+    null,
+    "{\"large\":9007199254740993123456789,\"unknown\":{\"present\":null}}",
+    "134218"
+  ],
+  "callbackRollbackConfirmed": true,
+  "savepointRollbackPreservesPriorWork": true,
+  "qualification": "Existing local PostgreSQL 17.9, Bun 1.4.2 direct single-connection unprepared subset. Exact explicit text casts, native transaction modes/affinity, controlled callback rollback and savepoint rollback. No Truss installation, caller adoption, cancellation, lost COMMIT, quarantine, prepared/pooler/Node support or complete adapter conformance."
+}
