@@ -21,6 +21,7 @@ export type NativeVectorFamily = 'oidvector' | 'int2vector';
 export interface NativeVectorLimits {
     readonly maxBytes: number;
     readonly maxTokens: number;
+    readonly ledger?: NativeDecodeBudget;
 }
 export interface NativeVector {
     readonly family: NativeVectorFamily;
@@ -47,6 +48,7 @@ export interface NativeArrayLimits {
     readonly maxBytes: number;
     readonly maxNodes: number;
     readonly maxDepth: number;
+    readonly ledger?: NativeDecodeBudget;
 }
 /** Selected comma-delimited text element output. Type/ACL authority is independently admitted. */
 export declare function decodeNativeTextArray(text: string | null, dimensions: string | null, limits: NativeArrayLimits): NativeArray;
@@ -93,3 +95,16 @@ export declare function decodeNativeRoutineCarriers(input: NativeRoutineCarrier,
     readonly modes: NativeArray;
     readonly settings: NativeArray;
 };
+/** Aggregate decode-accounting subset; transport/deadline/containment remain separate. */
+export declare class NativeDecodeBudget {
+    #private;
+    readonly maxBytes: number;
+    readonly maxNodes: number;
+    constructor(maxBytes: number, maxNodes: number);
+    reserve(bytes: number, nodes: number): void;
+    get remaining(): {
+        readonly bytes: number;
+        readonly nodes: number;
+        readonly exhausted: boolean;
+    };
+}

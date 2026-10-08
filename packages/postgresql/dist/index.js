@@ -177,6 +177,7 @@ function decodeNativeVector(family, text, limits, declaredCount) {
     throw new NativeVectorError("count-correspondence");
   if (declaredCount !== undefined && (declaredCount.length > String(limits.maxTokens).length || BigInt(declaredCount) > BigInt(limits.maxTokens)))
     throw new NativeVectorError("resource-limit");
+  limits.ledger?.reserve(text.length, 1);
   const tokens = [];
   let start = 0;
   for (let end = 0;end <= text.length; end++) {
@@ -195,6 +196,7 @@ function decodeNativeVector(family, text, limits, declaredCount) {
     const value = BigInt(token);
     if (family === "oidvector" ? value > 4294967295n : value < -32768n || value > 32767n)
       throw new NativeVectorError("native-domain");
+    limits.ledger?.reserve(0, 1);
     tokens.push(token);
     start = end + 1;
   }
@@ -235,6 +237,7 @@ function decodeNativeTextArray(text, dimensions, limits) {
     if (bytes > limits.maxBytes)
       refuse("resource-limit");
   }
+  limits.ledger?.reserve(bytes, 0);
   const parseBounds = (source) => {
     if (source.length > 6 * 26)
       refuse("resource-limit");
@@ -273,6 +276,7 @@ function decodeNativeTextArray(text, dimensions, limits) {
   const node = () => {
     if (++nodes > limits.maxNodes)
       refuse("resource-limit");
+    limits.ledger?.reserve(0, 1);
   };
   const array = (depth) => {
     node();
@@ -433,6 +437,7 @@ function decodeNativeRoutineCarriers(input, limits) {
   };
   if (typeof input.originalCatalogRowJson !== "string" || input.originalCatalogRowJson.length > limits.maxBytes)
     fail();
+  limits.ledger?.reserve(nativeScalarByteLength(input.originalCatalogRowJson), 1);
   if (!/^(0|[1-9][0-9]*)$/.test(input.inputCount) || input.inputCount.length > 5 || BigInt(input.inputCount) > 32767n)
     fail();
   const inputTypes = decodeNativeVector("oidvector", input.inputTypesText, limits, input.inputCount);
@@ -443,6 +448,7 @@ function decodeNativeRoutineCarriers(input, limits) {
     const array = decodeNativeTextArray(carrier.text, carrier.dimensions, limits);
     if (typeof carrier.rawJson !== "string" || carrier.rawJson.length > limits.maxBytes)
       fail();
+    limits.ledger?.reserve(nativeScalarByteLength(carrier.rawJson), 1);
     let raw;
     try {
       raw = JSON.parse(carrier.rawJson);
@@ -464,8 +470,55 @@ function decodeNativeRoutineCarriers(input, limits) {
     settings: decode(input.settings)
   });
 }
+
+class NativeDecodeBudget {
+  maxBytes;
+  maxNodes;
+  #remainingBytes;
+  #remainingNodes;
+  #exhausted = false;
+  constructor(maxBytes, maxNodes) {
+    this.maxBytes = maxBytes;
+    this.maxNodes = maxNodes;
+    if (![maxBytes, maxNodes].every((n) => Number.isSafeInteger(n) && n >= 0))
+      throw new Error("native-budget:invalid");
+    this.#remainingBytes = maxBytes;
+    this.#remainingNodes = maxNodes;
+    Object.freeze(this);
+  }
+  reserve(bytes, nodes) {
+    if (this.#exhausted)
+      throw new Error("native-budget:exhausted");
+    if (![bytes, nodes].every((n) => Number.isSafeInteger(n) && n >= 0) || bytes > this.#remainingBytes || nodes > this.#remainingNodes) {
+      this.#exhausted = true;
+      throw new Error("native-budget:exhausted");
+    }
+    this.#remainingBytes -= bytes;
+    this.#remainingNodes -= nodes;
+  }
+  get remaining() {
+    return Object.freeze({ bytes: this.#remainingBytes, nodes: this.#remainingNodes, exhausted: this.#exhausted });
+  }
+}
+function nativeScalarByteLength(text) {
+  let bytes = 0;
+  for (let i = 0;i < text.length; i++) {
+    const c = text.charCodeAt(i);
+    if (c >= 55296 && c <= 56319) {
+      const low = text.charCodeAt(++i);
+      if (!(low >= 56320 && low <= 57343))
+        throw new Error("native-budget:invalid-scalar");
+      bytes += 4;
+    } else if (c >= 56320 && c <= 57343)
+      throw new Error("native-budget:invalid-scalar");
+    else
+      bytes += c < 128 ? 1 : c < 2048 ? 2 : 3;
+  }
+  return bytes;
+}
 export {
   INERT_ASSEMBLY_PROFILE,
+  NativeDecodeBudget,
   NativeVectorError,
   createReferenceAssembly,
   decodeNativeRoutineCarriers,

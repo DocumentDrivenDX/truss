@@ -110,3 +110,23 @@ This is carrier composition only. Other fields/all-argument types/ACLs, full nat
 dependencies/security, aggregate collector memory/work/cut/transport custody and
 Truss installation remain unfinished. Per-carrier decoder limits cannot establish
 the full collector resource ledger.
+
+
+## Shared decoder accounting
+
+`NativeDecodeBudget` supplies caller-owned aggregate input-byte/materialized-node
+reservations across selected vector/array fields and routine raw-row/JSON
+projections. A failed reservation permanently exhausts the ledger; prior
+reservations are not refunded and no reset or implicit retry is available.
+Per-carrier limits still apply. Routine composition passes the same optional
+ledger through all selected codecs. Tests demonstrate aggregate refusal for
+individually valid fields, node exhaustion, immutable snapshots and combined
+raw-row/projection custody. Fourteen tests, 134 assertions, strict build and clean
+packed consumer pass. No new native workload occurred.
+
+This accounts selected decoded input and nodes only, not total heap allocations:
+bound strings, JSON parser allocations, dimensions, hex buffers, transport
+materialization, work/deadlines/cancellation/native containment and collector
+completion remain separate obligations. Callers without the optional ledger
+retain only per-carrier limits. Existing native receipts qualify the original
+observations, not native deployment of this aggregate accounting.
