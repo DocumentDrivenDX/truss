@@ -26,6 +26,19 @@ try{
  await sql.unsafe('ROLLBACK');
  const after=await sql.unsafe('SELECT count(*)::text AS n FROM truss.row_home_operation');assert(after[0].n==='0','rollback removes operation custody');
  const grants=await sql.unsafe("SELECT count(*)::text AS n FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace CROSS JOIN LATERAL aclexplode(p.proacl) a WHERE n.nspname='truss' AND p.proname='runtime_admit_operation' AND a.grantee=0 AND a.privilege_type='EXECUTE'");assert(grants[0].n==='0','no public execute');
- const receipt={component:'native operation admission',engine:'PostgreSQL17.9',checks,bodySha256:new Bun.CryptoHasher('sha256').update(body).digest('hex'),observerSha256:new Bun.CryptoHasher('sha256').update(observer).digest('hex'),qualification:'Actual xid/context/artifact bounds/single unfinished/rollback/private invocation component only. Protected issuer registration, canonical observers, finalization, deferred complete-cohort checks, installer security and public runtime remain unfinished.'};
+ const barrier=await Bun.file('packages/postgresql/native/operation-commit-barrier.sql').text();await sql.unsafe(barrier);
+ const admit="SELECT * FROM truss.runtime_admit_operation('mutation',decode('01','hex'),decode('01','hex'),decode('01','hex'),decode('01','hex'),decode('01','hex'),decode('01','hex'))";
+ await sql.unsafe('BEGIN');await sql.unsafe(admit);
+ let commitCode='';try{await sql.unsafe('COMMIT')}catch(e){commitCode=(e as any).errno??(e as any).code}
+ assert(commitCode==='55000','unfinalized operation cannot commit');
+ const rejected=await sql.unsafe('SELECT count(*)::text AS n FROM truss.row_home_operation');assert(rejected[0].n==='0','failed commit removes custody');
+ await sql.unsafe('CREATE TEMP TABLE caller_sentinel (value text)');await sql.unsafe('BEGIN');
+ await sql.unsafe("INSERT INTO caller_sentinel VALUES ('earlier caller work')");await sql.unsafe('SAVEPOINT operation');await sql.unsafe(admit);await sql.unsafe('ROLLBACK TO SAVEPOINT operation');await sql.unsafe('COMMIT');
+ const sentinel=await sql.unsafe('SELECT value FROM caller_sentinel');assert(sentinel.length===1&&sentinel[0].value==='earlier caller work','rolled back operation preserves earlier caller work');
+ await sql.unsafe('BEGIN');await sql.unsafe(admit);
+ await sql.unsafe("UPDATE truss.row_home_operation SET phase='application_finalized',readiness_generation=0,sealed_generation=0,application_generation=0,application_result_bytes=decode('01','hex')");
+ let forgedCode='';try{await sql.unsafe('COMMIT')}catch(e){forgedCode=(e as any).errno??(e as any).code}
+ assert(forgedCode==='55000','phase flags cannot bypass unavailable complete finalizer');
+ const receipt={component:'native operation admission',engine:'PostgreSQL17.9',checks,bodySha256:new Bun.CryptoHasher('sha256').update(body).digest('hex'),observerSha256:new Bun.CryptoHasher('sha256').update(observer).digest('hex'),barrierSha256:new Bun.CryptoHasher('sha256').update(barrier).digest('hex'),qualification:'Actual xid/context/artifact bounds/single unfinished/rollback/private invocation component only. Protected issuer registration, canonical observers, finalization, deferred complete-cohort checks, installer security and public runtime remain unfinished.'};
  await Bun.write('docs/helix/04-build/evidence/runtime-operation-admission.json',JSON.stringify(receipt,null,2)+'\n');console.log(JSON.stringify({checks:checks.length}));
 }finally{await sql.close()}

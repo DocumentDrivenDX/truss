@@ -9,9 +9,14 @@
     "second unfinished operation refused",
     "original binary artifact retained",
     "rollback removes operation custody",
-    "no public execute"
+    "no public execute",
+    "unfinalized operation cannot commit",
+    "failed commit removes custody",
+    "rolled back operation preserves earlier caller work",
+    "phase flags cannot bypass unavailable complete finalizer"
   ],
   "bodySha256": "8dcb3d6f545af7046e6bc644aa58dc800615e5962c6ad99a1199bc96b9d68301",
-  "qualification": "Actual xid/context/artifact bounds/single unfinished/rollback/private invocation component only. Protected issuer registration, canonical observers, finalization, deferred complete-cohort checks, installer security and public runtime remain unfinished.",
-  "observerSha256": "44962f3ca9b3ff95da87034910c74b09b6fa8c69fd214e3e97158aded3e41ce9"
+  "observerSha256": "44962f3ca9b3ff95da87034910c74b09b6fa8c69fd214e3e97158aded3e41ce9",
+  "barrierSha256": "eed4f044a241db7d70dd9cf222a3313bedd484273c18d0e7063b614ad5bab93b",
+  "qualification": "Actual xid/context/artifact bounds/single unfinished/rollback/private invocation component only. Protected issuer registration, canonical observers, finalization, deferred complete-cohort checks, installer security and public runtime remain unfinished."
 }
