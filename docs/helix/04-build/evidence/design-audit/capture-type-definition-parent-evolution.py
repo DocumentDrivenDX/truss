@@ -17,6 +17,11 @@ e=next(x for x in d['entries'] if x['authoredId']=='truss.layout.table.type_def'
 m,mh=load(e['originalLocator']['modelPath'])
 if mh!=e['originalLocator']['modelSha256']:raise ValueError('original model drift')
 tagged=at(m,e['originalLocator']['jsonPointer'])
+def decode(v):
+ if v['kind']=='object':return {k:decode(x) for k,x in v['members'].items()}
+ if v['kind']=='array':return [decode(x) for x in v['items']]
+ return json.loads(v['value']) if v['kind']=='number' else v.get('value')
+if decode(tagged)!=e['originalNativeDefinition']:raise ValueError('original decoded parent mismatch')
 # Original diagnostic keeps decoded semantics; retain original tagged bytes too.
 a,ah=load(B+'reference-history-layout-native-ast.json')
 candidates=[(i,x['stmt']['CreateStmt']) for i,x in enumerate(a) if 'CreateStmt' in x['stmt'] and x['stmt']['CreateStmt']['relation'].get('schemaname')=='truss' and x['stmt']['CreateStmt']['relation']['relname']=='type_def']
@@ -27,6 +32,17 @@ o,n=columns(old),columns(new)
 rows=[{'name':name,'state':'added' if name not in o else 'removed' if name not in n else 'same_definition_except_parser_positions' if strip(o[name])==strip(n[name]) else 'definition_changed','original':o.get(name),'selected':n.get(name)} for name in sorted(set(o)|set(n))]
 effects=[{'statementIndex':j,'kind':kind,'definition':v} for j,x in enumerate(a) for kind,v in x['stmt'].items() if isinstance(v,dict) and v.get('relation',{}).get('schemaname')=='truss' and v.get('relation',{}).get('relname')=='type_def']
 if [x['kind'] for x in effects]!=['CreateStmt','IndexStmt','AlterTableStmt']:raise ValueError('direct table effect inventory drift')
-out={'scope':'explicit qualified type_def parent evolution review candidate; complete direct qualified relation CREATE/index/ALTER source effects, implicit/transitive/native dependencies remain open','selectedDirectEffects':effects,'authoredId':e['authoredId'],'originalLocator':e['originalLocator'],'selectedLocator':{'astPath':B+'reference-history-layout-native-ast.json','jsonPointer':'/'+str(i)+'/stmt/CreateStmt'},'sourcePins':{'diagnostic':dh,'originalModel':mh,'selectedAst':ah,'producer':hashlib.sha256(Path(__file__).read_bytes()).hexdigest()},'originalTaggedParent':tagged,'originalNativeParent':old,'selectedNativeParent':new,'columnComparisons':rows,'parentIdentityAdopted':False,'nativeQualified':False}
+original_effect_ids=[];catalog_pins={}
+for file in ['truss-layout-0.2.constraint-ids.draft.json','truss-layout-0.2.supporting-index-ids.draft.json']:
+ path='docs/helix/02-design/models/'+file;catalog,ch=load(path);catalog_pins[path]=ch
+ for item in catalog['entries']:
+  if item.get('parentId')!='truss.layout.table.type_def':continue
+  loc=item['capturedModelLocator']
+  if loc['modelSha256']!=mh or loc['modelPath']!=e['originalLocator']['modelPath']:raise ValueError('effect source custody mismatch')
+  node=at(m,loc['jsonPointer'])
+  if item['objectKind']=='constraint' and node!=item['originalNativeNode']:raise ValueError('original constraint mismatch')
+  original_effect_ids.append(item)
+if len(original_effect_ids)!=7:raise ValueError('original effect identity inventory drift')
+out={'originalEffectIdentities':original_effect_ids,'originalEffectCatalogPins':catalog_pins,'scope':'explicit qualified type_def parent evolution review candidate; complete direct qualified relation CREATE/index/ALTER source effects, implicit/transitive/native dependencies remain open','selectedDirectEffects':effects,'authoredId':e['authoredId'],'originalLocator':e['originalLocator'],'selectedLocator':{'astPath':B+'reference-history-layout-native-ast.json','jsonPointer':'/'+str(i)+'/stmt/CreateStmt'},'sourcePins':{'diagnostic':dh,'originalModel':mh,'selectedAst':ah,'producer':hashlib.sha256(Path(__file__).read_bytes()).hexdigest()},'originalTaggedParent':tagged,'originalNativeParent':old,'selectedNativeParent':new,'columnComparisons':rows,'parentIdentityAdopted':False,'nativeQualified':False}
 (R/(B+'type-definition-parent-evolution-review.json')).write_text(json.dumps(out,separators=(',',':'))+'\n')
 print(json.dumps({x:sum(r['state']==x for r in rows) for x in sorted({r['state'] for r in rows})}))
