@@ -1,5 +1,5 @@
 import {test,expect} from 'bun:test';
-import {createQueryEngine,WEFT_SOURCE,type Compiler,type Host,type BindingInput} from '../../packages/weft/src/index';
+import {createQueryEngine,serializeStorageBinding,WEFT_SOURCE,type Compiler,type Host,type BindingInput} from '../../packages/weft/src/index';
 import {loadCompiler} from '../../packages/weft-bun/src/index';
 import request from './fixtures/qualified-count.request.json';
 const directory=process.env.TRUSS_WEFT_BUILD ?? '/private/tmp/truss-weft-27445317';
@@ -54,4 +54,12 @@ test('real queries exercise exact numeric, whole record, presence and logical-ke
  expect(paged.artifact.parameters.some(p=>p.value==='9007199254740993')).toBe(true);
  const quoted=await engine.compile('SELECT c.id FROM Customer c WHERE c.name = :name ORDER BY c.id LIMIT 20',{name:{family:'string',value:"x'; DROP TABLE object; --"}});
  expect(quoted.artifact.sql).not.toContain('DROP TABLE');expect(quoted.artifact.parameters.some(p=>p.value.includes('DROP TABLE'))).toBe(true);
+});
+
+test('owner binding serializer refuses fixture catalog and altered embedded artifact',async()=>{
+ const binding=JSON.parse(input.bindingJson);
+ const source={binding,modules:input.modules,backendVersion:input.backendVersion,targetProfile:input.targetProfile};
+ await expect(serializeStorageBinding(source)).rejects.toThrow('Positive original accepted catalog revision');
+ binding.basis.catalogRevision='1';binding.basis.acceptedCatalog.bytesBase64='W10=';
+ await expect(serializeStorageBinding(source)).rejects.toThrow('Original artifact hash mismatch');
 });

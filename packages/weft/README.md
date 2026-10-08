@@ -20,3 +20,6 @@ The build uses locked offline dependencies and `truss-postgresql-qualified`, nev
 
 
 `bun run build` emits browser-compatible JavaScript and declarations. Browser and native component checks are in `scripts/check-weft-browser.ts` and `scripts/check-weft-native.ts`. The native check requires a fresh isolated test database; it installs the review-only repaired source and never provisions an existing production database. The repair producer uses UMF to edit/export the native model. Retained receipts state the narrower qualification boundaries.
+
+
+`serializeStorageBinding` serializes a trusted owner-produced composition, verifies every embedded original artifact hash and requires a positive catalog revision. It retains supplied native/home/key/relationship definitions and never allocates IDs or infers bindings. Byte integrity and a positive revision do not establish authenticity: the host must obtain the composition from actual admitted catalog/installation custody. Rust remains responsible for binding semantics, and native host admission still verifies current original context. The serializer is not an acceptance service.

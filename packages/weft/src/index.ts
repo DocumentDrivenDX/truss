@@ -129,3 +129,42 @@ export async function createQueryEngine(compiler: Compiler, input: BindingInput,
     }
   });
 }
+
+
+export interface OwnerBindingComposition {
+  /** Complete owner-produced binding graph; original source/definition artifacts remain embedded. */
+  binding: Readonly<Record<string, Json>>;
+  modules: readonly ModelModule[];
+  backendVersion: string;
+  targetProfile: string;
+}
+/** Serialize a trusted owner's original composition; never allocate IDs or infer storage homes. */
+export async function serializeStorageBinding(source: OwnerBindingComposition): Promise<BindingInput> {
+  const original=clone(source);
+  const binding=original.binding;
+  if(binding.interfaceVersion!=='truss-postgresql-binding/0.1.0')refuse('binding','Unsupported owner binding grammar');
+  for(const key of ['basis','entities','properties','keys','relationships','executionObligations'])
+    if(!Object.hasOwn(binding,key))refuse('binding','Missing original owner composition: '+key);
+  const basis=binding.basis as any;
+  if(typeof basis?.catalogRevision!=='string'||!/^([1-9][0-9]*)$/.test(basis.catalogRevision))
+    refuse('catalog','Positive original accepted catalog revision required; fixture/genesis IDs are not acceptance');
+  let bytes=0,artifacts=0;
+  const visit=async(value: any):Promise<void>=>{
+    if(!value||typeof value!=='object')return;
+    if(Object.hasOwn(value,'bytesBase64')) {
+      if(typeof value.identity!=='string'||!value.identity||typeof value.bytesBase64!=='string'||typeof value.sha256!=='string')
+        refuse('binding_artifact','Incomplete original artifact');
+      let decoded:string;try{decoded=atob(value.bytesBase64)}catch{refuse('binding_artifact','Malformed artifact base64')}
+      bytes+=decoded.length;artifacts++;
+      if(bytes>4_194_304||artifacts>4096)refuse('resource','Original binding artifact budget exceeded');
+      const raw=Uint8Array.from(decoded,c=>c.charCodeAt(0));
+      const digest=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',raw)),v=>v.toString(16).padStart(2,'0')).join('');
+      if(digest!==value.sha256)refuse('binding_artifact','Original artifact hash mismatch');
+    }
+    for(const child of Object.values(value))await visit(child);
+  };
+  await visit(binding);
+  const bindingJson=JSON.stringify(binding);text(bindingJson,4_194_304);
+  return immutable({bindingJson,bindingSha256:await sha256(bindingJson),modules:original.modules,
+    backendVersion:original.backendVersion,targetProfile:original.targetProfile});
+}
