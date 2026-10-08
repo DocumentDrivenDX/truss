@@ -1,0 +1,36 @@
+{
+  "scope": "Serialization shape only; placeholder artifacts do not prove custody, native support or Weft adoption",
+  "schemaSha256": "d73355aedd6a7418ec74da1a3f935e4384c317dc6fa2d33c5d8a64bba7354195",
+  "cases": [
+    {
+      "name": "string",
+      "expected": true,
+      "passed": true
+    },
+    {
+      "name": "decimal21-3",
+      "expected": true,
+      "passed": true
+    },
+    {
+      "name": "domain-narrowing",
+      "expected": false,
+      "passed": true
+    },
+    {
+      "name": "rounding",
+      "expected": false,
+      "passed": true
+    },
+    {
+      "name": "null-string",
+      "expected": false,
+      "passed": true
+    },
+    {
+      "name": "missing-resource",
+      "expected": false,
+      "passed": true
+    }
+  ]
+}

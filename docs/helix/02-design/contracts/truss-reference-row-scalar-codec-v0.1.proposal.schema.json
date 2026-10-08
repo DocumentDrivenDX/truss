@@ -1,0 +1,181 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:reference-row-scalar-codec:0.1.0",
+  "title": "Original Account/Item row scalar codec candidate",
+  "description": "Reference string and decimal(21,3) registration shape only. Full original artifact custody, native semantics, resource and compiler admission remain required. No universal scalar support or installed identities.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-reference-row-scalar-codec/0.1.0"
+    },
+    "storageHome": {
+      "const": "row_home_scalar"
+    },
+    "coercion": {
+      "const": "none"
+    },
+    "readDefault": {
+      "const": "none"
+    },
+    "unusedPayloadSlots": {
+      "const": "native-null"
+    },
+    "invalidStoredValue": {
+      "const": "complete-result-refusal"
+    },
+    "workAdmission": {
+      "const": "original-enclosing-account-before-scan-copy-conversion"
+    },
+    "profile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "nativeDomainProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "sourceInterpretationProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "resourceProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "authoredDefinition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "nativeDomainDefinition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "sourceInterpretationDefinition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "resourceDefinition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "presenceDefinition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "rule": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "family": {
+              "const": "string"
+            },
+            "payloadColumn": {
+              "const": "text_value"
+            },
+            "encoding": {
+              "const": "preserve-unicode-scalars"
+            },
+            "unpairedSurrogate": {
+              "const": "refuse-before-utf8"
+            },
+            "nul": {
+              "const": "unsupported-native-realization"
+            },
+            "emptyText": {
+              "const": "admit"
+            },
+            "normalization": {
+              "const": "none"
+            }
+          },
+          "required": [
+            "family",
+            "payloadColumn",
+            "encoding",
+            "unpairedSurrogate",
+            "nul",
+            "emptyText",
+            "normalization"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "family": {
+              "const": "decimal"
+            },
+            "tokenColumn": {
+              "const": "numeric_token"
+            },
+            "projectionColumn": {
+              "const": "numeric_value"
+            },
+            "precision": {
+              "const": "21"
+            },
+            "scale": {
+              "const": "3"
+            },
+            "lexicalGrammar": {
+              "const": "complete-ascii-json-number-token"
+            },
+            "sourceSpelling": {
+              "const": "preserve-exact-token"
+            },
+            "coefficient": {
+              "const": "existing-pinned-umf-schemaCoefficient"
+            },
+            "zeroExponent": {
+              "const": "zero-before-nonzero-exponent-bound"
+            },
+            "projection": {
+              "const": "bounded-coefficient-fixed-scale-three"
+            },
+            "projectionInputMaxBytes": {
+              "const": "23"
+            },
+            "nonfinite": {
+              "const": "refuse"
+            },
+            "rounding": {
+              "const": "refuse"
+            },
+            "agreement": {
+              "const": "exact-coefficient-divided-by-1000"
+            }
+          },
+          "required": [
+            "family",
+            "tokenColumn",
+            "projectionColumn",
+            "precision",
+            "scale",
+            "lexicalGrammar",
+            "sourceSpelling",
+            "coefficient",
+            "zeroExponent",
+            "projection",
+            "projectionInputMaxBytes",
+            "nonfinite",
+            "rounding",
+            "agreement"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "storageHome",
+    "coercion",
+    "readDefault",
+    "unusedPayloadSlots",
+    "invalidStoredValue",
+    "workAdmission",
+    "profile",
+    "nativeDomainProfile",
+    "sourceInterpretationProfile",
+    "resourceProfile",
+    "authoredDefinition",
+    "nativeDomainDefinition",
+    "sourceInterpretationDefinition",
+    "resourceDefinition",
+    "presenceDefinition",
+    "rule"
+  ],
+  "additionalProperties": false
+}
