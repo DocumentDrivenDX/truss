@@ -69,3 +69,14 @@ The native run observes 50 requests across nine checkouts. These fields are loca
 host provenance only: they are not native xid, backend identity, issuer epoch,
 protected operation token or recovery authority. Historical records without these
 fields are preserved, but cannot satisfy the new grouping check.
+
+`bun scripts/check-pg-unknown-commit.ts` is an isolated local PostgreSQL sandbox
+fault probe. It retains the actual server COMMIT CommandComplete, deliberately
+interrupts forwarding to the driver parser, and observes the committed row from
+an independent connection. The executor returns `commit_unknown`/no retry, keeps
+quarantine and refuses ordinary host close. Original records prove one ordered
+checkout with BEGIN/INSERT/COMMIT, one commit submission and no guessed rollback.
+A unique fixture table is removed in finally; the isolated child then exits with
+unresolved host bookkeeping. Process exit is not a library settlement API. This
+qualifies deliberate completion-loss containment, not natural packet loss,
+power-loss recovery, protected native producers, source ACK or automatic replay.
