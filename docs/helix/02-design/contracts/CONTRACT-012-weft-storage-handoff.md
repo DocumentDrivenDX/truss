@@ -37,6 +37,23 @@ Reproduce with `python3 docs/helix/04-build/evidence/design-audit/diagnose-revie
 
 Parent/creator refinement is separately recorded in the [diagnostic receipt](../../04-build/evidence/design-audit/review011-parent-correspondence-diagnostics.json). Seventeen unmatched identities have no candidate under their available unique parent/creator anchors; seventy lack a unique anchor. No ambiguous identity is automatically resolved. Both exact and location-insensitive anchor strength are recorded, and source catalog pins are rechecked. Reproduce with `python3 docs/helix/04-build/evidence/design-audit/diagnose-review011-parent-correspondence.py` after the current exact/unmatched diagnostics. The next review must reconcile original parent source evolution before child adoption; anonymous equal constraints and name-only table lookup cannot substitute for that review.
 
+## Baseline source evolution review
+
+The retained baseline diagnostics distinguish twenty-one position-only observations, fifteen changed definitions and six absent named candidates. The changed definitions include six complete CREATE TABLE nodes and the nine columns below. They explain why parent whole-node equality cannot admit all child identities; a table's source changed even where some columns retain exact nodes.
+
+| Existing baseline authored column identity | Observed source change in current CREATE declaration | Required evolution/conversion review |
+| --- | --- | --- |
+| module_access.module | Add pg_catalog.C collation; replace inline primary-key membership with explicit NOT NULL in the column node | Review the complete qualified document/module key and table constraints together; column-node comparison alone cannot establish retained uniqueness or authority |
+| module_access.reader_role / writer_role | Add pg_catalog.C collation | Bind exact role spelling/lookup and effective grants; no normalization or inherited privilege inference |
+| type_def.module / element | Add pg_catalog.C collation | Preserve qualified authored identity and original source custody through acceptance/reactivation |
+| rel_def.module / rel_id | Add pg_catalog.C collation | Preserve relationship owner/identity and endpoint correspondence under the selected catalog profile |
+| key_tombstone.entity_kind | Original object-or-edge CHECK becomes edge-only in current declaration | Object key lifecycle moves to selected bucket/reservation/history homes; legacy object reservations require explicit conversion, never deletion justified by the new CHECK |
+| journal.op | Add metadata to the original operation CHECK list | Match selected event/decoder/feed/reconstruction profiles and full metadata witness; an old decoder must refuse unsupported history rather than drop it |
+
+The absent named candidates are the legacy object_key table and its four columns, plus schema_rev.report. Existing key bucket/reservation homes and immutable acceptance_report are the selected replacement direction. Their presence does not supply data conversion: preserve original full key bytes, owner/key definition and historical reservation meaning; preserve original acceptance report/revision/origin provenance without manufacturing unavailable fields. Inspect current complete CREATE plus ALTER effects before deciding a replacement mapping. These observations remain versioned source review, not automatic retirement/reallocation of baseline authored IDs or a migration-ready profile.
+
+Before resolving a changed parent identity, record its original and selected full node/source pins, complete added/removed/changed constraints/columns, governing selected meaning and any data/privilege/event conversion. Then resolve child/creator dependencies under that reviewed parent correspondence. Explicitly retain unresolved renamed/retired/replacement relations rather than force a same-name identity match. Native type/collation/grant and populated conversion qualification remain separate CH-01/03 outputs.
+
 ## Current 0.11 declaration dependency checks
 
 The [foreign-key source receipt](../../04-build/evidence/design-audit/layout-foreign-key-closure-v0.11.json) resolves all 61 declared inline/table foreign-key tuples to declared columns and nondeferrable primary/unique keys. Missing-target control and three receipt-specific corruptions refuse: missing request receipt target, removed receipt unique key and wrong target column. The [index/allocator source receipt](../../04-build/evidence/design-audit/layout-index-sequence-closure-v0.11.json) resolves 24 explicit indexes and fourteen literal nextval defaults against eleven declared sequences. Both receipts pin the current source inventory and verify its AST digest.
