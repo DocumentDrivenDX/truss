@@ -208,3 +208,17 @@ Selected complete-frame controls additionally split each header/body/UTF-8 field
 Extend DH-02/05 with the [private producer port](../../02-design/contracts/reference-driver-producer-port.proposal.md). Independently instrument original ingress allocation and parser entry while submitting forged, foreign-issuer, reused, stale-epoch and stale-generation tickets. No rejected precondition forwards bytes or admits a replacement account. Mutate an admitted frame through an upstream shared view and require refusal or prevention by the selected actual ownership mechanism; a readonly type is insufficient.
 
 Exercise two retained spans sharing one backing, release one while parser/capture evidence retains the other, and independently verify no premature occupancy refund. Inject parser exceptions, post-forward residual and reentrant callbacks; require at most one original forward, no frame replay/public result/pool return and retained original possible-effects/containment custody. Missing instrumentation or unbounded pre-hook ingress refuses the profile. These schedules remain planned, not runtime evidence.
+
+## Managed-service session loss (planned)
+
+MDEP-02/03 extend existing lease/containment/recovery controls. Terminate an
+idle original session under the selected managed-service lifecycle and require
+its issuer/epoch/prepared/advisory/session custody to become unusable before
+any new writer or pool reuse. Separately interrupt a commit response during
+compute restart: preserve original unknown outcome and reconcile through
+durable native receipt/recovery custody; connection loss never proves rollback.
+Repeat owned and adopted scopes with earlier caller sentinel work and
+independent actual termination evidence. Host state/settings recreation is a
+new qualified lease, not resurrection of the original transaction.
+
+These controls remain `not_run`; see the [managed-service source review](../../02-design/contracts/managed-extension-source-review.md#managed-service-lifecycle-handoff-refresh--2026-10-08). Actual service/profile and independent native observations are required.

@@ -320,3 +320,18 @@ Stage a transaction with a required new retain variant unsupported by the downst
 Extend complete-envelope controls with independent original registration fixtures. Keep event/profile bytes constant while replacing only the admitted extractor with a v0.1-only implementation, then only the seed archive loader with a v0.1-only implementation. Require composition refusal before any member extraction, seed publication or downstream apply call; record actual invocation counts, not only equal after-state. A matching wrapper label or retained opaque artifact cannot supply required event interpretation. Separately exercise a schema-valid mixed profile graph whose event decoder admits v0.2 but whose group digest or physical projection retains legacy meaning: refuse original correspondence before publication.
 
 Provide a v0.2 archive with independently complete baseline-only evidence and no events; empty membership is admissible only under that exact proved horizon. Remove its inventory/creation basis and require unavailable rather than inferred emptiness. Include one multi-name retain event and independently expect one original event/member/seq with all names present after application. The report remains rebind-only: no retain member is inserted to make catalog report and feed counts match. Retain complete original definitions/owners and exact artifacts in every setup; a converter that relabels old events, filters retain or reconstructs missing old metadata from current rows fails admission. Pin source/native/registration/loader/decoder tuples before executing; all extended cases remain not_run.
+
+## Managed-service feed restart (planned)
+
+MDEP-04/05 extend complete-feed and original ACK/retention controls. Commit
+a complete source transaction and downstream dedup/state/checkpoint, lose
+the source ACK, restart selected managed compute, then replay through the
+SQL feed. Require original event/prerequisite membership and exactly one
+downstream effect; no native logical-replication or session-cache dependency
+may replace durable dedup/ACK evidence. Separately discard cumulative
+statistics/session observations and verify that freshness/resource/retention
+results become unavailable or are freshly qualified rather than zero or
+ready by default. Complete original source protection remains until admitted
+ACK. Provider telemetry cannot establish absence of source work.
+
+These controls remain `not_run`; see the [managed-service source review](../../02-design/contracts/managed-extension-source-review.md#managed-service-lifecycle-handoff-refresh--2026-10-08). Actual service/profile and independent native observations are required.

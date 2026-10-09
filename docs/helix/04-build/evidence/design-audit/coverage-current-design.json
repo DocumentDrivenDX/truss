@@ -1099,15 +1099,15 @@
     "02-design/technical-designs/TD-040-apply-operations-as-one-atomic-group.md": "a700d25ee591f89258965ef2bbcbadabd7dc026ac222140d2c20e860c74079e9",
     "03-test/test-plans/STP-040-apply-operations-as-one-atomic-group.md": "7031d9ecdac0e8fcca7830ac3808bce196f10f522ee7e8bf85d2d81a0b20143a",
     "02-design/technical-designs/TD-041-publish-the-journal-without-losing-or-reordering-a-change.md": "5a977cd0ee2e19a2537601a017317c6f65cb5bfb6b65531510234b0df7155d16",
-    "03-test/test-plans/STP-041-publish-the-journal-without-losing-or-reordering-a-change.md": "3631b0fa484414d4a1c58e34953f28d071a91d2d63fb38a0b004003d01829490",
+    "03-test/test-plans/STP-041-publish-the-journal-without-losing-or-reordering-a-change.md": "8d0bb405d8eee2cbd2145a003f42f62d6d41e2a0acf7089e114441eeb8ed395f",
     "02-design/technical-designs/TD-042-read-how-far-behind-a-downstream-copy-is.md": "2b36eb214a7741a71f0d23a7b612e4c147e4f95d72a7bc40784c5ef4c80ab36e",
     "03-test/test-plans/STP-042-read-how-far-behind-a-downstream-copy-is.md": "e1d0b529dd8db841d7e17633540c444c6e631bb93c654d24ba29fc95df8927ce",
     "02-design/technical-designs/TD-043-make-a-group-safe-to-repeat.md": "06fdb6b5a62098e464965112ed76561479faedd4e07d88e85e727ef66d713d93",
     "03-test/test-plans/STP-043-make-a-group-safe-to-repeat.md": "22e7fab8b1575073108e0452924f7d3f62d11d531243c82ad5aa9e15a8036832",
     "02-design/technical-designs/TD-044-run-a-change-in-a-transaction-and-roll-it-back.md": "81d6a4421e2c824f1161a4912afbd758e6824031f37f0469ef4f63f713714f8a",
-    "03-test/test-plans/STP-044-run-a-change-in-a-transaction-and-roll-it-back.md": "ecfbc925fc377cbbca72b5608516f8b5cc974ed06d333d076eb1c9d9657b1f42",
+    "03-test/test-plans/STP-044-run-a-change-in-a-transaction-and-roll-it-back.md": "9ff24c7ff82bcc8bf764821a6417ef1050b410de262810e2668a511ae690fc5d",
     "02-design/technical-designs/TD-045-bootstrap-the-internal-layout-from-umf.md": "ca24959bde1ba9c23f15f856f2a61c882ac37d8377d4b73905ce5a4f0f859869",
-    "03-test/test-plans/STP-045-bootstrap-the-internal-layout-from-umf.md": "7bb58b234378017b5307cac0e575e78085874f370867ca0b1327272d457c7f6c"
+    "03-test/test-plans/STP-045-bootstrap-the-internal-layout-from-umf.md": "9766b6e1402ad8882bd798cca4aefb388d8410cfe62ac9eeb9ea8b0885243c9b"
   },
   "storySha256": {
     "01-frame/user-stories/US-001-accept-a-umf-revision-as-a-whole.md": "faa9173cc8ab9cb8c0945c2492b207ffc8ee6953cf5efef16a821a71a7a35b12",

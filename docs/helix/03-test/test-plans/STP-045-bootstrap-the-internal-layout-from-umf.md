@@ -777,3 +777,18 @@ AC-04 broadens a body dependency, changes a role binding or policy, adds a PUBLI
 ## Canonical method and installed binding correspondence (planned)
 
 PAC-01/03/06 consume the [canonical public route map](../../02-design/contracts/reference-public-native-route-map.proposal.md), its exact administrative signature inventory and the protected-access acceptance controls. Compare every selected method bidirectionally to actual native callables/statements/transitive dependencies/effective rights; refuse missing or extra paths, including operators/casts and separately advertised SQL surfaces. Preserve bootstrap pure generation versus owned installation versus read-only reconciliation. WCB-05 independently substitutes fixture-qualified identity over installed0.13 and requires refusal despite matching table/column counts. These schedules remain not_run and supplement, rather than replace, full installer/conversion/security inventory controls.
+
+## Managed-service durability inventory (planned)
+
+MDEP-01 extends IM/MI installation qualification for each actually selected
+Aurora/Lakebase tuple. Independently enumerate persistence class and original
+definition/ownership of receipt, catalog, report, feed, archive and recovery
+stores; substitution with unlogged/temp homes prevents readiness. Confirm
+original installation, then restart compute using the selected provider fault
+profile and recollect complete committed inventories and actual roles/settings.
+No vanished temporary helper/session or stale marker proves the durable closure.
+Record service product, engine build, configuration and original installed
+source/profile identities; documentation availability alone cannot pass this
+case. No provider changes are authorized by this planned schedule.
+
+These controls remain `not_run`; see the [managed-service source review](../../02-design/contracts/managed-extension-source-review.md#managed-service-lifecycle-handoff-refresh--2026-10-08). Actual service/profile and independent native observations are required.
