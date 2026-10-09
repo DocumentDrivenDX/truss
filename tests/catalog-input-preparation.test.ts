@@ -44,3 +44,29 @@ test('new-only staging cannot silently ignore declared transforms',async()=>{
  const {stageNewCatalogCohort}=await import('../packages/umf-bun/src/catalog-new-stage');const input=request();input.transforms=structuredClone(fixture.input.transforms);const original=run(input);let calls=0;
  await expect(stageNewCatalogCohort({unsafe:async()=>{calls++;return []}},original,prepareDefaultCatalogHomes(original).homes,{})).rejects.toThrow('Complete transform execution');expect(calls).toBe(0);
 });
+
+test('UMF report basis never invents a supported-subset artifact for unregistered preparation',async()=>{
+ const {collectCatalogUmfReportBasis}=await import('../packages/umf-bun/src/catalog-umf-report-basis');
+ const original=run(request());
+ expect(()=>collectCatalogUmfReportBasis(original)).toThrow('registered support artifact');
+ expect(()=>collectCatalogUmfReportBasis({...original})).toThrow('validated catalog preparation');
+});
+
+test('UMF report basis preserves actual original version and registered bytes without a support claim',async()=>{
+ const {collectCatalogUmfReportBasis}=await import('../packages/umf-bun/src/catalog-umf-report-basis');
+ const input=request();
+ const registrations:import('../packages/umf-bun/src/acceptance-profiles').AcceptanceProfileRegistration[]=[];
+ for(const [role,key] of [['layout','layoutProfile'],['acceptance','acceptanceProfile'],['validator','validatorProfile'],['support','supportProfile']] as const){
+  const bytes=new TextEncoder().encode('authored byte custody only: '+role),profile={identity:role,version:'test',sha256:new Bun.CryptoHasher('sha256').update(bytes).digest('hex')};
+  input[key]=profile;registrations.push({role,profile,artifactIdentity:role,bytes});
+ }
+ const policyBytes=new TextEncoder().encode('policy byte custody');input.policy.profile={identity:'policy',version:'test',sha256:new Bun.CryptoHasher('sha256').update(policyBytes).digest('hex')};
+ registrations.push({role:'policy',profile:input.policy.profile,artifactIdentity:'policy',bytes:policyBytes});
+ registrations.push({role:'umf',profile:preparation.umfProfile,artifactIdentity:'original-owner-bundle',bytes:new Uint8Array(await Bun.file(directory+'/producer.js').arrayBuffer())});
+ const guarded=await createCatalogInputPreparation(directory!,'/Users/erik/Projects/umf/package.json',createAcceptanceProfileResolver(registrations));
+ const basis=collectCatalogUmfReportBasis(guarded.prepare(new TextEncoder().encode(JSON.stringify(input))));
+ expect(basis.sourceVersions).toEqual(['0.7.0']);expect(basis.interpretationProfile).toEqual(preparation.umfProfile);
+ expect(Buffer.from(basis.supportArtifact.bytesBase64,'base64').toString()).toBe('authored byte custody only: support');
+ expect(basis.supportProfile).toEqual(input.supportProfile);expect(Object.isFrozen(basis.sourceVersions)).toBe(true);
+ expect(basis.scope).toBe('original_umf_and_support_byte_basis_only');expect('supportedSubset' in basis).toBe(false);
+});
