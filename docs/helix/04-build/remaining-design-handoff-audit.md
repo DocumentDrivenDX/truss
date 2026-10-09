@@ -34,6 +34,24 @@ preserve older component receipts at their actual scope.
 
 ### Prioritized execution frontier
 
+#### Receipt versus local history retention reconciliation
+
+Current PRD selected direction, STP-043 RSEL/NET/AC4 and retention probes,
+STP-019 AH-01–06, and the receipt-position proposal agree on independent
+protections. Short/zero local journal age does not shorten the complete receipt's
+at-least-24-hour retry window, erase longer protected dependencies, skip journal
+production or synthesize a no-op journal position. Archive success is admitted
+through original complete retrieved content and lifetime/security obligations,
+not upload acknowledgment. Expired or missing required position proof remains
+unavailable rather than permission to reapply the request or guess inclusion.
+
+This closes the suspected cross-document retention-policy ambiguity for these
+inspected surfaces; it does not qualify receipt storage, archive durability,
+native purge serialization or snapshot/replica comparison. The next action is
+the existing protected producer/profile implementation and independent planned
+cases, rather than another retention product question. Full-scope semantic audit
+remains open.
+
 Use this order for the next implementation cycle, while retaining every
 B-001–B-015 deliverable and all 45 stories/167 criteria. This sequence does not
 turn partial runtime evidence into design completion or remove unresolved owner
