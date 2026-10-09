@@ -62,3 +62,7 @@ test('collection cannot issue observations from copied or substituted owner call
  const {loadUmfFieldAssertionProducer}=await import('../packages/umf-bun/src/index');const fields=await loadUmfFieldAssertionProducer(directory);
  expect(()=>collectCatalogAssertionObservations(input,metadata,{...fields,inspectFacets:()=>({meaning:{state:'known'}})})).toThrow('loaded assertion owner');
 });
+
+test('loaded owner callbacks cannot give a reconstructed preparation original observation custody',async()=>{
+ const input=await prepared('0.7.0');expect(()=>collectCatalogAssertionObservations(structuredClone(input),metadata)).toThrow('validated catalog preparation');
+});

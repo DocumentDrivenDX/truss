@@ -1,8 +1,9 @@
 /** Original UMF extension occurrences; preservation never implies interpretation. */
-import type {createCatalogInputPreparation} from './catalog-input';
+import {requireOriginalCatalogPreparation,type createCatalogInputPreparation} from './catalog-input';
 import type {AssertionOwner} from '../../../docs/helix/02-design/contracts/bindings/truss-enforcement-report-v0.1';
 type Prepared=ReturnType<Awaited<ReturnType<typeof createCatalogInputPreparation>>['prepare']>;
 export function collectCatalogExtensionInventory(prepared:Prepared){
+ requireOriginalCatalogPreparation(prepared);
  const entries:{owner:AssertionOwner;scope:'document'|'module'|'element';sourcePointer:string;extensionId:string;vocabulary:unknown;payload:unknown;source:Prepared['original']['input']['documents'][number]['artifact']}[]=[];
  const pointer=(key:string)=>key.replace(/~/g,'~0').replace(/\//g,'~1');
  for(let index=0;index<prepared.documents.length;index++){

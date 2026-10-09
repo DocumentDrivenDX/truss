@@ -23,9 +23,9 @@
     "catalog-new-prestate-parity": "10fa8d6172757bb942f750fba582e88595b90190c920e97624e0cc0635cb15f7",
     "catalog-new-counts": "4d2962d3b8e1391ad9c97f6fdc2da7e0343463a6e2f4b7c9a1060603b6dab166"
   },
-  "reportDocumentProducerSha256": "f5e6c74c87f9133027fe04e2ca543f0f60a513a13e0052ec6b112dc399af3754",
-  "defaultHomeProducerSha256": "f7bea9fd414f75e43a2d26a940a32083976a7ea13b91027a5b019f5e141734d5",
-  "stageProducerSha256": "d192447bae892f4dd0c841680726b4551809a3b08d4ebe44ba0cdf8447c149ec",
+  "reportDocumentProducerSha256": "a2ecf444bb1d58563c3fe76f04cd51e8a23342ccb40da1bbbe6d3b6a074007bb",
+  "defaultHomeProducerSha256": "4766c10e24e494388dfd61f53f3863be054677c232f382612bf3947c9353e663",
+  "stageProducerSha256": "404e41a2eaa8d45e787ab4dd3ff73a2a5a803a6a705ecd36aebca93129955725",
   "originalInputSha256": "b8c64857b2cd73ef99471ebc8310e76f27102c62d30854d80bc40441dcbe609c",
   "engine": "17.9 (Debian 17.9-1.pgdg13+1)",
   "umfProfile": {
@@ -41,7 +41,7 @@
     "original native prestate bytes retained unchanged in operation custody",
     "later catalog state cannot replace original pre-admission capture",
     "incomplete property home inventory refuses before persistence",
-    "altered Field candidate refuses against original archived source after Record staging",
+    "reconstructed altered Field candidate refuses before native staging",
     "different complete original input cannot borrow native operation admission",
     "same interpreted source cannot substitute different original artifact bytes under admitted input",
     "failed cohort savepoint removes earlier revision and Record effects",

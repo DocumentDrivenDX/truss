@@ -1,6 +1,6 @@
 /** Private genuinely-new cohort staging; caller retains the original transaction. */
 import {randomUUID} from 'node:crypto';
-import type {createCatalogInputPreparation} from './catalog-input';
+import {requireOriginalCatalogPreparation,type createCatalogInputPreparation} from './catalog-input';
 type Prepared=ReturnType<Awaited<ReturnType<typeof createCatalogInputPreparation>>['prepare']>;
 type Rows=Record<string,string>[];
 export interface CatalogStageConnection {unsafe(query:string,parameters?:unknown[]):Promise<Rows>}
@@ -8,6 +8,7 @@ export interface CatalogPropertyHome {documentId:string;moduleId:string;elementI
 const same=(a:{documentId:string;moduleId:string;elementId:string},b:{documentId:string;moduleId:string;elementId:string})=>a.documentId===b.documentId&&a.moduleId===b.moduleId&&a.elementId===b.elementId;
 const id=(value:unknown):string=>{if(typeof value!=='string'||!(/^[1-9][0-9]{0,9}$/).test(value)||BigInt(value)>2147483647n)throw Error('Original native catalog ID required');return value};
 export async function stageNewCatalogCohort(connection:CatalogStageConnection,prepared:Prepared,homes:readonly CatalogPropertyHome[],origin:unknown){
+ requireOriginalCatalogPreparation(prepared);
  const records=prepared.declarations.flatMap(document=>document.records);
  const declared=records.flatMap(record=>record.fields.map(field=>({...record,field})));
  if(homes.length!==declared.length)throw Error('Complete original property home inventory required');

@@ -1,0 +1,33 @@
+{
+  "producerManifest": {
+    "revision": "c45c72a2a8a3c4fba61c40c5927dd9091acf8cc3",
+    "archiveSha256": "aa3ff171f8adbdbb6a0ad729dbcb2825dd2299b98e6d90a4e8e1e84835247838",
+    "bundleSha256": "ff990a3f9847a1bc0844fc6e637365462979efc3dcbec27383d4002943d64d83",
+    "operations": [
+      "readDocument",
+      "validateDocument",
+      "validateCoreRecordValues",
+      "upgradeSchemaPropertiesEnvelope",
+      "verifySchemaPropertiesUpgrade",
+      "rollbackSchemaPropertiesEnvelope"
+    ],
+    "scope": "Original logical UMF producers only; no native acceptance/containment qualification."
+  },
+  "sourceHashes": {
+    "packages/umf-bun/src/catalog-input.ts": "b77e55cc2ff66c026c41bf0de8ab48edf391d76032e92a30d4de7e287a150012",
+    "packages/umf-bun/src/catalog-new-stage.ts": "404e41a2eaa8d45e787ab4dd3ff73a2a5a803a6a705ecd36aebca93129955725",
+    "packages/umf-bun/src/catalog-default-homes.ts": "4766c10e24e494388dfd61f53f3863be054677c232f382612bf3947c9353e663",
+    "packages/umf-bun/src/catalog-report-document-basis.ts": "a2ecf444bb1d58563c3fe76f04cd51e8a23342ccb40da1bbbe6d3b6a074007bb",
+    "packages/umf-bun/src/catalog-assertion-observations.ts": "51385ea9c3aad2ff51e1049740425c375f00bddd211799da4df8248390202bd5",
+    "packages/umf-bun/src/catalog-extension-inventory.ts": "f42fa6157fcd8d5ac3a83d9374b39abb295837426d4c44622de579aad9ad3c84",
+    "tests/catalog-input-preparation.test.ts": "315598000be29a343af254e86627932f17c8b90ff8bb15b147b868c354d08bb8",
+    "tests/catalog-report-document-basis.test.ts": "ef6f268b1250cde0e63de2c39ec133269996dfb0a68dd9dde5cb6a3d96eb0276",
+    "tests/umf-declaration-producer.test.ts": "ca2b3c6118c8173b0a119c8ca890b6f5b0373c5eb49709ca0b9303eacd6bb14a"
+  },
+  "runtime": "Bun 1.4.2",
+  "hostTests": 28,
+  "hostAssertions": 117,
+  "nativeReceipt": "catalog-new-cohort.json",
+  "nativeChecks": 60,
+  "scope": "Validated preparation issuance plus private component/native staging checks. No complete root-profile/actor admission, registered binding interpretation, full accepted report or positive commit."
+}

@@ -5,6 +5,11 @@ import {loadUmfProducer} from './index';
 import {collectCatalogDeclarations} from './catalog-declarations';
 import type {createAcceptanceProfileResolver} from './acceptance-profiles';
 import type {ProfilePin} from '../../../docs/helix/02-design/contracts/bindings/truss-acceptance-input-v0.1';
+const originalPreparations=new WeakSet<object>();
+/** Private validated preparation recognition, not operation or acceptance authority. */
+export function requireOriginalCatalogPreparation(prepared:object):void{
+ if(!originalPreparations.has(prepared))throw Error('Original validated catalog preparation required');
+}
 export async function createCatalogInputPreparation(directory:string,dependenciesPackage:string,profiles?:ReturnType<typeof createAcceptanceProfileResolver>){
  const inspector=await createAcceptanceInputInspector(dependenciesPackage);const owner=await loadUmfProducer(directory);
  const umfProfile=Object.freeze({identity:'umf-record-interpretation',version:owner.sourceRevision,sha256:owner.bundleSha256});
@@ -29,6 +34,7 @@ export async function createCatalogInputPreparation(directory:string,dependencie
   const archiveDocuments=documents.map(({interpretation,...archive})=>Object.freeze(archive));
   function freeze(value:unknown):void{if(value&&typeof value==='object'){for(const child of Object.values(value))freeze(child);Object.freeze(value)}}
   freeze(documents);freeze(archiveDocuments);freeze(declarations);
-  return Object.freeze({original:inspected,registeredProfiles,documents:Object.freeze(documents),declarations:Object.freeze(declarations),archiveDocuments:Object.freeze(archiveDocuments),umfProfile,scope:'original_umf_preparation_only' as const});
+  const prepared=Object.freeze({original:inspected,registeredProfiles,documents:Object.freeze(documents),declarations:Object.freeze(declarations),archiveDocuments:Object.freeze(archiveDocuments),umfProfile,scope:'original_umf_preparation_only' as const});
+  originalPreparations.add(prepared);return prepared;
  }});
 }

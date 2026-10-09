@@ -27,3 +27,15 @@ test('embedded duplicate source members refuse before owner interpretation',()=>
  input.documents[0].artifact={identity:'duplicate-source',bytesBase64:bytes.toString('base64'),sha256:new Bun.CryptoHasher('sha256').update(bytes).digest('hex')};
  expect(()=>run(input)).toThrow('duplicate_member');
 });
+
+test('reconstructed preparations cannot enter home, extension, report or native staging helpers',async()=>{
+ const {collectCatalogExtensionInventory}=await import('../packages/umf-bun/src/catalog-extension-inventory');
+ const {collectCatalogReportDocumentBasis}=await import('../packages/umf-bun/src/catalog-report-document-basis');
+ const {stageNewCatalogCohort}=await import('../packages/umf-bun/src/catalog-new-stage');
+ const original=run(request()),clone=structuredClone(original);let calls=0;const connection={unsafe:async()=>{calls++;return []}};
+ expect(()=>prepareDefaultCatalogHomes(clone)).toThrow('validated catalog preparation');
+ expect(()=>collectCatalogExtensionInventory(clone)).toThrow('validated catalog preparation');
+ await expect(collectCatalogReportDocumentBasis(connection,clone,'1')).rejects.toThrow('validated catalog preparation');
+ await expect(stageNewCatalogCohort(connection,clone,[],{})).rejects.toThrow('validated catalog preparation');
+ expect(calls).toBe(0);expect(prepareDefaultCatalogHomes(original).homes.length).toBe(2);
+});

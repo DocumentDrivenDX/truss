@@ -1,9 +1,10 @@
 /** Actual archive/input bijection and original producer observations; no accepted report. */
 import {createHash} from 'node:crypto';
-import type {createCatalogInputPreparation} from './catalog-input';
+import {requireOriginalCatalogPreparation,type createCatalogInputPreparation} from './catalog-input';
 import type {CatalogStageConnection} from './catalog-new-stage';
 type Prepared=ReturnType<Awaited<ReturnType<typeof createCatalogInputPreparation>>['prepare']>;
 export async function collectCatalogReportDocumentBasis(connection:CatalogStageConnection,prepared:Prepared,revision:string){
+ requireOriginalCatalogPreparation(prepared);
  if(!/^[1-9][0-9]{0,9}$/.test(revision)||BigInt(revision)>2147483647n)throw Error('Original positive native revision required');
  const rows=await connection.unsafe("SELECT d.*,o.original_writer_xid::text AS writer_xid,o.operation_ordinal::text AS operation_ordinal,o.effect_generation::text AS effect_generation FROM truss.runtime_collect_report_documents($1::int) d CROSS JOIN truss.row_home_operation o WHERE o.original_writer_xid=pg_current_xact_id_if_assigned() AND o.phase='admitted'",[revision]);
  if(rows.length!==prepared.original.input.documents.length)throw Error('Complete original report document bijection required');

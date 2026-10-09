@@ -1,6 +1,6 @@
 /** Owner observations for report preparation, never complete assertion/enforcement admission. */
 import {createHash} from 'node:crypto';
-import type {createCatalogInputPreparation} from './catalog-input';
+import {requireOriginalCatalogPreparation,type createCatalogInputPreparation} from './catalog-input';
 import {requireLoadedUmfAssertionOwner,type loadUmfDeclarationProducer,type loadUmfFieldAssertionProducer} from './index';
 type Prepared=ReturnType<Awaited<ReturnType<typeof createCatalogInputPreparation>>['prepare']>;
 const originalCollections=new WeakMap<object,Prepared>();
@@ -10,6 +10,7 @@ export function requireOriginalCatalogObservationCollection(prepared:Prepared,co
 }
 type Owner=Awaited<ReturnType<typeof loadUmfDeclarationProducer>>;
 export function collectCatalogAssertionObservations(prepared:Prepared,owner:Owner,fields?:Awaited<ReturnType<typeof loadUmfFieldAssertionProducer>>){
+ requireOriginalCatalogPreparation(prepared);
  requireLoadedUmfAssertionOwner(owner,'declarations');
  if(fields)requireLoadedUmfAssertionOwner(fields,'assertion-fields');
  if(owner.sourceRevision!==prepared.umfProfile.version)throw Error('Original owner observation source mismatch');
