@@ -4,6 +4,15 @@ Status: execution sequence authored; public runtime unavailable. Governing input
 
 ## Current implementation boundary
 
+A subsequent graph-resource review moves the selected identifier-length check
+before NUL/surrogate scanning, verifies exact UTF-8 byte length before allocating
+encoded identifiers, and bounds edge labels before map lookup. Oversized malformed
+identities cannot bypass capacity refusal by reaching content validation first.
+The combined original supplied-source/Record/key/ordering suite now passes 31
+tests/614 assertions and strict TypeScript. This supersedes earlier component run
+counts below without changing their historical scope. It still does not establish
+complete shared-account/host heap admission or native acceptance.
+
 The full endpoint-intent carrier now has an original UMF registry experiment,
 not just the earlier minimal probe. Seventeen controls and strict TypeScript pass
 against the verified 1,342-member committed owner source tree. The callback checks

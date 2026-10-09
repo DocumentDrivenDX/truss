@@ -4,14 +4,20 @@ export function orderCatalogDocuments(nodes:readonly string[],edges:readonly (re
  if(nodes.length>limits.documents||edges.length>limits.edges)throw Error('Selected graph bound exceeded');
  const ids=new Map<string,number>(),bytes:Buffer[]=[],forward:number[][]=[],reverse:number[][]=[];
  for(const id of nodes){
-  if(typeof id!=='string'||id.length===0||id.includes('\0')||/[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/u.test(id))throw Error('Exact UTF-8 document identity required');
+  if(typeof id!=='string'||id.length===0)throw Error('Exact UTF-8 document identity required');
   if(id.length>limits.identityBytes)throw Error('Selected identity byte bound exceeded');
+  if(id.includes('\0')||/[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/u.test(id))throw Error('Exact UTF-8 document identity required');
+  if(Buffer.byteLength(id,'utf8')>limits.identityBytes)throw Error('Selected identity byte bound exceeded');
   if(ids.has(id))throw Error('duplicate_document_identity');
-  const encoded=Buffer.from(id,'utf8');if(encoded.length>limits.identityBytes)throw Error('Selected identity byte bound exceeded');
+  const encoded=Buffer.from(id,'utf8');
   ids.set(id,ids.size);bytes.push(encoded);forward.push([]);reverse.push([]);
  }
  for(const edge of edges){
   if(edge.length!==2)throw Error('Closed dependency pair required');
+  for(const id of edge){
+   if(typeof id!=='string'||id.length===0)throw Error('Exact UTF-8 document identity required');
+   if(id.length>limits.identityBytes)throw Error('Selected identity byte bound exceeded');
+  }
   const from=ids.get(edge[0]),to=ids.get(edge[1]);
   if(from===undefined||to===undefined)throw Error('missing_dependency_identity');
   forward[from].push(to);reverse[to].push(from);

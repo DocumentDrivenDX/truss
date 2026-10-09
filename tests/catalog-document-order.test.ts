@@ -22,3 +22,12 @@ test('long chain uses checked work stacks and dependency-first output',()=>{
  const edges=nodes.slice(1).map((id,i)=>[id,nodes[i]] as const);
  expect(orderCatalogDocuments(nodes,edges,{identityBytes:256,documents:4096,edges:4095}).order).toEqual(nodes);
 });
+
+test('oversized node and edge identities refuse before scanning or hashing their content',()=>{
+ const limits={documents:1,edges:1,identityBytes:4};
+ expect(()=>orderCatalogDocuments(['aaaaa\0'],[],limits)).toThrow('identity byte bound');
+ expect(()=>orderCatalogDocuments(['aaaaa\ud800'],[],limits)).toThrow('identity byte bound');
+ expect(()=>orderCatalogDocuments(['A'],[['A','aaaaa\0']],limits)).toThrow('identity byte bound');
+ expect(()=>orderCatalogDocuments(['ééé'],[],limits)).toThrow('identity byte bound');
+ expect(orderCatalogDocuments(['éé'],[],limits).order).toEqual(['éé']);
+});
