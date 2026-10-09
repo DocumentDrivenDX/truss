@@ -285,3 +285,6 @@ found no additional product selection needed for that persistence strategy;
 it does not prove the full retry design or corpus complete. Security-owned
 publication and authority protocols remain independently owned, including their
 uncommitted work; this reconciliation does not adopt new security code.
+
+
+The [focused source review inventory](evidence/design-audit/focused-story-reconciliation.json) pins fifteen current technical-design surfaces inspected during this reconciliation. Each retains a concrete finding and remaining handoff; none is a whole-story completion verdict. It complements the scoped rows above and does not replace the full 45-story semantic audit or structural coverage receipt.
