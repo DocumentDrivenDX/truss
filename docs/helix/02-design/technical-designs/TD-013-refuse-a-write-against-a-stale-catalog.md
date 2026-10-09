@@ -23,7 +23,7 @@ ddx:
 
 Use the single mutable head row and locking protocol in CONTRACT-001/004. The writer's first catalog/data lock is the shared head check; acceptance holds its exclusive head lock through persistence and commit. An old pin observed before locking is refused at READ COMMITTED after a newer acceptance. A REPEATABLE READ snapshot established before the head update exercises the native serialization outcome when attempting the locking check. Acceptance cannot replace a head while a writer already holds its shared lock.
 
-The optional queue is not implemented by a process-local mutex: independent hosts must share its admission boundary. Its fairness, timeout, abandonment and interaction with caller transactions need a governing contract before AC3's 50 ms guarantee is executable. Preserve the requirement as gated, not deleted.
+The optional queue is not implemented by a process-local mutex: independent hosts must share its admission boundary. Consume CONTRACT-003’s proposed transaction-scoped advisory prelude and original admission/reentry/unknown-state procedure. Exact native mechanism, participating-path coverage, fairness/wait behavior and caller-savepoint/timeout realization still require adoption and qualification before AC3’s 50 ms guarantee is executable. Preserve the requirement as gated, not deleted.
 
 ## Component Changes
 
@@ -34,7 +34,7 @@ The optional queue is not implemented by a process-local mutex: independent host
 | `tests/catalog/races.test.ts` | Explicit multi-client interleavings and state assertions | All criteria |
 | `tests/benchmarks/catalog-admission.ts` | Continuous-writer and qualified optional-queue wait measurements | US-013-AC3 |
 
-All runtime components are new; queue component placement waits for its shared protocol design.
+Head gating and optional prelude compose through the existing catalog admission/executor components; exact native implementation remains unfinished. The authored shared prelude is a candidate, not a second process-local queue or measured fairness guarantee.
 
 ## API/Interface Design
 
@@ -60,12 +60,12 @@ No schema change. Failed acceptance leaves head/catalog/data/journal unchanged. 
 
 1. Write deterministic RC/RR and dual-acceptance red tests with observed locks.
 2. Implement head gating/revalidation and error mapping through the common executor.
-3. Define the optional shared admission protocol, then implement and qualify its load benchmark.
+3. Adopt/implement the existing optional shared admission prelude under exact original native/driver/privilege profiles, then qualify its complete sixteen-writer timing and failure schedules.
 4. Review every public write for gate coverage and native evidence.
 
 ## Risks and Gates
 
-US-013's walkthrough explicitly places acceptance between pre-lock observation and locking admission; the held-share-lock control separately proves acceptance waits through outer termination. A mid-held-lock head replacement is impossible under the contract. Queue guarantee, timing/statistics and cross-host fairness remain unresolved. Exact stale/error precedence inherits US-012. No language-neutral correctness claim follows from one adapter's lock test.
+US-013's walkthrough explicitly places acceptance between pre-lock observation and locking admission; the held-share-lock control separately proves acceptance waits through outer termination. A mid-held-lock head replacement is impossible under the contract. The optional queue/prelude procedure and timing observation candidate are authored; actual cross-host fairness, realizable original custody and the selected workload/measurement profile remain unqualified. Exact stale/error precedence inherits US-012. No language-neutral correctness claim follows from one adapter's lock test.
 
 
 ## Proposed optional-queue timing observation protocol

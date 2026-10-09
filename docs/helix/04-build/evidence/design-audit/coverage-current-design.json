@@ -1042,7 +1042,7 @@
     "03-test/test-plans/STP-011-limit-an-edges-multiplicity.md": "15e0c656e97702f19a56414e488eaeb65216b85c75d35e1b51929fc730646bb2",
     "02-design/technical-designs/TD-012-write-with-one-protocol-and-report-every-violation.md": "b69570bfce6a4707a22ee654e81be5a533126a19d6a7ea6222f211f7c9e6ce49",
     "03-test/test-plans/STP-012-write-with-one-protocol-and-report-every-violation.md": "2d1600377fcfe8a6d3ce558a23a65c78b03b82c3c96793858f7bb48b62cc0042",
-    "02-design/technical-designs/TD-013-refuse-a-write-against-a-stale-catalog.md": "adba3ae01b9b9969b94f3325956437e329a12448ef5d8e190e02b3a431e8da92",
+    "02-design/technical-designs/TD-013-refuse-a-write-against-a-stale-catalog.md": "508ed5c6124b0de5df4ec9666de6586c01e8ebe13ca7154733c5fe78ed9bf5e0",
     "03-test/test-plans/STP-013-refuse-a-write-against-a-stale-catalog.md": "a8881acb61a094be8df694be05fbe15db50d28de0447b8d1e69a0e391a1319cb",
     "02-design/technical-designs/TD-014-keep-cross-row-rules-honest.md": "83a7b2b14c104499f83c02cde8ee6999c62c2db27a47408737d1fc01f987801b",
     "03-test/test-plans/STP-014-keep-cross-row-rules-honest.md": "73506d5c6de95d2c66250d36f20eb7f16c80d246aa26758af20a8f49ae1eed95",
