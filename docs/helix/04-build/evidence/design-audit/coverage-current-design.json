@@ -1129,7 +1129,7 @@
     "01-frame/user-stories/US-017-read-the-journal-incrementally-without-missing-a-change.md": "854dd8e82a9c08f817ac0f6fc26e59d2ffc0dec21212e90edb76348aaa2bf885",
     "01-frame/user-stories/US-018-reconstruct-a-record-as-of-a-version.md": "32dd185f39c695fd7b6e5732cded3dcd355cc5ef95345e8c88061c18f6be4555",
     "01-frame/user-stories/US-019-trim-the-journal-by-dropping-partitions.md": "cf3670097a6c702eb8fc3aa8047d48d54eb2c99efa14101a3b773888e7c81feb",
-    "01-frame/user-stories/US-020-read-an-object-by-id-or-key.md": "86ed160b149e9b7d5e54d84cabab6cfcb5e154406ede31f5acd72af003717876",
+    "01-frame/user-stories/US-020-read-an-object-by-id-or-key.md": "49feafab1f73270d359482e3d4b0cd3c3050ff898537660246f30a38ce998d44",
     "01-frame/user-stories/US-021-list-a-types-objects-in-pages.md": "886d8d16a14536254b9d1e689600a3854181df61bcec901ac79e5b9f2be05746",
     "01-frame/user-stories/US-022-list-an-objects-edges-bounded.md": "f40b89f5a85bfde15abeb42c2f0476cba168a093b54d1e07ef72aa03ea010aed",
     "01-frame/user-stories/US-023-traverse-one-to-three-hops.md": "d5faa0e4761daf3127746ab18670acc81dc0738e34534e5c39b5d0a0369451f0",

@@ -29,7 +29,7 @@ ddx:
 
 ## Context
 
-Both lookups are direct: by `(id, type)` or by the key text through the key table.
+Both lookups are direct: by complete typed identity `(id, type)` or by the admitted qualified key definition, ordered exact components and encoding profile through the selected native key home. Caller-supplied canonical text or a route digest cannot bypass component/owner/domain admission or establish equality. Observe the key membership and object in one qualified coherent context. Read results distinguish the original last-written revision from the current read catalog revision; a definition-only acceptance cannot relabel an unchanged record as newly written.
 
 ## Walkthrough
 
@@ -47,8 +47,8 @@ Both lookups are direct: by `(id, type)` or by the key text through the key tabl
 
 ## Edge Cases
 
-- **Unknown identifier or key**: not found, not an empty object.
-- **Values read**: parsed exactly from text.
+- **Absent identifier or key under a complete admitted lookup**: not found, not an empty object, under the selected disclosure policy. Unsupported comparison/encoding, truncated native observation, stale mapping or unavailable authority cannot prove absence and returns the defined refusal/unavailable outcome without a record payload.
+- **Values read**: complete logical values preserve exact carriers and distinguish absence, present null and empty content under original definition/presence pins. A current lookup is not historical business-key reconstruction under an arbitrary old catalog.
 
 ## Test Scenarios
 
