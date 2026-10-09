@@ -1783,3 +1783,37 @@ A matching post-commit verification cannot substitute for original commit proof;
 a mismatch after confirmed commit remains committed_unverified. Exact public
 command names and runnable adapters remain LM-06/B-014 outputs. The carrier is
 still an unimplemented proposal, not installed migration tooling.
+
+### Metadata plan to registered execution correspondence
+
+LM-01's frozen metadata plan is intentionally not an original-artifact capsule.
+The execution adapter must retain the complete original manifest and source
+observation separately as exact artifacts, together with the explicit requested
+target and selected route. Do not reconstruct a manifest from the selected steps:
+unselected routes, profiles and layouts remain part of the registered original.
+
+Before original-attempt registration, resolve manifest identity to registered
+complete bytes, independently check the artifact's full bytes/digest and parse
+those same bytes with the closed planner. Compare family, full source/target
+pins, route ID, direction and every ordered step/recipe/procedure/transactional
+field with the reviewed plan. Any changed manifest or supplied plan refuses;
+a copied plan object cannot authorize application. The selected route's actual
+recipe and procedure bytes require separate registration correspondence; names
+and digests alone do not establish native implementation or authority.
+
+After writer/security/configuration exclusion, recollect the original source
+installation and independently compare it to the retained observation and source
+pin before executing any recipe. A changed source refuses even if its version
+text still matches. Retain both the earlier observation and fresh admitted cut
+in attempt evidence; never silently refresh a stale request into another plan.
+For `no_steps`, route execution is unavailable: independently verified current
+installation can report readiness, but already_applied requires the original
+settled migration receipt and commit correspondence under the existing contract.
+
+LM-T04/06 additionally substitute only an unselected manifest route, reorder
+selected steps while keeping IDs/digests present, replace the source observation
+with another same-version inventory, and mutate caller buffers after planning.
+The original registered bytes and reviewed plan stay fixed; each substitution
+refuses before recipe effects or a new epoch. Arbitrary caller plan objects and
+successful pure planning remain inert. Native original-attempt registration,
+complete exclusion and recipe execution are still LM-02–04 implementation exits.
