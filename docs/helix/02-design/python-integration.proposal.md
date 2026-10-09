@@ -65,6 +65,33 @@ Author setup/call/expected-result/error/journal fixtures before collecting obser
 ADR-003 acceptance and Python package/repository ownership; initial driver and sync/async mode; published Weft wheel/feature tuple; admitted authorization ABI; stable install version and consumer-migration route; exact managed Lakebase version/extension/identity/transaction profile; receipt minimum retry lifetime; and receipt-token/reached ABI. Python adapter/codec/corpus work can start independently where these choices do not affect semantics. Complete public capability release still waits for the shared protected runtime and qualification.
 
 
+## Consumer closure order and accountable outputs
+
+R1–R10 are release outcomes, not ten additional votes on already selected
+transaction, exact-value or receipt semantics. Close the route decision first;
+author corpus cases alongside shared runtime work; qualify native identity
+before consumer effects; then run the complete release conjunction.
+
+| Requirement | Required output and implementation slice | Outstanding selection versus execution |
+| --- | --- | --- |
+| R1 Python route | ADR-003 owner decision, named package home and corresponding ADR-001 amendment | Owner decision pending; do not accept either ADR by inference |
+| R2 shared corpus | Versioned data manifest, setup/calls/expected/error/journal/alias artifacts and native two-way interchange runner; PY-07/B-015 | Exact fixture/procedure profiles and corpus artifacts to author; actual TypeScript/Python runs then required |
+| R3 installation | Stable compatible layout, exact DDL digest, installer/check plus explicit consumer deployment invocation; CH-01 and LM-01–06 | Stable release tuple and managed target selection open; native install/migration evidence not yet qualified |
+| R4 membership | Security-owned person membership and enforced read/write boundary; PY-03 | Shared authorization ABI/profile belongs to security workstream; native writer/reader/outsider/no-identity cases required |
+| R5 origin | Original session actor and separately retained asserted action extension; PY-03/04 | Security/native origin handoff, then actual journal correspondence; host cannot supply authority |
+| R6 dry-run | Adopted original transaction with contained savepoints and actual final-state validation; PY-01/04 | Select one driver/mode; execute same-plan dry-run/apply and unchanged-after-rollback cases |
+| R7 retry/reached | Immutable original result/token, current-snapshot comparison and complete applied coverage; PY-04/06 | Select token/resolver and deployment retry floor; execute lost-ACK, no-op, snapshot, restart and epoch cases |
+| R8 interactive reads | Direct versus Weft routes and finite indexed/work budgets; PY-02/05 | Parsed-input ABI is Weft-owned; aggregate/index resource profiles remain; actual native plans required |
+| R9 exact values | Existing CONTRACT-010 wire plus Python int/Decimal/lossless time/JSON projections; PY-01 | Select owner codec tuple; independent boundary and round-trip vectors required without float intermediates |
+| R10 publication | Release names Python/TypeScript, PostgreSQL/managed target, layout, corpus, UMF, Weft and authorization/profile versions; PY-07/B-014 | Exact artifacts and publication tuple open; clean package install and full matching receipts required |
+
+The first consumer-ready release must satisfy every row; a working compiler or
+adapter alone cannot replace it. Until R3/R10 close, describe source pins as
+recorded experimental integration inputs rather than stable dependencies. No
+managed Lakebase or Aurora support claim follows from isolated PostgreSQL 17.9
+evidence. Qualification names the actual target version, extension availability,
+authenticated connection semantics and transaction restrictions.
+
 ## Original configuration snapshot protocol
 
 PY-01 can consume the [shared twelve-column native snapshot wire](contracts/installed-context-admission.proposal.md#original-snapshot-host-projection-and-shared-native-wire). PostgreSQL retains the pre-effect capsule and compares live current state before returning bytes. Python preserves canonical xid/ordinal/generation text, exact hex bytes and direct SHA-256; it keeps original adapter/transaction/cut/profile custody and rechecks at use. Current-only collection remains a different protocol. The TypeScript/native 171-check component establishes scoped correspondence; Python execution, qualified transport/security/installation and public report/finalization remain PY-01/03/04 evidence.
