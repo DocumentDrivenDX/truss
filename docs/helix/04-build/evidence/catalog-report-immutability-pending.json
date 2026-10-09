@@ -1,0 +1,14 @@
+{
+  "sources": {
+    "packages/postgresql/native/catalog-report-immutability.sql": "c243b51682de3fee979b977626bb54279eccb3de22a24270e0bda467bd215167",
+    "scripts/check-catalog-report-immutability.ts": "62e6a9c1e60a0c116d0753805fff88ad8e07395ff40021a3d6e47c6f773e8668"
+  },
+  "strictTypeCheck": "passed",
+  "nativeAttempts": {
+    "count": 2,
+    "status": "unverified",
+    "errorCode": "ERR_POSTGRES_CONNECTION_TIMEOUT",
+    "detail": "Startup sent; no database response within five seconds. No infrastructure restart."
+  },
+  "scope": "Draft immutable report byte-home guard and runnable temporary-fixture schedule; no executed native guard qualification."
+}
