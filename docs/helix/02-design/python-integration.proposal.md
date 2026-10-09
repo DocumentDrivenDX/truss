@@ -167,6 +167,17 @@ consumer SQL. They establish logical profile correspondence only; actual count
 presence, page cursor custody, storage lowering, authorization and native results
 remain unqualified.
 
+After either saved frontend input run, assess the complete emitted result file
+with `python3 docs/helix/04-build/evidence/design-audit/check_consumer_frontend_observations.py`
+followed by `logical` or `application` and the emitted results path. The
+[retained assessor](../04-build/evidence/design-audit/check_consumer_frontend_observations.py)
+checks exact frozen input/harness/response digests, complete ordered case
+membership, original module retention and profile/key correspondence. Four
+logical and six application observations pass; six changed/incomplete controls
+per packet refuse. The Rust harness pass only records observations; this separate
+assessment checks their expected outcomes. Neither verdict qualifies SQL/native
+execution or the complete consumer adapter.
+
 ## Remaining consumer metadata meaning and action boundary
 
 Both explicit-name validation observations retain eight warnings. Five identify
