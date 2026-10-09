@@ -26,6 +26,7 @@
     "catalog-report-immutability": "c243b51682de3fee979b977626bb54279eccb3de22a24270e0bda467bd215167",
     "catalog-original-context": "bba5ab80bb909b354b710d7de466b94252df6e877739c8ef519db48a21ac2115"
   },
+  "originalExecutionBasisProducerSha256": "9fb6179ef8fa59b488df4d2ef911aa67937544a996a75583c41a636d484d75f8",
   "reportCorrespondenceProducerSha256": "2554a8e6d8df8f7e26bd4df3a207af2c06c0c6f098485d53e847975f2c5bec53",
   "reportPreparationProducerSha256": "125c0e99bf7e187bc1f126dbde73e81a9cb291d83aa891a6e8fdc2b493b32881",
   "assertionProfiles": {
@@ -94,6 +95,8 @@
     "native actor collector returns exact original admitted context bytes",
     "original native acting/login/database/backend facts match current issuer",
     "borrowed transaction identity cannot expose original native actor context",
+    "host actor basis preserves exact native context bytes",
+    "host actor basis carries actual role without inventing full originalExecution",
     "nine report fields correspond to original owner and actual native observations without accepted authority",
     "schema-valid forged native count refuses report correspondence",
     "copied composed report basis cannot borrow original native cut",

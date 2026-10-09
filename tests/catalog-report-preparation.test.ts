@@ -3,6 +3,7 @@ import {createCatalogInputPreparation} from '../packages/umf-bun/src/catalog-inp
 import {loadUmfDeclarationProducer,loadUmfFieldAssertionProducer} from '../packages/umf-bun/src/index';
 import {collectCatalogReportPreparation} from '../packages/umf-bun/src/catalog-report-preparation';
 import {createCatalogReportCorrespondence} from '../packages/umf-bun/src/catalog-report-correspondence';
+import {collectCatalogOriginalExecutionBasis} from '../packages/umf-bun/src/catalog-original-execution-basis';
 const recordDir=process.env.TRUSS_UMF_PRODUCER,ownerDir=process.env.TRUSS_UMF_DECLARATION_PRODUCER,fieldDir=process.env.TRUSS_UMF_FIELD_ASSERTION_PRODUCER;if(!recordDir||!ownerDir||!fieldDir)throw Error('All original owner directories required');
 const preparation=await createCatalogInputPreparation(recordDir,'/Users/erik/Projects/umf/package.json'),owner=await loadUmfDeclarationProducer(ownerDir),fields=await loadUmfFieldAssertionProducer(fieldDir);
 const input=structuredClone((await Bun.file('docs/helix/02-design/contracts/bindings/acceptance-input-capacity-v0.1.fixture.json').json()).input);input.binding={state:'absent'};input.transforms=[];
@@ -77,4 +78,14 @@ test('copied report basis and stale native cut cannot supply correspondence',asy
  const basis=await collectCatalogReportPreparation(connection(),prepared,'1',owner,fields),native=connection();
  await expect(correspondence.verify(native,prepared,{...basis},wire(reportFor(basis)))).rejects.toThrow('bound catalog report preparation');expect(native.queries).toEqual([]);
  await expect(correspondence.verify({unsafe:async()=>{throw Error('stale original cut')}},prepared,basis,wire(reportFor(basis)))).rejects.toThrow('stale original cut');
+});
+test('native actor basis retains original bytes and rejects inconsistent result carriers',async()=>{
+ const basis=await collectCatalogReportPreparation(connection(),prepared,'1',owner,fields);
+ const context=' {"interfaceVersion":"truss-native-operation-context/0.1","xid":"42","ordinal":"0","actingUser":"actor","sessionUser":"login","database":"db","backendPid":"7"} ';
+ const row={context_hex:Buffer.from(context).toString('hex'),database_role:'actor',login_role:'login',database_name:'db',backend_pid:'7'};
+ const native=(rows:Record<string,string>[])=>({unsafe:async(query:string)=>query.includes('runtime_collect_catalog_original_context')?rows:[]});
+ const result=await collectCatalogOriginalExecutionBasis(native([row]),prepared,basis);
+ expect(Buffer.from(result.contextEvidence.bytesBase64,'base64').toString()).toBe(context);expect(result.databaseRole).toBe('actor');expect(result.scope).toBe('original_native_actor_context_basis_only');
+ for(const rows of [[],[row,row],[{...row,extra:'x'}],[{...row,database_role:'forged'}],[{...row,context_hex:'7b7d'}],[{...row,context_hex:'AB'}]])await expect(collectCatalogOriginalExecutionBasis(native(rows),prepared,basis)).rejects.toThrow();
+ await expect(collectCatalogOriginalExecutionBasis(native([row]),prepared,{...basis})).rejects.toThrow('bound catalog report preparation');
 });
