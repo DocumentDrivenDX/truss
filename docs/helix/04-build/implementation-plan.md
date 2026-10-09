@@ -53,10 +53,10 @@ This is the current next-work sequence. Later chronological notes preserve their
 
 | Work item | Original inputs | Concrete deliverable and exit evidence | Blocking dependency |
 | --- | --- | --- | --- |
-| CH-01 physical effects / B-002 | Reconciled 0.12 history review over unchanged 0.11 declaration/receipt foundation, 46 tables/442 columns; original 0.11 inventory and compiler packet remain pinned | Complete authored relation/column/constraint/index/sequence/routine/trigger/policy/grant/implicit-effect inventory, preserving prior IDs and originals; independent missing/extra/parent/source corruption controls | Required routine/security/profile selection for a full installer; optional candidates cannot silently enter the selected inventory |
+| CH-01 physical effects / B-002 | Current private 0.15 native model and current 0.3 core structural projection, 46 tables/443 columns; historical 0.11/0.12 packets remain separately pinned | Complete authored relation/column/constraint/index/sequence/routine/trigger/policy/grant/implicit-effect inventory, preserving prior IDs and originals; independent missing/extra/parent/source corruption controls | Required routine/security/profile selection for a full installer; optional candidates cannot silently enter the selected inventory |
 | CH-02 protected native composition / B-005/013 | OC01–07, five trigger interfaces, separate seven handler/validator and five journal-phase manifests, qualified grant helper, feed/recovery/lifecycle/migration algorithms; H1–H7 history dependency order | Exact signatures, source bodies, owners/search paths/types/dependencies, private/public call graph and finite selected accounting; complete bypass and transaction closure schedules | Selected controlled-work scope; exact managed-service/driver/native observation and finite resource realization |
 | CH-03 bootstrap/conversion / B-003 | CH-01/02, marker/archive IM01–07, migration initializer, original conversion artifacts | One complete versioned installer plus original initialization/conversion; independent native catalog parity and IM-T/MI schedules before ready-marker publication | Complete selected native tuple and body/security inventory; no additive fragment or review marker qualifies readiness |
-| CH-04 compiler mapping / B-012 | Concrete 0.11 source packet, original UMF definitions and current Weft owner bridge | Exact accepted versioned layout/codec/selector/execution scope; independent scalar/key/relationship/compound fixtures plus MS-01–08 where supported | Explicit owner review/adoption and native stored-domain/executor evidence; packet validation alone cannot register support |
+| CH-04 compiler mapping / B-012 | Pinned qualified compiler 27445317, committed-source sync through 94b2de5e, original UMF definitions and current private 0.15 source; historical 0.11 packet remains unadopted | Exact accepted versioned layout/codec/selector/execution scope; independent scalar/key/relationship/compound fixtures plus MS-01–08 where supported | Explicit owner review/adoption and native stored-domain/executor evidence; packet validation alone cannot register support |
 | CH-05 public packaging / B-014 | Existing draft bindings and package delivery PD-01–08; exact driver hook handoff and STP-044 DH-01–05 alongside OL/LR/SB lease cases | Separate compiled ESM/declaration exports, clean packed consumers and inert construction/import evidence; reference host uses public interfaces | Build/import work can proceed now; native scenario requires CH-02/03 and selected driver; Node remains separately qualified |
 | CH-06 complete product qualification / B-001/015 | Independently authored corpus, all 45 story/STP pairs and public reference S01–S09 | Exact original per-case state/journal/report/fault/concurrency/resource/consumer receipts and complete assessor output | Required owner choices, selected corpus/deployment and implementation; unavailable prerequisites cannot be skipped into green status |
 
@@ -72,11 +72,11 @@ These close specific interface/procedure choices inside the existing CH work; na
 
 | Existing work | Selected handoff | Remaining composition before capability admission |
 | --- | --- | --- |
-| B-004 / CH-05 pure numeric convenience | [Core helper contract](../02-design/contracts/core-numeric-number-view.proposal.md), primary core declaration entry and [28-case oracle](../03-test/numeric-number-view-expected.proposal.json) | Exact lexical/rational implementation and qualified dependency/resource producers; shared enclosing-account integration; packed runtime parity |
+| B-004 / CH-05 pure numeric convenience | [Core helper contract](../02-design/contracts/core-numeric-number-view.proposal.md), primary core declaration entry and [28-case oracle](../03-test/numeric-number-view-expected.proposal.json) | Consume pinned UMF numeric public APIs; qualify conservative pre-invocation accounting and error translation, preserve signed-zero refusal/default exact custody, then verify packed runtime parity |
 | B-005/008 / CH-02 participation | [Independent outgoing SQL](../02-design/contracts/reference-outgoing-participation.proposal.sql), [incoming SQL](../02-design/contracts/reference-incoming-participation.proposal.sql), [degree oracle](../03-test/reference-participation-expected.proposal.json), STP-040 PQ-01–05 | Original complete affected-scope producer, exclusions/visibility/dependencies and count invocation on every writer/catalog/commit path; separate canonical/marker/current-union validation |
 | B-004/008 / CH-02 exact code equality | [Private equality SQL](../02-design/contracts/reference-code-equality-observation.proposal.sql), [Unicode oracle](../03-test/reference-code-equality-expected.proposal.json) | Exact native operator/collation/cast/encoding and source/home/Field admission; original resource and transport producer; UMF tuple identity remains separate |
 | B-005/013 / CH-02 actor custody | [Original actor handoff](../02-design/contracts/reference-actor-custody.proposal.md) | Actual original observation boundary, role/session/identity correspondence and protected transitive command/settings paths; no request role or helper-owner substitution |
-| B-012 / CH-04 owner compiler | Weft main 1ed1c24 accepts B-006, recorded in the [merge review](evidence/design-audit/weft-b006-merge-source-review.json) | Truss layout/codec/authority adoption and explicit-null registration remain separate; B-007 release scope is still open |
+| B-012 / CH-04 owner compiler | Merged compiler 27445317 with qualified registration and current 94b2de5e source sync, recorded in [the qualification review](evidence/design-audit/weft-merged-qualified-profile-source-review.json) | Truss installed layout/codec/authority adoption and explicit-native-null registration remain open; owner qualification does not establish the protected Truss engine |
 
 The [network batch host handoff](../02-design/contracts/reference-network-batch-host.proposal.md) composes B-009 receipts with CH-05/06 reference-host execution: one complete request, owned outer transaction, commit-before-ack and original equal-input recovery. Its NB-01–06 controls retain transport failure versus native settlement distinctions without adding remote transaction handles.
 
@@ -266,7 +266,7 @@ Record the following selection rows together before admitting an implementation 
 | Selection | Existing authority / recommended starting point | Concrete closure output | Work that can proceed meanwhile |
 | --- | --- | --- | --- |
 | Language and packaging | Accepted ADR-001: TypeScript portable core, Bun development; driver I/O isolated | Package entry/export map, browser-safe dependency graph and selected host runtime versions; Node support remains separately qualified | Public module/dependency/lifetime design and clean-consumer test specification |
-| UMF | Owner direction: existing capabilities are sufficient; current source receipts pin 16c35e8d | Exact consumable package/API/envelope/source/key versions and original source/export composition; do not mix newer incompatible profiles | Compose existing source artifacts and retain complete authored/source inventory |
+| UMF | Owner direction: existing capabilities are sufficient; current remote source is e3555b9a, with runtime producers separately pinned to original reviewed revisions | Exact consumable package/API/envelope/source/key versions and original source/export composition; do not mix newer incompatible profiles | Compose existing source artifacts and retain complete authored/source inventory |
 | PostgreSQL target | PostgreSQL 17 catalog/query candidates and historical spike evidence | Exact server/build/extensions/locale/encoding and isolated deployment identity; selected role/namespace/authority/coherence profile | Native installation/probe inventory and barrier-driven schedules |
 | Driver and transactions | CONTRACT-007 Bun candidate review and E01–E06 | Select original descriptor/tag/error/termination/control/resource producers; establish host transaction/savepoint mediation and supported pooling mode | Implementable producer signature/body design; unsupported driver capabilities stay explicit |
 | Layout and values | Accepted generic storage direction; baseline 0.2 and recursive row-home candidates remain distinct | One reconciled installation inventory with required helper bodies, codec/comparator/null/key definitions and privilege/guard source; no fragment concatenation | Resolve missing source/native effects and recursive value invariants |
@@ -2620,3 +2620,23 @@ remain unavailable under this owner producer, with signed zero preserved in
 exact carriers. The previous binary decomposition procedure is an independent
 oracle, not a second implementation work item. This does not silently migrate
 0.7 source to 0.8, qualify Field validation or alter native numeric homes.
+
+### Current handoff summary reconciliation
+
+The current CH/component/milestone rows above now distinguish the actual
+0.15 private layout, current structural projection, merged qualified compiler
+and available UMF numeric producer from their historical inputs. This is not
+a blanket dependency repin: each runtime source/build/profile still requires
+its own original admission and immutable correspondence. The 45-story corpus
+and B-001–B-015 scope remain unchanged.
+
+Execute the next integrated acceptance package in this order: complete
+registered input/custody and compatible precharged capacity; original
+input/archive/interpretation bijection; complete actual catalog and lifecycle
+effect collection; all nineteen report fields from their selected producers;
+exact canonical report persistence and recollection; unavoidable surviving
+cohort finalization/head transition; then owned/adopted settlement and original
+repeat/recovery. Independently inject failure at each transition and ordinary
+role bypass at each native boundary. Keep the temporary positive-COMMIT
+barrier until that complete chain passes. No browser, compiler COUNT fixture
+or component codec receipt can close this package.
