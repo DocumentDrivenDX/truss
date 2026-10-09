@@ -65,3 +65,40 @@ shared prerequisites retained by another cohort, lost cleanup COMMIT acknowledgm
 and restart. Observe original complete charges, reservations, history, receipt and
 horizon inventories rather than trusting the account producer's returned total.
 These schedules extend STP-018 HSEL-08 and STP-019 AH-05/06; none have run.
+
+## Independent reconstruction after confirmed local removal
+
+Archive handoff qualification must also exercise the actual future reader after
+local cleanup, not stop at upload/retrieval byte parity. Before export, author
+independent expected object/edge versions, exact values/presence, owner and typed
+identity, complete group order and original definition/source context for a
+populated history cohort. Include deletion, retained additions, rebind and shared
+prerequisites; local current state cannot supply the expected historical values.
+
+After independently confirmed eligible native removal and horizon publication,
+start a fresh reader process with only the selected admitted recovery identity,
+archive locator/profile and original interpretation dependencies. Exclude exporter
+memory, local history files, driver caches and test fixture state from its inputs.
+Read through the advertised reconstruction API and compare full reconstructed
+versions with the independent expectations. Explicitly observe local removed
+membership so a fallback to still-retained journal rows cannot pass the archive
+case. Preserve separately protected local prerequisites rather than deleting
+them merely to make the fixture smaller.
+
+Repeat after changing the current catalog and current values. Reconstruction uses
+original definitions/codecs and current authorized historical access; it cannot
+reinterpret old values under the new catalog or inherit the exporter's past
+permission. Missing original definition/profile, denied recovery identity,
+partial group/baseline and unavailable provider produce explicit unavailable,
+not a partial reconstructed version. Authorized tombstone history remains its
+own selected disclosure path; a recreated current object or matching business
+key does not replace the original typed identity.
+
+Separately fault cleanup before commit and lose its commit acknowledgment. A
+confirmed rollback keeps local horizon/content unchanged; uncertain cleanup
+reconciles the original native attempt before classifying actual removal or
+releasing capacity. The fresh-reader test must retain both provider and native
+settlement observations. Successful archive reconstruction cannot prove that
+cleanup committed, and successful cleanup cannot prove reconstruction. These
+planned AH/HSEL integration controls retain the existing v0.2 archive protocol;
+no new restoration-to-database API or provider credential authority is introduced.
