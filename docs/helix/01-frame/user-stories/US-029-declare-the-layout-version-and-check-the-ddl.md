@@ -29,7 +29,7 @@ ddx:
 
 ## Context
 
-The installed schema marker carries the normative layout version; SQL comments document it. The check script and independent native probes exercise constraints and behavior.
+The installed schema marker carries the normative layout version; SQL comments document it. The check script and independent native probes exercise constraints and behavior. Version compatibility also requires the implementation’s declared supported layout/runtime/profile range and independently verified installed inventory. A marker or matching major alone cannot establish complete routines, grants, codecs or data conversion. Physical upgrades use the explicit Truss migration system; connecting or inspecting status never performs an upgrade. The listed PostgreSQL versions are qualification targets inherited from the spikes, not evidence that the complete release installer already passes.
 
 ## Walkthrough
 
@@ -47,7 +47,7 @@ The installed schema marker carries the normative layout version; SQL comments d
 ## Edge Cases
 
 - **An unsupported PostgreSQL version**: reported unverified.
-- **A minor version difference**: accepted.
+- **A minor version difference**: accepted only within the declared compatible range and after complete required installed correspondence. Unknown or drifted same-major state refuses admission; it is never automatically repaired or migrated.
 
 ## Test Scenarios
 

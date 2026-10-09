@@ -48,3 +48,10 @@ Missing/malformed marker, incompatible minor capability inventory, unsupported s
 ## Build Handoff
 
 Resolve marker/minor policy, define probe inventory/red fixtures, implement preflight and run complete matrix. All criteria block claimed compatibility. Existing-data migration remains separate governed work.
+
+
+## Same-major inventory and explicit upgrade controls
+
+Install an independently qualified source layout and record its complete original object/routine/privilege/codec inventory. Connect an implementation whose declared supported range includes that exact profile and expect admission only after native correspondence. Then retain the major version while independently changing a required routine body, grant or codec artifact: a same-major marker cannot authorize operations, and the read-only verifier must report drift/unavailable without repairing it. Separately test an intact same-major layout outside the implementation’s declared range; refuse before mutation.
+
+Status inspection and ordinary connection/import must issue no installer or migration DDL. Only an explicitly invoked registered upgrade route may change the layout, under CONTRACT-008’s dedicated administrative ownership, preservation and original-attempt recovery protocol. Confirmed upgrade still requires fresh target parity before readiness; a ledger/version increment alone cannot satisfy it. Run every supported server/deployment tuple independently with the exact generated DDL and complete behavioral check. Historical spike success on a subset or version string is insufficient. These controls remain planned native/driver tests.
