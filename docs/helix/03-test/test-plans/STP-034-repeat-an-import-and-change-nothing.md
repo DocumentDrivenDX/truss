@@ -124,3 +124,56 @@ The [independent 51-record fixture](../reference-import-51-records.proposal.json
 This logical fixture is not serialized ImportInput, a request receipt or native-ID allocation. The harness supplies exact original wire/source/profile bytes and independently admitted identities/settlement; Item.note null still requires the selected direct native presence realization. Apply the existing criterion allocations for create/repeat/held/delete/report behavior and STP-035 source custody. Existing allow/edge/concurrency/resource/interruption and request-versus-load boundaries remain required; a passing all-object fixture cannot qualify them. All scenarios remain not_run.
 
 The [complete logical import-state oracle](../reference-import-51-expected-states.proposal.json) retains five authored cuts with every original live record, exact value/presence and logical key membership. It separately retains deleted item-c and original import-source expectations; native identities/version/clock/history/reservation/settlement remain independently observed, not inferred from business keys. The repeat cut equals the deletion cut in complete record/key content, with item-b’s correction preserved. These full expectations supplement the original-index report classifications and cannot be replaced by created/skipped counts or candidate-reader-derived expected state.
+
+
+## Concrete network acknowledgment-loss schedule
+
+NI-01 uses the same admitted original ImportInput across both branches, with
+independent expected records/source facts captured before the first call. Select
+an actual runBatches profile that divides the input into at least two batches;
+retain the exact batch/index assignment rather than guessing it from record count.
+
+1. Commit batch A and retain original committed outcome/membership evidence.
+   Cut batch B's commit acknowledgment through the original driver fault harness,
+   producing an unknown original batch outcome. Preserve original attempt identity,
+   report/recovery custody and resource quarantine; do not infer rollback from the
+   transport failure or serialize the request as an atomic mutation-group success.
+2. Establish original backend termination through the selected qualified observer.
+   Before original settlement is known, attempt to reuse its quarantined resource
+   and require refusal. A separate resource alone does not settle batch B or permit
+   overlapping execution without the original executor's recovery admission.
+3. Run separate original native commit and rollback schedules for B. In the committed
+   branch, a later authorized writer deletes one B-created record under forbid.
+   In the rolled-back branch, another writer creates one B identity independently.
+   Preserve each writer's actual journal/source/receipt provenance. These are
+   counterexamples to treating current absence as rollback or current presence
+   as proof the original import committed.
+4. Reconcile B only through exact original attempt/transaction/batch/contained-index
+   settlement evidence. Keep the originally observed report bytes unchanged and
+   append admitted settlement evidence separately. Compare A and B membership;
+   settled A cannot prove B settled, and another writer's identity cannot fill B's
+   unknown outcomes. An original live record that predates both attempts supplies
+   a further control against attributing every skip to B.
+5. Invoke the later eligible identity-based import as a distinct attempt with a new
+   load ID and current profile/configuration/authority. Under forbid, live and
+   reserved identities skip; only eligible absent/unreserved identities create.
+   Independently compare every record, key/reservation, version, journal and source
+   fact. The later report may differ from the original created/unknown report;
+   neither load ID nor equal input digest authorizes exact original-report replay.
+
+NI-02 submits one complete applyInTransaction input within a network host's original
+transaction. Create one valid record and fail a later record at its qualified
+record-local savepoint; retain original successful/failed index membership. Cut
+outer commit acknowledgment, then independently exercise committed and rolled-back
+outer outcomes. Before settlement no pending IDs or provisional committed-success
+projection may escape the network boundary. On confirmed commit only effects that
+survived the record-local containment are durable; host commit cannot relabel the
+failed record as created. On confirmed rollback none of the pending effects survive.
+An unavailable original settlement keeps uncertainty explicit. No atomic-group
+receipt is assumed for this import; exact request-present group replay is qualified
+separately under CONTRACT-004/007.
+
+These schedules extend NI-01/02 without selecting an import receipt, new report
+wire or HTTP endpoint. The harness must supply original transport/driver fault,
+termination, settlement, authority, custody and native state observations. Scenario
+description and current-state readback alone cannot produce a passing result.

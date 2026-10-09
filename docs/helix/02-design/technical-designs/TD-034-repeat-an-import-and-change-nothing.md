@@ -88,3 +88,23 @@ A host exposing runBatches must preserve its explicit multi-transaction import/r
 A network host invoking applyInTransaction supplies one complete bounded import body within its own original transaction and confirms the outer outcome before publishing committed progress. Per-record semantic failures still follow import's selected containment/report rules; this does not turn import into all-or-nothing group semantics. For the existing request-present atomic group API, use its own complete ordered semantic input and receipt recovery protocol. Exact import-report replay over a network would need an explicit separately designed import receipt profile; no existing method or loadId silently supplies it. This records the current public API limitation without weakening reliable group retry or adding a second receipt implementation by implication.
 
 The [compile-only retry-boundary witness](../contracts/bindings/truss-import-retry-boundary-v0.1.typecheck.ts) rejects a requestIdentity member in ImportInput and assigning import input to GroupSemanticInput. Runtime host/protocol evidence must prove that these distinctions survive acknowledgment loss and partial progress; type checks alone do not.
+
+
+### Network fault execution order and independent counterexamples
+
+Implement STP-034 NI-01/02 with original driver fault/termination/settlement
+producers, not a host-generated unknown flag. NI-01 holds exact original batch
+and submitted-index membership across one confirmed committed batch and one
+commit-unknown batch. Preserve original report bytes and quarantine; qualified
+termination and original outcome admission precede overlapping retry eligibility.
+The independent committed-B/later-delete and rolled-back-B/other-writer-create
+branches prove why current absence/presence cannot settle B. A later load has its
+own identity-based report/source facts and cannot repair original unknown entries.
+
+NI-02 keeps the complete network import inside the host's original transaction,
+with successful and failed record-local savepoints. Confirmed outer commit admits
+only surviving successful effects; confirmed outer rollback removes all pending
+effects. Until settlement, pending IDs/results cannot become network committed
+success. Use shared security-owner disclosure/publication custody for both original
+and recovery views; no parallel import ACL or receipt scheme is introduced.
+Full native execution/report/resource qualification remains required.

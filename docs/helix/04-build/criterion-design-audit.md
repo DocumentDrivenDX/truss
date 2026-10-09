@@ -306,3 +306,18 @@ All 167 criteria across 45 stories have now received this criterion-level design
 | 6 | Execution-ready integration slices with red independent tests and native qualification exits for acceptance, mutation/group/receipt, reads, history/feed, installation/migrations and Python interchange. | Truss implementation/test plans must consume outputs above and preserve owner boundaries. Actual native IDs, commit observations, complete ordinary-writer bypass coverage and cross-implementation passes are implementation outputs; record not_run until observed. |
 
 The order above is dependency order, not permission to delay Python scaffolding or independent pure tooling. A coherent profile choice is a design deliverable; proof that its implementation works belongs to the corresponding native/conformance exit. This audit must be updated when governing semantics or selected interfaces change.
+
+
+## Import network retry boundary review — 2026-10-09
+
+Reviewed US-034/035, TD/STP-034/035, the import capability wire and CONTRACT-004/007
+network execution boundary together. Identity-based repeated import and exact
+atomic-group request replay remain different selected behaviors; no loadId or
+group receipt promises original import-report replay. NI-01/02 now specify actual
+original-driver acknowledgment loss, termination/quarantine, original membership
+and settlement, separate later-load reporting, committed-then-deleted and rolled-
+back-then-created counterexamples, and mixed record-local savepoints at outer
+settlement. This advances the independent test plan, not native qualification.
+All six US-034 and four US-035 criterion allocations remain in scope. Complete
+native reservation/key/source/report/resource composition and current security-owner
+publication admission still need implementation; no new import receipt is selected.
