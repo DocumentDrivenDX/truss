@@ -26,8 +26,9 @@
     "catalog-report-immutability": "c243b51682de3fee979b977626bb54279eccb3de22a24270e0bda467bd215167",
     "catalog-original-context": "628db25db14d5bd7c979f16b2ddefcff3e41781747e75485fc1253515b55fd0d"
   },
+  "assertedOriginBasisProducerSha256": "01312ed82b592ff5000df939a87679300acad12613f05fdc8a78a14bbb96390d",
   "coreAssertionIdentityProducerSha256": "5d0f2d7fb097f3853473c845f81439d7b74791b477b51e47a92add23f9fa6fab",
-  "originalExecutionBasisProducerSha256": "34b13ad641ceb63dc13548f8af407e6951a231fa08df6167c3e1bb0857d62e4c",
+  "originalExecutionBasisProducerSha256": "f8ef3b4d5ab546e0a3ef41a518222b4aeaff8a4c9039c7ae1116e0489a2f64c8",
   "reportCorrespondenceProducerSha256": "2554a8e6d8df8f7e26bd4df3a207af2c06c0c6f098485d53e847975f2c5bec53",
   "reportPreparationProducerSha256": "421dc89fe416e098225fe6265a63eb523f7d1fdf650178f8759678144d6e0dbf",
   "assertionProfiles": {
@@ -108,6 +109,9 @@
     "copied actor basis, connection or report preparation cannot borrow native issuance",
     "copied actor basis, connection or report preparation cannot borrow native issuance",
     "copied actor basis, connection or report preparation cannot borrow native issuance",
+    "origin mapping uses rechecked original native actor",
+    "origin basis retains separate exact asserted and native artifacts",
+    "copied actor cannot grant a forged role to origin mapping",
     "original acting/login role OIDs match actual native identities",
     "nine report fields correspond to original owner and actual native observations without accepted authority",
     "schema-valid forged native count refuses report correspondence",

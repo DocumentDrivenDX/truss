@@ -34,3 +34,9 @@ export async function collectCatalogOriginalExecutionBasis(connection:CatalogSta
   scope:'original_native_actor_context_basis_only' as const});
  issuedNativeContexts.set(result,{connection,prepared,basis});return result;
 }
+/** Revalidate original issuance, native actor correspondence and operation cut. */
+export async function recheckOriginalCatalogNativeContext(value:Awaited<ReturnType<typeof collectCatalogOriginalExecutionBasis>>,connection:CatalogStageConnection,prepared:Prepared,basis:Basis){
+ requireOriginalCatalogNativeContext(value,connection,prepared,basis);
+ const current=await collectCatalogOriginalExecutionBasis(connection,prepared,basis);
+ if(JSON.stringify(current)!==JSON.stringify(value))throw Error('Original native actor context changed');
+}
