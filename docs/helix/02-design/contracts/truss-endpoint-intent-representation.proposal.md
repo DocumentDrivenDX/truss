@@ -31,6 +31,63 @@ It does not supply the complete endpoint/dependency semantics required to close
 US-002/003. The small probe schema omits full relationship bounds, keys, lifecycle,
 inverse and heterogeneous endpoint sets and must not become a release vocabulary.
 
+## Full candidate meaning and correspondence
+
+The full vocabulary must separate stable declared endpoint lineage from selected
+definition content. A lineage names the declaring document, module and element;
+a definition selection additionally names the exact original revision/artifact.
+Do not put a revision into the stable type identity or treat a bare display name
+as a document qualifier. Absence of an exact definition is represented explicitly
+as pending intent, never as an invented document, zero revision or resolved Record.
+
+| Required semantic slot | Candidate contract |
+| --- | --- |
+| Intent identity and provenance | Relationship ID belongs to the referring document/module; retain its exact original payload pointer and bytes. Two documents with equal module/relationship names remain distinct under the pending catalog-ownership decision; no physical identity is assigned by this extension |
+| Declared dependencies | Distinguish required exact document/revision selections from endpoint-only pending intent. Missing required dependency refuses package admission before unknown policy. A declared pending endpoint is not permission to fetch a document or substitute an incidental package member |
+| Endpoint sets | Preserve all source/target alternatives with exact qualified lineage and separate definition selection. A valid local endpoint still resolves through the original UMF Record producer. External resolution uses whole-set or prior accepted custody, not global module/element search. Duplicate/conflicting alternatives refuse before endpoint cross-product derivation |
+| Target keys | Retain whether a key is explicitly selected, explicitly absent under the admitted relation profile, or unresolved with its target definition. Resolve named keys only on their exact original owning Record. A provisional type has no invented key/property; unresolved key intent cannot produce a key number, key guarantee or identity-based import |
+| Direction, bounds and lifecycle | Retain every declared source/target bound, directed/undirected meaning, ownership/composition intent, inverse and association Record correspondence. The extension owns their pending-intent meaning; core declaration APIs still require their own valid local targets. Unsupported required modifiers block complete derivation rather than receiving default behavior |
+| Interpretation and enforcement | The original support/report procedure distinguishes validated intent, resolved model meaning and actual engine/database enforcement. Unknown registered-version content remains retained and cannot drive required semantics. Validation completeness is not a resolved endpoint or an enforcement claim |
+
+The complete producer emits original source-qualified intents and dependencies
+before allocation. A separate resolver classifies each target as an exact supplied
+definition, exact previously accepted definition, valid pending lineage, conflicting
+selection or unavailable interpretation. Preserve complete source membership and
+all classifications; a resolved prefix cannot become an accepted relationship set.
+Only the first two categories supply authoritative Record/key definitions. A valid
+pending lineage can enter the existing unknown-policy path after original caller,
+namespace and lifecycle admission. Claimed target coordinates alone confer no
+target-owner grant or authority; consume the security owner's endpoint-owner
+admission rather than introducing an extension-local policy resolver.
+
+Under provisional policy, US-003-AC2 still requires both the stable placeholder
+type and derived relationship, including complete endpoint membership and retained
+intent. It is not satisfied by archiving an unresolved note. The selected native
+mapping must represent the relationship's actual admitted state without invented
+key rows; operations requiring unresolved key/value meaning remain unavailable.
+Whether that full state fits the selected native tuple is an E4 composition exit,
+not a reason to weaken the criterion. Under skip, omit the entire relationship and
+retain explicit source-qualified loss. Under reject, collect every valid unresolved
+endpoint/relationship diagnostic without any placeholder or positive revision.
+
+Later definition admission resolves the same qualified lineage under the original
+accepted source/definition mapping. It cannot silently choose a newer revision
+than an explicitly selected one. Preserve type ID and creation provenance while
+recording the actual new definition source separately. Recompute the complete
+dependent relationship/key/retained-data and assertion inventory before publication.
+Unchanged display names, matching numeric IDs or a newly nonprovisional flag do
+not establish that correspondence. If native storage, definition compatibility or
+security admission is unavailable, refuse the whole transition with prior accepted
+state intact under the existing containment/recovery protocol.
+
+Independent E1/E3/E4/E5 packets must cover required-missing dependency versus valid
+pending endpoint, same names under different owners, mutual dependencies, wrong
+revision, conflicting target keys, heterogeneous endpoint omission, unsupported
+required modifier, duplicate intent, whole-relationship skip, provisional complete
+derivation, and later same-ID definition with changed retained-data meaning. The
+original invalid-core control remains required alongside every positive extension
+case. No probe or packet assumes the pending catalog-ownership answer.
+
 ## Remaining representation-to-policy handoff
 
 | Stage | Required authored output and independent exit |
