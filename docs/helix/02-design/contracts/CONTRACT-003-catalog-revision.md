@@ -885,3 +885,63 @@ If no such profile is currently registered, return unsupported representation
 and retain original custody; do not fall back to `JSON.parse` plus schema
 validation. This is a concrete Truss host/parser selection task, not a request
 for new UMF core semantics or a competing UMF document validator.
+
+### Selected reference outer-wire decoder procedure
+
+Select a browser-compatible TypeScript, iterative byte decoder for the
+numeric-free AcceptanceInput outer wire. It is a Truss protocol component,
+not an implementation of UMF document/schema/numeric semantics. Embedded
+artifact contents remain opaque verified bytes until the registered owner
+interpreter receives them. This procedure replaces the unspecified choice of
+a generic strict-JSON library for the reference producer; exact build/account
+registration and qualification remain implementation outputs.
+
+1. Retain one original immutable UTF-8 byte span under producer custody. Admit
+its complete raw length against the original registered representation limit
+and reserve input retention, explicit parser frames, decoded string storage,
+member/element slots and simultaneous output/canonical custody before
+materialization. Derive conservative checked bounds from original byte length
+and selected node/depth/string/collection ceilings; arithmetic overflow refuses
+before allocating. Never decode the full transport into a host object first.
+2. Scan bytes with a finite explicit container/state stack, accepting only
+JSON's four whitespace bytes, punctuation, strings, `true`, `false`, `null`,
+arrays and objects. Digits or minus at a value position refuse as forbidden
+outer numeric nodes. Require exactly one complete root followed only by
+allowed whitespace; reject BOM, comments, trailing comma/data and incomplete
+tokens. Canonical-tree representation additionally requires original canonical
+byte equality; raw transport may retain legal insignificant whitespace.
+3. Decode string bytes with strict shortest-form UTF-8 scalar validation and
+JSON escape grammar. Reject literal controls, invalid/overlong UTF-8, surrogate
+UTF-8 and out-of-range scalars. Escaped high surrogates require the immediate
+escaped low-surrogate pair; reject either unpaired surrogate. Preserve decoded
+scalar identity without Unicode normalization, while retaining original source
+bytes separately. Reserve each append and output span before constructing it.
+4. Compare each decoded object member name with every existing name in that
+object using exact scalar/UTF-8 equality and charged full comparison work.
+Escaped spelling variants of the same name are duplicates and refuse before
+value insertion. Use inert null-prototype output containers with owned data
+slots; `__proto__` is data, not a setter. No getters, revivers, custom prototype
+or document callback occurs. Arrays preserve original occurrence/order and
+reject holes. Charge every occurrence even when content repeats.
+5. Enforce selected structural and byte/work/peak limits before pushing a
+frame, allocating a slot or extending a string. Explicit full-name comparisons
+make duplicate-check work visible; no unqualified hash-table constant-time
+claim supplies the account. Failure releases only confirmed private custody
+and follows original containment; no partial tree/result is returned.
+6. Apply the existing complete closed input schema and original semantic
+profile/artifact verification to the owned inert tree. Canonicalize under the
+separately admitted CONTRACT-009 encoder/account and compare original bytes
+when representation requires it. Framed ingress verifies the exact original
+profile/domain prefix before feeding its tree portion; the prefix never
+changes the registered source identity or accounting basis.
+7. Issue the private admitted input only after complete original representation,
+artifact, schema, profile and custody correspondence. Retain source, canonical
+tree and framed preimage as distinct artifacts. The decoder alone cannot
+claim UMF validity, matching native archive, authenticated actor, report
+completeness, catalog effects or transaction success.
+
+The exact finite ceilings are part of the complete compatible producer/account
+registration and input-capacity gate, not implicit constants copied from UMF
+LIMITS. Implement the selected procedure before claiming raw ingress support;
+unsupported or unqualified registrations refuse. Use independent JPAR-01–07
+controls in STP-001 and RPDOC complete-boundary scenarios before adoption.

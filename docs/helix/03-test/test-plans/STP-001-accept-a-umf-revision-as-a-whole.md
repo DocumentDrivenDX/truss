@@ -246,3 +246,23 @@ inventories before/after both failure and outer settlement. Include ordinary
 role direct-helper/write bypass attempts; private collector access granted to
 a test actor cannot substitute for protected-entry qualification. Source stage
 row counts and successful encoder output do not establish these scenarios.
+
+## Outer input decoder qualification (planned)
+
+JPAR-01–07 qualify CONTRACT-003's selected reference numeric-free byte decoder
+before it issues the private complete-input basis. All remain `not_run`.
+
+| Case | Independent byte input | Required observation |
+| --- | --- | --- |
+| JPAR-01 | Complete capacity fixture with legal whitespace/member permutation; include literal and escaped Unicode equivalents | Same admitted semantic tree with exact distinct original transport custody; no embedded artifact rewrite |
+| JPAR-02 | Duplicate name using literal versus escaped spelling, including nested converted provenance | Refuse before duplicate insertion; no last-member-wins tree reaches schema/semantic admission |
+| JPAR-03 | Overlong/malformed UTF-8, surrogate UTF-8, unpaired surrogate escapes; valid paired escape as separate positive control | Invalid originals refuse; valid pair preserves its exact decoded scalar and retained source bytes |
+| JPAR-04 | Raw numeric outer value, comments, BOM, trailing data/comma, incomplete token and non-JSON whitespace | Explicit grammar refusal without owner metadata interpretation or fallback decoder |
+| JPAR-05 | `__proto__`, repeated independent array elements, empty containers and embedded base64 whose decoded artifact contains numeric tokens | Inert own member data, original occurrence/order and opaque artifact custody; outer numeric prohibition cannot reinterpret embedded bytes |
+| JPAR-06 | Exact selected depth/node/string/member/byte/work/peak boundaries and one-over variants; collision-heavy full-name comparisons | Inclusive admitted boundaries; refuse before over-limit frame/slot/string work; independently inspect precharged original account and no partial output |
+| JPAR-07 | Raw/tree/framed representation substitution, wrong prefix/domain and cancellation while decoding | Refuse or preserve original unresolved custody; no alternate grammar, issued admission, native effect or committed-success claim |
+
+Run actual packed browser and selected host decoder code on the same original
+byte corpus, with independently authored expected scalars, source bytes and
+refusal phase. Agreement between implementations is not the independent oracle.
+Complete input semantics and native acceptance remain separate later gates.
