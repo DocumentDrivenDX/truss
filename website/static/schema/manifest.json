@@ -1,0 +1,15 @@
+{
+  "owner": "DocumentDrivenDX/umf",
+  "revision": "c433cfcdde21995803aad65234f20ba95d8c3222",
+  "model": "docs/helix/02-design/models/truss-layout-core-structural-0.3.proposal.umf.json",
+  "assets": {
+    "explorer.js": "bca5a3bd81475a3f4978dc2d55ef8b718d1252c62b7938853c139142ffa9b687",
+    "explorer.css": "e71f192ab1f41be709a545489f6917a9e947601fcbce73627fcb20fadaeaaa2c",
+    "style.css": "6c686ba762afdb65112034b3666bb8079cf137e8365fc160fece1d7fc2482f7a",
+    "logo.svg": "5f40ae4ea560f51199abac4dda14b93d72b1667487a9791f4846cab73e4e114d",
+    "index.html": "dad3ba7cca8931ff2195ad31c8cb0224827408d9555fbb23423315de3ad50387",
+    "schema-catalog.json": "879483bb9ea5cf79bdec3e4995a8eb5f69fb2ae2d805409dbdaccfb1766af917",
+    "truss-layout.umf.json": "bf8e377219eb5c604dd04a9c1393f87a30ea7a63b1505dc3e29593fa8af82e8a"
+  },
+  "scope": "Unmodified UMF browser JS/CSS; Truss HTML shell and exact current schema catalog. No production deployment."
+}

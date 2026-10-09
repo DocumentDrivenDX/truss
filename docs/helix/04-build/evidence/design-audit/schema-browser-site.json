@@ -1,0 +1,14 @@
+{
+  "browser": "153.0.8010.12",
+  "ownerRevision": "c433cfcdde21995803aad65234f20ba95d8c3222",
+  "definitions": 491,
+  "checks": [
+    "Hugo Model page embeds working owner browser",
+    "current structural model validates",
+    "prop_def deep link and declaration_module field navigation",
+    "download is byte-identical UTF-8 source",
+    "390px mobile browser has no horizontal page overflow",
+    "no browser errors"
+  ],
+  "scope": "Actual generated site under /truss/ in Chromium; structural inspection only, no deployment or native runtime qualification."
+}
