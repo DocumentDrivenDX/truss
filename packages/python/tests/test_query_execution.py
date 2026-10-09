@@ -148,5 +148,30 @@ class QueryExecutionTests(unittest.TestCase):
         self.assertEqual(error.exception.code,'execution_obligation')
         self.assertEqual(events,['enter','cleanup'])
 
+    def test_async_context_exit_cannot_publish_or_enter(self):
+        events=[]
+        class Manager:
+            def __enter__(self):events.append('unexpected entry')
+            async def __exit__(self,*_):events.append('unexpected async cleanup')
+        host=SimpleNamespace(read_context=Manager,decode=lambda *_:[],handlers={})
+        engine,plan=coordinator(host)
+        with self.assertRaises(CompileRefusal) as error:engine.execute(plan)
+        self.assertEqual(error.exception.code,'execution_obligation');self.assertEqual(events,[])
+
+    def test_wrapped_async_cleanup_withholds_buffered_result(self):
+        events=[];host=self.host(events);original=host.read_context
+        async def pending_cleanup():events.append('should never run')
+        class Manager:
+            def __init__(self):self.original=original()
+            def __enter__(self):return self.original.__enter__()
+            def __exit__(self,*args):
+                self.original.__exit__(*args)
+                return pending_cleanup()
+        host.read_context=Manager
+        engine,plan=coordinator(host)
+        with self.assertRaises(CompileRefusal) as error:engine.execute(plan)
+        self.assertEqual(error.exception.code,'execution_obligation')
+        self.assertEqual(events[-1],'cleanup');self.assertNotIn('should never run',events)
+
 
 if __name__=='__main__':unittest.main()

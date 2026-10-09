@@ -219,6 +219,14 @@ thread creation. Nine unittest methods now pass with warnings treated as errors,
 including wrapped async checks, nonvoid checks and async context verification;
 their independent event traces contain no data query after such refusal.
 
+Context entry/exit now uses the same explicit synchronous completion boundary.
+Async lifecycle methods refuse before entry; a wrapped exit returning an awaitable
+withholds the buffered result and never runs implicit asynchronous cleanup. Original
+host cleanup/recovery custody remains unresolved until its own qualified protocol
+settles it. Eleven source unittest methods pass with warnings as errors, including
+both lifecycle controls. This closes the host-language publication bypass only;
+it does not prove native cleanup or release resources on behalf of the host.
+
 ## Shared planner corpus before the Python port
 
 `tests/fixtures/layout-migration-planning.json` now supplies sixteen independent

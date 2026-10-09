@@ -29,6 +29,24 @@ def _completed_check(value):
         raise CompileRefusal('execution_obligation', 'Original check must complete or raise')
 
 
+class _SynchronousContext:
+    def __init__(self, manager):
+        self._enter = manager.__enter__
+        self._exit = manager.__exit__
+        if any(inspect.iscoroutinefunction(f) or inspect.isasyncgenfunction(f)
+               for f in (self._enter,self._exit)):
+            raise CompileRefusal('execution_obligation', 'Synchronous original context lifecycle required')
+
+    def __enter__(self):
+        return _synchronous(self._enter())
+
+    def __exit__(self, error_type, error, traceback):
+        result = _synchronous(self._exit(error_type,error,traceback))
+        if result is not None and type(result) is not bool:
+            raise CompileRefusal('execution_obligation', 'Original context exit must complete')
+        return result
+
+
 def _freeze_result(value):
     if type(value) is str:
         try: value.encode('utf-8', errors='strict')
@@ -114,7 +132,7 @@ class QueryCoordinator:
             missing = object()
             result = missing
             self._admitting()
-            with _synchronous(self._context()) as scope:
+            with _SynchronousContext(_synchronous(self._context())) as scope:
                 verify_context = scope.verify_context
                 query = scope.query
                 self._admitting()
