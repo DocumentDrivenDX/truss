@@ -673,6 +673,41 @@ operation; otherwise refuse before effects. The synthetic ASCII value establishe
 wire size only, not a genuine nineteen-field report or its producer completeness.
 TLS, driver command settlement, native authority and publication remain unqualified.
 
+#### Preferred internal report transport experiment: canonical UTF-8 text
+
+The current TypeScript raw ingress explicitly refuses binary result formats;
+changing a Bind result format is not an admitted fallback. For the next internal
+report experiment, prefer a text/OID25/format0 route carrying the producer's
+already canonical UTF-8 report bytes, with UTF8 server/client encoding and exact
+source-to-wire byte correspondence. This is a selected experiment direction,
+not a public profile or permission to use the fixed-one-MiB decoder.
+
+PostgreSQL's [protocol format rules](https://www.postgresql.org/docs/17/protocol-overview.html#PROTOCOL-FORMAT-CODES)
+distinguish each type's text output from binary encoding. Its
+[17.9 manual](https://www.postgresql.org/files/documentation/pdf/17/postgresql-17-US.pdf)
+defines convert_from for original encoded bytes. A bounded conversion of admitted
+canonical UTF-8 bytea to text can avoid bytea hex expansion; do not cast arbitrary
+bytea to text or parse/reserialize through JSONB. Canonical member order, whitespace,
+escapes, exact numeric token spelling and unknown content must remain byte-exact.
+JSON control characters are already escaped; actual raw NUL or malformed UTF-8
+refuses this route. Preserve original report bytes/digest as the equality basis.
+
+A single four-MiB text cell requires 4,194,315 DataRow bytes, before separate
+messages and simultaneous ownership. Independently test this exact boundary,
+Unicode/escape content, malformed bytes and changed client encoding, comparing
+complete native source and received bytes rather than character counts or digest
+alone. Then run genuine full nineteen-field reports through both hosts under the
+same original producer/wire/decoder/account tuple. Native conversion/detoast and
+host UTF-8/backing/string/parser copies remain charged; reduced wire expansion
+does not prove bounded allocations or settle driver/publication custody.
+
+This experiment applies only to the complete canonical report route. Other raw
+binary values and compiled query columns keep their original codec/type/format
+profiles. Do not change Weft lowering or the security owner's working ingress
+implementation to make this experiment pass. If correspondence or complete
+capacity cannot be admitted, retain pre-effect refusal and the existing full
+report requirement.
+
 #### Full-report wire capacity before driver selection
 
 The frame candidate's one-MiB limit cannot transport the existing four-MiB
