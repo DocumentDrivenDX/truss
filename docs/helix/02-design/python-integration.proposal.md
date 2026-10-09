@@ -749,6 +749,25 @@ admit larger mutation/catalog requests. The four-MiB payload transport fixture i
 valid JSON but not a full report; it cannot supply that positive semantic case.
 Selected decoder/parser/account implementation and original admission remain open.
 
+The [compact response boundary fixture](../03-test/report-response-boundary-v0.1.proposal.fixture.json)
+now freezes complete nineteen-field synthetic report wires at 4,194,304 and
+4,194,305 bytes. Eight independently encoded diagnostic artifacts keep each
+base64 scalar below one MiB; exact complete wire hashes and original base-fixture
+pin prevent the test from substituting a tiny or incomplete report. The checker
+validates both against the pinned full schema closure, rejects omission of each
+required field, verifies every diagnostic's complete bytes/digest, and observes
+current codec resource refusal before schema admission. Synthetic diagnostic/
+profile custody does not establish genuine producer authority or runtime effects.
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 python3.11 docs/helix/04-build/evidence/design-audit/check_report_response_boundary.py
+```
+
+Use jsonschema 4.23.0/referencing 0.35.1. The fixtures supply independent future
+response-parser exact/one-over controls, not proof that either current codec
+supports the four-MiB boundary. Original semantic/profile/account admission and
+actual report-producing integration remain required.
+
 #### Full-report wire capacity before driver selection
 
 The frame candidate's one-MiB limit cannot transport the existing four-MiB
