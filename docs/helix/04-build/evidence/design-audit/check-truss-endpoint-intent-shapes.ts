@@ -1,0 +1,43 @@
+/** Complete candidate structure only; no endpoint/policy/native admission. */
+import {createRequire} from 'node:module';
+import {readFile,writeFile} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
+if(!process.argv[2])throw Error('Dependency package.json path required');
+const require=createRequire(process.argv[2]);
+const Ajv=require('ajv/dist/2020').default,ajv=new Ajv({strict:true});
+const dir=new URL('../../../02-design/contracts/',import.meta.url);
+const inputBytes=await readFile(new URL('acceptance-input-v0.1.schema.json',dir));
+const schemaBytes=await readFile(new URL('truss-endpoint-intent-v0.1.proposal.schema.json',dir));
+ajv.addSchema(JSON.parse(inputBytes.toString('utf8')));
+const validate=ajv.compile(JSON.parse(schemaBytes.toString('utf8')));
+const text='original source bytes',artifact={identity:'independent-source',bytesBase64:Buffer.from(text).toString('base64'),sha256:createHash('sha256').update(text).digest('hex')};
+const local={document:'source',module:'m',element:'Source',definition:{state:'selected',revision:'r1',source:artifact}};
+const target={document:'remote',module:'m',element:'Target',definition:{state:'pending',expectedRevision:'r2'},key:{state:'pending',name:'identity'}};
+const original:any={interfaceVersion:'truss-endpoint-intents/0.1.0',dependencies:[],intents:[{id:'source-target',module:'m',name:'target',sources:[local],targets:[target],sourceBounds:{min:'0',max:'*'},targetBounds:{min:'0',max:'1'},directed:true,lifecycle:'independent',composition:false,inverse:null,associationRecord:null}]};
+const results:any[]=[];
+function check(name:string,change:(value:any)=>void,expected:boolean,scope='structure'){
+ const value=structuredClone(original);change(value);
+ const actual=Boolean(validate(value));if(actual!==expected)throw Error(name+': '+JSON.stringify(validate.errors));
+ results.push({name,expected,scope,actual});
+}
+check('complete-pending',()=>{},true);
+check('selected-target',v=>{v.intents[0].targets[0].definition={state:'selected',revision:'r2',source:artifact};v.intents[0].targets[0].key={state:'selected',name:'identity'}},true);
+check('unknown-revision-explicit-null',v=>v.intents[0].targets[0].definition.expectedRevision=null,true);
+check('explicit-key-absence',v=>v.intents[0].targets[0].key={state:'absent'},true);
+check('declared-required-dependency',v=>v.dependencies=[{document:'remote',revision:'r2',source:artifact}],true);
+check('heterogeneous-endpoints',v=>v.intents[0].targets.push({...structuredClone(target),element:'Other'}),true);
+for(const field of Object.keys(original.intents[0]))check('missing-'+field,v=>delete v.intents[0][field],false);
+check('empty-endpoint-set',v=>v.intents[0].sources=[],false);
+check('pending-with-selected-source',v=>v.intents[0].targets[0].definition.source=artifact,false);
+check('selected-without-source',v=>v.intents[0].targets[0].definition={state:'selected',revision:'r2'},false);
+check('numeric-bound',v=>v.intents[0].targetBounds.max=1,false);
+check('noncanonical-bound',v=>v.intents[0].targetBounds.min='01',false);
+check('unknown-required-modifier',v=>v.intents[0].futureModifier=true,false);
+check('implicit-pending-revision',v=>delete v.intents[0].targets[0].definition.expectedRevision,false);
+check('wrong-source-digest-spelling',v=>v.dependencies=[{document:'remote',revision:'r2',source:{...artifact,sha256:'bad'}}],false);
+check('reversed-bounds-need-semantic-refusal',v=>v.intents[0].targetBounds={min:'2',max:'1'},true,'shape-valid; original semantic admission must refuse');
+check('duplicate-intents-need-semantic-refusal',v=>v.intents.push(structuredClone(v.intents[0])),true,'shape-valid; original semantic admission must refuse');
+check('changed-source-digest-needs-byte-admission',v=>v.intents[0].sources[0].definition.source.sha256='0'.repeat(64),true,'shape-valid; original byte/profile admission must refuse');
+const receipt={status:'passed',sourceSha256:{'acceptance-input-v0.1.schema.json':createHash('sha256').update(inputBytes).digest('hex'),'truss-endpoint-intent-v0.1.proposal.schema.json':createHash('sha256').update(schemaBytes).digest('hex')},results,scope:'Strict schema composition and shape controls only; no valid source document, registered full extension, dependency resolution, original authority, policy/native acceptance or resource qualification.'};
+await writeFile(new URL('./truss-endpoint-intent-shapes.json',import.meta.url),JSON.stringify(receipt,null,2)+'\n');
+console.log(results.length+' candidate shape controls; semantic/native admission remains separate');

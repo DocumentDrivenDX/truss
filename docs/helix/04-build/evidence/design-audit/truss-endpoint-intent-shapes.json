@@ -1,0 +1,184 @@
+{
+  "status": "passed",
+  "sourceSha256": {
+    "acceptance-input-v0.1.schema.json": "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd",
+    "truss-endpoint-intent-v0.1.proposal.schema.json": "6c27bf252db7f7149eb3c1839a4662d9a0999a76d8a2f5cedc6c47df61c424b8"
+  },
+  "results": [
+    {
+      "name": "complete-pending",
+      "expected": true,
+      "scope": "structure",
+      "actual": true
+    },
+    {
+      "name": "selected-target",
+      "expected": true,
+      "scope": "structure",
+      "actual": true
+    },
+    {
+      "name": "unknown-revision-explicit-null",
+      "expected": true,
+      "scope": "structure",
+      "actual": true
+    },
+    {
+      "name": "explicit-key-absence",
+      "expected": true,
+      "scope": "structure",
+      "actual": true
+    },
+    {
+      "name": "declared-required-dependency",
+      "expected": true,
+      "scope": "structure",
+      "actual": true
+    },
+    {
+      "name": "heterogeneous-endpoints",
+      "expected": true,
+      "scope": "structure",
+      "actual": true
+    },
+    {
+      "name": "missing-id",
+      "expected": false,
+      "scope": "structure",
+      "actual": false
+    },
+    {
+      "name": "missing-module",
+      "expected": false,
+      "scope": "structure",
+      "actual": false
+    },
+    {
+      "name": "missing-name",
+      "expected": false,
+      "scope": "structure",
+      "actual": false
+    },
+    {
+      "name": "missing-sources",
+      "expected": false,
+      "scope": "structure",
+      "actual": false
+    },
+    {
+      "name": "missing-targets",
+      "expected": false,
+      "scope": "structure",
+      "actual": false
+    },
+    {
+      "name": "missing-sourceBounds",
+      "expected": false,
+      "scope": "structure",
+      "actual": false
+    },
+    {
+      "name": "missing-targetBounds",
+      "expected": false,
+      "scope": "structure",
+      "actual": false
+    },
+    {
+      "name": "missing-directed",
+      "expected": false,
+      "scope": "structure",
+      "actual": false
+    },
+    {
+      "name": "missing-lifecycle",
+      "expected": false,
+      "scope": "structure",
+      "actual": false
+    },
+    {
+      "name": "missing-composition",
+      "expected": false,
+      "scope": "structure",
+      "actual": false
+    },
+    {
+      "name": "missing-inverse",
+      "expected": false,
+      "scope": "structure",
+      "actual": false
+    },
+    {
+      "name": "missing-associationRecord",
+      "expected": false,
+      "scope": "structure",
+      "actual": false
+    },
+    {
+      "name": "empty-endpoint-set",
+      "expected": false,
+      "scope": "structure",
+      "actual": false
+    },
+    {
+      "name": "pending-with-selected-source",
+      "expected": false,
+      "scope": "structure",
+      "actual": false
+    },
+    {
+      "name": "selected-without-source",
+      "expected": false,
+      "scope": "structure",
+      "actual": false
+    },
+    {
+      "name": "numeric-bound",
+      "expected": false,
+      "scope": "structure",
+      "actual": false
+    },
+    {
+      "name": "noncanonical-bound",
+      "expected": false,
+      "scope": "structure",
+      "actual": false
+    },
+    {
+      "name": "unknown-required-modifier",
+      "expected": false,
+      "scope": "structure",
+      "actual": false
+    },
+    {
+      "name": "implicit-pending-revision",
+      "expected": false,
+      "scope": "structure",
+      "actual": false
+    },
+    {
+      "name": "wrong-source-digest-spelling",
+      "expected": false,
+      "scope": "structure",
+      "actual": false
+    },
+    {
+      "name": "reversed-bounds-need-semantic-refusal",
+      "expected": true,
+      "scope": "shape-valid; original semantic admission must refuse",
+      "actual": true
+    },
+    {
+      "name": "duplicate-intents-need-semantic-refusal",
+      "expected": true,
+      "scope": "shape-valid; original semantic admission must refuse",
+      "actual": true
+    },
+    {
+      "name": "changed-source-digest-needs-byte-admission",
+      "expected": true,
+      "scope": "shape-valid; original byte/profile admission must refuse",
+      "actual": true
+    }
+  ],
+  "scope": "Strict schema composition and shape controls only; no valid source document, registered full extension, dependency resolution, original authority, policy/native acceptance or resource qualification."
+}

@@ -146,9 +146,44 @@ complete semantic evidence.
 
 ## Remaining representation-to-policy handoff
 
+The [full closed carrier schema](truss-endpoint-intent-v0.1.proposal.schema.json)
+now authors explicit pending/selected definition selection, exact source artifacts,
+required dependency declarations, complete endpoint sets and key state, exact
+integer-text bounds, direction/lifecycle/composition, inverse and association
+Record intent. A pending definition carries an explicit expected revision or
+explicit null; it never inherits latest. Selected definition/source fields are
+claims requiring original resolution, not a schema-issued resolved capability.
+
+The [shape checker](../../04-build/evidence/design-audit/check-truss-endpoint-intent-shapes.ts)
+strictly compiles this schema with the existing acceptance-input artifact schema.
+[Twenty-nine controls](../../04-build/evidence/design-audit/truss-endpoint-intent-shapes.json)
+pass, including missing complete fields, mixed definition states, empty endpoints,
+numeric/noncanonical bounds and unknown modifiers. Deliberately shape-valid
+reversed bounds, duplicate intent IDs and changed source digest still require
+semantic/original-byte refusal; their shape acceptance is not support. The checker
+uses synthetic source artifacts and does not establish valid UMF source output.
+
+For full `Registry.register` adoption, retain the original schema/dependency bytes
+and construct its closed registered schema bundle through the existing composition
+procedure. The external exactArtifact reference must resolve to the original
+acceptance-input definition, never a locally broadened substitute. The minimal
+probe's standalone manifest is not that complete bundle and cannot qualify the
+full carrier's semantic validator. The schema selects no native range, operation
+resource limit or automatic storage migration.
+
+Reproduce shape controls from the repository root with
+`bun docs/helix/04-build/evidence/design-audit/check-truss-endpoint-intent-shapes.ts /absolute/path/to/dependency/package.json`,
+using the admitted Ajv2020 dependency package.
+
+The [combined inventory receipt](../../04-build/evidence/design-audit/schema-inventory-endpoint-intents-2026-10-09.json)
+strictly registers and compiles all 156 current top-level contract schemas with
+zero errors. This adds the endpoint-intent candidate to the prior 155-schema
+composition check; it preserves that older receipt and grants no semantic or
+runtime qualification.
+
 | Stage | Required authored output and independent exit |
 | --- | --- |
-| E1 full extension meaning | Select a Truss-owned vocabulary/profile covering full relationship intent, exact declaring identity, endpoint sets, target keys, direction/bounds/lifecycle and original source pointers. Distinguish declared document dependencies from unresolved endpoint intent; never borrow the probe's minimal coordinate as a complete relation |
+| E1 full extension meaning | Independently review the authored full carrier/meaning, admit its original closed schema bundle and register the complete Truss semantic producer. Distinguish declared document dependencies from unresolved endpoint intent; never borrow the probe's minimal coordinate as a complete relation |
 | E2 source and package custody | Capture exact original document/revision/bytes and complete supplied or previously accepted membership. A revision string is a selection claim, not authority. Validate core content unchanged and validate registered extension semantics; unregistered content remains retained-only and cannot drive required policy |
 | E3 resolution and dependency graph | Resolve qualified definitions and keys through original owner producers and accepted catalog custody. Derive dependency edges only under E1's explicit semantics, then use the existing SCC/byte-order algorithm. Independently test mutual dependencies, permutation invariance, missing/wrong revisions and duplicate membership; do not flatten source documents or resolve bare names globally |
 | E4 unknown policy | Apply reject/provisional/skip to valid admitted intents only. Provisional allocation requires complete qualified lineage and absent-definition provenance; skip records exact original source-qualified loss. Multiple equal unknowns share only their admitted identity, and unrelated owners remain distinct. Invalid core input refuses before every branch |
