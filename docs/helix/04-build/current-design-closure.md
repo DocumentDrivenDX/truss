@@ -465,3 +465,12 @@ Four actual-owner tests with fifty-three assertions and strict type checking pas
 The composed report preparation now consumes the original issued owner observation collection through the core identity producer and retains its candidate profile/manifest, exact entries, absence/deferred observations and explicit incomplete status. Sixteen host tests with174 assertions and strict type checking pass. The [native cohort](evidence/catalog-new-cohort.json) passes eighty-seven PostgreSQL17.9 checks, including eleven original reference identities with both Record keys and the relationship, full original source digests and none/unqualified status. [Composition evidence](evidence/catalog-core-assertion-composition.json) pins current sources.
 
 This integration does not fill the full assertions report field: source/report membership, transition-target correspondence, complete core/extension inventory and independently qualified database/engine procedures still remain. Report correspondence remains nine fields. Public acceptance, immutable report insertion/head transition and the unconditional commit barrier are unchanged.
+
+The [focused integration checkpoint](evidence/design-audit/focused-integration-checkpoint.json)
+records fresh combined checks: 28 TypeScript tests/135 assertions, 24 Python
+candidate tests, three schema-reference tests, 16 inspection and nine review
+shape controls, complete retained-source checks, selected strict TypeScript and
+all 158 contract schemas. Structural coverage remains 45 stories/167 criteria/
+90 primary pins. Native probes were not rerun. This verifies current component
+integration; the complete original composition, pending selections and full
+independent native/public/corpus exits remain explicitly incomplete.
