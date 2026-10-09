@@ -388,3 +388,58 @@ allocation. Independently compare complete original bytes, resolved identities,
 active lifecycle and prior-state preservation; source row counts or matching key
 names are insufficient. These are authored implementation/test obligations, not
 an implemented archive service or a new acceptance capability.
+
+### E4 classification boundary and native derivation sequence
+
+Classify complete original occurrences before policy allocation. An unresolved
+endpoint *type* is the US-003 policy subject; an unavailable key or required
+modifier on an already resolved Record is not another unknown type. Preserve
+both classifications in source-qualified diagnostics instead of collapsing them
+into a nullable `target_key` or one generic missing-name result.
+
+| Original admitted state | Required behavior before publication |
+| --- | --- |
+| Invalid core content, missing required dependency, wrong selected source/Record or unavailable required interpretation | Refuse under reject, provisional and skip before policy effects. Unknown policy cannot repair invalid selection or support |
+| Resolved Record and selected key with exact owning correspondence | Use the original resolved key ID/definition and accepted mapping; do not allocate by key name |
+| Resolved Record and explicit absent key | Derive only under a selected relationship profile that supports key-free meaning; absence does not select that profile implicitly |
+| Resolved Record and pending/unavailable required key | Refuse complete derivation until the original key interpretation resolves. Allocate no provisional replacement type; skip of unknown types cannot discard this required known-type meaning |
+| Valid admitted unresolved type lineage, with absent or retained unresolved key intent | Apply the selected unknown-type branch. Provisional creates the actual relationship and complete typed endpoint membership plus the stable no-property/no-key placeholder; retained key intent grants no key-based operation |
+| Unsupported required direction/bounds/lifecycle/composition/inverse/association interpretation or native range | Refuse complete derivation; do not weaken the modifier, truncate exact bounds or accept only the supported endpoint alternatives |
+
+For reject, enumerate every valid unresolved type occurrence and affected
+relationship using original document/pointer coordinates, including shared unknown
+lineage occurrences. Distinct occurrences remain diagnostics even when one future
+placeholder identity would serve them. No placeholder/report/head effects occur.
+For skip, omit every affected relationship in its entirety and preserve one complete
+source-qualified loss inventory per omitted intent; keep known relationships only
+if the whole remaining candidate passes its independent admission. For provisional,
+reserve capacity for complete distinct lineage allocation, every relationship and
+source/target cross-product, native exact range and full report before effects.
+
+Use the protected whole-set phases and selected owner-qualified identity mapping.
+Allocate each admitted unknown type once, retaining original creation/referring
+source and explicitly absent definition provenance. Produce no authored key or
+Field. Then derive actual relationship definitions and every admitted endpoint
+triple, validate all required modifiers and original key-state correspondence,
+and collect complete `provisional/via` and loss entries for the full revision.
+The original interpretation archive/mapping must distinguish key-free meaning
+from unresolved key intent even when both use a native NULL. A native reader or
+writer unable to recover that distinction refuses; no query/import may guess from
+the cell. Additional storage, if required by the selected profile, goes through
+UMF/CH-01 and explicit physical migration rather than implicit model DDL.
+
+Consume the security owner's qualified target-owner/type/relationship admission
+and publication drain before exposing results. Do not infer grants for a claimed
+foreign owner, restore old grants on promotion or introduce a parallel ACL resolver.
+Late failure after any allocation aborts the whole acceptance; unknown commit
+retains the original recovery gate. Later definition uses E5's stable identity,
+retained-value/key/relationship validation and complete lifecycle/report effects.
+
+Independent E4 schedules must distinguish a missing type from a missing key on a
+known Record under all three policies, absent versus unresolved key with identical
+native NULL, supported versus out-of-range exact bounds, and mixed supported/
+unsupported heterogeneous alternatives. For two intents sharing one unknown,
+compare one actual placeholder, both complete relationships and all report `via`
+membership. For skip compare absence of every affected triple and full loss source
+bytes; for reject compare the complete diagnostic occurrence multiset and zero
+native effects. These schedules remain authored and native-unqualified.
