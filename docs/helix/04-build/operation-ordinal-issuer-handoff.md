@@ -79,3 +79,23 @@ source-only or result-metadata hooks do not supply it. No additional product vot
 is needed, and accepting a caller-provided ordinal as proof would weaken the
 already agreed contract. The complete installer must refuse readiness for a
 composition that retains the row-derived allocator.
+
+## Implemented counter component
+
+Private TypeScript operation-ordinal-issuer.ts and Python _operation_ordinal.py
+now implement exact bounded issuance and original object-affinity checking, with
+no reset/restore/rollback method. The six independently authored shared scenarios
+cover burnt ordinals after rollback/failed admission, finite exhaustion, wrong
+custody without consumption, and closed admission after cancellation/unknown
+control/end. Python serializes issuance with a lock; TypeScript issuance is
+synchronous. Native bigint bounds and exact host argument types are checked.
+
+This counter is deliberately not exported as a public issuer or wired into the
+old native admission functions. Creating an instance does not recognize a physical
+transaction or grant authority. The qualified original adapter must retain exactly
+one instance for its admitted original epoch, reserve enclosing control/account
+permits before issuance, and bind its result to original savepoint/attempt custody.
+Constructing another object cannot be a re-adoption or recovery procedure. Losing
+that private state closes new admission until original reconciliation qualifies it.
+The native MAX allocator conflict remains open until all four admission families
+consume the original verified issuer output.

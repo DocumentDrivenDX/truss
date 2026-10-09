@@ -1,0 +1,41 @@
+{
+  "scope": "Private exact bounded counter and object-affinity component only; no original transaction adoption, account/control permit, savepoint proof or native issuer verification",
+  "sources": [
+    {
+      "path": "packages/postgresql/src/operation-ordinal-issuer.ts",
+      "sha256": "caf59b276d0037a6d9a586380d6402714e39de0db6578c37b2a295c006586042"
+    },
+    {
+      "path": "packages/python/src/truss/_operation_ordinal.py",
+      "sha256": "9be8b93fbdaa7595e8330b9e8edd3d048fbff25b1b670c1587647ef1908ddcd3"
+    },
+    {
+      "path": "tests/fixtures/operation-ordinal-issuer.json",
+      "sha256": "f1165353472bc4537d94b34e7c032fd34edd34dcd120333f45f2bc71460cb38b"
+    },
+    {
+      "path": "tests/operation-ordinal-issuer.test.ts",
+      "sha256": "85fb0e69f8b26c887058f418bd350c7aa28d4bd0983ed6dca847c56032bbe74a"
+    },
+    {
+      "path": "packages/python/tests/test_operation_ordinal.py",
+      "sha256": "98b6d693e61d81f59e731e9ee1b35ac7610d29d3a178cd5af52cfa3d04a0a1b0"
+    }
+  ],
+  "sharedScenarios": 6,
+  "typescript": {
+    "tests": 7,
+    "assertions": 10,
+    "result": "pass",
+    "strictTypecheck": "pass",
+    "browserTargetBuild": "pass; no real-browser run"
+  },
+  "python": {
+    "version": "3.11",
+    "tests": 2,
+    "result": "pass",
+    "mode": "source component; expanded wheel not built in this check"
+  },
+  "nativeAllocatorConflict": "Still open; existing four native admission families are not wired to this component",
+  "authority": "Construction or object affinity does not establish original driver/transaction/native authority"
+}

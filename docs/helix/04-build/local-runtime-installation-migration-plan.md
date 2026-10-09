@@ -416,3 +416,10 @@ can support canonical observers or installer readiness. The native receipt marks
 contractConformant=false; it does not relabel gap reproduction as qualification.
 Correct all families against the same original issuer/driver/security port, retain
 original context fields and verify nonreuse under actual rollback/unknown outcomes.
+
+The original ordinal counter dependency now has private Python/TypeScript
+components checked against the same six expected event sequences. Exact bounded
+issuance never rewinds and closes on unknown/cancelled/ended custody. This is a
+component implementation, not a native issuer permit or a correction of the four
+old native allocators. Adapter transaction recognition, original account/control
+reservations, savepoint proof and native issuer verification remain required.
