@@ -1,5 +1,17 @@
 # Consumer deployment through shipped migration tooling
 
+## Product expectation
+
+Truss ships a migration system in its first release, with infrequent use as the
+intended operating model. Its fixed storage layout must accommodate ordinary
+consumer model evolution through catalog acceptance without physical migrations.
+The shipped tooling covers necessary Truss storage format and installed runtime
+upgrades; frequency is a design expectation, not a promise that upgrades will
+never be required. Opening an application connection does not automatically
+upgrade an installation. Deployment operators explicitly inspect, verify, apply
+and reconcile registered upgrades using the flow below. This capability is a
+release requirement; the planner and component evidence do not yet satisfy it.
+
 ## Planner wire correction — 2026-10-09
 
 The private LM-01 planner now requires route direction to be an exact string;
