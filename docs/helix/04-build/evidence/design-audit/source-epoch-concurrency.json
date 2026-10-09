@@ -1,0 +1,16 @@
+{
+  "database": "PostgreSQL 17.9 (Debian 17.9-1.pgdg13+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit",
+  "sources": {
+    "scripts/check-source-epoch-concurrency.ts": "73975c996ebbc68ac18c9b77fec31d9a6f45365215466738d277336c366a1c43",
+    "packages/postgresql/native/source-epoch-lock.sql": "e811a3656a45e941d588ca21b97ab524b789948d08585288e44b158b060d73cc",
+    "packages/postgresql/native/source-epoch-immutability.sql": "8e819d0b11a4497913a66a1046725577ca31acfe11b1c10820eb6f633ea4a955",
+    "docs/helix/04-build/evidence/source-epoch-storage.owner-export.sql": "c1338fa024a9e7af095457cfd2adec768071475f510caa98923df4da9a3e7407"
+  },
+  "checks": [
+    "Concurrent transition hits native lock timeout while writer holds shared pointer lock",
+    "Writer retains original epoch until transaction completion",
+    "Transition succeeds after writer completes and next admission returns successor evidence"
+  ],
+  "scope": "Two original native connections, synthetic component namespace/marker and tokens; lock behavior only, not issuer/transition authority or complete installed admission",
+  "qualified": false
+}
