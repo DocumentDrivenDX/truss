@@ -24,6 +24,8 @@ This table distinguishes unresolved selection from future execution evidence. It
 | Direct traversal output | Human owner; the concrete unique-destination versus path-output question is pending | The [proposed independent graph oracle](../03-test/reference-traversal-path-cycle.proposal.json) makes path-local cycle and terminal dedup meaning reviewable. Select the result contract before native correctness/performance qualification; do not deduplicate Weft SQL results. |
 | Continuous-writer pre-effect admission retry | Human owner; concrete retry-versus-public-refusal question is pending | STP-006 CW-01–04 separates held writes, waiting admissions, deterministic stale-head races and acceptance rollback. Select the public pre-effect retry policy before AC2 qualification; no retry after effects, adopted transaction restart or unknown commit is authorized by this choice. |
 | Python package owner/home | Human owner; the existing question remains unanswered and ADR-003 remains proposed | Select Truss-maintained versus consumer-maintained delivery, then reconcile ADR-001/003 and package responsibility. Shared PostgreSQL enforcement, data corpus and Rust Weft integration design continue now under the [Python proposal](../02-design/python-integration.proposal.md). |
+| Catalog ownership scope | Human owner; document-qualified versus globally unique naming question remains pending and ADR-004 remains proposed | Preserve the selected same-identity reactivation direction separately. Select the full authored ownership tuple before admitting collision/owner/native storage semantics; use STP-004's independent qualified-name and full-lineage cases. |
+| Pooler overhead acceptance statistic | Human owner; paired-mean versus tail-latency acceptance question remains pending | Freeze the selected statistic, repetitions, workload and exact deployment/driver tuple before measuring. Keep the existing benchmark proposals separate; a favorable run cannot select the acceptance rule afterward. |
 | Parsed-query ABI and complete Item.note projection | Weft owns public compiler input/lowering and affected scalar/presence interpretation | Consume an exact committed owner contract under the [consumer handoff](../02-design/contracts/consumer-read-integration.proposal.md). Truss may implement SQL-text admission and direct reads meanwhile; it cannot advertise parsed input by building its own parser or erase absent/null distinctions. |
 | Authorization and final publication drain | Security agent owns the model and shared protocol; Truss owns its integration | Bind the exact owner-produced caller/lease/drain contract to reads, reports, replay, feed and applicable administrative transitions. Native transaction locks alone cannot settle buffered publication after backend loss. Preserve the security agent’s working changes; do not independently select a competing resolver. |
 | Receipt locator/comparison and retry lifetime | Truss engineering profile selection plus consumer agreement on the advertised lifetime | Review the concrete [locator/reached proposal](../02-design/contracts/receipt-position-and-reached.proposal.md), adopt a complete protected producer/resolver and versioned receipt basis, and publish the applicable at-least-24-hour qualification profile. Wire vectors alone do not close authority, snapshot or replica coverage meaning; no global lifetime default is inferred. |
@@ -69,7 +71,14 @@ installed privilege and execution/fault receipts under implementation exits.
 
 ## Remaining decisions versus required runtime outputs
 
-Use the [current acceptance exit sequence](remaining-design-handoff-audit.md#current-acceptance-implementation-exit-sequence) for the concrete producer dependency order and exact seventeen-field partition. Nine fields have scoped original producer correspondence; eight require complete production/admission. This does not narrow B-001–B-015 or the full45-story scope.
+Use the [current acceptance handoff](acceptance-runtime-handoff.md#current-implementation-boundary)
+for the concrete producer dependency order. The combined reference requires all
+nineteen fields under report 0.3, including lifecycleProfile/reactivations and
+compatible 0.2 rebind events. Earlier seventeen-field partitions and nine-field
+component correspondence remain historical scoped observations; they cannot
+define the combined reference's remaining work by subtraction. Complete original
+producer meaning, custody and atomic report/head integration remain required.
+This does not narrow B-001–B-015 or the full 45-story/167-criterion scope.
 
 | Boundary | Already selected or authored | Concrete unresolved selection or implementation output |
 | --- | --- | --- |
