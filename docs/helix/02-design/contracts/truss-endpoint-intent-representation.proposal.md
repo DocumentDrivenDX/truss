@@ -298,6 +298,39 @@ this is not a new Truss override. These remain pure pre-native observations.
 
 ### Full document-language registry checkpoint
 
+#### Original transition and registration composition
+
+The subsequent [transition receipt](../../04-build/evidence/design-audit/truss-endpoint-intent-full-extension-transition.json)
+records 21 controls from the same exact committed owner tree and unchanged full
+schema. The four additional controls validate the registered 0.8 transition
+target, retain incomplete status without registration, restore and validate the
+original 0.7 source, and refuse a wrong authored key name in the target. The
+checker independently compares complete extension content through transition
+and complete serialized source correspondence after rollback. These are
+original-owner library observations, not browser or native acceptance evidence;
+the earlier seventeen-control receipt remains historical.
+
+E1 composition must select one exact producer bundle containing the owner
+registry, core validator and explicit transition functions, plus the original
+Truss schema/semantic-callback/resource pins. Register before interpreting any
+document and retain that same original registry selection for source and target
+validation. A target's core validity cannot substitute for registered extension
+completeness; invalid or unsupported required meaning refuses before native
+derivation. The current `loadUmfProducer` remains pinned to an older original
+bundle with default registry validation. Its profile cannot be reused to claim
+this new registration or relabeled with the current registry revision. Updating
+it requires an explicit new bundle/profile and matching original declaration,
+Field/key, transition and resource composition.
+
+Retain source version and complete original bytes separately from target
+interpretation and transition evidence. E2/E3 source references continue resolving
+the original accepted/supplied source, never a rewritten target document. Exercise
+changed registration/schema/callback pins, missing target registration, a mutated
+extension during transition and rollback mismatch as pre-effect refusals in the
+assembled producer. Do not expose a mutable shared registry that another request
+can change after preparation; final use admits the original registered profile
+and current installation/authority context under the existing acceptance rules.
+
 The [full registry checker](../../04-build/evidence/design-audit/check-truss-endpoint-intent-full-extension.ts)
 now registers the complete unchanged candidate schema through committed UMF's
 original `Registry.register`. It verifies all 1,342 original src/spec members

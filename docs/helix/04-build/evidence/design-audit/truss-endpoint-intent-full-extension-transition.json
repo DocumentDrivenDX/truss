@@ -1,0 +1,646 @@
+{
+  "status": "passed",
+  "ownerRevision": "1f7b5f5d2a355c4b476e3a96b289b9048f03f567",
+  "ownerTreeSha256": "299c8309fab01ca8e1675ff74d99e235ae0acb28bbfaad392200e2122fa60d9e",
+  "ownerSourceMembers": 1342,
+  "schemaSha256": "b4362c9c6842f51d061c39021cfe6c38dc18dac183e46d0e005c5cad97fd2493",
+  "checkerSha256": "03b59b4c11c73911a870a9592c8f464cd3e6d11f3f3d8c7e4bff5ba19719093b",
+  "manifest": {
+    "id": "truss-endpoint-intent-candidate",
+    "version": "0.1.0",
+    "coreVersion": "0.1.0",
+    "description": "Unadopted complete Truss endpoint-intent document language",
+    "schema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "urn:truss:proposal:endpoint-intents:0.1.0",
+      "title": "Proposed complete Truss catalog endpoint intent carrier",
+      "description": "Truss-owned extension candidate; structure does not resolve endpoints, admit package bytes, authorize policy or change UMF core relationship semantics.",
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-endpoint-intents/0.1.0"
+        },
+        "dependencies": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "$ref": "#/$defs/dependency"
+          }
+        },
+        "intents": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "$ref": "#/$defs/intent"
+          }
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "dependencies",
+        "intents"
+      ],
+      "additionalProperties": false,
+      "$defs": {
+        "definitionSelection": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "const": "pending"
+                },
+                "expectedRevision": {
+                  "oneOf": [
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "state",
+                "expectedRevision"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "const": "selected"
+                },
+                "revision": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "sourceReference": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "state",
+                "revision",
+                "sourceReference"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "keySelection": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "const": "absent"
+                }
+              },
+              "required": [
+                "state"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "const": "pending"
+                },
+                "name": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "state",
+                "name"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "const": "selected"
+                },
+                "name": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "state",
+                "name"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "sourceEndpoint": {
+          "type": "object",
+          "properties": {
+            "document": {
+              "type": "string",
+              "minLength": 1
+            },
+            "module": {
+              "type": "string",
+              "minLength": 1
+            },
+            "element": {
+              "type": "string",
+              "minLength": 1
+            },
+            "definition": {
+              "$ref": "#/$defs/definitionSelection"
+            }
+          },
+          "required": [
+            "document",
+            "module",
+            "element",
+            "definition"
+          ],
+          "additionalProperties": false
+        },
+        "targetEndpoint": {
+          "type": "object",
+          "properties": {
+            "document": {
+              "type": "string",
+              "minLength": 1
+            },
+            "module": {
+              "type": "string",
+              "minLength": 1
+            },
+            "element": {
+              "type": "string",
+              "minLength": 1
+            },
+            "definition": {
+              "$ref": "#/$defs/definitionSelection"
+            },
+            "key": {
+              "$ref": "#/$defs/keySelection"
+            }
+          },
+          "required": [
+            "document",
+            "module",
+            "element",
+            "definition",
+            "key"
+          ],
+          "additionalProperties": false
+        },
+        "bounds": {
+          "type": "object",
+          "properties": {
+            "min": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$"
+            },
+            "max": {
+              "type": "string",
+              "pattern": "^(\\*|0|[1-9][0-9]*)$"
+            }
+          },
+          "required": [
+            "min",
+            "max"
+          ],
+          "additionalProperties": false
+        },
+        "dependency": {
+          "type": "object",
+          "properties": {
+            "document": {
+              "type": "string",
+              "minLength": 1
+            },
+            "revision": {
+              "type": "string",
+              "minLength": 1
+            },
+            "sourceReference": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "document",
+            "revision",
+            "sourceReference"
+          ],
+          "additionalProperties": false
+        },
+        "intent": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "module": {
+              "type": "string",
+              "minLength": 1
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "sources": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/sourceEndpoint"
+              }
+            },
+            "targets": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/targetEndpoint"
+              }
+            },
+            "sourceBounds": {
+              "$ref": "#/$defs/bounds"
+            },
+            "targetBounds": {
+              "$ref": "#/$defs/bounds"
+            },
+            "directed": {
+              "type": "boolean"
+            },
+            "lifecycle": {
+              "enum": [
+                "independent",
+                "owned",
+                "unspecified"
+              ]
+            },
+            "composition": {
+              "type": "boolean"
+            },
+            "inverse": {
+              "oneOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "type": "string",
+                  "minLength": 1
+                }
+              ]
+            },
+            "associationRecord": {
+              "oneOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "$ref": "#/$defs/sourceEndpoint"
+                }
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "module",
+            "name",
+            "sources",
+            "targets",
+            "sourceBounds",
+            "targetBounds",
+            "directed",
+            "lifecycle",
+            "composition",
+            "inverse",
+            "associationRecord"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "semantics": "Document-local intent checks only. Declared external selection is not resolved package membership, accepted definition, security admission or native enforcement.",
+    "scopes": [
+      "document"
+    ],
+    "capabilities": {
+      "validation": "semantic",
+      "directions": [],
+      "evidence": []
+    }
+  },
+  "results": [
+    {
+      "name": "complete-registered-pending-language",
+      "result": {
+        "valid": true,
+        "complete": true,
+        "diagnostics": []
+      },
+      "sourceSha256": "129970f8e8686f511a2f65352ff66daa99b5ba19246089519eeea83c7161fa11"
+    },
+    {
+      "name": "unregistered-full-content-retained-incomplete",
+      "result": {
+        "valid": true,
+        "complete": false,
+        "diagnostics": [
+          {
+            "code": "UNKNOWN_EXTENSION",
+            "path": "/vocabularies/truss-endpoint-intent-candidate",
+            "message": "Exact extension version unavailable; content retained",
+            "severity": "warning"
+          }
+        ]
+      },
+      "sourceSha256": "129970f8e8686f511a2f65352ff66daa99b5ba19246089519eeea83c7161fa11"
+    },
+    {
+      "name": "wrong-local-Record",
+      "result": {
+        "valid": false,
+        "complete": false,
+        "diagnostics": [
+          {
+            "code": "TRUSS_INTENT_LOCAL_RECORD",
+            "path": "/extensions/truss-endpoint-intent-candidate/intents/0/sources/0",
+            "message": "Candidate document intent correspondence refused",
+            "severity": "error"
+          }
+        ]
+      },
+      "sourceSha256": "cca62b7f1f6351b507bacc875d2a47c4817214817fafe2c0773dfaff9a51a5ce"
+    },
+    {
+      "name": "wrong-declaring-module",
+      "result": {
+        "valid": false,
+        "complete": false,
+        "diagnostics": [
+          {
+            "code": "TRUSS_INTENT_MODULE",
+            "path": "/extensions/truss-endpoint-intent-candidate/intents/0/module",
+            "message": "Candidate document intent correspondence refused",
+            "severity": "error"
+          }
+        ]
+      },
+      "sourceSha256": "eb6f8ab57124d2ca5d7483a3990b4c8eaf72e03d03cbf200c742bc207966a4d9"
+    },
+    {
+      "name": "duplicate-qualified-intent",
+      "result": {
+        "valid": false,
+        "complete": false,
+        "diagnostics": [
+          {
+            "code": "TRUSS_INTENT_DUPLICATE",
+            "path": "/extensions/truss-endpoint-intent-candidate/intents/1/id",
+            "message": "Candidate document intent correspondence refused",
+            "severity": "error"
+          }
+        ]
+      },
+      "sourceSha256": "b5baad24d1c3d404bd06a4767f41f7f92268e3c03e4628fef02bbf2024def8e9"
+    },
+    {
+      "name": "reversed-exact-bounds",
+      "result": {
+        "valid": false,
+        "complete": false,
+        "diagnostics": [
+          {
+            "code": "TRUSS_INTENT_BOUNDS",
+            "path": "/extensions/truss-endpoint-intent-candidate/intents/0/targetBounds",
+            "message": "Candidate document intent correspondence refused",
+            "severity": "error"
+          }
+        ]
+      },
+      "sourceSha256": "cb34695d65569f34b2e335678c053dba9eab5cf361d052008a0379c9207ec025"
+    },
+    {
+      "name": "duplicate-endpoint-lineage",
+      "result": {
+        "valid": false,
+        "complete": false,
+        "diagnostics": [
+          {
+            "code": "TRUSS_INTENT_ENDPOINT_DUPLICATE",
+            "path": "/extensions/truss-endpoint-intent-candidate/intents/0/targets/1",
+            "message": "Candidate document intent correspondence refused",
+            "severity": "error"
+          }
+        ]
+      },
+      "sourceSha256": "918cc6f93a9c6f9c9feba84550b3c948e0e861449da3fab1f4f4d4fcd2e401ae"
+    },
+    {
+      "name": "selected-external-requires-declaration",
+      "result": {
+        "valid": false,
+        "complete": false,
+        "diagnostics": [
+          {
+            "code": "TRUSS_INTENT_DEPENDENCY_SELECTION",
+            "path": "/extensions/truss-endpoint-intent-candidate/intents/0/targets/0/definition",
+            "message": "Candidate document intent correspondence refused",
+            "severity": "error"
+          }
+        ]
+      },
+      "sourceSha256": "4bea3f4491006718e99e773582b62d9fb1fb93230e8c1cc4416de3ae9e451705"
+    },
+    {
+      "name": "duplicate-required-dependency",
+      "result": {
+        "valid": false,
+        "complete": false,
+        "diagnostics": [
+          {
+            "code": "TRUSS_INTENT_DEPENDENCY_DUPLICATE",
+            "path": "/extensions/truss-endpoint-intent-candidate/dependencies/1",
+            "message": "Candidate document intent correspondence refused",
+            "severity": "error"
+          }
+        ]
+      },
+      "sourceSha256": "788d8cfe6c4da78da1b5db078d759070d70bf3595e57ddfe9350dfd3b9bc5590"
+    },
+    {
+      "name": "wrong-local-key-name",
+      "result": {
+        "valid": false,
+        "complete": false,
+        "diagnostics": [
+          {
+            "code": "TRUSS_INTENT_LOCAL_KEY",
+            "path": "/extensions/truss-endpoint-intent-candidate/intents/0/targets/0/key",
+            "message": "Candidate document intent correspondence refused",
+            "severity": "error"
+          }
+        ]
+      },
+      "sourceSha256": "f33e029f5b0395aa608d8ed45a5b2b7343a79baa61867ccdbd8ae6916a079b29"
+    },
+    {
+      "name": "association-must-be-Record",
+      "result": {
+        "valid": false,
+        "complete": false,
+        "diagnostics": [
+          {
+            "code": "TRUSS_INTENT_LOCAL_RECORD",
+            "path": "/extensions/truss-endpoint-intent-candidate/intents/0/associationRecord",
+            "message": "Candidate document intent correspondence refused",
+            "severity": "error"
+          }
+        ]
+      },
+      "sourceSha256": "7edd87f6bba62a2d1beefd6c9b27a534b3521227c0df8fdbc45deb8e5a242d67"
+    },
+    {
+      "name": "declared-external-syntax-not-package-resolution",
+      "result": {
+        "valid": true,
+        "complete": true,
+        "diagnostics": []
+      },
+      "sourceSha256": "3a27a7a1bf9961f996d649385fdf4e3388407bdc0f05a676f82fff7f71204f59"
+    },
+    {
+      "name": "changed-external-reference-refuses",
+      "result": {
+        "valid": false,
+        "complete": false,
+        "diagnostics": [
+          {
+            "code": "TRUSS_INTENT_DEPENDENCY_SELECTION",
+            "path": "/extensions/truss-endpoint-intent-candidate/intents/0/targets/0/definition",
+            "message": "Candidate document intent correspondence refused",
+            "severity": "error"
+          }
+        ]
+      },
+      "sourceSha256": "fc4c8bcb9e4b4c81274150888ec7be25ec946db76d6f2552781e6e9c8243422c"
+    },
+    {
+      "name": "selected-callback-occurrence-bound",
+      "result": {
+        "valid": false,
+        "complete": false,
+        "diagnostics": [
+          {
+            "code": "TRUSS_INTENT_BOUND",
+            "path": "/extensions/truss-endpoint-intent-candidate",
+            "message": "Candidate document intent correspondence refused",
+            "severity": "error"
+          }
+        ]
+      },
+      "sourceSha256": "0929ac767cc940bb36bab7fda66c7bb355ee2d663d78e087687ed3df139867e1"
+    },
+    {
+      "name": "original-local-key-name",
+      "result": {
+        "valid": true,
+        "complete": true,
+        "diagnostics": []
+      },
+      "sourceSha256": "a3d4816138cfcd886543affeb3b0ff801a575146465c8e17b19c96cfde9d4298"
+    },
+    {
+      "name": "missing-full-carrier-field",
+      "result": {
+        "valid": false,
+        "complete": false,
+        "diagnostics": [
+          {
+            "code": "EXTENSION_STRUCTURE",
+            "path": "/extensions/truss-endpoint-intent-candidate/intents/0",
+            "message": "must have required property 'directed'",
+            "severity": "error"
+          }
+        ]
+      },
+      "sourceSha256": "8abe183c8eca7a7d704c4a31a14e8e50e041852f9c992afe63a75a5ed70b52f8"
+    },
+    {
+      "name": "full-extension-does-not-repair-invalid-core",
+      "result": {
+        "valid": false,
+        "complete": false,
+        "diagnostics": [
+          {
+            "code": "RELATIONSHIP_ENDPOINT_MISSING",
+            "path": "/modules/0/relationships/0/target/0",
+            "message": "Endpoint does not resolve by exact module and element IDs",
+            "severity": "error"
+          }
+        ]
+      },
+      "sourceSha256": "026aae17a5b05f940a7db7b04fadfe85e847472df5321de67b6bdf4a43bf37fe"
+    },
+    {
+      "name": "registered-transition-target-complete-language",
+      "result": {
+        "valid": true,
+        "complete": true,
+        "diagnostics": []
+      },
+      "sourceSha256": "a77eddfceea943dfc3172de791d0e3996f0bb8c37e9561a53f17535393a99bb6"
+    },
+    {
+      "name": "unregistered-transition-target-retains-incomplete-language",
+      "result": {
+        "valid": true,
+        "complete": false,
+        "diagnostics": [
+          {
+            "code": "UNKNOWN_EXTENSION",
+            "path": "/vocabularies/truss-endpoint-intent-candidate",
+            "message": "Exact extension version unavailable; content retained",
+            "severity": "warning"
+          }
+        ]
+      },
+      "sourceSha256": "a77eddfceea943dfc3172de791d0e3996f0bb8c37e9561a53f17535393a99bb6"
+    },
+    {
+      "name": "registered-restored-original-complete-language",
+      "result": {
+        "valid": true,
+        "complete": true,
+        "diagnostics": []
+      },
+      "sourceSha256": "129970f8e8686f511a2f65352ff66daa99b5ba19246089519eeea83c7161fa11"
+    },
+    {
+      "name": "transition-target-retains-authored-key-name-rule",
+      "result": {
+        "valid": false,
+        "complete": false,
+        "diagnostics": [
+          {
+            "code": "TRUSS_INTENT_LOCAL_KEY",
+            "path": "/extensions/truss-endpoint-intent-candidate/intents/0/targets/0/key",
+            "message": "Candidate document intent correspondence refused",
+            "severity": "error"
+          }
+        ]
+      },
+      "sourceSha256": "b6008e876dd1b743c04ed18c7744cc991cada286b55ba63e4d6d06c9d809337c"
+    }
+  ],
+  "scope": "Full candidate document language Registry/validateDocument experiment only; not adopted vocabulary, complete package membership, accepted-history custody, security, provisional/native relationship enforcement or release acceptance. Callback occurrence limit100 is not a complete decoder/resource profile."
+}

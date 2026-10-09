@@ -18,6 +18,7 @@ const ownerTreeSha256=createHash('sha256').update(JSON.stringify(Object.fromEntr
 if(Object.keys(allSourcePins).length!==1342||ownerTreeSha256!=='299c8309fab01ca8e1675ff74d99e235ae0acb28bbfaad392200e2122fa60d9e')throw Error('Changed original committed owner source tree');
 const {Registry}=await import(owner+'/src/registry/registry.ts');
 const {validateDocument}=await import(owner+'/src/validation/document.ts');
+const {upgradeSchemaPropertiesEnvelope,verifySchemaPropertiesUpgrade,rollbackSchemaPropertiesEnvelope}=await import(owner+'/src/model/schema-properties-transition.ts');
 const id='truss-endpoint-intent-candidate',version='0.1.0';
 const schemaBytes=await readFile(new URL('../../../02-design/contracts/truss-endpoint-intent-v0.1.proposal.schema.json',import.meta.url));
 const schemaSha256=createHash('sha256').update(schemaBytes).digest('hex');
@@ -85,6 +86,20 @@ const overBound=structuredClone(original);overBound.extensions[id].intents[0].ta
 const localKey=structuredClone(original);localKey.extensions[id].intents[0].targets=[{...local,key:{state:'selected',name:'Identity'}}];check('original-local-key-name',localKey,registry,true,true);
 const malformed=structuredClone(original);delete malformed.extensions[id].intents[0].directed;check('missing-full-carrier-field',malformed,registry,false,false);
 const invalidCore=structuredClone(original);invalidCore.modules[0].relationships=[{id:'invalid-core',name:'Invalid core',source:[{module:'m',element:'Source'}],target:[{module:'m',element:'Missing',key:'identity'}],sourceMultiplicity:{min:0,max:'*'},targetMultiplicity:{min:0,max:'*'},targetLifecycle:'independent',directed:true}];check('full-extension-does-not-repair-invalid-core',invalidCore,registry,false,false);
+const originalText=JSON.stringify(original);
+const transition=upgradeSchemaPropertiesEnvelope(original);
+verifySchemaPropertiesUpgrade(transition);
+if(JSON.stringify(original)!==originalText||transition.target.umf!=='0.8.0'||
+ JSON.stringify(transition.target.extensions[id])!==JSON.stringify(original.extensions[id]))
+ throw Error('Original source or complete extension changed during owner transition');
+check('registered-transition-target-complete-language',transition.target,registry,true,true);
+check('unregistered-transition-target-retains-incomplete-language',transition.target,new Registry(),true,false);
+const restored=rollbackSchemaPropertiesEnvelope(transition,transition.target);
+if(JSON.stringify(restored.target)!==originalText)throw Error('Full extension original rollback correspondence');
+check('registered-restored-original-complete-language',restored.target,registry,true,true);
+const wrongTargetKey=structuredClone(transition.target) as any;
+wrongTargetKey.extensions[id].intents[0].targets=[{...local,key:{state:'selected',name:'identity'}}];
+check('transition-target-retains-authored-key-name-rule',wrongTargetKey,registry,false,false,'TRUSS_INTENT_LOCAL_KEY');
 const receipt={status:'passed',ownerRevision:'1f7b5f5d2a355c4b476e3a96b289b9048f03f567',ownerTreeSha256,ownerSourceMembers:1342,schemaSha256,checkerSha256:createHash('sha256').update(await readFile(new URL(import.meta.url))).digest('hex'),manifest,results,scope:'Full candidate document language Registry/validateDocument experiment only; not adopted vocabulary, complete package membership, accepted-history custody, security, provisional/native relationship enforcement or release acceptance. Callback occurrence limit100 is not a complete decoder/resource profile.'};
-await writeFile(new URL('./truss-endpoint-intent-full-extension.json',import.meta.url),JSON.stringify(receipt,null,2)+'\n');
+await writeFile(new URL('./truss-endpoint-intent-full-extension-transition.json',import.meta.url),JSON.stringify(receipt,null,2)+'\n');
 console.log(results.length+' original-owner full candidate language controls; no package/native acceptance');
