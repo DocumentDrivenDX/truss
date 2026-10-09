@@ -10,13 +10,21 @@ This repository uses HELIX. Read `.helix.yml` and engage the installed
 - Preserve artifact IDs, frontmatter, and deliberate `ddx.links` traceability.
 - Record unknowns explicitly as open questions, assumptions or risks.
 
-Start with `docs/helix/README.md`. truss has discovery artifacts (product
-vision, competitive analysis, naming research, discovery input, component
-profiles), a storage research plan, two spikes, a storage layout review, two
-accepted ADRs, one proposed ADR and four draft contracts. No PRD, feature
-specifications or implementation exist yet. The
-next HELIX action is `frame`: write the PRD and feature specifications.
-Implementation must trace to framed requirements.
+Start with `docs/helix/README.md`, then
+`docs/helix/04-build/design-decision-queue.md` and
+`docs/helix/04-build/remaining-design-handoff-audit.md`. The PRD, eight feature
+specifications, 45 stories, architecture, contracts, implementation plan and
+story test plans exist as governed drafts. Experimental Weft integration and
+private PostgreSQL catalog/report components exist; they do not establish a
+complete protected engine or accepted catalog. The user has authorized runtime
+implementation. Trace changes to framed requirements rather than restarting
+framing or requesting that authorization again.
+
+Follow the audit's current acceptance implementation exit sequence. Preserve
+original producer evidence and independently qualify native effects before
+publishing an accepted revision. Never replace missing report fields with
+fixture identities or empty inventories. Component checks cannot establish the
+full acceptance → mutation → journal → feed → acknowledgement contract.
 
 ## Accepted decisions
 
@@ -60,16 +68,18 @@ provisional may change when its validation measurements report.
     as structured values with `root_id` on composed objects, edge ids, and the
     `target_type` edge-index include.
 
-Draft contracts (layout 0.2) specify the storage layout and DDL
-([CONTRACT-001](docs/helix/02-design/contracts/CONTRACT-001-storage-layout.md),
-`storage-layout.sql` and its check), the journal (CONTRACT-002), catalog revision
-and unknown entity types (CONTRACT-003), and the mutation protocol and
-conformance corpus (CONTRACT-004). [ADR-003](docs/helix/02-design/adr/ADR-003-conforming-implementations-and-shared-contracts.md)
-(proposed) lets implementations in other languages conform to them. The layout DDL
-and its check pass on PostgreSQL 16.2 and 17.9; PostgreSQL 18 is untested for it.
+CONTRACT-001 through CONTRACT-012 describe the storage, journal, catalog,
+mutation, embedding, bootstrap and Weft handoff boundaries. Start physical
+layout work with CONTRACT-012 and its installation gap matrix. The current
+reviewed native component model is 0.15; its separate core structural projection
+is 0.3. Earlier layout and compiler packets remain historical evidence and must
+not be silently combined into an installed profile.
 
-Still open: supported PostgreSQL versions (16 and 17 verified for the layout DDL), the query language, how a future
-Rust core would read UMF, and first users.
+PostgreSQL 17.9 has component evidence. Supported deployment versions, complete
+installation/security/resource profile adoption and full runtime qualification
+remain open; consult the current decision queue for the precise scope. UMF owns
+metadata semantics and reusable SQL generation; Weft owns logical SQL lowering.
+Truss owns their composition, retained evidence and protected publication.
 
 ## Boundaries
 
