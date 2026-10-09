@@ -40,7 +40,7 @@ Future commands: `bun test tests/edges/multiplicity.test.ts` and `bun tests/benc
 
 ## Data and Setup
 
-Separate source/target maximum fixtures and a two-sided limit. Independent observer counts actual edges and markers after commit/refusal. Race barriers demonstrate overlapping contenders and lock state. Benchmark warmup/sample count, median/tail statistic, timer resolution and confidence policy are preregistered; repeatable failure cannot be retried away to green.
+Separate source/target maximum fixtures and a two-sided limit. Independent observer counts actual edges and markers after commit/refusal. Race barriers demonstrate overlapping contenders and lock state. The [reference planning experiment candidate](../relationship-planning-experiment.proposal.md) authors complete native statement scope, exact Planning Time tokens, paired warm-up/samples, p95 and three-block decision. Adopt its exact original instrumentation/environment registration before execution; repeatable failure cannot be retried away to green.
 
 ## Edge Cases and Failure Modes
 

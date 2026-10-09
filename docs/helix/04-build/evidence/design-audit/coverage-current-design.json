@@ -1039,7 +1039,7 @@
     "02-design/technical-designs/TD-010-refuse-bad-edges-and-protect-connected-objects.md": "28d7e20d91856deed010edad6650d0c32a1ed16825ca6c2dbf3bed4aba21eefd",
     "03-test/test-plans/STP-010-refuse-bad-edges-and-protect-connected-objects.md": "039bc86ea67bd0e4b9a3a598a9316e32eb151d9cd1c003c9577ed45ee121ad88",
     "02-design/technical-designs/TD-011-limit-an-edges-multiplicity.md": "c94e6c6633440bc9b7cb58f95c8e7c0ef91b92b6f5797f9a013d52b92ccf010a",
-    "03-test/test-plans/STP-011-limit-an-edges-multiplicity.md": "e5af2cd7e06b7ab01a9f84048ac1e69a82a6f2ac3d98d77abd7bbb4a9edc3bfb",
+    "03-test/test-plans/STP-011-limit-an-edges-multiplicity.md": "15e0c656e97702f19a56414e488eaeb65216b85c75d35e1b51929fc730646bb2",
     "02-design/technical-designs/TD-012-write-with-one-protocol-and-report-every-violation.md": "4463200481ccd7103b4540004d9d8ab45517c00810a9751e427357903bcbadfa",
     "03-test/test-plans/STP-012-write-with-one-protocol-and-report-every-violation.md": "353ebfe34b87a5567a20a302e446457e59e352894d59195b6b86f48566a425eb",
     "02-design/technical-designs/TD-013-refuse-a-write-against-a-stale-catalog.md": "adba3ae01b9b9969b94f3325956437e329a12448ef5d8e190e02b3a431e8da92",
