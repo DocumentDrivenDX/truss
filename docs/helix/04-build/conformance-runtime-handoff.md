@@ -17,6 +17,17 @@ or qualify an operation against PostgreSQL or another implementation.
 
 ## Implementation sequence and independent exits
 
+C4 has a private `conformance-diagnostic-multiset.ts` comparator for bounded,
+already admitted diagnostic projections. Four tests/ten assertions and strict
+TypeScript preserve duplicate multiplicity, source/profile/classification,
+severity/code and exact path content, including root versus empty-member and
+escaped names. Input source/profile strings are original registry comparison
+keys whose complete artifact correspondence must be admitted before projection;
+they are not caller-minted identities or authority. The comparator does not
+decode diagnostic artifacts, select normalization, validate pointer truth or
+establish corpus completeness. C4 must still resolve the original expected and
+observed diagnostic artifacts and their version-scoped comparator procedure.
+
 C2 has a private `conformance-case-links.ts` component for shape-admitted bounded
 case projections. Twenty synthetic controls now exercise that implementation;
 strict TypeScript passes. It checks case/grammar/registry correspondence, exact
