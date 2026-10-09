@@ -29,13 +29,13 @@ ddx:
 
 ## Context
 
-A single operation is already atomic; a business action usually needs several.
+A single operation is already atomic; a business action usually needs several. The group plans and revalidates the complete affected lock set under CONTRACT-009 before graph effects, then validates cross-row invariants against the complete simulated final state. Submitted order determines aliases and ordered results; transient intermediate state cannot be advertised as the final graph. The opposed-order no-deadlock criterion covers groups honoring the shared hierarchy without arbitrary earlier host locks; a host-induced deadlock follows the separate retry/containment contract. Request-free group atomicity does not require receipt storage and does not provide exact-input replay. Request-enabled retry consumes the independently qualified complete receipt profile.
 
 ## Walkthrough
 
 1. Implementer builds a group: create an Order, create an OrderLine, and an edge from the Order to the line, referring to the new records by alias.
-2. System runs the catalog check once and each operation in order.
-3. System commits the group with one origin.
+2. System admits the original catalog/context once, acquires and revalidates the complete planned lock set, validates the final candidate graph, and applies the submitted operations in order.
+3. System returns ordered results with one origin: pending inside an adopted transaction, or committed only after confirmed settlement of its engine-owned outer transaction.
 4. Implementer repeats it with an invalid edge in the group.
 
 ## Acceptance Criteria
