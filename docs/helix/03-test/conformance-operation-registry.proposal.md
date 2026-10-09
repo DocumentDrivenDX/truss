@@ -321,6 +321,8 @@ Independent controls must reject v0.1 feed masquerading as v0.2, request-free gr
 | --- | --- | --- | --- |
 | fresh installation | installFresh | truss-bootstrap-installation-v0.1, BootstrapInstallationTooling | Dedicated administrative transaction; qualified complete candidate, nonempty refusal and original confirmed commit |
 | installation recovery | reconcileInstallation | Same | Read-only original attempt; no reinstall from missing observation |
+| layout inspection | status | truss-layout-migration-v0.1.proposal, LayoutMigrationTooling | Current original installation observation or unavailable; no persistent effects, readiness publication or prior-attempt settlement |
+| layout verification | verify | Same | Complete expected registered layout/bundle/inventory comparison; matches/drift/unavailable remain distinct; current parity never replaces original commit evidence |
 | layout upgrade | apply | truss-layout-migration-v0.1.proposal, LayoutMigrationTooling | Explicit complete registered route in dedicated administrative transaction; preserve migrated/already_applied/committed_unverified versus unknown/refused/rolled_back outcomes |
 | upgrade recovery | reconcile | Same | Read-only original recovery reference; no resubmission or inferred absence |
 | retention | dropInTransaction | truss-retention-tooling-v0.1, RetentionTooling | Complete original eligibility/dependency cohort under supplied transaction; pending until confirmation |
@@ -334,8 +336,19 @@ Independent controls must reject v0.1 feed masquerading as v0.2, request-free gr
 
 Executor.execute is a registered internal statement port, not a corpus escape hatch to dispatch arbitrary SQL. Native direct-SQL bypass tests use a separately host-admitted independent harness procedure and exact immutable statement fixture, with their own authority/resource/termination evidence. Host commit/rollback controls likewise remain trusted harness operations: Executor has no public commit-by-id method for adopted scopes.
 
-The existing InstallationAdmissionSnapshot is a data projection, not a callable status API. Inspection/readiness cases bind the actual ReferenceAssembly.observeReadiness procedure or exact independently registered native verifier; do not invent inspectStatus from the snapshot's name. Pure layout migration planning is separately implemented tooling, not LayoutMigrationTooling.apply and not evidence that upgrades execute.
+The existing InstallationAdmissionSnapshot is a data projection, not a callable status API. Inspection/readiness cases bind the actual ReferenceAssembly.observeReadiness procedure or exact independently registered native verifier; do not invent inspectStatus from the snapshot's name. The draft LayoutMigrationTooling.status/verify declarations now provide separately scoped current installation inspection; register their exact request/result and read-only procedure profiles, including LM-V01–06 observations. They remain unimplemented. Pure layout migration planning is separately implemented tooling, not LayoutMigrationTooling.apply and not evidence that upgrades execute.
 
 Conformance runner prepareRun/run/abandonPreparedRun/reconcileRun and assessor assess belong to the outer trusted harness lifecycle under truss-conformance-tooling-v0.1. They do not become recursive case operations unless a separately selected tooling test explicitly qualifies them. Preserve complete original run/cleanup evidence independently from implementation-under-test outcomes.
 
 This completes the named administrative/executor inventory above, not the full executable registry. Live source lookup, remaining lifecycle/configuration methods, exact machine-readable input/result registrations and typed identity paths must still be resolved. Never fill those gaps from a guessed public method name or treat this table as a passing corpus.
+
+
+Migration status/verification cases preserve their direct result unions rather than
+inventing a generic Outcome wrapper. No transaction handle or current database
+connection is serialized into the inspection request. The original harness binds
+actual administrative observation custody and registered procedure/resource pins;
+a case cannot obtain authority merely by naming a profile. LM-V01–06 independently
+observe complete unchanged state, drift and unavailable cuts, while original
+upgrade reconciliation retains historical settlement. Missing inspection service
+registration records unavailable/not_run instead of falling back to a marker-only
+query or invoking apply as a status probe.
