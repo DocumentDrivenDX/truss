@@ -52,6 +52,27 @@ the existing protected producer/profile implementation and independent planned
 cases, rather than another retention product question. Full-scope semantic audit
 remains open.
 
+#### Import interruption and provenance reconciliation
+
+CONTRACT-004's import report admission, STP-034's NI-01/02 schedules and
+STP-035's source-fact cases agree on the required distinction: identity-based
+import repetition is not exact request-receipt replay. Engine batches may commit
+independently and retain prior committed effects; host-adopted imports do not
+commit their caller transaction. Lost application observation is attempt_unknown,
+and unknown commit or cleanup prevents full-load success. Every original input
+index retains its observed outcome or never-submitted disposition, independently
+of object-before-edge execution order and derived counters.
+
+NI-01's intervening delete/independent-create controls explicitly prevent current
+absence/presence from replacing original batch settlement. Later eligible import
+is a distinct load and may legitimately return different create/skip outcomes;
+it preserves user corrections, tombstones/reservations and original source facts.
+NI-02 separately covers network-host outer commit uncertainty without inventing
+atomic-group receipts. No additional batching/retry product decision is missing
+for these inspected surfaces. Original driver, settlement, report-accounting,
+identity/native enforcement and independent full-state observations remain
+implementation exits; these planned cases have not been run.
+
 Use this order for the next implementation cycle, while retaining every
 B-001–B-015 deliverable and all 45 stories/167 criteria. This sequence does not
 turn partial runtime evidence into design completion or remove unresolved owner
