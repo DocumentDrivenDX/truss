@@ -278,13 +278,17 @@ PostgreSQL-bound NUL/unpaired-surrogate content.
 PYTHONDONTWRITEBYTECODE=1 python3.11 -m unittest discover -s docs/helix/04-build/evidence/design-audit -p 'test_python_*candidate.py'
 ```
 
-Eleven tests pass on Python 3.11 across numeric, timestamp, tree and raw-JSON
+Twelve tests pass on Python 3.11 across numeric, timestamp, tree and raw-JSON
 candidates. The raw parser independently matches all five source/token/string
 fixtures and presence expectations, including escaped pointer names; controlled
 source mutation cannot change retained bytes. Explicit source-size and lexical
-nesting-depth checks precede parsing. Node-count checks occur afterward during
-immutable projection, so this prototype does not establish complete precharged
-heap/copy bounds. Original semantic/profile admission, public package ownership,
+nesting-depth and value-node checks precede parsing. A lexical preflight counts
+containers and scalar values while skipping quoted content/member names; the
+JSON decoder still owns syntax validation. Controlled over-limit cases prove
+the decoder is never called, and exact-at-bound arrays/objects still decode.
+Immutable projection rechecks node count. These finite source/tree bounds do not
+establish complete precharged heap/copy accounting, including decoded member names,
+source/text copies and simultaneous trees. Original semantic/profile admission, public package ownership,
 qualified native transport and integrated whole-operation resource accounting
 remain required. No parser success claims native JSONB fidelity or UMF support.
 

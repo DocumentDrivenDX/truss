@@ -1,7 +1,7 @@
 """Private bounded-source JSON convenience parser, not UMF/native admission.
 
-Source/depth checks precede json.loads. Node checks occur during immutable
-projection after parsing; this is not complete precharged allocation accounting.
+Source/depth/node checks precede json.loads. This lexical preflight is not syntax
+or semantic admission, nor complete precharged allocation accounting.
 """
 from dataclasses import dataclass
 import json
@@ -32,24 +32,49 @@ def parse_retained_json(source: bytes | bytearray, *, maximum_bytes: int,
         raise ValueError("Original bytes and explicit finite candidate bounds required")
     original = bytes(source)
     text = original.decode("utf-8", errors="strict")
-    quoted = escaped = False
-    depth = 0
-    for char in text:
-        if quoted:
-            if escaped:
-                escaped = False
-            elif char == "\\":
-                escaped = True
-            elif char == '"':
-                quoted = False
-        elif char == '"':
-            quoted = True
-        elif char in "[{":
+    depth = preflight_nodes = index = 0
+
+    def charge_node():
+        nonlocal preflight_nodes
+        preflight_nodes += 1
+        if preflight_nodes > maximum_nodes:
+            raise ValueError("Selected JSON node count exceeded before parsing")
+
+    # Count value starts without constructing decoded containers or scalar tokens.
+    # Syntax (including malformed escapes) is still checked by json.loads.
+    while index < len(text):
+        char = text[index]
+        if char in "[{":
+            charge_node()
             depth += 1
             if depth > maximum_depth:
                 raise ValueError("Selected JSON depth exceeded before parsing")
         elif char in "]}":
             depth -= 1
+        elif char == '"':
+            index += 1
+            escaped = False
+            while index < len(text):
+                char = text[index]
+                if escaped:
+                    escaped = False
+                elif char == "\\":
+                    escaped = True
+                elif char == '"':
+                    break
+                index += 1
+            following = index + 1
+            while following < len(text) and text[following] in " \t\r\n":
+                following += 1
+            # Object member names are not value nodes. Their bytes remain charged
+            # by the whole source bound; syntax validation checks actual context.
+            if following == len(text) or text[following] != ":":
+                charge_node()
+        elif char not in " \t\r\n,:":
+            charge_node()
+            while index + 1 < len(text) and text[index + 1] not in " \t\r\n,]}:":
+                index += 1
+        index += 1
 
     def object_pairs(pairs):
         result = {}
