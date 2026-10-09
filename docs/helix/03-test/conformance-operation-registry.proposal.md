@@ -63,6 +63,45 @@ Keep legacy v0.1 cases version-scoped if independently selected. They cannot sat
 
 ## Registry completion obligations
 
+### Closed descriptor and acyclic artifact custody
+
+The [operation-registry descriptor schema](../02-design/contracts/conformance-operation-registry-v0.1.proposal.schema.json)
+now closes registry and entry members. Each operation binds an exact profile,
+registered declaration/method or original harness procedure, call procedure
+bytes/profile, argument and result schema bytes with exact JSON pointers,
+permitted scope kinds, semantic contract inventory, all four normative
+observer registrations with independence evidence, and resource profile.
+A performance observer is optional in shape but mandatory when the selected
+case/profile requires performance. An explicit no-output report or journal
+still requires its registered complete observer; omission is not emptiness.
+
+Schema pointers resolve only against the supplied exact original schema
+artifact after bounded parse/digest/profile admission. They select the intended
+schema node, never a path on the observed result. Method names and call
+procedure artifacts resolve through the original trusted host registration;
+no imports, SQL strings or callbacks are executed from this descriptor.
+Duplicate operation discriminators, unresolved declaration/method/profile,
+unsupported scope kind, incomplete observation membership or unqualified
+independence prevent registration. The shape-valid shared-observer fixture
+does not supply independence simply by repeating an evidence artifact.
+
+The descriptor deliberately does not embed identity-path artifact bytes or
+their digest. The path artifact already embeds the registry artifact, so a
+reverse reference would require circular hashes. The original host composition
+selects both artifacts independently; admission verifies that the path's
+registry equals these original bytes. Registry and grammar profiles identify
+separately registered semantic procedures, not their own enclosing artifact's
+self-hash. Preserve this acyclic source custody when constructing the complete
+manifest and aliases. The new descriptor is not itself a populated registry.
+
+Run `check-conformance-operation-registry.ts` in the design audit directory
+with the installed Ajv Draft 2020-12 module path: fourteen controls cover
+closed method/harness descriptors, required observer evidence, schema pointers,
+scope kinds and prohibited executable/reverse-reference members. Duplicates,
+unknown methods and insufficient independence deliberately remain shape-valid
+semantic refusal controls. Populate and independently admit all required
+operations under their exact methods/profiles before claiming execution readiness.
+
 ### Case-only multi-argument encoding
 
 The definitions-only `conformance-capability-arguments-v0.1.proposal.schema.json`
