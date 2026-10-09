@@ -34,6 +34,12 @@ own qualified version/profile. Aurora and Lakebase retain independent obligation
 
 ## Delivery sequence
 
+The [local deadline handoff](local-deadline-installation-handoff.md) now fixes
+admission/cancellation/containment/COMMIT/recovery ordering for the16.2 profile.
+Published pgserver remains0.1.4; no assumed newer binary solves the compatibility
+gap. Native transaction termination and the host's deadline remain separate facts.
+Original producer qualification is still required before complete readiness.
+
 ### Current integration priority
 
 The security workstream's same-endpoint occurrence finding is independently
