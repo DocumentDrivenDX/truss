@@ -649,3 +649,37 @@ Executor hook checkpoint: the [reference driver review](../02-design/contracts/r
 The initial qualified deployment tuple remains unresolved. With the optional owner question still unanswered, use the [local PostgreSQL 17.11 planning target](../02-design/contracts/reference-local-deployment.proposal.md) as an explicit revisable assumption for the first disposable reference integration. This preserves the managed-service portability requirements and extension restriction. It is not owner acceptance, installed build evidence, a current patch/security recommendation or permission to omit managed deployment gates.
 
 Bind exact server/build/encoding, driver and protocol hooks, role/administrative paths, available native resource mechanisms, installation/conversion start states and independent assessor visibility before qualification. Preserve unavailable features as explicit profile gaps. A PostgreSQL version or owner compiler fixture alone cannot supply this tuple. Independent layout/security and corpus design can continue against the planning assumption; native profile adoption still requires actual complete evidence and any required deployment authorization.
+
+## Association witness Key qualifier owner handoff — 2026-10-09
+
+Read-only coordination finds an unresolved source interpretation in the existing
+security owner's Relationship/witness work. Core CONTRACT-041 defines
+`associationRecord` as a qualified `{module,element}` Record reference; it does
+not define an extra `key` member. The owner's current SPIKE-009 records that
+accepting this qualifier requires a governed version/profile interpretation,
+not a validator allow-list. The private Truss working relationship stage accepts
+`module`, `element`, `key`, resolves the association Record from the archived
+original document/revision/ordinal and checks the supplied text against native
+`key_def.key_id`. These are uncommitted owner components, not an adopted public
+core grammar or complete witness capability.
+
+The security owner is examining a draft meaning in which this qualifier asserts
+the same stable Key selected for the association witness. Truss must await the
+original selected owner contract and independently bind its exact qualified
+Record/Key selection to archived source, accepted metadata and witness custody.
+Do not confuse native stable `key_id`, authored Key name, owner-local key number
+or the separately versioned Truss endpoint-intent selector. No matching display
+name, first available Key or existence of some Key supplies the missing meaning.
+
+Before adopting that path, independently test an absent qualifier under the
+selected witness profile, matching selector, mismatched selector, same spelling
+on another Record, retired/recreated Key and unresolved extra qualifiers. Refuse
+unsupported source interpretation before staging or exposing a witness; compare
+actual original association owner and Key under the same admitted metadata cut.
+Default core-only handling cannot silently acquire this draft meaning. This is
+an owner interpretation/interface dependency, not another product vote or a
+Truss-owned authorization resolver. Preserve the owner's working files.
+
+Weft's current local HEAD `94b2de5` is a microsite preview change; local compiler/
+security files remain dirty. No compiler rebuild, new public ABI or security
+adoption follows from that HEAD or this read-only inspection.
