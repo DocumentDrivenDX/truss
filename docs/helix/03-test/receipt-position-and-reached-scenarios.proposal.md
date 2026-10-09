@@ -21,6 +21,32 @@ Planned independent native scenarios for [receipt position and reached](../02-de
 
 The runner records exact layout/corpus/position/security/driver/database/application tuples, original read cuts and observed commit outcomes. Expected state is authored independently. Fresh true results require original inclusion proof; agreement between two implementations alone cannot certify it. Execute the same relevant cases through TypeScript and Python, then interchange saved tokens through the admitted shared resolver. Unsupported/incomplete required profiles remain unavailable and block full consumer qualification.
 
+## RV-12 minimum-window and journal-retention controls
+
+Use CONTRACT-009's original first trusted confirmed committed observation as
+the window basis, not receipt creation, client submission or a fixture's claimed
+commit time. Independently observe full payload protection at 86,399,999,999
+microseconds after that basis. At 86,400,000,000 microseconds, expiry is permitted
+only if every longer declared window, retained-event and dependency protection
+also permits it; the boundary alone is not a purge permit. Repeat for an
+event-bearing group and an all-no-op group.
+
+Delay the first confirmed observation and verify the conservative later deadline.
+Restart, move the wall clock forward/backward, and withhold qualified continuity
+evidence: cleanup must preserve payload rather than interpreting the jump as
+elapsed time. Extend protection concurrently with expiry assessment; purge must
+reobserve the latest original protection under its native arbitration.
+
+Select a qualified zero-local-journal-retention profile and complete its required
+durable archive/feed handoff. Removing eligible local journal rows must not
+remove the protected full receipt, change the original replay result/token or
+authorize request reapplication. Conversely, keeping journal rows without a
+complete protected receipt cannot manufacture full replay. After legitimate
+expiry, replay follows receipt_expired and reached follows disclosure-safe
+unavailable(retention); neither repeats mutation or reports false inclusion.
+Record original native clock, commit, protection and retention observations;
+synthetic timestamps or a fake clock exercise pure arithmetic only.
+
 ## Locator wire and receipt transition controls
 
 Planned subcases under RV token/replay/compatibility schedules: exact original
