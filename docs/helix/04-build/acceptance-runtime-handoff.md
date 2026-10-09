@@ -4,53 +4,36 @@ Status: execution sequence authored; public runtime unavailable. Governing input
 
 ## Current implementation boundary
 
-`packages/postgresql/src/index.ts` constructs an inert assembly whose catalog/mutation/feed selectors return unavailable. `packages/umf-bun/src/catalog-report-preparation.ts` composes a private new-only basis; transforms, retirement and provisional endpoints do not become supported from that basis. `catalog-report-correspondence.ts` checks ten original producer fields, and its private `verifyWithExecutionCandidate` path additionally checks the complete candidate originalExecution object after original issuer and native-context rechecks. The latter has scoped PostgreSQL 17.9 component evidence with 179 observations in `catalog-new-cohort-execution-correspondence.json`. `catalog-execution-report-candidate.ts` composes that explicitly unqualified execution candidate; installed semantic profile admission and full seventeen-field report verification remain incomplete. Native immutable-report trigger evidence proves byte-home mutation refusal only, not insert admission, complete installed privileges or accepted head publication.
+The public assembly in `packages/postgresql/src/index.ts` remains inert: catalog,
+mutation and feed selectors return unavailable. The private preparation supports
+new-only staging; it does not supply transform, retirement or provisional-endpoint
+support. Immutable-report guard evidence covers byte-home mutation refusal, not
+complete insert admission, installed privilege closure or accepted head publication.
 
-Keep unconditional deferred safety barriers until the entire original operation finalization path is independently qualified. Removing a barrier to make a consumer demonstration commit would misrepresent the public acceptance capability.
+The latest `verifyWithExecutionAndRegisteredReportProfile` path verifies ten
+original producer fields plus the complete originalExecution candidate and
+registered reportProfile bytes under one original preparation/connection basis.
+Original candidate custody precedes parsing/profile resolution, and native context
+is rechecked before return. Its explicit scope is
+`twelve_original_report_candidate_fields_only`; registered bytes are not selected
+report-profile semantic admission.
+
+The current report suite passes 16 tests/142 assertions and strict TypeScript.
+The [combined PostgreSQL 17.9 receipt](evidence/catalog-new-cohort-combined-report-correspondence.json)
+records 183 component observations. Earlier
+[execution-only](evidence/catalog-new-cohort-execution-correspondence.json) and
+[registered-profile](evidence/catalog-new-cohort-report-profile-correspondence.json)
+receipts retain their original narrower scopes. All owned probe databases were
+removed; no live native run is pending.
+
+Four dynamic fields remain: umf, rebinds, assertions and pending_indexes. The
+interfaceVersion constant is checked by the pinned 0.1 codec; its selected
+report-profile-to-schema mapping still requires semantic admission. Full report
+insertion, original finalization, confirmed commit and public head admission remain
+A3–A7 work. Keep unconditional deferred barriers until that complete path is
+independently qualified.
 
 ## Ordered implementation work
-
-The latest private `verifyWithExecutionAndRegisteredReportProfile` path combines
-the ten original producer fields, exact registered report-profile bytes and the
-complete original execution candidate under one original preparation/connection
-basis. Original candidate custody is checked before parsing or profile resolution;
-original native context is rechecked before return. Scope remains explicitly
-`twelve_original_report_candidate_fields_only`. It does not supply report-profile
-semantics. Four dynamic fields still lack full producer admission: umf, rebinds,
-assertions and pending_indexes. The interfaceVersion constant is already checked
-by the pinned 0.1 codec; admission of the selected report-profile-to-schema
-semantic mapping remains required. Do not invent a second version producer or
-count this structural check as complete profile admission.
-
-Sixteen report tests/140 assertions and strict TypeScript pass. The fresh
-[PostgreSQL 17.9 combined receipt](evidence/catalog-new-cohort-combined-report-correspondence.json)
-records 183 component observations, including combined positive correspondence
-and substituted source epoch refusal despite valid report registration. The
-owned database was removed; earlier receipts remain preserved. Public selectors,
-immutable report insertion and finalization barriers remain unchanged.
-
-The private `verifyWithRegisteredReportProfile` component now binds the report's
-reportProfile to an original issued profile resolver and its exact registered
-report artifact, then verifies the existing ten producer fields and native cut.
-It returns scope `ten_producer_fields_and_registered_report_bytes_only`.
-Substituted identity/version/hash, copied resolver and missing registration
-refuse before native observation. With the original UMF producers, the report
-suite passes 15 tests/138 assertions and strict TypeScript passes. These tests
-use controlled native observations; this new path has no fresh PostgreSQL
-execution evidence. It is separate from the execution-candidate comparison and
-does not claim their combined verification, selected semantic interpretation or
-full seventeen-field admission. Public selectors and deferred barriers remain
-unchanged.
-
-Fresh PostgreSQL 17.9 execution now exercises the registered-profile component
-against actual report collectors. All 181 component observations pass in
-[the separate receipt](evidence/catalog-new-cohort-report-profile-correspondence.json),
-including original registered-byte correspondence and substituted report-profile
-refusal. Earlier receipts remain unchanged and the owned database was removed.
-The registered artifact intentionally describes component byte custody only;
-its successful resolution does not admit report semantics. Combined execution
-candidate/profile verification and complete seventeen-field admission remain
-unfinished, as do immutable report insertion and public activation.
 
 ### A2 UMF support producer before full report comparison
 
