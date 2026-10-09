@@ -37,3 +37,10 @@ Independent native observer reads origin and catalog head. Include absent actor,
 ## Executable Proof and Handoff
 
 Future command `bun test tests/catalog/origin.test.ts` requires shared origin mechanism, shape constraint and authorization policy. Record role/definer/search-path/server/adapter configuration plus independent before/after effects. All criteria block closeout. Host-supplied actor is not authenticated by storage fidelity.
+
+
+## Original asserted origin and journal-mapping correspondence
+
+Independently author acceptance origin containing exact tagged numeric text, nested empty arrays/objects, absent actor and a literal string resembling a value tag. Run through the selected AcceptanceAttemptContext canonical-tree input and qualified journal-origin mapping; compare both original representations and native caller capture independently. Do not feed the assertion directly into an ExactValue codec or replace tag-looking strings with interpreted values. Missing/incompatible mapping refuses before new acceptance effects, while actor/extension text never authorizes a caller.
+
+After confirmed acceptance under original actor A, submit the same complete acceptance input at that head through an independently authorized actor B. Exact repeat preserves A’s complete original report/origin/capture/mapping bytes and performs no new attribution or journal effects; current B authority remains required for disclosure. Revoke B before publication and require the security-owned protocol to withhold the result, without rewriting A’s report. Separately hold new acceptance pending in an adopted host transaction: its original scope may observe pending attribution, but no committed revision/origin claim is published before host settlement. Lose settlement acknowledgment and retain original recovery instead of using a later actor’s attempt to reconstruct or overwrite provenance. These are planned native/host controls, not qualified mapping or security evidence.
