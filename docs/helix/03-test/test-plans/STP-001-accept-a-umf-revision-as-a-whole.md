@@ -285,3 +285,17 @@ recipe bytes in the actual runner, retaining expected byte counts; host UTF-16
 length is not the oracle. These recipes exercise byte admission only, not
 complete wire validity or simultaneous work/peak qualification. Structural
 and original-account fault boundaries remain separate planned controls.
+
+
+## Admission-time configuration custody — IC-T01–06
+
+The [installed-context temporal handoff](../../02-design/contracts/installed-context-admission.proposal.md#configuration-capture-time-and-immutable-operation-custody) governs these planned native schedules. The current late-collection witness is component evidence; full public acceptance/report publication remains required. Retain independently authored old/new configuration, binding and inventory bytes.
+
+| Case | Independent required observation |
+| --- | --- |
+| IC-T01 late collector boundary | Change configuration in the same operation before first collection; current collector returns changed bytes and scope current_configuration_byte_basis_under_original_operation_only, never an admission-time success claim |
+| IC-T02 original capture and changed use | Qualified pre-effect admission captures old complete capsule; same-transaction generation/scalar/artifact change leaves capsule unchanged and blocks publication, with full effect rollback after observed failure |
+| IC-T03 atomic siblings and bounds | Remove/corrupt a required capsule sibling or exceed admitted aggregate/encoding capacity before capture; no admitted operation/report/head effects or substitute default/profile appears |
+| IC-T04 adopted rollback | Savepoint rollback removes operation/capsule/effects while earlier caller work survives; copied/stale host issuance cannot be used after rollback; unresolved termination retains original recovery custody |
+| IC-T05 concurrent transition | Original protected writer and configuration transition race under selected exclusion order; no mixed old/new capsule and no same-transaction lock-upgrade bypass; independently observe complete committed outcomes |
+| IC-T06 historical replay | Retry a committed request after a compatible configuration change; return original result/context under independently admitted current invocation/disclosure, without rewriting historical capsule/report or reapplying effects |

@@ -1,4 +1,5 @@
--- Private original-operation configuration byte observation only.
+-- Private current-configuration observation under original operation custody.
+-- It does not prove the configuration present when operation admission began.
 -- No committed installation, policy, binding or inventory meaning is admitted.
 CREATE FUNCTION truss.runtime_collect_catalog_original_configuration(
  expected_writer_xid text,expected_operation_ordinal text,expected_effect_generation text)

@@ -1,4 +1,4 @@
-/** Exact current configuration under original operation custody, not complete admission. */
+/** Current configuration bytes under original operation custody; not an at-admission capture. */
 import {createHash} from 'node:crypto';
 import {requireOriginalCatalogEpochContextBasis,recheckOriginalCatalogEpochContextBasis,type collectCatalogEpochContextBasis} from './catalog-epoch-context-basis';
 import {recheckCatalogReportDocumentBasis} from './catalog-report-document-basis';
@@ -30,7 +30,7 @@ export async function collectCatalogConfigurationBasis(connection:CatalogStageCo
  };
  const configuration=artifact('configuration',row.configuration_hex,row.configuration_sha256),selectedBinding=artifact('selected-binding',row.selected_binding_hex,row.selected_binding_sha256),installedInventory=artifact('installed-inventory',row.installed_inventory_hex,row.installed_inventory_sha256);
  await recheckOriginalCatalogEpochContextBasis(epoch,connection,prepared,report);
- const result=Object.freeze({configurationGeneration:row.configuration_generation,keyReuse:row.key_reuse as 'forbid'|'allow',journalMode:row.journal_mode as 'engine'|'trigger',configuration,selectedBinding,installedInventory,nativeObservation:cut,scope:'original_configuration_byte_basis_only' as const});
+ const result=Object.freeze({configurationGeneration:row.configuration_generation,keyReuse:row.key_reuse as 'forbid'|'allow',journalMode:row.journal_mode as 'engine'|'trigger',configuration,selectedBinding,installedInventory,nativeObservation:cut,scope:'current_configuration_byte_basis_under_original_operation_only' as const});
  issued.set(result,{connection,prepared,report,epoch});return result;
 }
 export async function recheckOriginalCatalogConfigurationBasis(value:Awaited<ReturnType<typeof collectCatalogConfigurationBasis>>,connection:CatalogStageConnection,prepared:Prepared,report:Report,epoch:Epoch){

@@ -68,6 +68,27 @@ admission; the lifecycle procedure and writable operation composition must
 exclude that case explicitly. Row locks alone cannot forbid a transaction
 upgrading its own lock.
 
+## Configuration capture time and immutable operation custody
+
+Step 5 MUST finish before the operation's first catalog/business/journal effect. Collect generation, keyReuse, journalMode and exact configuration, selected-binding and installed-inventory bytes from the admitted installation under its original head/configuration exclusion. Validate bounded metadata before copying artifacts, retain all three full byte sequences, and charge retained bytes plus transport/encoding expansion to the complete operation resource ledger. Full-byte correspondence is required in addition to digest checks.
+
+The native operation registration and retained configuration capsule form one atomic admission cohort. The capsule binds the original writer xid/operation ordinal, installation/epoch/incarnation, configuration generation/scalars, original artifacts and their selected interpretation/capture profiles. It is immutable for the operation. Current configuration remains a separately observed fact; a later same-transaction update cannot rewrite the capsule or retroactively alter originalExecution. A transaction can mutate data despite holding its own exclusion, so the qualified protected path must explicitly forbid or fence configuration/lifecycle changes while an affected operation remains live. Locks alone do not establish that rule.
+
+Current `runtime_collect_catalog_original_configuration` and its host basis collect **current bytes under original operation custody**. They require a prepared report and therefore run after staging in the existing component. Their current native row may even have been inserted after operation admission. Original collector issuance and exact repeat rechecks prove byte/cut correspondence at collection; they do not prove historical admission-time capture. Their scope is current_configuration_byte_basis_under_original_operation_only, and they cannot supply the immutable original configuration capsule or complete originalExecution.
+
+| Temporal boundary | Required comparison | Failure behavior |
+| --- | --- | --- |
+| Before operation registration/effects | Original committed installation plus current configuration, selected profiles and complete capture capacity | Missing/newly provisional configuration or unsupported meaning refuses before operation effects |
+| Admission cohort persisted | Independently compare retained full capsule with native source observations and exact original operation identity | Partial/missing/copied capsule or mismatched identity prevents admission; no generation-only success |
+| Use and publication | Compare live configuration/epoch and complete applicable authority with immutable admission capsule under the qualified current-state profile | Changed generation/scalars/artifacts or lifecycle closes that operation's publication; newly collecting current bytes cannot replace the original capsule |
+| Savepoint rollback | Preserve the adopted caller's earlier work while independently resolving capsule/operation/effects and original retained recovery custody | Rolled-back rows cannot leave an issuable original object; unresolved native end remains recovery_required |
+| Exact request replay | Retain original historical result/context while separately admitting the current invocation and disclosure | Current configuration cannot rewrite the old report; incompatible required interpretation or unavailable original custody refuses |
+| Cleanup/retention | Retain required capsule/result correspondence through report/history/receipt and unknown-attempt protections | Stage absence is not proof of settlement or authority to discard recovery evidence |
+
+Realization must author the snapshot home, its fixed operation parent/immutability/cleanup links and initializer in the UMF layout before installation. Existing context0.4's one-MiB inline context and the collector's sixteen-MiB aggregate configuration limit are distinct component limits: do not append oversized hex artifacts to that context or silently widen its profile. A separately retained capsule/archive reference still requires complete original byte custody and compound resource accounting. Existing installation_admission remains the current configuration authority; the capsule is historical operation evidence and introduces no independent installation identity or ACL resolver.
+
+Required native schedules extend the existing negative matrix: change configuration before the first late collection and demonstrate that it sees later bytes; install the qualified pre-effect capture, then change configuration in the same transaction and verify original capsule retention plus publication refusal; corrupt/delete one capsule sibling; restore changes by savepoint rollback; race another writer with configuration transition; and retry a committed old request after a compatible current configuration change. Retain full expected old/new bytes and independently observed operation/report/effect outcomes. The current late-collection witness establishes the gap; only the qualified pre-effect producer and protected publication schedules close it.
+
 ## Decisive implementation schedule
 
 Use packed public capability exports plus their registered original services.

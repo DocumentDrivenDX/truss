@@ -163,6 +163,11 @@ try{
  await sql.unsafe('ROLLBACK TO SAVEPOINT absent_configuration');await sql.unsafe('RELEASE SAVEPOINT absent_configuration');
  const originalConfiguration=' {"mode":"component-only"}\n',originalBinding='{"binding":"component-only"}',originalInventory='{"inventory":"component-only"}';
  await sql.unsafe("INSERT INTO truss.installation_admission (head_id,installation_id_utf8,source_epoch_utf8,configuration_generation,key_reuse,journal_mode,configuration_bytes,selected_binding_bytes,installed_inventory_bytes) VALUES (1,convert_to('component-installation','UTF8'),convert_to($1,'UTF8'),0,'forbid','engine',convert_to($2,'UTF8'),convert_to($3,'UTF8'),convert_to($4,'UTF8'))",[issuedEpoch[0].epoch,originalConfiguration,originalBinding,originalInventory]);
+ await sql.unsafe('SAVEPOINT configuration_before_first_collection');
+ await sql.unsafe("UPDATE truss.installation_admission SET configuration_generation=1,configuration_bytes=convert_to('later-component-bytes','UTF8')");
+ const laterFirstCollection=await collectCatalogConfigurationBasis(connection,prepared,epochReport,epochBasis);
+ assert(laterFirstCollection.configurationGeneration==='1'&&Buffer.from(laterFirstCollection.configuration.bytesBase64,'base64').toString('utf8')==='later-component-bytes'&&laterFirstCollection.scope==='current_configuration_byte_basis_under_original_operation_only','first configuration collection observes current bytes, not a historical at-admission snapshot');
+ await sql.unsafe('ROLLBACK TO SAVEPOINT configuration_before_first_collection');await sql.unsafe('RELEASE SAVEPOINT configuration_before_first_collection');
  const configurationBasis=await collectCatalogConfigurationBasis(connection,prepared,epochReport,epochBasis);
  assert(configurationBasis.configurationGeneration==='0'&&configurationBasis.keyReuse==='forbid'&&configurationBasis.journalMode==='engine','native configuration scalars remain exact under original epoch/cut');
  assert(Buffer.from(configurationBasis.configuration.bytesBase64,'base64').toString('utf8')===originalConfiguration&&Buffer.from(configurationBasis.selectedBinding.bytesBase64,'base64').toString('utf8')===originalBinding&&Buffer.from(configurationBasis.installedInventory.bytesBase64,'base64').toString('utf8')===originalInventory,'all three original native configuration artifacts preserve exact bytes and generated digests');
