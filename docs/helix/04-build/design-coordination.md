@@ -15,6 +15,24 @@ ddx:
 
 # Design coordination and remaining work
 
+## Catalog ownership decision checkpoint — 2026-10-09
+
+ADR-004 remains proposed for the full document-qualified ownership rule. The
+already selected same-identity reactivation direction does not itself accept
+every ownership/layout/policy mechanism. An owner question now explicitly
+compares exact (document_id,module_id,element_id) ownership with globally unique
+module/element names. Do not infer an answer from elapsed time or mark ADR-004
+accepted until the choice arrives.
+
+STP-004 already contains candidate cases for equal names in distinct documents,
+forced digest collisions with unequal full lineage bytes, duplicate full lineage,
+wrong owner projection and case/NFC/NFD distinctions. Its equal-label scenarios
+must remain tied to the selected source identity semantics; baseline uniqueness
+and candidate ownership cannot be mixed. If document-qualified ownership is
+selected, Truss owns the fixed physical ownership/migration/grant composition
+and Weft consumes the exact admitted model identities. Neither source capture
+nor the current new-cohort probe establishes installed collision-safe ownership.
+
 ## Security formal replay refresh — 2026-10-09
 
 The active security owner reports a fresh Z3 4.15.4 replay of 147 saved formula
