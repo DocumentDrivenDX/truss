@@ -36,7 +36,7 @@ All runtime components are new. Trigger bodies and administrative transition pro
 
 ## API/Interface Design
 
-CONTRACT-002 owns mode/version/event behavior; CONTRACT-007 owns transaction-local origin restoration; CONTRACT-004 owns engine writes. Administrative mode transition needs an exact mutually exclusive protocol and privilege model in the shared contract. A mere setting read cannot prevent a simultaneous administrator update.
+CONTRACT-002 owns mode/version/event behavior; CONTRACT-007 owns transaction-local origin restoration; CONTRACT-004 owns engine writes. Consume CONTRACT-002’s authored transaction-wide writer/admin mode-only transition protocol, with target dispatcher readiness established before exclusive mode admission and complete current correspondence retained through the switch. Exact native mechanism, producer timing and privilege/dependency realization remain required implementation profile outputs. A mere setting read cannot prevent a simultaneous administrator update.
 
 ## Data Model and Integration
 
@@ -56,7 +56,7 @@ Fresh installation first. A live mode switch needs explicit exclusion, trigger/g
 
 ## Implementation Sequence
 
-1. Specify trigger bodies, privileges and mode-transition exclusion in CONTRACT-002.
+1. Consume the existing CONTRACT-002 mode-only transition algorithm; implement/select exact trigger bodies, privileges, original readiness and native exclusion procedures. Keep dispatcher installation/replacement under its separately qualified installation-authority transition.
 2. Create red native mode/bypass cases and transition interleavings.
 3. Implement trigger writer, engine dispatch and returned version integration.
 4. Qualify complete operation matrix and report limitations per mode.
