@@ -2551,3 +2551,45 @@ Hugo build plus existing link/navigation/source-seal checks pass. See
 microsite-location/integration blockers; native DDL interpretation and live
 publication remain distinct. Do not copy UMF's schema renderer into a new
 Truss implementation or treat successful inspection as installed semantics.
+
+### Complete acceptance-input capacity and custody gate
+
+Before implementing RPDOC-01–06, compose the original operation artifact
+producer with the complete input representation. Current private
+`operation-admission.sql` permits at most 1,048,576 bytes per artifact and
+4,194,304 bytes across its six artifacts; `catalog-report-documents.sql` permits
+4,194,304 bytes of archived source across at most 512 documents. These are
+different component domains. A source set that fits the collector can exceed
+the operation input artifact limit even before canonical framing, base64
+expansion, binding, converted-source/loss custody and profile declarations.
+Neither bound is evidence of a realizable complete public acceptance profile.
+
+The implementation entry gate is an independently authored complete-input
+fixture with native and converted branches, present binding, policy and
+transform declarations, plus exact expected source/artifact/framed lengths.
+Compute canonical base64 length as `4 * ceil(sourceBytes / 3)` using checked
+exact integer arithmetic; charge all other original fields and simultaneous
+owned copies separately. Reuse the original representation selected by the
+installed input producer rather than choosing whichever carrier fits.
+The original operation retains that whole artifact; native decoding may not
+borrow a caller documents-only replacement or obtain omitted provenance from
+current configuration.
+
+For the complete selected reference installation, derive finite compatible
+input/source/artifact/output/aggregate budgets from the actual producer and
+ledger. If existing carrier limits cannot represent the promised profile,
+revise the candidate storage/admission profile together with its installation
+identity, custody and capacity evidence before adoption. Do not silently lower
+the product's accepted input domain, split one acceptance into independent
+transactions, truncate source or retain only a digest. Unsupported profiles
+remain explicit refusals until a complete selected profile is realizable.
+
+Add boundary controls to RPDOC-06: a source set within the archive limit whose
+complete input exceeds the per-artifact limit; an input within its individual
+limit whose six-artifact total exceeds the aggregate limit; and an exact
+admitted boundary with all provenance preserved. Expected verdicts come from
+the selected profile, independently of measured implementation results.
+Refusal precedes native effects and preserves adopted caller work; no fallback
+to hash-only matching or reduced provenance is permitted. These controls are
+planned, not executed. The next parser work starts only after this concrete
+whole-input basis and its registered schema/representation/custody are pinned.
