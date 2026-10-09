@@ -642,6 +642,15 @@ The experiment refuses authentication flows other than local AuthenticationOk;
 it captures no authentication/backend-key body in its receipt. Exact dependency
 versions, core/probe/receiver/decoder hashes and raw message-size counters are saved.
 
+The private instance classes now reside in `pg8000_instance_candidate.py`,
+with four offline controlled-transport tests. Fragmented header/body and zero-body
+handling pass; malformed/partial input, wrong body requests, send-budget refusal
+and unknown send failure permanently close the experiment file without budget
+refund or sibling interference. A discovered pre-send budget refusal previously
+left the file usable; it now closes before any send. Closure is only an adapter
+state, not native termination, confirmed rollback or safe pool reuse. The native
+probe was rerun after this refactoring and pins the extracted candidate source.
+
 This is actual driver seam evidence, not the original protocol-port implementation.
 Stock `_read` and row/helper allocations remain outside a qualified complete
 account. The probe prefetches a whole admitted raw frame before returning its
