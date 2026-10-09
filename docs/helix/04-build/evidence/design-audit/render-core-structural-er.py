@@ -2,15 +2,17 @@
 from pathlib import Path
 import hashlib,html,json,subprocess,sys
 root=Path(__file__).resolve().parents[3]
-modelpath=root/'02-design/models/truss-layout-core-structural-0.2.proposal.umf.json'
-validation=json.loads((root/'04-build/evidence/design-audit/core-structural-layout-validation.json').read_text())
+current='--current' in sys.argv
+version='0.3' if current else '0.2'
+modelpath=root/f'02-design/models/truss-layout-core-structural-{version}.proposal.umf.json'
+validation=json.loads((root/('04-build/evidence/design-audit/core-current-layout-validation.json' if current else '04-build/evidence/design-audit/core-structural-layout-validation.json')).read_text())
 assert validation['valid'] and validation['modelSha256']==hashlib.sha256(modelpath.read_bytes()).hexdigest()
 module=next(m for m in json.loads(modelpath.read_text())['modules'] if m['id']=='truss-layout')
 fields={e['id']:e for e in module['elements'] if e.get('kind')=='field'}
 records=[e for e in module['elements'] if e.get('kind')=='record']
 ids={r['id']:'T'+str(i) for i,r in enumerate(records)}
 fieldowners={member['element']:record['id'] for record in records for member in record['members']}
-assert len(fieldowners)==len(fields)==442
+assert len(fieldowners)==len(fields)==(443 if current else 442)
 edges=[]
 for rel in module['relationships']:
  source=rel['source'][0];target=rel['target'][0]
@@ -34,7 +36,8 @@ original=json.loads((root/'02-design/models/truss-layout-core-relational-0.1.pro
 originalmod=next(m for m in original['modules'] if m['id']==module['id'])
 expected={e['id']:(e['source'][0]['element'],e['target'][0]['element'],e['fieldCorrespondence']) for e in originalmod['relationships']}
 assert {e['id']:(e['source'],e['target'],e['fields']) for e in edges}==expected
-lines=['digraph layout {','graph [rankdir=LR, pack=true, packmode="array_u4", bgcolor="white", label="Historical 0.12 core structure — native-only key semantics retained separately", labelloc=t, fontname="Helvetica"];','node [shape=plain,fontname="Helvetica"];','edge [fontname="Helvetica",fontsize=9];']
+caption='Current 0.15' if current else 'Historical 0.12'
+lines=['digraph layout {',f'graph [rankdir=LR, pack=true, packmode="array_u4", bgcolor="white", label="{caption} core structure — native-only key semantics retained separately", labelloc=t, fontname="Helvetica"];','node [shape=plain,fontname="Helvetica"];','edge [fontname="Helvetica",fontsize=9];']
 for record in records:
  keyfields={}
  for key in record.get('keys',[]):
@@ -51,10 +54,10 @@ for edge in edges:
  native=edge['kind'].startswith('physical');label=edge['name']+(' (native)' if native else '')
  lines.append(ids[edge['source']]+' -> '+ids[edge['target']]+' [label='+json.dumps(label)+(', style=dashed' if native else '')+'];')
 lines.append('}');text='\n'.join(lines)+'\n'
-dotpath=root/'02-design/models/truss-layout-core-structural-0.2.review.dot'
-svgpath=root/'02-design/models/truss-layout-core-structural-0.2.review.svg'
-receiptpath=root/'04-build/evidence/design-audit/core-structural-er-source.json'
-receipt={'modelSha256':validation['modelSha256'],'valid':validation['valid'],'complete':validation['complete'],'recordCount':len(records),'fieldCount':len(fields),'portableKeyCount':sum(len(r.get('keys',[])) for r in records),'associationCount':len(edges),'associations':edges,'dotSha256':hashlib.sha256(text.encode()).hexdigest(),'scope':'Historical core/explicit-reference diagram. All original associations compared independently; no native key interpretation, current-layout parity, DDL or installed support.'}
+dotpath=root/f'02-design/models/truss-layout-core-structural-{version}.review.dot'
+svgpath=root/f'02-design/models/truss-layout-core-structural-{version}.review.svg'
+receiptpath=root/('04-build/evidence/design-audit/core-current-er-source.json' if current else '04-build/evidence/design-audit/core-structural-er-source.json')
+receipt={'modelSha256':validation['modelSha256'],'valid':validation['valid'],'complete':validation['complete'],'recordCount':len(records),'fieldCount':len(fields),'portableKeyCount':sum(len(r.get('keys',[])) for r in records),'associationCount':len(edges),'associations':edges,'dotSha256':hashlib.sha256(text.encode()).hexdigest(),'scope':('Current 0.15 core/explicit-reference diagram. All original associations compared independently; no complete native key interpretation, DDL or installed support.' if current else 'Historical core/explicit-reference diagram. All original associations compared independently; no native key interpretation, current-layout parity, DDL or installed support.')}
 if '--check' in sys.argv:
  assert dotpath.read_text()==text
  retained=json.loads(receiptpath.read_text());assert all(retained[k]==v for k,v in receipt.items())

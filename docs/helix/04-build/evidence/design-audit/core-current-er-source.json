@@ -1,0 +1,1514 @@
+{
+  "modelSha256": "bf8e377219eb5c604dd04a9c1393f87a30ea7a63b1505dc3e29593fa8af82e8a",
+  "valid": true,
+  "complete": false,
+  "recordCount": 46,
+  "fieldCount": 443,
+  "portableKeyCount": 48,
+  "associationCount": 61,
+  "associations": [
+    {
+      "id": "fk-1",
+      "name": "fk-1",
+      "source": "schema_head",
+      "target": "schema_rev",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "schema_head.rev"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "schema_rev.rev"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-2",
+      "name": "fk-2",
+      "source": "schema_doc",
+      "target": "schema_rev",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "schema_doc.rev"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "schema_rev.rev"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-3",
+      "name": "fk-3",
+      "source": "schema_change",
+      "target": "schema_rev",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "schema_change.rev"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "schema_rev.rev"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-4",
+      "name": "fk-4",
+      "source": "type_def",
+      "target": "schema_rev",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "type_def.since_rev"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "schema_rev.rev"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-5",
+      "name": "fk-5",
+      "source": "type_def",
+      "target": "schema_rev",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "type_def.retired_rev"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "schema_rev.rev"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-6",
+      "name": "fk-6",
+      "source": "type_def",
+      "target": "schema_doc",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "type_def.since_rev"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "schema_doc.rev"
+          }
+        },
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "type_def.doc_ord"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "schema_doc.ord"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-7",
+      "name": "type_def_definition_document_fk",
+      "source": "type_def",
+      "target": "schema_doc",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "type_def.definition_rev"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "schema_doc.rev"
+          }
+        },
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "type_def.definition_doc_ord"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "schema_doc.ord"
+          }
+        },
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "type_def.definition_document_id"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "schema_doc.doc_id"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-8",
+      "name": "type_def_definition_binding_revision_fk",
+      "source": "type_def",
+      "target": "schema_rev",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "type_def.binding_source_rev"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "schema_rev.rev"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-9",
+      "name": "fk-9",
+      "source": "prop_def",
+      "target": "type_def",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "prop_def.type_id"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "type_def.type_id"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-10",
+      "name": "fk-10",
+      "source": "prop_def",
+      "target": "schema_rev",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "prop_def.since_rev"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "schema_rev.rev"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-11",
+      "name": "fk-11",
+      "source": "prop_def",
+      "target": "schema_rev",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "prop_def.retired_rev"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "schema_rev.rev"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-12",
+      "name": "fk-12",
+      "source": "prop_def",
+      "target": "schema_doc",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "prop_def.since_rev"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "schema_doc.rev"
+          }
+        },
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "prop_def.doc_ord"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "schema_doc.ord"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-13",
+      "name": "prop_def_definition_document_fk",
+      "source": "prop_def",
+      "target": "schema_doc",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "prop_def.definition_rev"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "schema_doc.rev"
+          }
+        },
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "prop_def.definition_doc_ord"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "schema_doc.ord"
+          }
+        },
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "prop_def.definition_document_id"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "schema_doc.doc_id"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-14",
+      "name": "prop_def_definition_binding_revision_fk",
+      "source": "prop_def",
+      "target": "schema_rev",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "prop_def.binding_source_rev"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "schema_rev.rev"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-15",
+      "name": "fk-15",
+      "source": "key_def",
+      "target": "type_def",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "key_def.type_id"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "type_def.type_id"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-16",
+      "name": "fk-16",
+      "source": "key_def",
+      "target": "schema_rev",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "key_def.since_rev"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "schema_rev.rev"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-17",
+      "name": "fk-17",
+      "source": "key_def",
+      "target": "schema_rev",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "key_def.retired_rev"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "schema_rev.rev"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-18",
+      "name": "key_def_definition_document_fk",
+      "source": "key_def",
+      "target": "schema_doc",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "key_def.definition_rev"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "schema_doc.rev"
+          }
+        },
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "key_def.definition_doc_ord"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "schema_doc.ord"
+          }
+        },
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "key_def.definition_document_id"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "schema_doc.doc_id"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-19",
+      "name": "key_def_definition_binding_revision_fk",
+      "source": "key_def",
+      "target": "schema_rev",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "key_def.binding_source_rev"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "schema_rev.rev"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-20",
+      "name": "fk-20",
+      "source": "rel_def",
+      "target": "type_def",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "rel_def.assoc_type_id"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "type_def.type_id"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-21",
+      "name": "fk-21",
+      "source": "rel_def",
+      "target": "schema_rev",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "rel_def.since_rev"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "schema_rev.rev"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-22",
+      "name": "fk-22",
+      "source": "rel_def",
+      "target": "schema_rev",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "rel_def.retired_rev"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "schema_rev.rev"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-23",
+      "name": "fk-23",
+      "source": "rel_def",
+      "target": "schema_doc",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "rel_def.since_rev"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "schema_doc.rev"
+          }
+        },
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "rel_def.doc_ord"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "schema_doc.ord"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-24",
+      "name": "rel_def_definition_document_fk",
+      "source": "rel_def",
+      "target": "schema_doc",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "rel_def.definition_rev"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "schema_doc.rev"
+          }
+        },
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "rel_def.definition_doc_ord"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "schema_doc.ord"
+          }
+        },
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "rel_def.definition_document_id"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "schema_doc.doc_id"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-25",
+      "name": "rel_def_definition_binding_revision_fk",
+      "source": "rel_def",
+      "target": "schema_rev",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "rel_def.binding_source_rev"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "schema_rev.rev"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-26",
+      "name": "fk-26",
+      "source": "rel_endpoint",
+      "target": "rel_def",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "rel_endpoint.rel_type_id"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "rel_def.rel_type_id"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-27",
+      "name": "fk-27",
+      "source": "rel_endpoint",
+      "target": "type_def",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "rel_endpoint.source_type"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "type_def.type_id"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-28",
+      "name": "fk-28",
+      "source": "rel_endpoint",
+      "target": "type_def",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "rel_endpoint.target_type"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "type_def.type_id"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-29",
+      "name": "fk-29",
+      "source": "object",
+      "target": "type_def",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "object.type_id"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "type_def.type_id"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-30",
+      "name": "fk-30",
+      "source": "object",
+      "target": "schema_rev",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "object.rev"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "schema_rev.rev"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-31",
+      "name": "object_root_fk",
+      "source": "object",
+      "target": "object",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "object.root_id"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "object.id"
+          }
+        },
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "object.root_type"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "object.type_id"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-32",
+      "name": "fk-32",
+      "source": "edge",
+      "target": "schema_rev",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "edge.rev"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "schema_rev.rev"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-33",
+      "name": "edge_source_fk",
+      "source": "edge",
+      "target": "object",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "edge.source_id"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "object.id"
+          }
+        },
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "edge.source_type"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "object.type_id"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-34",
+      "name": "edge_target_fk",
+      "source": "edge",
+      "target": "object",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "edge.target_id"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "object.id"
+          }
+        },
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "edge.target_type"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "object.type_id"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-35",
+      "name": "edge_endpoint_types_fk",
+      "source": "edge",
+      "target": "rel_endpoint",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "edge.rel_type_id"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "rel_endpoint.rel_type_id"
+          }
+        },
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "edge.source_type"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "rel_endpoint.source_type"
+          }
+        },
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "edge.target_type"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "rel_endpoint.target_type"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-36",
+      "name": "fk-36",
+      "source": "edge_limit",
+      "target": "edge",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "edge_limit.edge_id"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "edge.id"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-38",
+      "name": "row_home_state_property_fk",
+      "source": "row_home_state",
+      "target": "prop_def",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "row_home_state.property_owner_type_id"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "prop_def.type_id"
+          }
+        },
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "row_home_state.property_id"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "prop_def.prop_id"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-39",
+      "name": "row_home_state_object_fk",
+      "source": "row_home_state",
+      "target": "object",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "row_home_state.object_id"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "object.id"
+          }
+        },
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "row_home_state.object_type_id"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "object.type_id"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-40",
+      "name": "row_home_state_edge_fk",
+      "source": "row_home_state",
+      "target": "edge",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "row_home_state.edge_id"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "edge.id"
+          }
+        },
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "row_home_state.relationship_type_id"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "edge.rel_type_id"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-41",
+      "name": "row_home_state_root_fk",
+      "source": "row_home_state",
+      "target": "row_home_node",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "row_home_state.state_id"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "row_home_node.state_id"
+          }
+        },
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "row_home_state.root_node_id"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "row_home_node.node_id"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-42",
+      "name": "fk-42",
+      "source": "row_home_node",
+      "target": "row_home_state",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "row_home_node.state_id"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "row_home_state.state_id"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-43",
+      "name": "row_home_node_parent_fk",
+      "source": "row_home_node",
+      "target": "row_home_node",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "row_home_node.state_id"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "row_home_node.state_id"
+          }
+        },
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "row_home_node.parent_node_id"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "row_home_node.node_id"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-44",
+      "name": "row_home_scalar_node_fk",
+      "source": "row_home_scalar",
+      "target": "row_home_node",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "row_home_scalar.state_id"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "row_home_node.state_id"
+          }
+        },
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "row_home_scalar.node_id"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "row_home_node.node_id"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-45",
+      "name": "fk-45",
+      "source": "relationship_lineage",
+      "target": "rel_def",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "relationship_lineage.rel_type_id"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "rel_def.rel_type_id"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-46",
+      "name": "object_key_bucket_definition_fk",
+      "source": "object_key_bucket",
+      "target": "key_def",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "object_key_bucket.type_id"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "key_def.type_id"
+          }
+        },
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "object_key_bucket.key_num"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "key_def.key_num"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-47",
+      "name": "object_key_bucket_object_fk",
+      "source": "object_key_bucket",
+      "target": "object",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "object_key_bucket.object_id"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "object.id"
+          }
+        },
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "object_key_bucket.type_id"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "object.type_id"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-48",
+      "name": "object_key_bucket_guard_fk",
+      "source": "object_key_bucket",
+      "target": "key_bucket_guard",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "object_key_bucket.namespace_sha256"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "key_bucket_guard.namespace_sha256"
+          }
+        },
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "object_key_bucket.key_sha256"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "key_bucket_guard.key_sha256"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-49",
+      "name": "object_key_reservation_guard_fk",
+      "source": "object_key_reservation_bucket",
+      "target": "key_bucket_guard",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "object_key_reservation_bucket.namespace_sha256"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "key_bucket_guard.namespace_sha256"
+          }
+        },
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "object_key_reservation_bucket.key_sha256"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "key_bucket_guard.key_sha256"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-50",
+      "name": "fk-50",
+      "source": "catalog_acceptance_report",
+      "target": "schema_rev",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "catalog_acceptance_report.rev"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "schema_rev.rev"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-51",
+      "name": "installation_archive_marker_fk",
+      "source": "installation_archive",
+      "target": "installation_marker",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "installation_archive.installation_id"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "installation_marker.installation_id"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-55",
+      "name": "fk-55",
+      "source": "complete_feed_seed_artifact",
+      "target": "complete_feed_seed_attempt",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "complete_feed_seed_artifact.attempt_row_id"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "complete_feed_seed_attempt.storage_row_id"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-56",
+      "name": "fk-56",
+      "source": "key_lifecycle_history",
+      "target": "schema_rev",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "key_lifecycle_history.rev"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "schema_rev.rev"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-57",
+      "name": "fk-57",
+      "source": "key_lifecycle_history",
+      "target": "schema_rev",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "key_lifecycle_history.before_retired_rev"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "schema_rev.rev"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-58",
+      "name": "fk-58",
+      "source": "key_lifecycle_history",
+      "target": "schema_rev",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "key_lifecycle_history.after_retired_rev"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "schema_rev.rev"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-59",
+      "name": "fk-59",
+      "source": "key_lifecycle_history",
+      "target": "key_def",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "key_lifecycle_history.type_id"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "key_def.type_id"
+          }
+        },
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "key_lifecycle_history.key_num"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "key_def.key_num"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-60",
+      "name": "fk-60",
+      "source": "installation_admission",
+      "target": "schema_head",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "installation_admission.head_id"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "schema_head.id"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-61",
+      "name": "rr_protection_receipt_fk",
+      "source": "request_receipt_protection",
+      "target": "request_receipt",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "request_receipt_protection.receipt_storage_row_id"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "request_receipt.storage_row_id"
+          }
+        }
+      ],
+      "kind": "core relationship"
+    },
+    {
+      "id": "fk-37",
+      "name": "physical-fk:fk-37",
+      "source": "row_home_journal_stage",
+      "target": "row_home_operation",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "row_home_journal_stage.original_writer_xid"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "row_home_operation.original_writer_xid"
+          }
+        },
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "row_home_journal_stage.operation_ordinal"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "row_home_operation.operation_ordinal"
+          }
+        }
+      ],
+      "kind": "physical FK reference; native semantics unresolved"
+    },
+    {
+      "id": "fk-52",
+      "name": "physical-fk:fk-52",
+      "source": "feed_member",
+      "target": "feed_tx",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "feed_member.source_epoch"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "feed_tx.source_epoch"
+          }
+        },
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "feed_member.feed_profile"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "feed_tx.feed_profile"
+          }
+        },
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "feed_member.original_writer_xid"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "feed_tx.original_writer_xid"
+          }
+        }
+      ],
+      "kind": "physical FK reference; native semantics unresolved"
+    },
+    {
+      "id": "fk-53",
+      "name": "physical-fk:fk-53",
+      "source": "feed_prerequisite",
+      "target": "feed_tx",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "feed_prerequisite.source_epoch"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "feed_tx.source_epoch"
+          }
+        },
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "feed_prerequisite.feed_profile"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "feed_tx.feed_profile"
+          }
+        },
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "feed_prerequisite.original_writer_xid"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "feed_tx.original_writer_xid"
+          }
+        }
+      ],
+      "kind": "physical FK reference; native semantics unresolved"
+    },
+    {
+      "id": "fk-54",
+      "name": "physical-fk:fk-54",
+      "source": "feed_configuration_prerequisite",
+      "target": "feed_tx",
+      "fields": [
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "feed_configuration_prerequisite.source_epoch"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "feed_tx.source_epoch"
+          }
+        },
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "feed_configuration_prerequisite.feed_profile"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "feed_tx.feed_profile"
+          }
+        },
+        {
+          "source": {
+            "module": "truss-layout",
+            "element": "feed_configuration_prerequisite.original_writer_xid"
+          },
+          "target": {
+            "module": "truss-layout",
+            "element": "feed_tx.original_writer_xid"
+          }
+        }
+      ],
+      "kind": "physical FK reference; native semantics unresolved"
+    }
+  ],
+  "dotSha256": "6d109ab34d3fbc999d71ec528e7538cc1d8a43b0839dd0917169136ee8ed3e50",
+  "scope": "Current 0.15 core/explicit-reference diagram. All original associations compared independently; no complete native key interpretation, DDL or installed support.",
+  "svgSha256": "5975ff7fdebb8def9512260a6c8525cc5def205404c2651794b7353cda7d0510",
+  "renderer": "dot - graphviz version 16.1.0 (20260904.0139)"
+}

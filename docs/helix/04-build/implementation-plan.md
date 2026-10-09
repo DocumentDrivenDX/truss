@@ -2533,3 +2533,7 @@ The valid historical 0.2 projection now has a rendered SVG/DOT pair, complete or
 ### Current layout core structural refresh — 2026-10-08
 
 The core structural model now reflects current private 0.15 source with 46 Records/443 Fields and all original association paths. UMF-owned extraction and a strict bounded delta review preserve original 0.12/0.15 statement correspondence, while the complete current native archive remains untouched. Actual UMF validation passes zero errors with complete=false. Render the current model next; complete native interpretation/core-driven DDL equivalence and installation adoption are not inferred from this structural validation.
+
+### Current core ER output — 2026-10-08
+
+Current 0.15 source now has a core-driven 0.3 SVG/DOT diagram, preserving the historical 0.2 outputs. Exact current/historical renderer checks, complete original association comparison, 46-node/61-edge SVG inventory and the new required declaring-module column check pass; raster rendering was visually inspected. Current model validation remains valid=true/complete=false. Microsite integration and complete native/core DDL equivalence remain open.
