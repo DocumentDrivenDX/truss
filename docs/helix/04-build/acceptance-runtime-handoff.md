@@ -4,6 +4,32 @@ Status: execution sequence authored; public runtime unavailable. Governing input
 
 ## Current implementation boundary
 
+### Complete scalar streaming qualification
+
+A1/A2 must consume CONTRACT-003's complete scalar-task UTF-8/sink rules rather
+than treating the current 65,536-byte scalar component as a full encoder. Planned
+independent native controls place valid two-, three- and four-byte scalars across
+every source-block boundary, including offsets 65535/65536; verify one opening and
+closing quote and byte-exact output across sink boundaries. Repeat with quote,
+backslash and each U+0000–U+001F control in the byte-document profile. PostgreSQL
+text-value admission remains separately NUL-refusing.
+
+Inject overlong forms, UTF-8 surrogate encodings, isolated continuations,
+out-of-range F4 sequences and unfinished final scalars after otherwise valid
+earlier blocks. Independently replace, duplicate, omit or reorder one source
+block and change claimed total length; no complete bytes/hash/report/head may
+publish. Exercise one scalar larger than the old component's source ceiling
+inside an otherwise complete nineteen-field report under the selected admitted
+full profile. Refusal by the old component is not proof of the new producer.
+
+Observe exact source/target bytes and complete original scalar/escape membership,
+plus source/frame/key/sink/contiguous-output/base64/detoast ownership and work
+charges. Force simultaneous-copy and widened-output exhaustion before each
+allocation, including failure at final consolidation; contain all acceptance
+effects and preserve original recovery custody. These cases remain `not_run`;
+actual native source, UMF declaration, account and installation composition are
+required before claiming large-scalar or whole-report support.
+
 A subsequent graph-resource review moves the selected identifier-length check
 before NUL/surrogate scanning, verifies exact UTF-8 byte length before allocating
 encoded identifiers, and bounds edge labels before map lookup. Oversized malformed

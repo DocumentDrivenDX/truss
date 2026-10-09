@@ -209,6 +209,36 @@ String emission decodes each complete Unicode scalar from the selected exact sca
 
 The sink uses proposed 65,536-byte chunks. Before allocating a chunk or accepting the next producer block, reserve its maximum capacity and simultaneous source/frame/key/sink ownership under the original report/acceptance ledger. Charge actual emitted bytes, scalar/key inspection, comparisons and copies independently; fixed chunk size does not bound total work or native memory. A large scalar emits incrementally without repeated concatenation of the accumulated output. Container/key inventories, parser/native detoast/sort/intermediate allocations and producer blocks remain separately bounded. A complete output limit failure aborts encoding, never truncates a field or produces a partial report/hash.
 
+The existing `runtime_canonical_string_bytes` component's 65,536-byte source
+ceiling is not the complete scalar contract. Do not invoke it on independent
+source chunks and concatenate quoted results. The complete encoder owns one
+scalar task with admitted original total length, exact source identity, next
+byte offset and incremental UTF-8 state; opening and closing quotes occur once.
+Source blocks must match the original immutable scalar in order, with no gaps,
+duplicate offsets, replacement sources or bytes beyond the admitted end. A
+block boundary carries up to three pending UTF-8 bytes, not an incomplete scalar
+treated as valid text. Completion is derived from the admitted source inventory,
+not a caller-supplied end flag.
+
+Validate UTF-8 across boundaries: ASCII is one byte; leading C2–DF requires one
+continuation; E0–EF requires two, with E0's second byte A0–BF and ED's 80–9F;
+F0–F4 requires three, with F0's second byte 90–BF and F4's 80–8F. All other
+continuations are 80–BF. Reject overlong forms, surrogate encodings, isolated
+continuations, F5–FF and incomplete final scalars. Preserve the complete original
+UTF-8 bytes for valid noncontrol scalars. For the byte-document report profile,
+U+0000 emits `\u0000`; this does not admit PostgreSQL text values containing NUL.
+Buffer a complete scalar/escape before sink emission; source and sink boundaries
+cannot insert replacement characters, extra quotes or alternate escapes.
+
+Reserve complete source/validation/output and simultaneous-copy capacity under
+the original ledger. If exact widened output needs a preliminary scan, charge
+both passes and require the same immutable source correspondence during emission.
+Native detoast or a whole-input bytea/text copy remains charged even when sink
+output is segmented. A missing incremental native realization or insufficient
+whole-report capacity refuses the selected composition before acceptance effects;
+it cannot shrink reports, drop original artifacts or raise a component limit
+without an explicitly authored UMF/native/resource profile change.
+
 After the final frame closes, check actual total bytes and all container/producer completion invariants. Reserve the full contiguous report_bytes allocation while all source chunks still exist, copy exactly once in emission order, then release chunks only after their actual ownership ends. Hash the resulting complete bytes through the selected trusted SHA-256 implementation and encode ExactArtifact base64 under its existing grammar; charge both operations/copies and verify the actual stored report bytes under P5/P6. No digest or artifact is returned before complete encoding/admission. A native storage/driver implementation that requires additional copies must reserve them explicitly; a small sink chunk does not certify its maximum allocation.
 
 The ExactArtifact base64 producer follows the standard alphabet/padding of [RFC 4648 sections 3–4](https://www.rfc-editor.org/rfc/rfc4648.html), with no line breaks or whitespace. Consume complete source bytes in three-byte groups, producing four alphabet bytes; carry at most two trailing bytes across sink/source chunk boundaries. Apply one or two final padding characters only after actual whole-source completion, with unused final bits zero. Do not pad each 65,536-byte report chunk independently. Reserve the exact widened output length `4 * ceil(byteLength / 3)` before output allocation and charge simultaneous source/base64/storage copies. Counts use the selected exact native domain, not host-number rounding.
