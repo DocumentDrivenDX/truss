@@ -20,12 +20,38 @@ export type LayoutMigrationAttempt = Extract<RecoveryTargetContext,{readonly kin
  readonly originalRequest:ExactArtifact;
  readonly procedure:ProfilePin;
 };
+/** Exact ordered step evidence prepared in the effects transaction; not commit proof. */
+export interface LayoutMigrationStepEvidence {
+ readonly stepId:string;
+ readonly source:LayoutMigrationPin;readonly target:LayoutMigrationPin;
+ readonly recipe:ExactArtifact;readonly procedure:ProfilePin;
+ readonly preconditions:ExactArtifact;
+ readonly actualEffects:ExactArtifact;
+ readonly validation:ExactArtifact;
+ readonly preservation:ExactArtifact;
+}
+/** Native retained body. Visibility/commit correspondence is admitted separately. */
+export interface LayoutMigrationReceiptBody {
+ readonly interfaceVersion:'truss-layout-migration-receipt/0.1.0';
+ readonly originalAttempt:LayoutMigrationAttempt;
+ readonly manifest:ExactArtifact;readonly routeId:string;
+ readonly source:LayoutMigrationPin;readonly target:LayoutMigrationPin;
+ readonly procedure:ProfilePin;readonly resource:ProfilePin;
+ readonly transitionProfile:ProfilePin;
+ readonly originalSourceObservation:ExactArtifact;
+ readonly orderedSteps:readonly [LayoutMigrationStepEvidence,...LayoutMigrationStepEvidence[]];
+ readonly targetObservation:ExactArtifact;
+ readonly preservationEvidence:ExactArtifact;
+ /** Proposed target publication prepared atomically; never an observed COMMIT. */
+ readonly targetInstallation:ExactArtifact;
+ readonly targetInventory:ExactArtifact;
+}
 export type LayoutMigrationStage = 'admission'|'exclusion'|'source_verification'|
  'steps'|'target_verification'|'publication'|'commit'|'committed_verification';
 export interface LayoutMigrationCommit {
  readonly originalAttempt:LayoutMigrationAttempt;
  readonly source:LayoutMigrationPin;readonly target:LayoutMigrationPin;
- /** Complete immutable ordered route input, effects and results in this domain. */
+ /** Exact serialized LayoutMigrationReceiptBody, independently admitted with commit evidence. */
  readonly receipt:ExactArtifact;
  readonly commitObservation:ExactArtifact;
  readonly committedInstallation:ExactArtifact;

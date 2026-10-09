@@ -100,7 +100,7 @@ The default upgrade profile uses transactional DDL/data changes and holds the se
 
 Nontransactional/online/multiphase steps require a separately selected durable progress/cleanup/recovery profile; the default system refuses them. Downgrade has no implicit inverse or generic down script: only an explicitly qualified reverse edge can be applied, otherwise refuse and leave the original installed state. Recovery from a failed transactional step is observed rollback; restore is a deployment action with its own epoch/incarnation admission, not a claimed migration rollback.
 
-Version compatibility remains CONTRACT-001's declared layout-major rule: an implementation refuses a different major. Within a major, the release still declares exact supported layout/runtime/corpus/profile ranges and upgrade edges; same major is not permission to execute against unknown routines/codecs. The post-install/post-upgrade verifier runs without modifying state and reports actual current correspondence or explicit unavailable/drift. Native PostgreSQL and Lakebase deployment qualification remain separate; current native 0.16/core 0.4 candidates are not a stable published layout.
+Version compatibility remains CONTRACT-001's declared layout-major rule: an implementation refuses a different major. Within a major, the release still declares exact supported layout/runtime/corpus/profile ranges and upgrade edges; same major is not permission to execute against unknown routines/codecs. The post-install/post-upgrade verifier runs without modifying state and reports actual current correspondence or explicit unavailable/drift. Native PostgreSQL and Lakebase deployment qualification remain separate; current native 0.16/core 0.5 candidates are not a stable published layout.
 
 ### LM-01 candidate manifest and planner wire
 
@@ -139,6 +139,54 @@ For an exact repeat, resolve the original complete request/route receipt and com
 Example: a declared route has steps A (1.0.0→1.1.0) and B (1.1.0→1.2.0). If B fails after A writes, independent observation must show the original 1.0.0 state and preserved data after confirmed rollback. If COMMIT succeeds but its reply is lost, reconciliation queries the original attempt and may establish the complete committed 1.2.0 result; it never reruns A. If COMMIT is confirmed but current verification cannot inspect a required grant, the result is committed_unverified with the same commit evidence and runtime readiness stays closed.
 
 This handoff selects route atomicity and outcome meaning for implementation. Exact migration-domain UMF storage/initializer, archive/marker/receipt bodies, finite resource realization, native source/target parity, driver outcome correlation and the security owner's exclusion/authorization composition remain LM-02–05 prerequisites. It does not adopt a stable release layout or qualify migration execution.
+
+### Layout migration receipt body and settlement evidence
+
+LM-02–05 use `LayoutMigrationReceiptBody` in the [administrative binding](bindings/truss-layout-migration-v0.1.proposal.d.ts).
+The native retained body identifies the original installed attempt/request,
+complete manifest and route, exact source/target, procedure/resource/transition
+profiles and original source observation. Its nonempty ordered step evidence
+retains each registered recipe/procedure, preconditions, actual effects,
+validation and preservation. Final target observation, preservation and proposed
+target installation/inventory belong to the same body. A same-version planner
+`no_steps` result does not create an empty upgrade receipt.
+
+The protected producer compares this body with the complete originally admitted
+request and declared route: exact step count/order/identity, contiguous source
+and target pins, complete recipe bytes/digests, profile correspondence and final
+target all must agree. Step evidence cannot substitute a generic success flag
+for the registered procedure's data/history/codec assertions. Duplicate,
+missing, reordered or unrelated artifacts refuse publication. ExactArtifact
+hashes are verified against retained bytes and original registered interpretation;
+a caller-shaped body supplies neither authority nor successful effects.
+
+The body is prepared **before COMMIT** and retained atomically with final target
+archive/marker publication. It therefore contains no observed-commit claim.
+The original driver's settlement observation and a fresh independent native
+committed receipt/target observation are separate evidence. Only their qualified
+correspondence constructs `LayoutMigrationCommit`. A visible row from the
+writing transaction, a serialized committed label or the framework's migration
+history is insufficient. Confirmed COMMIT followed by unavailable verification
+still produces committed_unverified; the body never justifies resubmission.
+
+Use a distinct layout-migration storage domain. The existing bootstrap archive
+role enumeration has no layout-migration receipt role: do not smuggle these
+bytes into its input/marker roles or change a deployed enumeration implicitly.
+LM-02 must author the selected receipt/artifact home, exact uniqueness route,
+parent/installation/attempt correspondence, immutable guards and initializer in
+UMF, including any explicit archive extension/upgrade. Preserve complete original
+artifact bytes under finite whole-route limits; any shared artifact deduplication
+must retain full identity/byte equality and all protection dependencies. No
+cleanup follows merely from a later installed version. Original recovery,
+retained interpretation/history and supported repeat promises must release their
+protections first under an admitted lifecycle procedure.
+
+LM-T04/05 additionally require refusal for omitted/reordered/duplicate step
+bodies, mismatched original request or recipe, and self-asserted COMMIT evidence.
+Independent rollback observation must find no receipt or target publication from
+the failed route. Lost acknowledgment must recover the same immutable body and
+original commit without appending another migration. These are native schedule
+obligations; declaration checks cannot qualify settlement or persistence.
 
 ### Protected installation dependency order
 
