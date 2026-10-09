@@ -787,6 +787,23 @@ driver custody and genuine producer/native publication remain open. A structural
 four-MiB positive does not mint the required original response profile or increase
 caller request limits.
 
+The separate private TypeScript response scanner now admits the same exact four-
+MiB fixture under four-MiB source and 33,554,432 logical-work candidate limits;
+the original request scanner remains unchanged. Three Bun tests/fourteen assertions
+and strict TypeScript pass. Independently reconstructed wires match both frozen
+Python hashes, preserve all nineteen fields, refuse one-over and legacy request
+admission, preserve exact numeric strings/escaped NUL, and reject numeric nodes,
+duplicates and invalid Unicode. Distinct long keys below source/member/depth bounds
+also exhaust logical work with an honest resource refusal.
+
+This is response grammar/structure evidence only. The response scanner records
+its original request-scanner fork digest and retains existing duplicate/Unicode/
+numeric refusal semantics. Its copied algorithm is private experimental code, not
+an adopted shared parser or second UMF validator. Full schema integration and
+original aggregate allocation/account/registration remain required; the 32-MiB
+logical work value is not a host heap allowance or release profile. Neither host
+candidate activates native conversion or report publication.
+
 #### Full-report wire capacity before driver selection
 
 The frame candidate's one-MiB limit cannot transport the existing four-MiB
