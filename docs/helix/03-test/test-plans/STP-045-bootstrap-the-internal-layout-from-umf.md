@@ -810,6 +810,18 @@ Owner-selected first-release migration delivery extends B-003/B-014 and CONTRACT
 
 Retain exact expected source/target data and native effect inventories before collecting implementation observations. Test step-state and original-attempt corruption, partial archive/marker visibility and missing mandatory routines independently. No table-count, marker digest or successful framework deployment closes complete migration qualification.
 
+LM-T06/08 additionally require the
+[M5 deployment ordering and runtime compatibility schedule](../../04-build/migration-consumer-deployment-handoff.md#m5-deployment-ordering-and-runtime-compatibility).
+Independently observe old-runtime connection during the pending upgrade,
+old-runtime reconnect after target commit, premature target startup, application
+deployment failure after committed upgrade, and physical downgrade refusal
+without a qualified reverse route. Unsupported same-major runtimes must refuse
+before application work. Unknown settlement retains the original attempt and
+closes target readiness; application rollback cannot repeat migration or invent
+a down script. Advertised rolling support requires the selected simultaneous
+runtime/lease matrix, otherwise the route declares its interruption. These
+subcases remain `not_run` and use the same populated M1 source/target pair.
+
 ### LM-T03/05/07 receipt-initializer subcases
 
 These planned cases exercise the authored [initializer placement](../../02-design/contracts/CONTRACT-008-layout-bootstrap.md#migration-storage-initialization-and-self-upgrade).

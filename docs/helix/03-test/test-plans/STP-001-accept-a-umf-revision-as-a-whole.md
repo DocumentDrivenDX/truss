@@ -19,6 +19,18 @@ ddx:
 
 ## Immutable report outcome schedules (planned)
 
+RPSEL-07 extends lost-response recovery across a later accepted head. Use the
+[A6/A7 schedule](../../04-build/acceptance-runtime-handoff.md#a6a7-original-acceptance-settlement-after-head-advancement):
+lose R-A's commit acknowledgment, restart its caller, independently settle R-A,
+commit distinct R-B, then recover R-A through its original reference. Compare
+R-A's complete immutable report/revision and unchanged current R-B head, with
+zero repeated effects or duplicate index jobs. Separately refuse unauthorized
+disclosure, preserve unavailable settlement, and prove outer rollback cannot
+publish pending IDs. A fresh historical-input invocation is not this recovery
+operation and retains RPSEL-04's current validation requirement. This case is
+`not_run`; original recovery, complete report and public/native assembly are
+required, not inferred from a current-head query.
+
 RPSEL-03–06 supplement RPSEL-01–02: (03) verified exact current-head repeat returns byte-identical original report/origin with no new revision, report row, transform or index dispatch; (04) the same historical input after another accepted head requires fresh complete validation rather than historical equality bypass; (05) fail after original events and report insertion but before head publication and require full operation-local rollback with earlier adopted caller work preserved; (06) commit acceptance and lose the response, then observe original accepted report/head through recovery without duplicate insertion or another revision. Pending savepoint completion never supplies committed report evidence. Index-job completion leaves the original pending-job report inventory unchanged. Cases are not_run and require selected native producer/recovery and independent report/event inventories.
 
 
