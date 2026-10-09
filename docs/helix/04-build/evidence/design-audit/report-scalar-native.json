@@ -1,0 +1,107 @@
+{
+  "status": "passed_temporary_native_scalar_candidate",
+  "serverVersionNum": "170009",
+  "observations": [
+    {
+      "name": "two-byte-scalar-crosses-source-boundary",
+      "expected": "e5b572c5d24f3fbc02cbabd575df6515fb47e060e798bad49694304527eb1bb7",
+      "completeOriginalBytesEqual": true,
+      "nativeBytes": 65539,
+      "observed": "e5b572c5d24f3fbc02cbabd575df6515fb47e060e798bad49694304527eb1bb7"
+    },
+    {
+      "name": "three-byte-scalar-crosses-source-boundary",
+      "expected": "699981d2206a95d151f5f576470ae43850432ec2fa762266e3afae0af4e02616",
+      "completeOriginalBytesEqual": true,
+      "nativeBytes": 65540,
+      "observed": "699981d2206a95d151f5f576470ae43850432ec2fa762266e3afae0af4e02616"
+    },
+    {
+      "name": "four-byte-scalar-crosses-source-boundary",
+      "expected": "18f65fdec3653d755ae27ae75a47691af119ab76a5cbefb7e0a1cbb00d99402e",
+      "completeOriginalBytesEqual": true,
+      "nativeBytes": 65541,
+      "observed": "18f65fdec3653d755ae27ae75a47691af119ab76a5cbefb7e0a1cbb00d99402e"
+    },
+    {
+      "name": "highest-Unicode-scalar",
+      "expected": "d6be601594ff380c4a5e3cb7fcfc5f8f827847026cefe9d66c8bd17112d83f8a",
+      "completeOriginalBytesEqual": true,
+      "nativeBytes": 65541,
+      "observed": "d6be601594ff380c4a5e3cb7fcfc5f8f827847026cefe9d66c8bd17112d83f8a"
+    },
+    {
+      "name": "byte-document-controls-and-quotes",
+      "expected": "47590db6d0f80eae9c53c04ffaaa0b86bb34016a39d0a4b9a3bbe245117bf734",
+      "completeOriginalBytesEqual": true,
+      "nativeBytes": 65566,
+      "observed": "47590db6d0f80eae9c53c04ffaaa0b86bb34016a39d0a4b9a3bbe245117bf734"
+    },
+    {
+      "name": "overlong-two-byte",
+      "expected": "refused_22021",
+      "observed": "refused_22021"
+    },
+    {
+      "name": "overlong-three-byte",
+      "expected": "refused_22021",
+      "observed": "refused_22021"
+    },
+    {
+      "name": "surrogate-encoding",
+      "expected": "refused_22021",
+      "observed": "refused_22021"
+    },
+    {
+      "name": "above-Unicode-maximum",
+      "expected": "refused_22021",
+      "observed": "refused_22021"
+    },
+    {
+      "name": "invalid-five-byte-lead",
+      "expected": "refused_22021",
+      "observed": "refused_22021"
+    },
+    {
+      "name": "isolated-continuation",
+      "expected": "refused_22021",
+      "observed": "refused_22021"
+    },
+    {
+      "name": "unfinished-final-scalar",
+      "expected": "refused_22021",
+      "observed": "refused_22021"
+    },
+    {
+      "name": "ASCII-in-continuation",
+      "expected": "refused_22021",
+      "observed": "refused_22021"
+    },
+    {
+      "name": "exact-output-capacity",
+      "expected": "ed82f33b6fb1d3cdce0d98e6ac90a1debcde2868ecabf5e63ad5e96893f2ae3e",
+      "completeOriginalBytesEqual": true,
+      "nativeBytes": 1048576,
+      "observed": "ed82f33b6fb1d3cdce0d98e6ac90a1debcde2868ecabf5e63ad5e96893f2ae3e"
+    },
+    {
+      "name": "one-over-output-capacity",
+      "expected": "refused_54000",
+      "observed": "refused_54000"
+    },
+    {
+      "name": "output-capacity",
+      "expected": "refused_54000",
+      "observed": "refused_54000"
+    },
+    {
+      "name": "source-capacity",
+      "expected": "refused_54000",
+      "observed": "refused_54000"
+    }
+  ],
+  "sourceSha256": "d6baa0af49f437f7974ad3bffe1fcf2a75657a1ad7d83c329102b8f5cc2113d3",
+  "fixtureSha256": "8d9796d6359b1aec328b0a90ce7fe0c03f17f5b3d322562cff85b33152edc7b6",
+  "checkerSha256": "693759f0828e8d5690c4a9cea91eca5377a16e257014468f4c3ae3b8f0209549",
+  "scope": "Temporary function in one rolled-back native session; exact independent scalar bytes and invalid UTF-8/capacity refusals only. No installed routine, whole-report encoder, precharged native/driver resource profile, authority or acceptance effects."
+}

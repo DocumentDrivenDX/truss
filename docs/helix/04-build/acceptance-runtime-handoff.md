@@ -43,6 +43,18 @@ actual complete output to these original expected bytes, alongside the full
 report/capacity/containment controls above; expected output cannot be regenerated
 using the encoder under test.
 
+A subsequent [uninstalled scalar candidate](../02-design/contracts/report-scalar-resource-v0.2.proposal.md)
+now has exact UMF source/archive/export correspondence and seventeen actual
+PostgreSQL 17.9 temporary-function observations. Complete output matches the
+original byte vectors, and exact/one-over output capacity, invalid UTF-8 and
+source/control-expanded-output refusals pass. This implementation validates one
+whole bytea and emits complete scalar pieces into bounded output chunks. It
+does not accept external source blocks, traverse the report tree, issue original
+account custody or integrate report/head finalization. The old native component
+remains unchanged. A1/A2 must compose actual native allocations/grants/source
+inventory and full report capacity; neither a larger scalar ceiling nor the
+temporary administrative test closes those gates.
+
 A subsequent graph-resource review moves the selected identifier-length check
 before NUL/surrogate scanning, verifies exact UTF-8 byte length before allocating
 encoded identifiers, and bounds edge labels before map lookup. Oversized malformed
