@@ -24,3 +24,9 @@ export async function collectCatalogCapturedOriginBasis(connection:CatalogStageC
  const result=Object.freeze({origin:decoded.origin,journalOrigin:decoded.journalOrigin,contextEvidence:artifact('truss.original-native-operation-context3/'+cut.writerXid+'/'+cut.operationOrdinal,bytes),assertedEvidence:artifact('truss.original-asserted-origin/'+cut.writerXid+'/'+cut.operationOrdinal,Buffer.from(decoded.assertedUtf8Hex,'hex')),captureProfileEvidence:artifact('truss.original-origin-capture-profile/'+cut.writerXid+'/'+cut.operationOrdinal,profile),nativeObservation:cut,scope:'original_context3_captured_origin_basis_only' as const});
  issued.set(result,{connection,prepared,basis});return result;
 }
+/** Original basis is not reusable current authority; native context/cut recheck. */
+export async function recheckOriginalCapturedOriginBasis(value:Awaited<ReturnType<typeof collectCatalogCapturedOriginBasis>>,connection:CatalogStageConnection,prepared:Prepared,basis:Basis){
+ requireOriginalCapturedOriginBasis(value,connection,prepared,basis);
+ const current=await collectCatalogCapturedOriginBasis(connection,prepared,basis,Buffer.from(value.captureProfileEvidence.bytesBase64,'base64'));
+ if(JSON.stringify(current)!==JSON.stringify(value))throw Error('Original captured origin bytes/context changed');
+}
