@@ -2,6 +2,13 @@
 
 Companion to [case grammar](conformance-case-grammar.proposal.md). These entries bind existing declarations; they introduce no public methods. Status: proposed inventory, not a complete executable registry. Exact input/result schemas, identity paths, original profiles and semantic observation scope must be registered before execution.
 
+The [runtime implementation handoff](../04-build/conformance-runtime-handoff.md)
+orders the existing constructors, preparation/claim/recovery, native setup,
+operation/observer/identity procedures, receipt assessment and independent
+Python interchange. Source inspection confirms these services remain
+declarations; the tooling source currently supplies only layout migration
+planning. Carrier authoring does not replace that implementation sequence.
+
 ## Capability carrier closeout — 2026-10-09
 
 All twenty-two capability entries in the following table now have proposed
