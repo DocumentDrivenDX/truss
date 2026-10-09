@@ -182,3 +182,13 @@ Dependency sync for this authoring pass fetched UMF origin/master at 1f7b5f5d2a3
 After closed shape admission and original artifact/registry custody, require matching original case identity across manifest/input/expectation artifacts. Each input step label is unique; each operation resolves uniquely to a registered exact identity/version/hash and permitted scope kind. Non-none scope labels resolve to the original admitted harness scope inventory. Every observation references an existing input step; duplicate surface/step/boundary expectations refuse rather than masking contradictory results. Scope existence is not native liveness: actual original transaction generation, rollback cut and authority must still be admitted at invocation.
 
 Run `bun docs/helix/04-build/evidence/design-audit/check-conformance-case-links.ts`. Eleven independent authored controls cover mismatched case, duplicate labels/registry/boundaries, unknown operation/scope/observation and changed version/hash. The small design comparator assumes shape-admitted inputs and does not resolve artifact bytes, verify live scopes or prove complete observation coverage. It is not a production runner or native acceptance evidence. Full required observation membership and original registry/parser/resource/authority composition remain unfinished.
+
+The comparator now also admits fixture links, bringing the total to eighteen
+controls. Fixtures and inputs must share exact registry identity/bytes/digest
+and grammar pin, and both must match the manifest case. Setup operations use
+registered profiles and admitted scope labels; duplicate setup labels refuse.
+Setup and input labels have separate namespaces, so the same spelling may
+occur in both, but an expected input observation cannot resolve through a
+setup-only label. These checks still assume prior closed shape admission;
+matching supplied bytes does not establish digest truth, registered custody or
+native starting-state completeness.
