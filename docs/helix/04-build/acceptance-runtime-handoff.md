@@ -33,12 +33,21 @@ The ASCII carrier probe measures wire expansion only. Actual whole-report produc
 installed authority, original driver/account and settlement remain unqualified.
 
 The response admission profile must also distinguish internal canonical-report
-parsing from original caller-input parsing. Both current host report paths retain
+parsing from original caller-input parsing. The legacy report-to-native/input paths retain
 one-MiB source limits; TypeScript's two-million-unit work cap independently refuses
 a four-MiB source. Consume the
 [response-parser handoff](../02-design/python-integration.proposal.md#internal-response-parser-profile-is-distinct-from-request-admission)
 when selecting A1's complete tuple. A larger receiver or a byte-limit change alone
 cannot make the original report codec support the complete selected output.
+
+Separate private response candidates now admit the independently frozen four-MiB
+nineteen-field schema wire in both hosts without widening those legacy paths.
+The [native literal-echo receipt](evidence/design-audit/python-report-response-native-echo.json)
+compares complete actual received bytes and Python response-schema admission.
+It still records the original frame decoder's refusal and establishes no genuine
+report producer, original account/driver authority or protected persistence.
+A1 must admit the complete coherent tuple before effect-bearing acceptance;
+these structural response candidates cannot bypass that gate.
 
 ### Complete scalar streaming qualification
 

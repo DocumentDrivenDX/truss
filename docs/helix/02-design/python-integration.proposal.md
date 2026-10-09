@@ -819,6 +819,22 @@ producer/driver/native/publication correspondence. The original one-MiB request
 and report-to-native handoff components remain unchanged; their old source-pinned
 receipts are not expanded by this response-only composition.
 
+The [complete native echo receipt](../04-build/evidence/design-audit/python-report-response-native-echo.json)
+now compares the entire independently frozen four-MiB, nineteen-field report over
+local trust-authenticated PostgreSQL text/OID25/format0 and validates its actual
+received bytes through `ReportResponseCandidate`. Original startup UTF8 admission,
+exact 4,194,315-byte DataRow, complete expected-byte equality, nineteen schema
+fields and receiver/decoder/parser/probe source pins are retained. The query is
+an escaped read-only literal echo; its template/digest are stored instead of a
+four-MiB SQL string. The old one-MiB frame decoder refusal remains explicit.
+
+This exercises the actual received synthetic full wire and Python response
+schema candidate, not genuine diagnostic/report production, an admitted replacement
+frame decoder, authoritative accepted IDs, committed report persistence, installed
+security or publication. It uses independent fixture admission before native
+submission and BEGIN READ ONLY/ROLLBACK. Original complete operation accounting,
+qualified driver/settlement and public profile adoption remain required.
+
 #### Full-report wire capacity before driver selection
 
 The frame candidate's one-MiB limit cannot transport the existing four-MiB
