@@ -92,8 +92,24 @@ The root deliberately refuses all wires because this is a definition library,
 not an untagged union that lets a method accept another method's result.
 These compositions close the outer schema work identified in those table rows;
 original method/profile/argument/observer/identity-path registration still
-remains. Standalone mutation and group wrapper gaps are unchanged.
+remains. Standalone mutation wrapper gaps are unchanged.
 Import is explicitly excluded from generic Outcome composition.
+
+Group now has definitions-only `group-capability-wires-v0.1.proposal.schema.json`.
+Register requestFreeResult/requestFreeOutcome only for the request-none
+overload, and requestBearingResult/requestBearingOutcome for request-present.
+Reuse group-input's existing requestSelection/requestIdentity definitions for
+the separate request argument; never insert it into GroupSemanticInput.
+The result composition reuses the complete group semantic response but allows
+applied only with pending durability in the supplied scope. Request-bearing
+replay retains its original same-transaction or committed-receipt distinction;
+request-free excludes replay, request_conflict and receipt/receipt_expired.
+An unresolved union is a typing convenience, not permission to select the
+broader comparator after observing a result. Run `check-group-capability-wires.ts`
+in the design audit directory with the installed Ajv Draft 2020-12 module path:
+twenty-four overload/layering controls pass. Original input/result order,
+event/deletion completeness, request authority, full receipt correspondence
+and native commit/replay observation remain required.
 
 Catalog now reuses the existing v0.1 report/rejection/failure carriers through
 `catalog-capability-wires-v0.1.proposal.schema.json`. Register reportRequest
