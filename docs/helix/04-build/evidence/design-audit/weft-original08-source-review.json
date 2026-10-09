@@ -1,0 +1,33 @@
+{
+  "scope": "committed Weft source/owner-evidence review only; no Truss rebuild, native execution or public package adoption",
+  "revision": "f05f2df09e9c2494ac8c6d703dfe38413dbc4181",
+  "previousRevision": "5856c73db0342363e64802905a94abb96209d757",
+  "sources": [
+    {
+      "path": "crates/weft-core/src/model.rs",
+      "sha256": "ae4acfa1c0eee3e90a26ff848539ef00e5c2701b93207c62ebbf6c67035d5af3"
+    },
+    {
+      "path": "crates/weft-core/src/application_model.rs",
+      "sha256": "1328d35b61ca835e9cc3687518cfdec885c183260150d43cb3b366628167bb09"
+    },
+    {
+      "path": "crates/weft-core/tests/original08.rs",
+      "sha256": "f07e1ab970a9d840a7e6bd94ed352b38998f3c47ade2883c5e1cd982c17975e4"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/original-commerce08-local-20261009.md",
+      "sha256": "3eb558d8421bbb9ce2cb1ab95ff08835eea34ba0ea331db4b6282c8258a3c077"
+    }
+  ],
+  "owningVersions": [
+    "0.7.0",
+    "0.8.0"
+  ],
+  "transportVersionsUnchanged": true,
+  "selected08Meaning": "Unknown selected element/reference/relationship meaning, nonempty selected extensions, defaults/refinements/allowed-values and unestablished domains refuse rather than being ignored. Older owning-version behavior is unchanged.",
+  "consumerDisposition": "Original 0.7 consumer models remain original. A future admitted 0.8 transition/projection must establish selected DDD meaning; do not erase extensions or relabel source merely to pass selected08.",
+  "existingTrussAdapterPin": "2744531735c2a771fbe7ed24a7f67e3afc851b25",
+  "existingPythonWheelPin": "5856c73db0342363e64802905a94abb96209d757",
+  "nativeImplementationQualified": false
+}

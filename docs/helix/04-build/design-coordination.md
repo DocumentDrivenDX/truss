@@ -15,6 +15,24 @@ ddx:
 
 # Design coordination and remaining work
 
+## Additive Weft owning-core0.8 admission — 2026-10-09
+
+Fresh fetch now advances Weft to `f05f2df09e9c2494ac8c6d703dfe38413dbc4181`;
+UMF remains `c7c95e1c4ea5b72541f47fa0350ca467ff02f395`. The
+[source review](evidence/design-audit/weft-original08-source-review.json)
+records unchanged transport versions with additive original owning-core0.8
+admission. Selected new meaning is guarded: nonempty selected extensions and
+unsupported defaults/refinements/domains/qualifiers refuse. This is not blanket
+core0.8 support or permission to relabel a source as core0.7.
+
+The Truss adapter/build script remains pinned to `27445317`; the Python wheel and
+consumer frontend receipts remain pinned to `5856c73`. Neither is upgraded by
+CLI evidence from the owner. Next integration needs an isolated exact new-source
+build, retained core0.7 regression/custody checks, scoped original0.8 positive and
+selected-meaning refusal checks, matching host version admission and clean
+language distributions before any new package claim. Preserve dirty security
+owner work; no release-interface adoption follows from this fetch.
+
 ## Committed upstream refresh — 2026-10-09
 
 Fresh fetches now show UMF `c7c95e1c4ea5b72541f47fa0350ca467ff02f395`

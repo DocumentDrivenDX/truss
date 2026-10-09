@@ -22,6 +22,16 @@ Weft's committed source exposes `weft.compile_json(request: str) -> str` through
 
 ## Concrete consumer model/query inputs
 
+Latest Weft [original-core0.8 source review](../04-build/evidence/design-audit/weft-original08-source-review.json)
+finds additive owning-version admission in committed `f05f2df`, with unchanged
+transport shapes and strict selected-meaning refusal. Existing wheel/frontend
+receipts below retain their original `5856c73` scope. Consumer0.7 input is not
+upgraded by this change. An explicit future0.8 projection must account for selected
+DDD extensions: the new selected-element guard refuses nonempty extensions whose
+meaning it does not establish. Do not delete them, synthesize support or relabel
+the source to bypass the guard. Owner-admitted interpretation/projection and
+matching public Python/host builds remain required before this new path is used.
+
 The [consumer requirements provenance](../04-build/evidence/design-audit/consumer-requirements-provenance.json)
 resolves the copied requirements' `ADR-013` to the accepted consumer-repository
 decision, not a missing Truss ADR. It assigns the client facade, backend routing
