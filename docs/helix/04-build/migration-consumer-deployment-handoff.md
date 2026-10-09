@@ -186,6 +186,33 @@ Repeat across the subsequent-upgrade reconciliation schedule. These planned cont
 separate lifecycle protections observable; the private trigger component alone
 cannot qualify complete installed privileges or archival durability.
 
+### M2/M3 inspection-to-application change schedule
+
+Implement CONTRACT-008's “Metadata plan to registered execution correspondence”
+with independently controlled changes between initial inspection and the fresh
+source verification under writer/security/configuration exclusion. The retained
+inspection and inert plan do not reserve an installation or grant permission to
+execute. Preserve both observation cuts; never replace the original request with
+a silently refreshed plan.
+
+LM-T04/06 must exercise the following schedules before qualifying M3:
+
+| Change after planning | Required observation before the first recipe effect |
+| --- | --- |
+| Same-version routine, grant, constraint or retained encoding drifts | Fresh complete source comparison refuses; matching version text cannot permit execution |
+| Another original administrative attempt commits the selected route | Settle and inspect through the original receipt/commit procedures; do not infer `already_applied` from target-looking inventory or execute the recipes again |
+| An unselected manifest route changes, or selected recipe order changes | Complete registered manifest/plan correspondence refuses, even when the selected route ID and individual digest fields appear unchanged |
+| Caller mutates manifest or source-observation buffers | Original retained bytes remain fixed; changed supplied correspondence refuses before effects |
+| Source collection or exclusion becomes unavailable | Preserve the actual admission/containment outcome and original recovery custody; zero recipe effects and no automatic bootstrap or repair |
+
+Record original bytes, independently expected differences, effect observations
+and the actual result/termination evidence. Distinguish permitted transaction
+setup, exclusion and recovery registration from recipe effects; “zero effects”
+must not conceal an unconfirmed administrative transaction. After a refusal, a
+new request requires fresh explicit admission and any original-attempt settlement;
+it is not an automatic callback retry. These are planned M2/M3 qualification
+controls, not evidence of an implemented executor or a supported populated route.
+
 ### M5 deployment ordering and runtime compatibility
 
 The first packaged route must include a deployment sequence and an explicit
