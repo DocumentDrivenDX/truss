@@ -63,3 +63,52 @@ For E=2047, refuse nonfinite_number. For E=0 and F=0, retain the actual sign of 
 When exact comparison requires a rational, a nonnegative power shifts the coefficient into the numerator; a negative power creates an exact power-of-two denominator. Preflight every shift/allocation and cross-product under the selected account; never multiply before checking conservative result/work bounds. Compare with the fully admitted source rational, retaining wrapper integer-safety and signed-zero rules. The eight-byte pattern and fixed bit bounds do not waive full token interpretation or shared-account charges. No UMF decimal parser/encoder is recreated by this procedure.
 
 Independent bit witnesses are positive/negative zero (0000000000000000 / 8000000000000000), half (3fe0000000000000), minimum subnormal (0000000000000001), minimum normal (0010000000000000), maximum finite (7fefffffffffffff), positive infinity (7ff0000000000000) and a NaN pattern (7ff8000000000000). Their required mathematical outcomes are respectively signed zero, 2^-1, 2^-1074, 2^-1022, (2^53-1)*2^971 and nonfinite refusal. Test actual candidate bit inspection and independent original token comparison separately; agreement between two implementations of this decoder cannot replace the independent rational oracle.
+
+## Current UMF numeric producer adoption handoff — 2026-10-08
+
+Committed UMF `e3555b9aac9e4c3caa952203958c4b0c33cdf519` exports
+`admitJavascriptNumber`, `exactDecimal`, `integerFromBigInt`,
+`integerToBigInt` and `numericToNumberLossless` from its public index.
+`src/adapters/javascript-numeric.ts` performs exact binary64/decimal value
+comparison, preserves token spelling in constructors and optionally applies
+current Field-context checks. This supersedes the earlier absence of a
+concrete owner conversion producer. Consume these APIs at an immutable
+source/build pin; the binary decomposition above remains an independently
+specified oracle/design explanation, not a directive to implement a second
+Truss numeric parser or converter.
+
+The wrapper's successful view retains the original Truss exact carrier and
+uses only the owner-returned number. Safe integer admission and integer bigint
+conversion use their respective owner functions; decimal constructor admission
+uses exact text. There is no round-to-nearest fallback: ordinary decimal
+`0.1` refuses a number view, whereas its exact binary64 decimal expansion can
+qualify. Integer `9007199254740992` refuses the safe-number view while the
+same decimal carrier can qualify by exact value. Field-context validation
+requires the separately admitted current 0.8 document/transition and is not
+implied by context-free numeric conversion. Native storage text and lexical
+source remain canonical custody regardless of convenience output.
+
+Two integration boundaries remain explicit. First, the owner converter
+refuses negative zero, including decimal `-0.000`, although its exact decimal
+constructor retains that spelling. Preserve signed zero in the default exact
+carrier; a signed-zero number view is unavailable through this producer. Do
+not add local special-case conversion until the selected signed-zero view
+profile is reconciled with the owner. Second, owner text/exponent bounds and
+internal allocation are not the Truss shared operation account. Qualify
+conservative producer admission/allocation/work bounds and charge them before
+invocation; otherwise the operation-bounded convenience capability refuses
+as unsupported. Do not invoke first and claim post-call counting proves the
+precharged resource profile. Unknown owner errors must not be classified as
+lossy_number; pin tested error translation before public export.
+
+Execution controls compare the actual pinned owner call and packed Truss
+wrapper with independently authored exact carrier/value expectations:
+safe-integer limits; decimal half; decimal 0.1; exact binary expansion of 0.1;
+integer versus decimal 2^53; exact minimum-subnormal token; overflow and
+underflow; signed zero preservation with refused view; exponent lexical
+variants; invalid wrapper/getter input; unknown Field qualifiers; and
+resource refusal before any owner call. Cover current Field-context admission
+separately from context-free view conversion. Run the real public wrapper in
+Chromium and supported host packages; upstream unit tests alone cannot qualify
+the wrapper, account, native read custody or complete toolkit. These controls
+are planned, not_run.

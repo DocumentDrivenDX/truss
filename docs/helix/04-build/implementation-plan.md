@@ -2608,3 +2608,15 @@ the fixture's synthetic profile pins and empty document objects grant no UMF
 semantic validity, registered conversion capability or native acceptance.
 Replace those sources with original admitted producer outputs for RPDOC-01;
 retain these independent byte expectations as resource controls.
+
+### Shared numeric adapter implementation sequence
+
+[The numeric view handoff](../02-design/contracts/core-numeric-number-view.proposal.md#current-umf-numeric-producer-adoption-handoff--2026-10-08)
+now selects UMF's actual committed public conversion producer. Pin its source
+and bundle; qualify Truss pre-invocation work/allocation bounds and original
+error translation; preserve exact carrier/source custody; then implement the
+thin wrapper and real packed-browser/host controls. Signed-zero number views
+remain unavailable under this owner producer, with signed zero preserved in
+exact carriers. The previous binary decomposition procedure is an independent
+oracle, not a second implementation work item. This does not silently migrate
+0.7 source to 0.8, qualify Field validation or alter native numeric homes.
