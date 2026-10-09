@@ -100,7 +100,7 @@ The default upgrade profile uses transactional DDL/data changes and holds the se
 
 Nontransactional/online/multiphase steps require a separately selected durable progress/cleanup/recovery profile; the default system refuses them. Downgrade has no implicit inverse or generic down script: only an explicitly qualified reverse edge can be applied, otherwise refuse and leave the original installed state. Recovery from a failed transactional step is observed rollback; restore is a deployment action with its own epoch/incarnation admission, not a claimed migration rollback.
 
-Version compatibility remains CONTRACT-001's declared layout-major rule: an implementation refuses a different major. Within a major, the release still declares exact supported layout/runtime/corpus/profile ranges and upgrade edges; same major is not permission to execute against unknown routines/codecs. The post-install/post-upgrade verifier runs without modifying state and reports actual current correspondence or explicit unavailable/drift. Native PostgreSQL and Lakebase deployment qualification remain separate; current native 0.16/core 0.5 candidates are not a stable published layout.
+Version compatibility remains CONTRACT-001's declared layout-major rule: an implementation refuses a different major. Within a major, the release still declares exact supported layout/runtime/corpus/profile ranges and upgrade edges; same major is not permission to execute against unknown routines/codecs. The post-install/post-upgrade verifier runs without modifying state and reports actual current correspondence or explicit unavailable/drift. Native PostgreSQL and Lakebase deployment qualification remain separate; current native 0.16/core 0.6 candidates are not a stable published layout.
 
 ### LM-01 candidate manifest and planner wire
 
@@ -238,6 +238,63 @@ Initializer, unavoidable receipt/finalization producer, lifecycle/protection
 cleanup, complete security privileges remain required. The [core 0.6 projection](../models/truss-layout-core-structural-0.6.proposal.umf.json) now includes all eleven receipt columns and the original source-epoch FK through core record/field references with retained native key/constraint descriptors. It validates with zero errors and incomplete native interpretation; no portable key profile or installed mapping is inferred. The owner schema browser displays the receipt and downloads its original model byte-exactly. DELETE remains unconditionally unavailable; no caller cleanup flag,
 replication mode or future lifecycle intention bypasses these guards. No migration outcome is admitted
 by the model, generated DDL or this probe.
+
+### Migration storage initialization and self-upgrade
+
+The ledger initializer is part of the exact declared installation/upgrade
+recipe, not an independent preparatory migration. Fresh installation composes
+the selected receipt home, allocator, guards and privilege inventory into its
+original dedicated bootstrap transaction, with no invented upgrade receipt for
+an empty database. Initial absence of upgrade receipts is declared bootstrap
+state; it does not prove that arbitrary future routes were applied.
+
+For a first upgrade whose qualified source layout has no migration-receipt
+home, register the original attempt in the host recovery registry before native
+submission, verify that source under the common exclusions, and create the
+selected target receipt storage/guards in the same transaction as the entire
+route. Missing storage is legitimate only when the exact registered source
+inventory declares it absent. The target finalizer inserts the complete original
+receipt after all steps and target/preservation checks, then publishes the
+corresponding target archive/marker atomically. A failed route rolls back the
+new home and receipt with every other route effect. A lost COMMIT response
+queries the original attempt and committed target; it does not initialize the
+ledger again to discover whether the upgrade succeeded.
+
+No `IF NOT EXISTS` or version-only repair adopts a preexisting unrecognized
+home, allocator or trigger. Source and target inventories must account for
+exact definitions, ownership/privileges, sequence settings and initializer
+state. A source without admitted installation/epoch/attempt custody requires
+its own explicitly registered source-transition protocol; this adjunct cannot
+mint a trusted source identity retroactively. Receipt source-epoch FK insertion
+requires the original retained registry correspondence, including its
+incarnation, not today's epoch pointer.
+
+| Initialization state | Permitted outcome |
+| --- | --- |
+| Fresh empty namespace | Original bootstrap recipe creates the declared empty migration subsystem; no applied-route result |
+| Qualified old layout declaring no receipt subsystem | Registered first-upgrade recipe creates it inside the route transaction; readiness remains closed until full commit/target admission |
+| Qualified layout with exact existing subsystem | Verify original definitions and retained complete receipts; ordinary upgrade appends one original route receipt |
+| Missing/drifted subsystem where the source declares it present | Refuse before steps; do not silently recreate or erase original evidence |
+| Unrecognized existing subsystem or source epoch | Refuse unsupported/integrity admission; caller cannot select a repair flag |
+
+A later migration of the receipt subsystem must preserve every original
+request/receipt/profile/identity byte and source correspondence needed by
+recovery, repeats and retained history. Its registered conversion explicitly
+accounts for old and new homes, full-byte correspondence, pending protections,
+whole-route peak capacity and the resulting read/reconciliation profile. A
+new storage encoding is not permission to rewrite an old receipt's original
+meaning, mark unresolved attempts committed, reset its allocator or replace
+original recovery custody. Keep the old evidence protected until the conversion
+and lifecycle release are fully admitted. Current immutable DELETE/TRUNCATE
+refusal supplies no cleanup path; a self-upgrade requiring one needs a separately
+reviewed qualified procedure rather than disabling the guards during normal
+application.
+
+LM-02 now has an authored initializer placement/order. Exact registered native
+producer/security/privilege/resource composition and generated whole-bundle
+installation remain implementation outputs. The current adjunct is not a
+stable published upgrade edge and neither bootstrap nor migration execution is
+qualified by its rollback-only probe.
 
 ### Protected installation dependency order
 

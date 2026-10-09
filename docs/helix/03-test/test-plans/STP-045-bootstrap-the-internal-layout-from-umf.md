@@ -809,3 +809,17 @@ Owner-selected first-release migration delivery extends B-003/B-014 and CONTRACT
 | LM-T08 deployment composition | Consumer framework fails after Truss's confirmed commit: installed result remains committed. Re-running explicit verification succeeds or reports drift; PostgreSQL/Lakebase each need their own exact version/extension/driver receipts |
 
 Retain exact expected source/target data and native effect inventories before collecting implementation observations. Test step-state and original-attempt corruption, partial archive/marker visibility and missing mandatory routines independently. No table-count, marker digest or successful framework deployment closes complete migration qualification.
+
+### LM-T03/05/07 receipt-initializer subcases
+
+These planned cases exercise the authored [initializer placement](../../02-design/contracts/CONTRACT-008-layout-bootstrap.md#migration-storage-initialization-and-self-upgrade).
+They require actual registered source/target recipes and independent native
+observers; the existing storage probe cannot serve as their passed result.
+
+| Subcase | Fixture/action | Required independent observation |
+| --- | --- | --- |
+| LM-I01 fresh bootstrap | Install the complete selected fresh bundle into an empty namespace | Exact empty receipt subsystem with qualified allocator/guards/rights; no synthetic applied migration or consumer-ready state before original commit |
+| LM-I02 first upgrade | Qualified source explicitly lacks receipt storage; route creates it then converts populated data | One complete receipt and target publication in the same confirmed route commit; original source epoch/incarnation and retained data correspondence |
+| LM-I03 initializer rollback/unknown | Fail after home creation, or lose final COMMIT acknowledgment | Confirmed rollback removes new home/receipt/target effects; unknown preserves original registry custody and reconciles without another initializer or attempt |
+| LM-I04 drift/adoption refusal | Source expects storage but a guard/allocator is absent, or an unrecognized home exists | Refuse before route effects; no IF NOT EXISTS repair, erased prior receipts or fabricated source identity |
+| LM-I05 subsystem conversion | Upgrade a receipt encoding with retained repeats/recovery/history dependencies | Full original bytes/profile/identity preserved; original recovery and repeat resolve the same result; insufficient protection/peak capacity refuses, and current guards remain effective |
