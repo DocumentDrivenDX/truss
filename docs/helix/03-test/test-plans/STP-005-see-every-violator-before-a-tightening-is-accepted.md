@@ -59,3 +59,25 @@ Callback/manifest corpus now passes 19 cases. Independently substitute runtime r
 Acceptance report retains complete original transform registration manifests and implementation recognition in a required inventory. Verify exact set equality against distinct accepted-input pins and persist atomically before head advance. Retained exact repeats do not invoke callbacks or substitute current manifests.
 
 Accepted-report corpus now has 13 shape cases. Independently omit/add/duplicate registration entries, mismatch manifest SHA or recognition issuer, fail archive persistence, and change current callback before exact repeat. Require semantic refusal/whole rollback as appropriate and unchanged original report on admitted repeat; no current-default reconstruction.
+
+
+## Complete violator report capacity boundary (planned)
+
+Independently author three violating records and their exact expected typed
+identity/rule/path diagnostics, with the third on a later internal scan page.
+Under an admitted profile with room for the complete scan/report, require all
+three and a complete rejection. Under a separately admitted smaller profile
+that cannot retain the complete required diagnostics, require explicit
+incomplete/resource refusal and no acceptance, complete-list claim or fabricated
+zero-violator result. Any disclosed partial diagnostics remain explicitly
+incomplete and subject to current disclosure admission; they cannot close AC1.
+
+Repeat with a late transform/candidate violation after earlier exact outputs
+have been retained. Independently verify no graph, key, journal, report or head
+persistence occurs before complete candidate validation; on contained failure,
+prior caller work remains and retained candidate occupancy is released only
+under its qualified lifetime. Spent work is not refunded. A second invocation,
+spill handle or fresh allowance must not convert the same failed attempt into
+success. A genuinely new attempt requires fresh admission under the existing
+protocol. Preserve exact complete expected sets, resource artifact pins and
+native before/after/containment evidence; these cases remain `not_run`.
