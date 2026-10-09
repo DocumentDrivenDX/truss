@@ -4,6 +4,7 @@ from hashlib import sha256
 import json
 from pathlib import Path
 import sys
+from composition_schema_refs import static_refs
 
 if sys.argv[1:] not in ([], ['--capture']):
     raise SystemExit('Only --capture or no arguments supported')
@@ -27,20 +28,6 @@ for path in sorted(contracts.glob('*.schema.json')):
     registry[identity] = (path, schema)
 
 
-def refs(value):
-    if isinstance(value, dict):
-        for key, child in value.items():
-            if key in ('$ref', '$dynamicRef'):
-                if not isinstance(child, str):
-                    raise SystemExit('Non-string original reference')
-                if not child.startswith('#'):
-                    yield child.split('#', 1)[0]
-            else:
-                yield from refs(child)
-    elif isinstance(value, list):
-        for child in value:
-            yield from refs(child)
-
 
 counts = {}
 for row in record['boundaries']:
@@ -54,7 +41,7 @@ for row in record['boundaries']:
             continue
         closure.add(path)
         schema = json.loads(path.read_bytes())
-        for identity in refs(schema):
+        for identity in static_refs(schema):
             if identity not in registry:
                 raise SystemExit('Unavailable original local schema: ' + identity)
             pending.append(registry[identity][0])

@@ -401,3 +401,12 @@ verifies the retained membership. Combined strict schema compilation remains the
 separate fragment/reference validation evidence. This closes captured schema
 membership only; native model, producer, procedure, authority and semantic
 profile transitive closure remain explicitly incomplete in every boundary.
+
+The local dependency collector now walks only Draft 2020-12 schema positions,
+leaving `$ref`/`$id` inside literal const/examples as data. Nested schema identities
+and dynamic/recursive references explicitly refuse pending a scoped resolver;
+they are not flattened into the root document. Three independent collector tests
+cover literal preservation, scoped-reference refusal and conditional/array/content
+schema references. The current selected 11/8/1 closures still pass unchanged.
+This is a deliberately scoped dependency collector; strict schema validation and
+semantic profile admission remain separate.
