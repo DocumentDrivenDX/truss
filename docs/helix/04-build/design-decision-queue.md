@@ -26,7 +26,7 @@ Use [current design closure](current-design-closure.md) for the consolidated ele
 
 ## Current verified execution boundary — 2026-10-08
 
-The [closure summary](current-design-closure.md) now reflects private native layout 0.15 and 236 component checks, the composed report v0.3 plus original input/document correspondence procedure, confirmed consumer discovery PR #6 and the merged qualified Weft compiler. Product choices above remain selected. Compiler source is unchanged at latest reviewed owner HEAD; no rebuild or duplicate lowering work is needed. The remaining choices are concrete Truss profile/codec/resource/driver/archive/security composition and affected native-null projection interpretation; ordinary installed authority, full acceptance/finalization and end-to-end consumer evidence remain implementation obligations. A component pass or authored procedure does not close them.
+The [closure summary](current-design-closure.md) distinguishes private native layout0.15, historical component receipts, the report v0.3 source design, current complete-wire codec and nine-field producer correspondence, confirmed consumer discovery PR#6 and the merged qualified Weft compiler. The [current catalog cohort](evidence/catalog-new-cohort.json) has87 checks; it is a scoped staging/issuer/correspondence result, not a sum of all historical tests or complete engine evidence. Product choices above remain selected. Compiler source is unchanged at latest reviewed owner HEAD; no rebuild or duplicate lowering work is needed. The remaining choices are concrete Truss profile/codec/resource/driver/archive/security composition and affected native-null projection interpretation; ordinary installed authority, full acceptance/finalization and end-to-end consumer evidence remain implementation obligations. A component pass or authored procedure does not close them.
 
 ## Current design versus implementation boundary
 
@@ -48,6 +48,23 @@ archive/recovery/retention realization; or Weft's affected native-null mapping.
 Existing caller interfaces, product choices and owner-provided numeric APIs
 are not reopened because native tests have not run. Record actual body/OID,
 installed privilege and execution/fault receipts under implementation exits.
+
+
+## Remaining decisions versus required runtime outputs
+
+Use the [current acceptance exit sequence](remaining-design-handoff-audit.md#current-acceptance-implementation-exit-sequence) for the concrete producer dependency order and exact seventeen-field partition. Nine fields have scoped original producer correspondence; eight require complete production/admission. This does not narrow B-001–B-015 or the full45-story scope.
+
+| Boundary | Already selected or authored | Concrete unresolved selection or implementation output |
+| --- | --- | --- |
+| Report persistence | Separate immutable complete byte home; effect/report/head in one original transaction | Complete registered report profile and original producer outputs; independent effects and atomic finalizer/commit union. Guard and codec success do not resolve the complete profile. |
+| Acting identity | Native selected actor; no request-role or nested-definer-owner fallback | Context0.2 now captures role names/OIDs and verifies invoker/cut correspondence. Original public-entry, role-lifecycle/policy exclusion, installation/source epoch and origin/capture authority still need concrete protected producers. |
+| Assertion meanings | UMF owns interpretation; Truss owns inventory/evidence membership | Candidate source identities cover original core facts, keys/relationships and original0.8 property nodes. Reversible-target correspondence, complete selected support/disclosure and registered native/engine qualification remain; unavailable APIs are not a request for a duplicate Truss checker. |
+| SQL compiler | Weft owns lowering; Truss supplies accepted storage/authority mapping | Accepted native IDs, actual homes, joint codec/host/integrity tuple and affected explicit-null interpretation. Keep compiler-owner dependencies limited to affected projections. |
+| On-disk model/site | Core structural definitions plus retained native semantics; UMF-owned generic generation; owner browser embedded | Complete selected hybrid interpretation, installation/conversion and parity; site rendering neither blocks runtime nor qualifies the layout. |
+| Driver/resources/deployment | Embedded adopted scopes, network whole-batch owned execution, bounded controlled work | Exact released source/build/transport/resource/containment composition and ordinary-role/managed-build evidence. Do not transfer component superuser/Bun/PG17.9 observations to Aurora or Lakebase. |
+| History/offload | Reconstructable history and configurable local retention; complete original envelopes | Qualify the selected local archive/recovery/retention path. S3 remains an unadopted provider candidate; short/zero-local retention needs durable offload/recovery admission before enabling it. |
+
+Installation role/OID values, actual accepted IDs/reports and native fault observations are implementation outputs. A missing realizable producer/profile is a genuine design selection. Record that exact distinction in the existing governing artifact; neither unknown installation output nor a green component receipt is a reason to create another caller interface or reopen an approved product decision.
 
 ## Immediate priority: one complete physical profile for Weft
 
@@ -81,7 +98,7 @@ FR-15’s unconditional identifier nonreuse and US-007-AC4’s concurrent-create
 
 ## Row-home handoff audit
 
-The row-home work advances gates D-05, enforcement, reads and policy. Same-qualified-identity reactivation is now owner-selected; report/group persistence and full historical-envelope choices remain open. CONTRACT-001 owns original value/tree/native/custody procedures; CONTRACT-005 owns role/disclosure boundaries; CONTRACT-007 owns Weft binding; CONTRACT-008 owns bootstrap initialization; CONTRACT-009 owns lock ordering. STP-007/020/045 retain independent planned behavior/fault/bypass controls.
+The row-home work advances gates D-05, enforcement, reads and policy. Same-qualified-identity reactivation and separate immutable report persistence are owner-selected. Original complete group/event envelopes and report-before-head ordering are authored; exact protected producer, codec/resource/security registration and installed finalization remain unfinished. Their missing executed evidence does not reopen those product choices. CONTRACT-001 owns original value/tree/native/custody procedures; CONTRACT-005 owns role/disclosure boundaries; CONTRACT-007 owns Weft binding; CONTRACT-008 owns bootstrap initialization; CONTRACT-009 owns lock ordering. STP-007/020/045 retain independent planned behavior/fault/bypass controls.
 
 Current selected guard composition has 23 statements/142 authored physical effects, adding the three EL observers to the separately preserved twenty-statement/139-effect row-home candidate. Exact retained-source/delta mapping passes; physicalCoverageComplete=false, nativeExecution=false and installable=false. Neither candidate includes complete baseline conversion/composition, native routine bodies or full security/grant/dependency registration. Complete original native inventory is still necessary before installation or accepted binding; no marker/receipt/commit proof follows from source extraction or structural checks.
 
