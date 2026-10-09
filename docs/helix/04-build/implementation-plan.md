@@ -2529,3 +2529,7 @@ The [core layout review](../02-design/contracts/core-relational-layout-gap-revie
 ### Core structural ER rendering — 2026-10-08
 
 The valid historical 0.2 projection now has a rendered SVG/DOT pair, complete original 61-association endpoint/ordered-field comparison and source/output/renderer receipt. Both portable core relationships and four explicit physical-FK reference paths render, with unresolved native semantics visibly distinguished. Rendering and XML inventory checks pass; full-size raster inspection prompted compact disconnected-component packing. Current 0.15 model refresh and microsite integration remain required before a current on-disk layout diagram claim.
+
+### Current layout core structural refresh — 2026-10-08
+
+The core structural model now reflects current private 0.15 source with 46 Records/443 Fields and all original association paths. UMF-owned extraction and a strict bounded delta review preserve original 0.12/0.15 statement correspondence, while the complete current native archive remains untouched. Actual UMF validation passes zero errors with complete=false. Render the current model next; complete native interpretation/core-driven DDL equivalence and installation adoption are not inferred from this structural validation.
