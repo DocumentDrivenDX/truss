@@ -32,7 +32,7 @@ export async function createCatalogReportCorrespondence(dependenciesPackage:stri
   return Object.freeze({...encoded,verifiedFields:Object.freeze(Object.keys(expected)),nativeObservation:basis.documentBasis.nativeObservation,
    scope:'ten_original_report_producer_fields_only' as const});
  }};
- return Object.freeze({...correspondence,async verifyWithRegisteredReportProfile(connection:CatalogStageConnection,prepared:Prepared,basis:Basis,wire:Uint8Array,resolver:ReturnType<typeof createAcceptanceProfileResolver>,selected:ProfilePin){
+ const paths=Object.freeze({...correspondence,async verifyWithRegisteredReportProfile(connection:CatalogStageConnection,prepared:Prepared,basis:Basis,wire:Uint8Array,resolver:ReturnType<typeof createAcceptanceProfileResolver>,selected:ProfilePin){
   requireOriginalCatalogReportPreparation(basis,prepared);
   requireOriginalAcceptanceProfileResolver(resolver);
   const registration=resolver.resolveReport(selected);
@@ -49,5 +49,13 @@ export async function createCatalogReportCorrespondence(dependenciesPackage:stri
   if(!same(report.originalExecution,candidate.candidate))throw Error('Original report producer correspondence required: originalExecution');
   await recheckOriginalCatalogExecutionReportCandidate(candidate,connection,prepared,basis);
   return Object.freeze({...result,verifiedFields:Object.freeze([...result.verifiedFields,'originalExecution']),scope:'eleven_original_report_candidate_fields_only' as const});
+ }});
+ return Object.freeze({...paths,async verifyWithExecutionAndRegisteredReportProfile(connection:CatalogStageConnection,prepared:Prepared,basis:Basis,wire:Uint8Array,candidate:Awaited<ReturnType<typeof composeCatalogExecutionReportCandidate>>,resolver:ReturnType<typeof createAcceptanceProfileResolver>,selected:ProfilePin){
+  requireOriginalCatalogExecutionReportCandidate(candidate,connection,prepared,basis);
+  const result=await paths.verifyWithRegisteredReportProfile(connection,prepared,basis,wire,resolver,selected);
+  const report=decodeAcceptanceJson(Buffer.from(result.originalUtf8Hex,'hex')) as Record<string,unknown>;
+  if(!same(report.originalExecution,candidate.candidate))throw Error('Original report producer correspondence required: originalExecution');
+  await recheckOriginalCatalogExecutionReportCandidate(candidate,connection,prepared,basis);
+  return Object.freeze({...result,verifiedFields:Object.freeze([...result.verifiedFields,'originalExecution']),scope:'twelve_original_report_candidate_fields_only' as const});
  }});
 }

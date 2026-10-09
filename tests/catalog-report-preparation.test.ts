@@ -72,6 +72,13 @@ test('report profile binds original registered bytes and refuses substitution be
  await expect(correspondence.verifyWithRegisteredReportProfile(native,prepared,basis,new Uint8Array(),createAcceptanceProfileResolver([]),pin)).rejects.toThrow('report profile unavailable');
  expect(native.queries).toEqual([]);
 });
+
+test('combined report check refuses unissued execution custody before profile resolution or native I/O',async()=>{
+ const native=connection(),basis=await collectCatalogReportPreparation(native,prepared,'1',owner,fields);
+ native.queries.length=0;
+ await expect(correspondence.verifyWithExecutionAndRegisteredReportProfile(native,prepared,basis,new Uint8Array(),{candidate:untrustedReport.originalExecution} as any,createAcceptanceProfileResolver([]),untrustedReport.reportProfile)).rejects.toThrow('candidate custody');
+ expect(native.queries).toEqual([]);
+});
 test('complete wire corresponds to ten issued producer fields while other fixture fields remain untrusted',async()=>{
  const native=connection(),basis=await collectCatalogReportPreparation(native,prepared,'1',owner,fields);
  const result=await correspondence.verify(native,prepared,basis,wire(reportFor(basis)));

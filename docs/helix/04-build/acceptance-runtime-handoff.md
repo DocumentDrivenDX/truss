@@ -10,6 +10,22 @@ Keep unconditional deferred safety barriers until the entire original operation 
 
 ## Ordered implementation work
 
+The latest private `verifyWithExecutionAndRegisteredReportProfile` path combines
+the ten original producer fields, exact registered report-profile bytes and the
+complete original execution candidate under one original preparation/connection
+basis. Original candidate custody is checked before parsing or profile resolution;
+original native context is rechecked before return. Scope remains explicitly
+`twelve_original_report_candidate_fields_only`. It does not supply report-profile
+semantics. Five fields still lack full producer admission: interfaceVersion,
+umf, rebinds, assertions and pending_indexes.
+
+Sixteen report tests/140 assertions and strict TypeScript pass. The fresh
+[PostgreSQL 17.9 combined receipt](evidence/catalog-new-cohort-combined-report-correspondence.json)
+records 183 component observations, including combined positive correspondence
+and substituted source epoch refusal despite valid report registration. The
+owned database was removed; earlier receipts remain preserved. Public selectors,
+immutable report insertion and finalization barriers remain unchanged.
+
 The private `verifyWithRegisteredReportProfile` component now binds the report's
 reportProfile to an original issued profile resolver and its exact registered
 report artifact, then verifies the existing ten producer fields and native cut.
