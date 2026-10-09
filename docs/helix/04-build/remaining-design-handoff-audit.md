@@ -86,6 +86,31 @@ decisions from the governing queue.
 | 4 immediate Python development | Consume the existing PY-01a codec/native-carrier candidates and pinned-source PY-02 wheel/parity receipts; implement the original bounded transport/account handoff and independently observed read-request controls under the [Python plan](../02-design/python-integration.proposal.md#raw-wire-probe-versus-pre-ingress-accounting) | The development wheel and 1,216-response owner-corpus parity are already evidenced at their experimental scope. Do not rebuild unchanged owner sources as the next deliverable. PY-01b still needs a selected exact driver/mode, pre-ingress accounting and command/settlement custody, admitted mapping and security; groups, reads/import, feed/reached and committed interchange remain required |
 | 5 complete conformance services | Implement C1 original service composition, C2 complete preparation and C3–C7 execution/assessment/interchange in the [runtime handoff](conformance-runtime-handoff.md) | Actual registered methods/observer boundaries, independently reviewed full cases and complete evidence. Private link/alias/coverage helpers and fixture checks do not implement factories or qualify skipped surfaces |
 
+#### Original consumer inputs: next implementation prerequisites
+
+The consumer requirement source now has concrete model, parser and corpus inputs,
+not just the earlier generic Account/Item reference. Use the
+[original-input handoff](../02-design/python-integration.proposal.md#concrete-consumer-modelquery-inputs)
+and the [41-case corpus mapping](conformance-runtime-handoff.md#original-consumer-corpus-adoption-packet)
+for CH-04/05 and PY-02–06. Keep full Truss acceptance/mutation/feed scope and the
+reference corpus; these consumer inputs supplement it.
+
+| Next output | Known source basis and unresolved adoption |
+| --- | --- |
+| Explicit consumer query naming | Both original models lack core Record/Field names required by Weft. The exact [name proposal](../03-test/consumer-explicit-names.proposal.json) is UMF-valid and preserves other JSON content/key correspondence. Consumer source adoption or an owner-admitted projection is still required; runtime preparation must not insert names silently |
+| Core relationship identity binding | Actual UMF selection and Weft source resolve core endpoint key ID `identity`, distinct from display name `Identity`. That source question is closed at inspected scope; original native/key/codec and selected compiler binding remain open |
+| Complete vocabulary/action support disposition | Existing DDD registration validates both originals and rejects malformed identities. Placement/actions remain uninterpreted; retain complete content/diagnostics and specify support disposition. The host action-to-group adapter requires exact qualification, without a Truss action DSL or ACL fork |
+| Parsed/paged/count query admission | Consumer parser excludes ORDER BY/LIMIT while Weft bounded grouped count requires them. Ordinary relationship equality also needs explicit mapping to owner relationship predicates. Consume the owner parsed-input ABI or an explicitly agreed interim route; no local SQL append/reparse workaround |
+| Whole-entity host projection | Original alias.* expects relationship and attribution enrichment beyond authored Record members. Map explicit projections under one native/security cut. The consumer relationship list bound is 100; define per-list to query-level truncation correspondence and separately admit aggregate/column bounds |
+| Original consumer conformance adapter | Map all 41 original cases through registered operations/fixtures and complete observers. Fake passes, partial row assertions and covers labels cannot replace full Truss state/journal/report/receipt/settlement evidence or C7 interchange |
+
+These are concrete engineering/shared-owner inputs rather than new product votes.
+They must precede a claim that the actual consumer works; a generic sales/count
+fixture cannot supply their missing correspondence. Original native IDs, installer,
+protected producers/current-person/publication and managed-target evidence remain
+implementation exits. Package home and the other pending human choices retain
+their existing queue; this sequence supplies no default answer.
+
 Python driver frontier update: the pinned pg8000 1.31.5 instance-hook experiment
 now has actual local read-only PostgreSQL evidence and seven controlled transport
 checks. It retains exact raw cells/metadata through the bounded receiver and
