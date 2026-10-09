@@ -9,6 +9,21 @@ try {
   if(count[0].n!=='0')throw Error('Marker fixture must be empty');
   await tx.unsafe(await Bun.file('docs/helix/04-build/evidence/source-epoch-storage.owner-export.sql').text());
   await tx`INSERT INTO truss.installation_marker VALUES (1,'truss-bootstrap-marker/0.1.0','component-test-installation','component-only',decode(repeat('00',32),'hex'),'component',decode(repeat('00',32),'hex'),'owned-fixture','truss',now(),'component-clock-unqualified')`;
+  await tx.unsafe(await Bun.file('packages/postgresql/native/source-epoch-issue.sql').text());
+  try {await tx.savepoint(async sp=>{
+   const initial=await sp`SELECT truss.runtime_issue_source_epoch('component-test-installation',NULL,'component-test-incarnation',decode('01','hex'),decode('02','hex')) AS epoch`;
+   const first=initial[0].epoch;
+   if(!/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(first))throw Error('Native issuer token grammar');
+   const successor=await sp`SELECT truss.runtime_issue_source_epoch('component-test-installation',${first},'component-restored-incarnation',decode('01','hex'),decode('03','hex')) AS epoch`;
+   if(successor[0].epoch===first)throw Error('Issuer reused epoch');
+   const issued=await sp`SELECT source_epoch,predecessor_epoch FROM truss.source_epoch_registry ORDER BY transition_reason`;
+   if(issued.length!==2||issued[0].source_epoch!==first||issued[1].predecessor_epoch!==first)throw Error('Issuer lineage mismatch');
+   checks.push('Native issuance generates UUID4 initial and distinct successor with original predecessor');
+   throw Error('ROLLBACK_ISSUER_COMPONENT');
+  });}catch(e){if((e as Error).message!=='ROLLBACK_ISSUER_COMPONENT')throw e;}
+  const issuedAfter=await tx`SELECT count(*)::text AS n FROM truss.source_epoch_registry`;
+  if(issuedAfter[0].n!=='0')throw Error('Issuer rollback leaked');
+  checks.push('Issuer savepoint rollback removes initial and successor registry/pointer');
   const insert=(epoch:string,prior:string|null,reason:string)=>tx`INSERT INTO truss.source_epoch_registry (installation_id,source_epoch,target_incarnation,predecessor_epoch,transition_reason,profile_bytes,evidence_bytes) VALUES ('component-test-installation',${epoch},'component-test-incarnation',${prior},${reason},decode('01','hex'),decode('0203','hex'))`;
   const refuse=async(label:string,code:string,fn:()=>Promise<unknown>)=>{
    let observed='';try{await tx.savepoint(async()=>{await fn();});}catch(e){observed=(e as any).errno??(e as any).code;}
@@ -48,7 +63,10 @@ try {
   await refuse('Stale epoch comparison refuses','55000',()=>tx`SELECT * FROM truss.runtime_lock_source_epoch('component-test-installation','component-initial','component-test-incarnation')`);
   await refuse('Wrong incarnation comparison refuses','55000',()=>tx`SELECT * FROM truss.runtime_lock_source_epoch('component-test-installation','component-successor','different')`);
   await refuse('Missing expected identity refuses','55000',()=>tx`SELECT * FROM truss.runtime_lock_source_epoch(NULL,'component-successor','component-test-incarnation')`);
+  await refuse('Issuer stale predecessor refuses','55000',()=>tx`SELECT truss.runtime_issue_source_epoch('component-test-installation','component-initial','component-test-incarnation',decode('01','hex'),decode('02','hex'))`);
+  await refuse('Issuer null profile refuses','55000',()=>tx`SELECT truss.runtime_issue_source_epoch('component-test-installation','component-successor','component-test-incarnation',NULL,decode('02','hex'))`);
   await tx`SET LOCAL ROLE pg_read_all_data`;
+  await refuse('Ordinary role issuer execution denied','42501',()=>tx`SELECT truss.runtime_issue_source_epoch('component-test-installation','component-successor','component-test-incarnation',decode('01','hex'),decode('02','hex'))`);
   await refuse('Ordinary role epoch primitive execution denied','42501',()=>tx`SELECT * FROM truss.runtime_lock_source_epoch('component-test-installation','component-successor','component-test-incarnation')`);
   await refuse('Ordinary role registry insert denied','42501',()=>insert('component-forged',null,'initial'));
   await refuse('Ordinary role pointer update denied','42501',()=>tx`UPDATE truss.source_epoch_current SET source_epoch='component-initial'`);
@@ -59,6 +77,6 @@ try {
  if(after[0].registry!==null||after[0].markers!=='0')throw Error('Rollback leaked component state');
  checks.push('Outer rollback removes registry/pointer and marker');
  const sources:Record<string,string>={};
- for(const path of ['scripts/check-source-epoch-storage.ts','packages/postgresql/native/source-epoch-immutability.sql','packages/postgresql/native/source-epoch-lock.sql','docs/helix/04-build/evidence/source-epoch-storage.owner-export.sql'])sources[path]=new Bun.CryptoHasher('sha256').update(await Bun.file(path).arrayBuffer()).digest('hex');
+ for(const path of ['scripts/check-source-epoch-storage.ts','packages/postgresql/native/source-epoch-immutability.sql','packages/postgresql/native/source-epoch-lock.sql','packages/postgresql/native/source-epoch-issue.sql','docs/helix/04-build/evidence/source-epoch-storage.owner-export.sql'])sources[path]=new Bun.CryptoHasher('sha256').update(await Bun.file(path).arrayBuffer()).digest('hex');
  await Bun.write('docs/helix/04-build/evidence/design-audit/source-epoch-storage-native.json',JSON.stringify({database:after[0].version,sources,checks,scope:'Rollback-contained storage candidate constraints and ordinary-role DML denial only; synthetic component tokens are not issued epochs, installed admission or lifecycle qualification',qualified:false},null,2)+'\n');console.log(JSON.stringify({checks:checks.length,qualified:false}));
 }finally{await sql.close();}
