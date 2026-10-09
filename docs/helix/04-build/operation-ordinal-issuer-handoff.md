@@ -143,3 +143,30 @@ cleanup is not automatic replay or a production recovery procedure. The
 not arbitrary network loss, original issuer/account/control permits, unknown COMMIT,
 durable recovery registration or ordinary-person/TLS admission. Native pending and
 later terminated observations remain separate from adapter quarantine.
+
+## Per-family correction and preservation matrix
+
+| Original routine | Existing capture that correction must preserve | Independent native continuation |
+| --- | --- | --- |
+| runtime_admit_operation | Context0.2: actual xid/ordinal, invoker/session identities and role OIDs, database/backend; six original artifact columns and group custody | Original base rollback reproduction currently returns0 twice. Corrected original issuance must return0 then1 in the same actual xid with no first registry row left. |
+| runtime_admit_operation_with_asserted_origin | Context0.3 adds exact assertedOriginUtf8Hex and assertedOriginCaptureProfileHex; invoker identity remains separate from asserted origin | Fresh asserted-family reproduction also returns0 twice while preserving both independently expected fixture byte strings. Retain those bytes across corrected admission and forbid asserted actor substitution. |
+| runtime_admit_operation_with_epoch_context | Context0.4 additionally retains installationId/sourceEpoch/targetIncarnation and original source-epoch profile/evidence bytes from runtime_lock_source_epoch | Qualify on original installed epoch custody: stale epoch/incarnation refuses before registry effects, but an already issued host ordinal stays consumed. Do not replace original epoch inputs with synthetic nonempty bytes. |
+| runtime_admit_operation_with_configuration_context | Context0.4 plus separate operation_configuration row: original generation, key-reuse/journal modes, context digest, admission profile and configuration/binding/inventory bytes | Independently compare both rows and exact context digest. Rollback removes both; issuance does not rewind. Changed configuration refuses before business effects; no partial configuration capture or advanced-to-base delegation. |
+
+The [new asserted-family receipt](evidence/design-audit/pgserver-asserted-operation-ordinal-frontier.json)
+comes from a fresh disposable PostgreSQL16.2 run. Synthetic original byte fixtures
+exercise capture only; originalOriginAdmissionQualified and contractConformant
+remain false. It retains the complete captured contexts, source hashes and actual
+same-xid observations. Rollback removes the entire namespace. The epoch and
+configuration families still have source inspection only for this conflict; the
+matrix does not claim their native rollback schedules ran.
+
+For each corrected family, run native schedules for: rollback after successful
+admission; admission failure before insertion; foreign original issuer/epoch;
+unconsumed versus replayed original attempt; unknown control completion; exhausted
+int64 issuer; and a previously finalized operation followed by a failed attempt.
+Compare independent issued ordinals, actual registry/configuration effects and
+retained exact context/artifacts. No automatic replay is allowed. Full outer
+rollback may remove durable rows but cannot be interpreted as permission to reset
+a still-live original epoch. A genuinely new admitted native transaction gets its
+own issuer only through the original adoption protocol.
