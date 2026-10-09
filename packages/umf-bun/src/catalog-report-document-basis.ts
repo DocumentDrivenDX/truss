@@ -24,3 +24,9 @@ export async function collectCatalogReportDocumentBasis(connection:CatalogStageC
  });
  return Object.freeze({provisionalRevision:revision,nativeObservation,documents:Object.freeze(documents),observations:Object.freeze(observations),scope:'original_report_document_basis_only' as const});
 }
+
+/** Recheck the original cut before using its document evidence in report assembly. */
+export async function recheckCatalogReportDocumentBasis(connection:CatalogStageConnection,basis:Awaited<ReturnType<typeof collectCatalogReportDocumentBasis>>){
+ const original=basis.nativeObservation;
+ await connection.unsafe('SELECT truss.runtime_require_catalog_observation($1::text,$2::text,$3::text)',[original.writerXid,original.operationOrdinal,original.effectGeneration]);
+}

@@ -16,9 +16,10 @@
     "catalog-relationship-match": "973ccdb65e6708f6b810108b5270cca8132f4e84369b886c5ec5a25a58883006",
     "catalog-relationship-stage": "d32c213f607d4f8ca9dd4afcdc7bb4fd2bb7cf39dbf35057a82987859632933e",
     "catalog-report-documents": "362b6df87be8f22387c59921af9f827248e79536183e342b7894a3c4e36f4207",
-    "catalog-new-inventory": "872d921797dee82b851edcba2fc275f00a6f69a5ba3a2945cb8827e0bc43f687"
+    "catalog-new-inventory": "872d921797dee82b851edcba2fc275f00a6f69a5ba3a2945cb8827e0bc43f687",
+    "catalog-observation-recheck": "68bf56799bbcce0a1cfbf46a9a9b58d1870bb29a6e6214302296d8af1e4c38b2"
   },
-  "reportDocumentProducerSha256": "dd602afaf8df8099fc49df280accac2f2afd67f798d233cb66f6f41c1907481d",
+  "reportDocumentProducerSha256": "f5e6c74c87f9133027fe04e2ca543f0f60a513a13e0052ec6b112dc399af3754",
   "defaultHomeProducerSha256": "f7bea9fd414f75e43a2d26a940a32083976a7ea13b91027a5b019f5e141734d5",
   "stageProducerSha256": "9a6793f582e3591ea48c115736ead13f651aef8044ff4033c27255678b4e4c30",
   "originalInputSha256": "b8c64857b2cd73ef99471ebc8310e76f27102c62d30854d80bc40441dcbe609c",
@@ -50,6 +51,13 @@
     "catalog truncate cannot bypass row generation and complete effect inventory",
     "report document basis matches actual original input and native source archive",
     "report document basis captures actual original native operation and generation",
+    "current original report observation rechecks successfully",
+    "later catalog event makes captured report document basis stale",
+    "rolled-back catalog contribution restores the original surviving observation cut",
+    "writerXid substitution refuses report observation recheck",
+    "operationOrdinal substitution refuses report observation recheck",
+    "effectGeneration substitution refuses report observation recheck",
+    "effectGeneration substitution refuses report observation recheck",
     "original owner observation and reversible transition preserved inside exact evidence artifact",
     "native collector returns actual complete new-family identity inventory",
     "collected endpoint is original relationship/source/target tuple",
@@ -66,6 +74,7 @@
     "new-only collector cannot hide retirement or report it as addition",
     "provisional cohort never publishes accepted head",
     "unfinished complete acceptance cannot commit",
+    "ended native transaction cannot reuse captured report observation",
     "failed commit removes all provisional catalog effects"
   ],
   "scope": "Actual original complete declared new catalog staging and atomic refusal only. Root profile/authority, retained lifecycle, acceptance report/head/finalizer and public entrypoint are unqualified."
