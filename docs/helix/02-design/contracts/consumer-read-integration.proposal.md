@@ -116,3 +116,33 @@ Remaining adoption inputs: original accepted consumer schema and complete native
 The [current security-owner review](../../04-build/evidence/design-audit/security-publication-retirement-review.json) retains two additional scoped counterexamples. Closing one original publication cannot retire every publisher for the same actor: cleanup consumes exact original identity/generation and completion custody, preserving independent sibling buffers and obligations. A terminal identity visible as pending in a retained snapshot is not a reusable publication lease. Read/replay admission must consume the owner’s current freshness/fencing protocol after original shared participation, not infer liveness from snapshot-visible registration or a matching UUID.
 
 Truss consumes this shared protocol for every applicable direct/compiled result, report, receipt replay, feed and reached observation. Unknown cleanup or freshness keeps publication unavailable and retains original recovery; it does not acknowledge drain, refund unrelated capacity or reopen the terminal handle. The owner’s conditional retirement algebra is evidence of stated premises only, not an installed native/multi-publisher proof. Exact protocol/profile and ordinary native execution remain security-owned qualification dependencies. No Truss-local authorization resolver, epoch allocator or competing cleanup registry is introduced.
+
+## Committed presence contract and Item.note adoption control
+
+Read-only comparison of Weft `5856c73db0342363e64802905a94abb96209d757`
+with current committed local HEAD `94b2de5` finds no changes in the compiler/CLI
+source directories or CONTRACT-004 application-read contract. Dirty security
+sources remain separate owner work. The existing contract requires tagged
+absent/null/value cells where meaningful and separately admitted native-null
+semantics; source JSON-null acceptance does not by itself select the Truss
+physical null interpretation. No rebuild or expanded support claim follows from
+the newer microsite commits.
+
+Before CH-04 adopts the consumer's optional note projection, freeze three actual
+original object states under one accepted Field/codec profile: absent property,
+present explicit null and present empty string. Independently expect distinct
+logical cells, preserving original typed identity and last-written context.
+Include present nonempty Unicode text as a fourth control. Resolve every
+selected field's original native-null permission and authored availability before
+compiler execution; optionality alone cannot supply it.
+
+Run both direct logical read and explicit Weft whole-entity/scalar projection
+against the same protected database cut. Compare each route with the independent
+expectation rather than using direct output as the compiler oracle. A selected
+projection/binding that cannot distinguish required states must refuse before
+any result prefix; SQL NULL cannot become a guessed absent or explicit-null cell.
+Observe the complete original descriptor, native cell, decoder and final tagged
+public value separately, including zero visible rows and denied current authority.
+A nullable scalar SQL result without the required presence discriminator does
+not qualify the whole-entity contract. No Truss-local SQL rewrite is commissioned;
+Weft retains lowering and the selected joint mapping remains an adoption gate.
