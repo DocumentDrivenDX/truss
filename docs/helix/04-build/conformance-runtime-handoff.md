@@ -17,6 +17,12 @@ or qualify an operation against PostgreSQL or another implementation.
 
 ## Implementation sequence and independent exits
 
+C1 must consume the [private original-service construction port](../02-design/contracts/conformance-original-service-port.proposal.md).
+Public method shapes and matching profile metadata do not prove original
+registered service/build/function custody. Preserve the existing factory API
+and host qualification authority; copied services or unavailable original
+startup registration refuse before constructing a projection.
+
 | Slice | Concrete implementation output | Required exit |
 | --- | --- | --- |
 | C1 original composition and inert binding | Implement existing createConformanceRunTooling/createConformanceEvidenceTooling projections over original host runner/assessor; capture immutable exact configuration and method/profile correspondence | Missing services, unknown required profiles, changed pin or empty approved manifests refuse construction; no artifact resolution, native acquisition or execution occurs at import/construction |
