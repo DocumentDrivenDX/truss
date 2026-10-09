@@ -697,7 +697,12 @@ Beyond the journal, D-03 still needs actual adapter command recognition/exclusio
 Executor hook checkpoint: the [reference driver review](../02-design/contracts/reference-driver-hook-review.proposal.md) records documented Bun SQL and node-postgres candidates without selecting an unqualified build. The immediate adapter deliverable is an exact method-to-CONTRACT-007 mapping and pinned source/protocol evidence for physical custody, descriptors, cancellation/settlement and pre-materialization bounds. In particular, transaction-local reserve must never acquire a replacement connection, and raw/array rows alone do not qualify bounded complete results.
 
 
-## First reference deployment selection
+## Historical first reference deployment assumption
+
+Superseded by the owner-selected pgserver/Python direction and the
+[current local deployment target](../02-design/contracts/reference-local-deployment.proposal.md).
+The following paragraph records the earlier planning state; its optional owner
+question is no longer pending. Complete profile qualification remains required.
 
 The initial qualified deployment tuple remains unresolved. With the optional owner question still unanswered, use the [local PostgreSQL 17.11 planning target](../02-design/contracts/reference-local-deployment.proposal.md) as an explicit revisable assumption for the first disposable reference integration. This preserves the managed-service portability requirements and extension restriction. It is not owner acceptance, installed build evidence, a current patch/security recommendation or permission to omit managed deployment gates.
 

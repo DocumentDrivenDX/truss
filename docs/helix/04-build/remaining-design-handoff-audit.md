@@ -2,6 +2,19 @@
 
 ## Current reconciliation — 2026-10-09
 
+The [current local deployment target](../02-design/contracts/reference-local-deployment.proposal.md)
+now supersedes the historical17.11/older-layout/TypeScript-only assumptions with
+the owner-selected pgserver/Python direction and observed16.2 component tuple.
+Python ownership, document qualification, refusal without automatic retries and
+host connection ownership are settled. Traversal necessity remains engineering
+review rather than a blocking product vote. The complete default installation,
+populated migration route and coherent driver/security/resource/compiler profile
+remain implementation/adoption work. In particular, Weft's17.9 fixture registration
+cannot qualify the16.2 runtime. Current security-owner inventory correspondence
+work remains separate from backend support-profile admission; neither is adopted
+from an in-progress chat. Built Python planner/decoder evidence closes only those
+packaged components, not original administrative observation or execution.
+
 The older checkpoints below are retained as historical findings. Their final
 instruction to begin the 167-criterion audit is superseded: the
 [criterion audit](criterion-design-audit.md) now contains 167 unique criterion
@@ -15,7 +28,7 @@ checks composition only; the retained 155-schema receipt below is historical.
 
 Remaining design priorities are coherent installation/report/receipt/feed
 composition, independently reviewed complete cases and method/observer
-registration, pending owner behavior/package selections, frozen benchmark
+registration, selected owner behavior/package implementation, frozen benchmark
 profiles, and upstream compiler representation/parsed-input compatibility.
 Actual native identifiers, installed routines and successful execution receipts
 remain implementation outputs. Do not reopen the already specified 24-hour
