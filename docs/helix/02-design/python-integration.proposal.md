@@ -65,6 +65,35 @@ empty input and qualified relationship direction. Core validity, exact codecs,
 current-person policy and complete native/public results remain separate gates.
 No consumer files were changed and no host-specific runtime semantics are added.
 
+## Original grouped-count admission gap
+
+The [source correspondence review](../04-build/evidence/design-audit/consumer-grouped-count-source-review.json)
+compares the consumer's actual grouped practiceArea query with Weft's existing
+count-summary resolution. That owner profile requires complete grouping order
+and an explicit LIMIT for grouped output. The consumer example supplies neither,
+and its current parser rejects both constructs. Thus the example is not directly
+compatible with the bounded count-summary route; the earlier synthetic ordered,
+limited compiler receipt does not close this original-query gap.
+
+CH-04/PY-05 must consume the owner's selected parsed-input/paging admission or an
+explicit consumer-approved interim input route. Preserve original query and host
+bounds, and establish their exact correspondence under that procedure. Do not
+append SQL locally, select the unrestricted compiler profile as an interactive
+fallback or report a capped partial aggregate as COUNT(*). A grouped output limit
+bounds emitted groups, not the rows required to compute their complete counts.
+
+Author an independent source population with two absent practiceArea values,
+one present empty string and three equal nonempty values. Their original
+identities, presence states and total six-row membership are fixed before output.
+The selected owner grouping/equality/presence domain must define their grouping
+and exact output carriers; missing native-null/presence interpretation leaves
+this query unavailable rather than collapsing states in the host. Independently
+compare full integer-text counts, labels/presence, output ordering and group-limit
+behavior. Add grouped empty input and an over-budget complete aggregate that
+publishes no partial result. Exact current-person visibility and aggregate scan
+work remain separately qualified. This specifies the original consumer packet
+without declaring a new grouping domain or cloning Weft's resolver.
+
 ## Consumer count-summary integration
 
 ### Security-enabled compiler adoption gate

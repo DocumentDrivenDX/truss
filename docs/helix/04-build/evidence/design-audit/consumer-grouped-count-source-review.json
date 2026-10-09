@@ -1,0 +1,16 @@
+{
+  "scope": "source-only consumer/compiler contract correspondence; no compiler invocation or native qualification",
+  "consumerQuery": "SELECT u.practiceArea, COUNT(*) FROM catalog.UseCase u GROUP BY u.practiceArea",
+  "ownerSource": {
+    "path": "/Users/erik/Projects/weft/crates/weft-core/src/application_resolve.rs",
+    "sha256": "df48e51b8d08b881ee9ab3d3cdc9ea04a7ce7ddd52d3aff436c1b2396e22b6fa"
+  },
+  "observedProfileRule": "Grouped count-summary requires order signature equal to full grouping signature and an explicit LIMIT; global count excludes both",
+  "integrationGaps": [
+    "consumer parser rejects ORDER BY and LIMIT",
+    "owner-admitted parsed input or explicit consumer interim route required",
+    "original absent-allowed grouping/equality/output domain and complete policy admission",
+    "actual complete aggregate work and protected result publication"
+  ],
+  "nativeImplementationQualified": false
+}
