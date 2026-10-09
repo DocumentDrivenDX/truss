@@ -101,6 +101,33 @@ actual Python driver evidence remain dependencies of this slice.
 
 ## Exact transport
 
+### Initial Python driver qualification packet
+
+PY-01 consumes the shared
+[original driver producer port](contracts/reference-driver-producer-port.proposal.md).
+The selected Python driver/mode must name its actual source/build and demonstrate
+the original physical lease, ingress reservation before reads, retained backing
+capacity/lifetime, frame reservation before capture/parser copies, complete-frame
+consumption and callback/cycle correspondence. Metadata obtained from a completed
+driver result cannot establish those earlier allocation or parser observations.
+
+| Boundary | Required Python evidence |
+| --- | --- |
+| Admission | Original host transaction/connection and exclusive lease; supported exact producer hooks and finite conservative receive/parser/capture bounds before submission |
+| Native response | Actual ordered field OIDs/formats and raw cell bytes under the same command cycle; malformed/oversized/partial frames refuse before protected publication |
+| Containment | Callback/parser fault, cancellation and late response preserve original possible effects; independent native termination precedes safe reuse |
+| Adoption | Host prior work survives operation-local failure; no outer BEGIN/COMMIT/ROLLBACK or replacement connection; original savepoint/constraint state is preserved |
+| Ownership | Caller buffer mutation, shared backing views and asynchronous callbacks cannot change admitted bytes or refund performed work |
+
+A driver exposing raw result metadata without qualifying ingress hooks remains
+an incomplete adapter candidate, not a bounded supported implementation. A small
+driver/native transport bridge may be needed even with Python host orchestration;
+that is distinct from porting Truss to Rust. Choose it from actual source and
+native evidence, rather than infer suitability from Python package popularity.
+Reuse the shared port and original authority instead of creating a Python-only
+transaction/identity protocol. Unsupported sync/async modes remain explicitly
+unavailable until separately qualified.
+
 Use Python `int` for admitted integral domains and `Decimal` constructed from exact text for decimals, with domain/arithmetic context explicit. Driver raw cells remain text until profile decoding. Decimal operations must not inherit an ambient low-precision context that rounds accepted values. Timestamp transport retains the original exact text and offset; expose an aware `datetime` only when its microsecond representation is lossless. Finer precision requires a lossless wrapper/text representation or explicit refusal of the convenience view. Preserve raw exact JSON bytes; a convenience parser uses an admitted numeric decoder, never the default float path. Python bool must be distinguished from int at validation boundaries.
 
 Read shapes retain absent versus explicit null, ordered key components, exact large integral values and original selected decimal/token meaning. Known JSON-like values and retained unknown extensions cannot be normalized into different meanings. Exact wire grammar remains CONTRACT-010's responsibility; these mappings are Python implementation obligations, not new UMF types.
