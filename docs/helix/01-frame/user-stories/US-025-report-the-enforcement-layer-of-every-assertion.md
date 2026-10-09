@@ -29,7 +29,7 @@ ddx:
 
 ## Context
 
-SPIKE-002's model had 19 assertions, all enforced; the model carries rules of every kind.
+SPIKE-002's model had 19 assertions under its tested subset; that historical matrix does not qualify all current UMF assertions or deployments. Complete reporting derives every original assertion from the admitted source and interpretation profile, including document-scoped and binding assertions where selected. Database classification requires the exact ordinary-writer privilege and unavoidable canonical/derived consistency profile, not merely uniqueness of rows already present in a derived table. The key acceptance criterion applies to the fixture’s qualified native key profile; unsupported key/codec paths cannot inherit that status. A permission-filtered report declares its projection instead of claiming full assertion coverage, and immutable historical classification is distinct from current installed support.
 
 ## Walkthrough
 
