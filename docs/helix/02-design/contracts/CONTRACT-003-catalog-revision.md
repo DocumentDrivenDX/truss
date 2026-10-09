@@ -815,3 +815,31 @@ Independently author equal-count but swapped-family/identity, same-ID
 reactivation, duplicate endpoint, already-retired, rolled-back contribution
 and hidden-member controls before native collector implementation. Counts
 never replace the complete effect inventories or authorize head publication.
+
+### Private complete-input producer interface
+
+The [private producer declaration](bindings/truss-acceptance-input-producer-v0.1.d.ts)
+selects three explicitly tagged original representations: raw JSON transport,
+canonical-tree UTF-8, and framed fingerprint preimage. The installed original
+registration chooses one supported representation before decoding. Reject a
+foreign frame/domain or unsupported decoder; never strip a prefix or fall back
+to another grammar after refusal. All branches retain verified original exact
+bytes, profile and custody.
+
+The registered producer receives issuer-bound original custody and a
+precharged operation account, not caller counters. It completely admits the
+existing closed AcceptanceInput, all artifacts and semantic profile obligations
+before returning private immutable canonical-tree/preimage artifacts and the
+original admitted input. Type brands describe this authority boundary; runtime
+issuer, generation, ownership and liveness checks remain mandatory. The source
+artifact direct hash, canonical tree direct hash and framed semantic input hash
+are separate identities and cannot replace one another.
+
+Production interpretation must preserve duplicate-member/Unicode refusal and
+exact embedded artifacts before host JSON materialization can lose meaning.
+This port grants no native effects, public success, report publication or
+transaction settlement. Original archive matching and the complete report/
+effect/finalizer still consume its retained basis under their own admission.
+The implementation must pin a realizable parser/semantic/account profile and
+independent RPDOC controls; the declaration alone cannot issue custody or
+qualify a decoder. No new public wire or UMF/Weft API is introduced.
