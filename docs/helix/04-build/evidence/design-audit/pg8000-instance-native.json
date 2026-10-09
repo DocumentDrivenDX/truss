@@ -1,0 +1,140 @@
+{
+  "status": "passed_local_read_only_pg8000_instance_hooks",
+  "python": "3.11.17 (main, Oct  3 2026, 00:54:14) [Clang 22.1.3 ]",
+  "orderedCommandTags": [
+    "BEGIN\u0000",
+    "SELECT 1\u0000",
+    "ROLLBACK\u0000"
+  ],
+  "dependencies": {
+    "pg8000": "1.31.5",
+    "scramp": "1.4.17",
+    "asn1crypto": "1.5.1",
+    "python-dateutil": "2.9.0.post0",
+    "six": "1.17.0"
+  },
+  "driverCoreSha256": "cac1e50502901bcea3ddab588e0350149dd8fd771156ae1c531a2a04b3925e26",
+  "querySha256": "7a29d9d389200da85745d32e79918a152473a389c8b35e1aae2fe27b83146181",
+  "rawCellsHex": [
+    [
+      null,
+      "",
+      "393030373139393235343734303939332e30303030303030303030303030303030303031",
+      "c3a9f0908080",
+      "313730303039"
+    ]
+  ],
+  "orderedTypeOids": [
+    25,
+    25,
+    1700,
+    25,
+    25
+  ],
+  "messageKindsAndSizes": [
+    [
+      "R",
+      9
+    ],
+    [
+      "S",
+      24
+    ],
+    [
+      "S",
+      26
+    ],
+    [
+      "S",
+      22
+    ],
+    [
+      "S",
+      28
+    ],
+    [
+      "S",
+      21
+    ],
+    [
+      "S",
+      23
+    ],
+    [
+      "S",
+      39
+    ],
+    [
+      "S",
+      27
+    ],
+    [
+      "S",
+      24
+    ],
+    [
+      "S",
+      36
+    ],
+    [
+      "S",
+      36
+    ],
+    [
+      "S",
+      26
+    ],
+    [
+      "S",
+      50
+    ],
+    [
+      "S",
+      26
+    ],
+    [
+      "K",
+      13
+    ],
+    [
+      "Z",
+      6
+    ],
+    [
+      "C",
+      11
+    ],
+    [
+      "T",
+      126
+    ],
+    [
+      "D",
+      75
+    ],
+    [
+      "C",
+      14
+    ],
+    [
+      "C",
+      14
+    ],
+    [
+      "Z",
+      6
+    ]
+  ],
+  "remainingRawBounds": {
+    "bytes": 16776534,
+    "messages": 77,
+    "readCalls": 9954
+  },
+  "sourceSha256": {
+    "check_pg8000_instance_native.py": "e5cb4abb743a25778361d9e2a66ad1e0cd20e04d92b17233522e2b999d851c3c",
+    "python_pg_receive_candidate.py": "fd9c23e3da2358cf56abc6b561c893e5d56dd9c95756fe18ec7510f52a55f4bb",
+    "python_pg_frame_candidate.py": "ed92bfc5240f17f3447f868fb88e3647cc4bd9583e21ed18ad88eb7de1eb9968"
+  },
+  "driverPortQualified": false,
+  "scope": "Supplied local trust socket and instance-bound raw handlers only. BEGIN READ ONLY/ROLLBACK fixed query. No TLS/authenticated-person, stock helper/copy/row heap accounting, cancellation/cleanup/commit correlation, public package or native authority qualification. No authentication or backend-key bodies retained in evidence."
+}

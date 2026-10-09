@@ -631,6 +631,27 @@ handler failure and unknown termination. Keep authentication/backend-key materia
 out of evidence output. This source review does not install the driver, authorize
 credential collection, qualify a native person or activate a Python package.
 
+The subsequent [native instance-hook receipt](../04-build/evidence/design-audit/pg8000-instance-native.json)
+now exercises that exact installed driver in an isolated Python 3.11 environment.
+A supplied socket produces an instance-local file backed by the existing bounded
+raw receiver, avoiding the stock buffered `makefile`; instance row handlers
+consume the original completed header/body through the strict frame decoder.
+The fixed BEGIN READ ONLY/SELECT/ROLLBACK query independently matches NULL,
+empty text, the large exact decimal, Unicode, server version and ordered OIDs.
+The experiment refuses authentication flows other than local AuthenticationOk;
+it captures no authentication/backend-key body in its receipt. Exact dependency
+versions, core/probe/receiver/decoder hashes and raw message-size counters are saved.
+
+This is actual driver seam evidence, not the original protocol-port implementation.
+Stock `_read` and row/helper allocations remain outside a qualified complete
+account. The probe prefetches a whole admitted raw frame before returning its
+header to the driver; its raw bounds do not establish all simultaneous driver
+copies or callback backing. TLS/person identity, mode/lifetime/concurrency,
+cancellation/unknown outcomes, native cleanup, report-size paths and public
+packaging remain separate PY-01b/PY-03/PY-07 exits. Preserve the earlier source-only
+review as historical; do not repeat that no driver experiment exists or claim
+this read-only local result as a Lakebase/Aurora or protected mutation result.
+
 #### Raw-wire probe versus pre-ingress accounting
 
 Source inspection of `check_python_pg_frame_native.py` identifies two limits of
