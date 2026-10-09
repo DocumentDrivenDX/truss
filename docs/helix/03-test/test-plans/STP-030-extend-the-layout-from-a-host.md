@@ -121,3 +121,32 @@ Plan CC-01–04 alongside the assembly construction cases: (01) mutate the origi
 ## Binding issuer and caller settlement controls (planned)
 
 WCB-09/10 and PAC-05 supplement existing original issuer, disposal, enclosing account and adopted/owned transaction schedules. Exercise foreign-issuer plans, disposal during extraction/compile/publication, separate native resource exhaustion and surviving earlier caller sentinel work. No callback-local busy flag, serializer limit or postallocation timeout establishes issuer-wide custody/containment. Run through the original public assembly/executor rather than the convenience fixture harness. All cases remain not_run.
+
+
+## Host ledger versus exclusive journal producer (planned)
+
+Qualify the exact host row-ledger fixture alongside the selected engine-mode
+journal producer, then separately alongside the selected trigger-mode producer.
+Independently enumerate canonical effects, physical ledger rows, complete
+semantic journal siblings and versions. The ledger may record physical updates
+according to its own declared projection; it cannot produce extra Truss events,
+advance canonical versions or be counted as missing semantic journal evidence.
+For a two-property mutation, compare the independently expected complete event
+profile rather than assuming ledger row count equals journal row count.
+
+Present a host trigger that independently appends Truss journal rows alongside
+an existing producer. Its extension/profile composition is unavailable before
+advertised execution; trigger mode alone is not admission for that extra writer.
+If an independently controlled DDL drift schedule installs it after original
+observation, consume the security/installation-owned exclusion and revalidation
+protocol or refuse that unsupported race profile. Do not claim a startup trigger
+name check prevents all later DDL. Preserve original effect/containment recovery
+on any already-submitted work; no partial event deletion repairs duplicate audit.
+
+Throw from the admitted host ledger trigger after canonical effects would have
+begun, and require confirmed local rollback of host ledger, graph, keys and
+journal while earlier adopted caller work survives. Native outcome uncertainty
+remains unresolved, not a ledger-count proof of rollback. Retain actual selected
+function/trigger/privilege/dependency bytes and independent native inventories.
+These cases remain `not_run` and add no alternate UMF interpreter, Weft compiler,
+authorization resolver or journal API.

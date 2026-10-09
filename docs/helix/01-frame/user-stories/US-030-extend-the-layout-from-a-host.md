@@ -29,7 +29,7 @@ ddx:
 
 ## Context
 
-The extension rules list what a host may and may not do.
+The extension rules list what a host may and may not do. Support names an exact trusted extension/installation/security profile tested against the required corpus; arbitrary host code cannot silently change canonical values, enforcement or journal ownership. A separate host ledger remains distinct from Truss’s complete semantic journal.
 
 ## Walkthrough
 
@@ -46,7 +46,7 @@ The extension rules list what a host may and may not do.
 ## Edge Cases
 
 - **Foreign-key and unique checks under row-level security**: can reveal a hidden row exists; the host decides how to report it.
-- **Host triggers writing the journal**: allowed in trigger mode.
+- **Host triggers writing the journal**: allowed only as the selected qualified trigger-mode producer under CONTRACT-002’s exclusive ownership, full event/version and native admission rules. An additional independent journal writer is not admitted by trigger mode; a separate host ledger does not become a second Truss journal.
 
 ## Test Scenarios
 
