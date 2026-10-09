@@ -27,6 +27,18 @@ required observer/boundary coverage and complete semantic expectations still
 belong to original preparation and C4. Empty observation arrays cannot by
 themselves prove unchanged state or no journal/report effects.
 
+C2 also has a private `conformance-observation-coverage.ts` component comparing
+exact required and expected `(surface, step, boundary)` inventories, refusing
+missing, extra and duplicate keys. Five synthetic tests cover omitted empty
+inventories, boundary/surface/step substitutions, duplicates and ordering. The
+required inventory must be supplied by original registered procedures under the
+[case grammar](../03-test/conformance-case-grammar.proposal.md), not inferred from
+expected arrays. This helper neither issues that registration nor establishes
+observer independence or native completeness. C2 must integrate original
+procedure-derived coverage before claiming a prepared case; C4 must still run
+each applicable observer and compare complete values, including explicit empty
+journal/report artifacts. No public runner is activated by this component.
+
 C5 has a reusable private `conformance-alias-substitution.ts` component over
 already admitted bounded JSON/namespace/binding/scope projections. Seventeen
 synthetic controls now exercise that implementation, and strict TypeScript

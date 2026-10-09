@@ -52,6 +52,23 @@ Every case's original procedure profile resolves exactly one grammar version bef
 
 Expected sections identify the observation boundary by step label and original transaction outcome. State covers complete canonical and applicable derived/reservation/source/request effects for the case's selected operation profile. Journal covers original transaction grouping, event/order/version/payload/origin and completeness witnesses. Report covers complete applicable acceptance/import/enforcement/support output, including explicit absence when the operation emits none. The profile independently declares which report kind applies; the observed implementation cannot choose a smaller scope after execution.
 
+Before execution, derive the required `(surface, step, boundary)` inventory from
+the original registered operation, scope and observation procedures. Compare it
+exactly with the expected artifact's observation keys: missing, extra or duplicate
+keys refuse preparation. Do not derive requirements from the claimant's expected
+arrays or from what the implementation happens to emit. The original procedures
+must enumerate required success, rejection, rollback and uncertain-outcome
+boundaries for the selected case; runtime outcome admission selects the applicable
+branch without erasing its required observations.
+
+An expected empty journal or report inventory is an independently authored empty
+value artifact at a required observation key, compared with a complete native
+observation. It is not an empty `observations` array. An empty observation array
+is allowed only when the independently registered procedure explicitly requires
+no observation on that surface for this case. The coverage check does not prove
+observer provenance, native boundary truth, inventory completeness or comparison
+success; those remain separate preparation and execution obligations.
+
 ## Operation and scope grammar
 
 Each step invokes one registered contract operation, not SQL text or arbitrary callback code. The operation registry maps its discriminator to the exact existing input/result schema and semantic contract revision, required capability, observation surfaces and identity paths. The registry is an original trusted procedure artifact selected by the host; input cannot register an implementation.
