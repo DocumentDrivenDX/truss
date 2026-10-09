@@ -49,6 +49,64 @@ from hashlib import sha256
 repo = contracts.parents[3]
 record = json.loads((Path(__file__).resolve().parent / 'reference-composition-incomplete.json').read_bytes())
 validator.validate(record)
+# Required roots come from the reference composition correspondence, separately
+# from the inspected record. Schema dependency closure is checked by the separate
+# closure verifier; neither inventory establishes semantic/native compatibility.
+required_roots = {
+    'umf_acceptance': ['acceptance-report-v0.3.proposal.schema.json'],
+    'physical_installation': ['CONTRACT-008-layout-bootstrap.md'],
+    'acceptance_history': ['history-event-v0.2.proposal.schema.json',
+                           'retained-history-archive-v0.2.proposal.schema.json'],
+    'storage_compiler': ['consumer-read-integration.proposal.md'],
+    'execution_security_resources': ['installed-context-admission.proposal.md'],
+    'installation_upgrades': ['bindings/truss-layout-migration-v0.1.proposal.d.ts'],
+    'typescript_python': ['acceptance-input-v0.1.schema.json'],
+}
+
+def original_root_membership(rows):
+    if len(rows) != len(required_roots) or {r['boundary'] for r in rows} != set(required_roots):
+        return False
+    for row in rows:
+        members = row['membership']
+        roles = [m['role'] for m in members]
+        identities = [m['artifact']['identity'] for m in members]
+        if len(set(roles)) != len(roles) or len(set(identities)) != len(identities):
+            return False
+        actual = {(m['role'], m['artifact']['identity']) for m in members
+                  if m['role'].startswith('candidate-source:')}
+        expected = {('candidate-source:' + name,
+                     'docs/helix/02-design/contracts/' + name)
+                    for name in required_roots[row['boundary']]}
+        if actual != expected:
+            return False
+    return True
+
+# Small projections retain independent identity/role mutations without copying
+# megabytes of original captured bytes. Full record shape and byte checks remain.
+projection = [{'boundary': r['boundary'], 'membership': [
+    {'role': m['role'], 'artifact': {'identity': m['artifact']['identity']}}
+    for m in r['membership']]} for r in record['boundaries']]
+if not original_root_membership(projection):
+    raise SystemExit('Required original candidate root membership changed')
+controls = 0
+for index in range(len(projection)):
+    for mutation in ['omit', 'relabel', 'duplicate', 'swap']:
+        changed = deepcopy(projection)
+        members = changed[index]['membership']
+        root_index = next(i for i, m in enumerate(members)
+                          if m['role'].startswith('candidate-source:'))
+        if mutation == 'omit':
+            members.pop(root_index)
+        elif mutation == 'relabel':
+            members[root_index]['role'] = 'schema-dependency:substituted'
+        elif mutation == 'duplicate':
+            members.append(deepcopy(members[root_index]))
+        else:
+            members[root_index]['artifact']['identity'] = 'docs/helix/02-design/contracts/acceptance-report-v0.1.schema.json'
+        if original_root_membership(changed):
+            raise SystemExit('Root omission/substitution control admitted: ' + mutation)
+        controls += 1
+print(str(controls) + ' independent candidate-root membership controls passed')
 for row in record['boundaries']:
     for member in row['membership']:
         artifact = member['artifact']

@@ -387,6 +387,17 @@ recaptured; equal versions or a selected subset cannot close remaining boundarie
 This supplies concrete review inputs for priority 1 above, while preserving
 unresolved human/owner/profile selections and the full toolkit scope.
 
+A subsequent checker review found that valid record shape and original-byte
+comparison did not independently require every captured candidate root: removing
+a root could evade the byte loop. The checker now declares the eight required
+candidate roots across the seven correspondence boundaries independently of the
+record. Twenty-eight omission, role-relabeling, duplication and identity-swap
+controls pass, alongside the nine original review-shape controls and full current
+root-byte comparisons. Duplicate roles or artifact identities within a boundary
+refuse. Schema dependency closure still uses its separate checker; root membership
+is neither full transitive producer membership nor semantic design completion.
+All seven authored/review/native classifications remain incomplete.
+
 The combined [157-schema integration receipt](evidence/design-audit/schema-inventory-composition-review-2026-10-09.json)
 now verifies registration, reference resolution and strict Ajv Draft 2020-12
 compilation across the current contract inventory. Strict compilation caught
