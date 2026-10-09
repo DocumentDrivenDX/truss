@@ -41,7 +41,15 @@ try {
   const retained=await tx`SELECT source_epoch,encode(evidence_sha256,'hex') AS digest FROM truss.source_epoch_registry ORDER BY source_epoch`;
   if(JSON.stringify(retained)!==JSON.stringify(rows))throw Error('Guard changed original registry');
   checks.push('Both guards ALWAYS and original epoch evidence unchanged');
+  await tx.unsafe(await Bun.file('packages/postgresql/native/source-epoch-lock.sql').text());
+  const locked=await tx`SELECT * FROM truss.runtime_lock_source_epoch('component-test-installation','component-successor','component-test-incarnation')`;
+  if(locked.length!==1||locked[0].source_epoch!=='component-successor'||locked[0].profile_hex!=='01'||locked[0].evidence_hex!=='0203'||locked[0].evidence_sha256!==digest)throw Error('Epoch readback mismatch');
+  checks.push('Current pointer lock returns exact original registry bytes');
+  await refuse('Stale epoch comparison refuses','55000',()=>tx`SELECT * FROM truss.runtime_lock_source_epoch('component-test-installation','component-initial','component-test-incarnation')`);
+  await refuse('Wrong incarnation comparison refuses','55000',()=>tx`SELECT * FROM truss.runtime_lock_source_epoch('component-test-installation','component-successor','different')`);
+  await refuse('Missing expected identity refuses','55000',()=>tx`SELECT * FROM truss.runtime_lock_source_epoch(NULL,'component-successor','component-test-incarnation')`);
   await tx`SET LOCAL ROLE pg_read_all_data`;
+  await refuse('Ordinary role epoch primitive execution denied','42501',()=>tx`SELECT * FROM truss.runtime_lock_source_epoch('component-test-installation','component-successor','component-test-incarnation')`);
   await refuse('Ordinary role registry insert denied','42501',()=>insert('component-forged',null,'initial'));
   await refuse('Ordinary role pointer update denied','42501',()=>tx`UPDATE truss.source_epoch_current SET source_epoch='component-initial'`);
   await tx`RESET ROLE`;
@@ -51,6 +59,6 @@ try {
  if(after[0].registry!==null||after[0].markers!=='0')throw Error('Rollback leaked component state');
  checks.push('Outer rollback removes registry/pointer and marker');
  const sources:Record<string,string>={};
- for(const path of ['scripts/check-source-epoch-storage.ts','packages/postgresql/native/source-epoch-immutability.sql','docs/helix/04-build/evidence/source-epoch-storage.owner-export.sql'])sources[path]=new Bun.CryptoHasher('sha256').update(await Bun.file(path).arrayBuffer()).digest('hex');
+ for(const path of ['scripts/check-source-epoch-storage.ts','packages/postgresql/native/source-epoch-immutability.sql','packages/postgresql/native/source-epoch-lock.sql','docs/helix/04-build/evidence/source-epoch-storage.owner-export.sql'])sources[path]=new Bun.CryptoHasher('sha256').update(await Bun.file(path).arrayBuffer()).digest('hex');
  await Bun.write('docs/helix/04-build/evidence/design-audit/source-epoch-storage-native.json',JSON.stringify({database:after[0].version,sources,checks,scope:'Rollback-contained storage candidate constraints and ordinary-role DML denial only; synthetic component tokens are not issued epochs, installed admission or lifecycle qualification',qualified:false},null,2)+'\n');console.log(JSON.stringify({checks:checks.length,qualified:false}));
 }finally{await sql.close();}

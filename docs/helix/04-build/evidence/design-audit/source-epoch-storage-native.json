@@ -1,8 +1,9 @@
 {
   "database": "PostgreSQL 17.9 (Debian 17.9-1.pgdg13+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit",
   "sources": {
-    "scripts/check-source-epoch-storage.ts": "4498003646dbea6b466634ffb22d201d5778d28675582b44b33ef6aff1b27dc7",
+    "scripts/check-source-epoch-storage.ts": "01041f702edee36ba1e34049b064e7cebd21642e3f2f93cbf1bdc27566ecee9d",
     "packages/postgresql/native/source-epoch-immutability.sql": "8e819d0b11a4497913a66a1046725577ca31acfe11b1c10820eb6f633ea4a955",
+    "packages/postgresql/native/source-epoch-lock.sql": "e811a3656a45e941d588ca21b97ab524b789948d08585288e44b158b060d73cc",
     "docs/helix/04-build/evidence/source-epoch-storage.owner-export.sql": "c1338fa024a9e7af095457cfd2adec768071475f510caa98923df4da9a3e7407"
   },
   "checks": [
@@ -20,6 +21,11 @@
     "replica: registry DELETE blocked",
     "replica: registry TRUNCATE blocked",
     "Both guards ALWAYS and original epoch evidence unchanged",
+    "Current pointer lock returns exact original registry bytes",
+    "Stale epoch comparison refuses",
+    "Wrong incarnation comparison refuses",
+    "Missing expected identity refuses",
+    "Ordinary role epoch primitive execution denied",
     "Ordinary role registry insert denied",
     "Ordinary role pointer update denied",
     "Outer rollback removes registry/pointer and marker"
