@@ -1,9 +1,13 @@
 /** CONTRACT-004/011 candidate; evidence authority is host-established. */
 import type {ExactArtifact, ProfilePin} from './truss-acceptance-input-v0.1';
 import type {QualifiedOwner} from './truss-history-v0.1';
+/** Document-level assertions have no fictitious module owner. Module/element
+ * assertions retain the existing document-qualified module identity. */
+export type AssertionOwner = QualifiedOwner |
+  {readonly scope:'document';readonly documentId:string;readonly moduleId?:never};
 interface AssertionSourceIdentity {
   readonly sourceKind: 'umf_document' | 'truss_binding';
-  readonly owner: QualifiedOwner;
+  readonly owner: AssertionOwner;
   readonly definitionPin: string; readonly sourcePointer: string;
 }
 export type AssertionIdentity = AssertionSourceIdentity & ({

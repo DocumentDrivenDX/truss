@@ -12,6 +12,12 @@ const {reason,...common}=entry;
 const engine={...common,enforcement:'engine',validatorProfile:pin,qualificationReceiptSha256:sha};
 const database={...common,enforcement:'database',procedureProfile:pin,qualificationReceiptSha256:sha,installedInventorySha256:sha,currentObservationEvidenceSha256:sha,qualifiedWritePaths:['canonical_dml']};
 const cases:readonly [string,unknown,boolean][]=[
+ ['document-scoped assertion',{...base,entries:[{...entry,assertion:{...assertion,owner:{scope:'document',documentId:'doc'}}}]},true],
+ ['document assertion cannot fabricate module',{...base,entries:[{...entry,assertion:{...assertion,owner:{scope:'document',documentId:'doc',moduleId:'module'}}}]},false],
+ ['bare document identity is ambiguous',{...base,entries:[{...entry,assertion:{...assertion,owner:{documentId:'doc'}}}]},false],
+ ['document owner requires exact identity',{...base,entries:[{...entry,assertion:{...assertion,owner:{scope:'document',documentId:''}}}]},false],
+ ['unknown owner scope',{...base,entries:[{...entry,assertion:{...assertion,owner:{scope:'global',documentId:'doc'}}}]},false],
+ ['empty module is not document scope',{...base,entries:[{...entry,assertion:{...assertion,owner:{documentId:'doc',moduleId:''}}}]},false],
  ['storage binding assertion',{...base,entries:[{...entry,assertion:{...assertion,sourceKind:'truss_binding'}}]},true],
  ['missing source kind',{...base,entries:[{...entry,assertion:{...assertion,sourceKind:undefined}}]},false],
  ['wrong source kind needs archive admission refusal',{...base,entries:[{...entry,assertion:{...assertion,sourceKind:'truss_binding',sourcePointer:'/umf/keys/0'}}]},true],

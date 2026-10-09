@@ -1,7 +1,37 @@
 {
   "scope": "Enforcement report shape only; no assertion inventory, provenance, evidence trust or native qualification",
-  "cases": 15,
+  "cases": 21,
   "outcomes": [
+    {
+      "name": "document-scoped assertion",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "document assertion cannot fabricate module",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "bare document identity is ambiguous",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "document owner requires exact identity",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "unknown owner scope",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "empty module is not document scope",
+      "expected": false,
+      "actual": false
+    },
     {
       "name": "storage binding assertion",
       "expected": true,

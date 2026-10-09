@@ -120,22 +120,43 @@
       "additionalProperties": false
     },
     "owner": {
-      "type": "object",
-      "properties": {
-        "documentId": {
-          "type": "string",
-          "minLength": 1
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "documentId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "moduleId": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "documentId",
+            "moduleId"
+          ],
+          "additionalProperties": false
         },
-        "moduleId": {
-          "type": "string",
-          "minLength": 1
+        {
+          "type": "object",
+          "properties": {
+            "scope": {
+              "const": "document"
+            },
+            "documentId": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "scope",
+            "documentId"
+          ],
+          "additionalProperties": false
         }
-      },
-      "required": [
-        "documentId",
-        "moduleId"
-      ],
-      "additionalProperties": false
+      ]
     },
     "assertion": {
       "oneOf": [
