@@ -293,6 +293,8 @@ prevents transition acknowledgment/readiness; exact fencing and unresolved
 outcomes follow the shared security profile. This does not impose a new lease
 implementation or imply that every compatible layout upgrade revokes all reads.
 
+The [retirement review](../../04-build/evidence/design-audit/security-publication-retirement-review.json) adds two required composition controls: retirement of one publisher must preserve sibling publishers for the same actor, and an old snapshot cannot re-enroll a terminal publication identity. Where the upgrade requires old-context drain, enumerate/settle every relevant original publication under the security-owned protocol and verify its current freshness fence; actor-wide cleanup, missing registrations or snapshot-visible pending state cannot prove drain. A rolled-back or uncertain transition cannot reopen retired handles or advertise target readiness. Applicable native schedules are LM-P01–03 in STP-045; this consumes the shared security design rather than defining a competing epoch/lease service.
+
 ### Migration storage initialization and self-upgrade
 
 The ledger initializer is part of the exact declared installation/upgrade

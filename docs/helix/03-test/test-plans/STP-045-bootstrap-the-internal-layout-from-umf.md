@@ -839,3 +839,16 @@ observe complete route rollback and no receipt/target marker. Force uncertain
 containment at that point: retain original recovery custody and no ready result.
 No oversized artifact may be truncated, omitted or replaced by an unregistered
 archive reference. These remain planned native/resource cases.
+
+
+## Migration publication retirement composition — LM-P01–03
+
+These cases apply only to a selected upgrade/authority transition that requires old-context retirement or revocation acknowledgment. Compatible upgrades that preserve qualified old contexts keep their separately declared compatibility and protection rules. Consume the security owner’s exact original publisher/lease/drain/freshness producers; writer exclusion alone does not qualify these controls.
+
+| Planned control | Independent original observation and expected outcome |
+| --- | --- |
+| LM-P01 sibling publisher remains unsettled | Enroll two distinct publications for one actor against the original source runtime; independently retain each buffer and original registration/generation. Retire only A after confirmed discard. B remains an outstanding drain/protection obligation and blocks target readiness/retirement acknowledgment until independently settled. Actor-wide cleanup, native session termination or absence produced by the defective cleanup cannot pass. |
+| LM-P02 retained snapshot reentry | Hold an old snapshot that observed pending original publication, then retire that identity through the selected authoritative transition. Attempt reentry through the old snapshot before any new buffer acquisition. The security-owned current freshness fence refuses the terminal identity; UUID/PID equality and the old row cannot authorize use of the retired source runtime. Observe original source/target profile and retained history/receipt protections, not merely a changed marker. |
+| LM-P03 rollback and uncertain drain | Fault the upgrade after drain/retirement processing and before target publication; separately lose its outer commit acknowledgment. Preserve original migration and publication recovery/capacity custody and actual committed-versus-pending observations. No old handle resurrection, sibling capacity refund or confirmed target readiness follows callback failure. Independently verify the required fresh source/target inventory and original outcome before any explicit retry. |
+
+Retain native lock/cut/identity/generation and application-buffer evidence separately. A conditional formal retirement proof is not native multi-publisher qualification, and a successful writer-fencing schedule cannot stand in for these applicable publication tests. These schedules remain planned/not_run and do not execute unauthorized disclosure.
