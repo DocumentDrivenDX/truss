@@ -1,0 +1,185 @@
+{
+  "interfaceVersion": "truss-acceptance-outer-json-oracle/0.1.0",
+  "status": "independently authored planned oracle",
+  "scope": "Numeric-free outer byte decoding only; successful value is not complete AcceptanceInput or semantic/native acceptance. Reasons are oracle categories, not public error codes.",
+  "cases": [
+    {
+      "name": "empty object",
+      "utf8Hex": "7b7d",
+      "sourceSha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "expected": {
+        "status": "decoded",
+        "value": {}
+      }
+    },
+    {
+      "name": "null boolean string array",
+      "utf8Hex": "5b6e756c6c2c747275652c66616c73652c2278225d",
+      "sourceSha256": "85ec3106e4abf49b1338e2633a1e229d2638fe08b05440b12113e43ba5df3b5a",
+      "expected": {
+        "status": "decoded",
+        "value": [
+          null,
+          true,
+          false,
+          "x"
+        ]
+      }
+    },
+    {
+      "name": "legal whitespace",
+      "utf8Hex": "20090d0a7b2278223a2279227d0a",
+      "sourceSha256": "d3f0467d89fab7ef499a464c0ee03d247b1e4f46b3c2a47286643f0763ffe87c",
+      "expected": {
+        "status": "decoded",
+        "value": {
+          "x": "y"
+        }
+      }
+    },
+    {
+      "name": "inert prototype name",
+      "utf8Hex": "7b225f5f70726f746f5f5f223a2264617461227d",
+      "sourceSha256": "09e1978bfc8aae15ebaa1d4c49582dc11a6e3c3fc8be280298d58c321c319e2b",
+      "expected": {
+        "status": "decoded",
+        "value": {
+          "__proto__": "data"
+        }
+      }
+    },
+    {
+      "name": "valid escaped surrogate pair",
+      "utf8Hex": "7b2278223a225c75443833445c7544453030227d",
+      "sourceSha256": "f0d62da1462ef628beebaedde2d7a68bd5b0ac63a25bb236980ef74736ad60fe",
+      "expected": {
+        "status": "decoded",
+        "value": {
+          "x": "😀"
+        }
+      }
+    },
+    {
+      "name": "distinct normalization forms",
+      "utf8Hex": "7b22c3a9223a2261222c2265cc81223a2262227d",
+      "sourceSha256": "9aaab914516280da51ddbf07df08ccbc11f9e93ebf87d24e0b5b2aeab116c745",
+      "expected": {
+        "status": "decoded",
+        "value": {
+          "é": "a",
+          "é": "b"
+        }
+      }
+    },
+    {
+      "name": "escaped equivalent duplicate",
+      "utf8Hex": "7b2278223a6e756c6c2c225c7530303738223a747275657d",
+      "sourceSha256": "06d3598f05e41131d899c9ece44273e95d47fb3f2f53d2a72422208fa4c052d1",
+      "expected": {
+        "status": "refused",
+        "reason": "duplicate_member"
+      }
+    },
+    {
+      "name": "unpaired high surrogate",
+      "utf8Hex": "7b2278223a225c7544383030227d",
+      "sourceSha256": "ba927bcb42f027355038bb75718238279bc28078cada7d411f39158227c380fc",
+      "expected": {
+        "status": "refused",
+        "reason": "unicode"
+      }
+    },
+    {
+      "name": "unpaired low surrogate",
+      "utf8Hex": "7b2278223a225c7544433030227d",
+      "sourceSha256": "0bdad656155470abed4102e9de695e38d8cf4fa4bdb8f93a6d2db586641b4ab5",
+      "expected": {
+        "status": "refused",
+        "reason": "unicode"
+      }
+    },
+    {
+      "name": "overlong utf8",
+      "utf8Hex": "7b2278223a22c0af227d",
+      "sourceSha256": "37b3f35930ea17bfe075c5666f4cf91f3f0eb13b6b34853870daf30c161b7932",
+      "expected": {
+        "status": "refused",
+        "reason": "unicode"
+      }
+    },
+    {
+      "name": "surrogate utf8",
+      "utf8Hex": "7b2278223a22eda080227d",
+      "sourceSha256": "1db8ab238cce19a450aa404e9e3b0cd86efaccc57e89b645c4689609fdd080cc",
+      "expected": {
+        "status": "refused",
+        "reason": "unicode"
+      }
+    },
+    {
+      "name": "out of range utf8",
+      "utf8Hex": "7b2278223a22f4908080227d",
+      "sourceSha256": "a397cb45ecddae3182b5954a3ef3d30fc1e9f7055c709ce950f96b4e7a0f9fc6",
+      "expected": {
+        "status": "refused",
+        "reason": "unicode"
+      }
+    },
+    {
+      "name": "outer number",
+      "utf8Hex": "7b2278223a393030373139393235343734303939337d",
+      "sourceSha256": "880e06ad9369e8753dceaecd582caad85e45a16007844f958ad5818b7c14e44a",
+      "expected": {
+        "status": "refused",
+        "reason": "numeric_node"
+      }
+    },
+    {
+      "name": "trailing data",
+      "utf8Hex": "7b7d2074727565",
+      "sourceSha256": "b0cac530e06f43067ef26fbb201dc931829e7f5a2dacfb91eae4f98465eb0463",
+      "expected": {
+        "status": "refused",
+        "reason": "grammar"
+      }
+    },
+    {
+      "name": "trailing comma",
+      "utf8Hex": "5b6e756c6c2c5d",
+      "sourceSha256": "5d094d912a47d384df7e1b326f34a8d640cadc41a5b6d8fbaa98256fd9d28221",
+      "expected": {
+        "status": "refused",
+        "reason": "grammar"
+      }
+    },
+    {
+      "name": "bom",
+      "utf8Hex": "efbbbf7b7d",
+      "sourceSha256": "aa25e978046d680ef8740d837e6de5bc1e2a2dc6089dbda1012544b538d53f65",
+      "expected": {
+        "status": "refused",
+        "reason": "grammar"
+      }
+    },
+    {
+      "name": "comment",
+      "utf8Hex": "7b2f2a782a2f7d",
+      "sourceSha256": "593aa521cee0e776bef3dbab2634f9cfa6c568c7cfdcb77bac82c03036074cc5",
+      "expected": {
+        "status": "refused",
+        "reason": "grammar"
+      }
+    },
+    {
+      "name": "opaque numeric artifact base64",
+      "utf8Hex": "7b226279746573426173653634223a224d54497a227d",
+      "sourceSha256": "20d2bf9423c6b928dc0732f42c48685d51fbbbdbce937316b22447cb1544a6c9",
+      "expected": {
+        "status": "decoded",
+        "value": {
+          "bytesBase64": "MTIz"
+        }
+      }
+    }
+  ]
+}

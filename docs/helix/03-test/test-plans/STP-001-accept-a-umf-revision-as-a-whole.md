@@ -266,3 +266,13 @@ Run actual packed browser and selected host decoder code on the same original
 byte corpus, with independently authored expected scalars, source bytes and
 refusal phase. Agreement between implementations is not the independent oracle.
 Complete input semantics and native acceptance remain separate later gates.
+
+The [outer-byte oracle](../../acceptance-outer-json-expected.proposal.json)
+now supplies eighteen manually specified input-byte/value/refusal cases for
+JPAR-01–05/07, including escaped-equivalent duplicate keys, paired/unpaired
+surrogates, malformed/overlong/out-of-range UTF-8, numeric outer nodes,
+normalization-distinct names, prototype-name data and opaque artifact base64.
+Every case retains exact input hex and direct source SHA-256; expected values
+were authored independently of a decoder. Successful decoding is not complete
+AcceptanceInput validity. Decoder/resource execution remains not_run; JPAR-06
+requires the actual selected finite registration and boundary corpus separately.

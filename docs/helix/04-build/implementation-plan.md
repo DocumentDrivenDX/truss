@@ -2668,3 +2668,10 @@ profile, then qualify original UTF-8/duplicate/Unicode/structural/allocation
 behavior before implementing the private producer port. Existing UMF numeric,
 Field and document interpretation remains owner-owned after transport admission.
 Unavailable raw-decoder support refuses; no extra UMF feature is assumed.
+
+The reference outer-wire decoder is now selected in CONTRACT-003, replacing
+the earlier unspecified generic parser choice. Implement its iterative UTF-8/
+JSON numeric-free procedure with original custody/account; consume STP-001
+JPAR-01–07 and the eighteen-case independent byte oracle. Exact finite
+resource/build registration and native full-input integration remain open,
+while decoder semantics no longer require a new product or UMF decision.
