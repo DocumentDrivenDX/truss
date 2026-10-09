@@ -74,7 +74,8 @@ support meaning refuses complete report admission; no empty/default supported
 subset or inference from source version is allowed. Keep this separate from
 assertion enforcement classification. Implement and test that producer through
 the existing original preparation/correspondence path; do not add a second UMF
-validator or reopen public admission before all seventeen fields compose.
+validator or reopen public admission before the complete selected report composes
+(nineteen fields for the combined lifecycle/history reference).
 
 The existing report schema represents umf as an array of closed entries with
 exactly version, interpretationProfile and supportedSubset; supportedSubset is
@@ -94,6 +95,37 @@ references remain distinct from required executable checks under CONTRACT-003;
 resolving artifact bytes cannot classify a retained-only term as enforced.
 
 ### A2 remaining dynamic producer integration
+
+The UMF support procedure must join each original document's version and exact
+bytes to its admitted interpretation and selected subset artifact before
+deduplicating report entries. A single input-level supportProfile is not proof
+that every document has the same support meaning. Preserve the original document
+membership behind each `(version, interpretationProfile, supportedSubset)` entry;
+an omitted document cannot disappear merely because another has the same version.
+
+Distinguish executable support, retained-only unknown meaning and an unavailable
+required interpretation. Unknown extension retention does not classify its rules
+as enforced. Conversely, a valid retained-only term is not automatically UMF-invalid.
+Truss's selected support procedure must account for every applicable required
+feature, transformation and loss obligation under the original UMF-owned meaning;
+it cannot use assertion enforcement results as a replacement support inventory.
+
+If an original 0.7 document is interpreted through an explicitly registered 0.8
+transition, preserve both source and target artifacts and their original
+correspondence. The report's version is the original source version; do not
+replace it with the target version, borrow an unrelated 0.8 subset artifact or
+infer full 0.7 support from successful target validation. A transition whose
+source preservation/support/loss meaning is unadmitted leaves the field
+unavailable even when all byte hashes match. Direct 0.8 sources remain separate
+membership, not a second observation of the transitioned 0.7 document.
+
+Independent cases must include two documents sharing a version but differing
+required features, one retained-only unknown extension, one unsupported required
+term, mixed direct/transitioned versions and a changed source-target relation.
+Expected support entries and document membership are authored before producer
+outputs. Registered subset artifacts and their semantic procedure remain required
+engineering outputs; this handoff does not introduce new UMF core types or a
+second transition engine.
 
 | Field | Original producer inputs and ordering | Independent refusal controls |
 | --- | --- | --- |
