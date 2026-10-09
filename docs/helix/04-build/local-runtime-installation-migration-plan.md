@@ -533,3 +533,18 @@ namespace. These binary fixtures qualify storage behavior only; they are not
 admitted migration request/receipt encodings or protected original producers.
 Other generated homes, full byte collision processing, grants/current-person
 authority and complete installer/migration execution remain unqualified.
+
+The [migration receipt boundary receipt](evidence/design-audit/pgserver-receipt-boundary-component.json)
+now verifies seven native CHECK refusals: empty/over1KiB attempt identity,
+empty/over64KiB profile, empty request, empty receipt and combined payload one
+byte over16MiB. Every refusal leaves the receipt row count unchanged. A single
+positive row accepts exact1KiB attempt,64KiB profile and16MiB combined request/
+receipt bytes; both generated payload digests match independent expectations.
+The fixture transaction is rolled back and the namespace disappears.
+
+These administrator binary fixtures test the declared storage bounds only; they
+supply no admitted recipe/receipt semantics, shared resource-account containment
+or protected migration service. Failed inserts may consume nontransactional
+sequence values; unchanged row count is not evidence of zero allocator work or
+rewound identity. Complete migration atomicity, artifact admission and recovery
+remain the existing M1–M5 requirements.

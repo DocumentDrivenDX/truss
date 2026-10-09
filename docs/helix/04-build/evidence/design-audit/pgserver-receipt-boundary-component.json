@@ -1,0 +1,42 @@
+{
+  "scope": "Administrative receipt byte-boundary controls only; not original receipt/migration producer qualification",
+  "serverVersion": "16.2",
+  "expected": [
+    1024,
+    65536,
+    8388608,
+    8388608,
+    "ad97f87076920684e2ca66fc44e5d322797dc9d64706b174e51b5d0828937043",
+    "042e995365a46153f8d3a1327d986e2fec93554ed9d6b8126cecc7965ecf3be6",
+    2
+  ],
+  "observed": [
+    1024,
+    65536,
+    8388608,
+    8388608,
+    "ad97f87076920684e2ca66fc44e5d322797dc9d64706b174e51b5d0828937043",
+    "042e995365a46153f8d3a1327d986e2fec93554ed9d6b8126cecc7965ecf3be6",
+    2
+  ],
+  "refusalSqlstate": "23514",
+  "negativeControls": 7,
+  "exactAggregateBytes": 16777216,
+  "receiptRowsAfterSuccessfulBoundary": 2,
+  "rollbackRemovedNamespace": true,
+  "sources": {
+    "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f",
+    "docs/helix/04-build/evidence/operation-configuration-storage.owner-export.sql": "55448d0e9b979ab62f48099e6c317e19ebe40ce5ff9c90472209deff8a618e3a",
+    "docs/helix/04-build/evidence/layout-migration-storage.owner-export.sql": "dd7e24b38fd09194d67d4f0a55f5b72696bd83b7f87d108ccb001fbab6892d33",
+    "packages/postgresql/native/operation-configuration-immutability.sql": "3ae78935297c76e66eb324adb314f4554a7924f7e11b7a1ae7128c9d3cbc8386",
+    "packages/postgresql/native/layout-migration-receipt-immutability.sql": "1b13a84f5bfd4f706d8b5a3f01837f3cdd0a450a849a7fd6ca48eda8885af309",
+    "docs/helix/04-build/evidence/design-audit/pgserver-populated-guard-fixture.sql": "1221666a5d6b77bfb9f5c31280a95ef453140f4740f54b22fd232822447ef089"
+  },
+  "producerSha256": "372bf9f73516b311d2668d9997c4bf8f19072d2246e1c29e54b1df4f37f2b2e5",
+  "limitations": [
+    "Synthetic nonempty binary payloads are not admitted request/receipt encodings",
+    "No protected producer/current-person authority, migration execution or installed readiness",
+    "Digest routes never substitute for full original byte equality",
+    "Other generated homes remain separately unqualified"
+  ]
+}
