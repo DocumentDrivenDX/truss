@@ -17,6 +17,7 @@
   "completeCellEqualsIndependentLiteral": true,
   "fixedOneMiBDecoderRefused": true,
   "responseFrameDecoderAdmitted": true,
+  "responseMetadataDecoderAdmitted": true,
   "framesHex": [
     "5a0000000549",
     "430000000a424547494e00",
@@ -34,17 +35,17 @@
   "sourceSha256": {
     "python_pg_frame_candidate.py": "ed92bfc5240f17f3447f868fb88e3647cc4bd9583e21ed18ad88eb7de1eb9968",
     "python_pg_receive_candidate.py": "fd9c23e3da2358cf56abc6b561c893e5d56dd9c95756fe18ec7510f52a55f4bb",
-    "python_report_frame_candidate.py": "2ec092c1aa6f888e2b29a509e949a7a6955e10d531d93bbd01b4cff582e03218",
+    "python_report_frame_candidate.py": "0041185a44ff8a7f8f207ecc1c9ea49731737ad6688ffec6b7817db11cb79711",
     "python_report_response_candidate.py": "b845d66688129c200bbdf9cc8e397b9e1bd354e87e9b72e23110f47ff24dec9a",
     "python_report_wire_candidate.py": "54cc7e9cb1f6a2312e151b3a5d9fcf03ed8a3fbf282d48b949ea78a8c28b06a7",
     "python_raw_json_candidate.py": "eecc41365951d3b60c3c2adb9c7f75e0e087eb154728ad9c1c0956becf4217c6",
     "check_report_response_boundary.py": "4094c40c2417ff55db589bdf348eed772ef8cc39987545db625e2cea95938c65",
-    "check_python_report_response_native_echo.py": "a777c231d18932abdc27c35f766793828b6ac8422dbeeaaeb07d7b46c9bfa11f"
+    "check_python_report_response_native_echo.py": "c7bfdc5d1096b7b53c8f13b0001f3b574aa821459dfb4942730adfd3433fdc93"
   },
   "remainingRawBounds": {
     "bytes": 12582387,
     "messages": 77,
-    "readCalls": 9895
+    "readCalls": 9909
   },
   "scope": "Administrative local trust-auth probe, BEGIN READ ONLY/ROLLBACK; raw recv_into framing, response-only complete single-cell frame syntax, complete frozen synthetic nineteen-field report byte comparison and response-schema candidate only; fixed-one-MiB decoder refused as expected. No genuine diagnostic/report producer or committed report persistence. No installed changes, supported driver, ingress/account/TLS/native containment, current security or publication qualification."
 }

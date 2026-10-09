@@ -23,3 +23,12 @@ def report_cell(source):
     if cell_length < 0 or cell_length != len(source) - 11:
         raise ValueError('Null or incomplete report cell')
     return source[11:]
+
+
+def described_report_cell(description_source, row_source):
+    """Retained metadata syntax correspondence only, not original driver custody."""
+    from python_pg_frame_candidate import row_description
+    columns = row_description(description_source)
+    if len(columns) != 1 or columns[0].type_oid != 25 or columns[0].format != 0:
+        raise ValueError('Single text/OID25/format0 report column required')
+    return report_cell(row_source)

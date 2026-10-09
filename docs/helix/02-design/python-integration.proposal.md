@@ -847,15 +847,18 @@ qualified driver/settlement and public profile adoption remain required.
 
 A separate private retained-frame candidate,
 `python_report_frame_candidate.py`, now admits only a complete single nonnull
-DataRow cell up to 4,194,304 bytes (4,194,315 frame bytes). Three independent
+DataRow cell up to 4,194,304 bytes (4,194,315 frame bytes). Four independent
 syntax tests cover exact/one-over capacity, malformed signed lengths, missing or
 extra bytes, wrong message/column count, SQL NULL and mutable backing refusal.
+The `described_report_cell` composition also parses the original retained
+RowDescription and requires exactly one OID25/format0 column; bytea, JSON, JSONB,
+binary format and malformed metadata refuse before response-cell parsing.
 The response codec suite additionally composes the independently frozen full
 nineteen-field report frame with original schema validation. The old decoder
 and its original native receipts remain unchanged. The complete native echo receipt
 now pins and exercises this response decoder against actual received bytes.
-This candidate does not establish
-RowDescription OID/format, UTF8, ingress/account custody, command settlement or
+These metadata syntax checks do not establish original connection/cycle custody,
+UTF8, ingress/account custody, command settlement or
 native qualification; those require the original PY-01b composition. Arbitrary
 cell bytes pass syntax alone and cannot authorize publication or commit claims.
 

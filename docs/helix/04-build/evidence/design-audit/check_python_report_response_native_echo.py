@@ -11,7 +11,7 @@ import struct
 import sys
 from python_pg_frame_candidate import row_description, data_row, MAX_FRAME
 from python_pg_receive_candidate import Receiver
-from python_report_frame_candidate import report_cell
+from python_report_frame_candidate import described_report_cell
 from check_report_response_boundary import build, check, CONTRACTS
 from python_report_response_candidate import ReportResponseCandidate
 
@@ -70,7 +70,7 @@ with socket.create_connection(('127.0.0.1', 15434), timeout=10) as connection:
         raise ValueError('Original UTF8 server/client admission required')
     query = QUERY.encode('utf8') + b'\0'
     connection.sendall(b'Q' + struct.pack('!i', len(query) + 4) + query)
-    description = row = None
+    description = row = description_source = None
     commands = []
     decoder_refused = False
     while True:
@@ -79,6 +79,7 @@ with socket.create_connection(('127.0.0.1', 15434), timeout=10) as connection:
         if kind == b'T':
             if description is not None:
                 raise ValueError('Duplicate native description')
+            description_source = source
             description = row_description(source)
         elif kind == b'D':
             if description is None or row is not None:
@@ -93,7 +94,7 @@ with socket.create_connection(('127.0.0.1', 15434), timeout=10) as connection:
                 decoder_refused = True
             else:
                 raise ValueError('Unexpected fixed-limit decoder admission')
-            row = (report_cell(source),)
+            row = (described_report_cell(description_source, source),)
         elif kind == b'C':
             commands.append(body)
         elif kind == b'Z':
@@ -136,6 +137,7 @@ receipt = {
     'completeCellEqualsIndependentLiteral': row == EXPECTED_CELLS,
     'fixedOneMiBDecoderRefused': decoder_refused,
     'responseFrameDecoderAdmitted': True,
+    'responseMetadataDecoderAdmitted': True,
     'framesHex': [value.hex() for value in frames if value[:1] in (b'T', b'C', b'Z')],
     'orderedTypeOids': [c.type_oid for c in description],
     'rawCellsSha256': [hashlib.sha256(value).hexdigest() for value in row],

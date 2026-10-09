@@ -17,6 +17,7 @@ class ResponseTests(unittest.TestCase):
         here = Path(__file__).resolve().parent
         receipt = json.loads((here / 'python-report-response-native-echo.json').read_bytes())
         self.assertTrue(receipt['responseFrameDecoderAdmitted'])
+        self.assertTrue(receipt['responseMetadataDecoderAdmitted'])
         self.assertTrue(receipt['fixedOneMiBDecoderRefused'])
         self.assertTrue(receipt['completeCellEqualsIndependentLiteral'])
         self.assertEqual(receipt['observedDataRowBytes'], [4194315])
