@@ -524,6 +524,23 @@ PostgreSQL native/qualified17.9 profile bytes. The local16.2 qualification task
 above remains unchanged. Retain closed version/obligation admission and do not
 adopt Databricks registrations as Lakebase/PostgreSQL execution evidence.
 
+The subsequent [loader/native-null source review](evidence/design-audit/upstream-loader-null-source-review.json)
+advances reviewed UMF to72996e58 and Weft to1a8a344. UMF's portable loader
+contract primitives and Bun acquisition companion do not own Truss installation
+or PostgreSQL migration. Acquisition retry/publication receipts cannot substitute
+for Truss exact transaction retry receipts or native commit evidence. Its numeric
+adapter is unchanged; current original browser assets match byte-for-byte and
+Truss browser provenance now names that latest reviewed commit.
+
+Weft's new0.3 native-null encoding is explicit Ashlar/Spark opt-in: present null
+and present values have distinct tagged outputs, but source-valid absent optional
+properties refuse that backend representation. Preserve Truss's complete logical
+absence/null/empty/exact-value contract during later adoption; do not collapse
+absence into null or reinterpret an ideal nonnullable descriptor as availability.
+The PostgreSQL native/qualified17.9 source files remain unchanged. Current Python
+and TypeScript compiler boundaries stay at the frozen f05f2df0.2 component; the
+local16.2 and full installed-profile gates remain open.
+
 ## Native default declaration correspondence
 
 The [default component receipt](evidence/design-audit/pgserver-default-declaration-component.json)

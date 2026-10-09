@@ -36,11 +36,22 @@ superseded by this decision record, not renewed approval requests.
 
 ## Current closure classification — 2026-10-09
 
-Latest upstream and consumer reconciliation: fetched UMF is now
-`de11e172c1eb11e7082b605421ad146ae4740a0d`; Weft is now
-`f05f2df09e9c2494ac8c6d703dfe38413dbc4181`. The latest UMF dashboard
-extension and repository portability changes do not repin Truss runtime APIs;
-see the [committed-source review](evidence/design-audit/umf-dashboard-source-sync.json). UMF's experimental
+Latest committed upstream review: fetched UMF is
+`72996e58d2a9291ae191127b4f55e548c2105569`; Weft is
+`1a8a3445302aa44a93167ef340dbcfb306805254`. Truss's adopted compiler component
+remains frozen at `f05f2df09e9c2494ac8c6d703dfe38413dbc4181` with compile/SQL0.2.
+The [loader/native-null review](evidence/design-audit/upstream-loader-null-source-review.json)
+records exact committed inputs. UMF adds portable loader contract primitives;
+its exact JavaScript numeric adapter remains unchanged. Weft adds opt-in
+Ashlar/Spark optional Scalar null semantics, not PostgreSQL support. Its selected
+native-null home requires present properties and refuses source-valid absence;
+that subset cannot replace Truss's complete absence/null/value contract.
+PostgreSQL native/qualified17.9 profile sources are unchanged and do not qualify
+the default local16.2 engine. The original UMF browser assets are byte-identical;
+Truss browser provenance now advances to the reviewed UMF commit.
+
+Earlier UMF dashboard and repository portability review is retained in
+[its source receipt](evidence/design-audit/umf-dashboard-source-sync.json). UMF's experimental
 Record/dataset value operations are available owner inputs for A2, with finite
 supplied-only scope and core0.8 requirements. The
 [updated acceptance handoff](acceptance-runtime-handoff.md#a2-remaining-dynamic-producer-integration)
@@ -75,9 +86,9 @@ remains not_reviewed; candidate bytes and membership are unchanged. Native produ
 deployment and committed interchange exits now reside in nativeQualification
 rather than being described as absent authoring.
 
-Current verification after the related-list handoff refresh passes all nine
+The recorded verification after the related-list handoff refresh passes all nine
 review-shape and twenty-eight candidate-root membership controls, compares every
-captured root with its complete current source bytes, and verifies local schema
+captured root with its source bytes at that checkpoint, and verifies local schema
 closure (11 acceptance, 8 history, 2 migration and 1 Python schema). The storage
 compiler root capture now includes the bounded-list/lookahead admission rules.
 All authored/review/native dispositions retain their original incomplete states.
@@ -89,7 +100,7 @@ Recent handoffs now include Python/TypeScript complete synthetic report-to-nativ
 encoding parity (including integer-like key order), portable migration inspection
 schemas and LM-V01–06, fresh-process archive recovery AH-R01–03, and conformance
 interruption/evidence-store settlement controls. Current combined strict schema
-compilation covers [159 contracts](evidence/design-audit/schema-inventory-performance-handoff-2026-10-09.json),
+compilation covers [161 contracts](evidence/design-audit/schema-inventory-receipt-visibility.json),
 including the separate mandatory-performance expectation 0.2 envelope. These are component/design outputs, distinct
 from genuine full report production, protected publication, deployed migration
 execution, provider durability and committed database interchange.

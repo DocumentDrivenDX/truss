@@ -1,0 +1,71 @@
+{
+  "scope": "Committed-source review and original browser asset byte comparison; no upstream native rerun or runtime/API adoption",
+  "owners": {
+    "umf": {
+      "reviewedRevision": "72996e58d2a9291ae191127b4f55e548c2105569",
+      "previousReviewedRevision": "8e76c74d14203225d1ef159c9132bb9e9b0cdffe"
+    },
+    "weft": {
+      "reviewedRevision": "1a8a3445302aa44a93167ef340dbcfb306805254",
+      "previousReviewedRevision": "1a1c0ad2c26d0cdd7aa6fb7f415abbaa44ab2842"
+    }
+  },
+  "sources": {
+    "umf": {
+      "docs/helix/02-design/contracts/CONTRACT-057-domain-pack-loaders.md": "100ab353c56a221545be0f06f96373fa4435f45d4cad0d73839b500097ed4fea",
+      "src/domain-packs/loader-contract.ts": "904f1bfb385e5fcb62851ceba73fd5f3a4ae1d13b351e08b73a10e12a5fc9334",
+      "src/domain-packs/loader.ts": "b979bdc0db0208a7a44d4110e2546c0b1e5e1ef6887200aa61c41a3fd5f7f7c9",
+      "src/domain-packs/loader-inventory.ts": "db6647afb4825b307a031cfa477a3595e50f24f51b097934ec3758a354472abc",
+      "src/adapters/javascript-numeric.ts": "3d38e52cc878910509e8e277f671ff304707db37633f4f7c39082eb943618fdc"
+    },
+    "weft": {
+      "docs/helix/02-design/contracts/exact-arithmetic-v0.3.md": "8073a90fadcf00785542a6f600d0150d14274056b1643dfae52b0969efcb97c2",
+      "crates/weft-core/src/model.rs": "bd461122697e480dc87931bc0bf39fae46c28b10e457f03e4ec4861bf8b09cf0",
+      "crates/weft-core/src/backend.rs": "5d035cd39c83763d1e4f10aeb7d33ba2cd461cf5a1b312962fa816aef1a430ef",
+      "crates/weft-databricks/src/binding.rs": "823f9be9457f69c9fde689b1f3ee0b6546dceec230038ee65321cbc16ed07479",
+      "crates/weft-postgresql/src/native_profile.rs": "dd03d79bb4fe0072bd0b81e4bfd826db8cfc4781fbd2e32c25cc7e604b25a9ff",
+      "crates/weft-postgresql/src/qualified_profile.rs": "ee93032d4e787330ba41b0a72b5ed3686c26c8d9326bda868bf0b2e670c75993"
+    }
+  },
+  "unchangedSources": [
+    "umf:src/adapters/javascript-numeric.ts",
+    "weft:crates/weft-postgresql/src/native_profile.rs",
+    "weft:crates/weft-postgresql/src/qualified_profile.rs"
+  ],
+  "umfBrowserAssets": {
+    "explorer.js": {
+      "sha256": "1c7264d67a3822563bd0d3f95067e4554b98baf55f9a41b947332b4f8cc46258",
+      "unchangedFromPreviousBrowserPin": true
+    },
+    "explorer.css": {
+      "sha256": "479073250e24e40c180a37d4f55207cd7f672612acc61965c10156249d7cb6e0",
+      "unchangedFromPreviousBrowserPin": true
+    },
+    "style.css": {
+      "sha256": "6c686ba762afdb65112034b3666bb8079cf137e8365fc160fece1d7fc2482f7a",
+      "unchangedFromPreviousBrowserPin": true
+    },
+    "logo.svg": {
+      "sha256": "5f40ae4ea560f51199abac4dda14b93d72b1667487a9791f4846cab73e4e114d",
+      "unchangedFromPreviousBrowserPin": true
+    },
+    "explorer.html": {
+      "sha256": "32652f55a021d1666a2d300ccbd8136af5ae71354681649ba7b604c24114c051",
+      "unchangedFromPreviousBrowserPin": true
+    }
+  },
+  "adoptedCompilerRevision": "f05f2df09e9c2494ac8c6d703dfe38413dbc4181",
+  "findings": [
+    "UMF provides portable domain-pack loader contract/schema primitives; acquisition remains Bun-owned companion work, not Truss installation or migration",
+    "UMF exact JavaScript numeric adapter source is unchanged",
+    "Weft0.3 optional Scalar null tests/equality/tagged output require explicit Ashlar/Spark native-null encoding and original capability admission",
+    "That encoding requires optional properties to be present; source-valid absence refuses backend representation, so it does not meet Truss complete absence/null/value semantics",
+    "Truss PostgreSQL17.9 native and qualified profile sources are unchanged; no PostgreSQL16.2 qualification or Weft0.3 adoption follows",
+    "UMF browser dist assets match byte-for-byte; Truss browser provenance can advance to the reviewed commit without changing rendering bytes"
+  ],
+  "pending": [
+    "Consume finalized security interfaces and complete original native issuer authority",
+    "Qualify the full local16.2 installation and compiler target before advertising support",
+    "Keep complete logical-value absence/null/empty/exact-carrier controls in any later compiler adoption"
+  ]
+}
