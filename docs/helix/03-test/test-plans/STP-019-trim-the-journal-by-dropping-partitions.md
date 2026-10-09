@@ -106,3 +106,24 @@ meaning. Omit one event/group/definition/configuration dependency and require
 explicit unavailable, not unwritten/empty. Keep original rollback/commit-unknown
 retention settlement separate from provider success. These are planned native
 whole-partition/handoff cases, not a promise of synchronous per-row erasure.
+
+## Fresh-process archive recovery — AH-R01–03
+
+These extend AH-01/03/05 and the existing zero-window controls using the
+[archive reconstruction handoff](../../02-design/contracts/reference-history-archive-handoff.proposal.md#independent-reconstruction-after-confirmed-local-removal).
+They retain US-019-AC4 and US-018-AC1; existing deleted-record/presence cases
+remain required rather than being replaced by these isolation controls.
+
+| Control | Independently staged boundary and required result |
+| --- | --- |
+| AH-R01 fresh reader after confirmed removal | Author populated object/edge/group/definition expectations before export. Confirm original provider write and eligible native cleanup independently. Terminate exporter and launch an actual separate reader process with only the admitted locator, recovery identity and interpretation dependencies. No exporter heap, cached rows or fixture expected data is passed as reader input. Observe local cohort absence and exact full historical reconstruction through the advertised API. |
+| AH-R02 catalog/authority separation | Change current catalog/values after confirmed removal, then reconstruct through original archived interpretation under fresh authorized historical access. Require original values/typed identity/group order. Revoke recovery disclosure or remove one original definition/profile: explicit unavailable/refusal, no current-schema reinterpretation or partial version. A recreated same-business-key row is not the old identity. |
+| AH-R03 two independent settlements | Separately confirm local rollback and lose native cleanup commit acknowledgment while the same archive remains durable. Preserve actual native horizon/content and original unknown-attempt custody. Reconstructability does not classify cleanup settlement or release account capacity; reconcile the original native attempt before declaring actual removal. No repeated cleanup from a fresh request identity repairs uncertainty. |
+
+Retain actual process inputs/identities, complete original provider bytes and
+profile, independent local membership, full reconstructed result, current
+historical authorization and separate native/provider settlement artifacts.
+A unit-test cache reset is not proof of fresh-process isolation. Provider or
+registered reader unavailability leaves these cases `not_run`; no in-memory
+replacement can pass. The schedules authorize no provider provisioning or
+production retention effects by themselves.

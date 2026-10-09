@@ -1055,7 +1055,7 @@
     "02-design/technical-designs/TD-018-reconstruct-a-record-as-of-a-version.md": "4d9d827fe89d9e2364e4a90c100abd83d11b822c2eca003138630dc6ed997ee3",
     "03-test/test-plans/STP-018-reconstruct-a-record-as-of-a-version.md": "7233a1ac81c2ff6d64138ec90650385c999ca5ec8b05c7dc36439acf00352721",
     "02-design/technical-designs/TD-019-trim-the-journal-by-dropping-partitions.md": "69acfcbce5795c9e66aaf870bad883c569542a36e2dc553278db0671f71bc018",
-    "03-test/test-plans/STP-019-trim-the-journal-by-dropping-partitions.md": "4e50d8c9a5e76850c9356ca82512a6d42a4af2805410ae5fb6983f2d3b2316d2",
+    "03-test/test-plans/STP-019-trim-the-journal-by-dropping-partitions.md": "8c51e8c340f0b005dff5bdd099ac21699f1ad7124757a52a7a081263c719ecc9",
     "02-design/technical-designs/TD-020-read-an-object-by-identifier-or-key.md": "4ec42330c6a243f93435bf31b5de05849ac495dd723ad767a3bc9676809d7908",
     "03-test/test-plans/STP-020-read-an-object-by-identifier-or-key.md": "3ffb5727946fbafbd84916c32152705a461d0be57a79411396012c0bab1e8563",
     "02-design/technical-designs/TD-021-list-a-types-objects-in-pages.md": "d8715cf23bc1d5fa65d8e58de487f549b1d9339f9cf531f7cda2a09ff9e43bb8",
