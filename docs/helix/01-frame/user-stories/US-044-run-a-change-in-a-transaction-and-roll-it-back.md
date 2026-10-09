@@ -33,7 +33,7 @@ An embedded host adopts its actual live transaction, applies the group through
 real Truss precondition/effect/final-state validation, reads pending results and
 rolls back. Dry-run success cannot skip deferred Truss validation that a real
 apply must pass. Truss contains operation failure with savepoints and restores
-its operation-local validation context, preserving prior caller work.
+its operation-local validation context, preserving prior caller work. A caller rollback to an earlier host savepoint can subsequently remove a successful pending Truss call without ending the outer transaction; its retained result then cannot be published or settled as committed.
 
 Pending IDs/results remain inside that original transaction until confirmed
 outer commit. Commit acknowledgment loss requires original recovery, not a

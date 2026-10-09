@@ -1104,8 +1104,8 @@
     "03-test/test-plans/STP-042-read-how-far-behind-a-downstream-copy-is.md": "3253d56d85f89a2a32b11a36ab1bb182e1f4cc799bc34661f94628f367521b04",
     "02-design/technical-designs/TD-043-make-a-group-safe-to-repeat.md": "98fe69a5fddf9b42ac49824e9be44e65d27c7be150d92509b7a6a17917b5c6e6",
     "03-test/test-plans/STP-043-make-a-group-safe-to-repeat.md": "4c670aa123b8234d1236cc1c858dd02253a914e8d7a8ca7974bcf39ca5c677d6",
-    "02-design/technical-designs/TD-044-run-a-change-in-a-transaction-and-roll-it-back.md": "bcd759fc59a2857f95461a6524e034a42b368e0a6768f3925ebec8077f3304ed",
-    "03-test/test-plans/STP-044-run-a-change-in-a-transaction-and-roll-it-back.md": "257f9501be6ecddf447fb720ae67910c24d20bd68e286d09c8cc9a34ad57c619",
+    "02-design/technical-designs/TD-044-run-a-change-in-a-transaction-and-roll-it-back.md": "539477aee3355ca950c98fb2e9b030d879be1d8c7dee9b1d13fd0400917fb75e",
+    "03-test/test-plans/STP-044-run-a-change-in-a-transaction-and-roll-it-back.md": "e84d620b66aa825992d5e33cea899560cc547810926bf46cf78a6a9f703842d4",
     "02-design/technical-designs/TD-045-bootstrap-the-internal-layout-from-umf.md": "ca24959bde1ba9c23f15f856f2a61c882ac37d8377d4b73905ce5a4f0f859869",
     "03-test/test-plans/STP-045-bootstrap-the-internal-layout-from-umf.md": "6acf72866955ed9b89ad13bc3a6166577c78750578fe7f07c415c59a45e735e0"
   },
@@ -1153,7 +1153,7 @@
     "01-frame/user-stories/US-041-publish-the-journal-without-losing-or-reordering-a-change.md": "ccd8c6b718623d62b1a505a4c9a9afe36643ce829604a69a82ff0d3c812642bb",
     "01-frame/user-stories/US-042-read-how-far-behind-a-downstream-copy-is.md": "fd97545af6ceccb25dec1c9aa94505d0fe97ba879c8f95fd7cd7a0ffaa0eb97a",
     "01-frame/user-stories/US-043-make-a-group-safe-to-repeat.md": "38429945a17d36a38e12087158068f0b52176cf2ab9ba0e614239e3ba3ca3269",
-    "01-frame/user-stories/US-044-run-a-change-in-a-transaction-and-roll-it-back.md": "9c5a41f249b88497def1bdb60127537b26dc7c92df4c9a6951f2744916129989",
+    "01-frame/user-stories/US-044-run-a-change-in-a-transaction-and-roll-it-back.md": "3d256389d4174f99286ac69ae0ad835b10482ff52c8daa6ae9b5f16a2de488b5",
     "01-frame/user-stories/US-045-bootstrap-the-internal-layout-from-umf.md": "b271409bf91e0c32ed8bd8dd46f47e68dde7a745e050a3eca331e4eba8747280"
   },
   "producerSha256": "3c19b4b417c495ac19b98304d13ff995e3043226e7e7706acf7f25cc01cec634",

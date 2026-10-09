@@ -238,3 +238,31 @@ commit admits settlement; lost acknowledgment retains unknown/recovery with no
 replacement allocation. Test ordinary sequence gaps separately from committed
 crash/failover/nonreuse, and retain native/public observations rather than
 requiring a precommit durability guarantee the owner did not select.
+
+
+## Caller rollback across successful pending calls (planned)
+
+Create an earlier host sentinel, then a host savepoint S, then complete a Truss
+group and release only its operation savepoint. Retain its pending result and
+private capture. Independently verify pending graph/receipt membership and a
+blocked waiter for a specifically selected lock acquired after S. Have the host
+roll back to S while keeping the original outer transaction open. Independently
+verify the sentinel survives, the affected graph/journal/request/registry work
+is absent, and that selected post-S lock no longer blocks the waiter. Do not
+expect locks acquired before S to be released; inventory those separately.
+
+Attempt to reuse the retained rolled-back capture and to settle its result
+after a later host COMMIT: both refuse. The unchanged backend/top-level xid and
+successful release of the inner savepoint do not prove surviving operation
+membership. Independently admitted subsequent work uses a fresh operation
+lifetime and reobserves native state under the existing hierarchy; no allocator
+counter or resource allowance is reset by host rollback. Compare retained
+occupancy with nonrefundable spent work under the selected account profile.
+Lose acknowledgment of ROLLBACK TO S in a separate fault schedule: preserve
+original unknown containment and close affected admission until reconciliation,
+without claiming the group absent or issuing an automatic replacement attempt.
+
+Retain actual host command/state, original operation membership, independent
+lock observations and capture/public-result refusal evidence. This is an
+adopted-transaction lifetime case under CONTRACT-007, not a new rollback API.
+It remains `not_run` until the selected adapter/native profile is implemented.

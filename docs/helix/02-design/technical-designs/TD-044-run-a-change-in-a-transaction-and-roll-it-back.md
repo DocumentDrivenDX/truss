@@ -35,7 +35,7 @@ Adopt an active host transaction on its original connection. Execute each operat
 
 Adopt asynchronously under the draft execution binding, verifying expected isolation/accessMode against actual connection-affine native state. Do not SET either property, begin a replacement transaction or clean up host failure implicitly. Concurrent host termination during verification invalidates adoption. A pre-established snapshot remains unchanged; ordinary observation may naturally establish the first snapshot when none exists, with no fabricated earlier-cut claim. STP-044 owns mismatch/failure/read-only and pooler proof.
 
-Reject inactive/completed, cross-adapter or ambiguous concurrent use. Never issue whole-transaction BEGIN/COMMIT/ROLLBACK on an adopted handle, release its connection, change isolation or retry the host callback. Generated savepoint identifiers are trusted internal names. Role belongs to host context; origin is restored at call boundary. Several successful calls may share one host transaction and still have distinct per-call origins. Catalog/row locks survive savepoint release until transaction end.
+Reject inactive/completed, cross-adapter or ambiguous concurrent use. Never issue whole-transaction BEGIN/COMMIT/ROLLBACK on an adopted handle, release its connection, change isolation or retry the host callback. Generated savepoint identifiers are trusted internal names. Role belongs to host context; origin is restored at call boundary. Several successful calls may share one host transaction and still have distinct per-call origins. Releasing the Truss operation savepoint does not release its catalog/row locks. Their lifetime still follows native host transaction/subtransaction semantics: rollback to an earlier host savepoint can undo later operations and release locks acquired after that savepoint. Do not promise retention across that rollback or infer operation liveness from the unchanged top-level transaction identity.
 
 ## Dry-run and provisional publication
 
@@ -50,7 +50,7 @@ they do not authorize silently changing whole-transaction constraint mode.
 Ordinary live rollback may leave allocator gaps. Do not infer precommit crash
 nonreuse from that observation. Pending IDs can link records only in the original
 live transaction and cannot be durably published as committed identities.
-Confirmed outer commit supplies committed-ID nonreuse and result settlement;
+A host rollback to an earlier savepoint invalidates affected pending operation captures/results even when the connection and outer transaction remain live. A later outer commit cannot settle those rolled-back operations; independently admit any subsequent work under a fresh operation lifetime and current native state. Confirmed outer commit of surviving operations supplies committed-ID nonreuse and result settlement;
 unknown commit retains original allocation/result/recovery custody. Network
 execution remains a complete owned batch with confirmed-commit acknowledgment.
 
