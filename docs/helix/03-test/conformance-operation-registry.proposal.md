@@ -352,3 +352,15 @@ observe complete unchanged state, drift and unavailable cuts, while original
 upgrade reconciliation retains historical settlement. Missing inspection service
 registration records unavailable/not_run instead of falling back to a marker-only
 query or invoking apply as a status probe.
+
+Register migration inspection through
+[layout-migration-inspection-v0.1.proposal.schema.json](../02-design/contracts/layout-migration-inspection-v0.1.proposal.schema.json):
+`inspectionRequest`/`status` for status and `verificationRequest`/`verification`
+for verify. This definitions-only schema preserves direct observed/matches/drift/
+unavailable unions, original exact artifacts and procedure/resource pins. It
+adds no result COMMIT evidence or generic Outcome wrapper. The release-version
+pattern follows LM-01's proposed manifest wire, distinct from historical component
+labels. Sixteen independent shape controls and strict combined compilation of
+all 158 current schemas pass; native coherence, artifact/authority admission and
+unchanged-state observations remain LM-V01–06 exits. Reproduce shape controls
+with `check_migration_inspection_schema.py` in the design-audit evidence directory.

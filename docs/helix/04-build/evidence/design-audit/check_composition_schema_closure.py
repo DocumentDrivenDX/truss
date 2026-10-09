@@ -18,6 +18,7 @@ roots = {
     'acceptance_history': ['history-event-v0.2.proposal.schema.json',
                            'retained-history-archive-v0.2.proposal.schema.json'],
     'typescript_python': ['acceptance-input-v0.1.schema.json'],
+    'installation_upgrades': ['layout-migration-inspection-v0.1.proposal.schema.json'],
 }
 registry = {}
 for path in sorted(contracts.glob('*.schema.json')):
