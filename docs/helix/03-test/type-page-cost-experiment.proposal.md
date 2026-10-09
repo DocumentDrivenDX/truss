@@ -16,10 +16,31 @@ Prepare independently equivalent 10-type and 1,000-type installations. The
 selected small type contains exactly three identical complete objects; limit
 is 50 and continuation is absent. Freeze original source/value bytes and
 independently expected complete results before execution. Other types have
-zero objects. Catalog metadata count is the sole intended difference; record
+zero objects. The three objects have distinct original native identities and
+identical business-field values; they are not three copies of one complete
+identity-bearing record. Catalog metadata count is the sole intended difference; record
 complete table/index/statistics inventories and any unavoidable metadata-size
 changes. A different query, cache policy, optional index or payload creates a
 new experiment registration. No reduced decoding or authority bypass.
+
+The reference logical fixture declares `Type000` first, with one required string
+field `label`. Create three objects whose complete business payload is
+`label="page-value"`, retaining separate fixture aliases for their original
+observed identities. Both arms preserve those three objects and their authored
+definition/value meaning. The 10-type arm adds `Type001` through `Type009`;
+the 1,000-type arm preserves those and adds `Type010` through `Type999`, each
+with the same one-field declaration and zero objects. No edges, retained values
+or extra optional fields enter one arm alone. Configure the declared page
+maximum to admit limit 50 before registration; silently lowering that request
+changes the experiment.
+
+The independently expected page contains exactly the three distinct complete
+records in the selected native ordering, with no continuation. Resolve original
+identity aliases through admitted fixture observations and compare full field
+presence/value and membership, not only a count of three. Equality of business
+payloads must not permit accidental deduplication or repeated identity. Pin both
+arms' original snapshot/context and actual native ordering/decoder obligations;
+do not substitute string ordering of generated numeric IDs.
 
 Run three registered blocks with 30 unmeasured paired warm-up calls and 1,000
 measured pairs per block. Alternate arm order deterministically: 10 then
@@ -44,3 +65,11 @@ policy. Record actual evidence and differences; missing pins leave registration
 unavailable. Exercise deliberately failing ratio and missing/zero/incomparable
 sample controls before trusting the runner. This result cannot qualify other
 payload sizes, concurrent load, cold startup or different managed services.
+
+Reuse the private `checkRelationshipPlanningRatio` component for the identical
+one-block nearest-rank p95/2× arithmetic, with canonical nanosecond inputs and
+timer resolution. Its existing three tests/ten assertions cover that arithmetic;
+they do not measure list_objects, admit held snapshots or qualify this benchmark.
+The page runner must retain and validate its own three blocks and full native
+result/profile evidence. Sharing a statistic implementation does not transfer
+relationship-planning performance evidence to page cost.
