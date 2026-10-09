@@ -1,0 +1,174 @@
+{
+  "scope": "read-only original source/model correspondence; no compiler or native execution",
+  "sources": [
+    {
+      "path": "/Users/erik/Projects/weft/crates/weft-core/src/application_model.rs",
+      "sha256": "240a65d6d8f4aacfea6c6e8aadb6d35c8af32602eb3ad3d1c72fef14b769ab5f"
+    },
+    {
+      "path": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/umf.py",
+      "sha256": "787fed8c69736f77e4ca880581b9d3b9fa4fd10484afbd0fd126ac419d63a45e"
+    }
+  ],
+  "observations": [
+    {
+      "path": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "sha256": "e194117a8de436d1479804c59b0e2cc76470814a3c0723cd732797635442a3e5",
+      "fieldsWithoutAuthoredCoreName": [
+        {
+          "module": "catalog",
+          "element": "UseCase.code",
+          "pointer": "/modules/0/elements/1"
+        },
+        {
+          "module": "catalog",
+          "element": "UseCase.name",
+          "pointer": "/modules/0/elements/2"
+        },
+        {
+          "module": "catalog",
+          "element": "UseCase.practiceArea",
+          "pointer": "/modules/0/elements/3"
+        },
+        {
+          "module": "catalog",
+          "element": "Solution.code",
+          "pointer": "/modules/0/elements/5"
+        },
+        {
+          "module": "catalog",
+          "element": "Solution.name",
+          "pointer": "/modules/0/elements/6"
+        },
+        {
+          "module": "catalog",
+          "element": "Solution.coverageLevel",
+          "pointer": "/modules/0/elements/7"
+        }
+      ]
+    },
+    {
+      "path": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "sha256": "5ff02aa14d0d5a64b85b6fe75ffe99ec7a3d8caf93c19b79187506a86c45162e",
+      "fieldsWithoutAuthoredCoreName": [
+        {
+          "module": "catalog",
+          "element": "UseCase.code",
+          "pointer": "/modules/0/elements/1"
+        },
+        {
+          "module": "catalog",
+          "element": "UseCase.name",
+          "pointer": "/modules/0/elements/2"
+        },
+        {
+          "module": "catalog",
+          "element": "UseCase.practiceArea",
+          "pointer": "/modules/0/elements/3"
+        },
+        {
+          "module": "catalog",
+          "element": "UseCase.description",
+          "pointer": "/modules/0/elements/4"
+        },
+        {
+          "module": "catalog",
+          "element": "UseCase.problem",
+          "pointer": "/modules/0/elements/5"
+        },
+        {
+          "module": "catalog",
+          "element": "Solution.code",
+          "pointer": "/modules/0/elements/7"
+        },
+        {
+          "module": "catalog",
+          "element": "Solution.name",
+          "pointer": "/modules/0/elements/8"
+        },
+        {
+          "module": "catalog",
+          "element": "Solution.deliveryMode",
+          "pointer": "/modules/0/elements/9"
+        },
+        {
+          "module": "catalog",
+          "element": "Solution.summary",
+          "pointer": "/modules/0/elements/10"
+        },
+        {
+          "module": "catalog",
+          "element": "Solution.workflow",
+          "pointer": "/modules/0/elements/11"
+        },
+        {
+          "module": "catalog",
+          "element": "Solution.prompt",
+          "pointer": "/modules/0/elements/12"
+        },
+        {
+          "module": "catalog",
+          "element": "Solution.audience",
+          "pointer": "/modules/0/elements/13"
+        },
+        {
+          "module": "catalog",
+          "element": "Product.code",
+          "pointer": "/modules/0/elements/15"
+        },
+        {
+          "module": "catalog",
+          "element": "Product.name",
+          "pointer": "/modules/0/elements/16"
+        },
+        {
+          "module": "catalog",
+          "element": "Product.vendor",
+          "pointer": "/modules/0/elements/17"
+        },
+        {
+          "module": "catalog",
+          "element": "Product.category",
+          "pointer": "/modules/0/elements/18"
+        },
+        {
+          "module": "catalog",
+          "element": "Product.summary",
+          "pointer": "/modules/0/elements/19"
+        },
+        {
+          "module": "catalog",
+          "element": "Product.lifecycleStatus",
+          "pointer": "/modules/0/elements/20"
+        },
+        {
+          "module": "catalog",
+          "element": "Product.availability",
+          "pointer": "/modules/0/elements/21"
+        },
+        {
+          "module": "catalog",
+          "element": "Product.caveat",
+          "pointer": "/modules/0/elements/22"
+        },
+        {
+          "module": "catalog",
+          "element": "CoverageAssertion.code",
+          "pointer": "/modules/0/elements/24"
+        },
+        {
+          "module": "catalog",
+          "element": "CoverageAssertion.level",
+          "pointer": "/modules/0/elements/25"
+        },
+        {
+          "module": "catalog",
+          "element": "CoverageAssertion.notes",
+          "pointer": "/modules/0/elements/26"
+        }
+      ]
+    }
+  ],
+  "observedMismatch": "Weft application member resolution requires Field.name; consumer cross-check derives Field ID from Record and DDD property names without requiring core Field.name",
+  "nativeImplementationQualified": false
+}

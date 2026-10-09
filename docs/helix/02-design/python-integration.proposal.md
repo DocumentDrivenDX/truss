@@ -65,6 +65,34 @@ empty input and qualified relationship direction. Core validity, exact codecs,
 current-person policy and complete native/public results remain separate gates.
 No consumer files were changed and no host-specific runtime semantics are added.
 
+## Original consumer Field-name mapping prerequisite
+
+The [read-only Field-name review](../04-build/evidence/design-audit/consumer-field-name-source-review.json)
+finds six conformance-model Fields and twenty-three larger-example Fields without
+an authored core `name`. The consumer obtains property names from DDD metadata
+and cross-checks IDs formed as Record-name plus property-name. Weft's application
+model `members` procedure instead requires each selected core Field's authored
+`name`, including for entity projection. The original models' valid relationship
+key-ID selection does not resolve this distinct compiler input mismatch.
+
+Before CH-04/PY-02/05 adopts these sources, consume either an explicitly updated
+consumer document with authored core names or an owner-admitted interpretation/
+projection that supplies the exact logical naming correspondence. This is a
+source/adapter prerequisite, not permission to make DDD Truss's required ontology.
+No implicit dotted-ID split, local SQL rewrite or host parser assertion can stand
+in for the selected owner's interpretation. A copied document with inserted names
+is a different artifact and cannot retain the original source digest.
+
+Retain original source bytes, selected target bytes where applicable, exact
+source/target Field identities and naming/preservation correspondence. Independently
+cover absent core name, disagreement between core and extension names, equal
+property names under distinct qualified Records, quoted/case-distinct names and
+unknown extension content. Source validity and compiler-name support remain
+separate verdicts; successful UMF relationship inspection is not a compiler pass.
+Unadmitted naming keeps affected queries unavailable rather than using a generic
+sales fixture to claim the original consumer works. No consumer files are changed
+or new compiler naming semantics selected by this handoff.
+
 ## Original grouped-count admission gap
 
 The [source correspondence review](../04-build/evidence/design-audit/consumer-grouped-count-source-review.json)
