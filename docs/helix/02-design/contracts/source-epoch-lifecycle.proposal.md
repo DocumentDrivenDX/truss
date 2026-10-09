@@ -111,7 +111,7 @@ without adopting a complete lifecycle or deployment-admission profile.
 
 `packages/postgresql/native/source-epoch-issue.sql`, `source-epoch-lock.sql` and
 `source-epoch-immutability.sql` remain private SECURITY INVOKER components with
-PUBLIC execution revoked. The storage harness verifies 27 component checks;
+PUBLIC execution revoked. The storage harness verifies 31 component checks;
 `bun scripts/check-source-epoch-concurrency.ts` verifies nine checks with two
 connections, including actual issuer blocking, timeout with no speculative
 successor, successful successor admission and predecessor lineage. Use the
@@ -128,3 +128,10 @@ savepoint rollback restoration. Complete integration must prove every protected
 writer registers and retains this original admission before effects; the fixture
 is not that coverage proof. Unregistered direct writes remain governed by the
 separate public/private entry and role closure obligations.
+
+The storage harness now exercises actual runtime_admit_operation, proving its
+retained original row fences issuance, attempted deletion cannot evade the
+custody guard, and savepoint rollback removes the admission. This supersedes
+fixture-only writer evidence for that path. Completed-call finalization and
+all other protected writer entry paths remain required coverage; no accepted
+commit or complete installed context is established.

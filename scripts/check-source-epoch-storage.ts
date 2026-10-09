@@ -65,6 +65,18 @@ try {
   await refuse('Missing expected identity refuses','55000',()=>tx`SELECT * FROM truss.runtime_lock_source_epoch(NULL,'component-successor','component-test-incarnation')`);
   await refuse('Issuer stale predecessor refuses','55000',()=>tx`SELECT truss.runtime_issue_source_epoch('component-test-installation','component-initial','component-test-incarnation',decode('01','hex'),decode('02','hex'))`);
   await refuse('Issuer null profile refuses','55000',()=>tx`SELECT truss.runtime_issue_source_epoch('component-test-installation','component-successor','component-test-incarnation',NULL,decode('02','hex'))`);
+  try {await tx.savepoint(async sp=>{
+   await sp`SELECT * FROM truss.runtime_admit_operation('mutation',decode('01','hex'),decode('01','hex'),decode('01','hex'),decode('01','hex'),decode('01','hex'),decode('01','hex'))`;
+   await refuse('Actual native admitted writer fences epoch issuance','55000',()=>tx`SELECT truss.runtime_issue_source_epoch('component-test-installation','component-successor','component-test-incarnation',decode('01','hex'),decode('02','hex'))`);
+   await refuse('Actual original operation cannot be deleted to evade epoch fence','55000',()=>tx`DELETE FROM truss.row_home_operation WHERE original_writer_xid=pg_current_xact_id_if_assigned()`);
+   const retainedWriter=await sp`SELECT count(*)::text AS n FROM truss.row_home_operation WHERE original_writer_xid=pg_current_xact_id_if_assigned()`;
+   if(retainedWriter[0].n!=='1')throw Error('Original writer custody lost');
+   checks.push('Actual admitted operation survives attempted epoch transition and removal');
+   throw Error('ROLLBACK_ORIGINAL_WRITER_TEST');
+  });}catch(e){if((e as Error).message!=='ROLLBACK_ORIGINAL_WRITER_TEST')throw e;}
+  const rolledWriter=await tx`SELECT count(*)::text AS n FROM truss.row_home_operation WHERE original_writer_xid=pg_current_xact_id_if_assigned()`;
+  if(rolledWriter[0].n!=='0')throw Error('Original operation rollback failed');
+  checks.push('Original operation savepoint rollback restores no-writer state');
   await tx`SET LOCAL ROLE pg_read_all_data`;
   await refuse('Ordinary role issuer execution denied','42501',()=>tx`SELECT truss.runtime_issue_source_epoch('component-test-installation','component-successor','component-test-incarnation',decode('01','hex'),decode('02','hex'))`);
   await refuse('Ordinary role epoch primitive execution denied','42501',()=>tx`SELECT * FROM truss.runtime_lock_source_epoch('component-test-installation','component-successor','component-test-incarnation')`);
@@ -77,6 +89,6 @@ try {
  if(after[0].registry!==null||after[0].markers!=='0')throw Error('Rollback leaked component state');
  checks.push('Outer rollback removes registry/pointer and marker');
  const sources:Record<string,string>={};
- for(const path of ['scripts/check-source-epoch-storage.ts','packages/postgresql/native/source-epoch-immutability.sql','packages/postgresql/native/source-epoch-lock.sql','packages/postgresql/native/source-epoch-issue.sql','docs/helix/04-build/evidence/source-epoch-storage.owner-export.sql'])sources[path]=new Bun.CryptoHasher('sha256').update(await Bun.file(path).arrayBuffer()).digest('hex');
+ for(const path of ['scripts/check-source-epoch-storage.ts','packages/postgresql/native/source-epoch-immutability.sql','packages/postgresql/native/source-epoch-lock.sql','packages/postgresql/native/source-epoch-issue.sql','packages/postgresql/native/operation-admission.sql','docs/helix/04-build/evidence/source-epoch-storage.owner-export.sql'])sources[path]=new Bun.CryptoHasher('sha256').update(await Bun.file(path).arrayBuffer()).digest('hex');
  await Bun.write('docs/helix/04-build/evidence/design-audit/source-epoch-storage-native.json',JSON.stringify({database:after[0].version,sources,checks,scope:'Rollback-contained storage candidate constraints and ordinary-role DML denial only; synthetic component tokens are not issued epochs, installed admission or lifecycle qualification',qualified:false},null,2)+'\n');console.log(JSON.stringify({checks:checks.length,qualified:false}));
 }finally{await sql.close();}
