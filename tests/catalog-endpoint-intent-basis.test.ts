@@ -1,16 +1,19 @@
 import {test,expect} from 'bun:test';
+import {createCatalogEndpointDocumentOrder} from '../packages/umf-bun/src/catalog-endpoint-document-order';
 import {createCatalogInputPreparation} from '../packages/umf-bun/src/catalog-input';
 import {createCatalogEndpointIntentBasis} from '../packages/umf-bun/src/catalog-endpoint-intent-basis';
 const directory=process.env.TRUSS_UMF_PRODUCER;if(!directory)throw Error('Original Record producer directory required');
 const preparation=await createCatalogInputPreparation(directory,'/Users/erik/Projects/umf/package.json');
 const basis=await createCatalogEndpointIntentBasis('/Users/erik/Projects/umf/package.json');
+const ordering=await createCatalogEndpointDocumentOrder('/Users/erik/Projects/umf/package.json');
 const fixture=await Bun.file('docs/helix/02-design/contracts/bindings/acceptance-input-capacity-v0.1.fixture.json').json();
 function payload(){return {interfaceVersion:'truss-endpoint-intents/0.1.0',dependencies:[{document:'second-doc',revision:'r1',sourceReference:'second-doc-source'}],intents:[{id:'link',module:'m',name:'link',sources:[{document:'first-doc',module:'m',element:'Item',definition:{state:'selected',revision:'r1',sourceReference:'first-doc-source'}}],targets:[{document:'second-doc',module:'m',element:'Item',definition:{state:'selected',revision:'r1',sourceReference:'second-doc-source'},key:{state:'absent'}}],sourceBounds:{min:'0',max:'*'},targetBounds:{min:'0',max:'1'},directed:true,lifecycle:'independent',composition:false,inverse:null,associationRecord:null}]}}
-function prepare(value:any=payload()){
+function prepare(value:any=payload(),second:any=null,ids=['first-doc','second-doc']){
  const input=structuredClone(fixture.input);input.binding={state:'absent'};input.transforms=[];
- input.documents=['first-doc','second-doc'].map(documentId=>{
-  const extension=documentId==='first-doc'?{[basis.extensionId]:value}:{};
-  const text=JSON.stringify({umf:'0.7.0',id:documentId,vocabularies:documentId==='first-doc'?{[basis.extensionId]:{version:'0.1.0'}}:{},extensions:extension,modules:[{id:'m',namespace:'m',elements:[{id:'Item',kind:'record',members:[{module:'m',element:'label'}],extensions:{}},{id:'label',kind:'field',scalarType:'string',nullability:'required',cardinality:'one',extensions:{}}]}]});
+ input.documents=ids.map(documentId=>{
+  const carrier=documentId==='first-doc'?value:documentId==='second-doc'?second:null;
+  const extension=carrier===null?{}:{[basis.extensionId]:carrier};
+  const text=JSON.stringify({umf:'0.7.0',id:documentId,vocabularies:carrier!==null?{[basis.extensionId]:{version:'0.1.0'}}:{},extensions:extension,modules:[{id:'m',namespace:'m',elements:[{id:'Item',kind:'record',members:[{module:'m',element:'label'}],extensions:{}},{id:'label',kind:'field',scalarType:'string',nullability:'required',cardinality:'one',extensions:{}}]}]});
   return {documentId,documentRevision:'r1',artifact:{identity:documentId+'-source',bytesBase64:Buffer.from(text).toString('base64'),sha256:new Bun.CryptoHasher('sha256').update(text).digest('hex')},umfProfile:preparation.umfProfile,ingress:{kind:'native'}};
  });return preparation.prepare(new TextEncoder().encode(JSON.stringify(input)));
 }
@@ -44,4 +47,27 @@ test('all occurrences include dependency pending and association work in one bou
 test('copied preparation and malformed required carrier cannot borrow basis',()=>{
  expect(()=>basis.collect({...prepare()},3)).toThrow('validated catalog preparation');
  const value=payload();delete (value.intents[0] as any).lifecycle;expect(()=>basis.collect(prepare(value),3)).toThrow('complete candidate endpoint carrier');
+});
+
+test('ordering includes every original independent document and preserves original object custody',()=>{
+ const limits={documents:3,edges:1,identityBytes:256};
+ for(const ids of [['first-doc','second-doc','third-doc'],['third-doc','second-doc','first-doc']]){
+  const original=prepare(payload(),null,ids),result=ordering.order(original,3,limits);
+  expect(result.documents.map(d=>d.documentId)).toEqual(['second-doc','first-doc','third-doc']);
+  expect(result.documents[0]).toBe(original.documents.find(d=>d.documentId==='second-doc')!);
+  expect(result.scope).toBe('original_supplied_endpoint_dependency_order_only');
+ }
+});
+test('reciprocal original declarations form one complete deterministic component',()=>{
+ const reciprocal={interfaceVersion:'truss-endpoint-intents/0.1.0',dependencies:[{document:'first-doc',revision:'r1',sourceReference:'first-doc-source'}],intents:[]};
+ const result=ordering.order(prepare(payload(),reciprocal,['second-doc','third-doc','first-doc']),4,{documents:3,edges:2,identityBytes:256});
+ expect(result.components).toEqual([['first-doc','second-doc'],['third-doc']]);
+ expect(result.documents.map(d=>d.documentId)).toEqual(['first-doc','second-doc','third-doc']);
+});
+test('ordering refuses changed revision and insufficient full-set bounds',()=>{
+ const value=payload();value.dependencies[0].revision='r2';
+ expect(()=>ordering.order(prepare(value),3,{documents:2,edges:1,identityBytes:256})).toThrow();
+ expect(()=>ordering.order(prepare(),3,{documents:1,edges:1,identityBytes:256})).toThrow('document bound');
+ expect(()=>ordering.order(prepare(),3,{documents:2,edges:0,identityBytes:256})).toThrow('graph bound');
+ expect(()=>ordering.order({...prepare()},3,{documents:2,edges:1,identityBytes:256})).toThrow('validated catalog preparation');
 });

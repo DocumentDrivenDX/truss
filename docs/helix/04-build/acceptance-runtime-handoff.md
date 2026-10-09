@@ -10,11 +10,19 @@ and edge permutations of those small vectors, duplicate-edge charging, exact
 UTF-8 ordering, refusal bounds and a 4,096-document chain; strict TypeScript
 passes. This is `validated_graph_order_only`: explicit document, observed-edge
 and identity-byte bounds govern this controlled operation, not native budgets.
-The component does not yet consume the full original endpoint-intent basis,
-resolve accepted-source dependencies, derive whole-set definitions or persist
-`schema_doc.ord`. Those integrations and original semantic registration remain
-required before dependent-package acceptance. Existing vector files retain their
-authored status; this checkpoint records execution without rewriting their source.
+The component is now privately composed with the full original endpoint-intent
+basis. The composed operation includes every original supplied document, including
+independent sources without the candidate extension, resolves exact declared
+dependency selections through the original source inventory, and returns original
+prepared document objects in dependency-first order. Reciprocal declarations form
+one complete component without embedding reciprocal source digests in either
+document. Pending endpoints do not invent source selections or required dependency
+edges. Twenty-four combined tests/592 assertions and strict TypeScript pass.
+This remains `original_supplied_endpoint_dependency_order_only`: accepted-history
+source lookup, original extension semantic registration, whole-set definition/key
+derivation and native `schema_doc.ord` persistence remain required. Existing vector
+files retain their authored status; this checkpoint records execution without
+rewriting their source.
 
 The endpoint-intent candidate now has a private original supplied-source
 reference resolver. It consumes only the original validated preparation and
