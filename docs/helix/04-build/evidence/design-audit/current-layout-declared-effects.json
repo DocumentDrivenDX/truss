@@ -1,5 +1,5 @@
 {
-  "collectorSha256": "2e6b4defe3a71fc4090c50163c0389f21197d521ba89231acdeb9e937bb3974a",
+  "collectorSha256": "ead0e1f96767618eec9a80eadde1abd8cf3016ed31ff946ca03ea61cf2ead51d",
   "ownerProjection": {
     "sourcePins": {
       "src/model/document.ts": "a0422042659defdea425dff8bb0618eaa4bbf125f68da16aa5ad21af0b6c282f",
@@ -13,8 +13,8 @@
   "nativeAstSha256": "b487add3060364b08d25ae0cd28572cb168df83fb468e4a2000f5520e25f7d68",
   "nativeCountObservation": {
     "path": "docs/helix/04-build/evidence/design-audit/source-epoch-layout-native.json",
-    "sha256": "f22e82319cb5dcb93dea3b34f57c9c5b7db4d5e9f8a77a7b2b759f29b808e027",
-    "scope": "relation names/column counts only; not all native column/type/constraint parity"
+    "sha256": "63fae6b891436b06c225eaa730c5fd645b9d2e401eaf93220941638b37a893c7",
+    "scope": "All relation/column names and counts correspond to original declarations. Other native definitions are observed, not complete type/constraint/security semantic parity."
   },
   "statements": [
     {
