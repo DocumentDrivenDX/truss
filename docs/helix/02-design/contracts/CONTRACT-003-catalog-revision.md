@@ -843,3 +843,13 @@ effect/finalizer still consume its retained basis under their own admission.
 The implementation must pin a realizable parser/semantic/account profile and
 independent RPDOC controls; the declaration alone cannot issue custody or
 qualify a decoder. No new public wire or UMF/Weft API is introduced.
+
+The producer port's [declaration controls](bindings/truss-acceptance-input-producer-v0.1.typecheck.ts)
+compile under strict TypeScript with seven required negative cases: foreign
+framed domain, missing raw decoder, fabricated custody/account/admission,
+partial output on refusal and committed-success fabrication. Positive examples
+cover all three representation branches. Reproduce using the installed
+TypeScript compiler with `--ignoreConfig --noEmit --strict --target ES2022
+--module ESNext --moduleResolution bundler` and that file. These controls
+prove declaration separation only; runtime brands, parsing and authority
+remain independently qualified obligations.
