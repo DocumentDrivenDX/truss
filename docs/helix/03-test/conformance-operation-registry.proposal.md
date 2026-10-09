@@ -39,6 +39,24 @@ Keep legacy v0.1 cases version-scoped if independently selected. They cannot sat
 
 ### Existing wire carriers and actual composition gaps
 
+Retained reconstruct/historicalSource now have definitions-only
+`retained-history-capability-wires-v0.1.proposal.schema.json`: select the
+reconstructionRequest/Result/Outcome or sourceRequest/Result/Outcome member
+for the corresponding method. The evidence definitions preserve original
+baseline/event/definition inventory and current authority observations.
+Historical source reuses the existing FeedSourceFact carrier at
+seed-baseline-v0.1's `$defs/source`; this structural reuse qualifies neither
+seed execution nor feed completeness. Preserve absent versus not_found,
+deleted versus unwritten and history_unavailable versus unsupported meaning.
+No current catalog revision is silently inserted into a reconstruction request.
+Run `check-retained-history-capability-wires.ts` in the design audit directory
+with the installed Ajv Draft 2020-12 module path: twenty-four composition
+controls cover all business branches and required evidence/non-disclosure.
+Actual historical horizons, retained owner/source correspondence, current
+authority and native reconstruction remain unqualified. These carriers close
+the missing history wrapper work in the table below; original semantic
+registration is still required.
+
 Paths below are under `docs/helix/02-design/contracts/`. Reuse the named
 carriers, preserving their `$id` and exact registered bytes. A payload schema
 is not automatically the complete capability argument or return schema. Every
