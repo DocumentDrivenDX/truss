@@ -251,3 +251,22 @@ not native verification, complete dependency pinning or inventory closure. Impli
 constraint indexes, defaults/check expressions, routine bodies, grants and
 initializer publication remain separate required checks. UMF continues to own SQL
 generation; this capture introduces no alternative SQL compiler.
+
+## Local native sequence correspondence
+
+The structural checker now consumes the captured original UMF sequence nodes and
+refuses stale model hashes or options outside its admitted ascending-int8 subset.
+It compares every truss sequence with actual pg_sequence metadata: type, increment,
+minimum, maximum, start, cache and cycle. Native integers are transported as text;
+original large Float AST tokens are parsed as exact Python integers, never binary
+floats or JavaScript numbers. Defaults follow the
+[PostgreSQL16 CREATE SEQUENCE contract](https://www.postgresql.org/docs/16/sql-createsequence.html).
+
+All12 declarations match the fresh PostgreSQL16.2 composition, including the exact
+9223372036854775807 maximum. The updated structural receipt retains actual native
+values and the declaration-capture hash alongside the original source pins. The
+same50-table/481-column/67-FK and four guard-refusal checks pass; rollback removes
+the namespace. Sequence ownership dependencies, privileges, runtime allocation,
+crash recovery and migration state preservation are not qualified by configuration
+parity. Explicit/implicit indexes, defaults/check expressions and complete
+routines/grants/initializer publication remain required installation work.

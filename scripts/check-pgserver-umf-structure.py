@@ -111,6 +111,44 @@ for record in records:
         if target is None:
             target = relation['definition']['pktable']['relname']
         retain_fk(record['name'], target, relation['fieldCorrespondence'], fk_definition(relation))
+declarations_path = root / 'docs/helix/04-build/evidence/design-audit/pgserver-native-object-declarations.json'
+declarations_bytes = declarations_path.read_bytes()
+declarations = json.loads(declarations_bytes)
+for source in declarations['sources']:
+    assert hashlib.sha256((root / source['path']).read_bytes()).hexdigest() == source['sha256'], 'Stale original declaration capture'
+expected_sequences = {}
+for obj in declarations['objects']:
+    if obj['kind'] != 'CreateSeqStmt':
+        continue
+    definition = obj['definition']
+    relation = definition['sequence']
+    assert relation['schemaname'] == 'truss' and relation['relpersistence'] == 'p'
+    # Scoped ascending int8 declarations. PostgreSQL16 documented defaults:
+    # https://www.postgresql.org/docs/16/sql-createsequence.html
+    values = {'as': 'int8', 'increment': '1', 'minvalue': '1',
+              'maxvalue': '9223372036854775807', 'start': '1', 'cache': '1', 'cycle': False}
+    seen = set()
+    for entry in definition.get('options', []):
+        option = entry['DefElem']; name = option['defname']; arg = option['arg']
+        assert name in values and name not in seen, 'Unadmitted sequence option'
+        seen.add(name)
+        if name == 'as':
+            names = [v['String']['sval'] for v in arg['TypeName']['names']]
+            assert names == ['pg_catalog', 'int8']
+        elif name == 'cycle':
+            values[name] = arg['Boolean']['boolval']
+            assert isinstance(values[name], bool)
+        elif 'Integer' in arg:
+            value = arg['Integer']['ival']
+            assert isinstance(value, int) and not isinstance(value, bool)
+            values[name] = str(value)
+        else:
+            value = arg['Float']['fval']
+            assert re.fullmatch(r'-?[0-9]+', value), 'Exact integer token required'
+            values[name] = str(int(value))
+    assert values['increment'] == '1' and values['as'] == 'int8', 'Unadmitted sequence default profile'
+    assert relation['relname'] not in expected_sequences
+    expected_sequences[relation['relname']] = values
 if importlib.metadata.version('pgserver') != '0.1.4':
     raise SystemExit('Expected pinned pgserver0.1.4')
 psql = Path(str(importlib.resources.files('pgserver'))) / 'pginstall/bin/psql'
@@ -139,6 +177,12 @@ BEGIN
  PERFORM set_config('session_replication_role','origin',true);
 END $$;
 SELECT json_build_object(
+ 'sequences',(SELECT json_object_agg(c.relname,json_build_object(
+  'as',t.typname,'increment',q.seqincrement::text,'minvalue',q.seqmin::text,
+  'maxvalue',q.seqmax::text,'start',q.seqstart::text,'cache',q.seqcache::text,'cycle',q.seqcycle))
+ FROM pg_sequence q JOIN pg_class c ON c.oid=q.seqrelid
+ JOIN pg_namespace n ON n.oid=c.relnamespace JOIN pg_type t ON t.oid=q.seqtypid
+ WHERE n.nspname='truss'),
  'tables',(SELECT json_agg(c.relname ORDER BY c.relname) FROM pg_class c
  JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='truss' AND c.relkind IN ('r','p')),
  'serverVersion',current_setting('server_version'),
@@ -182,6 +226,7 @@ SELECT json_build_object(
 ROLLBACK;
 '''
         observed = json.loads(query('BEGIN;\n' + original.decode('utf-8') + ';\n' + probe))
+        assert observed['sequences'] == expected_sequences, 'Original sequence configuration discrepancy'
         assert observed['tables'] == sorted(expected), (observed['tables'], expected)
         assert all(observed[k] for k in ['sha256', 'xactStatus', 'currentXid', 'uuidIssuer'])
         assert observed['typeNamespaces'] == ['pg_catalog']
@@ -198,12 +243,12 @@ ROLLBACK;
         assert query("SELECT to_regnamespace('truss') IS NULL;") == 't'
     finally:
         server.cleanup()
-receipt = {'scope': 'Original generated base/adjunct DDL and immutable guard composition, UMF core column/type/requiredness and ordered physical FK correspondence plus independent adjunct catalog expectations under rollback only; no complete installer, routine/grant inventory, accepted catalog or migration qualification',
-           'pgserverVersion': '0.1.4', 'structuralModel': str(structural_path.relative_to(root)), 'structuralSha256': hashlib.sha256(structural_bytes).hexdigest(), 'sources': [{'path': path, 'sha256': hashlib.sha256(value).hexdigest()} for path, value in zip(paths, originals)], 'observation': observed,
+receipt = {'scope': 'Original generated base/adjunct DDL and immutable guard composition, UMF core column/type/requiredness and ordered physical FK and sequence configuration correspondence plus independent adjunct catalog expectations under rollback only; no complete installer, routine/grant inventory, accepted catalog or migration qualification',
+           'pgserverVersion': '0.1.4', 'declarationCaptureSha256': hashlib.sha256(declarations_bytes).hexdigest(), 'structuralModel': str(structural_path.relative_to(root)), 'structuralSha256': hashlib.sha256(structural_bytes).hexdigest(), 'sources': [{'path': path, 'sha256': hashlib.sha256(value).hexdigest()} for path, value in zip(paths, originals)], 'observation': observed,
            'rollbackRemovedNamespace': True, 'truncateRefusals': 4, 'truncateModes': ['origin', 'replica'],
            'unverifiedStructure': ['collation implementation/version semantics', 'default and check expression meaning', 'complete indexes/routines/grants'],
            'limitation': 'PostgreSQL16.2 lacks transaction_timeout; any selected profile requiring that setting must refuse or use a separately admitted bounded alternative',
            'producerSha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest()}
 (root / 'docs/helix/04-build/evidence/design-audit/pgserver-umf-structural-correspondence.json').write_text(json.dumps(receipt, indent=2) + '\n')
-print(json.dumps({'serverVersion': observed['serverVersion'], 'tables': len(expected), 'columns': sum(map(len, expected_columns.values())), 'foreignKeys': len(expected_fks),
+print(json.dumps({'serverVersion': observed['serverVersion'], 'tables': len(expected), 'columns': sum(map(len, expected_columns.values())), 'foreignKeys': len(expected_fks), 'sequences': len(expected_sequences),
                   'rollbackRemovedNamespace': True, 'truncateRefusals': 4, 'truncateModes': ['origin', 'replica'], 'transactionTimeout': observed['transactionTimeout']}))

@@ -1,6 +1,7 @@
 {
-  "scope": "Original generated base/adjunct DDL and immutable guard composition, UMF core column/type/requiredness and ordered physical FK correspondence plus independent adjunct catalog expectations under rollback only; no complete installer, routine/grant inventory, accepted catalog or migration qualification",
+  "scope": "Original generated base/adjunct DDL and immutable guard composition, UMF core column/type/requiredness and ordered physical FK and sequence configuration correspondence plus independent adjunct catalog expectations under rollback only; no complete installer, routine/grant inventory, accepted catalog or migration qualification",
   "pgserverVersion": "0.1.4",
+  "declarationCaptureSha256": "6d7b09b78c24e7486ec2c429e56119bec16d7946a6fa1ba94e3b446906801e31",
   "structuralModel": "docs/helix/02-design/models/truss-layout-core-structural-0.6.proposal.umf.json",
   "structuralSha256": "8631fecfcc5f07ed7217a4d8d6483e99a705d44f242727d92561948723b37026",
   "sources": [
@@ -26,6 +27,116 @@
     }
   ],
   "observation": {
+    "sequences": {
+      "layout_migration_receipt_row_seq": {
+        "as": "int8",
+        "increment": "1",
+        "minvalue": "1",
+        "maxvalue": "9223372036854775807",
+        "start": "1",
+        "cache": "1",
+        "cycle": false
+      },
+      "request_receipt_row_seq": {
+        "as": "int8",
+        "increment": "1",
+        "minvalue": "1",
+        "maxvalue": "9223372036854775807",
+        "start": "1",
+        "cache": "1",
+        "cycle": false
+      },
+      "migration_receipt_row_seq": {
+        "as": "int8",
+        "increment": "1",
+        "minvalue": "1",
+        "maxvalue": "9223372036854775807",
+        "start": "1",
+        "cache": "1",
+        "cycle": false
+      },
+      "feed_seed_artifact_row_seq": {
+        "as": "int8",
+        "increment": "1",
+        "minvalue": "1",
+        "maxvalue": "9223372036854775807",
+        "start": "1",
+        "cache": "1",
+        "cycle": false
+      },
+      "feed_seed_attempt_row_seq": {
+        "as": "int8",
+        "increment": "1",
+        "minvalue": "1",
+        "maxvalue": "9223372036854775807",
+        "start": "1",
+        "cache": "1",
+        "cycle": false
+      },
+      "feed_administration_receipt_row_seq": {
+        "as": "int8",
+        "increment": "1",
+        "minvalue": "1",
+        "maxvalue": "9223372036854775807",
+        "start": "1",
+        "cache": "1",
+        "cycle": false
+      },
+      "complete_feed_consumer_row_seq": {
+        "as": "int8",
+        "increment": "1",
+        "minvalue": "1",
+        "maxvalue": "9223372036854775807",
+        "start": "1",
+        "cache": "1",
+        "cycle": false
+      },
+      "installation_archive_row_seq": {
+        "as": "int8",
+        "increment": "1",
+        "minvalue": "1",
+        "maxvalue": "9223372036854775807",
+        "start": "1",
+        "cache": "1",
+        "cycle": false
+      },
+      "key_storage_row_seq": {
+        "as": "int8",
+        "increment": "1",
+        "minvalue": "1",
+        "maxvalue": "9223372036854775807",
+        "start": "1",
+        "cache": "1",
+        "cycle": false
+      },
+      "row_home_id_seq": {
+        "as": "int8",
+        "increment": "1",
+        "minvalue": "1",
+        "maxvalue": "9223372036854775807",
+        "start": "1",
+        "cache": "1",
+        "cycle": false
+      },
+      "journal_seq": {
+        "as": "int8",
+        "increment": "1",
+        "minvalue": "1",
+        "maxvalue": "9223372036854775807",
+        "start": "1",
+        "cache": "1",
+        "cycle": false
+      },
+      "id_seq": {
+        "as": "int8",
+        "increment": "1",
+        "minvalue": "1",
+        "maxvalue": "9223372036854775807",
+        "start": "1",
+        "cache": "1",
+        "cycle": false
+      }
+    },
     "tables": [
       "catalog_acceptance_report",
       "complete_feed_administration_receipt",
@@ -5569,5 +5680,5 @@
     "complete indexes/routines/grants"
   ],
   "limitation": "PostgreSQL16.2 lacks transaction_timeout; any selected profile requiring that setting must refuse or use a separately admitted bounded alternative",
-  "producerSha256": "8bd2d8b233768f8a6190fe0455d9e2ff0ac48d1cf3d7a8aa6c6faf3f37836244"
+  "producerSha256": "f392fe7684b1b5d90bdf7d70b69e76f8d1b632b2b7fbcca44e0e8f6c1471c8fe"
 }
