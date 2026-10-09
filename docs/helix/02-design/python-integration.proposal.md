@@ -532,3 +532,34 @@ authenticated connection semantics and transaction restrictions.
 ## Original configuration snapshot protocol
 
 PY-01 can consume the [shared twelve-column native snapshot wire](contracts/installed-context-admission.proposal.md#original-snapshot-host-projection-and-shared-native-wire). PostgreSQL retains the pre-effect capsule and compares live current state before returning bytes. Python preserves canonical xid/ordinal/generation text, exact hex bytes and direct SHA-256; it keeps original adapter/transaction/cut/profile custody and rechecks at use. Current-only collection remains a different protocol. The TypeScript/native 171-check component establishes scoped correspondence; Python execution, qualified transport/security/installation and public report/finalization remain PY-01/03/04 evidence.
+
+
+## Private PY-01a composed report schema checkpoint
+
+The private [Python report candidate](../04-build/evidence/design-audit/python_report_wire_candidate.py)
+consumes the same eleven pinned original schemas as the TypeScript composed
+report codec. It uses Python 3.11 with jsonschema4.23.0 and an explicit local
+referencing registry; it implements no substitute schema language or remote
+reference fetching. Original numeric-free bytes pass through the bounded retained
+JSON candidate before a temporary validation view. The returned original immutable
+bytes/tree remain separate from that view. Missing any of the nineteen fields,
+unknown versions, numeric nodes and invalid nested rebind/reactivation shapes refuse.
+
+The [receipt](../04-build/evidence/design-audit/python-report-wire-candidate.json)
+records seventeen passing tests across numeric/time/tree/raw-JSON/report candidates,
+all source/schema pins, exact dependency versions and original test output.
+Shape-valid forged source/effect examples explicitly retain codec-only scope;
+artifact digest/meaning, complete actual effects, authority and commit are not
+established by schema validation. The one-MiB/depth128/node100000 parser bounds
+cover this controlled prototype; schema traversal and simultaneous retained/
+validation allocations do not yet have the complete original precharged resource
+profile. PY-01b transport and native acceptance remain unavailable.
+
+Reproduce in a dedicated Python3.11 virtual environment using
+`pip install -r docs/helix/04-build/evidence/design-audit/python-report-wire-candidate.requirements.txt`,
+then `PYTHONDONTWRITEBYTECODE=1 python -m unittest discover -s docs/helix/04-build/evidence/design-audit -p 'test_python_*candidate.py'`.
+Earlier twelve-test standard-library-only checkpoints remain historical; this
+seventeen-test run includes the explicit schema-validation dependencies. Dependency
+selection here is experimental, not a package-ownership or release-route decision.
+The validator API follows its [versioned documentation](https://python-jsonschema.readthedocs.io/en/v4.23.0/validate/)
+and [local reference registry contract](https://python-jsonschema.readthedocs.io/en/v4.23.0/referencing/).
