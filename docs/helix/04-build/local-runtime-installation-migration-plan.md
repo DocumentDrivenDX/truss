@@ -423,3 +423,9 @@ issuance never rewinds and closes on unknown/cancelled/ended custody. This is a
 component implementation, not a native issuer permit or a correction of the four
 old native allocators. Adapter transaction recognition, original account/control
 reservations, savepoint proof and native issuer verification remain required.
+
+The Python original control-frame seam now has fresh local16.2 evidence for five
+fixed savepoint/transaction controls, reusing the existing pinned instance receiver.
+All ten expected command/ready frames match; original issuer/account/unknown-outcome
+qualification remains false. See the issuer handoff for the exact integration
+boundary. This does not replace the full driver or native admission profile.

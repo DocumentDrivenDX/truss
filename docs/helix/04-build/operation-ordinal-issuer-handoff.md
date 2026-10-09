@@ -106,3 +106,22 @@ submitOperationSavepoint boundary, original registry/account affinity and actual
 confirmation requirements. It is a design handoff, not an implemented stock-driver
 API. Its independently required fault schedules precede native allocator correction;
 ingress/frame receipts cannot substitute for operation control confirmation.
+
+## Original Python control-frame seam
+
+The [local driver probe](evidence/design-audit/check_pg8000_local_control_native.py)
+reuses the pinned pg8000 1.31.5 instance receiver and original complete-frame
+correspondence rather than reading public cursor results. On pgserver0.1.4 / actual
+PostgreSQL16.2 it captures BEGIN, SAVEPOINT, ROLLBACK TO, RELEASE and outer ROLLBACK
+as five distinct fixed submissions. All ten independently expected CommandComplete
+and ReadyForQuery frames match in order, including active/idle state. Startup ready
+observation remains separate. No authentication or backend-key bodies are retained.
+
+The [receipt](evidence/design-audit/pg8000-local-control-native.json) keeps
+ driverPortQualified=false. Probe cycle labels are local instrumentation, not the
+original issuer/epoch/account binding. Dependencies are reused from the existing
+private pg8000 and pgserver environments. This evidence establishes a concrete
+source/transport seam for original control capture, not lost-response handling,
+finite pre-ingress heap accounting, savepoint authority, original outcome settlement
+or TLS/current-person admission. Implement the original reservation/issuer binding
+at this seam and qualify its complete independent controls before adopting it.
