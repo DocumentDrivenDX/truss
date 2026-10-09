@@ -178,6 +178,20 @@ per packet refuse. The Rust harness pass only records observations; this separat
 assessment checks their expected outcomes. Neither verdict qualifies SQL/native
 execution or the complete consumer adapter.
 
+The [complete corpus SQL review](../04-build/evidence/design-audit/consumer-corpus-frontend.json)
+extends this to all 45 original query steps (22 distinct SQL texts), on both named
+model proposals. Under the unprofiled dialect-0.2 test frontend, 80 observations
+resolve and ten refuse: five relationship-equality steps per model return
+`WFT-NAME-MISSING` because relationship names are not Record property members.
+Use the [preparer/assessor](../04-build/evidence/design-audit/check_consumer_corpus_frontend.py)
+with `prepare` and an isolated pinned Weft workspace, run the saved Rust harness
+command, then use `assess` with the same workspace. It preserves each original
+case/step SQL and verifies complete observations and original source pins.
+No bounded profile, host limit, saved cursor or relationship rewrite is inserted.
+Unprofiled resolution of a grouped count or alias.* does not close its bounded
+profile, complete logical result, attribution or relationship projection gaps.
+This covers query input compatibility, not execution of the 41 consumer cases.
+
 ## Remaining consumer metadata meaning and action boundary
 
 Both explicit-name validation observations retain eight warnings. Five identify

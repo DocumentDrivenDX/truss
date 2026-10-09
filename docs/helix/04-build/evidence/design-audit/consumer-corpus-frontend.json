@@ -1,0 +1,848 @@
+{
+  "scope": "All original consumer corpus SQL steps on two named proposals; Rust test frontend dialect 0.2 without bounded read profile; no execution, SQL lowering or adapter qualification",
+  "revision": "5856c73db0342363e64802905a94abb96209d757",
+  "sourceArchiveSha256": "2affd857c0159de20096f55425ee43adbcfd6557958640f776a27c346ff322d1",
+  "corpus": {
+    "path": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/corpus.json",
+    "sha256": "8997812ea8f73d5e7ebe873809f2e812e3815206282f6d807b5ade1a21e93a09"
+  },
+  "querySteps": 45,
+  "distinctSql": 22,
+  "inputsSha256": "b5d5a14f9a216155e81f8bfa60e644358322d5ae75bd2e6ac4cc2e69872ff5b8",
+  "checkerSha256": "5694386adb2dc7c0b3c2973d877ba47cd4d289508e37c3ac204bc637f7d56be5",
+  "resolved": 80,
+  "blocked": 10,
+  "observations": [
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "read.key-lookup-whole-entity:0",
+      "sql": "SELECT u.* FROM catalog.UseCase u WHERE u.code = 'uc-1'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "93ef66980fa65cd40c7446a38ccaecd4a8cbcafbd09021a004cd4be2f5f8de71"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "read.relationship-columns-follow-ends:0",
+      "sql": "SELECT s.* FROM catalog.Solution s WHERE s.code = 'sol-1'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "b47e31faef7a220c0b0d1f762c17cebb680825744c4a9c9f815110b6a51ded95"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "read.missing-key-is-no-rows:0",
+      "sql": "SELECT u.* FROM catalog.UseCase u WHERE u.code = 'nope'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "14928c309dcab527a83aa4ceaf7fb80e4a32a829539b676cc6feea36bb31f61f"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "read.columns-and-filters:0",
+      "sql": "SELECT u.code, u.name FROM catalog.UseCase u WHERE u.name = 'NDA review'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "0c85c45e2cc1581f659a0b41c932956e466aee2244991126cb8b56eb1770c515"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "read.relationship-filter-both-directions:0",
+      "sql": "SELECT s.code FROM catalog.Solution s WHERE s.addresses = 'uc-1'",
+      "status": "blocked",
+      "diagnostics": [
+        {
+          "code": "WFT-NAME-MISSING",
+          "message": "Property not found among record members",
+          "phase": "resolve",
+          "severity": "error",
+          "sourceSpan": {
+            "end": 55,
+            "start": 46
+          }
+        }
+      ],
+      "responseSha256": "cb99f630247485b5178d6262c367b94cbc5b773d3f68d7ace5a990e2d49db777"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "read.relationship-filter-both-directions:1",
+      "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.addressedBy = 'sol-1'",
+      "status": "blocked",
+      "diagnostics": [
+        {
+          "code": "WFT-NAME-MISSING",
+          "message": "Property not found among record members",
+          "phase": "resolve",
+          "severity": "error",
+          "sourceSpan": {
+            "end": 56,
+            "start": 45
+          }
+        }
+      ],
+      "responseSha256": "91c70b76da954828191e7d6f2a9d4ff5ff8266e357661f27a4c842ffca01a9c0"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "read.relationship-filter-both-directions:2",
+      "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.addressedBy = 'nobody'",
+      "status": "blocked",
+      "diagnostics": [
+        {
+          "code": "WFT-NAME-MISSING",
+          "message": "Property not found among record members",
+          "phase": "resolve",
+          "severity": "error",
+          "sourceSpan": {
+            "end": 56,
+            "start": 45
+          }
+        }
+      ],
+      "responseSha256": "91c70b76da954828191e7d6f2a9d4ff5ff8266e357661f27a4c842ffca01a9c0"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "read.repeated-relationship-predicates-mean-both:2",
+      "sql": "SELECT s.code FROM catalog.Solution s WHERE s.addresses = 'uc-1' AND s.addresses = 'uc-2'",
+      "status": "blocked",
+      "diagnostics": [
+        {
+          "code": "WFT-NAME-MISSING",
+          "message": "Property not found among record members",
+          "phase": "resolve",
+          "severity": "error",
+          "sourceSpan": {
+            "end": 55,
+            "start": 46
+          }
+        }
+      ],
+      "responseSha256": "cb99f630247485b5178d6262c367b94cbc5b773d3f68d7ace5a990e2d49db777"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "read.repeated-relationship-predicates-mean-both:3",
+      "sql": "SELECT s.code FROM catalog.Solution s WHERE s.addresses = 'uc-1' AND s.addresses = 'nope'",
+      "status": "blocked",
+      "diagnostics": [
+        {
+          "code": "WFT-NAME-MISSING",
+          "message": "Property not found among record members",
+          "phase": "resolve",
+          "severity": "error",
+          "sourceSpan": {
+            "end": 55,
+            "start": 46
+          }
+        }
+      ],
+      "responseSha256": "cb99f630247485b5178d6262c367b94cbc5b773d3f68d7ace5a990e2d49db777"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "read.count-group-by:2",
+      "sql": "SELECT u.name, COUNT(*) FROM catalog.UseCase u GROUP BY u.name",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "39cd29c084ee171fbbcf6cdf39c8b81edd0456392c3714b4dd8b88a52c7bcfb1"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "read.paging-by-key:0",
+      "sql": "SELECT u.code FROM catalog.UseCase u",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "0cc648e5efba6296a0a3e7ad701b713968a48b5006266787a2427f8837daa5dc"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "read.paging-by-key:1",
+      "sql": "SELECT u.code FROM catalog.UseCase u",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "0cc648e5efba6296a0a3e7ad701b713968a48b5006266787a2427f8837daa5dc"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "read.relationship-columns-are-capped:2",
+      "sql": "SELECT u.* FROM catalog.UseCase u WHERE u.code = 'uc-2'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "58bc1631648f95368de2f9d3627383049530b7526568079d7a05b1a081ed9af1"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "access.no-token-is-refused:0",
+      "sql": "SELECT u.code FROM catalog.UseCase u",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "0cc648e5efba6296a0a3e7ad701b713968a48b5006266787a2427f8837daa5dc"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "access.anothers-token-is-refused:0",
+      "sql": "SELECT u.code FROM catalog.UseCase u",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "0cc648e5efba6296a0a3e7ad701b713968a48b5006266787a2427f8837daa5dc"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "access.anothers-token-is-refused:1",
+      "sql": "SELECT u.code FROM catalog.UseCase u",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "0cc648e5efba6296a0a3e7ad701b713968a48b5006266787a2427f8837daa5dc"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "access.no-grant-is-refused-not-empty:0",
+      "sql": "SELECT u.code FROM catalog.UseCase u",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "0cc648e5efba6296a0a3e7ad701b713968a48b5006266787a2427f8837daa5dc"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "access.expired-token-is-refused-not-unavailable:1",
+      "sql": "SELECT u.code FROM catalog.UseCase u",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "0cc648e5efba6296a0a3e7ad701b713968a48b5006266787a2427f8837daa5dc"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "access.outage-is-unavailable-never-empty:1",
+      "sql": "SELECT u.code FROM catalog.UseCase u",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "0cc648e5efba6296a0a3e7ad701b713968a48b5006266787a2427f8837daa5dc"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "access.outage-is-unavailable-never-empty:3",
+      "sql": "SELECT u.code FROM catalog.UseCase u",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "0cc648e5efba6296a0a3e7ad701b713968a48b5006266787a2427f8837daa5dc"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "access.outage-is-unavailable-never-empty:5",
+      "sql": "SELECT u.code FROM catalog.UseCase u",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "0cc648e5efba6296a0a3e7ad701b713968a48b5006266787a2427f8837daa5dc"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "access.no-token-is-refused-even-when-down:1",
+      "sql": "SELECT u.code FROM catalog.UseCase u",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "0cc648e5efba6296a0a3e7ad701b713968a48b5006266787a2427f8837daa5dc"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "access.outage-during-a-write-changes-nothing:4",
+      "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'uc-9'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "ce5396851c95801041c9ef2afca8847d605fc493c4c89417316393ea52794c75"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "freshness.replica-catches-up-to-a-token:2",
+      "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'uc-9'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "ce5396851c95801041c9ef2afca8847d605fc493c4c89417316393ea52794c75"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "freshness.replica-catches-up-to-a-token:5",
+      "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'uc-9'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "ce5396851c95801041c9ef2afca8847d605fc493c4c89417316393ea52794c75"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "freshness.authority-has-reached-its-own-tokens:2",
+      "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'uc-9'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "ce5396851c95801041c9ef2afca8847d605fc493c4c89417316393ea52794c75"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "action.applies-atomically-and-reads-back:2",
+      "sql": "SELECT s.* FROM catalog.Solution s WHERE s.code = 'sol-2'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "83a394f8e5adee4ba45af21311c7de5f191da67d0cbd7a8f0f614b9aff13f871"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "action.failed-precondition-changes-nothing:1",
+      "sql": "SELECT s.code FROM catalog.Solution s",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "6874e744ea3e7d8ed701182024ec7c799cc430171d0bf75653123923e25bf0c6"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "action.conflict-rolls-back-the-unit:1",
+      "sql": "SELECT s.* FROM catalog.Solution s WHERE s.code = 'sol-1'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "b47e31faef7a220c0b0d1f762c17cebb680825744c4a9c9f815110b6a51ded95"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "action.update-bumps-the-version-once:1",
+      "sql": "SELECT s.* FROM catalog.Solution s WHERE s.code = 'sol-1'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "b47e31faef7a220c0b0d1f762c17cebb680825744c4a9c9f815110b6a51ded95"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "action.read-only-principal-is-refused:1",
+      "sql": "SELECT u.code FROM catalog.UseCase u",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "0cc648e5efba6296a0a3e7ad701b713968a48b5006266787a2427f8837daa5dc"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "action.anothers-token-cannot-write:1",
+      "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'x'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "9ccefbc448189ba12155fd19808a3ccf3a93b54ad221977edab832353c3eede9"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "action.idempotent-retry-returns-the-original:2",
+      "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'uc-9'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "ce5396851c95801041c9ef2afca8847d605fc493c4c89417316393ea52794c75"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "action.key-reused-with-other-inputs-conflicts:2",
+      "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'uc-8'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "68f731fa21bef1e3504c0cff56d3934f3b375c5f949a5c0fbfc4888cff316695"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "action.dry-run-writes-nothing-and-keeps-the-key:2",
+      "sql": "SELECT s.code FROM catalog.Solution s",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "6874e744ea3e7d8ed701182024ec7c799cc430171d0bf75653123923e25bf0c6"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "action.deleted-keys-stay-deleted:1",
+      "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'uc-2'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "a1fd326f7884fd851c3a4e623ce1bc3b4b827f71336b0be8706a40ca7b2eec2b"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "action.deleted-keys-stay-deleted:3",
+      "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'uc-2'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "a1fd326f7884fd851c3a4e623ce1bc3b4b827f71336b0be8706a40ca7b2eec2b"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "action.atomic-batch-is-all-or-nothing:3",
+      "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'b3'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "d7ff331614c733978cc4782f1eba918e1196d02872f0bf8920bbbb919b1ba19b"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "action.independent-batch-reports-each-item:3",
+      "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'b9'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "0067a50a4cdc3f36122b5cdc89f009df3a48880ca4209e7a2c2266d1d2d5b432"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "action.batch-shape-and-access:3",
+      "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'x'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "9ccefbc448189ba12155fd19808a3ccf3a93b54ad221977edab832353c3eede9"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "import.identity-skip-and-provenance:1",
+      "sql": "SELECT u.* FROM catalog.UseCase u WHERE u.code = 'uc-7'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "d56a75d81e7f903a99a56fa5850428ddd9ea161c391530c8f780333a0b15eeb1"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "import.identity-skip-and-provenance:2",
+      "sql": "SELECT u.* FROM catalog.UseCase u WHERE u.code = 'uc-1'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "93ef66980fa65cd40c7446a38ccaecd4a8cbcafbd09021a004cd4be2f5f8de71"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "import.entities-before-relationships:1",
+      "sql": "SELECT s.* FROM catalog.Solution s WHERE s.code = 'sol-9'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "ec0b0679dfc93e579e377aa5dcc39f4579907fa2e9af7c778cb29c6afafec818"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "import.deleted-stays-deleted:1",
+      "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'uc-2'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "a1fd326f7884fd851c3a4e623ce1bc3b4b827f71336b0be8706a40ca7b2eec2b"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "caseStep": "import.deleted-stays-deleted:3",
+      "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'uc-2'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "a1fd326f7884fd851c3a4e623ce1bc3b4b827f71336b0be8706a40ca7b2eec2b"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "read.key-lookup-whole-entity:0",
+      "sql": "SELECT u.* FROM catalog.UseCase u WHERE u.code = 'uc-1'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "3a09d794f1fc080d597d3ffdf769be3cca37a5e09e64973b28e308ddd6ea1be7"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "read.relationship-columns-follow-ends:0",
+      "sql": "SELECT s.* FROM catalog.Solution s WHERE s.code = 'sol-1'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "14bc9cb736acd1f99e5f3c8cfe7dd9730f5a41f00a10a67dfe337845e195caf9"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "read.missing-key-is-no-rows:0",
+      "sql": "SELECT u.* FROM catalog.UseCase u WHERE u.code = 'nope'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "814524871ffebfd21213e99b425869ca993c5294fbbc356054031bc3e1bce704"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "read.columns-and-filters:0",
+      "sql": "SELECT u.code, u.name FROM catalog.UseCase u WHERE u.name = 'NDA review'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "001d3e8e0e7a78ee20caaa2094ab8a35bb552749e3ba4b14c6a05b6dd1a3c297"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "read.relationship-filter-both-directions:0",
+      "sql": "SELECT s.code FROM catalog.Solution s WHERE s.addresses = 'uc-1'",
+      "status": "blocked",
+      "diagnostics": [
+        {
+          "code": "WFT-NAME-MISSING",
+          "message": "Property not found among record members",
+          "phase": "resolve",
+          "severity": "error",
+          "sourceSpan": {
+            "end": 55,
+            "start": 46
+          }
+        }
+      ],
+      "responseSha256": "cb99f630247485b5178d6262c367b94cbc5b773d3f68d7ace5a990e2d49db777"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "read.relationship-filter-both-directions:1",
+      "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.addressedBy = 'sol-1'",
+      "status": "blocked",
+      "diagnostics": [
+        {
+          "code": "WFT-NAME-MISSING",
+          "message": "Property not found among record members",
+          "phase": "resolve",
+          "severity": "error",
+          "sourceSpan": {
+            "end": 56,
+            "start": 45
+          }
+        }
+      ],
+      "responseSha256": "91c70b76da954828191e7d6f2a9d4ff5ff8266e357661f27a4c842ffca01a9c0"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "read.relationship-filter-both-directions:2",
+      "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.addressedBy = 'nobody'",
+      "status": "blocked",
+      "diagnostics": [
+        {
+          "code": "WFT-NAME-MISSING",
+          "message": "Property not found among record members",
+          "phase": "resolve",
+          "severity": "error",
+          "sourceSpan": {
+            "end": 56,
+            "start": 45
+          }
+        }
+      ],
+      "responseSha256": "91c70b76da954828191e7d6f2a9d4ff5ff8266e357661f27a4c842ffca01a9c0"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "read.repeated-relationship-predicates-mean-both:2",
+      "sql": "SELECT s.code FROM catalog.Solution s WHERE s.addresses = 'uc-1' AND s.addresses = 'uc-2'",
+      "status": "blocked",
+      "diagnostics": [
+        {
+          "code": "WFT-NAME-MISSING",
+          "message": "Property not found among record members",
+          "phase": "resolve",
+          "severity": "error",
+          "sourceSpan": {
+            "end": 55,
+            "start": 46
+          }
+        }
+      ],
+      "responseSha256": "cb99f630247485b5178d6262c367b94cbc5b773d3f68d7ace5a990e2d49db777"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "read.repeated-relationship-predicates-mean-both:3",
+      "sql": "SELECT s.code FROM catalog.Solution s WHERE s.addresses = 'uc-1' AND s.addresses = 'nope'",
+      "status": "blocked",
+      "diagnostics": [
+        {
+          "code": "WFT-NAME-MISSING",
+          "message": "Property not found among record members",
+          "phase": "resolve",
+          "severity": "error",
+          "sourceSpan": {
+            "end": 55,
+            "start": 46
+          }
+        }
+      ],
+      "responseSha256": "cb99f630247485b5178d6262c367b94cbc5b773d3f68d7ace5a990e2d49db777"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "read.count-group-by:2",
+      "sql": "SELECT u.name, COUNT(*) FROM catalog.UseCase u GROUP BY u.name",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "5a5b9823729e61bcdccb6a84f3707e0cb640d90d9419dadb2dbd55219fb39371"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "read.paging-by-key:0",
+      "sql": "SELECT u.code FROM catalog.UseCase u",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "846ec167d1814944e6e03270f8174ab954dabefe509a3ff2ed8d3f3e90f33f43"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "read.paging-by-key:1",
+      "sql": "SELECT u.code FROM catalog.UseCase u",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "846ec167d1814944e6e03270f8174ab954dabefe509a3ff2ed8d3f3e90f33f43"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "read.relationship-columns-are-capped:2",
+      "sql": "SELECT u.* FROM catalog.UseCase u WHERE u.code = 'uc-2'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "0c62d7fe369a3309e7f8f42c68734d8017ca2ca67ac3c5a5e94d52e48248c02f"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "access.no-token-is-refused:0",
+      "sql": "SELECT u.code FROM catalog.UseCase u",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "846ec167d1814944e6e03270f8174ab954dabefe509a3ff2ed8d3f3e90f33f43"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "access.anothers-token-is-refused:0",
+      "sql": "SELECT u.code FROM catalog.UseCase u",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "846ec167d1814944e6e03270f8174ab954dabefe509a3ff2ed8d3f3e90f33f43"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "access.anothers-token-is-refused:1",
+      "sql": "SELECT u.code FROM catalog.UseCase u",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "846ec167d1814944e6e03270f8174ab954dabefe509a3ff2ed8d3f3e90f33f43"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "access.no-grant-is-refused-not-empty:0",
+      "sql": "SELECT u.code FROM catalog.UseCase u",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "846ec167d1814944e6e03270f8174ab954dabefe509a3ff2ed8d3f3e90f33f43"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "access.expired-token-is-refused-not-unavailable:1",
+      "sql": "SELECT u.code FROM catalog.UseCase u",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "846ec167d1814944e6e03270f8174ab954dabefe509a3ff2ed8d3f3e90f33f43"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "access.outage-is-unavailable-never-empty:1",
+      "sql": "SELECT u.code FROM catalog.UseCase u",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "846ec167d1814944e6e03270f8174ab954dabefe509a3ff2ed8d3f3e90f33f43"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "access.outage-is-unavailable-never-empty:3",
+      "sql": "SELECT u.code FROM catalog.UseCase u",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "846ec167d1814944e6e03270f8174ab954dabefe509a3ff2ed8d3f3e90f33f43"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "access.outage-is-unavailable-never-empty:5",
+      "sql": "SELECT u.code FROM catalog.UseCase u",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "846ec167d1814944e6e03270f8174ab954dabefe509a3ff2ed8d3f3e90f33f43"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "access.no-token-is-refused-even-when-down:1",
+      "sql": "SELECT u.code FROM catalog.UseCase u",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "846ec167d1814944e6e03270f8174ab954dabefe509a3ff2ed8d3f3e90f33f43"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "access.outage-during-a-write-changes-nothing:4",
+      "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'uc-9'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "9a6839e363452c901a2e9d3819922995392c7262eef6ba9661a9f06d58c672ab"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "freshness.replica-catches-up-to-a-token:2",
+      "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'uc-9'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "9a6839e363452c901a2e9d3819922995392c7262eef6ba9661a9f06d58c672ab"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "freshness.replica-catches-up-to-a-token:5",
+      "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'uc-9'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "9a6839e363452c901a2e9d3819922995392c7262eef6ba9661a9f06d58c672ab"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "freshness.authority-has-reached-its-own-tokens:2",
+      "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'uc-9'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "9a6839e363452c901a2e9d3819922995392c7262eef6ba9661a9f06d58c672ab"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "action.applies-atomically-and-reads-back:2",
+      "sql": "SELECT s.* FROM catalog.Solution s WHERE s.code = 'sol-2'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "6f5fa4c7cc452d11603b8251a9a396b8ab1c4513cc3ec097f2aea88f4f199ff3"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "action.failed-precondition-changes-nothing:1",
+      "sql": "SELECT s.code FROM catalog.Solution s",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "cb23ea4ae17cf0b937c85b62f8380382f2fe5234645e0311e91d5ecc42cf25f6"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "action.conflict-rolls-back-the-unit:1",
+      "sql": "SELECT s.* FROM catalog.Solution s WHERE s.code = 'sol-1'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "14bc9cb736acd1f99e5f3c8cfe7dd9730f5a41f00a10a67dfe337845e195caf9"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "action.update-bumps-the-version-once:1",
+      "sql": "SELECT s.* FROM catalog.Solution s WHERE s.code = 'sol-1'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "14bc9cb736acd1f99e5f3c8cfe7dd9730f5a41f00a10a67dfe337845e195caf9"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "action.read-only-principal-is-refused:1",
+      "sql": "SELECT u.code FROM catalog.UseCase u",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "846ec167d1814944e6e03270f8174ab954dabefe509a3ff2ed8d3f3e90f33f43"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "action.anothers-token-cannot-write:1",
+      "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'x'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "c524187e5cde39b1dfac1ab506edd79c68bae3fc2e604753f549346c5e925068"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "action.idempotent-retry-returns-the-original:2",
+      "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'uc-9'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "9a6839e363452c901a2e9d3819922995392c7262eef6ba9661a9f06d58c672ab"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "action.key-reused-with-other-inputs-conflicts:2",
+      "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'uc-8'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "8d26adaf22cb047bbf7db73a546ac54a13d9faf48ee5e90e4aa2e6251c788dfc"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "action.dry-run-writes-nothing-and-keeps-the-key:2",
+      "sql": "SELECT s.code FROM catalog.Solution s",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "cb23ea4ae17cf0b937c85b62f8380382f2fe5234645e0311e91d5ecc42cf25f6"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "action.deleted-keys-stay-deleted:1",
+      "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'uc-2'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "c1e5244ebef003f8e26112111977b19813229d08358aecd7112bb5fe127c9984"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "action.deleted-keys-stay-deleted:3",
+      "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'uc-2'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "c1e5244ebef003f8e26112111977b19813229d08358aecd7112bb5fe127c9984"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "action.atomic-batch-is-all-or-nothing:3",
+      "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'b3'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "83bf44ef770ff8e85b7880cbd93f6e417f1d65677c5fe306b61a3fea890b40f2"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "action.independent-batch-reports-each-item:3",
+      "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'b9'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "8d54a27fd42ffcde49469e8b03870829a6d0376cbcdece6d4d7e979e55d4ca43"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "action.batch-shape-and-access:3",
+      "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'x'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "c524187e5cde39b1dfac1ab506edd79c68bae3fc2e604753f549346c5e925068"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "import.identity-skip-and-provenance:1",
+      "sql": "SELECT u.* FROM catalog.UseCase u WHERE u.code = 'uc-7'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "dd61734c3791b1cbcebbecc3690b7ae74973876670e783a6434f5777866294b1"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "import.identity-skip-and-provenance:2",
+      "sql": "SELECT u.* FROM catalog.UseCase u WHERE u.code = 'uc-1'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "3a09d794f1fc080d597d3ffdf769be3cca37a5e09e64973b28e308ddd6ea1be7"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "import.entities-before-relationships:1",
+      "sql": "SELECT s.* FROM catalog.Solution s WHERE s.code = 'sol-9'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "05106666531d458069516f97498693f76477d75fc4e667264fd24cab006011f8"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "import.deleted-stays-deleted:1",
+      "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'uc-2'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "c1e5244ebef003f8e26112111977b19813229d08358aecd7112bb5fe127c9984"
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "caseStep": "import.deleted-stays-deleted:3",
+      "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'uc-2'",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "c1e5244ebef003f8e26112111977b19813229d08358aecd7112bb5fe127c9984"
+    }
+  ],
+  "nativeImplementationQualified": false
+}
