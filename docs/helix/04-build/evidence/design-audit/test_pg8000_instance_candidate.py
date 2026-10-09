@@ -1,5 +1,5 @@
 import unittest
-from pg8000_instance_candidate import FrameFile
+from pg8000_instance_candidate import FrameFile, RawConnection
 
 class Transport:
     def __init__(self, data):
@@ -50,6 +50,30 @@ class DriverFileTests(unittest.TestCase):
         sibling = FrameFile(Transport(bytes.fromhex('5a0000000549')))
         self.assertEqual(sibling.read(5), bytes.fromhex('5a00000005'))
         self.assertEqual(sibling.read(1), b'I')
+    def test_original_driver_dispatch_failure_quarantines_without_new_native_claim(self):
+        from types import SimpleNamespace
+        for source, exception in [
+            (bytes.fromhex('54000000060001'), ValueError),
+            (bytes.fromhex('5900000004'), KeyError),
+        ]:
+            t = Transport(source + bytes.fromhex('5a0000000549'))
+            f = FrameFile(t)
+            connection = RawConnection.__new__(RawConnection)
+            connection._sock = f
+            connection._transaction_status = b'T'
+            connection.message_types = {b'T':connection.handle_ROW_DESCRIPTION}
+            context = SimpleNamespace(columns=None, rows=None, error=None)
+            with self.assertRaises(exception): connection.handle_messages(context)
+            self.assertTrue(f.closed)
+            self.assertEqual(connection._transaction_status, b'T')
+            self.assertIsNone(context.rows)
+            reads = list(t.reads)
+            with self.assertRaises(ValueError): f.read(5)
+            with self.assertRaises(ValueError): f.write(b'Q')
+            self.assertEqual(t.reads, reads)
+            self.assertEqual(t.writes, [])
+            self.assertEqual(t.data, bytes.fromhex('5a0000000549'))
+
     def test_send_budget_and_unknown_send_failure_prevent_further_writes(self):
         t = Transport(b'')
         f = FrameFile(t)

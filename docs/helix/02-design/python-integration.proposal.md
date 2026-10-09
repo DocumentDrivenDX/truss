@@ -643,13 +643,21 @@ it captures no authentication/backend-key body in its receipt. Exact dependency
 versions, core/probe/receiver/decoder hashes and raw message-size counters are saved.
 
 The private instance classes now reside in `pg8000_instance_candidate.py`,
-with four offline controlled-transport tests. Fragmented header/body and zero-body
+with six offline controlled-transport tests. Fragmented header/body and zero-body
 handling pass; malformed/partial input, wrong body requests, send-budget refusal
 and unknown send failure permanently close the experiment file without budget
 refund or sibling interference. A discovered pre-send budget refusal previously
 left the file usable; it now closes before any send. Closure is only an adapter
 state, not native termination, confirmed rollback or safe pool reuse. The native
 probe was rerun after this refactoring and pins the extracted candidate source.
+
+Constructor and query-loop exceptions now close the instance file as well.
+Independent complete-frame controls exercise the original driver dispatch with
+malformed row metadata and an unknown message kind: both raise, leave a following
+ReadyForQuery unread, and prohibit subsequent reads or sends. The retained prior
+transaction status is not a fresh outcome observation. This quarantine prevents
+adapter reuse; it neither terminates the native transaction nor releases original
+recovery custody. The caller still owes qualified outcome and cleanup handling.
 
 A separate report-only driver experiment now closes the raw-capacity mismatch
 at its private scope. `pg8000_report_instance_candidate.py` creates its initial
@@ -663,8 +671,9 @@ The [full-driver report receipt](../04-build/evidence/design-audit/pg8000-report
 records actual local pg8000 execution with independently frozen four-MiB original
 bytes, UTF8 startup observations, exact descriptor, BEGIN/SELECT/ROLLBACK tags
 and all nineteen schema fields. Two report-path capacity controls add exact-frame
-success and one-over refusal before any body ingress; seven total controlled
-instance-file tests pass. The original small-query receipt stays unchanged.
+success and one-over refusal before any body ingress; eight total controlled
+instance-file tests pass. Both driver receipts were refreshed against the current
+shared candidate source.
 The query remains a fixed read-only literal echo; no authentic report production,
 persistence, full driver/parser/native copy accounting or protected publication
 is qualified. Do not widen caller-input admission or adopt this experiment as the

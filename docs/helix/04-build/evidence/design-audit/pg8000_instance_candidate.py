@@ -77,7 +77,22 @@ class SuppliedSocket:
 class RawConnection(CoreConnection):
     def __init__(self, *args, **kwargs):
         self.experiment_commands = []
-        super().__init__(*args, **kwargs)
+        try:
+            super().__init__(*args, **kwargs)
+        except BaseException:
+            file = getattr(self, '_sock', None)
+            if file is not None:
+                file.close()
+            raise
+
+    def handle_messages(self, context):
+        try:
+            return super().handle_messages(context)
+        except BaseException:
+            # Adapter quarantine only. Original backend outcome/termination is
+            # still the caller's obligation; no native state is inferred here.
+            self._sock.close()
+            raise
 
     def handle_COMMAND_COMPLETE(self, data, context):
         self.experiment_commands.append(data)
