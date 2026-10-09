@@ -1,0 +1,33 @@
+{
+  "status": "passed_read_only_native_frame_candidate",
+  "serverVersionNum": "170009",
+  "query": "BEGIN READ ONLY; SELECT NULL::text AS n, ''::text AS empty, 9007199254740993.0000000000000000001::numeric AS exact, '\u00e9\ud800\udc00'::text AS unicode, current_setting('server_version_num')::text AS server; ROLLBACK;",
+  "framesHex": [
+    "5a0000000549",
+    "430000000a424547494e00",
+    "540000007d00056e0000000000000000000019ffffffffffff0000656d7074790000000000000000000019ffffffffffff0000657861637400000000000000000006a4ffffffffffff0000756e69636f64650000000000000000000019ffffffffffff00007365727665720000000000000000000019ffffffffffff0000",
+    "440000004a0005ffffffff0000000000000024393030373139393235343734303939332e3030303030303030303030303030303030303100000006c3a9f090808000000006313730303039",
+    "430000000d53454c454354203100",
+    "430000000d524f4c4c4241434b00",
+    "5a0000000549"
+  ],
+  "orderedTypeOids": [
+    25,
+    25,
+    1700,
+    25,
+    25
+  ],
+  "rawCellsHex": [
+    null,
+    "",
+    "393030373139393235343734303939332e30303030303030303030303030303030303031",
+    "c3a9f0908080",
+    "313730303039"
+  ],
+  "sourceSha256": {
+    "python_pg_frame_candidate.py": "ed92bfc5240f17f3447f868fb88e3647cc4bd9583e21ed18ad88eb7de1eb9968",
+    "check_python_pg_frame_native.py": "9a2e7ed6ee3dc102d485b547062067264f2c653930e1f927cca79710e9dfb464"
+  },
+  "scope": "Administrative local trust-auth probe, BEGIN READ ONLY/ROLLBACK; exact native result syntax/metadata/cells only. No installed changes, supported driver, ingress/account/TLS/native containment, current security or publication qualification."
+}

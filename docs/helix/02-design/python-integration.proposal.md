@@ -495,6 +495,16 @@ statement-versus-portal descriptor qualification, native authority or publicatio
 All corresponding original producer obligations remain required before transport
 activation; the candidate does not replace the selected shared driver port.
 
+The [read-only native probe](../04-build/evidence/design-audit/check_python_pg_frame_native.py)
+now passes against the confirmed owned PostgreSQL 17.9 container. Its
+[receipt](../04-build/evidence/design-audit/python-pg-frame-native.json) retains
+actual result/command/ready frames and decoder/checker source pins. Five raw
+cells and their ordered descriptor facts match independent expectations, including
+NULL, empty text, exact large decimal and Unicode. The administrative local-trust
+session executes BEGIN READ ONLY/ROLLBACK without installed changes. This proves
+native result syntax correspondence only; the receive harness is not the shared
+original driver producer, qualified cancellation/TLS/account or public assembly.
+
 #### libpq receive-path qualification correction
 
 Review of PostgreSQL
