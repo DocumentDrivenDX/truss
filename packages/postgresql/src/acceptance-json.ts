@@ -7,6 +7,14 @@ type Frame={kind:'object';value:{[key:string]:AcceptanceJson};state:'first'|'key
 /** Caller must retain original immutable bytes; this component copies its input.
  * Finite logical limits below do not qualify host heap or the shared operation account. */
 export function decodeAcceptanceJson(original:Uint8Array):AcceptanceJson {
+ return scanJson(original,false);
+}
+/** Structural source preflight only. Numeric lexemes are scanned, never converted
+ * to JavaScript numbers. No semantic tree or precision qualification is returned. */
+export function preflightSourceJson(original:Uint8Array):void {
+ scanJson(original,true);
+}
+function scanJson(original:Uint8Array,sourceNumbers:boolean):AcceptanceJson {
  const refuse=(reason:WireRefusal):never=>{throw new AcceptanceJsonError(reason)};
  if(original.length>MAX_BYTES)refuse('resource');const bytes=original.slice();
  let index=0,nodes=0,work=bytes.length;const stack:Frame[]=[];let root:AcceptanceJson|undefined;
@@ -33,7 +41,16 @@ export function decodeAcceptanceJson(original:Uint8Array):AcceptanceJson {
  const value=()=>{whitespace();if(++nodes>MAX_NODES||stack.length>MAX_DEPTH)refuse('resource');const c=bytes[index];
   if(c===34){attach(string());return}if(c===123||c===91){take();const item:AcceptanceJson=c===123?Object.create(null):[];attach(item);stack.push(c===123?{kind:'object',value:item as {[key:string]:AcceptanceJson},state:'first',key:'',keys:[]}:{kind:'array',value:item as AcceptanceJson[],state:'first'});return}
   for(const [token,result] of [['null',null],['true',true],['false',false]] as const){if(c===token.charCodeAt(0)){for(const ch of token)if(take()!==ch.charCodeAt(0))refuse('grammar');attach(result);return}}
-  if(c===45||(c!==undefined&&c>=48&&c<=57))refuse('numeric_node');refuse('grammar');
+  if(c===45||(c!==undefined&&c>=48&&c<=57)){
+   if(!sourceNumbers)refuse('numeric_node');
+   const digit=()=>bytes[index]!==undefined&&bytes[index]!>=48&&bytes[index]!<=57;
+   if(bytes[index]===45)take();
+   if(bytes[index]===48)take();else {if(!digit()||bytes[index]===48)refuse('grammar');while(digit())take()}
+   if(bytes[index]===46){take();if(!digit())refuse('grammar');while(digit())take()}
+   if(bytes[index]===101||bytes[index]===69){take();if(bytes[index]===43||bytes[index]===45)take();if(!digit())refuse('grammar');while(digit())take()}
+   // Inert placeholder belongs only to the discarded structural scan tree.
+   attach(null);return;
+  }refuse('grammar');
  };
  value();while(stack.length){whitespace();const frame=stack.at(-1)!;const c=bytes[index];
   if(frame.kind==='array'){

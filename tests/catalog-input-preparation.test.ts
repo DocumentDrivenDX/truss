@@ -21,3 +21,9 @@ test('configured original registry refuses unregistered synthetic root profiles'
 
 test('absent binding derives complete default json homes from original members',()=>{const result=run(request());const defaults=prepareDefaultCatalogHomes(result);expect(defaults.homes).toEqual(['first-doc','second-doc'].map(documentId=>({documentId,moduleId:'m',elementId:'Item',fieldModule:'m',fieldId:'label',home:'json'})));expect(defaults.originalInputSha256).toBe(new Bun.CryptoHasher('sha256').update(Buffer.from(result.original.originalUtf8Hex,'hex')).digest('hex'));expect(Object.isFrozen(defaults.homes[0])).toBe(true)});
 test('present binding cannot be silently replaced with default homes',()=>{const input=request();input.binding=structuredClone(fixture.input.binding);expect(()=>prepareDefaultCatalogHomes(run(input))).toThrow('Original explicit binding home interpretation required')});
+
+test('embedded duplicate source members refuse before owner interpretation',()=>{
+ const input=request();const text=Buffer.from(input.documents[0].artifact.bytesBase64,'base64').toString().replace('"id":"first-doc"','"id":"discarded","id":"first-doc"');const bytes=Buffer.from(text);
+ input.documents[0].artifact={identity:'duplicate-source',bytesBase64:bytes.toString('base64'),sha256:new Bun.CryptoHasher('sha256').update(bytes).digest('hex')};
+ expect(()=>run(input)).toThrow('duplicate_member');
+});

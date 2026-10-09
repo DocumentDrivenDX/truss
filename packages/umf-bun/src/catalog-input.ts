@@ -1,4 +1,5 @@
 /** Original owner interpretation before native catalog effects. No acceptance authority. */
+import {preflightSourceJson} from '../../postgresql/src/acceptance-json';
 import {createAcceptanceInputInspector} from './acceptance-input';
 import {loadUmfProducer} from './index';
 import {collectCatalogDeclarations} from './catalog-declarations';
@@ -14,6 +15,7 @@ export async function createCatalogInputPreparation(directory:string,dependencie
    const declaration=inspected.input.documents[i]!;const source=inspected.documents[i]!;
    if(!equal(declaration.umfProfile,umfProfile))throw Error('Unsupported original UMF profile');
    if(declaration.ingress.kind!=='native')throw Error('Original converted adapter registration unavailable');
+   preflightSourceJson(new TextEncoder().encode(source.originalText));
    const observation=owner.inspect(source.originalText);
    if(!observation.sourceValidation.valid||!observation.targetValidation?.valid)throw Error('Original UMF validation refused');
    if(observation.source.id!==source.documentId)throw Error('Original document identity mismatch');
