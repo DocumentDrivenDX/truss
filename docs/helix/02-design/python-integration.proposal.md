@@ -171,6 +171,39 @@ interface and all required direct/compiled read shapes have matching corpus and
 native evidence. The exact ABI/profile bytes remain unselected until Weft
 publishes them; Truss consumes that interface rather than inventing its wire.
 
+### R8 read-shape delivery matrix
+
+Use the existing direct lookup/page/traversal contracts and Weft-owned logical
+query compiler. This matrix assigns implementation work; it does not advertise
+any row as currently supported. Each row requires a selected original mapping,
+ordinary-person read-only execution, full disclosure handling and actual native
+plan/resource evidence in PY-05 and the shared corpus.
+
+| Consumer shape | Intended route | Qualification required |
+| --- | --- | --- |
+| Exact authored business-key lookup | Direct authored-key lookup | Complete owner-local key definition/component order, admitted exact encoder and native indexed equality; one found record or independently established absence. No scan fallback when key semantics are unavailable |
+| Equality over a key | Direct lookup for a complete unique key; Weft for logical projections, joins or partial key predicates | Partial-key predicates cannot borrow unique-lookup bounds. Qualify their original comparison/index route and result cap independently |
+| Equality over an indexed property | Weft | Accepted declaration plus currently ready matching native index, exact comparator/presence mapping, statement/scan/result bounds and actual plan. A pending-index report is not a ready index |
+| Relationship predicates | Weft for logical filtering; direct incident-edge enumeration/traversal for those explicit operations | Preserve direction, endpoint types, key/relationship ownership, disclosure and complete result semantics. Incident edges or terminal traversal are not substitutes for an arbitrary logical predicate; unsupported compiler semantics refuse |
+| `alias.*` with capped relationship columns | Weft | Resolve expansion against the admitted catalog before submission, retain ordered result descriptors and the selected relationship-column cap. Extra fields cannot be silently dropped, and expansion cannot reinterpret absent/null/withheld values |
+| Keyset page ordered by business key | Weft | Complete authored key comparator and tie-breaker, cursor/query/context correspondence, actual eligible lookahead and native ordered access. Direct storage-ID paging keeps its own ordering and cannot satisfy business-key ordering by renaming its cursor |
+| `COUNT(*) GROUP BY` one property | Weft count-summary subset | Complete grouping order and LIMIT, exact count text, authorized input and native scan/statement budgets. Test empty groups, joined multiplicity and absent/null grouping under the original supported semantics; returned-group cap does not bound scanned rows |
+
+For every advertised row retain the complete input, original accepted catalog
+and compiler/direct mapping, ready index identities where applicable, native
+EXPLAIN evidence, returned descriptor/value/cursor expectations and the selected
+finite budgets. Test a populated success and independently injected unavailable
+index, wrong definition/profile and exhausted budget. Refusal or unavailable
+results carry no partial logical records. Native cancellation and cleanup retain
+their original executor outcome, rather than becoming a false empty result.
+
+The corpus must distinguish the direct and compiled routes even when both can
+answer one fixture. A direct lookup success does not qualify projections, joins,
+business-key paging or aggregate work; a compiler response does not qualify
+native index use or disclosure. Release documentation lists each route's exact
+supported subset and measured bounds. Numeric cap values and native access paths
+remain profile-selection outputs, not defaults inferred from this matrix.
+
 ## Host transaction adapter
 
 Use the semantic Executor operations of CONTRACT-007 rather than a language-specific second transaction protocol. The adapter accepts the caller's actual live connection/transaction object, validates ownership/lifetime, and retains it internally. No transaction identifier is accepted as a substitute. Initial delivery selects one driver/transaction mode and qualifies it; sync and async modes cannot share a support claim without separate evidence. Driver selection remains explicit.
