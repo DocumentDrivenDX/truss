@@ -771,3 +771,24 @@ The 0.15 qualified-property candidate composes the declaring module into native 
 ## Consumer discovery source verified — 2026-10-08
 
 GitHub reports PR #6 merged at e58f3c69817e744e32007acd273e556dac137b7b. The [source receipt](evidence/design-audit/consumer-pr6-source.json) verifies its fourteen changed-file hashes. The [reference handoff](remaining-design-handoff-audit.md#consumer-discovery-pr-6-source-to-reference-acceptance-handoff) maps the current five group/feed/lag/retry/caller-transaction requirements to all twenty-two US-040–044 criteria. Location is resolved; protected runtime and public consumer acceptance remain incomplete. The current durable-receipt direction supersedes the older journal-only replay technique, and proposed publisher freshness remains unmeasured.
+
+
+## Security-owner identity/runtime component review — 2026-10-09
+
+The [read-only source review](evidence/design-audit/security-identity-runtime-review.json)
+pins the owner’s uncommitted 132-observation PostgreSQL17.9 identity component
+and checks its listed source correspondence. It includes actual Truss pg-runtime
+request/frame/outcome observations, case-distinct quoted/unquoted native homes,
+qualified composite subject/resource identity, and hash-plus-full-key versus
+hash-only controls. Truss did not rerun the probe or adopt its backend/profile;
+this review does not establish full B13 acceptance.
+
+Use these controls in the existing key/lookup, ordinary-caller and driver
+handoffs: preserve exact native home identity and complete original key components
+through decoding, retain actual managed dependency resolution, and consume the
+security-owned current-fact/authority/publication procedure. Native key equality
+or one fixed RLS fixture cannot establish released Truss key binding, accepted
+catalog identity, revocation/drain or complete consumer authorization. No second
+ACL resolver, identity registry, hash codec or compiler is introduced. Actual
+original profile/source/installed correspondence remains required; uncommitted
+security/driver changes stay under their owner’s control.
