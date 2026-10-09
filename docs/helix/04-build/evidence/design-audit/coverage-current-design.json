@@ -1070,7 +1070,7 @@
     "03-test/test-plans/STP-025-report-the-enforcement-layer-of-every-assertion.md": "d522ed245ea1b4c69cf01c99734851bb9dfc5d7c167013bcce4640cf22b45684",
     "02-design/technical-designs/TD-026-back-every-support-claim-with-evidence.md": "35625b85d3a7570cc43a20da26aac085ab35a4a4794af006e4adf3315b1ba165",
     "03-test/test-plans/STP-026-back-every-support-claim-with-evidence.md": "6cc772a1a47465647e7aabaf942e0813317a53b35d4f6af1f2c70a97f7212427",
-    "02-design/technical-designs/TD-027-build-an-implementation-from-the-contracts.md": "4f565c83d7304d1d945896fb3986602580f91cbcf267347a421942a921d43a17",
+    "02-design/technical-designs/TD-027-build-an-implementation-from-the-contracts.md": "5810848bee2766f3bbcd0316fc74e6b14574ea96eefb8015a8c3398d39ea1ae4",
     "03-test/test-plans/STP-027-build-an-implementation-from-the-contracts.md": "48185a190c2b87be5b0f9e1f3b60cc87460b49d7be6fa18476e6ffac437b2283",
     "02-design/technical-designs/TD-028-pass-the-corpus-and-the-interchange-check.md": "0407f2365d823eda0a1c71e1aa5bcc2d3bb9586832a8834b6cd17acea4d616ed",
     "03-test/test-plans/STP-028-pass-the-corpus-and-the-interchange-check.md": "9a53a514e2e8a9f095888ed3da98586fc439ee220ac025c7fcf0e829b743dc92",
