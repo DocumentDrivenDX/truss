@@ -4,6 +4,14 @@ Status: execution sequence authored; public runtime unavailable. Governing input
 
 ## Current implementation boundary
 
+The endpoint-intent candidate now has a private original supplied-source
+reference resolver. It consumes only the original validated preparation and
+retains exact document/revision/artifact correspondence; five tests/21 assertions
+and strict TypeScript pass. Its supplied-source-only scope does not admit the
+full extension, accepted-history source context or unresolved endpoint policy.
+Use the [representation handoff](../02-design/contracts/truss-endpoint-intent-representation.proposal.md)
+for remaining E1–E5 original producer/dependency/definition/report integration.
+
 The public assembly in `packages/postgresql/src/index.ts` remains inert: catalog,
 mutation and feed selectors return unavailable. The private preparation supports
 new-only staging; it does not supply transform, retirement or provisional-endpoint

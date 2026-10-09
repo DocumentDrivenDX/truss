@@ -194,6 +194,25 @@ hashes each complete document independently. It does not embed its own bytes in
 those documents. Complete membership/definition checks precede graph ordering;
 successful reference lookup alone does not establish valid target semantics.
 
+The private `packages/umf-bun/src/catalog-endpoint-source-references.ts` now
+implements supplied-source correspondence over the original validated catalog
+preparation. It refuses reconstructed preparations, ambiguous inventory names,
+wrong document/revision/reference/context and over-limit occurrence lists. Local
+and reciprocal supplied references retain the actual archived source artifact,
+text and source UMF version rather than transitioned interpretation bytes.
+Repeated reference occurrences remain ordered and distinct; they do not dedupe
+original membership. Five Bun tests/21 assertions and strict TypeScript pass.
+
+Its scope is `original_supplied_source_reference_correspondence_only`. It accepts
+no caller-made accepted archive, resolves no Record/key, validates no extension
+meaning and supplies no acceptance authority. Previously accepted sources still
+require their original admitted archive/head context and a separate composition
+with that resolver; unavailable prior custody refuses without a supplied-source
+fallback. Required dependency coverage, full occurrence collection from the
+registered carrier and endpoint/lifecycle/namespace admission remain E2–E5 work.
+The explicit maximum reference count is an admitted caller profile argument, not
+a selected release default or whole-operation allocation proof.
+
 Reproduce shape controls from the repository root with
 `bun docs/helix/04-build/evidence/design-audit/check-truss-endpoint-intent-shapes.ts /absolute/path/to/dependency/package.json`,
 using the admitted Ajv2020 dependency package.
