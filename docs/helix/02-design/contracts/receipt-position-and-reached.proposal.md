@@ -215,3 +215,39 @@ This disposable local-trust administrator probe qualifies neither ordinary-perso
 authorization nor original driver/account/source-epoch/retention/publication
 custody. It uses stock pg8000 only as probe transport. reachedQualified remains
 false. Replica coverage and seed comparison remain separate producer dependencies.
+
+## Draft facade binding and admission order
+
+The [visibility binding](bindings/truss-receipt-visibility-v0.1.proposal.d.ts)
+now makes the proposed reachedInTransaction facade explicit. Its capability is
+constructed only by original admitted read services, takes the existing actual
+TransactionHandle and wraps its semantic result in the original execution Outcome.
+It introduces no commit-by-ID method, database connection factory or caller
+comparison-profile override. The available branch carries the boolean and exact
+comparison profile; unavailable carries no included field. Strict type controls
+reject unavailable/false conflation and numeric JavaScript work limits. Runtime
+admission and decoder correspondence still need implementation.
+
+Request limits are canonical positive integer text for token bytes, evidence
+bytes, retained bytes, work units and native statements. Each can only reduce
+the original selected cumulative profile ceiling; they are not operation-account
+permits or proof of available resources. Before decoding, intersect token limit
+with the existing16KiB wire cap. Reserve complete decoding/lookup/correspondence/
+publication/containment capacity before their effects. Exhaustion returns once.
+Missing/unregistered bounds refuse instead of inferring limits from input size.
+
+Admission order is original handle/profile/current-person and resource custody,
+canonical locator checks, private original receipt lookup/correspondence, selected
+commitment plus same-snapshot inclusion proof, then security-owned final release.
+No internal waiting or polling fills missing evidence. Semantic unavailability
+and original execution uncertainty remain separate; outer transport outcomes
+preserve recovery/containment even when no semantic result can be published.
+The declared reasons are internal semantic categories subject to the security
+owner's disclosure-safe projection; denied/missing/expired state must not become
+a public receipt-existence oracle. No raw receipt/context/native xid is added
+to the public result.
+
+The binding fixes the caller handoff while original service registration, native
+private locator entry, replica source-commitment/seed evidence, complete resource
+profiles and Python/TypeScript execution interchange remain unfinished. It does
+not adopt working security code or expand Weft's compiler responsibilities.
