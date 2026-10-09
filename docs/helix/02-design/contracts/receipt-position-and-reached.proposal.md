@@ -45,9 +45,25 @@ The candidate profile bounds encoded token text to 16 KiB, installation identity
 text to 256 UTF-8 bytes each, and decoded structure to depth four with no unknown
 members, duplicate names, numbers, malformed Unicode or NUL. Reject noncanonical
 base64url, noncanonical integer text and out-of-domain values before native
-submission. The registered encoder selects one deterministic JSON byte form;
-its golden vectors and byte-parity must be authored before activation. This
-proposal does not imply every alternative JSON spelling is accepted.
+submission. The proposed byte form is UTF-8 without BOM or whitespace, with root member
+order interfaceVersion, positionProfile, installationId, sourceEpoch,
+receiptStorageRowId, writerXid and profile member order identity, version,
+sha256. Escape quote/backslash and control characters; use short escapes for
+backspace/formfeed/newline/carriage-return/tab and lowercase six-character
+\u00xx for other allowed controls. Preserve all other Unicode scalars literally
+(including astral characters), without normalization or slash escaping. NUL and
+unpaired surrogates remain invalid. Only this byte spelling is accepted; parse
+then re-encode and compare the complete original bytes rather than accepting
+arbitrary JSON member order, whitespace or alternate escapes.
+
+The [closed decoded schema](receipt-position-locator-v0.1.proposal.schema.json)
+covers member shapes, not UTF-8 byte bounds, canonicality, integer maxima or
+native custody. [Four independent wire vectors](../../04-build/evidence/receipt-position-locator-vectors.json)
+cover ordinary values, signed/unsigned64 maxima, Unicode and escaping. Python
+stdlib produced their exact bytes; `bun scripts/check-receipt-position-vectors.ts`
+checks JavaScript byte parity and the existing numeric-free decoder. Fictional
+profile pins qualify no issuer/resolver. Activation still requires the selected
+encoder/resource/profile registration and hostile-input validation schedules.
 
 Retain the complete position basis/profile in the same original receipt effects
 transaction before commit. The current `truss-request-receipt/0.1.0` body does

@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:receipt-position-locator:0.1.0",
+  "description": "Candidate decoded locator grammar only; UTF-8 byte/Unicode/NUL/canonicality/range and original native custody are separate checks. No commit, authority or visibility claim.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-receipt-position/0.1.0"
+    },
+    "positionProfile": {
+      "type": "object",
+      "properties": {
+        "identity": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "identity",
+        "version",
+        "sha256"
+      ],
+      "additionalProperties": false
+    },
+    "installationId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024
+    },
+    "sourceEpoch": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "receiptStorageRowId": {
+      "type": "string",
+      "pattern": "^[1-9][0-9]{0,18}$"
+    },
+    "writerXid": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]{0,19})$"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "positionProfile",
+    "installationId",
+    "sourceEpoch",
+    "receiptStorageRowId",
+    "writerXid"
+  ],
+  "additionalProperties": false
+}
