@@ -119,3 +119,14 @@ wire. These fifteen cases are a baseline, not exhaustive decoder qualification.
 The Python planner is not implemented yet. Neither these fixture manifests nor
 a passing metadata plan are delivered original migration artifacts, installed
 observations, administrative authority or a selected populated M1 route.
+
+The private Python `_acceptance_json` component now implements numeric-free
+wire decoding with the same logical limits and duplicate-key work accounting
+as the existing TypeScript decoder. It scans iteratively and uses Python's
+JSON decoder only for individually validated string tokens. UTF-16 key lengths
+are used for shared work charges, including supplementary Unicode characters.
+Original `acceptance-outer-json-expected.proposal.json` vectors and the original
+capacity fixture pass, along with exact depth/container/node boundaries and
+byte/work refusals. These are source-component checks, not built-wheel, host
+heap, shared operation-account or administrative admission qualification.
+The planner port and its frozen result variants remain to be implemented.
