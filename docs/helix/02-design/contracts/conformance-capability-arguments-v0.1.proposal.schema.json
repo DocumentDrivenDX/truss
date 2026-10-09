@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:proposal:conformance-capability-arguments:0.1.0",
+  "title": "Case-only existing capability argument envelopes",
+  "description": "Definitions only for ordered case inputs. The adapter unwraps these into existing public arguments and resolves original live scope/cancellation through trusted harness registration. These envelopes add no public wire fields or authority.",
+  "not": {},
+  "$defs": {
+    "catalogAcceptance": {
+      "type": "object",
+      "properties": {
+        "input": {
+          "$ref": "urn:truss:acceptance-input:0.1.0"
+        },
+        "assertedOrigin": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/canonicalTree"
+        }
+      },
+      "required": [
+        "input",
+        "assertedOrigin"
+      ],
+      "additionalProperties": false
+    },
+    "requestFreeGroup": {
+      "type": "object",
+      "properties": {
+        "input": {
+          "$ref": "urn:truss:draft:group-input:0.1.0"
+        },
+        "request": {
+          "$ref": "urn:truss:draft:group-input:0.1.0#/$defs/requestSelection/oneOf/0"
+        }
+      },
+      "required": [
+        "input",
+        "request"
+      ],
+      "additionalProperties": false
+    },
+    "requestBearingGroup": {
+      "type": "object",
+      "properties": {
+        "input": {
+          "$ref": "urn:truss:draft:group-input:0.1.0"
+        },
+        "request": {
+          "$ref": "urn:truss:draft:group-input:0.1.0#/$defs/requestSelection/oneOf/1"
+        }
+      },
+      "required": [
+        "input",
+        "request"
+      ],
+      "additionalProperties": false
+    },
+    "importBatches": {
+      "type": "object",
+      "properties": {
+        "input": {
+          "$ref": "urn:truss:draft:import-input:0.1.0"
+        },
+        "options": {
+          "type": "object",
+          "properties": {
+            "isolation": {
+              "enum": [
+                "read_committed",
+                "repeatable_read",
+                "serializable"
+              ]
+            },
+            "accessMode": {
+              "const": "read_write"
+            }
+          },
+          "required": [
+            "isolation",
+            "accessMode"
+          ],
+          "additionalProperties": false
+        },
+        "cancellation": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "none"
+                }
+              },
+              "required": [
+                "kind"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "harness"
+                },
+                "reference": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "kind",
+                "reference"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": [
+        "input",
+        "options",
+        "cancellation"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

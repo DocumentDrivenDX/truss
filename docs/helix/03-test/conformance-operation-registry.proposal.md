@@ -63,6 +63,37 @@ Keep legacy v0.1 cases version-scoped if independently selected. They cannot sat
 
 ## Registry completion obligations
 
+### Case-only multi-argument encoding
+
+The definitions-only `conformance-capability-arguments-v0.1.proposal.schema.json`
+closes four case input envelopes without changing public API requests:
+
+| Member | Dispatch into existing method |
+| --- | --- |
+| catalogAcceptance | acceptInTransaction(original scope handle, input, assertedOrigin); origin reuses acceptance-input's existing CanonicalTree, not ExactValue or host numbers |
+| requestFreeGroup | applyInTransaction(original scope handle, input, request-none) |
+| requestBearingGroup | applyInTransaction(original scope handle, input, request-present) |
+| importBatches | runBatches(input, constructed read-write TransactionOptions) |
+
+For import, options declares the exact isolation and read-write access mode.
+The required case-only cancellation member is none or a reference to an
+original harness-issued signal. Resolve it through the admitted harness
+procedure before constructing public options; only then may an actual
+Cancellation `{signal}` be supplied. No JSON signal, caller-picked authority
+or native handle is deserialized. Unknown/ended/unowned references refuse
+dependent invocation. A none selection supplies no cancellation option.
+The existing input-step scope carries transaction references separately;
+these envelopes cannot end adopted transactions or create a different scope.
+
+Run `check-conformance-capability-arguments.ts` in the design audit directory
+with the installed Ajv Draft 2020-12 module path: fifteen controls cover each
+envelope, exact origin, overload narrowing, required cancellation selection and
+refusal of serialized handles/signals. This closes these argument carrier
+shapes, not original artifact custody, scope/signal issuance, cancellation
+containment or native method execution. Feed acknowledgment still requires its
+separate original VerifiedApplicationV02 procedure; no case envelope can forge
+that authority.
+
 ### Existing wire carriers and actual composition gaps
 
 Retained reconstruct/historicalSource now have definitions-only
