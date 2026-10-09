@@ -450,6 +450,36 @@ Read shapes retain absent versus explicit null, ordered key components, exact la
 
 ### PY-01 independent exact-value expectations
 
+#### Python-owned framing candidate: pg8000 1.31.5
+
+Source-only inspection of the
+[published pg8000 1.31.5 wheel](https://pypi.org/project/pg8000/1.31.5/)
+uses wheel SHA-256
+`0af2c1926b153307639868d2ee5cef6cd3a7d07448e12736989b10e1d491e201`
+and `pg8000/core.py` SHA-256
+`cac1e50502901bcea3ddab588e0350149dd8fd771156ae1c531a2a04b3925e26`.
+The wheel was downloaded into an isolated temporary directory, not installed or
+executed. This is an alternative prototype candidate, not a selected dependency.
+
+Its Python `handle_messages` reads a five-byte header and then the declared body
+before dispatch. `_read` builds a bytearray and returns a bytes copy; the connection
+uses a socket file object. RowDescription retains type OID/format, while DataRow
+slices and decodes cells before invoking type converters and accumulating rows.
+The inspected dispatch path does not impose Truss's pre-body frame budget or
+retain the required original raw-cell observation. A type-converter override is
+too late to account for receive backing, body copies or malformed framing.
+
+A prototype must reserve before body reads/copies, validate signed message/cell
+lengths and exact complete consumption, admit every message kind for its cycle,
+retain raw ordered metadata/cells before conversion, and account for buffered
+socket/TLS read-ahead and accumulated rows/notices. Partial EOF, negative/oversized
+lengths, trailing bytes, unexpected messages, decode faults and late callbacks
+need independent containment cases. Python-owned source makes those modification
+points inspectable; it does not prove allocation bounds, safe host adoption or
+native termination. Compare an actual bounded prototype with the libpq candidate
+before selecting PY-01's supported driver/build/mode; preserve the same shared
+producer port and security/compiler ownership in either route.
+
 #### libpq receive-path qualification correction
 
 Review of PostgreSQL
