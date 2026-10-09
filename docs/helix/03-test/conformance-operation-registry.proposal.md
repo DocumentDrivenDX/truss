@@ -92,8 +92,25 @@ The root deliberately refuses all wires because this is a definition library,
 not an untagged union that lets a method accept another method's result.
 These compositions close the outer schema work identified in those table rows;
 original method/profile/argument/observer/identity-path registration still
-remains. Catalog, standalone mutation and group wrapper gaps are unchanged.
+remains. Standalone mutation and group wrapper gaps are unchanged.
 Import is explicitly excluded from generic Outcome composition.
+
+Catalog now reuses the existing v0.1 report/rejection/failure carriers through
+`catalog-capability-wires-v0.1.proposal.schema.json`. Register reportRequest
+for the existing revision request, acceptanceSemantic/acceptanceOutcome for
+acceptInTransaction's result, and reportSemantic/reportOutcome for report's
+result. All are exact `$defs` selections from a definitions-only library.
+This preserves new/exact_repeat versus rejection and report
+available/not_found/unavailable distinctions. The separate assertedOrigin
+argument still needs exact CanonicalTree registration and original scope
+binding; this library does not serialize authorization context or a handle.
+Later lifecycle report proposals require separately selected versioned
+composition, not widening this v0.1 carrier in place. Run
+`check-catalog-capability-wires.ts` in the design audit directory with the
+installed Ajv Draft 2020-12 module path: fourteen shape controls pass. The
+synthetic empty rejection diagnostics are not proof of semantic completeness,
+and no producer-backed accepted report, immutable insertion, head publication
+or confirmed commit is qualified by these wrappers.
 
 Import now has its own definitions-only
 `import-execution-result-v0.1.proposal.schema.json`: register `$defs/engineOwned`
