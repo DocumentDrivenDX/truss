@@ -113,6 +113,8 @@ Truss ships an infrequently used layout migration system under [the PRD owner de
 | LM-05 verifier and recovery | Read-only post-deploy verification, same-step no-op after complete original correspondence, unsupported reverse/nontransactional refusal | Existing bootstrap/conversion recovery producers; no generic down script or framework-ledger authority |
 | LM-06 public deployment qualification | Shipped TypeScript/Python-neutral manifest/protocol plus selected CLI/tooling integration and consumer migration-runner example | [LM-T01–08](../03-test/test-plans/STP-045-bootstrap-the-internal-layout-from-umf.md#shipped-layout-migration-system--lm-t01–08), clean packed consumers and separate PostgreSQL/Lakebase qualification |
 
+LM-01 now has an internal pure `packages/tooling/src/layout-migration-plan.ts` component and closed candidate manifest semantics in CONTRACT-008. Nine tests cover exact route/order/pins, absent implicit paths, explicit reverse paths, nontransactional refusal, immutable output and large version components. Strict TypeScript passes. This advances metadata planning only; no installer/public package, native state/admission, original artifact/procedure registration or upgrade execution is supplied. The native LM-T01–08 and protected acceptance exits remain unchanged.
+
 These slices define the required shipped system. Artifact generation/current component checks do not qualify a stable release layout. Complete protected acceptance and producer-backed immutable report/head publication remain the first runtime milestone; migration implementation composes that installed inventory rather than creating a fixture-ready bypass.
 
 ## Current execution handoff (2026-10-08)

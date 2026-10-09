@@ -102,6 +102,18 @@ Nontransactional/online/multiphase steps require a separately selected durable p
 
 Version compatibility remains CONTRACT-001's declared layout-major rule: an implementation refuses a different major. Within a major, the release still declares exact supported layout/runtime/corpus/profile ranges and upgrade edges; same major is not permission to execute against unknown routines/codecs. The post-install/post-upgrade verifier runs without modifying state and reports actual current correspondence or explicit unavailable/drift. Native PostgreSQL and Lakebase deployment qualification remain separate; current native 0.16/core 0.4 candidates are not a stable published layout.
 
+### LM-01 candidate manifest and planner wire
+
+The internal pure planner implements proposed `truss-layout-migrations/0.1.0` metadata. The closed manifest has interfaceVersion, family, layouts, steps and routes. Each layout has version, bundleSha256 and inventorySha256; versions are three canonical decimal components (each at most 20 digits) and hashes are exact lowercase 64-digit SHA-256 text. This is a new candidate release-version wire, not a reinterpretation of historical 0.15/0.16 review labels. Layout versions are unique in a manifest family.
+
+Each step has id, from, to, recipe (identity/sha256), procedure (identity/version/sha256) and transactional boolean. Each route has id, from, to, direction (upgrade/downgrade) and a nonempty ordered list of step IDs. Route IDs and source/target pairs are unique. Every complete route must chain declared layouts in its stated direction with no repeated step. Only the explicitly requested source/target route can be selected; available intermediate steps do not imply a supported path. A selected nontransactional route is unavailable in this default planner profile.
+
+The supplied observation has interfaceVersion `truss-layout-observation/0.1.0`, family and layout pin. Exact source bundle/inventory fingerprints must match the manifest. This is caller-supplied metadata at this stage, not native observation authority. The planner returns plan, no_steps or refused under scope declared_metadata_only. Frozen output retains exact source/target and ordered recipe/procedure pins; it contains no executable SQL or callback. no_steps cannot qualify already-applied migration or current installation readiness.
+
+Reuse the existing closed numeric-free decoder's one-MiB UTF-8, duplicate-member, Unicode, depth/node/work limits. Each metadata collection is limited to 1,024 entries and each nonempty identifier/profile text to 256 UTF-8 bytes; routes/steps/layouts validate as a complete manifest before selection. Version comparison uses exact integers, never JavaScript numbers. These limits bound this controlled component's metadata work; they do not establish native migration budgets or a universal heap guarantee.
+
+LM-02–05 must bind the selected metadata to registered original artifacts/procedures and actual installation/attempt/native observations before application. Manifest fingerprints are locators/byte-correspondence inputs, not executable registration or grants. The planner neither verifies recipe bytes nor classifies current database state. Nine unit scenarios establish exact route/order/refusal semantics; full LM-T01–08 schedules and release publication remain required.
+
 ### Protected installation dependency order
 
 The row-home candidate requires PI01–PI07 in the original dedicated administrative transaction. These phases refine fresh bootstrap only; populated conversion keeps its separately admitted retained-data/old-writer protocol. A source composition without routine bodies and security dependencies is not an executable installation plan.
