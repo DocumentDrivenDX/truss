@@ -4,6 +4,7 @@ Only original admitted host services may supply this boundary. Unit callbacks
 do not qualify native authority, snapshot, result decoding or cleanup semantics.
 """
 from dataclasses import dataclass
+import inspect
 from threading import Lock
 from types import MappingProxyType
 from weakref import WeakValueDictionary
@@ -13,6 +14,19 @@ from .weft import CompilerBoundary, CompiledQuery, CompileRefusal
 @dataclass(frozen=True, slots=True, weakref_slot=True, eq=False)
 class QueryPlan:
     compiled: CompiledQuery
+
+
+def _synchronous(value):
+    if inspect.isawaitable(value):
+        if inspect.iscoroutine(value):
+            value.close()
+        raise CompileRefusal('execution_obligation', 'Synchronous original host callback required')
+    return value
+
+
+def _completed_check(value):
+    if _synchronous(value) is not None:
+        raise CompileRefusal('execution_obligation', 'Original check must complete or raise')
 
 
 def _freeze_result(value):
@@ -48,6 +62,9 @@ class QueryCoordinator:
         self._handlers = MappingProxyType({
             key:(handler.accepts,handler.check) for key,handler in host.handlers.items()
         }) if host is not None else MappingProxyType({})
+        callbacks = [self._context,self._decode] + [f for pair in self._handlers.values() for f in pair]
+        if any(inspect.iscoroutinefunction(f) or inspect.isasyncgenfunction(f) for f in callbacks if f is not None):
+            raise CompileRefusal('execution_obligation', 'Synchronous original host functions required')
         self._plans = WeakValueDictionary()
         self._disposed = False
         self._executing = False
@@ -90,31 +107,31 @@ class QueryCoordinator:
                 if not isinstance(obligation, MappingProxyType) or obligation.get('owner') != 'host' or type(obligation.get('id')) is not str:
                     raise CompileRefusal('obligation', 'Unsupported original obligation')
                 handler = self._handlers.get(obligation['id'])
-                if handler is None or handler[0](obligation,artifact) is not True:
+                if handler is None or _synchronous(handler[0](obligation,artifact)) is not True:
                     raise CompileRefusal('obligation', 'Unknown original obligation meaning')
                 self._admitting()
                 selected.append((obligation,handler[1]))
             missing = object()
             result = missing
             self._admitting()
-            with self._context() as scope:
+            with _synchronous(self._context()) as scope:
                 verify_context = scope.verify_context
                 query = scope.query
                 self._admitting()
-                verify_context(artifact)
+                _completed_check(verify_context(artifact))
                 self._admitting()
                 for obligation,check in selected:
-                    check(scope,obligation,artifact)
+                    _completed_check(check(scope,obligation,artifact))
                     self._admitting()
-                rows = query(artifact['sql'],tuple(p['value'] for p in artifact['parameters']))
+                rows = _synchronous(query(artifact['sql'],tuple(p['value'] for p in artifact['parameters'])))
                 if type(rows) not in (tuple,list) or any(
                     type(row) not in (tuple,list) or len(row) != len(artifact['columns'])
                     or any(cell is not None and type(cell) is not str for cell in row) for row in rows
                 ):
                     raise CompileRefusal('transport', 'Complete exact text/null rows required')
                 self._admitting()
-                decoded = self._decode(artifact,rows)
-                verify_context(artifact)
+                decoded = _synchronous(self._decode(artifact,rows))
+                _completed_check(verify_context(artifact))
                 self._admitting()
                 if type(decoded) not in (tuple,list):
                     raise CompileRefusal('decoder', 'Complete decoded result sequence required')

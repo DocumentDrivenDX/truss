@@ -119,5 +119,34 @@ class QueryExecutionTests(unittest.TestCase):
         host.decode=lambda *_: (_ for _ in ()).throw(RuntimeError('replaced decoder'))
         self.assertEqual(engine.execute(plan)[0]['integerToken'],'9007199254740993')
 
+    def test_async_and_nonvoid_checks_cannot_permit_sql(self):
+        async def pending(*_):return None
+        events=[];host=self.host(events)
+        host.handlers={'fixture':SimpleNamespace(accepts=lambda *_:True,check=pending)}
+        with self.assertRaises(CompileRefusal):coordinator(host)
+        self.assertEqual(events,[])
+        for check in [lambda *_:pending(),lambda *_:False,lambda *_:True]:
+            events=[];host=self.host(events)
+            host.handlers={'fixture':SimpleNamespace(accepts=lambda *_:True,check=check)}
+            engine,plan=coordinator(host,[{'owner':'host','id':'fixture'}])
+            with self.assertRaises(CompileRefusal) as error:engine.execute(plan)
+            self.assertEqual(error.exception.code,'execution_obligation')
+            self.assertEqual(events,['enter','verify','cleanup'])
+
+    def test_async_context_verification_cannot_permit_sql(self):
+        events=[]
+        async def verify(*_):events.append('should never run')
+        @contextmanager
+        def context():
+            events.append('enter')
+            try:
+                yield SimpleNamespace(verify_context=verify,
+                  query=lambda *_:events.append('unexpected sql'))
+            finally:events.append('cleanup')
+        engine,plan=coordinator(SimpleNamespace(read_context=context,decode=lambda *_:[],handlers={}))
+        with self.assertRaises(CompileRefusal) as error:engine.execute(plan)
+        self.assertEqual(error.exception.code,'execution_obligation')
+        self.assertEqual(events,['enter','cleanup'])
+
 
 if __name__=='__main__':unittest.main()

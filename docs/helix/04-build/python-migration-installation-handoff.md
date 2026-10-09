@@ -209,6 +209,16 @@ Original bounded producer/transaction custody, current-person authorization,
 full obligation grammar, owner-qualified decoder, actual native execution and
 installed distribution qualification remain required before public activation.
 
+The synchronous coordinator now refuses coroutine/async-generator host functions
+at construction and detects awaitable results from wrapped callbacks. Original
+context and obligation checks must return None after completing or raise; a
+Boolean return cannot stand in for completed verification. An unawaited coroutine
+is closed without executing it and never permits the next native query. Async
+services need a separately integrated execution path, not implicit event-loop or
+thread creation. Nine unittest methods now pass with warnings treated as errors,
+including wrapped async checks, nonvoid checks and async context verification;
+their independent event traces contain no data query after such refusal.
+
 ## Shared planner corpus before the Python port
 
 `tests/fixtures/layout-migration-planning.json` now supplies sixteen independent
