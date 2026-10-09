@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:proposal:conformance-case-fixtures:0.1.0",
+  "title": "Proposed complete conformance starting fixture envelope",
+  "description": "Data-only envelope. Original producer independence, complete starting state, profile custody, setup semantics and native boundaries require separate admission. Shape does not authorize setup.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-conformance-case-fixtures/0.1.0"
+    },
+    "caseId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "registry": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "grammarProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "profiles": {
+      "type": "object",
+      "properties": {
+        "installation": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "catalog": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "configuration": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "authority": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "resource": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "setup": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "startingInventory": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        }
+      },
+      "required": [
+        "installation",
+        "catalog",
+        "configuration",
+        "authority",
+        "resource",
+        "setup",
+        "startingInventory"
+      ],
+      "additionalProperties": false
+    },
+    "startingInventory": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "$ref": "urn:truss:proposal:conformance-case-inputs:0.1.0#/properties/steps/items"
+      }
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "caseId",
+    "registry",
+    "grammarProfile",
+    "profiles",
+    "startingInventory",
+    "steps"
+  ],
+  "additionalProperties": false
+}

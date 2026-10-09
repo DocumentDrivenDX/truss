@@ -4,6 +4,26 @@ This proposal supplies interpretation rules for the existing conformance manifes
 
 ## Artifact roles
 
+The [fixture envelope](../02-design/contracts/conformance-case-fixtures-v0.1.proposal.schema.json)
+requires original installation, catalog, configuration, authority, resource,
+setup and starting-inventory profile pins. Its `startingInventory` is the
+independently authored full expected state at the boundary after setup and
+before the first input step. It must explicitly describe applicable empty
+surfaces; absent content is not evidence of emptiness. `steps: []` means no
+setup operations, not an empty database. Setup uses the same registered step
+encoding as inputs, with a separate label inventory. Operation-result alias
+indexes refer to input steps; setup aliases resolve against the admitted setup
+result tree under the selected setup profile. Starting inventory comparison
+must pass before input effects; a mismatch records setup failure, not a case
+pass or replacement fixture. Pins and byte shapes alone do not prove any of
+these semantic obligations.
+
+Run `bun docs/helix/04-build/evidence/design-audit/check-conformance-case-fixtures.ts <installed-Ajv-2020-module-path>`.
+Eight shape controls check explicit no-setup, required state/authority and
+refusal of executable/credential members. Exact artifact custody, complete
+starting-state semantics and actual native setup remain separate required
+outputs.
+
 Every case's original procedure profile resolves exactly one grammar version before any effects. Decode complete exact artifact bytes under the registered bounded parser; unknown required grammar refuses the case, not a not-applicable pass. Artifact resolution never fetches arbitrary network content or chooses executable imports.
 
 | Manifest artifact | Required interpretation |
