@@ -38,6 +38,45 @@ issued tooling's registration. Required live authority/generation checks still
 belong to original prepare/run/assessment procedures; construction does not
 cache permanent authorization.
 
+## Configuration admission versus invocation admission
+
+The registered configuration is the exact permitted construction basis, not
+merely a list displayed by the projection. Compare the complete supplied
+configuration with its original registered counterpart before issuing tooling,
+including every manifest/profile pair, environment reference and runner
+originalComposition. Preserve declared order where its profile makes order
+meaningful; duplicate or conflicting entries refuse rather than silently
+deduplicating. Original artifact comparison uses complete admitted reference,
+role and byte correspondence, not a caller's digest alone. Inert construction
+can use only the locally retained registration's already admitted comparisons;
+if those originals are unavailable it returns incompatible_service without
+resolving external artifacts.
+
+Each later prepareRun must independently admit its requested procedure/resource
+profile, requiredManifest, inputInventory and environment against that same
+original composition. The registered procedure determines the allowed inventory
+and manifest correspondence; inclusion in a caller-supplied configuration cannot
+authorize a new case bundle or environment. This work belongs to the original
+runner's preparation path, before claim or native acquisition. The captured
+projection cannot forward an otherwise well-shaped request under a broader
+registration or replace the request to make it pass.
+
+Likewise assess must admit the exact requiredManifest/qualificationProfile pair
+and original receipt correspondence through the independently registered assessor.
+A receipt recorded by the runner is not an approval. A pair absent from original
+assessor approvals remains unavailable even if construction succeeded for another
+pair. Do not let the runner's environment or manifest approval stand in for
+assessor independence; the shared corpus may be the same, while producer and
+qualification custody remain separately admitted.
+
+Add C1/C2/C6 controls that construct with a legitimate original service, then
+invoke using a different manifest, procedure, inventory, environment or assessment
+pair. Construction itself makes zero service calls; invocation records its actual
+refusal through the original service with zero dependent native acquisition.
+Separately mutate the caller's configuration after construction and confirm the
+captured originals remain unchanged. These checks supplement fake/copy-service
+controls: exact function custody alone cannot prove complete request admission.
+
 Prepared-run issuance, at-most-once claim, abandonment and recovery remain owned
 by the original host runner. The wrapper passes original prepared custody through
 and never issues a replacement handle, interprets a recovery string as authority
