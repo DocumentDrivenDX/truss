@@ -329,3 +329,10 @@ concurrent isolated servers, exact-text committed persistence and exception clea
 The installed-wheel launcher readiness/stop probe passes as well. Dependencies were
 reused from the pinned qualification environment; clean dependency resolution and
 other operating systems remain separate qualification work.
+
+The [Python migration handoff](python-migration-installation-handoff.md) selects
+package/API composition, original artifact custody, dedicated administrative
+transaction rules, complete outcome mapping and implementation order under the
+existing migration binding. It introduces no alternative ledger, SQL generator
+or authorization resolver. It remains an implementation handoff; migration
+status/verify/apply/reconcile and the complete populated M1 route are unfinished.

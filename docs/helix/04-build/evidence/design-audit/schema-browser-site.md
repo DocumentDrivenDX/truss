@@ -40,3 +40,9 @@ source fields independently open `source_epoch_registry.installation_id` and
 This verifies the existing structural references, not native FK enforcement,
 portable key interpretation or an installed upgrade. The owner-asset check and
 Hugo build also pass. No production site was published by this run.
+
+Latest synchronization: committed UMF cea3fa03480de1f3437ecd6d23e500bea618e0f3
+supersedes the earlier browser pin. Asset reproduction and Hugo build pass; a
+fresh Chromium153.0.8010.12 run passes all eleven recorded Truss checks with532
+definitions. The JSON receipt records the exact current owner revision. This
+remains local read-only schema inspection, not deployment or installation proof.

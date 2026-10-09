@@ -1081,3 +1081,25 @@ catalog identity, revocation/drain or complete consumer authorization. No second
 ACL resolver, identity registry, hash codec or compiler is introduced. Actual
 original profile/source/installed correspondence remains required; uncommitted
 security/driver changes stay under their owner’s control.
+
+## Current local-runtime and browser synchronization — 2026-10-09
+
+The schema browser now consumes committed UMF cea3fa03480de1f3437ecd6d23e500bea618e0f3
+with updated owner explorer JS. Original asset reproduction, Hugo build and the
+fresh Chromium153.0.8010.12 Truss checks pass: 532 definitions, exact structural
+and all native adjunct downloads, qualified migration references and390px mobile
+layout. Other upstream core/API semantics remain separately pinned; a renderer
+refresh does not adopt unfinished runtime semantics. No production deployment
+is claimed. The Weft tracked main remains f05f2df for current compilation evidence.
+
+The security owner's active task was inspected read-only and is extending original
+core0.8 assertion/component inventory with unresolved unknown meaning preserved.
+That progress is not admitted/native security support; migration admission,
+writer exclusions and publication drain remain owner-supplied composition inputs.
+No cross-chat message was sent and no in-progress source was adopted.
+
+The owner's later decisions supersede the historical pending-decision checkpoint
+above: ADR-004 is accepted for document-qualified ownership and Truss owns the
+tested Python implementation. The local runtime and migration handoff carry those
+choices. Pool operations belong to the host, stale pre-effect refusal returns once,
+and the isolated traversal question does not block installation/Python/migrations.
