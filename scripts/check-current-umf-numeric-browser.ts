@@ -1,0 +1,14 @@
+import {createRequire} from 'node:module';
+const path=process.env.TRUSS_UMF_NUMERIC_PRODUCER;if(!path)throw Error('Pinned numeric-current producer directory required');
+const manifest=await Bun.file(path+'/producer-manifest.json').json();
+if(manifest.revision!=='e3555b9aac9e4c3caa952203958c4b0c33cdf519'||manifest.producerMode!=='numeric-current')throw Error('Wrong original producer');
+const bytes=await Bun.file(path+'/producer.js').bytes();if(new Bun.CryptoHasher('sha256').update(bytes).digest('hex')!==manifest.bundleSha256)throw Error('Bundle integrity');
+const {chromium}=createRequire('/Users/erik/Projects/umf/package.json')('playwright');
+const server=Bun.serve({hostname:'127.0.0.1',port:0,fetch(req){return new URL(req.url).pathname==='/producer.js'?new Response(bytes,{headers:{'content-type':'text/javascript'}}):new Response('<!doctype html><title>Original UMF numeric producer</title>')}});
+const browser=await chromium.launch({headless:true});
+try{const page=await browser.newPage();await page.goto('http://127.0.0.1:'+server.port);const results=await page.evaluate(async()=>{
+ const api=await import('/producer.js');const outcomes:any[]=[];
+ for(const [family,token,expected] of [['integer','42',42],['decimal','0.5',0.5],['decimal','9007199254740992',9007199254740992],['decimal','0.1000000000000000055511151231257827021181583404541015625',0.1]] as const){const original=family==='integer'?{integerToken:token}:api.exactDecimal(token);const value=api.numericToNumberLossless(original);if(value!==expected||Object.values(original)[0]!==token)throw Error('Original exact positive mismatch');outcomes.push({family,token,outcome:'lossless',originalPreserved:true})}
+ for(const [family,token] of [['integer','9007199254740992'],['integer','9007199254740993'],['decimal','0.1'],['decimal','-0.000'],['decimal','1e400'],['decimal','1e-400']] as const){let refused=false;try{api.numericToNumberLossless(family==='integer'?{integerToken:token}:api.exactDecimal(token))}catch{refused=true}if(!refused)throw Error('Expected refusal');outcomes.push({family,token,outcome:'refused'})}
+ const integer=api.integerFromBigInt(9223372036854775807n);if(integer.integerToken!=='9223372036854775807'||api.integerToBigInt(integer)!==9223372036854775807n)throw Error('Bigint changed');outcomes.push({family:'integer',token:integer.integerToken,outcome:'bigint_exact'});return outcomes;
+ });const receipt={producer:manifest,browser:browser.version(),results,scope:'Real browser context-free owner API observations against independent exact expected tokens; no Truss wrapper/resource account, Field-context admission or native storage qualification.'};await Bun.write('docs/helix/04-build/evidence/design-audit/umf-numeric-browser.json',JSON.stringify(receipt,null,2)+'\n');console.log(JSON.stringify({browser:receipt.browser,cases:results.length,scope:receipt.scope}));}finally{await browser.close();server.stop(true)}
