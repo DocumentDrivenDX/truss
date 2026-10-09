@@ -141,6 +141,19 @@ that deployment choice; Truss must not silently rename modules or restrict a
 consumer's selected bundle to hide a collision. This is source evidence only,
 not proof that the proposed documents compile or have native registrations.
 
+A subsequent [pinned Rust frontend receipt](../04-build/evidence/design-audit/consumer-logical-frontend.json)
+executes `SELECT u.code FROM catalog.UseCase u WHERE u.code = 'uc-1'` against
+both original models and both explicitly named proposals. Originals return
+`WFT-NAME-MISSING`; proposed documents resolve with the original supplied module
+pins retained. The saved inputs and Rust harness reproduce this narrow result
+in the isolated Weft `5856c73` source build. Copy the saved inputs to the workspace
+root as `truss-consumer-frontend-inputs.json` and the harness to
+`crates/weft-core/tests/truss_consumer_review.rs`, then run the receipt's cargo
+command. This uses the test frontend and dialect 0.1, not the public Python API
+or the bounded application-read profile. Review-only revision labels and serialized
+proposed documents grant no accepted-catalog identity, storage binding, SQL/native
+execution or source-owner adoption. Grouped count, whole entity, relationships,+paging and security remain separate integration obligations.
+
 ## Remaining consumer metadata meaning and action boundary
 
 Both explicit-name validation observations retain eight warnings. Five identify
