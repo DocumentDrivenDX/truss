@@ -16,7 +16,7 @@
     "acceptance-report-v0.3.proposal.schema.json": "c54196f8b4324aec768a33eeeab89bc2615a954af0e45559ed2038ccad7f14bf"
   },
   "sourcePins": {
-    "/Users/erik/Projects/truss/docs/helix/04-build/evidence/design-audit/check-report-tree-native.ts": "75b0886908ff8993ba6cf01ec81dbb7e1db4b9255df41e5dfd971d665aedd9f4",
+    "/Users/erik/Projects/truss/docs/helix/04-build/evidence/design-audit/check-report-tree-native.ts": "fc9bb11b23e77f576ec8158c86e6507966a50098dfa2c51d2042b81ae05baaff",
     "docs/helix/03-test/report-wire-untrusted.fixture.json": "b817b1610e86cfa956427dbbc84b9ef7485ccd0e66d1e2c7939b861e9a715368",
     "docs/helix/02-design/contracts/report-scalar-bytes-v0.2.proposal.sql": "5b99f2f05920a77c7617239acc9f183bc321248831acecc8e4fef7884c25de63",
     "docs/helix/02-design/contracts/report-tree-bytes-v0.2.proposal.sql": "0961dd8209fabe26c499b0240a3a7655ff370d9536ce293df12fe52ab1ab5e98",
@@ -25,6 +25,15 @@
     "packages/postgresql/src/acceptance-json.ts": "14a65dc9fd67b3ab53fb080a4a05422b991af63feac52fc6e0655eb03a47ed17"
   },
   "results": [
+    {
+      "name": "complete-wire-original-integer-key-order",
+      "originalFields": 19,
+      "sourceBytes": 3839,
+      "originalSourceSha256": "189053e1de416ad2b36fbff0829ae617c975360e17b4ba63e84f71818db85b2b",
+      "canonicalBytes": 3839,
+      "canonicalSha256": "258468b119e78200667528b8131307ad7bd3ed9eeeeb05f205aceed2e231fa09",
+      "completeOriginalBytesEqual": true
+    },
     {
       "name": "complete-nineteen-field-wire",
       "originalFields": 19,
@@ -86,5 +95,5 @@
       "observedSqlState": "54000"
     }
   ],
-  "scope": "Four complete nineteen-field synthetic report wires and six private inert-tree refusal controls in temporary functions, explicitly rolled back. Full-byte encoding parity only; no semantic report provenance, installed native authority/grants, resource account or accepted commit."
+  "scope": "Five complete nineteen-field synthetic report wires (both host carriers separately in Python mode) and six private inert-tree refusal controls in temporary functions, explicitly rolled back. Full-byte encoding parity only; no semantic report provenance, installed native authority/grants, resource account or accepted commit."
 }

@@ -133,3 +133,21 @@ Unicode-string oracle. Six private malformed-tree controls retain their expected
 native refusals. Both host modes passed ten observations on PostgreSQL 17.9;
 strict TypeScript compilation also passed. These are host-to-native codec checks,
 not committed TS/Python database writer/reader interchange or publication tests.
+
+### Original integer-like key ordering correction
+
+The later cross-host check includes an original raw report whose asserted object
+members appear as `10`, `2`, `01`, `0`. Python preserves that source order;
+JavaScript enumerates integer-index keys first. Consequently full intermediate
+carrier-text equality is not a universal host interchange requirement. The
+previous four-case equality observation remains scoped to those inputs.
+
+The checker now submits **both host carriers separately** in Python mode and
+compares each complete native result to the independent unsigned UTF-8 sorted
+canonical oracle. Original source bytes and cumulative task count must still
+agree. The integer-key control requires differing carrier bytes and equal full
+canonical bytes; no source normalization is introduced. Five full reports per
+host plus six malformed-tree controls passed (16 native observations); the
+TypeScript-only mode passed 11. These refreshed receipts supersede the earlier
+four-case inventory, retaining the same codec-only scope. Array order remains
+meaningful and is never sorted by this correspondence rule.

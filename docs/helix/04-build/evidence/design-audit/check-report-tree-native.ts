@@ -24,7 +24,8 @@ function oracle(value:unknown):string{
  return '{'+keys.map(key=>quote(key)+':'+oracle(record[key])).join(',')+'}';
 }
 const withAsserted=(asserted:unknown)=>{const report=structuredClone(base);report.originalExecution.origin.asserted=asserted;return report;};
-const cases=[{name:'complete-nineteen-field-wire',report:structuredClone(base)},
+const integerKeySource=JSON.stringify(withAsserted('raw-key-order-sentinel')).replace('"raw-key-order-sentinel"','{"10":"ten","2":"two","01":"leading","0":"zero"}');
+const cases:{name:string;report:any;source?:string}[]=[{name:'complete-wire-original-integer-key-order',report:JSON.parse(integerKeySource),source:integerKeySource},{name:'complete-nineteen-field-wire',report:structuredClone(base)},
  {name:'complete-wire-short-escape-expansion',report:withAsserted({'x-large-original':'\n'.repeat(200000)})},
  {name:'complete-wire-large-original-key',report:withAsserted({['x-'+ 'é'.repeat(40000)]:'original'})},
  {name:'complete-wire-UTF8-key-order-and-array-order',report:withAsserted({'𐀀':'supplementary','':'private','e\u0301':'decomposed','é':'composed','x-order':[null,false,true,'',{},[]],'x-NUL\0':'\0\n\\"'})}];
@@ -32,7 +33,7 @@ const codec=await createProposedComposedAcceptanceReportHandoff('/Users/erik/Pro
 let pythonEnvironment:unknown;
 const prepared=[];
 for(const c of cases){
- const source=Buffer.from(JSON.stringify(c.report)),handoff=codec.prepare(source),expected=Buffer.from(oracle(c.report));
+ const source=Buffer.from(c.source??JSON.stringify(c.report)),handoff=codec.prepare(source),expected=Buffer.from(oracle(c.report));
  if(handoff.originalUtf8Hex!==source.toString('hex'))throw Error('Original complete report wire changed');
  if(pythonMode){
   const bridge=Bun.spawn(['/private/tmp/truss-python-report-schema-env/bin/python',bridgePath],{env:{...process.env,PYTHONDONTWRITEBYTECODE:'1'},stdin:'pipe',stdout:'pipe',stderr:'pipe'});
@@ -42,8 +43,11 @@ for(const c of cases){
   const python=JSON.parse(out);
   if(pythonEnvironment!==undefined&&JSON.stringify(pythonEnvironment)!==JSON.stringify(python.environment))throw Error('Python environment changed during observation');
   pythonEnvironment=python.environment;
-  if(python.originalUtf8Hex!==handoff.originalUtf8Hex||python.nativeTreeText!==handoff.nativeTreeText||python.nativeTaskCount!==handoff.nativeTaskCount)throw Error('Full Python/TypeScript carrier correspondence differs: '+c.name);
-  prepared.push({...c,source,handoff:{...handoff,nativeTreeText:python.nativeTreeText},expected});
+  if(python.originalUtf8Hex!==handoff.originalUtf8Hex||python.nativeTaskCount!==handoff.nativeTaskCount)throw Error('Full Python/TypeScript carrier correspondence differs: '+c.name);
+  const carrierBytesEqual=python.nativeTreeText===handoff.nativeTreeText;
+  if(c.name==='complete-wire-original-integer-key-order'&&carrierBytesEqual)throw Error('Original integer-key order divergence control missing');
+  prepared.push({...c,name:c.name+'-typescript',source,handoff,expected,carrierBytesEqual});
+  prepared.push({...c,name:c.name+'-python',source,handoff:{...handoff,nativeTreeText:python.nativeTreeText},expected,carrierBytesEqual});
  }else prepared.push({...c,source,handoff,expected});
 }
 const scalarPath='docs/helix/02-design/contracts/report-scalar-bytes-v0.2.proposal.sql';
@@ -73,7 +77,7 @@ if(lines.length!==1+prepared.length+invalid.length||!lines[0].startsWith('server
 const results=[];
 for(let i=0;i<prepared.length;i++){
  const c=prepared[i]!;if(lines[i+1]!==c.name+'|'+c.expected.toString('hex'))throw Error('Complete independent native bytes differ: '+c.name);
- results.push({name:c.name,originalFields:Object.keys(c.report).length,sourceBytes:c.source.length,originalSourceSha256:hash(c.source),canonicalBytes:c.expected.length,canonicalSha256:hash(c.expected),completeOriginalBytesEqual:true});
+ results.push({name:c.name,originalFields:Object.keys(c.report).length,sourceBytes:c.source.length,originalSourceSha256:hash(c.source),canonicalBytes:c.expected.length,canonicalSha256:hash(c.expected),completeOriginalBytesEqual:true,...('carrierBytesEqual' in c?{carrierBytesEqual:c.carrierBytesEqual}:{})});
 }
 for(let i=0;i<invalid.length;i++){
  const c=invalid[i]!;if(lines[prepared.length+i+1]!==c.name+'|refused_'+c.state)throw Error('Expected native refusal differs: '+c.name);
@@ -82,6 +86,6 @@ for(let i=0;i<invalid.length;i++){
 const paths=[import.meta.path,fixturePath,scalarPath,treePath,'packages/umf-bun/src/canonical-report-handoff.ts','packages/postgresql/src/canonical-wire-tree.ts','packages/postgresql/src/acceptance-json.ts'];
 if(pythonMode)paths.push(bridgePath,'docs/helix/04-build/evidence/design-audit/python_report_wire_candidate.py','docs/helix/04-build/evidence/design-audit/python_raw_json_candidate.py','docs/helix/04-build/evidence/design-audit/python_native_report_carrier_candidate.py');
 const sourcePins=Object.fromEntries(await Promise.all(paths.map(async path=>[path,hash(new Uint8Array(await Bun.file(path).arrayBuffer()))])));
-const receipt={status:'passed_temporary_complete_wire_encoding',pythonEnvironment,carrierHost:pythonMode?'Python 3.11 private candidate':'TypeScript private candidate',serverVersionNum:lines[0].slice(7),schemaPins:codec.schemaPins,sourcePins,results,scope:'Four complete nineteen-field synthetic report wires and six private inert-tree refusal controls in temporary functions, explicitly rolled back. Full-byte encoding parity only; no semantic report provenance, installed native authority/grants, resource account or accepted commit.'};
+const receipt={status:'passed_temporary_complete_wire_encoding',pythonEnvironment,carrierHost:pythonMode?'Python 3.11 private candidate':'TypeScript private candidate',serverVersionNum:lines[0].slice(7),schemaPins:codec.schemaPins,sourcePins,results,scope:'Five complete nineteen-field synthetic report wires (both host carriers separately in Python mode) and six private inert-tree refusal controls in temporary functions, explicitly rolled back. Full-byte encoding parity only; no semantic report provenance, installed native authority/grants, resource account or accepted commit.'};
 await Bun.write('docs/helix/04-build/evidence/design-audit/'+(pythonMode?'python-report-tree-native.json':'report-tree-native.json'),JSON.stringify(receipt,null,2)+'\n');
 console.log(results.length+' native tree observations passed; complete wire encoding only');
