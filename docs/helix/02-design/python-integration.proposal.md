@@ -652,6 +652,27 @@ This adds actual local recv_into correspondence; it does not qualify authenticat
 TLS, a pg8000 adapter, complete allocations, cancellation/settlement, installed
 security or publication. The original frame receipt remains unchanged.
 
+#### Native full-carrier size and decoder mismatch evidence
+
+`check_python_pg_receive_full_carrier_native.py` now performs a separate local
+read-only probe with bytea_output=hex and a four-MiB ASCII bytea value. The receiver
+admits the exact 8,388,621-byte DataRow under explicitly larger harness bounds;
+complete original cell bytes match the independently constructed hex literal.
+The existing fixed-one-MiB frame decoder refuses that same complete frame. The
+[separate receipt](../04-build/evidence/design-audit/python-pg-receive-full-carrier-native.json)
+retains exact lengths, complete-byte comparison, cell digest, original source
+pins and the decoder refusal, without storing the large cell as receipt hex.
+
+The first attempted probe stopped at that decoder refusal and emitted no success
+receipt. The completed read-only rerun records the refusal explicitly and compares
+raw framing/cell content independently; it does not silently change the decoder's
+admitted capacity. This demonstrates a concrete receiver/decoder profile mismatch,
+not full report support. A1/PY-01b must admit compatible transport, decoder,
+carrier and simultaneous-copy accounts before submitting a report-producing
+operation; otherwise refuse before effects. The synthetic ASCII value establishes
+wire size only, not a genuine nineteen-field report or its producer completeness.
+TLS, driver command settlement, native authority and publication remain unqualified.
+
 #### Full-report wire capacity before driver selection
 
 The frame candidate's one-MiB limit cannot transport the existing four-MiB
