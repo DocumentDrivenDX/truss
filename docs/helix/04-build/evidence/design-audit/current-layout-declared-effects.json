@@ -13230,6 +13230,21 @@
       "composition": "separate_private_component_not_in_layout"
     },
     {
+      "path": "packages/postgresql/native/operation-configuration-context-admission.sql",
+      "sha256": "b24f12ed7fdbb33e64d2ffa4135ced87c55fd1dfdb786f079d49efb20d696efe",
+      "composition": "separate_private_component_not_in_layout"
+    },
+    {
+      "path": "packages/postgresql/native/operation-configuration-current.sql",
+      "sha256": "3867e6271489ed331e3669027c759d90bd9a343f9dffc8a7051dc1f2cf701be0",
+      "composition": "separate_private_component_not_in_layout"
+    },
+    {
+      "path": "packages/postgresql/native/operation-configuration-immutability.sql",
+      "sha256": "3ae78935297c76e66eb324adb314f4554a7924f7e11b7a1ae7128c9d3cbc8386",
+      "composition": "separate_private_component_not_in_layout"
+    },
+    {
       "path": "packages/postgresql/native/operation-epoch-context-admission.sql",
       "sha256": "7c3af5774c63c34e78e1d623ae203b6f70a3e511c4663d3d397d01927a530619",
       "composition": "separate_private_component_not_in_layout"
