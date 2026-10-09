@@ -57,6 +57,42 @@ and current authorization refusal before replay. After valid expiry, return
 receipt_expired rather than reapply. This case consumes the security owner's
 namespace/session/disclosure boundary, not a fixture boolean granting access.
 
+## Executable packet allocation
+
+Materialize the primary mixed/retry sequence as one case with the ordered steps
+above. Split failure and retention variants into separate immutable cases with
+their own original setup and scope generations; do not execute them against the
+primary sequence's mutated state and then rewrite expected starting versions.
+The independent fixture producer must establish actual identities, authorized
+namespace and native starting inventories before any operation under test.
+
+| Packet case | Required operation sequence and observer boundaries |
+| --- | --- |
+| Mixed commit, later edit, retry and conflict | Observe initial state; mixed call in adopted scope; pending boundary; confirmed outer commit; later edit and its commit; exact original retry; changed-input conflict. Capture complete graph, journal, receipt/protection and unchanged catalog/report inventories at each applicable boundary |
+| Second-operation failure | Seed unrelated caller work before the group, admit A's first update, fail B's actual precondition, then observe group-local rollback inside the still-live caller transaction. Independently commit only the surviving prior work and verify no group receipt or A effect survived |
+| Actual dry-run | Run the same mixed input through real final validation in an adopted scope, observe provisional effects without durable publication, then confirm outer rollback. Fresh observation finds original graph and no new journal/receipt/token |
+| All-no-op durable result | Apply both exact unchanged updates, confirm outer commit, then retry. Observe the full two-slot receipt with original results and no invented value-change events before or after replay |
+| Lost acknowledgment, committed branch | Submit original COMMIT and lose its acknowledgment; observe unknown outcome without publishing a committed token. Original recovery proves commit, then exact retry returns its original results once with no repeated effects |
+| Lost acknowledgment, rolled-back branch | Lose response under an independently controlled schedule whose original termination observer proves rollback. Preserve that evidence, perform fresh admission for the same semantic request, and verify one eventual committed application; missing receipt alone cannot select this branch |
+| Minimum protection and valid expiry | Use the registered trusted clock/retention procedure around the specified minimum interval. While protected, exact retry returns original results. Only independently proved valid expiry selects receipt_expired, which does not reapply or extend the old receipt |
+| Current replay authority refusal | Commit under the original admitted authority, then perform the actual registered authority transition. Exact retry under the now-disallowed caller reveals no retained private result and creates no effects; a fixture denial flag is insufficient |
+
+Original registered observer procedures determine required `(surface, step,
+boundary)` keys. Populate the expectation artifact from independently retained
+inventories, including explicit empty new journal/receipt inventories where
+required; never derive required coverage from the implementation's returned
+events. Starting, pending, terminated and committed observations must name their
+actual scope/cut. An old snapshot can establish its own observed state but cannot
+prove the fresh committed inventory or current replay authority.
+
+Treat durable response loss separately from native termination. An assessor may
+record interrupted/unavailable evidence, but it cannot choose the committed or
+rolled-back packet branch from a convenient fixture label. Each controlled fault
+must retain original native submission, termination and recovery observations.
+For both language interchange directions, the reader inspects the writer's
+actual committed database and original receipt; it does not reseed equivalent
+objects or re-encode the writer result as its expected oracle.
+
 The executable packet still needs original registered setup/operation/observer
 artifacts, exact resource/native profiles and independent expected inventories.
 Run it through TypeScript and Python on the same admitted layout, then perform
