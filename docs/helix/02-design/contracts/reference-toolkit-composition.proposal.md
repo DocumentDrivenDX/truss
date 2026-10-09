@@ -135,3 +135,13 @@ Produce the selected record only from actual original inputs and review outputs;
 do not populate it with synthetic runtime identities or claim that this schema
 establishes compatibility. Current scoped receipts may be attached only to their
 real membership/procedure, with unmet broader obligations retained explicitly.
+
+The schema additionally refuses independent-review advancement before authored
+review, or native qualification before both earlier reviews. The
+[reproducible shape checker](../../04-build/evidence/design-audit/check_reference_composition_review.py)
+passes nine independently specified controls, including missing/duplicate
+boundaries, substituted authority scope, missing evidence and out-of-order
+advancement. It deliberately accepts a structurally reviewed synthetic artifact
+only as data: original digest verification, evidence meaning, recognized reviewer
+and actual qualification still require semantic admission. These checks do not
+populate or approve the selected composition record.

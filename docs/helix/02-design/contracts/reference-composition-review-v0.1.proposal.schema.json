@@ -197,7 +197,85 @@
           "independentReview",
           "nativeQualification"
         ],
-        "additionalProperties": false
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "independentReview": {
+                  "properties": {
+                    "state": {
+                      "const": "reviewed"
+                    }
+                  },
+                  "required": [
+                    "state"
+                  ]
+                }
+              },
+              "required": [
+                "independentReview"
+              ]
+            },
+            "then": {
+              "properties": {
+                "authored": {
+                  "properties": {
+                    "state": {
+                      "const": "reviewed"
+                    }
+                  },
+                  "required": [
+                    "state"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "nativeQualification": {
+                  "properties": {
+                    "state": {
+                      "const": "reviewed"
+                    }
+                  },
+                  "required": [
+                    "state"
+                  ]
+                }
+              },
+              "required": [
+                "nativeQualification"
+              ]
+            },
+            "then": {
+              "properties": {
+                "authored": {
+                  "properties": {
+                    "state": {
+                      "const": "reviewed"
+                    }
+                  },
+                  "required": [
+                    "state"
+                  ]
+                },
+                "independentReview": {
+                  "properties": {
+                    "state": {
+                      "const": "reviewed"
+                    }
+                  },
+                  "required": [
+                    "state"
+                  ]
+                }
+              }
+            }
+          }
+        ]
       },
       "allOf": [
         {
