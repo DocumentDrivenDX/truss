@@ -1,7 +1,7 @@
 {
   "database": "PostgreSQL 17.9 (Debian 17.9-1.pgdg13+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit",
   "sources": {
-    "scripts/check-source-epoch-concurrency.ts": "68811ff12974ceaa951f4991240cde2b8d853b4d8fac67baba8bd13a4b9e4abf",
+    "scripts/check-source-epoch-concurrency.ts": "4c3ae7026491638fbe033d8e973cb8fd1f443ab56a29e870ffa504dd47103305",
     "packages/postgresql/native/source-epoch-issue.sql": "df57c993f4fdc7afc9b13d1ee9f02c7626e6a252ade2a7316fd52c34df6ba2e5",
     "packages/postgresql/native/source-epoch-lock.sql": "e811a3656a45e941d588ca21b97ab524b789948d08585288e44b158b060d73cc",
     "packages/postgresql/native/source-epoch-immutability.sql": "8e819d0b11a4497913a66a1046725577ca31acfe11b1c10820eb6f633ea4a955",
@@ -12,8 +12,10 @@
     "Timed-out issuer leaves no speculative successor",
     "Writer retains original epoch until transaction completion",
     "Transition succeeds after writer completes and next admission returns successor evidence",
-    "Only successful native issuer retains the original predecessor lineage"
+    "Only successful native issuer retains the original predecessor lineage",
+    "Previously native-issued epoch refuses new current admission after transition",
+    "Repeated initial issuance cannot replace the established current epoch"
   ],
-  "scope": "Two original native connections and native issuer-generated successor, synthetic component namespace/marker and initial tokens; issuer locking behavior only, not issuer/transition authority or complete installed admission",
+  "scope": "Two original native connections with native issuer-generated initial and successor tokens, synthetic component namespace/marker/profile/incarnation; issuer locking behavior only, not issuer/transition authority or complete installed admission",
   "qualified": false
 }

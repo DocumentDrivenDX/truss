@@ -112,7 +112,7 @@ without adopting a complete lifecycle or deployment-admission profile.
 `packages/postgresql/native/source-epoch-issue.sql`, `source-epoch-lock.sql` and
 `source-epoch-immutability.sql` remain private SECURITY INVOKER components with
 PUBLIC execution revoked. The storage harness verifies 27 component checks;
-`bun scripts/check-source-epoch-concurrency.ts` verifies five checks with two
+`bun scripts/check-source-epoch-concurrency.ts` verifies seven checks with two
 connections, including actual issuer blocking, timeout with no speculative
 successor, successful successor admission and predecessor lineage. Use the
 owned fixture URL on port 15434. Exact-source receipts are in the design-audit
