@@ -54,7 +54,7 @@ The database role comes from the database; the actor is what the caller asserts.
 
 | Scenario | AC ID | Input / State | Action | Expected Result |
 |----------|-------|---------------|--------|-----------------|
-| Rows | US-015-AC1 | Role `w`, actor `a` | Change 2 props | 2 rows; correct origin |
+| Rows | US-015-AC1 | Role `w`, actor `a` | Change 2 props | 2 property deltas plus complete record-boundary witness; shared original group/version/origin |
 | Role | US-015-AC2 | Caller sends role | Change | Database role stored |
 | Atomic | US-015-AC3 | Forced failure | Change | Not stored |
 | Operations | US-015-AC4 | Create/update/delete | Read rows | Defined payloads |
