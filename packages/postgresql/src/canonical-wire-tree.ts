@@ -7,16 +7,22 @@ export function prepareCanonicalWireTree(original:Uint8Array){
  if(!(original.buffer instanceof ArrayBuffer))throw Error('Original ordinary wire byte custody required');
  if(original.length>1048576)throw Error('Canonical wire source capacity exceeded');
  const owned=Uint8Array.prototype.slice.call(original) as Uint8Array;
- const value=decodeAcceptanceJson(owned);let steps=0;
- // Preflight the actual native task count before constructing its tagged carrier.
+ const value=decodeAcceptanceJson(owned);let steps=0,carrierLength=0;
+ // Preflight exact native tasks and compact ASCII length before tagged construction.
  const pending:AcceptanceJson[]=[value];
  while(pending.length){const node=pending.pop()!;steps++;
+  if(node===null)carrierLength+='{"kind":"null"}'.length;
+  else if(typeof node==='boolean')carrierLength+='{"kind":"boolean","value":true}'.length+(node?0:1);
+  else if(typeof node==='string')carrierLength+='{"kind":"string","utf8Hex":""}'.length+2*new TextEncoder().encode(node).length;
   if(node!==null&&typeof node==='object'){
    const children=Array.isArray(node)?node:Object.values(node);steps+=children.length+1+(Array.isArray(node)?0:2*children.length);
+   carrierLength+=(Array.isArray(node)?'{"kind":"array","items":[]}':'{"kind":"object","members":[]}').length+Math.max(0,children.length-1);
+   if(!Array.isArray(node))for(const key of Object.keys(node))carrierLength+='{"keyUtf8Hex":"","node":}'.length+2*new TextEncoder().encode(key).length;
    if(steps>32768)throw Error('Native canonical tree task capacity exceeded');
    for(const child of children)pending.push(child);
   }
   if(steps>32768)throw Error('Native canonical tree task capacity exceeded');
+  if(carrierLength>4194304)throw Error('Native canonical tree carrier capacity exceeded');
  }
  const root:{node?:NativeTree}={};const tasks:{value:AcceptanceJson;assign:(node:NativeTree)=>void}[]=[{value,assign:node=>{root.node=node}}];
  while(tasks.length){const task=tasks.pop()!,node=task.value;
@@ -32,6 +38,6 @@ export function prepareCanonicalWireTree(original:Uint8Array){
   }
  }
  const nativeTreeText=JSON.stringify(root.node);
- if(nativeTreeText.length>4194304)throw Error('Native canonical tree carrier capacity exceeded');
+ if(nativeTreeText.length!==carrierLength)throw Error('Native carrier preflight correspondence failed');
  return Object.freeze({originalUtf8Hex:hex(owned),nativeTreeText,nativeTaskCount:String(steps),scope:'original_numeric_free_wire_codec_handoff_only' as const});
 }

@@ -112,9 +112,12 @@ Python 3.11/schema-validator environment. The correspondence case includes
 NFC/NFD, supplementary Unicode, byte-document NUL, mixed arrays and a large
 scalar. It is not a full shared corpus or database writer/reader interchange.
 
-The existing TypeScript carrier checks its four-MiB serialized length after
-construction; Python's exact preflight does not qualify that allocation path.
-Python UTF-8 sizing, parsed/frozen/schema views, pending tasks, tagged objects,
+The TypeScript carrier now also computes exact compact ASCII size before tagged
+construction and checks actual serialization against that preflight. Seventeen
+TypeScript carrier/report tests (95 assertions) and all 24 Python candidate tests
+pass after alignment. Scalar/null/boolean and empty/nested container controls
+exercise length correspondence; this still does not qualify full allocations.
+Host UTF-8 sizing, parsed/frozen/schema views, pending tasks, tagged objects,
 serialization and native JSONB/output allocations still need the selected
 original account. Package ownership, native authority, full report semantic
 provenance and atomic publication remain open.

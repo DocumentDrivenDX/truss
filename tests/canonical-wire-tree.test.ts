@@ -19,3 +19,10 @@ test('native task ceiling is checked before carrier construction',()=>{
 test('shared backing cannot impersonate original immutable source custody',()=>{
  expect(()=>prepareCanonicalWireTree(new Uint8Array(new SharedArrayBuffer(8)))).toThrow('byte custody');
 });
+test('preflight exact ASCII length covers scalar encodings and nested empty containers',()=>{
+ for(const source of ['null','true','false','""','"\\u0000é𐀀"','[]','{}','[false,{},[],"é"]','{"é":false,"x":[]}']){
+  const result=prepareCanonicalWireTree(bytes(source));
+  expect(JSON.parse(result.nativeTreeText).kind).toBeDefined();
+  expect(result.nativeTreeText.length).toBeLessThanOrEqual(4194304);
+ }
+});
