@@ -120,6 +120,57 @@ the selected aggregate, security mapping or exact decoder; missing obligations
 refuse the whole read. Parsed-query input remains a separate Weft-owned ABI
 dependency: its availability cannot be inferred from SQL-text count support.
 
+### R8 parsed-input compiler handoff
+
+The original consumer requirement says the host parses its own statement and
+wants parameterized SQL without a second textual parse. At the pinned committed
+Weft baseline, `compile.rs` admits a closed request with required `sql: String`,
+and the Python export forwards a JSON string to that compiler. Its internal Rust
+logical plan is not a published language-neutral parsed-input ABI. Therefore the
+current wheel satisfies neither parsed-input admission nor the complete R8 read
+contract, even though supported SQL-text compilation and owner-corpus parity pass.
+
+Weft owns the missing parsed representation and entrypoint. Truss supplies the
+following consumer acceptance requirements for that upstream interface; it must
+not create its own AST, serialize an AST back to SQL as a claimed solution, or
+treat an arbitrary caller's pre-resolved plan as compiler authority.
+
+- Admit an explicit versioned parsed representation with closed node variants,
+  exact literals and parameter references. Preserve qualified entity/Field and
+  alias references, projection order, relationship direction, grouping/order and
+  paging bounds. Unknown or unsupported nodes refuse before database submission.
+- Resolve the parsed input against the same original UMF modules and registered
+  Truss backend mapping as SQL-text input. Host parsing does not bypass name,
+  type, presence, key, security or supported-subset checks. The compiler owner
+  defines which semantic stages remain shared and supplies their evidence.
+- Return the existing admitted parameterized SQL, ordered typed parameter
+  descriptors, complete result metadata and host obligations, or an explicitly
+  versioned successor. Python must retain exact values and independently bind
+  each parameter to its descriptor; a caller-provided SQL string or cursor is
+  not an accepted compiled result.
+- Define finite input/node/depth/output bounds and diagnostics for malformed
+  parsed input. Truss's existing transport/resource account must include the
+  original parsed carrier and compiler output; LIMIT alone cannot qualify
+  indexed or bounded native work.
+
+PY-02/05 qualification must pair independently authored parsed and text cases
+for the same supported semantics and compare result/parameter/obligation meaning,
+without requiring identical SQL formatting. Cover alias and qualified-name
+collisions, large integer and decimal parameters, absent/null projections,
+relationship direction, complete versus partial grouping order, keyset boundaries
+and capped `alias.*` expansion. Mutate each parsed case to an unknown node,
+unresolved reference, mistyped or missing parameter, unsupported relationship or
+unbounded projection; require compiler refusal and zero native submissions.
+Then execute admitted forms against the same authorized populated native data
+with original plan/budget evidence for each advertised read shape.
+
+The interim SQL-text route remains separately advertised at its actual scope.
+Parsed-input availability is an upstream engineering dependency, not a new
+consumer product choice. No release claim may mark R8 complete until its parsed
+interface and all required direct/compiled read shapes have matching corpus and
+native evidence. The exact ABI/profile bytes remain unselected until Weft
+publishes them; Truss consumes that interface rather than inventing its wire.
+
 ## Host transaction adapter
 
 Use the semantic Executor operations of CONTRACT-007 rather than a language-specific second transaction protocol. The adapter accepts the caller's actual live connection/transaction object, validates ownership/lifetime, and retains it internally. No transaction identifier is accepted as a substitute. Initial delivery selects one driver/transaction mode and qualifies it; sync and async modes cannot share a support claim without separate evidence. Driver selection remains explicit.
