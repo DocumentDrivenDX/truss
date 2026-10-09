@@ -82,3 +82,20 @@ This settles the measurement choice for US-037-AC6/STP-037. The runner, lawful
 security-owner baseline composition, sealed deployment registration and actual
 measurements remain unimplemented/unqualified. It does not establish policy
 correctness or authorize an installation that disables required protection.
+
+## Timing evaluator component
+
+`packages/tooling/src/module-policy-overhead.ts` now implements exact signed
+block sums and conjunctive threshold assessment. Each arm duration is canonical
+unsigned decimal text with at most20 digits; a registered timer producer must
+supply that bounded duration domain or refuse before measurement. The component
+requires exactly three blocks of1,000 closed timing pairs. It retains negative
+differences and refuses malformed/incomplete timing inputs. Independent tests
+cover equality, one-nanosecond failure despite passing pooled mean, negative
+differences and missing/type/field controls; strict TypeScript compilation passes.
+
+Its scope is explicitly timing_only. It cannot recognize duplicate/reordered
+original observations, verify timer truthfulness, classify wrong results or admit
+security/deployment registration. Those responsibilities remain with the original
+runner and independent assessor. A numeric pass does not make the registered
+experiment valid or establish US-037-AC6; native runner/registration remains open.
