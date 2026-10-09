@@ -1,5 +1,13 @@
 import {createRequire} from 'node:module';
 const {chromium}=createRequire('/Users/erik/Projects/umf/package.json')('playwright');
+const ownerManifest=await Bun.file('website/static/schema/manifest.json').json();
+if(ownerManifest.owner!=='DocumentDrivenDX/umf'||!(/^[a-f0-9]{40}$/).test(ownerManifest.revision))throw Error('Original UMF browser owner pin required');
+for(const [name,expected] of Object.entries(ownerManifest.assets)){
+ const actual=new Bun.CryptoHasher('sha256').update(await Bun.file('website/static/schema/'+name).arrayBuffer()).digest('hex');
+ if(actual!==expected)throw Error('Original UMF browser asset mismatch: '+name);
+ const published=new Bun.CryptoHasher('sha256').update(await Bun.file('website/public/schema/'+name).arrayBuffer()).digest('hex');
+ if(published!==expected)throw Error('Generated site schema asset mismatch: '+name);
+}
 const server=Bun.serve({hostname:'127.0.0.1',port:0,async fetch(req){let path=new URL(req.url).pathname;if(!path.startsWith('/truss/'))return new Response('Not found',{status:404});path=path.slice(7);if(!path||path.endsWith('/'))path+='index.html';const file=Bun.file('website/public/'+path);return await file.exists()?new Response(file):new Response('Not found',{status:404});}});
 const browser=await chromium.launch({headless:true});
 try{
@@ -40,6 +48,6 @@ try{
  if(migrationBytes.length!==migrationExpected.length||migrationBytes.some((b,i)=>b!==migrationExpected[i]))throw Error('Migration archive changed original bytes');
  await page.setViewportSize({width:390,height:844});await page.goto(base+'schema/');await page.locator('.definition-list').waitFor();
  const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth);if(overflow)throw Error('Mobile page overflow');if(errors.length)throw Error(errors.join('\n'));
- const receipt={browser:browser.version(),ownerRevision:'6e67169ef562df2cca6ce6388fe7d57e35a751cd',definitions,checks:['Hugo Model page embeds working owner browser','current structural model validates','prop_def deep link and declaration_module field navigation','download is byte-identical UTF-8 source','epoch registry and predecessor columns browse correctly','retained native source download is byte-exact','configuration capture columns browse and adjunct download is byte-exact','migration receipt columns browse and adjunct download is byte-exact','390px mobile browser has no horizontal page overflow','no browser errors'],scope:'Actual generated site under /truss/ in Chromium; structural inspection only, no deployment or native runtime qualification.'};
+ const receipt={browser:browser.version(),ownerRevision:ownerManifest.revision,definitions,checks:['Hugo Model page embeds working owner browser','current structural model validates','prop_def deep link and declaration_module field navigation','download is byte-identical UTF-8 source','epoch registry and predecessor columns browse correctly','retained native source download is byte-exact','configuration capture columns browse and adjunct download is byte-exact','migration receipt columns browse and adjunct download is byte-exact','390px mobile browser has no horizontal page overflow','no browser errors'],scope:'Actual generated site under /truss/ in Chromium; structural inspection only, no deployment or native runtime qualification.'};
  await Bun.write('docs/helix/04-build/evidence/design-audit/schema-browser-site.json',JSON.stringify(receipt,null,2)+'\n');console.log(JSON.stringify(receipt));
 }finally{await browser.close();server.stop(true)}

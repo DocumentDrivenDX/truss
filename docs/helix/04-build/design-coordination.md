@@ -15,6 +15,25 @@ ddx:
 
 # Design coordination and remaining work
 
+## Current schema-browser synchronization — 2026-10-09
+
+The browser builder and generated manifest now pin fetched UMF
+`1f7b5f5d2a355c4b476e3a96b289b9048f03f567`. Its committed explorer JS/CSS,
+site CSS and logo are byte-identical to the previously bundled owner assets;
+the refreshed pin records their current source correspondence. The browser
+check reads the manifest pin and checks every listed source and generated-site
+asset digest before opening the browser, preventing a separate stale test pin
+or stale build from standing in for the selected bundle.
+
+The builder's reproducibility check, Hugo build and actual Chromium
+153.0.8010.12 check pass locally. The current 532-definition projection renders;
+deep links, byte-exact structural/native/configuration/migration downloads and
+390px mobile layout pass without browser errors. The saved
+[browser receipt](evidence/design-audit/schema-browser-site.json) records this
+scope. This verifies local schema inspection against current committed owner
+assets; it does not publish the site, adopt a stable installed layout or qualify
+native semantics. Independent site work remains outside this scoped update.
+
 ## Catalog ownership decision checkpoint — 2026-10-09
 
 ADR-004 remains proposed for the full document-qualified ownership rule. The
