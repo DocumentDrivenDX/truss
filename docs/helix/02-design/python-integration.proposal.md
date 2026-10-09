@@ -884,6 +884,7 @@ into an empty collection before the selected owner's decision procedure.
 | True, false and unknown expressions, including nested AND/OR/NOT | Preserve the owner's exact truth result and final decision classification; Python truthiness is not the policy algebra |
 | Two association witnesses that separately satisfy different conjuncts | Nested SQL retains witness correlation; flattening joins or sharing endpoint values across witnesses cannot create a true condition |
 | A Record-backed edge's own Field versus an endpoint Field with equal name/text | Preserve qualified declaring identity, row witness and Field channel; endpoint data cannot replace the edge's stored value |
+| Different logical Record or Relationship kinds sharing one physical table, with equal keys and policy-relevant values | Every owner-generated scan selects the original qualified logical kind before supplying witnesses, endpoint values or quantified population. An unrelated row cannot satisfy a predicate or disprove a universal condition; empty selected populations retain the owner's semantics |
 | Unsupported term under an empty collection or a branch that would short-circuit | Owner preflight/support disposition remains explicit; SQL simplification cannot make unsupported meaning admitted |
 | Changed source, alias/parameter binding, context generation or lease after lowering | Refuse stale/substituted execution and publication under the owner protocol; successful condition generation is not freshness evidence |
 | Same Key label with reversed component order across endpoint, intrinsic identity and Record-witness mappings | One original qualified ordered Key descriptor governs every mapping. Equal labels or scalar families cannot establish correspondence; eager owner admission refuses the mismatch even when a policy branch would not use it |
@@ -902,6 +903,19 @@ not fail merely by scalar type, and an unused malformed mapping to verify eager
 admission. A copied Key name, equal encoded length or a successful condition parse
 cannot replace full descriptor correspondence. This adds an integration obligation;
 it neither adopts the owner's current source nor adds a Python Key resolver.
+
+The owner's revision-34 snapshot now identifies typed row selection as ongoing
+SQL-scan work. Freeze a shared-table fixture with two Record kinds and two
+Relationship kinds, including overlapping local keys and identical endpoint
+values. Keep the selected kind's population empty in one case, and put only an
+unrelated satisfying or violating row in the table; exercise existential and
+universal conditions independently. In another case, retain two distinct selected
+association witnesses while an unrelated kind shares their endpoint tuple.
+Compare the original interpreter and native condition over the same complete
+admitted source; preserve kind selection, multiplicity and witness correlation.
+Missing, substituted or stale kind mapping must follow owner admission/refusal,
+never a Python-generated filter or inferred label. These are planned integration
+controls; the snapshot does not prove native lowering or graph-source completeness.
 
 ## Exact transport
 
