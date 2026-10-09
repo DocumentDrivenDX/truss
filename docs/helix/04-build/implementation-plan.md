@@ -2768,3 +2768,8 @@ CONTRACT-008 LM-02–05 now has an exact draft request/attempt/result carrier an
 ### Pre-effect configuration capture correction — 2026-10-09
 
 CH-01/03 must retain an immutable configuration capsule atomically with original operation admission before catalog/business/journal effects, then compare it with current state at use/publication. Current native/host collection is explicitly current-byte observation under original operation custody. The 126-check native receipt proves a first late collection sees a same-operation change; it cannot establish admission-time history. Author the capsule home/parent/immutability/cleanup/initializer in UMF, integrate the qualified pre-effect capture and compound capacity ledger, and execute STP-001 IC-T01–06. Preserve context0.4 limits and existing current configuration identity/security ownership; no late recollection can repair a missing original capsule.
+
+
+### Configuration capsule storage handoff — 2026-10-09
+
+CH-01/03 now have an original UMF operation_configuration adjunct with sixteen columns, existing operation/epoch FKs and exact owner-generated DDL. Saved reload/export checks and rollback-only native DDL/count observations pass. Compose the unchanged 0.16 baseline with this versioned adjunct only after adding core schema-browser projection and complete pre-effect producer, immutable guard, historical retention and whole-operation cleanup dependencies. Security ownership/grants remain the active workstream's output. No public capability, installed layout version or full IC-T01–06 verdict is supplied by this adjunct.

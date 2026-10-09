@@ -1,0 +1,16 @@
+{
+  "sources": {
+    "docs/helix/04-build/evidence/source-epoch-storage.owner-export.sql": "c1338fa024a9e7af095457cfd2adec768071475f510caa98923df4da9a3e7407",
+    "docs/helix/04-build/evidence/operation-configuration-storage.owner-export.sql": "55448d0e9b979ab62f48099e6c317e19ebe40ce5ff9c90472209deff8a618e3a"
+  },
+  "testHarnessSha256": "a0674d97dfb036af60464dd0397c67176164c019fda10fbc1f8b05a50a28b077",
+  "observations": {
+    "columns": 16,
+    "foreignKeys": 2,
+    "generatedDigests": 3,
+    "userTriggers": 0,
+    "absentAfterRollback": true
+  },
+  "scope": "Actual rollback-only PostgreSQL DDL validity/count observation on owned fixture; separate exports joined with statement terminators. No complete definition parity, admission, immutability, privilege, core projection or installed qualification.",
+  "qualified": false
+}
