@@ -36,7 +36,7 @@ Components are new. Weft retains source compiler ownership; these direct templat
 
 CONTRACT-004 now proposes a concrete hop/work-limit/result declaration, path-local cycle exclusion and terminal object uniqueness. Consume it as a candidate rather than implementing global visited pruning or conflating output limit with expanded work. Owner cycle interpretation, staged work/result protocol and native budget enforcement remain review boundaries.
 
-CONTRACT-001 owns edge access/indexes; CONTRACT-007 owns read context. Add a shared direct-traversal contract before public API work, covering exact hops, deduplication identity, bounds, complete/truncated result and cursor semantics. A result limit alone cannot bound expanded intermediate work. Unsupported selected relationship variants refuse explicitly.
+CONTRACT-001 owns edge access/indexes; CONTRACT-007 owns read context. Consume the existing direct-traversal request/resume/page/result/release and host-service candidates in CONTRACT-004. The human choice between unique terminal destinations and path output remains pending; do not adopt the proposed deduplication/cycle interpretation from wire shape or the independent candidate oracle. Exact original native/store/resource/authority realization must qualify before publication. A result limit alone cannot bound expanded intermediate work. Unsupported selected relationship variants refuse explicitly.
 
 ## Data Model and Integration
 
@@ -56,14 +56,14 @@ No implicit layout migration. Disable an unqualified traversal profile without r
 
 ## Implementation Sequence
 
-1. Contract exact traversal semantics/resource limits and independently specify correctness corpus/baseline.
+1. Resolve the pending human output interpretation, consume existing traversal/service/state/ledger/resource candidates, select original realizable producer profiles and freeze the independent correctness corpus/baseline.
 2. Write red native correctness tests and preregister benchmark sampling.
 3. Implement bounded typed templates, then qualify native result equality and p95/planning ratios.
 4. Review optional index changes separately if measured gaps require them.
 
 ## Risks and Gates
 
-Exact traversal API, intermediate budgets and resumable visited-state semantics remain missing. SQL LIMIT after join expansion is not a work bound. Performance requirements remain unmet until native evidence proves equivalence and ratios. Broader relationship/association meaning and filtered multihop variants must not be silently removed to obtain green benchmarks.
+Traversal/service/state/ledger wires and finite budget candidates are authored. The output interpretation remains pending; exact original native expansion/store/physical accounting and supported process-lifetime realization remain unqualified. Cross-process or crash resumability is not supplied by the selected process-store candidate. SQL LIMIT after join expansion is not a work bound. Performance requirements remain unmet until native evidence proves equivalence and ratios. Broader relationship/association meaning and filtered multihop variants must not be silently removed to obtain green benchmarks.
 
 Use CONTRACT-004's versioned initial/resume/sealed-page/result schemas. Preserve full original normalized query, frontier path state, terminal dedup, cumulative budgets and live host snapshot behind original registry custody; wire hashes alone are insufficient. Resume requires serialized expected work version and no budget reset. Emit records only after membership is sealed; limited results contain no partial frontier. Release declaration/result and malformed-input classification are now authored under CONTRACT-004; selected host storage/resource defaults and native budget enforcement remain design outputs.
 
