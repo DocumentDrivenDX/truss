@@ -17,7 +17,7 @@ independent fixtures and observers, native scope/authority/resource admission,
 and the contract-only independent implementer review remain required. A
 compiled complete schema set is not a complete passing conformance corpus.
 
-This proposal supplies interpretation rules for the existing conformance manifest's fixtures, inputs, expected and identityAliases artifacts. It does not replace that manifest, define new public Truss operations or certify a passing corpus. CONTRACT-004/011 remain governing; US-027/028 require independent fixtures and an implementer walkthrough. A closed machine-readable encoding and actual adapter registration remain follow-up outputs.
+This proposal supplies interpretation rules for the existing conformance manifest's fixtures, inputs, expected and identityAliases artifacts. It does not replace that manifest, define new public Truss operations or certify a passing corpus. CONTRACT-004/011 remain governing; US-027/028 require independent fixtures and an implementer walkthrough. Closed machine-readable fixture/input/expected/identity-path encodings and the operation registry are now authored proposals, as described below. Original executable method/observer registration, complete semantic corpus and independent review remain follow-up outputs; do not author a second encoding to fill this older gap.
 
 ## Artifact roles
 

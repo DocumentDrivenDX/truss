@@ -182,7 +182,14 @@ Reviewed nine criteria against primary TD/STP handoffs. Published wire schemas a
 | US-028-AC2 | A writes/B independently reads actual state and journal, then B writes/A reads, against independent expected fixtures on the same layout. | Bidirectional isolation/alias/observer procedure is authored. Two genuinely independent implementations and exact selected shared native layout remain implementation evidence dependencies. Two wrappers around one implementation or mutual agreement on a shared bug are insufficient. |
 | US-028-AC3 | Complete divergence preserves both observed outputs and independent governing expectations, followed by reviewed implementation A/B/both or contract attribution. | Observed divergence and reviewed attribution wires are authored separately. Original recognized reviewer/oracle custody must compose; unresolved attribution is honest interim state but does not finish this criterion. The runner cannot infer blame merely from disagreement. |
 
-Ninety-seven criteria are assessed; 70 remain unassessed here. Priority conformance design output is the complete language-neutral case/adapter/identity-path grammar, followed by a contract-only walkthrough. Python package ownership and ADR-003 adoption remain pending rather than inferred from the requirement for a second implementation.
+This section's historical cumulative checkpoint was ninety-seven criteria,
+with seventy still unassessed at that point; the completed 167-row review below
+supersedes that coverage count. Conformance grammar, encoding, operation registry
+and adapter handshake are now authored proposals. The current next outputs are
+original executable method/observer composition, complete independently authored
+case packets and the contract-only independent implementer walkthrough under
+C1–C7. Python package ownership and ADR-003 adoption remain pending rather than
+inferred from the requirement for a second implementation.
 
 
 ## US-029–032: installation, host extension, roles and pooling
