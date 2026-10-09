@@ -43,7 +43,7 @@ Components are new. Pure validation/diffing remains browser-compatible; I/O/tran
 
 ## API/Interface Design
 
-CONTRACT-004 owns mutation signatures, violation reports and domain failure kinds. CONTRACT-007 adds cancellation, transaction_unusable and commit_unknown behavior and caller/owned durability. Resolve overlapping error precedence there before exposing a public union; this TD cannot invent a competing error vocabulary. CONTRACT-009 owns retries caused by stale preflight state.
+CONTRACT-004 owns mutation signatures, violation reports and domain failure kinds. CONTRACT-007 adds cancellation, transaction_unusable and commit_unknown behavior and caller/owned durability. Consume CONTRACT-007’s authored PostgreSQL native failure classification order and existing execution-failure wire; this TD cannot invent a competing error vocabulary. Exact original driver error/cause/termination/containment producers and recognized-code mapping remain qualification prerequisites before exposing outcomes. CONTRACT-009 owns retries caused by stale preflight state.
 
 ## Data Model and Integration
 
@@ -64,10 +64,10 @@ No layout migration. Failed owned calls roll back their transaction; caller call
 ## Implementation Sequence
 
 1. Create red validation/version/no-op cases and a contract-derived failure inventory.
-2. Finalize error precedence and exact no-op semantics in shared contracts.
+2. Consume the existing shared failure precedence/wire and exact logical no-op contract; select original codec/equality and native error/containment producer profiles without reopening the outcome vocabulary.
 3. Implement pure validation/diffing, then executor/version/journal wiring.
 4. Exercise faults on owned and caller scopes, then confirm every public mutation reaches the same pipeline.
 
 ## Risks and Gates
 
-D-05 exact equality/presence and D-06 replay may affect no-op results. CONTRACT-004/007 need one explicit error precedence/retry matrix before AC4 is complete. Failure tests require named injection points and observed state; generic thrown-error tests are insufficient. Completeness applies to evaluable rules under the selected supported profile, never a claim of all UMF semantics from a bounded validator.
+D-05 exact equality/presence and D-06 replay may affect no-op results. CONTRACT-007 already authors the failure precedence/retry procedure. AC4 still requires its exact original producer/mapping adoption and independently observed native outcomes; an error code alone cannot establish retry, cancellation or rollback. Failure tests require named injection points and observed state; generic thrown-error tests are insufficient. Completeness applies to evaluable rules under the selected supported profile, never a claim of all UMF semantics from a bounded validator.

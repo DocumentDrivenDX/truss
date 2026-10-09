@@ -44,11 +44,11 @@ Independent observer snapshots canonical, key, marker, journal and version state
 
 ## Edge Cases and Failure Modes
 
-Catalog mismatch, uniqueness/endpoint refusal, deadlock, serialization, cancellation before/after effects, cleanup failure, lost connection and uncertain commit. No-op equality covers absence/null and exact numeric policy; undeclared retained content is not automatically an error. Full error precedence remains a design gate. Native supplements verify database failures beyond synthetic shape assertions.
+Catalog mismatch, uniqueness/endpoint refusal, deadlock, serialization, cancellation before/after effects, cleanup failure, lost connection and uncertain commit. No-op equality covers absence/null and exact numeric policy; undeclared retained content is not automatically an error. The shared failure precedence is authored; original driver error/cause/termination and scope-containment producer adoption remains a gate. Native supplements verify database failures beyond synthetic shape assertions.
 
 ## Build Handoff
 
-Create contract failure inventory/red tests, resolve precedence and equality gates, then implement the shared pipeline. All four criteria and ownership/fault supplements block closeout. A complete error enum without observed state/retry behavior is insufficient.
+Consume the existing failure-order inventory/red tests, select exact equality and original failure/containment producers, then implement the shared pipeline. All four criteria and ownership/fault supplements block closeout. A complete error enum without observed state/retry behavior is insufficient.
 
 
 ## Complete diagnostics and original transaction outcome
@@ -56,3 +56,10 @@ Create contract failure inventory/red tests, resolve precedence and equality gat
 Author two independent invalid properties whose expected rule/path/layer facts do not come from the production validator. Establish complete observation of both under the selected profile and expect one invalid result with both diagnostics and no operation effects. Separately exhaust the selected work/byte/deadline bound after the first violation but before the second is examined: no complete invalid result or success can be inferred from that prefix. Preserve original failure classification and confirm containment before any resource-unavailable outcome; unresolved native cancellation remains the original executor outcome. No automatic smaller request or callback replay supplies missing validation.
 
 Run the valid and invalid requests inside a caller-owned transaction containing an earlier independently observed host sentinel. Valid application returns pending, with no driver COMMIT and no externally durable receipt/ID claim. Confirmed operation-local refusal preserves the sentinel and removes only this operation's effects. A host-requested outer rollback then removes the sentinel and valid pending effects together. Independently fault savepoint rollback/connection termination and assert no healthy transaction handle, fabricated no-change verdict or blind retry. Engine-owned execution separately requires confirmed outer settlement before a committed response. These are planned native/driver schedules, not runtime evidence.
+
+
+## Shared failure-order handoff
+
+Consume [the existing failure-order vectors](../../02-design/contracts/bindings/failure-order-v0.1.vectors.proposal.json) and CONTRACT-007’s native failure classification procedure, retaining their original scope. Expected outcomes come from the contract and independently authored observations, not a SQLSTATE-only switch. Bind every error, cancellation cause, command submission and termination/containment observation to the original issuer/epoch/ordinal/cycle before classification.
+
+Planned boundary controls preserve confirmed commit through later bookkeeping failure; retain commit_unknown when original COMMIT submission is possible but confirmation is missing; retain transaction_unusable when submitted work or cleanup is unresolved; and permit whole_transaction retry for qualified serialization/deadlock only after the required original state/termination evidence exists. Caller ownership never authorizes Truss to restart the host transaction or invoke its callback again. A known cancellation code without admitted cause and containment cannot become cancelled. Unknown/malformed error evidence cannot manufacture business absence or authorization refusal. These native controls remain not_run, and shape-valid failure objects alone cannot satisfy AC4.
