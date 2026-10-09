@@ -204,6 +204,28 @@ native index use or disclosure. Release documentation lists each route's exact
 supported subset and measured bounds. Numeric cap values and native access paths
 remain profile-selection outputs, not defaults inferred from this matrix.
 
+## Private PY-01a numeric convenience checkpoint
+
+The private evidence-directory prototype `python_exact_numeric_candidate.py`
+retains original admitted integer/decimal text and returns Python `int`/`Decimal`
+views with an explicit caller-selected finite UTF-8 byte bound. It rejects bool
+as integral host input and nonfinite decimals, preserves decimal signed zero
+and spelling, and constructs large exact decimals without ambient precision
+rounding. It performs no arithmetic or UMF grammar/facet/range admission.
+
+From the Truss repository root, run:
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 python3.11 docs/helix/04-build/evidence/design-audit/test_python_exact_numeric_candidate.py
+```
+
+Two tests pass on Python 3.11, covering all seven
+numeric proposal vectors plus finite-value, host-type, UTF-8 and bound refusals.
+Timestamp, recursive/presence/raw-JSON codecs, original upstream admission,
+whole-operation resource accounting, native storage and public packaging remain
+separate PY-01a/PY-01b work. This candidate lives outside a public package while
+package ownership is pending; its green results do not qualify the Python runtime.
+
 ## Host transaction adapter
 
 Use the semantic Executor operations of CONTRACT-007 rather than a language-specific second transaction protocol. The adapter accepts the caller's actual live connection/transaction object, validates ownership/lifetime, and retains it internally. No transaction identifier is accepted as a substitute. Initial delivery selects one driver/transaction mode and qualifies it; sync and async modes cannot share a support claim without separate evidence. Driver selection remains explicit.
