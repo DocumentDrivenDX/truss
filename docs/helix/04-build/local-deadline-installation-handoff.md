@@ -48,6 +48,22 @@ than advertising a host timer as equivalent native enforcement.
 
 ## Implementation and qualification exits
 
+The [original statement-timeout probe](evidence/design-audit/pg8000-local-statement-timeout-native.json)
+now executes a fixed pg_sleep statement with session statement_timeout50ms on
+pgserver0.1.4 / actual PostgreSQL16.2 and pinned pg8000 1.31.5. Original complete
+frames are ErrorResponse SQLSTATE57014 followed by ReadyForQuery E, with no
+successful CommandComplete. Independent pg_stat_activity still observes the same
+backend idle in transaction (aborted). The receiver quarantines and refuses a
+new submission without another send. Later explicit closure is followed by
+independently observed backend termination and absence of the pending fixture
+write; these are separate facts, not consequences inferred from the timeout.
+
+This is a local-trust, fixed-statement component schedule using existing private
+dependencies. It does not qualify an unavoidable complete transaction deadline,
+original issuer/account/control permission, arbitrary cancellation latency,
+ordinary-person/TLS execution or lost COMMIT recovery. The receipt retains
+driverPortQualified=false and wholeTransactionDeadlineQualified=false.
+
 Bind this procedure to the original driver producer/account and security services
 before publishing a ready installation. Execute independent faults at head-lock
 wait, active statement, statement completion, idle transaction, failed transaction,
