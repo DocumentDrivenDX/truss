@@ -83,8 +83,20 @@ decisions from the governing queue.
 | 1 coherent acceptance composition | Select and record one original installation/layout/report/history/lifecycle/authority/resource tuple for A1–A5 in the [acceptance handoff](acceptance-runtime-handoff.md) | Use the existing 0.3 report/0.2 event candidates without version relabeling; admit complete native installation and current owner services. The twelve-field baseline comparison and new nineteen-field codec do not establish the tuple |
 | 2 complete acceptance producers | Implement the original UMF support, assertion enforcement, full-group rebind, pending-index and lifecycle/reactivation producers described in that handoff, then atomic report/head finalization | Independently expected full report and effects, actual rebind/index/reactivation inputs, late-failure rollback and original settlement. New-only empty fixtures cannot close lifecycle requirements; public activation waits for A6/A7 |
 | 3 populated migration route | Select M1's exact source/target pair and implement M2–M5 in the [migration handoff](migration-consumer-deployment-handoff.md#implementation-order-and-ownership) | Complete preservation inventories and original recovery registry/driver composition; consume the security owner's final enrollment/exclusion/drain ordering. Planner and receipt guards are components, not an applied route |
-| 4 immediate Python development | Execute PY-01a codec vectors and reproducible pinned-source PY-02 wheel work under the [Python plan](../02-design/python-integration.proposal.md#execution-slices-and-independent-test-schedule) | Driver/package decisions need not block independent codec/build work. PY-01b/native execution still requires original bounded transport, admitted mapping and security; then groups, reads/import, feed/reached and full interchange remain required |
+| 4 immediate Python development | Consume the existing PY-01a codec/native-carrier candidates and pinned-source PY-02 wheel/parity receipts; implement the original bounded transport/account handoff and independently observed read-request controls under the [Python plan](../02-design/python-integration.proposal.md#raw-wire-probe-versus-pre-ingress-accounting) | The development wheel and 1,216-response owner-corpus parity are already evidenced at their experimental scope. Do not rebuild unchanged owner sources as the next deliverable. PY-01b still needs a selected exact driver/mode, pre-ingress accounting and command/settlement custody, admitted mapping and security; groups, reads/import, feed/reached and committed interchange remain required |
 | 5 complete conformance services | Implement C1 original service composition, C2 complete preparation and C3–C7 execution/assessment/interchange in the [runtime handoff](conformance-runtime-handoff.md) | Actual registered methods/observer boundaries, independently reviewed full cases and complete evidence. Private link/alias/coverage helpers and fixture checks do not implement factories or qualify skipped surfaces |
+
+Python frontier reconciliation: the current source plan retains the clean Python
+3.11 wheel build/smoke, count component and complete owner-corpus response parity
+receipts. Those close development packaging/compiler-component prerequisites;
+they do not close R1 package ownership, parsed-query/presence ABI, authorization,
+original connection/account custody or any complete native consumer outcome.
+The raw-wire probe likewise retains complete literal metadata/cell observations,
+but its post-body message count and unaccounted fragment/join copies cannot supply
+production ingress guarantees. The next transport controls inspect actual read
+requests before materialization and preserve unknown command outcomes. Prior
+codec/wheel checkpoints remain historical evidence rather than perpetual repeat
+work. No public Python capability is qualified by this sequencing correction.
 
 Independent preparation for priorities 2, 4 and 5 can proceed before full native
 priority 1 qualification; actual effects cannot borrow authority or installation
