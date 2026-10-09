@@ -15,6 +15,14 @@ DECLARE
   item bytea;
   total_bytes bigint := 0;
 BEGIN
+  -- This component observes at an invoker boundary. Never capture a nested
+  -- definer owner as the selected operation actor. Full role OID/grammar and
+  -- original public-entry custody remain separately qualified obligations.
+  IF current_user::text IS DISTINCT FROM (CASE
+      WHEN current_setting('role')='none' THEN session_user::text
+      ELSE current_setting('role') END) THEN
+    RAISE EXCEPTION 'original invoker actor boundary required' USING ERRCODE='55000';
+  END IF;
   IF kind IS NULL OR kind NOT IN ('mutation','import','catalog-transform',
        'catalog-acceptance','home-migration','administrative-repair') THEN
     RAISE EXCEPTION 'unsupported operation kind' USING ERRCODE='22023';

@@ -6,6 +6,10 @@ RETURNS TABLE(context_hex text,database_role text,login_role text,database_name 
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE op truss.row_home_operation%ROWTYPE; context jsonb;
 BEGIN
+ IF current_user::text IS DISTINCT FROM (CASE WHEN current_setting('role')='none'
+  THEN session_user::text ELSE current_setting('role') END) THEN
+  RAISE EXCEPTION 'original invoker actor boundary required' USING ERRCODE='55000';
+ END IF;
  PERFORM truss.runtime_require_catalog_observation(expected_writer,expected_ordinal,expected_generation);
  SELECT o.* INTO STRICT op FROM truss.row_home_operation o
   WHERE o.original_writer_xid=pg_current_xact_id_if_assigned() AND o.phase='admitted';

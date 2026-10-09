@@ -1,6 +1,6 @@
 {
   "sourcePins": {
-    "operation-admission": "a6cf8c9fca5a7d7e10bdfed243bfd17242a02928fb9fbe083987dfccd85c2bbd",
+    "operation-admission": "b4586d2e8a165883a11dbe173b1a8aa23b6bbdd878e796c675ffc83478f33444",
     "operation-commit-barrier": "eed4f044a241db7d70dd9cf222a3313bedd484273c18d0e7063b614ad5bab93b",
     "catalog-generation-observer": "03ef205fbdfc307c794134cdd51324d49c44cf6a24208525ab295a8e809f3a0e",
     "catalog-document-batch": "fe6754c5d4fbf054f17f5529387eb0f1ca4531e05c28c1ab31d6902251021000",
@@ -24,7 +24,7 @@
     "catalog-new-counts": "4d2962d3b8e1391ad9c97f6fdc2da7e0343463a6e2f4b7c9a1060603b6dab166",
     "catalog-provisional-empty": "754c3c53534a5a30d935a1942da903692c488aab3cd7fed3c0c5231c835f65c8",
     "catalog-report-immutability": "c243b51682de3fee979b977626bb54279eccb3de22a24270e0bda467bd215167",
-    "catalog-original-context": "bba5ab80bb909b354b710d7de466b94252df6e877739c8ef519db48a21ac2115"
+    "catalog-original-context": "925d3d723dbb5d874bf5e5f3db48509a0c36464478bfaf2c92f1675d2f252e3b"
   },
   "originalExecutionBasisProducerSha256": "9fb6179ef8fa59b488df4d2ef911aa67937544a996a75583c41a636d484d75f8",
   "reportCorrespondenceProducerSha256": "2554a8e6d8df8f7e26bd4df3a207af2c06c0c6f098485d53e847975f2c5bec53",
@@ -55,6 +55,8 @@
     "actual PostgreSQL17.9",
     "eleven ALWAYS catalog generation observers installed",
     "both immutable report guards installed with ALWAYS dispatch",
+    "nested definer owner cannot replace selected invoker actor at admission",
+    "definer actor refusal precedes operation registry effects",
     "catalog prestate refuses upgrade of earlier shared head admission",
     "actual original empty catalog start cut captured under head exclusion",
     "original native prestate bytes retained unchanged in operation custody",
