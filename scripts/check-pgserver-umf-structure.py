@@ -149,6 +149,29 @@ for obj in declarations['objects']:
     assert values['increment'] == '1' and values['as'] == 'int8', 'Unadmitted sequence default profile'
     assert relation['relname'] not in expected_sequences
     expected_sequences[relation['relname']] = values
+expected_indexes = {}
+for obj in declarations['objects']:
+    if obj['kind'] != 'IndexStmt':
+        continue
+    d = obj['definition']
+    assert d['relation']['schemaname'] == 'truss' and d['accessMethod'] == 'btree'
+    def index_columns(entries):
+        result = []
+        for entry in entries:
+            elem = entry['IndexElem']
+            assert elem['ordering'] == 'SORTBY_DEFAULT' and elem['nulls_ordering'] == 'SORTBY_NULLS_DEFAULT'
+            assert not elem.get('collation') and not elem.get('opclass'), 'Unadmitted index modifier'
+            assert ('name' in elem) != ('expr' in elem)
+            result.append(elem.get('name'))
+        return result
+    expected_indexes[d['idxname']] = {
+        'table': d['relation']['relname'], 'method': d['accessMethod'],
+        'unique': d.get('unique', False), 'nullsNotDistinct': d.get('nulls_not_distinct', False),
+        'keys': index_columns(d['indexParams']),
+        'included': index_columns(d.get('indexIncludingParams', [])),
+        'partial': 'whereClause' in d, 'valid': True, 'ready': True,
+        'options': [0] * len(d['indexParams']),
+    }
 if importlib.metadata.version('pgserver') != '0.1.4':
     raise SystemExit('Expected pinned pgserver0.1.4')
 psql = Path(str(importlib.resources.files('pgserver'))) / 'pginstall/bin/psql'
@@ -177,6 +200,16 @@ BEGIN
  PERFORM set_config('session_replication_role','origin',true);
 END $$;
 SELECT json_build_object(
+ 'indexes',(SELECT json_object_agg(c.relname,json_build_object(
+ 'table',r.relname,'method',am.amname,'unique',i.indisunique,'nullsNotDistinct',i.indnullsnotdistinct,
+ 'keys',(SELECT json_agg(a.attname ORDER BY u.ord) FROM unnest(i.indkey) WITH ORDINALITY u(num,ord)
+ LEFT JOIN pg_attribute a ON a.attrelid=r.oid AND a.attnum=u.num WHERE u.ord<=i.indnkeyatts),
+ 'included',COALESCE((SELECT json_agg(a.attname ORDER BY u.ord) FROM unnest(i.indkey) WITH ORDINALITY u(num,ord)
+ JOIN pg_attribute a ON a.attrelid=r.oid AND a.attnum=u.num WHERE u.ord>i.indnkeyatts),'[]'::json),
+ 'partial',i.indpred IS NOT NULL,'valid',i.indisvalid,'ready',i.indisready,
+ 'options',to_json(i.indoption::smallint[])))
+ FROM pg_index i JOIN pg_class c ON c.oid=i.indexrelid JOIN pg_class r ON r.oid=i.indrelid
+ JOIN pg_namespace n ON n.oid=c.relnamespace JOIN pg_am am ON am.oid=c.relam WHERE n.nspname='truss'),
  'sequences',(SELECT json_object_agg(c.relname,json_build_object(
   'as',t.typname,'increment',q.seqincrement::text,'minvalue',q.seqmin::text,
   'maxvalue',q.seqmax::text,'start',q.seqstart::text,'cache',q.seqcache::text,'cycle',q.seqcycle))
@@ -226,6 +259,8 @@ SELECT json_build_object(
 ROLLBACK;
 '''
         observed = json.loads(query('BEGIN;\n' + original.decode('utf-8') + ';\n' + probe))
+        for name, definition in expected_indexes.items():
+            assert observed['indexes'].get(name) == definition, ('Original index structure discrepancy', name, observed['indexes'].get(name), definition)
         assert observed['sequences'] == expected_sequences, 'Original sequence configuration discrepancy'
         assert observed['tables'] == sorted(expected), (observed['tables'], expected)
         assert all(observed[k] for k in ['sha256', 'xactStatus', 'currentXid', 'uuidIssuer'])
@@ -243,12 +278,12 @@ ROLLBACK;
         assert query("SELECT to_regnamespace('truss') IS NULL;") == 't'
     finally:
         server.cleanup()
-receipt = {'scope': 'Original generated base/adjunct DDL and immutable guard composition, UMF core column/type/requiredness and ordered physical FK and sequence configuration correspondence plus independent adjunct catalog expectations under rollback only; no complete installer, routine/grant inventory, accepted catalog or migration qualification',
+receipt = {'scope': 'Original generated base/adjunct DDL and immutable guard composition, UMF core column/type/requiredness and ordered physical FK, sequence configuration and explicit index structure correspondence plus independent adjunct catalog expectations under rollback only; no complete installer, routine/grant inventory, accepted catalog or migration qualification',
            'pgserverVersion': '0.1.4', 'declarationCaptureSha256': hashlib.sha256(declarations_bytes).hexdigest(), 'structuralModel': str(structural_path.relative_to(root)), 'structuralSha256': hashlib.sha256(structural_bytes).hexdigest(), 'sources': [{'path': path, 'sha256': hashlib.sha256(value).hexdigest()} for path, value in zip(paths, originals)], 'observation': observed,
            'rollbackRemovedNamespace': True, 'truncateRefusals': 4, 'truncateModes': ['origin', 'replica'],
-           'unverifiedStructure': ['collation implementation/version semantics', 'default and check expression meaning', 'complete indexes/routines/grants'],
+           'unverifiedStructure': ['collation implementation/version semantics', 'default and check expression meaning', 'index expression/predicate meaning and implicit constraint indexes', 'complete routines/grants'],
            'limitation': 'PostgreSQL16.2 lacks transaction_timeout; any selected profile requiring that setting must refuse or use a separately admitted bounded alternative',
            'producerSha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest()}
 (root / 'docs/helix/04-build/evidence/design-audit/pgserver-umf-structural-correspondence.json').write_text(json.dumps(receipt, indent=2) + '\n')
-print(json.dumps({'serverVersion': observed['serverVersion'], 'tables': len(expected), 'columns': sum(map(len, expected_columns.values())), 'foreignKeys': len(expected_fks), 'sequences': len(expected_sequences),
+print(json.dumps({'serverVersion': observed['serverVersion'], 'tables': len(expected), 'columns': sum(map(len, expected_columns.values())), 'foreignKeys': len(expected_fks), 'sequences': len(expected_sequences), 'explicitIndexes': len(expected_indexes),
                   'rollbackRemovedNamespace': True, 'truncateRefusals': 4, 'truncateModes': ['origin', 'replica'], 'transactionTimeout': observed['transactionTimeout']}))

@@ -270,3 +270,20 @@ the namespace. Sequence ownership dependencies, privileges, runtime allocation,
 crash recovery and migration state preservation are not qualified by configuration
 parity. Explicit/implicit indexes, defaults/check expressions and complete
 routines/grants/initializer publication remain required installation work.
+
+## Explicit native index structure
+
+The structural checker additionally compares all25 original IndexStmt declarations
+against installed pg_index/pg_class metadata. It verifies owning table, btree
+method, uniqueness, null-distinctness, ordered key positions, included column order,
+default ascending/null ordering, partial-index presence, validity and readiness.
+It refuses unadmitted explicit operator classes, collations or ordering modifiers.
+All25 match on the exact PostgreSQL16.2 composition. The receipt retains the full
+native index inventory, including additional indexes it does not yet qualify.
+
+For journal_request the expression occupies its expected key position, but a null
+attribute number only establishes expression presence. This check does not establish
+expression or predicate meaning. Implicit primary/unique constraint index
+correspondence, index dependency identities, operator-class/collation semantics,
+default/check expressions, routines, grants and initializer publication remain
+required before full installation qualification.

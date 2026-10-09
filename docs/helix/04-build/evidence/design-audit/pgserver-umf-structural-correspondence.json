@@ -1,5 +1,5 @@
 {
-  "scope": "Original generated base/adjunct DDL and immutable guard composition, UMF core column/type/requiredness and ordered physical FK and sequence configuration correspondence plus independent adjunct catalog expectations under rollback only; no complete installer, routine/grant inventory, accepted catalog or migration qualification",
+  "scope": "Original generated base/adjunct DDL and immutable guard composition, UMF core column/type/requiredness and ordered physical FK, sequence configuration and explicit index structure correspondence plus independent adjunct catalog expectations under rollback only; no complete installer, routine/grant inventory, accepted catalog or migration qualification",
   "pgserverVersion": "0.1.4",
   "declarationCaptureSha256": "6d7b09b78c24e7486ec2c429e56119bec16d7946a6fa1ba94e3b446906801e31",
   "structuralModel": "docs/helix/02-design/models/truss-layout-core-structural-0.6.proposal.umf.json",
@@ -27,6 +27,1621 @@
     }
   ],
   "observation": {
+    "indexes": {
+      "setting_pkey": {
+        "table": "setting",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "key"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "module_access_qualified_pk": {
+        "table": "module_access",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "document_id",
+          "module"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "schema_rev_pkey": {
+        "table": "schema_rev",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "rev"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "schema_head_pkey": {
+        "table": "schema_head",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "schema_doc_definition_source_tuple": {
+        "table": "schema_doc",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "rev",
+          "ord",
+          "doc_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0
+        ]
+      },
+      "schema_doc_rev_doc_id_key": {
+        "table": "schema_doc",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "rev",
+          "doc_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "schema_doc_pkey": {
+        "table": "schema_doc",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "rev",
+          "ord"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "schema_change_pkey": {
+        "table": "schema_change",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "rev",
+          "seq"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "rel_endpoint_pkey": {
+        "table": "rel_endpoint",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "rel_type_id",
+          "source_type",
+          "target_type"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0
+        ]
+      },
+      "object_type_id": {
+        "table": "object",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          "type_id",
+          "id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "object_pkey": {
+        "table": "object",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "id",
+          "type_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "edge_limit_edge": {
+        "table": "edge_limit",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          "edge_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "edge_limit_pkey": {
+        "table": "edge_limit",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "rel_type_id",
+          "side",
+          "endpoint_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0
+        ]
+      },
+      "key_tombstone_pkey": {
+        "table": "key_tombstone",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "entity_kind",
+          "type_id",
+          "key_num",
+          "k"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "record_source_load": {
+        "table": "record_source",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          "load_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "record_source_pkey": {
+        "table": "record_source",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "entity_kind",
+          "entity_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "feed_consumer_pkey": {
+        "table": "feed_consumer",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "consumer"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "edge_typed_identity_row_home": {
+        "table": "edge",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "id",
+          "rel_type_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "edge_in": {
+        "table": "edge",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          "target_id",
+          "rel_type_id"
+        ],
+        "included": [
+          "source_id",
+          "source_type"
+        ],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "edge_out": {
+        "table": "edge",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "source_id",
+          "rel_type_id",
+          "target_id"
+        ],
+        "included": [
+          "target_type"
+        ],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0
+        ]
+      },
+      "edge_pkey": {
+        "table": "edge",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "journal_request": {
+        "table": "journal",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          null
+        ],
+        "included": [],
+        "partial": true,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "journal_feed": {
+        "table": "journal",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          "xid",
+          "seq"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "journal_entity": {
+        "table": "journal",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          "entity_kind",
+          "entity_id",
+          "ver"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0
+        ]
+      },
+      "journal_pkey": {
+        "table": "journal",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "at",
+          "seq"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "row_home_operation_unfinished_xid": {
+        "table": "row_home_operation",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "original_writer_xid"
+        ],
+        "included": [],
+        "partial": true,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "row_home_operation_pk": {
+        "table": "row_home_operation",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "original_writer_xid",
+          "operation_ordinal"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "row_home_journal_stage_pk": {
+        "table": "row_home_journal_stage",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "original_writer_xid",
+          "operation_ordinal",
+          "stage_name",
+          "stage_ordinal"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "row_home_state_edge_property": {
+        "table": "row_home_state",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "edge_id",
+          "relationship_type_id",
+          "property_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0
+        ]
+      },
+      "row_home_state_object_property": {
+        "table": "row_home_state",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "object_id",
+          "object_type_id",
+          "property_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0
+        ]
+      },
+      "row_home_state_pkey": {
+        "table": "row_home_state",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "state_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "row_home_map_parent": {
+        "table": "row_home_node",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          "state_id",
+          "parent_node_id"
+        ],
+        "included": [],
+        "partial": true,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "row_home_sequence_slot": {
+        "table": "row_home_node",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "state_id",
+          "parent_node_id",
+          "sequence_ordinal"
+        ],
+        "included": [],
+        "partial": true,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0
+        ]
+      },
+      "row_home_one_root": {
+        "table": "row_home_node",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "state_id"
+        ],
+        "included": [],
+        "partial": true,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "row_home_node_id_unique": {
+        "table": "row_home_node",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "node_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "row_home_node_pk": {
+        "table": "row_home_node",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "state_id",
+          "node_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "row_home_scalar_pk": {
+        "table": "row_home_scalar",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "state_id",
+          "node_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "relationship_lineage_route": {
+        "table": "relationship_lineage",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          "identity_sha256",
+          "rel_type_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "relationship_lineage_pkey": {
+        "table": "relationship_lineage",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "rel_type_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "type_def_lineage_route": {
+        "table": "type_def",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          "lineage_sha256",
+          "type_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "type_def_pkey": {
+        "table": "type_def",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "type_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "key_def_type_id_key_num_key": {
+        "table": "key_def",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "type_id",
+          "key_num"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "key_def_pkey": {
+        "table": "key_def",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "type_id",
+          "key_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "rel_def_pkey": {
+        "table": "rel_def",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "rel_type_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "row_home_touch_pk": {
+        "table": "row_home_touch",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "transaction_id",
+          "owner_kind",
+          "owner_id",
+          "owner_discriminator_id",
+          "property_owner_type_id",
+          "property_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "row_home_capacity_pkey": {
+        "table": "row_home_capacity",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "singleton_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "object_key_bucket_route": {
+        "table": "object_key_bucket",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          "namespace_sha256",
+          "key_sha256",
+          "storage_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0
+        ]
+      },
+      "object_key_bucket_one_per_object": {
+        "table": "object_key_bucket",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "object_id",
+          "type_id",
+          "key_num"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0
+        ]
+      },
+      "object_key_bucket_pkey": {
+        "table": "object_key_bucket",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "storage_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "key_bucket_guard_pkey": {
+        "table": "key_bucket_guard",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "namespace_sha256",
+          "key_sha256"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "object_key_reservation_bucket_route": {
+        "table": "object_key_reservation_bucket",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          "namespace_sha256",
+          "key_sha256",
+          "storage_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0
+        ]
+      },
+      "object_key_reservation_bucket_pkey": {
+        "table": "object_key_reservation_bucket",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "storage_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "catalog_acceptance_report_pkey": {
+        "table": "catalog_acceptance_report",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "rev"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "installation_marker_installation_id_key": {
+        "table": "installation_marker",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "installation_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "installation_marker_pkey": {
+        "table": "installation_marker",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "singleton_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "installation_archive_identity_route": {
+        "table": "installation_archive",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          "installation_id",
+          "artifact_identity_sha256",
+          "archive_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0
+        ]
+      },
+      "installation_archive_pkey": {
+        "table": "installation_archive",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "archive_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "feed_tx_pk": {
+        "table": "feed_tx",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "source_epoch",
+          "feed_profile",
+          "original_writer_xid"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0
+        ]
+      },
+      "feed_member_delivery_unique": {
+        "table": "feed_member",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "source_epoch",
+          "feed_profile",
+          "original_writer_xid",
+          "delivery_ordinal"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "feed_member_pk": {
+        "table": "feed_member",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "source_epoch",
+          "feed_profile",
+          "original_writer_xid",
+          "registration_address"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "feed_prerequisite_pk": {
+        "table": "feed_prerequisite",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "source_epoch",
+          "feed_profile",
+          "original_writer_xid",
+          "prerequisite_address"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "feed_configuration_prerequisite_pk": {
+        "table": "feed_configuration_prerequisite",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "source_epoch",
+          "feed_profile",
+          "original_writer_xid",
+          "configuration_address"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "complete_feed_consumer_identity_route": {
+        "table": "complete_feed_consumer",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          "consumer_identity_sha256",
+          "storage_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "complete_feed_consumer_pkey": {
+        "table": "complete_feed_consumer",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "storage_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "feed_administration_receipt_identity_route": {
+        "table": "complete_feed_administration_receipt",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          "identity_sha256",
+          "storage_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "complete_feed_administration_receipt_pkey": {
+        "table": "complete_feed_administration_receipt",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "storage_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "feed_seed_attempt_identity_route": {
+        "table": "complete_feed_seed_attempt",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          "attempt_identity_sha256",
+          "storage_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "complete_feed_seed_attempt_pkey": {
+        "table": "complete_feed_seed_attempt",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "storage_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "feed_seed_artifact_identity_route": {
+        "table": "complete_feed_seed_artifact",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          "attempt_row_id",
+          "artifact_identity_sha256",
+          "storage_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0
+        ]
+      },
+      "complete_feed_seed_artifact_pkey": {
+        "table": "complete_feed_seed_artifact",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "storage_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "key_lifecycle_history_by_key": {
+        "table": "key_lifecycle_history",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          "type_id",
+          "key_num",
+          "rev",
+          "seq"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "key_lifecycle_history_pkey": {
+        "table": "key_lifecycle_history",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "rev",
+          "seq"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "installation_admission_pkey": {
+        "table": "installation_admission",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "head_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "key_migration_receipt_route": {
+        "table": "key_migration_receipt",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          "installation_sha256",
+          "epoch_sha256",
+          "attempt_sha256",
+          "storage_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "key_migration_receipt_pkey": {
+        "table": "key_migration_receipt",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "storage_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "rr_guard_pk": {
+        "table": "request_receipt_route_guard",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "namespace_sha256",
+          "request_sha256"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "request_receipt_route": {
+        "table": "request_receipt",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          "namespace_sha256",
+          "request_sha256",
+          "storage_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0
+        ]
+      },
+      "rr_receipt_pk": {
+        "table": "request_receipt",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "storage_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "rr_protection_pk": {
+        "table": "request_receipt_protection",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "receipt_storage_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "prop_def_qualified_field": {
+        "table": "prop_def",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "type_id",
+          "declaration_module",
+          "element"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0
+        ]
+      },
+      "prop_def_owner_property_row_home": {
+        "table": "prop_def",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "type_id",
+          "prop_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "prop_def_type_id_name_key": {
+        "table": "prop_def",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "type_id",
+          "name"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "prop_def_pkey": {
+        "table": "prop_def",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "prop_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "source_epoch_registry_source_epoch_key": {
+        "table": "source_epoch_registry",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "source_epoch"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "source_epoch_registry_pkey": {
+        "table": "source_epoch_registry",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "installation_id",
+          "source_epoch"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "source_epoch_current_pkey": {
+        "table": "source_epoch_current",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "singleton_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "operation_configuration_pkey": {
+        "table": "operation_configuration",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "original_writer_xid",
+          "operation_ordinal"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "layout_migration_receipt_attempt_route": {
+        "table": "layout_migration_receipt",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          "installation_id",
+          "original_attempt_sha256",
+          "storage_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0
+        ]
+      },
+      "layout_migration_receipt_pkey": {
+        "table": "layout_migration_receipt",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "storage_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      }
+    },
     "sequences": {
       "layout_migration_receipt_row_seq": {
         "as": "int8",
@@ -5677,8 +7292,9 @@
   "unverifiedStructure": [
     "collation implementation/version semantics",
     "default and check expression meaning",
-    "complete indexes/routines/grants"
+    "index expression/predicate meaning and implicit constraint indexes",
+    "complete routines/grants"
   ],
   "limitation": "PostgreSQL16.2 lacks transaction_timeout; any selected profile requiring that setting must refuse or use a separately admitted bounded alternative",
-  "producerSha256": "f392fe7684b1b5d90bdf7d70b69e76f8d1b632b2b7fbcca44e0e8f6c1471c8fe"
+  "producerSha256": "2220b1ee5690c213d96a586f38eb622ac2a12cff25d28174dc12ac3b81f1022a"
 }
