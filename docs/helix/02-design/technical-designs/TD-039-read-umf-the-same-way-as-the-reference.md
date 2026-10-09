@@ -32,6 +32,37 @@ Reference TypeScript composition invokes the pinned UMF library for validity and
 | `packages/conformance/corpus/umf/manifest.json` | Immutable source bytes, oracle pins and expected cases | US-039-AC4 |
 | `tests/conformance/umf-parity.test.ts` | Positive/negative/support/version corpus gates | All criteria |
 
+## Existing components and remaining composition
+
+Reuse `packages/tooling/src/conformance-diagnostic-multiset.ts` for comparison
+of already admitted projections. Its tuple includes source identity, diagnostic
+profile, classification, severity, code and path; multiplicity is preserved and
+order is ignored. `tests/conformance-diagnostic-multiset.test.ts` covers duplicate
+counts, root versus empty-member paths, source/profile/stage substitution and
+severity/code/escaped-pointer changes. This private helper neither validates
+paths nor establishes the source/profile admission that its input type assumes.
+The planned parity runner above must supply those boundaries rather than create
+another multiset implementation or accept arbitrary caller labels as provenance.
+
+`packages/umf-bun/src/catalog-validation-evidence.ts` separately retains original
+owner validation observations and exact diagnostic wrappers from original catalog
+preparation. It preserves original and reversible-target bases, including target
+paths inside their target-basis artifacts. Its component ceilings are 4,096
+diagnostics and four MiB of retained serialized evidence. This Bun adapter uses
+Node crypto and Buffer; it is not the planned browser-compatible validator.
+Serialization/output bounds do not establish pre-ingress allocation containment,
+semantic support, independently expected validity or complete corpus qualification.
+
+Next, freeze the owner validator/parser/extension and path-normalization profile
+and independent original-byte cases for VP-01–05. Resolve each diagnostic's exact
+source and basis before projecting into the comparator: a reversible-target path
+cannot be relabeled as an authored-source path. Retain complete owner wrappers as
+separate artifacts; projection never replaces them. Then compose preparation,
+validation, Truss support assessment and independently expected comparison in the
+portable adapter, and qualify actual Bun/Chromium behavior. The existing components
+are reusable implementation inputs, not an accepted report, published parity
+runner or completed US-039 criterion.
+
 ## Shared Interface
 
 CONTRACT-003 step 1 owns validity; CONTRACT-004 owns corpus packaging. Record source byte digest, UMF core version, validator package/commit, schema/extension subset and result. Compare diagnostics as severity/code/path with multiplicity, not message text or presentation order. Define path normalization explicitly from upstream published semantics; do not discard pointer escaping, root location or document identity. Preserve reference warnings on accepted input. Truss support diagnostics have a separate namespace/stage so they cannot hide missing validator diagnostics.
