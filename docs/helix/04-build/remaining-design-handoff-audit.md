@@ -28,8 +28,34 @@ the existing 0.3 lifecycle/history report, adding lifecycleProfile/reactivations
 and using 0.2 rebind events. The
 [current acceptance handoff](acceptance-runtime-handoff.md#current-implementation-boundary)
 supersedes any older claim that completing the baseline inventory closes full
-acceptance. The compatible codec and original lifecycle producers remain open;
+acceptance. An explicit eleven-schema candidate codec now exists; its complete
+semantic/native integration and original lifecycle producers remain open;
 preserve older component receipts at their actual scope.
+
+### Prioritized execution frontier
+
+Use this order for the next implementation cycle, while retaining every
+B-001–B-015 deliverable and all 45 stories/167 criteria. This sequence does not
+turn partial runtime evidence into design completion or remove unresolved owner
+decisions from the governing queue.
+
+| Priority | Next concrete output | Dependency and exit |
+| --- | --- | --- |
+| 1 coherent acceptance composition | Select and record one original installation/layout/report/history/lifecycle/authority/resource tuple for A1–A5 in the [acceptance handoff](acceptance-runtime-handoff.md) | Use the existing 0.3 report/0.2 event candidates without version relabeling; admit complete native installation and current owner services. The twelve-field baseline comparison and new nineteen-field codec do not establish the tuple |
+| 2 complete acceptance producers | Implement the original UMF support, assertion enforcement, full-group rebind, pending-index and lifecycle/reactivation producers described in that handoff, then atomic report/head finalization | Independently expected full report and effects, actual rebind/index/reactivation inputs, late-failure rollback and original settlement. New-only empty fixtures cannot close lifecycle requirements; public activation waits for A6/A7 |
+| 3 populated migration route | Select M1's exact source/target pair and implement M2–M5 in the [migration handoff](migration-consumer-deployment-handoff.md#implementation-order-and-ownership) | Complete preservation inventories and original recovery registry/driver composition; consume the security owner's final enrollment/exclusion/drain ordering. Planner and receipt guards are components, not an applied route |
+| 4 immediate Python development | Execute PY-01a codec vectors and reproducible pinned-source PY-02 wheel work under the [Python plan](../02-design/python-integration.proposal.md#execution-slices-and-independent-test-schedule) | Driver/package decisions need not block independent codec/build work. PY-01b/native execution still requires original bounded transport, admitted mapping and security; then groups, reads/import, feed/reached and full interchange remain required |
+| 5 complete conformance services | Implement C1 original service composition, C2 complete preparation and C3–C7 execution/assessment/interchange in the [runtime handoff](conformance-runtime-handoff.md) | Actual registered methods/observer boundaries, independently reviewed full cases and complete evidence. Private link/alias/coverage helpers and fixture checks do not implement factories or qualify skipped surfaces |
+
+Independent preparation for priorities 2, 4 and 5 can proceed before full native
+priority 1 qualification; actual effects cannot borrow authority or installation
+facts from fixtures. Migration route selection must explicitly account for the
+chosen acceptance/history/receipt/feed tuple, rather than upgrade between two
+unrelated proposal snapshots. Benchmark packets and pending product choices
+remain separate required outputs, including traversal meaning, package ownership,
+catalog ownership scope and the pending concurrency/overhead selections. Do not
+wait for those choices to perform already authorized independent preparation,
+and do not infer their answers from this ordering.
 
 A fresh fetch on 2026-10-09 confirms the committed coordination baselines remain
 UMF `1f7b5f5d2a355c4b476e3a96b289b9048f03f567` and Weft
