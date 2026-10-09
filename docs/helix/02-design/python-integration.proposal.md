@@ -160,10 +160,15 @@ when mandatory meaning cannot be decoded.
 
 ## Execution slices and independent test schedule
 
+PY-01 remains the combined protocol/codec workstream; PY-01a and PY-01b below
+split its implementation dependencies. References to PY-01 require both parts
+where native transport is involved.
+
 | Slice | Depends on | Deliverable and test gate |
 | --- | --- | --- |
-| PY-01 protocol adapter and codecs | Selected driver and CONTRACT-007/010 bindings | Inert construction; original connection adoption; no outer transaction commands; lossless raw transport; large integers/decimal/time/JSON/absent/null independent vectors; Python bool/int refusal |
-| PY-02 compiler integration | Published/pinned Weft wheel and admitted mapping | Clean Python 3.11 consumer compiles original supported queries; preserves parameters/obligations; rejects unsupported profiles before native submission. Do not use test-original configuration as production authority |
+| PY-01a portable codecs and wire validation | CONTRACT-007/010 and independently authored exact vectors; no driver selection needed | Python 3.11 modules preserve original integer/decimal/time/JSON/presence meanings and original bytes; bool/int refusal and incompatible report/profile refusal. Pure codec passing does not qualify transport or database effects |
+| PY-01b original protocol adapter | Selected driver, PY-01a and admitted raw producer port | Inert construction; original connection adoption; no outer transaction commands; original pre-ingress bounds and lossless metadata/cells; failure containment and outcome correlation. A driver which exposes only already-decoded results cannot satisfy the port |
+| PY-02 compiler integration | Reproducibly built pinned Weft wheel and admitted mapping; public wheel distribution is a PY-07 release requirement | Clean Python 3.11 consumer compiles original supported queries; preserves parameters/obligations; rejects unsupported profiles before native submission. Development may build the wheel from exact committed owner source and features, retaining toolchain/build hashes. Do not use test-original configuration as production authority |
 | PY-03 identity/security | Security workstream's complete handoff | Writer succeeds; reader write refuses; outsider read refuses; no identity refuses before application SQL; conflicting actor refuses; definer execution retains original person; denied queries publish no protected facts |
 | PY-04 groups, dry-run and retries | Complete accepted catalog/install, PY-01/03, protected group/receipt procedures | Real group/preconditions; operation rollback preserves prior caller work; dry-run and apply violations agree; lost acknowledgment replays original ordered results; changed input conflicts; all-no-op receipt survives; commit_unknown remains unresolved |
 | PY-05 reads/import/enumeration | PY-02/03/04 and native indexed/direct routes | Bounded key/equality/relationship/page/aggregate cases with actual plans; read-only enforcement; atomic/per-item imports/provenance; module revisions and incompatible layout refusal |
@@ -171,6 +176,16 @@ when mandatory meaning cannot be decoded.
 | PY-07 publication/interchange | All applicable slices and versioned shared corpus | Clean wheel install; named layout/corpus/backend versions; Python-write/TypeScript-read and reverse on one real database; independent state/journal/receipt observations; unknown/newer required corpus and skipped cases prevent qualification |
 
 Author setup/call/expected-result/error/journal fixtures before collecting observations. Reuse the existing conformance manifest's separate fixture/input/expected/identity-alias artifacts. Opaque identities are saved aliases, not fixed generated IDs. Complete selected accepted reports and original source epochs remain native outputs; no fixture accepted revision or invented epoch enables these slices. The combined reference uses the existing nineteen-field 0.3 lifecycle/history report, including lifecycleProfile/reactivations and 0.2 rebind events. A Python baseline 0.1 codec may preserve its separately qualified seventeen-field subset but cannot claim combined lifecycle compatibility by dropping fields or relabeling versions. Consume the same original selected schema/profile tuple as the TypeScript implementation; report version numbers alone are insufficient.
+
+Start PY-01a and the reproducible PY-02 build/unsupported-input checks while
+package ownership and driver qualification are being selected. These activities
+need no fabricated installed identities or security authority. Author independent
+exact-value and report-version vectors before either implementation emits results;
+retain Python and TypeScript observations against the same expectations. Native
+query submission remains gated on the original mapping, raw transport and security
+composition even if a source-built compiler wheel runs successfully. This makes
+the early development path executable without treating an unpublished wheel as
+a released dependency or merging packaging and native qualification decisions.
 
 ## Decisions still required
 
