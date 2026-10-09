@@ -97,7 +97,7 @@ resolving artifact bytes cannot classify a retained-only term as enforced.
 
 | Field | Original producer inputs and ordering | Independent refusal controls |
 | --- | --- | --- |
-| rebinds | Observe actual insertion-generated history events after admitted effects, under the selected report/history version and original operation cut. Admit complete mutation-group start/final state and every sibling before projecting its rebind entries. Persist the complete immutable report afterward and before head publication | Missing/extra rebind, copied event from another operation/revision, changed native seq, omitted non-rebind sibling or wrong ordered group digest refuses; no preallocated fake event or version conversion |
+| rebinds | Observe actual appended history events with positions from the selected original allocator/publication protocol, after admitted effects under the selected report/history version and original operation cut. Admit complete mutation-group start/final state and every sibling before projecting its rebind entries. Persist the complete immutable report afterward and before head publication | Missing/extra rebind, copied event from another operation/revision, changed native seq, omitted non-rebind sibling or wrong ordered group digest refuses; no guessed position, fabricated event or version conversion |
 | assertions | Complete original occurrence inventory and independently admitted engine/native enforcement evidence, including unsupported/opaque meanings | Missing or duplicate occurrence, substituted owner/source/pointer, unqualified database classification or truncated inventory refuses completeness; observation coverage alone cannot establish enforcement |
 | pending_indexes | Complete accepted declaration inventory under the original layout/binding profile, original installation/revision, exact declaration definition and physical target. Capture pending declarations before report persistence; do not dispatch jobs within acceptance | Duplicate job identity, conflicting definitions for one target, swapped revision/installation, omitted declaration or a ready-name substitution refuses. Empty inventory requires complete original declaration-absence evidence |
 | umf | Original document-version inventory, interpretation profile and admitted version-to-subset artifact correspondence | Multiple-version omission/duplication, exchanged subset artifacts or unavailable original semantic composition refuses complete admission |
@@ -160,6 +160,45 @@ cannot close those branches. Independently expected full report bytes, effects,
 late-failure rollback and public head visibility remain A2–A7 exits. Preserve
 the current source-exact 0.1 codec refusal until a separately selected compatible
 report/history composition is implemented.
+
+### A2 rebind producer construction and group closure
+
+The selected reference reserves positions before publication; the historical
+baseline assigns positions at insertion. Bind one original allocator/event/report
+tuple throughout preparation and collection. Neither the report nor a fixture
+may mint positions, relabel event versions or substitute one protocol's timing
+for another's.
+
+After canonical/derived acceptance effects quiesce, use the original nonsealing
+final capture and complete frozen sibling preparation from CONTRACT-002. Publish
+the actual full journal inventory and independently compare original start/final
+images, source epoch, producing transaction, typed entity, version, revision,
+complete ordered sibling membership and recomputed group digest. Only then
+project the rebind entries for this original acceptance. Verify every retained
+removal and property binding against actual before/after images and original
+definition/source context; a count or property ID match cannot establish meaning.
+
+The report's rebind-only array excludes other event kinds, but group completeness
+includes them. Retain original full-group evidence outside that filtered array;
+never recompute the group digest from only report entries. An empty rebind array
+needs the same complete operation/event inventory proving no rebind, rather than
+a query which could have missed groups. Declare the exact projection ordering
+in the selected report comparator before independently authoring expectations.
+
+Persist the complete report after journal publication and before head publication,
+then perform full operation readiness and finalization. Nonsealing collection is
+not a shortcut to sealing an operation whose report/history prerequisites are
+unfinished. Context or semantic-image changes after frozen capture invalidate
+the original candidate according to the shared generation protocol.
+
+Independent scenarios include a rebind with a non-rebind sibling, removal of that
+sibling while retaining the report entry, swapped group/epoch/revision, modified
+native position, incorrect ordered digest and changed retained/property presence.
+Also cover a genuinely rebind-free operation, two rebinds in one complete group, late report
+failure after actual journal append, and original uncertain settlement. All effects
+roll back together on confirmed rollback; unknown settlement cannot expose a
+committed report. This producer remains unimplemented and does not activate the
+new report codec or duplicate the shared journal producer.
 
 ### A2 assertion inventory closure
 
