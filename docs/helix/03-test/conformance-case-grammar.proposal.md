@@ -57,6 +57,27 @@ Observe and validate required native equality, inequality, exact numeric order, 
 
 ### Selected identity-path grammar and alias references
 
+The [identity-path schema](../02-design/contracts/conformance-identity-paths-v0.1.proposal.schema.json)
+closes each declaration's operation discriminator, surface/profile, exact
+pointer, namespace, identity profile and alias-eligible entity kind. Its
+registry artifact must match the original selected operation registry. The
+existing alias artifact's `identityPathGrammar` pin resolves this registered
+path artifact under the selected grammar; it is not an arbitrary file lookup.
+Semantic admission rejects duplicate operation/surface/profile/pointer tuples
+even when the competing entries have different namespaces. The declared
+namespace kind/profile must match the original alias namespace basis.
+An explicitly empty entries list supports only a case with no eligible
+identity occurrences or alias uses, established independently; it cannot
+erase required generated identities. Non-alias identity domains such as
+journal sequences retain their exact native comparisons outside this schema.
+
+Run `bun docs/helix/04-build/evidence/design-audit/check-conformance-identity-paths.ts <installed-Ajv-2020-module-path>`.
+Ten shape controls include escaped pointers, missing profiles/namespaces and
+closed entity kinds. `/*` is a syntactically valid pointer to a literal member
+named `*`; it never means wildcard. Duplicate path entries and actual identity
+eligibility remain semantic refusal obligations. These controls do not qualify
+the complete registered path inventory or a native comparator.
+
 The existing `conformance-aliases-v0.1.proposal.schema.json` supplies binding
 declarations, not a path registry or substitution algorithm. Its
 `operationIndex` is the zero-based position in the original ordered input steps,
