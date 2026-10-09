@@ -38,7 +38,7 @@ This table distinguishes unresolved selection from future execution evidence. It
 
 | Next boundary | Who can resolve it | Concrete next output and independent continuation |
 | --- | --- | --- |
-| Direct traversal output | Human owner; the concrete unique-destination versus path-output question is pending | The [proposed independent graph oracle](../03-test/reference-traversal-path-cycle.proposal.json) makes path-local cycle and terminal dedup meaning reviewable. Select the result contract before native correctness/performance qualification; do not deduplicate Weft SQL results. |
+| Direct traversal necessity | Truss engineering reviews actual consumer requirements first | No separate direct traversal result contract is selected or currently blocking. Establish whether consumers require this additional API before presenting a product choice; retain Weft SQL multiplicity and relationship semantics. The earlier graph oracle is proposal evidence only. |
 | Continuous-writer pre-effect admission retry | Owner-selected: expose refusal, no automatic loop | Implement CW-01–04 with one original submission and zero effects on stale admission; a caller-requested retry is distinct. |
 | Python package owner/home | Owner-selected: Truss maintains and ships tested embeddable Python in this repository | ADR-003 accepted; deliver public packed consumers, complete corpus and committed interchange. |
 | Catalog ownership scope | Owner-selected: document-qualified identity | ADR-004 accepted; implement complete lineage/native grants/compiler correspondence without name collapse. |
@@ -71,7 +71,7 @@ version-to-subset meaning, and the synthetic nineteen-field codec supplies no
 native report facts. Engineering must select that original semantic composition
 and implement it without a second UMF validator or caller-filled inventories.
 
-Use the five human-choice rows above for actual product questions. Keep A1's
+Use the current ownership table above; its owner-selected choices are settled and its remaining engineering outputs are not new product questions. Keep A1's
 coherent installation/account/security tuple, A2's producer composition and
 A3–A7's native persistence/finalization/public outcomes in their engineering
 queues. Neither missing execution receipts nor historical pending-language
@@ -760,3 +760,22 @@ outputs. Consume those exact outputs before translating checked witnesses into
 Truss query-use or disclosure authority; a checked logical object is not a native
 execution permit. The original mismatch/retirement/owner-cut integration controls
 above remain required, with default refusal preserved.
+
+## Next complete implementation dependency — operation issuer
+
+The [native ordinal conflict](operation-ordinal-issuer-handoff.md) is now reproduced
+on the local16.2 profile: registry-derived allocation reissues0 after savepoint
+rollback. Private Python/TypeScript counters pass the same independent nonrewind
+scenarios, but native admission has not consumed their original output. Correct
+all four admission context families through the qualified original executor/driver
+issuer before canonical observer or complete installer readiness. Do not equate
+a query-cycle ordinal, a supplied numeric field or a new counter instance with
+original operation authority.
+
+Implementation order is original transaction/issuer recognition and cumulative
+account/control reservation; permanent ordinal consumption; confirmed operation
+savepoint; native original-issuer verification and registry admission; canonical
+observation; complete deferred transaction cohort; full inventory/init publication.
+Unknown control completion closes admission and retains original recovery custody,
+without automatic replay. These are implementation outputs under existing
+contracts, not another owner decision or a reason to stop independent work.
