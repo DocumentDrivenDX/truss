@@ -1,0 +1,22 @@
+{
+  "scope": "Consumer API necessity source review only; not general traversal profile adoption or native qualification",
+  "consumerSource": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/docs/helix/02-design/truss-requirements.md",
+  "consumerSha256": "c8d93d8df7f37f004061fee06552238857f234e073dd75418e8eea94e3ef6d09",
+  "governingSources": {
+    "docs/helix/01-frame/user-stories/US-023-traverse-one-to-three-hops.md": "d5faa0e4761daf3127746ab18670acc81dc0738e34534e5c39b5d0a0369451f0",
+    "docs/helix/02-design/solution-designs/SD-005-reads-and-traversal.md": "840191b94339db73c19b4edc572491c4507c5abff95ae56ce09999b5e54dcd9a"
+  },
+  "findings": {
+    "consumerR8": "relationship predicates and bounded relationship columns; no additional recursive/path API requested",
+    "consumerR7": "opaque committed/feed position inclusion, not graph reachability",
+    "US023": "all three one-to-three-hop latency/planning criteria retained",
+    "additionalConsumerDirectTraversalApiRequired": false,
+    "nativeTestsRun": false
+  },
+  "remaining": [
+    "Complete original direct/compiled read context and source/profile adoption",
+    "Weft parsed-query input and full logical presence/relationship/enrichment correspondence",
+    "US023 independent semantic/cycle/performance qualification",
+    "General direct-traversal proposal adoption remains separate"
+  ]
+}

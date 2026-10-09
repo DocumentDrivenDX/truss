@@ -38,7 +38,7 @@ This table distinguishes unresolved selection from future execution evidence. It
 
 | Next boundary | Who can resolve it | Concrete next output and independent continuation |
 | --- | --- | --- |
-| Direct traversal necessity | Truss engineering reviews actual consumer requirements first | No separate direct traversal result contract is selected or currently blocking. Establish whether consumers require this additional API before presenting a product choice; retain Weft SQL multiplicity and relationship semantics. The earlier graph oracle is proposal evidence only. |
+| Direct traversal necessity | Truss engineering reviews actual consumer requirements first | Original consumer review finds no additional recursive/path API requirement. Use the existing direct/Weft read routes; R7 reached means position inclusion. Retain FR-31/RD-04/US-023 and all graph semantic/performance gates. General direct-traversal proposals remain unadopted; no extra consumer product vote blocks implementation. |
 | Continuous-writer pre-effect admission retry | Owner-selected: expose refusal, no automatic loop | Implement CW-01–04 with one original submission and zero effects on stale admission; a caller-requested retry is distinct. |
 | Python package owner/home | Owner-selected: Truss maintains and ships tested embeddable Python in this repository | ADR-003 accepted; deliver public packed consumers, complete corpus and committed interchange. |
 | Catalog ownership scope | Owner-selected: document-qualified identity | ADR-004 accepted; implement complete lineage/native grants/compiler correspondence without name collapse. |

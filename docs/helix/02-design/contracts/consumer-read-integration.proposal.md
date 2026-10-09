@@ -191,3 +191,36 @@ public value separately, including zero visible rows and denied current authorit
 A nullable scalar SQL result without the required presence discriminator does
 not qualify the whole-entity contract. No Truss-local SQL rewrite is commissioned;
 Weft retains lowering and the selected joint mapping remains an adoption gate.
+
+## Consumer traversal necessity review
+
+Review of the original Python consumer R8 and its full needs list establishes
+relationship predicates and bounded relationship columns, alongside key/equality
+lookup, keyset paging and grouped count. It requests no recursive search, path
+result, traversal cursor or independently named direct traversal capability.
+`reached` in R7 compares an opaque committed/feed position; it is not graph
+reachability and must not be implemented by walking relationships.
+
+The existing read-route table remains the consumer implementation boundary:
+Truss owns direct identity/key/catalog reads and complete logical enrichment;
+Weft owns relationship predicate SQL and registered logical lowering. There is
+no consumer requirement for an additional public direct traversal API. Keep
+bounded same-cut authorization, exact typed endpoint/relationship identity,
+explicit truncation and complete absent/null meaning in their existing routes.
+This conclusion does not adopt unfinished Weft APIs or waive parsed-input and
+profile compatibility gaps.
+
+FR-31/RD-04/US-023 still require practical one-to-three-hop graph reads, cycle
+behavior and the hand-designed-schema/scale benchmarks. SD-005 already assigns
+logical planning/lowering to Weft and native execution to Truss. Preserve all
+three US-023 criteria and its independent identity/multiplicity/cycle/performance
+oracles. General direct-traversal proposals remain unadopted design inputs; their
+unique-terminal/path-output question is not reopened as a consumer product vote.
+Before advertising any such extra capability, establish a separate requirement
+and reconcile its meaning with US-023 and Weft's explicit SQL multiplicity.
+
+This removes an unsupported additional-API prerequisite from the near-term
+consumer path, not the underlying graph-read requirement or its qualification.
+The source-pinned [review receipt](../../04-build/evidence/design-audit/consumer-traversal-necessity-review.json)
+records inspection scope only; no native traversal or consumer integration test
+ran as part of this review.
