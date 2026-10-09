@@ -214,3 +214,9 @@ guessed 0.1 spelling and unknown versions without conversion. Five focused codec
 tests pass. Adopting a later report/history profile needs an explicit new codec
 schema/pin/producer composition; the combined candidate path cannot infer it
 from matching field names or a registered report artifact.
+
+An asynchronous custody control mutates the caller's report buffer during the
+native observation in the registered-profile path. Returned original wire
+evidence remains byte-exact to the pre-observation checked copy. The current
+report suite passes sixteen tests/142 assertions and strict TypeScript; this
+controlled observation test adds no native support claim or new verified field.

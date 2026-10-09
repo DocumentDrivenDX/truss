@@ -62,6 +62,12 @@ test('report profile binds original registered bytes and refuses substitution be
  expect(result.scope).toBe('ten_producer_fields_and_registered_report_bytes_only');
  expect(result.verifiedFields).toContain('reportProfile');
  expect(result.registeredReportArtifact.sha256).toBe(pin.sha256);
+ const originalWire=wire(report),saved=Buffer.from(originalWire),originalUnsafe=native.unsafe.bind(native);
+ native.unsafe=async(query:string)=>{originalWire.fill(0);return originalUnsafe(query)};
+ const retained=await correspondence.verifyWithRegisteredReportProfile(native,prepared,basis,originalWire,resolver,pin);
+ expect(Buffer.from(retained.originalUtf8Hex,'hex')).toEqual(saved);
+ expect(originalWire.every(byte=>byte===0)).toBe(true);
+ native.unsafe=originalUnsafe;
  for(const supplied of [{...pin,identity:'substituted'},{...pin,version:'another'},{...pin,sha256:'0'.repeat(64)}]){
   native.queries.length=0;
   await expect(correspondence.verifyWithRegisteredReportProfile(native,prepared,basis,wire({...report,reportProfile:supplied}),resolver,pin)).rejects.toThrow('profile correspondence');
