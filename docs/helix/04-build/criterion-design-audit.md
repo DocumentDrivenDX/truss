@@ -321,3 +321,17 @@ settlement. This advances the independent test plan, not native qualification.
 All six US-034 and four US-035 criterion allocations remain in scope. Complete
 native reservation/key/source/report/resource composition and current security-owner
 publication admission still need implementation; no new import receipt is selected.
+
+
+## Exact byte versus native value boundary review — 2026-10-09
+
+CONTRACT-010, CONTRACT-003's canonical report producer/loader and the reference
+scalar profile now explicitly distinguish byte-document retention from native
+text/JSONB admission. The 39 shared report controls found a Python restriction
+incorrectly applied at the byte-document boundary; its correction preserves the
+existing native canonical byte algorithm and keeps native-value NUL refusal.
+Incoming schema-valid wire custody also remains distinct from persisted canonical
+artifact spelling. The paired independent zero-effect/native-cell schedules are
+authored; no report schema, UMF scalar meaning or native support profile is changed.
+This review advances semantic alignment without closing installation, original
+artifact/effect/authority admission or the full cross-host native corpus.

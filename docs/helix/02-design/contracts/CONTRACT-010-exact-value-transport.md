@@ -35,6 +35,43 @@ Reuse UMF's existing integer/decimal/float distinctions, facets, exact literal t
 
 **Version:** proposed truss-value/0.1.0. **Status:** draft; wire transport, not an accepted storage encoding.
 
+## Byte-document custody versus native value admission
+
+The PostgreSQL-bound string restrictions below apply to selected interpreted
+values, including nested Truss value strings and map/record names. They MUST NOT
+be applied by decoding arbitrary ExactArtifact payload bytes as if those bytes
+were a value destined for PostgreSQL text or JSONB. Original source/report/diagnostic
+byte custody and native cell admission are distinct contracts.
+
+CONTRACT-003's canonical report byte encoding can escape U+0000 into its original
+bytea representation without storing that scalar in a PostgreSQL text cell. A
+byte-document codec MAY preserve that scalar under its selected report/source
+profile. It MUST still reject invalid UTF-8 and unpaired surrogates, preserve
+original bytes independently, and apply the complete interpretation/profile
+checks before any native effect. This does not permit NUL in the reference
+`text_value` realization or in a PostgreSQL JSONB string. A byte-codec pass cannot
+establish that the same text is a supported authored property, key or native name.
+
+Opaque ExactArtifact contents remain untraversed until their own original bounded
+interpretation is selected. Integrity checks compare their actual complete bytes
+and digest; successful schema validation is neither artifact integrity nor
+semantic/authority admission. No codec may remove characters, normalize strings
+or regenerate source bytes to make an unsupported native value appear valid.
+
+A preparation codec may retain the original spelling of a schema-valid incoming
+report, including whitespace or alternate escapes. That result MUST NOT be
+presented as a persisted canonical report artifact. CONTRACT-003's original
+artifact loader separately requires exact canonical re-encoding equality and
+original report/revision/effect custody; noncanonical spelling refuses that loader.
+
+Independent paired checks preserve original NUL-containing report bytes through
+the byte codec while refusing the same decoded scalar in the selected PostgreSQL
+text-value path before effects. They separately compare alternate-escaped versus
+literal source bytes and require canonical artifact spelling at persistence/load.
+The current 39-control Python/TypeScript report experiment establishes shared
+wire decisions and original byte preservation only; it supplies no native-cell
+or accepted-report qualification.
+
 ## Surface
 
 [exact-value-v0.1.schema.json](exact-value-v0.1.schema.json) describes explicit presence and tagged exact values. `{present:false}` has no value; `{present:true,value:{kind:null}}` is present null. The pinned UMF definition decides whether absence/null is allowed. Schema validity alone cannot establish model validity or support.

@@ -56,3 +56,21 @@ RD-01–04 and the complete M03–M07 assessor must include these independent le
 ## Reference registration definition wire
 
 The [reference row scalar codec schema](truss-reference-row-scalar-codec-v0.1.proposal.schema.json) serializes the selected string and decimal(21,3) rules with original authored/presence/source/native/resource artifacts. It is distinct from the JSONB leaf codec schema and cannot describe other decimal domains by changing field labels. Complete exact artifacts and semantic/native admission remain required; schema-valid placeholders cannot register support. Pair each field’s codec with its qualified row-home presence definition and original field identity. Required code/amount reject null, while note’s explicit-null branch has no scalar payload and therefore cannot be encoded as a null string scalar. Weft owns any compiled codec/decoder registration, and this Truss definition is not an executable handler or new compiler ABI.
+
+
+## Byte custody does not select this native scalar realization
+
+CONTRACT-010 distinguishes report/source byte documents from interpreted native
+values. An exact byte artifact or canonical report codec can preserve original
+NUL by escaped byte encoding; it does not qualify NUL in this profile's
+PostgreSQL `text_value`. Refuse that scalar realization before writes rather than
+repairing or discarding the character. Keep original source bytes intact for
+explicit unsupported/loss reporting. The Python report candidate's byte-document
+option is confined to its codec scope and cannot enable it for this row profile.
+
+Independent tests submit the same scalar through original byte custody and this
+selected Field/native codec: byte retention remains exact, while the unsupported
+text mutation leaves canonical value, version, key membership, source and journal
+unchanged. Current authorized disclosure and original report/history profile still
+apply. Neither a schema-valid string nor a passing cross-host byte codec proves
+native support or original accepted definition correspondence.
