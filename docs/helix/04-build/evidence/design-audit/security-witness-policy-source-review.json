@@ -1,0 +1,30 @@
+{
+  "checkedAt": "2026-10-09T17:16:30.078890+00:00",
+  "scope": "read-only dirty owner source review; no independent test run, ABI adoption or native qualification",
+  "ownerThread": "01a11b8b-06bb-7091-a11a-b7eba0a432eb",
+  "ownerRevision": 22,
+  "sources": [
+    {
+      "path": "/Users/erik/Projects/weft/crates/weft-core/src/security_candidate_policy_types.rs",
+      "sha256": "f1a42c3068c771bcfe8c322b0a305115aa33f31a78cf6b5c98b6694e88bd631f"
+    },
+    {
+      "path": "/Users/erik/Projects/weft/crates/weft-core/tests/security_admission.rs",
+      "sha256": "853308a34fd6b967f6e294cbe6e3c62c4b4bef2b15005613fd59c66050ff08b5"
+    }
+  ],
+  "observedAuthoredBehavior": [
+    "association variables retain qualified Record versus Relationship namespace",
+    "opaque graph witnesses permit declared typed endpoint terms",
+    "opaque graph witness Record identity/attribute terms refuse rather than borrowing physical edge identity",
+    "Record-backed witness resolves its actual selected Record owner and key",
+    "owner is adding paired Record-witness positives to isolate opaque capability refusals"
+  ],
+  "remainingEvidence": [
+    "finished paired owner tests and exact released interpretation/compiler tuple",
+    "whole-document semantic qualification",
+    "original Truss graph source, endpoint/key/witness and protected fact correspondence",
+    "native authority/account/publication and evaluator/query-use refinement"
+  ],
+  "nativeImplementationQualified": false
+}

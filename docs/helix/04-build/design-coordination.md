@@ -52,6 +52,34 @@ selected, Truss owns the fixed physical ownership/migration/grant composition
 and Weft consumes the exact admitted model identities. Neither source capture
 nor the current new-cohort probe establishes installed collision-safe ownership.
 
+## Security witness policy handoff — 2026-10-09
+
+Owner revision 22 is implementing draft qualified-association term checking.
+The read-only [source review](evidence/design-audit/security-witness-policy-source-review.json)
+pins the candidate checker and authored controls. Opaque graph witnesses expose
+only their declared typed endpoints; Record identity or attribute terms require
+an actual Record-backed witness. The owner is strengthening paired positives and
+negatives. Truss has not rerun those tests or adopted a released policy ABI.
+
+When composing the graph source with the selected owner protocol, preserve this
+capability distinction independently of physical storage identity. An internal
+edge ID, row locator or endpoint key is not a policy Record identity. Do not
+populate a fictitious witness Record to make an opaque association fit the older
+Record-only source. For a Record-backed graph witness, resolve the actual
+qualified Record, selected key and original attribute owner under the admitted
+source procedure; endpoint direction/role/type/key correspondence remains required.
+
+Author paired integration cases with the same graph and endpoint facts: endpoint
+correlation works for the admitted opaque witness; identity/attribute access
+refuses for that witness; the corresponding term succeeds only for an independently
+admitted matching Record-backed witness. Substitute a physical edge ID, wrong
+Record owner, wrong selected key and a same-named association from another
+namespace; each must refuse before protected fact publication. An unavailable
+owner interpretation/typing/evaluation tuple leaves execution unavailable rather
+than treating the predicate as false or using a local fallback resolver. These
+are planned owner-consuming controls, distinct from native source completeness,
+authority/account/publication qualification and whole-document semantic validity.
+
 ## Security association closure refresh — 2026-10-09
 
 The active owner revision 18 reports selected raw-member and directed-graph
