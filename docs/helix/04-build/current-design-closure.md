@@ -17,6 +17,34 @@ ddx:
 
 # Current design closure
 
+## Current closure classification — 2026-10-09
+
+This index separates authored design from capability qualification. Its older
+chronological receipts below retain their recorded scope. The current
+[coordination queue](design-coordination.md#design-queue) and
+[consumer closure order](../02-design/python-integration.proposal.md#consumer-closure-order-and-accountable-outputs)
+are the actionable cross-project handoffs.
+
+| Remaining work | Classification and owner | Evidence needed to close it |
+| --- | --- | --- |
+| Python route/home and ADR-001/003 reconciliation | Human product decision; proposal now uses Python orchestration, shared PostgreSQL, Rust Weft and security-owned authorization | Explicit owner route decision followed by consistent ADR/package updates; future Python execution is separate |
+| Exact compiler projection/input contract | Weft-owned interface dependency; affected Item.note three-state meaning and parsed-input ABI remain explicit | Committed owner contract/profile, original mapping adoption and independent affected scenarios; no local compiler substitute |
+| Coherent release profiles | Truss design/engineering selection consuming UMF/Weft/security owner outputs | Exact compatible installation, interpretation, encoding, transport, resource, authority, archive and corpus tuple; no fixture or hash-only authority |
+| Stable layout and migrations | Truss composition/implementation; migration receipt body, UMF storage, immutable guards and recovery semantics are authored | Complete initializer/installer and registered route producer, native source/target/preservation/fault evidence, published DDL/check/manifest; no implicit migration |
+| Core metadata/browser | Authored and locally verified: core 0.6, 50 Records/481 Fields, 532 browser definitions, exact native downloads | Complete native interpretation/installed parity and any requested production publication; these do not reopen the chosen hybrid representation |
+| Entry/caller and transaction boundaries | Authored closure algorithms and ownership/savepoint/containment interfaces; security composition is independently owned | Actual callable bodies/dependencies, effective ordinary-role grants, original-driver outcome and bypass/fault evidence |
+| Accepted catalog/report/head | Truss implementation with available owner producers; complete public acceptance remains unavailable | All seventeen original report fields, admitted current installation/authority/resource context, immutable report insert and atomic head finalization; staged IDs remain provisional |
+| Groups, receipts, imports and history/feed | Truss implementation under selected durable retry/reconstructible-history decisions | Protected complete effects, original/no-op replay, native preconditions, complete membership/prerequisites/application/ACK and lifecycle protection evidence |
+| Shared corpus and release consumer | Truss implementation/test delivery across all 45 stories/167 criteria and both consumer inputs | Versioned data fixtures with independent expected results, complete native/host/bypass/interchange runs and clean packed consumers; 90 structural pins cannot establish this |
+
+Missing execution alone is not a missing design decision. Conversely, a
+complete method declaration cannot replace an unselected producer meaning or
+incompatible shared profile. The design goal remains open because the profile,
+compiler and Python decision rows are not closed and the full-scope handoff
+audit has not proved semantic completeness. Runtime release remains separately
+unqualified. Continue shared PostgreSQL work independently of Python ownership
+and compiler gaps that affect only their named surfaces.
+
 Historical physical design source is the reconciled 0.12 history review over the separately pinned 0.11 compiler foundation: 106 statements, 46 tables, 442 columns and 24 explicit indexes. These counts describe preserved declarations, not a full installer or supported deployment. The [current column inventory](../02-design/contracts/weft-review-columns-v0.12.proposal.md) covers the 0.12 review declarations. The separately versioned [0.12 source review packet](evidence/weft-source-binding012/README.md) maps the current review declarations and exact owner-export SQL; the [0.11 packet](evidence/weft-source-binding011/README.md) retains its original bytes and scope; earlier packets remain separately pinned. Source mapping does not qualify receipt replay or native/compiler adoption. Older 0.8/0.4 packets remain preserved and none is adopted. No complete design or native qualification claim is made.
 
 Source reconciliation: the [0.12 history review](../02-design/models/truss-layout-reference-history-0.12.proposal.umf.json) retains the 106-statement foundation, with no new tables, columns or carrier constraints. Exact source comparison confirms that 0.11 already contains the stage child, four carrier ALTERs and metadata operation. Only the journal sequence settings and review marker/identity change. The [receipt](evidence/design-audit/reference-history-layout-model-source.json) verifies this delta and exact export/reload equality; the existing 0.11 compiler packet remains separately pinned and cannot establish 0.12 adoption.
