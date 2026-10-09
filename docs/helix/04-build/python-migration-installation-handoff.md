@@ -115,6 +115,33 @@ pgserver/Python lifecycle wheel is useful local infrastructure, not evidence tha
 any stage above is implemented. No traversal API decision or pool performance
 benchmark gates this sequence.
 
+## Rust compiler embedding alignment
+
+The [frozen Python extension receipt](evidence/design-audit/weft-python-f05f2df-component.json)
+replaces the older5856c73 compiler pin for this focused component qualification.
+It uses the same f05f2df committed source archive and qualified build feature as
+the current Truss TypeScript/CLI integration. `scripts/build-weft-python.py`
+archives the committed source, verifies the original archive hash and builds
+the original PyO3 extension with locked offline dependencies; it adds no Python
+SQL compiler. The installed macOS arm64 ABI3 wheel delegates `weft.compile_json`
+directly to Rust and has no declared Python runtime dependencies.
+
+In a fresh Python3.11 environment outside the checkout, the loaded extension
+matches the exact wheel payload. Count, bounded grouped count, unbounded-group
+refusal, unsupported-profile refusal and missing-version refusal have independently
+declared outcomes and full parsed-response correspondence with the same pinned
+CLI. Five invalid transport inputs refuse, and the test-only configuration export
+is absent. Original owner-output equality is compiler correspondence, not an
+independent native semantic oracle. Historical broader owner corpus evidence
+remains tied to its older build; it is not relabeled by these five cases.
+
+This wheel is a local development build, not a published consumer dependency or
+a `truss-toolkit` query API. Its PostgreSQL fixture target remains17.9; neither
+this build nor its feature name qualifies the default pgserver16.2 database.
+Original Truss binding/obligation admission, current-person read context, exact
+result decoding, bounded execution and package delivery remain required. Weft0.3
+and positional output are not adopted by rebuilding this frozen0.2 interface.
+
 ## Shared planner corpus before the Python port
 
 `tests/fixtures/layout-migration-planning.json` now supplies sixteen independent
