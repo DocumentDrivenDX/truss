@@ -2,6 +2,7 @@ import {test,expect} from 'bun:test';
 import {createCatalogInputPreparation} from '../packages/umf-bun/src/catalog-input';
 import {loadUmfDeclarationProducer,loadUmfFieldAssertionProducer} from '../packages/umf-bun/src/index';
 import {collectCatalogReportPreparation} from '../packages/umf-bun/src/catalog-report-preparation';
+import {createCatalogReportCorrespondence} from '../packages/umf-bun/src/catalog-report-correspondence';
 const recordDir=process.env.TRUSS_UMF_PRODUCER,ownerDir=process.env.TRUSS_UMF_DECLARATION_PRODUCER,fieldDir=process.env.TRUSS_UMF_FIELD_ASSERTION_PRODUCER;if(!recordDir||!ownerDir||!fieldDir)throw Error('All original owner directories required');
 const preparation=await createCatalogInputPreparation(recordDir,'/Users/erik/Projects/umf/package.json'),owner=await loadUmfDeclarationProducer(ownerDir),fields=await loadUmfFieldAssertionProducer(fieldDir);
 const input=structuredClone((await Bun.file('docs/helix/02-design/contracts/bindings/acceptance-input-capacity-v0.1.fixture.json').json()).input);input.binding={state:'absent'};input.transforms=[];
@@ -42,4 +43,29 @@ test('original 0.8 validation does not invent a transition or duplicate a target
 test('new-only report preparation cannot ignore a declared transform registration',async()=>{
  const declared=structuredClone(input);declared.transforms=structuredClone((await Bun.file('docs/helix/02-design/contracts/bindings/acceptance-input-capacity-v0.1.fixture.json').json()).input.transforms);const original=preparation.prepare(new TextEncoder().encode(JSON.stringify(declared))),native=connection();
  await expect(collectCatalogReportPreparation(native,original,'1',owner,fields)).rejects.toThrow('Complete transform execution');expect(native.queries).toEqual([]);
+});
+const correspondence=await createCatalogReportCorrespondence('/Users/erik/Projects/umf/package.json');
+const untrustedReport=(await Bun.file('docs/helix/03-test/report-wire-untrusted.fixture.json').json()).report;
+function reportFor(basis:Awaited<ReturnType<typeof collectCatalogReportPreparation>>){return {...structuredClone(untrustedReport),rev:basis.provisionalRevision,acceptedInput:prepared.original.input,documents:basis.documentBasis.documents,counts:basis.counts,provisional:basis.provisional,diagnostics:basis.validationEvidence.diagnostics,documentInterpretations:basis.validationEvidence.documentInterpretations}}
+const wire=(value:unknown)=>new TextEncoder().encode(JSON.stringify(value));
+test('complete wire corresponds to seven issued producer fields while other fixture fields remain untrusted',async()=>{
+ const native=connection(),basis=await collectCatalogReportPreparation(native,prepared,'1',owner,fields);
+ const result=await correspondence.verify(native,prepared,basis,wire(reportFor(basis)));
+ expect(result.verifiedFields.length).toBe(7);expect(result.scope).toBe('seven_original_report_producer_fields_only');expect(native.queries.at(-1)).toContain('runtime_require_catalog_observation');
+});
+test('changed source effect and diagnostic fields refuse before native recheck',async()=>{
+ const basis=await collectCatalogReportPreparation(connection(),prepared,'1',owner,fields);
+ for(const field of ['rev','acceptedInput','documents','counts','diagnostics','documentInterpretations']){
+  const report=structuredClone(reportFor(basis));
+  if(field==='rev')report.rev='2';if(field==='acceptedInput')report.acceptedInput.layoutProfile.identity='forged';
+  if(field==='documents')report.documents[0].doc_revision='forged';if(field==='counts')report.counts.typesAdded='1';
+  if(field==='diagnostics')report.diagnostics[0].diagnostic.identity='forged';
+  if(field==='documentInterpretations')report.documentInterpretations[0].completeness='complete';
+  const native=connection();await expect(correspondence.verify(native,prepared,basis,wire(report))).rejects.toThrow('producer correspondence');expect(native.queries).toEqual([]);
+ }
+});
+test('copied report basis and stale native cut cannot supply correspondence',async()=>{
+ const basis=await collectCatalogReportPreparation(connection(),prepared,'1',owner,fields),native=connection();
+ await expect(correspondence.verify(native,prepared,{...basis},wire(reportFor(basis)))).rejects.toThrow('bound catalog report preparation');expect(native.queries).toEqual([]);
+ await expect(correspondence.verify({unsafe:async()=>{throw Error('stale original cut')}},prepared,basis,wire(reportFor(basis)))).rejects.toThrow('stale original cut');
 });
