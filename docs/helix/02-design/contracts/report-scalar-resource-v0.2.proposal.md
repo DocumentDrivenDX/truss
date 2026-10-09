@@ -91,3 +91,30 @@ This supplies tree/scalar encoding correspondence, not genuine report production
 Original source/artifact digests, full lifecycle/assertion/UMF/index/rebind facts,
 current authority, installed routine/grant inventory, pre-effect capacity and
 atomic report/head settlement remain required before accepted publication.
+
+## Private Python carrier preparation checkpoint
+
+The private Python report candidate now exposes `prepare_native` after its
+original pinned composed-schema preparation. The separate
+[carrier helper](../../04-build/evidence/design-audit/python_native_report_carrier_candidate.py)
+retains the original immutable source and preflights exact cumulative native
+steps (32,768) and compact ASCII carrier length (four MiB) before constructing
+the tagged tree. Serialization must equal the independently computed length.
+UTF-8 hex retains NUL, Unicode spelling, object member order and array order;
+this is a codec result, not an issued native execution permit.
+
+[Four component tests](../../04-build/evidence/design-audit/test_python_native_report_carrier_candidate.py)
+check complete nineteen-field Python/TypeScript carrier-byte and task-count
+correspondence, mutable input custody, legal-container aggregate task overflow
+before serialization, an admitted below-limit tree and schema refusal before
+native preparation. All 24 private Python candidate tests pass on the isolated
+Python 3.11/schema-validator environment. The correspondence case includes
+NFC/NFD, supplementary Unicode, byte-document NUL, mixed arrays and a large
+scalar. It is not a full shared corpus or database writer/reader interchange.
+
+The existing TypeScript carrier checks its four-MiB serialized length after
+construction; Python's exact preflight does not qualify that allocation path.
+Python UTF-8 sizing, parsed/frozen/schema views, pending tasks, tagged objects,
+serialization and native JSONB/output allocations still need the selected
+original account. Package ownership, native authority, full report semantic
+provenance and atomic publication remain open.

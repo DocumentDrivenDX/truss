@@ -64,3 +64,7 @@ class ReportWireCandidate:
         if not self._validator.is_valid(view(retained.value)):
             raise ValueError('Original composed report schema refused')
         return ReportWire(retained)
+
+    def prepare_native(self, source: bytes | bytearray):
+        from python_native_report_carrier_candidate import prepare_carrier
+        return prepare_carrier(self.prepare(source).original)
