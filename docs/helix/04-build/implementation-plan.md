@@ -2659,3 +2659,12 @@ complete original surviving effect cut, not stage return counts or allocation
 maxima. Independent swapped-identity/family, duplicate endpoint, rollback and
 hidden-membership controls precede report/head integration; these are planned
 collector controls, not executed native acceptance evidence.
+
+The existing UMF parser review in CONTRACT-003 identifies the exact raw-input
+decoder dependency: public copyJson is in-memory, readDocument is the UMF
+envelope, and internal parseNativeJson is neither a public supported interface
+nor precharged transport admission. Select/pin a supported host strict-JSON
+profile, then qualify original UTF-8/duplicate/Unicode/structural/allocation
+behavior before implementing the private producer port. Existing UMF numeric,
+Field and document interpretation remains owner-owned after transport admission.
+Unavailable raw-decoder support refuses; no extra UMF feature is assumed.

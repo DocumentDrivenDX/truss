@@ -853,3 +853,35 @@ TypeScript compiler with `--ignoreConfig --noEmit --strict --target ES2022
 --module ESNext --moduleResolution bundler` and that file. These controls
 prove declaration separation only; runtime brands, parsing and authority
 remain independently qualified obligations.
+
+### Existing UMF parser candidate review
+
+At committed e3555b9a, the public `copyJson` API is an inert in-memory copy
+procedure. It cannot recover duplicate members, original byte spelling or
+unpaired Unicode information already lost by a transport decoder. It also
+permits admitted host numbers, while the acceptance-input outer tree is
+numeric-free. Therefore it is not the raw acceptance transport parser.
+`readDocument` interprets a UMF envelope; a complete Truss AcceptanceInput is
+a different wire and must not be disguised as a UMF document for validation.
+
+UMF's internal `src/model/native-json.ts:parseNativeJson` retains numeric token
+text and uses a strict YAML AST to detect duplicate keys after JSON syntax
+checking. It is not exported by the public index. Its source bounds text
+length before parsing, but depth/value limits are checked during subsequent
+AST traversal, after initial JSON/YAML materialization. This is useful owner
+implementation evidence, not a public registered precharged parser for Truss.
+Do not import that internal function into the acceptance runtime or infer
+complete Unicode/resource admission from its successful parse. The public
+`parseNativeYaml` likewise does not select the JSON-only transport grammar.
+
+The raw producer implementation task must select and pin an existing supported
+strict JSON decoder or host decoder profile with exact byte/Unicode/duplicate
+behavior and conservative preallocation/isolation accounting. Preserve raw
+UTF-8 and reject numeric outer nodes before conversion to the existing
+AcceptanceInput wire. Independently test duplicate escaped-equivalent keys,
+unpaired surrogate escapes, malformed UTF-8, nested structure limits, large
+string/member inventories and aggregate copies before claiming admission.
+If no such profile is currently registered, return unsupported representation
+and retain original custody; do not fall back to `JSON.parse` plus schema
+validation. This is a concrete Truss host/parser selection task, not a request
+for new UMF core semantics or a competing UMF document validator.
