@@ -41,4 +41,4 @@ CONTRACT-003 owns recorded schema_doc ord and phases. CONTRACT-003 now pins the 
 
 ## Tests and Handoff
 
-STP-002 allocates three criteria. Resolve upstream graph syntax/cycles/qualified pins, define ordering profile, write red pure graph permutation tests and gated native acceptance cases, then implement SCC/phases. Unsupported package semantics refuse without effects. Failed order/derivation rolls back the whole set, not one component at a time. Algorithm evidence and valid package acceptance evidence remain separate.
+STP-002 allocates three criteria. Consume the existing CONTRACT-003 component/byte-order rule and STP-002’s exact graph vectors; implement and test pure bounded ordering independently. Resolve an already-valid owner representation for graph syntax/cycles/qualified pins before enabling native dependent-package cases, then compose whole-set derivation and persistence. Do not reopen the selected ordering rule as an unspecified product decision. Unsupported package semantics refuse without effects. Failed order/derivation rolls back the whole set, not one component at a time. Algorithm evidence and valid package acceptance evidence remain separate.

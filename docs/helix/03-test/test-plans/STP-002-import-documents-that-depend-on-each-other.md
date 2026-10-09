@@ -42,3 +42,6 @@ Future commands `bun test tests/core/catalog-order.test.ts tests/catalog/depende
 ## Independent component ordering vectors
 
 Abstract validated graph notation is `dependent -> dependency`; these are pure algorithm cases, not invented UMF wire syntax. For A->B and B->A plus C->A, expected order is A,B,C. For that same cycle plus unrelated D, ready-component vector [A,B] sorts before [D], yielding A,B,C,D because C becomes ready and C sorts before D. For A->C, B->C and unrelated D, expected order is C,A,B,D. Each input permutation must preserve these exact vectors. Native acceptance remains separately gated on upstream-valid representation.
+
+
+The [eight authored graph vectors](../document-order-v0.1.proposal.vectors.json) make the component and byte-order expectations concrete. Enumerate every node and edge ordering for each valid small graph; compare the complete independently authored order. The U+E000/U+10000 case detects default JavaScript UTF-16 sorting, and the NFC/NFD case detects normalization. The A/Z cyclic component must finish before unrelated B even though B sorts before Z individually. Duplicate document and missing dependency cases refuse rather than manufacturing graph vertices. All vectors remain authored_not_run; they supply neither a valid cross-document UMF representation nor native acceptance evidence.
