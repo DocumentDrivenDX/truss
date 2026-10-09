@@ -46,6 +46,16 @@ boundary remains incomplete; neither source capture nor schema compilation
 adopts a release profile. Its reproducible checkers refuse changed original
 membership and unsupported schema reference scopes.
 
+The inventory's remaining-work wording now separates authored semantic/profile
+selection from implementation and native qualification. Existing A2 and M2–M5
+procedures are not missing designs merely because their producers/executors are
+unimplemented. Conversely, an authored procedure does not select M1's source/target
+pair, a complete authority/account tuple or the compiler/consumer interface.
+All seven authored dispositions remain incomplete and independent/native review
+remains not_reviewed; candidate bytes and membership are unchanged. Native producer,
+deployment and committed interchange exits now reside in nativeQualification
+rather than being described as absent authoring.
+
 Current verification after the related-list handoff refresh passes all nine
 review-shape and twenty-eight candidate-root membership controls, compares every
 captured root with its complete current source bytes, and verifies local schema
