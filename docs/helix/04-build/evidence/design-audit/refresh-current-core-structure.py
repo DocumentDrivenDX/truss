@@ -16,7 +16,8 @@ changes=[i for i,(old,new) in enumerate(zip(oldtable['tableElts'],newtable['tabl
 assert len(oldtable['tableElts'])==len(newtable['tableElts']) and len(changes)==1
 changed=changes[0];column=newtable['tableElts'][changed]['ColumnDef'];assert column['colname']=='artifact_identity_sha256'
 assert [c['Constraint']['contype'] for c in column['constraints']]==['CONSTR_NOTNULL','CONSTR_CHECK']
-assert column['typeName']==oldtable['tableElts'][changed]['ColumnDef']['typeName'] and column.get('collClause')==oldtable['tableElts'][changed]['ColumnDef'].get('collClause')
+assert {k:v for k,v in column['typeName'].items() if k!='location'}=={k:v for k,v in oldtable['tableElts'][changed]['ColumnDef']['typeName'].items() if k!='location'}
+assert column.get('collClause')==oldtable['tableElts'][changed]['ColumnDef'].get('collClause')
 assert column['constraints'][1]['Constraint']['conname']=='installation_archive_identity_digest_exact'
 cmds=[]
 for node in y[106:]:
