@@ -1,0 +1,148 @@
+{
+  "scope": "Read-only saved security formal replay correspondence; no solver rerun, assumption review, native refinement or release adoption",
+  "ownerWorktree": "/Users/erik/.codex/worktrees/1598/umf",
+  "receipt": "docs/helix/04-build/evidence/security/formal-replay-audit.json",
+  "receiptSha256": "d17a205d0bb01e9ddff1e9aa5bc6ebfebfdad2f375e1fca9ae42a8cafec1abb0",
+  "ownerReportedStatus": "passed",
+  "solverVersion": "4.15.4",
+  "reportedObservations": 147,
+  "formulaBearingReceipts": 8,
+  "receiptsWithoutSelectedFormulaLeaves": [
+    "docs/helix/04-build/evidence/security/carrier-error-isolation-formal.json",
+    "docs/helix/04-build/evidence/security/existence-truth-formal.json",
+    "docs/helix/04-build/evidence/security/existence-unbounded-formal.json",
+    "docs/helix/04-build/evidence/security/formal.json",
+    "docs/helix/04-build/evidence/security/graph-key-correspondence-formal.json",
+    "docs/helix/04-build/evidence/security/mask-query-formal.json",
+    "docs/helix/04-build/evidence/security/original-source-completeness-formal.json",
+    "docs/helix/04-build/evidence/security/publication-drain-formal.json",
+    "docs/helix/04-build/evidence/security/publication-retirement-formal.json",
+    "docs/helix/04-build/evidence/security/scoped-composition-formal.json",
+    "docs/helix/04-build/evidence/security/typed-source-completeness-formal.json"
+  ],
+  "ownerScope": "Fresh Z3 parser/solver replay of every smt/result leaf in the selected retained *formal*.json receipts. Does not audit formulas absent from these receipts, prove generator-to-formula correspondence, validate assumptions or establish native/compiler/runtime refinement. Legacy saved formulas may contain Z3 model-converter annotations ignored with parser diagnostics; equality here concerns the parsed assertions and recorded SAT/UNSAT result, not strict SMT-LIB conformance.",
+  "sourceCorrespondence": [
+    {
+      "source": "tools/security/replay-formal-evidence.py",
+      "expectedSha256": "eb84c293eac510f98f3395a094e224bae3d47181a8309eaad57c18cdb686f488",
+      "currentSha256": "eb84c293eac510f98f3395a094e224bae3d47181a8309eaad57c18cdb686f488",
+      "matches": true
+    },
+    {
+      "source": "docs/helix/04-build/evidence/security/carrier-error-isolation-formal.json",
+      "expectedSha256": "77bd81b3304c237ff0ab60d3172049bcff670193cd82e33b7804912045bae43b",
+      "currentSha256": "77bd81b3304c237ff0ab60d3172049bcff670193cd82e33b7804912045bae43b",
+      "matches": true
+    },
+    {
+      "source": "docs/helix/04-build/evidence/security/existence-truth-formal.json",
+      "expectedSha256": "5551b4efb2e56a8605e74b9a21917b2fc2164466b60098f14c65e7a04411e513",
+      "currentSha256": "5551b4efb2e56a8605e74b9a21917b2fc2164466b60098f14c65e7a04411e513",
+      "matches": true
+    },
+    {
+      "source": "docs/helix/04-build/evidence/security/existence-unbounded-formal.json",
+      "expectedSha256": "b484664039e4acbe4df0fefa9170759ca11201ec5c796b2fa4cc0b7da19592d7",
+      "currentSha256": "b484664039e4acbe4df0fefa9170759ca11201ec5c796b2fa4cc0b7da19592d7",
+      "matches": true
+    },
+    {
+      "source": "docs/helix/04-build/evidence/security/field-write-fold-formal.json",
+      "expectedSha256": "7feaaa02a61ceb77c3225137e9bbe6b49f033037f771f8f93c5b1449424f60b9",
+      "currentSha256": "7feaaa02a61ceb77c3225137e9bbe6b49f033037f771f8f93c5b1449424f60b9",
+      "matches": true
+    },
+    {
+      "source": "docs/helix/04-build/evidence/security/formal.json",
+      "expectedSha256": "7edd9df8000be7ff834d4b3d9b80918bffb157f08a024307e9a6cc71ea0d2c12",
+      "currentSha256": "7edd9df8000be7ff834d4b3d9b80918bffb157f08a024307e9a6cc71ea0d2c12",
+      "matches": true
+    },
+    {
+      "source": "docs/helix/04-build/evidence/security/graph-key-correspondence-formal.json",
+      "expectedSha256": "bb9d1fe3a235f7d8c6bb13b298192697a7ca3289fadc90250660672f073257e0",
+      "currentSha256": "bb9d1fe3a235f7d8c6bb13b298192697a7ca3289fadc90250660672f073257e0",
+      "matches": true
+    },
+    {
+      "source": "docs/helix/04-build/evidence/security/hash-key-formal.json",
+      "expectedSha256": "c4f505008c373867f0a16305cc0a2a09ff088274009143312eca555339a5a5e3",
+      "currentSha256": "c4f505008c373867f0a16305cc0a2a09ff088274009143312eca555339a5a5e3",
+      "matches": true
+    },
+    {
+      "source": "docs/helix/04-build/evidence/security/mask-query-formal.json",
+      "expectedSha256": "5f79b439d629f3bcfafdc762e7795d680cebd54bfb6d287f131aa10d253600a8",
+      "currentSha256": "5f79b439d629f3bcfafdc762e7795d680cebd54bfb6d287f131aa10d253600a8",
+      "matches": true
+    },
+    {
+      "source": "docs/helix/04-build/evidence/security/multipublisher-custody-formal.json",
+      "expectedSha256": "277d3acaa5f993216f4540fd3e9ae14f49a7b801248b19cebf5235b588732fd3",
+      "currentSha256": "277d3acaa5f993216f4540fd3e9ae14f49a7b801248b19cebf5235b588732fd3",
+      "matches": true
+    },
+    {
+      "source": "docs/helix/04-build/evidence/security/namespace-native-domain-formal.json",
+      "expectedSha256": "0496534a7caa93f7e1958e9011800a1c5004b6522d22ad299e852bc1f1cbb1ce",
+      "currentSha256": "0496534a7caa93f7e1958e9011800a1c5004b6522d22ad299e852bc1f1cbb1ce",
+      "matches": true
+    },
+    {
+      "source": "docs/helix/04-build/evidence/security/original-source-completeness-formal.json",
+      "expectedSha256": "e40037de4b529d76fe76dd3686856bcb31e58266a27801e300c4e828d3ab3572",
+      "currentSha256": "e40037de4b529d76fe76dd3686856bcb31e58266a27801e300c4e828d3ab3572",
+      "matches": true
+    },
+    {
+      "source": "docs/helix/04-build/evidence/security/persistent-publication-formal.json",
+      "expectedSha256": "cb0349643d3d1249a6d4114ed6433c3369b3ef33a93d7547646916b414c6811a",
+      "currentSha256": "cb0349643d3d1249a6d4114ed6433c3369b3ef33a93d7547646916b414c6811a",
+      "matches": true
+    },
+    {
+      "source": "docs/helix/04-build/evidence/security/publication-drain-formal.json",
+      "expectedSha256": "7ffd7b499c87b335113f48697c665effc37426d77510efa28c96eabd22b41006",
+      "currentSha256": "7ffd7b499c87b335113f48697c665effc37426d77510efa28c96eabd22b41006",
+      "matches": true
+    },
+    {
+      "source": "docs/helix/04-build/evidence/security/publication-retirement-formal.json",
+      "expectedSha256": "87790034ee183b27cb201886ae665ed3ed019f5132f37b8807567d980e717ee9",
+      "currentSha256": "87790034ee183b27cb201886ae665ed3ed019f5132f37b8807567d980e717ee9",
+      "matches": true
+    },
+    {
+      "source": "docs/helix/04-build/evidence/security/scoped-composition-formal.json",
+      "expectedSha256": "911f182a9cd89faf76c180aa3067194b8deb6e0ed1ab49cbce623c1aa345345d",
+      "currentSha256": "911f182a9cd89faf76c180aa3067194b8deb6e0ed1ab49cbce623c1aa345345d",
+      "matches": true
+    },
+    {
+      "source": "docs/helix/04-build/evidence/security/type-key-formal.json",
+      "expectedSha256": "d5b7429eab0734b877d09e35ad4523dc1191bf33226109930f9a1322f48008a2",
+      "currentSha256": "d5b7429eab0734b877d09e35ad4523dc1191bf33226109930f9a1322f48008a2",
+      "matches": true
+    },
+    {
+      "source": "docs/helix/04-build/evidence/security/type-selection-formal.json",
+      "expectedSha256": "458ebc7178dd50f9c9527c1add973043d2cfb94b47b2c5f879af1d4662d53a28",
+      "currentSha256": "458ebc7178dd50f9c9527c1add973043d2cfb94b47b2c5f879af1d4662d53a28",
+      "matches": true
+    },
+    {
+      "source": "docs/helix/04-build/evidence/security/typed-source-completeness-formal.json",
+      "expectedSha256": "2b8ef0bf3d2988e8b2484b62c2488419f0399463f1f109549ea116466c3af9e0",
+      "currentSha256": "2b8ef0bf3d2988e8b2484b62c2488419f0399463f1f109549ea116466c3af9e0",
+      "matches": true
+    },
+    {
+      "source": "docs/helix/04-build/evidence/security/write-fold-formal.json",
+      "expectedSha256": "564364e44982b55d0d014cf88a35a54f9981403349c5fa1d5d41e2e0dd999e3e",
+      "currentSha256": "564364e44982b55d0d014cf88a35a54f9981403349c5fa1d5d41e2e0dd999e3e",
+      "matches": true
+    }
+  ],
+  "allSourcesMatch": true,
+  "qualifiesTruss": false
+}

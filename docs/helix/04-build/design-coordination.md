@@ -15,6 +15,20 @@ ddx:
 
 # Design coordination and remaining work
 
+## Security formal replay refresh — 2026-10-09
+
+The active security owner reports a fresh Z3 4.15.4 replay of 147 saved formula
+leaves. The [source review](evidence/design-audit/security-formal-replay-source-review-2026-10-09.json)
+pins that working receipt and checks its original listed source digests against
+current files. Truss did not rerun the solver. The owner explicitly excludes
+formulas absent from those leaves, generator-to-formula correspondence,
+assumption validity and native/compiler/runtime refinement. Eleven selected
+receipts contain no selected formula leaves; legacy ignored model-converter
+annotations can produce parser diagnostics. Preserve those limitations rather
+than call every formal receipt independently replayed or infer strict SMT-LIB
+validity. This does not adopt a released security ABI, qualify Truss enforcement
+or remove the original identity/privilege/native finalization gates.
+
 ## Security working-source refresh — 2026-10-09
 
 The [fresh boundary review](evidence/design-audit/security-current-boundary-review-2026-10-09.json)
