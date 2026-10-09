@@ -148,7 +148,7 @@ Next composition order: admit the original root profile and actor/installation c
 
 ## Current acceptance implementation exit sequence
 
-Nine fields have original producer correspondence in the current new-only native-ingress/absent-binding/no-transform component: rev, acceptedInput, documents, diagnostics, documentInterpretations, counts, provisional, losses and transformRegistrations. This is field correspondence under a staged original cut, not semantic authority or complete capability. [Current native evidence](evidence/catalog-new-cohort.json) records eighty-five checks; [host context evidence](evidence/catalog-original-execution-basis.json) retains its own versions and scope.
+Nine fields have original producer correspondence in the current new-only native-ingress/absent-binding/no-transform component: rev, acceptedInput, documents, diagnostics, documentInterpretations, counts, provisional, losses and transformRegistrations. This is field correspondence under a staged original cut, not semantic authority or complete capability. [Current native evidence](evidence/catalog-new-cohort.json) records eighty-seven checks; [host context evidence](evidence/catalog-original-execution-basis.json) retains its own versions and scope.
 
 Eight fields still require complete production/admission: interfaceVersion, reportProfile, originalExecution, umf, rebinds, assertions, pending_indexes and extensions. Schema validation supplies the interface literal but not its registered complete runtime interpretation. Preserve this partition when sequencing work; the previous table's historical source descriptions do not imply missing fields can be filled with fixture empties.
 
@@ -164,19 +164,21 @@ Decisive acceptance schedules remain full original source/report/effect bijectio
 ## Original execution source audit — 2026-10-08
 
 Readback of acceptance-report-v0.1's seven required originalExecution members,
-CONTRACT-003's producer context handoff, CONTRACT-007's installed recovery
-context, installation-admission-v0.1 and installation-metadata-v0.1 finds a
-concrete missing source: the marker/archive candidate records installationId
-but does not store or issue sourceEpoch. The admission wire requires it without
-providing native custody. Current package source contains epoch selection in a
-security key-namespace candidate, not an installed epoch producer. Those values
-cannot fill an accepted report. This is Truss installation/source-generation
-ownership; it requires no new UMF semantic or Weft compiler API.
+CONTRACT-003, CONTRACT-007 and the installation admission/metadata candidates
+initially identified no epoch issuer. That source gap now has an implemented
+private candidate: [epoch lifecycle](../02-design/contracts/source-epoch-lifecycle.proposal.md),
+UMF-generated fixed registry/pointer, native UUID4 issuer, immutable registry
+guards and original pointer lock/readback. Twenty-seven rollback-contained
+storage/issuer checks and five two-connection issuer-fencing checks pass on
+PostgreSQL17.9. Their exact-source receipts qualify components only. The
+remaining gap is complete committed-installation/deployment-incarnation
+admission, original retry/recovery custody and accepted report composition.
+This is Truss ownership; no new UMF semantic or Weft compiler API is needed.
 
 | Required member | Existing source | Next implementation and decisive test |
 | --- | --- | --- |
 | installationId | Marker candidate and retained bootstrap archive | Independently admit committed marker plus complete installed inventory. A same-transaction bootstrap candidate or copied marker cannot qualify; exercise commit uncertainty and namespace mismatch. |
-| sourceEpoch | Required admission wire; no protected native producer identified | Select and implement epoch issuance, retention and clone/restore transition under the installation contract before acceptance. Test original epoch retention, stale admission after epoch transition, rollback, and explicit clone/restore handling. Do not derive it from catalog revision, xid, timestamp or installationId. |
+| sourceEpoch | Private UUID4 native issuer; UMF registry/pointer; immutable guard and lock/readback; 27 component and five concurrency checks | Adopt complete lifecycle authority and trusted clone/restore incarnation evidence; retain original retry/recovery identity and bind the original operation context. Exercise committed installation, clone/restore, retries and original capture. Tokens from component tests cannot qualify an accepted report. |
 | origin.asserted | Separate asserted-origin facade argument | Retain complete original canonical tree at attempt admission, without upgrading assertion to authority. Test mutation of caller input after capture and exact-repeat preservation. |
 | origin.databaseRole | Native context0.2 and issued original-execution basis | Compose the original acting-role observation; exercise SET ROLE, definer entry, role rename/drop/recreate and changed builder context against retained OID/name evidence. |
 | journalOrigin / originMappingProfile | Required history origin grammar and mapping registration contract | Adopt one exact mapping producer and its retained implementation/profile evidence. Verify mapping of asserted fields and native role without overwriting asserted content; unknown mapping refuses before effects. |
@@ -188,5 +190,5 @@ with separately asserted origin; perform the registered origin mapping; then
 assemble and independently compare originalExecution. Keep the existing
 role-only basis as a component, without renaming it to imply complete installed
 admission. The public acceptance barrier remains until this and the other
-report fields pass their complete native schedules. These tests specify needed
-evidence, not executed verdicts or a selected epoch storage design.
+report fields pass their complete native schedules. The linked epoch receipts prove their explicitly scoped component schedules;
+the other tests remain required adoption evidence.

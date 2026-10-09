@@ -1,9 +1,9 @@
 {
   "owner": "DocumentDrivenDX/umf",
-  "revision": "c2dd3f93c941bc6ffb97082cfaf358913757d99e",
+  "revision": "60c974ecb71144d1055e5a7e2cfee451a22363a9",
   "model": "docs/helix/02-design/models/truss-layout-core-structural-0.3.proposal.umf.json",
   "assets": {
-    "explorer.js": "db0a70e25129f7c7968c9b543f2c90a4bea8123d178a4428f7d79b894e9b6321",
+    "explorer.js": "bf96a9b90fdbe16c3a6c1202d638a1febe02ce825e6f1da4a066b4b49fd30958",
     "explorer.css": "479073250e24e40c180a37d4f55207cd7f672612acc61965c10156249d7cb6e0",
     "style.css": "6c686ba762afdb65112034b3666bb8079cf137e8365fc160fece1d7fc2482f7a",
     "logo.svg": "5f40ae4ea560f51199abac4dda14b93d72b1667487a9791f4846cab73e4e114d",
