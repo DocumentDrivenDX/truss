@@ -98,3 +98,13 @@ The next outputs are owner statistic selection, immutable fixture and complete
 environment/procedure registration, red assessor controls and the actual
 paired native schedule. US-032-AC1/AC2 still require their complete correctness
 corpus independently; this point-read workload cannot substitute for it.
+
+Run `bun docs/helix/04-build/evidence/design-audit/check-pooler-overhead-arithmetic.ts`
+for twelve independent synthetic proposed-mean witnesses. They include exact
+boundary and one-nanosecond failures, negative deltas, wrong shared results,
+missing/duplicate samples, changed modes/units and failure hidden by combining
+repetitions. The unsafe-number fixture uses durations 2^53 and 2^53+1 and
+places their exact one-nanosecond difference at the decisive bound; converting
+them to JavaScript numbers would produce the wrong verdict. These are
+mathematical design checks, not measured samples, statistic adoption or native
+pooler/mode/resource qualification. The production assessor remains unfinished.
