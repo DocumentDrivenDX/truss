@@ -19,6 +19,29 @@ ddx:
 
 ## Current closure classification — 2026-10-09
 
+The [original composition review record](evidence/design-audit/reference-composition-incomplete.json)
+is the current concrete starting inventory: seven required boundaries, complete
+captured candidate source bytes and selected local schema dependencies. Every
+boundary remains incomplete; neither source capture nor schema compilation
+adopts a release profile. Its reproducible checkers refuse changed original
+membership and unsupported schema reference scopes.
+
+Recent handoffs now include Python/TypeScript complete synthetic report-to-native
+encoding parity (including integer-like key order), portable migration inspection
+schemas and LM-V01–06, fresh-process archive recovery AH-R01–03, and conformance
+interruption/evidence-store settlement controls. Current combined strict schema
+compilation covers 158 contracts. These are component/design outputs, distinct
+from genuine full report production, protected publication, deployed migration
+execution, provider durability and committed database interchange.
+
+The security owner's private Key-agreement interpretation now has source-pinned
+logical/browser evidence with nativeImplementationQualified=false. Default source
+qualifier refusal remains; public authenticated interpretation and compiler/native
+refinement still belong to that owner. Weft's committed compiler/CLI and affected
+application-read contract remain unchanged at inspected local HEAD94b2de5 relative
+to the prior selected source. Keep dirty owner work outside Truss release adoption.
+
+
 This index separates authored design from capability qualification. Its older
 chronological receipts below retain their recorded scope. The current
 [coordination queue](design-coordination.md#design-queue) and
@@ -28,12 +51,12 @@ are the actionable cross-project handoffs.
 | Remaining work | Classification and owner | Evidence needed to close it |
 | --- | --- | --- |
 | Python route/home and ADR-001/003 reconciliation | Human product decision; proposal now uses Python orchestration, shared PostgreSQL, Rust Weft and security-owned authorization | Explicit owner route decision followed by consistent ADR/package updates; future Python execution is separate |
-| Cross-document dependency acceptance / US-002 | Existing UMF registry candidate verified; full carrier, exact supplied-source/Record/key resolution and SCC ordering have private evidence. Truss owns adoption/composition | Admit the complete original registration/resource tuple, prior-accepted-source custody and whole-set native derivation/report publication. The 17 registry controls and 30 source/graph tests do not establish accepted catalog meaning. |
+| Cross-document dependency acceptance / US-002 | Existing UMF registry candidate verified; full carrier, exact supplied-source/Record/key resolution and SCC ordering have private evidence. Truss owns adoption/composition | Admit the complete original registration/resource tuple, prior-accepted-source custody and whole-set native derivation/report publication. The retained registry/source/graph component receipts do not establish accepted catalog meaning. |
 | Unknown endpoint policies / US-003 | Valid pending-intent representation is experimentally available through current UMF; Truss owns complete policy/storage/report composition | Admit full qualified provisional relationship/key-state mapping, explicit whole-relationship losses and same-ID promotion/lifecycle effects with the security owner. Nullable native key cells do not distinguish absent versus unresolved key meaning. CONTRACT-045 and core relationships remain unchanged. |
 | Exact compiler projection/input contract | Weft-owned interface dependency; affected Item.note three-state meaning and parsed-input ABI remain explicit | Committed owner contract/profile, original mapping adoption and independent affected scenarios; no local compiler substitute |
 | Direct traversal result meaning | Human product selection pending; current recommendation is unique typed terminals with path-local cycle exclusion | Select unique destinations versus path-valued results, then reconcile US-023/CONTRACT-004 and the [independent oracle](../03-test/reference-traversal-path-cycle.proposal.json). Weft SQL bag semantics remain separate; no silent adoption from proposed test expectations. |
 | Coherent release profiles | Truss design/engineering selection consuming UMF/Weft/security owner outputs | Exact compatible installation, interpretation, encoding, transport, resource, authority, archive and corpus tuple; no fixture or hash-only authority |
-| Stable layout and migrations | Truss composition/implementation; migration receipt body, UMF storage, immutable guards and recovery semantics are authored | Complete initializer/installer and registered route producer, native source/target/preservation/fault evidence, published DDL/check/manifest; no implicit migration |
+| Stable layout and migrations | Truss composition/implementation; migration receipt body, UMF storage, immutable guards, read-only status/verification and recovery semantics are authored | Complete initializer/installer and registered route producer, native source/target/preservation/fault evidence, published DDL/check/manifest; no implicit migration |
 | Core metadata/browser | Authored and locally verified: core 0.6, 50 Records/481 Fields, 532 browser definitions, exact native downloads | Complete native interpretation/installed parity and any requested production publication; these do not reopen the chosen hybrid representation |
 | Entry/caller and transaction boundaries | Authored closure algorithms and ownership/savepoint/containment interfaces; security composition is independently owned | Actual callable bodies/dependencies, effective ordinary-role grants, original-driver outcome and bypass/fault evidence |
 | Accepted catalog/report/head | Truss implementation with available owner producers; complete public acceptance remains unavailable | Complete selected report: nineteen original fields for the combined 0.3 lifecycle/history reference, including lifecycleProfile/reactivations; the seventeen-field 0.1 codec remains baseline-only. Admit current installation/authority/resource context, immutable report insert and atomic head finalization; staged IDs remain provisional |

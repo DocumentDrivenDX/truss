@@ -10,8 +10,8 @@ or runtime verdicts. Case grammar, fixture/input/expectation schemas, typed
 identity paths, operation registry and adapter handshake are now authored
 proposals; they are no longer wholly missing interfaces. The
 [runtime handoff](conformance-runtime-handoff.md) identifies C1–C7 implementation
-and independent review exits. Strict compilation of all 155 contract schemas
-checks composition only.
+and independent review exits. Current strict compilation of all 158 contract schemas
+checks composition only; the retained 155-schema receipt below is historical.
 
 Remaining design priorities are coherent installation/report/receipt/feed
 composition, independently reviewed complete cases and method/observer
