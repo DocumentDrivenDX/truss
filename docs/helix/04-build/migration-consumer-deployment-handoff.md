@@ -24,6 +24,31 @@ transaction for the entire transactional route. The framework must not supply
 application credentials as administrative authority, wrap apply in its own
 transaction, or treat its migration history row as Truss commit evidence.
 
+### Decide which deployment operation is required
+
+Release preparation compares the exact required installed inventory and retained
+encoding/interpretation obligations, rather than treating every dependency
+version change as a layout migration. This is engineering classification under
+CONTRACT-008; it neither permits automatic DDL nor creates a new runtime API.
+
+| Proposed change | Existing required route |
+| --- | --- |
+| Ordinary accepted UMF model revision | Catalog acceptance and its full validation/report/head protocol; fixed physical layout and migration ledger remain unchanged |
+| Policy or execution configuration update within the admitted installed profile | Security/configuration owner's explicit protected transition, current-context invalidation and publication rules; no hidden routine replacement or layout marker advance |
+| Python/TypeScript/Weft package update with the same required installed inventory and retained meaning | Admit the exact new host/compiler/backend tuple through its supported compatibility matrix; no database upgrade follows from package version alone |
+| Required table, column, constraint, index, installed routine, grant or retained encoding change | Registered Truss administrative upgrade/conversion with original source/target, complete preservation, exclusion, settlement and verification; unchanged table count cannot exempt a changed routine or codec |
+| Restore/fork or drifted installation | Existing restore/incarnation or explicit qualified repair/recovery procedure; neither ordinary acceptance nor repeating an already committed migration supplies the missing provenance |
+
+An upstream schema/semantic version change is not enough to decide which row
+applies. The selected owner interpretation must establish compatibility and any
+required conversion first. Preserve original policy/model/profile bytes and
+unknown content; do not relabel retained input to avoid a migration. Unsupported
+new meaning keeps the affected capability unavailable until its exact tuple is
+admitted. LM-T02 and the M5 clean deployment example must independently show
+ordinary model/package evolution causes no physical migration, while a required
+routine-only upgrade cannot bypass the registered route. These are planned
+qualification controls, not support for an unselected upstream version.
+
 First call the draft migration `status` and `verify` procedures under their
 original registered inspection/resource profiles to observe and independently
 verify the complete actual installed source. These methods remain unimplemented;
