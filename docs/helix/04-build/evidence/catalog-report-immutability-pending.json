@@ -10,5 +10,7 @@
     "errorCode": "ERR_POSTGRES_CONNECTION_TIMEOUT",
     "detail": "Startup sent; no database response within five seconds. No infrastructure restart."
   },
-  "scope": "Draft immutable report byte-home guard and runnable temporary-fixture schedule; no executed native guard qualification."
+  "scope": "Draft immutable report byte-home guard and runnable temporary-fixture schedule; no executed native guard qualification.",
+  "supersededBy": "catalog-report-immutability.json",
+  "note": "Historical startup timeouts retained; subsequent native temporary guard check passed eight observations and full component installation passed seventy checks."
 }

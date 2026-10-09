@@ -1,0 +1,15 @@
+{
+  "engine": "17.9 (Debian 17.9-1.pgdg13+1)",
+  "checks": [
+    "origin: UPDATE refused",
+    "origin: DELETE refused",
+    "origin: TRUNCATE refused",
+    "replica: UPDATE refused",
+    "replica: DELETE refused",
+    "replica: TRUNCATE refused",
+    "original byte inventory preserved after all refusals",
+    "both triggers ENABLE ALWAYS"
+  ],
+  "sourceSha256": "c243b51682de3fee979b977626bb54279eccb3de22a24270e0bda467bd215167",
+  "scope": "Actual native immutable report byte-home trigger in temporary fixture. No insert admission, accepted report, full privilege/dependency installation, retention or head publication qualification."
+}

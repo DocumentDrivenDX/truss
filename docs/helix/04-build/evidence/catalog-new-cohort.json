@@ -22,7 +22,8 @@
     "catalog-prestate-capture": "53645d129b85ce6c6c92a5ae88cb3be2f82640ee952e55f4f3dce6463b0e77a6",
     "catalog-new-prestate-parity": "10fa8d6172757bb942f750fba582e88595b90190c920e97624e0cc0635cb15f7",
     "catalog-new-counts": "4d2962d3b8e1391ad9c97f6fdc2da7e0343463a6e2f4b7c9a1060603b6dab166",
-    "catalog-provisional-empty": "754c3c53534a5a30d935a1942da903692c488aab3cd7fed3c0c5231c835f65c8"
+    "catalog-provisional-empty": "754c3c53534a5a30d935a1942da903692c488aab3cd7fed3c0c5231c835f65c8",
+    "catalog-report-immutability": "c243b51682de3fee979b977626bb54279eccb3de22a24270e0bda467bd215167"
   },
   "reportPreparationProducerSha256": "8da357fac30b9c24df296f5e64a4dab34b7b2b4d0cd5c4bfc2c1ebad0d34a433",
   "assertionProfiles": {
@@ -50,6 +51,7 @@
   "checks": [
     "actual PostgreSQL17.9",
     "eleven ALWAYS catalog generation observers installed",
+    "both immutable report guards installed with ALWAYS dispatch",
     "catalog prestate refuses upgrade of earlier shared head admission",
     "actual original empty catalog start cut captured under head exclusion",
     "original native prestate bytes retained unchanged in operation custody",
