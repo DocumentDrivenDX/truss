@@ -29,14 +29,36 @@ test('complete owner observation coverage detects omission, replacement and chan
  const {loadUmfFieldAssertionProducer}=await import('../packages/umf-bun/src/index');const {assessCatalogObservationCoverage}=await import('../packages/umf-bun/src/catalog-observation-coverage');
  const input=await prepared('0.7.0'),fields=await loadUmfFieldAssertionProducer(directory),collection=collectCatalogAssertionObservations(input,metadata,fields);
  const coverage=assessCatalogObservationCoverage(input,collection);expect(coverage.observationsRequired).toBe('14');expect(coverage.availability).toBe('available');expect(coverage.unavailable).toEqual([]);
- expect(()=>assessCatalogObservationCoverage(input,{...collection,fieldProfile:null})).toThrow('Field observation bundle');
- expect(()=>assessCatalogObservationCoverage(input,{...collection,observations:collection.observations.slice(1)})).toThrow('inventory');
- const duplicate=[...collection.observations];duplicate[1]=duplicate[0];expect(()=>assessCatalogObservationCoverage(input,{...collection,observations:duplicate})).toThrow('identity/basis');
- const changed=[...collection.observations];changed[0]={...changed[0],evidence:{...changed[0].evidence,sha256:'0'.repeat(64)}};expect(()=>assessCatalogObservationCoverage(input,{...collection,observations:changed})).toThrow('evidence correspondence');
+ expect(()=>assessCatalogObservationCoverage(input,{...collection,fieldProfile:null})).toThrow('collection custody');
+ expect(()=>assessCatalogObservationCoverage(input,{...collection,observations:collection.observations.slice(1)})).toThrow('collection custody');
+ const duplicate=[...collection.observations];duplicate[1]=duplicate[0];expect(()=>assessCatalogObservationCoverage(input,{...collection,observations:duplicate})).toThrow('collection custody');
+ const changed=[...collection.observations];changed[0]={...changed[0],evidence:{...changed[0].evidence,sha256:'0'.repeat(64)}};expect(()=>assessCatalogObservationCoverage(input,{...collection,observations:changed})).toThrow('collection custody');
 });
 test('full observation occurrence coverage cannot turn unavailable 0.8 APIs into available meaning',async()=>{
  const directory=process.env.TRUSS_UMF_FIELD_ASSERTION_PRODUCER;if(!directory)throw Error('Field assertion producer required');
  const {loadUmfFieldAssertionProducer}=await import('../packages/umf-bun/src/index');const {assessCatalogObservationCoverage}=await import('../packages/umf-bun/src/catalog-observation-coverage');
  const input=await prepared('0.8.0'),fields=await loadUmfFieldAssertionProducer(directory),collection=collectCatalogAssertionObservations(input,metadata,fields),coverage=assessCatalogObservationCoverage(input,collection);
  expect(coverage.observationsRequired).toBe('14');expect(coverage.availability).toBe('incomplete');expect(coverage.unavailable.some(o=>o.operation==='relationships'&&o.code==='RELATIONSHIP_RESULT')).toBe(true);expect(BigInt(coverage.observationsAvailable)).toBeLessThan(14n);expect(coverage.scope).toBe('original_owner_observation_correspondence_only');
+});
+
+
+test('self-consistent reconstructed evidence and byte-identical input cannot borrow collection custody',async()=>{
+ const directory=process.env.TRUSS_UMF_FIELD_ASSERTION_PRODUCER;if(!directory)throw Error('Field assertion producer required');
+ const {loadUmfFieldAssertionProducer}=await import('../packages/umf-bun/src/index');const {assessCatalogObservationCoverage}=await import('../packages/umf-bun/src/catalog-observation-coverage');
+ const input=await prepared('0.7.0'),fields=await loadUmfFieldAssertionProducer(directory),collection=collectCatalogAssertionObservations(input,metadata,fields);
+ expect(()=>assessCatalogObservationCoverage(input,structuredClone(collection))).toThrow('collection custody');
+ const reconstructed=structuredClone(collection),observed=reconstructed.observations[0];observed.result={state:'observed',observation:{invented:true}};
+ const content=JSON.parse(Buffer.from(observed.evidence.bytesBase64,'base64').toString());content.result=observed.result;const bytes=Buffer.from(JSON.stringify(content));observed.evidence.bytesBase64=bytes.toString('base64');observed.evidence.sha256=new Bun.CryptoHasher('sha256').update(bytes).digest('hex');
+ expect(()=>assessCatalogObservationCoverage(input,reconstructed)).toThrow('collection custody');
+ const duplicateInput=await prepared('0.7.0');expect(duplicateInput.original.originalUtf8Hex).toBe(input.original.originalUtf8Hex);
+ expect(()=>assessCatalogObservationCoverage(duplicateInput,collection)).toThrow('collection custody');
+ expect(assessCatalogObservationCoverage(input,collection).availability).toBe('available');
+});
+
+
+test('collection cannot issue observations from copied or substituted owner callbacks',async()=>{
+ const input=await prepared('0.7.0');expect(()=>collectCatalogAssertionObservations(input,{...metadata})).toThrow('loaded assertion owner');
+ const directory=process.env.TRUSS_UMF_FIELD_ASSERTION_PRODUCER;if(!directory)throw Error('Field assertion producer required');
+ const {loadUmfFieldAssertionProducer}=await import('../packages/umf-bun/src/index');const fields=await loadUmfFieldAssertionProducer(directory);
+ expect(()=>collectCatalogAssertionObservations(input,metadata,{...fields,inspectFacets:()=>({meaning:{state:'known'}})})).toThrow('loaded assertion owner');
 });

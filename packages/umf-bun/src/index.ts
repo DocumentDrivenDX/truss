@@ -1,5 +1,11 @@
 /** Trusted host-only original producer registration. No alternate UMF validation. */
 import {resolve} from 'node:path';
+const assertionOwners=new WeakMap<object,'declarations'|'assertion-fields'>();
+function registerAssertionOwner<T extends object>(owner:T,mode:'declarations'|'assertion-fields'):T{assertionOwners.set(owner,mode);return owner;}
+/** Private loaded-instance recognition; no external issuer or native qualification. */
+export function requireLoadedUmfAssertionOwner(owner:object,mode:'declarations'|'assertion-fields'):void{
+ if(assertionOwners.get(owner)!==mode)throw Error('Original loaded assertion owner required');
+}
 export const UMF_RUNTIME_SOURCE='c45c72a2a8a3c4fba61c40c5927dd9091acf8cc3';
 export async function loadUmfProducer(directory:string){
  const {hash,captured}=await loadPinnedFunctions(directory,UMF_RUNTIME_SOURCE,'record',['readDocument','validateDocument','validateCoreRecordValues','upgradeSchemaPropertiesEnvelope','verifySchemaPropertiesUpgrade','rollbackSchemaPropertiesEnvelope']);
@@ -45,9 +51,9 @@ export async function loadUmfValueProducer(directory:string){
 /** Owner-defined metadata meaning; separate bundle from value checks and native claims. */
 export async function loadUmfDeclarationProducer(directory:string){
  const {hash,captured}=await loadPinnedFunctions(directory,UMF_RUNTIME_SOURCE,'declarations',['inspectCoreSchemaProperties','inspectCoreKeys','inspectCoreRelationships']);
- return Object.freeze({sourceRevision:UMF_RUNTIME_SOURCE,bundleSha256:hash,
+ return registerAssertionOwner(Object.freeze({sourceRevision:UMF_RUNTIME_SOURCE,bundleSha256:hash,
   inspectSchemaProperties:captured.inspectCoreSchemaProperties,
-  inspectKeys:captured.inspectCoreKeys,inspectRelationships:captured.inspectCoreRelationships});
+  inspectKeys:captured.inspectCoreKeys,inspectRelationships:captured.inspectCoreRelationships}),'declarations');
 }
 async function loadPinnedFunctions(directory:string,revision:string,mode:string,names:readonly string[]){
  const root=resolve(directory);const manifest=await Bun.file(root+'/producer-manifest.json').json();
@@ -62,7 +68,7 @@ async function loadPinnedFunctions(directory:string,revision:string,mode:string,
 /** Original Field assertion meaning, not installation or enforcement evidence. */
 export async function loadUmfFieldAssertionProducer(directory:string){
  const {hash,captured}=await loadPinnedFunctions(directory,UMF_RUNTIME_SOURCE,'assertion-fields',['inspectCoreElementKind','inspectCoreNullability','inspectCoreCardinality','inspectCoreFacets']);
- return Object.freeze({sourceRevision:UMF_RUNTIME_SOURCE,bundleSha256:hash,
+ return registerAssertionOwner(Object.freeze({sourceRevision:UMF_RUNTIME_SOURCE,bundleSha256:hash,
   inspectKind:captured.inspectCoreElementKind,inspectNullability:captured.inspectCoreNullability,
-  inspectCardinality:captured.inspectCoreCardinality,inspectFacets:captured.inspectCoreFacets});
+  inspectCardinality:captured.inspectCoreCardinality,inspectFacets:captured.inspectCoreFacets}),'assertion-fields');
 }

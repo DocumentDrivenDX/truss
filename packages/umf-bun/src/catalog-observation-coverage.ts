@@ -1,10 +1,11 @@
 /** Observation correspondence only: never an enforcement or complete assertion report. */
 import {createHash} from 'node:crypto';
 import type {createCatalogInputPreparation} from './catalog-input';
-import type {collectCatalogAssertionObservations} from './catalog-assertion-observations';
+import {requireOriginalCatalogObservationCollection,type collectCatalogAssertionObservations} from './catalog-assertion-observations';
 type Prepared=ReturnType<Awaited<ReturnType<typeof createCatalogInputPreparation>>['prepare']>;
 type Collection=ReturnType<typeof collectCatalogAssertionObservations>;
 export function assessCatalogObservationCoverage(prepared:Prepared,collection:Collection){
+ requireOriginalCatalogObservationCollection(prepared,collection);
  if(!collection.fieldProfile)throw Error('Complete Field observation bundle required');
  for(const [profile,identity] of [[collection.profile,'umf-declaration-inspection'],[collection.fieldProfile,'umf-field-assertion-inspection']] as const)
   if(profile.identity!==identity||profile.version!==prepared.umfProfile.version||!/^[0-9a-f]{64}$/.test(profile.sha256))throw Error('Original observation profile correspondence required');

@@ -1,10 +1,17 @@
 /** Owner observations for report preparation, never complete assertion/enforcement admission. */
 import {createHash} from 'node:crypto';
 import type {createCatalogInputPreparation} from './catalog-input';
-import type {loadUmfDeclarationProducer,loadUmfFieldAssertionProducer} from './index';
+import {requireLoadedUmfAssertionOwner,type loadUmfDeclarationProducer,type loadUmfFieldAssertionProducer} from './index';
 type Prepared=ReturnType<Awaited<ReturnType<typeof createCatalogInputPreparation>>['prepare']>;
+const originalCollections=new WeakMap<object,Prepared>();
+/** Private in-process issuance correspondence; not native or durable authority. */
+export function requireOriginalCatalogObservationCollection(prepared:Prepared,collection:object):void{
+ if(originalCollections.get(collection)!==prepared)throw Error('Original observation collection custody required');
+}
 type Owner=Awaited<ReturnType<typeof loadUmfDeclarationProducer>>;
 export function collectCatalogAssertionObservations(prepared:Prepared,owner:Owner,fields?:Awaited<ReturnType<typeof loadUmfFieldAssertionProducer>>){
+ requireLoadedUmfAssertionOwner(owner,'declarations');
+ if(fields)requireLoadedUmfAssertionOwner(fields,'assertion-fields');
  if(owner.sourceRevision!==prepared.umfProfile.version)throw Error('Original owner observation source mismatch');
  if(fields&&fields.sourceRevision!==prepared.umfProfile.version)throw Error('Original Field owner observation source mismatch');
  const fieldProfile=fields?Object.freeze({identity:'umf-field-assertion-inspection',version:fields.sourceRevision,sha256:fields.bundleSha256}):null;
@@ -35,5 +42,6 @@ export function collectCatalogAssertionObservations(prepared:Prepared,owner:Owne
   }
  }
  function freeze(value:unknown):void{if(value&&typeof value==='object'){for(const child of Object.values(value))freeze(child);Object.freeze(value)}}freeze(observations);
- return Object.freeze({profile,fieldProfile,observations:Object.freeze(observations),scope:'original_owner_assertion_observations_only' as const});
+ const collection=Object.freeze({profile,fieldProfile,observations:Object.freeze(observations),scope:'original_owner_assertion_observations_only' as const});
+ originalCollections.set(collection,prepared);return collection;
 }
