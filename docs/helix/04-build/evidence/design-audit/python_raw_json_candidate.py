@@ -27,8 +27,9 @@ class RetainedJson:
 
 def parse_retained_json(source: bytes | bytearray, *, maximum_bytes: int,
                         maximum_depth: int, maximum_nodes: int,
-                        preserve_byte_document_nul: bool = False) -> RetainedJson:
-    if type(preserve_byte_document_nul) is not bool or type(source) not in (bytes, bytearray) or any(
+                        preserve_byte_document_nul: bool = False,
+                        maximum_members: int | None = None) -> RetainedJson:
+    if (maximum_members is not None and (type(maximum_members) is not int or maximum_members <= 0)) or type(preserve_byte_document_nul) is not bool or type(source) not in (bytes, bytearray) or any(
         type(bound) is not int or bound <= 0
         for bound in (maximum_bytes, maximum_depth, maximum_nodes)
     ) or maximum_depth > 128 or len(source) > maximum_bytes:
@@ -36,9 +37,18 @@ def parse_retained_json(source: bytes | bytearray, *, maximum_bytes: int,
     original = bytes(source)
     text = original.decode("utf-8", errors="strict")
     depth = preflight_nodes = index = 0
+    containers = []
+
+    def charge_member():
+        if containers:
+            containers[-1][1] += 1
+            if maximum_members is not None and containers[-1][1] > maximum_members:
+                raise ValueError("Selected JSON container member count exceeded before parsing")
 
     def charge_node():
         nonlocal preflight_nodes
+        if containers and containers[-1][0] == "[":
+            charge_member()
         preflight_nodes += 1
         if preflight_nodes > maximum_nodes:
             raise ValueError("Selected JSON node count exceeded before parsing")
@@ -49,10 +59,13 @@ def parse_retained_json(source: bytes | bytearray, *, maximum_bytes: int,
         char = text[index]
         if char in "[{":
             charge_node()
+            containers.append([char, 0])
             depth += 1
             if depth > maximum_depth:
                 raise ValueError("Selected JSON depth exceeded before parsing")
         elif char in "]}":
+            if containers:
+                containers.pop()
             depth -= 1
         elif char == '"':
             index += 1
@@ -73,6 +86,8 @@ def parse_retained_json(source: bytes | bytearray, *, maximum_bytes: int,
             # by the whole source bound; syntax validation checks actual context.
             if following == len(text) or text[following] != ":":
                 charge_node()
+            elif containers and containers[-1][0] == "{":
+                charge_member()
         elif char not in " \t\r\n,:":
             charge_node()
             while index + 1 < len(text) and text[index + 1] not in " \t\r\n,]}:":

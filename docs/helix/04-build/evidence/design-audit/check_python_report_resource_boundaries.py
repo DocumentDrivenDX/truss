@@ -15,7 +15,7 @@ large_members=candidate()
 large_members['documents']=[{'doc_id': 'doc'+str(i), 'doc_revision':'r1',
     'content_sha256':'a'*64, 'ord':str(i)} for i in range(4097)]
 large_scalar=candidate();large_scalar['lifecycleProfile']['identity']='x'*65537
-controls=[('per-container-members-not-yet-aligned',wire(large_members),True,False),
+controls=[('per-container-members-now-refuse-in-both-hosts',wire(large_members),False,False),
           ('host-codec-pass-does-not-admit-native-scalar-capacity',wire(large_scalar),True,True)]
 packets=[{'name':name,'bytesBase64':base64.b64encode(source).decode()} for name,source,_,_ in controls]
 with tempfile.TemporaryDirectory(prefix='truss-report-resources-') as temporary:
@@ -36,8 +36,8 @@ if len(ts)!=len(controls):raise RuntimeError('Complete original case membership 
 files=[Path(__file__),HERE/'check-python-report-interchange.ts',HERE/'python_report_wire_candidate.py',
        HERE/'python_raw_json_candidate.py',ROOT/'packages/postgresql/src/acceptance-json.ts',
        ROOT/'packages/postgresql/src/canonical-wire-tree.ts',ROOT/'packages/postgresql/native/canonical-string-bytes.sql']
-receipt={'status':'observed_expected_profile_gaps','results':results,
+receipt={'status':'observed_container_alignment_and_remaining_native_gap','results':results,
          'sourceSha256':{str(p.relative_to(ROOT)):sha256(p.read_bytes()).hexdigest() for p in files},
-         'scope':'Two intentionally distinct candidate resource outcomes. Synthetic shape-valid documents do not establish complete report semantics. Native scalar 65536-byte declaration inspected; no native invocation performed. Neither shared resource profile nor cross-host native support is qualified.'}
-(HERE/'python-report-resource-boundaries.json').write_text(json.dumps(receipt,indent=2)+'\n')
-print('2 resource-boundary distinctions observed; shared profile remains unadopted')
+         'scope':'Aligned container refusal and remaining host/native scalar capacity boundary. Synthetic shape-valid documents do not establish complete report semantics. Native scalar 65536-byte declaration inspected; no native invocation performed. Neither shared resource profile nor cross-host native support is qualified.'}
+(HERE/'python-report-resource-boundaries-container-aligned.json').write_text(json.dumps(receipt,indent=2)+'\n')
+print('Container refusal aligned; native scalar resource gap remains')

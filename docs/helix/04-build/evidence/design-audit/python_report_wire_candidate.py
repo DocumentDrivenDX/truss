@@ -48,7 +48,7 @@ class ReportWireCandidate:
     def prepare(self, source: bytes | bytearray) -> ReportWire:
         retained = parse_retained_json(source, maximum_bytes=1048576,
                                        maximum_depth=128, maximum_nodes=100000,
-                                       preserve_byte_document_nul=True)
+                                       preserve_byte_document_nul=True, maximum_members=4096)
 
         def view(value):
             if isinstance(value, JsonNumberToken):

@@ -606,9 +606,9 @@ separate.
 
 The [resource-boundary probe](../04-build/evidence/design-audit/check_python_report_resource_boundaries.py)
 retains [two observed distinctions](../04-build/evidence/design-audit/python-report-resource-boundaries.json),
-separate from the 39 small shared wire controls. Python accepts a shape-valid
-4,097-member document array that the TypeScript decoder refuses under its current
-4,096-member limit. Both host codecs accept a 65,537-byte scalar while the inspected
+separate from the 39 small shared wire controls. The original source-pinned probe observed Python accepting a shape-valid
+4,097-member document array that TypeScript refused under its 4,096-member limit;
+the subsequent container correction below addresses that one discrepancy. Both host codecs accept a 65,537-byte scalar while the inspected
 private native canonical-string component declares a 65,536-byte source limit.
 The probe does not invoke that native function or qualify its effects. Its synthetic
 large report intentionally cannot establish complete accepted-input/report semantics.
@@ -648,3 +648,27 @@ effects; original unknown submission/commit retains recovery/quarantine separate
 Actual source/native/driver/resource and security-owner admission still precede
 support. This is an execution-ready composition task, not a second UMF codec or
 Weft compiler responsibility.
+
+
+### Python report container preflight correction
+
+The retained-JSON candidate now offers an explicitly selected per-container member
+bound. The report candidate selects4096, matching the inspected TypeScript decoder.
+Lexical preflight charges each array value and each object member before json.loads;
+it keeps separate counters for nested containers and does not count quoted commas,
+brackets or escaped quotes as structure. The generic candidate's prior default
+remains unchanged when this additional bound is not selected.
+
+Nineteen Python codec tests pass, including above-bound array/object/nested cases
+with zero decoder calls, exact-bound nested containers and invalid bound types.
+All 39 shared report controls pass again under updated source hashes. The
+[new boundary receipt](../04-build/evidence/design-audit/python-report-resource-boundaries-container-aligned.json)
+records both hosts refusing the 4,097-member report and retains the remaining
+host/native scalar-capacity case. The earlier discrepancy receipt stays historical.
+
+This closes the observed container-admission difference only. TypeScript's parser
+work, canonical-tree tasks and carrier limits, Python validator/temporary-view
+allocation, native scalar/output admission and complete shared precharging still
+require the full composition above. A caller-selected counter is not an original
+registered operation account or a public capability. No report field is omitted,
+no native constant is raised and no acceptance effect is enabled by this correction.

@@ -44,6 +44,19 @@ class RawJsonCandidateTests(unittest.TestCase):
         self.assertEqual(len(parse(b'["string",false,1.00]', maximum_nodes=4).value), 3)
         self.assertEqual(len(parse(b'{"a":null,"b":null}', maximum_nodes=3).value.entries), 2)
 
+    def test_each_container_member_bound_precedes_decoder_and_does_not_count_nested_descendants(self):
+        for source in (b'[null,null,null]', b'{"a":null,"b":null,"c":null}',
+                       b'[{"a":null,"b":null,"c":null}]'):
+            with patch("python_raw_json_candidate.json.loads") as decoder:
+                with self.assertRaisesRegex(ValueError, 'member count'):
+                    parse(source, maximum_members=2)
+                decoder.assert_not_called()
+        self.assertEqual(len(parse(b'[[null,null],[null,null]]', maximum_members=2).value), 2)
+        self.assertEqual(len(parse(b'{"a":[null,null],"b":{}}', maximum_members=2).value.entries), 2)
+        self.assertEqual(dict(parse(b'{"a":"[,{\\\"", "b":null}', maximum_members=2).value.entries)['b'], None)
+        for bound in [0, True, 1.5]:
+            with self.assertRaises(ValueError): parse(b'null', maximum_members=bound)
+
     def test_all_original_vector_bytes_and_token_inventories(self):
         root = Path(__file__).resolve().parents[2]
         fixture = json.loads((root / "../03-test/python-raw-json-vectors.proposal.json").read_text())
