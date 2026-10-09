@@ -8,6 +8,13 @@ services. Governed inputs are CONTRACT-004/007/011, US/TD/STP-027/028, the case
 grammar and operation registry proposals. Reuse those APIs; no second runner,
 qualification authority or public transaction-by-ID service is needed.
 
+The [combined schema receipt](evidence/design-audit/schema-inventory-runtime-handoff-2026-10-09.json)
+records strict registration, reference resolution and compilation of all 155
+top-level contract schemas, including the case argument and operation registry
+descriptors added for this handoff. It reports zero errors. This verifies schema
+composition only; it does not implement the runner, establish observer independence
+or qualify an operation against PostgreSQL or another implementation.
+
 ## Implementation sequence and independent exits
 
 | Slice | Concrete implementation output | Required exit |
