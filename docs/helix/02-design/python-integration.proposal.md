@@ -511,8 +511,6 @@ metadata/cell/command expectations. It performs no network access and never
 rewrites the receipt. Passing this sixth test is saved-evidence correspondence,
 not a fresh native run or driver qualification.
 
-#### libpq receive-path qualification correction
-
 #### Full-report wire capacity before driver selection
 
 The frame candidate's one-MiB limit cannot transport the existing four-MiB
@@ -540,6 +538,8 @@ uses a complete otherwise valid single-cell frame at 1,048,576/1,048,577 bytes;
 it confirms the prototype limit rather than attributing oversized refusal to
 malformed input. The existing saved native receipt remains unchanged and scoped
 to its small read-only result.
+
+#### libpq receive-path qualification correction
 
 Review of PostgreSQL
 [REL_17_9 fe-misc.c](https://raw.githubusercontent.com/postgres/postgres/REL_17_9/src/interfaces/libpq/fe-misc.c)
