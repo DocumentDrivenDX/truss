@@ -1126,7 +1126,7 @@
     "01-frame/user-stories/US-014-keep-cross-row-rules-honest.md": "8877f279733b9ac9d3502771a5f07271bd7a7034bc86f7c9019b37a49d712f1a",
     "01-frame/user-stories/US-015-journal-every-change-atomically.md": "ea53eb7ff161f901cc34c304e5832dbfb9ba7a3b2409b14bb9f5d3739ebe59dc",
     "01-frame/user-stories/US-016-journal-plain-sql-changes-too.md": "5aac46f1d4b0f8b76211b82ae0ab52f4f624871fc38bc58cbd386e906f945e90",
-    "01-frame/user-stories/US-017-read-the-journal-incrementally-without-missing-a-change.md": "b18c41af7e2fb33dd2878804d5907cde5962b66bd984833b6e5dd2a6e6666bec",
+    "01-frame/user-stories/US-017-read-the-journal-incrementally-without-missing-a-change.md": "854dd8e82a9c08f817ac0f6fc26e59d2ffc0dec21212e90edb76348aaa2bf885",
     "01-frame/user-stories/US-018-reconstruct-a-record-as-of-a-version.md": "32dd185f39c695fd7b6e5732cded3dcd355cc5ef95345e8c88061c18f6be4555",
     "01-frame/user-stories/US-019-trim-the-journal-by-dropping-partitions.md": "cf3670097a6c702eb8fc3aa8047d48d54eb2c99efa14101a3b773888e7c81feb",
     "01-frame/user-stories/US-020-read-an-object-by-id-or-key.md": "86ed160b149e9b7d5e54d84cabab6cfcb5e154406ede31f5acd72af003717876",

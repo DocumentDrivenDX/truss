@@ -29,7 +29,7 @@ ddx:
 
 ## Context
 
-Sequence numbers are assigned at insert, not commit, so a later number can become visible first.
+Sequence numbers are assigned at insert, not commit, so a later number can become visible first. Stable order is the exact numeric `(xid, seq)` pair below a safe watermark observed coherently with the selected rows; it is transaction-ID assignment order, not commit chronology. Continuation retains the original source epoch, profile, scope and consistency context. An empty page is an observation at that safe boundary, not proof that no future change exists or that a downstream copy has applied everything. Retention gaps, incompatible epochs, missing complete event evidence or unavailable authority refuse rather than advancing a cursor across unknown history.
 
 ## Walkthrough
 
@@ -37,7 +37,7 @@ Sequence numbers are assigned at insert, not commit, so a later number can becom
 2. Transaction B writes a later row and commits.
 3. Consumer reads.
 4. System withholds B's row.
-5. A commits; the consumer reads again and gets both in order.
+5. A commits; a new qualified observation whose watermark has passed both transactions returns their rows in `(xid, seq)` order. A caller-held old snapshot does not become fresh merely by repeating the call.
 
 ## Acceptance Criteria
 
@@ -48,7 +48,7 @@ Sequence numbers are assigned at insert, not commit, so a later number can becom
 ## Edge Cases
 
 - **Using the sequence number or timestamp as a watermark**: unsafe and not permitted.
-- **Long-running transaction**: delays the consumer; documented.
+- **Long-running transaction**: delays the safe prefix even if unrelated to Truss. Polling never commits or replaces the caller’s transaction to manufacture progress. Journal page delivery does not acknowledge complete feed application or move a durable consumer checkpoint.
 
 ## Test Scenarios
 
