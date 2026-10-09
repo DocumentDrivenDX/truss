@@ -22,6 +22,15 @@ remain implementation outputs. Do not reopen the already specified 24-hour
 receipt minimum or confuse it with journal retention; its native realization
 and receipt-position comparison evidence remain required.
 
+The chronological seventeen-field report inventory below describes the baseline
+0.1 schema only. The selected combined reference requires nineteen fields under
+the existing 0.3 lifecycle/history report, adding lifecycleProfile/reactivations
+and using 0.2 rebind events. The
+[current acceptance handoff](acceptance-runtime-handoff.md#current-implementation-boundary)
+supersedes any older claim that completing the baseline inventory closes full
+acceptance. The compatible codec and original lifecycle producers remain open;
+preserve older component receipts at their actual scope.
+
 A fresh fetch on 2026-10-09 confirms the committed coordination baselines remain
 UMF `1f7b5f5d2a355c4b476e3a96b289b9048f03f567` and Weft
 `5856c73db0342363e64802905a94abb96209d757`. Uncommitted owner changes remain
