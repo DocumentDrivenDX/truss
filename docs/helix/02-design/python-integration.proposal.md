@@ -374,6 +374,47 @@ Reuse the shared port and original authority instead of creating a Python-only
 transaction/identity protocol. Unsupported sync/async modes remain explicitly
 unavailable until separately qualified.
 
+### Psycopg candidate review — 2026-10-09
+
+Source review targets the tagged
+[Psycopg 3.2.12 ctypes wrapper](https://raw.githubusercontent.com/psycopg/psycopg/3.2.12/psycopg/psycopg/pq/pq_ctypes.py),
+not an installed or qualified build. `PGresult.ftype()` and `fformat()` expose
+ordered column metadata; `get_value()` copies the native cell using its length
+and distinguishes SQL NULL from empty bytes. `consume_input()` delegates to
+`PQconsumeInput`; `get_result()` delegates to `PQgetResult`. These wrapper paths
+do not provide the shared port's pre-read reservation or complete-frame parser
+entry. The [official module documentation](https://www.psycopg.org/psycopg3/docs/api/pq.html)
+identifies libpq as the network/result owner and distinguishes Python, C and
+binary implementations. That live development documentation is explanatory,
+not a version pin for this candidate.
+
+The result layer is a plausible exact-value adapter. Ingress qualification is
+still incomplete; this review neither rules out a libpq-backed implementation
+nor establishes that a native bridge is sufficient. PY-01 must first select
+one actual implementation and libpq source/build, then inspect its receive,
+TLS, parser and allocation paths against the shared producer port. A Python
+wrapper around these two calls cannot infer the missing observations afterward.
+
+The execution packet must supply:
+
+1. An exact driver/libpq build and one supported execution mode, with original
+   lease ownership and an identified producer for every shared-port operation.
+2. A source-backed finite bound for retained receive/parser/capture capacity,
+   including simultaneous native and Python cell copies; accounting must reserve
+   before work and release only when the corresponding backing is released.
+3. Independent oversized, partial-frame, malformed-field, parser/callback-fault
+   and cancellation cases, proving refusal before publication and preserving
+   possible effects until native termination is established.
+4. Host-transaction adoption and reconnect refusal cases on the same physical
+   connection. Result metadata and transaction status alone do not prove the
+   original lease or safe reuse.
+
+If these cannot be produced for the selected stock driver, identify the smallest
+transport change that supplies them and qualify it independently. Keep Python
+orchestration, Weft compilation and security-owned enforcement at their existing
+boundaries. No package recommendation or supported-driver claim is adopted by
+this source review; native execution remains not run.
+
 Use Python `int` for admitted integral domains and `Decimal` constructed from exact text for decimals, with domain/arithmetic context explicit. Driver raw cells remain text until profile decoding. Decimal operations must not inherit an ambient low-precision context that rounds accepted values. Timestamp transport retains the original exact text and offset; expose an aware `datetime` only when its microsecond representation is lossless. Finer precision requires a lossless wrapper/text representation or explicit refusal of the convenience view. Preserve raw exact JSON bytes; a convenience parser uses an admitted numeric decoder, never the default float path. Python bool must be distinguished from int at validation boundaries.
 
 Read shapes retain absent versus explicit null, ordered key components, exact large integral values and original selected decimal/token meaning. Known JSON-like values and retained unknown extensions cannot be normalized into different meanings. Exact wire grammar remains CONTRACT-010's responsibility; these mappings are Python implementation obligations, not new UMF types.
