@@ -130,6 +130,24 @@ Do not copy the owner's working fixture into a release until its source/profile
 and complete expectations are published and admitted. These integration cases
 remain `not_run` and preserve security interpretation/lowering ownership.
 
+The owner's revision-13 continuation now drafts policy 0.2.0. Read-only source
+inspection of `docs/helix/02-design/spikes/security/policy-v0.2.schema.json`
+confirms its title explicitly excludes public admission; `exists.association`
+distinguishes full Record references from qualified Relationship references
+using relationshipId. This changes a candidate source meaning, not Truss's
+selected compiler/security registration. Existing policy 0.1 and Weft's draft
+security request must not inherit 0.2 support by matching a local identifier.
+
+Before adoption, C2/C4 require owner-supplied original transition/source artifacts
+and independent cases for preserved 0.1 content, explicit 0.2 relationship
+selection, ambiguous/mixed reference kinds, unknown required semantics and
+unsupported compiler/backend interpretation. Preserve complete authored unknown
+content and the owner's loss/incomplete report; never strip a relationship
+selector, rewrite it to a Record or fallback to an older policy to obtain SQL.
+Unsupported selected meaning refuses before native execution. Positive lowering
+and native enforcement remain independently qualified against the same original
+versioned source/profile. No policy migration implementation belongs in Truss.
+
 Before C3 native work, assemble one immutable independent case packet for each
 required operation/boundary family plus the selected full corpus manifest.
 Include forbidden overload results, wrong input/result profile, changed native
