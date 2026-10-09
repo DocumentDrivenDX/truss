@@ -1,0 +1,13 @@
+{
+  "sourceHashes": {
+    "packages/umf-bun/src/catalog-report-preparation.ts": "a8892ccc31e9f9d3e29359c3990e755ba18cc49896a2d5121ed1084d9e41e4de",
+    "tests/catalog-report-preparation.test.ts": "e3866e2f65f0038763bd3a767b5a7d1f838e984cb168305df576dd47291db188",
+    "scripts/check-catalog-new-cohort.ts": "ca3819f8da03e385ad2ed6df936d0dc640aca07d72251df47f336075137674e9"
+  },
+  "runtime": "Bun 1.4.2",
+  "hostTests": 4,
+  "hostAssertions": 17,
+  "nativeReceipt": "catalog-new-cohort.json",
+  "nativeChecks": 64,
+  "scope": "Private original new-only report preparation composition. Counts/documents have original native-cut correspondence; owner interpretation availability stays distinct from complete assertion/enforcement/report/commit authority."
+}
