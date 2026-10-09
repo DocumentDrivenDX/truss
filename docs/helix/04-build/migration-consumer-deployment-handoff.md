@@ -110,3 +110,23 @@ Consume the owner’s final registered ordering and evidence in LM-T06/LM-P01–
 Do not hard-code the tentative repair into a second Truss lease service or infer
 that a native lock timeout proves publication retirement. Earlier drain receipts
 retain their original scope and cannot prove this newly identified interleaving.
+
+The subsequent read-only owner checkpoint inspected
+`docs/helix/04-build/evidence/security/pg-raw-persistent-drain-component.json`
+in the security worktree: SHA-256
+`9de0d6d9a819dbe03a324ad70920561b99bf7dd76b50cdbb01f4c9898eaec0df`,
+status passed, 1,196 recorded observations, all 87 recorded source hashes matching
+current files. Truss did not rerun these native tests. The receipt expressly
+excludes a truthful public retirement service, general read-path enrollment,
+complete writer closure and registered L03 qualification. Its controlled consumer
+discard acknowledgment and fixture assessor do not supply those missing services.
+
+The owner's current implementation work tracks retained host buffers and refuses
+retirement while any remain, including buffers surviving rollback or backend
+loss. M3 must consume the final original host-custody API, not translate callback
+return, cleared local arrays, native rollback or backend disappearance into a
+discard acknowledgment. Independently retain a buffer through each such failure,
+then require transition refusal until its original authorized final release is
+proved. Releasing one publisher must preserve all siblings. These are shared
+security integration dependencies, not a new Truss ownership or lease protocol;
+the inspected component count does not close migration readiness.
