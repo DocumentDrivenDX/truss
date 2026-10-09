@@ -781,3 +781,37 @@ The report's `documents` array must be the complete ordered projection of the or
 5. Construct report document members only from the now-matched original archive: exact document ID/revision/digest and native ordinal text. Bind the result to this original revision/input/profile/operation and surviving effect generation for complete report admission. Later source or generation changes invalidate readiness and require original recollection; a cached member list is not proof. Complete failure returns no partial accepted report and follows the existing native execution containment/recovery protocol.
 
 This procedure adds no wire member or independent public API. It refines existing acceptance-input/report/schema/source correspondence and report-before-head requirements. Original artifact identities remain custody facts, not self-authenticating labels. The selected private source-text collector's 512-document/four-MiB checks are component limits, not a complete public preallocation/resource profile. Original input parsing, source/interpretation authority, precharged accounting, unavoidable native closure and complete report/finalizer remain required implementation outputs.
+
+### Complete report count extraction
+
+Construct the six `counts` values from the original surviving effect inventory,
+under the same admitted operation/revision/exclusion and complete before/after
+catalog cut used by report finalization. Match original qualified identities
+first; allocator high-water marks, input candidate counts, SQL row counts and
+visible current rows are not substitutes. Count each actual identity once
+within its family after complete effect/source correspondence.
+
+| Report member | Exact inventory unit |
+| --- | --- |
+| typesAdded | Genuinely new retained type identities created by this acceptance, including admitted provisional types |
+| propertiesAdded | Genuinely new retained qualified property identities created by this acceptance |
+| keysAdded | Genuinely new owner-local key identities created by this acceptance |
+| relationshipsAdded | Genuinely new retained relationship identities created by this acceptance |
+| endpointsAdded | Actual new distinct relationship/source-type/target-type endpoint tuples established by this acceptance; input endpoint occurrence count is insufficient |
+| elementsRetired | Distinct admitted type/property/key/relationship identities transitioning from active to retired in the surviving acceptance; do not count endpoint deletion, already-retired observations or downstream graph row changes as element retirement |
+
+Same-ID reactivation is represented by the complete `reactivations` inventory,
+not fabricated as a new addition. Updated definitions of retained active
+identities are not additions. Rollback removes contributions that did not
+survive; a attempted allocation can therefore leave no report addition even
+when an allocator observation changed. Verify disjoint new/retained/reactivated/
+retired classifications and complete before/after source correspondence before
+encoding canonical nonnegative decimal count text. A genuinely unsupported
+classification refuses the report rather than entering a catch-all count.
+
+Zero is proved by complete empty membership under qualified visibility and
+original effect closure, not by an omitted producer or inaccessible rows.
+Independently author equal-count but swapped-family/identity, same-ID
+reactivation, duplicate endpoint, already-retired, rolled-back contribution
+and hidden-member controls before native collector implementation. Counts
+never replace the complete effect inventories or authorize head publication.

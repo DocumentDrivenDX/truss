@@ -2651,3 +2651,11 @@ separately from schema refusals. All pass at the planning-fixture boundary;
 they do not implement duplicate-key raw transport admission, actual profile
 authority, resource preallocation, native bijection or positive acceptance.
 RPDOC full-boundary controls remain not_run.
+
+The report `counts` producer now has exact family/membership extraction in
+CONTRACT-003, including distinct endpoint tuples, actual retirement transitions,
+reactivation exclusion and empty-inventory proof. Implement it against the
+complete original surviving effect cut, not stage return counts or allocation
+maxima. Independent swapped-identity/family, duplicate endpoint, rollback and
+hidden-membership controls precede report/head integration; these are planned
+collector controls, not executed native acceptance evidence.
