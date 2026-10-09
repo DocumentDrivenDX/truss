@@ -81,3 +81,40 @@ missing exclusion producer returns unavailable(observation). Race protection
 expiry/current-authority change and backend loss before final release, preserving
 private evidence without boolean or existence disclosure. These are planned
 native/protected-publication tests, not proof from a shape-valid token.
+
+## Receipt visibility across shipped layout upgrades
+
+Compose RV-05/06/10/11/12 with
+[LM-T03–07](test-plans/STP-045-bootstrap-the-internal-layout-from-umf.md#shipped-layout-migration-system--lm-t01–08).
+Before migration, commit an event-bearing request and an all-no-op request;
+save their original full inputs, ordered results, tokens, receipt identities,
+protection deadlines and admitted source/replica inclusion evidence. Author the
+expected preserved inventory independently before observing upgrade effects.
+
+For an explicitly qualified unchanged-epoch upgrade, verify original token
+bytes and source receipt correspondence remain intact. Exact retry returns
+the original complete results without new graph/journal effects. Protection
+cannot shorten, reset first confirmation or disappear with changed storage.
+Fresh source reads and independently committed downstream reads retain their
+previously proved inclusion meaning. A layout version increase does not itself
+advance feed coverage, ACK, application state or a source epoch.
+
+An upgrade whose target cannot interpret the original receipt/token/profile
+must refuse that advertised preservation path before upgrade effects unless
+its registered transition explicitly supplies qualified compatibility. Never
+mint a replacement token, reinterpret the old row ID as a new receipt, or use
+today's epoch to repair old correspondence. A separately qualified epoch
+transition retains RV-11's explicit lineage/seed requirement; matching xid text
+cannot establish inclusion.
+
+Fail a later migration step after earlier data conversion and independently
+verify original receipt bytes, protection, graph/feed state and source marker
+survive full route rollback. Lose upgrade COMMIT acknowledgment and retain the
+same migration attempt; no token publication or target readiness follows from
+an uncertain marker. Reconciliation must establish the actual original outcome
+before target capabilities resume. Finally restart both hosts and repeat
+Python/TypeScript token interchange through the selected shared resolver.
+
+Record actual source/target layout, position, clock/protection, security and
+application profiles. These are planned integration controls; existing planner,
+DDL round-trip and rollback-only component evidence does not execute them.
