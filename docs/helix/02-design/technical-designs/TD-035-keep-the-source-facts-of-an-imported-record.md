@@ -48,7 +48,7 @@ Module policies must protect source lookup for both objects and edges, including
 
 ## Testing, Sequence and Rollback
 
-STP-035 allocates four criteria. Resolve source carrier/lookup/deletion policy; write red atomicity, absence, immutable-edit and direct-create tests; implement insertion/read paths and qualify privileges/RLS. Caller rollback removes pending provenance; engine committed batches retain it. Implementation rollback does not erase historical source rows.
+STP-035 allocates four criteria. Consume the authored live/historical source classification and current-authority rules; select exact source carrier and original creation/source/native producers; write red atomicity, absence, immutable-edit and direct-create tests; implement insertion/read paths and qualify privileges/RLS. Caller rollback removes pending provenance; engine committed batches retain it. Implementation rollback does not erase historical source rows.
 
 ## Gates
 
@@ -62,3 +62,6 @@ A deleted canonical row is not sufficient eligibility for source cleanup. Any se
 Reserve the complete bounded discovery, retained result/archive and containment resources before deletion. Under the original selected exclusion and lock order, revalidate both directions of the candidate cohort: every selected fact is eligible and every required dependent is retained or removed through the same explicitly admitted cohort procedure. Source cleanup cannot delete an active reservation, unresolved operation or retained recovery reference, nor remove the only ownership/creation evidence needed to distinguish imported from direct-created history. Selected retention policy must explicitly define expired-history behavior before removing such evidence; absent is never inferred from cleanup.
 
 After confirmed deletion, preserve immutable original cohort/eligibility/dependency/result evidence outside the deleted source rows under the existing retention result custody. Unknown submission/termination keeps original cleanup recovery open; no automatic repeat under a newly discovered cohort. Routine source lookup remains read-only and cannot opportunistically clean rows. This specifies eligibility and preservation behavior without selecting a retention duration, enabling source deletion for ordinary writers or claiming an installed cleanup routine.
+
+
+Live absence must be backed by original qualified creation classification, not merely an empty source-table query. An imported empty source object is found; missing required imported source evidence is unavailable/integrity failure through the selected existing outcome procedure. STP-035 separates direct absence, empty imported facts, missing evidence, hidden records and deleted/recreated identities. This refines the existing semantic distinction without adding a public status or substituting historical lookup for the live capability.
