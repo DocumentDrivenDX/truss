@@ -450,6 +450,26 @@ Read shapes retain absent versus explicit null, ordered key components, exact la
 
 ### PY-01 independent exact-value expectations
 
+#### libpq receive-path qualification correction
+
+Review of PostgreSQL
+[REL_17_9 fe-misc.c](https://raw.githubusercontent.com/postgres/postgres/REL_17_9/src/interfaces/libpq/fe-misc.c)
+shows `pqReadData` moving retained input bytes and warns that input-buffer
+pointers/indexes may not survive the call. More importantly, `pqSendSome` can
+call `pqReadData` while flushing output, including nonblocking operation and
+write-failure handling. Therefore reserving ingress only around Python
+`consume_input()` is insufficient for this source: sending/flushing may receive
+before that wrapper is invoked. Socket readiness alone does not identify the
+actual receive operation or retained buffer lifetime.
+
+PY-01's source-backed producer inventory must include every send/flush/error
+path that may receive, plus TLS and parser ownership. Its fault packet must
+induce output backpressure with incoming responses/notices and a write failure,
+then independently observe pre-read reservations and preserved original cycle
+custody. No inferred refund follows input compaction or a wrapper return. This
+is a concrete qualification obligation for the reviewed candidate, not proof
+that the installed libpq has this exact build or that a bridge is implemented.
+
 The [shared authored vectors](../03-test/python-exact-value-vectors.proposal.json)
 now materialize fifteen CONTRACT-010 presence/value carriers plus a Python host
 bool/integral refusal. Strict Ajv compilation validates each carrier and all
