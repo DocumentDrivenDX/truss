@@ -58,3 +58,11 @@ async function loadPinnedFunctions(directory:string,revision:string,mode:string,
  const captured=Object.fromEntries(names.map(name=>{if(typeof owner[name]!=='function')throw Error('Missing original producer');return [name,owner[name].bind(owner)]}));
  return {hash,captured};
 }
+
+/** Original Field assertion meaning, not installation or enforcement evidence. */
+export async function loadUmfFieldAssertionProducer(directory:string){
+ const {hash,captured}=await loadPinnedFunctions(directory,UMF_RUNTIME_SOURCE,'assertion-fields',['inspectCoreElementKind','inspectCoreNullability','inspectCoreCardinality','inspectCoreFacets']);
+ return Object.freeze({sourceRevision:UMF_RUNTIME_SOURCE,bundleSha256:hash,
+  inspectKind:captured.inspectCoreElementKind,inspectNullability:captured.inspectCoreNullability,
+  inspectCardinality:captured.inspectCoreCardinality,inspectFacets:captured.inspectCoreFacets});
+}

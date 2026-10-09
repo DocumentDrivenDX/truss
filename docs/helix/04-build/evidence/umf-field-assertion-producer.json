@@ -1,0 +1,34 @@
+{
+  "producerManifest": {
+    "revision": "c45c72a2a8a3c4fba61c40c5927dd9091acf8cc3",
+    "producerMode": "assertion-fields",
+    "buildDependencies": {
+      "yaml": {
+        "version": "2.9.1",
+        "packageSha256": "1c6441703d8204a23ded0d37ddf57c3b69d821dc392f20852d1f605bb9b8861c"
+      },
+      "ajv": {
+        "version": "8.20.0",
+        "packageSha256": "1f9033ee5a6515e7d76938b7072941862d1ed228a6879cc7fe10cdeb75107989"
+      }
+    },
+    "archiveSha256": "aa3ff171f8adbdbb6a0ad729dbcb2825dd2299b98e6d90a4e8e1e84835247838",
+    "bundleSha256": "860e70082df1706132fe6389e5274bb45c70783ddc547f4c4950c1a94fea5f67",
+    "operations": [
+      "inspectCoreElementKind",
+      "inspectCoreNullability",
+      "inspectCoreCardinality",
+      "inspectCoreFacets"
+    ],
+    "scope": "Original logical UMF producers only; no native acceptance/containment qualification."
+  },
+  "sourceHashes": {
+    "packages/umf-bun/src/catalog-assertion-observations.ts": "de95bf0d9426efc4cbbd487f2a96194d74e9d6bc746798175ee5327e1953ec16",
+    "tests/umf-field-assertion-producer.test.ts": "5affaca55e0ef9d76969d6b1e2552048c372cac235563c81fb1fd88cf44a37d1",
+    "tests/umf-declaration-producer.test.ts": "e651715eec4896474608efe34c1a30485426ea07e79a4a9a96505edf8990d83b"
+  },
+  "tests": 9,
+  "assertions": 42,
+  "runtime": "Bun 1.4.2",
+  "scope": "Original owner assertion observations only; no complete source assertion inventory, authorship qualification, database/engine enforcement or committed acceptance."
+}
