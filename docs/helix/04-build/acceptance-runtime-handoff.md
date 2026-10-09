@@ -28,6 +28,23 @@ assertion enforcement classification. Implement and test that producer through
 the existing original preparation/correspondence path; do not add a second UMF
 validator or reopen public admission before all seventeen fields compose.
 
+The existing report schema represents umf as an array of closed entries with
+exactly version, interpretationProfile and supportedSubset; supportedSubset is
+an ExactArtifact, not a string label or inline claim. Version 0.2 reuses this
+0.1 field definition. Bind each entry to original document-version inventory
+and the selected interpretation profile, and resolve its subset artifact through
+the original admitted support composition. The supportProfile pin or its whole
+artifact cannot be substituted for every version's subset reference unless the
+registered interpretation explicitly establishes that correspondence. Preserve
+the selected entry ordering and complete version membership.
+
+Independent controls must include two source versions with distinct subset
+artifacts, omitted/duplicated versions, swapped subset references, changed
+interpretation pins and an unavailable original subset artifact. A single-version
+positive case cannot close multiple-version membership. Retained-only semantic
+references remain distinct from required executable checks under CONTRACT-003;
+resolving artifact bytes cannot classify a retained-only term as enforced.
+
 ### A2 assertion inventory closure
 
 Inspection of `catalog-core-assertion-identities.ts` and
