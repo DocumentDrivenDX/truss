@@ -23,3 +23,20 @@ test('Field owner observations retain separate bundle evidence and original basi
  expect((field.result as any).observation.meaning).toEqual({state:'known',nullability:'required'});expect(field.basis).toBe('original');
  const evidence=JSON.parse(Buffer.from(field.evidence.bytesBase64,'base64').toString());expect(evidence.profile).toEqual(result.fieldProfile);expect(evidence.profile.sha256).toBe(fields.bundleSha256);
 });
+
+test('complete owner observation coverage detects omission, replacement and changed evidence',async()=>{
+ const directory=process.env.TRUSS_UMF_FIELD_ASSERTION_PRODUCER;if(!directory)throw Error('Field assertion producer required');
+ const {loadUmfFieldAssertionProducer}=await import('../packages/umf-bun/src/index');const {assessCatalogObservationCoverage}=await import('../packages/umf-bun/src/catalog-observation-coverage');
+ const input=await prepared('0.7.0'),fields=await loadUmfFieldAssertionProducer(directory),collection=collectCatalogAssertionObservations(input,metadata,fields);
+ const coverage=assessCatalogObservationCoverage(input,collection);expect(coverage.observationsRequired).toBe('14');expect(coverage.availability).toBe('available');expect(coverage.unavailable).toEqual([]);
+ expect(()=>assessCatalogObservationCoverage(input,{...collection,fieldProfile:null})).toThrow('Field observation bundle');
+ expect(()=>assessCatalogObservationCoverage(input,{...collection,observations:collection.observations.slice(1)})).toThrow('inventory');
+ const duplicate=[...collection.observations];duplicate[1]=duplicate[0];expect(()=>assessCatalogObservationCoverage(input,{...collection,observations:duplicate})).toThrow('identity/basis');
+ const changed=[...collection.observations];changed[0]={...changed[0],evidence:{...changed[0].evidence,sha256:'0'.repeat(64)}};expect(()=>assessCatalogObservationCoverage(input,{...collection,observations:changed})).toThrow('evidence correspondence');
+});
+test('full observation occurrence coverage cannot turn unavailable 0.8 APIs into available meaning',async()=>{
+ const directory=process.env.TRUSS_UMF_FIELD_ASSERTION_PRODUCER;if(!directory)throw Error('Field assertion producer required');
+ const {loadUmfFieldAssertionProducer}=await import('../packages/umf-bun/src/index');const {assessCatalogObservationCoverage}=await import('../packages/umf-bun/src/catalog-observation-coverage');
+ const input=await prepared('0.8.0'),fields=await loadUmfFieldAssertionProducer(directory),collection=collectCatalogAssertionObservations(input,metadata,fields),coverage=assessCatalogObservationCoverage(input,collection);
+ expect(coverage.observationsRequired).toBe('14');expect(coverage.availability).toBe('incomplete');expect(coverage.unavailable.some(o=>o.operation==='relationships'&&o.code==='RELATIONSHIP_RESULT')).toBe(true);expect(BigInt(coverage.observationsAvailable)).toBeLessThan(14n);expect(coverage.scope).toBe('original_owner_observation_correspondence_only');
+});

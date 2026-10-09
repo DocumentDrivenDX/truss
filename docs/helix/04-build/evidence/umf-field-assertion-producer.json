@@ -25,10 +25,10 @@
   "sourceHashes": {
     "packages/umf-bun/src/catalog-assertion-observations.ts": "de95bf0d9426efc4cbbd487f2a96194d74e9d6bc746798175ee5327e1953ec16",
     "tests/umf-field-assertion-producer.test.ts": "5affaca55e0ef9d76969d6b1e2552048c372cac235563c81fb1fd88cf44a37d1",
-    "tests/umf-declaration-producer.test.ts": "e651715eec4896474608efe34c1a30485426ea07e79a4a9a96505edf8990d83b"
+    "tests/umf-declaration-producer.test.ts": "919ebd4c3e61d61b2f37ed435654836333be8f26b7be1e45c9b4a2ec2322d0ec"
   },
-  "tests": 9,
-  "assertions": 42,
+  "tests": 11,
+  "assertions": 54,
   "runtime": "Bun 1.4.2",
   "scope": "Original owner assertion observations only; no complete source assertion inventory, authorship qualification, database/engine enforcement or committed acceptance."
 }
