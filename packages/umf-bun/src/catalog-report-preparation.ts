@@ -2,6 +2,7 @@
 import {requireOriginalCatalogPreparation,type createCatalogInputPreparation} from './catalog-input';
 import {collectCatalogAssertionObservations} from './catalog-assertion-observations';
 import {assessCatalogObservationCoverage} from './catalog-observation-coverage';
+import {collectCatalogValidationEvidence} from './catalog-validation-evidence';
 import {collectCatalogExtensionInventory} from './catalog-extension-inventory';
 import {collectCatalogReportDocumentBasis,recheckCatalogReportDocumentBasis} from './catalog-report-document-basis';
 import type {CatalogStageConnection} from './catalog-new-stage';
@@ -13,6 +14,7 @@ export async function collectCatalogReportPreparation(connection:CatalogStageCon
  const ownerObservations=collectCatalogAssertionObservations(prepared,owner,fields);
  const observationCoverage=assessCatalogObservationCoverage(prepared,ownerObservations);
  const extensions=collectCatalogExtensionInventory(prepared);
+ const validationEvidence=collectCatalogValidationEvidence(prepared);
  const documentBasis=await collectCatalogReportDocumentBasis(connection,prepared,revision);
  const rows=await connection.unsafe("SELECT c.*,o.original_writer_xid::text AS writer_xid,o.operation_ordinal::text AS operation_ordinal,o.effect_generation::text AS effect_generation FROM truss.runtime_collect_new_catalog_counts($1::int) c CROSS JOIN truss.row_home_operation o WHERE o.original_writer_xid=pg_current_xact_id_if_assigned() AND o.phase='admitted'",[revision]);
  if(rows.length!==1)throw Error('Original complete count observation required');const row=rows[0],cut=documentBasis.nativeObservation;
@@ -24,6 +26,6 @@ export async function collectCatalogReportPreparation(connection:CatalogStageCon
  for(const name of Object.keys(aliases) as (keyof typeof aliases)[]){const value=row[aliases[name]];if(typeof value!=='string'||!/^(0|[1-9][0-9]{0,4})$/.test(value)||BigInt(value)>16384n)throw Error('Original bounded count text required');counts[name]=value;}
  if(counts.elementsRetired!=='0')throw Error('Original new-only retirement count required');
  await recheckCatalogReportDocumentBasis(connection,documentBasis);
- return Object.freeze({provisionalRevision:revision,documentBasis,counts:Object.freeze(counts),ownerObservations,observationCoverage,extensions,
+ return Object.freeze({provisionalRevision:revision,documentBasis,counts:Object.freeze(counts),ownerObservations,observationCoverage,extensions,validationEvidence,
   scope:'original_new_catalog_report_preparation_only' as const});
 }

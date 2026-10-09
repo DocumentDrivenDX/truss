@@ -21,3 +21,20 @@ test('count grammar bounds columns and new-only retirement are explicit',async()
 test('forged preparation refuses before issuing native reads',async()=>{
  const native=connection();await expect(collectCatalogReportPreparation(native,structuredClone(prepared),'1',owner,fields)).rejects.toThrow('validated catalog preparation');expect(native.queries).toEqual([]);
 });
+
+
+test('composed validation evidence preserves diagnostics at both source and reversible target bases',async()=>{
+ const result=await collectCatalogReportPreparation(connection(),prepared,'1',owner,fields),evidence=result.validationEvidence;
+ expect(evidence.documentInterpretations.length).toBe(1);expect(evidence.documentInterpretations[0].completeness).toBe('partial');expect(evidence.documentInterpretations[0].contentSha256).toBe(digest);
+ const decoded=evidence.diagnostics.map(entry=>JSON.parse(Buffer.from(entry.diagnostic.bytesBase64,'base64').toString()));
+ for(const [basis,validation] of [['original',prepared.documents[0].interpretation.sourceValidation],['reversible_target',prepared.documents[0].interpretation.targetValidation]] as const)expect(decoded.filter(e=>e.basis===basis).map(e=>e.diagnostic)).toEqual(validation!.diagnostics);
+ for(const entry of evidence.diagnostics){expect(entry.source.artifact).toBe(prepared.original.input.documents[0].artifact);expect(entry.source.sourcePointer).toBe('');expect(entry.classification).toBe('upstream_validation');expect(entry.diagnostic.sha256).toBe(new Bun.CryptoHasher('sha256').update(Buffer.from(entry.diagnostic.bytesBase64,'base64')).digest('hex'))}
+ expect(evidence.profile.sha256).toBe(new Bun.CryptoHasher('sha256').update(Buffer.from(evidence.manifest.bytesBase64,'base64')).digest('hex'));
+ expect(evidence.documentInterpretations[0].evidence).toEqual(result.documentBasis.observations[0].evidence);
+});
+
+test('original 0.8 validation does not invent a transition or duplicate a target-basis diagnostic scan',async()=>{
+ const {collectCatalogValidationEvidence}=await import('../packages/umf-bun/src/catalog-validation-evidence');const originalInput=structuredClone(input),bytes=Buffer.from(JSON.stringify(prepared.documents[0].interpretation.target));
+ originalInput.documents[0].artifact={identity:'original-08',bytesBase64:bytes.toString('base64'),sha256:new Bun.CryptoHasher('sha256').update(bytes).digest('hex')};const source=preparation.prepare(new TextEncoder().encode(JSON.stringify(originalInput))),result=collectCatalogValidationEvidence(source);
+ expect(source.documents[0].interpretation.transition).toBeNull();expect(result.diagnostics.map(entry=>JSON.parse(Buffer.from(entry.diagnostic.bytesBase64,'base64').toString()).basis).every(b=>b==='original')).toBe(true);expect(result.diagnostics.length).toBe(source.documents[0].interpretation.sourceValidation.diagnostics.length);expect(result.documentInterpretations[0].completeness).toBe('partial');
+});

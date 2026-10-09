@@ -1,0 +1,14 @@
+{
+  "sourceHashes": {
+    "packages/umf-bun/src/catalog-validation-evidence.ts": "81c5b01219ba17119313bca94f8fe516b64343ac1e9afea555e669f70da5a708",
+    "packages/umf-bun/src/catalog-report-preparation.ts": "e8322086b63523d104dd4f92153f36c64ffabfc5839b3f980247a0c8775a2387",
+    "tests/catalog-report-preparation.test.ts": "58f6967e0a8611ac381ce74bec836771d2af07b6721d754fd116626c034ac688",
+    "scripts/check-catalog-new-cohort.ts": "57bd3e60d3b252843a495864ce245b5012c812ffccd2c135cd68f56d8931de95"
+  },
+  "runtime": "Bun 1.4.2",
+  "hostTests": 6,
+  "hostAssertions": 80,
+  "nativeReceipt": "catalog-new-cohort.json",
+  "nativeChecks": 66,
+  "scope": "Exact original producer diagnostic and complete/partial interpretation evidence within private new-only native report preparation. Wrapper profile registration, complete assertion admission and accepted publication remain unqualified."
+}

@@ -23,7 +23,7 @@
     "catalog-new-prestate-parity": "10fa8d6172757bb942f750fba582e88595b90190c920e97624e0cc0635cb15f7",
     "catalog-new-counts": "4d2962d3b8e1391ad9c97f6fdc2da7e0343463a6e2f4b7c9a1060603b6dab166"
   },
-  "reportPreparationProducerSha256": "a8892ccc31e9f9d3e29359c3990e755ba18cc49896a2d5121ed1084d9e41e4de",
+  "reportPreparationProducerSha256": "e8322086b63523d104dd4f92153f36c64ffabfc5839b3f980247a0c8775a2387",
   "assertionProfiles": {
     "declarations": {
       "identity": "umf-declaration-inspection",
@@ -87,6 +87,8 @@
     "original owner observation and reversible transition preserved inside exact evidence artifact",
     "composed report preparation derives all six counts under original native cut",
     "composed preparation retains matching native cut and actual available owner observations",
+    "composed producer interpretation preserves the original archived observation evidence",
+    "composed validation retains complete original and target-basis producer diagnostic inventories",
     "composed basis does not fabricate accepted status or extensions",
     "later catalog event between document and count observations refuses composed preparation",
     "native collector returns actual complete new-family identity inventory",
