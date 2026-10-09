@@ -388,3 +388,16 @@ were corrected before recording the passing result. All nine independent shape
 controls and full retained-source checks still pass. This supersedes the older
 155-schema count for current integration only, without adopting any schema's
 semantic profiles or qualifying native behavior.
+
+The incomplete record now includes exact original local schema dependencies for
+its selected schema roots: eleven acceptance schemas, eight history/archive
+schemas and the standalone Python input schema. The
+[closure checker](evidence/design-audit/check_composition_schema_closure.py)
+resolves references against the existing local identity inventory, refuses
+unavailable identities, and compares full current bytes before digest checks.
+`--capture` adds missing original dependency artifacts; it does not silently
+refresh changed captured sources or advance any review status. A normal check
+verifies the retained membership. Combined strict schema compilation remains the
+separate fragment/reference validation evidence. This closes captured schema
+membership only; native model, producer, procedure, authority and semantic
+profile transitive closure remain explicitly incomplete in every boundary.
