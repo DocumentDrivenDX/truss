@@ -28,7 +28,10 @@ or stale build from standing in for the selected bundle.
 The builder's reproducibility check, Hugo build and actual Chromium
 153.0.8010.12 check pass locally. The current 532-definition projection renders;
 deep links, byte-exact structural/native/configuration/migration downloads and
-390px mobile layout pass without browser errors. The saved
+390px mobile layout pass without browser errors. A fresh Chromium run also
+checks the migration receipt’s core parent reference and both ordered FK field
+references against their exact source-epoch-registry qualified definitions.
+The saved
 [browser receipt](evidence/design-audit/schema-browser-site.json) records this
 scope. This verifies local schema inspection against current committed owner
 assets; it does not publish the site, adopt a stable installed layout or qualify

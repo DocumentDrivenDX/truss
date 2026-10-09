@@ -31,3 +31,12 @@ revision. `build-umf-schema-browser.py --check` confirms all selected static ass
 and exact catalog source bytes. This refresh corrects stale evidence prose; it
 does not claim a new Chromium run or publication. The existing JSON receipt
 records Chromium 153.0.8010.12 and 532 inspected definitions.
+
+A subsequent actual Chromium run adds migration FK navigation to the receipt.
+From `layout_migration_receipt`, its core `physical-fk` parent reference opens
+`source_epoch_registry`. The `installation_id` and `original_source_epoch`
+source fields independently open `source_epoch_registry.installation_id` and
+`source_epoch_registry.source_epoch`, with exact qualified deep-link assertions.
+This verifies the existing structural references, not native FK enforcement,
+portable key interpretation or an installed upgrade. The owner-asset check and
+Hugo build also pass. No production site was published by this run.

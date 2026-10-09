@@ -11,6 +11,7 @@
     "retained native source download is byte-exact",
     "configuration capture columns browse and adjunct download is byte-exact",
     "migration receipt columns browse and adjunct download is byte-exact",
+    "migration core parent and both ordered FK field references navigate to exact qualified definitions",
     "390px mobile browser has no horizontal page overflow",
     "no browser errors"
   ],

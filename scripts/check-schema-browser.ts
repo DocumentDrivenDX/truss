@@ -46,8 +46,22 @@ try{
  const migrationEvent=page.waitForEvent('download');await page.getByText('Download migration adjunct source',{exact:true}).click();const migrationDownload=await migrationEvent;
  const migrationBytes=new Uint8Array(await Bun.file((await migrationDownload.path())!).arrayBuffer()),migrationExpected=new Uint8Array(await Bun.file(structural.extensions['truss.layout.native'].migrationSourceModel).arrayBuffer());
  if(migrationBytes.length!==migrationExpected.length||migrationBytes.some((b,i)=>b!==migrationExpected[i]))throw Error('Migration archive changed original bytes');
+ const fkRole='physical-fk:migration-physical-fk-13:';
+ await page.locator('#inspector > p').filter({hasText:fkRole}).getByRole('link',{name:'source_epoch_registry',exact:true}).click();
+ await page.locator('.definition-heading').filter({hasText:'source_epoch_registry'}).waitFor();
+ if(new URL(page.url()).hash!== '#'+new URLSearchParams({schema:'truss-layout',definition:JSON.stringify(['truss-layout','source_epoch_registry'])}))throw Error('Migration parent reference resolved to wrong definition');
+ for(const [sourceField,targetField,targetName] of [
+  ['layout_migration_receipt.installation_id','source_epoch_registry.installation_id','installation_id'],
+  ['layout_migration_receipt.original_source_epoch','source_epoch_registry.source_epoch','source_epoch'],
+ ]){
+  await page.goto(base+'schema/#'+new URLSearchParams({schema:'truss-layout',definition:JSON.stringify(['truss-layout',sourceField])}));
+  await page.locator('.definition-heading').waitFor();
+  await page.locator('#inspector > p').filter({hasText:fkRole}).getByRole('link',{name:targetName,exact:true}).click();
+  await page.locator('.definition-heading').filter({hasText:targetName}).waitFor();
+  if(new URL(page.url()).hash!=='#'+new URLSearchParams({schema:'truss-layout',definition:JSON.stringify(['truss-layout',targetField])}))throw Error('Migration field reference resolved to wrong definition');
+ }
  await page.setViewportSize({width:390,height:844});await page.goto(base+'schema/');await page.locator('.definition-list').waitFor();
  const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth);if(overflow)throw Error('Mobile page overflow');if(errors.length)throw Error(errors.join('\n'));
- const receipt={browser:browser.version(),ownerRevision:ownerManifest.revision,definitions,checks:['Hugo Model page embeds working owner browser','current structural model validates','prop_def deep link and declaration_module field navigation','download is byte-identical UTF-8 source','epoch registry and predecessor columns browse correctly','retained native source download is byte-exact','configuration capture columns browse and adjunct download is byte-exact','migration receipt columns browse and adjunct download is byte-exact','390px mobile browser has no horizontal page overflow','no browser errors'],scope:'Actual generated site under /truss/ in Chromium; structural inspection only, no deployment or native runtime qualification.'};
+ const receipt={browser:browser.version(),ownerRevision:ownerManifest.revision,definitions,checks:['Hugo Model page embeds working owner browser','current structural model validates','prop_def deep link and declaration_module field navigation','download is byte-identical UTF-8 source','epoch registry and predecessor columns browse correctly','retained native source download is byte-exact','configuration capture columns browse and adjunct download is byte-exact','migration receipt columns browse and adjunct download is byte-exact','migration core parent and both ordered FK field references navigate to exact qualified definitions','390px mobile browser has no horizontal page overflow','no browser errors'],scope:'Actual generated site under /truss/ in Chromium; structural inspection only, no deployment or native runtime qualification.'};
  await Bun.write('docs/helix/04-build/evidence/design-audit/schema-browser-site.json',JSON.stringify(receipt,null,2)+'\n');console.log(JSON.stringify(receipt));
 }finally{await browser.close();server.stop(true)}
