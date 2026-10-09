@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:conformance-aliases:0.1.0",
+  "title": "Candidate typed corpus alias declarations",
+  "description": "Data-only binding declarations; namespace/source correspondence, grammar paths, uniqueness and native invariants require semantic admission. No runtime IDs or authority supplied.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-conformance-aliases/0.1.0"
+    },
+    "caseId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024
+    },
+    "comparisonProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "identityPathGrammar": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "namespaces": {
+      "type": "array",
+      "maxItems": 100000,
+      "items": {
+        "type": "object",
+        "properties": {
+          "identity": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "entityKind": {
+            "enum": [
+              "object",
+              "edge",
+              "catalog_type",
+              "catalog_property",
+              "catalog_relationship",
+              "catalog_key"
+            ]
+          },
+          "identityProfile": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+          },
+          "originalBasis": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          }
+        },
+        "required": [
+          "identity",
+          "entityKind",
+          "identityProfile",
+          "originalBasis"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "aliases": {
+      "type": "array",
+      "maxItems": 100000,
+      "items": {
+        "type": "object",
+        "properties": {
+          "symbol": {
+            "type": "string",
+            "pattern": "^\\$[A-Za-z][A-Za-z0-9_]{0,127}$"
+          },
+          "namespaceIdentity": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "bind": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "setup"
+                  },
+                  "pointer": {
+                    "type": "string",
+                    "maxLength": 8192,
+                    "pattern": "^(?:/(?:[^~/]|~[01])*)*$"
+                  }
+                },
+                "required": [
+                  "kind",
+                  "pointer"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "operation_result"
+                  },
+                  "operationIndex": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,11})$"
+                  },
+                  "pointer": {
+                    "type": "string",
+                    "maxLength": 8192,
+                    "pattern": "^(?:/(?:[^~/]|~[01])*)*$"
+                  }
+                },
+                "required": [
+                  "kind",
+                  "operationIndex",
+                  "pointer"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          }
+        },
+        "required": [
+          "symbol",
+          "namespaceIdentity",
+          "bind"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "caseId",
+    "comparisonProfile",
+    "identityPathGrammar",
+    "namespaces",
+    "aliases"
+  ],
+  "additionalProperties": false
+}

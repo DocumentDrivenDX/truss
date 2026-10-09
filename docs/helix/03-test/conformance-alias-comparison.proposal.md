@@ -51,3 +51,28 @@ literal "$a" property value, overlap object/edge numeric IDs legitimately, and
 change only native ID ordering. Equivalent permitted allocations pass;
 identity/data/invariant substitutions fail. The exact case alias artifact
 encoding/profile and runner remain to be registered and executed.
+
+
+## Candidate declaration wire
+
+The [closed alias schema](../02-design/contracts/conformance-aliases-v0.1.proposal.schema.json)
+encodes `truss-conformance-aliases/0.1.0` as the manifest's exact identityAliases
+artifact. It names the original case, comparison/profile and identity-path
+grammar, namespace declarations and symbolic bindings. Each namespace retains
+its kind, exact identity profile and original basis artifact; its display identity
+is only a reference label, never proof of namespace equality or caller authority.
+Resolve its actual source/definition correspondence under the selected case
+profile before using it. Object and edge overlap remains typed; catalog-key
+namespace includes its original owner under that admitted basis.
+
+A binding points either into the independently observed setup structure or into
+one operation's admitted result, using a zero-based canonical decimal-text index
+and an RFC 6901 pointer. Indices must be within the actual case; pointers must
+resolve to a grammar-declared identity field, not merely an existing string.
+Empty aliases/namespaces are legal only when independently complete case
+interpretation requires none. Duplicate labels/symbols, unresolved namespaces,
+wrong kind, forward/unavailable result references and noninjective actual
+bindings refuse semantic admission even if the document validates. Runtime
+resolved IDs remain harness observations, not expected literals in this wire.
+The original manifest/profile binds its exact artifact bytes; schema success
+alone cannot establish expected-state meaning, native identity or interchange.
