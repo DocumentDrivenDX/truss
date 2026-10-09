@@ -222,3 +222,19 @@ independent actual termination evidence. Host state/settings recreation is a
 new qualified lease, not resurrection of the original transaction.
 
 These controls remain `not_run`; see the [managed-service source review](../../02-design/contracts/managed-extension-source-review.md#managed-service-lifecycle-handoff-refresh--2026-10-08). Actual service/profile and independent native observations are required.
+
+## Dry-run final-state and provisional publication controls
+
+Run the same admitted plan against equivalent native starting state in adopted
+dry-run and real apply, including precondition, catalog and Truss deferred
+final-state violations. Both surface the same admitted violations; dry-run never
+commits its outer transaction to discover them. Restore operation-local
+validation mode, preserve earlier host sentinel work after contained failure,
+and independently verify that host rollback removes graph/journal/request state.
+
+Track provisional IDs/results only in the original live scope. Attempt external
+committed-result/token publication before settlement: refuse. Original confirmed
+commit admits settlement; lost acknowledgment retains unknown/recovery with no
+replacement allocation. Test ordinary sequence gaps separately from committed
+crash/failover/nonreuse, and retain native/public observations rather than
+requiring a precommit durability guarantee the owner did not select.

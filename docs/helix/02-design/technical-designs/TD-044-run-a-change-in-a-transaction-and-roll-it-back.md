@@ -27,7 +27,7 @@ Adopt an active host transaction on its original connection. Execute each operat
 
 | Planned files | Responsibility | Criteria |
 | --- | --- | --- |
-| `packages/adapter-bun/src/transaction.ts`, `packages/adapter-pg/src/transaction.ts` | Active affine handle adoption and lifetime validation | US-044-AC1, US-044-AC4 |
+| `packages/adapter-bun/src/transaction.ts` (proposed), `packages/pg-runtime/src/index.ts` (existing experimental bridge) | Active affine handle adoption and lifetime validation | US-044-AC1, US-044-AC4 |
 | `packages/postgresql/src/mutation/scope.ts` | Savepoint containment, pending result and context restoration | US-044-AC1, US-044-AC2, US-044-AC3, US-044-AC4 |
 | `tests/host/caller-transaction.test.ts` | Native host sentinel, rollback/commit and lifetime proofs | All criteria |
 
@@ -36,6 +36,23 @@ Adopt an active host transaction on its original connection. Execute each operat
 Adopt asynchronously under the draft execution binding, verifying expected isolation/accessMode against actual connection-affine native state. Do not SET either property, begin a replacement transaction or clean up host failure implicitly. Concurrent host termination during verification invalidates adoption. A pre-established snapshot remains unchanged; ordinary observation may naturally establish the first snapshot when none exists, with no fabricated earlier-cut claim. STP-044 owns mismatch/failure/read-only and pooler proof.
 
 Reject inactive/completed, cross-adapter or ambiguous concurrent use. Never issue whole-transaction BEGIN/COMMIT/ROLLBACK on an adopted handle, release its connection, change isolation or retry the host callback. Generated savepoint identifiers are trusted internal names. Role belongs to host context; origin is restored at call boundary. Several successful calls may share one host transaction and still have distinct per-call origins. Catalog/row locks survive savepoint release until transaction end.
+
+## Dry-run and provisional publication
+
+Dry-run invokes the same actual group/precondition/final-state validation path
+as ordinary apply, including the selected Truss deferred constraints before
+reporting simulated success. It does not validate by committing the adopted
+outer transaction. Restore operation-local constraint/validation state and
+contain failed work in the original savepoint; earlier host writes remain.
+Arbitrary unrelated host deferred constraints retain their host-owned semantics;
+they do not authorize silently changing whole-transaction constraint mode.
+
+Ordinary live rollback may leave allocator gaps. Do not infer precommit crash
+nonreuse from that observation. Pending IDs can link records only in the original
+live transaction and cannot be durably published as committed identities.
+Confirmed outer commit supplies committed-ID nonreuse and result settlement;
+unknown commit retains original allocation/result/recovery custody. Network
+execution remains a complete owned batch with confirmed-commit acknowledgment.
 
 ## Failure and Rollback
 

@@ -29,7 +29,17 @@ ddx:
 
 ## Context
 
-A host that wants a dry run of a business change applies the group, reads the result, and rolls back.
+An embedded host adopts its actual live transaction, applies the group through
+real Truss precondition/effect/final-state validation, reads pending results and
+rolls back. Dry-run success cannot skip deferred Truss validation that a real
+apply must pass. Truss contains operation failure with savepoints and restores
+its operation-local validation context, preserving prior caller work.
+
+Pending IDs/results remain inside that original transaction until confirmed
+outer commit. Commit acknowledgment loss requires original recovery, not a
+committed label or a replacement allocation. Network callers instead submit a
+complete atomic batch through an engine-owned transaction; no create/commit-by-ID
+network transaction API is implied.
 
 ## Walkthrough
 
@@ -47,7 +57,7 @@ A host that wants a dry run of a business change applies the group, reads the re
 
 ## Edge Cases
 
-- **Ids consumed by a rolled-back group**: not reused; ids may have gaps.
+- **Ids consumed by a rolled-back group**: ordinary rollback does not reset the sequence, so gaps are allowed. IDs remain provisional within the original transaction; sequence behavior alone does not promise precommit crash/failover durability. Committed IDs are never reused.
 - **A long caller transaction**: holds row locks and the catalog head's share lock until it ends.
 
 ## Test Scenarios
