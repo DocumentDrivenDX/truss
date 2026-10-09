@@ -10,6 +10,7 @@ import sys
 import zipfile
 import weft
 import weft.weft as extension
+from truss.weft import CompilerBoundary, CompileRefusal, WEFT_SOURCE
 
 root = Path(__file__).resolve().parents[1]
 if len(sys.argv) != 3:
@@ -19,6 +20,7 @@ cli_manifest = Path(sys.argv[2])
 cli_build = json.loads(cli_manifest.read_bytes())
 revision = 'f05f2df09e9c2494ac8c6d703dfe38413dbc4181'
 assert build['revision'] == cli_build['revision'] == revision
+assert WEFT_SOURCE == revision
 assert build['features'] == [cli_build['feature']] == ['truss-postgresql-qualified']
 assert build['sourceArchiveSha256'] == cli_build['archiveSha256']
 wheel = Path(build['wheel']['path'])
@@ -45,6 +47,7 @@ profile['target']['targetProfile'] = 'truss-reference-history/0.12'
 cases.append(('unsupported_profile',profile,False))
 cases.append(('missing_version',{},False))
 observations = []
+boundary = CompilerBoundary(weft.compile_json)
 for name,value,compiled in cases:
  original = json.dumps(value,ensure_ascii=False,separators=(',',':'))
  raw = weft.compile_json(original)
@@ -64,6 +67,15 @@ for name,value,compiled in cases:
    assert all(clause in response['sql'].upper() for clause in ['GROUP BY','ORDER BY','LIMIT'])
  else:
   assert 'sql' not in response
+ try:
+  admitted = boundary.compile_request(original.encode('utf-8'))
+ except CompileRefusal as error:
+  assert not compiled
+  assert error.code == ('input_version' if name == 'missing_version' else 'compiler_blocked')
+ else:
+  assert compiled
+  assert admitted.original_response == raw.encode('utf-8')
+  assert admitted.artifact['sql'] == response['sql']
  observations.append({'id':name,'expectedCompiled':compiled,
   'inputSha256':hashlib.sha256(original.encode()).hexdigest(),
   'pythonResponseSha256':hashlib.sha256(raw.encode()).hexdigest(),
@@ -89,6 +101,8 @@ receipt = {
  'fixtureSha256':hashlib.sha256(fixture_bytes).hexdigest(),'cases':observations,
  'transportRefusals':5,'testOnlyExportAbsent':True,
  'nativeDatabaseExecuted':False,'qualifiedTrussPythonRuntime':False,
+ 'pythonBoundarySourceSha256':hashlib.sha256((root/'packages/python/src/truss/weft.py').read_bytes()).hexdigest(),
+ 'pythonBoundarySourceOnly':True,
  'producerSha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
 }
 (root / 'docs/helix/04-build/evidence/design-audit/weft-python-f05f2df-component.json').write_text(

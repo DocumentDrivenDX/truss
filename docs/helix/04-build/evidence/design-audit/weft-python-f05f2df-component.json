@@ -96,5 +96,7 @@
   "testOnlyExportAbsent": true,
   "nativeDatabaseExecuted": false,
   "qualifiedTrussPythonRuntime": false,
-  "producerSha256": "b6c24b0788968b2c829fe5beead5e150b8e1ed23f1e66ae6667e1bd673e09a07"
+  "pythonBoundarySourceSha256": "1b4720589a66c5d6a922ec9b7894d4b602b4cfe17764c71f4a4c1a9404792ded",
+  "pythonBoundarySourceOnly": true,
+  "producerSha256": "3fd599e5940cab146111907eac8b819d8e7b1d3a45819f2eff3c449b3bc2a84d"
 }

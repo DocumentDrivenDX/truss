@@ -103,3 +103,32 @@ from intermediate steps. Results and nested artifact views are frozen. This
 function performs no database I/O, retries, installation verification or migration
 execution. Even `no_steps` requires independent full installation verification.
 Keep original artifact bytes separately; decoded views provide no authority.
+
+An experimental synchronous compiler boundary is available in `truss.weft`:
+
+```python
+import weft  # Separately delivered, verified original Rust/PyO3 extension.
+from truss.weft import CompilerBoundary
+
+compiler = CompilerBoundary(weft.compile_json)
+compiled = compiler.compile_request(original_weft_request_bytes)
+artifact = compiled.artifact
+compiler.dispose()
+```
+
+The complete original request uses Weft's frozen compile0.2 / SQL0.2 grammar,
+Truss PostgreSQL target and original owner model/binding bytes. Rust owns SQL
+parsing and lowering. The boundary checks byte/hash and returned context
+correspondence, retains immutable original request/response bytes, and freezes
+nested artifact views. Parameter values remain exact text; decimal JSON metadata
+is decoded as Decimal with original spelling retained in the response bytes.
+Blocked input/compiler responses return a single CompileRefusal; callback errors
+propagate without retry. Disposal prevents publication and new compilation.
+
+The callback must come from the host's verified original source/build; supplying
+a function cannot prove its compiler pin. No Weft wheel is currently published or
+declared as a truss-toolkit dependency. The development wheel and compiler checks
+are recorded in the Python implementation handoff. A compiled artifact is not a
+native execution permit: this component has no database connection or execute
+method. Host obligation admission, current-person read context, exact result
+decoding and complete execution/profile qualification remain unfinished.

@@ -142,6 +142,27 @@ Original Truss binding/obligation admission, current-person read context, exact
 result decoding, bounded execution and package delivery remain required. Weft0.3
 and positional output are not adopted by rebuilding this frozen0.2 interface.
 
+The source-component `truss.weft.CompilerBoundary` now consumes that original
+in-process `compile_json` callable synchronously. It accepts immutable complete
+owner request bytes, verifies original binding/model hashes before invocation,
+admits only compile0.2/SQL0.2 and returned backend0.2/context correspondence,
+retains original response bytes and freezes nested artifact views. JSON metadata
+integers stay Python-exact and decimals use Decimal; parameter values must remain
+ordered text. Duplicate members, invalid Unicode, excessive nesting, changed
+pins, non-text parameters and positional output in the old profile refuse.
+
+Five independent unittest methods cover immutable exact carriers, pre-compiler
+input refusal, changed/new artifacts, single invocation on failures, reentrancy
+and disposal withholding publication. The pinned wheel/CLI checker additionally
+passes its five cases through this boundary: compiled artifacts retain exact
+response bytes, blocked profiles/queries refuse, and absent versions refuse before
+invocation. That checker loads the boundary from source, not a newly built Truss
+wheel; its receipt records this distinction. The original extension still matches
+its separately installed wheel payload. No execute method, native permit, alternate
+SQL compiler or Weft0.3 adoption is introduced. The full Python engine, original
+obligation services, native decoder and complete installed distribution remain
+required delivery work.
+
 ## Shared planner corpus before the Python port
 
 `tests/fixtures/layout-migration-planning.json` now supplies sixteen independent
