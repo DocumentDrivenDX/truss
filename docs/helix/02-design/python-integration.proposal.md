@@ -66,6 +66,39 @@ R4's database reader/writer membership and any model-level ACLs are separately a
 
 A Python adapter must refuse an unavailable shared security profile; it cannot use the raw predicate fixture or a caller-supplied actor as a fallback. Exact registered policy/native context and privacy behavior are the security workstream's outputs. This proposal defines the consumer-facing dependency and its required tests without choosing their policy semantics.
 
+### Current security-owner native observation handoff
+
+The working-source CONTRACT-053 reviewed in
+[the current boundary receipt](../04-build/evidence/design-audit/security-current-boundary-review-2026-10-09.json)
+specifies a private principal observer returning native superuser, bypass and
+encoding facts as TEXT. SESSION_USER and CURRENT_USER are selected outside the
+definer as original/effective actor. That response is exactly one row with five
+ordered fields, OIDs `[19,19,25,25,25]`, text format zero and non-null valid UTF-8.
+The separate direct-principal option uses five TEXT fields: these are distinct
+profiles, not decoder fallbacks. Inspection on 2026-10-09 still observes this
+distinction; it does not adopt the uncommitted owner contract as a released ABI.
+
+PY-01/03 must demonstrate original raw field metadata/byte custody before
+decoded identity use. A driver-returned string tuple alone cannot prove the
+selected OIDs, formats or original connection observation. Verify actual
+session actor, admitted effective actor/reset state, false superuser/bypass and
+UTF-8 through the owner's procedure. Missing/malformed facts close admission;
+do not substitute catalog lookup or a host-supplied role map.
+
+Subject-key results remain ordered TEXT OID25 even when a selected ordinary
+subject preflight uses native name for its SESSION_USER argument. Argument
+carrier selection does not change key-output semantics or authorize the caller.
+Preserve owner-issued registration and original policy/key/context provenance;
+serialized configuration cannot mint an issued resolver handle.
+
+Independent Python cases must swap actor/key OIDs, reorder fields, return NULL
+or malformed UTF-8, change the actual session/effective actor and lose the
+original response. None may reach application effects or publish protected
+facts. A host deadline does not prove native cancellation/rollback: retain
+original unresolved execution and quarantine custody until qualified native
+termination under CONTRACT-007. Security-owned routine/privilege closure and
+actual Python driver evidence remain dependencies of this slice.
+
 ## Exact transport
 
 Use Python `int` for admitted integral domains and `Decimal` constructed from exact text for decimals, with domain/arithmetic context explicit. Driver raw cells remain text until profile decoding. Decimal operations must not inherit an ambient low-precision context that rounds accepted values. Timestamp transport retains the original exact text and offset; expose an aware `datetime` only when its microsecond representation is lossless. Finer precision requires a lossless wrapper/text representation or explicit refusal of the convenience view. Preserve raw exact JSON bytes; a convenience parser uses an admitted numeric decoder, never the default float path. Python bool must be distinguished from int at validation boundaries.
