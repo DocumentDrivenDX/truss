@@ -591,6 +591,33 @@ original unresolved execution and quarantine custody until qualified native
 termination under CONTRACT-007. Security-owned routine/privilege closure and
 actual Python driver evidence remain dependencies of this slice.
 
+### Stored fact versus context value source custody
+
+The security owner's active revision-26 snapshot reports work on a separate
+source-bound context channel. A stored Field and a context attribute may refer
+to the same qualified declaration while carrying different values. Truss must
+consume the selected owner's channel/issuer semantics, not merge facts by
+Field identity or reinterpret a host dictionary as original database context.
+This is reported ongoing work, not adoption of a completed public/native ABI.
+
+Before protected execution, retain each value's original channel, qualified
+declaration, issuer/source/profile, operation generation and exact value/presence
+basis. Compiler slots and native context handoff must preserve that correspondence.
+Context changes follow the owner's freshness/invalidation procedure independently
+of stored-record versions. An admitted stored read cannot validate context authority;
+a matching context label or value cannot replace the stored record observation.
+
+PY-03/C4 independently supply different values for the same declaration through
+the stored and admitted context channels, then swap only one channel. A stored-
+Field predicate must consume the original stored value, while a context term
+consumes its admitted context value under the owner contract. Include unavailable
+context, a caller-forged issuer, changed context generation and copied stored
+value passed as context; observe the exact original refusal/unknown classification
+and zero unadmitted protected publication. Missing context is not an empty stored
+Field or an automatic false predicate. Keep output/diagnostic disclosure under the
+same owner policy, so errors do not reveal the other channel's protected value.
+No Python context resolver, policy parser or native authority mapping is added.
+
 ### Association correlation integration controls
 
 The security owner's revision-24 progress snapshot on 2026-10-09 describes a

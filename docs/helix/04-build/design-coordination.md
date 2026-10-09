@@ -88,6 +88,22 @@ coefficient equality alone cannot authorize a key, predicate or disclosure.
 These controls remain planned until the complete owner tuple and original Truss
 mapping/authority/account/publication procedures are qualified.
 
+## Security context-channel handoff — 2026-10-09
+
+The read-only “Assess security control support” snapshot is active at revision
+26 and reports a separate source-bound context channel. Stored Field facts and
+context attributes with equal qualified declarations must keep separate values
+and source custody. This status observation adopts no source, public ABI or
+native evidence.
+
+The [Python integration controls](../02-design/python-integration.proposal.md#stored-fact-versus-context-value-source-custody)
+now require paired different-value/channel-swap cases, missing context, forged
+issuer and changed generation. Truss consumes the owner protocol through compiler
+slots and native/current-authority publication; equality of declaration names,
+stored read success or a host dictionary cannot issue context authority. Original
+owner interpretation, source/current-context/resource and native refinement
+remain qualification dependencies, with no competing Truss resolver.
+
 ## Security empty-population preflight handoff — 2026-10-09
 
 The read-only “Assess security control support” snapshot is active at revision
