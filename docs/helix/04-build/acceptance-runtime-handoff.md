@@ -12,6 +12,14 @@ full extension, accepted-history source context or unresolved endpoint policy.
 Use the [representation handoff](../02-design/contracts/truss-endpoint-intent-representation.proposal.md)
 for remaining E1–E5 original producer/dependency/definition/report integration.
 
+The corresponding private full-carrier basis now collects complete declared
+dependency/endpoint/association occurrences from original source bytes, checks
+candidate structure and exact dependency/source correspondence, and retains
+pending lineage without invented definitions. Eleven combined tests/39 assertions
+and strict TypeScript pass. Unregistered extension semantics remain explicitly
+incomplete; this source/shape basis cannot enter A3 as adopted unknown-endpoint
+policy or stand in for complete original Record/key/native/report producers.
+
 The public assembly in `packages/postgresql/src/index.ts` remains inert: catalog,
 mutation and feed selectors return unavailable. The private preparation supports
 new-only staging; it does not supply transform, retirement or provisional-endpoint

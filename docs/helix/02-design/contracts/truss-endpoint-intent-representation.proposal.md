@@ -213,6 +213,26 @@ registered carrier and endpoint/lifecycle/namespace admission remain E2–E5 wor
 The explicit maximum reference count is an admitted caller profile argument, not
 a selected release default or whole-operation allocation proof.
 
+The private `catalog-endpoint-intent-basis.ts` now validates the exact pinned
+full candidate schema against original source payloads and collects every
+dependency, selected/pending endpoint and association-Record occurrence. It
+rejects duplicate dependency selections, qualified intent IDs and endpoint
+lineages, undeclared selected external definitions, absent declaring modules and
+reversed exact integer-text bounds. Selected references resolve through the
+original supplied-source component; pending references retain their full declared
+lineage/expected revision without fabricated source members. One explicit bound
+counts all reference occurrences across the whole original input.
+
+Six focused tests/18 assertions, together with the five source-reference tests,
+pass as eleven tests/39 assertions; both implementation/test pairs pass strict
+TypeScript. The positive test explicitly preserves UMF's incomplete validation
+status for the unregistered candidate extension. Thus the scope remains
+`original_endpoint_intent_shape_and_supplied_source_basis_only`, not registered
+endpoint interpretation, prior accepted-source admission, native definition/key
+resolution, policy execution or a positive accepted revision. The factory adds
+no public export or extension authority. Its current original-source subset is
+UMF 0.7; source transition to 0.8 never substitutes the archived source payload.
+
 Reproduce shape controls from the repository root with
 `bun docs/helix/04-build/evidence/design-audit/check-truss-endpoint-intent-shapes.ts /absolute/path/to/dependency/package.json`,
 using the admitted Ajv2020 dependency package.
