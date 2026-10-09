@@ -238,3 +238,16 @@ source pins. Remaining parity work is default/generated/check expression meaning
 index/sequence/routine/trigger inventory and effective ordinary-role grants, plus
 complete initialization and published installation custody. Local native execution
 continues to roll back all review DDL and establishes no installed release.
+
+## Native declarations for remaining installation checks
+
+The [declaration capture](../../../scripts/capture-pgserver-native-objects.ts) uses
+UMF's existing PostgreSQL node API to retain original native definitions from all
+three storage models. Its [artifact](evidence/design-audit/pgserver-native-object-declarations.json)
+pins model bytes and the three imported UMF entrypoint files. It captures 25 explicit
+index declarations and 12 sequence declarations, including exact integer option
+tokens and original predicates. This is an input to the next native comparison,
+not native verification, complete dependency pinning or inventory closure. Implicit
+constraint indexes, defaults/check expressions, routine bodies, grants and
+initializer publication remain separate required checks. UMF continues to own SQL
+generation; this capture introduces no alternative SQL compiler.

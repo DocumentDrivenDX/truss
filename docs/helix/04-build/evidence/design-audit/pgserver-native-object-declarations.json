@@ -1,0 +1,2050 @@
+{
+  "scope": "Original UMF native index/sequence declaration capture only; no native or installation qualification",
+  "ownerSources": [
+    {
+      "path": "/Users/erik/Projects/umf/src/model/document.ts",
+      "sha256": "a0422042659defdea425dff8bb0618eaa4bbf125f68da16aa5ad21af0b6c282f"
+    },
+    {
+      "path": "/Users/erik/Projects/umf/src/adapters/postgresql/index.ts",
+      "sha256": "7baa071d95e5f9863a4ce2bf892d87fb27cab9d8605ba4cf8887016d14ca17b4"
+    },
+    {
+      "path": "/Users/erik/Projects/umf/src/model/native-json.ts",
+      "sha256": "1459a3e030419c3ae09b300972e27aed8b8ee1f7e41972b3cc00627dff7d7882"
+    }
+  ],
+  "sources": [
+    {
+      "path": "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json",
+      "sha256": "261e32c6c62624418f124ac7fbe3c206338322a03755b7ac0f1a7c7d86002368"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/operation-configuration-storage-v0.1.proposal.umf.json",
+      "sha256": "5c94ccae459ee46925acf01ce797443fb4a236a1157fae189aa5d726c225b1b7"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/layout-migration-storage-v0.1.proposal.umf.json",
+      "sha256": "45e1f57588c21e6b107031732cd6c135d759e4c8f7221e19642d053437e9bf79"
+    }
+  ],
+  "objects": [
+    {
+      "sourceModel": "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json",
+      "sourcePointer": "/stmts/17/stmt/CreateSeqStmt",
+      "kind": "CreateSeqStmt",
+      "definition": {
+        "sequence": {
+          "schemaname": "truss",
+          "relname": "id_seq",
+          "inh": true,
+          "relpersistence": "p",
+          "location": 6601
+        }
+      }
+    },
+    {
+      "sourceModel": "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json",
+      "sourcePointer": "/stmts/19/stmt/IndexStmt",
+      "kind": "IndexStmt",
+      "definition": {
+        "idxname": "object_type_id",
+        "relation": {
+          "schemaname": "truss",
+          "relname": "object",
+          "inh": true,
+          "relpersistence": "p",
+          "location": 7849
+        },
+        "accessMethod": "btree",
+        "indexParams": [
+          {
+            "IndexElem": {
+              "name": "type_id",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          },
+          {
+            "IndexElem": {
+              "name": "id",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "sourceModel": "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json",
+      "sourcePointer": "/stmts/21/stmt/IndexStmt",
+      "kind": "IndexStmt",
+      "definition": {
+        "idxname": "edge_out",
+        "relation": {
+          "schemaname": "truss",
+          "relname": "edge",
+          "inh": true,
+          "relpersistence": "p",
+          "location": 10030
+        },
+        "accessMethod": "btree",
+        "indexParams": [
+          {
+            "IndexElem": {
+              "name": "source_id",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          },
+          {
+            "IndexElem": {
+              "name": "rel_type_id",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          },
+          {
+            "IndexElem": {
+              "name": "target_id",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          }
+        ],
+        "indexIncludingParams": [
+          {
+            "IndexElem": {
+              "name": "target_type",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          }
+        ],
+        "unique": true
+      }
+    },
+    {
+      "sourceModel": "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json",
+      "sourcePointer": "/stmts/22/stmt/IndexStmt",
+      "kind": "IndexStmt",
+      "definition": {
+        "idxname": "edge_in",
+        "relation": {
+          "schemaname": "truss",
+          "relname": "edge",
+          "inh": true,
+          "relpersistence": "p",
+          "location": 10125
+        },
+        "accessMethod": "btree",
+        "indexParams": [
+          {
+            "IndexElem": {
+              "name": "target_id",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          },
+          {
+            "IndexElem": {
+              "name": "rel_type_id",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          }
+        ],
+        "indexIncludingParams": [
+          {
+            "IndexElem": {
+              "name": "source_id",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          },
+          {
+            "IndexElem": {
+              "name": "source_type",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "sourceModel": "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json",
+      "sourcePointer": "/stmts/24/stmt/IndexStmt",
+      "kind": "IndexStmt",
+      "definition": {
+        "idxname": "edge_limit_edge",
+        "relation": {
+          "schemaname": "truss",
+          "relname": "edge_limit",
+          "inh": true,
+          "relpersistence": "p",
+          "location": 10814
+        },
+        "accessMethod": "btree",
+        "indexParams": [
+          {
+            "IndexElem": {
+              "name": "edge_id",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "sourceModel": "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json",
+      "sourcePointer": "/stmts/27/stmt/IndexStmt",
+      "kind": "IndexStmt",
+      "definition": {
+        "idxname": "record_source_load",
+        "relation": {
+          "schemaname": "truss",
+          "relname": "record_source",
+          "inh": true,
+          "relpersistence": "p",
+          "location": 12591
+        },
+        "accessMethod": "btree",
+        "indexParams": [
+          {
+            "IndexElem": {
+              "name": "load_id",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "sourceModel": "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json",
+      "sourcePointer": "/stmts/29/stmt/CreateSeqStmt",
+      "kind": "CreateSeqStmt",
+      "definition": {
+        "sequence": {
+          "schemaname": "truss",
+          "relname": "journal_seq",
+          "inh": true,
+          "relpersistence": "p",
+          "location": 13312
+        },
+        "options": [
+          {
+            "DefElem": {
+              "defname": "as",
+              "arg": {
+                "TypeName": {
+                  "names": [
+                    {
+                      "String": {
+                        "sval": "pg_catalog"
+                      }
+                    },
+                    {
+                      "String": {
+                        "sval": "int8"
+                      }
+                    }
+                  ],
+                  "typemod": -1,
+                  "location": 37
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 34
+            }
+          },
+          {
+            "DefElem": {
+              "defname": "increment",
+              "arg": {
+                "Integer": {
+                  "ival": 1
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 44
+            }
+          },
+          {
+            "DefElem": {
+              "defname": "minvalue",
+              "arg": {
+                "Integer": {
+                  "ival": 1
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 59
+            }
+          },
+          {
+            "DefElem": {
+              "defname": "maxvalue",
+              "arg": {
+                "Float": {
+                  "fval": "9223372036854775807"
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 70
+            }
+          },
+          {
+            "DefElem": {
+              "defname": "start",
+              "arg": {
+                "Integer": {
+                  "ival": 1
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 99
+            }
+          },
+          {
+            "DefElem": {
+              "defname": "cycle",
+              "arg": {
+                "Boolean": {
+                  "boolval": false
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 112
+            }
+          },
+          {
+            "DefElem": {
+              "defname": "cache",
+              "arg": {
+                "Integer": {
+                  "ival": 1
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 121
+            }
+          }
+        ]
+      }
+    },
+    {
+      "sourceModel": "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json",
+      "sourcePointer": "/stmts/31/stmt/IndexStmt",
+      "kind": "IndexStmt",
+      "definition": {
+        "idxname": "journal_entity",
+        "relation": {
+          "schemaname": "truss",
+          "relname": "journal",
+          "inh": true,
+          "relpersistence": "p",
+          "location": 14547
+        },
+        "accessMethod": "btree",
+        "indexParams": [
+          {
+            "IndexElem": {
+              "name": "entity_kind",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          },
+          {
+            "IndexElem": {
+              "name": "entity_id",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          },
+          {
+            "IndexElem": {
+              "name": "ver",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "sourceModel": "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json",
+      "sourcePointer": "/stmts/32/stmt/IndexStmt",
+      "kind": "IndexStmt",
+      "definition": {
+        "idxname": "journal_feed",
+        "relation": {
+          "schemaname": "truss",
+          "relname": "journal",
+          "inh": true,
+          "relpersistence": "p",
+          "location": 14623
+        },
+        "accessMethod": "btree",
+        "indexParams": [
+          {
+            "IndexElem": {
+              "name": "xid",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          },
+          {
+            "IndexElem": {
+              "name": "seq",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "sourceModel": "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json",
+      "sourcePointer": "/stmts/33/stmt/IndexStmt",
+      "kind": "IndexStmt",
+      "definition": {
+        "idxname": "journal_request",
+        "relation": {
+          "schemaname": "truss",
+          "relname": "journal",
+          "inh": true,
+          "relpersistence": "p",
+          "location": 14888
+        },
+        "accessMethod": "btree",
+        "indexParams": [
+          {
+            "IndexElem": {
+              "expr": {
+                "A_Expr": {
+                  "kind": "AEXPR_OP",
+                  "name": [
+                    {
+                      "String": {
+                        "sval": "#>>"
+                      }
+                    }
+                  ],
+                  "lexpr": {
+                    "ColumnRef": {
+                      "fields": [
+                        {
+                          "String": {
+                            "sval": "origin"
+                          }
+                        }
+                      ],
+                      "location": 14904
+                    }
+                  },
+                  "rexpr": {
+                    "A_Const": {
+                      "sval": {
+                        "sval": "{request,id}"
+                      },
+                      "location": 14915
+                    }
+                  },
+                  "location": 14911
+                }
+              },
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          }
+        ],
+        "whereClause": {
+          "A_Expr": {
+            "kind": "AEXPR_OP",
+            "name": [
+              {
+                "String": {
+                  "sval": "?"
+                }
+              }
+            ],
+            "lexpr": {
+              "ColumnRef": {
+                "fields": [
+                  {
+                    "String": {
+                      "sval": "origin"
+                    }
+                  }
+                ],
+                "location": 14938
+              }
+            },
+            "rexpr": {
+              "A_Const": {
+                "sval": {
+                  "sval": "request"
+                },
+                "location": 14947
+              }
+            },
+            "location": 14945
+          }
+        }
+      }
+    },
+    {
+      "sourceModel": "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json",
+      "sourcePointer": "/stmts/42/stmt/IndexStmt",
+      "kind": "IndexStmt",
+      "definition": {
+        "idxname": "type_def_lineage_route",
+        "relation": {
+          "schemaname": "truss",
+          "relname": "type_def",
+          "inh": true,
+          "relpersistence": "p",
+          "location": 2691
+        },
+        "accessMethod": "btree",
+        "indexParams": [
+          {
+            "IndexElem": {
+              "name": "lineage_sha256",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          },
+          {
+            "IndexElem": {
+              "name": "type_id",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "sourceModel": "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json",
+      "sourcePointer": "/stmts/45/stmt/CreateSeqStmt",
+      "kind": "CreateSeqStmt",
+      "definition": {
+        "sequence": {
+          "schemaname": "truss",
+          "relname": "row_home_id_seq",
+          "inh": true,
+          "relpersistence": "p",
+          "location": 545
+        },
+        "options": [
+          {
+            "DefElem": {
+              "defname": "as",
+              "arg": {
+                "TypeName": {
+                  "names": [
+                    {
+                      "String": {
+                        "sval": "pg_catalog"
+                      }
+                    },
+                    {
+                      "String": {
+                        "sval": "int8"
+                      }
+                    }
+                  ],
+                  "typemod": -1,
+                  "location": 570
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 567
+            }
+          },
+          {
+            "DefElem": {
+              "defname": "cycle",
+              "arg": {
+                "Boolean": {
+                  "boolval": false
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 577
+            }
+          }
+        ]
+      }
+    },
+    {
+      "sourceModel": "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json",
+      "sourcePointer": "/stmts/49/stmt/IndexStmt",
+      "kind": "IndexStmt",
+      "definition": {
+        "idxname": "row_home_one_root",
+        "relation": {
+          "schemaname": "truss",
+          "relname": "row_home_node",
+          "inh": true,
+          "relpersistence": "p",
+          "location": 4629
+        },
+        "accessMethod": "btree",
+        "indexParams": [
+          {
+            "IndexElem": {
+              "name": "state_id",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          }
+        ],
+        "whereClause": {
+          "NullTest": {
+            "arg": {
+              "ColumnRef": {
+                "fields": [
+                  {
+                    "String": {
+                      "sval": "parent_node_id"
+                    }
+                  }
+                ],
+                "location": 4668
+              }
+            },
+            "nulltesttype": "IS_NULL",
+            "location": 4683
+          }
+        },
+        "unique": true
+      }
+    },
+    {
+      "sourceModel": "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json",
+      "sourcePointer": "/stmts/50/stmt/IndexStmt",
+      "kind": "IndexStmt",
+      "definition": {
+        "idxname": "row_home_sequence_slot",
+        "relation": {
+          "schemaname": "truss",
+          "relname": "row_home_node",
+          "inh": true,
+          "relpersistence": "p",
+          "location": 4738
+        },
+        "accessMethod": "btree",
+        "indexParams": [
+          {
+            "IndexElem": {
+              "name": "state_id",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          },
+          {
+            "IndexElem": {
+              "name": "parent_node_id",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          },
+          {
+            "IndexElem": {
+              "name": "sequence_ordinal",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          }
+        ],
+        "whereClause": {
+          "A_Expr": {
+            "kind": "AEXPR_OP",
+            "name": [
+              {
+                "String": {
+                  "sval": "="
+                }
+              }
+            ],
+            "lexpr": {
+              "ColumnRef": {
+                "fields": [
+                  {
+                    "String": {
+                      "sval": "slot_kind"
+                    }
+                  }
+                ],
+                "location": 4811
+              }
+            },
+            "rexpr": {
+              "A_Const": {
+                "sval": {
+                  "sval": "sequence"
+                },
+                "location": 4823
+              }
+            },
+            "location": 4821
+          }
+        },
+        "unique": true
+      }
+    },
+    {
+      "sourceModel": "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json",
+      "sourcePointer": "/stmts/51/stmt/IndexStmt",
+      "kind": "IndexStmt",
+      "definition": {
+        "idxname": "row_home_map_parent",
+        "relation": {
+          "schemaname": "truss",
+          "relname": "row_home_node",
+          "inh": true,
+          "relpersistence": "p",
+          "location": 4871
+        },
+        "accessMethod": "btree",
+        "indexParams": [
+          {
+            "IndexElem": {
+              "name": "state_id",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          },
+          {
+            "IndexElem": {
+              "name": "parent_node_id",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          }
+        ],
+        "whereClause": {
+          "A_Expr": {
+            "kind": "AEXPR_OP",
+            "name": [
+              {
+                "String": {
+                  "sval": "="
+                }
+              }
+            ],
+            "lexpr": {
+              "ColumnRef": {
+                "fields": [
+                  {
+                    "String": {
+                      "sval": "slot_kind"
+                    }
+                  }
+                ],
+                "location": 4926
+              }
+            },
+            "rexpr": {
+              "A_Const": {
+                "sval": {
+                  "sval": "map"
+                },
+                "location": 4938
+              }
+            },
+            "location": 4936
+          }
+        }
+      }
+    },
+    {
+      "sourceModel": "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json",
+      "sourcePointer": "/stmts/54/stmt/IndexStmt",
+      "kind": "IndexStmt",
+      "definition": {
+        "idxname": "relationship_lineage_route",
+        "relation": {
+          "schemaname": "truss",
+          "relname": "relationship_lineage",
+          "inh": true,
+          "relpersistence": "p",
+          "location": 994
+        },
+        "accessMethod": "btree",
+        "indexParams": [
+          {
+            "IndexElem": {
+              "name": "identity_sha256",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          },
+          {
+            "IndexElem": {
+              "name": "rel_type_id",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "sourceModel": "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json",
+      "sourcePointer": "/stmts/63/stmt/CreateSeqStmt",
+      "kind": "CreateSeqStmt",
+      "definition": {
+        "sequence": {
+          "schemaname": "truss",
+          "relname": "key_storage_row_seq",
+          "inh": true,
+          "relpersistence": "p",
+          "location": 396
+        },
+        "options": [
+          {
+            "DefElem": {
+              "defname": "as",
+              "arg": {
+                "TypeName": {
+                  "names": [
+                    {
+                      "String": {
+                        "sval": "pg_catalog"
+                      }
+                    },
+                    {
+                      "String": {
+                        "sval": "int8"
+                      }
+                    }
+                  ],
+                  "typemod": -1,
+                  "location": 425
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 422
+            }
+          },
+          {
+            "DefElem": {
+              "defname": "minvalue",
+              "arg": {
+                "Integer": {
+                  "ival": 1
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 434
+            }
+          },
+          {
+            "DefElem": {
+              "defname": "maxvalue",
+              "arg": {
+                "Float": {
+                  "fval": "9223372036854775807"
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 445
+            }
+          },
+          {
+            "DefElem": {
+              "defname": "start",
+              "arg": {
+                "Integer": {
+                  "ival": 1
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 474
+            }
+          },
+          {
+            "DefElem": {
+              "defname": "cycle",
+              "arg": {
+                "Boolean": {
+                  "boolval": false
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 487
+            }
+          }
+        ]
+      }
+    },
+    {
+      "sourceModel": "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json",
+      "sourcePointer": "/stmts/66/stmt/IndexStmt",
+      "kind": "IndexStmt",
+      "definition": {
+        "idxname": "object_key_bucket_route",
+        "relation": {
+          "schemaname": "truss",
+          "relname": "object_key_bucket",
+          "inh": true,
+          "relpersistence": "p",
+          "location": 2510
+        },
+        "accessMethod": "btree",
+        "indexParams": [
+          {
+            "IndexElem": {
+              "name": "namespace_sha256",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          },
+          {
+            "IndexElem": {
+              "name": "key_sha256",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          },
+          {
+            "IndexElem": {
+              "name": "storage_row_id",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "sourceModel": "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json",
+      "sourcePointer": "/stmts/68/stmt/IndexStmt",
+      "kind": "IndexStmt",
+      "definition": {
+        "idxname": "object_key_reservation_bucket_route",
+        "relation": {
+          "schemaname": "truss",
+          "relname": "object_key_reservation_bucket",
+          "inh": true,
+          "relpersistence": "p",
+          "location": 3868
+        },
+        "accessMethod": "btree",
+        "indexParams": [
+          {
+            "IndexElem": {
+              "name": "namespace_sha256",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          },
+          {
+            "IndexElem": {
+              "name": "key_sha256",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          },
+          {
+            "IndexElem": {
+              "name": "storage_row_id",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "sourceModel": "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json",
+      "sourcePointer": "/stmts/75/stmt/CreateSeqStmt",
+      "kind": "CreateSeqStmt",
+      "definition": {
+        "sequence": {
+          "schemaname": "truss",
+          "relname": "installation_archive_row_seq",
+          "inh": true,
+          "relpersistence": "p",
+          "location": 1762
+        },
+        "options": [
+          {
+            "DefElem": {
+              "defname": "as",
+              "arg": {
+                "TypeName": {
+                  "names": [
+                    {
+                      "String": {
+                        "sval": "pg_catalog"
+                      }
+                    },
+                    {
+                      "String": {
+                        "sval": "int8"
+                      }
+                    }
+                  ],
+                  "typemod": -1,
+                  "location": 1800
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 1797
+            }
+          },
+          {
+            "DefElem": {
+              "defname": "minvalue",
+              "arg": {
+                "Integer": {
+                  "ival": 1
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 1809
+            }
+          },
+          {
+            "DefElem": {
+              "defname": "maxvalue",
+              "arg": {
+                "Float": {
+                  "fval": "9223372036854775807"
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 1820
+            }
+          },
+          {
+            "DefElem": {
+              "defname": "start",
+              "arg": {
+                "Integer": {
+                  "ival": 1
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 1849
+            }
+          },
+          {
+            "DefElem": {
+              "defname": "cycle",
+              "arg": {
+                "Boolean": {
+                  "boolval": false
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 1862
+            }
+          }
+        ]
+      }
+    },
+    {
+      "sourceModel": "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json",
+      "sourcePointer": "/stmts/77/stmt/IndexStmt",
+      "kind": "IndexStmt",
+      "definition": {
+        "idxname": "installation_archive_identity_route",
+        "relation": {
+          "schemaname": "truss",
+          "relname": "installation_archive",
+          "inh": true,
+          "relpersistence": "p",
+          "location": 3110
+        },
+        "accessMethod": "btree",
+        "indexParams": [
+          {
+            "IndexElem": {
+              "name": "installation_id",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          },
+          {
+            "IndexElem": {
+              "name": "artifact_identity_sha256",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          },
+          {
+            "IndexElem": {
+              "name": "archive_row_id",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "sourceModel": "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json",
+      "sourcePointer": "/stmts/82/stmt/CreateSeqStmt",
+      "kind": "CreateSeqStmt",
+      "definition": {
+        "sequence": {
+          "schemaname": "truss",
+          "relname": "complete_feed_consumer_row_seq",
+          "inh": true,
+          "relpersistence": "p",
+          "location": 182
+        },
+        "options": [
+          {
+            "DefElem": {
+              "defname": "as",
+              "arg": {
+                "TypeName": {
+                  "names": [
+                    {
+                      "String": {
+                        "sval": "pg_catalog"
+                      }
+                    },
+                    {
+                      "String": {
+                        "sval": "int8"
+                      }
+                    }
+                  ],
+                  "typemod": -1,
+                  "location": 222
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 219
+            }
+          },
+          {
+            "DefElem": {
+              "defname": "minvalue",
+              "arg": {
+                "Integer": {
+                  "ival": 1
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 231
+            }
+          },
+          {
+            "DefElem": {
+              "defname": "maxvalue",
+              "arg": {
+                "Float": {
+                  "fval": "9223372036854775807"
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 242
+            }
+          },
+          {
+            "DefElem": {
+              "defname": "start",
+              "arg": {
+                "Integer": {
+                  "ival": 1
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 271
+            }
+          },
+          {
+            "DefElem": {
+              "defname": "cycle",
+              "arg": {
+                "Boolean": {
+                  "boolval": false
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 284
+            }
+          }
+        ]
+      }
+    },
+    {
+      "sourceModel": "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json",
+      "sourcePointer": "/stmts/84/stmt/IndexStmt",
+      "kind": "IndexStmt",
+      "definition": {
+        "idxname": "complete_feed_consumer_identity_route",
+        "relation": {
+          "schemaname": "truss",
+          "relname": "complete_feed_consumer",
+          "inh": true,
+          "relpersistence": "p",
+          "location": 2896
+        },
+        "accessMethod": "btree",
+        "indexParams": [
+          {
+            "IndexElem": {
+              "name": "consumer_identity_sha256",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          },
+          {
+            "IndexElem": {
+              "name": "storage_row_id",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "sourceModel": "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json",
+      "sourcePointer": "/stmts/85/stmt/CreateSeqStmt",
+      "kind": "CreateSeqStmt",
+      "definition": {
+        "sequence": {
+          "schemaname": "truss",
+          "relname": "feed_administration_receipt_row_seq",
+          "inh": true,
+          "relpersistence": "p",
+          "location": 99
+        },
+        "options": [
+          {
+            "DefElem": {
+              "defname": "as",
+              "arg": {
+                "TypeName": {
+                  "names": [
+                    {
+                      "String": {
+                        "sval": "pg_catalog"
+                      }
+                    },
+                    {
+                      "String": {
+                        "sval": "int8"
+                      }
+                    }
+                  ],
+                  "typemod": -1,
+                  "location": 144
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 141
+            }
+          },
+          {
+            "DefElem": {
+              "defname": "minvalue",
+              "arg": {
+                "Integer": {
+                  "ival": 1
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 151
+            }
+          },
+          {
+            "DefElem": {
+              "defname": "start",
+              "arg": {
+                "Integer": {
+                  "ival": 1
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 162
+            }
+          },
+          {
+            "DefElem": {
+              "defname": "cycle",
+              "arg": {
+                "Boolean": {
+                  "boolval": false
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 175
+            }
+          }
+        ]
+      }
+    },
+    {
+      "sourceModel": "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json",
+      "sourcePointer": "/stmts/87/stmt/IndexStmt",
+      "kind": "IndexStmt",
+      "definition": {
+        "idxname": "feed_administration_receipt_identity_route",
+        "relation": {
+          "schemaname": "truss",
+          "relname": "complete_feed_administration_receipt",
+          "inh": true,
+          "relpersistence": "p",
+          "location": 1503
+        },
+        "accessMethod": "btree",
+        "indexParams": [
+          {
+            "IndexElem": {
+              "name": "identity_sha256",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          },
+          {
+            "IndexElem": {
+              "name": "storage_row_id",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "sourceModel": "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json",
+      "sourcePointer": "/stmts/88/stmt/CreateSeqStmt",
+      "kind": "CreateSeqStmt",
+      "definition": {
+        "sequence": {
+          "schemaname": "truss",
+          "relname": "feed_seed_attempt_row_seq",
+          "inh": true,
+          "relpersistence": "p",
+          "location": 1597
+        },
+        "options": [
+          {
+            "DefElem": {
+              "defname": "as",
+              "arg": {
+                "TypeName": {
+                  "names": [
+                    {
+                      "String": {
+                        "sval": "pg_catalog"
+                      }
+                    },
+                    {
+                      "String": {
+                        "sval": "int8"
+                      }
+                    }
+                  ],
+                  "typemod": -1,
+                  "location": 1632
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 1629
+            }
+          },
+          {
+            "DefElem": {
+              "defname": "minvalue",
+              "arg": {
+                "Integer": {
+                  "ival": 1
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 1639
+            }
+          },
+          {
+            "DefElem": {
+              "defname": "start",
+              "arg": {
+                "Integer": {
+                  "ival": 1
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 1650
+            }
+          },
+          {
+            "DefElem": {
+              "defname": "cycle",
+              "arg": {
+                "Boolean": {
+                  "boolval": false
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 1663
+            }
+          }
+        ]
+      }
+    },
+    {
+      "sourceModel": "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json",
+      "sourcePointer": "/stmts/90/stmt/IndexStmt",
+      "kind": "IndexStmt",
+      "definition": {
+        "idxname": "feed_seed_attempt_identity_route",
+        "relation": {
+          "schemaname": "truss",
+          "relname": "complete_feed_seed_attempt",
+          "inh": true,
+          "relpersistence": "p",
+          "location": 2964
+        },
+        "accessMethod": "btree",
+        "indexParams": [
+          {
+            "IndexElem": {
+              "name": "attempt_identity_sha256",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          },
+          {
+            "IndexElem": {
+              "name": "storage_row_id",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "sourceModel": "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json",
+      "sourcePointer": "/stmts/91/stmt/CreateSeqStmt",
+      "kind": "CreateSeqStmt",
+      "definition": {
+        "sequence": {
+          "schemaname": "truss",
+          "relname": "feed_seed_artifact_row_seq",
+          "inh": true,
+          "relpersistence": "p",
+          "location": 3056
+        },
+        "options": [
+          {
+            "DefElem": {
+              "defname": "as",
+              "arg": {
+                "TypeName": {
+                  "names": [
+                    {
+                      "String": {
+                        "sval": "pg_catalog"
+                      }
+                    },
+                    {
+                      "String": {
+                        "sval": "int8"
+                      }
+                    }
+                  ],
+                  "typemod": -1,
+                  "location": 3092
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 3089
+            }
+          },
+          {
+            "DefElem": {
+              "defname": "minvalue",
+              "arg": {
+                "Integer": {
+                  "ival": 1
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 3099
+            }
+          },
+          {
+            "DefElem": {
+              "defname": "start",
+              "arg": {
+                "Integer": {
+                  "ival": 1
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 3110
+            }
+          },
+          {
+            "DefElem": {
+              "defname": "cycle",
+              "arg": {
+                "Boolean": {
+                  "boolval": false
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 3123
+            }
+          }
+        ]
+      }
+    },
+    {
+      "sourceModel": "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json",
+      "sourcePointer": "/stmts/93/stmt/IndexStmt",
+      "kind": "IndexStmt",
+      "definition": {
+        "idxname": "feed_seed_artifact_identity_route",
+        "relation": {
+          "schemaname": "truss",
+          "relname": "complete_feed_seed_artifact",
+          "inh": true,
+          "relpersistence": "p",
+          "location": 4351
+        },
+        "accessMethod": "btree",
+        "indexParams": [
+          {
+            "IndexElem": {
+              "name": "attempt_row_id",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          },
+          {
+            "IndexElem": {
+              "name": "artifact_identity_sha256",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          },
+          {
+            "IndexElem": {
+              "name": "storage_row_id",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "sourceModel": "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json",
+      "sourcePointer": "/stmts/94/stmt/IndexStmt",
+      "kind": "IndexStmt",
+      "definition": {
+        "idxname": "row_home_operation_unfinished_xid",
+        "relation": {
+          "schemaname": "truss",
+          "relname": "row_home_operation",
+          "inh": true,
+          "relpersistence": "p",
+          "location": 217
+        },
+        "accessMethod": "btree",
+        "indexParams": [
+          {
+            "IndexElem": {
+              "name": "original_writer_xid",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          }
+        ],
+        "whereClause": {
+          "A_Expr": {
+            "kind": "AEXPR_OP",
+            "name": [
+              {
+                "String": {
+                  "sval": "pg_catalog"
+                }
+              },
+              {
+                "String": {
+                  "sval": "<>"
+                }
+              }
+            ],
+            "lexpr": {
+              "ColumnRef": {
+                "fields": [
+                  {
+                    "String": {
+                      "sval": "phase"
+                    }
+                  }
+                ],
+                "location": 272
+              }
+            },
+            "rexpr": {
+              "A_Const": {
+                "sval": {
+                  "sval": "application_finalized"
+                },
+                "location": 302
+              }
+            },
+            "location": 278
+          }
+        },
+        "unique": true
+      }
+    },
+    {
+      "sourceModel": "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json",
+      "sourcePointer": "/stmts/96/stmt/IndexStmt",
+      "kind": "IndexStmt",
+      "definition": {
+        "idxname": "key_lifecycle_history_by_key",
+        "relation": {
+          "schemaname": "truss",
+          "relname": "key_lifecycle_history",
+          "inh": true,
+          "relpersistence": "p",
+          "location": 1512
+        },
+        "accessMethod": "btree",
+        "indexParams": [
+          {
+            "IndexElem": {
+              "name": "type_id",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          },
+          {
+            "IndexElem": {
+              "name": "key_num",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          },
+          {
+            "IndexElem": {
+              "name": "rev",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          },
+          {
+            "IndexElem": {
+              "name": "seq",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "sourceModel": "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json",
+      "sourcePointer": "/stmts/98/stmt/CreateSeqStmt",
+      "kind": "CreateSeqStmt",
+      "definition": {
+        "sequence": {
+          "schemaname": "truss",
+          "relname": "migration_receipt_row_seq",
+          "inh": true,
+          "relpersistence": "p",
+          "location": 178
+        },
+        "options": [
+          {
+            "DefElem": {
+              "defname": "as",
+              "arg": {
+                "TypeName": {
+                  "names": [
+                    {
+                      "String": {
+                        "sval": "pg_catalog"
+                      }
+                    },
+                    {
+                      "String": {
+                        "sval": "int8"
+                      }
+                    }
+                  ],
+                  "typemod": -1,
+                  "location": 213
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 210
+            }
+          },
+          {
+            "DefElem": {
+              "defname": "minvalue",
+              "arg": {
+                "Integer": {
+                  "ival": 1
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 222
+            }
+          },
+          {
+            "DefElem": {
+              "defname": "maxvalue",
+              "arg": {
+                "Float": {
+                  "fval": "9223372036854775807"
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 233
+            }
+          },
+          {
+            "DefElem": {
+              "defname": "start",
+              "arg": {
+                "Integer": {
+                  "ival": 1
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 262
+            }
+          },
+          {
+            "DefElem": {
+              "defname": "cycle",
+              "arg": {
+                "Boolean": {
+                  "boolval": false
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 275
+            }
+          }
+        ]
+      }
+    },
+    {
+      "sourceModel": "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json",
+      "sourcePointer": "/stmts/100/stmt/IndexStmt",
+      "kind": "IndexStmt",
+      "definition": {
+        "idxname": "key_migration_receipt_route",
+        "relation": {
+          "schemaname": "truss",
+          "relname": "key_migration_receipt",
+          "inh": true,
+          "relpersistence": "p",
+          "location": 1760
+        },
+        "accessMethod": "btree",
+        "indexParams": [
+          {
+            "IndexElem": {
+              "name": "installation_sha256",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          },
+          {
+            "IndexElem": {
+              "name": "epoch_sha256",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          },
+          {
+            "IndexElem": {
+              "name": "attempt_sha256",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          },
+          {
+            "IndexElem": {
+              "name": "storage_row_id",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "sourceModel": "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json",
+      "sourcePointer": "/stmts/102/stmt/CreateSeqStmt",
+      "kind": "CreateSeqStmt",
+      "definition": {
+        "sequence": {
+          "schemaname": "truss",
+          "relname": "request_receipt_row_seq",
+          "inh": true,
+          "relpersistence": "p",
+          "location": 923
+        },
+        "options": [
+          {
+            "DefElem": {
+              "defname": "as",
+              "arg": {
+                "TypeName": {
+                  "names": [
+                    {
+                      "String": {
+                        "sval": "pg_catalog"
+                      }
+                    },
+                    {
+                      "String": {
+                        "sval": "int8"
+                      }
+                    }
+                  ],
+                  "typemod": -1,
+                  "location": 956
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 953
+            }
+          },
+          {
+            "DefElem": {
+              "defname": "minvalue",
+              "arg": {
+                "Integer": {
+                  "ival": 1
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 965
+            }
+          },
+          {
+            "DefElem": {
+              "defname": "maxvalue",
+              "arg": {
+                "Float": {
+                  "fval": "9223372036854775807"
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 976
+            }
+          },
+          {
+            "DefElem": {
+              "defname": "start",
+              "arg": {
+                "Integer": {
+                  "ival": 1
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 1005
+            }
+          },
+          {
+            "DefElem": {
+              "defname": "cycle",
+              "arg": {
+                "Boolean": {
+                  "boolval": false
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 1018
+            }
+          }
+        ]
+      }
+    },
+    {
+      "sourceModel": "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json",
+      "sourcePointer": "/stmts/104/stmt/IndexStmt",
+      "kind": "IndexStmt",
+      "definition": {
+        "idxname": "request_receipt_route",
+        "relation": {
+          "schemaname": "truss",
+          "relname": "request_receipt",
+          "inh": true,
+          "relpersistence": "p",
+          "location": 3045
+        },
+        "accessMethod": "btree",
+        "indexParams": [
+          {
+            "IndexElem": {
+              "name": "namespace_sha256",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          },
+          {
+            "IndexElem": {
+              "name": "request_sha256",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          },
+          {
+            "IndexElem": {
+              "name": "storage_row_id",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "sourceModel": "docs/helix/02-design/contracts/layout-migration-storage-v0.1.proposal.umf.json",
+      "sourcePointer": "/stmts/0/stmt/CreateSeqStmt",
+      "kind": "CreateSeqStmt",
+      "definition": {
+        "sequence": {
+          "schemaname": "truss",
+          "relname": "layout_migration_receipt_row_seq",
+          "inh": true,
+          "relpersistence": "p",
+          "location": 17
+        },
+        "options": [
+          {
+            "DefElem": {
+              "defname": "as",
+              "arg": {
+                "TypeName": {
+                  "names": [
+                    {
+                      "String": {
+                        "sval": "pg_catalog"
+                      }
+                    },
+                    {
+                      "String": {
+                        "sval": "int8"
+                      }
+                    }
+                  ],
+                  "typemod": -1,
+                  "location": 59
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 56
+            }
+          },
+          {
+            "DefElem": {
+              "defname": "minvalue",
+              "arg": {
+                "Integer": {
+                  "ival": 1
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 67
+            }
+          },
+          {
+            "DefElem": {
+              "defname": "maxvalue",
+              "arg": {
+                "Float": {
+                  "fval": "9223372036854775807"
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 78
+            }
+          },
+          {
+            "DefElem": {
+              "defname": "start",
+              "arg": {
+                "Integer": {
+                  "ival": 1
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 107
+            }
+          },
+          {
+            "DefElem": {
+              "defname": "cycle",
+              "arg": {
+                "Boolean": {
+                  "boolval": false
+                }
+              },
+              "defaction": "DEFELEM_UNSPEC",
+              "location": 120
+            }
+          }
+        ]
+      }
+    },
+    {
+      "sourceModel": "docs/helix/02-design/contracts/layout-migration-storage-v0.1.proposal.umf.json",
+      "sourcePointer": "/stmts/2/stmt/IndexStmt",
+      "kind": "IndexStmt",
+      "definition": {
+        "idxname": "layout_migration_receipt_attempt_route",
+        "relation": {
+          "schemaname": "truss",
+          "relname": "layout_migration_receipt",
+          "inh": true,
+          "relpersistence": "p",
+          "location": 1578
+        },
+        "accessMethod": "btree",
+        "indexParams": [
+          {
+            "IndexElem": {
+              "name": "installation_id",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          },
+          {
+            "IndexElem": {
+              "name": "original_attempt_sha256",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          },
+          {
+            "IndexElem": {
+              "name": "storage_row_id",
+              "ordering": "SORTBY_DEFAULT",
+              "nulls_ordering": "SORTBY_NULLS_DEFAULT"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
