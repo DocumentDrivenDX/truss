@@ -92,8 +92,24 @@ The root deliberately refuses all wires because this is a definition library,
 not an untagged union that lets a method accept another method's result.
 These compositions close the outer schema work identified in those table rows;
 original method/profile/argument/observer/identity-path registration still
-remains. Catalog, standalone mutation, group and import wrapper gaps are
-unchanged. Import is explicitly excluded from generic Outcome composition.
+remains. Catalog, standalone mutation and group wrapper gaps are unchanged.
+Import is explicitly excluded from generic Outcome composition.
+
+Import now has its own definitions-only
+`import-execution-result-v0.1.proposal.schema.json`: register `$defs/engineOwned`
+for runBatches and `$defs/inTransaction` for applyInTransaction. It composes
+the existing reported/resource_limited/execution_failed/invalid branches and
+reuses original report/resource/failure carriers. The report's execution
+discriminator preserves engine_owned versus host_adopted/outer_engine_scope.
+An execution_failed report is mandatory and nullable; absence is not null,
+and null is semantically permitted only before any writer submission. This
+schema does not prove that condition or allow removal of prior progress.
+Transaction options and original live scope binding remain argument-registration
+work. Run `check-import-execution-result.ts` in the design audit directory with
+the installed Ajv Draft 2020-12 module path: twenty-five composition controls
+cover every outer branch, ownership distinctions, omitted progress and
+forbidden generic Outcome wrapping. Native progress, count coherence,
+resource containment and actual transaction outcome remain unqualified.
 
 Run `bun docs/helix/04-build/evidence/design-audit/check-capability-execution-outcomes.ts <installed-Ajv-2020-module-path>`.
 Forty-six controls check all nine registered definitions' outer error/required
