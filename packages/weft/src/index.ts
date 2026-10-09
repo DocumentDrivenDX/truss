@@ -104,6 +104,11 @@ export async function createQueryEngine(compiler: Compiler, input: BindingInput,
           refuse('artifact_pin','Compiler artifact context drift');
       if(typeof value.sql!=='string'||!Array.isArray(value.parameters)||!Array.isArray(value.columns)||!Array.isArray(value.obligations))
         refuse('compiler','Incomplete artifact');
+      // This wrapper admits only the original 0.2 response domain. New positional
+      // carriers cannot be smuggled through an old version or a permissive host.
+      if(value.columns.some((column:any)=>column&&typeof column==='object'&&Object.hasOwn(column,'carrierName'))||
+         value.obligations.some((obligation:any)=>obligation?.id==='weft.output.positioned'))
+        refuse('artifact_version','Positional output metadata requires an explicitly admitted Weft 0.3 profile');
       value.parameters.forEach((p:any,i:number)=>{if(p.position!==i+1||typeof p.value!=='string')refuse('parameter','Non-exact parameter transport')});
       const plan=immutable({artifact:value as Artifact,originalResponse:response});plans.add(plan);return plan;
     },

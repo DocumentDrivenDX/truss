@@ -251,3 +251,12 @@ publication. Final-result exactness or postfilter bounds cannot replace those
 checks. No Truss parser, arithmetic lowerer or host SQL patch is introduced.
 Existing0.1/0.2 artifacts and their qualified subset remain separately pinned;
 new source HEAD cannot relabel an older wheel/WASM build or native receipt.
+
+The existing browser-compatible Truss wrapper now explicitly rejects carrierName
+metadata and weft.output.positioned obligations in its0.2 compile admission.
+Unknown0.3 version pins already refuse. Four mutated responses derived from the
+actual pinned f05f2df compiler prove these refusals before any native context
+acquisition, including null carrierName and a permissive registered host handler.
+All15 wrapper tests pass and strict TypeScript compilation passes. This is a
+closed-version integration correction, not0.3 adoption or native publication
+qualification; the original committed compiler build pin is retained.

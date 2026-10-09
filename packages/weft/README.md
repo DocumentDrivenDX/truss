@@ -35,3 +35,10 @@ The build uses locked offline dependencies and `truss-postgresql-qualified`, nev
 
 
 Engine construction captures the original compiler, host, decoder and handler functions before asynchronous admission. `dispose()` refuses new compilation/execution and buffered publication, including disposal during compilation, checks or host settlement. It does not commit, roll back or cancel an adopted native transaction: the original host retains settlement/recovery/cleanup responsibility. These lifecycle checks do not replace issuer-wide arbitration or native context/authority checks.
+
+The current wrapper remains explicitly0.2-only. It rejects carrierName column
+metadata (including null) and weft.output.positioned obligations at compile
+admission, even if a host registers a permissive handler. New0.3 responses
+refuse through the existing version-pin check. Later positional-output adoption
+requires a separately admitted owner profile and complete ordered native column/
+row correspondence; logical-name dictionaries cannot substitute for it.

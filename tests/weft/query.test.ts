@@ -106,3 +106,23 @@ test('disposal during host settlement withholds its buffered result',async()=>{
  engine=await createQueryEngine(compiler,input,host);const admitted=await engine.compile('SELECT COUNT(*) AS total FROM Customer c');
  await expect(engine.execute(admitted)).rejects.toThrow('Query engine disposed');
 });
+
+test('new positional metadata cannot enter an old-profile plan or acquire native context',async()=>{
+ let acquired=0;
+ const host:Host={handlers:{'weft.output.positioned':{accepts:()=>true,async check(){}}},
+  async withReadContext(){acquired++;throw Error('unexpected native acquisition')},async decode(){throw Error('unexpected decode')}};
+ for(const mutation of ['carrier','null-carrier','obligation','version']){
+  const changed:Compiler={async compileJson(raw){
+   const artifact=JSON.parse(await compiler.compileJson(raw));
+   expect(artifact.status).toBe('compiled');
+   if(mutation==='carrier')artifact.columns[0].carrierName='_weft_output_1';
+   else if(mutation==='null-carrier')artifact.columns[0].carrierName=null;
+   else if(mutation==='obligation')artifact.obligations.push({id:'weft.output.positioned',owner:'host',failureCode:'WFT-OBLIGATION',parameters:{profile:'weft-positioned-output/0.3.0'}});
+   else {artifact.interfaceVersion='weft-compile/0.3.0';artifact.dialect='weft-sql/0.3.0'}
+   return JSON.stringify(artifact);
+  }};
+  const engine=await createQueryEngine(changed,input,host);
+  await expect(engine.compile('SELECT COUNT(*) AS total FROM Customer c')).rejects.toThrow(mutation==='version'?'Compiler artifact context drift':'Positional output metadata');
+ }
+ expect(acquired).toBe(0);
+});
