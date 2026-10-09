@@ -1101,7 +1101,7 @@
     "02-design/technical-designs/TD-041-publish-the-journal-without-losing-or-reordering-a-change.md": "5a977cd0ee2e19a2537601a017317c6f65cb5bfb6b65531510234b0df7155d16",
     "03-test/test-plans/STP-041-publish-the-journal-without-losing-or-reordering-a-change.md": "8d0bb405d8eee2cbd2145a003f42f62d6d41e2a0acf7089e114441eeb8ed395f",
     "02-design/technical-designs/TD-042-read-how-far-behind-a-downstream-copy-is.md": "2b36eb214a7741a71f0d23a7b612e4c147e4f95d72a7bc40784c5ef4c80ab36e",
-    "03-test/test-plans/STP-042-read-how-far-behind-a-downstream-copy-is.md": "e1d0b529dd8db841d7e17633540c444c6e631bb93c654d24ba29fc95df8927ce",
+    "03-test/test-plans/STP-042-read-how-far-behind-a-downstream-copy-is.md": "3253d56d85f89a2a32b11a36ab1bb182e1f4cc799bc34661f94628f367521b04",
     "02-design/technical-designs/TD-043-make-a-group-safe-to-repeat.md": "98fe69a5fddf9b42ac49824e9be44e65d27c7be150d92509b7a6a17917b5c6e6",
     "03-test/test-plans/STP-043-make-a-group-safe-to-repeat.md": "4c670aa123b8234d1236cc1c858dd02253a914e8d7a8ca7974bcf39ca5c677d6",
     "02-design/technical-designs/TD-044-run-a-change-in-a-transaction-and-roll-it-back.md": "bcd759fc59a2857f95461a6524e034a42b368e0a6768f3925ebec8077f3304ed",
