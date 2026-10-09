@@ -163,3 +163,40 @@ then require transition refusal until its original authorized final release is
 proved. Releasing one publisher must preserve all siblings. These are shared
 security integration dependencies, not a new Truss ownership or lease protocol;
 the inspected component count does not close migration readiness.
+
+### Managed host-custody checkpoint — 2026-10-09
+
+A later read-only inspection supersedes the pending implementation description
+above for the owner's routed-buffer component only. The owner now provides
+`src/extensions/security/publication-custody.ts`: opaque instance-local handles,
+owned JSON copies, sealing before retirement, retained buffers across backend
+loss, and quarantine when consumer release fails. Native retirement is invoked
+only after the sealed instance has no retained buffers. Callback success means
+the host's declared final release; this component cannot observe arbitrary copies
+outside that host contract. Truss must consume this owner implementation rather
+than implement a parallel custody map.
+
+The updated `pg-raw-persistent-drain-component.json` has SHA-256
+`da04030b947af909903550742e3a72103559af3a547a005c129869fecf9eb162`,
+status passed, 1,421 observations and all 90 recorded source hashes matching at
+inspection. Primary, replay, sibling and fresh publications now traverse managed
+host custody before native issuer retirement acknowledgment. Its consumer-failure
+case receives an actual payload, rejects release, emits no retirement request and
+leaves durable pending custody blocking revocation after child shutdown. Excluded
+fixture teardown is not successful recovery. Truss did not rerun the native test.
+
+The separate `publication-custody-browser.json` has SHA-256
+`5fe9012cbbea8127d53821ef708fd0b4fe06a59b6982e3ac4f0b0b0dea986fce`,
+status passed, 31 observations and all six source hashes matching. Its scope is
+browser/Bun owned-copy and local-handle behavior; it does not prove native issuer
+authentication, process recovery or complete backend acceptance.
+
+M3/LM-P03 must now exercise the actual owner custody instance on the selected
+migration path: quarantine after failed release cannot become a discard merely
+because the enclosing migration rolled back or its process disconnected. Preserve
+original recovery obligations and keep readiness closed until the owner procedure
+proves settlement. The local component has no restart restoration or public
+quarantine recovery API; those remain original-owner integration dependencies,
+not permission for Truss to clear retained handles or invoke retirement directly.
+Public broker authentication, general read enrollment, full writer closure and
+L03 qualification remain outside both inspected receipts.
