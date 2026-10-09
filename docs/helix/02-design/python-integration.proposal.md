@@ -153,7 +153,11 @@ token hooks initially checked twelve independently authored token/string expecta
 The saved checker `python3 docs/helix/04-build/evidence/design-audit/check-python-raw-json-vectors.py`
 now compares complete numeric-token/string inventories and three presence checks,
 for fifteen expectations across five fixtures. Missing/extra token expectations
-cannot pass from partial pointer checks. This is not the production decoder and does not prove byte custody,
+cannot pass from partial pointer checks. Five negative controls refuse non-JSON
+NaN/Infinity constants and duplicate root/nested fixture members; ambiguous
+fixtures cannot silently lose entries through a dictionary overwrite. This is
+the checker's admitted fixture subset, not a new universal native JSON policy.
+This is not the production decoder and does not prove byte custody,
 bounded parsing, unknown-content support or native JSON qualification. Both
 adapters must retain the original source and run the complete fixture obligations
 under their selected original parser/codec/resource profiles.

@@ -7,6 +7,24 @@ class NumericToken(str):
     pass
 
 
+def closed_object(pairs):
+    result = {}
+    for name, value in pairs:
+        if name in result:
+            raise ValueError("Ambiguous duplicate fixture member")
+        result[name] = value
+    return result
+
+
+def reject_constant(value):
+    raise ValueError("Non-JSON fixture constant: " + value)
+
+
+def decode_fixture(source):
+    return json.loads(source, parse_int=NumericToken, parse_float=NumericToken,
+                      object_pairs_hook=closed_object, parse_constant=reject_constant)
+
+
 def pointer_part(text):
     return text.replace("~", "~0").replace("/", "~1")
 
@@ -40,15 +58,14 @@ def expected_inventory(entries, field):
 
 
 root = Path(__file__).resolve().parents[3]
-fixture = json.loads((root / "03-test/python-raw-json-vectors.proposal.json").read_text())
+fixture = decode_fixture((root / "03-test/python-raw-json-vectors.proposal.json").read_bytes())
 ids = set()
 expectations = 0
 for vector in fixture["vectors"]:
     if vector["id"] in ids:
         raise ValueError("Duplicate vector identity")
     ids.add(vector["id"])
-    document = json.loads(vector["sourceUtf8Text"].encode("utf-8"),
-                          parse_int=NumericToken, parse_float=NumericToken)
+    document = decode_fixture(vector["sourceUtf8Text"].encode("utf-8"))
     numbers, strings = collect(document)
     if numbers != expected_inventory(vector["expectedNumericTokens"], "token"):
         raise ValueError(vector["id"] + ": incomplete/wrong numeric token inventory")
@@ -71,5 +88,14 @@ for vector in fixture["vectors"]:
         if state != entry["state"]:
             raise ValueError(vector["id"] + ": wrong presence expectation")
         expectations += 1
-print(f"{len(ids)} fixtures, {expectations} complete token/string and presence expectations; "
+negative_controls = [b'{"n":NaN}', b'{"n":Infinity}', b'{"n":-Infinity}',
+                     b'{"n":1,"n":2}', b'{"nested":{"n":1,"n":2}}']
+for source in negative_controls:
+    try:
+        decode_fixture(source)
+    except ValueError:
+        continue
+    raise ValueError("Unsafe fixture parser accepted negative control")
+print(f"{len(ids)} fixtures, {expectations} complete token/string and presence expectations, "
+      f"{len(negative_controls)} parser refusal controls; "
       "fixture consistency only, no adapter/native qualification")
