@@ -189,6 +189,34 @@ initialization from copied marker text, or run the target fresh-install script
 over an existing source. These inputs can inform M1 review; their version numbers
 and append-only AST shape do not establish upgrade compatibility.
 
+#### Epoch-free source admission and first issuance
+
+For the historical epoch candidate only, M1 must explicitly describe an original
+verified epoch-free source inventory. Missing registry/pointer tables in an
+installation that should already have them are drift, not initial issuance.
+No status heuristic may turn absence into that source profile. The target's first
+epoch uses the existing registered lifecycle producer and original deployment
+incarnation admission in the dedicated migration transaction; native UUID issuance
+is a selected component, not sufficient authority. Its row/pointer and the complete
+target publication remain provisional together until confirmed commit and target
+verification. Original legacy writer exclusion and publication drain are required
+even though the old source has no current-epoch pointer to lock.
+
+| LM-T03/05/06 control | Independent required observation |
+| --- | --- |
+| Exact admitted epoch-free source with retained values/history/requests | Preserve original identities and artifacts; first epoch applies to newly admitted target operations, not retroactively to historical origins |
+| Same missing tables under an epoch-aware source profile | Refuse source drift before issuance/effects; do not repair by assigning a new epoch |
+| Historical receipt lacks the selected position/epoch basis | Preserve original retry result and its actual supported profile if that profile is retained. Do not mint a new reached locator or translate an old checkpoint without qualified correspondence; unavailable comparison stays unavailable |
+| Unresolved original attempt or publication remains in flight | Follow original M2/security recovery and drain admission; a new pointer or transaction lock cannot settle the old attempt or authorize dropping its custody |
+| First epoch issued, then a later target check fails | Observe complete rollback of registry/pointer and target publication alongside all route effects; no token or installed target becomes available |
+| Commit acknowledgment lost after atomic publication | Reconcile the original migration attempt, retaining the originally issued epoch. Never issue another epoch merely because the response was lost |
+
+If the selected route cannot preserve the required legacy retry/history/profile
+meaning, it is unsupported rather than a best-effort conversion. These planned
+controls consume the [existing epoch lifecycle](../02-design/contracts/source-epoch-lifecycle.proposal.md)
+and original recovery/security services; they do not select M1, introduce a legacy
+token codec or prove that the historical review source was installed.
+
 Before selecting a route, author its expected preservation mapping independently
 of the executor. LM-T03 uses that same mapping for committed target checks;
 LM-T05 compares confirmed rollback with the original source. Counts and aggregate
