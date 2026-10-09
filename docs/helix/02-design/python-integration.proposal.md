@@ -209,6 +209,35 @@ remain independently required native observations.
 
 ## Remaining consumer metadata meaning and action boundary
 
+### Consumer key versus identity Field mapping
+
+The [key/Field source review](../04-build/evidence/design-audit/consumer-key-field-source-review.json)
+finds that the consumer carries the object key separately from its properties.
+Its action fake rejects the identity property in create properties and rejects
+identity set/unset, then materializes that Field from the outer key for reads.
+PY-03/04 must explicitly map the consumer key to the admitted Record's authored
+Key ID `identity` and ordered Field tuple, including `UseCase.code` or
+`Solution.code`. A consumer key string, core Key declaration ID/display name,
+native Truss object ID and request idempotency key remain distinct identities.
+Core required-Field validation sees the complete admitted logical representation;
+it must not treat the outer key as an absent required Field or invent a default.
+
+The inspected import fake also overlays the identity Field with the outer key,
+but does not separately reject a conflicting same-named supplied property.
+That source behavior is an integration question, not approval for Truss to drop
+input or override generic Field semantics. Preserve the complete original input
+and exact retry/provenance basis. Resolve whether the consumer adapter rejects
+the conflict or uses explicitly specified precedence before qualifying import;
+an action-path rule cannot silently answer the import question.
+
+Independent adapter cases cover exact key materialization/read filtering, action
+identity set/unset refusal, missing outer key, conflicting import property,
+equal key text under distinct qualified Records and exact declared key tuple
+order. Observe stored values, key ownership, original receipt/import report and
+read projection together; no generated-ID equality or string-to-number coercion
+supplies the mapping. Consumer key syntax restrictions stay in the facade unless
+the admitted generic Truss key profile independently requires them.
+
 Both explicit-name validation observations retain eight warnings. Five identify
 experimental native meaning for nullability, cardinality, facets, keys and
 relationships; two retain unavailable exact DDD and placement vocabularies; one
