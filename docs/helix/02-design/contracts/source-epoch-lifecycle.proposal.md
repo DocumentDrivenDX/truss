@@ -99,3 +99,24 @@ records exact output hashes and owner checkout revision. This native extension
 candidate is not a core ER projection, installed profile or immutable owner
 bundle qualification. It must be composed with the installation marker model,
 qualified native guards and selected lifecycle issuer before adoption.
+
+## Native component selection and evidence
+
+The private native issuer now selects PostgreSQL's `pg_catalog.gen_random_uuid()`
+version-4 UUID text for tokens. It serializes initial issuance on the existing
+installation marker and transitions on the current pointer, checking the exact
+predecessor before insertion. The native unique constraint rejects collision;
+there is no implicit token reuse. This selects a concrete native token producer,
+without adopting a complete lifecycle or deployment-admission profile.
+
+`packages/postgresql/native/source-epoch-issue.sql`, `source-epoch-lock.sql` and
+`source-epoch-immutability.sql` remain private SECURITY INVOKER components with
+PUBLIC execution revoked. The storage harness verifies 27 component checks;
+`bun scripts/check-source-epoch-concurrency.ts` verifies five checks with two
+connections, including actual issuer blocking, timeout with no speculative
+successor, successful successor admission and predecessor lineage. Use the
+owned fixture URL on port 15434. Exact-source receipts are in the design-audit
+evidence directory. These use explicit test marker/profile/incarnation inputs;
+they do not qualify trusted installation, clone/restore detection, retries,
+complete report context or managed deployment authority. No public grant or
+acceptance barrier has been opened.
