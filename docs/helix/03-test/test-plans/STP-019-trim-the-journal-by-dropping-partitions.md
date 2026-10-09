@@ -38,7 +38,7 @@ Retention arbitration probes under CONTRACT-006 pause between eligibility scan a
 
 ## Executable Proof
 
-Future command `bun test tests/journal/retention.test.ts` requires native harness/files. Every criterion cites its ID and pins server/layout/grant/timezone/retention profile. Recognized-role policy and mandatory append-only protection must be resolved before AC3 passes.
+Future command `bun test tests/journal/retention.test.ts` requires native harness/files. Every criterion cites its ID and pins server/layout/grant/timezone/retention profile. AC3 consumes mandatory append-only behavior and the security-owned recognized-principal inventory; qualify its actual protection mechanism across every admitted writer route before claiming a pass. Trigger presence or a default grant alone is insufficient.
 
 ## Data and Setup
 
@@ -50,7 +50,7 @@ Overlapping ranges, exact month boundary, clock anomalies, direct child access, 
 
 ## Build Handoff
 
-Resolve role/protection/horizon conflicts, write red native tests, implement inventory/protection/planning and qualify disposable retention. All four criteria block closeout. Operational production procedures and destructive-action authorization are separate work.
+Select exact security-owned role/protection and original native horizon/eligibility producers under the existing contracts, write red native tests, implement inventory/protection/planning and qualify disposable retention. All four criteria block closeout. Operational production procedures and destructive-action authorization are separate work.
 
 ## Retention public tooling supplements
 
