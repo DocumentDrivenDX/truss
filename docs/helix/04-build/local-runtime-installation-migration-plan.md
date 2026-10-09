@@ -91,11 +91,11 @@ read-surface question does not block local runtime, installation or Python deliv
 
 ## Goal control
 
-The user explicitly resumed/unblocked the work with these criteria. This document
-is the persisted expanded execution objective. The available goal tools expose
-only complete/blocked/paused status updates and cannot edit an existing objective
-or resume blocked status; do not mark the old goal complete merely to replace it.
-Continue authorized work while reporting that control-plane limitation accurately.
+The user resumed the goal with the expanded criteria above; the next goal read
+confirms status active. The stored original objective text remains unchanged
+because the available tools cannot edit it; this plan retains the additional
+criteria as governing user instructions. No old pending product decision or
+control-plane limitation is a reason to stop installation/migration work.
 
 ## Initial runnable developer path
 
@@ -115,3 +115,34 @@ runtime embedding and complete installation follow the delivery sequence above.
 Actual initial macOS arm64/Python3.11 probe observed pgserver0.1.4 and PostgreSQL16.2.
 Full Truss SQL compatibility and installer qualification remain required on that
 exact server; retained17.9 evidence is separate.
+
+## PostgreSQL16.2 installation frontier
+
+The rollback-only [generated-layout probe](../../../scripts/check-pgserver-layout.py)
+executes original source-epoch0.16 owner-export bytes without schema rewriting.
+The [native component receipt](evidence/design-audit/pgserver-generated-layout-component.json)
+confirms all 48 declared table names, including the partitioned journal, and
+namespace removal after rollback. Native sha256, xid-status, current-xid and UUID
+issuance functions resolve. This establishes DDL admission and a narrow native
+prerequisite set, not complete constraints/grants/routines, initializer publication,
+accepted catalog or migration qualification. Configuration and migration-receipt
+adjuncts still require their complete generated/native composition.
+
+Select a separate local16.2 session-observation profile instead of relabeling the
+PostgreSQL17 reference profile. Capture transaction_timeout as unavailable; it
+cannot be silently omitted or installed by a setting alias. Local operations use
+finite Truss-controlled work/copy limits and bounded per-statement/lock admission;
+statement_timeout and lock_timeout do not establish a whole-transaction lifetime
+cap. Any capability requiring an unavoidable whole-native-transaction timeout
+remains unsupported on this tuple until a separately qualified mechanism exists.
+Original driver cancellation/termination and quarantine/recovery remain required;
+a client deadline cannot certify stopped native work or safe connection reuse.
+Do not downgrade the supplied-connection correctness or no-loss retry contract.
+
+Next native installation work must compose the same48-table source with original
+configuration/receipt adjuncts, routines and security-owned grants, then independently
+compare complete objects/columns/FKs/constraints/defaults/functions/rights and
+initializer effects. A CREATE success or equal table count cannot substitute for
+that complete inventory. The first populated migration route uses those same
+admitted inventories and preservation expectations, not these review version labels
+as release versions. PostgreSQL17.9 and managed-service evidence remain separate.
