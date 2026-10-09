@@ -1063,7 +1063,7 @@
     "02-design/technical-designs/TD-022-list-an-objects-edges-bounded.md": "c89ec2db85c7aabd05329b93f9126da4e728cfc0041b037c59d7735a708052fd",
     "03-test/test-plans/STP-022-list-an-objects-edges-bounded.md": "a1b21b25e50842bdb33941c09cc7378dbe9a8c184e38ec75bcc6d5b11b37d132",
     "02-design/technical-designs/TD-023-traverse-one-to-three-hops.md": "482d8195dbc1553a2cb66848b7bf25b1d55fed39e6f04ddff09c2e38beebeae3",
-    "03-test/test-plans/STP-023-traverse-one-to-three-hops.md": "cb6a98cf4051ec9a784b34c93eb2e85c9c1ed1e9c877f3ec28585a437504df02",
+    "03-test/test-plans/STP-023-traverse-one-to-three-hops.md": "c205330104b3e9699a8db0d535202560c4beab97bd5b0158b2c3ca5612d2c78e",
     "02-design/technical-designs/TD-024-enumerate-the-types-of-the-catalog.md": "87e0ba3d9419524eb8250347c0dbd37a9d90d6607e17421b919680c86ab331c1",
     "03-test/test-plans/STP-024-enumerate-the-types-of-the-catalog.md": "3797a78c25272e8534fecb07510cf8231f9a0020703e2bc4b870f80eb1320cd0",
     "02-design/technical-designs/TD-025-report-the-enforcement-layer-of-every-assertion.md": "f13bc6fee9575dfbd921396a1466a37fd808e47284d5a54c7fafc74a1395aabb",
