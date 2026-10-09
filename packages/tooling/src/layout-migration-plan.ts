@@ -32,7 +32,7 @@ function object(value:unknown,keys:readonly string[]):Record<string,unknown>{
  return value as Record<string,unknown>;
 }
 function text(value:unknown):string{
- if(typeof value!=='string'||!value||new TextEncoder().encode(value).length>256||value.includes('\0'))return fail();
+ if(typeof value!=='string'||!value||value.length>256||value.includes('\0')||new TextEncoder().encode(value).length>256)return fail();
  return value;
 }
 function sha(value:unknown):string{if(typeof value!=='string'||!(/^[a-f0-9]{64}$/).test(value))return fail();return value;}
@@ -74,7 +74,7 @@ export function planLayoutMigration(manifestBytes:Uint8Array,observationBytes:Ui
   const routes=unique(m.routes.map(value=>{
    const o=object(value,['id','from','to','direction','steps']);
    const from=version(o.from),to=version(o.to),direction=o.direction;
-   if(!layouts.has(from)||!layouts.has(to)||!['upgrade','downgrade'].includes(String(direction)))return fail();
+   if(!layouts.has(from)||!layouts.has(to)||typeof direction!=='string'||!['upgrade','downgrade'].includes(direction))return fail();
    const ids=list(o.steps).map(text);if(new Set(ids).size!==ids.length)return fail();
    let at=from;
    const ordered=ids.map(id=>{const step=steps.get(id);if(!step||step.from!==at||compare(step.from,step.to)!==(direction==='upgrade'?-1:1))return fail();at=step.to;return step});

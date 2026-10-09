@@ -50,4 +50,18 @@ describe('explicit inert layout migration plans',()=>{
   expect(planLayoutMigration(bytes({...m,layouts:[{...a,version:1}]}),bytes(observation()),'2.0.0')).toMatchObject({reason:'invalid_input'});
   expect(planLayoutMigration(new Uint8Array(1048577),bytes(observation()),'2.0.0')).toMatchObject({reason:'invalid_input'});
  });
+ test('route direction must be an exact string even for unselected or at-target routes',()=>{
+  const m=manifest();
+  m.steps.push(step('reverse','2.0.0','1.0.0'));
+  for(const direction of [['downgrade'],['upgrade'],{value:'downgrade'},null,true]){
+   const malformed={...m,routes:[...m.routes,{id:'reverse',from:'2.0.0',to:'1.0.0',direction,steps:['reverse']}]};
+   for(const [source,target] of [[c,'1.0.0'],[a,'2.0.0'],[c,'2.0.0']] as const){
+    expect(planLayoutMigration(bytes(malformed),bytes(observation(source)),target)).toMatchObject({outcome:'refused',reason:'invalid_input'});
+   }
+  }
+ });
+ test('direct target text observes the finite byte bound before version selection',()=>{
+  for(const target of ['1'.repeat(1048577),'é'.repeat(129),'\0','\ud800'])
+   expect(planLayoutMigration(bytes(manifest()),bytes(observation()),target)).toMatchObject({outcome:'refused',reason:'invalid_input'});
+ });
 });

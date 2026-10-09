@@ -1,5 +1,17 @@
 # Consumer deployment through shipped migration tooling
 
+## Planner wire correction — 2026-10-09
+
+The private LM-01 planner now requires route direction to be an exact string;
+coercing an array containing `downgrade` previously allowed a wrong-type direction
+to enter a declared reverse plan. Complete manifest validation refuses malformed
+directions in selected, unselected and at-target routes before returning any plan
+or `no_steps`. Direct target text also receives a code-unit length precheck before
+UTF-8 allocation, followed by the existing exact byte and version checks.
+`bun test tests/layout-migration-plan.test.ts` passes eleven tests and forty
+assertions. This corrects bounded metadata preparation only; original native
+source/target admission and M1–M5 remain separate requirements below.
+
 Implementation handoff for LM-06/B-014 under CONTRACT-008. This is a proposed
 deployment flow, not a released command or executable example. Reuse the
 [existing apply/reconcile interface](../02-design/contracts/bindings/truss-layout-migration-v0.1.proposal.d.ts)
