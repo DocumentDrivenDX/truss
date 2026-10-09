@@ -31,6 +31,16 @@ try{
  const inventory=await sql.unsafe('SELECT family,identity::text AS identity FROM truss.runtime_collect_new_catalog_inventory($1::int)',[result.provisionalRevision]);
  const families=Object.fromEntries(['type','property','key','relationship','endpoint'].map(family=>[family,inventory.filter(row=>row.family===family).length]));assert(JSON.stringify(families)===JSON.stringify({type:2,property:2,key:2,relationship:1,endpoint:1}),'native collector returns actual complete new-family identity inventory');
  const endpoint=JSON.parse(inventory.find(row=>row.family==='endpoint').identity);assert(endpoint[1]==='1'&&endpoint[2]==='2','collected endpoint is original relationship/source/target tuple');
+ for(const [label,mutation] of [
+  ['missing original Field',"DELETE FROM truss.prop_def WHERE prop_id=1"],
+  ['missing original Key',"DELETE FROM truss.key_def WHERE type_id=1"],
+  ['altered original Field scalar type',"UPDATE truss.prop_def SET scalar_type='integer' WHERE prop_id=1"],
+  ['altered original Field nullability',"UPDATE truss.prop_def SET nullability='absent-allowed' WHERE prop_id=1"],
+  ['substituted Key component',"UPDATE truss.key_def SET prop_ids=ARRAY[2] WHERE type_id=1"],
+  ['altered Key primary flag',"UPDATE truss.key_def SET is_primary=false WHERE type_id=1"],
+  ['altered relationship upper bound',"UPDATE truss.rel_def SET source_max=2"],
+  ['altered relationship target key',"UPDATE truss.rel_def SET target_key=NULL"],
+ ] as const){await sql.unsafe('SAVEPOINT changed_definition');await sql.unsafe(mutation);let refused=false;try{await sql.unsafe('SELECT * FROM truss.runtime_collect_new_catalog_inventory(1)')}catch(e){refused=((e as any).errno??(e as any).code)==='55000'}assert(refused,label+' refuses inventory');await sql.unsafe('ROLLBACK TO SAVEPOINT changed_definition')}
  await sql.unsafe('SAVEPOINT swapped_endpoint');await sql.unsafe('UPDATE truss.rel_endpoint SET source_type=target_type');let endpointRefusal=false;try{await sql.unsafe('SELECT * FROM truss.runtime_collect_new_catalog_inventory(1)')}catch(e){endpointRefusal=((e as any).errno??(e as any).code)==='55000'}assert(endpointRefusal,'equal-count substituted endpoint identity refuses collection');await sql.unsafe('ROLLBACK TO SAVEPOINT swapped_endpoint');
  await sql.unsafe('SAVEPOINT missing_endpoint');await sql.unsafe('DELETE FROM truss.rel_endpoint');let missingRefusal=false;try{await sql.unsafe('SELECT * FROM truss.runtime_collect_new_catalog_inventory(1)')}catch(e){missingRefusal=((e as any).errno??(e as any).code)==='55000'}assert(missingRefusal,'missing authored endpoint refuses collection');await sql.unsafe('ROLLBACK TO SAVEPOINT missing_endpoint');
  await sql.unsafe('SAVEPOINT inventory_retired');await sql.unsafe('UPDATE truss.type_def SET retired_rev=1 WHERE type_id=1');let lifecycleRefusal=false;try{await sql.unsafe('SELECT * FROM truss.runtime_collect_new_catalog_inventory(1)')}catch(e){lifecycleRefusal=((e as any).errno??(e as any).code)==='0A000'}assert(lifecycleRefusal,'new-only collector cannot hide retirement or report it as addition');await sql.unsafe('ROLLBACK TO SAVEPOINT inventory_retired');

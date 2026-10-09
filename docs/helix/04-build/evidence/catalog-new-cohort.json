@@ -15,7 +15,7 @@
     "catalog-relationship-match": "973ccdb65e6708f6b810108b5270cca8132f4e84369b886c5ec5a25a58883006",
     "catalog-relationship-stage": "d32c213f607d4f8ca9dd4afcdc7bb4fd2bb7cf39dbf35057a82987859632933e",
     "catalog-report-documents": "362b6df87be8f22387c59921af9f827248e79536183e342b7894a3c4e36f4207",
-    "catalog-new-inventory": "9636f4371beaf901ead42bfdacedd97e55ac25ccf304d17cccc456e03579b197"
+    "catalog-new-inventory": "872d921797dee82b851edcba2fc275f00a6f69a5ba3a2945cb8827e0bc43f687"
   },
   "stageProducerSha256": "9a6793f582e3591ea48c115736ead13f651aef8044ff4033c27255678b4e4c30",
   "originalInputSha256": "b8c64857b2cd73ef99471ebc8310e76f27102c62d30854d80bc40441dcbe609c",
@@ -40,6 +40,14 @@
     "failed repeated cohort preserves original staged revision only",
     "native collector returns actual complete new-family identity inventory",
     "collected endpoint is original relationship/source/target tuple",
+    "missing original Field refuses inventory",
+    "missing original Key refuses inventory",
+    "altered original Field scalar type refuses inventory",
+    "altered original Field nullability refuses inventory",
+    "substituted Key component refuses inventory",
+    "altered Key primary flag refuses inventory",
+    "altered relationship upper bound refuses inventory",
+    "altered relationship target key refuses inventory",
     "equal-count substituted endpoint identity refuses collection",
     "missing authored endpoint refuses collection",
     "new-only collector cannot hide retirement or report it as addition",
