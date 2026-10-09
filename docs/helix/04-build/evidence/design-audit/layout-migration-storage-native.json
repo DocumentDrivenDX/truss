@@ -1,0 +1,11 @@
+{
+  "scope": "Rollback-only PostgreSQL DDL/column/FK/generated-hash/PUBLIC INSERT observation; renamed disposable namespace and synthetic parent, no full layout or protected producer qualification",
+  "command": "docker exec -i truss-runtime-admission psql -U postgres -v ON_ERROR_STOP=1 -X -q < docs/helix/04-build/evidence/layout-migration-storage.rollback-probe.sql",
+  "columns": 11,
+  "foreignKeys": 1,
+  "generatedHashes": 3,
+  "publicInsert": false,
+  "transaction": "rolled_back",
+  "qualified": false,
+  "ddlSha256": "dd7e24b38fd09194d67d4f0a55f5b72696bd83b7f87d108ccb001fbab6892d33"
+}

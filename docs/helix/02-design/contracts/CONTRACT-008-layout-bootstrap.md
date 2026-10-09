@@ -188,6 +188,45 @@ the failed route. Lost acknowledgment must recover the same immutable body and
 original commit without appending another migration. These are native schedule
 obligations; declaration checks cannot qualify settlement or persistence.
 
+### UMF migration receipt storage candidate
+
+The [migration receipt model](layout-migration-storage-v0.1.proposal.umf.json)
+now authors a separate eleven-column home, dedicated noncycling bigint row
+allocator, nonunique attempt-hash route, source-epoch FK and PUBLIC revocations.
+UMF owns its [DDL export](../../04-build/evidence/layout-migration-storage.owner-export.sql);
+`bun scripts/build-layout-migration-storage.ts --check` verifies exact saved
+reload/export correspondence and original owner source digests. The model is an
+uncomposed adjunct, not a replacement for the native 0.16 baseline or an
+installed version bump.
+
+Retain original source installation/epoch/incarnation, exact UTF-8 attempt
+identity bytes, registered receipt-profile bytes, complete request bytes and
+complete receipt-body bytes. Generated SHA-256 values route identity and prove
+byte correspondence only. A text-to-bytes `convert_to` generated expression was
+rejected by PostgreSQL as nonimmutable; the candidate hashes stored identity
+bytes directly. The protected producer must prove those bytes match the
+original attempt identity under its admitted UTF-8 profile. Invalid encoding,
+changed request/profile or a matching digest with different complete bytes
+cannot establish an exact repeat. The nonunique route preserves collisions;
+serialized original exclusion and full comparison must enforce exactly one
+receipt for a settled attempt. Allocator gaps have no migration ordering meaning.
+
+Request and receipt bytes share a sixteen-MiB retained-payload ceiling, with
+receipt profile bounded to 64 KiB and identity/incarnation to 1 KiB each. These
+are candidate storage limits; full route admission additionally accounts for
+recipes, observations, transport, decoding and peak retained work. Larger routes
+refuse before effects under this candidate rather than truncating artifacts.
+The source-epoch FK retains parent correspondence without cascading cleanup.
+
+A [rollback-only native probe](../../04-build/evidence/layout-migration-storage.rollback-probe.sql)
+observed eleven columns, one FK, three generated hashes and no PUBLIC INSERT.
+Its disposable renamed namespace and synthetic parent verify DDL acceptance
+only; they do not prove actual baseline composition or protected writes.
+Initializer, unavoidable receipt/finalization producer, immutable UPDATE/DELETE/
+TRUNCATE guards, lifecycle/protection cleanup, complete security privileges and
+core record/field/FK projection remain required. No migration outcome is admitted
+by the model, generated DDL or this probe.
+
 ### Protected installation dependency order
 
 The row-home candidate requires PI01–PI07 in the original dedicated administrative transaction. These phases refine fresh bootstrap only; populated conversion keeps its separately admitted retained-data/old-writer protocol. A source composition without routine bodies and security dependencies is not an executable installation plan.
