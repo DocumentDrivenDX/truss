@@ -1755,3 +1755,31 @@ For a retained conversion, first identify actual stored column generation/constr
 
 
 The [native component receipt](../../04-build/evidence/installation-archive-insert-v0.2.native-component.json) records the exact statement hash, independently expected Unicode identity/binary content hashes, explicit rollback and failed deferred marker commit with zero surviving archive rows. This qualifies those narrow fresh body behaviors only; full installer role/exclusion/account, collision/duplicate inventory, successful marker production and populated conversion remain separate requirements.
+
+### Read-only migration status and verification carrier closure
+
+The draft tooling carrier now includes the previously required `status` and
+`verify` operations alongside `apply` and `reconcile`. Their procedure/resource
+pins are registration inputs, never caller authority. Each operation resolves
+current authorized installation custody and collects the complete selected
+native inventory under one admitted coherent observation cut; it performs no
+DDL, repair, epoch allocation, attempt registration or readiness publication.
+
+`status` returns an original layout pin, installation artifact and complete
+native observation, or explicit observation-unavailable. Unknown installation,
+insufficient authority and unavailable/incomplete observations cannot become a
+guessed version or an empty inventory. `verify` compares an explicitly expected
+registered layout/bundle/inventory pin and returns matches with exact original
+correspondence, drift with retained differences, or unavailable. A drift result
+requires complete admitted observations; inability to finish collection is
+unavailable rather than a fabricated mismatch. Neither result proves any prior
+migration committed, rolled back or never ran; original-attempt reconciliation
+retains that responsibility.
+
+LM-T01/05 must independently cover matching complete inventory, same-version
+changed routine/grant, wrong bundle/inventory, unavailable observation, policy
+change during collection and unchanged database state after each inspection.
+A matching post-commit verification cannot substitute for original commit proof;
+a mismatch after confirmed commit remains committed_unverified. Exact public
+command names and runnable adapters remain LM-06/B-014 outputs. The carrier is
+still an unimplemented proposal, not installed migration tooling.

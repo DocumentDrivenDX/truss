@@ -100,7 +100,41 @@ export type LayoutMigrationReconciliation = Exclude<LayoutMigrationResult,{
  readonly reason:'authorization'|'custody'|'profile'|'resource'|'integrity';
  readonly commit?:never;readonly originalAttempt?:never;
 };
+/** Read-only requests still resolve registered procedures and current authority. */
+export interface LayoutMigrationInspection {
+ readonly procedure:ProfilePin;readonly resource:ProfilePin;
+}
+export type LayoutMigrationUnavailableReason = 'authorization'|'custody'|'profile'|
+ 'resource'|'integrity'|'unsupported_installation';
+/** Current observation only; never proof of a prior attempt's outcome. */
+export type LayoutMigrationStatus = {
+ readonly outcome:'observed';readonly layout:LayoutMigrationPin;
+ readonly installation:ExactArtifact;readonly nativeObservation:ExactArtifact;
+ readonly scope:'current_installation_observation_only';
+} | {
+ readonly outcome:'observation_unavailable';readonly reason:LayoutMigrationUnavailableReason;
+ readonly layout?:never;readonly installation?:never;readonly nativeObservation?:never;
+};
+export interface LayoutMigrationVerificationRequest extends LayoutMigrationInspection {
+ readonly expected:LayoutMigrationPin;
+}
+export type LayoutMigrationVerification = {
+ readonly outcome:'matches';readonly expected:LayoutMigrationPin;
+ readonly installation:ExactArtifact;readonly nativeObservation:ExactArtifact;
+ readonly correspondence:ExactArtifact;readonly scope:'current_installation_verification_only';
+} | {
+ readonly outcome:'drift';readonly expected:LayoutMigrationPin;
+ readonly nativeObservation:ExactArtifact;readonly differences:ExactArtifact;
+ readonly scope:'current_installation_verification_only';
+} | {
+ readonly outcome:'observation_unavailable';readonly reason:LayoutMigrationUnavailableReason;
+ readonly nativeObservation?:never;readonly correspondence?:never;
+};
 export interface LayoutMigrationTooling {
+ /** Observe current original installation under one admitted read-only cut. */
+ status(request:LayoutMigrationInspection):Promise<LayoutMigrationStatus>;
+ /** Compare complete selected native inventory without repair or publication. */
+ verify(request:LayoutMigrationVerificationRequest):Promise<LayoutMigrationVerification>;
  /** Explicit dedicated administrative transaction for the complete declared route. */
  apply(request:LayoutMigrationRequest):Promise<LayoutMigrationResult>;
  /** Read-only original attempt lookup; cannot resubmit a step or transition. */
