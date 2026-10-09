@@ -1,0 +1,44 @@
+{
+  "required": [
+    "interfaceVersion",
+    "reportProfile",
+    "rev",
+    "originalExecution",
+    "acceptedInput",
+    "umf",
+    "documents",
+    "diagnostics",
+    "documentInterpretations",
+    "counts",
+    "provisional",
+    "rebinds",
+    "assertions",
+    "pending_indexes",
+    "losses",
+    "extensions",
+    "transformRegistrations"
+  ],
+  "producerCorrespondence": [
+    "rev",
+    "acceptedInput",
+    "documents",
+    "diagnostics",
+    "documentInterpretations",
+    "counts",
+    "provisional",
+    "losses",
+    "transformRegistrations"
+  ],
+  "remainingProductionAdmission": [
+    "interfaceVersion",
+    "reportProfile",
+    "originalExecution",
+    "umf",
+    "rebinds",
+    "assertions",
+    "pending_indexes",
+    "extensions"
+  ],
+  "auditSha256": "25179c12db82c88d745b2343b9a4926f4c3df646160c92cf9d2bc72edb3d39f9",
+  "scope": "Structural required-field partition and source-reconciled execution sequence; no full semantic/runtime completion."
+}
