@@ -611,6 +611,34 @@ bounded strategy may copy or buffer differently; Truss does not require the prob
 chunk-list implementation or choose a driver from this review. Native/TLS/driver
 qualification and the full-report capacities below remain separate prerequisites.
 
+#### Private controlled-transport receive candidate
+
+`python_pg_receive_candidate.py` now implements an instance-local raw receiver
+using recv_into: message/header eligibility precedes ingress; complete signed
+length/frame/cumulative-byte admission precedes body allocation and reception;
+a finite read-call budget precedes each fragmented read. Every receive failure,
+including interruption, permanently closes that receiver and retains consumed
+attempt/budget state. It neither closes nor settles the original backend and must
+never justify returning a connection to a pool. It creates one immutable complete
+frame after reception; decoder and semantic dispatch remain separate.
+
+Run from the Truss repository root:
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 python3.11 -m unittest discover -s docs/helix/04-build/evidence/design-audit -p test_python_pg_receive_candidate.py
+```
+
+Six independent controlled-transport tests pass on Python 3.11. Literal frame
+bytes and observed recv_into request inventories verify fragmented exact retention,
+zero next-header reads on message exhaustion, zero body reads after invalid or
+unaffordable lengths, read-work exhaustion before another fragment, partial EOF,
+interruption, malformed returned counts and unaffected sibling state. These are
+synthetic receive controls, not live driver/TLS startup or native command cycles.
+The candidate bounds cover raw bytes/message attempts/read calls only; header and
+whole-frame backing, immutable-copy lifetime, transport/TLS buffers, decoded values
+and aggregate work still need the original complete account. No driver, resource
+profile, custody issuer or public Python package is selected by this component.
+
 #### Full-report wire capacity before driver selection
 
 The frame candidate's one-MiB limit cannot transport the existing four-MiB
