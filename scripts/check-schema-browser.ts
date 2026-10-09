@@ -3,7 +3,7 @@ const {chromium}=createRequire('/Users/erik/Projects/umf/package.json')('playwri
 const server=Bun.serve({hostname:'127.0.0.1',port:0,async fetch(req){let path=new URL(req.url).pathname;if(!path.startsWith('/truss/'))return new Response('Not found',{status:404});path=path.slice(7);if(!path||path.endsWith('/'))path+='index.html';const file=Bun.file('website/public/'+path);return await file.exists()?new Response(file):new Response('Not found',{status:404});}});
 const browser=await chromium.launch({headless:true});
 try{
- const page=await browser.newPage();const errors:string[]=[];page.on('pageerror',e=>errors.push(String(e)));
+ const page=await browser.newPage();const errors:string[]=[];page.on('pageerror',(e:unknown)=>errors.push(String(e)));
  const base=`http://127.0.0.1:${server.port}/truss/`;
  await page.goto(base+'model/');const frame=page.frameLocator('iframe[title="Truss storage schema — UMF browser"]');
  await frame.locator('.definition-list').waitFor();
@@ -24,8 +24,15 @@ try{
  const structural=await Bun.file('website/static/schema/truss-layout.umf.json').json();
  const nativeExpected=new Uint8Array(await Bun.file(structural.extensions['truss.layout.native'].sourceModel).arrayBuffer());
  if(nativeBytes.length!==nativeExpected.length||nativeBytes.some((b,i)=>b!==nativeExpected[i]))throw Error('Native archive download changed original bytes');
+ await page.goto(base+'schema/#'+new URLSearchParams({schema:'truss-layout',definition:JSON.stringify(['truss-layout','operation_configuration'])}));
+ await page.locator('.definition-heading').filter({hasText:'operation_configuration'}).waitFor();
+ const captureTable=await page.locator('table').innerText();
+ for(const name of ['original_writer_xid','original_context_sha256','configuration_generation','admission_profile_bytes','installed_inventory_sha256'])if(!captureTable.includes(name))throw Error('Configuration capture column missing: '+name);
+ const adjunctEvent=page.waitForEvent('download');await page.getByText('Download configuration adjunct source',{exact:true}).click();const adjunctDownload=await adjunctEvent;
+ const adjunctBytes=new Uint8Array(await Bun.file((await adjunctDownload.path())!).arrayBuffer()),adjunctExpected=new Uint8Array(await Bun.file(structural.extensions['truss.layout.native'].additionalSourceModel).arrayBuffer());
+ if(adjunctBytes.length!==adjunctExpected.length||adjunctBytes.some((b,i)=>b!==adjunctExpected[i]))throw Error('Adjunct archive changed original bytes');
  await page.setViewportSize({width:390,height:844});await page.goto(base+'schema/');await page.locator('.definition-list').waitFor();
  const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth);if(overflow)throw Error('Mobile page overflow');if(errors.length)throw Error(errors.join('\n'));
- const receipt={browser:browser.version(),ownerRevision:'6e67169ef562df2cca6ce6388fe7d57e35a751cd',definitions,checks:['Hugo Model page embeds working owner browser','current structural model validates','prop_def deep link and declaration_module field navigation','download is byte-identical UTF-8 source','epoch registry and predecessor columns browse correctly','retained native source download is byte-exact','390px mobile browser has no horizontal page overflow','no browser errors'],scope:'Actual generated site under /truss/ in Chromium; structural inspection only, no deployment or native runtime qualification.'};
+ const receipt={browser:browser.version(),ownerRevision:'6e67169ef562df2cca6ce6388fe7d57e35a751cd',definitions,checks:['Hugo Model page embeds working owner browser','current structural model validates','prop_def deep link and declaration_module field navigation','download is byte-identical UTF-8 source','epoch registry and predecessor columns browse correctly','retained native source download is byte-exact','configuration capture columns browse and adjunct download is byte-exact','390px mobile browser has no horizontal page overflow','no browser errors'],scope:'Actual generated site under /truss/ in Chromium; structural inspection only, no deployment or native runtime qualification.'};
  await Bun.write('docs/helix/04-build/evidence/design-audit/schema-browser-site.json',JSON.stringify(receipt,null,2)+'\n');console.log(JSON.stringify(receipt));
 }finally{await browser.close();server.stop(true)}

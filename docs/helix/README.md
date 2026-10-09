@@ -1,5 +1,7 @@
 # truss project documentation
 
+Current schema-browser projection: [core 0.5](02-design/models/truss-layout-core-structural-0.5.proposal.umf.json) includes the unchanged native 0.16 baseline plus the uncomposed operation-configuration adjunct: 49 Records and 470 Fields. The adjunct's two physical FK associations use core record/field references with retained native descriptors because portable xid8 key equality remains unavailable. Both native sources download byte-exactly. Chromium verifies 520 displayed definitions, snapshot columns and mobile layout; protected capture/immutability/cleanup and installed native parity remain unfinished.
+
 Historical storage source handoff: [CONTRACT-012](02-design/contracts/CONTRACT-012-weft-storage-handoff.md) supplies the reconciled 0.12 reference-history review, its [column inventory](02-design/contracts/weft-review-columns-v0.12.proposal.md) and separate [0.12 source packet](04-build/evidence/weft-source-binding012/README.md). It retains 46 tables and 442 columns from the separately pinned 0.11 foundation; explicit journal allocator settings and the review marker change. Native installation, replay qualification and Weft mapping adoption are unfinished.
 
 

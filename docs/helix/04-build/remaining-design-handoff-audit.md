@@ -251,3 +251,6 @@ Committed-owner refresh observes Weft 5856c73db0342363e64802905a94abb96209d757 u
 
 
 Configuration capsule storage is now authored in the UMF adjunct linked from installed-context admission. Original operation/epoch parents and sixteen-column storage/initializer/immutability/cleanup responsibilities are explicit. Saved owner reload/export and rollback-only DDL/count checks pass; zero observed user triggers confirms guards remain missing. Core structural projection, composed native admission/cleanup, complete security/resource/source semantics and IC-T01–06 remain required.
+
+
+Configuration core/browser closure: original source projection 0.5 retains all sixteen adjunct columns, its native xid8 primary descriptor and two FK descriptors with corresponding core record/field references. Portable key equality remains explicitly unsupported. Validation has zero errors/complete=false; 49 Records/470 Fields are present. Chromium verifies 520 definitions, configuration columns, byte-exact original baseline/adjunct/core downloads and mobile layout in local Hugo output. Core/browser integration is complete for this structural delta; native producer/immutability/cleanup and complete installed/security/resource correspondence remain open.
