@@ -150,7 +150,8 @@
         "x"
       ],
       "retainedState": "retired",
-      "expected": "requires_explicit_lifecycle_decision"
+      "expected": "preserve_original_id_only_after_complete_reactivation_validation",
+      "reason": "Owner selected same-qualified-identity reactivation on 2026-10-07; allocation matching alone cannot authorize lifecycle activation. Missing or failed validation leaves the lineage retired and refuses the acceptance atomically."
     }
   ]
 }

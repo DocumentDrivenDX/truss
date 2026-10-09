@@ -1025,7 +1025,7 @@
     "02-design/technical-designs/TD-003-decide-what-happens-to-an-unknown-entity-type.md": "e7129593ea1619bf55ded34609b5889cb3330f83f6de363fca9bda340691bbd3",
     "03-test/test-plans/STP-003-decide-what-happens-to-an-unknown-entity-type.md": "a979ebb116d2090d82b5bc080ad1782c7dc4a6654440a809dff36b171d145b30",
     "02-design/technical-designs/TD-004-keep-identifiers-stable-across-revisions.md": "bb4fd6cfafcfb4b680d96ac7f5128307f6af452bfdbdf01e95eb48990d520e56",
-    "03-test/test-plans/STP-004-keep-identifiers-stable-across-revisions.md": "b47b7d51c3deb80d107ff0dadc221810284f517436b9be48a301d671106d9419",
+    "03-test/test-plans/STP-004-keep-identifiers-stable-across-revisions.md": "72c3a760c004420b66747b92cab50367eb649ff670cf4b6a98261aec4f510271",
     "02-design/technical-designs/TD-005-see-every-violator-before-a-tightening-is-accepted.md": "635d2912077d8f6ed6044a44829cd814f7c67aaeee2c8dc2cd062dd644bad3da",
     "03-test/test-plans/STP-005-see-every-violator-before-a-tightening-is-accepted.md": "e9180727353c55f5a6b38b22b6c42bebc97585dba7103197fe3048ffe36d3c56",
     "02-design/technical-designs/TD-006-add-a-type-without-ddl.md": "0e44cfd39f4306b5986e4a5254458c86d8b15b0bde1dfbd031288f8830d71065",
