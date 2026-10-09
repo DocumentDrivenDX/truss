@@ -2778,3 +2778,8 @@ CH-01/03 now have an original UMF operation_configuration adjunct with sixteen c
 ### Native pre-effect configuration checkpoint — 2026-10-09
 
 CH-01/03 now have the derived private configuration admission producer, immutable capsule guards and exact current-state comparison. The native cohort passes 157 checks: original capture before type effects, maximum bigint and raw artifacts/context, missing/mismatched/oversized input, sibling insertion atomicity, changed-current/full-byte refusal, immutable UPDATE/DELETE/TRUNCATE and operation/capsule/effect rollback. The new producer declares a twenty-MiB compound logical-byte bound while preserving prior four-MiB input and one-MiB context limits. Selected profile/installation/security/resource/driver meaning, host capsule projection, unavoidable finalization and qualified retention cleanup remain dependencies. Cleanup remains closed; the existing unfinished-acceptance commit barrier is unchanged. Complete IC-T01–06 remain planned public/historical/concurrency schedules.
+
+
+### Original configuration host projection — 2026-10-09
+
+CH-03/PY-01 now have the shared twelve-column native pre-effect snapshot protocol and issued TypeScript host projection. The 171-check cohort covers exact original profile/artifact/context bytes, owned input copy before await, copied-host/wrong-profile/current-change/ended-transaction refusal and native cut recheck. Reuse this protocol in Python with original adapter custody; do not duplicate UMF or authorization interpretation. Registered complete installation/configuration/security/resource/driver profiles, historical replay projection, protected cleanup and unavoidable report/head/finalization remain dependencies.

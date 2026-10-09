@@ -13065,6 +13065,11 @@
       "composition": "separate_private_component_not_in_layout"
     },
     {
+      "path": "packages/postgresql/native/catalog-admission-configuration.sql",
+      "sha256": "876522be71ad6e114fd774dc097afc194ce95952e7173772d4c1bf0d6954ec67",
+      "composition": "separate_private_component_not_in_layout"
+    },
+    {
       "path": "packages/postgresql/native/catalog-captured-context.sql",
       "sha256": "115554be0a686bdade8890e28dff4874bf3a6ecc5ef1d366c24f34219b04e1f5",
       "composition": "separate_private_component_not_in_layout"
