@@ -47,6 +47,11 @@ original recipes, authority and exclusions, then verify and settle the target
 before opening compatible target capabilities. No native executor, packaged
 CLI or managed-service support follows from this test run.
 
+The [consumer deployment handoff](migration-consumer-deployment-handoff.md)
+maps every existing apply/reconcile result to framework recovery and runtime
+admission behavior. LM-06 must deliver its clean public-package executable
+example; the handoff does not invent command names or a second migration API.
+
 The complete design goal is not achieved. This audit inspects the current source handoffs rather than treating declaration/coverage tests as complete behavior. Native identities and runtime qualification belong to implementation; missing producer interfaces and unresolved shared-owner meanings remain design work. The full B-001–B-015 plan and 45-story corpus remain governing.
 
 | Inspected source | Evidence observed | Design work still needed | Later implementation evidence |
