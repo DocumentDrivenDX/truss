@@ -57,9 +57,11 @@ BEGIN
   SELECT coalesce(max(o.operation_ordinal)+1,0) INTO next_ordinal
     FROM truss.row_home_operation AS o WHERE o.original_writer_xid=native_xid;
   native_context := convert_to(jsonb_build_object(
-    'interfaceVersion','truss-native-operation-context/0.1',
+    'interfaceVersion','truss-native-operation-context/0.2',
     'xid',native_xid::text,'ordinal',next_ordinal::text,
     'sessionUser',session_user::text,'actingUser',current_user::text,
+    'actorRoleOid',(SELECT r.oid::text FROM pg_catalog.pg_roles r WHERE r.rolname=current_user),
+    'sessionRoleOid',(SELECT r.oid::text FROM pg_catalog.pg_roles r WHERE r.rolname=session_user),
     'database',current_database(),'backendPid',pg_backend_pid()::text
   )::text,'UTF8');
   INSERT INTO truss.row_home_operation(original_writer_xid,operation_ordinal,

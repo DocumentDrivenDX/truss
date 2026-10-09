@@ -81,11 +81,11 @@ test('copied report basis and stale native cut cannot supply correspondence',asy
 });
 test('native actor basis retains original bytes and rejects inconsistent result carriers',async()=>{
  const basis=await collectCatalogReportPreparation(connection(),prepared,'1',owner,fields);
- const context=' {"interfaceVersion":"truss-native-operation-context/0.1","xid":"42","ordinal":"0","actingUser":"actor","sessionUser":"login","database":"db","backendPid":"7"} ';
- const row={context_hex:Buffer.from(context).toString('hex'),database_role:'actor',login_role:'login',database_name:'db',backend_pid:'7'};
+ const context=' {"interfaceVersion":"truss-native-operation-context/0.2","xid":"42","ordinal":"0","actingUser":"actor","sessionUser":"login","database":"db","backendPid":"7","actorRoleOid":"10","sessionRoleOid":"11"} ';
+ const row={context_hex:Buffer.from(context).toString('hex'),database_role:'actor',login_role:'login',database_name:'db',backend_pid:'7',actor_role_oid:'10',login_role_oid:'11'};
  const native=(rows:Record<string,string>[])=>({unsafe:async(query:string)=>query.includes('runtime_collect_catalog_original_context')?rows:[]});
  const result=await collectCatalogOriginalExecutionBasis(native([row]),prepared,basis);
  expect(Buffer.from(result.contextEvidence.bytesBase64,'base64').toString()).toBe(context);expect(result.databaseRole).toBe('actor');expect(result.scope).toBe('original_native_actor_context_basis_only');
- for(const rows of [[],[row,row],[{...row,extra:'x'}],[{...row,database_role:'forged'}],[{...row,context_hex:'7b7d'}],[{...row,context_hex:'AB'}]])await expect(collectCatalogOriginalExecutionBasis(native(rows),prepared,basis)).rejects.toThrow();
+ for(const rows of [[],[row,row],[{...row,extra:'x'}],[{...row,database_role:'forged'}],[{...row,context_hex:'7b7d'}],[{...row,context_hex:'AB'}],[{...row,actor_role_oid:'12'}]])await expect(collectCatalogOriginalExecutionBasis(native(rows),prepared,basis)).rejects.toThrow();
  await expect(collectCatalogOriginalExecutionBasis(native([row]),prepared,{...basis})).rejects.toThrow('bound catalog report preparation');
 });
