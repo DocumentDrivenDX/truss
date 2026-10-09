@@ -173,6 +173,25 @@ own issuer only through the original adoption protocol.
 
 ## Native control outcome correspondence
 
+The [private typed control binding](../02-design/contracts/bindings/truss-operation-control-v0.1.proposal.d.ts)
+now separates original reservation, issued ordinal, bound control, confirmed
+savepoint and recovery identities. Only the confirmed branch can enter the native
+admission dispatcher. Confirmed failure and unavailable completion retain recovery
+custody but expose no confirmation; a pre-submission refusal remains distinct.
+The original counter privately produces the issued token after reservation; its
+text value cannot construct that token. All post-issuance failures burn the ordinal.
+The producer registry must enforce affinity and one-use semantics at runtime:
+TypeScript branding is not a security boundary or native verification mechanism.
+
+The accompanying typecheck includes independently specified rejected uses for a
+bound-but-unconfirmed control, any nonconfirmed result, caller-constructed issuer
+or confirmation objects, and JavaScript numeric transport. This is a concrete
+adapter implementation interface, not an implemented producer or evidence that
+native admission is qualified. Full native verification, accounting, registered
+control correlation and the four SQL corrections remain required. Escaped adapter
+exceptions retain the pre-registered recovery association and unavailable status;
+they never make a consumed submission permission reusable.
+
 The [server-rejection probe](evidence/design-audit/pg8000-local-control-rejection-native.json)
 now provides the independent negative outcome alongside the happy-control and
 interrupted-callback probes. A deliberately malformed `SAVEPOINT` submission
