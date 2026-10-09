@@ -477,6 +477,41 @@ native enforcement joins and these controls remain unimplemented.
 
 A2 can progress through independent producer work before A1's complete native installation qualifies, but no public activation follows partial correspondence. A3 cannot silently reduce acceptance to new-only operations while presenting full catalog support. Original source-level validity remains UMF-owned; Truss stores the selected complete interpretation and qualified local identities.
 
+### A6/A7 complete report delivery versus confirmed commit
+
+Extend the original recovery schedule with interrupted large responses. Use a
+genuine full report from the selected producer; the frozen four-MiB synthetic
+wire is only a transport/schema precursor. Keep the original native attempt,
+commit observation, immutable report and current disclosure admission distinct
+from the consumer's observation of network delivery. A server-confirmed commit
+remains committed when its response socket closes; a consumer's partial JSON
+prefix is neither a complete report nor permission to repeat acceptance.
+
+| Fault cut | Required independent observation |
+| --- | --- |
+| Before native commit is confirmed | No network publication of pending IDs or report result as committed; original driver outcome/recovery custody remains governing |
+| After confirmed commit, before response header | Original complete report/revision stays committed; delivery is unavailable to the consumer, and original recovery performs zero acceptance effects |
+| After header or within the report body | Retain actual expected length and received prefix separately; response completion/parser/schema admission refuses incomplete framing, even if the prefix resembles a complete JSON object |
+| After full body, before consumer observes success | Original report equality and commit evidence remain intact; a later original recovery/retry does not regenerate the report or dispatch duplicate jobs |
+| During delivery with a current authority/context change | Consume the security owner's exact publication admission/drain procedure for Truss-controlled buffers; native commit alone cannot authorize a new disclosure |
+
+Observe complete original report bytes/fields, native revision/head/journal/job
+inventories, effect-submission counts and the original recovery reference. For
+mutation batches, use their existing exact request receipt/retry contract; do
+not substitute catalog recovery for mutation idempotency or create another
+network ledger. Change one original request in a negative control and retain the
+existing conflict/changed-input refusal. Catalog settlement still uses the
+original acceptance attempt described below, including later-head advancement.
+
+A delivery failure must not be rewritten as native `commit_unknown` when Truss
+already has qualified confirmed commit evidence; the consumer may independently
+lack that evidence. Conversely, a completed-looking report body cannot settle
+an unknown native commit. Original state and observer knowledge are separate.
+Retain failed controlled send-buffer custody through the owner's cleanup rules;
+do not require proof that arbitrary remote copies were erased. This preserves
+the selected boundary on what Truss controls. These are planned public assembly
+faults; the local literal echo qualifies no network recovery or publication path.
+
 ### A6/A7 original acceptance settlement after head advancement
 
 The public assembly must distinguish a new acceptance invocation from settlement
