@@ -1,0 +1,48 @@
+{
+  "scope": "actual UMF core selector and source-only Weft comparison; no compiler/native/security/profile adoption",
+  "positiveModels": 2,
+  "displayNameSubstitutionRefusals": 5,
+  "sources": [
+    {
+      "path": "/Users/erik/Projects/umf/src/model/relationship-selection.ts",
+      "sha256": "9062f11467e671363af1d7d903961787a0e9cfc3c9a5ebd483b0e0a9af7f7293"
+    },
+    {
+      "path": "/Users/erik/Projects/weft/crates/weft-core/src/application_model.rs",
+      "sha256": "240a65d6d8f4aacfea6c6e8aadb6d35c8af32602eb3ad3d1c72fef14b769ab5f"
+    }
+  ],
+  "observations": [
+    {
+      "path": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "sha256": "e194117a8de436d1479804c59b0e2cc76470814a3c0723cd732797635442a3e5",
+      "expectedKeyPaths": [
+        "/modules/0/elements/0/keys/0"
+      ],
+      "actualKeyPaths": [
+        "/modules/0/elements/0/keys/0"
+      ],
+      "provenance": "unverified",
+      "navigationScope": "authored-presentation-only"
+    },
+    {
+      "path": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "sha256": "5ff02aa14d0d5a64b85b6fe75ffe99ec7a3d8caf93c19b79187506a86c45162e",
+      "expectedKeyPaths": [
+        "/modules/0/elements/0/keys/0",
+        "/modules/0/elements/14/keys/0",
+        "/modules/0/elements/14/keys/0",
+        "/modules/0/elements/0/keys/0"
+      ],
+      "actualKeyPaths": [
+        "/modules/0/elements/0/keys/0",
+        "/modules/0/elements/14/keys/0",
+        "/modules/0/elements/14/keys/0",
+        "/modules/0/elements/0/keys/0"
+      ],
+      "provenance": "unverified",
+      "navigationScope": "authored-presentation-only"
+    }
+  ],
+  "nativeImplementationQualified": false
+}

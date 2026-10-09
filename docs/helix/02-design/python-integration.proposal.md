@@ -39,6 +39,16 @@ pending-intent candidate's key-name rule to core relationship references. Captur
 original ID/name/selector correspondence and independently test a wrong-key
 substitution under the admitted profile.
 
+The subsequent [actual selector receipt](../04-build/evidence/design-audit/consumer-relationship-key-selection.json)
+resolves both original consumer models through UMF's existing 0.7 core operation.
+All five relationship target occurrences select key ID `identity` and the
+independently expected original key paths; replacing each selector with display
+name `Identity` refuses source admission. Read-only Weft application-model source
+also passes the endpoint selector to its key-ID resolver. This closes the inspected
+core selector ID-versus-name question without changing the separate pending-intent
+language. UMF returns unverified authored navigation metadata; full extension
+meaning, compiler/native mapping and security/installed profile remain unadmitted.
+
 Actual consumer examples include whole-Solution projection by code and grouped
 UseCase.practiceArea count. The parser tests currently reject ORDER BY and LIMIT;
 they do not demonstrate the keyset/page syntax in Weft's bounded application
