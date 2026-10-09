@@ -3,7 +3,7 @@ import {preflightSourceJson} from '../../postgresql/src/acceptance-json';
 import {createAcceptanceInputInspector} from './acceptance-input';
 import {loadUmfProducer} from './index';
 import {collectCatalogDeclarations} from './catalog-declarations';
-import type {createAcceptanceProfileResolver} from './acceptance-profiles';
+import {requireOriginalAcceptanceProfileResolver,type createAcceptanceProfileResolver} from './acceptance-profiles';
 import type {ProfilePin} from '../../../docs/helix/02-design/contracts/bindings/truss-acceptance-input-v0.1';
 const originalPreparations=new WeakSet<object>();
 /** Private validated preparation recognition, not operation or acceptance authority. */
@@ -11,6 +11,7 @@ export function requireOriginalCatalogPreparation(prepared:object):void{
  if(!originalPreparations.has(prepared))throw Error('Original validated catalog preparation required');
 }
 export async function createCatalogInputPreparation(directory:string,dependenciesPackage:string,profiles?:ReturnType<typeof createAcceptanceProfileResolver>){
+ if(profiles!==undefined)requireOriginalAcceptanceProfileResolver(profiles);
  const inspector=await createAcceptanceInputInspector(dependenciesPackage);const owner=await loadUmfProducer(directory);
  const umfProfile=Object.freeze({identity:'umf-record-interpretation',version:owner.sourceRevision,sha256:owner.bundleSha256});
  const equal=(a:ProfilePin,b:ProfilePin)=>a.identity===b.identity&&a.version===b.version&&a.sha256===b.sha256;

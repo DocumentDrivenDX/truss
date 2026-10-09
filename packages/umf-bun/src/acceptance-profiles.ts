@@ -8,6 +8,11 @@ export interface AcceptanceProfileRegistration {
  readonly artifactIdentity:string;
  readonly bytes:Uint8Array;
 }
+const originalResolvers=new WeakSet<object>();
+/** Startup byte-custody recognition only; not registered semantic authority. */
+export function requireOriginalAcceptanceProfileResolver(resolver:object):void{
+ if(!originalResolvers.has(resolver))throw Error('Original profile byte-custody resolver required');
+}
 export function createAcceptanceProfileResolver(registrations:readonly AcceptanceProfileRegistration[]){
  if(registrations.length>4096)throw Error('Registered profile capacity exceeded');
  let total=0;
@@ -23,7 +28,7 @@ export function createAcceptanceProfileResolver(registrations:readonly Acceptanc
   return Object.freeze({role,profile:Object.freeze(profile),artifact});
  });
  for(let i=0;i<entries.length;i++)for(let j=0;j<i;j++)if(entries[i].role===entries[j].role&&entries[i].profile.identity===entries[j].profile.identity&&entries[i].profile.version===entries[j].profile.version)throw Error('Duplicate original profile registration');
- return Object.freeze({resolve(input:AcceptanceInput){
+ const resolver=Object.freeze({resolve(input:AcceptanceInput){
   const resolved:{pointer:string;role:AcceptanceProfileRole;profile:ProfilePin;artifact:ExactArtifact}[]=[];
   function require(role:AcceptanceProfileRole,pin:ProfilePin,pointer:string){
    const entry=entries.find(entry=>entry.role===role&&entry.profile.identity===pin.identity&&entry.profile.version===pin.version&&entry.profile.sha256===pin.sha256);
@@ -37,4 +42,5 @@ export function createAcceptanceProfileResolver(registrations:readonly Acceptanc
   input.transforms.forEach((transform,index)=>require('transform',transform.registration,`/transforms/${index}/registration`));
   return Object.freeze({profiles:Object.freeze(resolved),scope:'original_registered_pin_resolution_only' as const});
  }});
+ originalResolvers.add(resolver);return resolver;
 }

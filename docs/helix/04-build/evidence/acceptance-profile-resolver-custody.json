@@ -1,0 +1,12 @@
+{
+  "sources": {
+    "packages/umf-bun/src/acceptance-profiles.ts": "afa494f95e4270f8745c2e62209ebe4a53dad52309927aeced30f91872bf3458",
+    "packages/umf-bun/src/catalog-input.ts": "d6cf0700168d2c5146bf7a59954bea853e6f906adc233f4ef51dca4fbf490694",
+    "tests/acceptance-profiles.test.ts": "3a46a0aab157d281afd937751d0357320e932fbeaa6d4d90982ad959bacce9a0",
+    "tests/catalog-input-preparation.test.ts": "bfa2a11c7ecbc91422bb2a7acac575e9b81b9cf30dbd0ecc7d0c66f077cb3c1a"
+  },
+  "tests": 17,
+  "assertions": 59,
+  "strictTypeCheck": "passed",
+  "scope": "Original startup resolver identity, byte/hash/role custody and original owner input preparation. No semantic profile registration, actor authority, installed role qualification or accepted publication."
+}

@@ -1,5 +1,6 @@
 import {test,expect} from 'bun:test';
-import {createAcceptanceProfileResolver,type AcceptanceProfileRegistration,type AcceptanceProfileRole} from '../packages/umf-bun/src/acceptance-profiles';
+import {createAcceptanceProfileResolver,requireOriginalAcceptanceProfileResolver,type AcceptanceProfileRegistration,type AcceptanceProfileRole} from '../packages/umf-bun/src/acceptance-profiles';
+import {createCatalogInputPreparation} from '../packages/umf-bun/src/catalog-input';
 const fixture=await Bun.file('docs/helix/02-design/contracts/bindings/acceptance-input-capacity-v0.1.fixture.json').json();
 function setup(){const input=structuredClone(fixture.input);const registrations:AcceptanceProfileRegistration[]=[];function pin(role:AcceptanceProfileRole){const bytes=new TextEncoder().encode('original '+role);const profile={identity:role,version:'v1',sha256:new Bun.CryptoHasher('sha256').update(bytes).digest('hex')};registrations.push({role,profile,artifactIdentity:role+'-artifact',bytes});return profile}
  input.layoutProfile=pin('layout');input.acceptanceProfile=pin('acceptance');input.validatorProfile=pin('validator');input.supportProfile=pin('support');input.policy.profile=pin('policy');const umf=pin('umf'),adapter=pin('adapter');for(const document of input.documents){document.umfProfile=umf;if(document.ingress.kind==='converted')document.ingress.adapterProfile=adapter}if(input.binding.state==='present')input.binding.vocabulary=pin('binding');for(const transform of input.transforms)transform.registration=pin('transform');return {input,registrations}}
@@ -7,3 +8,11 @@ test('every complete input profile occurrence resolves to original bytes by role
 test('changed hash and borrowed role cannot use same-name registration',()=>{const {input,registrations}=setup();const resolver=createAcceptanceProfileResolver(registrations);input.layoutProfile=input.supportProfile;expect(()=>resolver.resolve(input)).toThrow('/layoutProfile');input.layoutProfile={...registrations[0].profile,sha256:'0'.repeat(64)};expect(()=>resolver.resolve(input)).toThrow('/layoutProfile')});
 test('original registration snapshots cannot be changed after startup',()=>{const {input,registrations}=setup();const resolver=createAcceptanceProfileResolver(registrations);input.layoutProfile={...input.layoutProfile};registrations[0].bytes.fill(0);(registrations[0].profile as any).identity='changed';expect(Buffer.from(resolver.resolve(input).profiles[0].artifact.bytesBase64,'base64').toString()).toBe('original layout')});
 test('duplicate and hash-mismatched registration refuse startup',()=>{const {registrations}=setup();expect(()=>createAcceptanceProfileResolver([...registrations,registrations[0]])).toThrow('Duplicate');registrations[0].bytes.fill(0);expect(()=>createAcceptanceProfileResolver(registrations)).toThrow('hash mismatch')});
+test('borrowed resolver method cannot impersonate original startup byte custody',async()=>{
+ const {registrations}=setup(),original=createAcceptanceProfileResolver(registrations);
+ expect(()=>requireOriginalAcceptanceProfileResolver(original)).not.toThrow();
+ expect(()=>requireOriginalAcceptanceProfileResolver({...original})).toThrow('byte-custody resolver');
+ let called=false;const forged={resolve(){called=true;return {profiles:Object.freeze([]),scope:'original_registered_pin_resolution_only' as const}}};
+ await expect(createCatalogInputPreparation('/missing-owner','/missing-dependencies',forged)).rejects.toThrow('byte-custody resolver');
+ expect(called).toBe(false);
+});
