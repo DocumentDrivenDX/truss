@@ -29,7 +29,7 @@ Host establishes an authorized transaction-local database role; Truss executes t
 
 | Planned files | Responsibility | Criteria |
 | --- | --- | --- |
-| `packages/adapter-bun/src/context.ts`, `packages/adapter-pg/src/context.ts` | Host-supplied role/context integration without session leakage | US-031-AC2, US-031-AC3 |
+| planned `packages/adapter-bun/src/context.ts`, existing `packages/pg-runtime` original context/transaction bridge | Host-supplied role/context integration without session leakage | US-031-AC2, US-031-AC3 |
 | `packages/postgresql/src/journal/origin.ts` | Trusted role observation, including qualified definer path | US-031-AC2 |
 | `tests/host/roles.test.ts` | Native grant/refusal/reset matrix | US-031-AC1, US-031-AC2, US-031-AC3 |
 
@@ -65,3 +65,6 @@ Role/grant changes are host-admin migrations, not automatic library startup. Rev
 ## Risks and Gates
 
 Trusted acting-role capture and caller transaction context authority remain shared gates. Ordinary writer cannot forge role by setting origin data. A direct connection pass does not qualify transaction-mode pooling. Native membership behavior and definer execution need actual evidence.
+
+
+Node/pg context integration consumes the existing pg-runtime bridge under the package-delivery proposal; do not create a duplicate adapter-pg package. The security agent owns caller identity, native authorization and publication protocols. Truss binds the exact selected owner contract and original executor custody rather than implementing a competing role resolver. Existing uncommitted security/driver work is not adopted by this design edit; ordinary-principal native role/grant/context/reset and pooler qualification remain explicit implementation exits.
