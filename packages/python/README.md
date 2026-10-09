@@ -20,3 +20,15 @@ pool configuration/operation belongs to the host.
 
 See the [installation and migration execution plan](../../docs/helix/04-build/local-runtime-installation-migration-plan.md)
 for the complete delivery scope and independent acceptance scenarios.
+
+Rollback-only native profile checks (same environment):
+
+```sh
+.venv/bin/python scripts/check-pgserver-layout.py
+.venv/bin/python scripts/check-pgserver-adjuncts.py
+.venv/bin/python scripts/check-pgserver-umf-structure.py
+```
+
+Each creates its own disposable server and rolls back all review DDL. The last
+compares the UMF schema-browser model with actual columns and FK mappings; it
+is not a complete installer or migration verifier.

@@ -166,3 +166,27 @@ component tests keep their original tuple; this new local result is not borrowed
 managed-service or installed-engine evidence. The composed sources remain review
 candidates; release versioning and one complete bundle still require the remaining
 routines, original security procedures and independent full preservation profile.
+
+## UMF core structural-to-native correspondence
+
+The [structural checker](../../../scripts/check-pgserver-umf-structure.py) compares
+actual local catalogs with the same core0.6 projection used by the schema browser,
+not a manually repeated table/column list. Its [receipt](evidence/design-audit/pgserver-umf-structural-correspondence.json)
+pins the complete model, generated sources and original guard bodies. On
+PostgreSQL16.2, all50 Records and481 ordered column definitions match native
+column names, built-in type identity, requiredness and declared array dimensions.
+All67 ordered physical foreign-key tuples match with duplicate multiplicity
+preserved; targets are in the original truss schema and types in pg_catalog.
+
+The comparison consumes core Record/Field membership and the model's relationship
+field correspondence. Seven xid8-related associations retain physical descriptors
+rather than claiming portable core Key equality; native correspondence does not
+promote them to a supported portable equality profile. Schema-browser visuals and
+this native read retain that same meaning boundary.
+
+Type modifiers, collations, defaults/check expressions, FK actions/deferrability,
+complete indexes, routines and effective grants remain unverified by this checker.
+Keep those as explicit next inventory outputs, rather than calling the whole
+installation verified from structural agreement. The immutable adjunct controls
+and rollback proof still run in the same actual transaction. No Truss installer
+publication, initialized epoch or populated migration is claimed.

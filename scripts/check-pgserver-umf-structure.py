@@ -1,0 +1,147 @@
+#!/usr/bin/env python3
+"""Rollback-only composition probe of original base, adjunct DDL and immutable guards on pgserver."""
+import hashlib
+import importlib.metadata
+import importlib.resources
+import json
+from pathlib import Path
+import re
+from collections import Counter
+import subprocess
+import tempfile
+
+import pgserver
+
+root = Path(__file__).resolve().parents[1]
+paths = [
+ 'docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql',
+ 'docs/helix/04-build/evidence/operation-configuration-storage.owner-export.sql',
+ 'docs/helix/04-build/evidence/layout-migration-storage.owner-export.sql',
+ 'packages/postgresql/native/operation-configuration-immutability.sql',
+ 'packages/postgresql/native/layout-migration-receipt-immutability.sql',
+]
+originals = [(root / path).read_bytes() for path in paths]
+original = b';\n'.join(originals)
+structural_path = root / 'docs/helix/02-design/models/truss-layout-core-structural-0.6.proposal.umf.json'
+structural_bytes = structural_path.read_bytes()
+model = json.loads(structural_bytes)
+module = model['modules'][0]
+elements = {e['id']: e for e in module['elements']}
+records = [e for e in module['elements'] if e['kind'] == 'record']
+expected = [r['name'] for r in records]
+expected_columns = {}
+for record in records:
+    columns = []
+    for ref in record['members']:
+        assert ref['module'] == module['id']
+        field = elements[ref['element']]
+        native = field['extensions']['truss.layout.native']['nativeType']
+        typname = native['names'][-1]['String']['sval']
+        if native.get('arrayBounds'):
+            typname = '_' + typname
+        columns.append([field['name'], typname, field['nullability'] == 'required', len(native.get('arrayBounds', []))])
+    expected_columns[record['name']] = columns
+expected_fks = []
+def retain_fk(source, target, correspondence):
+    expected_fks.append([source, target,
+        [elements[c['source']['element']]['name'] for c in correspondence],
+        [elements[c['target']['element']]['name'] for c in correspondence]])
+for relation in module['relationships']:
+    retain_fk(relation['source'][0]['element'], relation['target'][0]['element'], relation['fieldCorrespondence'])
+for record in records:
+    for relation in record.get('extensions', {}).get('truss.layout.native', {}).get('physicalForeignKeys', []):
+        target = relation.get('target', [{}])[0].get('element')
+        if target is None:
+            target = relation['definition']['pktable']['relname']
+        retain_fk(record['name'], target, relation['fieldCorrespondence'])
+if importlib.metadata.version('pgserver') != '0.1.4':
+    raise SystemExit('Expected pinned pgserver0.1.4')
+psql = Path(str(importlib.resources.files('pgserver'))) / 'pginstall/bin/psql'
+with tempfile.TemporaryDirectory(prefix='truss-pgserver-layout-') as directory:
+    server = pgserver.get_server(Path(directory) / 'data', cleanup_mode='stop')
+    def query(sql):
+        return subprocess.check_output(
+            [str(psql), server.get_uri(), '-X', '-q', '-A', '-t', '-v', 'ON_ERROR_STOP=1'],
+            input=sql, text=True, timeout=60).strip()
+    try:
+        # No schema replacement, substituted SQL or installed publication.
+        probe = '''
+DO $$
+DECLARE mode text; relation text;
+BEGIN
+ FOREACH mode IN ARRAY ARRAY['origin','replica'] LOOP
+  PERFORM set_config('session_replication_role',mode,true);
+  FOREACH relation IN ARRAY ARRAY['operation_configuration','layout_migration_receipt'] LOOP
+   BEGIN
+    EXECUTE format('TRUNCATE truss.%I',relation);
+    RAISE EXCEPTION 'immutable truncate did not refuse' USING ERRCODE='P0001';
+   EXCEPTION WHEN SQLSTATE '55000' THEN NULL;
+   END;
+  END LOOP;
+ END LOOP;
+ PERFORM set_config('session_replication_role','origin',true);
+END $$;
+SELECT json_build_object(
+ 'tables',(SELECT json_agg(c.relname ORDER BY c.relname) FROM pg_class c
+ JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='truss' AND c.relkind IN ('r','p')),
+ 'serverVersion',current_setting('server_version'),
+ 'sha256',to_regprocedure('pg_catalog.sha256(bytea)') IS NOT NULL,
+ 'xactStatus',to_regprocedure('pg_catalog.pg_xact_status(xid8)') IS NOT NULL,
+ 'currentXid',to_regprocedure('pg_catalog.pg_current_xact_id_if_assigned()') IS NOT NULL,
+ 'uuidIssuer',to_regprocedure('pg_catalog.gen_random_uuid()') IS NOT NULL,
+ 'typeNamespaces',(SELECT json_agg(DISTINCT tn.nspname) FROM pg_attribute a
+ JOIN pg_class c ON c.oid=a.attrelid JOIN pg_namespace n ON n.oid=c.relnamespace
+ JOIN pg_type ty ON ty.oid=a.atttypid JOIN pg_namespace tn ON tn.oid=ty.typnamespace
+ WHERE n.nspname='truss' AND c.relkind IN ('r','p') AND a.attnum>0 AND NOT a.attisdropped),
+ 'fkTargetNamespaces',(SELECT json_agg(DISTINCT pn.nspname) FROM pg_constraint k
+ JOIN pg_class c ON c.oid=k.conrelid JOIN pg_namespace n ON n.oid=c.relnamespace
+ JOIN pg_class p ON p.oid=k.confrelid JOIN pg_namespace pn ON pn.oid=p.relnamespace
+ WHERE n.nspname='truss' AND k.contype='f' AND k.conparentid=0),
+ 'columns',(SELECT json_object_agg(t.relname,t.columns) FROM
+ (SELECT c.relname,json_agg(json_build_array(a.attname,ty.typname,a.attnotnull,a.attndims) ORDER BY a.attnum) AS columns
+ FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace
+ JOIN pg_attribute a ON a.attrelid=c.oid JOIN pg_type ty ON ty.oid=a.atttypid
+ WHERE n.nspname='truss' AND c.relkind IN ('r','p') AND a.attnum>0 AND NOT a.attisdropped
+ GROUP BY c.relname) t),
+ 'foreignKeys',(SELECT json_agg(json_build_array(c.relname,p.relname,
+  (SELECT json_agg(a.attname ORDER BY u.ord) FROM unnest(k.conkey) WITH ORDINALITY u(num,ord)
+   JOIN pg_attribute a ON a.attrelid=k.conrelid AND a.attnum=u.num),
+  (SELECT json_agg(a.attname ORDER BY u.ord) FROM unnest(k.confkey) WITH ORDINALITY u(num,ord)
+   JOIN pg_attribute a ON a.attrelid=k.confrelid AND a.attnum=u.num)))
+ FROM pg_constraint k JOIN pg_class c ON c.oid=k.conrelid JOIN pg_class p ON p.oid=k.confrelid
+ JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='truss' AND k.contype='f' AND k.conparentid=0),
+ 'adjuncts',(SELECT json_object_agg(c.relname,json_build_object(
+  'columns',(SELECT count(*) FROM pg_attribute a WHERE a.attrelid=c.oid AND a.attnum>0 AND NOT a.attisdropped),
+  'foreignKeys',(SELECT count(*) FROM pg_constraint k WHERE k.conrelid=c.oid AND k.contype='f'),
+  'generatedHashes',(SELECT count(*) FROM pg_attribute a WHERE a.attrelid=c.oid AND a.attgenerated='s'),
+  'alwaysGuards',(SELECT count(*) FROM pg_trigger t WHERE t.tgrelid=c.oid AND NOT t.tgisinternal AND t.tgenabled='A'),
+  'publicInsert',has_table_privilege('public',c.oid,'INSERT')))
+  FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='truss'
+  AND c.relname IN ('operation_configuration','layout_migration_receipt')),
+ 'transactionTimeout',current_setting('transaction_timeout',true));
+ROLLBACK;
+'''
+        observed = json.loads(query('BEGIN;\n' + original.decode('utf-8') + ';\n' + probe))
+        assert observed['tables'] == sorted(expected), (observed['tables'], expected)
+        assert all(observed[k] for k in ['sha256', 'xactStatus', 'currentXid', 'uuidIssuer'])
+        assert observed['typeNamespaces'] == ['pg_catalog']
+        assert observed['fkTargetNamespaces'] == ['truss']
+        assert observed['columns'] == expected_columns, 'UMF column/type/requiredness discrepancy'
+        frozen = lambda values: Counter(json.dumps(v, separators=(',', ':')) for v in values)
+        assert frozen(observed['foreignKeys']) == frozen(expected_fks), 'UMF ordered FK correspondence discrepancy'
+        assert observed['adjuncts'] == {
+            'operation_configuration': {'columns': 16, 'foreignKeys': 2, 'generatedHashes': 3, 'alwaysGuards': 2, 'publicInsert': False},
+            'layout_migration_receipt': {'columns': 11, 'foreignKeys': 1, 'generatedHashes': 3, 'alwaysGuards': 2, 'publicInsert': False},
+        }, observed['adjuncts']
+        assert query("SELECT to_regnamespace('truss') IS NULL;") == 't'
+    finally:
+        server.cleanup()
+receipt = {'scope': 'Original generated base/adjunct DDL and immutable guard composition, UMF core column/type/requiredness and ordered physical FK correspondence plus independent adjunct catalog expectations under rollback only; no complete installer, routine/grant inventory, accepted catalog or migration qualification',
+           'pgserverVersion': '0.1.4', 'structuralModel': str(structural_path.relative_to(root)), 'structuralSha256': hashlib.sha256(structural_bytes).hexdigest(), 'sources': [{'path': path, 'sha256': hashlib.sha256(value).hexdigest()} for path, value in zip(paths, originals)], 'observation': observed,
+           'rollbackRemovedNamespace': True, 'truncateRefusals': 4, 'truncateModes': ['origin', 'replica'],
+           'unverifiedStructure': ['type modifiers', 'collations', 'default and check expression meaning', 'FK actions/deferrability', 'complete indexes/routines/grants'],
+           'limitation': 'PostgreSQL16.2 lacks transaction_timeout; any selected profile requiring that setting must refuse or use a separately admitted bounded alternative',
+           'producerSha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest()}
+(root / 'docs/helix/04-build/evidence/design-audit/pgserver-umf-structural-correspondence.json').write_text(json.dumps(receipt, indent=2) + '\n')
+print(json.dumps({'serverVersion': observed['serverVersion'], 'tables': len(expected), 'columns': sum(map(len, expected_columns.values())), 'foreignKeys': len(expected_fks),
+                  'rollbackRemovedNamespace': True, 'truncateRefusals': 4, 'truncateModes': ['origin', 'replica'], 'transactionTimeout': observed['transactionTimeout']}))
