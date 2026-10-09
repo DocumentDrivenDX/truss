@@ -87,6 +87,49 @@ Compiler/native index existence does not prove pending declaration completeness
 or grant execution authority. Exact-repeat acceptance returns original job
 declarations without submitting a new attempt.
 
+#### Pending-index producer construction and absence proof
+
+Implement this producer inside original acceptance preparation/composition,
+using the existing `IndexJobIdentity` and report wire; add no caller-supplied
+`pending_indexes` authority or dispatcher callback to acceptance input. Its
+source is the complete original accepted closure plus the independently
+registered binding interpretation, not a query for existing physical indexes.
+
+1. Reserve declaration, exact-definition, target and report capacity for the
+   complete input closure before effects. Enumerate every occurrence which the
+   selected binding interpretation classifies as an index declaration, retaining
+   its original document/module/element pointer and declaration identity.
+   Unknown required interpretation or incomplete enumeration refuses support;
+   skipping an opaque binding cannot establish an empty job inventory.
+2. After the original installation, pending accepted revision and complete
+   binding/layout mappings are admitted, resolve each declaration's exact
+   definition artifact and physical target. Preserve the full target tuple and
+   original pins; do not infer relation/index names from a guessed convention.
+   Compare complete declaration identities and target definitions, rejecting
+   duplicate identities or conflicting target declarations before persistence.
+3. Issue a private candidate tied to the original preparation and operation
+   context, with the complete occurrence-to-job correspondence. An empty
+   candidate requires the same complete enumeration and interpretation proof
+   showing zero applicable declarations. A copied array, zero count or empty
+   physical-index query is not this proof. Define output ordering in the selected
+   report comparator before independently authoring expected report bytes.
+4. At report assembly, recheck that original context and compare the entire
+   `pending_indexes` field against the issued candidate. Persist declarations
+   with the complete immutable report in acceptance's transaction. No worker
+   attempt, queued/building state or DDL submission occurs in this transaction.
+   Only independently confirmed committed acceptance can later admit dispatch.
+
+Independent cases must include two declarations, an omitted second occurrence,
+an extra job, conflicting targets, swapped original revision/layout/binding,
+definition bytes changed under a retained digest, missing binding interpretation,
+and a genuinely declaration-free closure. Re-run the same original accepted
+request after a worker becomes ready or fails: its immutable report remains
+byte-identical and no second attempt is submitted. Fault report persistence and
+lose the acceptance COMMIT acknowledgment separately; neither permits a worker
+to infer committed acceptance from a pending declaration or recovery reference.
+Native realization of this producer and the independent fixtures remain
+unimplemented; this sequence specifies the missing A2 component, not readiness.
+
 The full acceptance test must combine all four producers with the same original
 input, profiles, revision and operation context, including an input that actually
 requires rebind and an input that declares an index. Fresh empty-schema fixtures
