@@ -16,8 +16,11 @@ complete original execution candidate under one original preparation/connection
 basis. Original candidate custody is checked before parsing or profile resolution;
 original native context is rechecked before return. Scope remains explicitly
 `twelve_original_report_candidate_fields_only`. It does not supply report-profile
-semantics. Five fields still lack full producer admission: interfaceVersion,
-umf, rebinds, assertions and pending_indexes.
+semantics. Four dynamic fields still lack full producer admission: umf, rebinds,
+assertions and pending_indexes. The interfaceVersion constant is already checked
+by the pinned 0.1 codec; admission of the selected report-profile-to-schema
+semantic mapping remains required. Do not invent a second version producer or
+count this structural check as complete profile admission.
 
 Sixteen report tests/140 assertions and strict TypeScript pass. The fresh
 [PostgreSQL 17.9 combined receipt](evidence/catalog-new-cohort-combined-report-correspondence.json)
@@ -55,7 +58,7 @@ Source inspection of `catalog-umf-report-basis.ts` finds original source version
 interpretation/support pins and support artifact custody, with scope explicitly
 `original_umf_and_support_byte_basis_only`. It does not interpret the admitted
 supported subset. Do not count that object as the report's complete umf field or
-append it to eleven-field verification merely because its pins match.
+append it to the existing candidate verification merely because its pins match.
 
 The next producer must resolve the original registered support artifact under
 its selected semantic procedure, enumerate the supported versions/subsets and
@@ -180,3 +183,9 @@ Report correspondence now exposes a separate private verifyWithExecutionCandidat
 Positive verifyWithExecutionCandidate has now run on fresh PostgreSQL17.9. Its eleven-field result matches actual original epoch/origin/report collectors; modified databaseRole refuses and ended native operation cannot verify retained candidate bytes. All 179 component observations pass in separate catalog-new-cohort-execution-correspondence.json, preserving earlier receipts. The owned database was removed. OriginalExecution field comparison is now native-observed at this private component scope; selected profile meaning, complete seventeen-field admission, immutable report insertion and head/public activation remain unfinished.
 
 Report profile byte resolution now has a distinct report role and resolveReport operation on the existing trusted startup resolver. It cannot borrow an acceptance-role registration even with matching pins; it preserves frozen original bytes and refuses unknown/changed or duplicate registrations. Seven profile tests/30 assertions pass. This role is selected separately by host report composition and is not a new AcceptanceInput member or inferred semantic-input change. Exact report procedure meaning, installed/native correspondence and original producer admission remain required before its pin can support full report publication; byte resolution alone is explicitly original_registered_report_bytes_only.
+
+The pinned canonical report codec explicitly refuses 0.2/0.3 proposal tags,
+guessed 0.1 spelling and unknown versions without conversion. Five focused codec
+tests pass. Adopting a later report/history profile needs an explicit new codec
+schema/pin/producer composition; the combined candidate path cannot infer it
+from matching field names or a registered report artifact.

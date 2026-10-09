@@ -16,3 +16,9 @@ test('numeric counts and projected assertion scope cannot become complete report
 test('shape-valid source and effect forgeries remain visibly codec-only',()=>{
  const candidate=structuredClone(fixture);candidate.documents=[];candidate.originalExecution.origin.databaseRole='invented';expect(codec.prepare(wire(candidate)).scope).toBe('complete_report_wire_codec_handoff_only');
 });
+test('pinned 0.1 codec refuses proposed or guessed report versions without conversion',()=>{
+ for(const version of ['truss-acceptance-report/0.2.0-proposal','truss-acceptance-report/0.3.0-proposal','truss-acceptance-report/0.1','unknown']){
+  expect(()=>codec.prepare(wire({...fixture,interfaceVersion:version}))).toThrow('complete report wire');
+ }
+ expect(codec.prepare(wire(fixture)).scope).toBe('complete_report_wire_codec_handoff_only');
+});
