@@ -480,6 +480,21 @@ native termination. Compare an actual bounded prototype with the libpq candidate
 before selecting PY-01's supported driver/build/mode; preserve the same shared
 producer port and security/compiler ownership in either route.
 
+The private [complete-frame decoder candidate](../04-build/evidence/design-audit/python_pg_frame_candidate.py)
+now implements RowDescription/DataRow syntax from PostgreSQL 17's
+[message format](https://www.postgresql.org/docs/17/protocol-message-formats.html).
+Five independently authored tests preserve ordered metadata, unsigned OIDs,
+signed size/modifier fields, duplicate names, raw binary/text cells, NULL versus
+empty bytes and zero columns; malformed lengths/counts/formats/UTF-8 names,
+trailing/partial frames and mutable input refuse. Its one-MiB/4,096-column limits
+are candidate syntax bounds, not an adopted driver resource profile. Run with
+`python3.11 -m unittest discover -s docs/helix/04-build/evidence/design-audit -p test_python_pg_frame_candidate.py`.
+This decoder receives an already retained immutable frame and copies members.
+It supplies no ingress reservation, socket/TLS behavior, command-cycle provenance,
+statement-versus-portal descriptor qualification, native authority or publication.
+All corresponding original producer obligations remain required before transport
+activation; the candidate does not replace the selected shared driver port.
+
 #### libpq receive-path qualification correction
 
 Review of PostgreSQL
