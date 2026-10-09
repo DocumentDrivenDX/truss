@@ -33,6 +33,14 @@ The next complete runtime handoff remains accepted native catalog identity plus 
 
 Canonical entry design: use the [public native route map](../02-design/contracts/reference-public-native-route-map.proposal.md) and its exact administrative inventory, with store/private responsibility and PAC-01–06 controls in the protected access composition. The [accepted-catalog producer](../02-design/contracts/weft-accepted-catalog-producer.proposal.md) specifies original binding production and WCB-01–10. Do not treat missing native body/OID evidence as an undecided caller interface or duplicate these inventories. The [current handoff audit](remaining-design-handoff-audit.md#current-authored-closure-versus-outstanding-choices) distinguishes actual remaining design selections from implementation outputs.
 
+## Assertion-source owner API checkpoint — 2026-10-08
+
+Fresh upstream fetch observes UMF `30e489aab5762dcbf36363e48f8fa36b5712b779` and Weft `5856c73` on their respective remote defaults. The [declaration producer receipt](evidence/umf-declaration-producer.json) records exact committed source comparisons: no changes in UMF model/validation/numeric adapter sources from the previous remote checkpoint, and no changes in Weft crates/spec/Cargo inputs from the reviewed compiler checkpoint. New domain packs/site work does not upgrade the admitted runtime profiles.
+
+A separate immutable c45c72a2 metadata bundle now exposes the existing UMF-owned schema-property, authored-key and authored-relationship inspection APIs. Three actual Bun tests (twelve assertions) preserve original pointers, diagnostics, unverified provenance and input immutability. Key inspection reports the exact `/keys` pointer. Relationship inspection succeeds on the original 0.7 envelope and refuses the explicit upgraded 0.8 target; schema-property inspection requires that 0.8 target. Preserve original-source versus transition-target correspondence when assembling assertion evidence. Successful envelope validation or a source walker cannot erase this version-specific interpretation gap.
+
+The next enforcement producer must combine these scoped owner observations with original unknown core/extension content, complete source/owner identities and exact selected native/engine evidence. No complete assertion inventory or enforcement classification follows from these getter checks. Truss owns report membership/custody and qualification; UMF owns meanings and logical checks, and Weft owns lowering. This separate bundle leaves existing Record/value/numeric producer bytes and native/compiler registration pins intact.
+
 ## Closure by product area
 
 | Area / existing gate | Specified and reviewed source evidence | Remaining design output | Implementation/evidence after selection |

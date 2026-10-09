@@ -42,6 +42,13 @@ export async function loadUmfValueProducer(directory:string){
   encodeCoreKeyTuple:captured.encodeCoreKeyTuple,verifyCoreKeyTuple:captured.verifyCoreKeyTuple,
  });
 }
+/** Owner-defined metadata meaning; separate bundle from value checks and native claims. */
+export async function loadUmfDeclarationProducer(directory:string){
+ const {hash,captured}=await loadPinnedFunctions(directory,UMF_RUNTIME_SOURCE,'declarations',['inspectCoreSchemaProperties','inspectCoreKeys','inspectCoreRelationships']);
+ return Object.freeze({sourceRevision:UMF_RUNTIME_SOURCE,bundleSha256:hash,
+  inspectSchemaProperties:captured.inspectCoreSchemaProperties,
+  inspectKeys:captured.inspectCoreKeys,inspectRelationships:captured.inspectCoreRelationships});
+}
 async function loadPinnedFunctions(directory:string,revision:string,mode:string,names:readonly string[]){
  const root=resolve(directory);const manifest=await Bun.file(root+'/producer-manifest.json').json();
  const bytes=await Bun.file(root+'/producer.js').arrayBuffer();

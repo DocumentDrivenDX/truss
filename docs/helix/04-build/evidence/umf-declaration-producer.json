@@ -1,0 +1,41 @@
+{
+  "umfRemote": "30e489aab5762dcbf36363e48f8fa36b5712b779",
+  "weftRemote": "5856c73db0342363e64802905a94abb96209d757",
+  "producer": {
+    "revision": "c45c72a2a8a3c4fba61c40c5927dd9091acf8cc3",
+    "producerMode": "declarations",
+    "buildDependencies": {
+      "yaml": {
+        "version": "2.9.1",
+        "packageSha256": "1c6441703d8204a23ded0d37ddf57c3b69d821dc392f20852d1f605bb9b8861c"
+      },
+      "ajv": {
+        "version": "8.20.0",
+        "packageSha256": "1f9033ee5a6515e7d76938b7072941862d1ed228a6879cc7fe10cdeb75107989"
+      }
+    },
+    "archiveSha256": "aa3ff171f8adbdbb6a0ad729dbcb2825dd2299b98e6d90a4e8e1e84835247838",
+    "bundleSha256": "074cf378afb702ffd84d6924ae4b37817cad5324a4adc587fa30c541e1cfb216",
+    "operations": [
+      "inspectCoreSchemaProperties",
+      "inspectCoreKeys",
+      "inspectCoreRelationships"
+    ],
+    "scope": "Original logical UMF producers only; no native acceptance/containment qualification."
+  },
+  "ownerSourcePins": {
+    "src/model/schema-properties.ts": "893e047995830ceef82cbda52bd524d578679ee47f44b941e7fb1c4854c9cf9b",
+    "src/model/keys.ts": "083c779dc5b22415c85075b46132604b312243eeae818a48b9c89c5486c2183b",
+    "src/model/relationships.ts": "d1f9e30202a7c8af1a8b7fc47d113f933775df25596f69a84d1f6a69947081eb"
+  },
+  "changedUmfSemanticSources": [],
+  "changedWeftCompilerSources": [],
+  "actualHostChecks": [
+    "source 0.7 authored key inspection retains exact /keys pointer and unverified provenance",
+    "source 0.7 relationship inspection preserves known meaning; upgraded 0.8 inspection refuses",
+    "explicit reversible 0.8 schema-property observation retains actual owner diagnostics and leaves target unchanged"
+  ],
+  "tests": 3,
+  "assertions": 12,
+  "scope": "Actual Bun owner metadata APIs only. No complete assertion inventory, engine/native enforcement, containment/resource qualification or new runtime/source-profile adoption."
+}
