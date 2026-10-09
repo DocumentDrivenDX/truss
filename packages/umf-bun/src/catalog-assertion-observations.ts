@@ -1,0 +1,36 @@
+/** Owner observations for report preparation, never complete assertion/enforcement admission. */
+import {createHash} from 'node:crypto';
+import type {createCatalogInputPreparation} from './catalog-input';
+import type {loadUmfDeclarationProducer} from './index';
+type Prepared=ReturnType<Awaited<ReturnType<typeof createCatalogInputPreparation>>['prepare']>;
+type Owner=Awaited<ReturnType<typeof loadUmfDeclarationProducer>>;
+export function collectCatalogAssertionObservations(prepared:Prepared,owner:Owner){
+ if(owner.sourceRevision!==prepared.umfProfile.version)throw Error('Original owner observation source mismatch');
+ const profile=Object.freeze({identity:'umf-declaration-inspection',version:owner.sourceRevision,sha256:owner.bundleSha256});
+ const observations:{documentId:string;basis:'original'|'reversible_target';operation:string;identity:unknown;result:unknown;evidence:{identity:string;bytesBase64:string;sha256:string}}[]=[];let retainedBytes=0;let calls=0;
+ function capture(documentIndex:number,operation:string,identity:unknown,basis:'original'|'reversible_target',run:()=>unknown){
+  if(++calls>4096)throw Error('Declaration observation component call capacity exceeded');
+  const document=prepared.documents[documentIndex];let result:unknown;
+  try{result={state:'observed',observation:run()}}catch(error){result={state:'unavailable',name:error instanceof Error?error.name:null,code:typeof (error as any)?.code==='string'?(error as any).code:null,path:typeof (error as any)?.path==='string'?(error as any).path:null,message:error instanceof Error?error.message:String(error)}}
+  const bytes=Buffer.from(JSON.stringify({profile,documentId:document.documentId,contentSha256:prepared.original.documents[documentIndex].sha256,basis,operation,identity,result}),'utf8');
+  retainedBytes+=bytes.length;if(retainedBytes>4194304)throw Error('Declaration observation component output capacity exceeded');
+  observations.push(Object.freeze({documentId:document.documentId,basis,operation,identity,result,
+   evidence:Object.freeze({identity:'truss.owner-declaration-observation/'+documentIndex+'/'+(calls-1),bytesBase64:bytes.toString('base64'),sha256:createHash('sha256').update(bytes).digest('hex')})}));
+ }
+ for(let index=0;index<prepared.documents.length;index++){
+  const document=prepared.documents[index];const source=document.interpretation.source;const target=document.interpretation.target;const propertyBasis=document.interpretation.transition?'reversible_target' as const:'original' as const;
+  capture(index,'schema_properties',{scope:'document'},propertyBasis,()=>owner.inspectSchemaProperties(target,{scope:'document'}));
+  for(const module of source.modules){
+   const moduleIdentity={scope:'module',module:module.id};
+   capture(index,'schema_properties',moduleIdentity,propertyBasis,()=>owner.inspectSchemaProperties(target,moduleIdentity));
+   capture(index,'relationships',{module:module.id},'original',()=>owner.inspectRelationships(source,{module:module.id}));
+   for(const element of module.elements){
+    const identity={scope:'element',module:module.id,element:element.id};
+    capture(index,'schema_properties',identity,propertyBasis,()=>owner.inspectSchemaProperties(target,identity));
+    if(element.kind==='record')capture(index,'keys',{module:module.id,element:element.id},'original',()=>owner.inspectKeys(source,{module:module.id,element:element.id}));
+   }
+  }
+ }
+ function freeze(value:unknown):void{if(value&&typeof value==='object'){for(const child of Object.values(value))freeze(child);Object.freeze(value)}}freeze(observations);
+ return Object.freeze({profile,observations:Object.freeze(observations),scope:'original_owner_assertion_observations_only' as const});
+}

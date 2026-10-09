@@ -33,9 +33,12 @@
   "actualHostChecks": [
     "source 0.7 authored key inspection retains exact /keys pointer and unverified provenance",
     "source 0.7 relationship inspection preserves known meaning; upgraded 0.8 inspection refuses",
-    "explicit reversible 0.8 schema-property observation retains actual owner diagnostics and leaves target unchanged"
+    "explicit reversible 0.8 schema-property observation retains actual owner diagnostics and leaves target unchanged",
+    "prepared original input collects all selected owner observations as direct-hashed immutable evidence",
+    "original 0.8 relationship observation retains explicit unavailable state and owner code/path; original source is not relabeled a transition target"
   ],
-  "tests": 3,
-  "assertions": 12,
-  "scope": "Actual Bun owner metadata APIs only. No complete assertion inventory, engine/native enforcement, containment/resource qualification or new runtime/source-profile adoption."
+  "tests": 5,
+  "assertions": 23,
+  "scope": "Actual Bun owner metadata APIs only. No complete assertion inventory, engine/native enforcement, containment/resource qualification or new runtime/source-profile adoption.",
+  "observationAdapterSha256": "bc6791e40c5fb0ff2f91db026eb23dbdf1174a7d05cbd286832d4c08c1482e1f"
 }
