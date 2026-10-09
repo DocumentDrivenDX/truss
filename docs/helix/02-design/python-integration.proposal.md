@@ -85,7 +85,11 @@ artifact correspondence only, not administrative or query authority.
 The fixture has synthetic upstream
 catalog identities and is not accepted Truss state. These checks do not qualify
 native queries, complete obligation handling, actual catalog mapping or Python
-runtime publication.
+runtime publication. The same checker now compiles an ordered grouped count
+with LIMIT and verifies emitted grouping/order/limit clauses; removing LIMIT
+refuses before SQL publication. These exercise the committed count-summary
+profile rather than a local aggregate compiler. Native empty-input/bag/result
+and finite scan-work evidence remain required.
 
 For this profile, grouped counts require complete grouping order and LIMIT;
 global counts have one row and exclude ORDER BY/LIMIT. Cursor and relationship

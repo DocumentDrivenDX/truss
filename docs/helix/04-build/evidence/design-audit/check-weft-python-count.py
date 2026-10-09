@@ -29,6 +29,19 @@ if response["status"] != "compiled" or "count(*)::text" not in response["sql"]:
     raise ValueError("Independent count compilation expectation failed")
 if response["backend"]["backendVersion"] != "0.1.0-qualified":
     raise ValueError("Wrong qualified backend")
+grouped = json.loads(fixture.read_text())
+grouped["sql"] = "SELECT c.name, COUNT(*) AS total FROM Customer c GROUP BY c.name ORDER BY c.name LIMIT 10"
+grouped_raw = weft.compile_json(json.dumps(grouped))
+grouped_response = json.loads(grouped_raw)
+if grouped_response["status"] != "compiled" or "count(*)::text" not in grouped_response["sql"]:
+    raise ValueError("Bounded ordered grouped count did not compile")
+if not all(clause in grouped_response["sql"].upper() for clause in ["GROUP BY", "ORDER BY", "LIMIT"]):
+    raise ValueError("Grouped count lost its required grouping/order/limit")
+unbounded = json.loads(fixture.read_text())
+unbounded["sql"] = "SELECT c.name, COUNT(*) AS total FROM Customer c GROUP BY c.name ORDER BY c.name"
+unbounded_response = json.loads(weft.compile_json(json.dumps(unbounded)))
+if unbounded_response["status"] != "blocked" or "sql" in unbounded_response:
+    raise ValueError("Grouped count without LIMIT did not refuse")
 changed = json.loads(fixture.read_text())
 changed["target"]["targetProfile"] = "truss-reference-history/0.12"
 refused = json.loads(weft.compile_json(json.dumps(changed)))
@@ -58,7 +71,10 @@ receipt = {
     "fixtureSha256": hashlib.sha256(fixture.read_bytes()).hexdigest(),
     "checkerSha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
     "countResponseSha256": hashlib.sha256(raw.encode()).hexdigest(),
+    "groupedResponseSha256": hashlib.sha256(grouped_raw.encode()).hexdigest(),
     "countCompiled": True,
+    "boundedOrderedGroupedCountCompiled": True,
+    "unboundedGroupedCountRefused": True,
     "unsupportedProfileRefused": True,
     "transportRefusals": 5,
     "testOnlyExportAbsent": True,
