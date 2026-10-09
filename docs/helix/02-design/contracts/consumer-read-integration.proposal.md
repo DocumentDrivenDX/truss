@@ -29,6 +29,44 @@ The consumer already parses its own statement and requests a parsed-statement in
 
 Until that owner interface is selected, SQL-text compilation is an explicit interim route requiring consumer agreement. Do not claim the no-reparse parsed-input requirement closed. Retain original consumer query/model/parameters so qualification can compare the two routes when available. This interface gap does not block direct key/ID/page reads or current SQL-text backend integration.
 
+## Parsed-input owner handoff
+
+Fresh committed-source review at Weft `5856c73db0342363e64802905a94abb96209d757`
+confirms the [same unresolved interface boundary](../../04-build/evidence/design-audit/weft-current-consumer-interface-review.json):
+the Python public entry accepts serialized SQL-text compile requests; request
+0.2 requires sql and rejects unknown members. The committed presence parser
+admits authored JSON-null members but explicitly retains native-null as requiring
+a separate profile. That does not close the Truss row-home Item.note mapping.
+
+For R8, Weft must own a separately versioned parsed-input admission boundary.
+The consumer supplies data from its parser, not trusted compiler output. The
+owner chooses its public syntax-tree/normalized-input grammar and any supported
+host-parser adapters. A Rust internal struct or the emitted typed-plan schema
+is not a public input ABI merely because it can be serialized. Do not define a
+Truss-owned AST grammar or serialize the consumer's tree back to SQL and call
+that no-reparse support.
+
+The owner admission procedure must retain these obligations:
+
+| Boundary | Required meaning |
+| --- | --- |
+| Input provenance | Exact original input bytes, parser/profile/version and supported grammar/subset. If original SQL is also supplied, define/check its correspondence; do not trust a host assertion that it matches the tree |
+| Syntax data | Reject unknown/executable node forms, target SQL fragments, ambiguous names, unsupported constructs and invalid scalar/Unicode data. Integers/decimals retain exact token text, never host float values |
+| Semantic resolution | Resolve names/aliases/ordered projections, parameters, types/keys/relationships and presence against the same exact supplied UMF/model/binding/profile. A claimed resolved identity or inferred type from the host cannot skip owner checks |
+| Lowering | Produce the complete ordinary compiler artifact: ordered parameter slots, descriptors, required integrity/security/host obligations and diagnostics. The input cannot inject target SQL or suppress obligations |
+| Resources | Select finite input-byte/node/depth/resolution/descriptor/work limits before decoding/expansion. Exceeding limits refuses the whole input; no partial plan or result |
+| Host execution | Truss consumes the original artifact through the same admitted transaction/authority/result path. Parsed input grants neither database authority nor publication permission |
+| Compatibility | An unknown parser/input profile refuses before native submission. Existing SQL-text callers keep their selected behavior; adopting a new input route does not widen old backend registrations |
+
+The exact owner request member, version, grammar, public function and registration
+remain unresolved outputs. Truss can design their integration obligations and
+independent acceptance cases now without claiming that an owner ABI exists.
+The [IR-12 parsed-input schedule](../../03-test/interactive-consumer-read-scenarios.proposal.md#ir-12-parsed-input-admission-schedule)
+defines semantic parity and hostile-input controls. Equivalent results require
+independent expected values; byte-identical SQL text is not necessary if the
+owner permits different valid emission. Parameter order, descriptors and
+obligation correspondence must follow the declared artifact compatibility rule.
+
 ## Index and bounded-work admission
 
 Truss's fixed-layout rule remains: publishing a type adds catalog rows, never per-type tables/columns/partitions/indexes. Consume declared bounded physical optimization/index profiles under their own lifecycle; do not add a per-type index to satisfy this matrix. Logical definitions and compiler fixture paths cannot certify a live physical index. Verify original native relation/index keys, operators/collation/expression predicates, readiness/validity and full stored-domain correspondence under the selected installed context.

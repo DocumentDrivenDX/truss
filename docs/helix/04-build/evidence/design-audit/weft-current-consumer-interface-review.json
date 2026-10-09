@@ -1,0 +1,17 @@
+{
+  "ownerRevision": "5856c73db0342363e64802905a94abb96209d757",
+  "sourceSha256": {
+    "crates/weft-python/src/lib.rs": "4a348481922988a364ab280b6f3fb4fae1a9940afa447e4282f4a704b6905366",
+    "docs/helix/02-design/contracts/compile-request-v0.2.schema.json": "2277d5735179f9605bd8919d88a7d9eea54467bff4988dc0bf468ac1c2a816bc",
+    "docs/helix/02-design/contracts/CONTRACT-004-application-reads.md": "02274cde86dd042c47035200297f329316d807b49b606da8327734ef32c552cf",
+    "crates/weft-postgresql/src/presence_definition.rs": "ba075768f392bc8eb82e5779bde206b763e93046195fadb82e74bb855af35b75",
+    "tests/truss-postgresql/upstream/presence-definition.schema.json": "08270a400dceb28e855ead142e31cfad1a30fd116d84b5380022fa3de4542f11"
+  },
+  "observations": {
+    "pythonPublicEntry": "weft.compile_json(request: str) -> str",
+    "compileRequest02": "sql required; additionalProperties false; no parsed-input member",
+    "presence": "JSON-null member requires authored nullability; nativeNullValue remains unsupported-without-separate-profile"
+  },
+  "scope": "Committed source/interface inspection after origin fetch; no owner tests rerun, wheel publication or Truss native-null/parsed-input adoption",
+  "qualified": false
+}

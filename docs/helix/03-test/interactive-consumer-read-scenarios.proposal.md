@@ -18,3 +18,24 @@ Independent planned native cases for [consumer read integration](../02-design/co
 | IR-12 external consumer/parsing | Clean Python/TypeScript query consumers; source SQL and eventual owner parsed-input adapter over same original query/model/parameters | Exact ordered parameters/descriptors/results/diagnostics/obligations agree; current SQL-text route documented as interim until owner parsed ABI exists; no qualification from an invented AST entry point |
 
 Record exact compiler/frontend/backend, model/layout/codec, index/statistics, database/driver, policy/current-principal, snapshot and controlled-work profiles. Native execution and full public-result publication are required for Truss support. Unsupported required case or absent original input is unavailable, not skipped into success. Performance evidence applies to its measured cardinality/role/profile only. Python/TypeScript interoperability does not replace independent expected results.
+
+## IR-12 parsed-input admission schedule
+
+These are planned subcases of IR-12, not new executed checks. The owner must
+supply the actual parsed-input grammar/API and approved parser profile before
+fixture serialization; do not invent plausible tree bytes to fill that gap.
+
+| Subcase | Original action | Independent expectation |
+| --- | --- | --- |
+| PI-01 route parity | Compile one supported query as original SQL and admitted parser data against identical model/binding/parameters | Same complete logical results, descriptors and parameter/obligation meaning under the owner's declared compatibility rule; independently expected result, not SQL-text equality alone |
+| PI-02 name resolution | Ambiguous/unresolved qualified name, duplicate alias/output label and wrong dependency identity in host input | Owner semantic refusal; a host's claimed identity/type cannot bypass resolution |
+| PI-03 exact parameters | Large integer/decimal/Unicode literals, repeated named parameter and missing/surplus/wrong-family binding | Exact text/domain preserved and ordered native slots correct; rounded numeric input or inconsistent domain refuses |
+| PI-04 forged lowering | Supply target SQL fragment, caller-created resolved plan, removed integrity obligation or executable/unknown node | Refuse before native submission; no artifact from a trusted compiler registration |
+| PI-05 original correspondence | Change tree/model/binding after preparation; supply conflicting original SQL when required by the owner profile | Original-input/profile correspondence refusal; no borrowed prior artifact or guessed equivalence |
+| PI-06 grammar/resources | Unknown/newer parser profile, unsupported construct, duplicate-member input, invalid Unicode, excessive byte/node/depth/work boundary | Whole-input refusal with retained original failure category; no partial plan/public result or silent SQL-text fallback |
+| PI-07 native publication | Execute admitted parsed-input artifact through Python and TypeScript on original read-only transactions; race authority/mapping change | Same complete native/logical result on authorized cuts; stale/denied context publishes nothing; compiler success alone is insufficient |
+| PI-08 compatibility | Existing SQL-text and old backend profiles encounter newly supported parsed/null semantics | Old supported behavior remains unchanged; excluded meaning still refuses unless its own new registration is selected |
+
+Retain original parser/input/compiler/model/binding/profile artifacts, actual
+compile outcomes and native/public observations separately. Source interface
+inspection closes none of these execution cases.
