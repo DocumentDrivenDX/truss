@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:receipt-visibility-request:0.1.0",
+  "description": "Shape only; exact byte/account/profile/transaction/current-authority admission remains separate.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-receipt-visibility-request/0.1.0"
+    },
+    "token": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 16384,
+      "pattern": "^[A-Za-z0-9_-]+$"
+    },
+    "limits": {
+      "type": "object",
+      "properties": {
+        "tokenBytes": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "evidenceBytes": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "retainedBytes": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "workUnits": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "nativeStatements": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        }
+      },
+      "required": [
+        "tokenBytes",
+        "evidenceBytes",
+        "retainedBytes",
+        "workUnits",
+        "nativeStatements"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "token",
+    "limits"
+  ],
+  "additionalProperties": false
+}

@@ -251,3 +251,14 @@ The binding fixes the caller handoff while original service registration, native
 private locator entry, replica source-commitment/seed evidence, complete resource
 profiles and Python/TypeScript execution interchange remain unfinished. It does
 not adopt working security code or expand Weft's compiler responsibilities.
+
+The draft [request](receipt-visibility-request-v0.1.proposal.schema.json) and
+[result](receipt-visibility-result-v0.1.proposal.schema.json) schemas now register
+with the full contract set. Strict compilation passes for161 schemas with zero
+registration/reference errors, recorded separately in
+[schema inventory](../../04-build/evidence/design-audit/schema-inventory-receipt-visibility.json).
+Fourteen independent wire controls accept available true/false and unavailable
+without a boolean, while rejecting conflated outcomes, missing profiles, unknown
+fields/reasons, padded tokens and numeric/zero/leading-zero limits. This verifies
+closed shape only; canonical byte/range/resource/current-person/original execution
+admission is still required and cannot be inferred from schema success.
