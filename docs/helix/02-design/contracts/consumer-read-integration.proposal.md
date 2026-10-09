@@ -75,6 +75,33 @@ Read-only EXPLAIN/EXPLAIN ANALYZE on the disposable qualified corpus observes ac
 
 Do not force a native planner to claim an index is used merely because it exists. Small-fixture sequential scans can be legitimate; interactive qualification requires the declared scale/threshold and independent baseline. Preserve exact aggregate semantics even when they cost more than lookup. A result limit never grants permission to stop counting early. Oversized grouped output, recursive entities, relationship lookahead or unknown codec/obligation fails the whole public result; no partial prefix is returned.
 
+## Session loss and final publication dependency
+
+The [security owner evidence review](../../04-build/evidence/design-audit/security-publication-lease-loss-review.json)
+retains a current-worktree native counterexample: killing the reader backend
+releases its transaction lock, allowing revocation to commit while the live
+client still holds the original unpublished result. No unauthorized publication
+was executed. This contradicts using native session/transaction termination
+alone as proof of application-buffer drain; it does not replace or amend the
+security workstream's policy semantics.
+
+Every selected read-publication profile must consume the security owner's
+admitted publisher/lease protocol through final release/cleanup, including
+backend loss, cancellation and buffered-result disposal. A held native read-only
+transaction is necessary where selected but cannot supply this entire proof.
+Later connection-error detection, cooperative buffer discard or a current-epoch
+retry cannot retroactively justify an earlier revocation acknowledgment.
+Unknown publisher drain keeps acknowledgment unavailable under that protocol;
+it is not successful cleanup or permission to return buffered protected results.
+
+The same boundary applies where reports, receipt replay, enumeration, feed or
+reached disclose protected facts. Each capability declares its real publisher
+and final-release point rather than borrowing a query-only receipt. Truss wires
+that shared boundary into its host adapters and public facades; it does not
+implement another policy resolver or invent a lease from caller flags. Exact
+issuer/participation/resource/native composition remains security-owned and
+must be qualified before claiming the drain guarantee.
+
 ## Delivery and evidence
 
 B-008/CH-05 wires existing direct lookup/page/catalog facades and complete decoder. B-012/CH-04 imports Weft's explicit application-read artifact with original Truss definitions/homes/parameters/obligations. The security workstream supplies predicate/use/disclosure and original principal admission; this read work does not duplicate ACL resolution. B-014/PY-02/05 publishes parameterized Python/TypeScript facades only after actual native/public support evidence.

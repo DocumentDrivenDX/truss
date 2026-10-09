@@ -39,3 +39,21 @@ fixture serialization; do not invent plausible tree bytes to fill that gap.
 Retain original parser/input/compiler/model/binding/profile artifacts, actual
 compile outcomes and native/public observations separately. Source interface
 inspection closes none of these execution cases.
+
+## IR-11 backend-loss publication control
+
+Hold an authorized read result in the live host before its declared final
+release, then terminate only that fixture's reader backend and concurrently
+request the relevant revocation. The independent observer must distinguish
+native termination from host-buffer drain. The selected security protocol must
+prevent acknowledgment until admitted final release/cleanup, or return its
+explicit unresolved/unavailable outcome. Detecting the lost connection later
+cannot turn an already acknowledged revocation into a successful drain case.
+
+Retain the original buffer/lease/authority identities and ordered termination,
+revocation and final-release observations. Do not publish unauthorized data to
+exercise the control. Repeat through applicable scalar/entity, report/receipt,
+feed and reached publishers under their own profiles; a SQL-reader lock test
+cannot qualify every host publication path. This is planned integration
+qualification against the security owner's observed counterexample, not a rerun
+or acceptance of its unsafe mechanism.

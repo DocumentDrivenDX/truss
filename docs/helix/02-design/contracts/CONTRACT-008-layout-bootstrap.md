@@ -239,6 +239,19 @@ cleanup, complete security privileges remain required. The [core 0.6 projection]
 replication mode or future lifecycle intention bypasses these guards. No migration outcome is admitted
 by the model, generated DDL or this probe.
 
+### Publication drain within migration exclusion
+
+When a selected upgrade/authority transition requires retiring old read contexts
+or acknowledging revocation, LM-03 must consume the security-owned publication
+lease/drain protocol as well as native writer exclusion. The security
+[counterexample review](../../04-build/evidence/design-audit/security-publication-lease-loss-review.json)
+shows that reader backend loss may release native locks while a live publisher
+retains an old result. Do not equate terminated sessions, completed SQL or lock
+availability with application final release. Unknown required publisher drain
+prevents transition acknowledgment/readiness; exact fencing and unresolved
+outcomes follow the shared security profile. This does not impose a new lease
+implementation or imply that every compatible layout upgrade revokes all reads.
+
 ### Migration storage initialization and self-upgrade
 
 The ledger initializer is part of the exact declared installation/upgrade

@@ -115,6 +115,19 @@ Truss ships an infrequently used layout migration system under [the PRD owner de
 
 LM-01 now has an internal pure `packages/tooling/src/layout-migration-plan.ts` component and closed candidate manifest semantics in CONTRACT-008. Nine tests cover exact route/order/pins, absent implicit paths, explicit reverse paths, nontransactional refusal, immutable output and large version components. Strict TypeScript passes. This advances metadata planning only; no installer/public package, native state/admission, original artifact/procedure registration or upgrade execution is supplied. The native LM-T01–08 and protected acceptance exits remain unchanged.
 
+Current LM-02 design inputs now include the versioned original receipt body,
+UMF storage/immutable-guard models and exact owner exports, plus atomic
+initializer/self-conversion placement in CONTRACT-008. Core 0.6/browser exposes
+the receipt's columns and source FK. Implement in order: compose exact
+storage/initializer/rights inventory, register original request/recipe/profiles
+and resource custody, implement protected ordered effects/receipt insertion,
+verify full target/preservation/publication, then settle and independently
+reconcile original commit. LM-T03/05/07 include five initializer subcases;
+rollback-only adjunct checks do not qualify any upgrade route. LM-03 must also
+consume the security owner's required publisher-drain protocol: session loss
+can release native locks while a live host retains unpublished data. Native
+writer exclusion alone cannot certify that drain or revocation acknowledgment.
+
 These slices define the required shipped system. Artifact generation/current component checks do not qualify a stable release layout. Complete protected acceptance and producer-backed immutable report/head publication remain the first runtime milestone; migration implementation composes that installed inventory rather than creating a fixture-ready bypass.
 
 ## Current execution handoff (2026-10-08)

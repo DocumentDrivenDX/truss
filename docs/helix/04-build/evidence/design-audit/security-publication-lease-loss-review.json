@@ -1,0 +1,18 @@
+{
+  "ownerWorktree": "/Users/erik/.codex/worktrees/1598/umf",
+  "ownerArtifacts": {
+    "docs/helix/04-build/evidence/security/original-use-native-lease-loss-counterexample.json": "531416154874705e0cbf9eb0c0964e896de950e461bd5f7d2535e856fe8780f0",
+    "docs/helix/04-build/evidence/security/original-use-native-lease-loss-evidence.json": "a8795eb8536189db036d692a8598c0bebb86351c1f21bcb1a88a11a6928f1259"
+  },
+  "retainedEvidenceCorrespondence": true,
+  "ownerStatus": "counterexample-observed",
+  "observations": [
+    "lease-loss-control-original-buffer",
+    "lease-loss-control-server-termination",
+    "lease-loss-control-revocation-committed-before-buffer-drain",
+    "lease-loss-control-client-buffer-still-retained",
+    "lease-loss-control-client-eventually-detects-failure"
+  ],
+  "integrationConsequence": "Native session termination cannot certify application-buffer drain. Require security-owned publisher/lease participation or refuse revocation acknowledgment when drain is unknown. No unauthorized publication was executed.",
+  "scope": "Read-only review of current security workstream evidence and retained digest; upstream run not rerun, unpublished work not adopted as complete security profile"
+}
