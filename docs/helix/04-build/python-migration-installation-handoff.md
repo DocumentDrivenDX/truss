@@ -101,3 +101,21 @@ Aurora and Lakebase remain separate advertised-target qualifications. The curren
 pgserver/Python lifecycle wheel is useful local infrastructure, not evidence that
 any stage above is implemented. No traversal API decision or pool performance
 benchmark gates this sequence.
+
+## Shared planner corpus before the Python port
+
+`tests/fixtures/layout-migration-planning.json` now supplies fifteen independent
+expected results for the existing declared-metadata planner, exercised by
+`tests/layout-migration-corpus.test.ts`. It retains original input JSON text,
+including duplicate-member and numeric-node refusals, rather than passing only
+already-decoded objects. Full expected source/target pins, recipe order and
+procedure artifacts are compared for successful plans. Explicit route absence,
+ambiguous routes, changed source pins, nontransactional steps and malformed
+unselected routes refuse; large version components remain exact.
+
+The Python port must consume this same corpus and preserve the existing decoder's
+finite byte/depth/node/member/work bounds, Unicode rules and numeric-free closed
+wire. These fifteen cases are a baseline, not exhaustive decoder qualification.
+The Python planner is not implemented yet. Neither these fixture manifests nor
+a passing metadata plan are delivered original migration artifacts, installed
+observations, administrative authority or a selected populated M1 route.
