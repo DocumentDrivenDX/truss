@@ -990,3 +990,16 @@ unordered comparisons cannot pass. Unsupported compiler/security tuples remain
 refused; a metadata-only compiler fix does not qualify authorization compilation,
 installed graph-source authority or Python packaging. These cases are planned,
 not executed, and remain within the existing UMF/Weft/security ownership split.
+
+
+Read-only owner revision 15/source review now finds the Rust regression
+`original_boolean_primary_metadata_preserves_explicit_key_selection_and_refusal_gate`.
+Its alternate primary Key selects salary while the policy IR retains pk; malformed
+metadata and duplicate primary definitions have authored refusal controls, and
+public security compilation still refuses unsupported. The
+[source review receipt](../04-build/evidence/design-audit/security-primary-key-source-review.json)
+pins inspected working sources; Truss reran no owner tests. Consume the eventual
+published owner suite for these logical controls instead of duplicating its
+compiler oracle. Truss still supplies independent Python transport, zero-native-
+submission and actual protected native endpoint/domain/ordered-byte comparisons.
+Uncommitted source progress does not admit a release or resolve the package owner.
