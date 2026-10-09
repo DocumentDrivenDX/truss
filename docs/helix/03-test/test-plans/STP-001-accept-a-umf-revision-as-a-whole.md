@@ -276,3 +276,12 @@ Every case retains exact input hex and direct source SHA-256; expected values
 were authored independently of a decoder. Successful decoding is not complete
 AcceptanceInput validity. Decoder/resource execution remains not_run; JPAR-06
 requires the actual selected finite registration and boundary corpus separately.
+
+JPAR-06 now has [four exact byte-boundary recipes](../acceptance-outer-json-boundaries.proposal.json):
+ASCII exact-frame/one-over and supplementary-scalar within/next-occurrence
+controls. Their independently specified UTF-8 sizes agree with the selected
+canonical/framed profile by checked integer arithmetic. Generate the original
+recipe bytes in the actual runner, retaining expected byte counts; host UTF-16
+length is not the oracle. These recipes exercise byte admission only, not
+complete wire validity or simultaneous work/peak qualification. Structural
+and original-account fault boundaries remain separate planned controls.

@@ -1,0 +1,11 @@
+{
+  "status": "independent planned boundary recipes; not decoder execution",
+  "profile": "truss-acceptance-input-decoder-resources/0.1.0",
+  "cases": [
+    {"name":"exact framed artifact ceiling","recipe":{"prefix":"{\"x\":\"","repeat":"a","count":1048517,"suffix":"\"}"},"expected":{"treeUtf8Bytes":1048525,"framedBytes":1048576,"sizeDisposition":"within"}},
+    {"name":"one byte over framed ceiling","recipe":{"prefix":"{\"x\":\"","repeat":"a","count":1048518,"suffix":"\"}"},"expected":{"treeUtf8Bytes":1048526,"framedBytes":1048577,"sizeDisposition":"resource_refusal"}},
+    {"name":"supplementary scalar byte accounting","recipe":{"prefix":"{\"x\":\"","repeat":"😀","count":262129,"suffix":"\"}"},"expected":{"treeUtf8Bytes":1048524,"framedBytes":1048575,"sizeDisposition":"within"}},
+    {"name":"supplementary scalar next occurrence exceeds ceiling","recipe":{"prefix":"{\"x\":\"","repeat":"😀","count":262130,"suffix":"\"}"},"expected":{"treeUtf8Bytes":1048528,"framedBytes":1048579,"sizeDisposition":"resource_refusal"}}
+  ],
+  "scope": "Only conjunctive canonical/framed byte admission. Within-size cases are not valid complete AcceptanceInput and do not guarantee work/peak/schema/semantic admission. UTF-16 length cannot substitute for UTF-8 bytes."
+}
