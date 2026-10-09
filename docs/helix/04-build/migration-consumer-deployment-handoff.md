@@ -182,7 +182,7 @@ available under current disclosure admission; reconciliation submits zero recipe
 Add direct migration-row delete/truncate attempts and missing/offloaded-but-
 unretrievable original evidence. Unqualified deletion refuses, and unavailable
 historical evidence keeps reconciliation unavailable rather than triggering apply.
-Repeat across the subsequent-upgrade schedule above. These planned controls keep
+Repeat across the subsequent-upgrade reconciliation schedule. These planned controls keep
 separate lifecycle protections observable; the private trigger component alone
 cannot qualify complete installed privileges or archival durability.
 
