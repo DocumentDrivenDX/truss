@@ -210,12 +210,14 @@
                   },
                   "required": [
                     "state"
-                  ]
+                  ],
+                  "type": "object"
                 }
               },
               "required": [
                 "independentReview"
-              ]
+              ],
+              "type": "object"
             },
             "then": {
               "properties": {
@@ -227,9 +229,11 @@
                   },
                   "required": [
                     "state"
-                  ]
+                  ],
+                  "type": "object"
                 }
-              }
+              },
+              "type": "object"
             }
           },
           {
@@ -243,12 +247,14 @@
                   },
                   "required": [
                     "state"
-                  ]
+                  ],
+                  "type": "object"
                 }
               },
               "required": [
                 "nativeQualification"
-              ]
+              ],
+              "type": "object"
             },
             "then": {
               "properties": {
@@ -260,7 +266,8 @@
                   },
                   "required": [
                     "state"
-                  ]
+                  ],
+                  "type": "object"
                 },
                 "independentReview": {
                   "properties": {
@@ -270,9 +277,11 @@
                   },
                   "required": [
                     "state"
-                  ]
+                  ],
+                  "type": "object"
                 }
-              }
+              },
+              "type": "object"
             }
           }
         ]
@@ -287,7 +296,8 @@
             },
             "required": [
               "boundary"
-            ]
+            ],
+            "type": "object"
           },
           "minContains": 1,
           "maxContains": 1
@@ -301,7 +311,8 @@
             },
             "required": [
               "boundary"
-            ]
+            ],
+            "type": "object"
           },
           "minContains": 1,
           "maxContains": 1
@@ -315,7 +326,8 @@
             },
             "required": [
               "boundary"
-            ]
+            ],
+            "type": "object"
           },
           "minContains": 1,
           "maxContains": 1
@@ -329,7 +341,8 @@
             },
             "required": [
               "boundary"
-            ]
+            ],
+            "type": "object"
           },
           "minContains": 1,
           "maxContains": 1
@@ -343,7 +356,8 @@
             },
             "required": [
               "boundary"
-            ]
+            ],
+            "type": "object"
           },
           "minContains": 1,
           "maxContains": 1
@@ -357,7 +371,8 @@
             },
             "required": [
               "boundary"
-            ]
+            ],
+            "type": "object"
           },
           "minContains": 1,
           "maxContains": 1
@@ -371,7 +386,8 @@
             },
             "required": [
               "boundary"
-            ]
+            ],
+            "type": "object"
           },
           "minContains": 1,
           "maxContains": 1

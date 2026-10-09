@@ -379,3 +379,12 @@ original file before checking its digest. Changed source must be reviewed and
 recaptured; equal versions or a selected subset cannot close remaining boundaries.
 This supplies concrete review inputs for priority 1 above, while preserving
 unresolved human/owner/profile selections and the full toolkit scope.
+
+The combined [157-schema integration receipt](evidence/design-audit/schema-inventory-composition-review-2026-10-09.json)
+now verifies registration, reference resolution and strict Ajv Draft 2020-12
+compilation across the current contract inventory. Strict compilation caught
+missing object-type annotations in the review schema's nested conditions; these
+were corrected before recording the passing result. All nine independent shape
+controls and full retained-source checks still pass. This supersedes the older
+155-schema count for current integration only, without adopting any schema's
+semantic profiles or qualifying native behavior.
