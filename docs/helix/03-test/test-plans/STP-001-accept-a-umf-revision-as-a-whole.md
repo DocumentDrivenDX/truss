@@ -196,3 +196,29 @@ RPDOC-01–06 qualify CONTRACT-003's complete input/archive projection. All are 
 | RPDOC-06 | Exceed original native decoding/accounting budget; inject failure after complete archive matching but before report persistence; change surviving effect generation after matching | Preserve original execution/recovery evidence and earlier adopted caller work; publish no partial report/head; invalidate stale readiness and require complete recollection |
 
 Compare complete original input/archive/report sets and bytes, not counts alone. Converted-source fidelity requires the exact adapter qualification; an invented loss report is a refusal control. Tests must exercise ordinary protected entry points and effective role closure, not grant access to private collectors as a substitute. Existing RPSEL-01–06 still govern report persistence, repeat and unknown commit outcomes.
+
+### RPDOC-06 complete-input capacity schedules
+
+Use the [capacity fixture](../../02-design/contracts/bindings/acceptance-input-capacity-v0.1.fixture.json)
+as independent wire/sizing evidence only. Its synthetic pins and empty UMF
+objects must refuse semantic acceptance. For native execution, substitute
+original valid documents and actual registered profile/adapter/binding/transform
+artifacts, then independently freeze the complete expected bytes and lengths
+before invoking the public entry. Record which raw/tree/framed carrier the
+original installed producer retains; those representations have different
+lengths and are not interchangeable.
+
+| Subcase | Independent input basis | Expected evidence |
+| --- | --- | --- |
+| RPDOC-06a | One 1,048,576-byte original source within the archive collector allowance; its canonical base64 alone is 1,398,104 bytes, before envelope/profile/provenance | Under the current one-MiB artifact component, refuse before effects; observe zero revision/report/head/journal changes and no digest-only or documents-only fallback. A future selected profile may accept only with compatible complete original custody and precharged bounds. |
+| RPDOC-06b | Six original artifacts individually within one MiB with lengths 1,048,576 four times plus 1 and 1, totaling 4,194,306 | Under the current aggregate bound 4,194,304, refuse the complete operation; individual admissibility cannot permit partial persistence. Preserve earlier adopted caller sentinel work. |
+| RPDOC-06c | Complete original input exactly at the selected inclusive per-artifact and aggregate boundaries, with native and converted branches and all required provenance | Accept only under actual registered parser/semantic/authority/resource profiles; independently compare full artifact/source/report inventories. Boundary arithmetic or JSON-schema validity alone is insufficient. |
+| RPDOC-06d | The same complete valid input, but remaining original operation work/peak allowance is smaller than the conservative required decoder/verification/copy charge | Refuse before producer invocation/allocation under the qualified account; inspect producer invocation counts and native state independently. Increasing a caller-supplied budget cannot repair the original account. |
+
+Run owned and adopted transaction forms separately. For refusal, inspect
+independent complete before/after state and original transaction liveness;
+a thrown exception is not rollback proof. Inject cancellation between
+reservation and decode, and failure after bijection but before report insertion.
+Retain original recovery custody whenever containment/settlement is uncertain.
+These are planned full-boundary controls (`not_run`); the existing arithmetic
+checker establishes only fixture shape/artifact integrity and sizing.

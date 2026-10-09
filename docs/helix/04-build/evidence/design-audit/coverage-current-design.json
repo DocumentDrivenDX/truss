@@ -1019,7 +1019,7 @@
   ],
   "artifactSha256": {
     "02-design/technical-designs/TD-001-accept-a-umf-revision-as-a-whole.md": "269c8c78868218d01bef902f4747cb745880fbb34fd96c378ece72559819bcef",
-    "03-test/test-plans/STP-001-accept-a-umf-revision-as-a-whole.md": "d35043075a78af044e92f1766ac11bdfade01da2344610d5ee2038ca5961f497",
+    "03-test/test-plans/STP-001-accept-a-umf-revision-as-a-whole.md": "b0e137f6fb5bfe9cfa9aa950c8ff92a9dc156f75ede2a01681cc8b68c5ae2e65",
     "02-design/technical-designs/TD-002-import-documents-that-depend-on-each-other.md": "1d93cda1f65f88b51851a9d4c32cd1b4bff0758f4556a78708dcd572fe09647d",
     "03-test/test-plans/STP-002-import-documents-that-depend-on-each-other.md": "2311d9c7f342ae12aa1bb3868bd593944c0ce420db6562ae448ae4f46f9b38d2",
     "02-design/technical-designs/TD-003-decide-what-happens-to-an-unknown-entity-type.md": "37ee82d66c860c439319968d39729cc174136f02f676e847a1a1caabff21c7b6",
