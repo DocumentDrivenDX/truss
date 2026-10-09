@@ -99,6 +99,52 @@ Resolve and admit the original committed receipt/position under the current pers
 
 If the token resolves to a committed receipt that is excluded by the supplied snapshot, return not-yet-included only when the qualified resolver can establish its valid identity without crossing disclosure boundaries. If that evidence is unavailable in the snapshot, return unavailable(observation); do not open another connection silently. Exact native snapshot/status routines and bounded original evidence resolution must be selected before this capability is available.
 
+## Authority resolver procedure and positive proof
+
+Select a protected receipt-based authority resolver, rather than numerical xid
+ordering or current graph-row inspection. This procedure consumes the original
+read-only transaction and exact private locator under the shared current-person,
+publication and resource profiles. Its native lookup is a registered private
+operation, not direct application access to request receipts.
+
+| Stage | Required original work | Refusal/unavailable boundary |
+| --- | --- | --- |
+| Locator admission | Bound/copy/decode canonical locator and resolve exact position/receipt/layout profiles | Unsupported, noncanonical, oversized or unregistered input submits no lookup |
+| Original read context | Verify actual transaction/installation/epoch and current authenticated principal; acquire the admitted authority/publication and required receipt-lifecycle custody in common order | Wrong epoch/profile, ended/foreign handle, denied authority or unknown drain cannot publish a comparison |
+| Private source lookup | Locate the original source row by its qualified storage ID; retain full writer/context/profile/receipt/protection correspondence under the same native snapshot | Zero rows is not false. Missing, invisible, denied or expired evidence remains unavailable unless a separate qualified exclusion proof distinguishes it |
+| Original correspondence | Recheck native-issued writer xid, retained original installation/epoch/incarnation, new receipt position basis, full immutable result/input/domain and original protection profile | A same-numbered row, altered context, old encoding or digest-only match cannot resolve this token |
+| Snapshot inclusion | Admit full receipt producer/finalizer atomicity and actual native visibility from a different producing transaction | Uncommitted same-writer receipt cannot prove inclusion; incomplete or unqualified producer remains unavailable |
+| Final release | Recheck required current authority/receipt protection and original read/publication custody before releasing the small comparison result | Changed or unresolved current context publishes no boolean; native session loss alone is not buffer drain |
+
+The positive proof is native MVCC visibility of the complete protected receipt
+in this exact snapshot **plus** the admitted invariant that its original
+producer could commit only atomically with all group effects and required
+finalization. The original producing transaction must differ from the reader's
+own pending transaction. It follows that this snapshot includes that group's
+Truss effects, even if later visible changes supersede them. No additional
+caller committed flag, journal maximum or current-value equality is needed.
+Native visibility alone is insufficient until the unavoidable producer,
+finalizer, original writer capture and complete role/bypass closure are qualified.
+
+The resolver may capture private facts before owner disclosure guards only
+under the existing registered receipt-integrity procedure; none may escape
+before full authorization/correspondence. The token omits namespace/request
+hashes, so it cannot invoke the current namespace-hash lookup SQL unchanged.
+Implement a distinct protected locator entry that derives and verifies its
+private receipt namespace/context and then consumes the existing guarded full
+comparison. It must not accept a caller namespace, choose a SQL schema from token
+text, bypass request-route/owner/lifecycle guards, or use a second snapshot to
+repair missing facts silently.
+
+The source lookup result distinguishes a complete admitted observation from
+unavailable. An old snapshot with no receipt row defaults to
+unavailable(observation); not-yet-included requires separately admitted original
+commitment and snapshot-exclusion evidence. Do not broaden private visibility
+or open a new connection merely to force a false result. Existing RV-01/02/03/10/14
+cover these meanings. Exact native entrypoint/signature, original snapshot/lease
+and finite accounting realization remain implementation/profile outputs; the
+current private receipt SQL is not this consumer capability.
+
 ## Replica comparison
 
 The replica compares against its durably applied state in the same read snapshot. Source delivery, assembled fragments, worker claim, source ACK, or a checkpoint label alone cannot certify downstream visibility. Use the original committed application/seed evidence and the existing complete-feed boundary domains.

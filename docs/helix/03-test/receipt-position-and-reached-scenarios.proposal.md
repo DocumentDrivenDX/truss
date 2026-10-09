@@ -38,3 +38,20 @@ not acquire today's epoch. A changed new receipt body must fail original full
 correspondence; no circular whole-receipt token hash is accepted. Run fresh and
 held snapshots and real complete downstream application after native producer
 admission; a locator parser pass cannot prove reached or durable retry.
+
+## Authority receipt-proof controls
+
+Under the selected protected resolver, independently verify that the visible
+receipt and every required effect/finalization belonged to one real commit.
+Attempt raw/incomplete receipt insertion, changed original writer/context,
+same-writer pending lookup and legacy receipt-body substitution: none can
+publish included. Exercise an exact storage-row locator whose private namespace
+would be wrong if supplied by the host; native traces must show derived full
+original correspondence and common guard order, with no direct receipt grant.
+
+Compare an old snapshot with no visible row, an expired retained identity and
+an unauthorized receipt scope. Absence alone never yields false; a deliberately
+missing exclusion producer returns unavailable(observation). Race protection
+expiry/current-authority change and backend loss before final release, preserving
+private evidence without boolean or existence disclosure. These are planned
+native/protected-publication tests, not proof from a shape-valid token.
