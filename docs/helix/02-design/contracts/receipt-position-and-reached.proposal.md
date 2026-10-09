@@ -175,3 +175,21 @@ Truss owns token/receipt/native/feed/application composition. Weft supplies comp
 ## Independent execution schedule
 
 The [RV-01–14 schedule](../../03-test/receipt-position-and-reached-scenarios.proposal.md) belongs to B-007/008/009/014 and CH-02/05/06. It closes the consumer-facing comparison meaning while leaving explicitly named native/profile realization to those work items. A passing parser/type test is insufficient; actual original commits, snapshots, complete downstream application and unchanged denied state are required.
+
+## Python locator decoder component
+
+Private `truss._receipt_position.decode_receipt_position` now checks the existing
+candidate wire: finite canonical base64url, closed numeric-free UTF-8 JSON, exact
+signed64-positive receipt row and unsigned64 xid domains, text byte limits and
+complete canonical byte correspondence. Frozen decoded views retain the original
+immutable bytes. It accepts all four original independently specified vectors;
+negative controls refuse whitespace/alternate escapes, padding, duplicate/extra
+members, numeric nodes, invalid Unicode/NUL and range/resource violations.
+The JavaScript vector checker remains a serialization/parity check.
+
+This is a private source component, not public token production or `reached`.
+A decoded fictional or fabricated profile pin supplies no installed interpretation,
+receipt commitment, current authorization, original snapshot or replica coverage.
+The original native resolver must establish those facts; missing/unavailable
+evidence stays unavailable rather than false. No SQL, waiting or automatic retry
+is introduced, and built-wheel/native/interchange qualification remains open.
