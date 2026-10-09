@@ -263,3 +263,25 @@ Original configuration host projection is implemented with a shared twelve-colum
 
 
 Historical configuration closure now has a private original-target/operation/artifact locator, complete owner/protection dependency matrix and CC-T01–09 cross-story scenarios. Per-record archive coverage cannot close no-op receipts or unknown attempts; local operation/capsule custody stays protected until a selected complete handoff and fresh retention admission prove correspondence. One-MiB report and sixteen-MiB capsule bounds are explicitly separate; only registered compact-reference semantics can bridge them. Actual historical resolution/archive coverage/protected cleanup and exact accounts remain required; no archive provider or wire is newly adopted.
+
+
+## Scoped story reconciliation — 2026-10-09
+
+The following reviews reconcile concrete handoff defects. They are not a
+completed semantic audit of all 45 stories, executed acceptance verdicts or
+release qualification. The coverage receipt pins the current primary TD/STP
+artifacts; its 45-story/167-criterion count still proves structure only.
+
+| Reviewed story | Concrete reconciliation | Remaining decisive handoff |
+| --- | --- | --- |
+| US-039 UMF parity | STP-039 VP-01–05 independently test diagnostic multiplicity, paths, warnings/support separation, original parsing bytes and immutable version scope. Shared producer use does not erase adapter/transport obligations. | Select pinned owner parser/validator and normalization/profile tuple, freeze independent expected cases, implement and execute portable/native integration. No duplicate UMF validator is commissioned. |
+| US-042 freshness | STP-042 now consumes the existing complete-feed v0.2 wire rather than requiring another envelope/checkpoint design. CF-01–04 distinguish complete original fact timing, staged/downstream-only progress, exclusive watermark and unavailable evidence. | Compose native complete membership, source acknowledgment, clock and authorized coherent observation producers. All four criteria and side-fact scope remain required. |
+| US-044 adopted transaction | TD-044 corrects the unconditional lock-lifetime statement: rollback to an earlier host savepoint can remove a released pending operation while the outer transaction remains live. Retained result/capture cannot settle after later COMMIT. | Qualify actual adapter command arbitration, rollback correspondence, capture invalidation, lock lifetime and resource accounting. STP-044 records an independent sentinel/waiter and lost-rollback-acknowledgment schedule. |
+| US-045 installation | TD-045 required inventory now includes selected request receipts, separate immutable acceptance reports and the shipped migration subsystem. Default nontransactional refusal matches CONTRACT-008. Fresh genesis creates no fabricated upgrade result. | Compose a complete compatible installation bundle and independently qualify native inventory/initializer/settlement. Explicit upgrade routes remain separate LM-I/LM-T/LM-P work; fresh installation cannot stand in for upgrade evidence. |
+
+US-043 was read alongside US-044: its selected durable complete-result receipt
+and exact original retry path remain implementation prerequisites. This review
+found no additional product selection needed for that persistence strategy;
+it does not prove the full retry design or corpus complete. Security-owned
+publication and authority protocols remain independently owned, including their
+uncommitted work; this reconciliation does not adopt new security code.

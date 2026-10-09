@@ -1106,7 +1106,7 @@
     "03-test/test-plans/STP-043-make-a-group-safe-to-repeat.md": "4c670aa123b8234d1236cc1c858dd02253a914e8d7a8ca7974bcf39ca5c677d6",
     "02-design/technical-designs/TD-044-run-a-change-in-a-transaction-and-roll-it-back.md": "539477aee3355ca950c98fb2e9b030d879be1d8c7dee9b1d13fd0400917fb75e",
     "03-test/test-plans/STP-044-run-a-change-in-a-transaction-and-roll-it-back.md": "e84d620b66aa825992d5e33cea899560cc547810926bf46cf78a6a9f703842d4",
-    "02-design/technical-designs/TD-045-bootstrap-the-internal-layout-from-umf.md": "ca24959bde1ba9c23f15f856f2a61c882ac37d8377d4b73905ce5a4f0f859869",
+    "02-design/technical-designs/TD-045-bootstrap-the-internal-layout-from-umf.md": "a2e38b2730a8eb273a61a65eaf597cb16da154bc5c07129fa37bbd0213df2310",
     "03-test/test-plans/STP-045-bootstrap-the-internal-layout-from-umf.md": "6acf72866955ed9b89ad13bc3a6166577c78750578fe7f07c415c59a45e735e0"
   },
   "storySha256": {
