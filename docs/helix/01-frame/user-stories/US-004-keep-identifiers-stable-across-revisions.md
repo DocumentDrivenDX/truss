@@ -29,7 +29,7 @@ ddx:
 
 ## Context
 
-Stored values are keyed by property identifier, so a changed or reused identifier would corrupt meaning.
+Stored values are keyed by property identifier, so a changed or reused identifier would corrupt meaning. Identifier stability follows the complete qualified authored identity, not a display name or source position. For the nonreuse criterion, an issued catalog identifier means one durably accepted in a committed revision. Candidate allocations remain provisional inside their original transaction and cannot be published as durable identifiers before confirmed commitment; rollback or an unacknowledged outcome follows US-044 and the original recovery protocol. No observed high-water mark or later committed identifier proves an earlier attempt committed. Key numbers are owner-local: the complete identity includes the owning type, and a retired number cannot be reassigned within that type. Equal numbers in different types are not reuse of one identifier.
 
 ## Walkthrough
 
