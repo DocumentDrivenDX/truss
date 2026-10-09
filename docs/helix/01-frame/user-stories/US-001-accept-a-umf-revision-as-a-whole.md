@@ -58,7 +58,7 @@ execution/recovery outcome, not rejected/unchanged.
 ## Edge Cases
 
 - **Empty set**: rejected as invalid.
-- **A document accepted before with identical bytes**: no new revision (US-004).
+- **A document accepted before with identical bytes**: no new revision only when the complete verified acceptance input also matches the current head (US-004). Historical matches or changed bindings/policies/profiles require current acceptance validation.
 
 ## Test Scenarios
 

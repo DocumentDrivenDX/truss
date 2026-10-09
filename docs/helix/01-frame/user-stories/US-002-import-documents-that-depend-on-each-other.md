@@ -47,7 +47,7 @@ ddx:
 ## Edge Cases
 
 - **Tie between unrelated documents**: ordered by document identifier in byte order.
-- **A document that depends on one not in the set**: its endpoints follow the unknown-endpoint policy (US-003).
+- **A document that depends on one not in the set**: required missing dependencies fail upstream validity before Truss policy. Only an admitted upstream-valid unresolved endpoint follows US-003; exact qualified earlier accepted definitions require their original revision/digest pins.
 
 ## Test Scenarios
 
