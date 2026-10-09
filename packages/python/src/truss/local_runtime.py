@@ -95,20 +95,27 @@ class LocalPostgres:
             raise
 
     def close(self):
-        """Stop owned server, retain data, and release the directory lease."""
-        try:
-            if self._server is not None:
+        """Stop owned server; retain lease if cleanup fails or stop is unconfirmed.
+
+        A later close is an explicit host recovery action, never an automatic retry.
+        Connection information becomes unavailable as soon as close starts.
+        """
+        self._info = None
+        if self._server is not None:
+            try:
                 self._server.cleanup()
-        finally:
+            except Exception as error:
+                raise LocalRuntimeError('Local PostgreSQL cleanup failed; directory lease retained') from error
+            if (self.directory / 'postmaster.pid').exists():
+                raise LocalRuntimeError('Local PostgreSQL stop unconfirmed; directory lease retained')
             self._server = None
-            self._info = None
-            if self._lease is not None:
-                self._lease.release()
-                self._lease = None
-            if self._registered:
-                with _directory_lock:
-                    _active_directories.discard(self.directory)
-                self._registered = False
+        if self._lease is not None:
+            self._lease.release()
+            self._lease = None
+        if self._registered:
+            with _directory_lock:
+                _active_directories.discard(self.directory)
+            self._registered = False
 
     def __exit__(self, exc_type, exc, traceback):
         self.close()

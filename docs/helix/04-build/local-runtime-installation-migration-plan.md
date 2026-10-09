@@ -336,3 +336,16 @@ transaction rules, complete outcome mapping and implementation order under the
 existing migration binding. It introduces no alternative ledger, SQL generator
 or authorization resolver. It remains an implementation handoff; migration
 status/verify/apply/reconcile and the complete populated M1 route are unfinished.
+
+### Cleanup custody correction
+
+LocalPostgres originally released its directory lease in a finally block even when
+owned cleanup failed. It now invalidates connection information immediately and
+retains the server handle plus both leases on raised cleanup failure or a remaining
+postmaster marker. A later close is an explicit host recovery action; no automatic
+retry loop is introduced. Failure injection against an actual running server
+checks thrown cleanup, cleanup returning without stopping, continued overlapping
+context refusal, and successful explicit cleanup/restart after removing the fault.
+These controls qualify the wrapper's custody response, not every native shutdown
+or startup-constructor failure. Complete driver/native outcome settlement and
+process-crash recovery remain required for the installed engine/migration profile.

@@ -4,6 +4,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 from truss import LocalPostgres, LocalRuntimeError
 
@@ -56,6 +57,33 @@ class LocalRuntimeTests(unittest.TestCase):
                     self.assertEqual(query(first, 'SELECT 1'), '1')
                     self.assertEqual(query(second, 'SELECT 2'), '2')
                 self.assertEqual(query(first, 'SELECT 3'), '3')
+
+    def test_failed_cleanup_retains_lease_until_explicit_recovery(self):
+        with tempfile.TemporaryDirectory(prefix='truss-python-cleanup-') as parent:
+            directory = Path(parent) / 'data'
+            runtime = LocalPostgres(directory).__enter__()
+            try:
+                with patch.object(runtime._server, 'cleanup', side_effect=OSError('injected cleanup failure')) as cleanup:
+                    with self.assertRaisesRegex(LocalRuntimeError, 'lease retained'):
+                        runtime.close()
+                    self.assertEqual(cleanup.call_count, 1)
+                    with self.assertRaises(LocalRuntimeError):
+                        _ = runtime.info
+                    with self.assertRaisesRegex(LocalRuntimeError, 'already in use'):
+                        LocalPostgres(directory).__enter__()
+                with patch.object(runtime._server, 'cleanup', return_value=None) as cleanup:
+                    with self.assertRaisesRegex(LocalRuntimeError, 'stop unconfirmed'):
+                        runtime.close()
+                    self.assertEqual(cleanup.call_count, 1)
+                    with self.assertRaisesRegex(LocalRuntimeError, 'already in use'):
+                        LocalPostgres(directory).__enter__()
+                # Explicit host recovery, after removing the injected failure.
+                runtime.close()
+                self.assertFalse((directory / 'postmaster.pid').exists())
+                with LocalPostgres(directory) as restarted:
+                    self.assertEqual(query(restarted, 'SELECT 1'), '1')
+            finally:
+                runtime.close()
 
     def test_nonempty_and_wrong_version_directories_refuse_unchanged(self):
         with tempfile.TemporaryDirectory(prefix='truss-python-refusal-') as parent:

@@ -54,3 +54,10 @@ bundled16.2; other platform/version tuples still require qualification.
 The experimental truss-toolkit0.0.1.dev0 wheel exposes this lifecycle component;
 it does not yet expose the complete Truss engine, catalog acceptance, mutation,
 query or migration APIs. Test with `python -m unittest discover -s packages/python/tests -v`.
+
+If cleanup raises or leaves a postmaster marker, close refuses and retains the
+directory lease; connection information becomes unavailable. It does not retry
+automatically. The host may explicitly call `close()` again after resolving the
+failure. A successful close releases custody only after the owned cleanup returns
+and its postmaster marker is absent. Startup failures inside pgserver's constructor,
+crash recovery and other operating systems still need separate qualification.
