@@ -287,4 +287,7 @@ publication and authority protocols remain independently owned, including their
 uncommitted work; this reconciliation does not adopt new security code.
 
 
-The [focused source review inventory](evidence/design-audit/focused-story-reconciliation.json) pins fifteen current technical-design surfaces inspected during this reconciliation. Each retains a concrete finding and remaining handoff; none is a whole-story completion verdict. It complements the scoped rows above and does not replace the full 45-story semantic audit or structural coverage receipt.
+The [focused source review inventory](evidence/design-audit/focused-story-reconciliation.json) pins twenty-three current technical-design surfaces inspected during this reconciliation. Each retains a concrete finding and remaining handoff; none is a whole-story completion verdict. It complements the scoped rows above and does not replace the full 45-story semantic audit or structural coverage receipt.
+
+
+The supplemental reviews cover US-002/004/006/007/012/016/026/040: exact graph-order fixtures, selected lineage reactivation, concrete writer admission races, current UMF numeric ownership, authored failure precedence, mode-only readiness order, existing evidence wires and host-savepoint group custody. The inventory checks all retained source hashes before adding these surfaces. This adds focused semantic reconciliation, not whole-story completion. The continuous-writer public pre-effect retry question joins the existing pending Python/traversal owner questions; current cross-document input representation and affected Weft presence/parsed-input handoffs remain unresolved. Native execution and managed-target qualification remain later implementation evidence.

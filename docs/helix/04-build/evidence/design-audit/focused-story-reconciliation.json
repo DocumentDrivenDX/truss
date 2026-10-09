@@ -1,7 +1,25 @@
 {
   "scope": "Recent focused design reconciliations only; not a full 45-story semantic audit, runtime verdict or release qualification",
-  "basisCommit": "2af13093406e96bd67d4ed8d62a8d48a69b5a200",
+  "basisCommit": "59f9c735a18641967cdc5ab94d0c321f04ea3cb3",
   "entries": [
+    {
+      "story": "US-002",
+      "reviewedSurface": "Deterministic document graph ordering",
+      "source": "docs/helix/02-design/technical-designs/TD-002-import-documents-that-depend-on-each-other.md",
+      "sha256": "f214baae305ee3e904e4259f8b598114f7fde10bd257cd9f5fae924b1f4faa39",
+      "finding": "Existing component/UTF-8 rule is consumed; eight exact graph vectors supply independent expected orders.",
+      "remainingHandoff": "Already-valid owner cross-document/cycle representation remains unresolved; pure order is independently implementable.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-004",
+      "reviewedSurface": "Retired lineage allocation expectations",
+      "source": "docs/helix/02-design/technical-designs/TD-004-keep-identifiers-stable-across-revisions.md",
+      "sha256": "bb4fd6cfafcfb4b680d96ac7f5128307f6af452bfdbdf01e95eb48990d520e56",
+      "finding": "Retired-reintroduction vector now consumes selected validated reactivation instead of reopening the product choice.",
+      "remainingHandoff": "Actual lifecycle/native allocation and complete report/history correspondence remain implementation obligations.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
     {
       "story": "US-005",
       "reviewedSurface": "Complete violator-report capacity",
@@ -9,6 +27,24 @@
       "sha256": "635d2912077d8f6ed6044a44829cd814f7c67aaeee2c8dc2cd062dd644bad3da",
       "finding": "Explicit incomplete/resource refusal replaces the stale spill/export prerequisite.",
       "remainingHandoff": "Exact bounded scan/transform/report/native profile and execution remain unqualified.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-006",
+      "reviewedSurface": "Continuous-writer admission semantics",
+      "source": "docs/helix/02-design/technical-designs/TD-006-add-a-type-without-ddl.md",
+      "sha256": "0e44cfd39f4306b5986e4a5254458c86d8b15b0bde1dfbd031288f8830d71065",
+      "finding": "CW-01\u201304 specify shared custody, waiting writers, stale observation race and acceptance rollback.",
+      "remainingHandoff": "Public pre-effect retry versus exposed stale refusal is an unanswered owner choice; no effects-started or uncertain-outcome retry is inferred.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-007",
+      "reviewedSurface": "UMF numeric conversion ownership",
+      "source": "docs/helix/02-design/technical-designs/TD-007-store-and-read-objects-and-edges-exactly.md",
+      "sha256": "b19f9eb36490f622cfa2c4926c3090d7fb02c3bcec94b6b211220fa470f0382c",
+      "finding": "Consumes existing pinned owner APIs and Truss registration; independent binary-rational oracle does not commission a duplicate converter.",
+      "remainingHandoff": "Wrapper/shared resource precharging, error translation, signed-zero view and full native codec qualification remain explicit.",
       "verdict": "focused_review_only_not_story_completion"
     },
     {
@@ -48,12 +84,30 @@
       "verdict": "focused_review_only_not_story_completion"
     },
     {
+      "story": "US-012",
+      "reviewedSurface": "Native failure precedence",
+      "source": "docs/helix/02-design/technical-designs/TD-012-write-with-one-protocol-and-report-every-violation.md",
+      "sha256": "b69570bfce6a4707a22ee654e81be5a533126a19d6a7ea6222f211f7c9e6ce49",
+      "finding": "Consumes existing shared failure-order wire and vectors; original outcome/containment evidence precedes diagnostic classification.",
+      "remainingHandoff": "Exact driver-native cause/error/termination/containment producers and complete mutation/native tests remain unfinished.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
       "story": "US-014",
       "reviewedSurface": "Parent lock and snapshot freshness",
       "source": "docs/helix/02-design/technical-designs/TD-014-keep-cross-row-rules-honest.md",
       "sha256": "83a7b2b14c104499f83c02cde8ee6999c62c2db27a47408737d1fc01f987801b",
       "finding": "Requires separately qualified post-lock participation observation and independent stale-statement control.",
       "remainingHandoff": "Actual native observation/authority/final-state concurrency remains unqualified.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-016",
+      "reviewedSurface": "Mode-only switch readiness ordering",
+      "source": "docs/helix/02-design/technical-designs/TD-016-journal-plain-sql-changes-too.md",
+      "sha256": "6545ed719ce0c9d5653cfac7538d14c8415a4f57549cf6baa6a00cbc9abf864c",
+      "finding": "Target dispatcher readiness precedes exclusive mode admission; original correspondence is rechecked and drift refuses without DDL repair.",
+      "remainingHandoff": "Native dispatcher/exclusion/current observation and security-owned installation transition realization remain required.",
       "verdict": "focused_review_only_not_story_completion"
     },
     {
@@ -93,12 +147,30 @@
       "verdict": "focused_review_only_not_story_completion"
     },
     {
+      "story": "US-026",
+      "reviewedSurface": "Support evidence wire ownership",
+      "source": "docs/helix/02-design/technical-designs/TD-026-back-every-support-claim-with-evidence.md",
+      "sha256": "adcd98ceb75f5148085eda414588e6e88db3173cf0ea984f1c17902243eca80f",
+      "finding": "Consumes existing receipt, manifest, run-result and assessment schemas; shape success is separate from trusted semantic qualification.",
+      "remainingHandoff": "Original runner trust, independently complete case inventory, bounded parser and profile/reference correspondence remain unqualified.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
       "story": "US-039",
       "reviewedSurface": "UMF validator adapter parity",
       "source": "docs/helix/02-design/technical-designs/TD-039-read-umf-the-same-way-as-the-reference.md",
       "sha256": "e3146f575b9b1edd866169b19e34cd2443eaeee410ad3b773cb5bd6c08b7e6eb",
       "finding": "Independent multiplicity/path/warning/byte/version controls are authored.",
       "remainingHandoff": "Pinned parse/validator/normalization transport and complete corpus execution remain unqualified.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-040",
+      "reviewedSurface": "Group catalog custody after host rollback",
+      "source": "docs/helix/02-design/technical-designs/TD-040-apply-operations-as-one-atomic-group.md",
+      "sha256": "5904cd046c758d2fbfeee7e0c530187f012f7b09b26ce9f2a7c9dc60ca56ae92",
+      "finding": "Earlier host-savepoint rollback can remove pending group and later-acquired catalog locks; removed result cannot settle at later outer COMMIT.",
+      "remainingHandoff": "Actual original adapter capture/rollback/lock lifetime and group closure/finalization remain unqualified.",
       "verdict": "focused_review_only_not_story_completion"
     },
     {
