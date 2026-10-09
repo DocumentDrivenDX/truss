@@ -16,3 +16,52 @@ Zero local retention means eligible local history may be removed only after this
 Every network/provider action has finite original submission, lookup/retrieval byte/work/deadline and containment limits, charged across retries and copies. Native retention uses its separate enclosing operation and recovery reserve. Missing provider bounds or unresolved possibly durable writes remain explicit custody; no retry budget reset, partial retrieval success or unbounded wait is permitted. Exact limits/mechanisms must be selected in the provider profile, preserving current request/consumer protection lifetimes.
 
 Qualification schedules must inject lost upload acknowledgment, changed bytes under the same export identity, corruption/truncation on retrieval, changed protections between verification and drop, expired provider authority, provider overwrite/delete paths and lost native COMMIT acknowledgment. Independent observations verify local history/horizon, complete recovery contents and actual provider/native settlement separately. These schedules and provider selection remain unexecuted; this procedure supplies design ordering, not a durability claim.
+
+## Shared local backlog admission
+
+For the reference short/zero-window composition, select a finite bound on charged
+local retained-history content, including required local prerequisites and
+in-flight writer reservations. Define the exact encoded charge unit and duplicate
+dependency treatment in the original resource profile. This is a logical content
+bound; it is not a PostgreSQL disk-size or vacuum reclamation guarantee. Provider
+transfer/retrieval work and durable request-receipt storage keep their separate
+accounts and protection rules.
+
+Before history-producing effects, the original protected writer procedure admits
+a complete conservative reservation for its full possible event/prerequisite
+inventory under the same native arbitration as concurrent reservations and
+retention release. Admit only when existing charged content plus every live
+reservation plus this reservation fits the selected bound. An isolated host
+counter, snapshot-only sum or check followed by an unguarded append is insufficient.
+Reserve rollback/recovery work separately; capacity refusal must leave graph,
+catalog, journal and request-receipt effects absent, preserving prior caller work
+under the selected savepoint contract. The exact native producer, common lock
+order and UMF-authored account storage remain required composition outputs.
+
+Finalization compares the complete actual encoded inventory against the original
+reservation and publishes its charge atomically with history. An underestimated
+reservation refuses and contains the entire operation; it cannot omit events,
+obtain an unguarded post-effect allowance or silently raise the limit. Confirmed
+rollback removes the reservation with the operation. An uncertain response retains
+original settlement custody; host timeout, connection loss or a restarted worker
+cannot release capacity based on an assumed rollback. Native current-account
+observation must preserve charges for actual committed history and prevent an
+unresolved original attempt from being submitted twice.
+
+Archive confirmation alone does not release this local-content charge. Release
+only the exact charged inventory actually removed by a qualified native retention
+transaction, atomically with removal and horizon publication; content kept because
+of a consumer, shared dependency or active partition remains charged. Failed or
+unknown cleanup cannot produce a separate optimistic decrement. Retry and restart
+reconcile the original account/removal correspondence before admitting release.
+This composes the selected original resource/retention services and does not
+introduce a caller-held capacity permit or replace the security owner's authority.
+
+Qualification must independently race two writers whose individual reservations
+fit but whose sum exceeds capacity; exactly the admitted work may produce effects.
+Also exercise one underestimated full group, rollback after reservation, lost
+writer COMMIT acknowledgment, durable upload without eligible partition removal,
+shared prerequisites retained by another cohort, lost cleanup COMMIT acknowledgment
+and restart. Observe original complete charges, reservations, history, receipt and
+horizon inventories rather than trusting the account producer's returned total.
+These schedules extend STP-018 HSEL-08 and STP-019 AH-05/06; none have run.
