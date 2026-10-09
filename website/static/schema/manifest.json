@@ -1,15 +1,16 @@
 {
   "owner": "DocumentDrivenDX/umf",
   "revision": "60c974ecb71144d1055e5a7e2cfee451a22363a9",
-  "model": "docs/helix/02-design/models/truss-layout-core-structural-0.3.proposal.umf.json",
+  "model": "docs/helix/02-design/models/truss-layout-core-structural-0.4.proposal.umf.json",
   "assets": {
     "explorer.js": "bf96a9b90fdbe16c3a6c1202d638a1febe02ce825e6f1da4a066b4b49fd30958",
     "explorer.css": "479073250e24e40c180a37d4f55207cd7f672612acc61965c10156249d7cb6e0",
     "style.css": "6c686ba762afdb65112034b3666bb8079cf137e8365fc160fece1d7fc2482f7a",
     "logo.svg": "5f40ae4ea560f51199abac4dda14b93d72b1667487a9791f4846cab73e4e114d",
-    "index.html": "dad3ba7cca8931ff2195ad31c8cb0224827408d9555fbb23423315de3ad50387",
-    "schema-catalog.json": "879483bb9ea5cf79bdec3e4995a8eb5f69fb2ae2d805409dbdaccfb1766af917",
-    "truss-layout.umf.json": "bf8e377219eb5c604dd04a9c1393f87a30ea7a63b1505dc3e29593fa8af82e8a"
+    "index.html": "e5cd447a5847de5553f15de7716a7b76ecb4c561606121680c6ddfc7bac84b02",
+    "schema-catalog.json": "1cb97ee63ca788b8aed788c6ae91e0c0cd81a88c77562f9ee9a635c1eae7435d",
+    "truss-layout.umf.json": "c1fcba470666e96ec9c8af0cd26ed578b650b0ec944631512cbd78bbe30204b9",
+    "truss-layout.native.umf.json": "261e32c6c62624418f124ac7fbe3c206338322a03755b7ac0f1a7c7d86002368"
   },
   "scope": "Unmodified UMF browser JS/CSS; Truss HTML shell and exact current schema catalog. No production deployment."
 }

@@ -16,8 +16,16 @@ try{
  await page.locator('.definition-heading').filter({hasText:'declaration_module'}).waitFor();
  const downloadEvent=page.waitForEvent('download');await page.getByText('Download source',{exact:true}).click();const download=await downloadEvent;
  const downloaded=await Bun.file((await download.path())!).text();const original=await Bun.file('website/static/schema/truss-layout.umf.json').text();if(downloaded!==original)throw Error('Download changed source');
+ await page.goto(base+'schema/#'+new URLSearchParams({schema:'truss-layout',definition:JSON.stringify(['truss-layout','source_epoch_registry'])}));
+ await page.locator('.definition-heading').filter({hasText:'source_epoch_registry'}).waitFor();
+ if(!(await page.locator('table').innerText()).includes('predecessor_epoch'))throw Error('Epoch candidate columns missing');
+ const nativeEvent=page.waitForEvent('download');await page.getByText('Download retained native source',{exact:true}).click();const nativeDownload=await nativeEvent;
+ const nativeBytes=new Uint8Array(await Bun.file((await nativeDownload.path())!).arrayBuffer());
+ const structural=await Bun.file('website/static/schema/truss-layout.umf.json').json();
+ const nativeExpected=new Uint8Array(await Bun.file(structural.extensions['truss.layout.native'].sourceModel).arrayBuffer());
+ if(nativeBytes.length!==nativeExpected.length||nativeBytes.some((b,i)=>b!==nativeExpected[i]))throw Error('Native archive download changed original bytes');
  await page.setViewportSize({width:390,height:844});await page.goto(base+'schema/');await page.locator('.definition-list').waitFor();
  const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth);if(overflow)throw Error('Mobile page overflow');if(errors.length)throw Error(errors.join('\n'));
- const receipt={browser:browser.version(),ownerRevision:'60c974ecb71144d1055e5a7e2cfee451a22363a9',definitions,checks:['Hugo Model page embeds working owner browser','current structural model validates','prop_def deep link and declaration_module field navigation','download is byte-identical UTF-8 source','390px mobile browser has no horizontal page overflow','no browser errors'],scope:'Actual generated site under /truss/ in Chromium; structural inspection only, no deployment or native runtime qualification.'};
+ const receipt={browser:browser.version(),ownerRevision:'60c974ecb71144d1055e5a7e2cfee451a22363a9',definitions,checks:['Hugo Model page embeds working owner browser','current structural model validates','prop_def deep link and declaration_module field navigation','download is byte-identical UTF-8 source','epoch registry and predecessor columns browse correctly','retained native source download is byte-exact','390px mobile browser has no horizontal page overflow','no browser errors'],scope:'Actual generated site under /truss/ in Chromium; structural inspection only, no deployment or native runtime qualification.'};
  await Bun.write('docs/helix/04-build/evidence/design-audit/schema-browser-site.json',JSON.stringify(receipt,null,2)+'\n');console.log(JSON.stringify(receipt));
 }finally{await browser.close();server.stop(true)}

@@ -1,12 +1,14 @@
 {
   "browser": "153.0.8010.12",
   "ownerRevision": "60c974ecb71144d1055e5a7e2cfee451a22363a9",
-  "definitions": 491,
+  "definitions": 503,
   "checks": [
     "Hugo Model page embeds working owner browser",
     "current structural model validates",
     "prop_def deep link and declaration_module field navigation",
     "download is byte-identical UTF-8 source",
+    "epoch registry and predecessor columns browse correctly",
+    "retained native source download is byte-exact",
     "390px mobile browser has no horizontal page overflow",
     "no browser errors"
   ],
