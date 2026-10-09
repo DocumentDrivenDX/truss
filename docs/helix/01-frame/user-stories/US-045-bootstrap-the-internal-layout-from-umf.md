@@ -29,7 +29,7 @@ ddx:
 
 ## Context
 
-Application-model acceptance adds catalog rows. This separate bootstrap creates Truss's fixed system tables and administrative objects once. Native PostgreSQL meaning and generator gaps must remain inspectable rather than being hidden in handwritten patches.
+Application-model acceptance adds catalog rows and its required atomic data/report effects without physical DDL. This separate bootstrap creates Truss’s fixed system tables and administrative objects once. UMF owns SQL representation and generic generation; Truss owns the physical model, complete required-object/effect inventory and protected installer/parity protocol. Native PostgreSQL meaning and generator gaps must remain inspectable rather than being hidden in handwritten patches. A generated source artifact or structural schema-browser diagram is not an installed-ready system: readiness requires all selected callable, privilege, dependency, initializer and behavioral obligations plus independently confirmed installation settlement. Fresh genesis records installation provenance, not a fabricated accepted catalog or layout migration receipt. Existing installations use the separately shipped explicit migration system rather than fresh-bootstrap repair.
 
 ## Walkthrough
 

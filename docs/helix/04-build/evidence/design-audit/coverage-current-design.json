@@ -1142,7 +1142,7 @@
     "01-frame/user-stories/US-030-extend-the-layout-from-a-host.md": "d8b01ef2e561d27cdbd6658499e9bbd86710b491088100cdb4d28141e72fa0c4",
     "01-frame/user-stories/US-031-govern-writes-by-role-grants.md": "0fed239710947adba4247a4c6506c316e69ea6be55b0cd37a593933a9f19c764",
     "01-frame/user-stories/US-032-work-behind-a-transaction-mode-pooler.md": "b1228d4bb20a4c42971e714d6dc43b081c7d0258612236bd64ef11cb35227eff",
-    "01-frame/user-stories/US-033-run-the-layout-on-an-embedded-postgres.md": "6fd7955c6bfa389771b6d64552d10a86ccc1b12ac66fb1104f89b0e4a4df3083",
+    "01-frame/user-stories/US-033-run-the-layout-on-an-embedded-postgres.md": "08e565c609fbe81f904acc3cf76aa7cd9f3f14dff79ea1d4a94a637170495a77",
     "01-frame/user-stories/US-034-repeat-an-import-and-change-nothing.md": "432c85621813ce4b3e4c99fd8e8edd17706960998dc7b2b3a221de1f28d4cfe7",
     "01-frame/user-stories/US-035-keep-the-source-facts-of-an-imported-record.md": "23289b73273bcbcb8cc2ebd61da5a49d4eb2ef5ee26253ff7db83e8346cfee4e",
     "01-frame/user-stories/US-036-record-who-accepted-a-revision.md": "b51bc16e8421a4ad89572bdc5be572771d255eba084c66c305c58d997b444660",
@@ -1154,7 +1154,7 @@
     "01-frame/user-stories/US-042-read-how-far-behind-a-downstream-copy-is.md": "fd97545af6ceccb25dec1c9aa94505d0fe97ba879c8f95fd7cd7a0ffaa0eb97a",
     "01-frame/user-stories/US-043-make-a-group-safe-to-repeat.md": "38429945a17d36a38e12087158068f0b52176cf2ab9ba0e614239e3ba3ca3269",
     "01-frame/user-stories/US-044-run-a-change-in-a-transaction-and-roll-it-back.md": "9c5a41f249b88497def1bdb60127537b26dc7c92df4c9a6951f2744916129989",
-    "01-frame/user-stories/US-045-bootstrap-the-internal-layout-from-umf.md": "7c766bfb28b6159dff9d6b8b237a8018d0af69aaf7a7e25e38129158e6209053"
+    "01-frame/user-stories/US-045-bootstrap-the-internal-layout-from-umf.md": "b271409bf91e0c32ed8bd8dd46f47e68dde7a745e050a3eca331e4eba8747280"
   },
   "producerSha256": "3c19b4b417c495ac19b98304d13ff995e3043226e7e7706acf7f25cc01cec634",
   "scannerSha256": "e128b88779e96499bd44a2e769255aedb22fc15325b0ed9669c5feb3cc88359d",

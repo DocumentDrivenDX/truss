@@ -29,7 +29,7 @@ ddx:
 
 ## Context
 
-The spikes ran on embedded PostgreSQL 16.2 and 17.9 and each run used a fresh instance.
+The spikes ran on embedded PostgreSQL 16.2 and 17.9 and each run used a fresh instance. Those historical observations do not qualify the complete current installer, corpus or an arbitrary embedded distribution. Pin the actual server/build, adapter, role/extension/resource profile and exact generated layout artifact; compare the complete selected native objects and behavior against the corresponding standalone-server tuple. Matching PostgreSQL major versions or table counts alone is insufficient. Each parallel run owns separate database/storage, connections, recovery and evidence destinations so cleanup of one run cannot alter another or a host deployment. Unsupported embedded capabilities remain explicitly unverified and cannot be dropped from a required corpus to manufacture a pass.
 
 ## Walkthrough
 
