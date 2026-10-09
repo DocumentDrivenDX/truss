@@ -100,6 +100,52 @@ Each invocation records original case/worker/step/scope/attempt, complete constr
 
 ## Required grammar controls
 
+### Handshake placement and admission result
+
+Use the existing `HostConformanceRunner.prepareRun` / `run` lifecycle in
+`truss-conformance-tooling-v0.1.d.ts`; do not add a second public start or
+registration API. The handshake is an admission procedure selected by the
+original composition and procedure profiles, not an implementation-supplied
+callback or executable corpus artifact.
+
+During preparation, resolve the complete original manifest, input inventory,
+case grammar, operation registry, aliases and independently authored expected
+artifacts. Verify their exact bytes and cross-artifact membership. Admit the
+configured adapter's exact build, declared operation/profile map, observer
+procedures, environment reference, cleanup/recovery custody and complete
+resource reservation. This is configuration/artifact admission only:
+`prepareRun` must not open a native connection, create an environment or execute
+a case to discover capabilities. A copied prepared handle cannot substitute
+for original runner issuance.
+
+After the original at-most-once run claim, obtain the native environment under
+that admitted reference and verify its actual layout, installation, server,
+authority and capability tuple before setup effects. Record declared support
+and actual admitted availability separately. A same-named adapter operation
+with a changed profile hash, legacy feed wire, wrong transaction ownership or
+missing observer is not compatible. Drift cannot be repaired by changing the
+required manifest or switching profiles during the run.
+
+Required case membership is fixed by the original manifest. Missing mandatory
+capabilities prevent full qualification; the runner may produce an honest
+diagnostic receipt with affected cases not run under CONTRACT-011, retaining
+the complete required inventory and reason. It cannot relabel them optional,
+skip their normative surfaces or pass from the remaining cases. An invalid
+artifact/registration prevents preparation; a native incompatibility found
+after claim retains original run and cleanup evidence. Interrupted acquisition
+or uncertain cleanup follows the existing interrupted/reconciliation path,
+rather than returning a fresh preparation or assuming no effects.
+
+The independent handshake controls must cover changed adapter build/profile,
+missing required operation, missing observer, observer sharing the writer's
+serialization without admitted independence, copied prepared handle, native
+drift after preparation, acquisition interrupted after claim and a diagnostic
+receipt that attempts to omit not-run cases. Run each admission refusal against
+an effect counter to prove preparation performed no native work. Native drift,
+acquisition and cleanup controls additionally need the actual selected native
+procedure; a mock counter cannot qualify those boundaries. These remain
+implementation/test outputs, not executed evidence.
+
 The eventual schema/parser/runner must refuse missing normative sections, duplicate step labels, unknown mandatory operation, unsupported input wire, out-of-scope transaction reference, alias pointing into literal data, forward/rebound alias and omitted required observation. Independent controls must preserve literal "$a", distinguish absent/null, retain duplicate diagnostics, detect wrong endpoint despite equal final counts, reject hidden partial inventories and prohibit informative SQL mismatch from overriding normative success/failure. A selected empty report inventory is distinct from a missing report section.
 
 These are design controls, not executed tests. Closeout requires a complete closed registry/encoding, independently authored complete cases, red controls and a contract-only walkthrough that identifies remaining behavior gaps. Runtime/native conformance and bidirectional Python interchange remain separate evidence obligations.
