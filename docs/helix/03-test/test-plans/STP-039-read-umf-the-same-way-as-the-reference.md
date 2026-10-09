@@ -134,3 +134,28 @@ Reference amount integration consumes STP-007 RD-01–04 and the exact original 
 Execute WCB-01–10 from the [accepted catalog producer](../../02-design/contracts/weft-accepted-catalog-producer.proposal.md) through the selected public compiled-execution facade, preserving the existing full story corpus. STP-001 owns acceptance/report/commit controls, STP-038 current authority, STP-030 issuer/disposal and STP-045 installed correspondence; retain their receipts as prerequisites rather than duplicating or weakening those tests. This story verifies full end-to-end compilation/execution/result meaning after those prerequisites. Reuse real accepted bindings to run exact COUNT/SUM/empty/paging/injection/corrupt-value scenarios, with independent fixture expectations and original SQL/Bind/descriptors/publication observations.
 
 Current six native fixture scenarios and fourteen compiler/host plus three protocol tests are component evidence only. WCB cases remain not_run: the fixture-qualified profile does not register installed0.13, and the local trust-auth probe does not qualify production transport/authority/resource containment. Preserve the unsupported filtered-SUM query as a refusal until compiler-owned support is admitted; an alternate query cannot mark that capability passing.
+
+
+## Validator adapter parity controls (planned)
+
+VP-01–VP-05 qualify the original-byte validator adapter and diagnostic comparator,
+independently of Weft compilation and native storage support. Freeze expected
+results from the exact pinned UMF producer and review the authored failing
+conditions before running the Truss adapter. Do not compute both sides from the
+adapter under test. These cases remain `not_run`.
+
+| Case | Independent setup and required comparison |
+| --- | --- |
+| VP-01 diagnostic multiplicity | Select an original owner fixture with multiple diagnostic occurrences and retain the complete expected severity/code/path multiset. Remove one occurrence, duplicate another, and change a severity in separate comparator controls: every altered result fails. Reordering alone passes; changing message wording alone passes. A Set keyed only by code or path cannot qualify parity. |
+| VP-02 exact paths | Retain independently reviewed owner diagnostics for root locations and names containing slash, tilde and Unicode, with original document qualification where the selected owner API provides it. Alter escaping, strip the document qualifier, or collapse a root path to missing: comparison fails under the pinned normalization contract. If the owner path contract is unavailable, this profile remains unavailable rather than inventing host normalization. |
+| VP-03 warning and support separation | Run an owner-valid warning-only fixture, then an owner-valid fixture whose selected Truss capability is unsupported. Preserve the original owner validity and every warning in both results. The latter additionally refuses Truss support in its separate stage; changing it to UMF-invalid, suppressing warnings or manufacturing an owner error fails. Preserved unselected unknown content does not automatically activate unsupported semantics. |
+| VP-04 original parse boundary | Freeze duplicate-member, malformed UTF-8 and exact large-number source bytes plus the selected producer's actual parsing verdicts. Pass those original bytes through the declared parser/validator pipeline. Host replacement decoding, pre-parsing that erases duplicate members, or numeric rounding before the owner receives input fails correspondence even if the resulting object validates. A parsed-object-only owner API requires an explicitly qualified parsing producer; do not infer byte-level support from that API. |
+| VP-05 immutable version scope | Keep two independently pinned version/subset manifests and their original expectations. Substitute a validator/schema/extension pin, omit a required case, or overwrite an older expectation using a newer run: the original receipt cannot pass. A new version may differ only in its separately reviewed manifest; shared case names and shared producer use do not establish cross-version or second-language interchange. |
+
+Run these controls in Bun and real Chromium through the selected portable
+adapter; a Python host additionally qualifies its original byte transport and
+shared producer integration. Comparator corruption controls establish comparison
+behavior, not the UMF owner's semantic correctness. Native acceptance refusal
+and effect containment remain separate STP-001 prerequisites. Retain original
+input digests, expected diagnostics, owner pins, normalization profile and actual
+adapter outputs with each receipt.
