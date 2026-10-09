@@ -33,7 +33,7 @@ New tooling components do not enter the pure runtime core.
 
 ## API/Interface Design
 
-CONTRACT-004 owns conformance evidence/pass rules. CONTRACT-011 now defines receipt/support semantics, required inventory and exact digest matching; executable wire schema and trust bindings remain gates. Weft evidence declarations are references, not transferred Truss native qualification.
+CONTRACT-004 owns conformance evidence/pass rules. CONTRACT-011 defines receipt/support semantics, required inventory and exact digest matching. Consume the existing closed evidence-receipt, conformance-manifest, conformance-run-result and conformance-assessment v0.1 schemas; do not commission another receipt wire. Original runner trust, semantic case-set/reference correspondence, bounded parser and selected support-profile adoption remain gates. Weft evidence declarations are references, not transferred Truss native qualification.
 
 ## Data Model and Integration
 
@@ -53,15 +53,20 @@ Version evidence/support schema separately. Retain original receipts and explici
 
 ## Implementation Sequence
 
-1. Contract receipt/support/trust schema and create red missing/stale/regeneration cases.
+1. Consume the existing receipt/manifest/run-result/assessment schemas, select original runner trust and bounded semantic admission procedures, and create red missing/stale/regeneration cases.
 2. Implement bounded validation and statement assembly.
 3. Integrate real runner outputs, digest/link verification and immutable retention.
 4. Review every support claim against required-case matrix before publication.
 
 ## Risks and Gates
 
-Exact receipt schema, trusted runner provenance and support profile selection remain shared-contract work. Time recency is weaker than digest identity. Missing targets or skipped required cases cannot become full support. A historical spike's environment cannot qualify a newly changed contract by citation alone.
+Receipt wire shapes are authored; trusted runner provenance, complete semantic admission and support profile selection remain required shared-contract/adoption work. Time recency is weaker than digest identity. Missing targets or skipped required cases cannot become full support. A historical spike's environment cannot qualify a newly changed contract by citation alone.
 
 Index/statistics readiness wires now preserve separate original declaration/attempt, installed definition versus collection and unknown failure outcomes under CONTRACT-003. They are native observation inputs, not performance/integrity evidence. Exact inventory/current-attempt/collection producer admission remains mandatory.
 
 Explicit physical-job tooling now separates supplied-transaction pending admission from actual admission-commit observation and explicit original index/statistics execution. Accepted catalog commit alone cannot start a pending queue attempt. Original issuer/fence/native inventory and uncertain termination remain mandatory.
+
+
+## Existing evidence wire handoff
+
+The [receipt schema](../contracts/evidence-receipt-v0.1.schema.json) records observations without asserting qualification. The [run-result schema](../contracts/conformance-run-result-v0.1.schema.json) retains original execution results; the [assessment schema](../contracts/conformance-assessment-v0.1.schema.json) represents assessment against the independently selected manifest and requested profile. Keep these boundaries distinct. Shape-valid passed outcomes from an untrusted runner, missing executable result artifacts, duplicate case identities, incomplete required-case coverage or mismatched original pins cannot yield support. Failed/skipped/not_run outcomes remain visible; the assembler cannot omit them to create a passing subset under the original broad claim. Exact original runner/manifest/reference custody and semantic admission remain required before runtime publication.

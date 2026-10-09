@@ -1068,7 +1068,7 @@
     "03-test/test-plans/STP-024-enumerate-the-types-of-the-catalog.md": "3797a78c25272e8534fecb07510cf8231f9a0020703e2bc4b870f80eb1320cd0",
     "02-design/technical-designs/TD-025-report-the-enforcement-layer-of-every-assertion.md": "f13bc6fee9575dfbd921396a1466a37fd808e47284d5a54c7fafc74a1395aabb",
     "03-test/test-plans/STP-025-report-the-enforcement-layer-of-every-assertion.md": "d522ed245ea1b4c69cf01c99734851bb9dfc5d7c167013bcce4640cf22b45684",
-    "02-design/technical-designs/TD-026-back-every-support-claim-with-evidence.md": "35625b85d3a7570cc43a20da26aac085ab35a4a4794af006e4adf3315b1ba165",
+    "02-design/technical-designs/TD-026-back-every-support-claim-with-evidence.md": "adcd98ceb75f5148085eda414588e6e88db3173cf0ea984f1c17902243eca80f",
     "03-test/test-plans/STP-026-back-every-support-claim-with-evidence.md": "6cc772a1a47465647e7aabaf942e0813317a53b35d4f6af1f2c70a97f7212427",
     "02-design/technical-designs/TD-027-build-an-implementation-from-the-contracts.md": "0442ac48ad9af14dd6eb8342385536b6b9d60b81bfafddcfdffb82ff5589a29e",
     "03-test/test-plans/STP-027-build-an-implementation-from-the-contracts.md": "48185a190c2b87be5b0f9e1f3b60cc87460b49d7be6fa18476e6ffac437b2283",
