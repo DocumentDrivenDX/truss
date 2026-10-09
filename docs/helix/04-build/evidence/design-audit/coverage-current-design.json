@@ -1094,7 +1094,7 @@
     "03-test/test-plans/STP-037-give-roles-access-to-modules-only.md": "0ac4027219c8ba0483b4130c608f66e0fe63cc11bda7b241fb36dc84d2b9ac92",
     "02-design/technical-designs/TD-038-link-modules-and-see-the-link-only-with-both.md": "517cdd18365d3c17bfc66ae2fd3bde797c5027ab232f4f024d6d1f1df93d99e7",
     "03-test/test-plans/STP-038-link-modules-and-see-the-link-only-with-both.md": "7abffe2b9fb4bd252cfcf17aaf2833104bd3867b8d62f7eab222357169b684e1",
-    "02-design/technical-designs/TD-039-read-umf-the-same-way-as-the-reference.md": "e3146f575b9b1edd866169b19e34cd2443eaeee410ad3b773cb5bd6c08b7e6eb",
+    "02-design/technical-designs/TD-039-read-umf-the-same-way-as-the-reference.md": "ee2793724b42bc71dfc5e5281b297f40864d9ae18aa8cdbac21768c81109e627",
     "03-test/test-plans/STP-039-read-umf-the-same-way-as-the-reference.md": "f394458f3613ac763ed776f64d5b9acda2b54b9a1854fd321219d33f53a9e4e8",
     "02-design/technical-designs/TD-040-apply-operations-as-one-atomic-group.md": "5904cd046c758d2fbfeee7e0c530187f012f7b09b26ce9f2a7c9dc60ca56ae92",
     "03-test/test-plans/STP-040-apply-operations-as-one-atomic-group.md": "cd80ff500c39dd9feda1c6ffaa90f4678d0c701ee7ac4e139b75308dc16d70a4",
