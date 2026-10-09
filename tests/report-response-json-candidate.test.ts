@@ -1,4 +1,5 @@
 import {expect,test} from 'bun:test';
+import {createReportResponseSchemaCandidate} from '../docs/helix/04-build/evidence/design-audit/report-response-schema-candidate';
 import {decodeReportResponseJson as decode,ReportResponseJsonError} from '../docs/helix/04-build/evidence/design-audit/report-response-json-candidate';
 import {decodeAcceptanceJson} from '../packages/postgresql/src/acceptance-json';
 import base from '../docs/helix/03-test/report-wire-untrusted.fixture.json';
@@ -43,4 +44,18 @@ test('logical work exhaustion refuses distinct long keys below byte and member c
  expect(bytes.length).toBeLessThan(4194304);
  try{decode(bytes);throw Error('Expected work refusal');}
  catch(error){expect(error).toBeInstanceOf(ReportResponseJsonError);expect((error as ReportResponseJsonError).reason).toBe('resource');}
+});
+
+test('complete response schema integration refuses every missing field and retains copied bytes',async()=>{
+ const codec=await createReportResponseSchemaCandidate('/Users/erik/Projects/umf/package.json');
+ const bytes=source(4194304),result=codec.prepare(bytes);
+ expect(sha(result.originalBytes)).toBe(fixture.cases[0].sourceSha256);
+ expect(codec.scope).toBe('response_schema_bytes_only_without_account_admission');
+ const parsed=JSON.parse(new TextDecoder().decode(bytes));
+ for(const field of Object.keys(parsed)){
+  const incomplete={...parsed};delete incomplete[field];
+  expect(()=>codec.prepare(new TextEncoder().encode(JSON.stringify(incomplete)))).toThrow('schema refused');
+ }
+ bytes.fill(0);expect(sha(result.originalBytes)).toBe(fixture.cases[0].sourceSha256);
+ expect(()=>codec.prepare(source(4194305))).toThrow('capacity');
 });

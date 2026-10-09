@@ -804,6 +804,21 @@ original aggregate allocation/account/registration remain required; the 32-MiB
 logical work value is not a host heap allowance or release profile. Neither host
 candidate activates native conversion or report publication.
 
+The TypeScript private response candidate now composes the scanner with the same
+pinned eleven-schema closure as Python. Four tests/37 assertions and strict
+TypeScript pass: exact frozen four-MiB wire/schema admission, one-over refusal,
+every required-field omission, caller-buffer copying and the previous grammar/
+work controls. `report-response-schema-candidate.ts` checks all original schema
+bytes before compilation, returns response data only and exposes no native carrier
+or operation issuer. Its short generic schema refusal does not expose the report
+instance as a diagnostic.
+
+The new candidates establish both hosts' structural response paths at the frozen
+boundary. They still lack original aggregate account/registration and genuine
+producer/driver/native/publication correspondence. The original one-MiB request
+and report-to-native handoff components remain unchanged; their old source-pinned
+receipts are not expanded by this response-only composition.
+
 #### Full-report wire capacity before driver selection
 
 The frame candidate's one-MiB limit cannot transport the existing four-MiB
