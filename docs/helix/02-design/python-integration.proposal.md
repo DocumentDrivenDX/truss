@@ -209,6 +209,41 @@ remain independently required native observations.
 
 ## Remaining consumer metadata meaning and action boundary
 
+### Consumer action retry namespace and complete request basis
+
+The [source-pinned consumer fake](../04-build/evidence/design-audit/consumer-key-field-source-review.json)
+stores retry entries under `(plan.action, key)`;
+it compares a digest of supplied plan input digests, falling back to Python
+`repr` for hand-built plans. It checks current access before replay and adds a
+`replayed` facade flag to the returned original result. This describes the fake,
+not a durable Truss receipt implementation or an admitted canonical-input codec.
+
+PY-03 must declare a versioned, injective mapping from the admitted consumer
+action/key namespace to Truss's authenticated scope/request identity. Retain full
+qualified action identity and exact consumer key for comparison; hash-only or
+delimiter-concatenation equality is insufficient. Current selected module revision,
+process identity, transport retry count and current role must not accidentally
+create a fresh retry namespace after a committed attempt. Preserve the original
+scope through restart/reconciliation; changed semantic action/source/preconditions/
+effects/origin stay in the complete original request comparison. This does not
+select the pending global catalog ownership policy or grant caller-named scopes.
+
+Consume Truss's registered canonical request preparation and complete receipt
+lookup/current replay authorization. A host plan digest or `repr` is not proof
+of equality; a convenience facade receipt cannot replace the original stored
+result/position. Keep any `replayed` presentation flag separate from immutable
+business results and original token. Request-free calls remain explicitly
+request-free; the adapter must not mint a retry identity from current object state.
+
+Independent cases pair the same action/key with exact original input, changed
+preconditions/effect order/origin, a different qualified action using equal key
+text, namespace component strings that collide under naive concatenation, and a
+restart/catalog change after lost commit acknowledgment. Preserve the current
+authorization refusal when access is revoked, complete no-op receipts and the
+at-least-24-hour retry window. Observe native request identity/full payload and
+effects alongside the facade result; current row presence or a fake dictionary
+entry cannot establish original commit or safe retry.
+
 ### Consumer key versus identity Field mapping
 
 The [key/Field source review](../04-build/evidence/design-audit/consumer-key-field-source-review.json)
