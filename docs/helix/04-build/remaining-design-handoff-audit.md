@@ -68,8 +68,8 @@ than creating a competing resolver.
 
 Fresh fetches reconfirm the committed UMF/Weft baselines above. The security chat
 “Assess security control support” remains active; its latest read-only snapshot
-reports native key materialization across its graph fixture and missing-bucket
-refusal work. That progress is owner work, not a newly adopted Truss key/security
+reports graph-source hardening: captured own array-length descriptor custody and
+explicit pg_catalog JSON operator qualification, with native/browser reruns pending. That progress is owner work, not a newly adopted Truss key/security
 profile. Preserve its uncommitted Weft and Truss files and consume original
 published interfaces/evidence before changing caller or native admission.
 
@@ -404,3 +404,15 @@ The remaining focused surfaces US-003/020/023/027/028/030/033/034/036/038/041 ar
 
 
 All 45 primary technical-design surfaces now have a focused finding and remaining handoff, with exact source hashes verified. This completes this source-reconciliation pass, not the active design goal. Next assess the 167 governing criteria against each full TD/STP and required producer/profile selection. Missing actual native IDs, OIDs and execution results are implementation outputs; absent operation/expectation grammars, unresolved human behavior, unavailable owner representation/ABI and unselected realizable interface profiles remain genuine design gaps. Keep those distinctions when deciding readiness, and preserve the full original consumer requirements and managed-target scope.
+
+
+### Current graph-source ownership handoff
+
+The protected access composition now specifies adoption of the security owner's
+private graph-source candidate: original accepted metadata and key/context custody,
+one qualified validity/projection cut, raw driver observation, complete roots/typed
+endpoints and final original freshness/publication admission. Its issued object and
+required string/boolean projection are not a general SQL view or native permit.
+Original owner reruns remain dependencies; Truss does not alter those working files
+or duplicate their resolver/source implementation. This updates security integration
+planning without qualifying the release tuple or weakening the broader corpus.

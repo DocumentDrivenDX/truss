@@ -156,3 +156,53 @@ and PAC/STP controls; sixteen named private routines or a source AST pass
 cannot satisfy it. New root capability semantics require design reconciliation;
 new body/OID/dependency identities implementing an existing route are
 implementation outputs, not an unmade product decision.
+
+
+## Security-owner graph-source candidate integration boundary
+
+The current owner work includes private `security-graph-source.ts`, which constructs
+object/association-edge projections and a separate validity query from fixed native
+relations and validated required string/boolean metadata. It is uncommitted review
+input, not a selected compiler ABI, installed view, accepted definition or permit.
+Consume the original owner-produced source and version/profile evidence before
+adopting it; do not build a competing policy graph or ACL resolver.
+
+1. Bind construction inputs to original accepted type/relationship/property and
+   namespace/key/context custody. Retain exact native installation/layout and
+   current security-owner registration. The candidate's local WeakSet recognition
+   only proves local construction; neither copied SQL nor the issued object proves
+   source completeness, installation or authority.
+2. Reserve original driver ingress/result, validity, complete projection and final
+   freshness/custody capacity in the containing operation. Execute validity and
+   projection under the same independently qualified source/membership cut. Separate
+   READ COMMITTED statement snapshots cannot be assumed equivalent; use the owner's
+   selected original-cut/guard protocol rather than introducing another lock order.
+3. Admit validity's actual ordered raw metadata/text result through the original
+   physical lease and owner protocol. NULL, malformed/false, lost response, missing
+   catalog metadata or an invalid selected row refuse projection/publication.
+   A true result is not proof of complete visible roots or current authority: apply
+   the existing source-completeness and disclosure procedures independently.
+4. Collect every required object/edge and typed endpoint under that same admitted
+   context, preserving original identity/key buckets and graph-source membership.
+   Recheck the original source/security context before evaluation/publication.
+   Missing buckets, omitted roots, duplicate/mismatched rows or a changed context
+   refuse the complete result; inner joins and empty projections cannot prove absence.
+   Consume the owner's buffered-publication custody and backend-loss quarantine;
+   no host callback or fresh replacement connection settles original obligations.
+
+This candidate's required single string/boolean JSON-home subset does not qualify
+optional/null values, decimals, row-home storage, arbitrary UMF types or general
+consumer logical SQL. In particular it does not replace Weft's Item.note presence
+mapping or authorize the Python adapter to coerce projected NULL into absence.
+Current owner work also tightens array descriptor custody and qualifies native
+JSON operators; original rerun receipts are required before adoption. Truss retains
+its independent complete callable/privilege/native-source qualification gates.
+
+Independent integration schedules alter one required property/catalog fact,
+omit a root or key bucket, return malformed validity metadata, substitute a copied
+candidate, change graph/catalog/security context between validity and projection,
+and lose the original backend after collection. Each must refuse protected
+publication with original quarantine/recovery intact. A full positive source uses
+independently expected complete object/association-edge/typed endpoint membership;
+row counts alone cannot qualify it. These are authored integration exits, not
+execution of the owner's native or browser tests.
