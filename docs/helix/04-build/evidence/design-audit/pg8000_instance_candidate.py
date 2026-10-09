@@ -106,4 +106,3 @@ class RawConnection(CoreConnection):
         if context.columns is None:
             raise ValueError('Original description required')
         context.rows.append(data_row(self.original_frame(b'D', data), len(context.columns)))
-
