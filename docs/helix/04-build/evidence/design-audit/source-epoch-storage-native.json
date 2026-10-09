@@ -1,5 +1,10 @@
 {
   "database": "PostgreSQL 17.9 (Debian 17.9-1.pgdg13+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit",
+  "sources": {
+    "scripts/check-source-epoch-storage.ts": "4498003646dbea6b466634ffb22d201d5778d28675582b44b33ef6aff1b27dc7",
+    "packages/postgresql/native/source-epoch-immutability.sql": "8e819d0b11a4497913a66a1046725577ca31acfe11b1c10820eb6f633ea4a955",
+    "docs/helix/04-build/evidence/source-epoch-storage.owner-export.sql": "c1338fa024a9e7af095457cfd2adec768071475f510caa98923df4da9a3e7407"
+  },
   "checks": [
     "Initial registry/pointer component insertion",
     "Missing predecessor refuses",
@@ -8,6 +13,13 @@
     "Duplicate epoch refuses",
     "Missing current registry refuses",
     "Successor preserves original registry and exact artifact digest",
+    "origin: registry UPDATE blocked",
+    "origin: registry DELETE blocked",
+    "origin: registry TRUNCATE blocked",
+    "replica: registry UPDATE blocked",
+    "replica: registry DELETE blocked",
+    "replica: registry TRUNCATE blocked",
+    "Both guards ALWAYS and original epoch evidence unchanged",
     "Ordinary role registry insert denied",
     "Ordinary role pointer update denied",
     "Outer rollback removes registry/pointer and marker"
