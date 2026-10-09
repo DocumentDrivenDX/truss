@@ -224,3 +224,30 @@ consumer path, not the underlying graph-read requirement or its qualification.
 The source-pinned [review receipt](../../04-build/evidence/design-audit/consumer-traversal-necessity-review.json)
 records inspection scope only; no native traversal or consumer integration test
 ran as part of this review.
+
+## Committed Weft0.3 refresh
+
+Fetched Weft `1a1c0ad2c26d0cdd7aa6fb7f415abbaa44ab2842` adds explicit
+0.3 compile/language/IR requests, exact arithmetic, additional comparisons,
+unqualified Field resolution and positional repeated scalar output labels.
+The [source review](../../04-build/evidence/design-audit/weft-v03-committed-source-review.json)
+pins original contract/schema/backend/emission/runtime bytes. Truss PostgreSQL
+still declares only0.1/0.2 language profiles; its native/qualified profile sources
+are unchanged and still require17.9 fixture qualification. These additions do
+not fix the local16.2 registration gap or supply the consumer parsed-query ABI.
+No new compiler build/native test was adopted during this read-only refresh.
+
+Keep the currently admitted Truss version pair closed. Unknown0.3 requests,
+carrierName metadata or weft.output.positioned obligations must refuse before
+user SQL, not be discarded as optional metadata. Any later positioned-output
+adoption must retain every original logical output and scan identity by ordinal,
+verify complete native column count/order/unique carrier names and retain ordered
+exact row arrays. A Python dictionary or JavaScript object keyed only by repeated
+logical output names would silently lose cells. Execute compiler SQL unchanged.
+
+If arithmetic is later added to the Truss backend, consume the owner registration
+and all original source/intermediate/candidate-bag capacity checks before
+publication. Final-result exactness or postfilter bounds cannot replace those
+checks. No Truss parser, arithmetic lowerer or host SQL patch is introduced.
+Existing0.1/0.2 artifacts and their qualified subset remain separately pinned;
+new source HEAD cannot relabel an older wheel/WASM build or native receipt.

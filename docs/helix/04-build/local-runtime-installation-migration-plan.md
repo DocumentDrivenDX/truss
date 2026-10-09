@@ -474,3 +474,10 @@ JavaScript asset are unchanged from the preceding tracked commit. This does not
 require adopting CSV ingestion into this installation slice. The security owner's
 assertion-inventory composition remains in progress; use its finalized original
 interfaces and evidence rather than substituting local security authority.
+
+Fetched Weft now advances to `1a1c0ad2c26d0cdd7aa6fb7f415abbaa44ab2842`.
+The [committed0.3 source review](evidence/design-audit/weft-v03-committed-source-review.json)
+finds new explicit arithmetic/positional-output semantics but unchanged original
+PostgreSQL native/qualified17.9 profile bytes. The local16.2 qualification task
+above remains unchanged. Retain closed version/obligation admission and do not
+adopt Databricks registrations as Lakebase/PostgreSQL execution evidence.

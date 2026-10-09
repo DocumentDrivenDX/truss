@@ -1,0 +1,44 @@
+{
+  "scope": "Fetched committed source review; no rebuild, native rerun or capability adoption",
+  "weftRevision": "1a1c0ad2c26d0cdd7aa6fb7f415abbaa44ab2842",
+  "priorRevision": "f05f2df09e9c2494ac8c6d703dfe38413dbc4181",
+  "umfFetchedRevision": "8e76c74d14203225d1ef159c9132bb9e9b0cdffe",
+  "sources": {
+    "docs/helix/02-design/contracts/exact-arithmetic-v0.3.md": "a62f7516cded94412a197072f12a2ca63997073a9a293f1c4b8da48b5c965867",
+    "docs/helix/02-design/contracts/compile-request-v0.3.schema.json": "7345c424b1bbf8da15e6f7b4efb81da7eeb85a1e08fb91319eeb7b19ec129047",
+    "docs/helix/02-design/contracts/compile-response-v0.3.schema.json": "01db3a5805824a55d92a5f3bcad1fb312c79327549fb32add450ab2136a7fcff",
+    "crates/weft-postgresql/src/candidate.rs": "2102791e1e76ebcc99d2fac6392ec9d9172bdab6f0665b328ed45c6cf77b2687",
+    "crates/weft-postgresql/src/native_profile.rs": "dd03d79bb4fe0072bd0b81e4bfd826db8cfc4781fbd2e32c25cc7e604b25a9ff",
+    "crates/weft-postgresql/src/qualified_profile.rs": "ee93032d4e787330ba41b0a72b5ed3686c26c8d9326bda868bf0b2e670c75993",
+    "crates/weft-core/src/backend_emission.rs": "6635a82b85b6fe23ac91801c0621804e8823e2d548ca3ab9c7d87c4ec7ab59c4",
+    "crates/weft-runtime/src/lib.rs": "21036335ea180a97c78f8a0716ff389979c33ae6b0266fdd740124e8cb2d452a"
+  },
+  "unchangedSources": [
+    "crates/weft-postgresql/src/native_profile.rs",
+    "crates/weft-postgresql/src/qualified_profile.rs"
+  ],
+  "findings": {
+    "newExplicitVersion": "weft-compile/sql/ir 0.3.0",
+    "newSemantics": [
+      "exact arithmetic with complete candidate-bag guards",
+      "additional exact comparisons",
+      "unqualified Field resolution with ambiguity refusal",
+      "positioned repeated scalar output labels with unique carrierName and host obligation"
+    ],
+    "trussPostgresqlLanguageVersions": [
+      "0.1.0",
+      "0.2.0"
+    ],
+    "postgresqlQualifiedEngine": "17.9",
+    "localPgserverEngine": "16.2",
+    "trussV03Adopted": false,
+    "nativeTestsRun": false
+  },
+  "handoff": [
+    "Preserve old profile acceptance/refusal and source pins",
+    "Unknown version/positioned output obligations refuse before user SQL",
+    "Do not collapse repeated logical labels into Python dictionaries or JS objects",
+    "No PostgreSQL16.2 registration or parsed-query ABI follows from these changes",
+    "Rebuild exact committed artifacts and jointly qualify any later adoption; older wheel/WASM artifacts are historical"
+  ]
+}
