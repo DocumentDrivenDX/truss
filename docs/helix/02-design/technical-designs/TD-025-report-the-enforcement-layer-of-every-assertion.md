@@ -40,7 +40,7 @@ Use the [draft enforcement report declaration](../contracts/bindings/truss-enfor
 
 CONTRACT-004 now defines the required ordinary-writer privilege inventory and materially distinct bypass paths. Bind report classification to the installed inventory and exact receipt pins; current support checks reject drift rather than reuse historical acceptance qualification. Administrative exclusions must be visible in the scope, and actual tested role grants accompany native evidence.
 
-CONTRACT-003 owns acceptance report; CONTRACT-004 owns validation/corpus evidence; CONTRACT-001 owns actual storage guarantees. Add exact assertion/evidence profile semantics to the shared report contract before publication. Unknown assertion meaning cannot be silently omitted or classified enforced.
+CONTRACT-003 owns acceptance report; CONTRACT-004 owns validation/corpus evidence; CONTRACT-001 owns actual storage guarantees. Consume the authored assertion/evidence admission and report declaration; select and qualify the exact original assertion inventory, installed writer-path coverage and evidence producers before publication. Do not reopen report shape as a missing interface or infer native enforcement from declaration assignability. Unknown assertion meaning cannot be silently omitted or classified enforced.
 
 ## Data Model and Integration
 
@@ -60,11 +60,14 @@ No layout migration. Removing a guard or changing role grants withdraws its evid
 
 ## Implementation Sequence
 
-1. Resolve report schema and authored-key unavoidable enforcement gap.
+1. Consume the existing report binding and inventory/evidence rules; select exact original assertion/profile producers and implement unavoidable authored-key derivation under the advertised native writer coverage.
 2. Create red complete-inventory/classification and native bypass cases.
 3. Implement pure inventory/classification and trusted receipt binding.
 4. Verify installed surfaces and all rule/profile evidence before support publication.
 
 ## Risks and Gates
 
-US-025's full key guarantee conflicts with current engine-only derivation; D-04/D-05 identity/key meaning also apply. A successful implementation validation is not database enforcement. Opaque assertions remain recoverable even when classified none. Broader assertion coverage cannot be inferred from one fixture model.
+The historical engine-only derivation cannot satisfy US-025’s advertised database key guarantee. Treat unavoidable derivation and complete ordinary-writer coverage as required implementation/qualification work, not permission to weaken the requirement or relabel key-marker uniqueness. D-04/D-05 identity/key meaning also apply. A successful implementation validation is not database enforcement. Opaque assertions remain recoverable even when classified none. Broader assertion coverage cannot be inferred from one fixture model.
+
+
+Classification must remain assertion-specific: a qualified uniqueness constraint on derived key rows can support that physical invariant while the authored key assertion remains engine or none if ordinary canonical writes can omit or falsify derivation. Bind each classification to its exact original authored key identity, ordered components, equality/null/missing profile and complete selected writer inventory. Current authority, installed definition drift or missing bypass evidence prevents the broader database claim. This does not forbid a correctly scoped physical claim or erase historical evidence; it prevents transferring one guarantee to another assertion.
