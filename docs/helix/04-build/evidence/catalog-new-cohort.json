@@ -26,8 +26,15 @@
     "catalog-report-immutability": "c243b51682de3fee979b977626bb54279eccb3de22a24270e0bda467bd215167",
     "catalog-original-context": "628db25db14d5bd7c979f16b2ddefcff3e41781747e75485fc1253515b55fd0d",
     "operation-asserted-origin-admission": "7fefe615b0d296e627e18f187c52e4d47f890852b5ca5c0d8e225133b5a5efec",
-    "catalog-captured-context": "115554be0a686bdade8890e28dff4874bf3a6ecc5ef1d366c24f34219b04e1f5"
+    "catalog-captured-context": "115554be0a686bdade8890e28dff4874bf3a6ecc5ef1d366c24f34219b04e1f5",
+    "source-epoch-immutability": "8e819d0b11a4497913a66a1046725577ca31acfe11b1c10820eb6f633ea4a955",
+    "source-epoch-lock": "e811a3656a45e941d588ca21b97ab524b789948d08585288e44b158b060d73cc",
+    "source-epoch-issue": "f9a245ac08be79605dc200a7a345ead629221dbc927645b0288161f45fdd95d5",
+    "operation-epoch-context-admission": "7c3af5774c63c34e78e1d623ae203b6f70a3e511c4663d3d397d01927a530619",
+    "catalog-epoch-context": "edb2a0a8ab10fa1b2d392498fd4b23092a8aed05fc15b7b2c11df1d5789323e9",
+    "source-epoch-storage.owner-export.sql": "c1338fa024a9e7af095457cfd2adec768071475f510caa98923df4da9a3e7407"
   },
+  "epochContextBasisProducerSha256": "f2ea327461f710375af0c0052d6a213fc3fe51b897bf55caaf06b009396df4ef",
   "capturedOriginBasisProducerSha256": "b13a990078d4b26ef54515327983bb40ddb8377ffd507c9628626bfbb4b3277f",
   "assertedOriginBasisProducerSha256": "01312ed82b592ff5000df939a87679300acad12613f05fdc8a78a14bbb96390d",
   "coreAssertionIdentityProducerSha256": "5d0f2d7fb097f3853473c845f81439d7b74791b477b51e47a92add23f9fa6fab",
@@ -158,7 +165,14 @@
     "original captured origin survives exact native context/cut recheck",
     "later native catalog effects invalidate captured origin observation",
     "rolled-back contribution restores original captured origin correspondence",
-    "ended native transaction cannot reuse original captured origin basis"
+    "ended native transaction cannot reuse original captured origin basis",
+    "actual staged context4 pipeline retains native-issued epoch and original registry evidence",
+    "context4 epoch and asserted evidence belong to one original operation",
+    "epoch-context basis retains original report/preparation/executor issuance",
+    "copied epoch-context basis cannot borrow original operation authority",
+    "original epoch basis survives exact native context and registry recheck",
+    "later catalog effects invalidate original epoch-context cut",
+    "rollback restores original epoch-context correspondence"
   ],
   "scope": "Actual original complete declared new catalog staging and atomic refusal only. Root profile/authority, retained lifecycle, acceptance report/head/finalizer and public entrypoint are unqualified."
 }
