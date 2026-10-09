@@ -10,6 +10,51 @@ Keep unconditional deferred safety barriers until the entire original operation 
 
 ## Ordered implementation work
 
+### A2 assertion inventory closure
+
+Inspection of `catalog-core-assertion-identities.ts` and
+`catalog-observation-coverage.ts` establishes two different boundaries: the
+coverage assessor checks the ordered owner-observation requests and their exact
+evidence; the identity collector deliberately returns `complete: false`.
+Neither result is an enforcement report. Do not change that flag merely because
+all requested observations are available or the deferred array is empty.
+
+Implement the report assertion producer in this order:
+
+1. Select and register the assertion-inventory profile alongside the exact UMF
+   inspection and support profiles. Its enumerated rule families must cover the
+   entire accepted input, including retained opaque assertions. The present
+   core collector selects kind, nullability, cardinality, facets, keys,
+   relationships and only allowedValues/default/facets schema properties; its
+   request list is not a proof that those are every authored assertion.
+2. Reconcile every original document occurrence with a disposition: assertion,
+   explicitly non-assertive metadata, absence, or unavailable interpretation.
+   Preserve source digest, qualified owner and original pointer. Reversible
+   target observations require original-to-target correspondence before they
+   can establish original identities; a target pointer alone is insufficient.
+   Known unsupported or opaque assertions remain visible with qualified
+   non-enforcement reasons. Unavailable inventory interpretation must prevent a
+   complete report when it leaves occurrence membership unresolved.
+3. Join each inventoried assertion to independently admitted enforcement
+   evidence. Database classification requires the installed native mechanism
+   and ordinary-writer coverage; engine classification requires the selected
+   executable validator and its covered write paths. Leave classification as
+   none where neither is qualified. Coordinate these joins with the security
+   owner's key, privilege and write-path work rather than inventing another
+   resolver. An inventory can be complete while enforcement remains none.
+4. Compare the whole produced report against an independently enumerated
+   expected occurrence set, then admit it to the existing seventeen-field
+   correspondence. Omission, duplication, substituted source/owner/pointer,
+   fabricated database enforcement, unavailable interpretation, and converted
+   source misbinding must each have a refusal control. Include an opaque rule
+   that is retained and reported as unenforced, plus absent declarations that
+   produce no invented assertion. Independently count inventories; never use
+   the producer's own entries as the expected set.
+
+This closes the implementation sequence without adopting a new UMF semantic
+API or weakening the report's complete-scope requirement. The full producer,
+native enforcement joins and these controls remain unimplemented.
+
 | Step | Implementation output | Independent exit before proceeding |
 | --- | --- | --- |
 | A1 | Pin one coherent installation/authority/executor/resource and catalog/value/key/profile composition; resolve selected model/generated/native correspondence. | Original native required inventory, grants/callable coverage and descriptor/domain correspondence match the selected composition. Component 0.15 does not imply a complete installation. |
