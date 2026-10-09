@@ -348,3 +348,20 @@ original upgrade as rolled back or authorize recipe replay. Framework callback
 retry/success history remains separate from Truss settlement. Full M1 pair and
 M2–M5 execution/native qualification remain open; this review neither invents a
 second migration API nor defers the selected requirement to ship migrations.
+
+## US-043 retry review checkpoint
+
+A fresh review of FR-54, MUT-08 and the full US/TD/STP-043 surfaces, alongside
+network client retry disposition, finds the four criteria semantically aligned.
+The [source-pinned reconciliation](evidence/design-audit/receipt-criterion-reconciliation.json)
+records each finding and decisive remaining producer/profile output. No further
+receipt persistence product choice is needed. Complete semantic/result equality,
+winner commit versus rollback, current disclosure and extended event protection
+remain required; neither transport timeout nor short journal retention changes
+those guarantees. This does not mark the story or design goal complete.
+
+Next freeze one coherent registered replay/canonical/result/namespace/authority/
+clock/protection/resource/driver tuple and independently authored populated
+fixtures. The existing red native/public scenarios then qualify it. New generic
+retry wrappers or another receipt strategy would duplicate settled work without
+resolving that original composition requirement.
