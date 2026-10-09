@@ -1,0 +1,44 @@
+{
+  "scope": "PostgreSQL snapshot primitive and independent fixture row correspondence only",
+  "pgserver": "0.1.4",
+  "driver": "pg8000 1.31.5 dbapi; probe transport only",
+  "serverVersion": "16.2",
+  "observations": [
+    {
+      "kind": "pending-write",
+      "writerXid": "731",
+      "originalSnapshot": "731:731:",
+      "beforeCommit": false,
+      "settlement": "commit",
+      "oldSnapshotAfterSettlement": false,
+      "freshSnapshotAfterSettlement": true
+    },
+    {
+      "kind": "feed-empty-transaction",
+      "writerXid": "732",
+      "originalSnapshot": "732:732:",
+      "beforeCommit": false,
+      "settlement": "commit",
+      "oldSnapshotAfterSettlement": false,
+      "freshSnapshotAfterSettlement": true
+    },
+    {
+      "kind": "aborted-transaction",
+      "writerXid": "733",
+      "originalSnapshot": "733:733:",
+      "beforeCommit": false,
+      "settlement": "rollback",
+      "oldSnapshotAfterSettlement": false,
+      "freshSnapshotAfterSettlement": true
+    }
+  ],
+  "reachedQualified": false,
+  "sourceSha256": "f393a4e9d12de071874caa06b2c815a729d781fec2a5ed94b98585fcb15965e8",
+  "limitations": [
+    "Local trust administrator fixture, no ordinary-person authorization",
+    "No original receipt commitment, token resolver, retention or source epoch admission",
+    "Native visibility of an xid cannot alone distinguish an originally committed receipt from aborted effects",
+    "No replica application/coverage/seed evidence or public read capability",
+    "Existing private dependencies, not clean distribution qualification"
+  ]
+}

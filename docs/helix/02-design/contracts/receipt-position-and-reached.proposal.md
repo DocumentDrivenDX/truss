@@ -193,3 +193,25 @@ receipt commitment, current authorization, original snapshot or replica coverage
 The original native resolver must establish those facts; missing/unavailable
 evidence stays unavailable rather than false. No SQL, waiting or automatic retry
 is introduced, and built-wheel/native/interchange qualification remains open.
+
+## Local native snapshot basis
+
+The [snapshot component receipt](../../04-build/evidence/design-audit/pgserver-receipt-snapshot-component.json)
+records fresh PostgreSQL16.2 checks with independent writer and read-only
+repeatable-read sessions. For both a committed fixture write and an allocated
+feed-empty transaction, the original pre-settlement snapshot excludes the xid
+after commit; a fresh snapshot includes it. Independent row counts in the write
+case correspond exactly to that old/fresh distinction. No journal row is needed
+for the allocated feed-empty transaction's native identity.
+
+An explicit aborted-transaction control also reports the xid visible to a fresh
+snapshot. Therefore pg_visible_in_snapshot is only an admitted native snapshot
+primitive after original committed-receipt resolution; it cannot prove commitment
+from a decoded token or an xid alone. Missing original receipt evidence remains
+unavailable, regardless of snapshot visibility. The primitive must never issue
+an available/included result for an unverified fabricated or aborted token.
+
+This disposable local-trust administrator probe qualifies neither ordinary-person
+authorization nor original driver/account/source-epoch/retention/publication
+custody. It uses stock pg8000 only as probe transport. reachedQualified remains
+false. Replica coverage and seed comparison remain separate producer dependencies.
