@@ -755,3 +755,29 @@ actor. Compare the refused request with the allowed action-extension case so an
 adapter cannot satisfy refusal by dropping all origin metadata. This is existing
 consumer acceptance scope, not a new Truss-local ACL resolver or an adoption of
 unqualified security source.
+
+### R2/R7 journal assumptions and selected receipt contract
+
+The unchanged consumer artifact describes replay "from the journal", assumes
+last `(xid,seq)` for positions and asks for token reconstruction from repeated
+journal rows. These assumptions require explicit integration reconciliation;
+they are not the selected Truss receipt implementation. ADR-005 mandates complete
+original results, including all-no-op batches, and those batches have no invented
+journal row or last sequence. Preserve the original discovery artifact as evidence
+rather than editing it to appear already agreed.
+
+| Consumer assumption | Selected Truss handoff and acceptance obligation |
+| --- | --- |
+| Journal-only original replay | Original full input/results/configuration and position basis are retained in durable request receipts. Repeat returns those exact original results without current-state reconstruction. Changed/no-op mixtures and all-no-op groups are required corpus cases. |
+| Last journal xid/seq token | The current proposed opaque locator binds original installation/epoch, receipt identity, full producing xid and comparison profile. It is not a consumer-readable sequence cursor; adoption and original native production remain open. |
+| Rebuild every token from journal rows | Event-bearing groups may correlate journal witnesses to original receipt/transaction evidence under the selected resolver. All-no-op and locally trimmed history must resolve original retained receipt/position basis instead. Missing required original evidence is unavailable, never a guessed token or new mutation. |
+
+PY-04/06 must expose this selected contract clearly in the consumer-facing release
+and run independent authority/replica tests for both event-bearing and all-no-op
+receipts after restart and local trimming. A replica's complete verified applied
+coverage, not arrival count or an arbitrary same-numbered receipt row, governs
+reached. Record any consumer requirement for a specifically journal-only token as
+an unresolved incompatibility; do not advertise that representation merely because
+it works for nonempty groups. Existing durable retry and no-loss requirements
+remain selected, with the token/profile/native producer and consumer compatibility
+handoff still explicit outputs.
