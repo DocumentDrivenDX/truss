@@ -1,8 +1,10 @@
 /** Isolated native internal component; no normal installation marker or public writer. */
 import {SQL} from 'bun';
+import {createCatalogInputPreparation} from '../packages/umf-bun/src/catalog-input';
 import {loadUmfProducer,loadUmfValueProducer} from '../packages/umf-bun/src/index';
 const producerDirectory=process.env.TRUSS_UMF_PRODUCER;if(!producerDirectory)throw Error('Pinned original UMF producer required');
 const producer=await loadUmfProducer(producerDirectory);
+const preparation=await createCatalogInputPreparation(producerDirectory,'/Users/erik/Projects/umf/package.json');
 const valueDirectory=process.env.TRUSS_UMF_VALUE_PRODUCER;if(!valueDirectory)throw Error('Original current-core value producer required');const valueProducer=await loadUmfValueProducer(valueDirectory);
 const url=process.env.TRUSS_OPERATION_TEST_URL;
 if(!url||!url.startsWith('postgres://postgres@127.0.0.1:15434/'))throw Error('Dedicated local test endpoint required');
@@ -76,11 +78,20 @@ try{
  const secondText=JSON.stringify({...originalModel,id:'second-document'});const secondInspection=producer.inspect(secondText);
  assert(secondInspection.sourceValidation.valid,'second original document validated');
  const documents=[{documentId:'original-document',revision:'r1',umfVersion:'0.7.0',originalText:originalDocument,validation:originalValidation},{documentId:'second-document',revision:'r2',umfVersion:'0.7.0',originalText:secondText,validation:{sourceValidation:secondInspection.sourceValidation,transition:secondInspection.transition}}];
+ const completeInput=structuredClone((await Bun.file('docs/helix/02-design/contracts/bindings/acceptance-input-capacity-v0.1.fixture.json').json()).input);
+ completeInput.binding={state:'absent'};completeInput.transforms=[];
+ completeInput.documents=documents.map(document=>{const bytes=Buffer.from(document.originalText,'utf8');return {documentId:document.documentId,documentRevision:document.revision,artifact:{identity:document.documentId,bytesBase64:bytes.toString('base64'),sha256:new Bun.CryptoHasher('sha256').update(bytes).digest('hex')},umfProfile:preparation.umfProfile,ingress:{kind:'native'}}});
+ const completeBytes=new TextEncoder().encode(JSON.stringify(completeInput));const prepared=preparation.prepare(completeBytes);
+ assert(prepared.original.originalUtf8Hex===Buffer.from(completeBytes).toString('hex'),'complete original input bytes retained before native staging');
+ assert(prepared.archiveDocuments.every((document,i)=>document.originalText===documents[i].originalText&&document.documentId===documents[i].documentId&&document.revision===documents[i].revision),'native archive carrier derives from original complete input and owner interpretation');
+ // Add the independently exercised owner Record check without replacing original
+ // validation/transition custody. Synthetic installation pins remain unadmitted.
+ const preparedDocuments=prepared.archiveDocuments.map((document,i)=>({...document,validation:{...document.validation,...documents[i].validation}}));
  await sql.unsafe('SAVEPOINT duplicate_documents');let duplicateDocumentCode='';
  try{await sql.unsafe("SELECT * FROM truss.runtime_stage_catalog_documents($1::text::jsonb,'{}'::jsonb)",[JSON.stringify([documents[0],documents[0]])])}catch(e){duplicateDocumentCode=(e as any).errno??(e as any).code}
  assert(duplicateDocumentCode==='22023','duplicate documents refuse before revision allocation');await sql.unsafe('ROLLBACK TO SAVEPOINT duplicate_documents');
  const beforeValid=await sql.unsafe('SELECT count(*)::text AS n FROM truss.schema_rev');assert(beforeValid[0].n===beforeRevisions[0].n,'rejected document set leaves original revision inventory');
- const staged=await sql.unsafe("SELECT * FROM truss.runtime_stage_catalog_documents($1::text::jsonb,'{}'::jsonb)",[JSON.stringify(documents)]);
+ const staged=await sql.unsafe("SELECT * FROM truss.runtime_stage_catalog_documents($1::text::jsonb,'{}'::jsonb)",[JSON.stringify(preparedDocuments)]);
  assert(staged[0].document_count==='2','complete ordered document set shares one native revision');
  const orderedDocuments=await sql.unsafe('SELECT doc_id,ord::text AS ord FROM truss.schema_doc ORDER BY ord');assert(orderedDocuments.length===2&&orderedDocuments[0].doc_id==='original-document'&&orderedDocuments[1].ord==='1','original document order retained');
  assert(staged.length===1&&staged[0].provisional_revision==='1','native provisional catalog revision allocated');

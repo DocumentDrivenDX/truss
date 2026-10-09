@@ -33,6 +33,8 @@
     "actual original UMF source and transition validate",
     "actual owner producer retains declared-key dataset incompleteness",
     "second original document validated",
+    "complete original input bytes retained before native staging",
+    "native archive carrier derives from original complete input and owner interpretation",
     "duplicate documents refuse before revision allocation",
     "rejected document set leaves original revision inventory",
     "complete ordered document set shares one native revision",
