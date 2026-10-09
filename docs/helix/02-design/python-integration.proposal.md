@@ -550,6 +550,36 @@ exact source/build/mode, complete protocol behavior, native authority/settlement
 and upstream maintenance strategy remain adoption requirements. Do not rerun the
 already completed Weft wheel build to substitute for this driver work.
 
+#### pg8000 pre-startup TLS admission boundary
+
+The same pinned core.py source has an additional receive path before either
+framed loop: `_make_socket` sends SSLRequest, reads one byte at line 232, and
+wraps the socket at line 234. This negotiation is not a PostgreSQL five-byte
+message and must have separate original transport admission/accounting. Source
+inspection also finds that True/None ssl_context values create a context with
+check_hostname=False and CERT_NONE (lines 222–225); with None, a non-S response
+does not take the explicit refusal branch. These are static source observations,
+not executed TLS behavior or a supported Truss transport policy.
+
+For an advertised authenticated TLS tuple, select the exact original SSLContext,
+certificate/hostname/endpoint and channel-binding profile under the security
+owner's admission. Do not use the driver's Boolean/default configuration as proof
+of authenticated transport. A profile requiring TLS refuses server N, EOF,
+malformed negotiation and failed certificate/hostname admission before startup
+credentials or application commands. An explicitly admitted local non-TLS tuple
+remains separately scoped; no network fallback may silently switch between them.
+Account handshake reads, backing buffers and failure cleanup before constructing
+the framed startup receiver, while preserving original authentication custody.
+
+PY-01b/PY-03 independently observe zero startup/authentication/application sends
+after each failed negotiation or identity check, then qualify a correctly verified
+endpoint and owner-approved channel-binding path. Test the complete selected
+managed Aurora and Lakebase endpoints separately; the saved trust-authenticated
+local PostgreSQL probe establishes none of these TLS outcomes. This is driver
+integration work consuming the owner's transport/authentication contract, not a
+new Truss certificate resolver or authorization model. No credentials or actual
+TLS connections were accessed during this source review.
+
 #### Raw-wire probe versus pre-ingress accounting
 
 Source inspection of `check_python_pg_frame_native.py` identifies two limits of
