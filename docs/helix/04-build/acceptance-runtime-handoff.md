@@ -4,6 +4,19 @@ Status: execution sequence authored; public runtime unavailable. Governing input
 
 ## Current implementation boundary
 
+A private original supplied-endpoint Record/key resolver now composes the full
+carrier/source basis with the preparation's original UMF declaration inventory.
+It requires an exact Record under the selected document/module/element, retains
+source-qualified occurrence pointers, and resolves selected key names only within
+that Record. Candidate `key.name` means the authored UMF key `name`, not its `id`,
+field name or a global display-name lookup; absent/ambiguous names refuse. Pending
+definitions retain no invented Record/key, and pending key interpretation remains
+explicit even when its Record resolves. Twenty-seven combined tests/604 assertions
+and strict TypeScript pass. Scope is
+`original_supplied_endpoint_record_key_correspondence_only`; extension semantic
+registration, accepted-history custody, security admission and native complete
+relationship derivation remain open. No returned Record or key conveys a grant.
+
 A private nonrecursive SCC/dependency-first ordering component now executes the
 already-authored STP-002 graph vectors. Ten tests/541 assertions cover all node
 and edge permutations of those small vectors, duplicate-edge charging, exact

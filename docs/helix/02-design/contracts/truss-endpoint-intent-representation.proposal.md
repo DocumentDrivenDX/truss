@@ -268,3 +268,21 @@ commit into a clean directory with its admitted dependencies, then run the probe
 with the directory path. The checked tree digest refuses changed source members;
 the receipt scopes library source correspondence only, not dependency installation
 or native security/transport qualification.
+
+### Original supplied Record/key correspondence checkpoint
+
+The private supplied-endpoint resolver now resolves every selected source, target
+and association Record against the exact original owning document/module/element
+inventory after full source-reference correspondence. Candidate `key.name` selects
+the exact authored UMF key `name` within that Record; it does not select the key
+`id`, a field, another Record's key or a name in another owner. Missing or ambiguous
+name correspondence refuses. The original key object retains its distinct ID,
+name, field order and modifiers without claiming native enforcement. Pending
+Record/key states retain the complete original intent and do not manufacture a
+resolved key. This is a candidate-language clarification, not a change to UMF core.
+
+The combined original-source/graph/Record suite passes 27 tests/604 assertions and
+strict TypeScript. It demonstrates source-qualified correspondence only. E1's full
+original semantic registration, E3 accepted-history custody and E4/E5 native
+provisional/promotion/report effects still remain required; no public activation
+or security-owner admission follows from these private results.
