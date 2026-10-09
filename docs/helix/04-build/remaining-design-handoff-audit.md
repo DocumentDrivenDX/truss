@@ -129,7 +129,7 @@ The accepted-report schema requires these seventeen fields. The private composed
 | interfaceVersion | CONTRACT-003 accepted report binding/schema | Select the full registered encoder/report profile before emitting an accepted wire. |
 | reportProfile | Pinned closed schema, complete-wire codec handoff and native byte parity | Register the complete exact report interpretation/encoding/authority/effect profile, not a schema-only digest. |
 | rev | Native document staging and composed provisionalRevision | Publish it only with the complete immutable report and atomic head transition; provisional staging is not accepted commit. |
-| originalExecution | Native context0.2 captures names/OIDs; issued host basis verifies original bytes and current cut | Compose original installation/source epoch, acting/database role, asserted and journal origins, mapping/capture profiles and independently retained context evidence. Current component fixture bytes cannot fill these fields. |
+| originalExecution | Native context0.3 captures original asserted/profile bytes plus actor facts; original issued host basis decodes/maps and rechecks current cut. Epoch issuer/registry/lock components also exist. | Admit complete committed installation/target-incarnation/configuration/resource composition, original epoch binding and selected capture/mapping meanings. Current component profile bytes and separate epoch fixtures cannot qualify a complete installed context. |
 | acceptedInput | Original inspector/preparation, factory-issued pin resolver and nine-field correspondence | Admit root policy/layout/acceptance/validator/support profiles, registered meanings and exact original operation custody. Resolve converted ingress and selected binding/transform semantics. |
 | umf | Separately pinned Record/value/metadata owner bundles | Produce the complete supported-subset inventory under admitted profiles; source-version, partial interpretation and probe-only bundles stay distinct. |
 | documents | Original source/archive bijection under writer/ordinal/generation | Preserve full dependency order and source digests through final publication; ordinary-role visibility/driver qualification remains separate. |
@@ -148,12 +148,12 @@ Next composition order: admit the original root profile and actor/installation c
 
 ## Current acceptance implementation exit sequence
 
-Nine fields have original producer correspondence in the current new-only native-ingress/absent-binding/no-transform component: rev, acceptedInput, documents, diagnostics, documentInterpretations, counts, provisional, losses and transformRegistrations. This is field correspondence under a staged original cut, not semantic authority or complete capability. [Current native evidence](evidence/catalog-new-cohort.json) records eighty-seven checks; [host context evidence](evidence/catalog-original-execution-basis.json) retains its own versions and scope.
+Nine fields have original producer correspondence in the current new-only native-ingress/absent-binding/no-transform component: rev, acceptedInput, documents, diagnostics, documentInterpretations, counts, provisional, losses and transformRegistrations. This is field correspondence under a staged original cut, not semantic authority or complete capability. [Current native evidence](evidence/catalog-new-cohort.json) records 102 checks; [host context evidence](evidence/catalog-original-execution-basis.json) retains its own versions and scope.
 
 Eight fields still require complete production/admission: interfaceVersion, reportProfile, originalExecution, umf, rebinds, assertions, pending_indexes and extensions. Schema validation supplies the interface literal but not its registered complete runtime interpretation. Preserve this partition when sequencing work; the previous table's historical source descriptions do not imply missing fields can be filled with fixture empties.
 
 1. Bind the original root profiles to actual installed layout/security/driver/resource producers, and select the complete report-profile artifact. Byte resolution and local resolver recognition already exist; they do not interpret those artifacts. Keep the original unsupported-profile outcome for each missing meaning.
-2. Complete originalExecution using the existing installation marker/archive and source-epoch admission contracts. Native context0.2 and its host adapter provide original role names/OIDs/context bytes; they do not supply installation/source epoch, asserted/journal origin or mapping/capture authority. Identify the protected source of each remaining fact before writing persistence code. Do not add a second identity store or treat the source epoch as a caller string.
+2. Complete originalExecution using the existing installation marker/archive and source-epoch admission contracts. Native context0.3 and its issued host adapter now provide original role facts and native-retained asserted/profile bytes with strict origin mapping; they do not supply complete installation/source-epoch composition or mapping/capture authority. Identify the protected source of each remaining fact before writing persistence code. Do not add a second identity store or treat the source epoch as a caller string.
 3. Produce umf and assertions together from pinned owner meanings and full original source identity/coverage, then independently admit native/engine/none evidence. Preserve exact version-specific unavailable calls and unknown content. An owner getter's success cannot become a complete assertion result, and source validity cannot be relabeled native enforcement. UMF owns these meanings; Truss owns membership/custody and installed enforcement composition.
 4. Derive actual rebind event/group correspondence and index declarations/jobs. The current catalog prestate collector covers catalog relations, not complete graph/property/journal state; it cannot alone prove an empty rebind inventory. Add the required original native effect/union evidence rather than inferring absence from new definitions. Index declarations require registered binding interpretation; absent custom binding is not itself admission of every retained extension's meaning.
 5. Adopt the extension retention wrapper only with complete unselected core/extension disclosure and selected vocabulary/profile correspondence. Current wrappers preserve document/module/element occurrences and their whole source artifacts, but are not a complete report extensions producer.
@@ -179,9 +179,9 @@ This is Truss ownership; no new UMF semantic or Weft compiler API is needed.
 | --- | --- | --- |
 | installationId | Marker candidate and retained bootstrap archive | Independently admit committed marker plus complete installed inventory. A same-transaction bootstrap candidate or copied marker cannot qualify; exercise commit uncertainty and namespace mismatch. |
 | sourceEpoch | Private UUID4 native issuer; UMF registry/pointer; immutable guard and lock/readback; 31 component and nine concurrency checks | Adopt complete lifecycle authority and trusted clone/restore incarnation evidence; retain original retry/recovery identity and bind the original operation context. Exercise committed installation, clone/restore, retries and original capture. Tokens from component tests cannot qualify an accepted report. |
-| origin.asserted | Separate asserted-origin facade argument | Retain complete original canonical tree at attempt admission, without upgrading assertion to authority. Test mutation of caller input after capture and exact-repeat preservation. |
+| origin.asserted | Context0.3 retains original asserted bytes before registry INSERT; strict host mapping and original issued collector rechecks pass | Adopt selected facade/capture profile and complete original attempt correspondence; qualify caller mutation, resource/disclosure and historical repeat custody through public exports. |
 | origin.databaseRole | Native context0.2 and issued original-execution basis | Compose the original acting-role observation; exercise SET ROLE, definer entry, role rename/drop/recreate and changed builder context against retained OID/name evidence. |
-| journalOrigin / originMappingProfile | Required history origin grammar and mapping registration contract | Adopt one exact mapping producer and its retained implementation/profile evidence. Verify mapping of asserted fields and native role without overwriting asserted content; unknown mapping refuses before effects. |
+| journalOrigin / originMappingProfile | Implemented exact numeric-free mapping candidate; source-pinned profile and report/history schema vectors; actual context0.3 pipeline | Register complete selected mapping meaning under the installed composition, independently qualify native journal/report projection parity and shared resource/disclosure custody. Pure mapping and byte/profile correspondence are not authority. |
 | captureProfile / contextEvidence | Original native role/context artifact, limited component scope | Adopt a complete installed-context capture profile and artifact binding installation, epoch, original executor and actor facts. Verify changed installation/epoch/executor, copied evidence and stale generation all refuse; native role-only artifact cannot claim full capture. |
 
 Implementation order is dependency-driven: qualify committed installation
@@ -192,3 +192,32 @@ role-only basis as a component, without renaming it to imply complete installed
 admission. The public acceptance barrier remains until this and the other
 report fields pass their complete native schedules. The linked epoch receipts prove their explicitly scoped component schedules;
 the other tests remain required adoption evidence.
+
+## Installed capture registration boundary — 2026-10-08
+
+The current acceptance-profiles resolver recognizes nine roles corresponding to
+existing AcceptanceInput pins. Installation capture and origin mapping have no
+independent input selectors in that wire. Keep their executable references and
+exact selected pins in the original installed-context composition described in
+[installed-context admission](../02-design/contracts/installed-context-admission.proposal.md).
+Do not extend the input-role enum or invent caller capture/mapping selection to
+make component bytes appear registered. The complete selected acceptance profile
+must recognize the original installed composition before native effects.
+
+[Asserted capture](../02-design/contracts/asserted-origin-capture.proposal.md)
+now has private admission/collection, strict context0.3 decoding, native-retained
+origin mapping and original issued basis/rechecks. The staged native receipt's
+102 checks include capture profile substitution, copied basis refusal, stale
+catalog effects, rollback restoration and ended transaction refusal. The
+standalone capture receipt covers bounds and immutable byte custody. These do
+not adopt the arbitrary test capture-profile bytes or prove installation/epoch,
+complete report originalExecution, accepted head or finalized feed. Preserve
+the nine/eight report-field partition: useful originalExecution components do
+not turn that whole field into a qualified producer.
+
+Next concrete integration is the original committed installation/inventory and
+trusted target-incarnation producer, same-operation epoch capture and immutable
+registered capture/mapping profile interpretation. The existing epoch and
+context components must be bound to one original executor/attempt, rather than
+combining independent fixture observations. Complete configuration/security/
+resource exclusion and all seventeen report fields remain acceptance exits.
