@@ -57,3 +57,10 @@ feed and reached publishers under their own profiles; a SQL-reader lock test
 cannot qualify every host publication path. This is planned integration
 qualification against the security owner's observed counterexample, not a rerun
 or acceptance of its unsafe mechanism.
+
+
+## Publication sibling and stale-retirement controls
+
+Plan two concurrently enrolled publications for one admitted actor with separate original identities/generations and independently retained buffers. Terminate the original native backends as specified by the qualified assessor, then close only publication A: B’s registration, recovery/capacity and buffer-drain obligation remain live. A revocation acknowledgment cannot treat actor-wide deletion as B’s drain. No unauthorized payload is delivered by this negative control.
+
+Separately retain an old repeatable-read snapshot that observed an enrolled pending publication; complete original buffer discard and terminal retirement through the selected security-owned protocol. Attempt new admission using that old snapshot/identity. Refuse before buffer acquisition or disclosure unless the owner’s exact freshness/current-generation evidence independently authorizes a new original enrollment. Rollback/lost cleanup reply cannot resurrect the old identity. Native PID, UUID equality or a snapshot row alone is insufficient. Repeat across direct and compiled host publication integration; reports/replay/feed/reached require their own applicable native schedules. These controls are planned, consume owner evidence and do not qualify the complete security profile.
