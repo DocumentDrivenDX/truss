@@ -78,6 +78,21 @@ for field, value in [('interfaceVersion', 'truss-history-event/0.1.0'), ('operat
     invalid = deepcopy(changed); invalid['rebinds'][0][field] = value
     add('nested-rebind-wrong-'+field, wire(invalid), False)
 
+# The report/event/presence wrappers contribute four containers. Each sequence
+# contributes an object and an items array; the final null carrier adds one.
+# Thus 61 sequences reach depth127, while 62 require depth129 above the cap128.
+for count, leaf, accepted, name in [
+    (61, {'kind': 'null'}, True, 'deep-exact-value-within-report-depth-bound'),
+    (62, {'kind': 'null'}, False, 'deep-exact-value-above-report-depth-bound'),
+    (61, {'kind': 'integer', 'text': True}, False, 'deep-invalid-exact-value-still-schema-refuses'),
+]:
+    value = leaf
+    for _ in range(count): value = {'kind': 'sequence', 'items': [value]}
+    deep_report = deepcopy(base); deep_event = deepcopy(event)
+    deep_event['retainedBefore'] = {'present': True, 'value': value}
+    deep_report['rebinds'] = [deep_event]
+    add(name, wire(deep_report), accepted)
+
 with tempfile.TemporaryDirectory(prefix='truss-report-interchange-') as temporary:
     inventory = Path(temporary)/'cases.json'
     inventory.write_text(json.dumps(controls))

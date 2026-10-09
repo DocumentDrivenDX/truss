@@ -604,6 +604,15 @@ separate.
 
 ### PY-01a/01b complete report resource composition
 
+The shared wire checker now has 42 independently expected controls. Three added
+rebind-value controls preserve original bytes for 61 nested sequences (actual
+report container depth127), refuse 62 sequences (depth129 above cap128), and
+refuse a wrong-type integer token at the deepest admitted leaf. Both hosts agree
+under the pinned eleven-schema bundle. These are bounded parser/schema/byte
+observations; they do not prove the history event's semantic rebind effects,
+native value admission or complete allocation accounting. Earlier 39-control
+checkpoints retain their historical scope.
+
 The private Python report candidate now returns a fixed schema-refusal diagnostic
 instead of propagating the validator's instance-bearing exception. A large
 invalid original report remains refused without including its content in the
