@@ -26,6 +26,16 @@ boundary remains incomplete; neither source capture nor schema compilation
 adopts a release profile. Its reproducible checkers refuse changed original
 membership and unsupported schema reference scopes.
 
+Current verification after the related-list handoff refresh passes all nine
+review-shape and twenty-eight candidate-root membership controls, compares every
+captured root with its complete current source bytes, and verifies local schema
+closure (11 acceptance, 8 history, 2 migration and 1 Python schema). The storage
+compiler root capture now includes the bounded-list/lookahead admission rules.
+All authored/review/native dispositions retain their original incomplete states.
+The structural scope check also still covers 45 stories, 167 criteria and 90
+primary TD/STP pins. These checks verify current inventory fidelity; they do not
+prove complete semantic agreement or qualify an implemented capability.
+
 Recent handoffs now include Python/TypeScript complete synthetic report-to-native
 encoding parity (including integer-like key order), portable migration inspection
 schemas and LM-V01–06, fresh-process archive recovery AH-R01–03, and conformance
