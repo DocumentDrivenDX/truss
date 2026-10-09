@@ -13,7 +13,9 @@
     "catalog-key-stage": "bc345b25a15668fbaac06b0a2f2f6ed1562b90b9fd3f09eb445c3b5d4a2d885a",
     "catalog-key-batch": "e31a769cf820ca00035b3c4e96f75078d6696fca8eb1bd62c8c4dc136303ae18",
     "catalog-relationship-match": "973ccdb65e6708f6b810108b5270cca8132f4e84369b886c5ec5a25a58883006",
-    "catalog-relationship-stage": "d32c213f607d4f8ca9dd4afcdc7bb4fd2bb7cf39dbf35057a82987859632933e"
+    "catalog-relationship-stage": "d32c213f607d4f8ca9dd4afcdc7bb4fd2bb7cf39dbf35057a82987859632933e",
+    "catalog-report-documents": "362b6df87be8f22387c59921af9f827248e79536183e342b7894a3c4e36f4207",
+    "catalog-new-inventory": "9636f4371beaf901ead42bfdacedd97e55ac25ccf304d17cccc456e03579b197"
   },
   "stageProducerSha256": "9a6793f582e3591ea48c115736ead13f651aef8044ff4033c27255678b4e4c30",
   "originalInputSha256": "b8c64857b2cd73ef99471ebc8310e76f27102c62d30854d80bc40441dcbe609c",
@@ -36,6 +38,11 @@
     "verbatim original source whitespace survives complete staging",
     "existing identity cannot pass genuinely-new cohort staging",
     "failed repeated cohort preserves original staged revision only",
+    "native collector returns actual complete new-family identity inventory",
+    "collected endpoint is original relationship/source/target tuple",
+    "equal-count substituted endpoint identity refuses collection",
+    "missing authored endpoint refuses collection",
+    "new-only collector cannot hide retirement or report it as addition",
     "provisional cohort never publishes accepted head",
     "unfinished complete acceptance cannot commit",
     "failed commit removes all provisional catalog effects"
