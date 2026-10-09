@@ -188,3 +188,19 @@ Request-free operations receive no invented idempotent recovery. Client intent
 persistence is an explicitly selected host/application producer; a restart
 with missing original request custody must not reconstruct intent from current
 records. These scenarios qualify that integration, not a new Truss retry wire.
+
+## AC4 accepted-receipt and local-history controls
+
+Qualify AC4 under an explicitly selected replay window of at least 24 hours,
+without changing its original while-journal-retained promise. Retain original
+required events longer than that window and attempt result expiry: the complete
+receipt remains protected and exact repeat returns original results. Separately
+trim/offload local history after full qualified handoff: protected receipt repeat
+still succeeds within its declared window. An all-no-op group has no fabricated
+journal event and must pass the same independently observed replay-window test.
+
+Use real original first-confirmed commit/clock/protection evidence, including
+the one-microsecond boundary schedules above. A timestamp label, journal index
+lookup or current-state reconstruction cannot pass. Expired result identity
+never silently applies again. These cases qualify a named deployment profile;
+they do not imply that every deployment defaults to a 24-hour promise.

@@ -34,11 +34,11 @@ ADR-005 is selected. Every request-enabled batch, including all-no-op batches, a
 
 ## Context
 
-FR-54 requires complete original ordered results, including no-op entries, and verified input equivalence. The journal request-index spike demonstrates bounded serialization/recovery but does not establish full replay. CONTRACT-009 owns replay ordering; ADR-005 proposes complete persistence and remains unaccepted. This story states required behavior without selecting a storage table or journal envelope.
+FR-54 requires complete original ordered results, including no-op entries, and verified input equivalence. The journal request-index spike demonstrates bounded serialization/recovery but does not establish full replay. CONTRACT-009 owns replay ordering; accepted ADR-005 selects fixed complete-result receipt persistence. Exact native/profile/security/clock qualification remains open; journal-only persistence is historical spike evidence.
 
 ## Walkthrough
 
-1. Implementer applies a group with request id `r` and a hash of its inputs.
+1. Implementer applies a group with request id `r` and complete semantic input; an optional claimed hash does not replace full-input verification.
 2. Implementer applies it again.
 3. Two identical requests arrive at once.
 4. The id is reused with different inputs.
@@ -52,7 +52,7 @@ FR-54 requires complete original ordered results, including no-op entries, and v
 
 ## Edge Cases
 
-- **A group that changed nothing**: its complete results and input identity remain replayable; repeat does not re-evaluate it against later data. Receipt-only persistence is a separate proposed administrative/layout decision and does not invent property-change journal rows.
+- **A group that changed nothing**: its complete results and input identity remain replayable; repeat does not re-evaluate it against later data. Accepted ADR-005 requires complete receipt persistence for this case and does not invent property-change journal rows.
 - **An id never used**: applied normally.
 
 ## Test Scenarios
@@ -64,9 +64,17 @@ FR-54 requires complete original ordered results, including no-op entries, and v
 | Conflict | US-043-AC3 | Other hash | Apply | `request_conflict` |
 | Window | US-043-AC4 | 24 h later | Apply | Honored |
 
-## Remaining retention reconciliation
+## Retention qualification boundary
 
-AC4 retains its original while-journal-retained promise. ADR-005's independent receipt expiry/namespace proposal must reconcile that promise explicitly before adoption; a 24-hour receipt pass alone cannot narrow or close AC4 when journal retention is longer. Persistence, replay authorization and canonical wire profiles remain gates.
+AC4 retains its original while-journal-retained promise. Qualify it with an
+explicit protected replay profile lasting at least 24 hours, and retain complete
+receipt dependencies while the original required journal events remain retained.
+A 24-hour receipt pass cannot close AC4 if longer event retention would permit
+premature result expiry. Short/zero local journal retention and all-no-op groups
+still use independently protected complete receipts; no journal row is fabricated
+to establish replay. This names the capability/test profile needed for AC4, not
+a universal deployment default. Exact clocks, current replay authority, canonical
+wire and native protection/expiry producers remain qualification gates.
 
 ## Dependencies
 

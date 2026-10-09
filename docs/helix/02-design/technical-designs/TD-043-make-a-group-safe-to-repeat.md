@@ -34,6 +34,18 @@ Admit the head, complete policy owner guards and trusted namespace lifecycle bef
 
 ADR-005 selects fixed complete-result receipts. Layout 0.11 includes the route guard, receipt and protection stores. Complete ordered results include mixed and all-no-op batches; journal-only recovery cannot replace them. Replay protection is independent of journal retention, including zero local journal retention. The unresolved outputs are exact canonical input/result producer and decoder, trusted namespace/current-authority composition, native duplicate arbitration, original commit observation, monotonic protection and expiry producers, privilege inventory and full installed correspondence. No further choice between journal-only and fixed-table persistence is required.
 
+## AC4 retention profile reconciliation
+
+The original AC4 promise remains governing: qualification selects an explicit
+at-least-24-hour replay profile and preserves complete original results when
+required original journal events remain retained longer. Accepted receipt
+persistence does not shorten that window. Trimming/offloading local history does
+not itself expire the independently protected receipt, and all-no-op groups use
+the same qualified clock/window without invented journal rows. No universal
+24-hour deployment default is selected by this technical design. Test declared
+window, original event protections, archive handoff and original first-confirmed
+commit observation separately under the existing receipt lifecycle protocol.
+
 ## Component Changes
 
 | Planned files | Responsibility | Criteria |
