@@ -101,3 +101,11 @@ test('report correspondence refuses omitted, duplicated or substituted original 
   await expect(correspondence.verify(native,prepared,basis,wire(report))).rejects.toThrow('producer correspondence required: extensions');
  }
 });
+
+
+test('execution report comparison refuses copied/unissued candidate before parsing or native I/O',async()=>{
+ const native=connection(),basis=await collectCatalogReportPreparation(native,prepared,'1',owner,fields);
+ native.queries.length=0;
+ await expect(correspondence.verifyWithExecutionCandidate(native,prepared,basis,new Uint8Array(),{candidate:untrustedReport.originalExecution} as any)).rejects.toThrow('candidate custody');
+ expect(native.queries).toEqual([]);
+});

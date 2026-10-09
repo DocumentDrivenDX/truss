@@ -1,4 +1,5 @@
 /** Existing producer fields only; never full report/effect admission. */
+import {requireOriginalCatalogExecutionReportCandidate,recheckOriginalCatalogExecutionReportCandidate,type composeCatalogExecutionReportCandidate} from './catalog-execution-report-candidate';
 import {createCanonicalAcceptanceReportHandoff} from './canonical-report-handoff';
 import {collectCatalogExtensionArtifacts} from './catalog-extension-artifacts';
 import {decodeAcceptanceJson} from '../../postgresql/src/acceptance-json';
@@ -18,7 +19,7 @@ function same(a:unknown,b:unknown):boolean{
 }
 export async function createCatalogReportCorrespondence(dependenciesPackage:string){
  const codec=await createCanonicalAcceptanceReportHandoff(dependenciesPackage);
- return Object.freeze({async verify(connection:CatalogStageConnection,prepared:Prepared,basis:Basis,wire:Uint8Array){
+ const correspondence={async verify(connection:CatalogStageConnection,prepared:Prepared,basis:Basis,wire:Uint8Array){
   requireOriginalCatalogReportPreparation(basis,prepared);
   const encoded=codec.prepare(wire),report=decodeAcceptanceJson(Buffer.from(encoded.originalUtf8Hex,'hex')) as Record<string,unknown>;
   const expected={rev:basis.provisionalRevision,acceptedInput:prepared.original.input,documents:basis.documentBasis.documents,counts:basis.counts,
@@ -28,5 +29,13 @@ export async function createCatalogReportCorrespondence(dependenciesPackage:stri
   await recheckCatalogReportDocumentBasis(connection,basis.documentBasis);
   return Object.freeze({...encoded,verifiedFields:Object.freeze(Object.keys(expected)),nativeObservation:basis.documentBasis.nativeObservation,
    scope:'ten_original_report_producer_fields_only' as const});
+ }};
+ return Object.freeze({...correspondence,async verifyWithExecutionCandidate(connection:CatalogStageConnection,prepared:Prepared,basis:Basis,wire:Uint8Array,candidate:Awaited<ReturnType<typeof composeCatalogExecutionReportCandidate>>){
+  requireOriginalCatalogExecutionReportCandidate(candidate,connection,prepared,basis);
+  const result=await correspondence.verify(connection,prepared,basis,wire);
+  const report=decodeAcceptanceJson(Buffer.from(result.originalUtf8Hex,'hex')) as Record<string,unknown>;
+  if(!same(report.originalExecution,candidate.candidate))throw Error('Original report producer correspondence required: originalExecution');
+  await recheckOriginalCatalogExecutionReportCandidate(candidate,connection,prepared,basis);
+  return Object.freeze({...result,verifiedFields:Object.freeze([...result.verifiedFields,'originalExecution']),scope:'eleven_original_report_candidate_fields_only' as const});
  }});
 }
