@@ -1,5 +1,6 @@
 /** Existing producer fields only; never full report/effect admission. */
 import {createCanonicalAcceptanceReportHandoff} from './canonical-report-handoff';
+import {collectCatalogExtensionArtifacts} from './catalog-extension-artifacts';
 import {decodeAcceptanceJson} from '../../postgresql/src/acceptance-json';
 import {requireOriginalCatalogReportPreparation,type collectCatalogReportPreparation} from './catalog-report-preparation';
 import {recheckCatalogReportDocumentBasis} from './catalog-report-document-basis';
@@ -22,10 +23,10 @@ export async function createCatalogReportCorrespondence(dependenciesPackage:stri
   const encoded=codec.prepare(wire),report=decodeAcceptanceJson(Buffer.from(encoded.originalUtf8Hex,'hex')) as Record<string,unknown>;
   const expected={rev:basis.provisionalRevision,acceptedInput:prepared.original.input,documents:basis.documentBasis.documents,counts:basis.counts,
    provisional:basis.provisional,diagnostics:basis.validationEvidence.diagnostics,documentInterpretations:basis.validationEvidence.documentInterpretations,
-   losses:basis.ingressBasis.losses,transformRegistrations:basis.ingressBasis.transformRegistrations};
+   losses:basis.ingressBasis.losses,transformRegistrations:basis.ingressBasis.transformRegistrations,extensions:collectCatalogExtensionArtifacts(prepared).extensions};
   for(const [field,value] of Object.entries(expected))if(!same(report[field],value))throw Error('Original report producer correspondence required: '+field);
   await recheckCatalogReportDocumentBasis(connection,basis.documentBasis);
   return Object.freeze({...encoded,verifiedFields:Object.freeze(Object.keys(expected)),nativeObservation:basis.documentBasis.nativeObservation,
-   scope:'nine_original_report_producer_fields_only' as const});
+   scope:'ten_original_report_producer_fields_only' as const});
  }});
 }

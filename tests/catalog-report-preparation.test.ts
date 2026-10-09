@@ -1,4 +1,5 @@
 import {test,expect} from 'bun:test';
+import {collectCatalogExtensionArtifacts} from '../packages/umf-bun/src/catalog-extension-artifacts';
 import {createCatalogInputPreparation} from '../packages/umf-bun/src/catalog-input';
 import {loadUmfDeclarationProducer,loadUmfFieldAssertionProducer} from '../packages/umf-bun/src/index';
 import {collectCatalogReportPreparation} from '../packages/umf-bun/src/catalog-report-preparation';
@@ -48,12 +49,12 @@ test('new-only report preparation cannot ignore a declared transform registratio
 });
 const correspondence=await createCatalogReportCorrespondence('/Users/erik/Projects/umf/package.json');
 const untrustedReport=(await Bun.file('docs/helix/03-test/report-wire-untrusted.fixture.json').json()).report;
-function reportFor(basis:Awaited<ReturnType<typeof collectCatalogReportPreparation>>){return {...structuredClone(untrustedReport),rev:basis.provisionalRevision,acceptedInput:prepared.original.input,documents:basis.documentBasis.documents,counts:basis.counts,provisional:basis.provisional,diagnostics:basis.validationEvidence.diagnostics,documentInterpretations:basis.validationEvidence.documentInterpretations}}
+function reportFor(basis:Awaited<ReturnType<typeof collectCatalogReportPreparation>>){return {...structuredClone(untrustedReport),rev:basis.provisionalRevision,acceptedInput:prepared.original.input,documents:basis.documentBasis.documents,counts:basis.counts,provisional:basis.provisional,diagnostics:basis.validationEvidence.diagnostics,documentInterpretations:basis.validationEvidence.documentInterpretations,extensions:collectCatalogExtensionArtifacts(prepared).extensions}}
 const wire=(value:unknown)=>new TextEncoder().encode(JSON.stringify(value));
-test('complete wire corresponds to nine issued producer fields while other fixture fields remain untrusted',async()=>{
+test('complete wire corresponds to ten issued producer fields while other fixture fields remain untrusted',async()=>{
  const native=connection(),basis=await collectCatalogReportPreparation(native,prepared,'1',owner,fields);
  const result=await correspondence.verify(native,prepared,basis,wire(reportFor(basis)));
- expect(result.verifiedFields.length).toBe(9);expect(result.scope).toBe('nine_original_report_producer_fields_only');expect(native.queries.at(-1)).toContain('runtime_require_catalog_observation');
+ expect(result.verifiedFields.length).toBe(10);expect(result.scope).toBe('ten_original_report_producer_fields_only');expect(native.queries.at(-1)).toContain('runtime_require_catalog_observation');
 });
 test('native ingress absence does not admit injected loss or transform registration',async()=>{
  const basis=await collectCatalogReportPreparation(connection(),prepared,'1',owner,fields);
@@ -89,4 +90,14 @@ test('native actor basis retains original bytes and rejects inconsistent result 
  expect(Buffer.from(result.contextEvidence.bytesBase64,'base64').toString()).toBe(context);expect(result.databaseRole).toBe('actor');expect(result.scope).toBe('original_native_actor_context_basis_only');
  for(const rows of [[],[row,row],[{...row,extra:'x'}],[{...row,database_role:'forged'}],[{...row,context_hex:'7b7d'}],[{...row,context_hex:'AB'}],[{...row,actor_role_oid:'12'}]])await expect(collectCatalogOriginalExecutionBasis(native(rows),prepared,basis)).rejects.toThrow();
  await expect(collectCatalogOriginalExecutionBasis(native([row]),prepared,{...basis})).rejects.toThrow('bound catalog report preparation');
+});
+
+
+test('report correspondence refuses omitted, duplicated or substituted original extension artifacts',async()=>{
+ const correspondence=await createCatalogReportCorrespondence('/Users/erik/Projects/umf/package.json');
+ const native=connection(),basis=await collectCatalogReportPreparation(native,prepared,'1',owner,fields);
+ for(const extensions of [[],[...collectCatalogExtensionArtifacts(prepared).extensions,...collectCatalogExtensionArtifacts(prepared).extensions],[{...collectCatalogExtensionArtifacts(prepared).extensions[0],identity:'substituted'}]]){
+  const report={...reportFor(basis),extensions};
+  await expect(correspondence.verify(native,prepared,basis,wire(report))).rejects.toThrow('producer correspondence required: extensions');
+ }
 });
