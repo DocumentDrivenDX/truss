@@ -1032,7 +1032,7 @@
     "03-test/test-plans/STP-006-add-a-type-without-ddl.md": "edd9b1b969fca00571080e7945315baa2e913509155d0a3c642680b85ed13ca4",
     "02-design/technical-designs/TD-007-store-and-read-objects-and-edges-exactly.md": "f23895f047c9a2346b609d9873ef5aadaee063219c99561cd6fc6bf8a468439e",
     "03-test/test-plans/STP-007-store-and-read-objects-and-edges-exactly.md": "6a0fdc7180ca35facdd13b27a5f1c9b42544b5feb8053f2b2734361743cacfdb",
-    "02-design/technical-designs/TD-008-keep-what-the-schema-does-not-define.md": "11d0c71fcc8b08f52c57d2f50a679aa4e3d9ac3f8a371de00a2ea16f2854261f",
+    "02-design/technical-designs/TD-008-keep-what-the-schema-does-not-define.md": "6e5bba27d4c38cfdac417435c08d56fad53f590c03567014afb2bc9a322cde41",
     "03-test/test-plans/STP-008-keep-what-the-schema-does-not-define.md": "4f6b5e97ed86cd45652636c1e07a55e52980cf3b9498740de0b937bdfa5659a8",
     "02-design/technical-designs/TD-009-find-an-object-by-its-key.md": "25ed3ec38b49bd477065d3786ee529f092ddc8b7661e3433fe99a7784890a2d7",
     "03-test/test-plans/STP-009-find-an-object-by-its-key.md": "5c65ad7cbfaa61ae074c146eb21b6e78b2f6139b7abad7477df9472358189428",
