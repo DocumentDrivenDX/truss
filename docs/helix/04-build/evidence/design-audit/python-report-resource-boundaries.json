@@ -1,0 +1,29 @@
+{
+  "status": "observed_expected_profile_gaps",
+  "results": [
+    {
+      "name": "per-container-members-not-yet-aligned",
+      "sourceBytes": 566848,
+      "sourceSha256": "333778398c3f474f5ff32accf4235dfa4b84fd200daec2e30d8b5657e738e52d",
+      "pythonAccepted": true,
+      "typescriptAccepted": false
+    },
+    {
+      "name": "host-codec-pass-does-not-admit-native-scalar-capacity",
+      "sourceBytes": 69341,
+      "sourceSha256": "ac19e99abfbf2bd6e8e55fee51cf71ed59831de597cc16dea787bc90a1afffab",
+      "pythonAccepted": true,
+      "typescriptAccepted": true
+    }
+  ],
+  "sourceSha256": {
+    "docs/helix/04-build/evidence/design-audit/check_python_report_resource_boundaries.py": "f6879ced5557f0768beac9e55c48ea46ef7ed21f609f678320bfa4fc1c5e2a6a",
+    "docs/helix/04-build/evidence/design-audit/check-python-report-interchange.ts": "bac473964f243820619071000619621024e81b983bef550949ee9a2efea95180",
+    "docs/helix/04-build/evidence/design-audit/python_report_wire_candidate.py": "54fe044bd671eda61bc23d2644b283d14d959a748e75f5cc2d1483c9b729e26e",
+    "docs/helix/04-build/evidence/design-audit/python_raw_json_candidate.py": "3376303e2c87c0c54f2f18d32d2809f7b1e7ce1a8fa8ed7db43affad0a105ab8",
+    "packages/postgresql/src/acceptance-json.ts": "14a65dc9fd67b3ab53fb080a4a05422b991af63feac52fc6e0655eb03a47ed17",
+    "packages/postgresql/src/canonical-wire-tree.ts": "2fcb2ff72ce7faad682800be3a4deba1f7147f814e08319179cea4ed93cc4bf6",
+    "packages/postgresql/native/canonical-string-bytes.sql": "fe943bfd4397325ed3dff16cec7436070653f6ad6c19fbe67e853348c508dbc1"
+  },
+  "scope": "Two intentionally distinct candidate resource outcomes. Synthetic shape-valid documents do not establish complete report semantics. Native scalar 65536-byte declaration inspected; no native invocation performed. Neither shared resource profile nor cross-host native support is qualified."
+}

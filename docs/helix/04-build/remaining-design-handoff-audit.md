@@ -416,3 +416,14 @@ required string/boolean projection are not a general SQL view or native permit.
 Original owner reruns remain dependencies; Truss does not alter those working files
 or duplicate their resolver/source implementation. This updates security integration
 planning without qualifying the release tuple or weakening the broader corpus.
+
+
+### Python report resource boundary evidence
+
+The new two-case original-wire probe observes a per-container host discrepancy
+and host admission beyond the private native scalar declaration. PY-01a's 39 shared
+wire controls therefore remain confined to their tested bounds. The Python plan
+now assigns complete parser/validator/carrier/scalar/output and simultaneous-copy
+resource composition to PY-01a/01b and A1–A5, including pre-effect complete report
+capacity and UMF-authored bounded native streaming if required. No profile is
+adopted by equating source/depth/node constants; full reports remain mandatory.

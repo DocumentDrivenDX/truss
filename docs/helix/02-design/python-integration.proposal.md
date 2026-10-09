@@ -600,3 +600,51 @@ The checker invokes the existing Bun codec with the selected local dependency
 package; this is test orchestration, not a JavaScript runtime requirement for the
 Python implementation. Public packaging/driver/security/resource adoption remains
 separate.
+
+
+### PY-01a/01b complete report resource composition
+
+The [resource-boundary probe](../04-build/evidence/design-audit/check_python_report_resource_boundaries.py)
+retains [two observed distinctions](../04-build/evidence/design-audit/python-report-resource-boundaries.json),
+separate from the 39 small shared wire controls. Python accepts a shape-valid
+4,097-member document array that the TypeScript decoder refuses under its current
+4,096-member limit. Both host codecs accept a 65,537-byte scalar while the inspected
+private native canonical-string component declares a 65,536-byte source limit.
+The probe does not invoke that native function or qualify its effects. Its synthetic
+large report intentionally cannot establish complete accepted-input/report semantics.
+
+| Phase | Inspected candidate bounds and adoption obligation |
+| --- | --- |
+| Original wire reception | Both prototypes use a one-MiB source cap; original driver ingress/backing/copy reservation must precede reads, not infer capacity from the resulting bytes |
+| Parsing | Both select depth128 and nodes100000; TypeScript additionally caps each container at4096 and scanner work at2000000. Python's byte/depth/node preflight alone is not the same parser/work/collection profile |
+| Schema validation | Both use the eleven exact original schemas. Reserve simultaneous retained source, parsed/frozen view, validation view and validator traversal/diagnostic capacity; a parser node count does not charge these copies |
+| Native carrier preparation | TypeScript caps canonical-tree tasks at32768 and ASCII tagged carrier bytes at4194304. Python's schema-only result produces no equivalent native carrier or task admission; do not claim parity for that stage |
+| Native scalar/output | The private native scalar input is capped at65536 bytes, with chunked output. A larger host-admitted scalar still needs an admitted complete native producer or refusal before effects. Chunk size is not a total source/output limit |
+
+Select one coherent report/operation resource profile before PY-01b submission.
+First derive complete worst-case report capacity from original admitted input,
+profiles/artifacts and every possible producer branch; include exact base64/hex
+expansion and simultaneous ownership. Then reconcile host collection/work/carrier
+rules and native scalar/output admission with that same profile. Native string
+and original artifact membership must be checked before any acceptance effect;
+a late report-capacity failure cannot be repaired by omitting source bytes,
+provisional/lifecycle entries or diagnostics.
+
+The existing 64-KiB scalar component is not a complete producer for all larger
+original artifacts. If the selected complete reference needs larger scalars,
+author the bounded native streaming/chunk source through the authoritative UMF
+physical/routine model and CH-01, retaining old component receipts at their actual
+subset. Reserve complete source inspection, escaped output, chunk inventories and
+final assembly/copies before execution. Do not just raise a SQL constant, mirror
+host limits in an unregistered Python counter or shrink the required full report
+into a passing projection. No selected release profile follows from this proposal.
+
+Independent schedules vary each limit alone while keeping complete semantic input
+fixed: at/above container membership, parser work, tree tasks, carrier bytes,
+scalar UTF-8 bytes and complete escaped-output capacity. Include base64 original
+artifact expansion, NUL/control escapes and late producer failure. A refused
+original attempt leaves no accepted revision/report/head or durable data/history
+effects; original unknown submission/commit retains recovery/quarantine separately.
+Actual source/native/driver/resource and security-owner admission still precede
+support. This is an execution-ready composition task, not a second UMF codec or
+Weft compiler responsibility.
