@@ -21,10 +21,10 @@ for(const path of models){
  sources.push({path,sha256:hash(bytes)});
  for(const [index,node] of nodes.entries()){
   const kind=Object.keys(node.stmt)[0];
-  if(!['IndexStmt','CreateSeqStmt'].includes(kind))continue;
+  if(!['IndexStmt','CreateSeqStmt','CreateStmt','AlterTableStmt'].includes(kind))continue;
   objects.push({sourceModel:path,sourcePointer:`/stmts/${index}/stmt/${kind}`,kind,definition:node.stmt[kind]});
  }
 }
 const output={scope:'Original UMF native index/sequence declaration capture only; no native or installation qualification',ownerSources,sources,objects};
 await Bun.write('docs/helix/04-build/evidence/design-audit/pgserver-native-object-declarations.json',JSON.stringify(output,null,2)+'\n');
-console.log(JSON.stringify({indexes:objects.filter(o=>o.kind==='IndexStmt').length,sequences:objects.filter(o=>o.kind==='CreateSeqStmt').length}));
+console.log(JSON.stringify({indexes:objects.filter(o=>o.kind==='IndexStmt').length,sequences:objects.filter(o=>o.kind==='CreateSeqStmt').length,tables:objects.filter(o=>o.kind==='CreateStmt').length}));

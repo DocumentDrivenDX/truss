@@ -172,6 +172,45 @@ for obj in declarations['objects']:
         'partial': 'whereClause' in d, 'valid': True, 'ready': True,
         'options': [0] * len(d['indexParams']),
     }
+expected_key_constraints = []
+for obj in declarations['objects']:
+    if obj['kind'] != 'CreateStmt':
+        continue
+    d = obj['definition']
+    for entry in d.get('tableElts', []):
+        column = entry.get('ColumnDef')
+        constraints = [entry['Constraint']] if 'Constraint' in entry else [c['Constraint'] for c in column.get('constraints', [])] if column else []
+        for pos, c in enumerate(constraints):
+            if c['contype'] not in ('CONSTR_PRIMARY', 'CONSTR_UNIQUE'):
+                continue
+            assert not any(x['contype'].startswith('CONSTR_ATTR_') for x in constraints[pos+1:pos+2]), 'Unadmitted column key attributes'
+            assert not c.get('including') and not c.get('options') and not c.get('indexname'), 'Unadmitted key index modifier'
+            keys = [v['String']['sval'] for v in c['keys']] if c.get('keys') else [column['colname']]
+            expected_key_constraints.append([d['relation']['relname'],
+                'p' if c['contype']=='CONSTR_PRIMARY' else 'u', keys,
+                c.get('deferrable', False), c.get('initdeferred', False),
+                c.get('nulls_not_distinct', False), True, True, True, keys])
+# Apply the original key-only ALTER declarations in source order. This is a
+# scoped inventory projection, not a SQL generator or general DDL interpreter.
+for obj in declarations['objects']:
+    if obj['kind'] != 'AlterTableStmt':
+        continue
+    d = obj['definition']; table = d['relation']['relname']
+    for entry in d['cmds']:
+        cmd = entry['AlterTableCmd']
+        if cmd['subtype'] == 'AT_DropConstraint':
+            assert table == 'prop_def' and cmd['name'] == 'prop_def_type_id_element_key', 'Unadmitted constraint removal'
+            old = [table, 'u', ['type_id','element'], False, False, False, True, True, True, ['type_id','element']]
+            assert expected_key_constraints.count(old) == 1
+            expected_key_constraints.remove(old)
+        elif cmd['subtype'] == 'AT_AddConstraint':
+            c = cmd['def']['Constraint']
+            if c['contype'] not in ('CONSTR_PRIMARY','CONSTR_UNIQUE'):
+                continue
+            assert not c.get('including') and not c.get('options') and not c.get('indexname')
+            keys = [v['String']['sval'] for v in c['keys']]
+            expected_key_constraints.append([table, 'p' if c['contype']=='CONSTR_PRIMARY' else 'u', keys,
+                c.get('deferrable',False),c.get('initdeferred',False),c.get('nulls_not_distinct',False),True,True,True,keys])
 if importlib.metadata.version('pgserver') != '0.1.4':
     raise SystemExit('Expected pinned pgserver0.1.4')
 psql = Path(str(importlib.resources.files('pgserver'))) / 'pginstall/bin/psql'
@@ -200,6 +239,14 @@ BEGIN
  PERFORM set_config('session_replication_role','origin',true);
 END $$;
 SELECT json_build_object(
+ 'keyConstraints',(SELECT json_agg(json_build_array(r.relname,k.contype,
+ (SELECT json_agg(a.attname ORDER BY u.ord) FROM unnest(k.conkey) WITH ORDINALITY u(num,ord)
+ JOIN pg_attribute a ON a.attrelid=r.oid AND a.attnum=u.num),
+ k.condeferrable,k.condeferred,i.indnullsnotdistinct,i.indisunique,i.indisvalid,i.indisready,
+ (SELECT json_agg(a.attname ORDER BY u.ord) FROM unnest(i.indkey) WITH ORDINALITY u(num,ord)
+ JOIN pg_attribute a ON a.attrelid=r.oid AND a.attnum=u.num)))
+ FROM pg_constraint k JOIN pg_class r ON r.oid=k.conrelid JOIN pg_namespace n ON n.oid=r.relnamespace
+ JOIN pg_index i ON i.indexrelid=k.conindid WHERE n.nspname='truss' AND k.contype IN ('p','u') AND k.conparentid=0),
  'indexes',(SELECT json_object_agg(c.relname,json_build_object(
  'table',r.relname,'method',am.amname,'unique',i.indisunique,'nullsNotDistinct',i.indnullsnotdistinct,
  'keys',(SELECT json_agg(a.attname ORDER BY u.ord) FROM unnest(i.indkey) WITH ORDINALITY u(num,ord)
@@ -268,6 +315,9 @@ ROLLBACK;
         assert observed['fkTargetNamespaces'] == ['truss']
         assert observed['columns'] == expected_columns, 'UMF column/type/requiredness discrepancy'
         frozen = lambda values: Counter(json.dumps(v, separators=(',', ':')) for v in values)
+        if frozen(observed['keyConstraints']) != frozen(expected_key_constraints):
+            print(json.dumps({'missingKeys': list((frozen(expected_key_constraints)-frozen(observed['keyConstraints'])).elements()), 'unexpectedKeys': list((frozen(observed['keyConstraints'])-frozen(expected_key_constraints)).elements())}))
+            raise AssertionError('Original primary/unique constraint discrepancy')
         if frozen(observed['foreignKeys']) != frozen(expected_fks):
             print(json.dumps({'missingExpected': list((frozen(expected_fks)-frozen(observed['foreignKeys'])).elements()), 'unexpectedNative': list((frozen(observed['foreignKeys'])-frozen(expected_fks)).elements())}))
             raise AssertionError('UMF ordered FK correspondence discrepancy')
@@ -285,5 +335,5 @@ receipt = {'scope': 'Original generated base/adjunct DDL and immutable guard com
            'limitation': 'PostgreSQL16.2 lacks transaction_timeout; any selected profile requiring that setting must refuse or use a separately admitted bounded alternative',
            'producerSha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest()}
 (root / 'docs/helix/04-build/evidence/design-audit/pgserver-umf-structural-correspondence.json').write_text(json.dumps(receipt, indent=2) + '\n')
-print(json.dumps({'serverVersion': observed['serverVersion'], 'tables': len(expected), 'columns': sum(map(len, expected_columns.values())), 'foreignKeys': len(expected_fks), 'sequences': len(expected_sequences), 'explicitIndexes': len(expected_indexes),
+print(json.dumps({'serverVersion': observed['serverVersion'], 'tables': len(expected), 'columns': sum(map(len, expected_columns.values())), 'foreignKeys': len(expected_fks), 'sequences': len(expected_sequences), 'explicitIndexes': len(expected_indexes), 'keyConstraints': len(expected_key_constraints),
                   'rollbackRemovedNamespace': True, 'truncateRefusals': 4, 'truncateModes': ['origin', 'replica'], 'transactionTimeout': observed['transactionTimeout']}))

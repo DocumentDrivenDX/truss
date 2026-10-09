@@ -287,3 +287,21 @@ expression or predicate meaning. Implicit primary/unique constraint index
 correspondence, index dependency identities, operator-class/collation semantics,
 default/check expressions, routines, grants and initializer publication remain
 required before full installation qualification.
+
+## Primary and unique constraint correspondence
+
+The capture now also retains original CreateStmt and AlterTableStmt nodes. The
+checker derives final primary/unique key tuples from those original declarations,
+including three added unique keys and the explicit replacement of
+prop_def_type_id_element_key with its document/module-qualified field constraint.
+It refuses an unrecognized key-constraint removal rather than guessing a final
+layout. This is a scoped inventory projection, not a general DDL interpreter.
+
+All64 final primary/unique constraints match native ordered columns, deferral
+settings and null-distinctness, with unique, valid, ready backing indexes whose
+ordered columns match the constraint. Duplicate multiplicity is preserved. The
+first run deliberately failed on the unreconciled CREATE-only inventory; the
+original ALTER declarations resolved the discrepancy without changing model or SQL.
+Constraint names, backing-index operator classes/collations and dependency identities,
+check/default and index expression meaning, complete routines/grants and initializer
+publication remain unqualified. Complete migration preservation remains separate.
