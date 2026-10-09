@@ -135,10 +135,15 @@ Read shapes retain absent versus explicit null, ordered key components, exact la
 ### PY-01 independent exact-value expectations
 
 The [shared authored vectors](../03-test/python-exact-value-vectors.proposal.json)
-now materialize fourteen CONTRACT-010 presence/value carriers plus a Python host
+now materialize fifteen CONTRACT-010 presence/value carriers plus a Python host
 bool/integral refusal. Strict Ajv compilation validates each carrier and all
 cross-vector references resolve. This is fixture shape evidence only; neither
 Python/TypeScript decoding nor native storage has been run against them. The
+signed-zero pair now independently preserves opposite signs and distinct wire
+forms despite mathematical equality. The large decimal vector specifies ambient
+precision 3; Python Decimal construction remains exact under that context in a
+standard-library check. That check does not qualify adapter arithmetic or storage.
+The
 nested map vector checks typed token/string separation, not raw JSON parser
 custody. The [raw JSON vectors](../03-test/python-raw-json-vectors.proposal.json)
 separately author five exact UTF-8 sources, including nested large integers,
