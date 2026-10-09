@@ -432,6 +432,40 @@ native enforcement joins and these controls remain unimplemented.
 
 A2 can progress through independent producer work before A1's complete native installation qualifies, but no public activation follows partial correspondence. A3 cannot silently reduce acceptance to new-only operations while presenting full catalog support. Original source-level validity remains UMF-owned; Truss stores the selected complete interpretation and qualified local identities.
 
+### A6/A7 original acceptance settlement after head advancement
+
+The public assembly must distinguish a new acceptance invocation from settlement
+of an existing original transaction. Retain original invocation/input, pending
+revision/report correspondence and the selected transaction recovery reference
+before submission under CONTRACT-007. A network timeout does not authorize a
+second acceptance, publish provisional IDs, dispatch pending index work or infer
+rollback from the current head. Use the original recovery service; this handoff
+does not introduce a new catalog receipt or recovery API.
+
+Independently schedule acceptance R-A with a complete expected immutable report,
+lose its commit acknowledgment, and restart the caller without its live result
+objects. Once R-A is independently confirmed committed, accept R-B with a distinct
+original input and advance the active head. Settle R-A through its original
+reference after R-B commits. The observed R-A outcome must retain its original
+revision and report correspondence; observing R-B as current head cannot replace
+that outcome, rerun R-A effects or roll the head back. Original outcome evidence
+and permission to disclose the recovered result are separate: current authority
+must still admit publication, without changing the retained historical facts.
+
+Repeat with confirmed outer rollback and with genuinely unavailable settlement.
+Rolled-back pending IDs/report objects must not become public committed results;
+unavailable settlement retains original recovery custody and cannot trigger a
+fresh execution. For host-adopted acceptance, savepoint release is not outer
+commit confirmation. Any post-commit index-job dispatch requires the original
+qualified commit outcome and registered job identity; restarting settlement
+cannot create duplicate jobs. Keep index readiness separate from the immutable
+acceptance report's original pending-job meaning.
+
+Compare complete independently expected source/revision/report/head/journal and
+job observations, including an unchanged current R-B head during R-A recovery.
+These are additional A6/A7 schedules, currently not run; full report production,
+original recovery services and native/public assembly remain prerequisites.
+
 ### Combined lifecycle producer before report persistence
 
 Resolve `lifecycleProfile` through the original registered lifecycle composition,
