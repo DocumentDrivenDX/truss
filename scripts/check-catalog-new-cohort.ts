@@ -2,6 +2,7 @@
 import {SQL} from 'bun';
 import {createCatalogInputPreparation} from '../packages/umf-bun/src/catalog-input';
 import {stageNewCatalogCohort} from '../packages/umf-bun/src/catalog-new-stage';
+import {prepareDefaultCatalogHomes} from '../packages/umf-bun/src/catalog-default-homes';
 const directory=process.env.TRUSS_UMF_PRODUCER;if(!directory)throw Error('Original owner directory required');
 const url=process.env.TRUSS_OPERATION_TEST_URL;if(!url?.startsWith('postgres://postgres@127.0.0.1:15434/'))throw Error('Dedicated disposable endpoint required');
 const preparation=await createCatalogInputPreparation(directory,'/Users/erik/Projects/umf/package.json');
@@ -19,7 +20,7 @@ try{
  let incomplete=false;try{await stageNewCatalogCohort(connection,request(),homes.slice(1),{})}catch{incomplete=true}assert(incomplete,'incomplete property home inventory refuses before persistence');
  let unsupported=false;try{await stageNewCatalogCohort(connection,request(true),homes,{})}catch(e){unsupported=((e as any).errno??(e as any).code)==='22023'}assert(unsupported,'unsupported original unnamed Field refuses native property staging');
  const cleared=await sql.unsafe('SELECT (SELECT count(*) FROM truss.schema_rev WHERE rev>0)::text AS revisions,(SELECT count(*) FROM truss.type_def)::text AS types');assert(cleared[0].revisions==='0'&&cleared[0].types==='0','failed cohort savepoint removes earlier revision and Record effects');
- const prepared=request();const result=await stageNewCatalogCohort(connection,prepared,homes,{source:'original test'});
+ const prepared=request();const defaults=prepareDefaultCatalogHomes(prepared);assert(JSON.stringify(defaults.homes)===JSON.stringify(homes),'default homes derive from original absent-binding input, never guessed native IDs');const result=await stageNewCatalogCohort(connection,prepared,defaults.homes,{source:'original test'});
  assert(result.types.length===2&&result.properties.length===2&&result.keys.length===2&&result.relationships.length===1,'entire original declared catalog stages using actual native IDs');
  assert(result.types[0].type_id==='1'&&result.types[1].type_id==='2','native sorted allocator assigns Record identities');
  const properties=await sql.unsafe('SELECT type_id::text AS owner,prop_id::text AS id FROM truss.prop_def ORDER BY type_id');assert(properties[0].id!==properties[1].id,'distinct original owners retain their allocated property identities');
@@ -48,5 +49,5 @@ try{
  let barrier=false;try{await sql.unsafe('COMMIT')}catch(e){barrier=((e as any).errno??(e as any).code)==='55000'}assert(barrier,'unfinished complete acceptance cannot commit');
  const empty=await sql.unsafe('SELECT count(*)::text AS count FROM truss.type_def');assert(empty[0].count==='0','failed commit removes all provisional catalog effects');
  const sourcePins=Object.fromEntries(await Promise.all(components.map(async component=>[component,new Bun.CryptoHasher('sha256').update(await Bun.file('packages/postgresql/native/'+component+'.sql').arrayBuffer()).digest('hex')])));
- const receipt={sourcePins,stageProducerSha256:new Bun.CryptoHasher('sha256').update(await Bun.file('packages/umf-bun/src/catalog-new-stage.ts').arrayBuffer()).digest('hex'),originalInputSha256:new Bun.CryptoHasher('sha256').update(Buffer.from(prepared.original.originalUtf8Hex,'hex')).digest('hex'),engine:version[0].server_version,umfProfile:preparation.umfProfile,checks,scope:'Actual original complete declared new catalog staging and atomic refusal only. Root profile/authority, retained lifecycle, acceptance report/head/finalizer and public entrypoint are unqualified.'};await Bun.write('docs/helix/04-build/evidence/catalog-new-cohort.json',JSON.stringify(receipt,null,2)+'\n');console.log(JSON.stringify({checks:checks.length}));
+ const receipt={sourcePins,defaultHomeProducerSha256:new Bun.CryptoHasher('sha256').update(await Bun.file('packages/umf-bun/src/catalog-default-homes.ts').arrayBuffer()).digest('hex'),stageProducerSha256:new Bun.CryptoHasher('sha256').update(await Bun.file('packages/umf-bun/src/catalog-new-stage.ts').arrayBuffer()).digest('hex'),originalInputSha256:new Bun.CryptoHasher('sha256').update(Buffer.from(prepared.original.originalUtf8Hex,'hex')).digest('hex'),engine:version[0].server_version,umfProfile:preparation.umfProfile,checks,scope:'Actual original complete declared new catalog staging and atomic refusal only. Root profile/authority, retained lifecycle, acceptance report/head/finalizer and public entrypoint are unqualified.'};await Bun.write('docs/helix/04-build/evidence/catalog-new-cohort.json',JSON.stringify(receipt,null,2)+'\n');console.log(JSON.stringify({checks:checks.length}));
 }finally{await sql.close()}

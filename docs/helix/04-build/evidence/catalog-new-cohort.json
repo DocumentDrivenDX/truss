@@ -30,6 +30,7 @@
     "incomplete property home inventory refuses before persistence",
     "unsupported original unnamed Field refuses native property staging",
     "failed cohort savepoint removes earlier revision and Record effects",
+    "default homes derive from original absent-binding input, never guessed native IDs",
     "entire original declared catalog stages using actual native IDs",
     "native sorted allocator assigns Record identities",
     "distinct original owners retain their allocated property identities",
@@ -55,5 +56,6 @@
     "unfinished complete acceptance cannot commit",
     "failed commit removes all provisional catalog effects"
   ],
-  "scope": "Actual original complete declared new catalog staging and atomic refusal only. Root profile/authority, retained lifecycle, acceptance report/head/finalizer and public entrypoint are unqualified."
+  "scope": "Actual original complete declared new catalog staging and atomic refusal only. Root profile/authority, retained lifecycle, acceptance report/head/finalizer and public entrypoint are unqualified.",
+  "defaultHomeProducerSha256": "f7bea9fd414f75e43a2d26a940a32083976a7ea13b91027a5b019f5e141734d5"
 }

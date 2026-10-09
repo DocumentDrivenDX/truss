@@ -1,6 +1,7 @@
 import {test,expect} from 'bun:test';
 import {createCatalogInputPreparation} from '../packages/umf-bun/src/catalog-input';
 import {createAcceptanceProfileResolver} from '../packages/umf-bun/src/acceptance-profiles';
+import {prepareDefaultCatalogHomes} from '../packages/umf-bun/src/catalog-default-homes';
 const directory=process.env.TRUSS_UMF_PRODUCER;if(!directory)throw Error('Original Record producer directory required');
 const preparation=await createCatalogInputPreparation(directory,'/Users/erik/Projects/umf/package.json');
 const fixture=await Bun.file('docs/helix/02-design/contracts/bindings/acceptance-input-capacity-v0.1.fixture.json').json();
@@ -17,3 +18,6 @@ test('native archive carrier has exact five original fields without interpretati
 test('source declaration extraction preserves original owner and Field references',()=>{const result=run(request());expect(result.declarations.map(d=>d.records[0].documentId)).toEqual(['first-doc','second-doc']);const record=result.declarations[0].records[0];expect([record.moduleId,record.elementId]).toEqual(['m','Item']);expect(record.fields[0].declaration).toBe(result.documents[0].interpretation.source.modules[0].elements[1]);expect(record.fields[0].reference).toEqual({module:'m',element:'label'});expect(Object.isFrozen(record.fields[0].declaration)).toBe(true)});
 
 test('configured original registry refuses unregistered synthetic root profiles',async()=>{const guarded=await createCatalogInputPreparation(directory!,'/Users/erik/Projects/umf/package.json',createAcceptanceProfileResolver([]));expect(()=>guarded.prepare(new TextEncoder().encode(JSON.stringify(request())))).toThrow('/layoutProfile')});
+
+test('absent binding derives complete default json homes from original members',()=>{const result=run(request());const defaults=prepareDefaultCatalogHomes(result);expect(defaults.homes).toEqual(['first-doc','second-doc'].map(documentId=>({documentId,moduleId:'m',elementId:'Item',fieldModule:'m',fieldId:'label',home:'json'})));expect(defaults.originalInputSha256).toBe(new Bun.CryptoHasher('sha256').update(Buffer.from(result.original.originalUtf8Hex,'hex')).digest('hex'));expect(Object.isFrozen(defaults.homes[0])).toBe(true)});
+test('present binding cannot be silently replaced with default homes',()=>{const input=request();input.binding=structuredClone(fixture.input.binding);expect(()=>prepareDefaultCatalogHomes(run(input))).toThrow('Original explicit binding home interpretation required')});
