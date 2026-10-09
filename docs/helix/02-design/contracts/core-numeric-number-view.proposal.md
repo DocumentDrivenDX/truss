@@ -123,3 +123,19 @@ then set `TRUSS_UMF_NUMERIC_PRODUCER` to its output and run
 bundle and dependencies. These context-free observations do not qualify the
 Truss wrapper, Field context, native values or precharged operation accounting.
 Historical record/numeric/value build modes retain their separate pins.
+
+## Existing Truss registration reconciliation
+
+The existing `packages/umf-bun` registration already captures these owner
+functions at immutable 9e4bed3e. Its adapter, schema-literal and Field-properties
+source files are unchanged at reviewed remote e3555b9a, as pinned in the
+[registration sync](../../04-build/evidence/design-audit/umf-numeric-registration-sync.json).
+Preserve that runtime registration; the newer isolated browser source is a
+separate observation, not a compulsory runtime repin. Fresh execution of
+`tests/umf-numeric-runtime.test.ts` passes four tests/21 assertions; the original
+16-case Chromium corpus also passes, including scoped current Field context
+and registration-substitution refusal. Thus owner API capture and scoped
+Field-context bridge checks already exist. The public standalone wrapper,
+complete source/native admission and conservative shared-resource/error
+qualification remain separate obligations. Do not rebuild a second registration
+or report the already implemented bridge as missing design.
