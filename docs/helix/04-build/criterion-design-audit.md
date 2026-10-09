@@ -1,6 +1,18 @@
 # Criterion-level design completion audit
 
-This audit assesses design and test handoff readiness, not runtime acceptance. The governing scope remains all 45 stories and 167 criteria. A concrete test name, source hash or schema alone does not prove a criterion’s full behavior is designed. Remaining actual native IDs/OIDs and passing runtime observations are implementation outputs; unavailable semantics, unresolved behavior and unselected realizable producer profiles are design gaps. Sections below record cumulative review of each named story group against its current requirements, primary TD/STP handoffs and governing contracts. Criteria outside those named groups remain unassessed; historical cumulative counts mark the progress at each section.
+This audit assesses design and test handoff readiness, not runtime acceptance. The governing scope remains all 45 stories and 167 criteria. A concrete test name, source hash or schema alone does not prove a criterion’s full behavior is designed. Remaining actual native IDs/OIDs and passing runtime observations are implementation outputs; unavailable semantics, unresolved behavior and unselected realizable producer profiles are design gaps. The tables now contain 167 unique criterion assessments across all 45 stories. The cumulative counts below describe historical review checkpoints, not current unassessed scope.
+
+Current reconciliation uses the [design closure index](current-design-closure.md)
+and [seven-boundary composition record](evidence/design-audit/reference-composition-incomplete.json).
+All seven authored boundaries remain incomplete; future producer/executor/native
+test exits are recorded separately from unresolved profile/owner selections.
+New UMF core0.8 dataset operations inform A2 without establishing complete native
+coverage. The complete consumer SQL review, explicit relationship alternatives,
+key/identity-Field and action retry mappings inform the existing Python/read/group/
+import handoffs; they supplement rather than replace these 167 criterion rows.
+Consumer source adoption and outcome compatibility remain unresolved. The five
+human-choice rows retain their existing pending status; no component evidence
+answers them or closes the full design goal.
 
 | Criterion | Current semantic and independent test handoff | Design readiness assessment and required next output |
 | --- | --- | --- |
