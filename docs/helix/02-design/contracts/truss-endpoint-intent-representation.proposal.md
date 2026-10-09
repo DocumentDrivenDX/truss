@@ -332,3 +332,59 @@ registration or callback exported by the runtime package. E1 still needs a pinne
 original full registration in the coherent interpretation/resource tuple, and
 E2–E5 still need complete package/accepted-history, security and native/report
 composition. No vocabulary support claim or public activation follows.
+
+### E2/E3 previously accepted source construction and independent exit
+
+Extend the existing original acceptance composition rather than adding a public
+archive-fetch callback or a second source registry. The supplied-source resolver
+remains supplied-only until this complete prior-source path exists. Retain the
+original prior accepted closure and complete source membership under the admitted
+installation, catalog revision, layout/report/interpretation and security/resource
+context; a caller's copied view or arbitrary archive bytes cannot provide it.
+
+1. Before effects, capture the complete required dependency and selected endpoint
+   inventory from all original incoming documents. Reserve capacity for source
+   bytes, interpretation, definition/key correspondence and diagnostics. Distinguish
+   references to supplied members from references requiring original accepted
+   custody; do not resolve a successful supplied prefix as the whole package.
+2. Under the original acceptance transaction/snapshot and exclusion order, resolve
+   each prior selection through the protected accepted source/archive producer.
+   Match exact document, Truss revision and source-inventory identity, original
+   bytes/digest and accepted membership. Compare full artifact identity and bytes
+   after any hash routing. Ambiguous membership, missing bytes, wrong incarnation
+   or an unavailable original interpretation refuses before allocations.
+3. Admit that exact definition in the selected final closure. Merely retaining
+   bytes from an old report does not make a retired or superseded definition active.
+   A required lifecycle/reactivation/rebind transition uses its existing complete
+   producer; source lookup cannot perform that transition implicitly. If incoming
+   and prior selections conflict under one qualified lineage, refuse or require
+   the original explicit compatible transition; never select latest or prioritize
+   one input source by iteration order.
+4. Interpret original source through its admitted original UMF/profile producer,
+   retaining any explicit version transition as separate evidence. Resolve the
+   exact owning Record and authored key. Candidate key names are source-version
+   lookup inputs; after resolution preserve `Record.keys[].id` and complete
+   definition/provenance under CONTRACT-003. A later rename cannot remap by current
+   name or allocate a new native key number for the unchanged authored key ID.
+5. Bind resolved definitions to the original accepted mapping and current
+   security-owner admission. A found source, Record or key conveys no grant.
+   Recheck original context before native effects/publication; changed head,
+   interpretation, lifecycle or authority cannot reuse a stale resolution result.
+   Feed/report publication and backend-loss custody follow the security owner's
+   shared protocol, without a new endpoint-specific ACL or drain mechanism.
+6. Derive all types/properties/keys before complete relationship endpoint sets.
+   Preserve source-qualified pending/loss inventories and compare the complete
+   independently expected report before original immutable insertion and head
+   publication. Confirmed rollback preserves prior accepted source/mapping state;
+   unknown commit uses the original acceptance attempt and recovery gate.
+
+Independent schedules require a supplied source plus a previously accepted target,
+wrong source revision with a newer version present, same names under different
+owners, retained historical bytes whose definition is retired, source identity/hash
+routing collisions, omitted accepted member, changed source/profile/head, and
+changed authority after lookup. Include a key rename with unchanged authored ID,
+a conflicting changed key tuple under that ID, and a late failure after endpoint
+allocation. Independently compare complete original bytes, resolved identities,
+active lifecycle and prior-state preservation; source row counts or matching key
+names are insufficient. These are authored implementation/test obligations, not
+an implemented archive service or a new acceptance capability.

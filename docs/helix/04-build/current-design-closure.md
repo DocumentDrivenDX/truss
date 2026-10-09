@@ -28,8 +28,8 @@ are the actionable cross-project handoffs.
 | Remaining work | Classification and owner | Evidence needed to close it |
 | --- | --- | --- |
 | Python route/home and ADR-001/003 reconciliation | Human product decision; proposal now uses Python orchestration, shared PostgreSQL, Rust Weft and security-owned authorization | Explicit owner route decision followed by consistent ADR/package updates; future Python execution is separate |
-| Cross-document dependency acceptance / US-002 | Concrete representation/cycle-policy gap; deterministic graph ordering is separately authored | Admit an existing owner representation with exact document revision/dependency/endpoint semantics and valid cycles, or explicit product reconciliation. A sorted vector or opaque preserved reference cannot prove accepted cross-document meaning. |
-| Unknown endpoint policies / US-003 | Concrete requirement-versus-available-representation gap; Truss owns consumer reconciliation | An already-valid owner adapter/extension representation with exact unresolved endpoint identity/loss semantics, or explicit product resolution. UMF CONTRACT-045 remains unimplemented and does not change current relationship endpoint rules; no synthetic stub or validation bypass closes this. |
+| Cross-document dependency acceptance / US-002 | Existing UMF registry candidate verified; full carrier, exact supplied-source/Record/key resolution and SCC ordering have private evidence. Truss owns adoption/composition | Admit the complete original registration/resource tuple, prior-accepted-source custody and whole-set native derivation/report publication. The 17 registry controls and 30 source/graph tests do not establish accepted catalog meaning. |
+| Unknown endpoint policies / US-003 | Valid pending-intent representation is experimentally available through current UMF; Truss owns complete policy/storage/report composition | Admit full qualified provisional relationship/key-state mapping, explicit whole-relationship losses and same-ID promotion/lifecycle effects with the security owner. Nullable native key cells do not distinguish absent versus unresolved key meaning. CONTRACT-045 and core relationships remain unchanged. |
 | Exact compiler projection/input contract | Weft-owned interface dependency; affected Item.note three-state meaning and parsed-input ABI remain explicit | Committed owner contract/profile, original mapping adoption and independent affected scenarios; no local compiler substitute |
 | Direct traversal result meaning | Human product selection pending; current recommendation is unique typed terminals with path-local cycle exclusion | Select unique destinations versus path-valued results, then reconcile US-023/CONTRACT-004 and the [independent oracle](../03-test/reference-traversal-path-cycle.proposal.json). Weft SQL bag semantics remain separate; no silent adoption from proposed test expectations. |
 | Coherent release profiles | Truss design/engineering selection consuming UMF/Weft/security owner outputs | Exact compatible installation, interpretation, encoding, transport, resource, authority, archive and corpus tuple; no fixture or hash-only authority |
@@ -59,14 +59,17 @@ generic CONTRACT-045 feature work.
 
 The full endpoint-intent carrier is now authored and passes 31 structural controls;
 strict registration/reference compilation of all 156 current contract schemas
-passes. E1 still requires original full semantic registration and reviewed
-definition/dependency/policy correspondence. This schema progression does not
-advance the minimal extension probe to full catalog acceptance.
+passes. A subsequent full document-language registration experiment passes 17 original
+owner controls; exact supplied-source/Record/key and deterministic graph composition
+passes 30 tests/609 assertions. E1 still requires adopted bounded original runtime
+registration and complete package/definition/policy correspondence. Neither the
+full experiment nor the earlier minimal probe establishes catalog acceptance.
 
 The current carrier uses opaque original source-inventory references instead of
 embedded source bytes/digests, avoiding self-reference and reciprocal hash cycles
-for local and mutual dependencies. Original complete source correspondence still
-belongs to acceptance preparation; a reference string cannot authorize resolution.
+for local and mutual dependencies. Private preparation now verifies exact supplied-source correspondence without
+substituting transition bytes. Previously accepted source custody and native
+publication remain open; a reference string cannot authorize resolution.
 
 Historical physical design source is the reconciled 0.12 history review over the separately pinned 0.11 compiler foundation: 106 statements, 46 tables, 442 columns and 24 explicit indexes. These counts describe preserved declarations, not a full installer or supported deployment. The [current column inventory](../02-design/contracts/weft-review-columns-v0.12.proposal.md) covers the 0.12 review declarations. The separately versioned [0.12 source review packet](evidence/weft-source-binding012/README.md) maps the current review declarations and exact owner-export SQL; the [0.11 packet](evidence/weft-source-binding011/README.md) retains its original bytes and scope; earlier packets remain separately pinned. Source mapping does not qualify receipt replay or native/compiler adoption. Older 0.8/0.4 packets remain preserved and none is adopted. No complete design or native qualification claim is made.
 

@@ -64,6 +64,26 @@ review inputs, not adopted release interfaces. Security identity resolution
 continues to belong to its existing owner; Truss consumes that boundary rather
 than creating a competing resolver.
 
+### Cross-document integration and current owner coordination
+
+Fresh fetches reconfirm the committed UMF/Weft baselines above. The security chat
+“Assess security control support” remains active; its latest read-only snapshot
+reports native key materialization across its graph fixture and missing-bucket
+refusal work. That progress is owner work, not a newly adopted Truss key/security
+profile. Preserve its uncommitted Weft and Truss files and consume original
+published interfaces/evidence before changing caller or native admission.
+
+The full Truss endpoint-intent carrier now has 17 original-owner registry controls
+and 30 supplied-source/Record/key/graph tests with 609 assertions. The closure index
+now classifies representation as experimentally available through current UMF,
+with runtime adoption and complete policy/publication still open. Priority 2 must
+consume these components rather than rebuild a dependency sorter or wait for
+CONTRACT-045. The representation handoff now authors the complete E2/E3 prior-
+accepted-source construction and independent schedules, including exact closure
+membership, retained historical versus active meaning, source-version key names
+versus stable authored key IDs, changed context/authority and late-failure recovery.
+No archive service, whole-set native producer or positive revision is qualified.
+
 ### Migration planner implementation boundary
 
 Fresh execution of `bun test tests/layout-migration-plan.test.ts` on 2026-10-09
