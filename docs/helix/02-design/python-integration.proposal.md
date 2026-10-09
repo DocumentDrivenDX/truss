@@ -91,6 +91,18 @@ refuses before SQL publication. These exercise the committed count-summary
 profile rather than a local aggregate compiler. Native empty-input/bag/result
 and finite scan-work evidence remain required.
 
+The pinned wheel also passes complete parsed-response parity for all 1,216
+Truss cases in the committed owner's qualified-registration artifact corpus.
+The [saved parity receipt](../04-build/evidence/design-audit/weft-python-owner-corpus-parity.json)
+retains original corpus, wheel, extension and checker hashes plus each response
+hash. Run `check-weft-python-owner-corpus.py` from the same evidence directory
+with the clean-wheel interpreter and the pinned owner gzip corpus path. It
+refuses changed corpus bytes or missing/duplicate cases. The 965 Ashlar cases
+are explicitly excluded from this Truss-only feature build. Owner compiler
+outputs are the parity reference, not an independently authored Truss oracle;
+no byte-order parity, native database execution or production mapping adoption
+is claimed.
+
 For this profile, grouped counts require complete grouping order and LIMIT;
 global counts have one row and exclude ORDER BY/LIMIT. Cursor and relationship
 predicates are excluded. Empty global input produces one zero-count row; empty
