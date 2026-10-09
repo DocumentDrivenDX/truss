@@ -1,5 +1,34 @@
 # Remaining design handoff audit — 2026-10-08
 
+## Current reconciliation — 2026-10-09
+
+The older checkpoints below are retained as historical findings. Their final
+instruction to begin the 167-criterion audit is superseded: the
+[criterion audit](criterion-design-audit.md) now contains 167 unique criterion
+rows across all 45 stories. These are design assessments, not completed-story
+or runtime verdicts. Case grammar, fixture/input/expectation schemas, typed
+identity paths, operation registry and adapter handshake are now authored
+proposals; they are no longer wholly missing interfaces. The
+[runtime handoff](conformance-runtime-handoff.md) identifies C1–C7 implementation
+and independent review exits. Strict compilation of all 155 contract schemas
+checks composition only.
+
+Remaining design priorities are coherent installation/report/receipt/feed
+composition, independently reviewed complete cases and method/observer
+registration, pending owner behavior/package selections, frozen benchmark
+profiles, and upstream compiler representation/parsed-input compatibility.
+Actual native identifiers, installed routines and successful execution receipts
+remain implementation outputs. Do not reopen the already specified 24-hour
+receipt minimum or confuse it with journal retention; its native realization
+and receipt-position comparison evidence remain required.
+
+A fresh fetch on 2026-10-09 confirms the committed coordination baselines remain
+UMF `1f7b5f5d2a355c4b476e3a96b289b9048f03f567` and Weft
+`5856c73db0342363e64802905a94abb96209d757`. Uncommitted owner changes remain
+review inputs, not adopted release interfaces. Security identity resolution
+continues to belong to its existing owner; Truss consumes that boundary rather
+than creating a competing resolver.
+
 The complete design goal is not achieved. This audit inspects the current source handoffs rather than treating declaration/coverage tests as complete behavior. Native identities and runtime qualification belong to implementation; missing producer interfaces and unresolved shared-owner meanings remain design work. The full B-001–B-015 plan and 45-story corpus remain governing.
 
 | Inspected source | Evidence observed | Design work still needed | Later implementation evidence |
