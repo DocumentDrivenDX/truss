@@ -3,6 +3,7 @@ import hashlib
 import importlib.metadata
 import importlib.resources
 import json
+import re
 from pathlib import Path
 import subprocess
 import tempfile
@@ -54,12 +55,21 @@ with tempfile.TemporaryDirectory(prefix='truss-default-declarations-') as direct
     try:
         version = query('SHOW server_version;'); assert version == '16.2'
         sql = "SELECT coalesce(json_agg(json_build_array(c.relname,a.attname,a.attgenerated,pg_get_expr(d.adbin,d.adrelid)) ORDER BY c.relname,a.attname),'[]') FROM pg_attrdef d JOIN pg_class c ON c.oid=d.adrelid JOIN pg_namespace n ON n.oid=c.relnamespace JOIN pg_attribute a ON a.attrelid=c.oid AND a.attnum=d.adnum WHERE n.nspname='truss' AND a.attgenerated<>'';"
-        observed = json.loads(query('BEGIN;\n' + b';\n'.join(originals).decode() + ';\n' + sql + '\nROLLBACK;'))
+        binding_sql = "SELECT json_build_object('builtinOid','pg_catalog.sha256(bytea)'::regprocedure::oid::text,'functions',(SELECT json_agg(json_build_array(c.relname,a.attname,d.adbin::text) ORDER BY c.relname,a.attname) FROM pg_attrdef d JOIN pg_class c ON c.oid=d.adrelid JOIN pg_namespace n ON n.oid=c.relnamespace JOIN pg_attribute a ON a.attrelid=c.oid AND a.attnum=d.adnum WHERE n.nspname='truss' AND a.attgenerated<>''));"
+        output = query('BEGIN;\n' + b';\n'.join(originals).decode() + ';\n' + sql + '\n' + binding_sql + '\nROLLBACK;').splitlines()
+        assert len(output) == 2
+        observed, binding = map(json.loads, output)
+        function_bindings = []
+        for table, column, native_tree in binding['functions']:
+            functions = re.findall(r':funcid ([0-9]+)', native_tree)
+            assert functions == [binding['builtinOid']], 'Wrong/extra generated callable binding'
+            function_bindings.append(dict(table=table, column=column, functionOid=functions[0], originalNativeExpression=native_tree))
+        assert len(function_bindings) == 29
         if observed != expected:
             raise ValueError(json.dumps({'expected': expected, 'observed': observed}))
         assert query("SELECT to_regnamespace('truss') IS NULL;") == 't'
     finally:
         server.cleanup()
-receipt = dict(scope='Original generated expression declaration/storage-mode/native deparse correspondence only; no full installer qualification', serverVersion=version, generatedColumns=len(expected), expected=expected, observed=observed, rollbackRemovedNamespace=True, sources={p:hashlib.sha256(b).hexdigest() for p,b in zip(paths,originals)}, declarationCaptureSha256=hashlib.sha256((root / manifest_path).read_bytes()).hexdigest(), producerSha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(), limitations=['Populated generated-value evaluation, function permissions/dependencies and write-path enforcement not qualified', 'No full routine/grant/initializer or ready marker', 'Scoped AST inventory comparison, not another UMF DDL generator'])
+receipt = dict(scope='Original generated expression declaration/storage-mode/native deparse and builtin function-OID correspondence only; no full installer qualification', serverVersion=version, generatedColumns=len(expected), builtinSignature='pg_catalog.sha256(bytea)', builtinOid=binding['builtinOid'], functionBindings=function_bindings, expected=expected, observed=observed, rollbackRemovedNamespace=True, sources={p:hashlib.sha256(b).hexdigest() for p,b in zip(paths,originals)}, declarationCaptureSha256=hashlib.sha256((root / manifest_path).read_bytes()).hexdigest(), producerSha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(), limitations=['Populated generated-value evaluation, function permissions/dependencies and write-path enforcement not qualified', 'No full routine/grant/initializer or ready marker', 'Scoped AST inventory comparison, not another UMF DDL generator'])
 (root / 'docs/helix/04-build/evidence/design-audit/pgserver-generated-declaration-component.json').write_text(json.dumps(receipt, indent=2)+'\n')
 print(json.dumps(dict(serverVersion=version, generatedColumns=len(expected), rollbackRemovedNamespace=True)))

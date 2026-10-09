@@ -511,3 +511,13 @@ retained, and rollback removes the namespace. This is declaration correspondence
 not populated generated-value evaluation, callable permission/dependency closure,
 protected write-path enforcement or complete installer readiness. Hash routing
 still requires full original byte equality; no digest becomes identity authority.
+
+The generated-column assessor additionally verifies actual cached expression
+function OIDs against the exact native `pg_catalog.sha256(bytea)` regprocedure.
+All29 native expression trees contain exactly that one callable; source-qualified
+and source-unqualified calls resolve to the same builtin on this16.2 composition.
+The receipt retains the builtin OID and every original pg_node_tree observation.
+This closes scoped callable-identity correspondence, not grants, argument dependency
+closure or populated enforcement. The internal node-text extraction is explicitly
+16.2-scoped and must be requalified for another server build rather than advertised
+as a portable PostgreSQL AST API. All earlier generated-column limitations remain.
