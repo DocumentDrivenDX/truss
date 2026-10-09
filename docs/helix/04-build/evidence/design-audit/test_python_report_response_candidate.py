@@ -10,6 +10,18 @@ class ResponseTests(unittest.TestCase):
         cls.response = ReportResponseCandidate(CONTRACTS)
         cls.legacy = ReportWireCandidate(CONTRACTS)
 
+    def test_complete_frame_to_original_response_schema(self):
+        import struct
+        from python_report_frame_candidate import report_cell
+        _, source = build(4194304)
+        frame = b'D' + struct.pack('!iHi', len(source) + 10, 1, len(source)) + source
+        cell = report_cell(frame)
+        result = self.response.prepare(cell)
+        self.assertEqual(result.original.source_bytes, source)
+        self.assertEqual(len(result.original.value.entries), 19)
+        with self.assertRaises(ValueError):
+            self.response.prepare_native(cell)
+
     def test_frozen_complete_boundary_and_one_over(self):
         check()  # Independent original fixture/schema/hash verification.
         report, source = build(4194304)
