@@ -84,3 +84,10 @@ Race deadlines before submit, during native effect, at commit submission/acknowl
 
 
 Caller retry classification regression: inject independently observed serialization/deadlock completion with known failed original transaction state and no unresolved cleanup/commit outcome. Expect retry with whole_transaction scope, no Truss whole-host rollback/callback rerun and no ordinary admission through that failed generation. The host separately ends/restarts its complete transaction. Contrast native error identity without confirmed statement termination/state, which retains original unusable/recovery custody; operation-local recovery cannot convert the restart instruction into statement retry.
+
+
+## Backend rotation versus live-context affinity
+
+Independently observe native transaction/backend generations for two completed ordinary transactions and force rotation between them. Then hold one caller-owned transaction through host write, Truss mutation, direct page and next Truss operation: each must use its original native transaction and exact admitted principal/context. Attempt to continue its handle or held-snapshot cursor on another backend before completion; refuse before native work, without committing or ending the original transaction. Backend PID equality alone is insufficient identity because PIDs can be reused.
+
+Repeat with preparation disabled and with each explicitly selected prepared protocol. Reuse a pooled backend after confirmed rollback/cancellation containment for a different admitted principal and independently observe no origin/configuration/temporary-state leakage. If original statement or termination remains unknown, quarantine it rather than returning it to the pool or silently substituting a fresh connection. Administrative install/upgrade uses its separate dedicated ownership procedure; an incompatible pooled administrative configuration refuses before DDL. The complete corpus retains all applicable cases and records unsupported combinations explicitly rather than dropping them to obtain a pooled pass. These are planned native integration controls, not a pooler support claim.

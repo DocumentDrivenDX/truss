@@ -29,7 +29,7 @@ ddx:
 
 ## Context
 
-Unprepared reads cost 0.01 to 0.05 ms more on the adopted layout, so preparing is recommended and not required.
+SPIKE-003 measured 0.01 to 0.05 ms extra for unprepared reads on its experimental layout; this is not qualification of a shipped layout or arbitrary pooler. Preparing is recommended where supported and not required for semantic correctness. Backend rotation is allowed between complete transactions, never inside one admitted live transaction. No Truss mutable session context, temporary-object dependency or cached backend identity may cross the transaction boundary. Native authenticated principal identity remains required and is independently admitted under the selected security profile; pooling cannot substitute a host role map for that authority.
 
 ## Walkthrough
 
@@ -46,8 +46,8 @@ Unprepared reads cost 0.01 to 0.05 ms more on the adopted layout, so preparing i
 
 ## Edge Cases
 
-- **A pooler that supports prepared statements**: the engine may use them.
-- **Session-level settings**: none are relied on.
+- **A pooler that supports prepared statements**: the engine may use them only under its exact qualified driver/pooler protocol and lifetime rules; cached names alone cannot establish readiness after backend rotation.
+- **Session-level settings**: no mutable Truss session setting is relied on across transactions. Transaction-local context is restored on success/refusal and independently checked after rollback/cancellation before safe pool reuse.
 
 ## Test Scenarios
 
@@ -67,4 +67,4 @@ Unprepared reads cost 0.01 to 0.05 ms more on the adopted layout, so preparing i
 
 ## Out of Scope
 
-None.
+Moving a live adopted transaction or held snapshot between backend connections. Installation and layout upgrades retain their separately qualified dedicated administrative transaction requirements; a pooled ordinary-operation pass does not qualify those deployment steps.
