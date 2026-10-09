@@ -19,7 +19,7 @@ ddx:
 
 The owner has resolved the six product choices: bounded Truss-controlled work with separately classified arbitrary native resource guarantees; provisional transaction-scoped precommit IDs and committed-ID nonreuse; complete durable request receipts; exact numeric carriers with lossless JavaScript number/bigint convenience; reconstructable history with configurable short/zero local retention; and separate immutable acceptance reports. Embedded execution uses live transaction scopes; network mutation execution receives complete atomic batches and acknowledges confirmed commit. ADR-005/006/007 now record accepted product direction. Older pending-choice passages below are historical where superseded by this handoff.
 
-Remaining work is exact coherent source/native/driver/codec/security/corpus profile composition, not another vote on those product guarantees. Review current UMF decimalToken convenience work when it lands, preserving existing core meanings and qualified support limits. Weft still owns compiler implementation; source packets remain unadopted until exact mapping/interface review. Native routines, complete installer/conversion and independent test execution remain required before support claims.
+Remaining work is exact coherent source/native/driver/codec/security/corpus profile composition, not another vote on those product guarantees. UMF numeric convenience has landed in committed remote e3555b9a; consume the selected owner APIs with the wrapper/account handoff, preserving existing core meanings and qualified support limits. Weft still owns compiler implementation; source packets remain unadopted until exact mapping/interface review. Native routines, complete installer/conversion and independent test execution remain required before support claims.
 
 
 Use [current design closure](current-design-closure.md) for the consolidated eleven-area status, pending choices and implementation-ready boundaries. Chronological evidence below retains its original version scope.
@@ -28,9 +28,30 @@ Use [current design closure](current-design-closure.md) for the consolidated ele
 
 The [closure summary](current-design-closure.md) now reflects private native layout 0.15 and 236 component checks, the composed report v0.3 plus original input/document correspondence procedure, confirmed consumer discovery PR #6 and the merged qualified Weft compiler. Product choices above remain selected. Compiler source is unchanged at latest reviewed owner HEAD; no rebuild or duplicate lowering work is needed. The remaining choices are concrete Truss profile/codec/resource/driver/archive/security composition and affected native-null projection interpretation; ordinary installed authority, full acceptance/finalization and end-to-end consumer evidence remain implementation obligations. A component pass or authored procedure does not close them.
 
+## Current design versus implementation boundary
+
+The current reference caller routes and native callable-closure construction
+algorithm are authored in the protected access composition. The 46-store and
+sixteen-helper inventories are inputs to actual native body/dependency/rights
+reconciliation, not missing caller policy decisions. The UMF schema browser
+is implemented locally with real Chromium evidence. Numeric conversion now
+has an available owner producer; signed-zero view support and precharged
+resource/error integration remain explicitly constrained. Complete acceptance
+input capacity/custody has an independently checked fixture and RPDOC-06a–d
+planned controls. These advances close their respective source/interface
+questions without closing installation or the full eleven-area scope.
+
+Remaining design selections must name a concrete missing profile or meaning:
+original complete input/decoder/resource custody; native per-family codec and
+source correspondence; exact supported driver/deployment composition; selected
+archive/recovery/retention realization; or Weft's affected native-null mapping.
+Existing caller interfaces, product choices and owner-provided numeric APIs
+are not reopened because native tests have not run. Record actual body/OID,
+installed privilege and execution/fault receipts under implementation exits.
+
 ## Immediate priority: one complete physical profile for Weft
 
-The owner prioritized the on-disk layout on 2026-10-07. [CONTRACT-012](../02-design/contracts/CONTRACT-012-weft-storage-handoff.md) selects the 0.12 history review over the preserved 0.11 compiler foundation: 46 tables/442 columns, with only the original journal allocator settings and review identity/marker changed. The 0.11 source packet remains separately pinned and does not register 0.12. Earlier 22-table and 0.10 references remain historical checkpoints. Finish complete installation bodies, security/dependency composition, initialization/conversion and native inventory parity; declaration/source export completeness alone cannot close them. Weft has accepted its B-005 candidate compiler slice, so Truss-specific layout/codec/authority/execution adoption is the current compiler integration task, not repeated upstream compiler acceptance. The [current handoff](implementation-plan.md#current-execution-handoff-2026-10-08) sequences these outputs.
+The owner prioritized the on-disk layout on 2026-10-07. [CONTRACT-012](../02-design/contracts/CONTRACT-012-weft-storage-handoff.md) now distinguishes current private 0.15 source (46 tables/443 columns) from historical 0.12/0.11 packets. The current 0.3 structural projection and Model-page UMF browser cover the current layout; native interpretation, complete installation and mapping adoption remain separate. The 0.11 source packet remains separately pinned and does not register 0.12. Earlier 22-table and 0.10 references remain historical checkpoints. Finish complete installation bodies, security/dependency composition, initialization/conversion and native inventory parity; declaration/source export completeness alone cannot close them. Weft has merged the qualified compiler registration consumed at 27445317; Truss-specific installed layout/codec/authority/execution adoption is the current integration task, not repeated upstream compiler acceptance. The [current handoff](implementation-plan.md#current-execution-handoff-2026-10-08) sequences these outputs.
 
 ## Current owner direction: UMF is sufficient
 
@@ -54,9 +75,9 @@ All 45 story pairs and 167 structural allocations exist. This queue groups unres
 | 10 / policy | CONTRACT-005 | Hidden UPDATE outcome is reconciled; indirect deleted-edge journal/tombstone/source visibility, non-superuser definer acting role and catalog-report disclosure. SELECT-only observer/policy/helper and optional-admission cross-connection candidates are authored; the existing current-authority coordinator now has an explicit participant wait matrix and original-context drain prerequisites for conflicting DDL; a concrete raw PostgreSQL 17 role/membership observation and finite resource proposal now preserve separate grantor/admin/inherit/set facts. The proposed protected row-home privilege matrix now separates public read, canonical writer, touch observer, finalizer, commit guard and retention authority and rejects incompatible direct-DML profiles. The feed authority matrix separately covers registration, finalization, validation, consumers, retention and installation, with FP01–FP08 planned bypass and permitted-action controls. Namespace/routine/relation/column/sequence/type/domain/language grant and effective inquiry candidates, tagged RLS principals and command-compatible carriers are now authored under IP01–IP07. Exact original writer capture, complete native producers/decoders/canonical comparisons, actual effective role paths, full dependency/provenance closure and administrative/native profiles remain. | B-013 |
 | 11 / qualification | TP-001, CONTRACT-004/011 | V01–V06 in the implementation plan distinguish authored receipts/runner/assessor/resource proposals from exact corpus/native deployment/producer/archive/independent implementation and performance selections. No historical spike auto-qualification. | B-001, B-003, B-015 |
 
-## Pending allocation durability interpretation
+## Historical allocation durability alternatives — superseded
 
-FR-15’s unconditional identifier nonreuse and US-007-AC4’s concurrent-create/deletion criterion need an explicit interpretation for IDs disclosed while their graph transaction remains pending. CONTRACT-009 AP03 records PostgreSQL 17’s precommit sequence-state uncertainty and two alternatives: an explicitly registered independent durable allocation service using the same sequence, or a governing clarification limiting pending-number durability. The service alternative preserves caller transaction ownership and forbids cross-connection guard inversion; it still needs exact original-attempt recovery, durability/failover/restoration and resource profiles. Owner clarification is requested; neither alternative is accepted, and ordinary sequence/source evidence cannot close this gap. This is a Truss-owned requirement/deployment decision, not a new UMF prerequisite or Weft compiler feature.
+FR-15’s unconditional identifier nonreuse and US-007-AC4’s concurrent-create/deletion criterion need an explicit interpretation for IDs disclosed while their graph transaction remains pending. CONTRACT-009 AP03 records PostgreSQL 17’s precommit sequence-state uncertainty and two alternatives: an explicitly registered independent durable allocation service using the same sequence, or a governing clarification limiting pending-number durability. The service alternative preserves caller transaction ownership and forbids cross-connection guard inversion; it still needs exact original-attempt recovery, durability/failover/restoration and resource profiles. The owner subsequently selected transaction-scoped provisional precommit IDs and committed-ID nonreuse, recorded in the selected handoff above. No clarification remains requested for that product choice. Ordinary sequence/source evidence still cannot qualify actual crash/restore behavior. This is a Truss-owned requirement/deployment decision, not a new UMF prerequisite or Weft compiler feature.
 
 ## Row-home handoff audit
 
