@@ -27,7 +27,7 @@
     "catalog-original-context": "628db25db14d5bd7c979f16b2ddefcff3e41781747e75485fc1253515b55fd0d"
   },
   "coreAssertionIdentityProducerSha256": "5d0f2d7fb097f3853473c845f81439d7b74791b477b51e47a92add23f9fa6fab",
-  "originalExecutionBasisProducerSha256": "ed757b84f2cf424965567c394c1f57457ae3f8b5047bc0b194896442ae07f6fd",
+  "originalExecutionBasisProducerSha256": "34b13ad641ceb63dc13548f8af407e6951a231fa08df6167c3e1bb0857d62e4c",
   "reportCorrespondenceProducerSha256": "2554a8e6d8df8f7e26bd4df3a207af2c06c0c6f098485d53e847975f2c5bec53",
   "reportPreparationProducerSha256": "421dc89fe416e098225fe6265a63eb523f7d1fdf650178f8759678144d6e0dbf",
   "assertionProfiles": {
@@ -104,6 +104,10 @@
     "borrowed transaction identity cannot expose original native actor context",
     "host actor basis preserves exact native context bytes",
     "host actor basis carries actual role without inventing full originalExecution",
+    "original native actor basis retains exact collector issuance and context",
+    "copied actor basis, connection or report preparation cannot borrow native issuance",
+    "copied actor basis, connection or report preparation cannot borrow native issuance",
+    "copied actor basis, connection or report preparation cannot borrow native issuance",
     "original acting/login role OIDs match actual native identities",
     "nine report fields correspond to original owner and actual native observations without accepted authority",
     "schema-valid forged native count refuses report correspondence",

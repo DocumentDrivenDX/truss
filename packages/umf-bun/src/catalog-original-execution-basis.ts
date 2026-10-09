@@ -7,6 +7,13 @@ import type {createCatalogInputPreparation} from './catalog-input';
 import type {CatalogStageConnection} from './catalog-new-stage';
 type Prepared=ReturnType<Awaited<ReturnType<typeof createCatalogInputPreparation>>['prepare']>;
 type Basis=Awaited<ReturnType<typeof collectCatalogReportPreparation>>;
+const issuedNativeContexts=new WeakMap<object,{connection:CatalogStageConnection;prepared:Prepared;basis:Basis}>();
+/** Original collector issuance only; does not confer installed-context authority. */
+export function requireOriginalCatalogNativeContext(value:object,connection:CatalogStageConnection,prepared:Prepared,basis:Basis){
+ const original=issuedNativeContexts.get(value);
+ if(!original||original.connection!==connection||original.prepared!==prepared||original.basis!==basis)throw Error('Original native context collector custody required');
+ requireOriginalCatalogReportPreparation(basis,prepared);
+}
 export async function collectCatalogOriginalExecutionBasis(connection:CatalogStageConnection,prepared:Prepared,basis:Basis){
  requireOriginalCatalogReportPreparation(basis,prepared);const cut=basis.documentBasis.nativeObservation;
  const rows=await connection.unsafe('SELECT * FROM truss.runtime_collect_catalog_original_context($1::text,$2::text,$3::text)',[cut.writerXid,cut.operationOrdinal,cut.effectGeneration]);
@@ -22,7 +29,8 @@ export async function collectCatalogOriginalExecutionBasis(connection:CatalogSta
  if(!row.database_role||!row.login_role||!row.database_name||!/^[1-9][0-9]*$/.test(row.backend_pid))throw Error('Original native actor facts required');
  if([row.actor_role_oid,row.login_role_oid].some(value=>!/^[1-9][0-9]{0,9}$/.test(value)||BigInt(value)>4294967295n))throw Error('Original native role identities required');
  await recheckCatalogReportDocumentBasis(connection,basis.documentBasis);
- return Object.freeze({databaseRole:row.database_role,loginRole:row.login_role,actorRoleOid:row.actor_role_oid,loginRoleOid:row.login_role_oid,databaseName:row.database_name,backendPid:row.backend_pid,nativeObservation:cut,
+ const result=Object.freeze({databaseRole:row.database_role,loginRole:row.login_role,actorRoleOid:row.actor_role_oid,loginRoleOid:row.login_role_oid,databaseName:row.database_name,backendPid:row.backend_pid,nativeObservation:cut,
   contextEvidence:Object.freeze({identity:'truss.original-native-operation-context/'+cut.writerXid+'/'+cut.operationOrdinal,bytesBase64:bytes.toString('base64'),sha256:createHash('sha256').update(bytes).digest('hex')}),
   scope:'original_native_actor_context_basis_only' as const});
+ issuedNativeContexts.set(result,{connection,prepared,basis});return result;
 }
