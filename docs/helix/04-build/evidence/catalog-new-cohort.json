@@ -2,6 +2,7 @@
   "sourcePins": {
     "operation-admission": "a6cf8c9fca5a7d7e10bdfed243bfd17242a02928fb9fbe083987dfccd85c2bbd",
     "operation-commit-barrier": "eed4f044a241db7d70dd9cf222a3313bedd484273c18d0e7063b614ad5bab93b",
+    "catalog-generation-observer": "03ef205fbdfc307c794134cdd51324d49c44cf6a24208525ab295a8e809f3a0e",
     "catalog-document-batch": "fe6754c5d4fbf054f17f5529387eb0f1ca4531e05c28c1ab31d6902251021000",
     "catalog-lineage-producer": "1b329a8c3711834642f3fbf718837396aa292da493a0619f3e3c95cabe43667f",
     "catalog-source-integrity": "ffffc887bc4858ef47c62be1e43239665edd04f172f11a137dbc3535635d6c3e",
@@ -17,6 +18,7 @@
     "catalog-report-documents": "362b6df87be8f22387c59921af9f827248e79536183e342b7894a3c4e36f4207",
     "catalog-new-inventory": "872d921797dee82b851edcba2fc275f00a6f69a5ba3a2945cb8827e0bc43f687"
   },
+  "reportDocumentProducerSha256": "dd602afaf8df8099fc49df280accac2f2afd67f798d233cb66f6f41c1907481d",
   "defaultHomeProducerSha256": "f7bea9fd414f75e43a2d26a940a32083976a7ea13b91027a5b019f5e141734d5",
   "stageProducerSha256": "9a6793f582e3591ea48c115736ead13f651aef8044ff4033c27255678b4e4c30",
   "originalInputSha256": "b8c64857b2cd73ef99471ebc8310e76f27102c62d30854d80bc40441dcbe609c",
@@ -28,19 +30,26 @@
   },
   "checks": [
     "actual PostgreSQL17.9",
+    "eleven ALWAYS catalog generation observers installed",
     "incomplete property home inventory refuses before persistence",
     "unsupported original unnamed Field refuses native property staging",
     "failed cohort savepoint removes earlier revision and Record effects",
     "default homes derive from original absent-binding input, never guessed native IDs",
     "entire original declared catalog stages using actual native IDs",
     "native sorted allocator assigns Record identities",
+    "every surviving new catalog/archive/lineage/endpoint row contributes original operation generation",
+    "catalog event invalidates previously marked readiness",
+    "savepoint rollback removes non-surviving catalog generation contribution",
     "distinct original owners retain their allocated property identities",
     "every original key resolves actual owning property ID",
     "relationship endpoints resolve actual Record allocations",
     "verbatim original source whitespace survives complete staging",
     "existing identity cannot pass genuinely-new cohort staging",
     "failed repeated cohort preserves original staged revision only",
+    "ALWAYS catalog observer survives replica dispatch",
+    "catalog truncate cannot bypass row generation and complete effect inventory",
     "report document basis matches actual original input and native source archive",
+    "report document basis captures actual original native operation and generation",
     "original owner observation and reversible transition preserved inside exact evidence artifact",
     "native collector returns actual complete new-family identity inventory",
     "collected endpoint is original relationship/source/target tuple",
@@ -59,6 +68,5 @@
     "unfinished complete acceptance cannot commit",
     "failed commit removes all provisional catalog effects"
   ],
-  "scope": "Actual original complete declared new catalog staging and atomic refusal only. Root profile/authority, retained lifecycle, acceptance report/head/finalizer and public entrypoint are unqualified.",
-  "reportDocumentProducerSha256": "06f014f27eb92bd25b2f52e7b49fa11eeff9eaafbf6a46c5acb0b9f8a8d759e5"
+  "scope": "Actual original complete declared new catalog staging and atomic refusal only. Root profile/authority, retained lifecycle, acceptance report/head/finalizer and public entrypoint are unqualified."
 }
