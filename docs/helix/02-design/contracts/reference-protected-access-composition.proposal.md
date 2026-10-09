@@ -115,3 +115,44 @@ These schedules remain not_run. Exact body-specific rights and transitive native
 ## Administrative closure acceptance
 
 PAC-06 extends the existing planned closure controls: independently invoke every selected administrative method in the canonical route/inventory as its correct original administrator, then as an ordinary application actor, a stale generation and a foreign issuer. Permit only its declared authority/effect boundary. Include rolled-back pending job/registration tokens, unknown bootstrap/migration/downstream acknowledgment and cleanup faults; inspect source and downstream effects independently. All schedules remain not_run. Native method-to-body identity, grants/dependencies and production evidence remain implementation outputs.
+
+## Native callable closure construction and exit rule
+
+Use the canonical public route map and administrative inventory as the root
+set. Classify each root as pure/inert, ordinary disclosure, protected
+transaction participant, owned installation/administration, or recovery-only
+observation. Pure/inert roots have no native call edge; a constructor cannot
+acquire authority through a hidden readiness query. Record actual body
+selectors and full argument/result signatures only when those bodies exist.
+A logical capability name is not a callable SQL identity.
+
+For each native root, expand a work queue of actual reached statements and
+callables until no new dependency remains. Each edge retains the original
+source/body identity, invoker/elevated actor transition, exact command and
+store/column/sequence access, native definition-resolution dependency, trigger
+firing/timing, disclosure/error/callback destination, resource account and
+transaction settlement owner. Include indirect trigger/default/generated
+expression/policy/operator/cast/wrapper calls, deferred commit paths and
+restore/replication firing differences. Catalog dependency introspection is
+one input, not proof that dynamic statements or trusted wrapper behavior
+were enumerated. Dynamic identifier/statement selection must be confined to
+a finite admitted original inventory; unresolved selection marks the affected
+capability unavailable rather than assuming the static dependency graph is
+complete. Recursion cycles require explicit admitted termination/work bounds.
+
+Compare the intended closure with independently collected installed identities
+and effective rights in both directions. Missing dependencies refuse; extra
+reachable routes or grants refuse even when all intended functions exist.
+Exercise each ordinary invocation route under the actual actor/inheritance/SET
+ROLE context, including direct helper calls, trigger bypass and wrapper
+substitution. Check original source/profile and installation generation again
+before publication. A changed body or grant invalidates the affected closure
+without transferring settlement or disclosure ownership to its helper.
+
+The design exit is this authored construction algorithm plus each canonical
+root's selected responsibility and caller boundary. The implementation exit
+is the complete actual root/edge inventory, independent native reconciliation
+and PAC/STP controls; sixteen named private routines or a source AST pass
+cannot satisfy it. New root capability semantics require design reconciliation;
+new body/OID/dependency identities implementing an existing route are
+implementation outputs, not an unmade product decision.
