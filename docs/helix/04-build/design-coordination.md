@@ -55,6 +55,39 @@ selected, Truss owns the fixed physical ownership/migration/grant composition
 and Weft consumes the exact admitted model identities. Neither source capture
 nor the current new-cohort probe establishes installed collision-safe ownership.
 
+## Security normalization resource handoff — 2026-10-09
+
+Owner revision 23 is adding aggregate normalized-storage bounds for short exponent
+tokens that can expand into large exact integers. The read-only
+[source review](evidence/design-audit/security-normalization-resource-source-review.json)
+pins the working literal, policy-term and source code; it observes a single-value
+expansion bound, not a qualified complete aggregate account. Truss did not rerun
+owner tests or adopt the unfinished interpretation/compiler tuple.
+
+The admitted compiler/security composition must account original source,
+expanded digits/limbs, normalized facet/range/allowed-value/default/example
+storage, temporary copies and repeated checking work separately. Input bytes,
+AST node count, the driver frame ceiling or one literal's maximum are not a
+complete aggregate bound. Consume the owner's original finite normalization
+procedure and account/custody correspondence before enabling dependent execution;
+Truss owns its surrounding transport/operation lifetime, not a second normalizer.
+
+Independent planned integration controls include many short exponent literals
+within the raw-byte limit that exceed the complete normalized-storage/work bound,
+a single over-bound expansion refused before its large allocation, and failure
+between normalization and protected dispatch/publication. Preserve the original
+resource refusal and source bytes; never fall back to a host float, silently
+truncate precision or substitute false for an unavailable policy result.
+
+Also compare an integer value 100 with a decimal value 1.00 under an independently
+selected scale-2 decimal domain: a coefficient representation can contain 100
+for both, while the domains and values remain distinct. Keep qualified Field,
+original wrapper/token, scale/domain and source custody through transport and
+comparison. The owner interpretation decides normalization and admissible equality;
+coefficient equality alone cannot authorize a key, predicate or disclosure.
+These controls remain planned until the complete owner tuple and original Truss
+mapping/authority/account/publication procedures are qualified.
+
 ## Security witness policy handoff — 2026-10-09
 
 Owner revision 22 is implementing draft qualified-association term checking.
