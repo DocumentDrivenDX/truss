@@ -318,3 +318,36 @@ invariants and complete public-wire validation. The shared corpus version and
 its required-case inventory remain separately registered release artifacts;
 copying the consumer's covers labels cannot establish completeness or C7
 independent committed database interchange.
+
+### Consumer runner pass versus required capability qualification
+
+The [runner source review](evidence/design-audit/consumer-runner-qualification-source-review.json)
+records seven read steps with conditional `requires` expectations. The original
+runner replaces their expected successful result with `Unsupported` when the
+backend descriptor omits the required read, column, relationship or count
+capability. A consumer report can therefore pass without exercising those
+successful reads. Its `only` filter can also skip applicable cases without an
+independent required-case completeness check. Preserve this original host
+behavior, but do not promote `Report.passed` into a Truss qualification verdict.
+
+C2 must register the independently reviewed required capability/case matrix
+before consulting the candidate backend descriptor. For the current inputs the
+conditional reads require UseCase `code`/`name`, inverse `addressedBy`, grouped
+count on `name`, and Solution `code` with forward `addresses`. This list covers
+the seven conditional steps only; whole-entity, paging, access and mutation
+requirements remain in the complete case inventory. C4 records both the original
+consumer verdict and the separate Truss required-capability verdict. Missing
+required support, skipped required cases, or unavailable native observations
+cannot produce release qualification, even if the host report is green.
+
+The independent assessment controls pair an admitted complete descriptor with
+each individually omitted required capability, a descriptor claiming support
+whose execution returns Unsupported, an `only`-filtered run, an unknown/newer
+corpus, and both authority/replica required-case sets. Descriptor mutation must
+not mutate the frozen expected matrix. Each selected case receives a fresh
+original fixture/harness as the consumer runner specifies; verify database,
+session, recovery and feed isolation rather than only allocating a new Python
+object. The inspected original corpus contains only authority/replica tags;
+future host-specific rows retain a separate assessment rather than satisfying
+required shared cases. These are implementation/test obligations, not executed
+controls or changes to the consumer runner.

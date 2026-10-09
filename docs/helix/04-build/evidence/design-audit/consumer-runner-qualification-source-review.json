@@ -1,0 +1,117 @@
+{
+  "scope": "original runner and capability-dependent expectations source review; no adapter execution or qualification",
+  "sources": [
+    {
+      "path": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/corpus.json",
+      "sha256": "8997812ea8f73d5e7ebe873809f2e812e3815206282f6d807b5ade1a21e93a09"
+    },
+    {
+      "path": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/__init__.py",
+      "sha256": "4ac604d858870c93627d47f5f62b3e92eb5f94e9d19e7997f7f76a6486b63494"
+    }
+  ],
+  "conditionalReadExpectations": [
+    {
+      "caseId": "read.columns-and-filters",
+      "stepIndex": 0,
+      "requires": {
+        "type": "catalog.UseCase",
+        "columns": [
+          "code",
+          "name"
+        ]
+      }
+    },
+    {
+      "caseId": "read.relationship-filter-both-directions",
+      "stepIndex": 0,
+      "requires": {
+        "type": "catalog.Solution",
+        "columns": [
+          "code"
+        ],
+        "relationships": [
+          "addresses"
+        ]
+      }
+    },
+    {
+      "caseId": "read.relationship-filter-both-directions",
+      "stepIndex": 1,
+      "requires": {
+        "type": "catalog.UseCase",
+        "columns": [
+          "code"
+        ],
+        "relationships": [
+          "addressedBy"
+        ]
+      }
+    },
+    {
+      "caseId": "read.relationship-filter-both-directions",
+      "stepIndex": 2,
+      "requires": {
+        "type": "catalog.UseCase",
+        "columns": [
+          "code"
+        ],
+        "relationships": [
+          "addressedBy"
+        ]
+      }
+    },
+    {
+      "caseId": "read.repeated-relationship-predicates-mean-both",
+      "stepIndex": 2,
+      "requires": {
+        "type": "catalog.Solution",
+        "columns": [
+          "code"
+        ],
+        "relationships": [
+          "addresses"
+        ]
+      }
+    },
+    {
+      "caseId": "read.repeated-relationship-predicates-mean-both",
+      "stepIndex": 3,
+      "requires": {
+        "type": "catalog.Solution",
+        "columns": [
+          "code"
+        ],
+        "relationships": [
+          "addresses"
+        ]
+      }
+    },
+    {
+      "caseId": "read.count-group-by",
+      "stepIndex": 2,
+      "requires": {
+        "type": "catalog.UseCase",
+        "columns": [
+          "name"
+        ],
+        "count": true
+      }
+    }
+  ],
+  "caseSelection": {
+    "tags": [
+      "authority",
+      "replica"
+    ],
+    "onlyFilterCanSkipApplicableCases": true,
+    "freshHarnessPerSelectedCase": true
+  },
+  "observations": [
+    "needs_missing_capability consults the backend descriptor and changes a read expectation to Unsupported if required support is absent.",
+    "Report.passed checks newer_corpus, failed and nonempty results; it does not independently reject only-filter skips.",
+    "Result.ok also accepts host_specific; the inspected original corpus currently has no host-specific tags."
+  ],
+  "qualificationRequirement": "Register independent required cases and required capabilities before running; compare full execution and descriptor evidence against that original matrix. Missing required capability or skipped required case is unavailable qualification even when the consumer report passes.",
+  "nativeImplementationQualified": false
+}
