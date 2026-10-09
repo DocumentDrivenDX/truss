@@ -238,3 +238,12 @@ occur in both, but an expected input observation cannot resolve through a
 setup-only label. These checks still assume prior closed shape admission;
 matching supplied bytes does not establish digest truth, registered custody or
 native starting-state completeness.
+
+The descriptor reconciliation now compares the entry's actual operationProfile
+and observationProfile fields and the expectation artifact's grammarProfile,
+bringing link controls to twenty. Changed observation-procedure and expected
+grammar pins refuse. Operation and observation negative controls replace only
+the selected pin object, avoiding shared fixture-object mutation that could
+otherwise fail an unrelated grammar check first. This verifies those explicit
+links; actual procedure custody and native observation independence remain
+required.

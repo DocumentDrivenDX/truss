@@ -6,13 +6,14 @@ const validate=ajv.compile(await Bun.file(root+'conformance-operation-registry-v
 const pin={identity:'shape-only',version:'0.1',sha256:'a'.repeat(64)};
 const artifact={identity:'shape-only',bytesBase64:'',sha256:pin.sha256};
 const observer={profile:pin,procedure:artifact,independenceEvidence:artifact};
-const entry={operation:'direct.lookup',operationProfile:pin,target:{kind:'registered_method',declaration:artifact,method:'lookup',bindingProfile:pin},callProcedure:artifact,callProfile:pin,argumentSchema:{artifact,pointer:''},resultSchema:{artifact,pointer:'/$defs/outcome'},scopeKinds:['adopted'],semanticContractInventory:artifact,observers:{result:observer,state:observer,journal:observer,report:observer},resourceProfile:pin};
+const entry={operation:'direct.lookup',operationProfile:pin,observationProfile:pin,target:{kind:'registered_method',declaration:artifact,method:'lookup',bindingProfile:pin},callProcedure:artifact,callProfile:pin,argumentSchema:{artifact,pointer:''},resultSchema:{artifact,pointer:'/$defs/outcome'},scopeKinds:['adopted'],semanticContractInventory:artifact,observers:{result:observer,state:observer,journal:observer,report:observer},resourceProfile:pin};
 const base={interfaceVersion:'truss-conformance-operation-registry/0.1.0',registryProfile:pin,entries:[entry]};
 let count=0;
 function witness(name:string,wanted:boolean,change:(x:any)=>void){const x=structuredClone(base);change(x);if(Boolean(validate(x))!==wanted)throw Error(name+': '+JSON.stringify(validate.errors));count++;}
 witness('complete descriptor',true,()=>{});
 witness('harness procedure descriptor',true,x=>x.entries[0].target={kind:'registered_harness_procedure',procedure:artifact,procedureProfile:pin});
 witness('missing declaration',false,x=>delete x.entries[0].target.declaration);
+witness('missing aggregate observation profile',false,x=>delete x.entries[0].observationProfile);
 witness('missing required observer',false,x=>delete x.entries[0].observers.journal);
 witness('missing independence evidence',false,x=>delete x.entries[0].observers.state.independenceEvidence);
 witness('no executable import',false,x=>x.entries[0].target.module='writer.ts');

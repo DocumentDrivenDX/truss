@@ -74,6 +74,10 @@ observer registrations with independence evidence, and resource profile.
 A performance observer is optional in shape but mandatory when the selected
 case/profile requires performance. An explicit no-output report or journal
 still requires its registered complete observer; omission is not emptiness.
+Each entry also requires observationProfile for the registered aggregate
+observation procedure selected by the input step; its individual surface
+observers retain their separate pins. A step cannot switch that procedure
+while preserving only the operation pin.
 
 Schema pointers resolve only against the supplied exact original schema
 artifact after bounded parse/digest/profile admission. They select the intended
@@ -95,7 +99,7 @@ self-hash. Preserve this acyclic source custody when constructing the complete
 manifest and aliases. The new descriptor is not itself a populated registry.
 
 Run `check-conformance-operation-registry.ts` in the design audit directory
-with the installed Ajv Draft 2020-12 module path: fourteen controls cover
+with the installed Ajv Draft 2020-12 module path: fifteen controls cover
 closed method/harness descriptors, required observer evidence, schema pointers,
 scope kinds and prohibited executable/reverse-reference members. Duplicates,
 unknown methods and insufficient independence deliberately remain shape-valid

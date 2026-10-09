@@ -248,6 +248,9 @@
           },
           "resourceProfile": {
             "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+          },
+          "observationProfile": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
           }
         },
         "required": [
@@ -261,7 +264,8 @@
           "scopeKinds",
           "semanticContractInventory",
           "observers",
-          "resourceProfile"
+          "resourceProfile",
+          "observationProfile"
         ],
         "additionalProperties": false
       }
