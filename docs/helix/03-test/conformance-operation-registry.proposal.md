@@ -42,3 +42,28 @@ For every entry, the executable registry must pin exact original declaration and
 Host transaction controls use trusted harness procedures, not Truss capability methods. Installation/status/explicit migrations, live provenance and administrative retention/tooling require their own exact existing declarations/procedures to be enumerated before claiming the full registry complete. Do not invent convenience methods to fill that inventory. Informative SQL is never dispatched as a substitute operation.
 
 Independent controls must reject v0.1 feed masquerading as v0.2, request-free group expectations containing replay, import progress discarded inside a generic Outcome wrapper, release requiring an ended transaction, and a pending result labeled committed from savepoint release. These are required red integration controls, not passing runtime evidence.
+
+## Administrative and executor inventory
+
+| Family | Existing operation | Declaration | Required boundary |
+| --- | --- | --- | --- |
+| fresh installation | installFresh | truss-bootstrap-installation-v0.1, BootstrapInstallationTooling | Dedicated administrative transaction; qualified complete candidate, nonempty refusal and original confirmed commit |
+| installation recovery | reconcileInstallation | Same | Read-only original attempt; no reinstall from missing observation |
+| layout upgrade | apply | truss-layout-migration-v0.1.proposal, LayoutMigrationTooling | Explicit complete registered route in dedicated administrative transaction; preserve migrated/already_applied/committed_unverified versus unknown/refused/rolled_back outcomes |
+| upgrade recovery | reconcile | Same | Read-only original recovery reference; no resubmission or inferred absence |
+| retention | dropInTransaction | truss-retention-tooling-v0.1, RetentionTooling | Complete original eligibility/dependency cohort under supplied transaction; pending until confirmation |
+| receipt protection | extendInTransaction; observeProtection | truss-receipt-protection-tooling-v0.1, ReceiptProtectionTooling | Pending monotonic protection change versus independent original committed observation |
+| receipt expiry | assessPurge; purgePayloadInTransaction; observeExpiry | truss-receipt-expiry-tooling-v0.1, ReceiptExpiryTooling | Eligibility differs from removal; expired identity remains protected against reexecution |
+| physical jobs | admitIndexInTransaction; observeIndexAdmission; runIndexAttempt; observeIndex | truss-physical-job-tooling-v0.1, PhysicalJobTooling | Pending admission, confirmed admission, explicit original execution and observation remain separate |
+| statistics jobs | admitStatisticsInTransaction; observeStatisticsAdmission; runStatisticsAttempt; observeStatistics | Same | Acceptance commit alone cannot launch a pending job; original collection failure stays visible |
+| executor | withTransaction | truss-execution-v0.1, Executor | Explicit owned callback scope; original confirmed commit, no automatic callback replay |
+| executor | adoptTransaction | Same | Verify active original host handle/isolation/access mode without replacement or ownership transfer |
+| executor | savepoint; rollbackToSavepoint; releaseSavepoint | Same | Original operation scope; release is not commit and rollback invalidates removed captures |
+
+Executor.execute is a registered internal statement port, not a corpus escape hatch to dispatch arbitrary SQL. Native direct-SQL bypass tests use a separately host-admitted independent harness procedure and exact immutable statement fixture, with their own authority/resource/termination evidence. Host commit/rollback controls likewise remain trusted harness operations: Executor has no public commit-by-id method for adopted scopes.
+
+The existing InstallationAdmissionSnapshot is a data projection, not a callable status API. Inspection/readiness cases bind the actual ReferenceAssembly.observeReadiness procedure or exact independently registered native verifier; do not invent inspectStatus from the snapshot's name. Pure layout migration planning is separately implemented tooling, not LayoutMigrationTooling.apply and not evidence that upgrades execute.
+
+Conformance runner prepareRun/run/abandonPreparedRun/reconcileRun and assessor assess belong to the outer trusted harness lifecycle under truss-conformance-tooling-v0.1. They do not become recursive case operations unless a separately selected tooling test explicitly qualifies them. Preserve complete original run/cleanup evidence independently from implementation-under-test outcomes.
+
+This completes the named administrative/executor inventory above, not the full executable registry. Live source lookup, remaining lifecycle/configuration methods, exact machine-readable input/result registrations and typed identity paths must still be resolved. Never fill those gaps from a guessed public method name or treat this table as a passing corpus.
