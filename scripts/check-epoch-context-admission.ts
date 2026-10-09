@@ -6,10 +6,12 @@ const sql=new SQL(url,{max:1});const checks:string[]=[];
 try{
  await sql.begin(async tx=>{
   await tx.unsafe(await Bun.file('docs/helix/04-build/evidence/source-epoch-storage.owner-export.sql').text());
-  for(const component of ['source-epoch-immutability','source-epoch-lock','source-epoch-issue','operation-epoch-context-admission'])await tx.unsafe(await Bun.file('packages/postgresql/native/'+component+'.sql').text());
+  for(const component of ['source-epoch-immutability','source-epoch-lock','source-epoch-issue','operation-epoch-context-admission','catalog-epoch-context'])await tx.unsafe(await Bun.file('packages/postgresql/native/'+component+'.sql').text());
   await tx`INSERT INTO truss.installation_marker VALUES (1,'truss-bootstrap-marker/0.1.0','component-installation','component-only',decode(repeat('00',32),'hex'),'component',decode(repeat('00',32),'hex'),'owned-fixture','truss',now(),'component-clock-unqualified')`;
   const issued=await tx`SELECT truss.runtime_issue_source_epoch('component-installation',NULL,'component-incarnation',decode('0102','hex'),decode('0304','hex')) AS epoch`;
-  const epoch=issued[0].epoch;
+  const predecessor=issued[0].epoch;
+  const successor=await tx`SELECT truss.runtime_issue_source_epoch('component-installation',${predecessor},'component-incarnation',decode('0102','hex'),decode('0304','hex')) AS epoch`;
+  const epoch=successor[0].epoch;
   const origin=new TextEncoder().encode(' {"actor":"asserted", "note":"\\u0000", "decimal":"123.000"}\n');
   const hex=Array.from(origin,b=>b.toString(16).padStart(2,'0')).join('');
   const invoke=(sourceHex:string,profileHex:string)=>tx.unsafe("SELECT * FROM truss.runtime_admit_operation_with_epoch_context('catalog-acceptance',decode('01','hex'),decode('01','hex'),decode('01','hex'),decode('01','hex'),decode('01','hex'),decode('01','hex'),decode($1,'hex'),decode($2,'hex'),'component-installation',$3,'component-incarnation')",[sourceHex,profileHex,epoch]);
@@ -24,6 +26,16 @@ try{
   checks.push('One original context0.4 artifact retains exact asserted whitespace/escapes and separate native actors/profile');
   if(context.installationId!=='component-installation'||context.sourceEpoch!==epoch||context.targetIncarnation!=='component-incarnation'||context.sourceEpochProfileHex!=='0102'||context.sourceEpochEvidenceHex!=='0304')throw Error('Same-operation native epoch correspondence');
   checks.push('One immutable original context binds actual native-issued epoch and registry profile/evidence bytes');
+  const collected=await tx.unsafe('SELECT * FROM truss.runtime_collect_catalog_epoch_context($1,$2,$3)',[rows[0].writer_xid,rows[0].ordinal,'0']);
+  if(collected.length!==1||collected[0].context_hex!==rows[0].context_hex||collected[0].database_role!==actual[0].actor)throw Error('Native epoch collector correspondence');
+  checks.push('Native epoch collector returns exact original context under current epoch/actor/cut');
+  await tx.savepoint(async sp=>{
+   await sp`UPDATE truss.source_epoch_current SET source_epoch=${predecessor}`;
+   await refuse('Altered current pointer invalidates captured epoch collector','55000',()=>tx.unsafe('SELECT * FROM truss.runtime_collect_catalog_epoch_context($1,$2,$3)',[rows[0].writer_xid,rows[0].ordinal,'0']));
+   await sp`UPDATE truss.source_epoch_current SET source_epoch=${epoch}`;
+  });
+  await tx.unsafe('SELECT * FROM truss.runtime_collect_catalog_epoch_context($1,$2,$3)',[rows[0].writer_xid,rows[0].ordinal,'0']);checks.push('Restored original pointer restores native epoch correspondence');
+  for(const [writer,ordinal,generation] of [['1',rows[0].ordinal,'0'],[rows[0].writer_xid,'1','0'],[rows[0].writer_xid,rows[0].ordinal,'1']])await refuse('Unrelated epoch-context cut refuses','55000',()=>tx.unsafe('SELECT * FROM truss.runtime_collect_catalog_epoch_context($1,$2,$3)',[writer,ordinal,generation]));
   const decoded=decodeCapturedOriginContext(new Uint8Array(Buffer.from(rows[0].context_hex,'hex')),'0.4');
   if(!decoded.epoch||decoded.epoch.sourceEpoch!==epoch||decoded.epoch.profileHex!=='0102'||decoded.epoch.evidenceHex!=='0304'||decoded.origin.databaseRole!==actual[0].actor||decoded.assertedUtf8Hex!==hex)throw Error('Original context4 host decode mismatch');
   checks.push('Strict host decoder preserves original epoch evidence and asserted/native actor correspondence');
@@ -40,6 +52,6 @@ try{
   throw Error('ROLLBACK_ASSERTED_CAPTURE');
  }).catch(e=>{if(e.message!=='ROLLBACK_ASSERTED_CAPTURE')throw e});
  const after=await sql`SELECT count(*)::text AS n FROM truss.row_home_operation`;if(after[0].n!=='0')throw Error('Rollback leaked capture');checks.push('Outer rollback removes captured operation');
- const sources:Record<string,string>={};for(const path of ['scripts/check-asserted-origin-admission.ts','packages/postgresql/native/operation-epoch-context-admission.sql','packages/postgresql/native/operation-admission.sql','docs/helix/04-build/evidence/source-epoch-storage.owner-export.sql','packages/postgresql/native/source-epoch-immutability.sql','packages/postgresql/native/source-epoch-lock.sql','packages/postgresql/native/source-epoch-issue.sql','packages/postgresql/src/captured-origin-context.ts','packages/postgresql/src/asserted-origin-map.ts','packages/postgresql/native/catalog-input-custody.sql'])sources[path]=new Bun.CryptoHasher('sha256').update(await Bun.file(path).arrayBuffer()).digest('hex');
+ const sources:Record<string,string>={};for(const path of ['scripts/check-asserted-origin-admission.ts','packages/postgresql/native/operation-epoch-context-admission.sql','packages/postgresql/native/operation-admission.sql','docs/helix/04-build/evidence/source-epoch-storage.owner-export.sql','packages/postgresql/native/catalog-epoch-context.sql','packages/postgresql/native/catalog-observation-recheck.sql','packages/postgresql/native/source-epoch-immutability.sql','packages/postgresql/native/source-epoch-lock.sql','packages/postgresql/native/source-epoch-issue.sql','packages/postgresql/src/captured-origin-context.ts','packages/postgresql/src/asserted-origin-map.ts','packages/postgresql/native/catalog-input-custody.sql'])sources[path]=new Bun.CryptoHasher('sha256').update(await Bun.file(path).arrayBuffer()).digest('hex');
  await Bun.write('docs/helix/04-build/evidence/design-audit/epoch-context-admission.json',JSON.stringify({sources,checks,scope:'Actual context0.4 same-operation native epoch/actor/asserted byte capture and immutable custody on PostgreSQL17.9; profile bytes are explicit component inputs, not installed authority or complete asserted-origin semantic admission'},null,2)+'\n');console.log(JSON.stringify({checks:checks.length}));
 }finally{await sql.close();}
