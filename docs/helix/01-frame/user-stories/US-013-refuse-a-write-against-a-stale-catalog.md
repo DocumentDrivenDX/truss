@@ -29,14 +29,14 @@ ddx:
 
 ## Context
 
-SPIKE-003 found that a new-row-per-revision head and an advisory-only lock both let a stale write through in some isolation levels.
+SPIKE-003 found that a new-row-per-revision head and an advisory-only lock both let a stale write through in some isolation levels. The selected protocol uses one mutable catalog head with shared writer/exclusive acceptance locking. “Accepted mid-write” in AC1/AC2 means acceptance commits after an earlier unprotected pin/snapshot observation but before the writer successfully acquires its locking head admission. Once admitted, the writer retains its share lock through actual outer transaction termination; acceptance waits rather than replacing its head. An adopted transaction is not silently ended to allow acceptance through.
 
 ## Walkthrough
 
-1. A writer reads the head and begins a write.
+1. A writer retains an expected head pin or establishes an older repeatable-read snapshot before acquiring the catalog share lock.
 2. Another session accepts a revision.
-3. The writer's transaction reaches its next step.
-4. System fails the write as catalog changed or retry, and the writer retries against the new revision.
+3. The writer attempts its original locking head admission against the now-changed row.
+4. System refuses as catalog changed or the qualified serialization/retry outcome, with original containment. The host may explicitly retry under the required scope; Truss does not automatically rerun the host transaction.
 
 ## Acceptance Criteria
 

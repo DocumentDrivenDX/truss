@@ -65,7 +65,7 @@ No schema change. Failed acceptance leaves head/catalog/data/journal unchanged. 
 
 ## Risks and Gates
 
-US-013's walkthrough must be interpreted as pre-lock observation followed by acceptance; a mid-held-lock head replacement is impossible under the contract. Queue guarantee, timing/statistics and cross-host fairness remain unresolved. Exact stale/error precedence inherits US-012. No language-neutral correctness claim follows from one adapter's lock test.
+US-013's walkthrough explicitly places acceptance between pre-lock observation and locking admission; the held-share-lock control separately proves acceptance waits through outer termination. A mid-held-lock head replacement is impossible under the contract. Queue guarantee, timing/statistics and cross-host fairness remain unresolved. Exact stale/error precedence inherits US-012. No language-neutral correctness claim follows from one adapter's lock test.
 
 
 ## Proposed optional-queue timing observation protocol
