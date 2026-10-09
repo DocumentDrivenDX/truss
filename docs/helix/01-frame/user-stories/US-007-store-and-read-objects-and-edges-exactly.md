@@ -34,12 +34,12 @@ Safe number convenience is permitted only at a lossless public boundary. Unsafe 
 
 ## Context
 
-Typical traps are integers beyond 2^53, decimals with trailing zeros, timestamp offsets and explicit null.
+Typical traps are integers beyond 2^53, decimals with trailing zeros, timestamp offsets and explicit null. Exact authored numeric spelling enters through the selected exact-token wire, not an ordinary JSON number that may already be rounded. Safe JavaScript number convenience requires lossless admission against the original field domain and does not invent original authored spelling. Logical readback preserves the admitted token and presence independently of native typed comparison/key witnesses.
 
 ## Walkthrough
 
-1. Engineer creates an Order with `total` 10.50, `placedAt` `2026-10-05T09:00:00+02:00`, `count` 9007199254740993 and `note` null.
-2. System stores them in the property map.
+1. Engineer creates an Order with exact decimal token `10.50`, `placedAt` `2026-10-05T09:00:00+02:00`, exact integer token `9007199254740993` and `note` null under their admitted original definitions.
+2. System stores them through the selected exact-value/presence codec and qualified native homes, preserving the original numeric/time carriers.
 3. Engineer reads the Order.
 4. System returns each value exactly as written.
 
@@ -53,7 +53,7 @@ Typical traps are integers beyond 2^53, decimals with trailing zeros, timestamp 
 ## Edge Cases
 
 - **Binary values**: stored as base64 text and read back identical.
-- **A client that parses numbers to doubles**: a defect; values are read as text and parsed exactly.
+- **A client that parses exact numeric tokens to doubles**: unsupported precision loss. An explicit lossless number view is permitted only after exact representability checks and retains the original token; default exact readback cannot silently discard it.
 
 ## Test Scenarios
 

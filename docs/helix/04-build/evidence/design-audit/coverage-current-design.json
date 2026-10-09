@@ -1116,7 +1116,7 @@
     "01-frame/user-stories/US-004-keep-identifiers-stable-across-revisions.md": "b1cd8e8e427a3e92f8a8e5bb1f5f24e953759ee871ba41b893d5f6178b82d443",
     "01-frame/user-stories/US-005-see-every-violator-before-a-tightening-is-accepted.md": "467bbee17f6bddc79718ffeaabe12ced1720669997fee0c3deb2a9a9b4136bd9",
     "01-frame/user-stories/US-006-add-a-type-without-ddl.md": "b5c6e3e0cd45f9d51fb46c095960e467a0eb8476c9ebd4682f531ac6e816ee9a",
-    "01-frame/user-stories/US-007-store-and-read-objects-and-edges-exactly.md": "cbdbecef2d23a1500d3784e3293fe3da3296ff5d5d7a8697f3f30bdfefb9b110",
+    "01-frame/user-stories/US-007-store-and-read-objects-and-edges-exactly.md": "da51bb2e5b81ea49255ce4b98ce640e3d7322cbf978346889ec18c596c6211f3",
     "01-frame/user-stories/US-008-keep-what-the-schema-does-not-define.md": "0095bbda4a481e0a3ff58fbebad01e7dd22bb7d3d81513c5ad6e8573c7e100b6",
     "01-frame/user-stories/US-009-find-an-object-by-its-key.md": "8644ae0ba5efd9658153e67f7ffe85f72061b00b1be28bfae4d6d938013c28ed",
     "01-frame/user-stories/US-010-refuse-bad-edges-and-protect-connected-objects.md": "c4a703a40ca4f8d75a97f57e31e2240b979b5ce9ab6de56e71f184a5a7be6b39",
