@@ -4,6 +4,7 @@ import {collectCatalogAssertionObservations} from './catalog-assertion-observati
 import {assessCatalogObservationCoverage} from './catalog-observation-coverage';
 import {collectCatalogValidationEvidence} from './catalog-validation-evidence';
 import {collectCatalogExtensionInventory} from './catalog-extension-inventory';
+import {collectCatalogIngressReportBasis} from './catalog-ingress-report-basis';
 import {collectCatalogReportDocumentBasis,recheckCatalogReportDocumentBasis} from './catalog-report-document-basis';
 import type {CatalogStageConnection} from './catalog-new-stage';
 import type {loadUmfDeclarationProducer,loadUmfFieldAssertionProducer} from './index';
@@ -17,6 +18,7 @@ export async function collectCatalogReportPreparation(connection:CatalogStageCon
  owner:Awaited<ReturnType<typeof loadUmfDeclarationProducer>>,fields:Awaited<ReturnType<typeof loadUmfFieldAssertionProducer>>){
  requireOriginalCatalogPreparation(prepared);
  if(prepared.original.input.transforms.length)throw Error('Complete transform execution and report producer required');
+ const ingressBasis=collectCatalogIngressReportBasis(prepared);
  const ownerObservations=collectCatalogAssertionObservations(prepared,owner,fields);
  const observationCoverage=assessCatalogObservationCoverage(prepared,ownerObservations);
  const extensions=collectCatalogExtensionInventory(prepared);
@@ -33,7 +35,7 @@ export async function collectCatalogReportPreparation(connection:CatalogStageCon
  if(row.provisional_count!=='0')throw Error('Original empty provisional inventory proof required');
  if(counts.elementsRetired!=='0')throw Error('Original new-only retirement count required');
  await recheckCatalogReportDocumentBasis(connection,documentBasis);
- const result=Object.freeze({provisionalRevision:revision,documentBasis,counts:Object.freeze(counts),provisional:Object.freeze([]),ownerObservations,observationCoverage,extensions,validationEvidence,
+ const result=Object.freeze({provisionalRevision:revision,documentBasis,counts:Object.freeze(counts),provisional:Object.freeze([]),ownerObservations,observationCoverage,extensions,validationEvidence,ingressBasis,
   scope:'original_new_catalog_report_preparation_only' as const});
  originalReportPreparations.set(result,prepared);return result;
 }

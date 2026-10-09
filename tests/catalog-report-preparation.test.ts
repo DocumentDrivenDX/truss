@@ -48,10 +48,19 @@ const correspondence=await createCatalogReportCorrespondence('/Users/erik/Projec
 const untrustedReport=(await Bun.file('docs/helix/03-test/report-wire-untrusted.fixture.json').json()).report;
 function reportFor(basis:Awaited<ReturnType<typeof collectCatalogReportPreparation>>){return {...structuredClone(untrustedReport),rev:basis.provisionalRevision,acceptedInput:prepared.original.input,documents:basis.documentBasis.documents,counts:basis.counts,provisional:basis.provisional,diagnostics:basis.validationEvidence.diagnostics,documentInterpretations:basis.validationEvidence.documentInterpretations}}
 const wire=(value:unknown)=>new TextEncoder().encode(JSON.stringify(value));
-test('complete wire corresponds to seven issued producer fields while other fixture fields remain untrusted',async()=>{
+test('complete wire corresponds to nine issued producer fields while other fixture fields remain untrusted',async()=>{
  const native=connection(),basis=await collectCatalogReportPreparation(native,prepared,'1',owner,fields);
  const result=await correspondence.verify(native,prepared,basis,wire(reportFor(basis)));
- expect(result.verifiedFields.length).toBe(7);expect(result.scope).toBe('seven_original_report_producer_fields_only');expect(native.queries.at(-1)).toContain('runtime_require_catalog_observation');
+ expect(result.verifiedFields.length).toBe(9);expect(result.scope).toBe('nine_original_report_producer_fields_only');expect(native.queries.at(-1)).toContain('runtime_require_catalog_observation');
+});
+test('native ingress absence does not admit injected loss or transform registration',async()=>{
+ const basis=await collectCatalogReportPreparation(connection(),prepared,'1',owner,fields);
+ expect(basis.ingressBasis.originalIngress[0].contentSha256).toBe(digest);
+ for(const extra of [{losses:[{source:input.documents[0].artifact,sourcePointer:"",lossProfile:input.layoutProfile,loss:input.documents[0].artifact}]},{transformRegistrations:[{registration:input.layoutProfile,manifest:input.documents[0].artifact,originalImplementationRecognition:input.documents[0].artifact}]}]){
+  const native=connection();await expect(correspondence.verify(native,prepared,basis,wire({...reportFor(basis),...extra}))).rejects.toThrow('producer correspondence');expect(native.queries).toEqual([]);
+ }
+ const declared=structuredClone(input);declared.binding=structuredClone((await Bun.file('docs/helix/02-design/contracts/bindings/acceptance-input-capacity-v0.1.fixture.json').json()).input.binding);
+ const original=preparation.prepare(wire(declared)),native=connection();await expect(collectCatalogReportPreparation(native,original,'1',owner,fields)).rejects.toThrow('binding effect interpretation');expect(native.queries).toEqual([]);
 });
 test('changed source effect and diagnostic fields refuse before native recheck',async()=>{
  const basis=await collectCatalogReportPreparation(connection(),prepared,'1',owner,fields);

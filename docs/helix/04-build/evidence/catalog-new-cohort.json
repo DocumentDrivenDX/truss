@@ -25,8 +25,8 @@
     "catalog-provisional-empty": "754c3c53534a5a30d935a1942da903692c488aab3cd7fed3c0c5231c835f65c8",
     "catalog-report-immutability": "c243b51682de3fee979b977626bb54279eccb3de22a24270e0bda467bd215167"
   },
-  "reportCorrespondenceProducerSha256": "d4eb162cfc3c9e4f69bc2af52652976676defaec556b167e288b7b7fa7660a3d",
-  "reportPreparationProducerSha256": "37cc45e1e6a80ebc2651b0d4b48e19129f7acab1e1e9ff30aa0a20fa386637ea",
+  "reportCorrespondenceProducerSha256": "2554a8e6d8df8f7e26bd4df3a207af2c06c0c6f098485d53e847975f2c5bec53",
+  "reportPreparationProducerSha256": "125c0e99bf7e187bc1f126dbde73e81a9cb291d83aa891a6e8fdc2b493b32881",
   "assertionProfiles": {
     "declarations": {
       "identity": "umf-declaration-inspection",
@@ -90,7 +90,7 @@
     "effectGeneration substitution refuses report observation recheck",
     "original owner observation and reversible transition preserved inside exact evidence artifact",
     "declared transform cannot pass new-only native staging as if absent",
-    "seven report fields correspond to original owner and actual native observations without accepted authority",
+    "nine report fields correspond to original owner and actual native observations without accepted authority",
     "schema-valid forged native count refuses report correspondence",
     "copied composed report basis cannot borrow original native cut",
     "later actual native event invalidates report producer correspondence",
