@@ -95,6 +95,15 @@ is a concrete incompatible component, not a missing wheel or an absent driver
 experiment. The separate complete-report frame/schema/native-echo candidates do
 not silently widen that driver profile.
 
+A subsequent separate report-only pg8000 experiment now carries the full
+four-MiB frozen nineteen-field wire through the actual driver, strict original
+metadata/frame decoder and response schema. Its own raw bounds leave the generic
+one-MiB driver and caller-input paths unchanged. Seven total controlled tests
+include report exact/one-over capacity. The saved full-driver receipt proves
+local synthetic byte/schema correspondence, not a genuine producer or original
+complete account/custody/authority profile. Raw-capacity experimentation is no
+longer the missing deliverable; original admission and complete lifetimes remain.
+
 Next compose one explicitly selected complete response/driver/copy-account route,
 then qualify original transaction/cancellation/termination custody and consume
 the security owner's final TLS/person/publication services. Preserve the one-MiB

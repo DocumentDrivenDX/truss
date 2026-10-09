@@ -651,6 +651,25 @@ left the file usable; it now closes before any send. Closure is only an adapter
 state, not native termination, confirmed rollback or safe pool reuse. The native
 probe was rerun after this refactoring and pins the extracted candidate source.
 
+A separate report-only driver experiment now closes the raw-capacity mismatch
+at its private scope. `pg8000_report_instance_candidate.py` creates its initial
+4,194,315-byte frame bound and eight-MiB outbound experiment allowance before
+startup, requires one OID25/format0 descriptor and one original report row, and
+uses the response-only frame decoder. The generic instance candidate stays at
+one MiB. These constants are experimental raw limits, not a public resource
+profile or reset of an active original operation account.
+
+The [full-driver report receipt](../04-build/evidence/design-audit/pg8000-report-instance-native.json)
+records actual local pg8000 execution with independently frozen four-MiB original
+bytes, UTF8 startup observations, exact descriptor, BEGIN/SELECT/ROLLBACK tags
+and all nineteen schema fields. Two report-path capacity controls add exact-frame
+success and one-over refusal before any body ingress; seven total controlled
+instance-file tests pass. The original small-query receipt stays unchanged.
+The query remains a fixed read-only literal echo; no authentic report production,
+persistence, full driver/parser/native copy accounting or protected publication
+is qualified. Do not widen caller-input admission or adopt this experiment as the
+original PY-01b port solely because the complete payload fits.
+
 This is actual driver seam evidence, not the original protocol-port implementation.
 Stock `_read` and row/helper allocations remain outside a qualified complete
 account. The probe prefetches a whole admitted raw frame before returning its

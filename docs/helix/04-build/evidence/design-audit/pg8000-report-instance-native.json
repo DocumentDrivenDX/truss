@@ -1,0 +1,139 @@
+{
+  "status": "passed_local_read_only_pg8000_full_report_echo",
+  "python": "3.11.17 (main, Oct  3 2026, 00:54:14) [Clang 22.1.3 ]",
+  "driverCoreSha256": "cac1e50502901bcea3ddab588e0350149dd8fd771156ae1c531a2a04b3925e26",
+  "querySha256": "0b6acfdc9ffadb3028bca3003c220ef7fd2168946b6b9672f794e153a154ff77",
+  "originalReportSha256": "fb0b4fc677d060bc52473e8f6562ba46834ee9704e5e740c5ef759baeed7995c",
+  "observedReportSha256": "fb0b4fc677d060bc52473e8f6562ba46834ee9704e5e740c5ef759baeed7995c",
+  "observedBytes": 4194304,
+  "observedFields": 19,
+  "observedEncodings": {
+    "client_encoding": "UTF8",
+    "server_encoding": "UTF8"
+  },
+  "orderedCommandTags": [
+    "BEGIN\u0000",
+    "SELECT 1\u0000",
+    "ROLLBACK\u0000"
+  ],
+  "messageKindsAndSizes": [
+    [
+      "R",
+      9
+    ],
+    [
+      "S",
+      24
+    ],
+    [
+      "S",
+      26
+    ],
+    [
+      "S",
+      22
+    ],
+    [
+      "S",
+      28
+    ],
+    [
+      "S",
+      21
+    ],
+    [
+      "S",
+      23
+    ],
+    [
+      "S",
+      39
+    ],
+    [
+      "S",
+      27
+    ],
+    [
+      "S",
+      24
+    ],
+    [
+      "S",
+      36
+    ],
+    [
+      "S",
+      36
+    ],
+    [
+      "S",
+      26
+    ],
+    [
+      "S",
+      50
+    ],
+    [
+      "S",
+      26
+    ],
+    [
+      "K",
+      13
+    ],
+    [
+      "Z",
+      6
+    ],
+    [
+      "C",
+      11
+    ],
+    [
+      "T",
+      33
+    ],
+    [
+      "D",
+      4194315
+    ],
+    [
+      "C",
+      14
+    ],
+    [
+      "C",
+      14
+    ],
+    [
+      "Z",
+      6
+    ]
+  ],
+  "dependencies": {
+    "pg8000": "1.31.5",
+    "scramp": "1.4.17",
+    "asn1crypto": "1.5.1",
+    "python-dateutil": "2.9.0.post0",
+    "six": "1.17.0",
+    "jsonschema": "4.23.0",
+    "referencing": "0.35.1",
+    "rpds-py": "0.21.0",
+    "attrs": "24.2.0",
+    "jsonschema-specifications": "2024.10.1"
+  },
+  "sourceSha256": {
+    "check_pg8000_report_instance_native.py": "332162633676955e1549bfc6a9a6c6ae4d9ddeb0a5d797aa1bd64d770c45dc87",
+    "pg8000_report_instance_candidate.py": "807b1dfebf762be84727b0a75de158fc395494e5b90eeba3d72bec0eb87e87d4",
+    "pg8000_instance_candidate.py": "a12fe8f535b31c1e714a2ff7f9d416a49e92b93081064484cbad6dd5f5c912a2",
+    "python_pg_receive_candidate.py": "fd9c23e3da2358cf56abc6b561c893e5d56dd9c95756fe18ec7510f52a55f4bb",
+    "python_pg_frame_candidate.py": "ed92bfc5240f17f3447f868fb88e3647cc4bd9583e21ed18ad88eb7de1eb9968",
+    "python_report_frame_candidate.py": "0041185a44ff8a7f8f207ecc1c9ea49731737ad6688ffec6b7817db11cb79711",
+    "python_report_response_candidate.py": "b845d66688129c200bbdf9cc8e397b9e1bd354e87e9b72e23110f47ff24dec9a",
+    "python_report_wire_candidate.py": "54cc7e9cb1f6a2312e151b3a5d9fcf03ed8a3fbf282d48b949ea78a8c28b06a7",
+    "python_raw_json_candidate.py": "eecc41365951d3b60c3c2adb9c7f75e0e087eb154728ad9c1c0956becf4217c6",
+    "check_report_response_boundary.py": "4094c40c2417ff55db589bdf348eed772ef8cc39987545db625e2cea95938c65"
+  },
+  "driverPortQualified": false,
+  "scope": "Actual installed driver, separate report-only raw bounds, original text descriptor/frame and full synthetic nineteen-field response schema. Fixed local trust read-only echo only. No genuine report producer/persistence, original account/authority, TLS/person, cancellation/termination/commit/publication or managed target qualification."
+}
