@@ -267,7 +267,7 @@ byte corpus, with independently authored expected scalars, source bytes and
 refusal phase. Agreement between implementations is not the independent oracle.
 Complete input semantics and native acceptance remain separate later gates.
 
-The [outer-byte oracle](../../acceptance-outer-json-expected.proposal.json)
+The [outer-byte oracle](../acceptance-outer-json-expected.proposal.json)
 now supplies eighteen manually specified input-byte/value/refusal cases for
 JPAR-01–05/07, including escaped-equivalent duplicate keys, paired/unpaired
 surrogates, malformed/overlong/out-of-range UTF-8, numeric outer nodes,
