@@ -150,6 +150,16 @@ must explicitly retain and classify the uninterpreted content rather than advert
 complete vocabulary/action execution. No consumer action grammar or new UMF
 capability is selected here.
 
+The subsequent [DDD registry receipt](../04-build/evidence/design-audit/consumer-ddd-registry.json)
+runs the existing UMF `dddRegistry()` against both untouched original consumer
+models. Both validate, and each independently malformed DDD identity refuses
+with the owner's DDD_IDENTITY error. The unavailable DDD warning disappears;
+placement and module actions remain explicitly uninterpreted, and complete stays
+false. This closes the inspected DDD registration-availability question using
+existing owner capability. It neither proves core/DDD naming equivalence nor
+adopts complete support, native key enforcement, action execution or a compiler
+binding. The earlier empty-registry observations retain their original scope.
+
 ## Original relationship cap and predicate correspondence
 
 The pinned consumer corpus case `read.relationship-columns-are-capped` seeds
