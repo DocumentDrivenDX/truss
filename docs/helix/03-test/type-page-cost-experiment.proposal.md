@@ -68,7 +68,8 @@ payload sizes, concurrent load, cold startup or different managed services.
 
 Reuse the private `checkRelationshipPlanningRatio` component for the identical
 one-block nearest-rank p95/2× arithmetic, with canonical nanosecond inputs and
-timer resolution. Its existing three tests/ten assertions cover that arithmetic;
+timer resolution. Its existing four tests/twelve assertions cover that arithmetic,
+including sparse-array refusal;
 they do not measure list_objects, admit held snapshots or qualify this benchmark.
 The page runner must retain and validate its own three blocks and full native
 result/profile evidence. Sharing a statistic implementation does not transfer

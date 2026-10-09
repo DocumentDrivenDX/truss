@@ -18,3 +18,8 @@ test('missing, incomparable and below-resolution baselines cannot pass',()=>{
  expect(ratio(samples('100'),samples('1.0'),'1')).toBe('invalid_samples');
  expect(ratio(samples('100'),samples('100'),'0')).toBe('invalid_samples');
 });
+test('sparse arrays refuse instead of skipping missing observations',()=>{
+ expect(ratio(new Array<string>(1000),samples('100'),'1')).toBe('invalid_samples');
+ const candidate=samples('100');delete candidate[999];
+ expect(ratio(samples('100'),candidate,'1')).toBe('invalid_samples');
+});

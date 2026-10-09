@@ -98,7 +98,8 @@ per arm. Inputs are canonical unsigned integer durations in one independently
 admitted common unit (at most 30 digits), plus positive reporting resolution in
 that same unit. The timing producer must losslessly convert original millisecond
 tokens; rounding or changing units to obtain a pass is forbidden. Baseline p95
-at/below resolution and malformed/missing samples are invalid. Three tests/ten
+at/below resolution and malformed/missing samples are invalid, including sparse
+arrays with skipped observations. Four tests/twelve
 assertions and strict TypeScript pass, including the inclusive boundary, a
 one-unit failure above 2^53 and the exact 950th order statistic. This helper does
 not admit source timing, complete statement sums, environment or instrumentation;
