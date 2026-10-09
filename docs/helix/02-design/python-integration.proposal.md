@@ -20,6 +20,41 @@ This route needs no Rust port of Truss. It does require an independent Python ad
 
 Weft's committed source exposes `weft.compile_json(request: str) -> str` through the `weft-sql` PyO3/maturin package. Its `truss-postgresql-qualified` build feature is distinct from candidate/test configurations. Python packaging must pin the actual admitted feature/backend tuple, not infer it from an import or package version. Test-only configuration exports cannot serve as production registration. This source observation does not prove wheel availability or Python authorization/compiler qualification.
 
+## Concrete consumer model/query inputs
+
+The [read-only consumer source review](../04-build/evidence/design-audit/consumer-model-query-source-review.json)
+pins the original requirements, conformance model, larger catalog example and
+parser tests. The conformance source is UMF 0.7.0 document `sandbox`, module
+`catalog`, with UseCase and Solution Records; the larger `praxis-catalog` example
+also has Product and CoverageAssertion. These are concrete integration inputs,
+not a selected accepted schema, original native binding or UMF validity verdict.
+Preserve their DDD and placement extension content without inferring executable
+support from successful envelope loading.
+
+Both models distinguish key ID `identity` from authored key name `Identity`.
+Their relationship endpoint text uses `identity`. Before adoption, the original
+UMF interpretation and selected Weft/Truss mapping must establish that selector's
+meaning. Do not case-fold it, substitute the primary key or apply the separate
+pending-intent candidate's key-name rule to core relationship references. Capture
+original ID/name/selector correspondence and independently test a wrong-key
+substitution under the admitted profile.
+
+Actual consumer examples include whole-Solution projection by code and grouped
+UseCase.practiceArea count. The parser tests currently reject ORDER BY and LIMIT;
+they do not demonstrate the keyset/page syntax in Weft's bounded application
+profile. CH-04/PY-05 must specify the original parser/host paging configuration to
+owner-input correspondence before claiming these examples close interactive
+paging. Truss must not append SQL or invent an AST adapter to bridge that gap.
+The parsed-input owner dependency and consumer agreement on any interim SQL-text
+route remain explicit. Existing Account/Item presence scenarios retain their own
+reference scope; they do not replace these original consumer inputs.
+
+Use these sources to author independent original model/query/result packets for
+R2/R8 before native execution, including absent practiceArea, quoted text, grouped
+empty input and qualified relationship direction. Core validity, exact codecs,
+current-person policy and complete native/public results remain separate gates.
+No consumer files were changed and no host-specific runtime semantics are added.
+
 ## Consumer count-summary integration
 
 ### Security-enabled compiler adoption gate
