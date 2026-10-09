@@ -84,3 +84,29 @@ unimplemented. Their first native schedule must use the same M1 pair throughout;
 passing checks assembled from different layout proposals cannot qualify a route.
 These are engineering delivery dependencies, not a reopening of the owner's
 decision to ship migrations in the first release.
+
+### Security enrollment/exclusion ordering dependency
+
+The security owner’s active 2026-10-09 review identified a possible circular
+wait when a reader holds a shared guard while awaiting publication enrollment:
+a queued exclusive changer may prevent the issuer’s subsequent shared admission.
+Its proposed repair enrolls before reader guard acquisition and refuses busy
+enrollment immediately. This is an in-progress owner finding, not a released
+protocol or Truss-native qualification. The owner thread is
+`01a11b8b-06bb-7091-a11a-b7eba0a432eb` (Assess security control support).
+
+Before composing M3 with that protocol, independently schedule an original live
+publisher, a queued migration/change, and a new or nested enrollment. Record the
+actual guard/native enrollment order and bounded refusal/settlement observations.
+The pending changer must not strand the existing publisher’s final release, and
+failed enrollment must not create an active publication or release another
+publisher’s custody. After the confirmed change, a successful new admission must
+use the fresh selected installation/authority generation. Cancellation and lost
+backend cases still require original outcome/drain evidence; elapsed time alone
+does not establish cleanup. Test both a compatible upgrade and a transition
+requiring publication retirement according to their selected profiles.
+
+Consume the owner’s final registered ordering and evidence in LM-T06/LM-P01–03.
+Do not hard-code the tentative repair into a second Truss lease service or infer
+that a native lock timeout proves publication retirement. Earlier drain receipts
+retain their original scope and cannot prove this newly identified interleaving.
