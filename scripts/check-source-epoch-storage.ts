@@ -26,7 +26,7 @@ try {
   await tx`UPDATE truss.source_epoch_current SET source_epoch='component-successor'`;
   const rows=await tx`SELECT source_epoch,encode(evidence_sha256,'hex') AS digest FROM truss.source_epoch_registry ORDER BY source_epoch`;
   const digest=new Bun.CryptoHasher('sha256').update(new Uint8Array([2,3])).digest('hex');
-  if(rows.length!==2||rows.some(r=>r.digest!==digest))throw Error('History/digest mismatch');
+  if(rows.length!==2||rows.some((r:{digest:string})=>r.digest!==digest))throw Error('History/digest mismatch');
   checks.push('Successor preserves original registry and exact artifact digest');
   await tx`SET LOCAL ROLE pg_read_all_data`;
   await refuse('Ordinary role registry insert denied','42501',()=>insert('component-forged',null,'initial'));
