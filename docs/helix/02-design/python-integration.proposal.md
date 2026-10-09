@@ -221,8 +221,8 @@ PYTHONDONTWRITEBYTECODE=1 python3.11 docs/helix/04-build/evidence/design-audit/t
 
 Two tests pass on Python 3.11, covering all seven
 numeric proposal vectors plus finite-value, host-type, UTF-8 and bound refusals.
-Timestamp, recursive/presence/raw-JSON codecs, original upstream admission,
-whole-operation resource accounting, native storage and public packaging remain
+At this numeric-only checkpoint, timestamp, recursive/presence/raw-JSON codecs, original upstream admission,
+whole-operation resource accounting, native storage and public packaging were
 separate PY-01a/PY-01b work. This candidate lives outside a public package while
 package ownership is pending; its green results do not qualify the Python runtime.
 
@@ -243,8 +243,27 @@ PYTHONDONTWRITEBYTECODE=1 python3.11 -m unittest discover -s docs/helix/04-build
 
 Four tests pass on Python 3.11, including all three authored timestamp vectors,
 same-instant/different-offset preservation, exact versus lossy finer precision,
-unavailable views and capacity refusal. Recursive/presence/raw-JSON codecs and
-original source/native/resource admission remain required.
+unavailable views and capacity refusal. At that timestamp-only checkpoint,
+recursive/presence/raw-JSON codecs and original source/native/resource admission
+remained required.
+
+The private `python_exact_tree_candidate.py` now projects the existing presence
+and tagged-value carrier into immutable ordered Python values. It retains exact
+numeric/timestamp wrappers, strings, binary text, boolean/null, sequence order,
+exact map keys and record field identities/definition pins. Absent values remain
+distinct from present null and empty collections. Duplicate map/field identities,
+nested PostgreSQL-bound NUL/unpaired-surrogate text and changed opaque source
+digests refuse; opaque format/source bytes remain uninterpreted.
+
+The same discovery command now passes eight tests on Python 3.11, exercising all
+fifteen original vectors, caller-mutation isolation, all tagged families, distinct
+Unicode key spellings and explicit depth/node/entry bounds. Bounds are selected
+arguments, with candidate depth limited to 128; this does not adopt draft release
+defaults. Projection starts from already materialized admitted carriers. It
+neither parses original bytes nor charges aggregate simultaneous allocation,
+resolves definition ownership, validates binary/native domains or qualifies
+opaque support. PY-01a must still integrate original byte parsing and upstream
+semantic admission before this projection can serve an actual adapter.
 
 ## Host transaction adapter
 
