@@ -32,12 +32,12 @@
   "currentOwnerRevision": "1f7b5f5d2a355c4b476e3a96b289b9048f03f567",
   "currentListedSourceSubsetMatches": true,
   "backend": "@libpg-query/parser@17.6.10",
-  "path": "docs/helix/02-design/contracts/report-scalar-bytes-v0.2.proposal.sql",
-  "sourceSha256": "5b99f2f05920a77c7617239acc9f183bc321248831acecc8e4fef7884c25de63",
-  "artifactPath": "docs/helix/02-design/contracts/report-scalar-bytes-v0.2.proposal.umf.json",
-  "artifactSha256": "4c4d12f858d48b1a6b76b723a48c39a04fb9c87211d83fbc60614b7bba960afd",
-  "exportPath": "docs/helix/04-build/evidence/design-audit/report-scalar-bytes.owner-export.sql",
-  "exportSha256": "0aedaf920054b7b408a5cb59e982a6ec4d7c20b5e6b4fa25d87ff5ae2833566c",
+  "path": "docs/helix/02-design/contracts/report-tree-bytes-v0.2.proposal.sql",
+  "sourceSha256": "0961dd8209fabe26c499b0240a3a7655ff370d9536ce293df12fe52ab1ab5e98",
+  "artifactPath": "docs/helix/02-design/contracts/report-tree-bytes-v0.2.proposal.umf.json",
+  "artifactSha256": "fb9b777d3c5c0d10b461e2347c2b00792f6cd1c585a9a3abbf4bc5a371655d14",
+  "exportPath": "docs/helix/04-build/evidence/design-audit/report-tree-bytes.owner-export.sql",
+  "exportSha256": "29e344a4b2ee08ee3ebeb7d6c71068c7665b680cbebf3b5f03a7421f51c56a63",
   "sourceArchiveExact": true,
   "reloadedExportExact": true,
   "declarations": {
@@ -78,7 +78,7 @@
                           "members": {
                             "sval": {
                               "kind": "string",
-                              "value": "runtime_report_scalar_bytes_v0_2"
+                              "value": "runtime_report_tree_bytes_v0_2"
                             }
                           }
                         }
@@ -97,7 +97,7 @@
                           "members": {
                             "name": {
                               "kind": "string",
-                              "value": "original"
+                              "value": "tree"
                             },
                             "argType": {
                               "kind": "object",
@@ -113,7 +113,7 @@
                                           "members": {
                                             "sval": {
                                               "kind": "string",
-                                              "value": "bytea"
+                                              "value": "jsonb"
                                             }
                                           }
                                         }
@@ -127,7 +127,7 @@
                                 },
                                 "location": {
                                   "kind": "number",
-                                  "value": "146"
+                                  "value": "240"
                                 }
                               }
                             },
@@ -169,7 +169,7 @@
                     },
                     "location": {
                       "kind": "number",
-                      "value": "161"
+                      "value": "255"
                     }
                   }
                 },
@@ -206,7 +206,7 @@
                             },
                             "location": {
                               "kind": "number",
-                              "value": "167"
+                              "value": "261"
                             }
                           }
                         }
@@ -242,7 +242,7 @@
                             },
                             "location": {
                               "kind": "number",
-                              "value": "184"
+                              "value": "278"
                             }
                           }
                         }
@@ -278,7 +278,7 @@
                             },
                             "location": {
                               "kind": "number",
-                              "value": "194"
+                              "value": "288"
                             }
                           }
                         }
@@ -328,7 +328,7 @@
                                                 },
                                                 "location": {
                                                   "kind": "number",
-                                                  "value": "227"
+                                                  "value": "321"
                                                 }
                                               }
                                             }
@@ -351,7 +351,7 @@
                                                 },
                                                 "location": {
                                                   "kind": "number",
-                                                  "value": "238"
+                                                  "value": "332"
                                                 }
                                               }
                                             }
@@ -369,7 +369,7 @@
                             },
                             "location": {
                               "kind": "number",
-                              "value": "211"
+                              "value": "305"
                             }
                           }
                         }
@@ -402,7 +402,7 @@
                                               "members": {
                                                 "sval": {
                                                   "kind": "string",
-                                                  "value": "\nDECLARE n integer; i integer:=0; b integer; c integer; width integer; j integer;\n expected bigint:=2; chunk bytea:=decode('22','hex'); chunks bytea[]:=ARRAY[]::bytea[];\n piece bytea; output bytea;\nBEGIN\n IF original IS NULL THEN RAISE EXCEPTION 'original scalar bytes required' USING ERRCODE='22023'; END IF;\n n:=octet_length(original);\n IF n>1048576 THEN RAISE EXCEPTION 'scalar source capacity' USING ERRCODE='54000'; END IF;\n -- Validate complete UTF-8 and check the candidate output ceiling before emission.\n WHILE i<n LOOP\n  b:=get_byte(original,i);\n  IF b<128 THEN width:=1;\n  ELSIF b BETWEEN 194 AND 223 THEN width:=2;\n  ELSIF b BETWEEN 224 AND 239 THEN width:=3;\n  ELSIF b BETWEEN 240 AND 244 THEN width:=4;\n  ELSE RAISE EXCEPTION 'invalid scalar UTF8' USING ERRCODE='22021'; END IF;\n  IF i+width>n THEN RAISE EXCEPTION 'unfinished scalar UTF8' USING ERRCODE='22021'; END IF;\n  IF width>1 THEN\n   FOR j IN 1..width-1 LOOP\n    c:=get_byte(original,i+j);\n    IF c NOT BETWEEN 128 AND 191 OR\n     (j=1 AND ((b=224 AND c<160) OR (b=237 AND c>159) OR\n                (b=240 AND c<144) OR (b=244 AND c>143))) THEN\n     RAISE EXCEPTION 'invalid scalar UTF8 continuation' USING ERRCODE='22021';\n    END IF;\n   END LOOP;\n  END IF;\n  expected:=expected+CASE WHEN b<32 THEN 6 WHEN b IN (34,92) THEN 2 ELSE width END;\n  IF expected>4194304 THEN RAISE EXCEPTION 'scalar output capacity' USING ERRCODE='54000'; END IF;\n  i:=i+width;\n END LOOP;\n i:=0;\n WHILE i<n LOOP\n  b:=get_byte(original,i);\n  width:=CASE WHEN b<128 THEN 1 WHEN b<224 THEN 2 WHEN b<240 THEN 3 ELSE 4 END;\n  IF b<32 THEN piece:=convert_to(chr(92)||'u00'||lpad(to_hex(b),2,'0'),'UTF8');\n  ELSIF b IN (34,92) THEN piece:=decode('5c','hex')||substr(original,i+1,1);\n  ELSE piece:=substr(original,i+1,width); END IF;\n  IF octet_length(chunk)+octet_length(piece)>65536 THEN\n   chunks:=array_append(chunks,chunk);chunk:=decode('','hex');\n  END IF;\n  chunk:=chunk||piece;i:=i+width;\n END LOOP;\n IF octet_length(chunk)+1>65536 THEN chunks:=array_append(chunks,chunk);chunk:=decode('','hex'); END IF;\n chunks:=array_append(chunks,chunk||decode('22','hex'));\n SELECT string_agg(value,decode('','hex') ORDER BY ordinal) INTO output\n  FROM unnest(chunks) WITH ORDINALITY AS c(value,ordinal);\n IF octet_length(output)<>expected THEN RAISE EXCEPTION 'complete scalar byte parity required' USING ERRCODE='55000'; END IF;\n RETURN output;\nEND;\n"
+                                                  "value": "\nDECLARE tasks jsonb[]:=ARRAY[jsonb_build_object('node',tree,'depth','0')]; task jsonb;\n node jsonb; member jsonb; children jsonb; tag text; piece bytea; chunk bytea:=decode('','hex');\n chunks bytea[]:=ARRAY[]::bytea[]; output bytea; i int; depth int; steps int:=0; emitted bigint:=0;\nBEGIN\n IF tree IS NULL THEN RAISE EXCEPTION 'inert tree required' USING ERRCODE='22023'; END IF;\n IF octet_length(tree::text)>4194304 THEN RAISE EXCEPTION 'tree input capacity' USING ERRCODE='54000'; END IF;\n WHILE cardinality(tasks)>0 LOOP\n  steps:=steps+1;\n  IF steps>32768 OR cardinality(tasks)>16384 THEN RAISE EXCEPTION 'tree task capacity' USING ERRCODE='54000'; END IF;\n  task:=tasks[cardinality(tasks)];tasks:=tasks[1:cardinality(tasks)-1];piece:=decode('','hex');\n  IF task ? 'emit' THEN piece:=decode(task->>'emit','hex');\n  ELSIF task ? 'frame' THEN\n   children:=task->'children';tag:=task->>'frame';i:=(task->>'index')::int;depth:=(task->>'depth')::int;\n   IF i=jsonb_array_length(children) THEN piece:=decode(CASE WHEN tag='array' THEN '5d' ELSE '7d' END,'hex');\n   ELSE\n    member:=children->i;\n    tasks:=array_append(tasks,jsonb_set(task,'{index}',to_jsonb((i+1)::text)));\n    tasks:=array_append(tasks,jsonb_build_object('node',CASE WHEN tag='array' THEN member ELSE member->'node' END,'depth',(depth+1)::text));\n    IF tag='object' THEN\n     tasks:=array_append(tasks,jsonb_build_object('emit','3a'));\n     tasks:=array_append(tasks,jsonb_build_object('node',jsonb_build_object('kind','string','utf8Hex',member->>'keyUtf8Hex'),'depth',(depth+1)::text));\n    END IF;\n    IF i>0 THEN piece:=decode('2c','hex'); END IF;\n   END IF;\n  ELSE\n   node:=task->'node';depth:=(task->>'depth')::int;\n   IF depth>256 THEN RAISE EXCEPTION 'tree depth capacity' USING ERRCODE='54000'; END IF;\n   IF node IS NULL OR jsonb_typeof(node)<>'object' OR jsonb_typeof(node->'kind') IS DISTINCT FROM 'string' THEN RAISE EXCEPTION 'inert node shape' USING ERRCODE='22023'; END IF;\n   tag:=node->>'kind';\n   IF tag='null' AND (SELECT count(*) FROM jsonb_object_keys(node))=1 THEN piece:=convert_to('null','UTF8');\n   ELSIF tag='boolean' AND (SELECT count(*) FROM jsonb_object_keys(node))=2 AND jsonb_typeof(node->'value')='boolean' THEN piece:=convert_to(node->>'value','UTF8');\n   ELSIF tag='string' AND (SELECT count(*) FROM jsonb_object_keys(node))=2 AND jsonb_typeof(node->'utf8Hex')='string' AND node->>'utf8Hex' ~ '^([0-9a-f]{2})*$' THEN piece:=truss.runtime_report_scalar_bytes_v0_2(decode(node->>'utf8Hex','hex'));\n   ELSIF tag IN ('array','object') AND (SELECT count(*) FROM jsonb_object_keys(node))=2 THEN\n    children:=node->CASE WHEN tag='array' THEN 'items' ELSE 'members' END;\n    IF jsonb_typeof(children) IS DISTINCT FROM 'array' THEN RAISE EXCEPTION 'container inventory' USING ERRCODE='22023'; END IF;\n    IF jsonb_array_length(children)>4096 THEN RAISE EXCEPTION 'container inventory capacity' USING ERRCODE='54000'; END IF;\n    IF tag='object' THEN\n     FOR member IN SELECT value FROM jsonb_array_elements(children) LOOP\n      IF jsonb_typeof(member)<>'object' OR (SELECT count(*) FROM jsonb_object_keys(member))<>2\n       OR NOT member ?& ARRAY['keyUtf8Hex','node'] OR jsonb_typeof(member->'keyUtf8Hex') IS DISTINCT FROM 'string'\n       OR member->>'keyUtf8Hex' !~ '^([0-9a-f]{2})*$' THEN RAISE EXCEPTION 'object member shape' USING ERRCODE='22023'; END IF;\n      PERFORM truss.runtime_report_scalar_bytes_v0_2(decode(member->>'keyUtf8Hex','hex'));\n     END LOOP;\n     IF (SELECT count(DISTINCT decode(value->>'keyUtf8Hex','hex')) FROM jsonb_array_elements(children))<>jsonb_array_length(children) THEN RAISE EXCEPTION 'duplicate original object key' USING ERRCODE='22023'; END IF;\n     SELECT coalesce(jsonb_agg(value ORDER BY decode(value->>'keyUtf8Hex','hex')),'[]'::jsonb) INTO children FROM jsonb_array_elements(children);\n    END IF;\n    tasks:=array_append(tasks,jsonb_build_object('frame',tag,'children',children,'index','0','depth',depth::text));\n    piece:=decode(CASE WHEN tag='array' THEN '5b' ELSE '7b' END,'hex');\n   ELSE RAISE EXCEPTION 'unsupported inert node or extra content' USING ERRCODE='22023'; END IF;\n  END IF;\n  emitted:=emitted+octet_length(piece);\n  IF emitted>4194304 THEN RAISE EXCEPTION 'complete tree output capacity' USING ERRCODE='54000'; END IF;\n  WHILE octet_length(piece)>0 LOOP\n   i:=least(65536-octet_length(chunk),octet_length(piece));chunk:=chunk||substr(piece,1,i);piece:=substr(piece,i+1);\n   IF octet_length(chunk)=65536 THEN chunks:=array_append(chunks,chunk);chunk:=decode('','hex'); END IF;\n  END LOOP;\n END LOOP;\n chunks:=array_append(chunks,chunk);\n SELECT string_agg(value,decode('','hex') ORDER BY ordinal) INTO output FROM unnest(chunks) WITH ORDINALITY AS c(value,ordinal);\n IF octet_length(output)<>emitted THEN RAISE EXCEPTION 'complete tree byte parity' USING ERRCODE='55000'; END IF;\n RETURN output;\nEND;\n"
                                                 }
                                               }
                                             }
@@ -420,7 +420,7 @@
                             },
                             "location": {
                               "kind": "number",
-                              "value": "246"
+                              "value": "340"
                             }
                           }
                         }
@@ -483,7 +483,7 @@
                                       "members": {
                                         "sval": {
                                           "kind": "string",
-                                          "value": "runtime_report_scalar_bytes_v0_2"
+                                          "value": "runtime_report_tree_bytes_v0_2"
                                         }
                                       }
                                     }
@@ -511,7 +511,7 @@
                                                   "members": {
                                                     "sval": {
                                                       "kind": "string",
-                                                      "value": "bytea"
+                                                      "value": "jsonb"
                                                     }
                                                   }
                                                 }
@@ -525,7 +525,7 @@
                                         },
                                         "location": {
                                           "kind": "number",
-                                          "value": "2707"
+                                          "value": "5268"
                                         }
                                       }
                                     }
@@ -556,7 +556,7 @@
                                                       "members": {
                                                         "sval": {
                                                           "kind": "string",
-                                                          "value": "bytea"
+                                                          "value": "jsonb"
                                                         }
                                                       }
                                                     }
@@ -570,7 +570,7 @@
                                             },
                                             "location": {
                                               "kind": "number",
-                                              "value": "2707"
+                                              "value": "5268"
                                             }
                                           }
                                         },
@@ -605,7 +605,7 @@
                             },
                             "location": {
                               "kind": "number",
-                              "value": "2719"
+                              "value": "5280"
                             }
                           }
                         }

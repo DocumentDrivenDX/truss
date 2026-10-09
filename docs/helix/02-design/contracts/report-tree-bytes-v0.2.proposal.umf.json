@@ -1,0 +1,633 @@
+{
+  "umf": "0.1.0",
+  "id": "truss-report-tree-bytes-v0.2-proposal",
+  "vocabularies": {
+    "umf.postgresql": {
+      "version": "0.1.0"
+    }
+  },
+  "modules": [
+    {
+      "id": "schema",
+      "namespace": "",
+      "elements": [
+        {
+          "id": "schema",
+          "extensions": {
+            "umf.postgresql": {
+              "profile": "postgresql-raw-parse-tree",
+              "source": "-- Uninstalled tree candidate using the separately captured v0.2 scalar; no report/account authority.\n-- Strings/keys carry original UTF-8 as lowercase hex. Numbers are unsupported.\nCREATE FUNCTION truss.runtime_report_tree_bytes_v0_2(tree jsonb) RETURNS bytea\nLANGUAGE plpgsql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$\nDECLARE tasks jsonb[]:=ARRAY[jsonb_build_object('node',tree,'depth','0')]; task jsonb;\n node jsonb; member jsonb; children jsonb; tag text; piece bytea; chunk bytea:=decode('','hex');\n chunks bytea[]:=ARRAY[]::bytea[]; output bytea; i int; depth int; steps int:=0; emitted bigint:=0;\nBEGIN\n IF tree IS NULL THEN RAISE EXCEPTION 'inert tree required' USING ERRCODE='22023'; END IF;\n IF octet_length(tree::text)>4194304 THEN RAISE EXCEPTION 'tree input capacity' USING ERRCODE='54000'; END IF;\n WHILE cardinality(tasks)>0 LOOP\n  steps:=steps+1;\n  IF steps>32768 OR cardinality(tasks)>16384 THEN RAISE EXCEPTION 'tree task capacity' USING ERRCODE='54000'; END IF;\n  task:=tasks[cardinality(tasks)];tasks:=tasks[1:cardinality(tasks)-1];piece:=decode('','hex');\n  IF task ? 'emit' THEN piece:=decode(task->>'emit','hex');\n  ELSIF task ? 'frame' THEN\n   children:=task->'children';tag:=task->>'frame';i:=(task->>'index')::int;depth:=(task->>'depth')::int;\n   IF i=jsonb_array_length(children) THEN piece:=decode(CASE WHEN tag='array' THEN '5d' ELSE '7d' END,'hex');\n   ELSE\n    member:=children->i;\n    tasks:=array_append(tasks,jsonb_set(task,'{index}',to_jsonb((i+1)::text)));\n    tasks:=array_append(tasks,jsonb_build_object('node',CASE WHEN tag='array' THEN member ELSE member->'node' END,'depth',(depth+1)::text));\n    IF tag='object' THEN\n     tasks:=array_append(tasks,jsonb_build_object('emit','3a'));\n     tasks:=array_append(tasks,jsonb_build_object('node',jsonb_build_object('kind','string','utf8Hex',member->>'keyUtf8Hex'),'depth',(depth+1)::text));\n    END IF;\n    IF i>0 THEN piece:=decode('2c','hex'); END IF;\n   END IF;\n  ELSE\n   node:=task->'node';depth:=(task->>'depth')::int;\n   IF depth>256 THEN RAISE EXCEPTION 'tree depth capacity' USING ERRCODE='54000'; END IF;\n   IF node IS NULL OR jsonb_typeof(node)<>'object' OR jsonb_typeof(node->'kind') IS DISTINCT FROM 'string' THEN RAISE EXCEPTION 'inert node shape' USING ERRCODE='22023'; END IF;\n   tag:=node->>'kind';\n   IF tag='null' AND (SELECT count(*) FROM jsonb_object_keys(node))=1 THEN piece:=convert_to('null','UTF8');\n   ELSIF tag='boolean' AND (SELECT count(*) FROM jsonb_object_keys(node))=2 AND jsonb_typeof(node->'value')='boolean' THEN piece:=convert_to(node->>'value','UTF8');\n   ELSIF tag='string' AND (SELECT count(*) FROM jsonb_object_keys(node))=2 AND jsonb_typeof(node->'utf8Hex')='string' AND node->>'utf8Hex' ~ '^([0-9a-f]{2})*$' THEN piece:=truss.runtime_report_scalar_bytes_v0_2(decode(node->>'utf8Hex','hex'));\n   ELSIF tag IN ('array','object') AND (SELECT count(*) FROM jsonb_object_keys(node))=2 THEN\n    children:=node->CASE WHEN tag='array' THEN 'items' ELSE 'members' END;\n    IF jsonb_typeof(children) IS DISTINCT FROM 'array' THEN RAISE EXCEPTION 'container inventory' USING ERRCODE='22023'; END IF;\n    IF jsonb_array_length(children)>4096 THEN RAISE EXCEPTION 'container inventory capacity' USING ERRCODE='54000'; END IF;\n    IF tag='object' THEN\n     FOR member IN SELECT value FROM jsonb_array_elements(children) LOOP\n      IF jsonb_typeof(member)<>'object' OR (SELECT count(*) FROM jsonb_object_keys(member))<>2\n       OR NOT member ?& ARRAY['keyUtf8Hex','node'] OR jsonb_typeof(member->'keyUtf8Hex') IS DISTINCT FROM 'string'\n       OR member->>'keyUtf8Hex' !~ '^([0-9a-f]{2})*$' THEN RAISE EXCEPTION 'object member shape' USING ERRCODE='22023'; END IF;\n      PERFORM truss.runtime_report_scalar_bytes_v0_2(decode(member->>'keyUtf8Hex','hex'));\n     END LOOP;\n     IF (SELECT count(DISTINCT decode(value->>'keyUtf8Hex','hex')) FROM jsonb_array_elements(children))<>jsonb_array_length(children) THEN RAISE EXCEPTION 'duplicate original object key' USING ERRCODE='22023'; END IF;\n     SELECT coalesce(jsonb_agg(value ORDER BY decode(value->>'keyUtf8Hex','hex')),'[]'::jsonb) INTO children FROM jsonb_array_elements(children);\n    END IF;\n    tasks:=array_append(tasks,jsonb_build_object('frame',tag,'children',children,'index','0','depth',depth::text));\n    piece:=decode(CASE WHEN tag='array' THEN '5b' ELSE '7b' END,'hex');\n   ELSE RAISE EXCEPTION 'unsupported inert node or extra content' USING ERRCODE='22023'; END IF;\n  END IF;\n  emitted:=emitted+octet_length(piece);\n  IF emitted>4194304 THEN RAISE EXCEPTION 'complete tree output capacity' USING ERRCODE='54000'; END IF;\n  WHILE octet_length(piece)>0 LOOP\n   i:=least(65536-octet_length(chunk),octet_length(piece));chunk:=chunk||substr(piece,1,i);piece:=substr(piece,i+1);\n   IF octet_length(chunk)=65536 THEN chunks:=array_append(chunks,chunk);chunk:=decode('','hex'); END IF;\n  END LOOP;\n END LOOP;\n chunks:=array_append(chunks,chunk);\n SELECT string_agg(value,decode('','hex') ORDER BY ordinal) INTO output FROM unnest(chunks) WITH ORDINALITY AS c(value,ordinal);\n IF octet_length(output)<>emitted THEN RAISE EXCEPTION 'complete tree byte parity' USING ERRCODE='55000'; END IF;\n RETURN output;\nEND;\n$$;\nREVOKE ALL ON FUNCTION truss.runtime_report_tree_bytes_v0_2(jsonb) FROM PUBLIC;\n",
+              "root": {
+                "kind": "object",
+                "members": {
+                  "version": {
+                    "kind": "number",
+                    "value": "170004"
+                  },
+                  "stmts": {
+                    "kind": "array",
+                    "items": [
+                      {
+                        "kind": "object",
+                        "members": {
+                          "stmt": {
+                            "kind": "object",
+                            "members": {
+                              "CreateFunctionStmt": {
+                                "kind": "object",
+                                "members": {
+                                  "funcname": {
+                                    "kind": "array",
+                                    "items": [
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "String": {
+                                            "kind": "object",
+                                            "members": {
+                                              "sval": {
+                                                "kind": "string",
+                                                "value": "truss"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "String": {
+                                            "kind": "object",
+                                            "members": {
+                                              "sval": {
+                                                "kind": "string",
+                                                "value": "runtime_report_tree_bytes_v0_2"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "parameters": {
+                                    "kind": "array",
+                                    "items": [
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "FunctionParameter": {
+                                            "kind": "object",
+                                            "members": {
+                                              "name": {
+                                                "kind": "string",
+                                                "value": "tree"
+                                              },
+                                              "argType": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "names": {
+                                                    "kind": "array",
+                                                    "items": [
+                                                      {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "String": {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "sval": {
+                                                                "kind": "string",
+                                                                "value": "jsonb"
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    ]
+                                                  },
+                                                  "typemod": {
+                                                    "kind": "number",
+                                                    "value": "-1"
+                                                  },
+                                                  "location": {
+                                                    "kind": "number",
+                                                    "value": "240"
+                                                  }
+                                                }
+                                              },
+                                              "mode": {
+                                                "kind": "string",
+                                                "value": "FUNC_PARAM_DEFAULT"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "returnType": {
+                                    "kind": "object",
+                                    "members": {
+                                      "names": {
+                                        "kind": "array",
+                                        "items": [
+                                          {
+                                            "kind": "object",
+                                            "members": {
+                                              "String": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "sval": {
+                                                    "kind": "string",
+                                                    "value": "bytea"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        ]
+                                      },
+                                      "typemod": {
+                                        "kind": "number",
+                                        "value": "-1"
+                                      },
+                                      "location": {
+                                        "kind": "number",
+                                        "value": "255"
+                                      }
+                                    }
+                                  },
+                                  "options": {
+                                    "kind": "array",
+                                    "items": [
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "DefElem": {
+                                            "kind": "object",
+                                            "members": {
+                                              "defname": {
+                                                "kind": "string",
+                                                "value": "language"
+                                              },
+                                              "arg": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "String": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "sval": {
+                                                        "kind": "string",
+                                                        "value": "plpgsql"
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "defaction": {
+                                                "kind": "string",
+                                                "value": "DEFELEM_UNSPEC"
+                                              },
+                                              "location": {
+                                                "kind": "number",
+                                                "value": "261"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "DefElem": {
+                                            "kind": "object",
+                                            "members": {
+                                              "defname": {
+                                                "kind": "string",
+                                                "value": "volatility"
+                                              },
+                                              "arg": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "String": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "sval": {
+                                                        "kind": "string",
+                                                        "value": "immutable"
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "defaction": {
+                                                "kind": "string",
+                                                "value": "DEFELEM_UNSPEC"
+                                              },
+                                              "location": {
+                                                "kind": "number",
+                                                "value": "278"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "DefElem": {
+                                            "kind": "object",
+                                            "members": {
+                                              "defname": {
+                                                "kind": "string",
+                                                "value": "security"
+                                              },
+                                              "arg": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "Boolean": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "boolval": {
+                                                        "kind": "boolean",
+                                                        "value": false
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "defaction": {
+                                                "kind": "string",
+                                                "value": "DEFELEM_UNSPEC"
+                                              },
+                                              "location": {
+                                                "kind": "number",
+                                                "value": "288"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "DefElem": {
+                                            "kind": "object",
+                                            "members": {
+                                              "defname": {
+                                                "kind": "string",
+                                                "value": "set"
+                                              },
+                                              "arg": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "VariableSetStmt": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "kind": {
+                                                        "kind": "string",
+                                                        "value": "VAR_SET_VALUE"
+                                                      },
+                                                      "name": {
+                                                        "kind": "string",
+                                                        "value": "search_path"
+                                                      },
+                                                      "args": {
+                                                        "kind": "array",
+                                                        "items": [
+                                                          {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "A_Const": {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "sval": {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "sval": {
+                                                                        "kind": "string",
+                                                                        "value": "pg_catalog"
+                                                                      }
+                                                                    }
+                                                                  },
+                                                                  "location": {
+                                                                    "kind": "number",
+                                                                    "value": "321"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          },
+                                                          {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "A_Const": {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "sval": {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "sval": {
+                                                                        "kind": "string",
+                                                                        "value": "pg_temp"
+                                                                      }
+                                                                    }
+                                                                  },
+                                                                  "location": {
+                                                                    "kind": "number",
+                                                                    "value": "332"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        ]
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "defaction": {
+                                                "kind": "string",
+                                                "value": "DEFELEM_UNSPEC"
+                                              },
+                                              "location": {
+                                                "kind": "number",
+                                                "value": "305"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "DefElem": {
+                                            "kind": "object",
+                                            "members": {
+                                              "defname": {
+                                                "kind": "string",
+                                                "value": "as"
+                                              },
+                                              "arg": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "List": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "items": {
+                                                        "kind": "array",
+                                                        "items": [
+                                                          {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "String": {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "sval": {
+                                                                    "kind": "string",
+                                                                    "value": "\nDECLARE tasks jsonb[]:=ARRAY[jsonb_build_object('node',tree,'depth','0')]; task jsonb;\n node jsonb; member jsonb; children jsonb; tag text; piece bytea; chunk bytea:=decode('','hex');\n chunks bytea[]:=ARRAY[]::bytea[]; output bytea; i int; depth int; steps int:=0; emitted bigint:=0;\nBEGIN\n IF tree IS NULL THEN RAISE EXCEPTION 'inert tree required' USING ERRCODE='22023'; END IF;\n IF octet_length(tree::text)>4194304 THEN RAISE EXCEPTION 'tree input capacity' USING ERRCODE='54000'; END IF;\n WHILE cardinality(tasks)>0 LOOP\n  steps:=steps+1;\n  IF steps>32768 OR cardinality(tasks)>16384 THEN RAISE EXCEPTION 'tree task capacity' USING ERRCODE='54000'; END IF;\n  task:=tasks[cardinality(tasks)];tasks:=tasks[1:cardinality(tasks)-1];piece:=decode('','hex');\n  IF task ? 'emit' THEN piece:=decode(task->>'emit','hex');\n  ELSIF task ? 'frame' THEN\n   children:=task->'children';tag:=task->>'frame';i:=(task->>'index')::int;depth:=(task->>'depth')::int;\n   IF i=jsonb_array_length(children) THEN piece:=decode(CASE WHEN tag='array' THEN '5d' ELSE '7d' END,'hex');\n   ELSE\n    member:=children->i;\n    tasks:=array_append(tasks,jsonb_set(task,'{index}',to_jsonb((i+1)::text)));\n    tasks:=array_append(tasks,jsonb_build_object('node',CASE WHEN tag='array' THEN member ELSE member->'node' END,'depth',(depth+1)::text));\n    IF tag='object' THEN\n     tasks:=array_append(tasks,jsonb_build_object('emit','3a'));\n     tasks:=array_append(tasks,jsonb_build_object('node',jsonb_build_object('kind','string','utf8Hex',member->>'keyUtf8Hex'),'depth',(depth+1)::text));\n    END IF;\n    IF i>0 THEN piece:=decode('2c','hex'); END IF;\n   END IF;\n  ELSE\n   node:=task->'node';depth:=(task->>'depth')::int;\n   IF depth>256 THEN RAISE EXCEPTION 'tree depth capacity' USING ERRCODE='54000'; END IF;\n   IF node IS NULL OR jsonb_typeof(node)<>'object' OR jsonb_typeof(node->'kind') IS DISTINCT FROM 'string' THEN RAISE EXCEPTION 'inert node shape' USING ERRCODE='22023'; END IF;\n   tag:=node->>'kind';\n   IF tag='null' AND (SELECT count(*) FROM jsonb_object_keys(node))=1 THEN piece:=convert_to('null','UTF8');\n   ELSIF tag='boolean' AND (SELECT count(*) FROM jsonb_object_keys(node))=2 AND jsonb_typeof(node->'value')='boolean' THEN piece:=convert_to(node->>'value','UTF8');\n   ELSIF tag='string' AND (SELECT count(*) FROM jsonb_object_keys(node))=2 AND jsonb_typeof(node->'utf8Hex')='string' AND node->>'utf8Hex' ~ '^([0-9a-f]{2})*$' THEN piece:=truss.runtime_report_scalar_bytes_v0_2(decode(node->>'utf8Hex','hex'));\n   ELSIF tag IN ('array','object') AND (SELECT count(*) FROM jsonb_object_keys(node))=2 THEN\n    children:=node->CASE WHEN tag='array' THEN 'items' ELSE 'members' END;\n    IF jsonb_typeof(children) IS DISTINCT FROM 'array' THEN RAISE EXCEPTION 'container inventory' USING ERRCODE='22023'; END IF;\n    IF jsonb_array_length(children)>4096 THEN RAISE EXCEPTION 'container inventory capacity' USING ERRCODE='54000'; END IF;\n    IF tag='object' THEN\n     FOR member IN SELECT value FROM jsonb_array_elements(children) LOOP\n      IF jsonb_typeof(member)<>'object' OR (SELECT count(*) FROM jsonb_object_keys(member))<>2\n       OR NOT member ?& ARRAY['keyUtf8Hex','node'] OR jsonb_typeof(member->'keyUtf8Hex') IS DISTINCT FROM 'string'\n       OR member->>'keyUtf8Hex' !~ '^([0-9a-f]{2})*$' THEN RAISE EXCEPTION 'object member shape' USING ERRCODE='22023'; END IF;\n      PERFORM truss.runtime_report_scalar_bytes_v0_2(decode(member->>'keyUtf8Hex','hex'));\n     END LOOP;\n     IF (SELECT count(DISTINCT decode(value->>'keyUtf8Hex','hex')) FROM jsonb_array_elements(children))<>jsonb_array_length(children) THEN RAISE EXCEPTION 'duplicate original object key' USING ERRCODE='22023'; END IF;\n     SELECT coalesce(jsonb_agg(value ORDER BY decode(value->>'keyUtf8Hex','hex')),'[]'::jsonb) INTO children FROM jsonb_array_elements(children);\n    END IF;\n    tasks:=array_append(tasks,jsonb_build_object('frame',tag,'children',children,'index','0','depth',depth::text));\n    piece:=decode(CASE WHEN tag='array' THEN '5b' ELSE '7b' END,'hex');\n   ELSE RAISE EXCEPTION 'unsupported inert node or extra content' USING ERRCODE='22023'; END IF;\n  END IF;\n  emitted:=emitted+octet_length(piece);\n  IF emitted>4194304 THEN RAISE EXCEPTION 'complete tree output capacity' USING ERRCODE='54000'; END IF;\n  WHILE octet_length(piece)>0 LOOP\n   i:=least(65536-octet_length(chunk),octet_length(piece));chunk:=chunk||substr(piece,1,i);piece:=substr(piece,i+1);\n   IF octet_length(chunk)=65536 THEN chunks:=array_append(chunks,chunk);chunk:=decode('','hex'); END IF;\n  END LOOP;\n END LOOP;\n chunks:=array_append(chunks,chunk);\n SELECT string_agg(value,decode('','hex') ORDER BY ordinal) INTO output FROM unnest(chunks) WITH ORDINALITY AS c(value,ordinal);\n IF octet_length(output)<>emitted THEN RAISE EXCEPTION 'complete tree byte parity' USING ERRCODE='55000'; END IF;\n RETURN output;\nEND;\n"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        ]
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "defaction": {
+                                                "kind": "string",
+                                                "value": "DEFELEM_UNSPEC"
+                                              },
+                                              "location": {
+                                                "kind": "number",
+                                                "value": "340"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "stmt_len": {
+                            "kind": "number",
+                            "value": "5206"
+                          }
+                        }
+                      },
+                      {
+                        "kind": "object",
+                        "members": {
+                          "stmt": {
+                            "kind": "object",
+                            "members": {
+                              "GrantStmt": {
+                                "kind": "object",
+                                "members": {
+                                  "targtype": {
+                                    "kind": "string",
+                                    "value": "ACL_TARGET_OBJECT"
+                                  },
+                                  "objtype": {
+                                    "kind": "string",
+                                    "value": "OBJECT_FUNCTION"
+                                  },
+                                  "objects": {
+                                    "kind": "array",
+                                    "items": [
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "ObjectWithArgs": {
+                                            "kind": "object",
+                                            "members": {
+                                              "objname": {
+                                                "kind": "array",
+                                                "items": [
+                                                  {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "String": {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "sval": {
+                                                            "kind": "string",
+                                                            "value": "truss"
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "String": {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "sval": {
+                                                            "kind": "string",
+                                                            "value": "runtime_report_tree_bytes_v0_2"
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                ]
+                                              },
+                                              "objargs": {
+                                                "kind": "array",
+                                                "items": [
+                                                  {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "TypeName": {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "names": {
+                                                            "kind": "array",
+                                                            "items": [
+                                                              {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "String": {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "sval": {
+                                                                        "kind": "string",
+                                                                        "value": "jsonb"
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            ]
+                                                          },
+                                                          "typemod": {
+                                                            "kind": "number",
+                                                            "value": "-1"
+                                                          },
+                                                          "location": {
+                                                            "kind": "number",
+                                                            "value": "5268"
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                ]
+                                              },
+                                              "objfuncargs": {
+                                                "kind": "array",
+                                                "items": [
+                                                  {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "FunctionParameter": {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "argType": {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "names": {
+                                                                "kind": "array",
+                                                                "items": [
+                                                                  {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "String": {
+                                                                        "kind": "object",
+                                                                        "members": {
+                                                                          "sval": {
+                                                                            "kind": "string",
+                                                                            "value": "jsonb"
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                ]
+                                                              },
+                                                              "typemod": {
+                                                                "kind": "number",
+                                                                "value": "-1"
+                                                              },
+                                                              "location": {
+                                                                "kind": "number",
+                                                                "value": "5268"
+                                                              }
+                                                            }
+                                                          },
+                                                          "mode": {
+                                                            "kind": "string",
+                                                            "value": "FUNC_PARAM_DEFAULT"
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                ]
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "grantees": {
+                                    "kind": "array",
+                                    "items": [
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "RoleSpec": {
+                                            "kind": "object",
+                                            "members": {
+                                              "roletype": {
+                                                "kind": "string",
+                                                "value": "ROLESPEC_PUBLIC"
+                                              },
+                                              "location": {
+                                                "kind": "number",
+                                                "value": "5280"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "behavior": {
+                                    "kind": "string",
+                                    "value": "DROP_RESTRICT"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "stmt_location": {
+                            "kind": "number",
+                            "value": "5207"
+                          },
+                          "stmt_len": {
+                            "kind": "number",
+                            "value": "79"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

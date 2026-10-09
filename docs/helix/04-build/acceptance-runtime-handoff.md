@@ -65,6 +65,18 @@ seventeen-case iteration. This removes a demonstrated accidental scalar subset
 restriction. Actual tree invocation of this candidate and complete report-tree
 parity still need composition evidence; neither ceiling proves a shared account.
 
+The subsequent [tree/scalar checkpoint](../02-design/contracts/report-scalar-resource-v0.2.proposal.md#uninstalled-tree-composition-checkpoint)
+now runs four full nineteen-field synthetic wires through the pinned host schema
+and original native carrier, then compares complete native bytes independently.
+Large original keys, short-escape expansion, UTF-8 key ordering, array ordering
+and byte-document NUL preserve their exact meanings. Six additional private
+tree controls refuse malformed or over-bound input. Both candidate sources are
+UMF-captured with exact reload/export; old native files remain unchanged.
+This supersedes the missing tree-invocation observation above at the encoding
+component scope. A1–A5 still require original complete report producers,
+native/profile/account admission and protected atomic report/head publication;
+shape-valid synthetic wires cannot supply those facts.
+
 A subsequent graph-resource review moves the selected identifier-length check
 before NUL/surrogate scanning, verifies exact UTF-8 byte length before allocating
 encoded identifiers, and bounds edge labels before map lookup. Oversized malformed

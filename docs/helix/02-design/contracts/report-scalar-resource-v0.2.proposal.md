@@ -56,3 +56,38 @@ extracted declarations and `complete=false`. The loaded owner revision is
 That subset comparison does not relabel the loaded owner or qualify a complete
 current runtime bundle. Routine/body/grant/dependency inventory, resource
 composition and actual report integration remain explicit A1/A2 outputs.
+
+## Uninstalled tree composition checkpoint
+
+The [tree source](report-tree-bytes-v0.2.proposal.sql) derives from the existing
+private `canonical-tree-bytes.sql` task/frame algorithm, with a distinct candidate
+routine identity and calls to this scalar candidate. Its
+[UMF capture](report-tree-bytes-v0.2.proposal.umf.json) preserves original source;
+the [source receipt](../../04-build/evidence/design-audit/report-tree-source.json)
+reports exact archive/reload/export and incomplete declaration extraction. The
+existing native component files are unchanged.
+
+Tree ceilings remain four MiB of native JSONB text and complete canonical output,
+32,768 cumulative tasks, 16,384 pending tasks, native logical depth 256 and 4,096
+members per container. Host original-wire depth 128 and one-MiB source admission
+remain distinct checks; these numbers do not prove their full account composition.
+String pieces now have up to four MiB of output and must remain charged while
+copied into sink chunks. Pending frames, JSONB rendering/decoding, duplicate-key
+inventory, byte-order sorting, array growth, suffix copies, aggregate workspace
+and final contiguous output require actual original reservations. A bounded sink
+does not establish bounded peak or linear total copying.
+
+The [native tree receipt](../../04-build/evidence/design-audit/report-tree-native.json)
+records four full nineteen-field synthetic report wires through the original
+composed host schema/carrier preparation: baseline, control escape expansion,
+large UTF-8 key, and byte-order/array-order/NUL content. Complete output bytes
+equal an independently authored Unicode-string oracle. Six additional private
+inert-tree controls refuse duplicate keys, invalid key/value UTF-8, unknown node
+kinds, container overflow and aggregate output overflow. These fault carriers
+are not advertised public report inputs. Native functions ran temporarily as the
+administrative principal in one rolled-back session.
+
+This supplies tree/scalar encoding correspondence, not genuine report production.
+Original source/artifact digests, full lifecycle/assertion/UMF/index/rebind facts,
+current authority, installed routine/grant inventory, pre-effect capacity and
+atomic report/head settlement remain required before accepted publication.
