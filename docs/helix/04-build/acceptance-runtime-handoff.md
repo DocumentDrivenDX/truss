@@ -10,6 +10,19 @@ Keep unconditional deferred safety barriers until the entire original operation 
 
 ## Ordered implementation work
 
+The private `verifyWithRegisteredReportProfile` component now binds the report's
+reportProfile to an original issued profile resolver and its exact registered
+report artifact, then verifies the existing ten producer fields and native cut.
+It returns scope `ten_producer_fields_and_registered_report_bytes_only`.
+Substituted identity/version/hash, copied resolver and missing registration
+refuse before native observation. With the original UMF producers, the report
+suite passes 15 tests/138 assertions and strict TypeScript passes. These tests
+use controlled native observations; this new path has no fresh PostgreSQL
+execution evidence. It is separate from the execution-candidate comparison and
+does not claim their combined verification, selected semantic interpretation or
+full seventeen-field admission. Public selectors and deferred barriers remain
+unchanged.
+
 ### A2 UMF support producer before full report comparison
 
 Source inspection of `catalog-umf-report-basis.ts` finds original source versions,

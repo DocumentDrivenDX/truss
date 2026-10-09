@@ -3,6 +3,8 @@ import {requireOriginalCatalogExecutionReportCandidate,recheckOriginalCatalogExe
 import {createCanonicalAcceptanceReportHandoff} from './canonical-report-handoff';
 import {collectCatalogExtensionArtifacts} from './catalog-extension-artifacts';
 import {decodeAcceptanceJson} from '../../postgresql/src/acceptance-json';
+import {requireOriginalAcceptanceProfileResolver,type createAcceptanceProfileResolver} from './acceptance-profiles';
+import type {ProfilePin} from '../../../docs/helix/02-design/contracts/bindings/truss-acceptance-input-v0.1';
 import {requireOriginalCatalogReportPreparation,type collectCatalogReportPreparation} from './catalog-report-preparation';
 import {recheckCatalogReportDocumentBasis} from './catalog-report-document-basis';
 import type {createCatalogInputPreparation} from './catalog-input';
@@ -30,7 +32,17 @@ export async function createCatalogReportCorrespondence(dependenciesPackage:stri
   return Object.freeze({...encoded,verifiedFields:Object.freeze(Object.keys(expected)),nativeObservation:basis.documentBasis.nativeObservation,
    scope:'ten_original_report_producer_fields_only' as const});
  }};
- return Object.freeze({...correspondence,async verifyWithExecutionCandidate(connection:CatalogStageConnection,prepared:Prepared,basis:Basis,wire:Uint8Array,candidate:Awaited<ReturnType<typeof composeCatalogExecutionReportCandidate>>){
+ return Object.freeze({...correspondence,async verifyWithRegisteredReportProfile(connection:CatalogStageConnection,prepared:Prepared,basis:Basis,wire:Uint8Array,resolver:ReturnType<typeof createAcceptanceProfileResolver>,selected:ProfilePin){
+  requireOriginalCatalogReportPreparation(basis,prepared);
+  requireOriginalAcceptanceProfileResolver(resolver);
+  const registration=resolver.resolveReport(selected);
+  const encoded=codec.prepare(wire),report=decodeAcceptanceJson(Buffer.from(encoded.originalUtf8Hex,'hex')) as Record<string,unknown>;
+  if(!same(report.reportProfile,registration.profile))throw Error('Original registered report profile correspondence required');
+  const result=await correspondence.verify(connection,prepared,basis,wire);
+  return Object.freeze({...result,registeredReportArtifact:registration.artifact,
+   verifiedFields:Object.freeze([...result.verifiedFields,'reportProfile']),
+   scope:'ten_producer_fields_and_registered_report_bytes_only' as const});
+ },async verifyWithExecutionCandidate(connection:CatalogStageConnection,prepared:Prepared,basis:Basis,wire:Uint8Array,candidate:Awaited<ReturnType<typeof composeCatalogExecutionReportCandidate>>){
   requireOriginalCatalogExecutionReportCandidate(candidate,connection,prepared,basis);
   const result=await correspondence.verify(connection,prepared,basis,wire);
   const report=decodeAcceptanceJson(Buffer.from(result.originalUtf8Hex,'hex')) as Record<string,unknown>;

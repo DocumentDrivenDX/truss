@@ -4,6 +4,7 @@ import {createCatalogInputPreparation} from '../packages/umf-bun/src/catalog-inp
 import {loadUmfDeclarationProducer,loadUmfFieldAssertionProducer} from '../packages/umf-bun/src/index';
 import {collectCatalogReportPreparation} from '../packages/umf-bun/src/catalog-report-preparation';
 import {createCatalogReportCorrespondence} from '../packages/umf-bun/src/catalog-report-correspondence';
+import {createAcceptanceProfileResolver} from '../packages/umf-bun/src/acceptance-profiles';
 import {collectCatalogOriginalExecutionBasis} from '../packages/umf-bun/src/catalog-original-execution-basis';
 const recordDir=process.env.TRUSS_UMF_PRODUCER,ownerDir=process.env.TRUSS_UMF_DECLARATION_PRODUCER,fieldDir=process.env.TRUSS_UMF_FIELD_ASSERTION_PRODUCER;if(!recordDir||!ownerDir||!fieldDir)throw Error('All original owner directories required');
 const preparation=await createCatalogInputPreparation(recordDir,'/Users/erik/Projects/umf/package.json'),owner=await loadUmfDeclarationProducer(ownerDir),fields=await loadUmfFieldAssertionProducer(fieldDir);
@@ -51,6 +52,26 @@ const correspondence=await createCatalogReportCorrespondence('/Users/erik/Projec
 const untrustedReport=(await Bun.file('docs/helix/03-test/report-wire-untrusted.fixture.json').json()).report;
 function reportFor(basis:Awaited<ReturnType<typeof collectCatalogReportPreparation>>){return {...structuredClone(untrustedReport),rev:basis.provisionalRevision,acceptedInput:prepared.original.input,documents:basis.documentBasis.documents,counts:basis.counts,provisional:basis.provisional,diagnostics:basis.validationEvidence.diagnostics,documentInterpretations:basis.validationEvidence.documentInterpretations,extensions:collectCatalogExtensionArtifacts(prepared).extensions}}
 const wire=(value:unknown)=>new TextEncoder().encode(JSON.stringify(value));
+test('report profile binds original registered bytes and refuses substitution before native observation',async()=>{
+ const basis=await collectCatalogReportPreparation(connection(),prepared,'1',owner,fields);
+ const bytes=wire({purpose:'test byte custody, no semantic authority'});
+ const pin={identity:'registered-report',version:'0.1.0',sha256:new Bun.CryptoHasher('sha256').update(bytes).digest('hex')};
+ const resolver=createAcceptanceProfileResolver([{role:'report',profile:pin,artifactIdentity:'original-report-profile',bytes}]);
+ const report={...reportFor(basis),reportProfile:pin},native=connection();
+ const result=await correspondence.verifyWithRegisteredReportProfile(native,prepared,basis,wire(report),resolver,pin);
+ expect(result.scope).toBe('ten_producer_fields_and_registered_report_bytes_only');
+ expect(result.verifiedFields).toContain('reportProfile');
+ expect(result.registeredReportArtifact.sha256).toBe(pin.sha256);
+ for(const supplied of [{...pin,identity:'substituted'},{...pin,version:'another'},{...pin,sha256:'0'.repeat(64)}]){
+  native.queries.length=0;
+  await expect(correspondence.verifyWithRegisteredReportProfile(native,prepared,basis,wire({...report,reportProfile:supplied}),resolver,pin)).rejects.toThrow('profile correspondence');
+  expect(native.queries).toEqual([]);
+ }
+ native.queries.length=0;
+ await expect(correspondence.verifyWithRegisteredReportProfile(native,prepared,basis,new Uint8Array(),{...resolver},pin)).rejects.toThrow('byte-custody resolver');
+ await expect(correspondence.verifyWithRegisteredReportProfile(native,prepared,basis,new Uint8Array(),createAcceptanceProfileResolver([]),pin)).rejects.toThrow('report profile unavailable');
+ expect(native.queries).toEqual([]);
+});
 test('complete wire corresponds to ten issued producer fields while other fixture fields remain untrusted',async()=>{
  const native=connection(),basis=await collectCatalogReportPreparation(native,prepared,'1',owner,fields);
  const result=await correspondence.verify(native,prepared,basis,wire(reportFor(basis)));
