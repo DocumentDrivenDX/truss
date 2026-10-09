@@ -35,6 +35,59 @@ Observe and validate required native equality, inequality, exact numeric order, 
 
 ## Expected comparison grammar
 
+### Selected identity-path grammar and alias references
+
+The existing `conformance-aliases-v0.1.proposal.schema.json` supplies binding
+declarations, not a path registry or substitution algorithm. Its
+`operationIndex` is the zero-based position in the original ordered input steps,
+parsed as an exact unsigned decimal integer; never a JavaScript floating-point
+number. A setup pointer resolves against the complete admitted setup result,
+and an operation-result pointer resolves against that step's entire public
+result wire. It does not resolve against a runner-created projection. Failed or
+unavailable outcomes bind nothing unless the registered result contract
+explicitly declares the referenced identity present and eligible.
+
+Each registered identity-path entry selects one operation, input/result or
+expected observation surface, exact profile pin, RFC 6901 pointer and namespace
+identity. Pointers are exact occurrences: no wildcard, recursive descent,
+field-name heuristic or substring match. Array indexes use their canonical
+unsigned decimal spelling and must resolve within the actual array. Decode
+`~1` and `~0` once; distinguish an object member named `0` from array index zero
+using the resolved container. Missing members and out-of-range indexes refuse
+resolution. Paths into ordinary property payloads are ineligible even when the
+value looks like an ID. A variable-length surface requires its registered
+procedure to enumerate concrete eligible paths before comparison; the observed
+writer cannot define that enumeration.
+
+For this case grammar, an alias reference is the closed object
+`{"identityAlias":"$a"}` in a registered identity slot of the case's input or
+expected artifact. The adapter resolves input references into the unchanged
+existing public wire before invocation. In an expected artifact it resolves
+them to the original bound identity for comparison. The string `"$a"` remains
+literal data everywhere. The reference object is not interpreted outside
+registered identity slots, including inside JSON-valued properties. A
+reference's symbol and namespace must match exactly one admitted declaration
+and path entry. Duplicate symbols, duplicate namespace identities, unknown
+namespaces and a binding whose identity kind/profile differs from its path
+entry refuse the case before dependent effects.
+
+Bindings become usable only after the original setup/result and applicable
+pending or committed boundary have been independently admitted. Preserve the
+binding's original scope generation and transaction outcome. A rolled-back
+pending allocation cannot supply a later committed identity; cross-scope use
+requires the selected operation contract's committed visibility, not a reused
+scope label. Aliases are comparison aids and do not authorize access or retry.
+Two aliases resolving to the same identity must still satisfy the case's
+independent equality/inequality requirements; normalization cannot turn an
+actual collision into distinct symbols.
+
+Required independent controls include an escaped member pointer, an object
+member named `0`, a missing array index, a literal `$a` property, an alias-shaped
+JSON property that remains unchanged, a result binding from a rejected step,
+a forward input reference and a rolled-back pending binding used after commit
+of another scope. These supplement the earlier grammar controls; they remain
+unexecuted until the closed path registry and runner are implemented.
+
 Each surface expectation selects its exact comparator/profile and complete observation boundary. Compare ordered operation results and journal/feed semantic order as sequences. A collection is order-insensitive only when its declared contract says so; compare full membership and multiplicity, never just counts or hashes. Exact source/numeric token/presence/definition content stays exact under its governing codec. JSON object-member ordering may follow the selected canonical grammar; it cannot erase absent versus null or normalize decimal spellings where lexical custody is required.
 
 Diagnostic expectations compare the governing severity/code/path multiset with multiplicity; message text is informative unless the selected contract explicitly makes it normative. Expected failure names the actual permitted error family and required unchanged/rolled-back/unknown state. Resource or executor failure cannot stand in for a planned semantic rejection. Every required expectation must be checked; one unavailable observer makes that case unverified, not passed from its other surfaces.
