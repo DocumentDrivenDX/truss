@@ -960,3 +960,33 @@ an unresolved incompatibility; do not advertise that representation merely becau
 it works for nonempty groups. Existing durable retry and no-loss requirements
 remain selected, with the token/profile/native producer and consumer compatibility
 handoff still explicit outputs.
+
+### Authored Key selection and primary metadata correspondence
+
+The security owner's current work identifies a Weft admission mismatch around
+core `Key.primary` Boolean metadata. Treat that work as an upstream candidate,
+not a published compiler version. PY-02/03 must consume the eventual original
+owner profile and preserve the complete admitted Key; neither the Python adapter
+nor Truss should strip `primary` to make an older compiler accept the document.
+The current Weft application model separately resolves an explicit authored Key
+ID and infers a Relationship source endpoint from one primary Key (or a sole
+Key). These are distinct selection boundaries and must not be conflated.
+
+Freeze independent cases before adopting the owner change: a Record with two
+eligible Keys, one marked primary, and a request explicitly selecting the other;
+the same request with primary true, false and absent on the selected Key; and
+malformed non-Boolean primary metadata. The explicit selection must preserve its
+original ordered fields, canonical key bytes and endpoint correspondence rather
+than switching to the primary Key. Invalid metadata must fail original owner
+admission before native submission. Relationship inference cases separately
+exercise one primary, no primary with one Key, ambiguous multiple Keys and
+multiple primary Keys against the owner's admitted rules; do not invent a
+fallback in the adapter.
+
+Compare original UMF metadata, compiler-selected identity and actual native
+endpoint values using independent expected identities and bytes. Include equal
+Key names in different Records and reordered composite fields so name-only or
+unordered comparisons cannot pass. Unsupported compiler/security tuples remain
+refused; a metadata-only compiler fix does not qualify authorization compilation,
+installed graph-source authority or Python packaging. These cases are planned,
+not executed, and remain within the existing UMF/Weft/security ownership split.
