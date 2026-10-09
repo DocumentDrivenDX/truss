@@ -62,6 +62,31 @@ full reference composition.
 
 ### Admission steps
 
+The composition review must retain one complete compatibility record across the
+following boundaries. This record is a review input to the existing assembly
+interfaces, not a new runtime authority token or public configuration format.
+Each row needs exact original artifact membership and a correspondence procedure;
+matching version strings alone cannot join rows.
+
+| Boundary | Required correspondence in the same selected composition |
+| --- | --- |
+| UMF interpretation to acceptance | Original document version/bytes and admitted transition, supported subset and assertion interpretation map to the exact catalog/report producers. Preserve source-version membership even when execution uses a transitioned representation |
+| Physical model to installation | CH-01 preserves/evolves/supersedes every original physical identity and resolves all selected implicit effects. Generated DDL, initialization, routine/grant inventory and installed marker/archive refer to that same complete model |
+| Acceptance to history | The nineteen-field report 0.3 and event 0.2 use the same original definitions, lifecycle ownership and complete rebind group. Their transitive schemas and semantic profiles agree with archive/page consumers; successful wire validation alone does not establish that agreement |
+| Storage to compiler | Weft's registered mapping covers the selected physical homes, typed identity, presence and exact-value codecs. Existing 0.11 fixtures remain historical until the compiler owner qualifies a mapping for the composed layout; executable SQL against a similar table is insufficient |
+| Execution to security/resources | Selected transport, transaction and bounded-result procedures consume the original security owner's caller, freshness, exclusion and publication custody. The same operation cannot mix one profile's ingress bound with another profile's decoder or drain procedure |
+| Installation to upgrades | M1's source and target each have their own complete compatible tuple. The registered route explicitly maps retained identities, history, receipts, feed tokens and recovery obligations between them; installing target DDL does not prove that mapping |
+| TypeScript to Python | Both implementations advertise the same admitted contract/corpus and storage semantics, while retaining independent driver/build evidence. Python wheel ABI compatibility establishes compiler loading only; it cannot qualify Python raw transport or substitute for shared runtime interchange |
+
+For each row, review both a valid correspondence and a deliberate substitution:
+retain the nominal version but change one source artifact, native descriptor,
+producer, compiler mapping, driver profile or security generation. Observe refusal
+at the existing preparation/admission boundary before protected effects. Keep
+unavailable rows explicit and their dependent capabilities inactive; independent
+capabilities still require their complete own closure. The review record must
+distinguish authored compatibility, independently reviewed compatibility and
+native qualification, rather than marking all three complete from a source hash.
+
 1. Capture exact original source/profile bytes for each selected capability and distinguish already selected product behavior from proposed implementation profiles. Preserve current pending human choices separately.
 2. Resolve every required producer and its owned dependencies, including original native authority/executor and resource procedures. Record an unavailable producer as an incomplete capability; never insert fabricated native identities or qualify through a placeholder.
 3. Build immutable definition artifacts in the existing acyclic composition order. Recursive logical UMF types do not create permission to introduce cyclic exact-byte artifact references.
@@ -82,6 +107,6 @@ Independent integration tests must deliberately construct each incompatible comb
 
 ## Remaining concrete selections
 
-Select the original native producer/resource/authority profiles for each row; reconcile one complete physical model and exact supported release/environment range; finish language-neutral case/adapter grammar. Existing pending human decisions cover Python package ownership, traversal terminal-versus-path output and pre-effect continuous-writer admission retry. Preserve those questions rather than inferring an answer here. Optional traversal can remain unavailable while unaffected toolkit work proceeds, but its broader required design remains open.
+Select the original native producer/resource/authority profiles for each row; reconcile one complete physical model and exact supported release/environment range; independently review and implement the authored language-neutral case/adapter grammar through C1–C7. Existing pending human decisions cover Python package ownership, traversal terminal-versus-path output, catalog ownership scope and pre-effect continuous-writer admission retry, alongside the benchmark statistic/profile selections in the decision queue. Preserve those questions rather than inferring an answer here. Optional traversal can remain unavailable while unaffected toolkit work proceeds, but its broader required design remains open.
 
 This proposal does not shrink full toolkit scope to the scalar reference milestone or a single compiler fixture. Broader exact recursive values, supported relationships, complete history/feed and consumer Python interchange retain their governing requirements and independent qualification exits.
