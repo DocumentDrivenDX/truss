@@ -170,3 +170,28 @@ retained exact context/artifacts. No automatic replay is allowed. Full outer
 rollback may remove durable rows but cannot be interpreted as permission to reset
 a still-live original epoch. A genuinely new admitted native transaction gets its
 own issuer only through the original adoption protocol.
+
+## Native control outcome correspondence
+
+The [server-rejection probe](evidence/design-audit/pg8000-local-control-rejection-native.json)
+now provides the independent negative outcome alongside the happy-control and
+interrupted-callback probes. A deliberately malformed `SAVEPOINT` submission
+produces an original ErrorResponse containing SQLSTATE42601 followed by exact
+ReadyForQuery E, with no CommandComplete. Independent pg_stat_activity observes
+the same backend idle in transaction (aborted). The receiver quarantines and a
+new submission refuses without another send. Explicit socket close is separately
+followed by observed backend termination and absence of the pending fixture write.
+
+| Observed candidate boundary | Truthful interpretation for original integration |
+| --- | --- |
+| Original expected command and ready frames for a registered valid control | Candidate successful frame correspondence. Original transaction/attempt/savepoint confirmation and account custody are still required before admission. |
+| Correlated ErrorResponse then ReadyForQuery E, no successful command completion | Confirmed failure of that submitted negative control, with the outer transaction aborted but not yet rolled back/settled. Preserve issued ordinal; permit no registry/business admission. |
+| CommandComplete captured, callback fails before ReadyForQuery | Completion is unavailable to the original host protocol. Backend can remain live and pending. Close admission, preserve original recovery custody and do not resubmit. |
+| Later explicit transport closure plus independent backend termination | A separate containment observation. It is not implied by client quarantine, exception, failed-transaction status or uncommitted-row invisibility. |
+
+The rejected malformed command is a negative protocol fixture, not an admitted
+registered savepoint definition. This probe uses local trust and reused private
+driver dependencies; driverPortQualified remains false. It supplies neither
+original account/control permits nor lost-COMMIT/durable recovery qualification.
+Complete producer integration must preserve these distinct outcomes rather than
+classifying every exception as an unknown result or an already settled rollback.
