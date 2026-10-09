@@ -1,0 +1,66 @@
+{
+  "scope": "Packaged already-admitted Python exact-value host views and local runtime lifecycle only; no UMF grammar/facet or native storage admission, full protected engine, installer or migration qualification",
+  "python": "3.11",
+  "platform": "macOS arm64",
+  "wheel": {
+    "name": "truss_toolkit-0.0.1.dev0-py3-none-any.whl",
+    "sha256": "98c65bc022ac2825f17f42adc022b93eb32ee5ad65de69c55830c67214f174b6"
+  },
+  "sources": [
+    {
+      "path": "packages/python/pyproject.toml",
+      "sha256": "44c4146d1dabbcb38c977628a95e2ce45d940608c5f1c57f23d47e50d0ccf8f5"
+    },
+    {
+      "path": "packages/python/src/truss/numeric.py",
+      "sha256": "4833d54fda887fa70171511761d28ea75a0dc22aa89a50c3eae2a88f2b972d18"
+    },
+    {
+      "path": "packages/python/src/truss/timestamp.py",
+      "sha256": "b08dbf2a9c48754282f05429a58b66515c75a815f6e1282d3c485248f762120c"
+    },
+    {
+      "path": "packages/python/tests/test_exact_numeric.py",
+      "sha256": "1b7753e6692cd19575e401612056159dae06df6c2769589800ce0429a165c458"
+    },
+    {
+      "path": "packages/python/tests/test_exact_timestamp.py",
+      "sha256": "8d9d1c2364d474d98f1ab63ad586a8c3c11148ff12950e94bef424f1e997379f"
+    },
+    {
+      "path": "packages/python/src/truss/local_runtime.py",
+      "sha256": "e0f983625af50cf61a6bea8f79134723de97263e5f553581cf0b15892f001ea5"
+    },
+    {
+      "path": "packages/python/tests/test_local_runtime.py",
+      "sha256": "6a6128f5380aeb9ba8646edd7e1b6339cf71cdf3c72590d3367ab2e9879563a0"
+    },
+    {
+      "path": "docs/helix/03-test/python-exact-value-vectors.proposal.json",
+      "sha256": "5700c64bfaf5fe11becd539fa926960d1e82de569e0f5ee815beaa2e881101de"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/python_exact_numeric_candidate.py",
+      "sha256": "dbf942b9633d3079e4bb008b678f863db5f322d192d8c24e2509a63d39e38d4f"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/python_exact_timestamp_candidate.py",
+      "sha256": "a99fbb9765a7d5360881dd3c1b3b55029e9ed39ddeed918e9495f47731988a32"
+    }
+  ],
+  "umfOwnerSourceReview": {
+    "revision": "8e76c74d14203225d1ef159c9132bb9e9b0cdffe",
+    "path": "src/adapters/javascript-numeric.ts",
+    "sha256": "3d38e52cc878910509e8e277f671ff304707db37633f4f7c39082eb943618fdc",
+    "scope": "Committed JavaScript numeric API reviewed; no working-checkout import or new Python UMF semantics"
+  },
+  "tests": {
+    "total": 9,
+    "exactHostViews": 5,
+    "nativeLocalLifecycle": 4,
+    "result": "pass",
+    "command": "PYTHONPATH=/private/tmp/truss-python-runtime-installed python -m unittest discover -s /Users/erik/Projects/truss/packages/python/tests -v",
+    "workingDirectory": "/private/tmp"
+  },
+  "qualification": "Wheel installed with --no-deps into a separate target. Shared proposal corpus read as independent test expectations; not shipped engine corpus or clean dependency resolution. Native lifecycle uses pgserver0.1.4/PostgreSQL16.2. Host-view checks do not prove native numeric/timestamp round trips."
+}

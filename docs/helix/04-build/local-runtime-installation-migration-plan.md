@@ -349,3 +349,27 @@ context refusal, and successful explicit cleanup/restart after removing the faul
 These controls qualify the wrapper's custody response, not every native shutdown
 or startup-constructor failure. Complete driver/native outcome settlement and
 process-crash recovery remain required for the installed engine/migration profile.
+
+## Python exact-value component packaging
+
+The existing numeric/timestamp candidate converters are now packaged as
+truss.numeric and truss.timestamp, with the same independently authored shared
+exact-value vectors. They require already admitted original text and a finite
+caller-selected byte bound. Python int/Decimal construction retains original
+spelling without float conversion or ambient Decimal rounding. Bool/float host
+integers and nonfinite Decimal views refuse. Timestamp conversion retains the
+token when precision, offset or Python's date range prevents a lossless datetime
+view. It does not classify unavailable host conversion as invalid UMF content.
+
+This packages host views, not UMF grammar/facet admission, a storage codec, key
+normalization, decimal arithmetic or native-domain qualification. The committed
+UMF JavaScript numeric owner API remains the source for TypeScript number/bigint/
+decimalToken behavior; Python does not introduce a competing primitive. Original
+candidate files and historical evidence remain unchanged.
+
+The [exact-host-view wheel receipt](evidence/design-audit/python-exact-host-views-wheel-component.json)
+pins the expanded distribution, unchanged original candidates, shared vectors and
+committed owner numeric source review. All nine installed-wheel tests pass from
+outside the checkout: five exact host-view checks plus four native local lifecycle
+checks. Dependencies are reused; native exact-value round trips and complete
+committed TypeScript/Python engine interchange remain separate obligations.

@@ -61,3 +61,24 @@ automatically. The host may explicitly call `close()` again after resolving the
 failure. A successful close releases custody only after the owned cleanup returns
 and its postmaster marker is absent. Startup failures inside pgserver's constructor,
 crash recovery and other operating systems still need separate qualification.
+
+Already admitted exact-value conveniences are available in `truss.numeric` and
+`truss.timestamp`:
+
+```python
+from truss.numeric import decimal_from_admitted_text
+from truss.timestamp import timestamp_from_admitted_text
+
+amount = decimal_from_admitted_text('12345678901234567890.123456789', 128)
+assert amount.original_text == '12345678901234567890.123456789'
+time = timestamp_from_admitted_text('2026-10-09T12:34:56.123456789Z', 64)
+assert time.datetime_view is None  # Python datetime cannot preserve nanoseconds.
+```
+
+The caller must first admit source grammar, UMF field meaning and native domain.
+These functions retain original spelling and require a caller-selected finite byte
+bound; they perform host conversion only. Decimal construction ignores ambient
+precision, but subsequent Decimal arithmetic follows the caller's context and is
+not qualified here. Integer host input rejects bool and float. Timestamp tokens
+retain their original offset/precision even when a datetime view is unavailable.
+These adapters do not normalize keys or define an alternative UMF grammar or codec.
