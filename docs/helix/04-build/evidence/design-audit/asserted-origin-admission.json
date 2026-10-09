@@ -1,0 +1,19 @@
+{
+  "sources": {
+    "scripts/check-asserted-origin-admission.ts": "81dbad4654443ba71007e292c183f135e1252c8fd8e0ee5624cf8893f008d739",
+    "packages/postgresql/native/operation-asserted-origin-admission.sql": "7fefe615b0d296e627e18f187c52e4d47f890852b5ca5c0d8e225133b5a5efec",
+    "packages/postgresql/native/operation-admission.sql": "3d71a92e3a02f568e1edf9fa0b0ca18b8cc35e79a117c6724a4351022375f1bf",
+    "packages/postgresql/native/catalog-input-custody.sql": "b48222a7eafabfa854568422d9ffd7e76c355563e144fe2c620c216b1af5d230"
+  },
+  "checks": [
+    "Empty asserted bytes refuse before operation insertion",
+    "Empty capture profile refuses before operation insertion",
+    "Asserted source bound refuses before insertion",
+    "One original context0.3 artifact retains exact asserted whitespace/escapes and separate native actors/profile",
+    "Context original bytes cannot be replaced",
+    "Original operation cannot be deleted",
+    "Failed substitutions preserve complete original context",
+    "Outer rollback removes captured operation"
+  ],
+  "scope": "Actual context0.3 original byte-capture and immutable custody on PostgreSQL17.9; profile bytes are explicit component inputs, not installed authority or complete asserted-origin semantic admission"
+}
