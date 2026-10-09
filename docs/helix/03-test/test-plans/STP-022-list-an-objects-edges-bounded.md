@@ -88,3 +88,10 @@ Ordering-domain controls independently seed signed catalog IDs whose decimal tex
 
 
 D0–D7 planned page controls inject a malformed, unauthorized-owner, out-of-order or oversized lookahead after independently valid requested records. No prefix, end page or cursor may publish. Truncated native completion after zero/limit rows also refuses. Validate all observed identities and exact selected order before current-authority closure, then race cancellation/disposal/authority expiration against D7 with independently observed zero publication. Charge lookahead, parser state, native candidates and full serialized output concurrently; no public-size limit may erase native work or allocation. Run through the actual selected transport/coordinator producers before qualification.
+
+
+## Live order-key repeat counterexample and snapshot control
+
+Independently establish visible edge order `(a,10)`, `(b,20)`, `(c,30)` under the selected comparator. Read limit 2 with boundary `(b,20)`, then commit a concurrent change moving edge 10 to key `d`. A subsequent live READ COMMITTED page may return 30 and 10: the repeated identity demonstrates the declared mutable-order behavior, not successful frozen enumeration. Independently confirm the actual native order-key change and commit; do not simulate it by editing a decoded result. Repeat using one caller-held repeatable-read snapshot: continuation returns only 30 with terminal membership and retains the original edge-10 order despite the concurrent commit. A cursor copied to a new transaction cannot claim that held snapshot.
+
+Exercise authority revocation separately from the order mutation: no snapshot consistency guarantee authorizes disclosure after current required permissions are lost. The security-owned publication protocol must withhold the complete page/cursor when its lease or drain evidence is unavailable. These are planned native controls and establish no implemented transport or publication guarantee.

@@ -29,7 +29,7 @@ ddx:
 
 ## Context
 
-Ordered relationships use an order key; others are ordered by identifier.
+The selected direct-list comparator orders non-null order keys using the qualified C comparator, then immutable edge ID for ties, with null keys last and ordered by ID. All-null relationships therefore use ID order. Mixed relationship selections use the same global comparator, rather than a different comparator per relationship. Complete stable paging requires one caller-held qualified snapshot; each page also requires current authorization before publication.
 
 ## Walkthrough
 
@@ -46,7 +46,7 @@ Ordered relationships use an order key; others are ordered by identifier.
 ## Edge Cases
 
 - **An object with no edges**: empty list.
-- **Edges deleted between pages**: no edge is returned twice.
+- **Edges changed between pages**: a held snapshot preserves original membership/order and avoids repeats. Separate live READ COMMITTED pages can omit or repeat an edge whose mutable order key crosses the prior boundary; deletion alone does not repeat a stable-order edge. The declared live mode cannot promise frozen enumeration.
 
 ## Test Scenarios
 
