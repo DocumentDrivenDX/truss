@@ -22,6 +22,35 @@ Weft's committed source exposes `weft.compile_json(request: str) -> str` through
 
 ## Consumer count-summary integration
 
+### Security-enabled compiler adoption gate
+
+Read-only review of the security owner's uncommitted Weft CONTRACT-005 and
+`compile-request-v0.3.schema.json` on 2026-10-09 observes a separate
+`weft-compile/0.3.0` candidate: exact UMF 0.8 source pins plus policy/ontology
+source bytes, retaining the 0.2 SQL grammar. Its documented activation gate
+refuses security-enabled compilation before backend emission. This is an owner
+review input, not a selected Truss interface, published package or supported
+security profile; do not build a release from the dirty owner checkout.
+
+PY-02/PY-03 must preserve that distinction when the owner publishes the actual
+interface. Compile capability and native execution capability are admitted
+separately. A source-shape-valid policy packet, ordinary compiler artifact or
+successful Python import cannot establish protected lowering or authorization.
+Consume the owner's complete emitted security/result/host-obligation contract
+through original Truss execution custody once it is available; do not append a
+local security flag to an ordinary artifact or implement policy lowering here.
+
+The independent Python integration schedule must cover an unsupported protected
+request, an unknown compiler version, malformed security source, and a protected
+request whose selected backend lacks the required lowering. Each refuses before
+native submission and publishes no partial SQL/result. Instrument the admitted
+executor to independently observe zero submissions. No refusal may trigger a
+retry through 0.1/0.2, drop policy/ontology members, change the selected backend,
+or convert the request to an ordinary query. Faults after native submission keep
+the original execution/settlement rules instead of being labeled compiler
+refusal. Exact diagnostics and positive protected cases follow the owner's
+published versioned contract; this handoff does not freeze its draft API.
+
 ### PY-02 reproducible development wheel recipe
 
 Use a clean source checkout of Weft commit
