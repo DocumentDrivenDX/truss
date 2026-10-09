@@ -88,6 +88,62 @@ derivation, and later same-ID definition with changed retained-data meaning. The
 original invalid-core control remains required alongside every positive extension
 case. No probe or packet assumes the pending catalog-ownership answer.
 
+## Provisional storage and complete-report handoff
+
+The existing reviewed storage declares `rel_endpoint` as the complete
+`(rel_type_id, source_type, target_type)` membership, while `rel_def.target_key`
+is nullable text. These declarations can represent typed endpoint membership;
+they do not distinguish an explicitly absent key from an unresolved key selection
+or establish heterogeneous target-key meaning. Consume the full original intent
+and registered interpretation alongside native columns. A SQL NULL target_key
+cannot turn unresolved required key semantics into an admitted key-free relation.
+If the complete selected mapping needs additional storage, compose it through
+the authoritative UMF physical model and CH-01; do not introduce a runtime
+side table, implicit ALTER or alternate catalog outside installation inventory.
+
+E4's provisional producer must independently compare all of the following before
+report/head finalization:
+
+- Every distinct valid unresolved lineage has exactly one admitted provisional
+  type, no authored properties/keys and no invented definition source. Retained
+  instance content remains exact under the selected provisional storage profile.
+- Every non-skipped intent has its actual derived relationship and complete
+  source/target endpoint cross-product. All original bounds/direction/lifecycle
+  and key interpretation match the retained source, including explicitly
+  unavailable operations; typed FK success proves only its structural scope.
+- Each full report `provisional` member refers to the actual type and its complete
+  `via` relationship inventory. Repeated references to one type do not multiply
+  the type count; omitting one surviving referring relationship fails completeness.
+- Skip creates no relationship/endpoints for the skipped intent and emits the
+  existing `losses` carrier with original source, exact pointer, registered loss
+  profile and complete loss artifact. An empty relationship count or retained
+  source alone does not prove explicit skip reporting.
+
+Retiring or skipping the last referring relationship does not silently define,
+delete or recycle its placeholder. Preserve the original type identity and any
+retained objects/recovery obligations. Continue reporting an active provisional
+type; its complete `via` may be empty only after independently proving no active
+referring relationships remain. An explicit type retirement still follows the
+selected original lifecycle/data-preservation procedure and admitted owner scope.
+An orphan is not permission to invent an authoritative target document or apply
+an implicit cleanup policy. Later legitimate definition can claim the preserved
+lineage under the same promotion checks, rather than allocating a fresh type.
+
+Independent cases seed two relationships to one unknown and another same-name
+unknown under a different declared owner. Compare actual counts, complete typed
+endpoints and full report references, then retire one relationship and later the
+last. Retain objects for the orphan and verify continued reporting and stable
+later promotion. Separately alter only target-key interpretation while preserving
+the same nullable native cell: complete source/profile correspondence must refuse
+the substitution. Fail after placeholder/relationship allocation and before full
+report insertion; confirmed rollback removes all new effects and preserves the
+prior orphan/data state. Unknown commit follows original acceptance recovery.
+
+These are E4/E5 design obligations, not native results. The existing report wire
+already has `provisional`/`via` and source-qualified `losses`; use those carriers
+without inventing another report format or treating shape-valid empty arrays as
+complete semantic evidence.
+
 ## Remaining representation-to-policy handoff
 
 | Stage | Required authored output and independent exit |
