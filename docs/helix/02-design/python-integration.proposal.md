@@ -48,8 +48,16 @@ First verify import, exact wheel identity and refusal of a closed invalid reques
 then run independently authored supported-query/parameter/obligation expectations
 through the original registered mapping. An import or a JSON error response is
 only a packaging/ABI smoke check, not compilation or native Truss support. This
-recipe is derived from committed owner source and remains not_run in Truss;
-wheel distribution and full native security/transport/mapping qualification
+recipe has now run from an isolated committed-source archive using Rust 1.90.0,
+maturin 1.9.6 hosted on Python 3.12.14, and locked/offline release dependencies.
+The macOS arm64 cp39-abi3 wheel installed without dependencies into a clean
+Python 3.11.17 environment. Import, version, absent test-original export and
+actual WFT-INPUT blocked response for `{}` pass. The
+[saved build/smoke receipt](../04-build/evidence/design-audit/weft-python-wheel-development-smoke.json)
+pins archive, unchanged Cargo.lock and exact emitted wheel bytes. The ABI3 build
+does not use a Python-3.11-specific binary ABI, despite the requested interpreter.
+No supported query or Truss native operation ran. Wheel distribution and full
+native security/transport/mapping qualification
 remain PY-07 and PY-01b/03 dependencies. It supplies no new Weft registration or
 Python ACL/compiler implementation.
 

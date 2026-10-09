@@ -1,0 +1,43 @@
+{
+  "scope": "pinned-source wheel build and clean Python 3.11 packaging/ABI/input-refusal smoke only",
+  "revision": "5856c73db0342363e64802905a94abb96209d757",
+  "sourceArchiveSha256": "2affd857c0159de20096f55425ee43adbcfd6557958640f776a27c346ff322d1",
+  "cargoLockSha256": "08d3d30468be6bbde701be72c4e070f60c0706b54898e8e3a0432ea0cfbe0e9e",
+  "rust": "1.90.0",
+  "maturin": "1.9.6",
+  "maturinHostPython": "3.12.14",
+  "features": [
+    "truss-postgresql-qualified"
+  ],
+  "buildOptions": [
+    "locked",
+    "offline",
+    "release"
+  ],
+  "wheel": {
+    "filename": "weft_sql-0.1.0-cp39-abi3-macosx_11_0_arm64.whl",
+    "sha256": "fe2c22dc25075eec72dd5f4ca10ec9347e3465212028347ff21eff7bd2cf1829",
+    "path": "/private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-weft-python-rxmjjjw7/dist/weft_sql-0.1.0-cp39-abi3-macosx_11_0_arm64.whl"
+  },
+  "smoke": {
+    "python": "3.11.17 (main, Oct  3 2026, 00:54:14) [Clang 22.1.3 ]",
+    "version": "0.1.0",
+    "invalidRequest": {
+      "diagnostics": [
+        {
+          "code": "WFT-INPUT",
+          "message": "Compile and dialect versions must be supplied strings",
+          "phase": "input",
+          "recoverability": "correct-input",
+          "severity": "error"
+        }
+      ],
+      "interfaceVersion": "weft-compile/0.1.0",
+      "status": "blocked"
+    },
+    "testOriginalExport": false
+  },
+  "supportedQueryExecuted": false,
+  "trussNativeExecuted": false,
+  "qualifiedTrussPythonRuntime": false
+}
