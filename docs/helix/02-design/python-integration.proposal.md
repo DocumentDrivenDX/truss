@@ -832,14 +832,15 @@ The [complete native echo receipt](../04-build/evidence/design-audit/python-repo
 now compares the entire independently frozen four-MiB, nineteen-field report over
 local trust-authenticated PostgreSQL text/OID25/format0 and validates its actual
 received bytes through `ReportResponseCandidate`. Original startup UTF8 admission,
-exact 4,194,315-byte DataRow, complete expected-byte equality, nineteen schema
-fields and receiver/decoder/parser/probe source pins are retained. The query is
+exact 4,194,315-byte DataRow, complete response-only frame decoding, expected-byte
+equality, nineteen schema fields and receiver/decoder/parser/probe source pins
+are retained. The query is
 an escaped read-only literal echo; its template/digest are stored instead of a
 four-MiB SQL string. The old one-MiB frame decoder refusal remains explicit.
 
 This exercises the actual received synthetic full wire and Python response
-schema candidate, not genuine diagnostic/report production, an admitted replacement
-frame decoder, authoritative accepted IDs, committed report persistence, installed
+schema candidate, not genuine diagnostic/report production, a production-admitted
+driver/frame/account profile, authoritative accepted IDs, committed report persistence, installed
 security or publication. It uses independent fixture admission before native
 submission and BEGIN READ ONLY/ROLLBACK. Original complete operation accounting,
 qualified driver/settlement and public profile adoption remain required.
@@ -851,7 +852,9 @@ syntax tests cover exact/one-over capacity, malformed signed lengths, missing or
 extra bytes, wrong message/column count, SQL NULL and mutable backing refusal.
 The response codec suite additionally composes the independently frozen full
 nineteen-field report frame with original schema validation. The old decoder
-and its native receipts remain unchanged. This candidate does not establish
+and its original native receipts remain unchanged. The complete native echo receipt
+now pins and exercises this response decoder against actual received bytes.
+This candidate does not establish
 RowDescription OID/format, UTF8, ingress/account custody, command settlement or
 native qualification; those require the original PY-01b composition. Arbitrary
 cell bytes pass syntax alone and cannot authorize publication or commit claims.

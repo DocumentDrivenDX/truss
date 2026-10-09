@@ -11,6 +11,7 @@ import struct
 import sys
 from python_pg_frame_candidate import row_description, data_row, MAX_FRAME
 from python_pg_receive_candidate import Receiver
+from python_report_frame_candidate import report_cell
 from check_report_response_boundary import build, check, CONTRACTS
 from python_report_response_candidate import ReportResponseCandidate
 
@@ -92,7 +93,7 @@ with socket.create_connection(('127.0.0.1', 15434), timeout=10) as connection:
                 decoder_refused = True
             else:
                 raise ValueError('Unexpected fixed-limit decoder admission')
-            row = (source[11:],)
+            row = (report_cell(source),)
         elif kind == b'C':
             commands.append(body)
         elif kind == b'Z':
@@ -134,16 +135,18 @@ receipt = {
     'observedDataRowBytes': [len(value) for value in frames if value[:1] == b'D'],
     'completeCellEqualsIndependentLiteral': row == EXPECTED_CELLS,
     'fixedOneMiBDecoderRefused': decoder_refused,
+    'responseFrameDecoderAdmitted': True,
     'framesHex': [value.hex() for value in frames if value[:1] in (b'T', b'C', b'Z')],
     'orderedTypeOids': [c.type_oid for c in description],
     'rawCellsSha256': [hashlib.sha256(value).hexdigest() for value in row],
     'sourceSha256': {name: hashlib.sha256((HERE / name).read_bytes()).hexdigest()
                      for name in ['python_pg_frame_candidate.py', 'python_pg_receive_candidate.py',
+                                  'python_report_frame_candidate.py',
                                   'python_report_response_candidate.py', 'python_report_wire_candidate.py',
                                   'python_raw_json_candidate.py', 'check_report_response_boundary.py', Path(__file__).name]},
     'remainingRawBounds': {'bytes': receiver.remaining_bytes,
                            'messages': receiver.remaining_messages,
                            'readCalls': receiver.remaining_reads},
-    'scope': 'Administrative local trust-auth probe, BEGIN READ ONLY/ROLLBACK; raw recv_into framing, complete frozen synthetic nineteen-field report byte comparison and response-schema candidate only; fixed-one-MiB decoder refused as expected. No genuine diagnostic/report producer or committed report persistence. No installed changes, supported driver, ingress/account/TLS/native containment, current security or publication qualification.'}
+    'scope': 'Administrative local trust-auth probe, BEGIN READ ONLY/ROLLBACK; raw recv_into framing, response-only complete single-cell frame syntax, complete frozen synthetic nineteen-field report byte comparison and response-schema candidate only; fixed-one-MiB decoder refused as expected. No genuine diagnostic/report producer or committed report persistence. No installed changes, supported driver, ingress/account/TLS/native containment, current security or publication qualification.'}
 (HERE / 'python-report-response-native-echo.json').write_text(json.dumps(receipt, indent=2) + '\n')
 print('Complete frozen nineteen-field native echo matches original bytes and response schema')

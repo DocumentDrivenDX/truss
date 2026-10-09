@@ -10,6 +10,21 @@ class ResponseTests(unittest.TestCase):
         cls.response = ReportResponseCandidate(CONTRACTS)
         cls.legacy = ReportWireCandidate(CONTRACTS)
 
+    def test_native_echo_receipt_pins_current_composition(self):
+        import hashlib
+        import json
+        from pathlib import Path
+        here = Path(__file__).resolve().parent
+        receipt = json.loads((here / 'python-report-response-native-echo.json').read_bytes())
+        self.assertTrue(receipt['responseFrameDecoderAdmitted'])
+        self.assertTrue(receipt['fixedOneMiBDecoderRefused'])
+        self.assertTrue(receipt['completeCellEqualsIndependentLiteral'])
+        self.assertEqual(receipt['observedDataRowBytes'], [4194315])
+        self.assertEqual(receipt['observedReportFields'], 19)
+        self.assertEqual(receipt['orderedTypeOids'], [25])
+        for name, digest in receipt['sourceSha256'].items():
+            self.assertEqual(hashlib.sha256((here / name).read_bytes()).hexdigest(), digest)
+
     def test_complete_frame_to_original_response_schema(self):
         import struct
         from python_report_frame_candidate import report_cell
