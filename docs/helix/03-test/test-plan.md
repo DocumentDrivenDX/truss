@@ -153,6 +153,12 @@ Shared interface negotiation fixtures follow CONTRACT-007: exact tuple succeeds 
 
 ### Performance experiment registration
 
+The [pooler overhead experiment proposal](pooler-overhead-experiment.proposal.md)
+now specifies the US-032-AC3 point-read dataset, paired call boundary, warm-up,
+three repetitions and exact proposed mean-difference arithmetic. Statistic
+selection and complete fixture/native environment pins remain pending; this
+is an execution plan, not a registered or passing benchmark.
+
 Before executing a performance criterion, freeze an experiment artifact containing the exact AC IDs, threshold and units from the governing story/STP, dataset bytes and independent expected cardinalities, selected model/layout/codec/policy/backend/adapter/server pins, index/statistics inventory, hardware/runtime settings, concurrency, warm-up policy, measured call boundary, sample count, paired baseline procedure and raw-result format. An unspecified threshold or baseline leaves the experiment unregistered; do not choose one after seeing measurements. Proposed product targets remain proposed until owner selection, even when a run meets them.
 
 Use monotonic elapsed time for public-call measurements, from API entry through complete validated decoding/assembly; retain exact nonnegative duration text and every sample in call order. For the US-024 100-call experiment, compute nearest-rank p95 from the sorted 100 durations (rank 95, one-based). Record warm-up separately; never discard slow measured samples as warm-up afterward. Errors, timeouts, overflow or incomplete results fail correctness and prevent a latency pass rather than being removed from the distribution. A server-only EXPLAIN measurement is a separate metric and cannot satisfy public-call latency.
