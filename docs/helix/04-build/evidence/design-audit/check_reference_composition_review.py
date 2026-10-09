@@ -42,3 +42,20 @@ for name, value, expected in cases:
     if validator.is_valid(value) != expected:
         raise SystemExit('Unexpected review-record shape outcome: ' + name)
 print(str(len(cases)) + ' independent review-shape controls passed; synthetic evidence grants no compatibility or authority')
+
+# Preserve full source equality, not digest-only correspondence, for this draft.
+import base64
+from hashlib import sha256
+repo = contracts.parents[3]
+record = json.loads((Path(__file__).resolve().parent / 'reference-composition-incomplete.json').read_bytes())
+validator.validate(record)
+for row in record['boundaries']:
+    for member in row['membership']:
+        artifact = member['artifact']
+        path = repo / artifact['identity']
+        if not path.resolve().is_relative_to(contracts.resolve()):
+            raise SystemExit('Captured root escaped the contract inventory')
+        original = base64.b64decode(artifact['bytesBase64'], validate=True)
+        if original != path.read_bytes() or sha256(original).hexdigest() != artifact['sha256']:
+            raise SystemExit('Captured original root changed: ' + artifact['identity'])
+print('Seven-boundary incomplete record and complete original root bytes verified; no compatibility admission')

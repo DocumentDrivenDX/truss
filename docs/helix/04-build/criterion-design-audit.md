@@ -365,3 +365,17 @@ clock/protection/resource/driver tuple and independently authored populated
 fixtures. The existing red native/public scenarios then qualify it. New generic
 retry wrappers or another receipt strategy would duplicate settled work without
 resolving that original composition requirement.
+
+## Original composition review starting record
+
+The [incomplete seven-boundary record](evidence/design-audit/reference-composition-incomplete.json)
+retains complete original bytes/digests for eight actual candidate contract roots
+and names the missing composition outputs in each boundary. No row claims
+complete authored compatibility, independent review or native qualification.
+These roots are not the full transitive membership or a registered release bundle.
+The [checker](evidence/design-audit/check_reference_composition_review.py)
+validates the record and compares each full retained source with the current
+original file before checking its digest. Changed source must be reviewed and
+recaptured; equal versions or a selected subset cannot close remaining boundaries.
+This supplies concrete review inputs for priority 1 above, while preserving
+unresolved human/owner/profile selections and the full toolkit scope.
