@@ -47,8 +47,8 @@ Independent fixtures include nested unknown names, numeric values beyond host-do
 
 ## Edge Cases and Failure Modes
 
-New definition incompatible with a retained value, collision with an already defined value, unresolved-name update and renamed property require shared policy before expected results can be finalized. In every refusal case, old head/maps/journal remain unchanged and source content survives. Fault after the first planned move must not commit partial rebinds. Restricted roles cannot enumerate hidden rows through retained reports. Unknown values matching nothing remain retained after revision.
+The authored CONTRACT-003/004 candidate supplies refusal/no-op precedence for incompatible definitions, occupied destinations and retained mutation collisions. Consume that exact candidate interpretation rather than reopening an unspecified overwrite policy; original name/owner mapping, value/event/codec and native producer profiles still require admission before execution. In every refusal case, old head/maps/journal remain unchanged and source content survives. Fault after the first planned move must not commit partial rebinds. Restricted roles cannot enumerate hidden rows through retained reports. Unknown values matching nothing remain retained after revision.
 
 ## Build Handoff
 
-Begin with retention/rebind red cases, resolve collision/overwrite/incompatibility and journal-envelope gates, then implement classification/planning/persistence. Block closeout on all three criteria and independent recovery/rollback observations. No claim of arbitrary lexical retention until D-05 is resolved.
+Begin with retention/rebind red cases using the authored collision/no-op/incompatibility rules, admit the complete name/owner/value/event/native profile, then implement classification/planning/persistence. Block closeout on all three criteria and independent recovery/rollback observations. No claim of arbitrary lexical retention until D-05 is resolved.

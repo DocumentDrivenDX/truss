@@ -29,7 +29,7 @@ ddx:
 
 ## Context
 
-Imported order data may carry fields no document defines.
+Imported order data may carry fields no document defines. Retention preserves the exact original name, recursive value and presence under the admitted value profile; it does not authorize truncation or coercion to make unsupported content fit. Rebinding requires the complete qualified owning definition and unambiguous original name correspondence, a valid final candidate and an absent destination. Matching display text alone cannot cross owners or overwrite an existing defined value, including present null. Incompatible or ambiguous candidates refuse the whole revision and preserve retained data, prior definitions and head.
 
 ## Walkthrough
 
@@ -37,7 +37,7 @@ Imported order data may carry fields no document defines.
 2. System stores the three values under their original name.
 3. System reports them as retained.
 4. Engineer registers a revision defining `giftWrap`.
-5. System re-binds the three values and journals each.
+5. After complete correspondence, destination and final-state validation, system re-binds the three values atomically, journals each and stores the complete acceptance report before publishing the new head.
 
 ## Acceptance Criteria
 
