@@ -21,6 +21,32 @@ This proposal supplies interpretation rules for the existing conformance manifes
 
 ## Artifact roles
 
+### Explicit performance expectations — separate draft 0.2
+
+The [0.2 expectation envelope](../02-design/contracts/conformance-case-expected-v0.2.proposal.schema.json)
+adds mandatory performance alongside result/state/journal/report, reusing the
+original observation/profile/comparator/artifact structure. Version 0.1 remains
+unchanged and refuses a performance member. This closes a carrier gap between
+the registry's performance observer and the former four-surface envelope; it
+does not select a corpus grammar/profile or implement runner support.
+
+Performance expected artifacts retain the independently frozen workload,
+statistic/threshold, repetitions/strata, baseline procedure and sample-admission
+rules. Actual raw samples, timing boundaries, native outcomes and resources are
+separate observations, never regenerated as expected values. Pending human
+benchmark choices remain pending. Empty performance is admitted only when the
+original required scope contains no performance observations; a benchmark case
+cannot omit its observer or raw samples and pass from the behavioral surfaces.
+
+C2/C4 must explicitly admit this version and extend original procedure-derived
+coverage/link comparison to the fifth surface before execution. The existing
+four-surface private helpers do not support it: refusal is required until that
+integration is implemented. Do not drop performance or relabel 0.2 as 0.1.
+Run `python3.11 docs/helix/04-build/evidence/design-audit/check_performance_expectation_schema.py`
+with jsonschema 4.23.0/referencing 0.35.1. Thirteen controls verify shapes and
+version separation only; no sampling, timing, observer independence or native
+performance qualification is established.
+
 The [fixture envelope](../02-design/contracts/conformance-case-fixtures-v0.1.proposal.schema.json)
 requires original installation, catalog, configuration, authority, resource,
 setup and starting-inventory profile pins. Its `startingInventory` is the
