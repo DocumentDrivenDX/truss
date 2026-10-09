@@ -1,21 +1,17 @@
--- Synthetic parent and renamed disposable schema; no installation/commit qualification.
+"""Build a rollback-only native component probe from original source bytes."""
+from pathlib import Path
+import sys
+root = Path(__file__).resolve().parents[1]
+ddl = (root / 'docs/helix/04-build/evidence/layout-migration-storage.owner-export.sql').read_text()
+guard = (root / 'docs/helix/04-build/evidence/layout-migration-immutability.owner-export.sql').read_text()
+namespace = 'truss_migration_storage_probe'
+body = """-- Synthetic parent and renamed disposable schema; no installation/commit qualification.
 BEGIN;
 CREATE SCHEMA truss_migration_storage_probe;
 CREATE TABLE truss_migration_storage_probe.source_epoch_registry (
  installation_id text COLLATE pg_catalog."C", source_epoch text COLLATE pg_catalog."C",
  PRIMARY KEY (installation_id,source_epoch));
-CREATE SEQUENCE truss_migration_storage_probe.layout_migration_receipt_row_seq AS bigint MINVALUE 1 MAXVALUE 9223372036854775807 START 1 NO CYCLE; CREATE TABLE truss_migration_storage_probe.layout_migration_receipt (storage_row_id bigint PRIMARY KEY DEFAULT nextval('truss_migration_storage_probe.layout_migration_receipt_row_seq'), installation_id text NOT NULL COLLATE pg_catalog."C", original_source_epoch text NOT NULL COLLATE pg_catalog."C", original_target_incarnation text NOT NULL CHECK (octet_length(original_target_incarnation) BETWEEN 1 AND 1024) COLLATE pg_catalog."C", original_attempt_identity_bytes bytea NOT NULL CHECK (octet_length(original_attempt_identity_bytes) BETWEEN 1 AND 1024), receipt_profile_bytes bytea NOT NULL CHECK (octet_length(receipt_profile_bytes) BETWEEN 1 AND 65536), original_request_bytes bytea NOT NULL CHECK (octet_length(original_request_bytes) > 0), original_receipt_bytes bytea NOT NULL CHECK (octet_length(original_receipt_bytes) > 0), original_attempt_sha256 bytea GENERATED ALWAYS AS (pg_catalog.sha256(original_attempt_identity_bytes)) STORED, original_request_sha256 bytea GENERATED ALWAYS AS (pg_catalog.sha256(original_request_bytes)) STORED, original_receipt_sha256 bytea GENERATED ALWAYS AS (pg_catalog.sha256(original_receipt_bytes)) STORED, CHECK (storage_row_id > 0), CHECK ((octet_length(original_request_bytes)::bigint + octet_length(original_receipt_bytes)::bigint) <= 16777216), FOREIGN KEY (installation_id, original_source_epoch) REFERENCES truss_migration_storage_probe.source_epoch_registry (installation_id, source_epoch) ON DELETE RESTRICT); CREATE INDEX layout_migration_receipt_attempt_route ON truss_migration_storage_probe.layout_migration_receipt USING btree (installation_id, original_attempt_sha256, storage_row_id); REVOKE ALL ON truss_migration_storage_probe.layout_migration_receipt, truss_migration_storage_probe.layout_migration_receipt_row_seq FROM public;
-CREATE FUNCTION truss_migration_storage_probe.runtime_immutable_layout_migration_receipt() RETURNS trigger LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path TO pg_catalog, pg_temp AS $$
-BEGIN
- IF TG_RELID<>'truss_migration_storage_probe.layout_migration_receipt'::regclass OR TG_NARGS<>0
-  OR TG_WHEN<>'BEFORE' OR NOT ((TG_LEVEL='ROW' AND TG_OP IN ('UPDATE','DELETE'))
-   OR (TG_LEVEL='STATEMENT' AND TG_OP='TRUNCATE')) THEN
-  RAISE EXCEPTION 'unregistered migration receipt event' USING ERRCODE='55000';
- END IF;
- RAISE EXCEPTION 'original migration receipt is immutable; cleanup unavailable' USING ERRCODE='55000';
-END;
-$$; REVOKE ALL ON FUNCTION truss_migration_storage_probe.runtime_immutable_layout_migration_receipt() FROM public; CREATE TRIGGER runtime_layout_migration_receipt_immutable BEFORE DELETE OR UPDATE ON truss_migration_storage_probe.layout_migration_receipt FOR EACH ROW EXECUTE FUNCTION truss_migration_storage_probe.runtime_immutable_layout_migration_receipt(); ALTER TABLE truss_migration_storage_probe.layout_migration_receipt ENABLE ALWAYS TRIGGER runtime_layout_migration_receipt_immutable; CREATE TRIGGER runtime_layout_migration_receipt_no_truncate BEFORE TRUNCATE ON truss_migration_storage_probe.layout_migration_receipt EXECUTE FUNCTION truss_migration_storage_probe.runtime_immutable_layout_migration_receipt(); ALTER TABLE truss_migration_storage_probe.layout_migration_receipt ENABLE ALWAYS TRIGGER runtime_layout_migration_receipt_no_truncate;
-
+""" + ddl.replace('truss.', namespace + '.') + ';\n' + guard.replace('truss.', namespace + '.') + ';\n' + """
 INSERT INTO truss_migration_storage_probe.source_epoch_registry VALUES ('installation','source');
 INSERT INTO truss_migration_storage_probe.layout_migration_receipt
  (installation_id,original_source_epoch,original_target_incarnation,original_attempt_identity_bytes,
@@ -68,3 +64,11 @@ DO $$ BEGIN
 END $$;
 ROLLBACK;
 SELECT to_regclass('truss_migration_storage_probe.layout_migration_receipt') IS NULL AS rollback_removed_home;
+"""
+path = root / 'docs/helix/04-build/evidence/layout-migration-storage.rollback-probe.sql'
+if '--check' in sys.argv:
+    if path.read_text() != body:
+        raise SystemExit('stale migration storage probe')
+else:
+    path.write_text(body)
+print('Migration storage probe source exact; native execution remains separate.')

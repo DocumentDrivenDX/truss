@@ -222,9 +222,22 @@ A [rollback-only native probe](../../04-build/evidence/layout-migration-storage.
 observed eleven columns, one FK, three generated hashes and no PUBLIC INSERT.
 Its disposable renamed namespace and synthetic parent verify DDL acceptance
 only; they do not prove actual baseline composition or protected writes.
-Initializer, unavoidable receipt/finalization producer, immutable UPDATE/DELETE/
-TRUNCATE guards, lifecycle/protection cleanup, complete security privileges and
-core record/field/FK projection remain required. No migration outcome is admitted
+The [immutable guard model](layout-migration-immutability-v0.1.proposal.umf.json)
+and [owner-exported guard DDL](../../04-build/evidence/layout-migration-immutability.owner-export.sql)
+now declare an exact-relation/event-checked SECURITY INVOKER routine and two
+ENABLE ALWAYS triggers. The rollback-only probe refuses receipt/request/identity
+UPDATE, DELETE and TRUNCATE in origin and replica modes, verifies original bytes
+and hashes, refuses parent deletion and proves savepoint rollback removes a
+pending insertion. Equal attempt hashes may coexist on the nonunique route;
+this is deliberately not an admitted retry producer. The probe runs as the
+fixture administrator and cannot prove ordinary-role insertion authority or
+owner/guard-alteration resistance. `python3 scripts/build-layout-migration-storage-probe.py --check`
+checks its derivation from original generated storage/guard bytes.
+
+Initializer, unavoidable receipt/finalization producer, lifecycle/protection
+cleanup, complete security privileges and core record/field/FK projection remain
+required. DELETE remains unconditionally unavailable; no caller cleanup flag,
+replication mode or future lifecycle intention bypasses these guards. No migration outcome is admitted
 by the model, generated DDL or this probe.
 
 ### Protected installation dependency order
