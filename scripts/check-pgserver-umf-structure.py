@@ -42,18 +42,59 @@ for record in records:
         columns.append([field['name'], typname, field['nullability'] == 'required', len(native.get('arrayBounds', []))])
     expected_columns[record['name']] = columns
 expected_fks = []
-def retain_fk(source, target, correspondence):
+# Scoped native AST inventory comparison, not a UMF or SQL validator.
+# PostgreSQL16 transformConstraintAttrs attaches these separate ColumnDef
+# attribute nodes to the preceding FK. Retain original descriptors unchanged.
+def fk_definition(relation):
+    definition = relation.get('nativeCorrespondence', {}).get('definition', relation.get('definition'))
+    normalized = dict(definition)
+    pointer = relation.get('nativeCorrespondence', {}).get('sourcePointer', relation.get('sourcePointer', ''))
+    if not pointer.endswith('/ColumnDef'):
+        return normalized
+    refs = relation['fieldCorrespondence']
+    assert len(refs) == 1, 'Unadmitted compound column FK'
+    field = elements[refs[0]['source']['element']]
+    native = field['extensions']['truss.layout.native']
+    assert native['sourcePointer'] == pointer
+    constraints = [entry['Constraint'] for entry in native['constraints']]
+    indices = [i for i, entry in enumerate(constraints) if entry == definition]
+    assert len(indices) == 1, 'Original column FK node correspondence required'
+    attrs = []
+    for entry in constraints[indices[0]+1:]:
+        if not entry['contype'].startswith('CONSTR_ATTR_'):
+            break
+        attrs.append(entry['contype'])
+    assert len(attrs) == len(set(attrs))
+    assert not {'CONSTR_ATTR_DEFERRABLE', 'CONSTR_ATTR_NOT_DEFERRABLE'} <= set(attrs)
+    assert not {'CONSTR_ATTR_DEFERRED', 'CONSTR_ATTR_IMMEDIATE'} <= set(attrs)
+    for kind in attrs:
+        assert kind in {'CONSTR_ATTR_DEFERRABLE', 'CONSTR_ATTR_NOT_DEFERRABLE', 'CONSTR_ATTR_DEFERRED', 'CONSTR_ATTR_IMMEDIATE'}
+    if 'CONSTR_ATTR_DEFERRABLE' in attrs:
+        normalized['deferrable'] = True
+    if 'CONSTR_ATTR_NOT_DEFERRABLE' in attrs:
+        normalized['deferrable'] = False
+    if 'CONSTR_ATTR_DEFERRED' in attrs:
+        normalized['initdeferred'] = True
+        assert 'CONSTR_ATTR_NOT_DEFERRABLE' not in attrs
+        normalized['deferrable'] = True
+    if 'CONSTR_ATTR_IMMEDIATE' in attrs:
+        normalized['initdeferred'] = False
+    return normalized
+
+def retain_fk(source, target, correspondence, definition):
     expected_fks.append([source, target,
         [elements[c['source']['element']]['name'] for c in correspondence],
-        [elements[c['target']['element']]['name'] for c in correspondence]])
+        [elements[c['target']['element']]['name'] for c in correspondence],
+        definition['fk_matchtype'], definition['fk_upd_action'], definition['fk_del_action'],
+        definition.get('deferrable', False), definition.get('initdeferred', False), definition['initially_valid']])
 for relation in module['relationships']:
-    retain_fk(relation['source'][0]['element'], relation['target'][0]['element'], relation['fieldCorrespondence'])
+    retain_fk(relation['source'][0]['element'], relation['target'][0]['element'], relation['fieldCorrespondence'], fk_definition(relation))
 for record in records:
     for relation in record.get('extensions', {}).get('truss.layout.native', {}).get('physicalForeignKeys', []):
         target = relation.get('target', [{}])[0].get('element')
         if target is None:
             target = relation['definition']['pktable']['relname']
-        retain_fk(record['name'], target, relation['fieldCorrespondence'])
+        retain_fk(record['name'], target, relation['fieldCorrespondence'], fk_definition(relation))
 if importlib.metadata.version('pgserver') != '0.1.4':
     raise SystemExit('Expected pinned pgserver0.1.4')
 psql = Path(str(importlib.resources.files('pgserver'))) / 'pginstall/bin/psql'
@@ -107,7 +148,8 @@ SELECT json_build_object(
   (SELECT json_agg(a.attname ORDER BY u.ord) FROM unnest(k.conkey) WITH ORDINALITY u(num,ord)
    JOIN pg_attribute a ON a.attrelid=k.conrelid AND a.attnum=u.num),
   (SELECT json_agg(a.attname ORDER BY u.ord) FROM unnest(k.confkey) WITH ORDINALITY u(num,ord)
-   JOIN pg_attribute a ON a.attrelid=k.confrelid AND a.attnum=u.num)))
+   JOIN pg_attribute a ON a.attrelid=k.confrelid AND a.attnum=u.num),
+  k.confmatchtype,k.confupdtype,k.confdeltype,k.condeferrable,k.condeferred,k.convalidated))
  FROM pg_constraint k JOIN pg_class c ON c.oid=k.conrelid JOIN pg_class p ON p.oid=k.confrelid
  JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='truss' AND k.contype='f' AND k.conparentid=0),
  'adjuncts',(SELECT json_object_agg(c.relname,json_build_object(
@@ -128,7 +170,9 @@ ROLLBACK;
         assert observed['fkTargetNamespaces'] == ['truss']
         assert observed['columns'] == expected_columns, 'UMF column/type/requiredness discrepancy'
         frozen = lambda values: Counter(json.dumps(v, separators=(',', ':')) for v in values)
-        assert frozen(observed['foreignKeys']) == frozen(expected_fks), 'UMF ordered FK correspondence discrepancy'
+        if frozen(observed['foreignKeys']) != frozen(expected_fks):
+            print(json.dumps({'missingExpected': list((frozen(expected_fks)-frozen(observed['foreignKeys'])).elements()), 'unexpectedNative': list((frozen(observed['foreignKeys'])-frozen(expected_fks)).elements())}))
+            raise AssertionError('UMF ordered FK correspondence discrepancy')
         assert observed['adjuncts'] == {
             'operation_configuration': {'columns': 16, 'foreignKeys': 2, 'generatedHashes': 3, 'alwaysGuards': 2, 'publicInsert': False},
             'layout_migration_receipt': {'columns': 11, 'foreignKeys': 1, 'generatedHashes': 3, 'alwaysGuards': 2, 'publicInsert': False},
@@ -139,7 +183,7 @@ ROLLBACK;
 receipt = {'scope': 'Original generated base/adjunct DDL and immutable guard composition, UMF core column/type/requiredness and ordered physical FK correspondence plus independent adjunct catalog expectations under rollback only; no complete installer, routine/grant inventory, accepted catalog or migration qualification',
            'pgserverVersion': '0.1.4', 'structuralModel': str(structural_path.relative_to(root)), 'structuralSha256': hashlib.sha256(structural_bytes).hexdigest(), 'sources': [{'path': path, 'sha256': hashlib.sha256(value).hexdigest()} for path, value in zip(paths, originals)], 'observation': observed,
            'rollbackRemovedNamespace': True, 'truncateRefusals': 4, 'truncateModes': ['origin', 'replica'],
-           'unverifiedStructure': ['type modifiers', 'collations', 'default and check expression meaning', 'FK actions/deferrability', 'complete indexes/routines/grants'],
+           'unverifiedStructure': ['type modifiers', 'collations', 'default and check expression meaning', 'complete indexes/routines/grants'],
            'limitation': 'PostgreSQL16.2 lacks transaction_timeout; any selected profile requiring that setting must refuse or use a separately admitted bounded alternative',
            'producerSha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest()}
 (root / 'docs/helix/04-build/evidence/design-audit/pgserver-umf-structural-correspondence.json').write_text(json.dumps(receipt, indent=2) + '\n')

@@ -190,3 +190,26 @@ Keep those as explicit next inventory outputs, rather than calling the whole
 installation verified from structural agreement. The immutable adjunct controls
 and rollback proof still run in the same actual transaction. No Truss installer
 publication, initialized epoch or populated migration is claimed.
+
+## FK action and deferral descriptor comparison
+
+The structural checker now compares all67 native FK match/update/delete action
+codes, deferrability, initial deferral and validation state against the retained
+UMF native descriptors, in addition to ordered endpoint columns. The same local
+rollback-only receipt has been refreshed at this extended scope. Original source
+bytes are unchanged; no native fact is used to rewrite its expected descriptor.
+
+One inline seed-artifact FK demonstrated why an individual Constraint node is
+insufficient: the Field retains separate CONSTR_ATTR_DEFERRABLE and
+CONSTR_ATTR_DEFERRED nodes following its original FK node. The scoped checker
+requires exact node/pointer correspondence and includes those original attributes,
+following PostgreSQL16 [transformConstraintAttrs](https://github.com/postgres/postgres/blob/REL_16_STABLE/src/backend/parser/parse_utilcmd.c).
+It refuses ambiguous/misplaced correspondence rather than treating every omitted
+flag as false. This inventory comparison is not a new portable UMF relationship
+interpreter or generic SQL validator. The initial failed check exposed incomplete
+probe interpretation, not lost source meaning or incompatible generated DDL.
+
+Defaults/check expressions, type modifiers, collations, indexes and complete
+routine/effective-grant inventory remain the next installation parity work. The
+raw physical descriptor comparison cannot qualify logical lifecycle semantics,
+protected producer authority or a populated migration route by itself.
