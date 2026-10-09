@@ -16,5 +16,13 @@
     "diagnostics",
     "documentInterpretations"
   ],
-  "scope": "Actual owner host composition and synthetic native observations only. Seven producer fields and issuer/cut refusal; no complete report authority, real native correspondence run or accepted publication."
+  "scope": "Actual owner host composition plus actual PostgreSQL75-check cohort evidence for seven report fields and original observation liveness. Remaining complete-report fields are untrusted fixtures; no full report authority or accepted publication.",
+  "nativeEvidence": "catalog-new-cohort.json",
+  "nativeCases": [
+    "seven issued producer fields match actual staged catalog",
+    "schema-valid count forgery refuses",
+    "copied report basis refuses",
+    "later native event invalidates correspondence",
+    "rollback restores original correspondence"
+  ]
 }

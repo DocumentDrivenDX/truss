@@ -25,7 +25,8 @@
     "catalog-provisional-empty": "754c3c53534a5a30d935a1942da903692c488aab3cd7fed3c0c5231c835f65c8",
     "catalog-report-immutability": "c243b51682de3fee979b977626bb54279eccb3de22a24270e0bda467bd215167"
   },
-  "reportPreparationProducerSha256": "8da357fac30b9c24df296f5e64a4dab34b7b2b4d0cd5c4bfc2c1ebad0d34a433",
+  "reportCorrespondenceProducerSha256": "d4eb162cfc3c9e4f69bc2af52652976676defaec556b167e288b7b7fa7660a3d",
+  "reportPreparationProducerSha256": "37cc45e1e6a80ebc2651b0d4b48e19129f7acab1e1e9ff30aa0a20fa386637ea",
   "assertionProfiles": {
     "declarations": {
       "identity": "umf-declaration-inspection",
@@ -89,6 +90,11 @@
     "effectGeneration substitution refuses report observation recheck",
     "original owner observation and reversible transition preserved inside exact evidence artifact",
     "declared transform cannot pass new-only native staging as if absent",
+    "seven report fields correspond to original owner and actual native observations without accepted authority",
+    "schema-valid forged native count refuses report correspondence",
+    "copied composed report basis cannot borrow original native cut",
+    "later actual native event invalidates report producer correspondence",
+    "rolled-back native contribution restores original report correspondence",
     "composed report preparation derives all six counts under original native cut",
     "composed preparation retains matching native cut and actual available owner observations",
     "empty provisional report inventory has original native proof across the full retained catalog",
