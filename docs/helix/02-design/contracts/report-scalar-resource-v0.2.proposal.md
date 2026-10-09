@@ -121,3 +121,15 @@ Host UTF-8 sizing, parsed/frozen/schema views, pending tasks, tagged objects,
 serialization and native JSONB/output allocations still need the selected
 original account. Package ownership, native authority, full report semantic
 provenance and atomic publication remain open.
+
+The native checker now has a closed `--python` mode. Its
+[Python native receipt](../../04-build/evidence/design-audit/python-report-tree-native.json)
+records the actual Python/schema-validator versions and exact bridge/parser/
+schema/carrier source hashes. Each of the same four complete synthetic reports
+is prepared independently in both hosts; original source hex, full carrier text
+and native task count must agree before the Python carrier is submitted to the
+temporary PostgreSQL routine. Complete native bytes must then equal the separate
+Unicode-string oracle. Six private malformed-tree controls retain their expected
+native refusals. Both host modes passed ten observations on PostgreSQL 17.9;
+strict TypeScript compilation also passed. These are host-to-native codec checks,
+not committed TS/Python database writer/reader interchange or publication tests.

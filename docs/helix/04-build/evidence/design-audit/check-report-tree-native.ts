@@ -1,5 +1,9 @@
 /** Temporary native encoding versus independent whole-wire bytes; no acceptance authority. */
 import {createProposedComposedAcceptanceReportHandoff} from '../../../../../packages/umf-bun/src/canonical-report-handoff';
+const args=process.argv.slice(2);
+if(args.length>1||(args.length===1&&args[0]!=='--python'))throw Error('Only --python carrier mode is supported');
+const pythonMode=args[0]==='--python';
+const bridgePath='docs/helix/04-build/evidence/design-audit/prepare_python_native_report_carrier.py';
 const hash=(bytes:string|Uint8Array)=>new Bun.CryptoHasher('sha256').update(bytes).digest('hex');
 const fixturePath='docs/helix/03-test/report-wire-untrusted.fixture.json';
 const base=structuredClone((await Bun.file(fixturePath).json()).report);
@@ -25,11 +29,23 @@ const cases=[{name:'complete-nineteen-field-wire',report:structuredClone(base)},
  {name:'complete-wire-large-original-key',report:withAsserted({['x-'+ 'é'.repeat(40000)]:'original'})},
  {name:'complete-wire-UTF8-key-order-and-array-order',report:withAsserted({'𐀀':'supplementary','':'private','e\u0301':'decomposed','é':'composed','x-order':[null,false,true,'',{},[]],'x-NUL\0':'\0\n\\"'})}];
 const codec=await createProposedComposedAcceptanceReportHandoff('/Users/erik/Projects/umf/package.json');
-const prepared=cases.map(c=>{
+let pythonEnvironment:unknown;
+const prepared=[];
+for(const c of cases){
  const source=Buffer.from(JSON.stringify(c.report)),handoff=codec.prepare(source),expected=Buffer.from(oracle(c.report));
  if(handoff.originalUtf8Hex!==source.toString('hex'))throw Error('Original complete report wire changed');
- return {...c,source,handoff,expected};
-});
+ if(pythonMode){
+  const bridge=Bun.spawn(['/private/tmp/truss-python-report-schema-env/bin/python',bridgePath],{env:{...process.env,PYTHONDONTWRITEBYTECODE:'1'},stdin:'pipe',stdout:'pipe',stderr:'pipe'});
+  bridge.stdin.write(source);bridge.stdin.end();
+  const [out,err,code]=await Promise.all([new Response(bridge.stdout).text(),new Response(bridge.stderr).text(),bridge.exited]);
+  if(code)throw Error('Python carrier preparation refused: '+err);
+  const python=JSON.parse(out);
+  if(pythonEnvironment!==undefined&&JSON.stringify(pythonEnvironment)!==JSON.stringify(python.environment))throw Error('Python environment changed during observation');
+  pythonEnvironment=python.environment;
+  if(python.originalUtf8Hex!==handoff.originalUtf8Hex||python.nativeTreeText!==handoff.nativeTreeText||python.nativeTaskCount!==handoff.nativeTaskCount)throw Error('Full Python/TypeScript carrier correspondence differs: '+c.name);
+  prepared.push({...c,source,handoff:{...handoff,nativeTreeText:python.nativeTreeText},expected});
+ }else prepared.push({...c,source,handoff,expected});
+}
 const scalarPath='docs/helix/02-design/contracts/report-scalar-bytes-v0.2.proposal.sql';
 const treePath='docs/helix/02-design/contracts/report-tree-bytes-v0.2.proposal.sql';
 const scalar=await Bun.file(scalarPath).text(),tree=await Bun.file(treePath).text();
@@ -48,9 +64,9 @@ for(const c of invalid){
  sql.push(`SELECT '${c.name}|refused_${c.state}';`);
 }
 sql.push('ROLLBACK;');
-const process=Bun.spawn(['docker','exec','-i','truss-runtime-admission','psql','-X','-q','-A','-t','-v','ON_ERROR_STOP=1','-U','postgres','-d','postgres'],{stdin:'pipe',stdout:'pipe',stderr:'pipe'});
-process.stdin.write(sql.join('\n'));process.stdin.end();
-const [stdout,stderr,status]=await Promise.all([new Response(process.stdout).text(),new Response(process.stderr).text(),process.exited]);
+const nativeProcess=Bun.spawn(['docker','exec','-i','truss-runtime-admission','psql','-X','-q','-A','-t','-v','ON_ERROR_STOP=1','-U','postgres','-d','postgres'],{stdin:'pipe',stdout:'pipe',stderr:'pipe'});
+nativeProcess.stdin.write(sql.join('\n'));nativeProcess.stdin.end();
+const [stdout,stderr,status]=await Promise.all([new Response(nativeProcess.stdout).text(),new Response(nativeProcess.stderr).text(),nativeProcess.exited]);
 if(status)throw Error(stderr);
 const lines=stdout.trim().split('\n');
 if(lines.length!==1+prepared.length+invalid.length||!lines[0].startsWith('server|'))throw Error('Complete native observation inventory required');
@@ -64,7 +80,8 @@ for(let i=0;i<invalid.length;i++){
  results.push({name:c.name,observedSqlState:c.state});
 }
 const paths=[import.meta.path,fixturePath,scalarPath,treePath,'packages/umf-bun/src/canonical-report-handoff.ts','packages/postgresql/src/canonical-wire-tree.ts','packages/postgresql/src/acceptance-json.ts'];
+if(pythonMode)paths.push(bridgePath,'docs/helix/04-build/evidence/design-audit/python_report_wire_candidate.py','docs/helix/04-build/evidence/design-audit/python_raw_json_candidate.py','docs/helix/04-build/evidence/design-audit/python_native_report_carrier_candidate.py');
 const sourcePins=Object.fromEntries(await Promise.all(paths.map(async path=>[path,hash(new Uint8Array(await Bun.file(path).arrayBuffer()))])));
-const receipt={status:'passed_temporary_complete_wire_encoding',serverVersionNum:lines[0].slice(7),schemaPins:codec.schemaPins,sourcePins,results,scope:'Four complete nineteen-field synthetic report wires and six private inert-tree refusal controls in temporary functions, explicitly rolled back. Full-byte encoding parity only; no semantic report provenance, installed native authority/grants, resource account or accepted commit.'};
-await Bun.write('docs/helix/04-build/evidence/design-audit/report-tree-native.json',JSON.stringify(receipt,null,2)+'\n');
+const receipt={status:'passed_temporary_complete_wire_encoding',pythonEnvironment,carrierHost:pythonMode?'Python 3.11 private candidate':'TypeScript private candidate',serverVersionNum:lines[0].slice(7),schemaPins:codec.schemaPins,sourcePins,results,scope:'Four complete nineteen-field synthetic report wires and six private inert-tree refusal controls in temporary functions, explicitly rolled back. Full-byte encoding parity only; no semantic report provenance, installed native authority/grants, resource account or accepted commit.'};
+await Bun.write('docs/helix/04-build/evidence/design-audit/'+(pythonMode?'python-report-tree-native.json':'report-tree-native.json'),JSON.stringify(receipt,null,2)+'\n');
 console.log(results.length+' native tree observations passed; complete wire encoding only');
