@@ -22,6 +22,24 @@ Weft's committed source exposes `weft.compile_json(request: str) -> str` through
 
 ## Concrete consumer model/query inputs
 
+The [consumer requirements provenance](../04-build/evidence/design-audit/consumer-requirements-provenance.json)
+resolves the copied requirements' `ADR-013` to the accepted consumer-repository
+decision, not a missing Truss ADR. It assigns the client facade, backend routing
+and adapters to the consumer and generic storage/layout/import/isolation/feed to
+the backend projects. Keep that split in PY-03–06: Truss implements generic
+protected operations; the consumer maps its actions and interface to them.
+Its rejection of a separately owned generic Python engine informs the package
+discussion but does not select Truss's pending package home or approve ADR-003.
+
+The consumer's cross-backend references are keys resolved through bounded reads;
+destination feed materialization is a separate backend operation. The Truss
+adapter must not add live remote stub entities, distribute a Truss transaction
+over both stores, or treat destination visibility as proof of original source
+commit. Retain exact source revisions and recorded re-pinning for adapter inputs.
+The external ADR's descriptions of current backend capabilities are authored
+requirements/context, not implementation evidence. Preserve its original
+repository-qualified traceability rather than inventing a local same-ID ADR.
+
 The [read-only consumer source review](../04-build/evidence/design-audit/consumer-model-query-source-review.json)
 pins the original requirements, conformance model, larger catalog example and
 parser tests. The conformance source is UMF 0.7.0 document `sandbox`, module
