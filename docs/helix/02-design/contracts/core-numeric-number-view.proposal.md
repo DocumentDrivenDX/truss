@@ -112,3 +112,14 @@ separately from context-free view conversion. Run the real public wrapper in
 Chromium and supported host packages; upstream unit tests alone cannot qualify
 the wrapper, account, native read custody or complete toolkit. These controls
 are planned, not_run.
+
+The selected owner producer now has [eleven real Chromium observations](../../04-build/evidence/design-audit/umf-numeric-browser.json)
+against independently specified exact tokens: safe integer/half/decimal 2^53/
+exact binary expansion positives, unsafe integer/decimal 0.1/signed-zero/
+overflow/underflow refusals and exact int64 bigint round-trip. Reproduce an
+isolated owner build with `bun scripts/build-umf-runtime.ts /path/to/umf numeric-current`,
+then set `TRUSS_UMF_NUMERIC_PRODUCER` to its output and run
+`bun scripts/check-umf-numeric-browser.ts`. The receipt pins original archive,
+bundle and dependencies. These context-free observations do not qualify the
+Truss wrapper, Field context, native values or precharged operation accounting.
+Historical record/numeric/value build modes retain their separate pins.

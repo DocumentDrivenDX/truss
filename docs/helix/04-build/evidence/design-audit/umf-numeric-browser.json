@@ -1,0 +1,89 @@
+{
+  "producer": {
+    "revision": "e3555b9aac9e4c3caa952203958c4b0c33cdf519",
+    "producerMode": "numeric-current",
+    "buildDependencies": {
+      "yaml": {
+        "version": "2.9.1",
+        "packageSha256": "1c6441703d8204a23ded0d37ddf57c3b69d821dc392f20852d1f605bb9b8861c"
+      },
+      "ajv": {
+        "version": "8.20.0",
+        "packageSha256": "1f9033ee5a6515e7d76938b7072941862d1ed228a6879cc7fe10cdeb75107989"
+      }
+    },
+    "archiveSha256": "f18197bd8bf07c9b03bf5d1106f332d9e7abb048c606869365ac38125dae958c",
+    "bundleSha256": "676668dec0b9371367b4b52f0de2788ea33e7a9b70e732ad9ae57f375704a24d",
+    "operations": [
+      "exactDecimal",
+      "integerFromBigInt",
+      "integerToBigInt",
+      "admitJavascriptNumber",
+      "numericToNumberLossless"
+    ],
+    "scope": "Original logical UMF producers only; no native acceptance/containment qualification."
+  },
+  "browser": "153.0.8010.12",
+  "results": [
+    {
+      "family": "integer",
+      "token": "42",
+      "outcome": "lossless",
+      "originalPreserved": true
+    },
+    {
+      "family": "decimal",
+      "token": "0.5",
+      "outcome": "lossless",
+      "originalPreserved": true
+    },
+    {
+      "family": "decimal",
+      "token": "9007199254740992",
+      "outcome": "lossless",
+      "originalPreserved": true
+    },
+    {
+      "family": "decimal",
+      "token": "0.1000000000000000055511151231257827021181583404541015625",
+      "outcome": "lossless",
+      "originalPreserved": true
+    },
+    {
+      "family": "integer",
+      "token": "9007199254740992",
+      "outcome": "refused"
+    },
+    {
+      "family": "integer",
+      "token": "9007199254740993",
+      "outcome": "refused"
+    },
+    {
+      "family": "decimal",
+      "token": "0.1",
+      "outcome": "refused"
+    },
+    {
+      "family": "decimal",
+      "token": "-0.000",
+      "outcome": "refused"
+    },
+    {
+      "family": "decimal",
+      "token": "1e400",
+      "outcome": "refused"
+    },
+    {
+      "family": "decimal",
+      "token": "1e-400",
+      "outcome": "refused"
+    },
+    {
+      "family": "integer",
+      "token": "9223372036854775807",
+      "outcome": "bigint_exact"
+    }
+  ],
+  "scope": "Real browser context-free owner API observations against independent exact expected tokens; no Truss wrapper/resource account, Field-context admission or native storage qualification."
+}
