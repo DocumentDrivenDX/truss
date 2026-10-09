@@ -17,6 +17,7 @@
     "catalog-report-documents": "362b6df87be8f22387c59921af9f827248e79536183e342b7894a3c4e36f4207",
     "catalog-new-inventory": "872d921797dee82b851edcba2fc275f00a6f69a5ba3a2945cb8827e0bc43f687"
   },
+  "defaultHomeProducerSha256": "f7bea9fd414f75e43a2d26a940a32083976a7ea13b91027a5b019f5e141734d5",
   "stageProducerSha256": "9a6793f582e3591ea48c115736ead13f651aef8044ff4033c27255678b4e4c30",
   "originalInputSha256": "b8c64857b2cd73ef99471ebc8310e76f27102c62d30854d80bc40441dcbe609c",
   "engine": "17.9 (Debian 17.9-1.pgdg13+1)",
@@ -39,6 +40,8 @@
     "verbatim original source whitespace survives complete staging",
     "existing identity cannot pass genuinely-new cohort staging",
     "failed repeated cohort preserves original staged revision only",
+    "report document basis matches actual original input and native source archive",
+    "original owner observation and reversible transition preserved inside exact evidence artifact",
     "native collector returns actual complete new-family identity inventory",
     "collected endpoint is original relationship/source/target tuple",
     "missing original Field refuses inventory",
@@ -57,5 +60,5 @@
     "failed commit removes all provisional catalog effects"
   ],
   "scope": "Actual original complete declared new catalog staging and atomic refusal only. Root profile/authority, retained lifecycle, acceptance report/head/finalizer and public entrypoint are unqualified.",
-  "defaultHomeProducerSha256": "f7bea9fd414f75e43a2d26a940a32083976a7ea13b91027a5b019f5e141734d5"
+  "reportDocumentProducerSha256": "06f014f27eb92bd25b2f52e7b49fa11eeff9eaafbf6a46c5acb0b9f8a8d759e5"
 }
