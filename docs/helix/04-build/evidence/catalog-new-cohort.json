@@ -18,7 +18,8 @@
     "catalog-report-documents": "362b6df87be8f22387c59921af9f827248e79536183e342b7894a3c4e36f4207",
     "catalog-new-inventory": "872d921797dee82b851edcba2fc275f00a6f69a5ba3a2945cb8827e0bc43f687",
     "catalog-observation-recheck": "68bf56799bbcce0a1cfbf46a9a9b58d1870bb29a6e6214302296d8af1e4c38b2",
-    "catalog-input-custody": "b48222a7eafabfa854568422d9ffd7e76c355563e144fe2c620c216b1af5d230"
+    "catalog-input-custody": "b48222a7eafabfa854568422d9ffd7e76c355563e144fe2c620c216b1af5d230",
+    "catalog-prestate-capture": "53645d129b85ce6c6c92a5ae88cb3be2f82640ee952e55f4f3dce6463b0e77a6"
   },
   "reportDocumentProducerSha256": "f5e6c74c87f9133027fe04e2ca543f0f60a513a13e0052ec6b112dc399af3754",
   "defaultHomeProducerSha256": "f7bea9fd414f75e43a2d26a940a32083976a7ea13b91027a5b019f5e141734d5",
@@ -33,6 +34,10 @@
   "checks": [
     "actual PostgreSQL17.9",
     "eleven ALWAYS catalog generation observers installed",
+    "catalog prestate refuses upgrade of earlier shared head admission",
+    "actual original empty catalog start cut captured under head exclusion",
+    "original native prestate bytes retained unchanged in operation custody",
+    "later catalog state cannot replace original pre-admission capture",
     "incomplete property home inventory refuses before persistence",
     "altered Field candidate refuses against original archived source after Record staging",
     "different complete original input cannot borrow native operation admission",
