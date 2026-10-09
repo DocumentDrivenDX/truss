@@ -22,6 +22,32 @@ Weft's committed source exposes `weft.compile_json(request: str) -> str` through
 
 ## Host transaction adapter
 
+### Consumer count-summary integration
+
+Committed Weft `5856c73db0342363e64802905a94abb96209d757` defines COUNT(*)
+in CONTRACT-004's application-read 0.2 dialect and resolves it in
+`crates/weft-core/src/application_resolve.rs`. R8 should consume that owner
+implementation rather than add a Truss aggregate compiler. The explicit
+readProfile is version `weft-application-read/0.2.0`, subset `count-summary`;
+omitting it does not supply bounded interactive-read semantics.
+
+For this profile, grouped counts require complete grouping order and LIMIT;
+global counts have one row and exclude ORDER BY/LIMIT. Cursor and relationship
+predicates are excluded. Empty global input produces one zero-count row; empty
+grouped input produces no rows. Joins retain bag multiplicity. Python preserves
+the admitted exact integer carrier without float conversion, ordered parameters
+and every original host obligation. Query LIMIT bounds returned groups, not
+necessarily scanned input or native execution work.
+
+PY-02/05 must independently test empty/global/grouped inputs, duplicate joined
+rows, exact count decoding, parameter domains, omitted/partial grouping order,
+missing grouped LIMIT and forbidden cursor/relationship constructs. Use actual
+authorized native data and plans with finite selected scan/statement/transport
+budgets. Compiler acceptance alone does not prove the Truss backend supports
+the selected aggregate, security mapping or exact decoder; missing obligations
+refuse the whole read. Parsed-query input remains a separate Weft-owned ABI
+dependency: its availability cannot be inferred from SQL-text count support.
+
 Use the semantic Executor operations of CONTRACT-007 rather than a language-specific second transaction protocol. The adapter accepts the caller's actual live connection/transaction object, validates ownership/lifetime, and retains it internally. No transaction identifier is accepted as a substitute. Initial delivery selects one driver/transaction mode and qualifies it; sync and async modes cannot share a support claim without separate evidence. Driver selection remains explicit.
 
 - Owned execution begins on one connection, commits after complete native finalization, and publishes durable results only after observed commit. Failed or unknown commit preserves recovery state.
