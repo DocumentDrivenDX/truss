@@ -285,7 +285,7 @@ Before producer adoption, publish a complete bidirectional profile mapping from 
 
 Standalone retained-content additions require their own complete before/after retained-home representation or another explicitly reviewed complete encoding. The group metadata witness cannot compensate for a missing retained delta under the proposed reducer procedure. Until that wire/producer/loader design exists, report standalone retain support unresolved for this complete profile; keep the legacy physical retain operation separately scoped. A decoder cannot skip it, invent a property identity, or use its snapshot after image to silently change retained state. Complete create/delete and rebind have their separately authored retained semantics and do not discharge this missing standalone case.
 
-Select these mappings alongside the pending row-count interpretation, event/profile version, native producer/custody/resource and complete migration inventory. Exact original legacy rows remain legacy; profile selection cannot retroactively reinterpret ambiguous content. This gate concerns Truss's physical/semantic journal boundary and requests no UMF or Weft change.
+Select these mappings under the owner-selected two-property-delta/one-metadata-witness interpretation, with exact event/profile version, native producer/custody/resource and complete migration inventory. Exact original legacy rows remain legacy; profile selection cannot retroactively reinterpret ambiguous content. This gate concerns Truss's physical/semantic journal boundary and requests no UMF or Weft change.
 
 ### Proposed standalone retained-content event semantics
 

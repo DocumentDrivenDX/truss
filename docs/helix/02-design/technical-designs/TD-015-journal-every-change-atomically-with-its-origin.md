@@ -36,7 +36,7 @@ All runtime components are new. Core event planning stays I/O-free.
 
 ## API/Interface Design
 
-CONTRACT-002 owns event/origin schemas and operation payloads; CONTRACT-004 owns mutation diff semantics; CONTRACT-007 owns transaction-local context and durability. Complete historical envelope schemas and snapshot procedures are authored candidates in CONTRACT-002; adoption, native producer realization and the US-015 row-count reconciliation remain prerequisites for AC4; this TD does not invent an alternate event format.
+CONTRACT-002 owns event/origin schemas and operation payloads; CONTRACT-004 owns mutation diff semantics; CONTRACT-007 owns transaction-local context and durability. Complete historical envelope schemas and snapshot procedures are authored candidates in CONTRACT-002; adoption and native producer realization under the selected two-delta/one-witness group remain prerequisites for AC4; this TD does not invent an alternate event format.
 
 ## Data Model and Integration
 
@@ -68,11 +68,9 @@ D-07 whole-record/presence completeness and role/session authenticity remain sha
 
 For explicitly adopted lexical numeric profiles, event planning consumes CONTRACT-004 stored-value equality and CONTRACT-002 exact old/new correspondence; mathematical NX equality or unchanged key identity cannot suppress a token change. Implement the same selected codec/event meaning in the exclusive engine or trigger writer, with original source reconstruction and atomic rollback. STP-015 supplies conditional lexical-change/no-op/engine-versus-trigger/failure cases. Carrier/envelope/codec adoption and native producer qualification remain prerequisites.
 
-### Requirement conflict: metadata witness row count
+### Selected metadata witness row count
 
-US-015's walkthrough describes two journal rows for a two-property change; AC1 requires two old/new rows with shared version and origin. STP-015 currently tests the two-property projection, while CONTRACT-002's proposed complete non-create/delete group adds one metadata witness carrying full start/final records. That candidate has two property events plus one metadata event. Do not silently treat the story as approving a third total row or remove the metadata witness to make the existing test green.
-
-Resolve the governing requirement before adopting this candidate: either explicitly state that the criterion counts property rows and permits the complete-profile metadata sibling, or revise the complete-profile representation so record boundary evidence is provided without that extra journal row. The latter requires wire/digest/loader/persistence redesign and cannot be claimed compatible merely by hiding metadata from a public query. Keep the legacy two-row baseline and proposed complete profile distinct in tests and support claims. This TD records a concrete open requirement interpretation, not an amended acceptance criterion.
+The owner resolved this interpretation on 2026-10-07: US-015-AC1 counts two property-delta rows and includes one additional complete record-boundary metadata witness in the same group. Consume the amended story and CONTRACT-002 selection; do not remove or hide the witness to obtain a two-total-row result. Keep the legacy two-row baseline separate from the selected complete profile. Exact three-event sibling membership, digest, original native producer and reader/migration qualification remain implementation obligations, not a pending product vote.
 
 ### Snapshot reuse implementation handoff
 
