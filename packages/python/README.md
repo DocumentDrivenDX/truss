@@ -82,3 +82,8 @@ precision, but subsequent Decimal arithmetic follows the caller's context and is
 not qualified here. Integer host input rejects bool and float. Timestamp tokens
 retain their original offset/precision even when a datetime view is unavailable.
 These adapters do not normalize keys or define an alternative UMF grammar or codec.
+
+For populated local guard qualification, run
+`python scripts/check-pgserver-populated-guards.py` in the local runtime environment.
+It checks12 immutable row/statement refusals using explicit FK-valid administrative
+fixtures under rollback. It performs no protected engine or installer publication.

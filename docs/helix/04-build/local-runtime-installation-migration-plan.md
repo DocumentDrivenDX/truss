@@ -373,3 +373,25 @@ committed owner numeric source review. All nine installed-wheel tests pass from
 outside the checkout: five exact host-view checks plus four native local lifecycle
 checks. Dependencies are reused; native exact-value round trips and complete
 committed TypeScript/Python engine interchange remain separate obligations.
+
+## Populated local immutable guards
+
+The [populated checker](../../../scripts/check-pgserver-populated-guards.py) composes
+the same five original generated/native inputs with an explicit administrative
+fixture. It inserts the marker, source epoch and actual-xid operation dependencies
+under origin-mode FK enforcement, then inserts configuration and migration-receipt
+rows. These are test fixtures, not admitted original protected artifacts or a
+ready installation. No constraint or trigger is disabled to prepare them.
+
+All12 UPDATE/DELETE/TRUNCATE controls (two tables, two replication modes) refuse
+with55000 and preserve the complete row after each refusal. Independently expected
+original text and all six generated SHA-256 values match after those controls;
+the migration row receives its expected sequence default. Rollback removes the
+namespace. The [receipt](evidence/design-audit/pgserver-populated-guard-component.json)
+pins every source and the producer. This extends the earlier empty-table TRUNCATE
+evidence to populated native row guards and selected generated defaults.
+
+Protected capsule/receipt production, ordinary-role authorization, complete
+retention/cleanup lifecycle, semantic default/check/index correspondence, full
+routine/grant inventory, initialization publication and migration execution remain
+unqualified. This check must not publish or substitute for an installation marker.
