@@ -335,3 +335,16 @@ artifact spelling. The paired independent zero-effect/native-cell schedules are
 authored; no report schema, UMF scalar meaning or native support profile is changed.
 This review advances semantic alignment without closing installation, original
 artifact/effect/authority admission or the full cross-host native corpus.
+
+
+## Shipped migration restart/settlement review — 2026-10-09
+
+Reviewed CONTRACT-008's apply/reconcile/receipt types, LM-T04/05/08 and consumer
+framework deployment together. M4 now specifies original registration before
+recipe submission, registration-acknowledgment uncertainty, exact original restart
+custody, qualified original commit/rollback observation, quarantine and fresh
+postcommit target verification. A later routine/grant drift cannot relabel the
+original upgrade as rolled back or authorize recipe replay. Framework callback
+retry/success history remains separate from Truss settlement. Full M1 pair and
+M2–M5 execution/native qualification remain open; this review neither invents a
+second migration API nor defers the selected requirement to ship migrations.

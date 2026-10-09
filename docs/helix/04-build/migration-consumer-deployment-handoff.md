@@ -200,3 +200,61 @@ quarantine recovery API; those remain original-owner integration dependencies,
 not permission for Truss to clear retained handles or invoke retirement directly.
 Public broker authentication, general read enrollment, full writer closure and
 L03 qualification remain outside both inspected receipts.
+
+
+### M4 original attempt reconstruction and commit-loss schedule
+
+Implement recovery through the existing request/attempt/receipt types and shared
+registry, not through a framework ledger or a second migration identity. Capture
+exact expected source/target preservation before execution and keep the same M1
+route/profile tuple in every branch below.
+
+1. Before any recipe submission, register and confirm durable custody of the
+   exact original request, installed target context, original source observation,
+   procedure/resource/transition pins and recovery reference. If that registration's
+   acknowledgment is itself unknown, resolve its original registration attempt
+   before submitting migration effects. A host-generated attempt ID alone does
+   not establish registration or authorize native work.
+2. Under the original dedicated transaction, apply every ordered registered step,
+   retain actual step/preservation/target observations, prepare the immutable route
+   receipt and marker/archive publication, and perform the governing final checks.
+   No intermediate step receipt or target-looking marker independently opens
+   runtime readiness. Security publication enrollment/exclusion/drain remains the
+   existing owner's dependency.
+3. Cut the actual original driver's COMMIT acknowledgment after submission. Retain
+   original possible effects and resource quarantine. Stop consumer startup, keep
+   the original recovery reference and do not invoke apply again merely because
+   the framework retries its deployment callback. Losing the process cannot turn
+   that uncertain route into an unsubmitted request.
+4. On restart, restore the original request/recovery custody, including exact bytes
+   and registered profile membership. Use reconcile for that original attempt under
+   independently admitted current administrative/disclosure authority. Changed
+   manifest/recipe/procedure bytes or another installation's receipt refuse
+   correspondence; do not regenerate the request from current version numbers.
+5. Obtain qualified original termination and settlement evidence. A complete original
+   committed receipt/attempt observation establishes original commit under its
+   admitted observation profile; an absent receipt alone does not establish rollback.
+   A still-active backend, unavailable observation, incomplete receipt/archive or
+   incomparable incarnation keeps recovery/readiness closed. Do not refund or reuse
+   unresolved native/publication custody merely because the client restarted.
+6. After original commit is confirmed, independently verify the complete current
+   target inventory, data/codec/history compatibility and security/resource state.
+   Return original commit plus current verification only when both admit. Current
+   drift yields committed_unverified, not rolled_back or permission to rerun the
+   route. Confirmed original rollback retains verified source state; any new attempt
+   requires fresh original source/authority admission and original cleanup settlement.
+
+| Independent fault branch | Required original observations and outcome |
+| --- | --- |
+| Recovery registration acknowledgment lost before recipe submission | No recipe effect; resolve the same original registration before eligibility. Framework callback retry cannot create a second effect-bearing attempt |
+| Route committed, commit acknowledgment lost, process restarted | Same original request/attempt and immutable receipt; complete actual target preservation; reconcile submits zero recipes and supplies original committed evidence plus fresh verification |
+| Route rolled back, commit acknowledgment lost | Original qualified termination/rollback and complete source preservation; no target receipt/publication. Mere marker/receipt absence is insufficient |
+| Original outcome still unavailable after termination | Keep original recovery and readiness closed; no synthetic rollback, alternate-source route or duplicate apply |
+| Route committed, then a required native routine/grant drifts | Original committed custody remains intact; fresh verification fails and target runtime stays closed. Restore/repair follows explicit qualified administration, not replaying the original upgrade |
+| Framework fails after confirmed Truss commit | Framework status may fail independently; original route stays committed. On retry, fresh source/target verification and original receipt determine already_applied versus committed_unverified |
+
+Retain exact original and later observations separately. Compare complete native
+source/target data and effect inventories, recipe-submission counts and original
+attempt references; framework status, table counts and version strings are supporting
+facts only. These are executable test requirements for LM-T04/05/08 and M4/M5;
+no registered original recovery service or populated route is qualified here.
