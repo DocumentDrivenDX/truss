@@ -511,6 +511,37 @@ metadata/cell/command expectations. It performs no network access and never
 rewrites the receipt. Passing this sixth test is saved-evidence correspondence,
 not a fresh native run or driver qualification.
 
+#### Raw-wire probe versus pre-ingress accounting
+
+Source inspection of `check_python_pg_frame_native.py` identifies two limits of
+its retained read-only evidence. `receive` checks message count only after reading
+and appending the complete next frame; the 101st body may therefore already be
+materialized before refusal. `read_exact` retains each received fragment in a list
+and joins them, with no independent fragment/work or simultaneous-copy account.
+The fixed byte caps are harness bounds, not PY-01b pre-ingress guarantees. Preserve
+the saved probe receipt and its source pins at that actual scope.
+
+The original admitted driver must reserve eligibility for another message before
+reading its header, then admit the length and reserve body/backing/copy capacity
+before any body read. Include framing, transport buffering, fragmented reads,
+retained raw observations and decoder views in the complete account; counting
+only final joined bytes misses simultaneous lifetimes and per-fragment work.
+If header/body reception stops with unknown backend work, original command-cycle
+custody and settlement still apply. Resource refusal cannot manufacture an idle
+connection or release a publication.
+
+PY-01b's controlled transport tests must observe actual read requests: exhausting
+the message budget causes zero reads for the next message; an oversized or
+cumulatively unaffordable header causes zero body reads; and one-byte fragmentation
+cannot exceed the registered allocation/work reservation. Include truncation,
+EOF and cancellation after partial body reception, independently verify retained
+original bytes and record actual cleanup/unknown outcomes. Compare exact-capacity
+success with otherwise valid one-over refusals. These requirements apply to every
+selected message kind, including notices and errors, not just DataRow. An admitted
+bounded strategy may copy or buffer differently; Truss does not require the probe's
+chunk-list implementation or choose a driver from this review. Native/TLS/driver
+qualification and the full-report capacities below remain separate prerequisites.
+
 #### Full-report wire capacity before driver selection
 
 The frame candidate's one-MiB limit cannot transport the existing four-MiB
