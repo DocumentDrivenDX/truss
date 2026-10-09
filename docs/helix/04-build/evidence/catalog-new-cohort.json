@@ -26,9 +26,10 @@
     "catalog-report-immutability": "c243b51682de3fee979b977626bb54279eccb3de22a24270e0bda467bd215167",
     "catalog-original-context": "628db25db14d5bd7c979f16b2ddefcff3e41781747e75485fc1253515b55fd0d"
   },
+  "coreAssertionIdentityProducerSha256": "5d0f2d7fb097f3853473c845f81439d7b74791b477b51e47a92add23f9fa6fab",
   "originalExecutionBasisProducerSha256": "ed757b84f2cf424965567c394c1f57457ae3f8b5047bc0b194896442ae07f6fd",
   "reportCorrespondenceProducerSha256": "2554a8e6d8df8f7e26bd4df3a207af2c06c0c6f098485d53e847975f2c5bec53",
-  "reportPreparationProducerSha256": "125c0e99bf7e187bc1f126dbde73e81a9cb291d83aa891a6e8fdc2b493b32881",
+  "reportPreparationProducerSha256": "421dc89fe416e098225fe6265a63eb523f7d1fdf650178f8759678144d6e0dbf",
   "assertionProfiles": {
     "declarations": {
       "identity": "umf-declaration-inspection",
@@ -96,6 +97,8 @@
     "effectGeneration substitution refuses report observation recheck",
     "original owner observation and reversible transition preserved inside exact evidence artifact",
     "declared transform cannot pass new-only native staging as if absent",
+    "composed original source identities include both Record keys and relationship alongside core Field facts",
+    "native composition retains source custody and explicit incomplete unqualified assertion inventory",
     "native actor collector returns exact original admitted context bytes",
     "original native acting/login/database/backend facts match current issuer",
     "borrowed transaction identity cannot expose original native actor context",

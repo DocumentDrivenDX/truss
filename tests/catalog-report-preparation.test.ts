@@ -33,6 +33,7 @@ test('composed validation evidence preserves diagnostics at both source and reve
  for(const entry of evidence.diagnostics){expect(entry.source.artifact).toBe(prepared.original.input.documents[0].artifact);expect(entry.source.sourcePointer).toBe('');expect(entry.classification).toBe('upstream_validation');expect(entry.diagnostic.sha256).toBe(new Bun.CryptoHasher('sha256').update(Buffer.from(entry.diagnostic.bytesBase64,'base64')).digest('hex'))}
  expect(evidence.profile.sha256).toBe(new Bun.CryptoHasher('sha256').update(Buffer.from(evidence.manifest.bytesBase64,'base64')).digest('hex'));
  expect(evidence.documentInterpretations[0].evidence).toEqual(result.documentBasis.observations[0].evidence);
+ expect(result.coreAssertionIdentities.complete).toBe(false);expect(result.coreAssertionIdentities.deferred.length).toBeGreaterThan(0);
 });
 
 test('original 0.8 validation does not invent a transition or duplicate a target-basis diagnostic scan',async()=>{

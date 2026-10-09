@@ -1,0 +1,14 @@
+{
+  "sources": {
+    "packages/umf-bun/src/catalog-report-preparation.ts": "421dc89fe416e098225fe6265a63eb523f7d1fdf650178f8759678144d6e0dbf",
+    "packages/umf-bun/src/catalog-core-assertion-identities.ts": "5d0f2d7fb097f3853473c845f81439d7b74791b477b51e47a92add23f9fa6fab",
+    "tests/catalog-report-preparation.test.ts": "2a14faee68d6578ee2260512620189ccdfda976653525471368e7d093343b034",
+    "tests/catalog-core-assertion-identities.test.ts": "8922e447fca73c20952c841618b0dfaf78ad319849ddc1a2a4c20bbfd7df894b"
+  },
+  "tests": 16,
+  "assertions": 174,
+  "strictTypeCheck": "passed",
+  "nativeEvidence": "catalog-new-cohort.json",
+  "nativeChecks": 87,
+  "scope": "Actual owner identity subset composed with native staged catalog preparation; eleven reference identities, full source custody, complete=false and none/unqualified. No complete assertion report, native enforcement qualification or accepted publication."
+}
