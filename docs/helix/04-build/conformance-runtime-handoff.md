@@ -107,6 +107,29 @@ do not infer a heap bound from individual schema maxima.
 
 ## Red-first execution packet
 
+### Shared security correspondence fixture boundary
+
+Read-only coordination with “Assess security control support” on 2026-10-09
+(thread 01a11b8b-06bb-7091-a11a-b7eba0a432eb, revision 12) reports an active
+Staff/Project graph-selector correspondence harness using qualified Relationships
+and directed endpoints. Its authored semantic fixture is distinct from evidence
+about Truss's physical representation. This observation selects neither an
+owner API nor a native Truss security profile.
+
+C4/C7 should consume the owner's eventual original fixture and independently
+specified semantic expectations rather than author another policy resolver or
+compiler oracle. Truss's separate packet must map each qualified entity/key,
+relationship direction and participant to its admitted actual native storage
+under one protected cut, then compare actual allowed/denied/disclosed results.
+Include reversed endpoints, equal local names in distinct qualified owners,
+empty associations, current-principal change and unavailable source collection.
+An empty projected graph cannot bypass metadata/authority admission. Owner
+logical agreement alone cannot qualify the mapping, current native facts,
+compiled enforcement or host publication; each needs its original observation.
+Do not copy the owner's working fixture into a release until its source/profile
+and complete expectations are published and admitted. These integration cases
+remain `not_run` and preserve security interpretation/lowering ownership.
+
 Before C3 native work, assemble one immutable independent case packet for each
 required operation/boundary family plus the selected full corpus manifest.
 Include forbidden overload results, wrong input/result profile, changed native
