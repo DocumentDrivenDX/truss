@@ -30,3 +30,61 @@ Ingress/scanner/parser/capture allocation observations reconcile with the same o
 Implement this port inside the versioned adapter integration at the frozen parser boundary, not as an application event listener. Bind reserveIngress to the actual socket/TLS producer before enabling reads, and forwardFrame to an explicit integrated parser entry with original consumption assertions. Keep native authentication and earlier protocol phases separately admitted. No fork or installed runtime is supplied by this document.
 
 Qualify independent ledger and wire/native observations in STP-044 DH-01–05. Required faults include forged/foreign tickets, repeated forward, frame mutation after admission, shared-backing early release, wrong cycle/epoch/generation, synchronous callback reentrancy and parser exception after capture. Compare actual allocation order, forwarding count, captured native facts and original containment outcome; adapter-issued receipts cannot be their own expected oracle.
+
+## Operation issuer and savepoint control binding
+
+The ingress operations above reserve control allowance but do not themselves
+issue an operation ordinal or confirm an operation savepoint. Complete this
+binding inside the same admitted physical-lease issuer; do not treat the current
+counter component or a resolved control Promise as that binding. This extends
+original private producer custody, not the public Executor protocol.
+
+The selected integration needs three private operations on the existing issuer:
+
+| Private operation | Original inputs | Required output and custody |
+| --- | --- | --- |
+| reserveOperationControl | Admitted original transaction epoch, exclusive arbitration, current profile/cancellation state, cumulative account, selected savepoint and containment/cleanup procedure bounds | One opaque reservation registered with that issuer. Reserve all forward and cleanup obligations before consuming an ordinal. Failure publishes no operation and submits no native control. |
+| bindIssuedOperation | That unconsumed original reservation and the separately consumed exact operation ordinal | Original attempt/control association retained before native submission. No caller bytes or copied ticket can bind an ordinal. Failure after issuance burns the ordinal; it never rewinds the counter. |
+| submitOperationSavepoint | That original bound reservation and selected registered savepoint control definition | One submission, then original correlated native completion/containment observation for that epoch, operation and control cycle. Confirmed savepoint permits later native admission; unavailable completion keeps it closed and retains original recovery custody. |
+
+These names describe the required private binding, not implemented or callable
+stock-driver APIs. The same account and physical issuer registry govern them and
+the ingress operations. Keep operation ordinals, protocol-cycle ordinals and
+savepoint-control identities separate, with explicit original correspondence.
+No additional database table or independently resettable issuer is introduced.
+
+reserveOperationControl must complete before bindIssuedOperation and before any
+savepoint is submitted. If cancellation or epoch/profile change occurs during
+reservation, recheck under the original arbitration before publishing its ticket.
+Never use a later epoch's reservation to finish an earlier operation. After
+issuance, failed binding, cancellation or failed savepoint creation preserves the
+burnt ordinal. Unused occupancy may be reconciled only from actual original
+producer lifetime evidence; cumulative work is not refunded.
+
+submitOperationSavepoint consumes its submission permission on entry. Parser,
+transport or callback failure cannot permit a second submission. The original
+control completion must establish that exact savepoint exists in the admitted
+original transaction through the selected control/native producer protocol;
+ReadyForQuery T alone, a command tag alone or a resolved Promise is insufficient.
+The same original outcome correlation determines confirmed failure versus
+unknown control completion. Unknown completion closes new operation admission,
+retains original attempt/control/account/cleanup custody and follows the existing
+recovery procedure without creating a replacement counter or savepoint.
+
+Native head/capacity admission, registry insertion and canonical effects follow
+only confirmed containment. They must consume original issuer evidence through
+the selected private native admission composition, rather than trusting a numeric
+argument. The four row-derived native allocation candidates remain incompatible
+until that verification is implemented. No successful reservation proves current
+person authorization, installed inventory or publication-drain completion.
+
+Qualify this binding under CONTRACT-007's original adoption/control schedules and
+DH-01–05, with actual native observation in addition to independent host accounting:
+reservation denial before any submission; concurrent wrapper adoption; cancellation
+between reservation and issuance; failure after issuance; lost savepoint response;
+wrong epoch/control cycle; duplicate submission; confirmed savepoint followed by
+actual rollback; and loss of private issuer state. Every schedule observes exact
+forward/control counts, burnt/nonreused ordinals, complete original custody and
+whether native registry effects were permitted. A fake successful control callback
+cannot author the expected native confirmation. Python and TypeScript must satisfy
+these same controls on their own selected driver tuples before sharing support.

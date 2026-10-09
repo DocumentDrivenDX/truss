@@ -99,3 +99,10 @@ Constructing another object cannot be a re-adoption or recovery procedure. Losin
 that private state closes new admission until original reconciliation qualifies it.
 The native MAX allocator conflict remains open until all four admission families
 consume the original verified issuer output.
+
+The [driver producer control binding](../02-design/contracts/reference-driver-producer-port.proposal.md#operation-issuer-and-savepoint-control-binding)
+now specifies the missing reserveOperationControl → bindIssuedOperation →
+submitOperationSavepoint boundary, original registry/account affinity and actual
+confirmation requirements. It is a design handoff, not an implemented stock-driver
+API. Its independently required fault schedules precede native allocator correction;
+ingress/frame receipts cannot substitute for operation control confirmation.
