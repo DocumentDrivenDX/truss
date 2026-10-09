@@ -163,3 +163,28 @@ These concrete schedules support US-043-AC1 and NET-02/RSEL-01, without replacin
 ### Version-precondition separation for the mixed fixture
 
 Keep optional-version controls separate from the primary lost-ack scenario. Use independently observed original versions and the admitted ordered simulation rule to author a fresh group's preconditions, including the changed first result and subsequent unchanged result. A deliberately stale precondition on a later operation must produce the original indexed group failure and confirmed complete rollback, with no semantic receipt/effect publication; unknown containment retains execution recovery. No later operation may reuse the initial version merely because it targets the same record. Retain the complete supplied precondition bytes in request equality: adding, removing or changing expectedVersion under the original request identity is a different semantic input even if today's record would satisfy it. Receipt replay follows original input/authority admission before fresh mutation planning and must not retest the original preconditions against later current versions or rewrite them from saved results.
+
+## Retained client intent and retry disposition schedules
+
+CLIENT-01–05 extend NET-01–04 / RSEL-01–04 using the
+[network host's client decision table](../../02-design/contracts/reference-network-batch-host.proposal.md#client-retry-decision-and-original-request-custody).
+Use the packed public reference host/client with original qualified namespace
+and immutable complete request bytes. Independently authored expected graph,
+version, journal and receipt results precede dispatch; observed current state
+cannot generate the expected replay. These cases remain `not_run`.
+
+| Case | Original failure/restart schedule | Required outcome |
+| --- | --- | --- |
+| CLIENT-01 | Persist original intent; commit mixed changed/no-op group; lose response; terminate client; perform unrelated later edits; restart client from retained intent and retry | Exactly the original complete ordered committed result, with aliases/no-op versions/events intact. No second mutation or receipt; later state cannot replace replay content. |
+| CLIENT-02 | Deliver only an original response prefix, then interrupt; separately return malformed/truncated response after actual commit | No semantic success callback from partial bytes. Client retains unknown intent and retries unchanged; independently inspect host commit/receipt and single effect. |
+| CLIENT-03 | Hold original commit outcome unresolved while client backoff/deadline budget expires; resume original recovery later | Budget expiry leaves outcome unknown. No replacement identity, callback rerun or uncertain connection reuse. Qualified original recovery determines final disposition. |
+| CLIENT-04 | Retry after changing operation order, exact numeric spelling, expected-version presence or request identity; separately expire original identity | Same-ID semantic changes conflict; new identity is a distinct application intent, never automatic recovery. Expiry cannot reapply the original effect. Host disclosure and native settlement remain independently admitted. |
+| CLIENT-05 | Revoke receipt owner-union authority between original commit and restart; restore valid authentication without restoring that authority | No original receipt payload in body, callback, log or cache; refreshed authentication cannot waive current disclosure. Restored authority, if explicitly admitted later, permits original receipt observation only. |
+
+Capture actual native commit/rollback/recovery independently of client transport
+status. Inspect complete before/after graph, journal, receipt and protection
+inventories, plus callback/body/log disclosure and connection disposition.
+Request-free operations receive no invented idempotent recovery. Client intent
+persistence is an explicitly selected host/application producer; a restart
+with missing original request custody must not reconstruct intent from current
+records. These scenarios qualify that integration, not a new Truss retry wire.
