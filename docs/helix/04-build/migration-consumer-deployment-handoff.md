@@ -172,6 +172,23 @@ retain their separate advertised-target evidence requirements.
 
 ### M1 populated preservation comparison
 
+The [historical epoch candidate comparison](evidence/design-audit/migration-epoch-candidate-delta.json)
+makes one input pair concrete: qualified-property0.15 and source-epoch0.16 review
+models. The target retains all 109 earlier native AST statements apart from the
+explicit review-only schema comment and appends two epoch tables plus REVOKE ALL
+from public. The [reproducible checker](evidence/design-audit/check_migration_epoch_candidate_delta.py)
+compares that exact prefix and pins both models and the owner-generated export.
+This is a structural comparison, not selection of M1 or executable ALTER SQL:
+the target contains full CREATE statements for the earlier layout.
+
+A complete route must additionally select original epoch initialization and
+historical report/receipt/feed interpretation, complete installed routines and
+authority/resource/recovery/publication profiles, and populated preservation.
+Do not assign a new epoch to historical tokens to make them comparable, derive
+initialization from copied marker text, or run the target fresh-install script
+over an existing source. These inputs can inform M1 review; their version numbers
+and append-only AST shape do not establish upgrade compatibility.
+
 Before selecting a route, author its expected preservation mapping independently
 of the executor. LM-T03 uses that same mapping for committed target checks;
 LM-T05 compares confirmed rollback with the original source. Counts and aggregate

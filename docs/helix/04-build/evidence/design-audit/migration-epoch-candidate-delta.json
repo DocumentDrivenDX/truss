@@ -1,0 +1,48 @@
+{
+  "scope": "historical review-model structural candidate delta only; no complete installed source/target pair, conversion or route selection",
+  "sources": [
+    {
+      "path": "docs/helix/02-design/models/truss-layout-qualified-property-0.15.proposal.umf.json",
+      "sha256": "baed6c2707240261802d9fe87a00448acf37f13dcb33e8215717681dc4542b76"
+    },
+    {
+      "path": "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json",
+      "sha256": "261e32c6c62624418f124ac7fbe3c206338322a03755b7ac0f1a7c7d86002368"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql",
+      "sha256": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f"
+    }
+  ],
+  "commonStatements": 109,
+  "excludedDifference": "review-only schema comment",
+  "addedStatements": [
+    {
+      "statementIndex": 109,
+      "nativeKind": "CreateStmt",
+      "relation": "source_epoch_registry",
+      "astSha256": "dd5b9ad50fdbe4786211dd85c5b026bdc4528bd06fe215a650fe92bea621ee5e"
+    },
+    {
+      "statementIndex": 110,
+      "nativeKind": "CreateStmt",
+      "relation": "source_epoch_current",
+      "astSha256": "df8b6c1d9806334747a00103a652c54078456791e8f31eb2a4e243990a833d78"
+    },
+    {
+      "statementIndex": 111,
+      "nativeKind": "GrantStmt",
+      "relation": null,
+      "astSha256": "742e85eb51a6ce148988f9fb42aa42201e23b0fe1032eebcc01938a351c587c7"
+    }
+  ],
+  "privilegeEffect": "revoke all on both epoch tables from public",
+  "missingRouteComposition": [
+    "complete installed routine/dependency/authority/resource profiles",
+    "original epoch initialization and historical token/report/feed preservation",
+    "registered original recovery/request/receipt homes and target publication",
+    "independent populated preservation and fault expectations"
+  ],
+  "m1Selected": false,
+  "nativeImplementationQualified": false
+}
