@@ -1,0 +1,17 @@
+{
+  "database": "PostgreSQL 17.9 (Debian 17.9-1.pgdg13+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit",
+  "checks": [
+    "Initial registry/pointer component insertion",
+    "Missing predecessor refuses",
+    "Self predecessor refuses",
+    "Initial with predecessor refuses",
+    "Duplicate epoch refuses",
+    "Missing current registry refuses",
+    "Successor preserves original registry and exact artifact digest",
+    "Ordinary role registry insert denied",
+    "Ordinary role pointer update denied",
+    "Outer rollback removes registry/pointer and marker"
+  ],
+  "scope": "Rollback-contained storage candidate constraints and ordinary-role DML denial only; synthetic component tokens are not issued epochs, installed admission or lifecycle qualification",
+  "qualified": false
+}
