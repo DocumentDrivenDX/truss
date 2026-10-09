@@ -417,6 +417,28 @@ Original owner reruns remain dependencies; Truss does not alter those working fi
 or duplicate their resolver/source implementation. This updates security integration
 planning without qualifying the release tuple or weakening the broader corpus.
 
+The subsequent original owner native-stage receipt at
+`/Users/erik/.codex/worktrees/1598/umf/docs/helix/04-build/evidence/security/truss-graph-native-stage.json`
+has SHA-256 `93b099a53e57f10dcc9c5b644f4f98ba2b9696ad6703e6952b3a4ac66a3dd49e`.
+Read-only review compared all 765 retained source digests with current files and
+all 57 expected/observed pairs; none differed. The owner records a fresh
+PostgreSQL 17.9 candidate run, while `nativeImplementationQualified` remains
+false. Truss did not rerun the native probe. Its original installer connection,
+provisional catalog, excluded namespace selections and rollback-only scope do
+not establish committed catalog or authenticated source/cut authority.
+
+Integration must admit required endpoint-key metadata independently of row
+population, before treating an empty projection as valid. The original control
+observes exact native edge count zero and an empty projection, then changes the
+required metadata and observes validity false. For the assembled accepted-source
+path, independently repeat that schedule with the actual admitted metadata,
+authority and shared validity/projection cut; missing, stale or invalid required
+metadata must refuse even with zero edges. Restore the original metadata and
+independently compare populated exact endpoint keys and typed identities. Do not
+replace these controls with a row-level predicate that becomes vacuously true
+over an empty table. This is a concrete assembly test obligation, not a new
+Truss-owned resolver or an adoption of the owner's candidate as release-ready.
+
 
 ### Python report resource boundary evidence
 
