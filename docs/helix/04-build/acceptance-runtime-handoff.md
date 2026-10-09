@@ -23,6 +23,16 @@ does not claim their combined verification, selected semantic interpretation or
 full seventeen-field admission. Public selectors and deferred barriers remain
 unchanged.
 
+Fresh PostgreSQL 17.9 execution now exercises the registered-profile component
+against actual report collectors. All 181 component observations pass in
+[the separate receipt](evidence/catalog-new-cohort-report-profile-correspondence.json),
+including original registered-byte correspondence and substituted report-profile
+refusal. Earlier receipts remain unchanged and the owned database was removed.
+The registered artifact intentionally describes component byte custody only;
+its successful resolution does not admit report semantics. Combined execution
+candidate/profile verification and complete seventeen-field admission remain
+unfinished, as do immutable report insertion and public activation.
+
 ### A2 UMF support producer before full report comparison
 
 Source inspection of `catalog-umf-report-basis.ts` finds original source versions,
