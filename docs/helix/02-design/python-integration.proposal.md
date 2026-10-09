@@ -112,6 +112,44 @@ A source author must explicitly adopt a new document or the selected owner must
 admit a complete projection before Truss uses these names; the packet grants no
 permission for a runtime to mutate original source during preparation.
 
+## Remaining consumer metadata meaning and action boundary
+
+Both explicit-name validation observations retain eight warnings. Five identify
+experimental native meaning for nullability, cardinality, facets, keys and
+relationships; two retain unavailable exact DDD and placement vocabularies; one
+retains `/modules/0/actions` as unknown core content. These are distinct from
+missing names. Envelope validity cannot classify every warning as harmless,
+claim complete semantics or authorize action execution.
+
+The consumer sources contain an action language with input references, named
+preconditions, create/link/update effects and operation-local aliases. That is
+not a registered Truss or UMF core executable action contract. Preserve its
+original bytes and unknown-content diagnostics. Do not strip actions to claim
+complete acceptance, execute their JSON directly, reinterpret aliases as committed
+Truss IDs or commission a Truss-owned action-language compiler.
+
+The existing consumer integration boundary receives the complete explicitly
+prepared atomic-group request under CONTRACT-004, with its original ordered
+preconditions/effects, exact values, module scope and request identity. Any host
+adapter from authored action to that request needs its own exact source/mapping
+and qualification; Truss still validates the whole request and enforces current
+person/module/native constraints. Host input validation is not a replacement for
+those database checks. The action's selected x- provenance follows the existing
+R5 journal path and grants no authorization, asserted actor or trusted compiler
+status. A different action label cannot bypass a failed precondition or current
+policy, and a label alone proves no correspondence to retained action source.
+
+PY-03/04 and R2 must exercise original consumer create-plus-link ordering,
+operation-local alias resolution, optional missing property handling, precondition
+failure and dry-run rollback through the existing group protocol. Keep complete
+independent graph/receipt/journal expectations and authenticated origin alongside
+the original action/provenance mapping. An unsupported required action adapter
+remains unavailable; successful generic group tests do not qualify that adapter.
+Read-only core queries can have separately admitted support, but their profile
+must explicitly retain and classify the uninterpreted content rather than advertise
+complete vocabulary/action execution. No consumer action grammar or new UMF
+capability is selected here.
+
 ## Original grouped-count admission gap
 
 The [source correspondence review](../04-build/evidence/design-audit/consumer-grouped-count-source-review.json)
