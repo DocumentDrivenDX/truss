@@ -30,7 +30,8 @@ Recent handoffs now include Python/TypeScript complete synthetic report-to-nativ
 encoding parity (including integer-like key order), portable migration inspection
 schemas and LM-V01–06, fresh-process archive recovery AH-R01–03, and conformance
 interruption/evidence-store settlement controls. Current combined strict schema
-compilation covers 158 contracts. These are component/design outputs, distinct
+compilation covers [159 contracts](evidence/design-audit/schema-inventory-performance-handoff-2026-10-09.json),
+including the separate mandatory-performance expectation 0.2 envelope. These are component/design outputs, distinct
 from genuine full report production, protected publication, deployed migration
 execution, provider durability and committed database interchange.
 

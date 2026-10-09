@@ -15,6 +15,14 @@ descriptors added for this handoff. It reports zero errors. This verifies schema
 composition only; it does not implement the runner, establish observer independence
 or qualify an operation against PostgreSQL or another implementation.
 
+The newer [159-schema receipt](evidence/design-audit/schema-inventory-performance-handoff-2026-10-09.json)
+includes the performance expectation 0.2 envelope and supersedes the old count
+for the current top-level contract inventory. It retains every original schema
+identity and byte digest; zero strict compilation errors prove only that exact
+registration/reference composition. Strict TypeScript also passes for the current
+link/coverage helpers, their coverage test and the synthetic link controls. No
+registered conformance host, complete corpus or native qualification follows.
+
 ## Implementation sequence and independent exits
 
 C4 has a private `conformance-diagnostic-multiset.ts` comparator for bounded,
