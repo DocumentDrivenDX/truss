@@ -44,6 +44,10 @@ class FrameTests(unittest.TestCase):
                            c.type_size, c.modifier, c.format) for c in columns],
                          [(b'a', 0, 0, 25, -1, -1, 0),
                           (b'b', 4294967295, 2, 4294967295, 8, -1, 1)])
+        # Pinned pg8000 1.31.5 core.py selects the signed "ihihih" format.
+        # Its metadata representation cannot substitute for original raw OIDs.
+        self.assertEqual(struct.unpack('!ihihih', source[-18:]),
+                         (-1, 2, -1, 8, -1, 1))
 
     def test_null_empty_and_exact_undecoded_cells(self):
         source = bytes.fromhex('44000000140003ffffffff0000000000000002ff00')

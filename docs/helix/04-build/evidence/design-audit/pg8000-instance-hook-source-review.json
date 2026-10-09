@@ -1,0 +1,38 @@
+{
+  "checkedAt": "2026-10-09T17:31:28.733314+00:00",
+  "scope": "Pinned pg8000 1.31.5 wheel source review; no driver installation, connection or public port qualification",
+  "wheelPath": "/private/tmp/truss-pg8000-review-1315/pg8000-1.31.5-py3-none-any.whl",
+  "wheelSha256": "0af2c1926b153307639868d2ee5cef6cd3a7d07448e12736989b10e1d491e201",
+  "coreSha256": "cac1e50502901bcea3ddab588e0350149dd8fd771156ae1c531a2a04b3925e26",
+  "sourceSeams": [
+    {
+      "lines": "258-274,199-200",
+      "behavior": "CoreConnection accepts supplied sock and _make_socket selects it before file construction"
+    },
+    {
+      "lines": "234-248,328-339",
+      "behavior": "TLS can replace that socket; final transport supplies makefile after channel-binding derivation"
+    },
+    {
+      "lines": "352,355",
+      "behavior": "message_types holds instance-bound row-description and data-row handlers"
+    },
+    {
+      "lines": "33,641-670",
+      "behavior": "stock row metadata uses signed ihihih format and selects conversion functions by type OID"
+    },
+    {
+      "lines": "821-833",
+      "behavior": "stock DataRow converts text and accumulates rows"
+    }
+  ],
+  "requiredQualification": [
+    "instance-local hooks installed before startup; no global _read or PG_TYPES mutation",
+    "instrument final approved TLS transport and retain original endpoint/certificate/channel binding semantics",
+    "reserve underlying buffering and stock helper/parser/copy/row accumulation before materialization",
+    "raw metadata preserves unsigned OIDs, signed native fields and complete exact row shape",
+    "raw cells and metadata retain original command/generation custody before conversion",
+    "all driver mode/caller/handler/cleanup paths covered or unavailable"
+  ],
+  "driverPortQualified": false
+}

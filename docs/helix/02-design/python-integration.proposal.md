@@ -590,6 +590,47 @@ integration work consuming the owner's transport/authentication contract, not a
 new Truss certificate resolver or authorization model. No credentials or actual
 TLS connections were accessed during this source review.
 
+#### pg8000 connection-local transport and row-handler seams
+
+The pinned 1.31.5 [source review](../04-build/evidence/design-audit/pg8000-instance-hook-source-review.json)
+identifies a concrete experiment path: `CoreConnection` accepts a supplied
+`sock`; the constructor creates its file only after `_make_socket` returns the
+final transport. Its dispatch table binds instance row-description/data-row
+handlers. An original adapter can investigate connection-local transport and
+handler hooks without globally replacing `_read` or `PG_TYPES`. This is a
+source-backed candidate path, not a driver choice or implemented raw producer.
+
+Install original account/custody before constructor startup. The final file
+producer must establish bounded read-ahead and pre-header/body admission for
+both receive loops, including notice/error/authentication messages. Stock `_read`
+still allocates/extends/copies buffers, and stock handlers still accumulate rows;
+a supplied socket alone cannot account those allocations or establish release.
+Original command/generation and cleanup/settlement custody remain mandatory.
+
+TLS can replace the supplied socket before `makefile`. Instrument the final
+security-owner-approved transport and preserve original endpoint/certificate and
+channel-binding derivation; do not assume a raw socket proxy survives wrapping.
+Passing an already TLS-wrapped socket with `ssl_context=False` skips this driver's
+channel-binding derivation and cannot silently stand in for the selected secure
+profile. Neither a global socket/SSL monkey patch nor turning TLS off supplies
+the missing admission. Unsupported transport/security combinations remain unavailable.
+
+The stock RowDescription metadata format uses signed 32-bit OIDs. The Truss raw
+metadata path must preserve unsigned table/type OIDs, alongside signed attribute,
+type-size and modifier fields; the existing independent frame vector with
+4,294,967,295 OIDs demonstrates the distinction. Unknown OID/profile admission
+is separate from unsigned transport. Raw DataRow capture must verify the complete
+original count/length/body before conversion, preserve SQL NULL versus exact cell
+bytes, and bind the same original descriptor/cycle. Reusing already converted
+stock `context.rows` cannot reconstruct that raw port.
+
+Qualify a connection-local experiment with independent sibling connections,
+constructor/query/prepare/execute/close paths, unsigned metadata, exact numeric
+and Unicode cells, malformed/trailing rows, fragmented/oversized reception,
+handler failure and unknown termination. Keep authentication/backend-key material
+out of evidence output. This source review does not install the driver, authorize
+credential collection, qualify a native person or activate a Python package.
+
 #### Raw-wire probe versus pre-ingress accounting
 
 Source inspection of `check_python_pg_frame_native.py` identifies two limits of
