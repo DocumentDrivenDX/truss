@@ -167,6 +167,35 @@ Do not copy the owner's working fixture into a release until its source/profile
 and complete expectations are published and admitted. These integration cases
 remain `not_run` and preserve security interpretation/lowering ownership.
 
+### Empty-data preflight versus valid nonmatch
+
+The security owner's active revision-25 snapshot reports a corrected empty,
+unused population bypass and further controls for unsupported expressions beneath
+an empty quantifier. This is owner-reported progress, not independently inspected
+finished code or native qualification. C2/C4 must preserve the selected owner's
+whole-input typing/association/support preflight before data-dependent evaluation.
+Zero observed witnesses cannot admit an undeclared association or change
+unsupported required meaning into an ordinary false predicate.
+
+Author paired packets using the same policy/source/profile and independently
+seeded empty versus nonempty populations:
+
+| Packet | Independent expectation |
+| --- | --- |
+| Declared qualified association and supported expression; complete empty population | The admitted owner evaluation determines a valid empty result/nonmatch. Complete collection and preflight evidence are still required |
+| Undeclared Relationship or a Record reference substituted into its namespace; empty unused population | Preflight refuses before protected execution/publication; unused or empty data does not hide invalid metadata |
+| Unsupported required expression nested beneath an empty quantifier | Support preflight refuses under the original owner protocol. Short-circuit evaluation cannot emit a supported false result |
+| The same invalid packets with one witness | The same preflight classification applies; data cardinality cannot decide grammar/support admission |
+| Missing or interrupted population collection presented as an empty array | Original source completeness is unavailable, rather than a verified empty population or policy nonmatch |
+
+C2 resolves original artifacts and registered required observers for these cases.
+C4 records exact admission/evaluation result layers, source completeness and zero
+protected recipe/publication effects for refusals. Do not infer success from an
+empty journal array or from a comparator that saw no rows. The independently
+admitted positive empty case prevents a blanket empty-data refusal from satisfying
+the corpus. These controls consume owner semantics and add no Truss policy parser,
+evaluator, grammar or fallback interpretation.
+
 The owner's revision-13 continuation now drafts policy 0.2.0. Read-only source
 inspection of `docs/helix/02-design/spikes/security/policy-v0.2.schema.json`
 confirms its title explicitly excludes public admission; `exists.association`

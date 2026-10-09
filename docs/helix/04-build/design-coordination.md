@@ -88,6 +88,21 @@ coefficient equality alone cannot authorize a key, predicate or disclosure.
 These controls remain planned until the complete owner tuple and original Truss
 mapping/authority/account/publication procedures are qualified.
 
+## Security empty-population preflight handoff — 2026-10-09
+
+The read-only “Assess security control support” snapshot is active at revision
+25. The owner reports correcting empty unused populations that bypass association
+checks and is testing unsupported expressions under empty quantifiers. This is
+reported progress only; no owner source or test receipt is adopted by this entry.
+
+The [conformance handoff](conformance-runtime-handoff.md#empty-data-preflight-versus-valid-nonmatch)
+now pairs valid complete empty populations with undeclared/wrong-namespace
+associations, unsupported nested expressions, their nonempty counterparts and
+unavailable collection. Whole-input preflight and complete source observation
+remain distinct from data-dependent nonmatch. Actual native/protected result
+and publication observations remain required; Truss does not implement the
+owner's evaluator or treat unavailable meaning as false.
+
 ## Security association correlation handoff — 2026-10-09
 
 A fresh read-only status snapshot of “Assess security control support” is active
