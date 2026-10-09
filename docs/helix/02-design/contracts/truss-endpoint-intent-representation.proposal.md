@@ -147,7 +147,7 @@ complete semantic evidence.
 ## Remaining representation-to-policy handoff
 
 The [full closed carrier schema](truss-endpoint-intent-v0.1.proposal.schema.json)
-now authors explicit pending/selected definition selection, exact source artifacts,
+now authors explicit pending/selected definition selection, original source references,
 required dependency declarations, complete endpoint sets and key state, exact
 integer-text bounds, direction/lifecycle/composition, inverse and association
 Record intent. A pending definition carries an explicit expected revision or
@@ -156,29 +156,52 @@ claims requiring original resolution, not a schema-issued resolved capability.
 
 The [shape checker](../../04-build/evidence/design-audit/check-truss-endpoint-intent-shapes.ts)
 strictly compiles this schema with the existing acceptance-input artifact schema.
-[Twenty-nine controls](../../04-build/evidence/design-audit/truss-endpoint-intent-shapes.json)
+[Thirty-one current controls](../../04-build/evidence/design-audit/truss-endpoint-intent-acyclic-shapes.json)
 pass, including missing complete fields, mixed definition states, empty endpoints,
 numeric/noncanonical bounds and unknown modifiers. Deliberately shape-valid
-reversed bounds, duplicate intent IDs and changed source digest still require
+reversed bounds, duplicate intent IDs and foreign source references still require
 semantic/original-byte refusal; their shape acceptance is not support. The checker
-uses synthetic source artifacts and does not establish valid UMF source output.
+uses synthetic source-reference claims and does not establish valid UMF source output.
 
-For full `Registry.register` adoption, retain the original schema/dependency bytes
-and construct its closed registered schema bundle through the existing composition
-procedure. The external exactArtifact reference must resolve to the original
-acceptance-input definition, never a locally broadened substitute. The minimal
-probe's standalone manifest is not that complete bundle and cannot qualify the
-full carrier's semantic validator. The schema selects no native range, operation
-resource limit or automatic storage migration.
+For full `Registry.register` adoption, retain the original closed schema bytes
+and semantic procedure through the existing composition procedure. The minimal
+probe's manifest cannot qualify the full carrier's semantic validator. The schema
+selects no native range, operation resource limit or automatic storage migration.
+
+### Acyclic source inventory references
+
+The first unadopted full schema embedded exact source artifacts in selected
+definitions/dependencies. That is unsuitable for local references or mutually
+dependent source documents: embedded self bytes, or reciprocal source digests,
+would create circular byte dependencies. The corrected candidate carries only
+`sourceReference`, an opaque original source-inventory entry identity. Original
+full bytes and verified digest stay in the already admitted acceptance input or
+prior accepted archive, outside the referring document. Preserve the earlier
+shape/inventory receipts at their original historical scope.
+
+Resolve each reference against the original complete source inventory and require
+exact declared document/revision/entry correspondence. Duplicate or ambiguous
+entry identities, wrong revision, missing original bytes, changed content and
+foreign accepted-source context refuse; reference spelling cannot confer custody
+or request external loading. Local selections resolve to their actual containing
+source member and its original Truss document revision. External selected targets
+and required dependencies resolve to exact supplied or admitted prior members.
+Pending selections retain explicit absence without a fabricated source entry.
+
+Logical dependency cycles still use the existing SCC order. Their inner source
+documents refer to stable opaque inventory names; the outer admitted inventory
+hashes each complete document independently. It does not embed its own bytes in
+those documents. Complete membership/definition checks precede graph ordering;
+successful reference lookup alone does not establish valid target semantics.
 
 Reproduce shape controls from the repository root with
 `bun docs/helix/04-build/evidence/design-audit/check-truss-endpoint-intent-shapes.ts /absolute/path/to/dependency/package.json`,
 using the admitted Ajv2020 dependency package.
 
-The [combined inventory receipt](../../04-build/evidence/design-audit/schema-inventory-endpoint-intents-2026-10-09.json)
+The [current combined inventory receipt](../../04-build/evidence/design-audit/schema-inventory-acyclic-endpoints-2026-10-09.json)
 strictly registers and compiles all 156 current top-level contract schemas with
 zero errors. This adds the endpoint-intent candidate to the prior 155-schema
-composition check; it preserves that older receipt and grants no semantic or
+composition check and corrects the intervening embedded-source candidate; it preserves the earlier receipts and grants no semantic or
 runtime qualification.
 
 | Stage | Required authored output and independent exit |

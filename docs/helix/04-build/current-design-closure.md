@@ -57,11 +57,16 @@ It does not adopt a vocabulary, repair invalid core references or qualify native
 acceptance. Prefer reviewing this existing-owner mechanism over waiting for
 generic CONTRACT-045 feature work.
 
-The full endpoint-intent carrier is now authored and passes 29 structural controls;
+The full endpoint-intent carrier is now authored and passes 31 structural controls;
 strict registration/reference compilation of all 156 current contract schemas
 passes. E1 still requires original full semantic registration and reviewed
 definition/dependency/policy correspondence. This schema progression does not
 advance the minimal extension probe to full catalog acceptance.
+
+The current carrier uses opaque original source-inventory references instead of
+embedded source bytes/digests, avoiding self-reference and reciprocal hash cycles
+for local and mutual dependencies. Original complete source correspondence still
+belongs to acceptance preparation; a reference string cannot authorize resolution.
 
 Historical physical design source is the reconciled 0.12 history review over the separately pinned 0.11 compiler foundation: 106 statements, 46 tables, 442 columns and 24 explicit indexes. These counts describe preserved declarations, not a full installer or supported deployment. The [current column inventory](../02-design/contracts/weft-review-columns-v0.12.proposal.md) covers the 0.12 review declarations. The separately versioned [0.12 source review packet](evidence/weft-source-binding012/README.md) maps the current review declarations and exact owner-export SQL; the [0.11 packet](evidence/weft-source-binding011/README.md) retains its original bytes and scope; earlier packets remain separately pinned. Source mapping does not qualify receipt replay or native/compiler adoption. Older 0.8/0.4 packets remain preserved and none is adopted. No complete design or native qualification claim is made.
 

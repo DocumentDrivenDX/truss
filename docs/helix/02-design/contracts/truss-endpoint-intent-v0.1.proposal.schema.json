@@ -66,14 +66,15 @@
        "type": "string",
        "minLength": 1
       },
-      "source": {
-       "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+      "sourceReference": {
+       "type": "string",
+       "minLength": 1
       }
      },
      "required": [
       "state",
       "revision",
-      "source"
+      "sourceReference"
      ],
      "additionalProperties": false
     }
@@ -216,14 +217,15 @@
      "type": "string",
      "minLength": 1
     },
-    "source": {
-     "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    "sourceReference": {
+     "type": "string",
+     "minLength": 1
     }
    },
    "required": [
     "document",
     "revision",
-    "source"
+    "sourceReference"
    ],
    "additionalProperties": false
   },
