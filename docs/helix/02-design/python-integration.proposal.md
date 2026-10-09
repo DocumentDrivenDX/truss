@@ -639,6 +639,19 @@ whole-frame backing, immutable-copy lifetime, transport/TLS buffers, decoded val
 and aggregate work still need the original complete account. No driver, resource
 profile, custody issuer or public Python package is selected by this component.
 
+The separate `check_python_pg_receive_native.py` now exercises that receiver over
+the existing owned local PostgreSQL 17.9 raw socket with the earlier independently
+specified read-only query and BEGIN READ ONLY/ROLLBACK. The saved
+[receive receipt](../04-build/evidence/design-audit/python-pg-receive-native.json)
+pins receiver, decoder and probe bytes, retaining exact ordered descriptors/cells
+and remaining raw bounds. Startup and query frames share the same receiver instance.
+No credentials or backend-key material are retained in the receipt. The seventh
+receive test checks its source correspondence and independently expected null,
+empty, large exact decimal, Unicode, server text and command sequence offline.
+This adds actual local recv_into correspondence; it does not qualify authenticated
+TLS, a pg8000 adapter, complete allocations, cancellation/settlement, installed
+security or publication. The original frame receipt remains unchanged.
+
 #### Full-report wire capacity before driver selection
 
 The frame candidate's one-MiB limit cannot transport the existing four-MiB
