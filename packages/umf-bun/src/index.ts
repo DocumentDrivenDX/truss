@@ -1,5 +1,6 @@
 /** Trusted host-only original producer registration. No alternate UMF validation. */
 import {resolve} from 'node:path';
+import {requireUnchangedCatalogTransition} from './catalog-transition-correspondence';
 const assertionOwners=new WeakMap<object,'declarations'|'assertion-fields'>();
 function registerAssertionOwner<T extends object>(owner:T,mode:'declarations'|'assertion-fields'):T{assertionOwners.set(owner,mode);return owner;}
 /** Private loaded-instance recognition; no external issuer or native qualification. */
@@ -16,9 +17,12 @@ export async function loadUmfProducer(directory:string){
    if(!sourceValidation.valid) return {originalText,source,sourceValidation,transition:null,targetValidation:null};
    let transition=null,target=source;
    if(source.umf==='0.7.0'){
-    transition=captured.upgradeSchemaPropertiesEnvelope(source);captured.verifySchemaPropertiesUpgrade(transition);
+    const originalSourceJson=JSON.stringify(source);
+    transition=captured.upgradeSchemaPropertiesEnvelope(source);
+    const verified=captured.verifySchemaPropertiesUpgrade(transition);
     const restored=captured.rollbackSchemaPropertiesEnvelope(transition,transition.target);
-    if(JSON.stringify(restored.target)!==JSON.stringify(source))throw Error('Original transition rollback mismatch');target=transition.target;
+    requireUnchangedCatalogTransition(originalSourceJson,source,transition,verified,restored);
+    target=transition.target;
    }else if(source.umf!=='0.8.0')throw Error('Unsupported original UMF version');
    return {originalText,source,sourceValidation,transition,targetValidation:captured.validateDocument(target),target};
   },

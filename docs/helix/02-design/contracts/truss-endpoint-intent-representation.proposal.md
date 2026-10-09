@@ -351,6 +351,19 @@ reference. The existing preparation's comparison of restored original alone is
 not a reusable unchanged-target validator. E1's new producer must enforce this
 additional correspondence before native effects and test it independently.
 
+The existing host loader now invokes the private
+`catalog-transition-correspondence.ts` check before publishing its interpretation:
+actual source, transition source, verified source and restored original all match
+the retained original source serialization; transition target and rollback's
+current source both match the verified target serialization. Unknown extension
+content participates in these complete comparisons. Eighteen tests/sixty
+assertions cover the comparison controls plus the original pinned owner runtime
+and catalog preparation. This closes that private unchanged-target comparison
+gap only. It neither changes the older producer pin nor registers/adopts the
+new candidate extension, and native acceptance remains unavailable. The
+comparison uses the existing producer's deterministic JSON serialization;
+original source artifact bytes remain separately retained without reserialization.
+
 The [full registry checker](../../04-build/evidence/design-audit/check-truss-endpoint-intent-full-extension.ts)
 now registers the complete unchanged candidate schema through committed UMF's
 original `Registry.register`. It verifies all 1,342 original src/spec members
