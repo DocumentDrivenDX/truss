@@ -15,6 +15,25 @@ ddx:
 
 # Design coordination and remaining work
 
+## Committed upstream refresh — 2026-10-09
+
+Fresh fetches now show UMF `c7c95e1c4ea5b72541f47fa0350ca467ff02f395`
+and unchanged Weft `5856c73db0342363e64802905a94abb96209d757`.
+The [dataset source review](evidence/design-audit/umf-core-dataset-source-review.json)
+records new experimental core0.8 Record/dataset value operations and their explicit
+finite, supplied-only subset. The [acceptance handoff](acceptance-runtime-handoff.md#a2-remaining-dynamic-producer-integration)
+now consumes those owner semantics without claiming native coverage, chunk-global
+validation, old-source support or full assertion enforcement. Owner test receipts
+remain owner evidence; Truss has not rerun or adopted this new tuple.
+
+An exact diff of the five selected browser assets against the preceding fetched
+baseline is empty, recorded in the refreshed browser source-sync receipt. Existing
+builder/manifest pins and rendering evidence below remain their original scope;
+there is no new schema-browser code to incorporate from these two commits.
+The security owner's revision-29 snapshot is continuing Record-backed edge
+identity/Field interpretation; this remains private owner work, not a released
+Weft ABI or native Truss qualification. Preserve its changes and resolver ownership.
+
 ## Current schema-browser synchronization — 2026-10-09
 
 The browser builder and generated manifest now pin fetched UMF

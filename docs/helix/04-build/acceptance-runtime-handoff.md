@@ -296,6 +296,27 @@ resolving artifact bytes cannot classify a retained-only term as enforced.
 
 ### A2 remaining dynamic producer integration
 
+The [committed UMF dataset source review](evidence/design-audit/umf-core-dataset-source-review.json)
+updates the upstream baseline to `c7c95e1c4ea5b72541f47fa0350ca467ff02f395`.
+UMF now owns experimental operation-1.0.0 Record and finite dataset value checks
+on core0.8, composing its original Field/Key semantics and preserving separate
+receipts. A2 can consume these owner operations under the admitted support tuple
+instead of duplicating logical member, presence, key or endpoint validation.
+The supplied-dataset-only receipt does not prove that Truss supplied every native
+row: collect complete protected source coverage and retain original wire bytes,
+identity/cut, cumulative account and independently expected observations separately.
+
+The first relationship subset is directed, monomorphic and independent lifecycle
+without an association Record. Association/lifecycle/heterogeneous/undirected or
+unknown meaning remains residual/incomplete; never classify it as enforced from
+the operation's existence. Its finite 1000-record/10000-occurrence and four-million-
+byte receipt bounds do not authorize validating independent chunks as one complete
+dataset: cross-chunk uniqueness and multiplicity need a separately admitted complete
+procedure. Original Record context diagnostics remain distinct even when dataset
+obligations are discharged. Source0.7 needs an explicit preserved transition; no
+source relabeling or implicit consumer upgrade is admitted. Native assertion
+enforcement, report publication and security population completeness remain open.
+
 The UMF support procedure must join each original document's version and exact
 bytes to its admitted interpretation and selected subset artifact before
 deduplicating report entries. A single input-level supportProfile is not proof
