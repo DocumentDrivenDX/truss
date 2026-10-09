@@ -107,6 +107,13 @@ reference corpus; these consumer inputs supplement it.
 | Independent required-capability assessment | Seven original read expectations can change to Unsupported from the candidate descriptor; filtered runs can omit applicable cases. Freeze required capabilities/cases independently, retain original host verdicts and assess complete authority/replica execution separately as [specified in C2/C4](conformance-runtime-handoff.md#consumer-runner-pass-versus-required-capability-qualification) |
 
 These are concrete engineering/shared-owner inputs rather than new product votes.
+The [full SQL input review](evidence/design-audit/consumer-corpus-frontend.json)
+now identifies every original query step: 40 logical resolutions and five
+relationship-equality refusals per named model. Its unprofiled frontend scope
+cannot supply bounded-read, original actor, cursor or projection semantics.
+Implementation can use the exact refused case/step locations for the owner input
+mapping and the remaining successful locations for independently observed native
+scenarios; it must preserve the separate original corpus and full Truss coverage.
 They must precede a claim that the actual consumer works; a generic sales/count
 fixture cannot supply their missing correspondence. Original native IDs, installer,
 protected producers/current-person/publication and managed-target evidence remain

@@ -19,6 +19,26 @@ ddx:
 
 ## Current closure classification — 2026-10-09
 
+Latest upstream and consumer reconciliation: fetched UMF is now
+`c7c95e1c4ea5b72541f47fa0350ca467ff02f395`; Weft remains
+`5856c73db0342363e64802905a94abb96209d757`. UMF's new experimental
+Record/dataset value operations are available owner inputs for A2, with finite
+supplied-only scope and core0.8 requirements. The
+[updated acceptance handoff](acceptance-runtime-handoff.md#a2-remaining-dynamic-producer-integration)
+retains explicit old-source transition, complete native coverage and unsupported
+association/lifecycle obligations. These operations do not select a complete
+acceptance or security tuple. Selected schema-browser asset bytes are unchanged.
+
+The [complete consumer SQL review](evidence/design-audit/consumer-corpus-frontend.json)
+now accounts for all 45 query steps on both explicitly named model proposals:
+80 unprofiled logical resolutions and ten relationship-equality refusals. The
+separate bounded frontend packet confirms grouped-count and key-page review
+alternatives, not automatic consumer query rewriting. Source naming adoption,
+parsed input, presence/enrichment, reached-result compatibility and full native
+consumer qualification remain open. Keep these exact scopes when allocating
+implementation; neither a logical frontend pass nor the host corpus's passing
+report proves the original consumer integration complete.
+
 The [original composition review record](evidence/design-audit/reference-composition-incomplete.json)
 is the current concrete starting inventory: seven required boundaries, complete
 captured candidate source bytes and selected local schema dependencies. Every
