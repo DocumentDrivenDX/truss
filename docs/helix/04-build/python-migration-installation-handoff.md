@@ -141,3 +141,10 @@ target/resource/type refusals and frozen nested results. These source tests do n
 qualify a built distribution, migration execution or original installed observation
 producer. The separate `truss.migrations` administrative tooling remains unfinished;
 this module exposes no database connection, apply, startup upgrade or retry.
+
+The [built-wheel component receipt](evidence/design-audit/python-migration-planning-wheel-component.json)
+records five passing unittest methods outside the checkout, including all sixteen
+shared planner cases and eighteen original wire cases. Both module origins resolve
+to the separately installed wheel. Installation used --no-deps in an existing
+private environment; it does not qualify clean dependency resolution or delivered
+original recipes. Independent corpus inputs remain external test expectations.

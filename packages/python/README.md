@@ -87,3 +87,19 @@ For populated local guard qualification, run
 `python scripts/check-pgserver-populated-guards.py` in the local runtime environment.
 It checks12 immutable row/statement refusals using explicit FK-valid administrative
 fixtures under rollback. It performs no protected engine or installer publication.
+
+Declared migration metadata planning is available experimentally:
+
+```python
+from truss.migration_planning import plan_layout_migration
+
+result = plan_layout_migration(manifest_bytes, observation_bytes, '2.0.0')
+# Inspect result.outcome: plan, no_steps or refused.
+```
+
+Inputs are immutable original numeric-free JSON bytes and a bounded target version.
+Only explicitly declared complete routes are selected; no route is synthesized
+from intermediate steps. Results and nested artifact views are frozen. This
+function performs no database I/O, retries, installation verification or migration
+execution. Even `no_steps` requires independent full installation verification.
+Keep original artifact bytes separately; decoded views provide no authority.
