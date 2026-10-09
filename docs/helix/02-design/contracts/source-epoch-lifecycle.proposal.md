@@ -87,3 +87,15 @@ Exit requires generated layout correspondence, complete installation/profile
 adoption, native schedules and complete report-context composition. This design
 selects storage/lifecycle structure; it does not claim issuer implementation,
 managed deployment fencing, accepted IDs or a working feed.
+
+## Storage candidate generation
+
+[source-epoch-storage-v0.1.proposal.umf.json](source-epoch-storage-v0.1.proposal.umf.json)
+retains the fixed native registry/pointer declarations through UMF's PostgreSQL
+adapter. Reproduce with `bun scripts/build-source-epoch-layout.ts`; saved model
+reload exports identical [owner DDL](../../04-build/evidence/source-epoch-storage.owner-export.sql).
+The [receipt](../../04-build/evidence/design-audit/source-epoch-storage.json)
+records exact output hashes and owner checkout revision. This native extension
+candidate is not a core ER projection, installed profile or immutable owner
+bundle qualification. It must be composed with the installation marker model,
+qualified native guards and selected lifecycle issuer before adoption.

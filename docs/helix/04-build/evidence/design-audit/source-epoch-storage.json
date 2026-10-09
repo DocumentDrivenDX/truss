@@ -1,0 +1,10 @@
+{
+  "scope": "Owner SQL import, UMF retention and exact saved reload/export only; no native install, epoch issuance or authority qualification",
+  "ownerCommit": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+  "modelPath": "docs/helix/02-design/contracts/source-epoch-storage-v0.1.proposal.umf.json",
+  "modelSha256": "dce1c03b91b30a4e0ae0b7dceb1647af91e10ce87c1057b02e7cfcc6ffdc01f2",
+  "ddlPath": "docs/helix/04-build/evidence/source-epoch-storage.owner-export.sql",
+  "ddlSha256": "c1338fa024a9e7af095457cfd2adec768071475f510caa98923df4da9a3e7407",
+  "reloadedExportExact": true,
+  "qualified": false
+}
