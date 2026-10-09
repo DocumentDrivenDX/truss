@@ -2,7 +2,7 @@
 CREATE FUNCTION truss.runtime_collect_new_catalog_inventory(original_revision int)
 RETURNS TABLE(family text,identity jsonb)
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE op truss.row_home_operation%ROWTYPE; item record; matched record; inventory jsonb; original_relationship jsonb; expected_endpoints jsonb; actual_endpoints jsonb; original_field jsonb; original_key jsonb; original_properties int[]; original_owner truss.type_def%ROWTYPE; incomplete boolean;
+DECLARE op truss.row_home_operation%ROWTYPE; item record; matched record; inventory jsonb; original_relationship jsonb; expected_endpoints jsonb; actual_endpoints jsonb; original_field jsonb; original_key jsonb; original_properties int[]; original_owner truss.type_def%ROWTYPE; incomplete boolean; archived_documents jsonb;
 BEGIN
  SELECT o.* INTO STRICT op FROM truss.row_home_operation o WHERE
   o.original_writer_xid=pg_current_xact_id_if_assigned() AND o.phase<>'application_finalized' FOR UPDATE;
@@ -13,7 +13,11 @@ BEGIN
  IF EXISTS(SELECT 1 FROM truss.schema_head h WHERE h.rev>=original_revision) THEN
   RAISE EXCEPTION 'unpublished original revision required' USING ERRCODE='55000';
  END IF;
+ SELECT jsonb_agg(jsonb_build_object('documentId',d.doc_id,'revision',d.doc_revision,'umfVersion',d.umf_version,'originalText',d.document,'validation',d.validation) ORDER BY d.ord)
+  INTO archived_documents FROM truss.schema_doc d WHERE d.rev=original_revision;
+ PERFORM truss.runtime_require_catalog_document_carrier(archived_documents);
  PERFORM * FROM truss.runtime_collect_report_documents(original_revision);
+ PERFORM truss.runtime_verify_new_catalog_prestate(original_revision);
  IF EXISTS(SELECT 1 FROM truss.type_def t WHERE t.retired_rev=original_revision OR (t.definition_rev=original_revision AND t.since_rev<>original_revision))
   OR EXISTS(SELECT 1 FROM truss.prop_def p WHERE p.retired_rev=original_revision OR (p.definition_rev=original_revision AND p.since_rev<>original_revision))
   OR EXISTS(SELECT 1 FROM truss.key_def k WHERE k.retired_rev=original_revision OR (k.definition_rev=original_revision AND k.since_rev<>original_revision))
