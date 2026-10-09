@@ -48,6 +48,15 @@ audit has not proved semantic completeness. Runtime release remains separately
 unqualified. Continue shared PostgreSQL work independently of Python ownership
 and compiler gaps that affect only their named surfaces.
 
+A subsequent [endpoint-intent representation probe](../02-design/contracts/truss-endpoint-intent-representation.proposal.md)
+now executes the existing committed UMF extension registry against a Truss-owned
+pending-intent language, with five validity/completeness/refusal controls. It
+provides a concrete candidate path for the US-002/003 representation rows, while
+leaving E1–E5 full endpoint/dependency/policy/lifecycle correspondence unresolved.
+It does not adopt a vocabulary, repair invalid core references or qualify native
+acceptance. Prefer reviewing this existing-owner mechanism over waiting for
+generic CONTRACT-045 feature work.
+
 Historical physical design source is the reconciled 0.12 history review over the separately pinned 0.11 compiler foundation: 106 statements, 46 tables, 442 columns and 24 explicit indexes. These counts describe preserved declarations, not a full installer or supported deployment. The [current column inventory](../02-design/contracts/weft-review-columns-v0.12.proposal.md) covers the 0.12 review declarations. The separately versioned [0.12 source review packet](evidence/weft-source-binding012/README.md) maps the current review declarations and exact owner-export SQL; the [0.11 packet](evidence/weft-source-binding011/README.md) retains its original bytes and scope; earlier packets remain separately pinned. Source mapping does not qualify receipt replay or native/compiler adoption. Older 0.8/0.4 packets remain preserved and none is adopted. No complete design or native qualification claim is made.
 
 Source reconciliation: the [0.12 history review](../02-design/models/truss-layout-reference-history-0.12.proposal.umf.json) retains the 106-statement foundation, with no new tables, columns or carrier constraints. Exact source comparison confirms that 0.11 already contains the stage child, four carrier ALTERs and metadata operation. Only the journal sequence settings and review marker/identity change. The [receipt](evidence/design-audit/reference-history-layout-model-source.json) verifies this delta and exact export/reload equality; the existing 0.11 compiler packet remains separately pinned and cannot establish 0.12 adoption.
