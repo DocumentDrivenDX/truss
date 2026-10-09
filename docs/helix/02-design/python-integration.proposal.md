@@ -862,6 +862,45 @@ UTF8, ingress/account custody, command settlement or
 native qualification; those require the original PY-01b composition. Arbitrary
 cell bytes pass syntax alone and cannot authorize publication or commit claims.
 
+#### PY-01b complete-report command-cycle qualification
+
+For the selected single-text-report result procedure, freeze its complete result
+shape and original command-cycle protocol before implementing host dispatch.
+Require exactly the declared description and row count, original OID25/format0,
+UTF8, complete cell/report validation and the original procedure's permitted
+command completion and terminal transaction-state observations. Message bytes
+must belong to the same admitted live connection, request and generation; a
+saved matching descriptor from a previous command cannot supply that custody.
+Multiple-result procedures need their separately declared complete shape rather
+than truncation to the first acceptable report.
+
+Independently author the following PY-01b fault schedules, using the same full
+nineteen-field report as the success control and observing publication and
+connection disposition separately from parsed bytes:
+
+| Received sequence or failure | Required observation |
+| --- | --- |
+| Complete valid DataRow, then EOF/cancellation before command completion | Retain the provisional original bytes under their account; no completed operation result or safe pool reuse from successful report parsing |
+| Complete report and command tag, then loss before terminal cycle observation | Command-cycle outcome remains unresolved under the original driver procedure; a command tag alone supplies neither native commit nor cleanup proof |
+| Backend error after a complete report row | Original bounded error/transaction handling governs failure; the earlier report is not substituted for a successful result |
+| Omitted, repeated or reordered description/row/completion; extra second report row | Refuse the complete result-shape mismatch; no first-row success or silent discarded result |
+| Description or row from an earlier generation/interleaved command | Refuse custody mismatch before publishing protected data, even when metadata and report bytes independently match |
+| Notices or error fields exhaust the selected account between report and completion | Preserve resource refusal and original outcome/cleanup custody; neither dropping messages nor refunding spent work can force success |
+| Original transaction status differs from the expected procedure boundary | Original execution/settlement procedure classifies the mismatch; no invented commit, automatic retry or connection replacement |
+
+The observer records actual submitted commands, complete permitted message
+inventory, outstanding request/generation, retained report state, publication
+attempts, native termination/settlement and whether the physical connection was
+quarantined or safely returned. No-state-change expectations must be observed
+independently; an absent delivered response does not prove absent backend work.
+An idle ReadyForQuery status is a cycle observation, not proof that a particular
+mutation or administrative attempt committed. Conversely, confirmed original
+commit evidence remains committed when later report delivery fails. Adopted
+execution preserves caller ownership and never issues an outer end command to
+make these tests pass. These planned controls qualify the original adapter;
+the read-only literal echo and retained-frame/schema candidates do not implement
+the complete command lifecycle or settle a real acceptance attempt.
+
 #### Full-report wire capacity before driver selection
 
 The frame candidate's one-MiB limit cannot transport the existing four-MiB
