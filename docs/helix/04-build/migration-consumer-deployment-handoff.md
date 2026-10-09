@@ -352,3 +352,36 @@ its full bundle/producer/security/resource correspondence and independent native
 preservation/recovery evidence pass. M5's clean consumer demonstrates inspection,
 explicit application and original reconciliation separately; a convenience deploy
 wrapper cannot collapse unavailable, drift and commit_unknown into success.
+
+### M4 reconciliation after a subsequent committed upgrade
+
+LM-T04/08 must retain an original S-to-T attempt with a lost acknowledgment,
+independently settle that attempt, then apply an admitted T-to-U route before
+reconciling the retained S-to-T reference. Use two real populated registered
+routes with independently frozen preservation expectations; a marker mutation
+cannot stand in for the second upgrade. This schedule becomes executable only
+when both routes and their original recovery procedures are qualified.
+
+Original commit evidence still identifies S-to-T, its ordered recipes and its
+immutable target observation. Reconciliation submits zero recipes, never rewrites
+that receipt as S-to-U, and never restores T merely to reproduce the old result.
+Observe U through a separate current status/verification request under freshly
+admitted administrative authority. A valid original T receipt does not assert
+that T is still installed or admit a T-only runtime against U.
+
+Under the existing draft binding, `already_applied.currentVerification` must
+actually verify the original target T. If the current installation is U and no
+registered verification profile establishes the required T correspondence, retain
+the confirmed original commit through `committed_unverified` with the actual
+mismatch evidence. Do not manufacture a successful T verification from U's larger
+version number, same major, or independently successful U verification. The
+consumer may separately admit its runtime against U using U's actual compatibility
+matrix; that admission does not change the old attempt's outcome or target.
+
+Independent observations compare both complete immutable receipts, exact original
+attempt references, recipe-submission counts, current U inventory and all retained
+receipt/feed/history protections across both transitions. Include a changed old
+request, an unavailable historical receipt and a U-compatible versus T-only
+runtime. A missing historical proof remains unavailable; current U contents alone
+cannot reconstruct whether the old route committed. These are additional planned
+recovery controls, not support for a second migration edge or a new result API.
