@@ -38,10 +38,15 @@ benchmark choices remain pending. Empty performance is admitted only when the
 original required scope contains no performance observations; a benchmark case
 cannot omit its observer or raw samples and pass from the behavioral surfaces.
 
-C2/C4 must explicitly admit this version and extend original procedure-derived
-coverage/link comparison to the fifth surface before execution. The existing
-four-surface private helpers do not support it: refusal is required until that
-integration is implemented. Do not drop performance or relabel 0.2 as 0.1.
+C2/C4 must explicitly admit this version before execution. Private structural
+link and procedure-derived coverage helpers now include the performance surface:
+24 synthetic link controls and six coverage tests check unknown/fixture-only
+steps, duplicate boundaries, omitted performance and behavioral substitutions.
+The link projection keeps performance optional for shape-admitted 0.1 inputs;
+the 0.2 schema independently requires it. These helpers neither admit a wire
+version nor register observers, sample workloads or implement the runner.
+Refuse execution until those dependencies are implemented. Do not drop
+performance or relabel 0.2 as 0.1.
 Run `python3.11 docs/helix/04-build/evidence/design-audit/check_performance_expectation_schema.py`
 with jsonschema 4.23.0/referencing 0.35.1. Thirteen controls verify shapes and
 version separation only; no sampling, timing, observer independence or native

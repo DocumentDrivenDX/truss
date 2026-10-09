@@ -32,4 +32,8 @@ witness('setup labels do not bind input observations',false,(_i,e)=>e.result.obs
 witness('same label in distinct inventories',true,(_i,_e,_r,_s,f)=>f.steps[0].label='read');
 witness('changed expected grammar',false,(_i,e)=>e.grammarProfile.sha256='3'.repeat(64));
 witness('changed observation procedure',false,i=>i.steps[0].observationProfile={...i.steps[0].observationProfile,sha256:'4'.repeat(64)});
+witness('performance links admitted input step',true,(_i,e)=>e.performance={observations:[{step:'read',boundary:'committed'}]});
+witness('performance refuses unknown input step',false,(_i,e)=>e.performance={observations:[{step:'missing',boundary:'committed'}]});
+witness('performance refuses fixture-only step',false,(_i,e)=>e.performance={observations:[{step:'setup',boundary:'committed'}]});
+witness('performance refuses duplicate boundary',false,(_i,e)=>e.performance={observations:[{step:'read',boundary:'committed'},{step:'read',boundary:'committed'}]});
 console.log(count+' independent cross-artifact controls passed. Assumes shape-admitted inputs; scope liveness, artifact authenticity and complete semantic observations remain unqualified.');

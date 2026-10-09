@@ -2,7 +2,7 @@
  * Required keys must come from original registered procedures, never case claims.
  * This function does not establish that provenance or perform observations. */
 export type ConformanceObservationKey = {
-  surface: 'result' | 'state' | 'journal' | 'report';
+  surface: 'result' | 'state' | 'journal' | 'report' | 'performance';
   step: string;
   boundary: string;
 };

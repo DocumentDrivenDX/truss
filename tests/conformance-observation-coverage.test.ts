@@ -31,3 +31,14 @@ test('explicitly admitted no-observation procedure has empty coverage', () => {
   expect(covers([], [])).toBe(true);
   expect(covers([], [required[0]])).toBe(false);
 });
+
+test('performance evidence cannot be omitted or replaced by behavioral evidence', () => {
+  const performance: Key = {surface:'performance',step:'read',boundary:'committed'};
+  const benchmark = [...required, performance];
+  expect(covers(benchmark, [...benchmark].reverse())).toBe(true);
+  expect(covers(benchmark, required)).toBe(false);
+  expect(covers(benchmark, [...required, {...performance,surface:'result'}])).toBe(false);
+  expect(covers(benchmark, [...required, {...performance,boundary:'pending'}])).toBe(false);
+  expect(covers(benchmark, [...benchmark,performance])).toBe(false);
+  expect(covers(required, benchmark)).toBe(false);
+});

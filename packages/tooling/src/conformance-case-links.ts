@@ -5,7 +5,7 @@ export type ConformanceLinkStep={label:string;operation:string;operationProfile:
 export type ConformanceLinkArtifact={identity:string;bytesBase64:string;sha256:string};
 export type ConformanceLinkInputs={caseId:string;registry:ConformanceLinkArtifact;grammarProfile:ConformanceLinkPin;steps:ConformanceLinkStep[]};
 export type ConformanceLinkFixtures=ConformanceLinkInputs;
-export type ConformanceLinkExpected={caseId:string;grammarProfile:ConformanceLinkPin}&Record<'result'|'state'|'journal'|'report',{observations:{step:string;boundary:string}[]}>;
+export type ConformanceLinkExpected={caseId:string;grammarProfile:ConformanceLinkPin}&Record<'result'|'state'|'journal'|'report',{observations:{step:string;boundary:string}[]}> & {performance?:{observations:{step:string;boundary:string}[]}};
 export type ConformanceLinkEntry={operation:string;operationProfile:ConformanceLinkPin;observationProfile:ConformanceLinkPin;scopeKinds:readonly string[]};
 function equalPin(a:ConformanceLinkPin,b:ConformanceLinkPin){return a.identity===b.identity&&a.version===b.version&&a.sha256===b.sha256;}
 export function checkAdmittedConformanceCaseLinks(caseId:string,inputs:ConformanceLinkInputs,expected:ConformanceLinkExpected,registry:readonly ConformanceLinkEntry[],knownScopeLabels:ReadonlySet<string>,fixtures:ConformanceLinkFixtures):boolean {
@@ -25,9 +25,9 @@ export function checkAdmittedConformanceCaseLinks(caseId:string,inputs:Conforman
   if(step.scope.kind!=='none'&&(!step.scope.label||!knownScopeLabels.has(step.scope.label)))return false;
  }
  }
- for(const surface of ['result','state','journal','report'] as const){
+ for(const surface of ['result','state','journal','report','performance'] as const){
   const observations=new Set<string>();
-  for(const observation of expected[surface].observations){
+  for(const observation of expected[surface]?.observations ?? []){
    if(!labels.has(observation.step))return false;
    const key=JSON.stringify([observation.step,observation.boundary]);
    if(observations.has(key))return false;observations.add(key);
