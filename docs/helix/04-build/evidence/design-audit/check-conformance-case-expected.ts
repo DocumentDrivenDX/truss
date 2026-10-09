@@ -1,0 +1,23 @@
+import {readFileSync} from 'node:fs';
+import {createRequire} from 'node:module';
+if(!process.argv[2])throw new Error('Provide the installed Ajv Draft 2020-12 module path.');
+const Ajv=createRequire(import.meta.url)(process.argv[2]).default;
+const root='docs/helix/02-design/contracts/';
+const ajv=new Ajv({strict:true});
+ajv.addSchema(JSON.parse(readFileSync(root+'acceptance-input-v0.1.schema.json','utf8')));
+const validate=ajv.compile(JSON.parse(readFileSync(root+'conformance-case-expected-v0.1.proposal.schema.json','utf8')));
+const profile={identity:'shape-only',version:'0.1',sha256:'0'.repeat(64)};
+const artifact={identity:'shape-only',bytesBase64:'',sha256:'0'.repeat(64)};
+const section={observationProfile:profile,observations:[]};
+const base={interfaceVersion:'truss-conformance-case-expected/0.1.0',caseId:'shape',grammarProfile:profile,result:structuredClone(section),state:structuredClone(section),journal:structuredClone(section),report:structuredClone(section)};
+let count=0;
+function check(name:string,expected:boolean,change:(x:any)=>void){const x=structuredClone(base);change(x);if(Boolean(validate(x))!==expected)throw new Error(name+': '+JSON.stringify(validate.errors));count++;}
+check('explicit empty surfaces require semantic admission',true,()=>{});
+for(const key of ['result','state','journal','report'])check('missing '+key,false,x=>delete x[key]);
+check('informative SQL',true,x=>x.sql={normative:false,artifact});
+check('normative SQL prohibited',false,x=>x.sql={normative:true,artifact});
+check('committed observation carrier',true,x=>x.state.observations=[{step:'apply',boundary:'committed',comparatorProfile:profile,expected:artifact}]);
+check('unknown boundary',false,x=>x.state.observations=[{step:'apply',boundary:'callback_returned',comparatorProfile:profile,expected:artifact}]);
+check('missing expected artifact',false,x=>x.result.observations=[{step:'apply',boundary:'pending',comparatorProfile:profile}]);
+check('unknown observation member',false,x=>x.result.observations=[{step:'apply',boundary:'pending',comparatorProfile:profile,expected:artifact,skip:true}]);
+console.log(count+' shape controls passed; empty inventories and boundary truth still require independent semantic admission. No native execution.');

@@ -1,0 +1,233 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:proposal:conformance-case-expected:0.1.0",
+  "title": "Proposed complete conformance expectation envelope",
+  "description": "All normative surfaces explicit. Empty observations require independent scope/completeness admission; omission never means empty. SQL is informative only. No execution or comparator qualification follows shape.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-conformance-case-expected/0.1.0"
+    },
+    "caseId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "grammarProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "result": {
+      "type": "object",
+      "properties": {
+        "observationProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "observations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "step": {
+                "type": "string",
+                "minLength": 1
+              },
+              "boundary": {
+                "enum": [
+                  "pre_effect",
+                  "pending",
+                  "committed",
+                  "rolled_back",
+                  "unknown"
+                ]
+              },
+              "comparatorProfile": {
+                "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+              },
+              "expected": {
+                "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+              }
+            },
+            "required": [
+              "step",
+              "boundary",
+              "comparatorProfile",
+              "expected"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "observationProfile",
+        "observations"
+      ],
+      "additionalProperties": false
+    },
+    "state": {
+      "type": "object",
+      "properties": {
+        "observationProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "observations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "step": {
+                "type": "string",
+                "minLength": 1
+              },
+              "boundary": {
+                "enum": [
+                  "pre_effect",
+                  "pending",
+                  "committed",
+                  "rolled_back",
+                  "unknown"
+                ]
+              },
+              "comparatorProfile": {
+                "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+              },
+              "expected": {
+                "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+              }
+            },
+            "required": [
+              "step",
+              "boundary",
+              "comparatorProfile",
+              "expected"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "observationProfile",
+        "observations"
+      ],
+      "additionalProperties": false
+    },
+    "journal": {
+      "type": "object",
+      "properties": {
+        "observationProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "observations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "step": {
+                "type": "string",
+                "minLength": 1
+              },
+              "boundary": {
+                "enum": [
+                  "pre_effect",
+                  "pending",
+                  "committed",
+                  "rolled_back",
+                  "unknown"
+                ]
+              },
+              "comparatorProfile": {
+                "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+              },
+              "expected": {
+                "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+              }
+            },
+            "required": [
+              "step",
+              "boundary",
+              "comparatorProfile",
+              "expected"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "observationProfile",
+        "observations"
+      ],
+      "additionalProperties": false
+    },
+    "report": {
+      "type": "object",
+      "properties": {
+        "observationProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "observations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "step": {
+                "type": "string",
+                "minLength": 1
+              },
+              "boundary": {
+                "enum": [
+                  "pre_effect",
+                  "pending",
+                  "committed",
+                  "rolled_back",
+                  "unknown"
+                ]
+              },
+              "comparatorProfile": {
+                "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+              },
+              "expected": {
+                "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+              }
+            },
+            "required": [
+              "step",
+              "boundary",
+              "comparatorProfile",
+              "expected"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "observationProfile",
+        "observations"
+      ],
+      "additionalProperties": false
+    },
+    "sql": {
+      "type": "object",
+      "properties": {
+        "normative": {
+          "const": false
+        },
+        "artifact": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        }
+      },
+      "required": [
+        "normative",
+        "artifact"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "caseId",
+    "grammarProfile",
+    "result",
+    "state",
+    "journal",
+    "report"
+  ],
+  "additionalProperties": false
+}
