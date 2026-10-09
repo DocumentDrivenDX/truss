@@ -133,8 +133,15 @@ native execution permit: this component has no database connection or execute
 method. Host obligation admission, current-person read context, exact result
 decoding and complete execution/profile qualification remain unfinished.
 
-The current base wheel's compiler boundary has also been tested outside the
+The earlier base wheel's compiler boundary was tested outside the
 checkout, without PYTHONPATH, alongside the frozen original Rust extension.
 All nine delivered module payloads match the wheel/source, and the focused compiler
 and boundary tests pass. This qualifies that development packaging component;
 the local extra and complete Truss installation are separate delivery gates.
+
+The subsequent private `_query_execution` coordinator is source-tested and is
+not included in that earlier nine-module wheel evidence. It orders original host
+obligations before read acquisition, checks context through publication and waits
+for cleanup before returning immutable exact-carrier results. Its seven tests use
+synthetic callbacks. Public query activation still requires the original native,
+decoder and security services and their complete qualification.

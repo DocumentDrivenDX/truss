@@ -180,6 +180,35 @@ full engine API, database execution or original recipe/profile delivery is
 established by these packaging checks. Historical source-only and older component
 receipts retain their original scope and pins.
 
+## Private query execution coordination
+
+`truss._query_execution.QueryCoordinator` implements the synchronous ordering
+boundary corresponding to the existing TypeScript host/handler/scope protocol.
+It captures original compiler and host callbacks at construction and keeps a
+private weak identity registry of its own frozen plans. Foreign/copied plans
+refuse. Complete original host obligations are checked for admitted meaning
+before acquiring a read context. Unsupported owners or unknown handlers refuse
+without a connection acquisition. Brands or compiler SQL do not issue authority.
+
+Inside the same original context, run context verification, every registered
+obligation check, one data query, exact text/null shape admission, the original
+decoder and publication context verification. Freeze complete results and return
+only after context cleanup exits successfully. Disposal is rechecked through
+publication, including after cleanup. Unknown cleanup, context drift, decoder
+failure, suppressed incomplete host failure or reentrant native invocation
+publishes no result. No transaction commit, connection substitution or automatic
+query retry is introduced. Native ownership and settlement stay with the host.
+
+Seven independent unittest methods cover those ordering/fault schedules, nested
+immutability, exact large integer text, numeric/invalid-Unicode decoder refusal,
+callback capture and disposal during both checks and context exit. They use
+synthetic host callbacks and compiler responses, not authenticated native
+observations. This module is private source implementation, absent from the
+earlier nine-module wheel receipt and not exported as a ready query engine.
+Original bounded producer/transaction custody, current-person authorization,
+full obligation grammar, owner-qualified decoder, actual native execution and
+installed distribution qualification remain required before public activation.
+
 ## Shared planner corpus before the Python port
 
 `tests/fixtures/layout-migration-planning.json` now supplies sixteen independent
