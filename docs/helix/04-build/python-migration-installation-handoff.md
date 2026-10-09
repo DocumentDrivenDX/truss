@@ -130,3 +130,14 @@ capacity fixture pass, along with exact depth/container/node boundaries and
 byte/work refusals. These are source-component checks, not built-wheel, host
 heap, shared operation-account or administrative admission qualification.
 The planner port and its frozen result variants remain to be implemented.
+
+The experimental `truss.migration_planning.plan_layout_migration` now implements
+the existing declared-route planner in Python. Frozen pin/artifact/procedure/result
+dataclasses and tuple step sequences retain exact hashes, original declared order
+and integer-exact version comparisons. Immutable bytes are required; mutable
+buffers refuse. Both implementations pass the expanded sixteen-case shared corpus,
+including a complete explicitly declared downgrade. Python also checks direct
+target/resource/type refusals and frozen nested results. These source tests do not
+qualify a built distribution, migration execution or original installed observation
+producer. The separate `truss.migrations` administrative tooling remains unfinished;
+this module exposes no database connection, apply, startup upgrade or retry.

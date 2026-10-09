@@ -249,6 +249,61 @@
           }
         ]
       }
+    },
+    {
+      "id": "declared-complete-downgrade",
+      "manifestText": "{\"interfaceVersion\":\"truss-layout-migrations/0.1.0\",\"family\":\"truss-postgresql\",\"layouts\":[{\"version\":\"1.0.0\",\"bundleSha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"inventorySha256\":\"ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff\"},{\"version\":\"1.1.0\",\"bundleSha256\":\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\"inventorySha256\":\"ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff\"},{\"version\":\"2.0.0\",\"bundleSha256\":\"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\"inventorySha256\":\"ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff\"}],\"steps\":[{\"id\":\"one\",\"from\":\"1.0.0\",\"to\":\"1.1.0\",\"recipe\":{\"identity\":\"one\",\"sha256\":\"dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd\"},\"procedure\":{\"identity\":\"transactional-layout-migration\",\"version\":\"0.1.0\",\"sha256\":\"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\"},\"transactional\":true},{\"id\":\"two\",\"from\":\"1.1.0\",\"to\":\"2.0.0\",\"recipe\":{\"identity\":\"two\",\"sha256\":\"dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd\"},\"procedure\":{\"identity\":\"transactional-layout-migration\",\"version\":\"0.1.0\",\"sha256\":\"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\"},\"transactional\":true},{\"id\":\"back-two\",\"from\":\"2.0.0\",\"to\":\"1.1.0\",\"recipe\":{\"identity\":\"back-two\",\"sha256\":\"dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd\"},\"procedure\":{\"identity\":\"transactional-layout-migration\",\"version\":\"0.1.0\",\"sha256\":\"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\"},\"transactional\":true},{\"id\":\"back-one\",\"from\":\"1.1.0\",\"to\":\"1.0.0\",\"recipe\":{\"identity\":\"back-one\",\"sha256\":\"dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd\"},\"procedure\":{\"identity\":\"transactional-layout-migration\",\"version\":\"0.1.0\",\"sha256\":\"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\"},\"transactional\":true}],\"routes\":[{\"id\":\"upgrade\",\"from\":\"1.0.0\",\"to\":\"2.0.0\",\"direction\":\"upgrade\",\"steps\":[\"one\",\"two\"]},{\"id\":\"reverse\",\"from\":\"2.0.0\",\"to\":\"1.0.0\",\"direction\":\"downgrade\",\"steps\":[\"back-two\",\"back-one\"]}]}",
+      "observationText": "{\"interfaceVersion\":\"truss-layout-observation/0.1.0\",\"family\":\"truss-postgresql\",\"layout\":{\"version\":\"2.0.0\",\"bundleSha256\":\"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\"inventorySha256\":\"ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff\"}}",
+      "targetVersion": "1.0.0",
+      "expected": {
+        "outcome": "plan",
+        "scope": "declared_metadata_only",
+        "family": "truss-postgresql",
+        "source": {
+          "version": "2.0.0",
+          "bundleSha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "inventorySha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+        },
+        "target": {
+          "version": "1.0.0",
+          "bundleSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "inventorySha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+        },
+        "route": "reverse",
+        "direction": "downgrade",
+        "steps": [
+          {
+            "id": "back-two",
+            "from": "2.0.0",
+            "to": "1.1.0",
+            "recipe": {
+              "identity": "back-two",
+              "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+            },
+            "procedure": {
+              "identity": "transactional-layout-migration",
+              "version": "0.1.0",
+              "sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+            },
+            "transactional": true
+          },
+          {
+            "id": "back-one",
+            "from": "1.1.0",
+            "to": "1.0.0",
+            "recipe": {
+              "identity": "back-one",
+              "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+            },
+            "procedure": {
+              "identity": "transactional-layout-migration",
+              "version": "0.1.0",
+              "sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+            },
+            "transactional": true
+          }
+        ]
+      }
     }
   ]
 }
