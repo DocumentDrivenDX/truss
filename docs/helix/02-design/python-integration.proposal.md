@@ -726,3 +726,32 @@ unresolved selections. The carrier implementation can be reused once selected;
 it does not activate public packaging or bypass those exits. Weft retains SQL
 lowering and its Rust/Python packaging, UMF retains schema semantics and reusable
 SQL generation, and the current security owner retains authorization meaning.
+
+### R5 mismatched actor claim qualification
+
+Re-reading the unchanged original consumer requirement confirms an additional
+explicit negative expectation: a supplied actor differing from the authenticated
+connecting person must refuse. Separating trusted execution origin from asserted
+metadata does not, by itself, prove that negative outcome. PY-03/04 must consume
+the security owner's exact original origin-admission profile and define which
+public request field, if any, asserts execution actor. Do not manufacture that
+field from an arbitrary `x-` extension or silently reinterpret every retained
+assertion as an execution-identity claim.
+
+Before a consumer-ready release, freeze an independently authored request through
+the actual selected public surface with the mismatched actor claim. Compare the
+native original connecting person, complete admitted claim and exact refusal;
+observe no graph/journal/receipt effects. A host that merely discards the claim
+and successfully writes fails this requested negative case. If the chosen public
+surface has no execution-actor input, its closed-wire refusal must be demonstrated
+rather than claiming that actor separation alone meets R5. Matching-actor handling
+and generic asserted metadata keep their selected owner meanings.
+
+Separately apply an authorized group with the consumer's action name in its
+retained `x-` key. Independently inspect the complete original journal origin:
+trusted actor equals the authenticated connecting person; the action extension
+survives exact spelling; request-role and nested-definer owner cannot replace
+actor. Compare the refused request with the allowed action-extension case so an
+adapter cannot satisfy refusal by dropping all origin metadata. This is existing
+consumer acceptance scope, not a new Truss-local ACL resolver or an adoption of
+unqualified security source.

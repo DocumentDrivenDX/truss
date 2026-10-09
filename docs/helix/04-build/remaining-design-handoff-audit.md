@@ -461,3 +461,10 @@ including original integer-like key order divergence. None proves genuine report
 production, installed authority, full operation allocations or committed database
 interchange. Those decisive exits and the existing package/profile selections
 remain open rather than being relabeled complete by codec observations.
+
+A fresh byte comparison confirms the original consumer requirements still equal
+the captured 2026-10-08 artifact. R5's explicit mismatched-supplied-actor refusal
+is now retained as its own PY-03/04 negative case, alongside authenticated native
+actor and preserved action-extension positives. Mere actor/metadata separation
+cannot replace that required refusal. Exact claim surface and origin admission
+remain security-owner profile outputs; no working security files were changed.
