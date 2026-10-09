@@ -28,3 +28,26 @@ PostgreSQL 17 documents [sha256(bytea) as a binary-string function](https://www.
 SQL/PL/pgSQL availability is sufficient to continue authoring these bodies and their original inventories. It does not establish that every existing algorithm can be safely implemented without another dependency. If a required primitive remains unsupported, record the precise affected boundary and refuse that capability rather than assume a custom module or weaken graph integrity. Do not require pg_tle, PL/v8, PL/Python, C/Rust native libraries or pg_stat_statements as default correctness dependencies without separate selected need and all-target evidence. Optional telemetry is outside correctness admission.
 
 The candidate keeps persistent row/byte capacity admission and protected transaction effects separate from toolkit-owned cumulative attempt accounting. Ordinary transactional ledger rows do not become rollback-resistant spent-work evidence. Cancellation, native memory/work, commit observation and managed-service privilege restrictions remain individually qualified; a language choice cannot close those claims. Exact native codec/collector/body/security/driver composition and all native fault schedules remain open.
+
+## Managed-service lifecycle handoff refresh — 2026-10-08
+
+Fresh [Lakebase compatibility documentation](https://docs.databricks.com/aws/en/oltp/projects/compatibility)
+reports connection/session loss on scale-to-zero, nonpersistent unlogged
+tables across compute restart, loss of cumulative statistics, restricted
+parameter contexts and no native PostgreSQL logical replication. Its current
+[extension table](https://docs.databricks.com/aws/en/oltp/projects/extensions)
+lists plpgsql and pg_stat_statements. Aurora's
+[engine-version matrix](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraPostgreSQLReleaseNotes/AuroraPostgreSQL.Extensions.html)
+also lists plpgsql. These are documentation observations, not installed Truss
+qualification.
+
+Truss implementation implications: durable receipt/feed/archive/recovery
+custody stays in logged original stores; session locks, temporary state and
+telemetry cannot serve as durable proof. Selected leases must observe original
+connection termination and invalidate cached session custody before reuse.
+The complete feed remains Truss's SQL protocol, with durable replica/ACK
+semantics; no native logical-replication dependency is introduced. Qualify
+restart/scale-to-zero fault schedules and actual configurable settings before
+managed-service support. Treat session/statistics loss as evidence invalidation,
+not a zero-work or no-change observation. Exact product/version/roles/pooling
+and operational settings remain separately selected deployment outputs.
