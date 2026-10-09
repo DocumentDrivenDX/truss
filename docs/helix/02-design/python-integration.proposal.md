@@ -265,6 +265,29 @@ resolves definition ownership, validates binary/native domains or qualifies
 opaque support. PY-01a must still integrate original byte parsing and upstream
 semantic admission before this projection can serve an actual adapter.
 
+The private `python_raw_json_candidate.py` now retains immutable original UTF-8
+source bytes and produces a separate immutable convenience tree with explicit
+number-token wrappers. Its parser never routes JSON numbers through float or
+int conversion, and exact strings stay distinct from numeric tokens. Original
+whitespace, escapes, unknown extension content and literal `$a` remain byte-exact;
+the convenience tree grants no alias substitution or executable interpretation.
+It refuses duplicate members, non-JSON numeric constants and nested
+PostgreSQL-bound NUL/unpaired-surrogate content.
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 python3.11 -m unittest discover -s docs/helix/04-build/evidence/design-audit -p 'test_python_*candidate.py'
+```
+
+Eleven tests pass on Python 3.11 across numeric, timestamp, tree and raw-JSON
+candidates. The raw parser independently matches all five source/token/string
+fixtures and presence expectations, including escaped pointer names; controlled
+source mutation cannot change retained bytes. Explicit source-size and lexical
+nesting-depth checks precede parsing. Node-count checks occur afterward during
+immutable projection, so this prototype does not establish complete precharged
+heap/copy bounds. Original semantic/profile admission, public package ownership,
+qualified native transport and integrated whole-operation resource accounting
+remain required. No parser success claims native JSONB fidelity or UMF support.
+
 ## Host transaction adapter
 
 Use the semantic Executor operations of CONTRACT-007 rather than a language-specific second transaction protocol. The adapter accepts the caller's actual live connection/transaction object, validates ownership/lifetime, and retains it internally. No transaction identifier is accepted as a substitute. Initial delivery selects one driver/transaction mode and qualifies it; sync and async modes cannot share a support claim without separate evidence. Driver selection remains explicit.
