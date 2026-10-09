@@ -33,6 +33,20 @@ class ResponseTests(unittest.TestCase):
             with self.subTest(source=source), self.assertRaises(ValueError):
                 self.response.prepare(source)
 
+    def test_malformed_response_errors_are_instance_free(self):
+        marker = b'private-original-instance-'
+        for source, reason in [(b'{"x":"' + marker + b'a'*100000 + b'"', 'grammar'),
+                               (b'{"x":"' + marker + b'\xff"}', 'unicode')]:
+            with self.subTest(source_length=len(source)), self.assertRaises(ValueError) as rejected:
+                self.response.prepare(source)
+            error = rejected.exception
+            self.assertEqual(error.reason, reason)
+            self.assertNotIn(marker.decode(), str(error))
+            self.assertFalse(hasattr(error, 'doc'))
+            self.assertFalse(hasattr(error, 'object'))
+            self.assertIsNone(error.__cause__)
+            self.assertIsNone(error.__context__)
+
     def test_retained_response_cannot_change_with_caller_buffer(self):
         source = bytearray(build(4194304)[1])
         result = self.response.prepare(source)

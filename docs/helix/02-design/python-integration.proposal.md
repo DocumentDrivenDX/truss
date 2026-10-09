@@ -771,14 +771,23 @@ actual report-producing integration remain required.
 A separate private `ReportResponseCandidate` now reuses the original pinned
 schema closure while admitting response source bytes up to four MiB. The legacy
 `ReportWireCandidate` and its one-MiB request/input behavior remain unchanged.
-Three independent tests consume the frozen boundary fixtures: complete nineteen-
+Four independent tests consume the frozen boundary fixtures: complete nineteen-
 field response admission, one-over and legacy refusal, numeric/schema/duplicate/
-Unicode negatives and mutable caller-buffer isolation. Inherited native conversion
+Unicode negatives, mutable caller-buffer isolation and instance-free parser errors. Inherited native conversion
 explicitly refuses because its carrier/account composition is not admitted.
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 python3.11 -m unittest discover -s docs/helix/04-build/evidence/design-audit -p test_python_report_response_candidate.py
 ```
+
+The malformed-wire regression originally observed JSONDecodeError.doc retaining
+the complete response. Known parser failures now expose a short grammar/unicode/
+resource category raised outside the original handler, with no doc/object or
+instance-bearing cause/context. Independent malformed JSON and invalid UTF-8
+controls verify those properties and preserve the categories. The complete native
+echo was rerun after this source change; its current receipt pins the corrected
+candidate. Protected original raw-source custody and public diagnostic/traceback
+handling remain the original adapter's responsibilities.
 
 This closes the private Python response source/schema subset gap only. The scope
 is response_schema_bytes_only_without_account_admission: aggregate parser/schema
