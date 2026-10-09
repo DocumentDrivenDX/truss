@@ -93,6 +93,25 @@ Unadmitted naming keeps affected queries unavailable rather than using a generic
 sales fixture to claim the original consumer works. No consumer files are changed
 or new compiler naming semantics selected by this handoff.
 
+A subsequent source review also finds missing Record names: Weft resolves query
+Records by authored name, not the consumer's DDD entity label or bare ID. The
+[explicit name proposal](../03-test/consumer-explicit-names.proposal.json) now
+supplies eight Record/Field additions for the small model and twenty-seven for
+the larger one, with exact original source hashes and per-element paths. Names
+are explicit author declarations for review, not an inferred general adapter.
+The [UMF validation receipt](../04-build/evidence/design-audit/consumer-explicit-names.json)
+checks both proposed targets, strips only those additions to prove every other
+JSON value unchanged, verifies original relationship/key correspondence and
+rechecks that the consumer files were untouched. Both target envelopes are valid;
+unknown extension completeness remains qualified by the saved diagnostics.
+
+This makes the source correction concrete and reviewable without accepting it
+for the consumer. Native homes, naming/collision interpretation, full extension
+support, compiler input registration and actual consumer results remain separate.
+A source author must explicitly adopt a new document or the selected owner must
+admit a complete projection before Truss uses these names; the packet grants no
+permission for a runtime to mutate original source during preparation.
+
 ## Original grouped-count admission gap
 
 The [source correspondence review](../04-build/evidence/design-audit/consumer-grouped-count-source-review.json)

@@ -1,0 +1,192 @@
+{
+  "scope": "explicit author proposal only; no automatic adapter or accepted consumer change",
+  "sources": [
+    {
+      "sourcePath": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "sourceSha256": "e194117a8de436d1479804c59b0e2cc76470814a3c0723cd732797635442a3e5",
+      "authoredNameAdditions": [
+        {
+          "pointer": "/modules/0/elements/0/name",
+          "element": "UseCase",
+          "name": "UseCase"
+        },
+        {
+          "pointer": "/modules/0/elements/1/name",
+          "element": "UseCase.code",
+          "name": "code"
+        },
+        {
+          "pointer": "/modules/0/elements/2/name",
+          "element": "UseCase.name",
+          "name": "name"
+        },
+        {
+          "pointer": "/modules/0/elements/3/name",
+          "element": "UseCase.practiceArea",
+          "name": "practiceArea"
+        },
+        {
+          "pointer": "/modules/0/elements/4/name",
+          "element": "Solution",
+          "name": "Solution"
+        },
+        {
+          "pointer": "/modules/0/elements/5/name",
+          "element": "Solution.code",
+          "name": "code"
+        },
+        {
+          "pointer": "/modules/0/elements/6/name",
+          "element": "Solution.name",
+          "name": "name"
+        },
+        {
+          "pointer": "/modules/0/elements/7/name",
+          "element": "Solution.coverageLevel",
+          "name": "coverageLevel"
+        }
+      ]
+    },
+    {
+      "sourcePath": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "sourceSha256": "5ff02aa14d0d5a64b85b6fe75ffe99ec7a3d8caf93c19b79187506a86c45162e",
+      "authoredNameAdditions": [
+        {
+          "pointer": "/modules/0/elements/0/name",
+          "element": "UseCase",
+          "name": "UseCase"
+        },
+        {
+          "pointer": "/modules/0/elements/1/name",
+          "element": "UseCase.code",
+          "name": "code"
+        },
+        {
+          "pointer": "/modules/0/elements/2/name",
+          "element": "UseCase.name",
+          "name": "name"
+        },
+        {
+          "pointer": "/modules/0/elements/3/name",
+          "element": "UseCase.practiceArea",
+          "name": "practiceArea"
+        },
+        {
+          "pointer": "/modules/0/elements/4/name",
+          "element": "UseCase.description",
+          "name": "description"
+        },
+        {
+          "pointer": "/modules/0/elements/5/name",
+          "element": "UseCase.problem",
+          "name": "problem"
+        },
+        {
+          "pointer": "/modules/0/elements/6/name",
+          "element": "Solution",
+          "name": "Solution"
+        },
+        {
+          "pointer": "/modules/0/elements/7/name",
+          "element": "Solution.code",
+          "name": "code"
+        },
+        {
+          "pointer": "/modules/0/elements/8/name",
+          "element": "Solution.name",
+          "name": "name"
+        },
+        {
+          "pointer": "/modules/0/elements/9/name",
+          "element": "Solution.deliveryMode",
+          "name": "deliveryMode"
+        },
+        {
+          "pointer": "/modules/0/elements/10/name",
+          "element": "Solution.summary",
+          "name": "summary"
+        },
+        {
+          "pointer": "/modules/0/elements/11/name",
+          "element": "Solution.workflow",
+          "name": "workflow"
+        },
+        {
+          "pointer": "/modules/0/elements/12/name",
+          "element": "Solution.prompt",
+          "name": "prompt"
+        },
+        {
+          "pointer": "/modules/0/elements/13/name",
+          "element": "Solution.audience",
+          "name": "audience"
+        },
+        {
+          "pointer": "/modules/0/elements/14/name",
+          "element": "Product",
+          "name": "Product"
+        },
+        {
+          "pointer": "/modules/0/elements/15/name",
+          "element": "Product.code",
+          "name": "code"
+        },
+        {
+          "pointer": "/modules/0/elements/16/name",
+          "element": "Product.name",
+          "name": "name"
+        },
+        {
+          "pointer": "/modules/0/elements/17/name",
+          "element": "Product.vendor",
+          "name": "vendor"
+        },
+        {
+          "pointer": "/modules/0/elements/18/name",
+          "element": "Product.category",
+          "name": "category"
+        },
+        {
+          "pointer": "/modules/0/elements/19/name",
+          "element": "Product.summary",
+          "name": "summary"
+        },
+        {
+          "pointer": "/modules/0/elements/20/name",
+          "element": "Product.lifecycleStatus",
+          "name": "lifecycleStatus"
+        },
+        {
+          "pointer": "/modules/0/elements/21/name",
+          "element": "Product.availability",
+          "name": "availability"
+        },
+        {
+          "pointer": "/modules/0/elements/22/name",
+          "element": "Product.caveat",
+          "name": "caveat"
+        },
+        {
+          "pointer": "/modules/0/elements/23/name",
+          "element": "CoverageAssertion",
+          "name": "CoverageAssertion"
+        },
+        {
+          "pointer": "/modules/0/elements/24/name",
+          "element": "CoverageAssertion.code",
+          "name": "code"
+        },
+        {
+          "pointer": "/modules/0/elements/25/name",
+          "element": "CoverageAssertion.level",
+          "name": "level"
+        },
+        {
+          "pointer": "/modules/0/elements/26/name",
+          "element": "CoverageAssertion.notes",
+          "name": "notes"
+        }
+      ]
+    }
+  ]
+}
