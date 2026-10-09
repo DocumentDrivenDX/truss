@@ -77,10 +77,13 @@ class SuppliedSocket:
 class RawConnection(CoreConnection):
     def __init__(self, *args, **kwargs):
         self.experiment_commands = []
+        supplied = kwargs.get('sock')
+        original_file = supplied.file if isinstance(supplied, SuppliedSocket) else None
         try:
             super().__init__(*args, **kwargs)
         except BaseException:
-            file = getattr(self, '_sock', None)
+            # Stock startup cleanup clears _sock; retain original file custody.
+            file = original_file if original_file is not None else getattr(self, '_sock', None)
             if file is not None:
                 file.close()
             raise

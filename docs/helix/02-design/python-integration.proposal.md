@@ -670,7 +670,7 @@ it captures no authentication/backend-key body in its receipt. Exact dependency
 versions, core/probe/receiver/decoder hashes and raw message-size counters are saved.
 
 The private instance classes now reside in `pg8000_instance_candidate.py`,
-with six offline controlled-transport tests. Fragmented header/body and zero-body
+with seven offline controlled-transport tests. Fragmented header/body and zero-body
 handling pass; malformed/partial input, wrong body requests, send-budget refusal
 and unknown send failure permanently close the experiment file without budget
 refund or sibling interference. A discovered pre-send budget refusal previously
@@ -686,6 +686,16 @@ transaction status is not a fresh outcome observation. This quarantine prevents
 adapter reuse; it neither terminates the native transaction nor releases original
 recovery custody. The caller still owes qualified outcome and cleanup handling.
 
+An actual stock-constructor control subsequently found that failed startup
+cleanup clears `_sock` after attempting Terminate and closing the transport,
+leaving the separately retained instance file usable. The candidate now captures
+that original file before construction and quarantines it even after the driver
+clears its field. Unsupported AuthenticationCleartextPassword input independently
+exercises this path without credentials: the following ReadyForQuery remains
+unread and further file reads/sends refuse. The cleanup send and local transport
+closure are observations, not native termination or rollback proof. Ten controlled
+tests pass; both read-only native receipts pin the repaired shared source.
+
 A separate report-only driver experiment now closes the raw-capacity mismatch
 at its private scope. `pg8000_report_instance_candidate.py` creates its initial
 4,194,315-byte frame bound and eight-MiB outbound experiment allowance before
@@ -698,7 +708,7 @@ The [full-driver report receipt](../04-build/evidence/design-audit/pg8000-report
 records actual local pg8000 execution with independently frozen four-MiB original
 bytes, UTF8 startup observations, exact descriptor, BEGIN/SELECT/ROLLBACK tags
 and all nineteen schema fields. Two report-path capacity controls add exact-frame
-success and one-over refusal before any body ingress; nine total controlled
+success and one-over refusal before any body ingress; ten total controlled
 instance-file tests pass. Both driver receipts were refreshed against the current
 shared candidate source.
 The query remains a fixed read-only literal echo; no authentic report production,
@@ -713,7 +723,7 @@ the adapter; downstream report admission is not reached. The earlier raw row
 remains provisional in the internal context, not a successful operation result.
 Only the first branch consumes the idle status; EOF retains the prior transaction
 status without making it current. Neither case proves rollback, native termination,
-release of arbitrary retained copies or safe pool reuse. Nine controlled tests
+release of arbitrary retained copies or safe pool reuse. Ten controlled tests
 now pass across the generic and report-only candidates.
 
 This is actual driver seam evidence, not the original protocol-port implementation.

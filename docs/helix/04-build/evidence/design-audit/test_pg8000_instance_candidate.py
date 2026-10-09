@@ -1,5 +1,5 @@
 import unittest
-from pg8000_instance_candidate import FrameFile, RawConnection
+from pg8000_instance_candidate import FrameFile, RawConnection, SuppliedSocket
 
 class Transport:
     def __init__(self, data):
@@ -73,6 +73,27 @@ class DriverFileTests(unittest.TestCase):
             self.assertEqual(t.reads, reads)
             self.assertEqual(t.writes, [])
             self.assertEqual(t.data, bytes.fromhex('5a0000000549'))
+
+    def test_original_startup_failure_closes_retained_file_after_driver_clears_socket(self):
+        class StartupTransport(Transport):
+            def __init__(self, data):
+                super().__init__(data)
+                self.closed = False
+            def close(self): self.closed = True
+        transport = StartupTransport(bytes.fromhex('5200000008000000035a0000000549'))
+        supplied = SuppliedSocket(transport)
+        with self.assertRaises(ValueError):
+            RawConnection(user='fixture', database='fixture', sock=supplied, ssl_context=False)
+        self.assertTrue(transport.closed)
+        self.assertTrue(supplied.file.closed)
+        # Original driver's cleanup sends Terminate; it is not observed settlement.
+        self.assertEqual(transport.writes[-1], bytes.fromhex('5800000004'))
+        self.assertEqual(transport.data, bytes.fromhex('5a0000000549'))
+        before_reads, before_writes = list(transport.reads), list(transport.writes)
+        with self.assertRaises(ValueError): supplied.file.read(5)
+        with self.assertRaises(ValueError): supplied.file.write(b'Q')
+        self.assertEqual(transport.reads, before_reads)
+        self.assertEqual(transport.writes, before_writes)
 
     def test_send_budget_and_unknown_send_failure_prevent_further_writes(self):
         t = Transport(b'')
