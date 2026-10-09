@@ -34,6 +34,36 @@ own qualified version/profile. Aurora and Lakebase retain independent obligation
 
 ## Delivery sequence
 
+### Current integration priority
+
+The next deliverable is a complete installation composition, not another isolated
+storage check. Existing native declaration, receipt boundary and lifecycle evidence
+remain component evidence only. Work through these dependencies in order:
+
+1. Correct all four operation-admission families against the original executor
+   issuer. Savepoint rollback must never make an already consumed ordinal reusable.
+   Bind issuer authority and uncertain driver outcomes through the existing
+   [issuer handoff](operation-ordinal-issuer-handoff.md); caller-supplied ordinals
+   cannot stand in for that authority.
+2. Implement the five missing canonical trigger bodies and two scope validators
+   against that issuer and the security owner's admitted authorization context.
+   Exercise populated effects, savepoint rollback and failed finalization before
+   treating their presence as installation readiness.
+3. Compose generated storage with those routines, original grants, initialization,
+   archive and complete inventory verification. Publish readiness only after the
+   complete bundle verifies atomically on the selected PostgreSQL version.
+4. Select the populated M1 route from that complete source/target composition;
+   implement Python status/verify/apply/reconcile and M2–M5 preservation/recovery
+   scenarios using the same artifacts. Package the actual installation inputs and
+   recipes with the Python distribution.
+
+The security owner's grants and publication work is a composition dependency;
+it does not require a second authorization implementation. Weft's PostgreSQL17.9
+fixture qualification does not qualify the pgserver PostgreSQL16.2 default. Keep
+that compiler/profile qualification explicit alongside installation integration.
+These are engineering deliverables, not pending product votes or a reason to
+pause independent Python and installation work.
+
 1. Implement local server lifecycle: explicit start with caller-selected data
    directory, connection information, readiness, signal-safe stop and persistent
    restart. Fresh temporary fixtures are isolated. Server startup alone performs
