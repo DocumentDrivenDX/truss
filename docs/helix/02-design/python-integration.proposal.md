@@ -548,6 +548,41 @@ Use the semantic Executor operations of CONTRACT-007 rather than a language-spec
 - No automatic callback retry occurs. A connection loss may mean commit_unknown; exact request-ID recovery uses the same original semantic input and original ordered result. Retrying with a new request ID is a new action.
 - Reads use the caller-person read-only transaction and current disclosure policy. A successful application-role lookup does not give access to private integrity observations.
 
+### Original consumer dry-run qualification packet
+
+The pinned corpus case `action.dry-run-writes-nothing-and-keeps-the-key` previews
+AddSolution's Create/Link effects, reports a missing-use-case precondition,
+checks unchanged visible rows and later applies with the same key. These host
+expectations are useful but do not observe deferred native validation, retained
+journal/request state or caller transaction ownership. PY-04/R6 must add those
+observations before claiming native dry-run support.
+
+Execute the actual admitted group plan on the caller's original live transaction,
+invoke its complete selected Truss final-state/deferred validation procedure,
+retain the provisional validation result, then observe the caller's explicit
+outer rollback. The preview cannot commit, roll back the outer transaction for
+the caller or publish pending IDs as durable. Observe complete graph/derived/key/
+reservation/journal/receipt/report state afterward from an independent admitted
+connection, including absence of the original request identity. Reuse that key in
+a fresh actual apply and compare the independently expected committed result.
+
+Use paired valid and violating plans on equivalent independently frozen starting
+states. One violation must arise only after actual effects at the selected Truss
+final-state check, rather than from input validation. Compare original failure
+identity/classification and full no-durable-effects state after the caller rollback.
+Caller-owned preexisting work and exact timing settings remain governed by
+CONTRACT-007: no SET CONSTRAINTS ALL, guessed prior mode or disabled barrier is
+allowed to manufacture parity. An operation-local rollback cannot prove outer
+rollback; lost rollback/cleanup observation leaves original custody unresolved.
+Dry-run proves the selected operation on its observed cut, not future outer-commit
+success after arbitrary later caller work or unrelated external constraints.
+
+The successful preview and rejected preview both consume actual cumulative work;
+rollback can release only independently settled occupancy. Preserve original
+parameter/value/source and current-person authority through both runs. Native
+transaction/finalizer/account/security and driver evidence remain unimplemented
+requirements; the fake corpus's unchanged row count cannot substitute for them.
+
 ## Security workstream handoff
 
 Consume the security agent's model and implementation. Do not create an independent Python ACL policy parser, host role map, or alternative predicate compiler. Their current Truss predicate/key/namespace/transport/stored-key/query-use modules are component candidates, and their TypeScript interfaces are not yet a language-neutral public Python ABI.
