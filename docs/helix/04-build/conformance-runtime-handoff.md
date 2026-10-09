@@ -280,3 +280,41 @@ methods and direct result schemas, preserving original historical reconciliation
 as a separate operation. Like the lookup/group walkthroughs, this is author
 case design; independent implementer review and real service/native execution
 remain required.
+
+
+## Original consumer corpus adoption packet
+
+The [read-only consumer inventory](evidence/design-audit/consumer-corpus-source-review.json)
+locates corpus version 1 with 41 unique cases and original basic/empty fixtures.
+The source tests execute FakeAuthorityHarness and FakeReplicaHarness; Truss ran
+no consumer tests. These inputs resolve the missing original scenario location,
+not R2's published shared corpus or an actual native implementation verdict.
+Preserve original case IDs/bytes and explicitly map their host operations through
+C2's registered adapters; their JSON grammar is not Truss's case grammar.
+
+| Original consumer case family | Truss handoff required |
+| --- | --- |
+| Reads, equality, counts and page contract | Original source/name/key/presence and parser-to-compiler correspondence under CH-04/05; exact source and read-only current-person native setup |
+| Access and attribution | Security-owned person/session and current module membership; corpus persona labels nominate fixture sessions, never caller-supplied actor authority or a host role map |
+| Atomic actions, retries, dry-run and batches | Complete prepared group/preconditions, original request/receipt equality and outer settlement. Host batch/action receipts require explicit correspondence; do not relabel them as Truss receipts |
+| Import, freshness, reached and replica behavior | Original provenance plus complete committed feed application and receipt-position resolver; fake sync or authority tokens cannot stand in for native durable inclusion |
+| Registry and unsupported/unavailable outcomes | Exact public registration/capability/result profiles and original refused/unavailable/not-run distinctions; unsupported required shared cases cannot be skipped into qualification |
+
+The original whole-entity case expects inverse relationship keys and attribution
+columns alongside properties. Weft's entity-page projection covers authored
+Record members; relationships are explicit requested projections. A consumer
+facade needs an admitted exact projection/enrichment and descriptor mapping under
+the same native/security cut, or explicitly revised consumer expectations.
+Do not add implicit relationship columns to the compiler, manufacture empty
+lists, infer attribution from the current actor or silently strip expected columns.
+All related-list bounds/lookahead and complete-publication obligations remain.
+
+The consumer runner's row expectations compare declared fields within each row;
+that is useful host-level coverage, not proof of full Truss result membership.
+C4 must additionally observe independently required complete state, journal,
+report, receipt and transaction boundaries, including explicit empty inventories
+on refusal/dry-run. Keep expected consumer projections separate from full native
+invariants and complete public-wire validation. The shared corpus version and
+its required-case inventory remain separately registered release artifacts;
+copying the consumer's covers labels cannot establish completeness or C7
+independent committed database interchange.
