@@ -1,0 +1,11 @@
+{
+  "sources": {
+    "packages/umf-bun/src/catalog-extension-artifacts.ts": "8cbdaf76dc4d618d3fd2fc76a3ce7556daf4c843a6102c040b1a1223ca8c4f93",
+    "packages/umf-bun/src/catalog-extension-inventory.ts": "f42fa6157fcd8d5ac3a83d9374b39abb295837426d4c44622de579aad9ad3c84",
+    "tests/catalog-extension-inventory.test.ts": "40f93038b678c7de62083cc53222505914ad61e9dc74247e01f16bbd5a1574f4"
+  },
+  "tests": 3,
+  "assertions": 41,
+  "strictTypeCheck": "passed",
+  "scope": "Actual owner original document/module/element extension occurrence wrappers; complete source bytes, pointer and digest correspondence. No complete core/extension disclosure, semantic interpretation, admitted report-profile registration or accepted publication."
+}
