@@ -1115,7 +1115,7 @@
     "01-frame/user-stories/US-003-decide-what-happens-to-an-unknown-entity-type.md": "8d3a8c47f4814bcd59e3551fe6dff3bc7524925bc3798612c47e4167bce69fed",
     "01-frame/user-stories/US-004-keep-identifiers-stable-across-revisions.md": "b1cd8e8e427a3e92f8a8e5bb1f5f24e953759ee871ba41b893d5f6178b82d443",
     "01-frame/user-stories/US-005-see-every-violator-before-a-tightening-is-accepted.md": "467bbee17f6bddc79718ffeaabe12ced1720669997fee0c3deb2a9a9b4136bd9",
-    "01-frame/user-stories/US-006-add-a-type-without-ddl.md": "b5c6e3e0cd45f9d51fb46c095960e467a0eb8476c9ebd4682f531ac6e816ee9a",
+    "01-frame/user-stories/US-006-add-a-type-without-ddl.md": "f167952340b6d0798488a2bd4beaf5e1622bab9fd2cd368b6574f16de747a8c8",
     "01-frame/user-stories/US-007-store-and-read-objects-and-edges-exactly.md": "da51bb2e5b81ea49255ce4b98ce640e3d7322cbf978346889ec18c596c6211f3",
     "01-frame/user-stories/US-008-keep-what-the-schema-does-not-define.md": "ff10b76349b5bae084448b0acea09757ea2794d10b5c3467344c3fedf0623c1c",
     "01-frame/user-stories/US-009-find-an-object-by-its-key.md": "8644ae0ba5efd9658153e67f7ffe85f72061b00b1be28bfae4d6d938013c28ed",
