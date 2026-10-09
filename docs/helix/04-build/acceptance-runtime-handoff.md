@@ -10,6 +10,24 @@ Keep unconditional deferred safety barriers until the entire original operation 
 
 ## Ordered implementation work
 
+### A2 UMF support producer before full report comparison
+
+Source inspection of `catalog-umf-report-basis.ts` finds original source versions,
+interpretation/support pins and support artifact custody, with scope explicitly
+`original_umf_and_support_byte_basis_only`. It does not interpret the admitted
+supported subset. Do not count that object as the report's complete umf field or
+append it to eleven-field verification merely because its pins match.
+
+The next producer must resolve the original registered support artifact under
+its selected semantic procedure, enumerate the supported versions/subsets and
+interpretation/loss obligations for every accepted document, and compare an
+independently authored complete expected umf value. Unknown or unavailable
+support meaning refuses complete report admission; no empty/default supported
+subset or inference from source version is allowed. Keep this separate from
+assertion enforcement classification. Implement and test that producer through
+the existing original preparation/correspondence path; do not add a second UMF
+validator or reopen public admission before all seventeen fields compose.
+
 ### A2 assertion inventory closure
 
 Inspection of `catalog-core-assertion-identities.ts` and
