@@ -124,3 +124,42 @@ interchange. Do not replace any native exit above with their green output.
 Package exports, original runtime/driver/target tuples and actual runner
 commands are selected and pinned during implementation; no command pointing
 to absent harness files is a current executable success claim.
+
+## C3/C6 interrupted-operation and evidence-store settlement packet
+
+Runner implementation must track native outcome and immutable evidence-store
+settlement separately. A completed database operation followed by an interrupted
+evidence write cannot become an unexecuted case eligible for automatic rerun.
+The original claim, actual operation/input/namespace and retained raw observation
+remain bound to the original run. The registered evidence-store procedure must
+reconcile the same original evidence identity and full bytes before any repeated
+write; it may not regenerate observations from later database state.
+
+| Fault boundary | Required preserved disposition | Independent continuation control |
+| --- | --- | --- |
+| Before original run claim | Preparation remains prepared or actually abandoned; no native acquisition | Observe claim registry and environment independently; cancellation does not invent a claim. |
+| After claim, before acquired-environment acknowledgment | Original acquisition may be unknown; retain exact recovery and resource custody | Reconcile the same acquisition identity; no second environment or duplicate setup until original settlement is admitted. |
+| After case operation dispatch, before native outcome | Operation remains unknown even if callback/process/transport ended | Resolve original transaction/attempt through registered recovery; no operation replay merely to obtain a result. Unexecuted dependent cases remain explicitly not_run. |
+| After confirmed native outcome, before complete observers | Preserve actual commit/rollback independently from unavailable case verification | Missing original-cut observations keep the case unverified. Later current-state reads cannot impersonate its original boundary. |
+| After complete raw observations, before evidence-store acknowledgment | Preserve original full observations and native settlement; evidence persistence is separately unknown | Reconcile original immutable evidence identity/bytes. A timeout cannot authorize another operation, changed evidence or a second run claim. |
+| After evidence commit, before assessor delivery | Original receipt is recorded; qualification remains unavailable until admitted assessment | Re-read exact original receipt and invoke only the separately registered assessment protocol; runner success cannot self-qualify. |
+
+Freeze independent expected claim/environment/attempt/evidence inventories for
+these boundaries before adding faults. For each boundary, terminate the actual
+runner process or interrupt the selected transport after an independently
+observed dispatch barrier; a thrown mock callback alone cannot establish native
+uncertainty. Keep fault-induced process/session handles and inspect their real
+terminal state before reconciliation, preserving live original work when an
+observation merely times out. Repeated reconciliation must not issue setup,
+mutation, COMMIT, rollback or cleanup beyond the original registered recovery
+procedure. Compare complete original graph/history/receipt/feed inventories,
+claim count, environment identity and immutable evidence bytes after settlement.
+
+Inject an evidence-store identity collision with different complete bytes and
+require integrity refusal, not overwrite or a qualified receipt. Inject partial
+receipt storage and independently show no complete recorded result is admitted.
+A fresh explicitly requested rerun uses a new claim/evidence identity and its
+own original environment/expectations; it preserves the failed run's partial
+inventory and cannot fill that historical run's not_run cases. These are planned
+C3/C6 native/service controls; evidence storage, recovery procedures and the
+actual host services remain to select and implement.
