@@ -37,6 +37,50 @@ Keep legacy v0.1 cases version-scoped if independently selected. They cannot sat
 
 ## Registry completion obligations
 
+### Existing wire carriers and actual composition gaps
+
+Paths below are under `docs/helix/02-design/contracts/`. Reuse the named
+carriers, preserving their `$id` and exact registered bytes. A payload schema
+is not automatically the complete capability argument or return schema. Every
+`Outcome<T>` also needs the registered execution-failure branch. This matrix
+covers the twenty-two capability entries above; the administrative inventory
+below retains its separate completion obligations.
+
+| Existing method / branch | Reusable carrier | Remaining complete operation encoding |
+| --- | --- | --- |
+| catalog acceptInTransaction | acceptance-input-v0.1; acceptance-report-v0.1; acceptance-rejection-v0.1 | Bind separate assertedOrigin argument and AcceptanceSemanticResult disposition/rejection wrapper, then outer Outcome; select lifecycle report version explicitly |
+| catalog report | acceptance-report-v0.1 | Encode existing AcceptanceReportRequest revision and available/not_found/unavailable result wrapper, then Outcome |
+| mutation applyInTransaction | group-input-v0.1 operation definitions; group-result-v0.1 semantic payload | Encode actual standalone MutationSemanticInput restrictions and MutationApplicationResult; group aliases/references and group response are not substitutes |
+| group applyInTransaction, request none | group-input-v0.1; group-result-v0.1 | Bind separate request-none argument and RequestFreeGroupApplicationResult; exclude receipt/replay/conflict outcomes forbidden by this overload |
+| group applyInTransaction, request present | group-input-v0.1 requestIdentity/requestSelection definitions; group-result-v0.1 | Bind original separate request argument and GroupApplicationResult/InTransactionGroupResponse, then Outcome; a committed GroupResponse cannot relabel pending application |
+| import runBatches | import-input-v0.1; import-report-v0.1; import-resource-result-v0.1 | Bind separate read-write TransactionOptions and full ImportExecutionResult with engine_owned report discrimination; no generic Outcome wrapper |
+| import applyInTransaction | same import carriers | Encode full ImportExecutionResult with host_adopted/outer_engine_scope report discrimination; preserve execution_failed report/null and prior progress |
+| lookup | direct-lookup-request-v0.1; direct-lookup-result-v0.1 | Existing proposed direct-lookup-execution-outcome-v0.1 composes return; exact scope/profile registration remains |
+| page | direct-page-request-v0.1; direct-page-result-v0.1 | Compose outer Outcome and actual transaction scope |
+| catalogView | catalog-view-request-v0.1; catalog-view-v0.1 | Encode CatalogViewResult available/unavailable wrapper before Outcome; raw CatalogView is only its payload |
+| traverse | direct-traversal-request-v0.1; direct-traversal-result-v0.1 | Compose Outcome and original snapshot/stage procedures; preserve pending human traversal interpretation |
+| resumeTraversal | direct-traversal-resume-request-v0.1; direct-traversal-result-v0.1 | Compose Outcome and original stage/work-version correspondence |
+| nextTraversalPage | direct-traversal-page-request-v0.1; direct-traversal-result-v0.1 | Compose Outcome and sealed original page/publication context |
+| releaseTraversal | direct-traversal-release-request-v0.1; direct-traversal-release-result-v0.1 | Compose Outcome; method has no transaction argument |
+| pageJournal | journal-page-request-v0.1; journal-page-result-v0.1 | Compose Outcome; select later complete-history journal proposal only through its separate adopted profile |
+| reconstruct | history-record-v0.1 retained record payload | Encode existing ReconstructionRequest/ReconstructionResult and complete evidence, not a bare record or journal page |
+| historicalSource | history-record-v0.1 retained record payload | Encode existing HistoricalSourceRequest/HistoricalSourceResult and original source evidence; current direct lookup cannot substitute |
+| executeInTransaction | compiled-execution-request-v0.1; compiled-execution-result-v0.1 | Compose Outcome with exact selected Weft ABI/decoder registration and obligations; no parsed-query wire inferred |
+| discoverNext v0.2 | feed-discovery-v0.2 root request and $defs/result | Compose Outcome and original complete discovery/watermark procedure |
+| readFragment v0.2 | feed-fragment-request-v0.2; feed-fragment-page-v0.2 | Compose Outcome; fragment page cannot establish independent complete-feed membership alone |
+| observeFreshness v0.2 | complete-feed-freshness-v0.2 $defs/request and $defs/result | Compose Outcome, original proof registration and native clock/boundary observations |
+| acknowledgeInTransaction v0.2 | feed-acknowledgment-result-v0.2; selected application/boundary carriers | Encode ConsumerAcknowledgmentV02 arguments through original admitted VerifiedApplicationV02 issuance; never deserialize or cast JSON into that branded authority; compose Outcome |
+
+Names without a `.schema.json` suffix in this table designate that schema file,
+not a newly proposed API. For rows with missing wrappers, first derive the
+closed carrier from the cited existing declaration and add independent
+forbidden-branch controls. Register each exact argument separately or an
+explicit case-only argument envelope; do not add envelope fields to public
+requests. Scope handles, verified applications and other host-issued authority
+come from original trusted procedures, never from a schema-valid JSON object.
+This mapping prevents duplicate carrier work but is not an executable registry
+or qualification of any method.
+
 For direct `lookup`, reuse `direct-lookup-request-v0.1.schema.json` for the
 request argument and `direct-lookup-result-v0.1.schema.json` for the inner
 business result. The proposed `direct-lookup-execution-outcome-v0.1.proposal.schema.json`
