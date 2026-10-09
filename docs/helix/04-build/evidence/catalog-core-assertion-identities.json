@@ -1,11 +1,11 @@
 {
   "sources": {
-    "packages/umf-bun/src/catalog-core-assertion-identities.ts": "fc6fbd3d441a0901de614398fbba1bc313ab1c5407eab5395b43544446c02fe4",
-    "tests/catalog-core-assertion-identities.test.ts": "12a86580e3b61cc5ed73029e2611cb99d88f858beab4d2db4fa16f0088219da3"
+    "packages/umf-bun/src/catalog-core-assertion-identities.ts": "5d0f2d7fb097f3853473c845f81439d7b74791b477b51e47a92add23f9fa6fab",
+    "tests/catalog-core-assertion-identities.test.ts": "8922e447fca73c20952c841618b0dfaf78ad319849ddc1a2a4c20bbfd7df894b"
   },
-  "tests": 3,
-  "assertions": 47,
+  "tests": 4,
+  "assertions": 53,
   "strictTypeCheck": "passed",
-  "scope": "Actual pinned owner original kind/nullability/cardinality/facets/keys/relationships subset. Exact authored IDs retain occurrence pointers; missing and deferred observations separate. No complete report or admitted enforcement.",
-  "identityProfileVersion": "0.2.0"
+  "scope": "Actual pinned owner original source identities including original0.8 allowedValues/default/facets. Annotations separate, reversible target properties deferred, missing/unavailable explicit. No complete report or admitted enforcement.",
+  "identityProfileVersion": "0.3.0"
 }

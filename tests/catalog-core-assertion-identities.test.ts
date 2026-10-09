@@ -28,3 +28,11 @@ test('authored key and relationship IDs remain qualified by original occurrence 
  expect(entries.map(e=>e.assertion.kind)).toEqual(['authored','authored']);expect(entries.map(e=>(e.assertion as any).authoredIdentity)).toEqual(['same','same']);
  expect(entries.every(e=>e.enforcement==='none')).toBe(true);expect(result.complete).toBe(false);
 });
+test('original 0.8 schema properties keep authored pointers and legacy API failures explicit',()=>{
+ const declared:any=structuredClone(model);declared.umf='0.8.0';declared.title='Original document annotation';declared.modules[0].elements[0].allowedValues=[{string:'red'}];declared.modules[0].elements[0].default={value:{string:'red'},on:'missing'};
+ const originalInput=structuredClone(input),source=Buffer.from(JSON.stringify(declared));originalInput.documents[0].artifact={identity:'original08',bytesBase64:source.toString('base64'),sha256:new Bun.CryptoHasher('sha256').update(source).digest('hex')};
+ const prepared=preparation.prepare(new TextEncoder().encode(JSON.stringify(originalInput))),result=collectCatalogCoreAssertionIdentities(prepared,collectCatalogAssertionObservations(prepared,owner,fields));
+ expect(result.entries.map(e=>e.assertion.sourcePointer)).toEqual(['/modules/0/elements/0/allowedValues','/modules/0/elements/0/default','/modules/0/elements/0/facets']);
+ expect(result.deferred.some(o=>o.operation==='schema_properties'&&(o.identity as any).scope==='document')).toBe(true);expect(result.entries.some(e=>e.ruleName.endsWith('.title'))).toBe(false);
+ expect(result.deferred.some(o=>(o.result as any).state==='unavailable')).toBe(true);expect(result.complete).toBe(false);expect(result.entries.every(e=>e.enforcement==='none')).toBe(true);
+});
