@@ -736,6 +736,55 @@ packaging remain separate PY-01b/PY-03/PY-07 exits. Preserve the earlier source-
 review as historical; do not repeat that no driver experiment exists or claim
 this read-only local result as a Lakebase/Aurora or protected mutation result.
 
+#### Original driver copy and account binding handoff
+
+PY-01b must consume CONTRACT-007's original resource/custody issuer at the
+connection-local file and decoder cuts. The experiment's remaining byte/message
+counters are not issuer leases and cannot be reset to begin another operation.
+Before startup, bind the selected startup/connection-lifetime account and exact
+supplied file. Before each query command, admit one original operation account,
+transaction generation, command sequence and response profile under exclusive
+connection use. Switching accounts while a frame, row, callback or unknown command
+remains live refuses. Operation closure cannot reset connection-lifetime counters,
+transfer a previous operation's backing to a new account or infer native settlement.
+
+Implement the following precharge points with the existing issuer, preserving
+separate controlled-byte, object/work and native/transport qualifications:
+
+| Original cut | Reservation required before materialization | Custody that survives the cut |
+| --- | --- | --- |
+| Before next header read | Original message attempt, five-byte mutable header, recv call/work and selected transport backing | Original connection/operation ownership; incomplete header failure keeps its actual command outcome unknown where applicable |
+| After signed length admission, before body ingress | Complete mutable frame plus simultaneous immutable frame construction and header backing under the selected allocation model | No body read occurs on refusal; cumulative ingress remains consumed even if later parsing fails |
+| File body return and stock `_read` | Full-frame retention, body slice, stock growable bytearray capacity/reallocation and immutable return copy, including their actual overlap | Frame/header/driver views remain attributed until the selected issuer observes their qualified release; nominal length alone does not bound bytearray capacity |
+| Original frame reconstruction and row parsing | Header/body concatenation, row metadata/cell slices, ordered tuple/list slots, decoded text and exact-value nodes/work | Every actual retained row and descriptor is provisional; a subsequent error or EOF cannot publish or silently refund them |
+| Complete report/schema projection | Original raw cell, UTF-8/parser/schema views, immutable report/artifact copies and consolidation work | Report issuer/publisher retains its exact original account and release obligations; a schema pass does not settle the transaction |
+| Cleanup or cancellation | Admitted cleanup command/response and retained recovery evidence, independent of exhausted normal-work capacity | Original native outcome, transport quarantine and host-buffer lifetime remain separate. Cleanup capacity grants no replacement query, automatic retry or success claim |
+
+The pinned stock `_read` grows a bytearray and returns another immutable bytes
+object. Instrumenting only `FrameFile.read` cannot precharge those hidden copies.
+The implementation must supply an explicitly versioned connection-local driver
+hook or reviewed private driver integration that mediates these allocations; an
+unchanged stock driver cannot be declared accounted because its raw frame fits.
+No global helper monkeypatch or competing public driver API is selected. Any
+unmediated required allocation keeps this original profile unavailable.
+
+Derive controlled allocation bounds from the selected Python/build/container
+procedure, accounting capacity rather than just payload length and charging work
+before repeated append/parse/encode actions. This is not an arbitrary interpreter,
+allocator, TLS or database heap guarantee. Keep unsupported guarantees separately
+classified under the owner's bounded-work direction. Exact native and TLS backing
+still require their admitted producers; neither fixed overhead guesses nor process
+RSS samples issue resource authority.
+
+Qualify startup and query sequences with an independent observer of reserve,
+allocate/read/send and release order. Force exhaustion at every listed cut while
+another original view is retained; observe no unreserved allocation/submission,
+no sibling refund and no post-failure account switch. Include constructor cleanup
+clearing the driver's socket field, a full row followed by late error/EOF, and
+unavailable cleanup/outcome. Repeated failed preparation consumes its actual work;
+opening a new profile cannot erase it. These are concrete implementation exits,
+not a complete account implementation or adoption of the development driver.
+
 #### Raw-wire probe versus pre-ingress accounting
 
 Source inspection of `check_python_pg_frame_native.py` identifies two limits of
