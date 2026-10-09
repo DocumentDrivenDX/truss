@@ -809,8 +809,8 @@ This is response grammar/structure evidence only. The response scanner records
 its original request-scanner fork digest and retains existing duplicate/Unicode/
 numeric refusal semantics. Its copied algorithm is private experimental code, not
 an adopted shared parser or second UMF validator. Full schema integration and
-original aggregate allocation/account/registration remain required; the 32-MiB
-logical work value is not a host heap allowance or release profile. Neither host
+original aggregate allocation/account/registration remain required; the 33,554,432-unit
+logical work bound is not a host heap allowance or release profile. Neither host
 candidate activates native conversion or report publication.
 
 The TypeScript private response candidate now composes the scanner with the same

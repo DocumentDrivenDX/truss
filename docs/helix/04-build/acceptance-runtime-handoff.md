@@ -512,6 +512,27 @@ do not require proof that arbitrary remote copies were erased. This preserves
 the selected boundary on what Truss controls. These are planned public assembly
 faults; the local literal echo qualifies no network recovery or publication path.
 
+A6's consumer-host transport profile must separately bound the complete outer
+response and decoded report bytes. A four-MiB report requires 5,592,408 base64
+characters when an exact-artifact envelope is selected, before field names,
+metadata, original outcome/commit evidence and framing. Stringifying already
+encoded report JSON introduces its own escaping expansion. The successful
+4,194,315-byte PostgreSQL text DataRow cannot qualify either host envelope.
+
+Select the actual host-owned encoding and exact complete envelope maximum before
+operation admission. Preserve original report bytes/digest and settlement evidence
+without truncation, mutable reserialization or a second fallback encoding. Charge
+outer bytes, decoded bytes, complete report parsing and simultaneous retained
+copies independently under the original account. This is an embedding/consumer
+integration obligation, not a new Truss HTTP server, response schema or receipt API.
+
+Add independent complete-envelope controls at its registered boundary and one
+over, plus a small envelope claiming an unaffordable decoded body and a complete
+report with missing original settlement evidence. Exhaustion refuses before
+effects where capacity is known; unexpected late delivery failure retains the
+original committed/recovery outcome described above. No four-MiB inner parser
+result may be advertised as a four-MiB bound on all network replies.
+
 ### A6/A7 original acceptance settlement after head advancement
 
 The public assembly must distinguish a new acceptance invocation from settlement
