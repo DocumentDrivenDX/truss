@@ -876,12 +876,22 @@ into an empty collection before the selected owner's decision procedure.
 | A Record-backed edge's own Field versus an endpoint Field with equal name/text | Preserve qualified declaring identity, row witness and Field channel; endpoint data cannot replace the edge's stored value |
 | Unsupported term under an empty collection or a branch that would short-circuit | Owner preflight/support disposition remains explicit; SQL simplification cannot make unsupported meaning admitted |
 | Changed source, alias/parameter binding, context generation or lease after lowering | Refuse stale/substituted execution and publication under the owner protocol; successful condition generation is not freshness evidence |
+| Same Key label with reversed component order across endpoint, intrinsic identity and Record-witness mappings | One original qualified ordered Key descriptor governs every mapping. Equal labels or scalar families cannot establish correspondence; eager owner admission refuses the mismatch even when a policy branch would not use it |
 
 Freeze independent truth/predicate/source expectations before native execution,
 then observe protected reads/mutations and disclosure, including denied/unknown
 and unavailable branches. The exact handling of unknown at the final policy
 boundary follows the selected owner contract, not a new Truss decision here.
 No native security capability is qualified by these planned controls.
+
+The owner's revision-32 progress snapshot identifies ordered-Key descriptor
+coherence as ongoing work. For the eventual admitted tuple, PY-03/C4 preserves
+qualified component Field identity, order and exact codec meaning across all three
+mapping channels. Include two-component same-family keys so reversing values does
+not fail merely by scalar type, and an unused malformed mapping to verify eager
+admission. A copied Key name, equal encoded length or a successful condition parse
+cannot replace full descriptor correspondence. This adds an integration obligation;
+it neither adopts the owner's current source nor adds a Python Key resolver.
 
 ## Exact transport
 
