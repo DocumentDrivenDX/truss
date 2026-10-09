@@ -351,3 +351,30 @@ object. The inspected original corpus contains only authority/replica tags;
 future host-specific rows retain a separate assessment rather than satisfying
 required shared cases. These are implementation/test obligations, not executed
 controls or changes to the consumer runner.
+
+### Consumer reached-result compatibility gap
+
+The [original source review](evidence/design-audit/consumer-reached-compatibility-source-review.json)
+shows that `freshness.unissued-token-is-not-reached-by-a-replica` expects
+`false` for both `$foreign` and literal `garbage`. The reviewed harness supplies
+`$foreign` as `fake:999999`, explicitly a position no fake instance issued.
+Neither input supplies an original committed receipt, admitted source/epoch or
+qualified exclusion proof. Truss's
+[reached contract](../02-design/contracts/receipt-position-and-reached.proposal.md)
+separates available/not-yet-included from unavailable: invalid or incomparable
+input cannot be converted into `false`. The consumer expectation therefore needs
+explicit source-owner resolution before this case can qualify the Truss adapter.
+No consumer source change or public error spelling is selected here.
+
+Proposed correction: preserve this case ID and split its controls into malformed
+locator refusal and unissued/unresolvable evidence unavailable, using the selected
+disclosure-safe public result profile. Keep
+`freshness.replica-catches-up-to-a-token` as the separate available false-to-true
+schedule, but obtain its initial false through actual valid original receipt and
+qualified downstream exclusion evidence; lack of a row alone is insufficient.
+Its final true requires complete durable application under the original read cut.
+Pair with missing retention, wrong epoch, unknown commit and unavailable resolver
+controls. Keep the original host expectation/verdict alongside the proposed
+Truss mapping so the mismatch cannot disappear through token substitution or a
+boolean convenience wrapper. Until the owner adopts a compatible outcome mapping,
+report this required integration case as unresolved rather than passed or skipped.
