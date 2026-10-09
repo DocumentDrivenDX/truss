@@ -20,3 +20,21 @@ Planned independent native scenarios for [receipt position and reached](../02-de
 | RV-14 bounds/read-only | Malformed/oversized token, unsupported position profile, substituted original transaction/connection, exhausted evidence bound | Refusal before native effects; no worker start, ACK, retention update or new transaction. Comparison uses the supplied read-only snapshot and finite selected work |
 
 The runner records exact layout/corpus/position/security/driver/database/application tuples, original read cuts and observed commit outcomes. Expected state is authored independently. Fresh true results require original inclusion proof; agreement between two implementations alone cannot certify it. Execute the same relevant cases through TypeScript and Python, then interchange saved tokens through the admitted shared resolver. Unsupported/incomplete required profiles remain unavailable and block full consumer qualification.
+
+## Locator wire and receipt transition controls
+
+Planned subcases under RV token/replay/compatibility schedules: exact original
+locator equality after confirmed commit and all-no-op repeat; maximum signed64
+receipt row and unsigned64 xid without host-number conversion; unknown members,
+duplicate keys, wrong alphabet/padding, malformed Unicode, over-bound strings,
+noncanonical integers and unknown profile refusal before native submission.
+Author the selected encoder's byte-exact golden vectors independently.
+
+Tamper original row/xid/installation/epoch/profile separately and retain denied,
+missing and expired outcomes without protected existence disclosure. A current
+same-numbered receipt or replica row cannot replace original source evidence.
+Old receipt profile without retained position basis must refuse token production,
+not acquire today's epoch. A changed new receipt body must fail original full
+correspondence; no circular whole-receipt token hash is accepted. Run fresh and
+held snapshots and real complete downstream application after native producer
+admission; a locator parser pass cannot prove reached or durable retry.

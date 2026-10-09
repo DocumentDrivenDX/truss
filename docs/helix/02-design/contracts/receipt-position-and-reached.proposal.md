@@ -18,6 +18,65 @@ Equal request-ID/full-input retries return the same original ordered results and
 
 A token is stable across ordinary process/feed restarts in the same source epoch. Restore/fork epochs are distinct. Matching xid text from another epoch or installation is incomparable. Cross-epoch inclusion requires an explicit independently qualified lineage/seed proof; there is no numeric shortcut. Expired receipt/required evidence produces unavailable(retention), even if the caller remembers its token.
 
+## Candidate locator wire and receipt profile transition
+
+Propose an opaque consumer string containing canonical RFC 4648 base64url
+without padding of a closed UTF-8 JSON locator. Decoding is private to the
+selected Truss position resolver. The decoded candidate has only these fields:
+
+| Field | Exact candidate meaning |
+| --- | --- |
+| interfaceVersion | `truss-receipt-position/0.1.0` |
+| positionProfile | Original registered identity/version/SHA-256 pin for locator interpretation and comparison scope |
+| installationId | Original producing installation identity, never today's marker |
+| sourceEpoch | Original producing epoch identity |
+| receiptStorageRowId | Canonical positive signed64 decimal text identifying the original source receipt home row |
+| writerXid | Canonical unsigned64 decimal text for the original native full transaction identity |
+
+Use the selected original request-receipt row allocator/identity. The storage
+row ID locates a source receipt; it does not order graph changes or identify an
+arbitrary same-numbered replica row. Equal request repeats retain that original
+row and producing xid, including all-no-op groups. A position profile pins the
+exact compatible receipt home/encoding, authorized comparison scope and native
+producer/resolver. Unsupported layout conversion cannot silently remap the
+locator; it must preserve admitted original correspondence or return unavailable.
+
+The candidate profile bounds encoded token text to 16 KiB, installation identity to 1 KiB, epoch/profile
+text to 256 UTF-8 bytes each, and decoded structure to depth four with no unknown
+members, duplicate names, numbers, malformed Unicode or NUL. Reject noncanonical
+base64url, noncanonical integer text and out-of-domain values before native
+submission. The registered encoder selects one deterministic JSON byte form;
+its golden vectors and byte-parity must be authored before activation. This
+proposal does not imply every alternative JSON spelling is accepted.
+
+Retain the complete position basis/profile in the same original receipt effects
+transaction before commit. The current `truss-request-receipt/0.1.0` body does
+not contain this added basis: select a new versioned receipt encoding/profile
+and compatibility interpretation, rather than adding an undeclared member to
+old receipts. The existing original receipt byte home can retain that body if
+its whole request/result/position resource budget and immutable producer are
+qualified. No additional journal event or new allocator is required. Legacy
+receipts without this basis provide ordinary selected replay but cannot mint
+this token by reading today's installation or guessing their old epoch.
+
+The token carries no request ID/input/result, actor, credentials, private
+configuration bytes or receipt-body hash. It is a locator, never a grant,
+commit proof or signed attestation. Do not create a self-referential preimage by
+including a hash of a receipt that itself contains its token. The protected
+resolver compares complete original retained receipt/context/position bytes;
+a token's claimed row/xid/profile is not trusted evidence. Native pending rows
+can prepare a token internally but public release still requires original
+confirmed outer commit and the security-owned final publication boundary.
+
+Base64url is not confidentiality. The security owner must admit disclosure of
+these locator identities under the selected public scope; if that profile
+requires a different protected locator, this candidate cannot be advertised
+unchanged. Receipt absence, denied observation and expired proof retain the
+existing disclosure-safe unavailable semantics. This wire proposal narrows the
+implementation handoff; native authority snapshot comparison, replica source
+commitment evidence, exact encoder/receipt registration and security admission
+remain unresolved producer outputs.
+
 ## Authority comparison
 
 Resolve and admit the original committed receipt/position under the current person's authorized scope. Bind its original producing transaction to the supplied native snapshot and installed source epoch. Inclusion requires original commit/visibility evidence for that snapshot; an application's committed flag or current row value is insufficient. A same-producing-transaction observation cannot upgrade its uncommitted receipt into durable proof.
