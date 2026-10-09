@@ -1,0 +1,353 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:proposal:mutation-capability-wires:0.1.0",
+  "title": "Existing standalone mutation facade wire compositions",
+  "description": "Definitions only. Reuses exact original group operation branches with standalone no-alias/stored-reference restrictions. Original profile/order/source/native validation and pending durability require independent admission. Register exact original group schemas before these pointer compositions.",
+  "not": {},
+  "$defs": {
+    "operation": {
+      "oneOf": [
+        {
+          "allOf": [
+            {
+              "$ref": "urn:truss:draft:group-input:0.1.0#/properties/operations/items/oneOf/0"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "alias": false,
+                "ownership": {
+                  "type": "object",
+                  "properties": {
+                    "root": {
+                      "type": "object",
+                      "properties": {
+                        "state": {
+                          "const": "stored"
+                        }
+                      },
+                      "required": [
+                        "state"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "urn:truss:draft:group-input:0.1.0#/properties/operations/items/oneOf/1"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "alias": false,
+                "source": {
+                  "type": "object",
+                  "properties": {
+                    "state": {
+                      "const": "stored"
+                    }
+                  },
+                  "required": [
+                    "state"
+                  ]
+                },
+                "target": {
+                  "type": "object",
+                  "properties": {
+                    "state": {
+                      "const": "stored"
+                    }
+                  },
+                  "required": [
+                    "state"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "urn:truss:draft:group-input:0.1.0#/properties/operations/items/oneOf/2"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "target": {
+                  "type": "object",
+                  "properties": {
+                    "state": {
+                      "const": "stored"
+                    }
+                  },
+                  "required": [
+                    "state"
+                  ]
+                },
+                "ownershipChange": {
+                  "type": "object",
+                  "properties": {
+                    "root": {
+                      "type": "object",
+                      "properties": {
+                        "state": {
+                          "const": "stored"
+                        }
+                      },
+                      "required": [
+                        "state"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "urn:truss:draft:group-input:0.1.0#/properties/operations/items/oneOf/3"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "target": {
+                  "type": "object",
+                  "properties": {
+                    "state": {
+                      "const": "stored"
+                    }
+                  },
+                  "required": [
+                    "state"
+                  ]
+                },
+                "endpointChange": {
+                  "type": "object",
+                  "properties": {
+                    "source": {
+                      "type": "object",
+                      "properties": {
+                        "state": {
+                          "const": "stored"
+                        }
+                      },
+                      "required": [
+                        "state"
+                      ]
+                    },
+                    "target": {
+                      "type": "object",
+                      "properties": {
+                        "state": {
+                          "const": "stored"
+                        }
+                      },
+                      "required": [
+                        "state"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "urn:truss:draft:group-input:0.1.0#/properties/operations/items/oneOf/4"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "target": {
+                  "type": "object",
+                  "properties": {
+                    "state": {
+                      "const": "stored"
+                    }
+                  },
+                  "required": [
+                    "state"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "input": {
+      "type": "object",
+      "properties": {
+        "layoutProfile": {
+          "$ref": "urn:truss:draft:group-input:0.1.0#/properties/layoutProfile"
+        },
+        "mutationProfile": {
+          "$ref": "urn:truss:draft:group-input:0.1.0#/properties/mutationProfile"
+        },
+        "valueProfile": {
+          "$ref": "urn:truss:draft:group-input:0.1.0#/properties/valueProfile"
+        },
+        "catalog": {
+          "$ref": "urn:truss:draft:group-input:0.1.0#/properties/catalog"
+        },
+        "assertedOrigin": {
+          "$ref": "urn:truss:draft:group-input:0.1.0#/properties/assertedOrigin"
+        },
+        "interfaceVersion": {
+          "const": "truss-mutation-input/0.1.0"
+        },
+        "operation": {
+          "$ref": "urn:truss:proposal:mutation-capability-wires:0.1.0#/$defs/operation"
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "layoutProfile",
+        "mutationProfile",
+        "valueProfile",
+        "catalog",
+        "operation",
+        "assertedOrigin"
+      ],
+      "additionalProperties": false
+    },
+    "result": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "success"
+            },
+            "result": {
+              "allOf": [
+                {
+                  "$ref": "urn:truss:draft:group-result:0.1.0#/$defs/semantic/properties/results/items"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "alias": false
+                  }
+                }
+              ]
+            },
+            "executedCatalogRevision": {
+              "type": "string",
+              "minLength": 1
+            },
+            "layoutProfile": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+            },
+            "mutationProfile": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+            },
+            "durability": {
+              "const": "pending"
+            }
+          },
+          "required": [
+            "outcome",
+            "result",
+            "executedCatalogRevision",
+            "layoutProfile",
+            "mutationProfile",
+            "durability"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "failed"
+            },
+            "code": {
+              "type": "string",
+              "minLength": 1
+            },
+            "errorProfile": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+            },
+            "error": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            }
+          },
+          "required": [
+            "outcome",
+            "code",
+            "errorProfile",
+            "error"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "unavailable"
+            },
+            "reason": {
+              "enum": [
+                "profile",
+                "observation",
+                "resource"
+              ]
+            }
+          },
+          "required": [
+            "outcome",
+            "reason"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "outcome": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "status": {
+              "const": "ok"
+            },
+            "value": {
+              "$ref": "urn:truss:proposal:mutation-capability-wires:0.1.0#/$defs/result"
+            }
+          },
+          "required": [
+            "status",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "status": {
+              "const": "error"
+            },
+            "error": {
+              "$ref": "urn:truss:draft:execution-failure:0.1.0"
+            }
+          },
+          "required": [
+            "status",
+            "error"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

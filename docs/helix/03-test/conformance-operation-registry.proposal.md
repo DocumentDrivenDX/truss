@@ -92,8 +92,25 @@ The root deliberately refuses all wires because this is a definition library,
 not an untagged union that lets a method accept another method's result.
 These compositions close the outer schema work identified in those table rows;
 original method/profile/argument/observer/identity-path registration still
-remains. Standalone mutation wrapper gaps are unchanged.
+remains. The specialized compositions below close further carrier work while
+retaining exact argument and original procedure registration obligations.
 Import is explicitly excluded from generic Outcome composition.
+
+Standalone mutation now has definitions-only
+`mutation-capability-wires-v0.1.proposal.schema.json`. Register input/result/outcome
+for the existing facade and operation only for its single-operation argument.
+The input reuses original group common fields and exact indexed operation
+branches, with aliases forbidden and stored references required for targets,
+roots and endpoints. Register the original group schema bytes/digest alongside
+this composition; changing branch order cannot silently preserve correspondence
+by filename. The result reuses group operation-result branches, forbids an
+allocation alias and keeps supplied-scope success pending. These restrictions
+apply to registered structural slots, not recursive strings or ordinary JSON
+properties. Run `check-mutation-capability-wires.ts` in the design audit
+directory with the installed Ajv Draft 2020-12 module path: nineteen controls
+cover all six operations, stored/alias restrictions and pending result layering.
+Native reference/ownership/value/key/current-authority validation, full journal
+effects and confirmed transaction termination remain unqualified.
 
 Group now has definitions-only `group-capability-wires-v0.1.proposal.schema.json`.
 Register requestFreeResult/requestFreeOutcome only for the request-none
