@@ -23,7 +23,8 @@
     "catalog-new-prestate-parity": "10fa8d6172757bb942f750fba582e88595b90190c920e97624e0cc0635cb15f7",
     "catalog-new-counts": "4d2962d3b8e1391ad9c97f6fdc2da7e0343463a6e2f4b7c9a1060603b6dab166",
     "catalog-provisional-empty": "754c3c53534a5a30d935a1942da903692c488aab3cd7fed3c0c5231c835f65c8",
-    "catalog-report-immutability": "c243b51682de3fee979b977626bb54279eccb3de22a24270e0bda467bd215167"
+    "catalog-report-immutability": "c243b51682de3fee979b977626bb54279eccb3de22a24270e0bda467bd215167",
+    "catalog-original-context": "bba5ab80bb909b354b710d7de466b94252df6e877739c8ef519db48a21ac2115"
   },
   "reportCorrespondenceProducerSha256": "2554a8e6d8df8f7e26bd4df3a207af2c06c0c6f098485d53e847975f2c5bec53",
   "reportPreparationProducerSha256": "125c0e99bf7e187bc1f126dbde73e81a9cb291d83aa891a6e8fdc2b493b32881",
@@ -90,6 +91,9 @@
     "effectGeneration substitution refuses report observation recheck",
     "original owner observation and reversible transition preserved inside exact evidence artifact",
     "declared transform cannot pass new-only native staging as if absent",
+    "native actor collector returns exact original admitted context bytes",
+    "original native acting/login/database/backend facts match current issuer",
+    "borrowed transaction identity cannot expose original native actor context",
     "nine report fields correspond to original owner and actual native observations without accepted authority",
     "schema-valid forged native count refuses report correspondence",
     "copied composed report basis cannot borrow original native cut",
