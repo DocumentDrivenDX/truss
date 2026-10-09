@@ -157,6 +157,35 @@ allocator gaps and original recovery evidence. Unknown settlement keeps both
 the original attempt and readiness gate intact. These are planned LM-T03/05
 comparison requirements; no populated route is qualified by this handoff.
 
+### Administrative migration receipt lifecycle
+
+The mutation request's at-least-24-hour retry guarantee does not define an
+administrative migration receipt's purge time. Current migration receipt guards
+refuse UPDATE/DELETE/TRUNCATE, and complete retention cleanup remains unavailable.
+M2/M4 must retain original route/request/attempt/recipe/profile and commit evidence
+for every still-protected reconciliation and installed-lineage obligation. Do not
+reuse mutation expiry or zero journal retention as administrative cleanup authority.
+
+The selected route must inventory those protection dependencies with original
+custody, including unresolved registration/application/cleanup attempts, later
+routes that depend on its installation provenance, and still-advertised original
+retry/reconciliation. Any future offload or retirement needs a separately admitted
+complete lifecycle and retrieval/authority/resource correspondence. Neither upload
+acknowledgment nor a retained version/digest is the original complete receipt.
+Until that lifecycle is qualified, preserve the current unavailable-cleanup rule;
+this handoff selects no administrative TTL or archive provider.
+
+LM-T03/04/08 must independently expire eligible mutation receipts and apply the
+selected short/zero journal policy while keeping a protected migration attempt.
+Its complete original administrative receipt and recovery reference remain
+available under current disclosure admission; reconciliation submits zero recipes.
+Add direct migration-row delete/truncate attempts and missing/offloaded-but-
+unretrievable original evidence. Unqualified deletion refuses, and unavailable
+historical evidence keeps reconciliation unavailable rather than triggering apply.
+Repeat across the subsequent-upgrade schedule above. These planned controls keep
+separate lifecycle protections observable; the private trigger component alone
+cannot qualify complete installed privileges or archival durability.
+
 ### M5 deployment ordering and runtime compatibility
 
 The first packaged route must include a deployment sequence and an explicit
