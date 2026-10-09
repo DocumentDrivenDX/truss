@@ -1,0 +1,1294 @@
+{
+  "revision": "5856c73db0342363e64802905a94abb96209d757",
+  "sourceArchiveSha256": "2affd857c0159de20096f55425ee43adbcfd6557958640f776a27c346ff322d1",
+  "cargoLockSha256": "08d3d30468be6bbde701be72c4e070f60c0706b54898e8e3a0432ea0cfbe0e9e",
+  "rust": "1.90.0",
+  "command": "cargo test --offline --release -p weft-core --test truss_consumer_review",
+  "harnessSha256": "1137cdefa7261f48392c3c7f915fa1fe315574e3a2ccc54e8a3ff187d4e6cf8e",
+  "scope": "Explicit author-reviewed relationship/page SQL alternatives on named models; test frontend only; no automatic mapping, source adoption, SQL lowering or execution",
+  "inputsSha256": "4b96073dda9f18d949aa7f5d002be34b1ae50932e9eb97b3c6284235ed1e240d",
+  "observations": [
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "variant": "read.relationship-filter-both-directions:0",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "60e6d39b18a4b5379b8386813b45abf634a0854f6db3c0df07d3bbb36380d125",
+      "predicates": [
+        {
+          "key": [
+            {
+              "kind": "literal",
+              "span": {
+                "end": 79,
+                "start": 73
+              },
+              "type": {
+                "facets": {},
+                "family": "string",
+                "nullable": false
+              },
+              "value": "uc-1"
+            }
+          ],
+          "op": "hasRelated",
+          "relationship": {
+            "from": {
+              "documentId": "sandbox",
+              "element": "Solution",
+              "module": "catalog",
+              "revision": "consumer-review-only"
+            },
+            "identity": {
+              "documentId": "sandbox",
+              "module": "catalog",
+              "relationship": "solution-addresses",
+              "revision": "consumer-review-only"
+            },
+            "inverse": false,
+            "sourceKey": {
+              "fields": [
+                {
+                  "documentId": "sandbox",
+                  "element": "Solution.code",
+                  "module": "catalog",
+                  "revision": "consumer-review-only"
+                }
+              ],
+              "id": "identity",
+              "types": [
+                {
+                  "facets": {},
+                  "family": "string",
+                  "nullable": false
+                }
+              ]
+            },
+            "sourceMultiplicity": {
+              "max": "*",
+              "min": 0
+            },
+            "targetKey": {
+              "fields": [
+                {
+                  "documentId": "sandbox",
+                  "element": "UseCase.code",
+                  "module": "catalog",
+                  "revision": "consumer-review-only"
+                }
+              ],
+              "id": "identity",
+              "types": [
+                {
+                  "facets": {},
+                  "family": "string",
+                  "nullable": false
+                }
+              ]
+            },
+            "targetLifecycle": "independent",
+            "targetMultiplicity": {
+              "max": "*",
+              "min": 0
+            },
+            "to": {
+              "documentId": "sandbox",
+              "element": "UseCase",
+              "module": "catalog",
+              "revision": "consumer-review-only"
+            }
+          },
+          "scan": "s0"
+        }
+      ]
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "variant": "read.relationship-filter-both-directions:1",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "4735f550daec482a81a0ab729648898868b70562742499c033d31e1cd3950ded",
+      "predicates": [
+        {
+          "key": [
+            {
+              "kind": "literal",
+              "span": {
+                "end": 81,
+                "start": 74
+              },
+              "type": {
+                "facets": {},
+                "family": "string",
+                "nullable": false
+              },
+              "value": "sol-1"
+            }
+          ],
+          "op": "hasRelated",
+          "relationship": {
+            "from": {
+              "documentId": "sandbox",
+              "element": "UseCase",
+              "module": "catalog",
+              "revision": "consumer-review-only"
+            },
+            "identity": {
+              "documentId": "sandbox",
+              "module": "catalog",
+              "relationship": "solution-addresses",
+              "revision": "consumer-review-only"
+            },
+            "inverse": true,
+            "sourceKey": {
+              "fields": [
+                {
+                  "documentId": "sandbox",
+                  "element": "UseCase.code",
+                  "module": "catalog",
+                  "revision": "consumer-review-only"
+                }
+              ],
+              "id": "identity",
+              "types": [
+                {
+                  "facets": {},
+                  "family": "string",
+                  "nullable": false
+                }
+              ]
+            },
+            "sourceMultiplicity": {
+              "max": "*",
+              "min": 0
+            },
+            "targetKey": {
+              "fields": [
+                {
+                  "documentId": "sandbox",
+                  "element": "Solution.code",
+                  "module": "catalog",
+                  "revision": "consumer-review-only"
+                }
+              ],
+              "id": "identity",
+              "types": [
+                {
+                  "facets": {},
+                  "family": "string",
+                  "nullable": false
+                }
+              ]
+            },
+            "targetLifecycle": "independent",
+            "targetMultiplicity": {
+              "max": "*",
+              "min": 0
+            },
+            "to": {
+              "documentId": "sandbox",
+              "element": "Solution",
+              "module": "catalog",
+              "revision": "consumer-review-only"
+            }
+          },
+          "scan": "s0"
+        }
+      ]
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "variant": "read.relationship-filter-both-directions:2",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "4a79a97feb5b14e5b5d4d6e35c2a394906baf845e8e05a119e188eed21a970e1",
+      "predicates": [
+        {
+          "key": [
+            {
+              "kind": "literal",
+              "span": {
+                "end": 82,
+                "start": 74
+              },
+              "type": {
+                "facets": {},
+                "family": "string",
+                "nullable": false
+              },
+              "value": "nobody"
+            }
+          ],
+          "op": "hasRelated",
+          "relationship": {
+            "from": {
+              "documentId": "sandbox",
+              "element": "UseCase",
+              "module": "catalog",
+              "revision": "consumer-review-only"
+            },
+            "identity": {
+              "documentId": "sandbox",
+              "module": "catalog",
+              "relationship": "solution-addresses",
+              "revision": "consumer-review-only"
+            },
+            "inverse": true,
+            "sourceKey": {
+              "fields": [
+                {
+                  "documentId": "sandbox",
+                  "element": "UseCase.code",
+                  "module": "catalog",
+                  "revision": "consumer-review-only"
+                }
+              ],
+              "id": "identity",
+              "types": [
+                {
+                  "facets": {},
+                  "family": "string",
+                  "nullable": false
+                }
+              ]
+            },
+            "sourceMultiplicity": {
+              "max": "*",
+              "min": 0
+            },
+            "targetKey": {
+              "fields": [
+                {
+                  "documentId": "sandbox",
+                  "element": "Solution.code",
+                  "module": "catalog",
+                  "revision": "consumer-review-only"
+                }
+              ],
+              "id": "identity",
+              "types": [
+                {
+                  "facets": {},
+                  "family": "string",
+                  "nullable": false
+                }
+              ]
+            },
+            "targetLifecycle": "independent",
+            "targetMultiplicity": {
+              "max": "*",
+              "min": 0
+            },
+            "to": {
+              "documentId": "sandbox",
+              "element": "Solution",
+              "module": "catalog",
+              "revision": "consumer-review-only"
+            }
+          },
+          "scan": "s0"
+        }
+      ]
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "variant": "read.repeated-relationship-predicates-mean-both:2",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "cf6b0424c49b9a80b7fa213902e21f5e3b0b8144f6f5180283a164023d2d8f23",
+      "predicates": [
+        {
+          "key": [
+            {
+              "kind": "literal",
+              "span": {
+                "end": 79,
+                "start": 73
+              },
+              "type": {
+                "facets": {},
+                "family": "string",
+                "nullable": false
+              },
+              "value": "uc-1"
+            }
+          ],
+          "op": "hasRelated",
+          "relationship": {
+            "from": {
+              "documentId": "sandbox",
+              "element": "Solution",
+              "module": "catalog",
+              "revision": "consumer-review-only"
+            },
+            "identity": {
+              "documentId": "sandbox",
+              "module": "catalog",
+              "relationship": "solution-addresses",
+              "revision": "consumer-review-only"
+            },
+            "inverse": false,
+            "sourceKey": {
+              "fields": [
+                {
+                  "documentId": "sandbox",
+                  "element": "Solution.code",
+                  "module": "catalog",
+                  "revision": "consumer-review-only"
+                }
+              ],
+              "id": "identity",
+              "types": [
+                {
+                  "facets": {},
+                  "family": "string",
+                  "nullable": false
+                }
+              ]
+            },
+            "sourceMultiplicity": {
+              "max": "*",
+              "min": 0
+            },
+            "targetKey": {
+              "fields": [
+                {
+                  "documentId": "sandbox",
+                  "element": "UseCase.code",
+                  "module": "catalog",
+                  "revision": "consumer-review-only"
+                }
+              ],
+              "id": "identity",
+              "types": [
+                {
+                  "facets": {},
+                  "family": "string",
+                  "nullable": false
+                }
+              ]
+            },
+            "targetLifecycle": "independent",
+            "targetMultiplicity": {
+              "max": "*",
+              "min": 0
+            },
+            "to": {
+              "documentId": "sandbox",
+              "element": "UseCase",
+              "module": "catalog",
+              "revision": "consumer-review-only"
+            }
+          },
+          "scan": "s0"
+        },
+        {
+          "key": [
+            {
+              "kind": "literal",
+              "span": {
+                "end": 121,
+                "start": 115
+              },
+              "type": {
+                "facets": {},
+                "family": "string",
+                "nullable": false
+              },
+              "value": "uc-2"
+            }
+          ],
+          "op": "hasRelated",
+          "relationship": {
+            "from": {
+              "documentId": "sandbox",
+              "element": "Solution",
+              "module": "catalog",
+              "revision": "consumer-review-only"
+            },
+            "identity": {
+              "documentId": "sandbox",
+              "module": "catalog",
+              "relationship": "solution-addresses",
+              "revision": "consumer-review-only"
+            },
+            "inverse": false,
+            "sourceKey": {
+              "fields": [
+                {
+                  "documentId": "sandbox",
+                  "element": "Solution.code",
+                  "module": "catalog",
+                  "revision": "consumer-review-only"
+                }
+              ],
+              "id": "identity",
+              "types": [
+                {
+                  "facets": {},
+                  "family": "string",
+                  "nullable": false
+                }
+              ]
+            },
+            "sourceMultiplicity": {
+              "max": "*",
+              "min": 0
+            },
+            "targetKey": {
+              "fields": [
+                {
+                  "documentId": "sandbox",
+                  "element": "UseCase.code",
+                  "module": "catalog",
+                  "revision": "consumer-review-only"
+                }
+              ],
+              "id": "identity",
+              "types": [
+                {
+                  "facets": {},
+                  "family": "string",
+                  "nullable": false
+                }
+              ]
+            },
+            "targetLifecycle": "independent",
+            "targetMultiplicity": {
+              "max": "*",
+              "min": 0
+            },
+            "to": {
+              "documentId": "sandbox",
+              "element": "UseCase",
+              "module": "catalog",
+              "revision": "consumer-review-only"
+            }
+          },
+          "scan": "s0"
+        }
+      ]
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "variant": "read.repeated-relationship-predicates-mean-both:3",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "1dafe55365548be31e64ee00e8a021e6b3e6767c48172d9f79050b78a9f81aa3",
+      "predicates": [
+        {
+          "key": [
+            {
+              "kind": "literal",
+              "span": {
+                "end": 79,
+                "start": 73
+              },
+              "type": {
+                "facets": {},
+                "family": "string",
+                "nullable": false
+              },
+              "value": "uc-1"
+            }
+          ],
+          "op": "hasRelated",
+          "relationship": {
+            "from": {
+              "documentId": "sandbox",
+              "element": "Solution",
+              "module": "catalog",
+              "revision": "consumer-review-only"
+            },
+            "identity": {
+              "documentId": "sandbox",
+              "module": "catalog",
+              "relationship": "solution-addresses",
+              "revision": "consumer-review-only"
+            },
+            "inverse": false,
+            "sourceKey": {
+              "fields": [
+                {
+                  "documentId": "sandbox",
+                  "element": "Solution.code",
+                  "module": "catalog",
+                  "revision": "consumer-review-only"
+                }
+              ],
+              "id": "identity",
+              "types": [
+                {
+                  "facets": {},
+                  "family": "string",
+                  "nullable": false
+                }
+              ]
+            },
+            "sourceMultiplicity": {
+              "max": "*",
+              "min": 0
+            },
+            "targetKey": {
+              "fields": [
+                {
+                  "documentId": "sandbox",
+                  "element": "UseCase.code",
+                  "module": "catalog",
+                  "revision": "consumer-review-only"
+                }
+              ],
+              "id": "identity",
+              "types": [
+                {
+                  "facets": {},
+                  "family": "string",
+                  "nullable": false
+                }
+              ]
+            },
+            "targetLifecycle": "independent",
+            "targetMultiplicity": {
+              "max": "*",
+              "min": 0
+            },
+            "to": {
+              "documentId": "sandbox",
+              "element": "UseCase",
+              "module": "catalog",
+              "revision": "consumer-review-only"
+            }
+          },
+          "scan": "s0"
+        },
+        {
+          "key": [
+            {
+              "kind": "literal",
+              "span": {
+                "end": 121,
+                "start": 115
+              },
+              "type": {
+                "facets": {},
+                "family": "string",
+                "nullable": false
+              },
+              "value": "nope"
+            }
+          ],
+          "op": "hasRelated",
+          "relationship": {
+            "from": {
+              "documentId": "sandbox",
+              "element": "Solution",
+              "module": "catalog",
+              "revision": "consumer-review-only"
+            },
+            "identity": {
+              "documentId": "sandbox",
+              "module": "catalog",
+              "relationship": "solution-addresses",
+              "revision": "consumer-review-only"
+            },
+            "inverse": false,
+            "sourceKey": {
+              "fields": [
+                {
+                  "documentId": "sandbox",
+                  "element": "Solution.code",
+                  "module": "catalog",
+                  "revision": "consumer-review-only"
+                }
+              ],
+              "id": "identity",
+              "types": [
+                {
+                  "facets": {},
+                  "family": "string",
+                  "nullable": false
+                }
+              ]
+            },
+            "sourceMultiplicity": {
+              "max": "*",
+              "min": 0
+            },
+            "targetKey": {
+              "fields": [
+                {
+                  "documentId": "sandbox",
+                  "element": "UseCase.code",
+                  "module": "catalog",
+                  "revision": "consumer-review-only"
+                }
+              ],
+              "id": "identity",
+              "types": [
+                {
+                  "facets": {},
+                  "family": "string",
+                  "nullable": false
+                }
+              ]
+            },
+            "targetLifecycle": "independent",
+            "targetMultiplicity": {
+              "max": "*",
+              "min": 0
+            },
+            "to": {
+              "documentId": "sandbox",
+              "element": "UseCase",
+              "module": "catalog",
+              "revision": "consumer-review-only"
+            }
+          },
+          "scan": "s0"
+        }
+      ]
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "variant": "read.relationship-filter-both-directions:0",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "dd98a872892265f8858cae447ba8f107f4c0a740a9a9017dd17725ab34260755",
+      "predicates": [
+        {
+          "key": [
+            {
+              "kind": "literal",
+              "span": {
+                "end": 79,
+                "start": 73
+              },
+              "type": {
+                "facets": {},
+                "family": "string",
+                "nullable": false
+              },
+              "value": "uc-1"
+            }
+          ],
+          "op": "hasRelated",
+          "relationship": {
+            "from": {
+              "documentId": "praxis-catalog",
+              "element": "Solution",
+              "module": "catalog",
+              "revision": "consumer-review-only"
+            },
+            "identity": {
+              "documentId": "praxis-catalog",
+              "module": "catalog",
+              "relationship": "solution-addresses",
+              "revision": "consumer-review-only"
+            },
+            "inverse": false,
+            "sourceKey": {
+              "fields": [
+                {
+                  "documentId": "praxis-catalog",
+                  "element": "Solution.code",
+                  "module": "catalog",
+                  "revision": "consumer-review-only"
+                }
+              ],
+              "id": "identity",
+              "types": [
+                {
+                  "facets": {},
+                  "family": "string",
+                  "nullable": false
+                }
+              ]
+            },
+            "sourceMultiplicity": {
+              "max": "*",
+              "min": 0
+            },
+            "targetKey": {
+              "fields": [
+                {
+                  "documentId": "praxis-catalog",
+                  "element": "UseCase.code",
+                  "module": "catalog",
+                  "revision": "consumer-review-only"
+                }
+              ],
+              "id": "identity",
+              "types": [
+                {
+                  "facets": {},
+                  "family": "string",
+                  "nullable": false
+                }
+              ]
+            },
+            "targetLifecycle": "independent",
+            "targetMultiplicity": {
+              "max": "*",
+              "min": 0
+            },
+            "to": {
+              "documentId": "praxis-catalog",
+              "element": "UseCase",
+              "module": "catalog",
+              "revision": "consumer-review-only"
+            }
+          },
+          "scan": "s0"
+        }
+      ]
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "variant": "read.relationship-filter-both-directions:1",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "bf2a88f02aa1061df2e84a3879e8fe60a7be32beced7926ecd0f07c8d72302fe",
+      "predicates": [
+        {
+          "key": [
+            {
+              "kind": "literal",
+              "span": {
+                "end": 81,
+                "start": 74
+              },
+              "type": {
+                "facets": {},
+                "family": "string",
+                "nullable": false
+              },
+              "value": "sol-1"
+            }
+          ],
+          "op": "hasRelated",
+          "relationship": {
+            "from": {
+              "documentId": "praxis-catalog",
+              "element": "UseCase",
+              "module": "catalog",
+              "revision": "consumer-review-only"
+            },
+            "identity": {
+              "documentId": "praxis-catalog",
+              "module": "catalog",
+              "relationship": "solution-addresses",
+              "revision": "consumer-review-only"
+            },
+            "inverse": true,
+            "sourceKey": {
+              "fields": [
+                {
+                  "documentId": "praxis-catalog",
+                  "element": "UseCase.code",
+                  "module": "catalog",
+                  "revision": "consumer-review-only"
+                }
+              ],
+              "id": "identity",
+              "types": [
+                {
+                  "facets": {},
+                  "family": "string",
+                  "nullable": false
+                }
+              ]
+            },
+            "sourceMultiplicity": {
+              "max": "*",
+              "min": 0
+            },
+            "targetKey": {
+              "fields": [
+                {
+                  "documentId": "praxis-catalog",
+                  "element": "Solution.code",
+                  "module": "catalog",
+                  "revision": "consumer-review-only"
+                }
+              ],
+              "id": "identity",
+              "types": [
+                {
+                  "facets": {},
+                  "family": "string",
+                  "nullable": false
+                }
+              ]
+            },
+            "targetLifecycle": "independent",
+            "targetMultiplicity": {
+              "max": "*",
+              "min": 0
+            },
+            "to": {
+              "documentId": "praxis-catalog",
+              "element": "Solution",
+              "module": "catalog",
+              "revision": "consumer-review-only"
+            }
+          },
+          "scan": "s0"
+        }
+      ]
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "variant": "read.relationship-filter-both-directions:2",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "c61168a85880a674eb1ffccbdcd441811655fe329e7ecb22bc713ce7aba15f03",
+      "predicates": [
+        {
+          "key": [
+            {
+              "kind": "literal",
+              "span": {
+                "end": 82,
+                "start": 74
+              },
+              "type": {
+                "facets": {},
+                "family": "string",
+                "nullable": false
+              },
+              "value": "nobody"
+            }
+          ],
+          "op": "hasRelated",
+          "relationship": {
+            "from": {
+              "documentId": "praxis-catalog",
+              "element": "UseCase",
+              "module": "catalog",
+              "revision": "consumer-review-only"
+            },
+            "identity": {
+              "documentId": "praxis-catalog",
+              "module": "catalog",
+              "relationship": "solution-addresses",
+              "revision": "consumer-review-only"
+            },
+            "inverse": true,
+            "sourceKey": {
+              "fields": [
+                {
+                  "documentId": "praxis-catalog",
+                  "element": "UseCase.code",
+                  "module": "catalog",
+                  "revision": "consumer-review-only"
+                }
+              ],
+              "id": "identity",
+              "types": [
+                {
+                  "facets": {},
+                  "family": "string",
+                  "nullable": false
+                }
+              ]
+            },
+            "sourceMultiplicity": {
+              "max": "*",
+              "min": 0
+            },
+            "targetKey": {
+              "fields": [
+                {
+                  "documentId": "praxis-catalog",
+                  "element": "Solution.code",
+                  "module": "catalog",
+                  "revision": "consumer-review-only"
+                }
+              ],
+              "id": "identity",
+              "types": [
+                {
+                  "facets": {},
+                  "family": "string",
+                  "nullable": false
+                }
+              ]
+            },
+            "targetLifecycle": "independent",
+            "targetMultiplicity": {
+              "max": "*",
+              "min": 0
+            },
+            "to": {
+              "documentId": "praxis-catalog",
+              "element": "Solution",
+              "module": "catalog",
+              "revision": "consumer-review-only"
+            }
+          },
+          "scan": "s0"
+        }
+      ]
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "variant": "read.repeated-relationship-predicates-mean-both:2",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "8292e460d15bc34f9b861da74fb1194c5aa6dfbeb37e16c9f8d9643a69663844",
+      "predicates": [
+        {
+          "key": [
+            {
+              "kind": "literal",
+              "span": {
+                "end": 79,
+                "start": 73
+              },
+              "type": {
+                "facets": {},
+                "family": "string",
+                "nullable": false
+              },
+              "value": "uc-1"
+            }
+          ],
+          "op": "hasRelated",
+          "relationship": {
+            "from": {
+              "documentId": "praxis-catalog",
+              "element": "Solution",
+              "module": "catalog",
+              "revision": "consumer-review-only"
+            },
+            "identity": {
+              "documentId": "praxis-catalog",
+              "module": "catalog",
+              "relationship": "solution-addresses",
+              "revision": "consumer-review-only"
+            },
+            "inverse": false,
+            "sourceKey": {
+              "fields": [
+                {
+                  "documentId": "praxis-catalog",
+                  "element": "Solution.code",
+                  "module": "catalog",
+                  "revision": "consumer-review-only"
+                }
+              ],
+              "id": "identity",
+              "types": [
+                {
+                  "facets": {},
+                  "family": "string",
+                  "nullable": false
+                }
+              ]
+            },
+            "sourceMultiplicity": {
+              "max": "*",
+              "min": 0
+            },
+            "targetKey": {
+              "fields": [
+                {
+                  "documentId": "praxis-catalog",
+                  "element": "UseCase.code",
+                  "module": "catalog",
+                  "revision": "consumer-review-only"
+                }
+              ],
+              "id": "identity",
+              "types": [
+                {
+                  "facets": {},
+                  "family": "string",
+                  "nullable": false
+                }
+              ]
+            },
+            "targetLifecycle": "independent",
+            "targetMultiplicity": {
+              "max": "*",
+              "min": 0
+            },
+            "to": {
+              "documentId": "praxis-catalog",
+              "element": "UseCase",
+              "module": "catalog",
+              "revision": "consumer-review-only"
+            }
+          },
+          "scan": "s0"
+        },
+        {
+          "key": [
+            {
+              "kind": "literal",
+              "span": {
+                "end": 121,
+                "start": 115
+              },
+              "type": {
+                "facets": {},
+                "family": "string",
+                "nullable": false
+              },
+              "value": "uc-2"
+            }
+          ],
+          "op": "hasRelated",
+          "relationship": {
+            "from": {
+              "documentId": "praxis-catalog",
+              "element": "Solution",
+              "module": "catalog",
+              "revision": "consumer-review-only"
+            },
+            "identity": {
+              "documentId": "praxis-catalog",
+              "module": "catalog",
+              "relationship": "solution-addresses",
+              "revision": "consumer-review-only"
+            },
+            "inverse": false,
+            "sourceKey": {
+              "fields": [
+                {
+                  "documentId": "praxis-catalog",
+                  "element": "Solution.code",
+                  "module": "catalog",
+                  "revision": "consumer-review-only"
+                }
+              ],
+              "id": "identity",
+              "types": [
+                {
+                  "facets": {},
+                  "family": "string",
+                  "nullable": false
+                }
+              ]
+            },
+            "sourceMultiplicity": {
+              "max": "*",
+              "min": 0
+            },
+            "targetKey": {
+              "fields": [
+                {
+                  "documentId": "praxis-catalog",
+                  "element": "UseCase.code",
+                  "module": "catalog",
+                  "revision": "consumer-review-only"
+                }
+              ],
+              "id": "identity",
+              "types": [
+                {
+                  "facets": {},
+                  "family": "string",
+                  "nullable": false
+                }
+              ]
+            },
+            "targetLifecycle": "independent",
+            "targetMultiplicity": {
+              "max": "*",
+              "min": 0
+            },
+            "to": {
+              "documentId": "praxis-catalog",
+              "element": "UseCase",
+              "module": "catalog",
+              "revision": "consumer-review-only"
+            }
+          },
+          "scan": "s0"
+        }
+      ]
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "variant": "read.repeated-relationship-predicates-mean-both:3",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "469b291b782ed667b1c9502ad1182abd3f446ceb8ba2099c145c6d85e13475bc",
+      "predicates": [
+        {
+          "key": [
+            {
+              "kind": "literal",
+              "span": {
+                "end": 79,
+                "start": 73
+              },
+              "type": {
+                "facets": {},
+                "family": "string",
+                "nullable": false
+              },
+              "value": "uc-1"
+            }
+          ],
+          "op": "hasRelated",
+          "relationship": {
+            "from": {
+              "documentId": "praxis-catalog",
+              "element": "Solution",
+              "module": "catalog",
+              "revision": "consumer-review-only"
+            },
+            "identity": {
+              "documentId": "praxis-catalog",
+              "module": "catalog",
+              "relationship": "solution-addresses",
+              "revision": "consumer-review-only"
+            },
+            "inverse": false,
+            "sourceKey": {
+              "fields": [
+                {
+                  "documentId": "praxis-catalog",
+                  "element": "Solution.code",
+                  "module": "catalog",
+                  "revision": "consumer-review-only"
+                }
+              ],
+              "id": "identity",
+              "types": [
+                {
+                  "facets": {},
+                  "family": "string",
+                  "nullable": false
+                }
+              ]
+            },
+            "sourceMultiplicity": {
+              "max": "*",
+              "min": 0
+            },
+            "targetKey": {
+              "fields": [
+                {
+                  "documentId": "praxis-catalog",
+                  "element": "UseCase.code",
+                  "module": "catalog",
+                  "revision": "consumer-review-only"
+                }
+              ],
+              "id": "identity",
+              "types": [
+                {
+                  "facets": {},
+                  "family": "string",
+                  "nullable": false
+                }
+              ]
+            },
+            "targetLifecycle": "independent",
+            "targetMultiplicity": {
+              "max": "*",
+              "min": 0
+            },
+            "to": {
+              "documentId": "praxis-catalog",
+              "element": "UseCase",
+              "module": "catalog",
+              "revision": "consumer-review-only"
+            }
+          },
+          "scan": "s0"
+        },
+        {
+          "key": [
+            {
+              "kind": "literal",
+              "span": {
+                "end": 121,
+                "start": 115
+              },
+              "type": {
+                "facets": {},
+                "family": "string",
+                "nullable": false
+              },
+              "value": "nope"
+            }
+          ],
+          "op": "hasRelated",
+          "relationship": {
+            "from": {
+              "documentId": "praxis-catalog",
+              "element": "Solution",
+              "module": "catalog",
+              "revision": "consumer-review-only"
+            },
+            "identity": {
+              "documentId": "praxis-catalog",
+              "module": "catalog",
+              "relationship": "solution-addresses",
+              "revision": "consumer-review-only"
+            },
+            "inverse": false,
+            "sourceKey": {
+              "fields": [
+                {
+                  "documentId": "praxis-catalog",
+                  "element": "Solution.code",
+                  "module": "catalog",
+                  "revision": "consumer-review-only"
+                }
+              ],
+              "id": "identity",
+              "types": [
+                {
+                  "facets": {},
+                  "family": "string",
+                  "nullable": false
+                }
+              ]
+            },
+            "sourceMultiplicity": {
+              "max": "*",
+              "min": 0
+            },
+            "targetKey": {
+              "fields": [
+                {
+                  "documentId": "praxis-catalog",
+                  "element": "UseCase.code",
+                  "module": "catalog",
+                  "revision": "consumer-review-only"
+                }
+              ],
+              "id": "identity",
+              "types": [
+                {
+                  "facets": {},
+                  "family": "string",
+                  "nullable": false
+                }
+              ]
+            },
+            "targetLifecycle": "independent",
+            "targetMultiplicity": {
+              "max": "*",
+              "min": 0
+            },
+            "to": {
+              "documentId": "praxis-catalog",
+              "element": "UseCase",
+              "module": "catalog",
+              "revision": "consumer-review-only"
+            }
+          },
+          "scan": "s0"
+        }
+      ]
+    }
+  ],
+  "proposedQueriesAdopted": false,
+  "nativeImplementationQualified": false
+}

@@ -33,18 +33,29 @@ def assess(packet, rows):
             assert response["retainedModules"] == request["modules"]
             plan = response["logicalPlan"]
             assert plan["modulePins"] == [m["pin"] for m in request["modules"]]
-            if packet == "application":
+            if packet in ("application", "relationship"):
                 assert plan["readProfile"] == request["readProfile"]
                 if source["variant"] == "explicit-bounded-page-proposal":
                     assert plan["pageKey"]["id"] == "identity"
                     assert [f["element"] for f in plan["pageKey"]["fields"]] == ["UseCase.code"]
+            if packet == "relationship":
+                predicates = plan["filters"]
+                label = source["variant"]
+                assert len(predicates) == (2 if label.startswith("read.repeated-") else 1)
+                inverse = label in ("read.relationship-filter-both-directions:1", "read.relationship-filter-both-directions:2")
+                for predicate in predicates:
+                    assert predicate["op"] == "hasRelated"
+                    relationship = predicate["relationship"]
+                    assert relationship["inverse"] is inverse
+                    assert relationship["identity"]["relationship"] == "solution-addresses"
+                    assert relationship["sourceKey"]["id"] == relationship["targetKey"]["id"] == "identity"
         else:
             assert "logicalPlan" not in response and "retainedModules" not in response
 
 
 def main():
     packet, results_path = sys.argv[1:]
-    assert packet in ("logical", "application")
+    assert packet in ("logical", "application", "relationship")
     rows = json.loads(Path(results_path).read_text())
     assess(packet, rows)
     controls = [rows[:-1], rows + [rows[0]], list(reversed(rows))]

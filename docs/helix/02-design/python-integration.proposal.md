@@ -192,6 +192,21 @@ Unprofiled resolution of a grouped count or alias.* does not close its bounded
 profile, complete logical result, attribution or relationship projection gaps.
 This covers query input compatibility, not execution of the 41 consumer cases.
 
+The [relationship frontend alternatives](../04-build/evidence/design-audit/consumer-relationship-frontend.json)
+make the five refused shapes concrete using Weft's declared `HAS_RELATED`/`KEY`
+forms under the related-entity-page profile. Ten named-model observations resolve
+and preserve `solution-addresses`, endpoint Key ID `identity`, forward/inverse
+direction and two distinct existential predicates for each conjunction. The saved
+inputs use explicit key ordering and a review-only page limit of 50; this does not
+select a global Truss default or replace the consumer's request-level bounds.
+Use the same Rust harness with `consumer-relationship-frontend-inputs.json`, then
+the retained assessor's `relationship` mode. Six changed/incomplete controls refuse.
+These alternatives require consumer/Weft owner agreement on the admitted parsed
+input route, exact key tuple conversion, cursor and bound correspondence. No
+runtime string replacement or SQL append/reparse path is implemented or approved.
+Actual missing-target and two-edge results, policy cuts and bag/list semantics
+remain independently required native observations.
+
 ## Remaining consumer metadata meaning and action boundary
 
 Both explicit-name validation observations retain eight warnings. Five identify
