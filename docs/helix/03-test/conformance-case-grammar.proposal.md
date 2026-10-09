@@ -135,6 +135,14 @@ Diagnostic expectations compare the governing severity/code/path multiset with m
 
 ## Adapter handshake and original execution
 
+The [missing-object lookup walkthrough](direct-lookup-contract-walkthrough.proposal.md)
+applies these rules to the actual direct-read and executor declarations,
+including nested execution/business results, adopted termination and complete
+unchanged state/journal/report observations. It is an author review and
+implementation handoff, not the required independent implementer review or a
+passing native case. Exact semantic fixture/schema/observer registration
+remains required before execution.
+
 Before effects the trusted runner admits exact implementation/build, operation registry/corpus/contract, native target/layout, selected capabilities, observer independence, transport/executor, authority, resource and cleanup profiles. Adapter reports supported registered operations; missing mandatory operation refuses full-profile qualification. It cannot supply expected fixtures, revise required surfaces or nominate an observer that shares writer serialization without disclosed independence review.
 
 Each invocation records original case/worker/step/scope/attempt, complete constructed input and actual outcome/termination evidence. No automatic replay hides failures. Original partial progress and unresolved cleanup retain recovery custody under CONTRACT-011. Interchange retains writer's original committed alias bindings and has the independently admitted other reader inspect that same actual state; reverse direction uses fresh isolated setup.
