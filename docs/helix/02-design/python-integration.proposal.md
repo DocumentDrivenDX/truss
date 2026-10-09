@@ -152,7 +152,20 @@ root as `truss-consumer-frontend-inputs.json` and the harness to
 command. This uses the test frontend and dialect 0.1, not the public Python API
 or the bounded application-read profile. Review-only revision labels and serialized
 proposed documents grant no accepted-catalog identity, storage binding, SQL/native
-execution or source-owner adoption. Grouped count, whole entity, relationships,+paging and security remain separate integration obligations.
+execution or source-owner adoption. Grouped count, whole entity, relationships,
+paging and security remain separate integration obligations.
+
+The separate [application frontend receipt](../04-build/evidence/design-audit/consumer-application-frontend.json)
+then tests six named-model inputs under dialect 0.2 and the original bounded
+application profiles. On each model the consumer grouped-count text is refused
+with `WFT-PROFILE`; explicitly authored grouping/order/LIMIT and key-ordered page
+proposals resolve. The page plan binds key ID `identity` and Field `UseCase.code`.
+Use `consumer-application-frontend-inputs.json` with the same saved harness and
+command to reproduce these observations. These are author review alternatives,
+not permission to append clauses, choose host page bounds silently or rewrite
+consumer SQL. They establish logical profile correspondence only; actual count
+presence, page cursor custody, storage lowering, authorization and native results
+remain unqualified.
 
 ## Remaining consumer metadata meaning and action boundary
 

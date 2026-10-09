@@ -1,0 +1,170 @@
+{
+  "revision": "5856c73db0342363e64802905a94abb96209d757",
+  "sourceArchiveSha256": "2affd857c0159de20096f55425ee43adbcfd6557958640f776a27c346ff322d1",
+  "cargoLockSha256": "08d3d30468be6bbde701be72c4e070f60c0706b54898e8e3a0432ea0cfbe0e9e",
+  "rust": "1.90.0",
+  "command": "cargo test --offline --release -p weft-core --test truss_consumer_review",
+  "harnessSha256": "1137cdefa7261f48392c3c7f915fa1fe315574e3a2ccc54e8a3ff187d4e6cf8e",
+  "scope": "actual pinned Rust test application frontend, dialect 0.2; named consumer proposals only; no SQL lowering, native execution or automatic query rewrite",
+  "inputsSha256": "d728f574ff32841eef9a1ad32ecbd56fd1e683de54f1dfbf32466bf66b7f7bfe",
+  "observations": [
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "variant": "consumer-grouped-count",
+      "status": "blocked",
+      "diagnostics": [
+        {
+          "code": "WFT-PROFILE",
+          "message": "Grouped count-summary requires complete grouping order and LIMIT",
+          "phase": "resolve",
+          "severity": "error"
+        }
+      ],
+      "responseSha256": "e235b1a0c7a36551ba1f86037e878f7b4d30b9ecd338fc24457f31b44e44b822",
+      "readProfile": null,
+      "requiredCapabilities": null,
+      "pageKey": null
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "variant": "explicit-bounded-count-proposal",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "d1918adfd0155cd714052605d44e64d7b9d0402683adb6acba0a37be00b87e2b",
+      "readProfile": {
+        "subset": "count-summary",
+        "version": "weft-application-read/0.2.0"
+      },
+      "requiredCapabilities": [
+        "aggregate",
+        "aggregate.count",
+        "group",
+        "limit",
+        "order.asc",
+        "project",
+        "scan",
+        "type.string"
+      ],
+      "pageKey": null
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "variant": "explicit-bounded-page-proposal",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "10a1cb638c3e3fef52cd90afe2229c482993cab3cede10ae99b8a18eff6e132a",
+      "readProfile": {
+        "subset": "entity-page",
+        "version": "weft-application-read/0.2.0"
+      },
+      "requiredCapabilities": [
+        "equal",
+        "filter",
+        "key.uniqueStable",
+        "limit",
+        "order.asc",
+        "project",
+        "scan",
+        "type.string"
+      ],
+      "pageKey": {
+        "fields": [
+          {
+            "documentId": "sandbox",
+            "element": "UseCase.code",
+            "module": "catalog",
+            "revision": "consumer-review-only"
+          }
+        ],
+        "id": "identity",
+        "types": [
+          {
+            "facets": {},
+            "family": "string",
+            "nullable": false
+          }
+        ]
+      }
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "variant": "consumer-grouped-count",
+      "status": "blocked",
+      "diagnostics": [
+        {
+          "code": "WFT-PROFILE",
+          "message": "Grouped count-summary requires complete grouping order and LIMIT",
+          "phase": "resolve",
+          "severity": "error"
+        }
+      ],
+      "responseSha256": "e235b1a0c7a36551ba1f86037e878f7b4d30b9ecd338fc24457f31b44e44b822",
+      "readProfile": null,
+      "requiredCapabilities": null,
+      "pageKey": null
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "variant": "explicit-bounded-count-proposal",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "2cfdd3ac3920eb5f925303d045f2ee443fec94f567faf9b3865b5ad4ca05c2a2",
+      "readProfile": {
+        "subset": "count-summary",
+        "version": "weft-application-read/0.2.0"
+      },
+      "requiredCapabilities": [
+        "aggregate",
+        "aggregate.count",
+        "group",
+        "limit",
+        "order.asc",
+        "project",
+        "scan",
+        "type.string"
+      ],
+      "pageKey": null
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "variant": "explicit-bounded-page-proposal",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "469883487a777ef5de8d361932e5665678d7589047e2e1ff5da0d704664decb8",
+      "readProfile": {
+        "subset": "entity-page",
+        "version": "weft-application-read/0.2.0"
+      },
+      "requiredCapabilities": [
+        "equal",
+        "filter",
+        "key.uniqueStable",
+        "limit",
+        "order.asc",
+        "project",
+        "scan",
+        "type.string"
+      ],
+      "pageKey": {
+        "fields": [
+          {
+            "documentId": "praxis-catalog",
+            "element": "UseCase.code",
+            "module": "catalog",
+            "revision": "consumer-review-only"
+          }
+        ],
+        "id": "identity",
+        "types": [
+          {
+            "facets": {},
+            "family": "string",
+            "nullable": false
+          }
+        ]
+      }
+    }
+  ],
+  "proposedQueriesAdopted": false,
+  "nativeImplementationQualified": false
+}
