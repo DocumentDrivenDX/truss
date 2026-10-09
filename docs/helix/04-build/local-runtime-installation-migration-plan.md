@@ -437,3 +437,40 @@ backend termination and rollback of the earlier pending fixture write. This clos
 one concrete callback-failure behavior, not full control/COMMIT recovery or driver
 account qualification. Preserve those separate outcomes in the original issuer
 integration rather than classifying all client exceptions as rollback.
+
+## Weft qualification for the default local engine
+
+Source inspection at Weft commit
+`f05f2df09e9c2494ac8c6d703dfe38413dbc4181` establishes a concrete integration
+boundary. `crates/weft-postgresql/src/native_profile.rs` pins engineVersion17.9,
+UTF8 client/server encodings, standard_conforming_strings=on, repeatable-read,
+C locale/comparison and exact-or-error arithmetic. Its registered layout is
+`weft-truss-fixtures/0.1`. `qualified_profile.rs` inherits these requirements in
+`pg17.9-qualified-fixtures`; it changes qualification metadata, not the engine
+or layout contract. That fixture evidence cannot qualify pgserver's observed16.2
+or the composed Truss source-epoch0.16 layout.
+
+The host must refuse an incompatible executing engine/profile before integrity
+or user SQL. No fallback, profile relabeling or automatic retry is permitted.
+This is a source-confirmed obligation mismatch, not a new executed compiler
+refusal test. Existing local storage/control probes remain useful component
+work; they do not satisfy compiler execution obligations.
+
+The next integration packet must provide the Weft owner the exact local engine
+and observed session settings, original versioned layout/model hashes, admitted
+catalog/publication identity, document-qualified mappings and complete storage
+home, value, key, presence/null, relationship and comparison semantics. Weft owns
+registration and SQL lowering. Truss owns host verification, integrity and
+authorization checks, decoder use and buffered publication in the same admitted
+read context. Add a separately registered16.2 profile only with independent
+native compiler/decoder qualification for its explicit domains. Keep17.9 and
+managed-service evidence separate. A local16.2 registration alone would not
+qualify the complete installation or the consumer's entire query corpus.
+
+Upstream synchronization on2026-10-09 also found UMF commit
+`8e76c74d14203225d1ef159c9132bb9e9b0cdffe` adding an explicit CSV Boolean
+lexical source profile. Its JavaScript numeric adapter and schema-browser
+JavaScript asset are unchanged from the preceding tracked commit. This does not
+require adopting CSV ingestion into this installation slice. The security owner's
+assertion-inventory composition remains in progress; use its finalized original
+interfaces and evidence rather than substituting local security authority.
