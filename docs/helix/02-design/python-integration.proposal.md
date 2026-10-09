@@ -698,13 +698,23 @@ The [full-driver report receipt](../04-build/evidence/design-audit/pg8000-report
 records actual local pg8000 execution with independently frozen four-MiB original
 bytes, UTF8 startup observations, exact descriptor, BEGIN/SELECT/ROLLBACK tags
 and all nineteen schema fields. Two report-path capacity controls add exact-frame
-success and one-over refusal before any body ingress; eight total controlled
+success and one-over refusal before any body ingress; nine total controlled
 instance-file tests pass. Both driver receipts were refreshed against the current
 shared candidate source.
 The query remains a fixed read-only literal echo; no authentic report production,
 persistence, full driver/parser/native copy accounting or protected publication
 is qualified. Do not widen caller-input admission or adopt this experiment as the
 original PY-01b port solely because the complete payload fits.
+
+A third report-path control supplies a complete independently constructed
+four-MiB report row, then either a server ErrorResponse followed by ReadyForQuery
+or transport EOF before completion. Both original driver loops raise and close
+the adapter; downstream report admission is not reached. The earlier raw row
+remains provisional in the internal context, not a successful operation result.
+Only the first branch consumes the idle status; EOF retains the prior transaction
+status without making it current. Neither case proves rollback, native termination,
+release of arbitrary retained copies or safe pool reuse. Nine controlled tests
+now pass across the generic and report-only candidates.
 
 This is actual driver seam evidence, not the original protocol-port implementation.
 Stock `_read` and row/helper allocations remain outside a qualified complete

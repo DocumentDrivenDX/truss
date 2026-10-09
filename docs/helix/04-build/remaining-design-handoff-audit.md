@@ -98,9 +98,9 @@ not silently widen that driver profile.
 A subsequent separate report-only pg8000 experiment now carries the full
 four-MiB frozen nineteen-field wire through the actual driver, strict original
 metadata/frame decoder and response schema. Its own raw bounds leave the generic
-one-MiB driver and caller-input paths unchanged. Eight total controlled tests
+one-MiB driver and caller-input paths unchanged. Nine total controlled tests
 include report exact/one-over capacity and original-driver dispatch failure
-quarantine. The saved full-driver receipt proves
+quarantine, plus late failure after a complete report row. The saved full-driver receipt proves
 local synthetic byte/schema correspondence, not a genuine producer or original
 complete account/custody/authority profile. Raw-capacity experimentation is no
 longer the missing deliverable; original admission and complete lifetimes remain.
@@ -109,7 +109,7 @@ Next compose one explicitly selected complete response/driver/copy-account route
 then qualify original transaction/cancellation/termination custody and consume
 the security owner's final TLS/person/publication services. Preserve the one-MiB
 request path and historical probe receipts. Do not rerun unchanged wheel/parity
-work or label the small driver query as PY-01b completion. The eight tests are
+work or label the small driver query as PY-01b completion. The nine tests are
 controlled adapter checks; full account/port/native authority remains unqualified.
 
 Python frontier reconciliation: the current source plan retains the clean Python

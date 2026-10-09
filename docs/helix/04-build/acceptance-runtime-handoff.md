@@ -49,6 +49,18 @@ report producer, original account/driver authority or protected persistence.
 A1 must admit the complete coherent tuple before effect-bearing acceptance;
 these structural response candidates cannot bypass that gate.
 
+### Complete row remains provisional until operation completion
+
+The Python driver experiment now has an independent complete four-MiB row
+followed by either server error/ReadyForQuery or EOF. The actual pinned driver
+loop raises in both branches and quarantines its instance file; no downstream
+report admission occurs. Retained raw row bytes are provisional even when their
+schema could pass. A1 must preserve this distinction across producer, driver,
+report validation, native finalization and original outer settlement. Complete
+row reception, schema admission and idle status individually establish no
+accepted revision or committed head. These controlled transport observations
+are prerequisites, not a genuine report producer or native transaction proof.
+
 ### Complete scalar streaming qualification
 
 A1/A2 must consume CONTRACT-003's complete scalar-task UTF-8/sink rules rather
