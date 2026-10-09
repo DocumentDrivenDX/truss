@@ -42,3 +42,9 @@ admission, even if a host registers a permissive handler. New0.3 responses
 refuse through the existing version-pin check. Later positional-output adoption
 requires a separately admitted owner profile and complete ordered native column/
 row correspondence; logical-name dictionaries cannot substitute for it.
+
+`bun scripts/check-weft-admission-browser.ts` checks this boundary in headless
+Chromium using the existing pinned compiler build and private Playwright
+dependencies. It admits the original0.2 baseline and refuses all four mutated
+responses without acquiring native context. This is wrapper qualification only;
+it does not rebuild or adopt a newer Rust/WASM compiler.

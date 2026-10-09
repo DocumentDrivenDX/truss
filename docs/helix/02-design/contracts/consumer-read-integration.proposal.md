@@ -260,3 +260,11 @@ acquisition, including null carrierName and a permissive registered host handler
 All15 wrapper tests pass and strict TypeScript compilation passes. This is a
 closed-version integration correction, not0.3 adoption or native publication
 qualification; the original committed compiler build pin is retained.
+
+The [Chromium component receipt](../../04-build/evidence/design-audit/weft-v02-admission-browser.json)
+now confirms the same four refusal codes in actual Chromium153.0.8010.12, with
+zero native context acquisitions. The browser-target wrapper admits and freezes
+the unchanged original0.2 baseline response. Its original response, bundle and
+source hashes are retained. The probe replays a response from the pinned native
+f05f2df compiler; it does not rebuild Rust/WASM, run user SQL or qualify0.3/native
+publication. Browser dependencies come from the existing private UMF environment.

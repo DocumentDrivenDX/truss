@@ -1,0 +1,35 @@
+{
+  "scope": "Chromium wrapper admission component only; original compiler response replayed as test input, no browser Rust rebuild/native SQL/publication qualification",
+  "browserVersion": "153.0.8010.12",
+  "weftBuildRevision": "f05f2df09e9c2494ac8c6d703dfe38413dbc4181",
+  "originalResponseSha256": "989b139469bbffed89ab26cb7cd909fd2538889bfa32a7cee528a529792c7f67",
+  "browserBundleSha256": "ba3762bbbda1067ef1b127ea3c5113892a14818be740ea2c450e05164273ac11",
+  "result": {
+    "baselineAdmitted": true,
+    "baselineFrozen": true,
+    "outcomes": [
+      {
+        "mutation": "carrier",
+        "code": "artifact_version"
+      },
+      {
+        "mutation": "null-carrier",
+        "code": "artifact_version"
+      },
+      {
+        "mutation": "obligation",
+        "code": "artifact_version"
+      },
+      {
+        "mutation": "version",
+        "code": "artifact_pin"
+      }
+    ],
+    "nativeContexts": 0
+  },
+  "sourceSha256": {
+    "scripts/check-weft-admission-browser.ts": "47eb718304d9b89ce06f25f6053f394c9182e5f0433dac6082d225d11497fc72",
+    "packages/weft/src/index.ts": "d672ae62b847eea4725ff306fdb8222c25ea1b9c9149c5a85fdfc19ae02e9def",
+    "tests/weft/fixtures/qualified-count.request.json": "0ac92dccb705f6fbfd843d3735aa02a819862e6683019134335bc15f15ed4aa8"
+  }
+}
