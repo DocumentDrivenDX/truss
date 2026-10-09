@@ -289,6 +289,42 @@ composition even if a source-built compiler wheel runs successfully. This makes
 the early development path executable without treating an unpublished wheel as
 a released dependency or merging packaging and native qualification decisions.
 
+## Validator diagnostic path correspondence
+
+For the pinned UMF 0.7 source-validation candidate, preserve each original
+`severity`, `code` and `path` unchanged. The committed UMF document validator
+emits structural diagnostics using Ajv's original `instancePath`, and semantic
+diagnostics using its escaped pointer helper. A missing-property structural
+diagnostic may identify the containing object; do not append a guessed absent
+property or convert its code to a semantic error. Preserve empty-string root
+paths separately from `/`, which identifies an empty member name.
+
+Keep the original source artifact/document identity and Truss diagnostic
+classification separate from the upstream path. The existing rejection carrier
+has `source`, `diagnosticProfile`, exact diagnostic artifact and `classification`;
+reuse it rather than concatenating acceptance-wrapper/module names onto the
+upstream pointer. Resolve sourcePointer under its original registered source
+profile; a pointer inside the diagnostic's document is not automatically a pointer
+inside the serialized acceptance request. Retain source bytes and complete raw
+diagnostic artifacts before any convenience projection.
+
+The semantic comparator must use severity/code/path as a multiset with
+multiplicity under the same source/profile/classification. Message text and
+ordering remain informative unless the selected profile declares otherwise.
+Distinct source documents with equal paths stay distinct; upstream warnings on
+accepted input cannot disappear or become Truss-support errors. Unsupported
+Truss storage interpretation remains `truss_admission`, not UMF-invalid.
+
+Independently author root-versus-empty-member, escaped slash/tilde member,
+array-index-versus-numeric-member, duplicate diagnostic, warning-only and
+missing-required-property-parent cases. Retain the pinned reference outputs and
+review each against its authored invalid condition before adapter execution.
+Byte parsing/duplicate-member behavior and the 0.8 transition remain separate
+profiles; this 0.7 source observation does not select them. Original validator
+registration, diagnostic artifact encoding and full Python/browser/native corpus
+qualification remain open; no second UMF validator or normalization algorithm
+is introduced here.
+
 ## Decisions still required
 
 ADR-003 acceptance and Python package/repository ownership; initial driver and sync/async mode; published Weft wheel/feature tuple; admitted authorization ABI; stable install version and consumer-migration route; exact managed Lakebase version/extension/identity/transaction profile; native realization of CONTRACT-009's specified minimum 24-hour receipt protection; and receipt-token/reached ABI. Python adapter/codec/corpus work can start independently where these choices do not affect semantics. Complete public capability release still waits for the shared protected runtime and qualification.
