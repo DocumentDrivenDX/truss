@@ -74,8 +74,15 @@ event, mutate an existing report, flatten owned/adopted result layers, and
 label callback return committed without host termination. Every control must
 fail its applicable normative comparator; equal final counts are insufficient.
 
-Closing this case requires exact request/result schema registration from the
-existing declarations, registered setup/transaction and observer procedures,
+The existing request/result carriers are `direct-lookup-request-v0.1.schema.json`
+and `direct-lookup-result-v0.1.schema.json`, with shared cursor, exact-value,
+history and direct-page dependencies. Reuse them; no new request/result wire is
+needed. The proposal `direct-lookup-execution-outcome-v0.1.proposal.schema.json`
+composes the existing outer Outcome and inner result plus execution-failure
+schema. It adds no public field and does not qualify termination.
+
+Closing this case requires exact registration of those existing schemas and
+the outer composition, registered setup/transaction and observer procedures,
 actual immutable fixture and expected bytes, complete identity paths where
 applicable, and native no-write/termination witnesses. The current envelope
 schemas cannot fill those semantic artifacts. A contract-only implementer must

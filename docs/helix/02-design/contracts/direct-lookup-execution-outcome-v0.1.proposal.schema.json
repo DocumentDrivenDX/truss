@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:proposal:direct-lookup-execution-outcome:0.1.0",
+  "title": "Existing direct lookup execution outcome composition",
+  "description": "Composes the existing Outcome<DirectLookupResult> declaration without changing its public wire. Inner business admission is distinct from outer execution failure; native effects and termination need original evidence.",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "status": {
+          "const": "ok"
+        },
+        "value": {
+          "$ref": "urn:truss:draft:direct-lookup-result:0.1.0"
+        }
+      },
+      "required": [
+        "status",
+        "value"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "status": {
+          "const": "error"
+        },
+        "error": {
+          "$ref": "urn:truss:draft:execution-failure:0.1.0"
+        }
+      },
+      "required": [
+        "status",
+        "error"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

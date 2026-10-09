@@ -37,6 +37,19 @@ Keep legacy v0.1 cases version-scoped if independently selected. They cannot sat
 
 ## Registry completion obligations
 
+For direct `lookup`, reuse `direct-lookup-request-v0.1.schema.json` for the
+request argument and `direct-lookup-result-v0.1.schema.json` for the inner
+business result. The proposed `direct-lookup-execution-outcome-v0.1.proposal.schema.json`
+composes the actual `Outcome<DirectLookupResult>` return using the existing
+execution-failure schema. The transaction handle is supplied through original
+scope registration, not serialized into the request. A withTransaction harness
+wrapper has another outer outcome and cannot be flattened into this return.
+Run `check-direct-lookup.ts` and `check-direct-lookup-outcome.ts` in the design
+audit evidence directory with the installed Ajv Draft 2020-12 module path:
+twenty-two existing request/inner-result and eight nested-outcome controls pass.
+Exact registry/profile custody, complete fixture/observer semantics and native
+effects/termination remain required; these shapes do not admit availability.
+
 For every entry, the executable registry must pin exact original declaration and input/result schemas, full semantic contract inventory, capability selection, observer/profile/resource grammar, and generated identity paths. Symbolic step references must resolve before existing public input construction, never by modifying public wires. The registry must distinguish outer Outcome execution failure from inner business result, and import's distinct progress-bearing execution result.
 
 Host transaction controls use trusted harness procedures, not Truss capability methods. Installation/status/explicit migrations, live provenance and administrative retention/tooling require their own exact existing declarations/procedures to be enumerated before claiming the full registry complete. Do not invent convenience methods to fill that inventory. Informative SQL is never dispatched as a substitute operation.
