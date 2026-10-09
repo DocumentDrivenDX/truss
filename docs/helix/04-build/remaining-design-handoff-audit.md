@@ -119,3 +119,29 @@ installed admission. Canonical caller responsibility is designed. Actual
 bodies, dependency edges, native rights and PAC observations remain required
 implementation outputs; their missing identities do not reopen the selected
 caller contract. New advertised semantics still require design review.
+
+## Accepted-report composition audit — 2026-10-08
+
+The accepted-report schema requires these seventeen fields. The private composed preparation is not that report: its original inputs, observation availability and coherent native cut do not qualify actor/profile authority or enforcement. Use this inventory to order remaining work; do not fill missing producer outputs with fixture values or empty arrays. The existing B-001–B-015 and story/test obligations remain governing.
+
+| Required field | Current source/producer | Remaining admission and evidence |
+| --- | --- | --- |
+| interfaceVersion | CONTRACT-003 accepted report binding/schema | Select the full registered encoder/report profile before emitting an accepted wire. |
+| reportProfile | Draft report schema and canonical native encoder components | Register the complete exact report interpretation/encoding/authority/effect profile, not a schema-only digest. |
+| rev | Native document staging and composed provisionalRevision | Publish it only with the complete immutable report and atomic head transition; provisional staging is not accepted commit. |
+| originalExecution | Native operation admission plus driver/actor design | Compose original installation/source epoch, acting/database role, asserted and journal origins, mapping/capture profiles and independently retained context evidence. Current component fixture bytes cannot fill these fields. |
+| acceptedInput | Original byte wire/artifact inspector and catalog preparation | Admit root policy/layout/acceptance/validator/support profiles, registered meanings and exact original operation custody. Resolve converted ingress and selected binding/transform semantics. |
+| umf | Separately pinned Record/value/metadata owner bundles | Produce the complete supported-subset inventory under admitted profiles; source-version, partial interpretation and probe-only bundles stay distinct. |
+| documents | Original source/archive bijection under writer/ordinal/generation | Preserve full dependency order and source digests through final publication; ordinary-role visibility/driver qualification remains separate. |
+| diagnostics | Original/target producer validation evidence component | Register its wrapper profile; add complete Truss admission, conversion and transform diagnostics from their actual stages, without remapping owner codes/paths. |
+| documentInterpretations | One exact observation and complete/partial summary per original document | Verify full document/profile correspondence and selected support policy. Available inspection calls do not establish complete interpretation. |
+| counts | Native new-only source/definition/retained-cut collector | Extend to retained edits, retirement/reactivation/conversion; preserve actual effects and coherent original cut. |
+| provisional | Native empty-provisional proof across visible retained types | Implement nonempty type/via/source/owner/lifecycle inventory and complete qualified disclosure. Empty proof cannot qualify a role-filtered view. |
+| rebinds | Full event envelope, prepublication reservation and stage design | Produce actual original semantic/event/group inventories and persisted effect parity, including empty-case proof. Do not infer no rebinds from new input types alone. |
+| assertions | Actual owner observations, coverage and scoped extension retention | Enumerate exact selected assertion identities/source definitions, admit complete source/report membership, and classify database/engine/none with independently qualified evidence. Preserve the observed 0.8 legacy-API gap. |
+| pending_indexes | Index declaration/job/readiness binding | Interpret exact registered declarations and derive immutable original job identities. Missing binding interpretation is not an empty declaration inventory. |
+| losses | Original converted ingress/loss artifact carriers | Admit adapters and complete loss evidence/policy; prove native-ingress absence under the selected profile rather than manufacturing an empty list. |
+| extensions | Original document/module/element occurrences with complete source artifacts | Compose retained unselected core/extension inventory with selected vocabulary disclosure and profile completeness; occurrence preservation is not semantic support. |
+| transformRegistrations | Exact pin resolver and transform handoff designs | Admit implementation recognition, dependency inputs, deterministic execution, original retained outputs, complete validation/persistence/event/report parity. New-only staging/preparation now refuses declared transforms instead of silently ignoring them. |
+
+Next composition order: admit the original root profile and actor/installation context; complete selected assertion/source identity and native/engine qualification; derive full original transform/rebind/index/loss inventories; encode the complete report from retained producer outputs; independently compare actual effects, persist immutable bytes and publish head under original generation/finalization custody. Reconcile all sources against one coherent layout/driver/security/resource tuple before opening the public acceptance route. Preserve the source/version boundary when testing existing 0.7 assertions and new 0.8 schema properties. UMF owns their meaning and Weft owns lowering; Truss owns inventory, evidence custody and publication.

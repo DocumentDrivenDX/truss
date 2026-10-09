@@ -39,3 +39,8 @@ test('reconstructed preparations cannot enter home, extension, report or native 
  await expect(stageNewCatalogCohort(connection,clone,[],{})).rejects.toThrow('validated catalog preparation');
  expect(calls).toBe(0);expect(prepareDefaultCatalogHomes(original).homes.length).toBe(2);
 });
+
+test('new-only staging cannot silently ignore declared transforms',async()=>{
+ const {stageNewCatalogCohort}=await import('../packages/umf-bun/src/catalog-new-stage');const input=request();input.transforms=structuredClone(fixture.input.transforms);const original=run(input);let calls=0;
+ await expect(stageNewCatalogCohort({unsafe:async()=>{calls++;return []}},original,prepareDefaultCatalogHomes(original).homes,{})).rejects.toThrow('Complete transform execution');expect(calls).toBe(0);
+});

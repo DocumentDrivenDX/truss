@@ -38,3 +38,8 @@ test('original 0.8 validation does not invent a transition or duplicate a target
  originalInput.documents[0].artifact={identity:'original-08',bytesBase64:bytes.toString('base64'),sha256:new Bun.CryptoHasher('sha256').update(bytes).digest('hex')};const source=preparation.prepare(new TextEncoder().encode(JSON.stringify(originalInput))),result=collectCatalogValidationEvidence(source);
  expect(source.documents[0].interpretation.transition).toBeNull();expect(result.diagnostics.map(entry=>JSON.parse(Buffer.from(entry.diagnostic.bytesBase64,'base64').toString()).basis).every(b=>b==='original')).toBe(true);expect(result.diagnostics.length).toBe(source.documents[0].interpretation.sourceValidation.diagnostics.length);expect(result.documentInterpretations[0].completeness).toBe('partial');
 });
+
+test('new-only report preparation cannot ignore a declared transform registration',async()=>{
+ const declared=structuredClone(input);declared.transforms=structuredClone((await Bun.file('docs/helix/02-design/contracts/bindings/acceptance-input-capacity-v0.1.fixture.json').json()).input.transforms);const original=preparation.prepare(new TextEncoder().encode(JSON.stringify(declared))),native=connection();
+ await expect(collectCatalogReportPreparation(native,original,'1',owner,fields)).rejects.toThrow('Complete transform execution');expect(native.queries).toEqual([]);
+});

@@ -11,6 +11,7 @@ type Prepared=ReturnType<Awaited<ReturnType<typeof createCatalogInputPreparation
 export async function collectCatalogReportPreparation(connection:CatalogStageConnection,prepared:Prepared,revision:string,
  owner:Awaited<ReturnType<typeof loadUmfDeclarationProducer>>,fields:Awaited<ReturnType<typeof loadUmfFieldAssertionProducer>>){
  requireOriginalCatalogPreparation(prepared);
+ if(prepared.original.input.transforms.length)throw Error('Complete transform execution and report producer required');
  const ownerObservations=collectCatalogAssertionObservations(prepared,owner,fields);
  const observationCoverage=assessCatalogObservationCoverage(prepared,ownerObservations);
  const extensions=collectCatalogExtensionInventory(prepared);

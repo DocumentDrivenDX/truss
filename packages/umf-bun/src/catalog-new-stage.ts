@@ -9,6 +9,7 @@ const same=(a:{documentId:string;moduleId:string;elementId:string},b:{documentId
 const id=(value:unknown):string=>{if(typeof value!=='string'||!(/^[1-9][0-9]{0,9}$/).test(value)||BigInt(value)>2147483647n)throw Error('Original native catalog ID required');return value};
 export async function stageNewCatalogCohort(connection:CatalogStageConnection,prepared:Prepared,homes:readonly CatalogPropertyHome[],origin:unknown){
  requireOriginalCatalogPreparation(prepared);
+ if(prepared.original.input.transforms.length)throw Error('Complete transform execution and report producer required');
  const records=prepared.declarations.flatMap(document=>document.records);
  const declared=records.flatMap(record=>record.fields.map(field=>({...record,field})));
  if(homes.length!==declared.length)throw Error('Complete original property home inventory required');
