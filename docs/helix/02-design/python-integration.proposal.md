@@ -505,6 +505,12 @@ session executes BEGIN READ ONLY/ROLLBACK without installed changes. This proves
 native result syntax correspondence only; the receive harness is not the shared
 original driver producer, qualified cancellation/TLS/account or public assembly.
 
+The frame test command now runs six tests, adding offline verification of the
+saved native frame sequence, original decoder/probe source hashes and independent
+metadata/cell/command expectations. It performs no network access and never
+rewrites the receipt. Passing this sixth test is saved-evidence correspondence,
+not a fresh native run or driver qualification.
+
 #### libpq receive-path qualification correction
 
 Review of PostgreSQL

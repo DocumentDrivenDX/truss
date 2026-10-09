@@ -1,5 +1,8 @@
 import struct
 import unittest
+import hashlib
+import json
+from pathlib import Path
 from python_pg_frame_candidate import row_description, data_row, MAX_FRAME
 
 
@@ -8,6 +11,28 @@ def frame(kind, body):
 
 
 class FrameTests(unittest.TestCase):
+    def test_saved_native_frames_and_original_source_correspondence(self):
+        here = Path(__file__).resolve().parent
+        receipt = json.loads((here / 'python-pg-frame-native.json').read_bytes())
+        self.assertEqual(receipt['status'], 'passed_read_only_native_frame_candidate')
+        for name in ['python_pg_frame_candidate.py', 'check_python_pg_frame_native.py']:
+            self.assertEqual(hashlib.sha256((here / name).read_bytes()).hexdigest(),
+                             receipt['sourceSha256'][name])
+        frames = [bytes.fromhex(value) for value in receipt['framesHex']]
+        self.assertEqual([value[:1] for value in frames],
+                         [b'Z', b'C', b'T', b'D', b'C', b'C', b'Z'])
+        columns = row_description(frames[2])
+        self.assertEqual([(c.name, c.type_oid, c.format) for c in columns],
+                         [(b'n', 25, 0), (b'empty', 25, 0), (b'exact', 1700, 0),
+                          (b'unicode', 25, 0), (b'server', 25, 0)])
+        self.assertEqual(data_row(frames[3], 5),
+                         (None, b'', b'9007199254740993.0000000000000000001',
+                          'é𐀀'.encode('utf8'), b'170009'))
+        self.assertEqual([value[5:] for value in frames if value[:1] == b'C'],
+                         [b'BEGIN\0', b'SELECT 1\0', b'ROLLBACK\0'])
+        self.assertEqual([value for value in frames if value[:1] == b'Z'],
+                         [b'Z\0\0\0\5I'] * 2)
+
     def test_ordered_metadata_signed_fields_and_unsigned_oids(self):
         # Independent literal network-order witnesses: name, table, attribute,
         # type, size, modifier, format. No encoder from the candidate is used.
