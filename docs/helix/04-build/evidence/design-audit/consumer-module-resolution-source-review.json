@@ -1,0 +1,44 @@
+{
+  "scope": "read-only source-resolution review; no compiler invocation, adopted naming target or native qualification",
+  "sources": [
+    {
+      "path": "/Users/erik/Projects/weft/crates/weft-core/src/model.rs",
+      "sha256": "c64e2d60ddf3d42228f346a4aede536e29320368d7344e5678eefcab9220eee5"
+    },
+    {
+      "path": "/Users/erik/Projects/weft/crates/weft-core/src/application_resolve.rs",
+      "sha256": "df48e51b8d08b881ee9ab3d3cdc9ea04a7ce7ddd52d3aff436c1b2396e22b6fa"
+    }
+  ],
+  "models": [
+    {
+      "path": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "sha256": "e194117a8de436d1479804c59b0e2cc76470814a3c0723cd732797635442a3e5",
+      "modules": [
+        {
+          "id": "catalog",
+          "namespace": "catalog",
+          "hasAuthoredModuleName": false
+        }
+      ]
+    },
+    {
+      "path": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "sha256": "5ff02aa14d0d5a64b85b6fe75ffe99ec7a3d8caf93c19b79187506a86c45162e",
+      "modules": [
+        {
+          "id": "catalog",
+          "namespace": "catalog",
+          "hasAuthoredModuleName": false
+        }
+      ]
+    }
+  ],
+  "observations": [
+    "Catalog preparation selects modules by exact module ID.",
+    "Catalog::record matches a qualified SQL source against module namespace and authored Record name; module name is not used.",
+    "application_resolve passes source namespace and name to Catalog::record.",
+    "Multiple matching Records yield WFT-NAME-AMBIGUOUS; selecting both original catalog documents does not create a document-qualified SQL source."
+  ],
+  "disposition": "No module-name addition is required by these reviewed source-resolution paths. Record/Field authoring remains a proposal; global naming policy remains pending."
+}

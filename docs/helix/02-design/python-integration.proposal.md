@@ -112,6 +112,17 @@ A source author must explicitly adopt a new document or the selected owner must
 admit a complete projection before Truss uses these names; the packet grants no
 permission for a runtime to mutate original source during preparation.
 
+The [module resolution source review](../04-build/evidence/design-audit/consumer-module-resolution-source-review.json)
+confirms that the reviewed Weft paths select modules by ID and resolve SQL
+qualifiers against `namespace`; they do not require a module `name`. Both original
+consumer documents already provide module ID and namespace `catalog`, so this
+path needs no additional module-name declaration. Selecting both documents with
+the same queryable Record names would still produce `WFT-NAME-AMBIGUOUS` rather
+than document-qualified resolution. The pending catalog naming policy must resolve
+that deployment choice; Truss must not silently rename modules or restrict a
+consumer's selected bundle to hide a collision. This is source evidence only,
+not proof that the proposed documents compile or have native registrations.
+
 ## Remaining consumer metadata meaning and action boundary
 
 Both explicit-name validation observations retain eight warnings. Five identify
