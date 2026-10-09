@@ -51,3 +51,33 @@ Create forced-race/report red cases, implement post-lock checks and classificati
 
 
 K03/K04 reference schedules require full outgoing and incoming bound arbitration with distinct source parents. Independently inspect actual ordinary-role direct-DML/helper/derived-marker paths and the installed guard/privilege inventory. Missing shared target-side exclusion or an omitted canonical contribution must fail even if engine operations and derived-row uniqueness pass. Unknown native outcome is unresolved original work, not rollback evidence. No new lock hierarchy or fixture-only bypass is allowed.
+
+
+## Parent-lock wait versus count snapshot (planned)
+
+Start with one parent and two independently enumerated participating edges,
+minimum one. Transaction A acquires the selected parent exclusion and stages
+removal of edge a. Transaction B submits its lock acquisition while A remains
+open. Independently observe B actually blocked before permitting A to commit.
+After B confirms the lock, issue the complete participation observation as a
+subsequent admitted native command. Its baseline contains only edge b;
+removing b would violate the final-state minimum and must refuse with confirmed
+local containment. Independently committed state remains one edge, with only
+A's original version/journal effects.
+
+Retain exact command submission/completion order and actual native lock/state
+barriers. As a deliberately defective comparator, place lock acquisition and
+ordinary participation collection in one statement whose snapshot began before
+A committed. Demonstrate its stale count where the selected query permits
+that schedule; it cannot qualify the engine path even though the parent lock
+was ultimately acquired. A mock post-lock count or sleeps cannot establish
+snapshot freshness. No production guarantee is inferred from a locking CTE or
+sequential source lines inside a callable.
+
+Repeat the supported post-lock schedule with target-side participation and a
+valid remove/add final-state replacement. Separately retain an earlier fixed
+snapshot under REPEATABLE READ: a new command alone does not refresh it. Apply
+only the selected conflict/retry/refusal protocol; Truss cannot restart an
+adopted transaction or silently change its isolation. These cases remain
+`not_run`, consuming the original shared hierarchy without adding another lock
+or bypass guarantee.

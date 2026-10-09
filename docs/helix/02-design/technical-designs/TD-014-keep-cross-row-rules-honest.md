@@ -23,9 +23,11 @@ ddx:
 
 ## Technical Approach
 
-Inherit parent-lock validation and final group-state checking from CONTRACT-004/009. Every participating edge removal obtains the same parent lock before counting. At READ COMMITTED, read current committed participation after lock acquisition, combine planned effects and validate the final state. Never count from a stale pre-lock snapshot and then apply effects under the lock. Engine-only lock checks remain explicitly engine enforcement.
+Inherit parent-lock validation and final group-state checking from CONTRACT-004/009. Every participating edge removal obtains the same parent lock before counting. At READ COMMITTED, read current committed participation after lock acquisition, combine planned effects and validate the final state. Never count from a stale pre-lock snapshot and then apply effects under the lock. The READ COMMITTED host sequence confirms complete parent-lock acquisition before issuing the participation observation as a subsequent native command in the same transaction. A combined lock/count statement, materialized CTE or already-submitted query cannot be assumed fresh because its lock step returned later. Any routine-internal alternative must separately qualify its actual snapshot acquisition and original command order; do not infer it from source text or PL/pgSQL statement order alone. Engine-only lock checks remain explicitly engine enforcement.
 
 Deferred trigger existence alone does not establish database enforcement. Reports combine rule/profile identity, mandatory execution path and qualified evidence, preserving unsupported/unverified distinctions. A SERIALIZABLE variant needs its own transaction-wide retry and native evidence before classification changes.
+
+PostgreSQL 17 [transaction isolation documentation](https://www.postgresql.org/docs/17/transaction-iso.html#XACT-READ-COMMITTED) distinguishes command-start visibility from lock-wait row handling and permits successive READ COMMITTED commands to observe newly committed changes. This is the source basis for the post-lock command requirement; it does not qualify a Truss implementation or a fixed-snapshot variant.
 
 ## Component Changes
 
