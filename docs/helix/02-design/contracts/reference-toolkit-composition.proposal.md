@@ -27,6 +27,41 @@ The separate acceptance-report, operation-configuration and layout-migration UMF
 
 ## Composition admission sequence
 
+### Selected report/history roots for the next composition
+
+The combined reference uses the existing lifecycle/history report 0.3, history
+event 0.2, retained archive 0.2 and page declaration 0.2. Their component version
+numbers deliberately differ. The following exact source roots were inspected
+for this handoff; these hashes identify bytes, not installed authority, a complete
+transitive artifact closure or a qualified release bundle.
+
+| Root relative to this contract directory | SHA-256 |
+| --- | --- |
+| acceptance-report-v0.3.proposal.schema.json | c54196f8b4324aec768a33eeeab89bc2615a954af0e45559ed2038ccad7f14bf |
+| history-event-v0.2.proposal.schema.json | 714923be0f86bd3508a097cabfee63a180e03b19651ebbfa38844bb3e637b425 |
+| retained-history-archive-v0.2.proposal.schema.json | 000cd715c000bd6bb1e7bb35bb2d2eb100a5de55692dfbd8527139b26dde1f3f |
+| bindings/truss-acceptance-report-v0.3.proposal.d.ts | 8c7b99a09dc87bf79c1839f8569a9199459c53da6e5d0605e2533e31e49b04bc |
+| bindings/truss-journal-page-v0.2.proposal.d.ts | 896b623ea46902ff3831b547f7c7ab0c2496760d9213a813a79e7b00e24cca79 |
+
+Resolve their complete original schema/type dependencies and semantic profiles
+before composition. Report rebind-only membership preserves whole-group evidence
+without adding other event kinds to the report; lifecycleProfile/reactivations
+remain required report fields. The page has no new in-body version discriminator,
+so original journal profile and cursor/assembly admission must distinguish its
+meaning. Preserve separately scoped 0.1 codec and compiler fixtures unchanged.
+
+The source recipe `reference-history-composition-v0.1.proposal.json` describes a
+physical journal/stage/allocator edit from its original 0.11 foundation. It does
+not select or generate these report/archive/page consumers, reconcile the 0.15
+catalog basis, or establish populated migration correspondence. The next model
+must reconcile all of those inputs through CH-01 before M1 can name a supported
+source/target route. Use the [acceptance producer handoff](../../04-build/acceptance-runtime-handoff.md)
+and [migration sequence](../../04-build/migration-consumer-deployment-handoff.md)
+for the remaining outputs, rather than treating a successful source recipe as
+full reference composition.
+
+### Admission steps
+
 1. Capture exact original source/profile bytes for each selected capability and distinguish already selected product behavior from proposed implementation profiles. Preserve current pending human choices separately.
 2. Resolve every required producer and its owned dependencies, including original native authority/executor and resource procedures. Record an unavailable producer as an incomplete capability; never insert fabricated native identities or qualify through a placeholder.
 3. Build immutable definition artifacts in the existing acyclic composition order. Recursive logical UMF types do not create permission to introduce cyclic exact-byte artifact references.
