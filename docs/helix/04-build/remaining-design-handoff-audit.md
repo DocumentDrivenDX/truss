@@ -160,3 +160,33 @@ Eight fields still require complete production/admission: interfaceVersion, repo
 6. Assemble all seventeen fields from these original retained outputs, run complete independent source/native effect comparison, encode and insert immutable bytes once, and publish/verify head atomically. Validate surviving finalized-operation union at commit before replacing the unconditional barrier. Keep adopted settlement and network confirmed-commit publication distinct.
 
 Decisive acceptance schedules remain full original source/report/effect bijection, missing or invented producer refusal, role/current-authority changes, stale and rolled-back cuts, nonempty retained rebind siblings, conflicting index declarations, insertion/head/finalizer failure and lost/unknown commit responses. The reference consumer must receive real accepted IDs and immutable report artifacts through packed public exports before mutation/journal/feed/ACK acceptance can be exercised. Component fixtures remain test inputs, never substitutes for those artifacts. The wider B-001–B-015 and all45 stories remain required beyond this acceptance sequence.
+
+## Original execution source audit — 2026-10-08
+
+Readback of acceptance-report-v0.1's seven required originalExecution members,
+CONTRACT-003's producer context handoff, CONTRACT-007's installed recovery
+context, installation-admission-v0.1 and installation-metadata-v0.1 finds a
+concrete missing source: the marker/archive candidate records installationId
+but does not store or issue sourceEpoch. The admission wire requires it without
+providing native custody. Current package source contains epoch selection in a
+security key-namespace candidate, not an installed epoch producer. Those values
+cannot fill an accepted report. This is Truss installation/source-generation
+ownership; it requires no new UMF semantic or Weft compiler API.
+
+| Required member | Existing source | Next implementation and decisive test |
+| --- | --- | --- |
+| installationId | Marker candidate and retained bootstrap archive | Independently admit committed marker plus complete installed inventory. A same-transaction bootstrap candidate or copied marker cannot qualify; exercise commit uncertainty and namespace mismatch. |
+| sourceEpoch | Required admission wire; no protected native producer identified | Select and implement epoch issuance, retention and clone/restore transition under the installation contract before acceptance. Test original epoch retention, stale admission after epoch transition, rollback, and explicit clone/restore handling. Do not derive it from catalog revision, xid, timestamp or installationId. |
+| origin.asserted | Separate asserted-origin facade argument | Retain complete original canonical tree at attempt admission, without upgrading assertion to authority. Test mutation of caller input after capture and exact-repeat preservation. |
+| origin.databaseRole | Native context0.2 and issued original-execution basis | Compose the original acting-role observation; exercise SET ROLE, definer entry, role rename/drop/recreate and changed builder context against retained OID/name evidence. |
+| journalOrigin / originMappingProfile | Required history origin grammar and mapping registration contract | Adopt one exact mapping producer and its retained implementation/profile evidence. Verify mapping of asserted fields and native role without overwriting asserted content; unknown mapping refuses before effects. |
+| captureProfile / contextEvidence | Original native role/context artifact, limited component scope | Adopt a complete installed-context capture profile and artifact binding installation, epoch, original executor and actor facts. Verify changed installation/epoch/executor, copied evidence and stale generation all refuse; native role-only artifact cannot claim full capture. |
+
+Implementation order is dependency-driven: qualify committed installation
+custody and epoch lifecycle; capture that original installed context together
+with separately asserted origin; perform the registered origin mapping; then
+assemble and independently compare originalExecution. Keep the existing
+role-only basis as a component, without renaming it to imply complete installed
+admission. The public acceptance barrier remains until this and the other
+report fields pass their complete native schedules. These tests specify needed
+evidence, not executed verdicts or a selected epoch storage design.
