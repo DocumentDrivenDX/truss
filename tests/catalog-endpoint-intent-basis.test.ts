@@ -10,12 +10,13 @@ const records=await createCatalogEndpointRecords('/Users/erik/Projects/umf/packa
 const ordering=await createCatalogEndpointDocumentOrder('/Users/erik/Projects/umf/package.json');
 const fixture=await Bun.file('docs/helix/02-design/contracts/bindings/acceptance-input-capacity-v0.1.fixture.json').json();
 function payload(){return {interfaceVersion:'truss-endpoint-intents/0.1.0',dependencies:[{document:'second-doc',revision:'r1',sourceReference:'second-doc-source'}],intents:[{id:'link',module:'m',name:'link',sources:[{document:'first-doc',module:'m',element:'Item',definition:{state:'selected',revision:'r1',sourceReference:'first-doc-source'}}],targets:[{document:'second-doc',module:'m',element:'Item',definition:{state:'selected',revision:'r1',sourceReference:'second-doc-source'},key:{state:'absent'}}],sourceBounds:{min:'0',max:'*'},targetBounds:{min:'0',max:'1'},directed:true,lifecycle:'independent',composition:false,inverse:null,associationRecord:null}]}}
-function prepare(value:any=payload(),second:any=null,ids=['first-doc','second-doc']){
+function prepare(value:any=payload(),second:any=null,ids=['first-doc','second-doc'],edit?:(documentId:string,source:any)=>void){
  const input=structuredClone(fixture.input);input.binding={state:'absent'};input.transforms=[];
  input.documents=ids.map(documentId=>{
   const carrier=documentId==='first-doc'?value:documentId==='second-doc'?second:null;
   const extension=carrier===null?{}:{[basis.extensionId]:carrier};
-  const text=JSON.stringify({umf:'0.7.0',id:documentId,vocabularies:carrier!==null?{[basis.extensionId]:{version:'0.1.0'}}:{},extensions:extension,modules:[{id:'m',namespace:'m',elements:[{id:'Item',kind:'record',members:[{module:'m',element:'label'}],keys:[{id:'label-key-id',name:'label-key',fields:[{module:'m',element:'label'}]}],extensions:{}},{id:'label',kind:'field',scalarType:'string',nullability:'required',cardinality:'one',extensions:{}}]}]});
+  const source={umf:'0.7.0',id:documentId,vocabularies:carrier!==null?{[basis.extensionId]:{version:'0.1.0'}}:{},extensions:extension,modules:[{id:'m',namespace:'m',elements:[{id:'Item',kind:'record',members:[{module:'m',element:'label'}],keys:[{id:'label-key-id',name:'label-key',fields:[{module:'m',element:'label'}]}],extensions:{}},{id:'label',kind:'field',scalarType:'string',nullability:'required',cardinality:'one',extensions:{}}]}]};
+  edit?.(documentId,source);const text=JSON.stringify(source);
   return {documentId,documentRevision:'r1',artifact:{identity:documentId+'-source',bytesBase64:Buffer.from(text).toString('base64'),sha256:new Bun.CryptoHasher('sha256').update(text).digest('hex')},umfProfile:preparation.umfProfile,ingress:{kind:'native'}};
  });return preparation.prepare(new TextEncoder().encode(JSON.stringify(input)));
 }
@@ -93,4 +94,29 @@ test('pending definitions and pending keys retain explicit unresolved meaning',(
  const selected=payload();selected.intents[0].targets[0].key={state:'pending',name:'future-key'} as any;
  const result=records.resolve(prepare(selected),3).endpoints[1];expect(result.record).not.toBeNull();expect(result.key).toBeNull();
  expect(result.endpoint.key.state).toBe('pending');
+});
+
+test('a same-name key on another Record or document cannot satisfy the target',()=>{
+ const value=payload();value.intents[0].targets[0].key={state:'selected',name:'label-key'} as any;
+ const original=prepare(value,null,undefined,(documentId,source)=>{
+  if(documentId!=='second-doc')return;
+  delete source.modules[0].elements[0].keys;
+  source.modules[0].elements.push({id:'other-label',kind:'field',scalarType:'string',nullability:'required',cardinality:'one',extensions:{}});
+  source.modules[0].elements.push({id:'Other',kind:'record',members:[{module:'m',element:'other-label'}],keys:[{id:'other-key',name:'label-key',fields:[{module:'m',element:'other-label'}]}],extensions:{}});
+ });
+ expect(original.declarations[1].records.map(r=>r.elementId)).toEqual(['Item','Other']);
+ expect(()=>records.resolve(original,3)).toThrow('owning Record key name correspondence unavailable');
+});
+test('complete endpoint and association inventory refuses a late unresolved selected Record',()=>{
+ const value=payload();value.intents[0].targets.push({...structuredClone(value.intents[0].targets[0]),element:'missing'});
+ expect(()=>records.resolve(prepare(value),4)).toThrow('Record correspondence unavailable');
+ const association=payload();association.intents[0].associationRecord={document:'second-doc',module:'m',element:'label',definition:{state:'selected',revision:'r1',sourceReference:'second-doc-source'}} as any;
+ expect(()=>records.resolve(prepare(association),4)).toThrow('Record correspondence unavailable');
+});
+test('ambiguous authored key names refuse in original UMF validation before correspondence',()=>{
+ expect(()=>prepare(payload(),null,undefined,(_,source)=>{
+  source.modules[0].elements.push({id:'other-label',kind:'field',scalarType:'string',nullability:'required',cardinality:'one',extensions:{}});
+  const record=source.modules[0].elements[0];record.members.push({module:'m',element:'other-label'});
+  record.keys.push({id:'duplicate-name',name:'label-key',fields:[{module:'m',element:'other-label'}]});
+ })).toThrow('KEY_DUPLICATE_NAME');
 });

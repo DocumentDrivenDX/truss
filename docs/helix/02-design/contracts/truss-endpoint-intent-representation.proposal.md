@@ -286,3 +286,12 @@ strict TypeScript. It demonstrates source-qualified correspondence only. E1's fu
 original semantic registration, E3 accepted-history custody and E4/E5 native
 provisional/promotion/report effects still remain required; no public activation
 or security-owner admission follows from these private results.
+
+The follow-up negative suite passes 30 combined tests/609 assertions. Its decoy
+Record owns a distinct Field under original UMF's member-ownership rule; it has
+the requested key name while the selected target Record has no key. Resolution
+refuses instead of borrowing that key or the same-name key in another document.
+A later invalid selected endpoint and an association Field each refuse the complete
+result, with no resolved-prefix output. Duplicate authored key names are rejected
+by the original UMF validator (`KEY_DUPLICATE_NAME`) before Truss correspondence;
+this is not a new Truss override. These remain pure pre-native observations.

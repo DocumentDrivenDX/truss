@@ -11,8 +11,10 @@ source-qualified occurrence pointers, and resolves selected key names only withi
 that Record. Candidate `key.name` means the authored UMF key `name`, not its `id`,
 field name or a global display-name lookup; absent/ambiguous names refuse. Pending
 definitions retain no invented Record/key, and pending key interpretation remains
-explicit even when its Record resolves. Twenty-seven combined tests/604 assertions
-and strict TypeScript pass. Scope is
+explicit even when its Record resolves. Thirty combined tests/609 assertions
+and strict TypeScript pass. Negative controls include a same-name key on a different
+Record, a missing later endpoint and a Field incorrectly selected as association
+Record. Original UMF rejects duplicate key names before correspondence. Scope is
 `original_supplied_endpoint_record_key_correspondence_only`; extension semantic
 registration, accepted-history custody, security admission and native complete
 relationship derivation remain open. No returned Record or key conveys a grant.
