@@ -521,3 +521,15 @@ This closes scoped callable-identity correspondence, not grants, argument depend
 closure or populated enforcement. The internal node-text extraction is explicitly
 16.2-scoped and must be requalified for another server build rather than advertised
 as a portable PostgreSQL AST API. All earlier generated-column limitations remain.
+
+The [populated receipt digest receipt](evidence/design-audit/pgserver-receipt-digest-component.json)
+now supplies five additional FK-valid administrative fixtures covering NUL/FF
+bytes, all256 byte values, distinct composed/decomposed Unicode spellings and
+exact-looking numeric JSON text with CRLF. All retained request/receipt/attempt
+bytes and15 generated SHA-256 values match independently computed Python
+expectations. Explicitly supplying a generated digest refuses with SQLSTATE428C9
+and leaves the six fixture rows unchanged in count. Outer rollback removes the
+namespace. These binary fixtures qualify storage behavior only; they are not
+admitted migration request/receipt encodings or protected original producers.
+Other generated homes, full byte collision processing, grants/current-person
+authority and complete installer/migration execution remain unqualified.
