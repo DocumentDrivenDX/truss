@@ -1,6 +1,6 @@
 {
   "scope": "Recent focused design reconciliations only; not a full 45-story semantic audit, runtime verdict or release qualification",
-  "basisCommit": "30e730a726003c924978b5a0e462fd9846960053",
+  "basisCommit": "33d8a44bcf00449f95970a0ab20fbbb3d75ff68e",
   "entries": [
     {
       "story": "US-001",
@@ -18,6 +18,15 @@
       "sha256": "f214baae305ee3e904e4259f8b598114f7fde10bd257cd9f5fae924b1f4faa39",
       "finding": "Existing component/UTF-8 rule is consumed; eight exact graph vectors supply independent expected orders.",
       "remainingHandoff": "Already-valid owner cross-document/cycle representation remains unresolved; pure order is independently implementable.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-003",
+      "reviewedSurface": "Valid unresolved endpoint representation",
+      "source": "docs/helix/02-design/technical-designs/TD-003-decide-what-happens-to-an-unknown-entity-type.md",
+      "sha256": "e7129593ea1619bf55ded34609b5889cb3330f83f6de363fca9bda340691bbd3",
+      "finding": "Current recognized UMF missing endpoints reject; provisional/skip cannot bypass upstream validity.",
+      "remainingHandoff": "Concrete already-valid owner representation or explicit product reconciliation remains required.",
       "verdict": "focused_review_only_not_story_completion"
     },
     {
@@ -165,6 +174,15 @@
       "verdict": "focused_review_only_not_story_completion"
     },
     {
+      "story": "US-020",
+      "reviewedSurface": "Direct lookup and shared decoder ownership",
+      "source": "docs/helix/02-design/technical-designs/TD-020-read-an-object-by-identifier-or-key.md",
+      "sha256": "4ec42330c6a243f93435bf31b5de05849ac495dd723ad767a3bc9676809d7908",
+      "finding": "Consumes closed lookup wires and fixed original statements, with complete termination before not_found.",
+      "remainingHandoff": "Exact descriptor/decoder/context/current-authority/native/resource producer composition remains unfinished.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
       "story": "US-021",
       "reviewedSurface": "Object paging and cost metric",
       "source": "docs/helix/02-design/technical-designs/TD-021-list-a-types-objects-in-pages.md",
@@ -180,6 +198,15 @@
       "sha256": "c89ec2db85c7aabd05329b93f9126da4e728cfc0041b037c59d7735a708052fd",
       "finding": "Reviewed fixed comparator, typed endpoint, lookahead and live versus held-context distinction.",
       "remainingHandoff": "Actual comparator/context/current-authority/native query execution remain unqualified.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-023",
+      "reviewedSurface": "Traversal interface versus output choice",
+      "source": "docs/helix/02-design/technical-designs/TD-023-traverse-one-to-three-hops.md",
+      "sha256": "7dc20334945300e42d0324f6559d5e0796250340a9661edf01daf8b6ef703fcb",
+      "finding": "Existing traversal/service/state/ledger candidates are authored; output selection is still explicitly pending.",
+      "remainingHandoff": "Human result choice and exact original expansion/store/resource/native realization remain required.",
       "verdict": "focused_review_only_not_story_completion"
     },
     {
@@ -210,12 +237,39 @@
       "verdict": "focused_review_only_not_story_completion"
     },
     {
+      "story": "US-027",
+      "reviewedSurface": "Language-neutral case and alias contract",
+      "source": "docs/helix/02-design/technical-designs/TD-027-build-an-implementation-from-the-contracts.md",
+      "sha256": "0442ac48ad9af14dd6eb8342385536b6b9d60b81bfafddcfdffb82ff5589a29e",
+      "finding": "Existing manifests and typed alias procedure/wire avoid duplicate schemas and identity normalization errors.",
+      "remainingHandoff": "Complete case operation/expectation/identity-path grammars, namespace interpretation and runner handshake still need composition.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-028",
+      "reviewedSurface": "Independent bidirectional interchange",
+      "source": "docs/helix/02-design/technical-designs/TD-028-pass-the-corpus-and-the-interchange-check.md",
+      "sha256": "0407f2365d823eda0a1c71e1aa5bcc2d3bb9586832a8834b6cd17acea4d616ed",
+      "finding": "Independent normative expected observations arbitrate both directions; agreement alone is insufficient.",
+      "remainingHandoff": "Complete corpus/native observer/runner profile and truly independent implementation remain required.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
       "story": "US-029",
       "reviewedSurface": "Within-major layout compatibility",
       "source": "docs/helix/02-design/technical-designs/TD-029-declare-the-layout-version-and-check-the-ddl-on-every-version.md",
       "sha256": "4be0dc1a16f8f6b306ccabfea375c76f59cacf8163ffb51d2ad2a8ebfad14a37",
       "finding": "Consumes explicit supported release ranges and complete selected inventory; no blanket same-major support.",
       "remainingHandoff": "Exact release ranges, bundle/current verifier and managed-target qualification remain unfinished.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-030",
+      "reviewedSurface": "Host extension journal ownership",
+      "source": "docs/helix/02-design/technical-designs/TD-030-extend-the-layout-from-a-host.md",
+      "sha256": "3f4f1edc5a86425a13bb669e52bc3ee4d8942ad796d7b927ea7079858bee414d",
+      "finding": "Named separate host ledger must coexist with exclusive Truss event producer; arbitrary extensions gain no universal guarantee.",
+      "remainingHandoff": "Exact extension/policy inventory and complete native corpus/rollback/privilege qualification remain required.",
       "verdict": "focused_review_only_not_story_completion"
     },
     {
@@ -237,6 +291,24 @@
       "verdict": "focused_review_only_not_story_completion"
     },
     {
+      "story": "US-033",
+      "reviewedSurface": "Embedded target qualification",
+      "source": "docs/helix/02-design/technical-designs/TD-033-run-the-layout-on-an-embedded-postgres.md",
+      "sha256": "1132e1e6afff98fe861d644470ac28499df99088f14befd8c42b62ce97634d43",
+      "finding": "Same byte-pinned bundle and semantic inventory apply; disposable process ownership is scoped to original harness resources.",
+      "remainingHandoff": "Embedded distribution/platform, complete native corpus and actual adapter/parallel lifecycle realization remain required.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-034",
+      "reviewedSurface": "Import retry versus receipt replay",
+      "source": "docs/helix/02-design/technical-designs/TD-034-repeat-an-import-and-change-nothing.md",
+      "sha256": "392ab7969a03acbee3cb9ecaea21ce4483327f939d5473ebbf74417ff2df13ed",
+      "finding": "Create-or-skip identity preserves records; load ID does not provide original report replay or whole-import atomicity.",
+      "remainingHandoff": "Exact original batch/reservation/configuration/report/resource/native producer qualification remains unfinished.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
       "story": "US-035",
       "reviewedSurface": "Provenance absence versus evidence loss",
       "source": "docs/helix/02-design/technical-designs/TD-035-keep-the-source-facts-of-an-imported-record.md",
@@ -246,12 +318,30 @@
       "verdict": "focused_review_only_not_story_completion"
     },
     {
+      "story": "US-036",
+      "reviewedSurface": "Acceptance origin and repeat",
+      "source": "docs/helix/02-design/technical-designs/TD-036-record-who-accepted-a-revision.md",
+      "sha256": "f68b500e3ef3190c6f02264a5fc1acb2c0063435958c2e11cd77111788ea5b58",
+      "finding": "Complete-input/current-head repeat preserves original origin; equal derived rows do not establish repeat.",
+      "remainingHandoff": "Trusted original role/context, protected origin insertion and authorized report/read projection remain required.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
       "story": "US-037",
       "reviewedSurface": "Historical endpoint-owner disclosure",
       "source": "docs/helix/02-design/technical-designs/TD-037-give-roles-access-to-modules-only.md",
       "sha256": "291436fbb7c6048f306277412ca3afd381ab0646fbbf536658ed3dca97ff59f6",
       "finding": "Consumes declaring plus both original endpoint-owner contexts under current grants.",
       "remainingHandoff": "Security-owned original exclusion/authority and complete native loader/predicate/privilege realization remain required.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-038",
+      "reviewedSurface": "Relationship current and historical authority",
+      "source": "docs/helix/02-design/technical-designs/TD-038-link-modules-and-see-the-link-only-with-both.md",
+      "sha256": "517cdd18365d3c17bfc66ae2fd3bde797c5027ab232f4f024d6d1f1df93d99e7",
+      "finding": "Valid in-document references and declaring/source/target owner intersection are distinct from cross-document support.",
+      "remainingHandoff": "Original owner mapping, complete native policy/direct/compiler path and retained historical qualification remain required.",
       "verdict": "focused_review_only_not_story_completion"
     },
     {
@@ -270,6 +360,15 @@
       "sha256": "5904cd046c758d2fbfeee7e0c530187f012f7b09b26ce9f2a7c9dc60ca56ae92",
       "finding": "Earlier host-savepoint rollback can remove pending group and later-acquired catalog locks; removed result cannot settle at later outer COMMIT.",
       "remainingHandoff": "Actual original adapter capture/rollback/lock lifetime and group closure/finalization remain unqualified.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-041",
+      "reviewedSurface": "Complete feed versus journal scan",
+      "source": "docs/helix/02-design/technical-designs/TD-041-publish-the-journal-without-losing-or-reordering-a-change.md",
+      "sha256": "5a977cd0ee2e19a2537601a017317c6f65cb5bfb6b65531510234b0df7155d16",
+      "finding": "Transaction/member/prerequisite custody and source acknowledgments cannot be reconstructed from journal row counts alone.",
+      "remainingHandoff": "Exact native manifest/configuration/fact-clock/retention/snapshot-cut and downstream application proof remain required.",
       "verdict": "focused_review_only_not_story_completion"
     },
     {
