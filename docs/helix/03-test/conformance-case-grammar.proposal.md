@@ -1,5 +1,22 @@
 # Language-neutral conformance case grammar — proposal 0.1
 
+## Combined carrier verification — 2026-10-09
+
+The [fresh combined schema receipt](../04-build/evidence/design-audit/schema-inventory-conformance-2026-10-09.json)
+records 147 top-level contract schemas with unique IDs, resolved references and
+strict Draft 2020-12 compilation, including the input, expected, fixture,
+identity-path and nested lookup-outcome proposals. The earlier 135-schema
+receipt is preserved. Reproduction accepts a separate output receipt path:
+`bun docs/helix/04-build/evidence/design-audit/check-schema-inventory.ts <installed-Ajv-2020-module-path> <new-receipt-path>`.
+
+The focused input/expected/fixture/path/outcome checks pass 8/11/8/10/8 controls,
+and the cross-artifact comparator passes eighteen controls. This establishes
+carrier reference integration and the enumerated shape/link witnesses only.
+Complete executable operation/profile registration, original artifact custody,
+independent fixtures and observers, native scope/authority/resource admission,
+and the contract-only independent implementer review remain required. A
+compiled complete schema set is not a complete passing conformance corpus.
+
 This proposal supplies interpretation rules for the existing conformance manifest's fixtures, inputs, expected and identityAliases artifacts. It does not replace that manifest, define new public Truss operations or certify a passing corpus. CONTRACT-004/011 remain governing; US-027/028 require independent fixtures and an implementer walkthrough. A closed machine-readable encoding and actual adapter registration remain follow-up outputs.
 
 ## Artifact roles
