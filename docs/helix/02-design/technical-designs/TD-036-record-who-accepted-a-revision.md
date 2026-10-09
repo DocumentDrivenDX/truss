@@ -44,7 +44,7 @@ Catalog acceptance requires administrative authority separate from ordinary muta
 
 ## Testing and Failure Handling
 
-STP-036 owns four criteria. Observe schema_rev/head/catalog/data/journal independently after semantic rejection, late persistence failure, cancellation and caller rollback. A returned rejected diagnostic is not persisted as an accepted revision. Reaccepting identical bytes returns the existing revision when no derived change exists: it must not overwrite that revision's original origin. If attempted-acceptance auditing is needed, the host owns a separate mechanism; it must not masquerade as accepted history.
+STP-036 owns four criteria. Observe schema_rev/head/catalog/data/journal independently after semantic rejection, late persistence failure, cancellation and caller rollback. A returned rejected diagnostic is not persisted as an accepted revision. Only verified complete acceptance-input equality at the current head returns the existing revision/report and preserves its original origin. Equal derived rows alone cannot establish repeat: changed document bytes, binding, policy, validator/support or transform pins require current acceptance validation under CONTRACT-003. A historical match after intervening acceptance is not a current-head repeat. The new attempt’s supplied actor/reason cannot overwrite the original accepted origin or silently create accepted-history evidence for a no-op. If attempted-acceptance auditing is needed, the host owns a separate mechanism; it must not masquerade as accepted history.
 
 ## Sequence, Rollback and Gates
 

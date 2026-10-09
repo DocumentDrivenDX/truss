@@ -1088,7 +1088,7 @@
     "03-test/test-plans/STP-034-repeat-an-import-and-change-nothing.md": "a4c2b769b2053470741ccb415d517dd1287de609ebf3d557bcbbfffdca6a2001",
     "02-design/technical-designs/TD-035-keep-the-source-facts-of-an-imported-record.md": "ad5731d685ed1dfa6f074dafc1b18a30e5ed3482920506a43cf0aeaf741c339c",
     "03-test/test-plans/STP-035-keep-the-source-facts-of-an-imported-record.md": "88eb025241d28435a007f411d65debdf4ec6717378ffb214a1d42186ab1c88de",
-    "02-design/technical-designs/TD-036-record-who-accepted-a-revision.md": "7104f430928314f81b626297bd7708bb04b74ee063cbe9b8f6bdb055a0d412ff",
+    "02-design/technical-designs/TD-036-record-who-accepted-a-revision.md": "f68b500e3ef3190c6f02264a5fc1acb2c0063435958c2e11cd77111788ea5b58",
     "03-test/test-plans/STP-036-record-who-accepted-a-revision.md": "b072bbec1c625ed6acd20a72d0b3101e560d180a60a43d1163a2e73b6b288e6f",
     "02-design/technical-designs/TD-037-give-roles-access-to-modules-only.md": "291436fbb7c6048f306277412ca3afd381ab0646fbbf536658ed3dca97ff59f6",
     "03-test/test-plans/STP-037-give-roles-access-to-modules-only.md": "0ac4027219c8ba0483b4130c608f66e0fe63cc11bda7b241fb36dc84d2b9ac92",
