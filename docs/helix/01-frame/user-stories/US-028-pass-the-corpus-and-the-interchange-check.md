@@ -29,7 +29,7 @@ ddx:
 
 ## Context
 
-Interchange means each implementation reads what the other wrote.
+Interchange means each implementation reads what the other wrote in both directions on the exact shared installed layout/profile. Each direction must also match independently authored normative expectations: two implementations agreeing on the same wrong result do not pass. Shared protected PostgreSQL enforcement and the Weft compiler may be common dependencies, but host orchestration, original result observations and interchange evidence must identify their actual implementation/dependency boundaries. Two wrappers around the same host implementation are not a second implementation.
 
 ## Walkthrough
 
@@ -46,7 +46,7 @@ Interchange means each implementation reads what the other wrote.
 
 ## Edge Cases
 
-- **A host extension case**: tagged outside the pass rule.
+- **A host extension case**: tagged outside the base corpus pass rule, with any separately advertised extension qualification stated explicitly. Tags cannot remove required base semantics or turn a missing required case into a pass.
 - **A newer corpus than the implementation**: reported, never silently passed.
 
 ## Test Scenarios

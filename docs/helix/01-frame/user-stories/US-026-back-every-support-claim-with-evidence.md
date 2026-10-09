@@ -29,7 +29,7 @@ ddx:
 
 ## Context
 
-A claim without a version and a test is not a claim.
+A support claim requires evidence of the behavior actually advertised under its exact tested implementation/build, layout, UMF subset, driver, security/resource and deployment profiles. Source/schema/type checks and component-native tests retain their limited scope; they cannot establish complete engine support. Historical evidence remains immutable and linked to its original artifacts, while current installed drift or changed dependencies invalidate its use as a current guarantee until the required qualification is repeated. Missing evidence is unverified, not a successful optional omission.
 
 ## Walkthrough
 
@@ -46,7 +46,7 @@ A claim without a version and a test is not a claim.
 ## Edge Cases
 
 - **A test that fails on one version**: the statement shows the failure.
-- **Evidence older than the contract**: flagged stale.
+- **Evidence older than the contract**: determine correspondence against exact original artifact/profile pins; changed governing behavior makes the affected claim stale. Regenerating an index or hash receipt without rerunning the required behavioral tests does not refresh qualification.
 
 ## Test Scenarios
 
