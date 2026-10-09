@@ -136,6 +136,40 @@ passing checks assembled from different layout proposals cannot qualify a route.
 These are engineering delivery dependencies, not a reopening of the owner's
 decision to ship migrations in the first release.
 
+### M5 clean-package qualification packet
+
+Shipping requires the administrative flow and its exact registered route inputs
+to be obtainable from the selected release distribution. A repository planner,
+source-tree SQL file or development-only import is not the shipped capability.
+Package home and public names remain subject to the existing owner decision;
+this packet applies to the chosen Python and TypeScript distributions without
+selecting those names. Release preparation inventories the complete delivered
+manifest, recipes, source/target inventories, UMF-generated DDL, verifier inputs,
+compatibility profiles and public entry points. If some are separately delivered,
+record their exact retrieval/admission contract instead of relying on a checkout
+or a mutable latest-version download. Administrative authority and recovery
+custody remain separately supplied services, not bundled credentials.
+
+Run LM-T07/08 from a new consumer environment with only the advertised released
+artifacts and declared dependencies. Preserve the same M1 route and original
+request throughout the following controls; neither a hand-written substitute
+recipe nor another release's source profile may fill a missing package artifact.
+
+| Control | Independent required observation |
+| --- | --- |
+| Inspect and verify without an upgrade | Public entry points resolve the packaged exact profiles; complete installed state is observed read-only, with no marker, epoch or ledger mutation |
+| Required delivered recipe, inventory or profile absent or byte-modified | Refuse before upgrade effects; report the actual unavailable/integrity cause and retain full source readiness evidence. No source-tree fallback or version-string-generated SQL |
+| Host startup against a supported old source | Startup reports incompatibility under the release matrix and performs no upgrade. Explicit deployment applies the registered route, verifies it, then permits compatible application startup |
+| Package update requiring no installed change | Independently verify unchanged installed inventory and retained meaning; catalog evolution and application startup perform no migration or new migration receipt |
+| Interrupted explicit deployment and a new consumer process | Restore the original durable recovery reference and reconcile without executing steps again; the package example exposes uncertainty and does not hide it in a framework success flag |
+
+Retain the built distribution digests, installed dependency versions, public
+import/command trace, exact original request/route artifacts and independently
+observed native changes/results. These controls qualify packaging and composition
+only after M1–M4 and the required backend/security services exist; the current
+development wheel smoke does not qualify migration delivery. Aurora and Lakebase
+retain their separate advertised-target evidence requirements.
+
 ### M1 populated preservation comparison
 
 Before selecting a route, author its expected preservation mapping independently
