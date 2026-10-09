@@ -852,6 +852,37 @@ compiler parameters and native execution. Retain cumulative comparison work and
 original admission custody; Python must not implement another duplicate resolver
 or infer complete population from projection success.
 
+### Owner SQL condition lowering integration
+
+The security owner's revision-30 snapshot describes draft SQL condition lowering
+over its endpoint mapping, preserving nested correlation and three-valued truth
+and refusing unsupported terms. This is ongoing owner work, not an adopted public
+compiler contract. Truss consumes the eventual exact registered output/parameter/
+alias/source profile; Python must not implement a competing policy lowerer.
+Condition generation is separate from authenticated person/fact admission and
+the current operation/publication decision. Even a constant true condition does
+not supply a trusted graph source, complete population, lease or authority.
+
+PY-03/C4 must independently compare owner interpretation and lowered native
+condition evaluation under the same original admitted source cut. Keep Boolean
+unknown distinct from false and from unsupported/unavailable source meaning;
+do not insert a convenience `COALESCE(..., false)` or convert missing evidence
+into an empty collection before the selected owner's decision procedure.
+
+| Integration control | Required original correspondence |
+| --- | --- |
+| True, false and unknown expressions, including nested AND/OR/NOT | Preserve the owner's exact truth result and final decision classification; Python truthiness is not the policy algebra |
+| Two association witnesses that separately satisfy different conjuncts | Nested SQL retains witness correlation; flattening joins or sharing endpoint values across witnesses cannot create a true condition |
+| A Record-backed edge's own Field versus an endpoint Field with equal name/text | Preserve qualified declaring identity, row witness and Field channel; endpoint data cannot replace the edge's stored value |
+| Unsupported term under an empty collection or a branch that would short-circuit | Owner preflight/support disposition remains explicit; SQL simplification cannot make unsupported meaning admitted |
+| Changed source, alias/parameter binding, context generation or lease after lowering | Refuse stale/substituted execution and publication under the owner protocol; successful condition generation is not freshness evidence |
+
+Freeze independent truth/predicate/source expectations before native execution,
+then observe protected reads/mutations and disclosure, including denied/unknown
+and unavailable branches. The exact handling of unknown at the final policy
+boundary follows the selected owner contract, not a new Truss decision here.
+No native security capability is qualified by these planned controls.
+
 ## Exact transport
 
 ### Initial Python driver qualification packet
