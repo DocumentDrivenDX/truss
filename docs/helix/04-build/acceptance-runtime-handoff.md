@@ -87,6 +87,31 @@ positive case cannot close multiple-version membership. Retained-only semantic
 references remain distinct from required executable checks under CONTRACT-003;
 resolving artifact bytes cannot classify a retained-only term as enforced.
 
+### A2 remaining dynamic producer integration
+
+| Field | Original producer inputs and ordering | Independent refusal controls |
+| --- | --- | --- |
+| rebinds | Observe actual insertion-generated history events after admitted effects, under the selected report/history version and original operation cut. Admit complete mutation-group start/final state and every sibling before projecting its rebind entries. Persist the complete immutable report afterward and before head publication | Missing/extra rebind, copied event from another operation/revision, changed native seq, omitted non-rebind sibling or wrong ordered group digest refuses; no preallocated fake event or version conversion |
+| assertions | Complete original occurrence inventory and independently admitted engine/native enforcement evidence, including unsupported/opaque meanings | Missing or duplicate occurrence, substituted owner/source/pointer, unqualified database classification or truncated inventory refuses completeness; observation coverage alone cannot establish enforcement |
+| pending_indexes | Complete accepted declaration inventory under the original layout/binding profile, original installation/revision, exact declaration definition and physical target. Capture pending declarations before report persistence; do not dispatch jobs within acceptance | Duplicate job identity, conflicting definitions for one target, swapped revision/installation, omitted declaration or a ready-name substitution refuses. Empty inventory requires complete original declaration-absence evidence |
+| umf | Original document-version inventory, interpretation profile and admitted version-to-subset artifact correspondence | Multiple-version omission/duplication, exchanged subset artifacts or unavailable original semantic composition refuses complete admission |
+
+For pending_indexes, preserve the original declaration when a later worker becomes
+ready, fails or loses its outcome. Physical-job admission/commit/run/observation
+uses its separate existing administrative tooling. Statistics jobs retain their
+distinct declaration/profile and cannot be inserted into the index array.
+Compiler/native index existence does not prove pending declaration completeness
+or grant execution authority. Exact-repeat acceptance returns original job
+declarations without submitting a new attempt.
+
+The full acceptance test must combine all four producers with the same original
+input, profiles, revision and operation context, including an input that actually
+requires rebind and an input that declares an index. Fresh empty-schema fixtures
+cannot close those branches. Independently expected full report bytes, effects,
+late-failure rollback and public head visibility remain A2–A7 exits. Preserve
+the current source-exact 0.1 codec refusal until a separately selected compatible
+report/history composition is implemented.
+
 ### A2 assertion inventory closure
 
 Inspection of `catalog-core-assertion-identities.ts` and
