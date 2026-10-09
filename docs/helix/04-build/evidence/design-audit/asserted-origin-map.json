@@ -1,0 +1,8 @@
+{
+  "profilePath": "docs/helix/02-design/contracts/asserted-origin-map-v0.1.proposal.json",
+  "profileSha256": "c3f2645d6af8465366b49332d62cf696ee58acebf826e4abd5aa9de33aa7497d",
+  "vectors": 5,
+  "allHistoryOriginShapesIdentical": true,
+  "closedShapeRefusals": 2,
+  "scope": "Actual candidate mapping output against governing report origin and every current history origin shape only; no installed mapping/actor authority or resource adoption"
+}
