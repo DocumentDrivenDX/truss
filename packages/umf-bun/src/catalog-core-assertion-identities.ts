@@ -1,0 +1,30 @@
+/** Original inspected core subset. Never a complete enforcement inventory. */
+import {createHash} from 'node:crypto';
+import {requireOriginalCatalogPreparation,type createCatalogInputPreparation} from './catalog-input';
+import {requireOriginalCatalogObservationCollection,type collectCatalogAssertionObservations} from './catalog-assertion-observations';
+type Prepared=ReturnType<Awaited<ReturnType<typeof createCatalogInputPreparation>>['prepare']>;
+type Collection=ReturnType<typeof collectCatalogAssertionObservations>;
+export function collectCatalogCoreAssertionIdentities(prepared:Prepared,collection:Collection){
+ requireOriginalCatalogPreparation(prepared);requireOriginalCatalogObservationCollection(prepared,collection);
+ const manifestBytes=Buffer.from(JSON.stringify({interfaceVersion:'truss-core-assertion-source-identity/0.1.0',producer:collection.fieldProfile,
+  operations:['kind','nullability','cardinality','facets'],basis:'original',identity:'original document digest, qualified owner and exact owner-produced pointer',missing:'retained absence observation; no assertion invented',enforcement:'none/unqualified'}));
+ const manifest=Object.freeze({identity:'truss.core-assertion-source-identity/0.1.0',bytesBase64:manifestBytes.toString('base64'),sha256:createHash('sha256').update(manifestBytes).digest('hex')});
+ const profile=Object.freeze({identity:'truss-core-assertion-source-identity',version:'0.1.0',sha256:manifest.sha256});
+ const entries=[];const absent=[];const deferred=[];const identities=new Set<string>();
+ for(const observed of collection.observations){
+  if(observed.basis!=='original'||!['kind','nullability','cardinality','facets'].includes(observed.operation)){deferred.push(observed);continue}
+  const result=observed.result as any;if(result.state!=='observed'){deferred.push(observed);continue}
+  const original=result.observation,meaning=original.meaning;
+  if(meaning?.state==='missing'){absent.push(observed);continue}
+  if(!['known','partial'].includes(meaning?.state)){deferred.push(observed);continue}
+  const di=prepared.documents.findIndex(d=>d.documentId===observed.documentId),document=prepared.documents[di],identity=observed.identity as any;
+  if(!document||JSON.stringify(original.source)!==JSON.stringify(document.interpretation.source)||typeof original.path!=='string'||!original.path.startsWith('/')||typeof identity?.module!=='string')throw Error('Original core source/owner pointer required');
+  let node:any=original.source;
+  for(const token of original.path.slice(1).split('/')){const key=token.replace(/~1/g,'/').replace(/~0/g,'~');if(node===null||typeof node!=='object'||!Object.hasOwn(node,key))throw Error('Original asserted source node absent');node=node[key]}
+  const source=prepared.original.input.documents[di].artifact,owner=Object.freeze({documentId:document.documentId,moduleId:identity.module});
+  const uniqueness=JSON.stringify([source.sha256,owner,original.path]);if(identities.has(uniqueness))throw Error('Duplicate original core assertion source identity');identities.add(uniqueness);
+  entries.push(Object.freeze({assertion:Object.freeze({sourceKind:'umf_document' as const,owner,definitionPin:source.sha256,sourcePointer:original.path,kind:'source' as const,sourceIdentityProfile:profile}),
+   source,ruleName:'core.'+observed.operation,ruleNameOrigin:'profile_generated' as const,enforcement:'none' as const,reason:'unqualified' as const,ownerEvidence:observed.evidence}));
+ }
+ return Object.freeze({profile,manifest,entries:Object.freeze(entries),absent:Object.freeze(absent),deferred:Object.freeze(deferred),complete:false as const,scope:'original_inspected_core_source_identity_subset_only' as const});
+}
