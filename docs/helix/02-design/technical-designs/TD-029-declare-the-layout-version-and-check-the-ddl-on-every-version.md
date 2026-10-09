@@ -37,7 +37,7 @@ Reuse US-045 bootstrap comparator; do not create a second layout authority.
 
 ## API/Interface Design
 
-CONTRACT-001 owns marker/version compatibility; CONTRACT-008 owns generated bootstrap/parity and authority transition; CONTRACT-004 owns qualification evidence. Resolve blanket minor-version acceptance versus required capability inventory in governing contracts before publication. A compatible version label cannot excuse missing selected physical meaning.
+CONTRACT-001 owns marker/version compatibility; CONTRACT-008 owns generated bootstrap/parity and authority transition; CONTRACT-004 owns qualification evidence. Consume CONTRACT-008’s declared-major and exact supported layout/runtime/corpus/profile-range rule. Different major refuses; same major still requires an explicitly admitted supported range, complete required inventory and current correspondence. No unknown routine/codec is admitted by version arithmetic. A compatible version label cannot excuse missing selected physical meaning.
 
 ## Data Model and Integration
 
@@ -57,11 +57,14 @@ Startup never repairs an incompatible namespace. Fresh installation is separate 
 
 ## Implementation Sequence
 
-1. Reconcile marker/comment and minor compatibility policy.
+1. Reconcile exact marker/comment/source inventory and consume the existing within-major supported-range rule; select concrete release ranges and explicit upgrade edges without inferring support from a shared major.
 2. Write red mismatch/missing-surface fixtures and complete probe manifest.
 3. Implement preflight and reuse independent bootstrap native runner.
 4. Run required target matrix and publish scoped compatibility receipt.
 
 ## Risks and Gates
 
-The story's comment-based version language is stale relative to installed schema marker. Blanket minor acceptance requires explicit compatibility guarantees; layout 0.x is draft, not a stable universal ABI. Exact-value and guard gaps remain independent probe gates. DDL parser success is not native behavior evidence.
+The story's comment-based version language is stale relative to installed schema marker. Same-major compatibility is explicitly limited by the selected release range and complete capability inventory; layout 0.x is draft, not a stable universal ABI. Exact-value and guard gaps remain independent probe gates. DDL parser success is not native behavior evidence.
+
+
+The read-only verifier must distinguish incompatible major, unsupported same-major range, missing required surface, drifted actual definition and unavailable original observation. None can trigger startup repair or implicit migration. A published compatible minor is an exact release selection supported by its complete required cases, not a fallback for unknown installed versions. Fresh installation, explicit registered upgrade routes and normal DDL-free catalog acceptance retain their separate entrypoints under CONTRACT-008.
