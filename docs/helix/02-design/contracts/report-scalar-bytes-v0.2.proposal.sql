@@ -28,7 +28,7 @@ BEGIN
    END LOOP;
   END IF;
   expected:=expected+CASE WHEN b<32 THEN 6 WHEN b IN (34,92) THEN 2 ELSE width END;
-  IF expected>1048576 THEN RAISE EXCEPTION 'scalar output capacity' USING ERRCODE='54000'; END IF;
+  IF expected>4194304 THEN RAISE EXCEPTION 'scalar output capacity' USING ERRCODE='54000'; END IF;
   i:=i+width;
  END LOOP;
  i:=0;

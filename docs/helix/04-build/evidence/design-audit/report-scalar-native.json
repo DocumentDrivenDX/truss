@@ -78,11 +78,18 @@
       "observed": "refused_22021"
     },
     {
-      "name": "exact-output-capacity",
-      "expected": "ed82f33b6fb1d3cdce0d98e6ac90a1debcde2868ecabf5e63ad5e96893f2ae3e",
+      "name": "short-escape-expands-beyond-one-MiB",
+      "expected": "d1ee889173f57e6ba96832f5f802412f571d9eb6904bf3cf8e674442e28d25e1",
       "completeOriginalBytesEqual": true,
-      "nativeBytes": 1048576,
-      "observed": "ed82f33b6fb1d3cdce0d98e6ac90a1debcde2868ecabf5e63ad5e96893f2ae3e"
+      "nativeBytes": 1200002,
+      "observed": "d1ee889173f57e6ba96832f5f802412f571d9eb6904bf3cf8e674442e28d25e1"
+    },
+    {
+      "name": "exact-output-capacity",
+      "expected": "2d35feb8c4e23f24bf7d223798c4effd41d7d24e0fca51b4b8964125845502a7",
+      "completeOriginalBytesEqual": true,
+      "nativeBytes": 4194304,
+      "observed": "2d35feb8c4e23f24bf7d223798c4effd41d7d24e0fca51b4b8964125845502a7"
     },
     {
       "name": "one-over-output-capacity",
@@ -100,8 +107,8 @@
       "observed": "refused_54000"
     }
   ],
-  "sourceSha256": "d6baa0af49f437f7974ad3bffe1fcf2a75657a1ad7d83c329102b8f5cc2113d3",
+  "sourceSha256": "5b99f2f05920a77c7617239acc9f183bc321248831acecc8e4fef7884c25de63",
   "fixtureSha256": "8d9796d6359b1aec328b0a90ce7fe0c03f17f5b3d322562cff85b33152edc7b6",
-  "checkerSha256": "693759f0828e8d5690c4a9cea91eca5377a16e257014468f4c3ae3b8f0209549",
+  "checkerSha256": "ef01cbee34840f77565417364d6a4013e857acc6fad671e60564ddd82cd7b24a",
   "scope": "Temporary function in one rolled-back native session; exact independent scalar bytes and invalid UTF-8/capacity refusals only. No installed routine, whole-report encoder, precharged native/driver resource profile, authority or acceptance effects."
 }

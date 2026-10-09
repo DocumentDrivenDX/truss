@@ -30,13 +30,18 @@ for vector in fixture['vectors']:
         statements.append("DO $$ BEGIN BEGIN PERFORM pg_temp.runtime_report_scalar_bytes_v0_2(" + literal + "); RAISE EXCEPTION 'invalid source accepted'; EXCEPTION WHEN SQLSTATE '22021' THEN NULL; END; END $$;")
         statements.append("SELECT '" + vector['name'] + "|refused_22021';")
         results.append({'name': vector['name'], 'expected': 'refused_22021'})
-boundary = b'"' + b'a' * 1048574 + b'"'
-statements += ["SELECT 'exact-output-capacity|'||encode(pg_temp.runtime_report_scalar_bytes_v0_2(decode(repeat('61',1048574),'hex')),'hex');",
-               "DO $$ BEGIN BEGIN PERFORM pg_temp.runtime_report_scalar_bytes_v0_2(decode(repeat('61',1048575),'hex')); RAISE EXCEPTION 'one-over output accepted'; EXCEPTION WHEN SQLSTATE '54000' THEN NULL; END; END $$;",
+expanded = b'"' + b'\\u000a' * 200000 + b'"'
+if len(json.dumps('\n' * 200000).encode('utf8')) >= 1048576 or len(expanded) <= 1048576:
+    raise ValueError('Independent short-escape expansion boundary required')
+statements.append("SELECT 'short-escape-expands-beyond-one-MiB|'||encode(pg_temp.runtime_report_scalar_bytes_v0_2(decode(repeat('0a',200000),'hex')),'hex');")
+results.append({'name': 'short-escape-expands-beyond-one-MiB', 'expected': sha256(expanded).hexdigest(), 'expectedNativeHex': expanded.hex()})
+boundary = b'"' + b'\\u0000' * 699050 + b'aa' + b'"'
+statements += ["SELECT 'exact-output-capacity|'||encode(pg_temp.runtime_report_scalar_bytes_v0_2(decode(repeat('00',699050)||'6161','hex')),'hex');",
+               "DO $$ BEGIN BEGIN PERFORM pg_temp.runtime_report_scalar_bytes_v0_2(decode(repeat('00',699050)||'616161','hex')); RAISE EXCEPTION 'one-over output accepted'; EXCEPTION WHEN SQLSTATE '54000' THEN NULL; END; END $$;",
                "SELECT 'one-over-output-capacity|refused_54000';"]
 results += [{'name': 'exact-output-capacity', 'expected': sha256(boundary).hexdigest(), 'expectedNativeHex': boundary.hex()},
             {'name': 'one-over-output-capacity', 'expected': 'refused_54000'}]
-statements += ["DO $$ BEGIN BEGIN PERFORM pg_temp.runtime_report_scalar_bytes_v0_2(decode(repeat('00',174763),'hex')); RAISE EXCEPTION 'output overflow accepted'; EXCEPTION WHEN SQLSTATE '54000' THEN NULL; END; END $$;",
+statements += ["DO $$ BEGIN BEGIN PERFORM pg_temp.runtime_report_scalar_bytes_v0_2(decode(repeat('00',699051),'hex')); RAISE EXCEPTION 'output overflow accepted'; EXCEPTION WHEN SQLSTATE '54000' THEN NULL; END; END $$;",
                "SELECT 'output-capacity|refused_54000';",
                "DO $$ BEGIN BEGIN PERFORM pg_temp.runtime_report_scalar_bytes_v0_2(decode(repeat('61',1048577),'hex')); RAISE EXCEPTION 'source overflow accepted'; EXCEPTION WHEN SQLSTATE '54000' THEN NULL; END; END $$;",
                "SELECT 'source-capacity|refused_54000';", 'ROLLBACK;']

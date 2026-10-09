@@ -55,6 +55,16 @@ remains unchanged. A1/A2 must compose actual native allocations/grants/source
 inventory and full report capacity; neither a larger scalar ceiling nor the
 temporary administrative test closes those gates.
 
+Composition review subsequently corrected the unadopted scalar output ceiling
+from one MiB to the existing tree profile's four MiB, retaining the one-MiB
+input ceiling. Eighteen native observations now include a short-escape original
+below one MiB with complete canonical scalar output above one MiB, and exact/
+one-over four-MiB output boundaries. The source/UMF/export and native receipts
+have been refreshed at their current hashes; earlier Git revisions retain the
+seventeen-case iteration. This removes a demonstrated accidental scalar subset
+restriction. Actual tree invocation of this candidate and complete report-tree
+parity still need composition evidence; neither ceiling proves a shared account.
+
 A subsequent graph-resource review moves the selected identifier-length check
 before NUL/surrogate scanning, verifies exact UTF-8 byte length before allocating
 encoded identifiers, and bounds edge labels before map lookup. Oversized malformed
