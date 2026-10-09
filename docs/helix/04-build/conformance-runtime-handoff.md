@@ -1,8 +1,8 @@
 # Conformance runtime implementation handoff
 
 Status: existing contracts and carrier proposals are authored; runtime services
-remain unimplemented. Source inspection finds only the layout migration planner
-under `packages/tooling/src`. The conformance constructors and runner/assessor
+remain unimplemented. `packages/tooling/src` contains the layout migration planner
+and a private alias-substitution candidate helper. The conformance constructors and runner/assessor
 lifecycle currently exist as declarations and type witnesses, not executable
 services. Governed inputs are CONTRACT-004/007/011, US/TD/STP-027/028, the case
 grammar and operation registry proposals. Reuse those APIs; no second runner,
@@ -16,6 +16,16 @@ composition only; it does not implement the runner, establish observer independe
 or qualify an operation against PostgreSQL or another implementation.
 
 ## Implementation sequence and independent exits
+
+C5 has a reusable private `conformance-alias-substitution.ts` component over
+already admitted bounded JSON/namespace/binding/scope projections. Seventeen
+synthetic controls now exercise that implementation, and strict TypeScript
+passes. It preserves literal data and exact integer text, uses only registered
+slots, refuses invalid/forward/rolled-back/unknown or wrong-generation bindings
+and returns a copied candidate input. It does not admit native issuer, visibility,
+resource accounting or complete public-wire semantics. C5 still requires those
+original runner procedures and independent native invariant comparison before
+normalization; no public conformance factory or capability is activated.
 
 C1 must consume the [private original-service construction port](../02-design/contracts/conformance-original-service-port.proposal.md).
 Public method shapes and matching profile metadata do not prove original
