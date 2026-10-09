@@ -4,6 +4,34 @@ Status: execution sequence authored; public runtime unavailable. Governing input
 
 ## Current implementation boundary
 
+### A1 producer/wire/decoder capacity correspondence
+
+Before mutation dispatch, admit the complete producer-to-host report route, not
+just separate producer and receiver limits. The current Python
+[full-carrier native receipt](evidence/design-audit/python-pg-receive-full-carrier-native.json)
+observes an 8,388,621-byte DataRow for a four-MiB bytea in text hex format and the
+existing fixed-one-MiB decoder's refusal. The receiver's successful raw capture
+cannot admit that decoder or establish full report support.
+
+A1 must bind the original producer's complete maximum serialized output, actual
+native result descriptor/OID/format and output encoding to an admitted decoder
+and simultaneous operation account before effect-bearing work. For a selected
+single-cell bytea route, account the distinct binary versus hex wire expansion;
+for another route, use its own original encoding/descriptor evidence rather than
+borrowing those measured sizes. Include frame/header/transport/backing, retained
+raw cell, decoded carrier, complete report views and output lifetimes. No complete
+report may be shortened to fit a mismatched component.
+
+Independently inject a compatible producer with an undersized decoder, a changed
+format/output setting and an unavailable complete account. Each must refuse
+before catalog staging, object/edge effects, report persistence or head changes;
+observe actual native submission/effect inventories. Then exercise a coherent
+positive tuple with a genuine complete report and independently expected effects.
+An unexpected late resource failure still follows original rollback/unknown-
+outcome custody; preflight cannot guarantee every environmental allocation succeeds.
+The ASCII carrier probe measures wire expansion only. Actual whole-report producer,
+installed authority, original driver/account and settlement remain unqualified.
+
 ### Complete scalar streaming qualification
 
 A1/A2 must consume CONTRACT-003's complete scalar-task UTF-8/sink rules rather
