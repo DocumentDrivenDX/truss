@@ -146,3 +146,23 @@ initializer effects. A CREATE success or equal table count cannot substitute for
 that complete inventory. The first populated migration route uses those same
 admitted inventories and preservation expectations, not these review version labels
 as release versions. PostgreSQL17.9 and managed-service evidence remain separate.
+
+## Exact local adjunct composition
+
+The [composed probe](../../../scripts/check-pgserver-adjuncts.py) now runs original
+base and both UMF-generated adjunct exports plus their immutable guard SQL in one
+rollback-only PostgreSQL16.2 transaction. Its [receipt](evidence/design-audit/pgserver-composed-adjunct-component.json)
+pins all five sources. All50 declared native table names are present; independent
+adjunct expectations verify configuration16columns/2FKs/3generated hashes and
+migration receipt11columns/1FK/3generated hashes. Each has two ALWAYS guards and
+no PUBLIC INSERT privilege. Both TRUNCATE operations refuse with SQLSTATE55000
+in origin and replica mode (four controls), and rollback removes the namespace.
+
+This closes the isolated dependency-order and local native guard-admission question
+for these exact components. It does not prove UPDATE/DELETE refusal on populated
+original capsules, full column/constraint/routine/grant parity, protected insertion,
+initializer/epoch publication or complete migration execution. Existing historical
+component tests keep their original tuple; this new local result is not borrowed
+managed-service or installed-engine evidence. The composed sources remain review
+candidates; release versioning and one complete bundle still require the remaining
+routines, original security procedures and independent full preservation profile.
