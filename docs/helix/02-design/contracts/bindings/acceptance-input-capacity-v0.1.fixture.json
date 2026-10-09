@@ -1,0 +1,137 @@
+{
+  "status": "planning-only complete wire fixture; no installed profile or valid UMF assertion",
+  "input": {
+    "acceptanceProfile": {
+      "identity": "fixture",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "version": "draft"
+    },
+    "binding": {
+      "state": "present",
+      "vocabulary": {
+        "identity": "fixture",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "version": "draft"
+      },
+      "artifact": {
+        "identity": "binding",
+        "bytesBase64": "eyJiaW5kaW5ncyI6W119",
+        "sha256": "b0005ba41f01f372d3fc486c12cd3ac2279c9e688ba7d12c653b57bc50e7ecb2"
+      }
+    },
+    "documents": [
+      {
+        "artifact": {
+          "bytesBase64": "e30=",
+          "identity": "doc-bytes",
+          "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+        },
+        "documentId": "doc",
+        "documentRevision": "r1",
+        "ingress": {
+          "kind": "native"
+        },
+        "umfProfile": {
+          "identity": "fixture",
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+          "version": "draft"
+        }
+      },
+      {
+        "artifact": {
+          "bytesBase64": "e30=",
+          "identity": "doc-bytes",
+          "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+        },
+        "documentId": "converted-doc",
+        "documentRevision": "r1",
+        "ingress": {
+          "kind": "converted",
+          "adapterProfile": {
+            "identity": "fixture",
+            "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+            "version": "draft"
+          },
+          "source": {
+            "identity": "source",
+            "bytesBase64": "b3JpZ2luYWwgc291cmNlCg==",
+            "sha256": "5424073a96f9f8a575231c720bdb3efa7f6d44f8e4ec63f480d1102c41750db8"
+          },
+          "lossReport": {
+            "identity": "loss",
+            "bytesBase64": "eyJsb3NzZXMiOltdfQ==",
+            "sha256": "37cfa753aabdc073a4dcfdf42d6f29c475324227d5714d7df213deea442b1c37"
+          }
+        },
+        "umfProfile": {
+          "identity": "fixture",
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+          "version": "draft"
+        }
+      }
+    ],
+    "interfaceVersion": "truss-acceptance-input/0.1.0",
+    "layoutProfile": {
+      "identity": "fixture",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "version": "draft"
+    },
+    "policy": {
+      "loss": "strict",
+      "profile": {
+        "identity": "fixture",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "version": "draft"
+      },
+      "unknownEndpoint": "reject"
+    },
+    "supportProfile": {
+      "identity": "fixture",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "version": "draft"
+    },
+    "transforms": [
+      {
+        "registration": {
+          "identity": "fixture",
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+          "version": "draft"
+        },
+        "targetDefinitionIdentity": "fixture-target",
+        "parameters": {
+          "tag": "decimal",
+          "value": "1.00"
+        }
+      }
+    ],
+    "validatorProfile": {
+      "identity": "fixture",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "version": "draft"
+    }
+  },
+  "expected": {
+    "canonicalTreeBytes": 2445,
+    "framedPreimageBytes": 2496,
+    "framedSha256": "8acec1f089c50ba168ee3e221fc6c3cbb5a946ee16c2b24be69f0f75afce5bfc",
+    "archivedDocumentBytes": 4,
+    "artifactRawBytes": 48,
+    "artifactBase64Bytes": 72
+  },
+  "boundaryExpectations": {
+    "sourceBytes": 1048576,
+    "base64Bytes": 1398104,
+    "minimumInputBytesExceedsPrivateArtifactLimit": true,
+    "sixIndividuallyValidArtifactBytes": [
+      1048576,
+      1048576,
+      1048576,
+      1048576,
+      1,
+      1
+    ],
+    "aggregateBytes": 4194306,
+    "aggregateLimit": 4194304
+  },
+  "scope": "Complete native/converted ingress, binding and transform custody sizing only. Fixture {} documents and synthetic pins are not acceptance-authorized."
+}

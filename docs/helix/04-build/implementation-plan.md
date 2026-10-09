@@ -2593,3 +2593,18 @@ Refusal precedes native effects and preserves adopted caller work; no fallback
 to hash-only matching or reduced provenance is permitted. These controls are
 planned, not executed. The next parser work starts only after this concrete
 whole-input basis and its registered schema/representation/custody are pinned.
+
+The [complete capacity fixture](../02-design/contracts/bindings/acceptance-input-capacity-v0.1.fixture.json)
+now makes both ingress branches, present binding, transform parameters and
+opaque source/loss custody concrete. It independently records 2,445 canonical
+tree bytes and 2,496 framed bytes.
+`bun docs/helix/04-build/evidence/design-audit/check-acceptance-input-capacity.ts`
+checks the closed Draft 2020-12 input schema with AJV, exact artifact
+base64/hash correspondence, independent canonical sizing and the two boundary
+calculations. A one-MiB source requires 1,398,104 base64 bytes before the input
+envelope; six individually admissible artifact lengths can total 4,194,306
+bytes, exceeding the aggregate bound by two. This is planning evidence only:
+the fixture's synthetic profile pins and empty document objects grant no UMF
+semantic validity, registered conversion capability or native acceptance.
+Replace those sources with original admitted producer outputs for RPDOC-01;
+retain these independent byte expectations as resource controls.
