@@ -15,6 +15,33 @@ ddx:
 
 # Design coordination and remaining work
 
+## Current committed owner baseline — 2026-10-09
+
+A fresh successful origin fetch confirms UMF `origin/master` at
+`1f7b5f5d2a355c4b476e3a96b289b9048f03f567` and Weft `origin/main` at
+`5856c73db0342363e64802905a94abb96209d757`. Both remain at the previously
+reviewed remote heads. The older checkpoints below describe historical
+source/evidence scopes, not the current remote baseline.
+
+Inspection with `git show origin/main:docs/helix/02-design/contracts/compile-request-v0.2.schema.json`
+confirms the committed Weft request requires SQL text, selected UMF 0.7.0
+module documents and the original target binding; additional members are
+closed. It supplies no parsed-query input ABI. The primary Weft working tree
+contains an untracked compile-request-v0.3 schema and uncommitted security/core
+changes. The v0.3 schema is absent from the fetched remote commit. Those edits
+belong to the security/Weft owners and are excluded from this committed
+integration baseline; do not copy them into Truss or reinterpret the existing
+compiler registration as their adoption.
+
+The consumer parsed-query boundary therefore remains an explicit integration
+dependency. Truss may use its existing pinned SQL-text compiler adapter for
+the qualified subset; it must not implement another SQL compiler, invent a
+parsed wire or make support claims from local draft filenames. A future owner
+handoff must pin the committed ABI and exact backend/UMF/security composition,
+then qualify it against original Truss installation and query evidence before
+replacing the current registration. This source refresh does not rebuild the
+compiler, rerun owner tests or qualify protected runtime execution.
+
 ## Refreshed remote UMF source — 2026-10-08
 
 A fresh origin fetch establishes UMF `origin/master` at
