@@ -29,6 +29,24 @@ review inputs, not adopted release interfaces. Security identity resolution
 continues to belong to its existing owner; Truss consumes that boundary rather
 than creating a competing resolver.
 
+### Migration planner implementation boundary
+
+Fresh execution of `bun test tests/layout-migration-plan.test.ts` on 2026-10-09
+with Bun 1.4.2 passes nine tests and 21 assertions. The inspected planner copies
+closed metadata, preserves exact ordered recipes, requires declared routes,
+refuses broken chains/default nontransactional routes and compares large version
+components without JavaScript number conversion. This evidence covers the pure
+LM-01 planner only.
+
+Every successful result explicitly has scope `declared_metadata_only`.
+`no_steps` means equal declared source/target metadata, not installed parity,
+an original committed upgrade or runtime readiness. A declared cross-major
+upgrade route may be planned administratively; it never relaxes a runtime's
+different-major refusal. LM-03/04 must independently admit actual source state,
+original recipes, authority and exclusions, then verify and settle the target
+before opening compatible target capabilities. No native executor, packaged
+CLI or managed-service support follows from this test run.
+
 The complete design goal is not achieved. This audit inspects the current source handoffs rather than treating declaration/coverage tests as complete behavior. Native identities and runtime qualification belong to implementation; missing producer interfaces and unresolved shared-owner meanings remain design work. The full B-001–B-015 plan and 45-story corpus remain governing.
 
 | Inspected source | Evidence observed | Design work still needed | Later implementation evidence |
