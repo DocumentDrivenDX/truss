@@ -29,13 +29,19 @@ ddx:
 
 ## Context
 
-A publisher may be a custom reader or a database-native synchronization; the contract states what either must preserve.
+A publisher may be a custom reader or database-native synchronization; either
+must preserve complete original transaction membership and revision/definition
+prerequisites. Delivery may repeat after failure. The downstream applies each
+complete transaction atomically and retains durable application evidence before
+source acknowledgment. Fragment delivery and journal-only positions are not
+complete applied boundaries; required revision-only/side-record transactions
+cannot disappear because no property journal row exists.
 
 ## Walkthrough
 
 1. Implementer registers a consumer and starts publishing.
 2. A record is created, changed and deleted; a catalog revision is accepted.
-3. The consumer applies each record by its key.
+3. The consumer verifies all required members/prerequisites and applies the complete transaction atomically, retaining its original applied boundary before acknowledgment.
 4. The consumer is stopped and restarted from an earlier position.
 
 ## Acceptance Criteria
@@ -50,7 +56,7 @@ A publisher may be a custom reader or a database-native synchronization; the con
 ## Edge Cases
 
 - **An older open transaction**: later changes are held back until it ends.
-- **A position older than the retained journal**: the consumer reports it must re-seed.
+- **A position older than complete retained/qualified archive coverage**: the consumer reports the explicit retention gap and must re-seed when the required original evidence is unavailable. Remembering a cursor does not repair the gap.
 
 ## Test Scenarios
 

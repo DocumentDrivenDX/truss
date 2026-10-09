@@ -29,11 +29,16 @@ ddx:
 
 ## Context
 
-Lag depends on the transport and on long-running transactions; it has to be observable, not assumed.
+Lag depends on transport and long-running transactions; it must be observed
+from the same qualified source snapshot, complete required feed fact kinds and
+actual durable applied/acknowledged boundaries. A heartbeat, newest write time,
+fragment cursor or numerically higher xid cannot establish freshness. Empty
+publishable backlog, held committed changes and unavailable evidence are
+separate states; no scope-filtered result claims global catch-up.
 
 ## Walkthrough
 
-1. A consumer reports its position after applying a batch.
+1. A consumer reports its exact epoch/scope-qualified position after complete durable application; source acknowledgment remains distinct from a possibly ahead downstream position.
 2. Auditor reads its lag.
 3. A long transaction holds the safe watermark back.
 4. Auditor reads lag again.
@@ -48,7 +53,13 @@ Lag depends on the transport and on long-running transactions; it has to be obse
 ## Edge Cases
 
 - **No registered consumer**: no lag is reported.
-- **A consumer ahead of the watermark**: nothing to read; lag is zero.
+- **A confirmed consumer boundary ahead of this observer's watermark**: preserve
+  it only under its qualified original observation and report the affected backlog
+  unavailable; do not infer zero lag. An unsupported speculative advance is
+  refused, not treated as confirmed progress.
+- **An empty publishable backlog**: zero age is permitted only after complete
+  authorized scoped absence is established. Held changes remain separately
+  reported; retained gaps, clock failures and denied scope never become zero.
 
 ## Test Scenarios
 

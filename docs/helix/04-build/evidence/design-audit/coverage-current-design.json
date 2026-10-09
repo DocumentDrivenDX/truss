@@ -1150,8 +1150,8 @@
     "01-frame/user-stories/US-038-link-modules-and-see-the-link-only-with-both.md": "6cea90e3fd8a2073c35acf3c3f0d109ead413749e8a7a91fcc08fd7bc9b09357",
     "01-frame/user-stories/US-039-read-umf-the-same-way-as-the-reference.md": "5f591ef21a4de6c554b02d15898f8c31fe1b3f19397c3591b5c4b43247454992",
     "01-frame/user-stories/US-040-apply-operations-as-one-atomic-group.md": "41d4a649f98bbb3e8e493753927917b93f485342c74d2ed66c0b96e200f751e8",
-    "01-frame/user-stories/US-041-publish-the-journal-without-losing-or-reordering-a-change.md": "beffaf56e890326b973dbdbd04815e2e110240253f8d60f54b93f69d158dd53a",
-    "01-frame/user-stories/US-042-read-how-far-behind-a-downstream-copy-is.md": "49abb2c987d93c42f7aaa9eabece65498634c37ae8e779c7de53c613b2606c56",
+    "01-frame/user-stories/US-041-publish-the-journal-without-losing-or-reordering-a-change.md": "ccd8c6b718623d62b1a505a4c9a9afe36643ce829604a69a82ff0d3c812642bb",
+    "01-frame/user-stories/US-042-read-how-far-behind-a-downstream-copy-is.md": "fd97545af6ceccb25dec1c9aa94505d0fe97ba879c8f95fd7cd7a0ffaa0eb97a",
     "01-frame/user-stories/US-043-make-a-group-safe-to-repeat.md": "38429945a17d36a38e12087158068f0b52176cf2ab9ba0e614239e3ba3ca3269",
     "01-frame/user-stories/US-044-run-a-change-in-a-transaction-and-roll-it-back.md": "9c5a41f249b88497def1bdb60127537b26dc7c92df4c9a6951f2744916129989",
     "01-frame/user-stories/US-045-bootstrap-the-internal-layout-from-umf.md": "7c766bfb28b6159dff9d6b8b237a8018d0af69aaf7a7e25e38129158e6209053"
