@@ -156,6 +156,27 @@ Two aliases resolving to the same identity must still satisfy the case's
 independent equality/inequality requirements; normalization cannot turn an
 actual collision into distinct symbols.
 
+Run `bun docs/helix/04-build/evidence/design-audit/check-conformance-alias-substitution.ts`
+for seventeen synthetic substitution controls over registered non-root public
+identity slots. The procedure copies original input, replaces only a closed
+reference object at a selected slot, and preserves literal strings and
+alias-shaped JSON outside those slots. Input mutation, forward references,
+unknown symbols, wrong namespaces, rolled-back/unknown bindings, ended scopes
+and changed pending scope generations refuse. Committed cross-scope use still
+requires independently admitted visibility. The exact identity remains string
+data, including values beyond the JavaScript safe-integer range.
+
+These fixtures supply admitted binding/scope projections, not native proof.
+The actual runner must obtain those facts through original issuer/namespace
+and transaction procedures, reserve complete parse/copy/constructed-wire
+capacity before substitution, and validate the whole constructed public wire
+under the exact registered schema and semantic profile before invocation.
+Literal `$a` in an identity slot remains literal and may fail that domain's
+native validation; it is never silently interpreted as an alias. Root identity
+inputs, if a selected original method permits them, require a separately
+registered root construction procedure rather than truncation or fallback.
+This witness does not qualify a complete production runner or native authority.
+
 Required independent controls include an escaped member pointer, an object
 member named `0`, a missing array index, a literal `$a` property, an alias-shaped
 JSON property that remains unchanged, a result binding from a rejected step,
