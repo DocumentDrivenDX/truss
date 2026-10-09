@@ -483,3 +483,33 @@ request, an unavailable historical receipt and a U-compatible versus T-only
 runtime. A missing historical proof remains unavailable; current U contents alone
 cannot reconstruct whether the old route committed. These are additional planned
 recovery controls, not support for a second migration edge or a new result API.
+
+
+### M4 restore/fork identity separation
+
+CONTRACT-008 retains the original source installation, epoch, incarnation and
+trusted database/cluster target independently of native OIDs and copied marker
+bytes. Extend LM-T04/08 with two explicitly admitted deployment targets whose
+backup-derived tables, schema names, OIDs where reproducible, original request
+and immutable migration receipt bytes are otherwise equal. One is the original
+source of the attempt; the other is a restored or forked incarnation. Register
+that distinction through the existing trusted deployment/restore identity
+procedure, never by editing a receipt or inventing a second identity authority.
+
+| Schedule | Required observation |
+| --- | --- |
+| Reconcile the original reference against the original target | The selected original-attempt procedure determines its outcome; actual receipt, target and current authority correspondence remain required |
+| Present the same reference and copied receipt on the fork | Refuse original-target correspondence or leave it unavailable under the selected protocol. Matching version, bytes, OIDs or schema name cannot produce original commit evidence or `already_applied` |
+| Lose the original target while the fork remains available | Preserve original recovery custody; fork availability cannot establish original termination, rollback or release of its native/publication obligations |
+| Restore a snapshot predating the upgrade while retaining the original host recovery reference | Observe the new incarnation separately. Do not rerun the old request, infer rollback from missing receipt, or retarget the original attempt to the restored connection |
+| Restore a post-upgrade snapshot with complete copied target inventory | Current restored-installation verification and original-attempt settlement remain separate. Readiness requires the admitted restore/incarnation procedure and current compatibility; a copied successful receipt cannot skip it |
+
+Independently record trusted target/incarnation observations, original reference
+membership, recipe-submission counts and native/publication custody. All lookup
+branches submit zero migration recipes. Any subsequently authorized upgrade on
+the restored installation requires its own freshly admitted original source and
+request; it does not rewrite the historical attempt. No generic reset, receipt
+rebind, restore provider or new migration result variant is selected here.
+These cases become executable with M1/M2/M4's actual registered services and
+independent restore identity evidence; copied fixture labels alone do not qualify
+the separation.
