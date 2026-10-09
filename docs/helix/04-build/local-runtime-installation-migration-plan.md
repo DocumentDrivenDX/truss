@@ -404,3 +404,15 @@ missing handler bodies; it preserves the historical0.6 receipt rather than
 relabeling that older source evidence. The next complete-bundle work follows
 original operation dependencies → handlers/validators → independent full native
 parity → initializer/publication, while retaining all other release obligations.
+
+## Operation issuer dependency before canonical guards
+
+The [issuer handoff](operation-ordinal-issuer-handoff.md) records a reproduced
+OC01 conflict in the existing private admission allocator: savepoint rollback
+reissues ordinal0 in the same native transaction. The other three admission
+context families share the inspected MAX-over-surviving-rows source expression.
+The original executor issuer must replace that derivation before these candidates
+can support canonical observers or installer readiness. The native receipt marks
+contractConformant=false; it does not relabel gap reproduction as qualification.
+Correct all families against the same original issuer/driver/security port, retain
+original context fields and verify nonreuse under actual rollback/unknown outcomes.

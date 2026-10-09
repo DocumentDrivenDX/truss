@@ -359,3 +359,11 @@ These are engineering implementation dependencies, not pending product votes.
 The owner supplied connection boundary, Python ownership, refusal policy and
 local runtime direction apply. Native driver/account and final security composition
 remain independent integration outputs; do not infer them from local psql probes.
+
+Current OC01 correction prerequisite: the existing private admission routines
+allocate MAX(surviving ordinal)+1, which rewinds after savepoint rollback. The
+[issuer handoff and native conflict evidence](../../04-build/operation-ordinal-issuer-handoff.md)
+require original shared-executor issuance/custody before adopting those routines
+as observer dependencies. Query-submission ordinals are a different domain.
+The missing canonical handler bodies cannot be closed by reusing this allocator
+or accepting an untrusted ordinal argument.
