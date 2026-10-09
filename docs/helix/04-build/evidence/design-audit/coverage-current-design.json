@@ -1020,7 +1020,7 @@
   "artifactSha256": {
     "02-design/technical-designs/TD-001-accept-a-umf-revision-as-a-whole.md": "269c8c78868218d01bef902f4747cb745880fbb34fd96c378ece72559819bcef",
     "03-test/test-plans/STP-001-accept-a-umf-revision-as-a-whole.md": "b493b02ee003d23e63a7e704dcd07b212a14ce6bc220120e1674a54e4326ec1c",
-    "02-design/technical-designs/TD-002-import-documents-that-depend-on-each-other.md": "1d93cda1f65f88b51851a9d4c32cd1b4bff0758f4556a78708dcd572fe09647d",
+    "02-design/technical-designs/TD-002-import-documents-that-depend-on-each-other.md": "f14e3efc06125b222f6032f5b14d79c44ef01898d9e029945802b2f6dd3afb29",
     "03-test/test-plans/STP-002-import-documents-that-depend-on-each-other.md": "2311d9c7f342ae12aa1bb3868bd593944c0ce420db6562ae448ae4f46f9b38d2",
     "02-design/technical-designs/TD-003-decide-what-happens-to-an-unknown-entity-type.md": "e7129593ea1619bf55ded34609b5889cb3330f83f6de363fca9bda340691bbd3",
     "03-test/test-plans/STP-003-decide-what-happens-to-an-unknown-entity-type.md": "a979ebb116d2090d82b5bc080ad1782c7dc4a6654440a809dff36b171d145b30",
@@ -1111,7 +1111,7 @@
   },
   "storySha256": {
     "01-frame/user-stories/US-001-accept-a-umf-revision-as-a-whole.md": "d076a57fa4a69d85fd08b6945d6b2c635e94f07a0ed30fca1424656aa10066cf",
-    "01-frame/user-stories/US-002-import-documents-that-depend-on-each-other.md": "4b1f63bdcf5fa1d3ef5b1ebc973a0dee8262c45f51b086ed41ad39aaf7ba6400",
+    "01-frame/user-stories/US-002-import-documents-that-depend-on-each-other.md": "d6841eb57ec8d8fa9f5ec0b12fdab8f3d7882337cb75fb91bb08cd5e7a0ad957",
     "01-frame/user-stories/US-003-decide-what-happens-to-an-unknown-entity-type.md": "8d3a8c47f4814bcd59e3551fe6dff3bc7524925bc3798612c47e4167bce69fed",
     "01-frame/user-stories/US-004-keep-identifiers-stable-across-revisions.md": "b1cd8e8e427a3e92f8a8e5bb1f5f24e953759ee871ba41b893d5f6178b82d443",
     "01-frame/user-stories/US-005-see-every-violator-before-a-tightening-is-accepted.md": "467bbee17f6bddc79718ffeaabe12ced1720669997fee0c3deb2a9a9b4136bd9",

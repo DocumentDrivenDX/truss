@@ -29,7 +29,7 @@ ddx:
 
 ## Context
 
-`orders` declares a relationship to `Product`, which `sales` defines. The set may arrive in either order.
+`orders` declares a relationship to `Product`, which `sales` defines. The set may arrive in either order under an admitted representation with explicit cross-document dependency and endpoint meaning. Current UMF local references never search sibling documents; sorting or whole-set derivation cannot make an upstream-invalid external endpoint valid. The dependent and mutual-reference positive examples remain gated on a concrete available owner adapter/extension representation or explicit product reconciliation. Independent valid documents can still be ordered deterministically without claiming cross-document acceptance. Original document bytes, qualified identity and revision pins remain unchanged by ordering.
 
 ## Walkthrough
 
