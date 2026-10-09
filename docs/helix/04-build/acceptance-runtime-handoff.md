@@ -30,6 +30,19 @@ effects and preserve original recovery custody. These cases remain `not_run`;
 actual native source, UMF declaration, account and installation composition are
 required before claiming large-scalar or whole-report support.
 
+The [thirteen independent scalar byte vectors](../03-test/report-scalar-stream-v0.1.proposal.vectors.json)
+now author exact expanded sources, source split offsets and complete expected
+canonical bytes/lengths/hashes for admitted cases. They include two-/three-/four-
+byte scalars, U+10FFFF, NUL/control/quote/backslash spelling and malformed UTF-8
+after a 65,535-byte prefix. Compact repeat counts are fixture metadata only.
+The [fixture checker receipt](evidence/design-audit/report-scalar-stream-vectors.json)
+passes strict incremental UTF-8 at each individual split and the combined split
+schedule; expected JSON literal meaning and byte hashes match independently.
+This does not run the native encoder. Its eventual qualification must compare
+actual complete output to these original expected bytes, alongside the full
+report/capacity/containment controls above; expected output cannot be regenerated
+using the encoder under test.
+
 A subsequent graph-resource review moves the selected identifier-length check
 before NUL/surrogate scanning, verifies exact UTF-8 byte length before allocating
 encoded identifiers, and bounds edge labels before map lookup. Oversized malformed

@@ -1,0 +1,359 @@
+{
+  "status": "authored independent vectors; native not_run",
+  "profile": "CONTRACT-003 complete scalar task, candidate byte-document report composition",
+  "expansionMaximumBytes": "131072",
+  "vectors": [
+    {
+      "name": "two-byte-scalar-crosses-source-boundary",
+      "sourceParts": [
+        {
+          "hex": "61",
+          "repeat": "65535"
+        },
+        {
+          "hex": "c3a9",
+          "repeat": "1"
+        }
+      ],
+      "sourceByteLength": "65537",
+      "splitOffsets": [
+        "65536"
+      ],
+      "expectedUtf8Valid": true,
+      "expectedCanonicalParts": [
+        {
+          "hex": "22",
+          "repeat": "1"
+        },
+        {
+          "hex": "61",
+          "repeat": "65535"
+        },
+        {
+          "hex": "c3a9",
+          "repeat": "1"
+        },
+        {
+          "hex": "22",
+          "repeat": "1"
+        }
+      ],
+      "expectedCanonicalByteLength": "65539",
+      "expectedCanonicalSha256": "e5b572c5d24f3fbc02cbabd575df6515fb47e060e798bad49694304527eb1bb7"
+    },
+    {
+      "name": "three-byte-scalar-crosses-source-boundary",
+      "sourceParts": [
+        {
+          "hex": "61",
+          "repeat": "65535"
+        },
+        {
+          "hex": "e99baa",
+          "repeat": "1"
+        }
+      ],
+      "sourceByteLength": "65538",
+      "splitOffsets": [
+        "65536",
+        "65537"
+      ],
+      "expectedUtf8Valid": true,
+      "expectedCanonicalParts": [
+        {
+          "hex": "22",
+          "repeat": "1"
+        },
+        {
+          "hex": "61",
+          "repeat": "65535"
+        },
+        {
+          "hex": "e99baa",
+          "repeat": "1"
+        },
+        {
+          "hex": "22",
+          "repeat": "1"
+        }
+      ],
+      "expectedCanonicalByteLength": "65540",
+      "expectedCanonicalSha256": "699981d2206a95d151f5f576470ae43850432ec2fa762266e3afae0af4e02616"
+    },
+    {
+      "name": "four-byte-scalar-crosses-source-boundary",
+      "sourceParts": [
+        {
+          "hex": "61",
+          "repeat": "65535"
+        },
+        {
+          "hex": "f09f9982",
+          "repeat": "1"
+        }
+      ],
+      "sourceByteLength": "65539",
+      "splitOffsets": [
+        "65536",
+        "65537",
+        "65538"
+      ],
+      "expectedUtf8Valid": true,
+      "expectedCanonicalParts": [
+        {
+          "hex": "22",
+          "repeat": "1"
+        },
+        {
+          "hex": "61",
+          "repeat": "65535"
+        },
+        {
+          "hex": "f09f9982",
+          "repeat": "1"
+        },
+        {
+          "hex": "22",
+          "repeat": "1"
+        }
+      ],
+      "expectedCanonicalByteLength": "65541",
+      "expectedCanonicalSha256": "18f65fdec3653d755ae27ae75a47691af119ab76a5cbefb7e0a1cbb00d99402e"
+    },
+    {
+      "name": "highest-Unicode-scalar",
+      "sourceParts": [
+        {
+          "hex": "61",
+          "repeat": "65535"
+        },
+        {
+          "hex": "f48fbfbf",
+          "repeat": "1"
+        }
+      ],
+      "sourceByteLength": "65539",
+      "splitOffsets": [
+        "65536",
+        "65537",
+        "65538"
+      ],
+      "expectedUtf8Valid": true,
+      "expectedCanonicalParts": [
+        {
+          "hex": "22",
+          "repeat": "1"
+        },
+        {
+          "hex": "61",
+          "repeat": "65535"
+        },
+        {
+          "hex": "f48fbfbf",
+          "repeat": "1"
+        },
+        {
+          "hex": "22",
+          "repeat": "1"
+        }
+      ],
+      "expectedCanonicalByteLength": "65541",
+      "expectedCanonicalSha256": "d6be601594ff380c4a5e3cb7fcfc5f8f827847026cefe9d66c8bd17112d83f8a"
+    },
+    {
+      "name": "byte-document-controls-and-quotes",
+      "sourceParts": [
+        {
+          "hex": "61",
+          "repeat": "65535"
+        },
+        {
+          "hex": "00010a1f222f5c",
+          "repeat": "1"
+        }
+      ],
+      "sourceByteLength": "65542",
+      "splitOffsets": [
+        "65536",
+        "65537",
+        "65538",
+        "65539",
+        "65540",
+        "65541"
+      ],
+      "expectedUtf8Valid": true,
+      "expectedCanonicalParts": [
+        {
+          "hex": "22",
+          "repeat": "1"
+        },
+        {
+          "hex": "61",
+          "repeat": "65535"
+        },
+        {
+          "hex": "5c75303030305c75303030315c75303030615c75303031665c222f5c5c",
+          "repeat": "1"
+        },
+        {
+          "hex": "22",
+          "repeat": "1"
+        }
+      ],
+      "expectedCanonicalByteLength": "65566",
+      "expectedCanonicalSha256": "47590db6d0f80eae9c53c04ffaaa0b86bb34016a39d0a4b9a3bbe245117bf734"
+    },
+    {
+      "name": "overlong-two-byte",
+      "sourceParts": [
+        {
+          "hex": "61",
+          "repeat": "65535"
+        },
+        {
+          "hex": "c080",
+          "repeat": "1"
+        }
+      ],
+      "sourceByteLength": "65537",
+      "splitOffsets": [
+        "65536"
+      ],
+      "expectedUtf8Valid": false
+    },
+    {
+      "name": "overlong-three-byte",
+      "sourceParts": [
+        {
+          "hex": "61",
+          "repeat": "65535"
+        },
+        {
+          "hex": "e09f80",
+          "repeat": "1"
+        }
+      ],
+      "sourceByteLength": "65538",
+      "splitOffsets": [
+        "65536",
+        "65537"
+      ],
+      "expectedUtf8Valid": false
+    },
+    {
+      "name": "surrogate-encoding",
+      "sourceParts": [
+        {
+          "hex": "61",
+          "repeat": "65535"
+        },
+        {
+          "hex": "eda080",
+          "repeat": "1"
+        }
+      ],
+      "sourceByteLength": "65538",
+      "splitOffsets": [
+        "65536",
+        "65537"
+      ],
+      "expectedUtf8Valid": false
+    },
+    {
+      "name": "above-Unicode-maximum",
+      "sourceParts": [
+        {
+          "hex": "61",
+          "repeat": "65535"
+        },
+        {
+          "hex": "f4908080",
+          "repeat": "1"
+        }
+      ],
+      "sourceByteLength": "65539",
+      "splitOffsets": [
+        "65536",
+        "65537",
+        "65538"
+      ],
+      "expectedUtf8Valid": false
+    },
+    {
+      "name": "invalid-five-byte-lead",
+      "sourceParts": [
+        {
+          "hex": "61",
+          "repeat": "65535"
+        },
+        {
+          "hex": "f5808080",
+          "repeat": "1"
+        }
+      ],
+      "sourceByteLength": "65539",
+      "splitOffsets": [
+        "65536",
+        "65537",
+        "65538"
+      ],
+      "expectedUtf8Valid": false
+    },
+    {
+      "name": "isolated-continuation",
+      "sourceParts": [
+        {
+          "hex": "61",
+          "repeat": "65535"
+        },
+        {
+          "hex": "80",
+          "repeat": "1"
+        }
+      ],
+      "sourceByteLength": "65536",
+      "splitOffsets": [],
+      "expectedUtf8Valid": false
+    },
+    {
+      "name": "unfinished-final-scalar",
+      "sourceParts": [
+        {
+          "hex": "61",
+          "repeat": "65535"
+        },
+        {
+          "hex": "f09f99",
+          "repeat": "1"
+        }
+      ],
+      "sourceByteLength": "65538",
+      "splitOffsets": [
+        "65536",
+        "65537"
+      ],
+      "expectedUtf8Valid": false
+    },
+    {
+      "name": "ASCII-in-continuation",
+      "sourceParts": [
+        {
+          "hex": "61",
+          "repeat": "65535"
+        },
+        {
+          "hex": "f09f4182",
+          "repeat": "1"
+        }
+      ],
+      "sourceByteLength": "65539",
+      "splitOffsets": [
+        "65536",
+        "65537",
+        "65538"
+      ],
+      "expectedUtf8Valid": false
+    }
+  ],
+  "scope": "Compact exact byte patterns and independently authored expected canonical bytes. Prefix counts and split offsets are fixture metadata, not native authority. No selected native resource profile, encoder execution, complete report or PostgreSQL text admission."
+}
