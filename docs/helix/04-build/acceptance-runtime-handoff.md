@@ -46,10 +46,12 @@ reactivation hidden in extensions or automatic codec upgrade is permitted.
 
 `createProposedComposedAcceptanceReportHandoff` now provides an explicit private
 wire-codec candidate for that 0.3 report. It pins all eleven transitive schema
-files and reuses the existing bounded exact-byte/native-tree handoff. Nine
-baseline/composed tests with 42 assertions and strict TypeScript pass, including
+files and reuses the existing bounded exact-byte/native-tree handoff. Eleven
+baseline/composed tests with 64 assertions and strict TypeScript pass, including
 nonempty rebind/reactivation shape, missing lifecycle fields, version isolation
-and wrong owner-local key shape. Synthetic values remain unqualified. The
+and wrong owner-local key shape. Every required field has an omission control;
+extra claims, oversized input and post-preparation caller mutation are covered.
+Synthetic values remain unqualified. The
 baseline factory and acceptance correspondence still select 0.1; neither silently
 upgrades. The new codec does not produce lifecycle events, establish completeness,
 admit profile meaning or activate public acceptance.

@@ -33,3 +33,16 @@ test('rebind-only selected event version and exact owner-local key shape remain 
 test('codec scope cannot establish completeness or native transition meaning',()=>{
  expect(composed.prepare(wire({...candidate,reactivations:[],rebinds:[]})).scope).toBe('complete_report_wire_codec_handoff_only');
 });
+test('every selected field is mandatory and unknown claims refuse',()=>{
+ for(const field of Object.keys(candidate)){
+  const changed={...candidate} as Record<string,unknown>;delete changed[field];
+  expect(()=>composed.prepare(wire(changed))).toThrow('complete report wire');
+ }
+ expect(()=>composed.prepare(wire({...candidate,accepted:true}))).toThrow('complete report wire');
+});
+test('prepared byte custody survives caller mutation and rejects oversized wire',()=>{
+ const source=wire(candidate),expected=Buffer.from(source),result=composed.prepare(source);
+ source.fill(0);
+ expect(Buffer.from(result.originalUtf8Hex,'hex')).toEqual(expected);
+ expect(()=>composed.prepare(new Uint8Array(1048577))).toThrow('capacity');
+});
