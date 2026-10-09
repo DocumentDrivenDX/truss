@@ -1,17 +1,18 @@
 {
   "owner": "DocumentDrivenDX/umf",
   "revision": "6e67169ef562df2cca6ce6388fe7d57e35a751cd",
-  "model": "docs/helix/02-design/models/truss-layout-core-structural-0.5.proposal.umf.json",
+  "model": "docs/helix/02-design/models/truss-layout-core-structural-0.6.proposal.umf.json",
   "assets": {
     "explorer.js": "53ae28d5e07ae55fb3cc914cc9d992e2227823f6309abb96f1210e6722e6bb21",
     "explorer.css": "479073250e24e40c180a37d4f55207cd7f672612acc61965c10156249d7cb6e0",
     "style.css": "6c686ba762afdb65112034b3666bb8079cf137e8365fc160fece1d7fc2482f7a",
     "logo.svg": "5f40ae4ea560f51199abac4dda14b93d72b1667487a9791f4846cab73e4e114d",
-    "index.html": "ef9f92294d65dc0d9fdb193a456d1197e43b5e084ea28d394e1190dd5a6bfebe",
-    "schema-catalog.json": "19732e7b47445c3629407ade5001acf928d95cf6f4255bb172674ee36feb2a61",
-    "truss-layout.umf.json": "a025e6fe745832b9b59ee4d68cfe65b6bf50f29bc68f87b5fae36782dd1c16ab",
+    "index.html": "dcc131bb78b2cce4167c6e37421febcae7d669a2122b76b4880dc0552503f70b",
+    "schema-catalog.json": "21ee7ab73e34ed6a63789f86a81b9d1eee5654f9aaecc52656c67a36f3669e3d",
+    "truss-layout.umf.json": "8631fecfcc5f07ed7217a4d8d6483e99a705d44f242727d92561948723b37026",
     "truss-layout.native.umf.json": "261e32c6c62624418f124ac7fbe3c206338322a03755b7ac0f1a7c7d86002368",
-    "truss-operation-configuration.native.umf.json": "5c94ccae459ee46925acf01ce797443fb4a236a1157fae189aa5d726c225b1b7"
+    "truss-operation-configuration.native.umf.json": "5c94ccae459ee46925acf01ce797443fb4a236a1157fae189aa5d726c225b1b7",
+    "truss-layout-migration.native.umf.json": "45e1f57588c21e6b107031732cd6c135d759e4c8f7221e19642d053437e9bf79"
   },
   "scope": "Unmodified UMF browser JS/CSS; Truss HTML shell and exact current schema catalog. No production deployment."
 }

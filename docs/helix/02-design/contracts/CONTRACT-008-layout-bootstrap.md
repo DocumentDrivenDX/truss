@@ -235,8 +235,7 @@ owner/guard-alteration resistance. `python3 scripts/build-layout-migration-stora
 checks its derivation from original generated storage/guard bytes.
 
 Initializer, unavoidable receipt/finalization producer, lifecycle/protection
-cleanup, complete security privileges and core record/field/FK projection remain
-required. DELETE remains unconditionally unavailable; no caller cleanup flag,
+cleanup, complete security privileges remain required. The [core 0.6 projection](../models/truss-layout-core-structural-0.6.proposal.umf.json) now includes all eleven receipt columns and the original source-epoch FK through core record/field references with retained native key/constraint descriptors. It validates with zero errors and incomplete native interpretation; no portable key profile or installed mapping is inferred. The owner schema browser displays the receipt and downloads its original model byte-exactly. DELETE remains unconditionally unavailable; no caller cleanup flag,
 replication mode or future lifecycle intention bypasses these guards. No migration outcome is admitted
 by the model, generated DDL or this probe.
 

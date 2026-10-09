@@ -1,7 +1,7 @@
 {
   "browser": "153.0.8010.12",
   "ownerRevision": "6e67169ef562df2cca6ce6388fe7d57e35a751cd",
-  "definitions": 520,
+  "definitions": 532,
   "checks": [
     "Hugo Model page embeds working owner browser",
     "current structural model validates",
@@ -10,6 +10,7 @@
     "epoch registry and predecessor columns browse correctly",
     "retained native source download is byte-exact",
     "configuration capture columns browse and adjunct download is byte-exact",
+    "migration receipt columns browse and adjunct download is byte-exact",
     "390px mobile browser has no horizontal page overflow",
     "no browser errors"
   ],

@@ -1,0 +1,13 @@
+{
+  "observedRemoteRevision": "1f7b5f5d2a355c4b476e3a96b289b9048f03f567",
+  "browserRevision": "6e67169ef562df2cca6ce6388fe7d57e35a751cd",
+  "comparedPaths": [
+    "docs/helix/05-deploy/microsite/dist/explorer.js",
+    "docs/helix/05-deploy/microsite/dist/explorer.css",
+    "docs/helix/05-deploy/microsite/dist/style.css",
+    "docs/helix/05-deploy/microsite/dist/logo.svg",
+    "docs/helix/05-deploy/microsite/dist/explorer.html"
+  ],
+  "changedPaths": [],
+  "scope": "Fresh UMF origin/master fetch and exact git diff of selected browser assets; no upstream tests rerun, no native Truss qualification"
+}
