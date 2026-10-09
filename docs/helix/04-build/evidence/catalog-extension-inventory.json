@@ -1,0 +1,25 @@
+{
+  "ownerRevision": "c45c72a2a8a3c4fba61c40c5927dd9091acf8cc3",
+  "producerManifest": {
+    "revision": "c45c72a2a8a3c4fba61c40c5927dd9091acf8cc3",
+    "archiveSha256": "aa3ff171f8adbdbb6a0ad729dbcb2825dd2299b98e6d90a4e8e1e84835247838",
+    "bundleSha256": "ff990a3f9847a1bc0844fc6e637365462979efc3dcbec27383d4002943d64d83",
+    "operations": [
+      "readDocument",
+      "validateDocument",
+      "validateCoreRecordValues",
+      "upgradeSchemaPropertiesEnvelope",
+      "verifySchemaPropertiesUpgrade",
+      "rollbackSchemaPropertiesEnvelope"
+    ],
+    "scope": "Original logical UMF producers only; no native acceptance/containment qualification."
+  },
+  "sourceHashes": {
+    "packages/umf-bun/src/catalog-extension-inventory.ts": "ede7c98d12fe4aca15f8060ebb876adc31cd8492ab72205f1db8cce6cc15bd3f",
+    "tests/catalog-extension-inventory.test.ts": "2ce677ebcfadcbc499b92de58807a13c78d335e7266cd8148ab031c1d4932603"
+  },
+  "runtime": "Bun 1.4.2",
+  "tests": 2,
+  "assertions": 20,
+  "scope": "Original document/module/element extension occurrence preservation only. No extension interpretation, full assertion identity inventory, disclosure, native enforcement or accepted report publication."
+}
