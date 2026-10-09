@@ -51,3 +51,36 @@ changed recipe/drift refusal and the
 Qualify PostgreSQL and each advertised managed-service tuple separately. The
 example becomes executable only when the original installer, migration executor,
 recovery registry, verifier and public packaging are implemented.
+
+## Implementation order and ownership
+
+The existing planner in `packages/tooling/src/layout-migration-plan.ts` selects
+declared metadata only. The receipt guards in
+`packages/postgresql/native/layout-migration-receipt-immutability.sql` are one
+storage component. Neither is an executor. Implement the following sequence
+against the existing administrative binding, without introducing another
+framework-specific ledger or recovery service.
+
+| Sequence | Concrete implementation output | Evidence required before the next dependent stage |
+| --- | --- | --- |
+| M1 select the first supported populated route | One exact registered source/target bundle pair, original recipes and ordered native/data/preservation inventories; declare receipt-home initialization or conversion in that route | Independently authored LM-T03 expectations cover objects, keys, edges, retained values, catalog, reports, journal, receipts, feed positions and unresolved recovery state. A metadata-only route or empty database is insufficient |
+| M2 bind original administrative services | Private composition over the existing installation verifier, installed-target HostRecoveryRegistry, registered recipes and qualified driver; durable original request/attempt recovery custody before submission | Wrong service/build/profile, modified request, unavailable registry and caller-owned transaction refuse before effects; restart recovers the same original reference. No public JSON field grants administrative authority |
+| M3 implement transactional apply | One owned transaction runs source verification under common exclusions, ordered steps, independent target/preservation checks and atomic receipt/archive/marker publication | LM-T05 demonstrates actual first-step effects followed by second-step failure, complete rollback and no target receipt. LM-T06 and LM-P01–03 exercise the security-owned writer/context fences and any required publication drain |
+| M4 implement settlement and reconcile | Qualified original driver outcome correlation plus read-only original-attempt lookup, preserving every existing result variant | Actual lost-ack and post-commit verification failure produce commit_unknown/recovery_required/committed_unverified as applicable; reconcile never repeats recipes. LM-T04 verifies original repeat identity and fresh target parity, including changed bytes and native drift refusals |
+| M5 expose the packaged deployment flow | Existing apply/reconcile contract exposed through selected release packaging, with a clean consumer example and advertised source/target matrix | LM-T01/02/07/08 prove bootstrap separation, ordinary catalog evolution without migration, unsupported-route refusal, no automatic upgrade and framework failure after confirmed Truss commit. Each advertised PostgreSQL or managed-service tuple has its own native evidence |
+
+Truss owns route recipes, preservation obligations, executor composition and the
+deployment example. UMF owns generic schema representation and DDL generation;
+consume its admitted outputs rather than creating a second generator. Weft owns
+logical SQL compilation; verify compatibility with both selected layout profiles
+without moving migration execution into the compiler. The authorization/security
+owner supplies administrative admission, common exclusion order, freshness and
+publication drain. M3 cannot replace those with a Truss-specific ACL resolver or
+assume native lock release settles a publisher.
+
+M1 remains unselected: the authored physical layout proposals and component
+receipts do not establish a released source/target upgrade pair. M2–M5 remain
+unimplemented. Their first native schedule must use the same M1 pair throughout;
+passing checks assembled from different layout proposals cannot qualify a route.
+These are engineering delivery dependencies, not a reopening of the owner's
+decision to ship migrations in the first release.
