@@ -429,3 +429,11 @@ fixed savepoint/transaction controls, reusing the existing pinned instance recei
 All ten expected command/ready frames match; original issuer/account/unknown-outcome
 qualification remains false. See the issuer handoff for the exact integration
 boundary. This does not replace the full driver or native admission profile.
+
+The Python driver failure seam now independently demonstrates that a handler
+exception after SAVEPOINT CommandComplete leaves the backend pending. Quarantine
+prevents a new send; explicit socket close is followed by separately observed
+backend termination and rollback of the earlier pending fixture write. This closes
+one concrete callback-failure behavior, not full control/COMMIT recovery or driver
+account qualification. Preserve those separate outcomes in the original issuer
+integration rather than classifying all client exceptions as rollback.

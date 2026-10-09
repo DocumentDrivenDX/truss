@@ -125,3 +125,21 @@ source/transport seam for original control capture, not lost-response handling,
 finite pre-ingress heap accounting, savepoint authority, original outcome settlement
 or TLS/current-person admission. Implement the original reservation/issuer binding
 at this seam and qualify its complete independent controls before adopting it.
+
+### Failure after original savepoint command capture
+
+The [failure probe](evidence/design-audit/check_pg8000_local_control_failure_native.py)
+injects a handler exception after capturing the original SAVEPOINT CommandComplete
+frame and before its ReadyForQuery observation. The instance receiver quarantines;
+a subsequent submission refuses without another send. Independent pg_stat_activity
+observation still shows that same backend idle in transaction. A client exception
+therefore did not settle the transaction or restore usable driver custody.
+
+The probe explicitly closes its original socket, then separately observes backend
+termination and absence of its earlier pending fixture write. This explicit probe
+cleanup is not automatic replay or a production recovery procedure. The
+[receipt](evidence/design-audit/pg8000-local-control-failure-native.json) preserves
+ driverPortQualified=false. It qualifies this injected callback failure seam only,
+not arbitrary network loss, original issuer/account/control permits, unknown COMMIT,
+durable recovery registration or ordinary-person/TLS admission. Native pending and
+later terminated observations remain separate from adapter quarantine.
