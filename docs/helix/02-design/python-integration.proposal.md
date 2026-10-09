@@ -22,6 +22,37 @@ Weft's committed source exposes `weft.compile_json(request: str) -> str` through
 
 ## Consumer count-summary integration
 
+### PY-02 reproducible development wheel recipe
+
+Use a clean source checkout of Weft commit
+`5856c73db0342363e64802905a94abb96209d757`, not the security owner's dirty
+checkout. Its committed `rust-toolchain.toml` selects Rust 1.90.0; its Python
+pyproject pins maturin 1.9.6, and its Cargo feature forwards
+`truss-postgresql-qualified` to the shared runtime. From that clean checkout:
+
+```sh
+python3.11 -m venv .venv
+.venv/bin/python -m pip install maturin==1.9.6
+.venv/bin/maturin build --manifest-path crates/weft-python/Cargo.toml --features truss-postgresql-qualified --locked --release --interpreter .venv/bin/python --out dist
+```
+
+Install the exact emitted wheel into a separate clean Python 3.11 environment;
+record its actual filename, SHA-256, platform/ABI tag, source commit, Cargo.lock
+hash, toolchain and complete feature set. Do not guess a wheel filename or reuse
+an unpinned ambient installation. Do not enable `test-original` or a candidate
+backend as a substitute for the selected feature. The original extension exposes
+`weft.compile_json(str) -> str`; the conformance-configuration entry point is
+conditional on `test-original` and must be absent in this selected build.
+
+First verify import, exact wheel identity and refusal of a closed invalid request;
+then run independently authored supported-query/parameter/obligation expectations
+through the original registered mapping. An import or a JSON error response is
+only a packaging/ABI smoke check, not compilation or native Truss support. This
+recipe is derived from committed owner source and remains not_run in Truss;
+wheel distribution and full native security/transport/mapping qualification
+remain PY-07 and PY-01b/03 dependencies. It supplies no new Weft registration or
+Python ACL/compiler implementation.
+
 Committed Weft `5856c73db0342363e64802905a94abb96209d757` defines COUNT(*)
 in CONTRACT-004's application-read 0.2 dialect and resolves it in
 `crates/weft-core/src/application_resolve.rs`. R8 should consume that owner
