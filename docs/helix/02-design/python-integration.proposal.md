@@ -76,7 +76,13 @@ without publishing SQL, rejects four wrong transport types and an invalid Unicod
 surrogate, and confirms the test-only configuration export is absent. Run
 `docs/helix/04-build/evidence/design-audit/check-weft-python-count.py` with the
 clean pinned-wheel interpreter; the [saved component receipt](../04-build/evidence/design-audit/weft-python-count-component.json)
-records fixture/checker/response hashes. The fixture has synthetic upstream
+records fixture/checker/response hashes.
+The checker first verifies the saved original wheel hash and compares the loaded
+native extension byte-for-byte with its sole native wheel payload, retaining both
+hashes in the receipt. A matching package version alone cannot pass this check;
+missing original wheel custody refuses before compilation. This establishes
+artifact correspondence only, not administrative or query authority.
+The fixture has synthetic upstream
 catalog identities and is not accepted Truss state. These checks do not qualify
 native queries, complete obligation handling, actual catalog mapping or Python
 runtime publication.

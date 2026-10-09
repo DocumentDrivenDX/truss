@@ -3,9 +3,24 @@ import hashlib
 import json
 from pathlib import Path
 import sys
+import zipfile
 import weft
+import weft.weft as native_extension
 
 repository = Path(__file__).resolve().parents[5]
+build = json.loads(Path(__file__).with_name("weft-python-wheel-development-smoke.json").read_text())
+wheel = Path(build["wheel"]["path"])
+if hashlib.sha256(wheel.read_bytes()).hexdigest() != build["wheel"]["sha256"]:
+    raise ValueError("Original wheel bytes changed")
+with zipfile.ZipFile(wheel) as archive:
+    members = [name for name in archive.namelist() if name.endswith(".so")]
+    if len(members) != 1:
+        raise ValueError("Expected exactly one original native extension")
+    native_bytes = archive.read(members[0])
+if Path(native_extension.__file__).read_bytes() != native_bytes:
+    raise ValueError("Loaded extension does not match original wheel payload")
+if build["features"] != ["truss-postgresql-qualified"]:
+    raise ValueError("Wrong original build feature tuple")
 fixture = repository / "tests/weft/fixtures/qualified-count.request.json"
 request = json.loads(fixture.read_text())
 raw = weft.compile_json(json.dumps(request))
@@ -37,6 +52,9 @@ receipt = {
     "scope": "public Python compiler-only count, profile and transport checks; synthetic upstream binding, no accepted Truss IDs or native execution",
     "python": sys.version,
     "weftVersion": weft.__version__,
+    "wheelSha256": build["wheel"]["sha256"],
+    "nativeExtensionSha256": hashlib.sha256(native_bytes).hexdigest(),
+    "loadedExtensionMatchesOriginalWheel": True,
     "fixtureSha256": hashlib.sha256(fixture.read_bytes()).hexdigest(),
     "checkerSha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
     "countResponseSha256": hashlib.sha256(raw.encode()).hexdigest(),
