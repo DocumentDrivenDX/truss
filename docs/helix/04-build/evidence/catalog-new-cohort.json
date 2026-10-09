@@ -26,6 +26,7 @@
     "catalog-report-immutability": "c243b51682de3fee979b977626bb54279eccb3de22a24270e0bda467bd215167",
     "catalog-original-context": "628db25db14d5bd7c979f16b2ddefcff3e41781747e75485fc1253515b55fd0d"
   },
+  "capturedOriginBasisProducerSha256": "59cdb6838ae77bd33733fb22219fbbbfc9cfa6e7ef6e7c7bbbbfb304638b557f",
   "assertedOriginBasisProducerSha256": "01312ed82b592ff5000df939a87679300acad12613f05fdc8a78a14bbb96390d",
   "coreAssertionIdentityProducerSha256": "5d0f2d7fb097f3853473c845f81439d7b74791b477b51e47a92add23f9fa6fab",
   "originalExecutionBasisProducerSha256": "f8ef3b4d5ab546e0a3ef41a518222b4aeaff8a4c9039c7ae1116e0489a2f64c8",
@@ -147,7 +148,11 @@
     "unfinished complete acceptance cannot commit",
     "operation truncate guard refuses even with no pending admission trigger",
     "ended native transaction cannot reuse captured report observation",
-    "failed commit removes all provisional catalog effects"
+    "failed commit removes all provisional catalog effects",
+    "complete staged original context3 pipeline returns native-retained asserted bytes",
+    "captured origin basis retains original native/report/executor issuance",
+    "copied captured origin basis cannot borrow original native custody",
+    "different original capture profile bytes refuse origin composition"
   ],
   "scope": "Actual original complete declared new catalog staging and atomic refusal only. Root profile/authority, retained lifecycle, acceptance report/head/finalizer and public entrypoint are unqualified."
 }
