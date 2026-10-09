@@ -1,0 +1,40 @@
+{
+  "status": "passed_read_only_native_receive_canonical_text_candidate",
+  "query": "BEGIN READ ONLY; SELECT pg_catalog.convert_from(pg_catalog.convert_to('{\"payload\":\"' || pg_catalog.repeat('a', 4194290) || '\"}', 'UTF8'), 'UTF8') AS carrier; ROLLBACK;",
+  "observedEncodings": {
+    "client_encoding": "UTF8",
+    "server_encoding": "UTF8"
+  },
+  "expectedPayloadBytes": 4194304,
+  "observedCellBytes": 4194304,
+  "observedDataRowBytes": [
+    4194315
+  ],
+  "completeCellEqualsIndependentLiteral": true,
+  "fixedOneMiBDecoderRefused": true,
+  "framesHex": [
+    "5a0000000549",
+    "430000000a424547494e00",
+    "54000000200001636172726965720000000000000000000019ffffffffffff0000",
+    "430000000d53454c454354203100",
+    "430000000d524f4c4c4241434b00",
+    "5a0000000549"
+  ],
+  "orderedTypeOids": [
+    25
+  ],
+  "rawCellsSha256": [
+    "31bf043dd25a50d8cce2c718431aac2e2f12a1d8622789b963ab98c3e730f8f4"
+  ],
+  "sourceSha256": {
+    "python_pg_frame_candidate.py": "ed92bfc5240f17f3447f868fb88e3647cc4bd9583e21ed18ad88eb7de1eb9968",
+    "python_pg_receive_candidate.py": "fd9c23e3da2358cf56abc6b561c893e5d56dd9c95756fe18ec7510f52a55f4bb",
+    "check_python_pg_receive_canonical_text_native.py": "cc12b387a0721c7468122fe97853065fd290da2d876b14823ffb5ec93845bd0e"
+  },
+  "remainingRawBounds": {
+    "bytes": 12582387,
+    "messages": 77,
+    "readCalls": 9903
+  },
+  "scope": "Administrative local trust-auth probe, BEGIN READ ONLY/ROLLBACK; raw recv_into framing and independent complete carrier-byte comparison only; fixed-one-MiB decoder refused as expected. No installed changes, supported driver, ingress/account/TLS/native containment, current security or publication qualification."
+}

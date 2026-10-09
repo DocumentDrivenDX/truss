@@ -708,6 +708,17 @@ implementation to make this experiment pass. If correspondence or complete
 capacity cannot be admitted, retain pre-effect refusal and the existing full
 report requirement.
 
+The selected text experiment now has a
+[separate native receipt](../04-build/evidence/design-audit/python-pg-receive-canonical-text-native.json).
+Its read-only probe admits original startup server/client UTF8 observations and
+returns a complete four-MiB synthetic canonical JSON value through convert_to /
+convert_from and text/OID25/format0. Every received byte equals the independently
+constructed original literal; the DataRow is exactly 4,194,315 bytes. This confirms
+that route's wire-size reduction without JSONB reserialization. The fixed-one-MiB
+decoder still refuses, explicitly retained in the receipt. Therefore receiver/
+decoder/account composition and genuine report production remain open; this
+experiment is not a supported report capability or a new binary codec.
+
 #### Full-report wire capacity before driver selection
 
 The frame candidate's one-MiB limit cannot transport the existing four-MiB
