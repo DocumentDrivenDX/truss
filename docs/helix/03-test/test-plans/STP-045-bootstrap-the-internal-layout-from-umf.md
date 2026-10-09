@@ -823,3 +823,19 @@ observers; the existing storage probe cannot serve as their passed result.
 | LM-I03 initializer rollback/unknown | Fail after home creation, or lose final COMMIT acknowledgment | Confirmed rollback removes new home/receipt/target effects; unknown preserves original registry custody and reconciles without another initializer or attempt |
 | LM-I04 drift/adoption refusal | Source expects storage but a guard/allocator is absent, or an unrecognized home exists | Refuse before route effects; no IF NOT EXISTS repair, erased prior receipts or fabricated source identity |
 | LM-I05 subsystem conversion | Upgrade a receipt encoding with retained repeats/recovery/history dependencies | Full original bytes/profile/identity preserved; original recovery and repeat resolve the same result; insufficient protection/peak capacity refuses, and current guards remain effective |
+
+### LM-T03/05 retained-wire capacity controls
+
+Predeclare exact independently encoded request/receipt sizes and registered
+producer maxima. Test a route whose recipes individually fit but repeated
+base64/metadata/request occurrences exceed the combined sixteen-MiB storage
+ceiling: refuse before step effects. Missing output maxima also refuse. Test
+exactly-at-bound and one-byte-over combined payloads under the selected encoder,
+plus overlapping original/decoded/driver/target allocations under the whole
+route account. Native CHECK refusal is not evidence of preflight charging.
+
+Force a producer to exceed its declared bound after an earlier step writes:
+observe complete route rollback and no receipt/target marker. Force uncertain
+containment at that point: retain original recovery custody and no ready result.
+No oversized artifact may be truncated, omitted or replaced by an unregistered
+archive reference. These remain planned native/resource cases.

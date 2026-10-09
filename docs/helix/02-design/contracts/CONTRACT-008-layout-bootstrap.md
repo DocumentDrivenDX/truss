@@ -239,6 +239,47 @@ cleanup, complete security privileges remain required. The [core 0.6 projection]
 replication mode or future lifecycle intention bypasses these guards. No migration outcome is admitted
 by the model, generated DDL or this probe.
 
+### Migration retained-wire resource admission
+
+The storage ceiling measures the exact stored request and receipt **serialized
+bytes**, not the sum of decoded recipes alone. `LayoutMigrationReceiptBody`
+contains an original attempt/request artifact, manifest, step recipes and
+observations; repeated artifacts and base64 expansion count at every serialized
+occurrence. A shared hash or in-memory reference does not reduce those stored
+bytes. The profile must specify the exact registered encoder and finite upper
+bound for each procedure's effects/validation/preservation output before steps.
+
+For this candidate, preflight reserves the complete request length plus the
+conservative maximum final receipt length against the shared sixteen-MiB
+payload limit. This includes every ordered step and final target artifact,
+JSON/string/base64 overhead and original-request repetition. Refuse a missing
+producer bound or an oversized route before upgrade effects. Separate complete
+profile and identity/incarnation storage bounds still apply. Individually valid
+artifacts are not necessarily a valid whole route.
+
+Before native submission, charge original input copying, complete decoding,
+owner interpretation, recipe loading and simultaneous prestate/target/receipt
+construction to the original whole-route account. Encoded and decoded copies,
+retained observations and driver buffers overlap; the sixteen-MiB storage limit
+is not a peak-host-memory guarantee. Native data conversion/verification work,
+statement deadlines, cancellation and containment have their own selected
+limits and original custody under LM-03/04. Arbitrary database resource behavior
+retains the separately classified guarantee selected by the owner.
+
+If a producer exceeds its admitted output bound after effects begin, contain and
+roll back the entire route using the reserved recovery capacity. Do not truncate
+the receipt, omit validation/preservation, commit without it, silently externalize
+mandatory bytes, or claim a pre-effect refusal. Uncertain termination retains
+recovery_required/commit_unknown as applicable. A proposed archive or compact
+reference encoding requires a separately registered resolvable/lifetime profile;
+it is not an automatic escape from this candidate's complete-byte requirement.
+
+The native combined-length CHECK is an independent last-line storage constraint,
+not the preflight or allocator/accounting implementation. A complete resource
+profile must realize and qualify the conservative encoder/producer/transport
+bounds before migration execution can be admitted. This ordering resolves the
+serialized-budget handoff without claiming measured memory/native limits.
+
 ### Publication drain within migration exclusion
 
 When a selected upgrade/authority transition requires retiring old read contexts
