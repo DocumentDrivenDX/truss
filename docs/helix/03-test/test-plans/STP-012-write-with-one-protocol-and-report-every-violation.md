@@ -49,3 +49,10 @@ Catalog mismatch, uniqueness/endpoint refusal, deadlock, serialization, cancella
 ## Build Handoff
 
 Create contract failure inventory/red tests, resolve precedence and equality gates, then implement the shared pipeline. All four criteria and ownership/fault supplements block closeout. A complete error enum without observed state/retry behavior is insufficient.
+
+
+## Complete diagnostics and original transaction outcome
+
+Author two independent invalid properties whose expected rule/path/layer facts do not come from the production validator. Establish complete observation of both under the selected profile and expect one invalid result with both diagnostics and no operation effects. Separately exhaust the selected work/byte/deadline bound after the first violation but before the second is examined: no complete invalid result or success can be inferred from that prefix. Preserve original failure classification and confirm containment before any resource-unavailable outcome; unresolved native cancellation remains the original executor outcome. No automatic smaller request or callback replay supplies missing validation.
+
+Run the valid and invalid requests inside a caller-owned transaction containing an earlier independently observed host sentinel. Valid application returns pending, with no driver COMMIT and no externally durable receipt/ID claim. Confirmed operation-local refusal preserves the sentinel and removes only this operation's effects. A host-requested outer rollback then removes the sentinel and valid pending effects together. Independently fault savepoint rollback/connection termination and assert no healthy transaction handle, fabricated no-change verdict or blind retry. Engine-owned execution separately requires confirmed outer settlement before a committed response. These are planned native/driver schedules, not runtime evidence.
