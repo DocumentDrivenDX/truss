@@ -59,3 +59,30 @@ Reproduce native extraction with `bun docs/helix/04-build/evidence/design-audit/
 ### Current diagram output
 
 The [current 0.15 structural SVG](../models/truss-layout-core-structural-0.3.review.svg) and [DOT source](../models/truss-layout-core-structural-0.3.review.dot) now consume the validated current 0.3 core model. Reproduce with `render-core-structural-er.py --current`; add `--check` for exact read-only source/receipt/output verification. The historical renderer default remains byte-identical and passes its original check. The [current receipt](../../04-build/evidence/design-audit/core-current-er-source.json) records 46 tables, 443 fields, 48 portable keys and all 61 original associations. Exact complete endpoint/ordered-field comparison, SVG node/edge inventory and declaring-module/current-version label checks pass. The new raster was visually inspected. Microsite embedding remains separate; arrows and dashed physical references retain the structural/native interpretation boundary.
+
+## Selected reference hybrid layout generation route
+
+Use the current 0.15 native UMF layout as original physical source custody,
+with the source-correlated 0.3 core structural projection for portable
+Record/Field/Key/Relationship inspection. The reference DDL route uses UMF's
+pinned PostgreSQL source export, preserving original native constraints,
+xid8/timestamp and nullable UNIQUE descriptors. Core association references
+remain endpoint metadata, not portable equality or enforcement declarations.
+No new portable-core key meaning is required for this selected route.
+
+Before adopting either output, independently compare every original relation,
+column, ordered key/FK descriptor and residual source artifact against the
+corresponding core/native inventories under exact source hashes. A changed
+core projection or native archive invalidates the paired output; neither
+artifact may silently become an independently edited layout authority. Truss
+owns this correspondence and installer policy, while UMF owns SQL export.
+The source-preserved native DDL must then pass complete installed effect and
+security/initialization/conversion parity before readiness.
+
+This closes the reference choice of a usable core-plus-native representation
+and generation route. It does not claim a generic whole-schema generator from
+portable core alone, full interpretation of unknown native descriptors or
+installed enforcement. Those separate capabilities must retain their own
+explicit limits and evidence. The Model-page owner browser presents the
+validated current structural projection and its retained native payloads;
+its complete=false notice is part of the truthful supported contract.
