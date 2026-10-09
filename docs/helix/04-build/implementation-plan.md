@@ -2640,3 +2640,14 @@ repeat/recovery. Independently inject failure at each transition and ordinary
 role bypass at each native boundary. Keep the temporary positive-COMMIT
 barrier until that complete chain passes. No browser, compiler COUNT fixture
 or component codec receipt can close this package.
+
+The complete-input capacity checker now exercises eleven independently selected
+corruption/provenance controls: documents-only replacement, omitted converted
+source/loss, fabricated conversion on native ingress, missing present binding,
+hash-only document artifacts, unknown root policy, host numbers, changed
+digests, noncanonical equal-byte base64 pad bits and changed conversion source
+with identical accepted UMF bytes. Shape-valid integrity controls are checked
+separately from schema refusals. All pass at the planning-fixture boundary;
+they do not implement duplicate-key raw transport admission, actual profile
+authority, resource preallocation, native bijection or positive acceptance.
+RPDOC full-boundary controls remain not_run.
