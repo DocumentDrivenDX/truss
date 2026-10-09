@@ -24,7 +24,7 @@
     "catalog-new-counts": "4d2962d3b8e1391ad9c97f6fdc2da7e0343463a6e2f4b7c9a1060603b6dab166",
     "catalog-provisional-empty": "754c3c53534a5a30d935a1942da903692c488aab3cd7fed3c0c5231c835f65c8"
   },
-  "reportPreparationProducerSha256": "15fd010fac1b8dcfc3de13d0a40f268c299eef45e914c0fc671de7b8816f1fa8",
+  "reportPreparationProducerSha256": "8da357fac30b9c24df296f5e64a4dab34b7b2b4d0cd5c4bfc2c1ebad0d34a433",
   "assertionProfiles": {
     "declarations": {
       "identity": "umf-declaration-inspection",
@@ -39,7 +39,7 @@
   },
   "reportDocumentProducerSha256": "a2ecf444bb1d58563c3fe76f04cd51e8a23342ccb40da1bbbe6d3b6a074007bb",
   "defaultHomeProducerSha256": "4766c10e24e494388dfd61f53f3863be054677c232f382612bf3947c9353e663",
-  "stageProducerSha256": "404e41a2eaa8d45e787ab4dd3ff73a2a5a803a6a705ecd36aebca93129955725",
+  "stageProducerSha256": "9f40d1b03b4887e906847ab3597f92244791333ec57966f954096a5d8c6f185a",
   "originalInputSha256": "b8c64857b2cd73ef99471ebc8310e76f27102c62d30854d80bc40441dcbe609c",
   "engine": "17.9 (Debian 17.9-1.pgdg13+1)",
   "umfProfile": {
@@ -86,6 +86,7 @@
     "effectGeneration substitution refuses report observation recheck",
     "effectGeneration substitution refuses report observation recheck",
     "original owner observation and reversible transition preserved inside exact evidence artifact",
+    "declared transform cannot pass new-only native staging as if absent",
     "composed report preparation derives all six counts under original native cut",
     "composed preparation retains matching native cut and actual available owner observations",
     "empty provisional report inventory has original native proof across the full retained catalog",

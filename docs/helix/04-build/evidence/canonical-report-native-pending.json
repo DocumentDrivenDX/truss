@@ -10,5 +10,7 @@
     "errorCode": "ERR_POSTGRES_CONNECTION_TIMEOUT",
     "detail": "Startup message sent; no response within five seconds on explicitly owned port 15434. Original docker inspect session 51460 still live without output."
   },
-  "scope": "Runnable native parity schedule and host case preparation; no native parity or accepted report evidence."
+  "scope": "Runnable native parity schedule and host case preparation; no native parity or accepted report evidence.",
+  "supersededBy": "canonical-report-native.json",
+  "note": "Historical timeout retained. Original inspect completed and subsequent exact-source native parity run passed; no daemon restart or duplicate launch."
 }
