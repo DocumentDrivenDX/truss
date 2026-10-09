@@ -32,6 +32,14 @@ outcome custody; preflight cannot guarantee every environmental allocation succe
 The ASCII carrier probe measures wire expansion only. Actual whole-report producer,
 installed authority, original driver/account and settlement remain unqualified.
 
+The response admission profile must also distinguish internal canonical-report
+parsing from original caller-input parsing. Both current host report paths retain
+one-MiB source limits; TypeScript's two-million-unit work cap independently refuses
+a four-MiB source. Consume the
+[response-parser handoff](../02-design/python-integration.proposal.md#internal-response-parser-profile-is-distinct-from-request-admission)
+when selecting A1's complete tuple. A larger receiver or a byte-limit change alone
+cannot make the original report codec support the complete selected output.
+
 ### Complete scalar streaming qualification
 
 A1/A2 must consume CONTRACT-003's complete scalar-task UTF-8/sink rules rather

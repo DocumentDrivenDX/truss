@@ -719,6 +719,36 @@ decoder still refuses, explicitly retained in the receipt. Therefore receiver/
 decoder/account composition and genuine report production remain open; this
 experiment is not a supported report capability or a new binary codec.
 
+#### Internal response parser profile is distinct from request admission
+
+Current source inspection identifies another A1/PY-01b composition gap:
+`packages/postgresql/src/acceptance-json.ts` fixes source capacity at 1,048,576
+bytes and logical work at 2,000,000; `ReportWireCandidate.prepare` likewise calls
+Python's retained parser with a one-MiB source bound. A four-MiB canonical response
+cannot be admitted through either current report path. Merely raising the
+TypeScript byte ceiling also fails its work account, whose initial charge already
+includes the entire source length. The saved codec/report receipts retain their
+original input subsets; transport success does not expand them.
+
+Author and admit a separate complete canonical-response parser/schema profile
+for the selected report output ceiling. Keep original caller-input/source admission
+limits unchanged. Its original registry tuple must bind parser grammar, full
+nineteen-field schema closure, source/UTF-8/work/depth/node/member limits and all
+simultaneous raw/string/schema/convenience-view allocations to the same operation
+account. No caller parameter, response length or native success mints that profile.
+Use the full original report bytes before schema projection; preserve numeric
+node refusal and exact tagged numeric values, escaped NUL, duplicate-member and
+unknown-content rules. Do not bypass schema admission with a parsed-looking object.
+
+Freeze independent controls using genuine schema-valid report artifacts at the
+selected response boundary and one over, then inject insufficient logical work
+and simultaneous-copy capacity. Verify complete fields/bytes and honest resource
+refusal separately from invalid-schema classification. Run unchanged caller-input
+boundary controls alongside them so a response-profile change cannot silently
+admit larger mutation/catalog requests. The four-MiB payload transport fixture is
+valid JSON but not a full report; it cannot supply that positive semantic case.
+Selected decoder/parser/account implementation and original admission remain open.
+
 #### Full-report wire capacity before driver selection
 
 The frame candidate's one-MiB limit cannot transport the existing four-MiB
