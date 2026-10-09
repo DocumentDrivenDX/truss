@@ -186,6 +186,48 @@ Repeat across the subsequent-upgrade reconciliation schedule. These planned cont
 separate lifecycle protections observable; the private trigger component alone
 cannot qualify complete installed privileges or archival durability.
 
+### M2/M3 full migration receipt capacity
+
+The current migration storage adjunct has one aggregate native check:
+`octet_length(original_request_bytes) + octet_length(original_receipt_bytes)`
+must be at most 16,777,216 bytes. Both artifacts must be nonempty. This is a
+combined stored-byte ceiling, not two independent sixteen-MiB limits. The
+planner's one-MiB metadata and 1,024-step ceilings do not qualify complete
+request/receipt production, storage or delivery.
+
+For M1's selected route, serialize and retain the exact original request before
+submission. The original receipt producer must supply a finite bound for its
+complete ordered step evidence, original recipes/procedures, preconditions,
+actual effects, target/preservation observations and installation/inventory
+artifacts. Admit request size plus that complete receipt bound against the native
+ceiling and original shared account before the first recipe effect. A small
+trial receipt, identity/digest-only substitution or dropping unselected original
+manifest content cannot establish capacity. If no complete bound is available,
+the route remains unavailable. This does not require predicting arbitrary
+allocation failure; unexpected late failure still uses original containment and
+settlement.
+
+Separately account base64 expansion inside exact artifacts, outer delivery,
+native backing/detoast and simultaneous retained/decoded views. The four-MiB
+acceptance-response candidate is not a migration response profile. The selected
+migration apply/reconcile transport must preserve its complete original receipt
+and commit/recovery evidence under its own admitted limits.
+
+Independent M2/M3/M4 controls must include:
+
+| Capacity case | Required observation |
+| --- | --- |
+| Valid route metadata fits the planner, but full request plus receipt bound exceeds storage | Refuse before recipe effects, receipt/archive insertion or marker advance; preserve actual administrative containment |
+| Combined stored bytes equal the native ceiling, then exceed it by one byte | Independently authored complete artifacts establish the exact boundary; both source and target/protection inventories remain complete. Native constraint success alone does not qualify semantic admission |
+| Each artifact separately fits sixteen MiB but their sum does not | Refuse aggregate capacity; no independent-per-field shortcut |
+| Original receipt grows through an additional step, recipe body or preservation inventory | Recompute the complete selected route bound; do not reuse the previous route's favorable receipt size |
+| Late encoding, consolidation or persistence failure after actual recipe effects | Confirm full rollback before reporting it; unknown termination/commit retains original recovery custody, never a shortened success receipt |
+| Apply committed but delivery/reconcile response capacity is unavailable | Preserve original confirmed commit and immutable receipt; no rerun or pruning to make delivery fit |
+
+These controls use M1's real populated route and the existing M2–M5 services.
+They introduce no alternate ledger, new native cap, public permit or automatic
+migration behavior. Source arithmetic and declarations alone remain unqualified.
+
 ### M2/M3 inspection-to-application change schedule
 
 Implement CONTRACT-008's “Metadata plan to registered execution correspondence”
