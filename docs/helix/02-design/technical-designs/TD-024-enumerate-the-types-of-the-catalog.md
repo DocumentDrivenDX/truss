@@ -38,7 +38,7 @@ Components are new; assembly stays I/O-free.
 
 Consume the [draft catalog view binding](../contracts/bindings/truss-catalog-view-v0.1.d.ts) and CONTRACT-003 enumeration rules. The view preserves exact definitions and distinguishes full inventory from an authorized closed projection. Native loading and pure reference/inventory validation are separate components; no mapper may promote a projection or provisional entry into full validated model support.
 
-CONTRACT-001/003 own catalog storage and acceptance; CONTRACT-007 owns context. Shared enumeration schema must define completeness, deterministic ordering, identity, flags and qualified role projection before publication. Do not expose mixed revision results as a valid mapping bundle.
+CONTRACT-001/003 own catalog storage and acceptance; CONTRACT-007 owns context. The existing catalog-view binding and CONTRACT-003 enumeration rules define completeness, deterministic ordering, identity, flags and qualified role projection. Select exact original loader/assembly/resource/context producers and qualify their complete correspondence before publication; do not commission a parallel view contract. Do not expose mixed revision results as a valid mapping bundle.
 
 ## Data Model and Integration
 
@@ -58,7 +58,7 @@ No schema migration. Incompatible view/profile versions refuse. Missing meaning 
 
 ## Implementation Sequence
 
-1. Define complete enumeration result/context policy and create red inventory/race tests.
+1. Consume the authored complete enumeration result/context rules, select original loader/resource/authority profiles and create red inventory/race tests.
 2. Implement fixed native reads and pure assembly.
 3. Qualify role/identity closure and preregistered 100-call p95 measurement.
 

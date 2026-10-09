@@ -1018,7 +1018,7 @@
     }
   ],
   "artifactSha256": {
-    "02-design/technical-designs/TD-001-accept-a-umf-revision-as-a-whole.md": "269c8c78868218d01bef902f4747cb745880fbb34fd96c378ece72559819bcef",
+    "02-design/technical-designs/TD-001-accept-a-umf-revision-as-a-whole.md": "b4f2c4162c68b1e199f88294fa04014985d941da4e0f44a21b71a5f9475b2877",
     "03-test/test-plans/STP-001-accept-a-umf-revision-as-a-whole.md": "b493b02ee003d23e63a7e704dcd07b212a14ce6bc220120e1674a54e4326ec1c",
     "02-design/technical-designs/TD-002-import-documents-that-depend-on-each-other.md": "f214baae305ee3e904e4259f8b598114f7fde10bd257cd9f5fae924b1f4faa39",
     "03-test/test-plans/STP-002-import-documents-that-depend-on-each-other.md": "e24d5f5468f1978e1821800cac1f99b4df96fa23ef5dec0bdc943a4042574f68",
@@ -1064,7 +1064,7 @@
     "03-test/test-plans/STP-022-list-an-objects-edges-bounded.md": "a1b21b25e50842bdb33941c09cc7378dbe9a8c184e38ec75bcc6d5b11b37d132",
     "02-design/technical-designs/TD-023-traverse-one-to-three-hops.md": "482d8195dbc1553a2cb66848b7bf25b1d55fed39e6f04ddff09c2e38beebeae3",
     "03-test/test-plans/STP-023-traverse-one-to-three-hops.md": "c205330104b3e9699a8db0d535202560c4beab97bd5b0158b2c3ca5612d2c78e",
-    "02-design/technical-designs/TD-024-enumerate-the-types-of-the-catalog.md": "87e0ba3d9419524eb8250347c0dbd37a9d90d6607e17421b919680c86ab331c1",
+    "02-design/technical-designs/TD-024-enumerate-the-types-of-the-catalog.md": "260b71999a476a90e16bb3609639f17fbf9d63a6873fba8f85a1cf6c949fd622",
     "03-test/test-plans/STP-024-enumerate-the-types-of-the-catalog.md": "3797a78c25272e8534fecb07510cf8231f9a0020703e2bc4b870f80eb1320cd0",
     "02-design/technical-designs/TD-025-report-the-enforcement-layer-of-every-assertion.md": "f13bc6fee9575dfbd921396a1466a37fd808e47284d5a54c7fafc74a1395aabb",
     "03-test/test-plans/STP-025-report-the-enforcement-layer-of-every-assertion.md": "d522ed245ea1b4c69cf01c99734851bb9dfc5d7c167013bcce4640cf22b45684",
