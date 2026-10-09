@@ -110,3 +110,28 @@ Independent integration tests must deliberately construct each incompatible comb
 Select the original native producer/resource/authority profiles for each row; reconcile one complete physical model and exact supported release/environment range; independently review and implement the authored language-neutral case/adapter grammar through C1–C7. Existing pending human decisions cover Python package ownership, traversal terminal-versus-path output, catalog ownership scope and pre-effect continuous-writer admission retry, alongside the benchmark statistic/profile selections in the decision queue. Preserve those questions rather than inferring an answer here. Optional traversal can remain unavailable while unaffected toolkit work proceeds, but its broader required design remains open.
 
 This proposal does not shrink full toolkit scope to the scalar reference milestone or a single compiler fixture. Broader exact recursive values, supported relationships, complete history/feed and consumer Python interchange retain their governing requirements and independent qualification exits.
+
+## Review-record shape for the selected composition work
+
+The [private review-record schema](reference-composition-review-v0.1.proposal.schema.json)
+makes the seven correspondence boundaries above explicit, exactly once each.
+Every boundary retains role-labelled complete original artifacts and separate
+`authored`, `independentReview` and `nativeQualification` assessments. An
+unreviewed/incomplete assessment names remaining outputs; a reviewed assessment
+retains its original evidence artifact. This is review data, not a new assembly
+configuration, registration format, readiness token or execution permit.
+
+Semantic admission must independently enforce unique roles, complete required
+membership and transitive dependencies, original bytes/digests, recognized
+reviewer/procedure and the evidence's exact current scope. A reviewed native
+assessment requires independently observed full selected behavior, not a codec
+receipt or source inspection. Native qualification cannot advance past incomplete
+authored or independent review; complete source coverage alone cannot advance
+native qualification. Review records preserve missing boundaries instead of
+omitting them to advertise a smaller complete toolkit. Original pending human
+choices and owner interface gaps remain incomplete with their actual reasons.
+
+Produce the selected record only from actual original inputs and review outputs;
+do not populate it with synthetic runtime identities or claim that this schema
+establishes compatibility. Current scoped receipts may be attached only to their
+real membership/procedure, with unmet broader obligations retained explicitly.
