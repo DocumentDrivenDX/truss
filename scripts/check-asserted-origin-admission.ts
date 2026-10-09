@@ -5,8 +5,8 @@ const url=process.env.TRUSS_OPERATION_TEST_URL;if(!url?.startsWith('postgres://p
 const sql=new SQL(url,{max:1});const checks:string[]=[];
 try{
  await sql.begin(async tx=>{
-  await tx.unsafe(await Bun.file('packages/postgresql/native/operation-asserted-origin-admission.sql').text());
-  await tx.unsafe(await Bun.file('packages/postgresql/native/catalog-captured-context.sql').text());
+  await tx.unsafe(await Bun.file('packages/postgresql/native/operation-asserted-origin-admission.sql').text().then(text=>text.replace('CREATE FUNCTION','CREATE OR REPLACE FUNCTION')));
+  await tx.unsafe(await Bun.file('packages/postgresql/native/catalog-captured-context.sql').text().then(text=>text.replace('CREATE FUNCTION','CREATE OR REPLACE FUNCTION')));
   const origin=new TextEncoder().encode(' {"actor":"asserted", "note":"\\u0000", "decimal":"123.000"}\n');
   const hex=Array.from(origin,b=>b.toString(16).padStart(2,'0')).join('');
   const invoke=(sourceHex:string,profileHex:string)=>tx.unsafe("SELECT * FROM truss.runtime_admit_operation_with_asserted_origin('catalog-acceptance',decode('01','hex'),decode('01','hex'),decode('01','hex'),decode('01','hex'),decode('01','hex'),decode('01','hex'),decode($1,'hex'),decode($2,'hex'))",[sourceHex,profileHex]);

@@ -1,3 +1,4 @@
+import {decodeCapturedOriginContext} from '../packages/postgresql/src/captured-origin-context';
 /** Rollback-contained context0.3 byte custody, not full installed admission. */
 import {SQL} from 'bun';
 const url=process.env.TRUSS_OPERATION_TEST_URL;if(!url?.startsWith('postgres://postgres@127.0.0.1:15434/'))throw Error('Owned fixture URL required');
@@ -23,6 +24,13 @@ try{
   checks.push('One original context0.4 artifact retains exact asserted whitespace/escapes and separate native actors/profile');
   if(context.installationId!=='component-installation'||context.sourceEpoch!==epoch||context.targetIncarnation!=='component-incarnation'||context.sourceEpochProfileHex!=='0102'||context.sourceEpochEvidenceHex!=='0304')throw Error('Same-operation native epoch correspondence');
   checks.push('One immutable original context binds actual native-issued epoch and registry profile/evidence bytes');
+  const decoded=decodeCapturedOriginContext(new Uint8Array(Buffer.from(rows[0].context_hex,'hex')),'0.4');
+  if(!decoded.epoch||decoded.epoch.sourceEpoch!==epoch||decoded.epoch.profileHex!=='0102'||decoded.epoch.evidenceHex!=='0304'||decoded.origin.databaseRole!==actual[0].actor||decoded.assertedUtf8Hex!==hex)throw Error('Original context4 host decode mismatch');
+  checks.push('Strict host decoder preserves original epoch evidence and asserted/native actor correspondence');
+  for(const invalid of [{...context,sourceEpoch:''},{...context,sourceEpochEvidenceHex:'zz'},{...context,extra:'unknown'}]){let rejected=false;try{decodeCapturedOriginContext(new TextEncoder().encode(JSON.stringify(invalid)),'0.4')}catch{rejected=true}if(!rejected)throw Error('Invalid context4 decoded');}
+  let legacy=false;try{decodeCapturedOriginContext(new Uint8Array(Buffer.from(rows[0].context_hex,'hex')))}catch{legacy=true}if(!legacy)throw Error('Context3 decoder accepted epoch-context upgrade');
+  checks.push('Invalid epoch identity/evidence/extra fields and implicit context3 upgrade refuse');
+
   await refuse('Epoch issuer refuses transition behind captured original writer','55000',()=>tx`SELECT truss.runtime_issue_source_epoch('component-installation',${epoch},'component-incarnation',decode('01','hex'),decode('02','hex'))`);
   await refuse('Context original bytes cannot be replaced','55000',()=>tx`UPDATE truss.row_home_operation SET original_context_bytes=decode('01','hex') WHERE original_writer_xid=pg_current_xact_id_if_assigned()`);
   await refuse('Original operation cannot be deleted','55000',()=>tx`DELETE FROM truss.row_home_operation WHERE original_writer_xid=pg_current_xact_id_if_assigned()`);
