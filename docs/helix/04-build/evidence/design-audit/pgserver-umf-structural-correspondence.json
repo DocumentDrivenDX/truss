@@ -95,13 +95,17 @@
           "rev",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "report_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "complete_feed_administration_receipt": [
@@ -109,85 +113,125 @@
           "storage_row_id",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "source_epoch",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "administrative_namespace",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "request_id",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "identity_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "identity_sha256",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "canonical_input_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "input_profile_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "receipt_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "receipt_profile_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "actual_database_role",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "authorization_evidence_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "producing_xid",
           "xid8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_production_evidence_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "complete_feed_consumer": [
@@ -195,127 +239,187 @@
           "storage_row_id",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "source_epoch",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "feed_profile",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "scope_identity",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "consumer_id",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "registration_id",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "worker_generation",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "state_kind",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "consumer_identity_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "consumer_identity_sha256",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_registration_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "current_state_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "current_state_sha256",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "applied_boundary_bytes",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "applied_boundary_profile_bytes",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "inclusive_protection_xid",
           "xid8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "protection_evidence_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "procedure_profile_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "downstream_profile_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "registered_at",
           "timestamptz",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "acknowledged_at",
           "timestamptz",
           false,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "complete_feed_seed_artifact": [
@@ -323,61 +427,84 @@
           "storage_row_id",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "attempt_row_id",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "artifact_role",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "artifact_ordinal",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "artifact_identity_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "artifact_identity_sha256",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "artifact_profile_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "payload_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "payload_sha256",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "production_custody_evidence_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "complete_feed_seed_attempt": [
@@ -385,73 +512,100 @@
           "storage_row_id",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "attempt_identity_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "attempt_identity_sha256",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "activation_profile_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "source_context_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_worker_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "state_kind",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "current_state_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "inclusive_replay_xmin",
           "xid8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "protection_evidence_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "invalidation_evidence_bytes",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "classifier_retirement_evidence_bytes",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "edge": [
@@ -459,79 +613,108 @@
           "id",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "rel_type_id",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "source_id",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "source_type",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "target_id",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "target_type",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "props",
           "jsonb",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "order_key",
           "text",
           false,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "rev",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "ver",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "created_at",
           "timestamptz",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "updated_at",
           "timestamptz",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "retained",
           "jsonb",
           false,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "edge_limit": [
@@ -539,25 +722,36 @@
           "rel_type_id",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "side",
           "bpchar",
           true,
-          0
+          0,
+          5,
+          [
+            "pg_catalog",
+            "default"
+          ]
         ],
         [
           "endpoint_id",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "edge_id",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "feed_configuration_prerequisite": [
@@ -565,67 +759,95 @@
           "source_epoch",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "feed_profile",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "original_writer_xid",
           "xid8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "configuration_address",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_installation_identity_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_configuration_generation",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_configuration_profile_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_configuration_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_producer_inventory_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_configuration_sha256",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_owner_context_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "feed_consumer": [
@@ -633,25 +855,36 @@
           "consumer",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
         ],
         [
           "xid",
           "xid8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "seq",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "updated_at",
           "timestamptz",
           true,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "feed_member": [
@@ -659,85 +892,122 @@
           "source_epoch",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "feed_profile",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "original_writer_xid",
           "xid8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "registration_address",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "fact_kind",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "original_fact_key_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_fact_key_profile_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_payload_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_payload_profile_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_payload_sha256",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_owner_context_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_write_at",
           "timestamptz",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_fact_clock_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "delivery_ordinal",
           "int8",
           false,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "feed_prerequisite": [
@@ -745,61 +1015,87 @@
           "source_epoch",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "feed_profile",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "original_writer_xid",
           "xid8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "prerequisite_address",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_revision",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_artifact_identity_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_definition_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_definition_profile_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_definition_sha256",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_owner_context_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "feed_tx": [
@@ -807,73 +1103,103 @@
           "source_epoch",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "feed_profile",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "original_writer_xid",
           "xid8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "registration_counter",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "prerequisite_registration_counter",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "configuration_registration_counter",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "membership_generation",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "finalized_generation",
           "int8",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_context_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "manifest_profile_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "manifest_bytes",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "manifest_sha256",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "installation_admission": [
@@ -881,73 +1207,103 @@
           "head_id",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "installation_id_utf8",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "source_epoch_utf8",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "configuration_generation",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "key_reuse",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
         ],
         [
           "journal_mode",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
         ],
         [
           "configuration_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "selected_binding_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "installed_inventory_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "configuration_sha256",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "selected_binding_sha256",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "installed_inventory_sha256",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "installation_archive": [
@@ -955,43 +1311,66 @@
           "archive_row_id",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "installation_id",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "artifact_role",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "artifact_identity",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "artifact_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "artifact_sha256",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "artifact_identity_sha256",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "installation_marker": [
@@ -999,67 +1378,110 @@
           "singleton_id",
           "int2",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "marker_interface_version",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "installation_id",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "layout_version",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "bundle_sha256",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "inventory_profile",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "inventory_sha256",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "database_identity",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "schema_name",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "installed_at",
           "timestamptz",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "installed_at_text",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ]
       ],
       "journal": [
@@ -1067,79 +1489,111 @@
           "seq",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "at",
           "timestamptz",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "xid",
           "xid8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "entity_kind",
           "bpchar",
           true,
-          0
+          0,
+          5,
+          [
+            "pg_catalog",
+            "default"
+          ]
         ],
         [
           "entity_id",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "entity_type",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "ver",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "op",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
         ],
         [
           "prop_id",
           "int4",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "old_value",
           "jsonb",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "new_value",
           "jsonb",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "rev",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "origin",
           "jsonb",
           true,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "key_bucket_guard": [
@@ -1147,19 +1601,25 @@
           "namespace_sha256",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "key_sha256",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "generation",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "key_def": [
@@ -1167,85 +1627,125 @@
           "type_id",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "key_id",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
         ],
         [
           "key_num",
           "int2",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "prop_ids",
           "_int4",
           true,
-          1
+          1,
+          -1,
+          null
         ],
         [
           "is_primary",
           "bool",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "since_rev",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "retired_rev",
           "int4",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "definition_source_kind",
           "text",
           false,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "definition_rev",
           "int4",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "definition_doc_ord",
           "int4",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "definition_document_id",
           "text",
           false,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "binding_source_rev",
           "int4",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "binding_source_pointer",
           "text",
           false,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "binding_source_bytes",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "key_lifecycle_history": [
@@ -1253,55 +1753,76 @@
           "rev",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "seq",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "type_id",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "key_num",
           "int2",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "transition_kind",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "before_retired_rev",
           "int4",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "after_retired_rev",
           "int4",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "before_definition_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "after_definition_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "key_migration_receipt": [
@@ -1309,79 +1830,105 @@
           "storage_row_id",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "installation_id_utf8",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "source_epoch_utf8",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "migration_attempt_id_utf8",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_request_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_attempt_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "receipt_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "prior_generation",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "resulting_generation",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "installation_sha256",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "epoch_sha256",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "attempt_sha256",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "receipt_sha256",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "key_tombstone": [
@@ -1389,43 +1936,63 @@
           "entity_kind",
           "bpchar",
           true,
-          0
+          0,
+          5,
+          [
+            "pg_catalog",
+            "default"
+          ]
         ],
         [
           "type_id",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "key_num",
           "int2",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "k",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "entity_id",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "ver",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "at",
           "timestamptz",
           true,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "layout_migration_receipt": [
@@ -1433,67 +2000,98 @@
           "storage_row_id",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "installation_id",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "original_source_epoch",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "original_target_incarnation",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "original_attempt_identity_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "receipt_profile_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_request_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_receipt_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_attempt_sha256",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_request_sha256",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_receipt_sha256",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "module_access": [
@@ -1501,25 +2099,45 @@
           "document_id",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "module",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "reader_role",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "writer_role",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ]
       ],
       "object": [
@@ -1527,61 +2145,81 @@
           "id",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "type_id",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "props",
           "jsonb",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "retained",
           "jsonb",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "root_id",
           "int8",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "root_type",
           "int4",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "rev",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "ver",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "created_at",
           "timestamptz",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "updated_at",
           "timestamptz",
           true,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "object_key_bucket": [
@@ -1589,55 +2227,73 @@
           "storage_row_id",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "type_id",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "key_num",
           "int2",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "object_id",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "namespace_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "key_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_context_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "namespace_sha256",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "key_sha256",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "object_key_reservation_bucket": [
@@ -1645,37 +2301,49 @@
           "storage_row_id",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "namespace_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "key_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_reservation_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "namespace_sha256",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "key_sha256",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "operation_configuration": [
@@ -1683,97 +2351,144 @@
           "original_writer_xid",
           "xid8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "operation_ordinal",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "installation_id",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "source_epoch",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "target_incarnation",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "configuration_generation",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "key_reuse",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "journal_mode",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "original_context_sha256",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "admission_profile_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "configuration_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "selected_binding_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "installed_inventory_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "configuration_sha256",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "selected_binding_sha256",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "installed_inventory_sha256",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "prop_def": [
@@ -1781,127 +2496,199 @@
           "prop_id",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "type_id",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "element",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
         ],
         [
           "name",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
         ],
         [
           "scalar_type",
           "text",
           false,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
         ],
         [
           "nullability",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
         ],
         [
           "cardinality",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
         ],
         [
           "facets",
           "jsonb",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "item",
           "jsonb",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "home",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
         ],
         [
           "since_rev",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "doc_ord",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "retired_rev",
           "int4",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "definition_source_kind",
           "text",
           false,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "definition_rev",
           "int4",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "definition_doc_ord",
           "int4",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "definition_document_id",
           "text",
           false,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "binding_source_rev",
           "int4",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "binding_source_pointer",
           "text",
           false,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "binding_source_bytes",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "declaration_module",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ]
       ],
       "record_source": [
@@ -1909,31 +2696,47 @@
           "entity_kind",
           "bpchar",
           true,
-          0
+          0,
+          5,
+          [
+            "pg_catalog",
+            "default"
+          ]
         ],
         [
           "entity_id",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "load_id",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
         ],
         [
           "source",
           "jsonb",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "imported_at",
           "timestamptz",
           true,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "rel_def": [
@@ -1941,151 +2744,231 @@
           "document_id",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "rel_type_id",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "module",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "rel_id",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "name",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
         ],
         [
           "source_min",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "source_max",
           "int4",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "target_min",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "target_max",
           "int4",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "lifecycle",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
         ],
         [
           "directed",
           "bool",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "target_key",
           "text",
           false,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
         ],
         [
           "composition",
           "bool",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "assoc_type_id",
           "int4",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "inverse",
           "text",
           false,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
         ],
         [
           "since_rev",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "doc_ord",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "retired_rev",
           "int4",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "definition_source_kind",
           "text",
           false,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "definition_rev",
           "int4",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "definition_doc_ord",
           "int4",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "definition_document_id",
           "text",
           false,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "binding_source_rev",
           "int4",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "binding_source_pointer",
           "text",
           false,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "binding_source_bytes",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "rel_endpoint": [
@@ -2093,19 +2976,25 @@
           "rel_type_id",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "source_type",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "target_type",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "relationship_lineage": [
@@ -2113,31 +3002,47 @@
           "rel_type_id",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "lineage_category",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
         ],
         [
           "identity_profile",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
         ],
         [
           "original_identity_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "identity_sha256",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "request_receipt": [
@@ -2145,79 +3050,108 @@
           "storage_row_id",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "namespace_identity_utf8",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "request_id_utf8",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_writer_xid",
           "xid8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_writer_context_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "lifecycle_generation",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "payload_state",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
         ],
         [
           "original_receipt_bytes",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "expired_identity_bytes",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "namespace_sha256",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "request_sha256",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "expiry_writer_xid",
           "xid8",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "expiry_writer_context_bytes",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "request_receipt_protection": [
@@ -2225,37 +3159,49 @@
           "receipt_storage_row_id",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "protection_generation",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_protection_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_update_evidence_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_update_writer_xid",
           "xid8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_update_writer_context_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "request_receipt_route_guard": [
@@ -2263,19 +3209,25 @@
           "namespace_sha256",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "request_sha256",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "generation",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "row_home_capacity": [
@@ -2283,43 +3235,57 @@
           "singleton_id",
           "int2",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "retained_rows",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "retained_custody_bytes",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "reserved_rows",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "reserved_custody_bytes",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_layout_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_resource_profile_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "row_home_journal_stage": [
@@ -2327,37 +3293,52 @@
           "original_writer_xid",
           "xid8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "operation_ordinal",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "stage_name",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "stage_ordinal",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "effect_generation",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "body_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "row_home_node": [
@@ -2365,61 +3346,90 @@
           "state_id",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "node_id",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "parent_node_id",
           "int8",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "slot_kind",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "sequence_ordinal",
           "int8",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "map_key",
           "text",
           false,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "record_field_identity_bytes",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "value_kind",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "definition_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "source_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "row_home_operation": [
@@ -2427,97 +3437,135 @@
           "original_writer_xid",
           "xid8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "operation_ordinal",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "operation_kind",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "phase",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "effect_generation",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "readiness_generation",
           "int8",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "sealed_generation",
           "int8",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "application_generation",
           "int8",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_context_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_definition_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_input_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_prestate_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "admitted_candidate_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "effect_obligation_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_group_custody_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "application_result_bytes",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "row_home_scalar": [
@@ -2525,79 +3573,117 @@
           "state_id",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "node_id",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "scalar_kind",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "text_value",
           "text",
           false,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "boolean_value",
           "bool",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "numeric_value",
           "numeric",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "numeric_token",
           "text",
           false,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "binary_value",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "temporal_text",
           "text",
           false,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "temporal_instant",
           "timestamptz",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "opaque_bytes",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "codec_definition_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_source_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "row_home_state": [
@@ -2605,79 +3691,108 @@
           "state_id",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "owner_kind",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "object_id",
           "int8",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "object_type_id",
           "int4",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "edge_id",
           "int8",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "relationship_type_id",
           "int4",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "property_owner_type_id",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "property_id",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "root_node_id",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "definition_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "home_profile_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "value_profile_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "source_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "row_home_touch": [
@@ -2685,73 +3800,100 @@
           "transaction_id",
           "xid8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "owner_kind",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "owner_id",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "owner_discriminator_id",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "property_owner_type_id",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "property_id",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "dirty_generation",
           "int8",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "sealed_generation",
           "int8",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_layout_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_home_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_owner_property_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "original_operation_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "schema_change": [
@@ -2759,37 +3901,52 @@
           "rev",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "seq",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "kind",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
         ],
         [
           "def_id",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "before",
           "jsonb",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "after",
           "jsonb",
           true,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "schema_doc": [
@@ -2797,49 +3954,80 @@
           "rev",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "ord",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "doc_id",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "doc_revision",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
         ],
         [
           "umf_version",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
         ],
         [
           "content_sha256",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
         ],
         [
           "document",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
         ],
         [
           "validation",
           "jsonb",
           true,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "schema_head": [
@@ -2847,13 +4035,17 @@
           "id",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "rev",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "schema_rev": [
@@ -2861,19 +4053,25 @@
           "rev",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "accepted_at",
           "timestamptz",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "origin",
           "jsonb",
           true,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "setting": [
@@ -2881,13 +4079,20 @@
           "key",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
         ],
         [
           "value",
           "jsonb",
           true,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "source_epoch_current": [
@@ -2895,19 +4100,31 @@
           "singleton_id",
           "int2",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "installation_id",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "source_epoch",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ]
       ],
       "source_epoch_registry": [
@@ -2915,49 +4132,80 @@
           "installation_id",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "source_epoch",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "target_incarnation",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "predecessor_epoch",
           "text",
           false,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "transition_reason",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "profile_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "evidence_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "evidence_sha256",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ]
       ],
       "type_def": [
@@ -2965,115 +4213,177 @@
           "document_id",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "type_id",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "module",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "element",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "kind",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
         ],
         [
           "provisional",
           "bool",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "since_rev",
           "int4",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "doc_ord",
           "int4",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "retired_rev",
           "int4",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "lineage_profile",
           "text",
           true,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "lineage_bytes",
           "bytea",
           true,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "lineage_sha256",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "definition_source_kind",
           "text",
           false,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "definition_rev",
           "int4",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "definition_doc_ord",
           "int4",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "definition_document_id",
           "text",
           false,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "binding_source_rev",
           "int4",
           false,
-          0
+          0,
+          -1,
+          null
         ],
         [
           "binding_source_pointer",
           "text",
           false,
-          0
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
         ],
         [
           "binding_source_bytes",
           "bytea",
           false,
-          0
+          0,
+          -1,
+          null
         ]
       ]
     },
@@ -4254,11 +5564,10 @@
     "replica"
   ],
   "unverifiedStructure": [
-    "type modifiers",
-    "collations",
+    "collation implementation/version semantics",
     "default and check expression meaning",
     "complete indexes/routines/grants"
   ],
   "limitation": "PostgreSQL16.2 lacks transaction_timeout; any selected profile requiring that setting must refuse or use a separately admitted bounded alternative",
-  "producerSha256": "78cc647332f810f81508c75fc5868a8bae33d4b5e531a21b567ba184e64da525"
+  "producerSha256": "8bd2d8b233768f8a6190fe0455d9e2ff0ac48d1cf3d7a8aa6c6faf3f37836244"
 }

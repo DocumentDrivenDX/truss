@@ -39,7 +39,23 @@ for record in records:
         typname = native['names'][-1]['String']['sval']
         if native.get('arrayBounds'):
             typname = '_' + typname
-        columns.append([field['name'], typname, field['nullability'] == 'required', len(native.get('arrayBounds', []))])
+        typmod = -1
+        if native.get('typmods'):
+            assert typname == 'bpchar' and len(native['typmods']) == 1, 'Unadmitted type modifier profile'
+            length = native['typmods'][0]['A_Const']['ival']['ival']
+            assert isinstance(length, int) and not isinstance(length, bool) and 1 <= length <= 10485760
+            # PostgreSQL16 anychar_typmodin includes the four-byte varlena header.
+            typmod = length + 4
+        declaration = field['extensions']['truss.layout.native'].get('collation')
+        collation = ['pg_catalog', 'default'] if typname in ('text', 'bpchar') else None
+        if declaration:
+            collation = [v['String']['sval'] for v in declaration['collname']]
+            if len(collation) == 1:
+                assert collation == ['C'], 'Unadmitted unqualified collation'
+                # This fresh-cluster probe admits only implicit pg_catalog.C.
+                collation = ['pg_catalog', 'C']
+            assert len(collation) == 2, 'Original qualified collation required'
+        columns.append([field['name'], typname, field['nullability'] == 'required', len(native.get('arrayBounds', [])), typmod, collation])
     expected_columns[record['name']] = columns
 expected_fks = []
 # Scoped native AST inventory comparison, not a UMF or SQL validator.
@@ -139,9 +155,11 @@ SELECT json_build_object(
  JOIN pg_class p ON p.oid=k.confrelid JOIN pg_namespace pn ON pn.oid=p.relnamespace
  WHERE n.nspname='truss' AND k.contype='f' AND k.conparentid=0),
  'columns',(SELECT json_object_agg(t.relname,t.columns) FROM
- (SELECT c.relname,json_agg(json_build_array(a.attname,ty.typname,a.attnotnull,a.attndims) ORDER BY a.attnum) AS columns
+ (SELECT c.relname,json_agg(json_build_array(a.attname,ty.typname,a.attnotnull,a.attndims,a.atttypmod,
+ CASE WHEN a.attcollation=0 THEN NULL ELSE json_build_array(cn.nspname,co.collname) END) ORDER BY a.attnum) AS columns
  FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace
  JOIN pg_attribute a ON a.attrelid=c.oid JOIN pg_type ty ON ty.oid=a.atttypid
+ LEFT JOIN pg_collation co ON co.oid=a.attcollation LEFT JOIN pg_namespace cn ON cn.oid=co.collnamespace
  WHERE n.nspname='truss' AND c.relkind IN ('r','p') AND a.attnum>0 AND NOT a.attisdropped
  GROUP BY c.relname) t),
  'foreignKeys',(SELECT json_agg(json_build_array(c.relname,p.relname,
@@ -183,7 +201,7 @@ ROLLBACK;
 receipt = {'scope': 'Original generated base/adjunct DDL and immutable guard composition, UMF core column/type/requiredness and ordered physical FK correspondence plus independent adjunct catalog expectations under rollback only; no complete installer, routine/grant inventory, accepted catalog or migration qualification',
            'pgserverVersion': '0.1.4', 'structuralModel': str(structural_path.relative_to(root)), 'structuralSha256': hashlib.sha256(structural_bytes).hexdigest(), 'sources': [{'path': path, 'sha256': hashlib.sha256(value).hexdigest()} for path, value in zip(paths, originals)], 'observation': observed,
            'rollbackRemovedNamespace': True, 'truncateRefusals': 4, 'truncateModes': ['origin', 'replica'],
-           'unverifiedStructure': ['type modifiers', 'collations', 'default and check expression meaning', 'complete indexes/routines/grants'],
+           'unverifiedStructure': ['collation implementation/version semantics', 'default and check expression meaning', 'complete indexes/routines/grants'],
            'limitation': 'PostgreSQL16.2 lacks transaction_timeout; any selected profile requiring that setting must refuse or use a separately admitted bounded alternative',
            'producerSha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest()}
 (root / 'docs/helix/04-build/evidence/design-audit/pgserver-umf-structural-correspondence.json').write_text(json.dumps(receipt, indent=2) + '\n')

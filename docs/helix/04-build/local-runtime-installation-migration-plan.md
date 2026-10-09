@@ -213,3 +213,28 @@ Defaults/check expressions, type modifiers, collations, indexes and complete
 routine/effective-grant inventory remain the next installation parity work. The
 raw physical descriptor comparison cannot qualify logical lifecycle semantics,
 protected producer authority or a populated migration route by itself.
+
+## Column modifier and collation identity comparison
+
+The same local structural probe now compares all481 column type modifiers and
+qualified native collation identities, including86 explicit collation declarations
+and four character(1) declarations. Expected modifiers come from retained native
+AST literals under the selected bpchar profile; PostgreSQL16
+[anychar_typmodin](https://github.com/postgres/postgres/blob/REL_16_STABLE/src/backend/utils/adt/varchar.c)
+accounts for the varlena header. No expected value is copied from the installed
+catalog. Other modifier profiles refuse until explicitly admitted.
+
+For retained unqualified C declarations, this fresh-cluster probe admits only
+pg_catalog.C. It does not provide arbitrary host-schema collation resolution or
+allow same-name substitutions. Unspecified text/character collation is compared
+with pg_catalog.default under this local tuple; noncollatable columns remain
+uncollated. Provider implementation/version, locale behavior and complete host
+lookup/session custody remain separately unverified. Qualifying names does not
+prove all equality/order behavior or permit reusing this profile after database
+collation configuration changes.
+
+The refreshed receipt retains complete actual column observations and original
+source pins. Remaining parity work is default/generated/check expression meaning,
+index/sequence/routine/trigger inventory and effective ordinary-role grants, plus
+complete initialization and published installation custody. Local native execution
+continues to roll back all review DDL and establishes no installed release.
