@@ -150,6 +150,44 @@ must explicitly retain and classify the uninterpreted content rather than advert
 complete vocabulary/action execution. No consumer action grammar or new UMF
 capability is selected here.
 
+## Original relationship cap and predicate correspondence
+
+The pinned consumer corpus case `read.relationship-columns-are-capped` seeds
+101 related Solutions and expects 100 inverse keys plus a true query-level
+truncation flag. This is a concrete consumer profile input; it resolves the
+consumer's list bound, not a universal Truss limit or a cap on the number of
+relationship columns. The explicit projection adapter must retain Weft's
+per-column bounded-list envelopes and define their exact query-level flag
+correspondence alongside any main-page truncation. It cannot discard a true
+column flag, emit false without complete proof or reinterpret decoder/work failure
+as normal truncation. Validate all selected columns and lookahead before any
+host result. Aggregate result/column/work bounds remain separately selected.
+
+Use the original 100/101 fixture, plus independently seeded 99 and 100 matching
+keys, under actual admitted ordering, multiplicity and disclosure. Compare exact
+keys and flags, not just row length. An over-bound malformed or unauthorized
+lookahead must follow the registered owner's result/refusal meaning rather than
+be silently omitted. The host's global flag must not expose which protected
+unrequested association overflowed.
+
+The original case `read.repeated-relationship-predicates-mean-both` requires a
+Solution related to uc-1 and uc-2. Its two predicates are separate existential
+requirements over the same source Record, and may be satisfied by different
+edges. That meaning is distinct from a security policy whose single association
+variable requires multiple endpoints on one witness. Preserve the original
+quantifier/binding scope: do not import the security same-witness restriction
+into ordinary repeated consumer predicates, or weaken a same-witness security
+rule by splitting it into two unrelated existentials.
+
+Weft owns any admitted parsed-input or SQL relationship syntax mapping to its
+existing HAS_RELATED semantics. The consumer's ordinary relationship equality
+syntax is not automatically supported by copying it into a SQL-text request.
+No Truss text substitution/parser is introduced. Independently test the original
+two-edge positive, a missing second-key negative, duplicated same-key edges and
+the separate same-witness security negative against their own owner contracts.
+Compiler artifacts, original parameter order, relation direction/key namespace,
+current-person policy and complete protected results remain qualification gates.
+
 ## Original grouped-count admission gap
 
 The [source correspondence review](../04-build/evidence/design-audit/consumer-grouped-count-source-review.json)
