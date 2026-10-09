@@ -8,6 +8,14 @@ substitute for the complete populated M1 source/target route.
 
 ## Package and entrypoints
 
+Fresh installation is a separate `truss.installation` tooling projection with
+`install_fresh` and `reconcile_installation`, mapping the existing bootstrap
+binding. It requires its original qualified candidate and bootstrap-attempt
+context; an installed migration request cannot create a fresh namespace. Both
+tooling projections are constructed inertly from the same admitted original
+assembly/services. Construction performs no namespace query, starts no transaction
+and issues no attempt. The current Python package implements neither projection.
+
 Continue the experimental `truss-toolkit` distribution already containing the
 local runtime. Implement a `truss.migrations` module with `status`, `verify`,
 `apply` and `reconcile` on an explicitly constructed migration tooling instance.
@@ -60,7 +68,12 @@ consume that composition rather than implement a second resolver.
 ## Settlement and exceptions
 
 Map native outcomes to the existing result variants, including `commit_unknown`,
-`recovery_required` and `committed_unverified`. Do not translate them into a generic
+`recovery_required` and `committed_unverified`. The bootstrap binding now includes
+the confirmed-commit/unverified-readiness variant too: retain original commit and
+attempt evidence with a recovery reference, exposing no ready marker or complete
+committed inventory. Authorization-unavailable recovery retains the evidence in
+the trusted registry while returning the opaque observation-unavailable branch.
+Do not translate these outcomes into a generic
 retryable exception. Pre-effect refusal returns once. No automatic apply retry,
 callback replay or recipe resubmission follows a socket error or deadline.
 
@@ -104,7 +117,7 @@ benchmark gates this sequence.
 
 ## Shared planner corpus before the Python port
 
-`tests/fixtures/layout-migration-planning.json` now supplies fifteen independent
+`tests/fixtures/layout-migration-planning.json` now supplies sixteen independent
 expected results for the existing declared-metadata planner, exercised by
 `tests/layout-migration-corpus.test.ts`. It retains original input JSON text,
 including duplicate-member and numeric-node refusals, rather than passing only
@@ -113,10 +126,10 @@ procedure artifacts are compared for successful plans. Explicit route absence,
 ambiguous routes, changed source pins, nontransactional steps and malformed
 unselected routes refuse; large version components remain exact.
 
-The Python port must consume this same corpus and preserve the existing decoder's
+The Python port consumes this same corpus and preserves the existing decoder's
 finite byte/depth/node/member/work bounds, Unicode rules and numeric-free closed
-wire. These fifteen cases are a baseline, not exhaustive decoder qualification.
-The Python planner is not implemented yet. Neither these fixture manifests nor
+wire. These sixteen cases are a baseline, not exhaustive decoder qualification.
+Neither these fixture manifests nor
 a passing metadata plan are delivered original migration artifacts, installed
 observations, administrative authority or a selected populated M1 route.
 
@@ -129,7 +142,8 @@ Original `acceptance-outer-json-expected.proposal.json` vectors and the original
 capacity fixture pass, along with exact depth/container/node boundaries and
 byte/work refusals. These are source-component checks, not built-wheel, host
 heap, shared operation-account or administrative admission qualification.
-The planner port and its frozen result variants remain to be implemented.
+The planner's frozen result variants are implemented as described below;
+administrative execution remains unfinished.
 
 The experimental `truss.migration_planning.plan_layout_migration` now implements
 the existing declared-route planner in Python. Frozen pin/artifact/procedure/result

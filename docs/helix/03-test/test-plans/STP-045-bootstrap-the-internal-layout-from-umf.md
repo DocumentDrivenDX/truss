@@ -152,6 +152,25 @@ Instrument inert constructor calls to verify zero executor/registry/namespace ac
 
 Bootstrap uncertainty assertions now distinguish stalled native statement/application_unknown, lost rollback or owned release/cleanup_unknown, and submitted commit acknowledgment loss/commit_unknown. Exercise each before/after its explicit barrier and require original-attempt evidence with no marker authority. Fresh absence while native work remains live preserves unresolved classification; cleanup confirmation alone cannot turn lost commit into rollback. Two additional type probes reject cleanup marker authority and missing original evidence.
 
+## Confirmed commit without current readiness
+
+After independently confirmed installation COMMIT, inject post-commit inventory
+drift, unavailable collection, changed profile and resource denial on the fresh
+verification context. Require `committed_unverified` with the same original attempt,
+exact original commit observation, original attempt evidence and recovery reference;
+no ready marker or complete committed inventory is exposed. Compare actual committed
+effects independently and assert no second DDL submission, new attempt, rollback
+claim or automatic installation retry. Repeat via authorized read-only reconciliation:
+restored complete current parity may return `installed` without executing a recipe.
+
+Remove authority to disclose original attempt/evidence during reconciliation and
+require opaque `observation_unavailable`; the trusted registry must still retain
+the confirmed commit. Independently leave cleanup unresolved after confirmed
+application commit and prove that this result neither releases cleanup custody nor
+rewrites durability as unknown. Static binding checks reject missing commit evidence,
+ready markers and committed-inventory claims on the unverified branch. These are
+required native fault schedules, not a claim that the installer is implemented.
+
 ## Namespace lock profile supplements
 
 Use the four published exact-byte vectors, including case and distinct Unicode normalization forms, independently of native tests. For native qualification, hold installer A through marker creation, block installer B at the same advisory key, commit A, then release B: B's separate post-lock READ COMMITTED inventory must observe nonempty namespace and refuse. Repeat winner rollback to prove fresh emptiness; held-snapshot and combined lock/inventory-statement variants must not qualify this profile. Inject test-only same-key routing for different actual namespaces and prove exact ownership checks remain intact. Disconnect/cancel during lock wait and DDL; original termination/custody controls decide retry, not timeout. Verify lock is acquired outside installation savepoint, actual connection remains transaction-affine through pooling, and no session unlock or resource leak occurs. Four Bun cryptographic probes are byte evidence only, not these native cases.

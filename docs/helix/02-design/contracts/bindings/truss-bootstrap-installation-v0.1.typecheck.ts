@@ -48,5 +48,19 @@ const unavailable:BootstrapReconciliationResult={outcome:'refused',reason:'integ
 const disclosed:BootstrapReconciliationResult={outcome:'observation_unavailable',reason:'authorization',originalAttempt:installed.originalAttempt};
 void [uncontained,unavailable,disclosed];
 
+const committedUnverified:BootstrapInstallationResult={
+ outcome:'committed_unverified',recoveryReference:'trusted-original-reference',
+ originalAttempt:installed.originalAttempt,commitObservation:installed.commitObservation,
+ originalAttemptEvidence:installed.commitObservation,reason:'drift'
+};
+const observedCommittedUnverified:BootstrapReconciliationResult=committedUnverified;
+// @ts-expect-error Confirmed commit alone cannot publish a ready marker.
+const falseReadiness:BootstrapInstallationResult={...committedUnverified,marker:installed.marker};
+// @ts-expect-error Unverified current readiness cannot expose complete committed inventory.
+const falseInventory:BootstrapInstallationResult={...committedUnverified,committedInventory:installed.committedInventory};
+// @ts-expect-error The confirmed-commit branch requires original commit evidence.
+const lostCommit:BootstrapInstallationResult={outcome:'committed_unverified',recoveryReference:'fixture',originalAttempt:installed.originalAttempt,originalAttemptEvidence:installed.commitObservation,reason:'profile'};
+void [observedCommittedUnverified,falseReadiness,falseInventory,lostCommit];
+
 // @ts-expect-error Unverified generation cannot be submitted for qualified fresh installation.
 tooling.installFresh({...request,candidate:{...request.candidate,qualification:{state:'unverified'}}});

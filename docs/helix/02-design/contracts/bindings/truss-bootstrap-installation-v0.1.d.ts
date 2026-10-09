@@ -50,6 +50,13 @@ export type BootstrapInstallationResult = {
  readonly outcome:'commit_unknown';readonly recoveryReference:string;
  readonly originalAttempt:BootstrapAttemptContext;
  readonly originalAttemptEvidence:ExactArtifact;readonly marker?:never;
+} | {
+ /** Commit is confirmed; complete current installation readiness is not. */
+ readonly outcome:'committed_unverified';readonly recoveryReference:string;
+ readonly originalAttempt:BootstrapAttemptContext;
+ readonly commitObservation:ExactArtifact;readonly originalAttemptEvidence:ExactArtifact;
+ readonly reason:'authorization'|'custody'|'profile'|'resource'|'integrity'|'drift';
+ readonly marker?:never;readonly committedInventory?:never;
 };
 export type BootstrapReconciliationResult = Exclude<BootstrapInstallationResult,{readonly outcome:'refused'}> | {
  readonly outcome:'observation_unavailable';

@@ -1280,12 +1280,30 @@ Resolve the recovery reference through the original trusted registry before coll
 | Original outcome / observed facts | Admitted reconciliation result | Required retained evidence |
 | --- | --- | --- |
 | Commit confirmed, exact original candidate marker/archive and full stable basis match | installed | Original commit plus complete current target/marker/archive/inventory correspondence |
-| Commit confirmed but current marker/archive/basis unavailable or conflicting | observation_unavailable | Original confirmed commit retained; unavailable/integrity reason cannot relabel it rollback |
+| Commit confirmed but current marker/archive/basis unavailable or conflicting | committed_unverified when original attempt/evidence disclosure remains authorized; otherwise observation_unavailable | Original confirmed commit retained; unavailable/integrity reason cannot relabel it rollback |
 | COMMIT may have been submitted; original outcome unresolved; exact original committed marker/archive/full basis plus qualified original outcome correlation | installed only if selected native recovery profile establishes original commit | Correlation producer, original transaction end and complete observation; marker shape/name alone insufficient |
 | COMMIT may have been submitted; missing marker, foreign candidate marker, incomplete scope or unknown original end | commit_unknown, or observation_unavailable when authority/custody prevents inquiry | Original submission/outcome/custody and observed facts; no absence-to-rollback inference |
 | Installation work may remain active before COMMIT; termination unresolved | recovery_required application_unknown | Original stage/work/termination custody; current marker absence cannot stop original work |
 | Rollback/cleanup requested but original end or mandatory cleanup unresolved | recovery_required cleanup_unknown | Original ownership and unresolved cleanup/resource inventory; no pool release on request alone |
 | Original rollback and termination confirmed; transactional effects resolved and mandatory nontransactional cleanup complete | rolled_back | Original end/rollback and required independent cleanup observations |
+
+The fresh installation result binding now explicitly retains `committed_unverified`
+for confirmed commit followed by unavailable or drifted current readiness. It
+carries the original bootstrap attempt, exact commit observation, original attempt
+evidence and recovery reference, with no ready marker or committed-inventory claim.
+This applies to initial installation and authorized original-attempt reconciliation;
+neither may translate a known commit into `commit_unknown`, `rolled_back` or
+`recovery_required application_unknown` solely because readiness verification
+failed. Unknown required cleanup remains a separate custody obligation even when
+application durability is already known. Preserve both facts in the original
+registry; the readiness variant does not release cleanup resources.
+
+If current authority prevents disclosure of original attempt/evidence, reconciliation
+returns the existing opaque `observation_unavailable` branch and retains known
+commit evidence privately. It cannot infer rollback, issue a replacement attempt
+or repeat initialization. Only a later complete authorized current correspondence
+may return `installed`. The draft administrative binding is a contract selection,
+not implementation or native outcome qualification.
 
 A foreign attempt's matching bundle marker is a conflict/current observation fact, never success for this original attempt. Disposed registry/host context or inaccessible archive returns unavailable without minting a replacement original attempt. Recovery may repeat read-only observations under admitted resource/authority limits; it never restarts installation or resets evidence. Actual native outcome correlation, complete marker/archive lookup, conflict grammar and cleanup producers remain required selected design/qualification outputs.
 
