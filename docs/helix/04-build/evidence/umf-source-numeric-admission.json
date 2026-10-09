@@ -1,0 +1,39 @@
+{
+  "ownerRevision": "c45c72a2a8a3c4fba61c40c5927dd9091acf8cc3",
+  "producerManifest": {
+    "revision": "c45c72a2a8a3c4fba61c40c5927dd9091acf8cc3",
+    "archiveSha256": "aa3ff171f8adbdbb6a0ad729dbcb2825dd2299b98e6d90a4e8e1e84835247838",
+    "bundleSha256": "ff990a3f9847a1bc0844fc6e637365462979efc3dcbec27383d4002943d64d83",
+    "operations": [
+      "readDocument",
+      "validateDocument",
+      "validateCoreRecordValues",
+      "upgradeSchemaPropertiesEnvelope",
+      "verifySchemaPropertiesUpgrade",
+      "rollbackSchemaPropertiesEnvelope"
+    ],
+    "scope": "Original logical UMF producers only; no native acceptance/containment qualification."
+  },
+  "ownerSourceHashes": {
+    "src/model/document.ts": "a0422042659defdea425dff8bb0618eaa4bbf125f68da16aa5ad21af0b6c282f",
+    "src/model/serialization.ts": "235407a33795c78badb334f66c6131f64d3364503e3c871723d0dd518bc2e28c",
+    "src/model/json.ts": "b2c3f48bb779972af5beadfb22ec1db48c793dcdaf572293afa62904016465e7"
+  },
+  "testSourceSha256": "92d149ceaeac2d869efd449cf1633ee9a5b08c562d204c5ab401d8657c0eace1",
+  "tests": 9,
+  "assertions": 31,
+  "runtime": "Bun 1.4.2",
+  "observedRefusals": [
+    "unsafe integer",
+    "decimal spelling changes on parse",
+    "overflow",
+    "underflow",
+    "negative zero"
+  ],
+  "observedAdmission": [
+    "0.1",
+    "maximum safe integer",
+    "exponent spelling with equal decimal value"
+  ],
+  "scope": "Actual pinned owner source interpretation and reversible envelope validation only. Unknown exact string carriers remain incomplete opaque extension semantics; no Truss numeric enforcement, complete assertion report or committed catalog acceptance."
+}
