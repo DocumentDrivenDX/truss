@@ -34,6 +34,33 @@ This table distinguishes unresolved selection from future execution evidence. It
 
 The next full-scope audit must test semantic agreement among requirements, contracts, story designs and planned independent scenarios, not merely refresh source hashes. The current reconciliations cover catalog identity/reporting, write ownership, journal producer ownership, feed freshness, history retention, paging consistency, pooling and import recovery. Other governed surfaces remain to be checked. No component count, schema browser rendering or unexecuted test schedule proves complete design or release qualification.
 
+## Acceptance decision versus producer work reconciliation — 2026-10-09
+
+The owner selected separate immutable acceptance reports. That product choice is
+not pending. Older report-storage passages below describe the earlier proposal
+review and must not trigger another preference question. Exact replacement of
+the legacy parent report column, report-home UMF/native inventory, insertion
+privileges, bounded complete producers and populated conversion are engineering
+composition outputs; the selected direction does not qualify those outputs.
+
+The [acceptance handoff](acceptance-runtime-handoff.md#ordered-implementation-work)
+already specifies the implementation inputs and ordering for support/subset
+interpretation, complete assertions, whole-group rebinds, pending-index absence
+and lifecycle/reactivation reporting. Those procedures are authored; they are
+not absent merely because the native producers remain unimplemented. A2 still
+needs registered original semantic artifacts and implementations of those
+procedures. In particular, the existing UMF byte-basis collector does not resolve
+version-to-subset meaning, and the synthetic nineteen-field codec supplies no
+native report facts. Engineering must select that original semantic composition
+and implement it without a second UMF validator or caller-filled inventories.
+
+Use the five human-choice rows above for actual product questions. Keep A1's
+coherent installation/account/security tuple, A2's producer composition and
+A3–A7's native persistence/finalization/public outcomes in their engineering
+queues. Neither missing execution receipts nor historical pending-language
+creates a new human decision. Full design closure remains unproven until all
+remaining specified meanings and owner interfaces are reconciled.
+
 ## Selected decision handoff — 2026-10-07
 
 The owner has resolved the six product choices: bounded Truss-controlled work with separately classified arbitrary native resource guarantees; provisional transaction-scoped precommit IDs and committed-ID nonreuse; complete durable request receipts; exact numeric carriers with lossless JavaScript number/bigint convenience; reconstructable history with configurable short/zero local retention; and separate immutable acceptance reports. Embedded execution uses live transaction scopes; network mutation execution receives complete atomic batches and acknowledges confirmed commit. ADR-005/006/007 now record accepted product direction. Older pending-choice passages below are historical where superseded by this handoff.
@@ -199,9 +226,9 @@ The [source inventory](evidence/design-audit/journal-stage-declaration-inventory
 
 ### Prerequisite audit for the next authoring pass
 
-Acceptance retains a report-storage selection gate: accepted-report rebinds embed full HistoricalEvent envelopes requiring insertion-generated seq and mutation-group digest. The conditional separate-report-home design in CONTRACT-003/TD-001 now creates the reconciled revision parent first, obtains actual event outputs, inserts the complete immutable report once, then publishes and verifies the head before fresh finalization. RP01–RP05 and R-01–R-06 specify its custody and replacement handoff. The previous complete-parent-report-before-effects order is not the proposed order for this option. Other options remain unadopted; do not present P0–P6 as selected or execution-ready until the owner chooses the persistence profile and its exact native producers, inventory and privileges are completed. Empty-rebind fixtures cannot qualify the nonempty event/report path. No journal-disabled support is inferred.
+Acceptance retains a report-storage selection gate: accepted-report rebinds embed full HistoricalEvent envelopes requiring insertion-generated seq and mutation-group digest. The conditional separate-report-home design in CONTRACT-003/TD-001 now creates the reconciled revision parent first, obtains actual event outputs, inserts the complete immutable report once, then publishes and verifies the head before fresh finalization. RP01–RP05 and R-01–R-06 specify its custody and replacement handoff. The previous complete-parent-report-before-effects order is not the proposed order for this option. Other options remain unadopted; the separate-report direction is selected, while P0–P6 require the exact engineered persistence profile, native producers, inventory and privileges before execution qualification. Empty-rebind fixtures cannot qualify the nonempty event/report path. No journal-disabled support is inferred.
 
-Product preference for the report-storage choice remains pending. The recommended separate report row preserves full historical-event reporting and parent-first references, but requires an explicit replacement disposition for the existing required parent report column; it is not an additive table-only change or an adopted profile. Genesis revision-0 installation/lookup is distinct from positive accepted reports. Fresh installation must refuse a nonempty retained layout under STP-045; a separately selected retained conversion requires original complete report artifacts and independent STP-001 qualification. JSONB-only contents cannot be regenerated into claimed original bytes, and the baseline `{}` report is not a positive accepted-report envelope.
+Historical proposal review: the owner subsequently selected separate immutable reports in the selected decision handoff above. The separate report row preserves full historical-event reporting and parent-first references, but requires an explicit replacement disposition for the existing required parent report column; it is not an additive table-only change or an adopted profile. Genesis revision-0 installation/lookup is distinct from positive accepted reports. Fresh installation must refuse a nonempty retained layout under STP-045; a separately selected retained conversion requires original complete report artifacts and independent STP-001 qualification. JSONB-only contents cannot be regenerated into claimed original bytes, and the baseline `{}` report is not a positive accepted-report envelope.
 
 The remaining work is not wholly waiting on other projects. In particular, an artifact wrapper, a planned file or a future native test does not specify the procedure inside that boundary. Work through the following owned outputs before requesting adoption of another large interface batch.
 
