@@ -40,7 +40,7 @@ Components are new. CONTRACT-001 EL01–EL07 now defines complete canonical/mark
 
 ## API/Interface Design
 
-CONTRACT-001 owns derived limit rows; CONTRACT-004 owns write/report semantics; CONTRACT-009 owns lock order and final group validation. Amend the shared integrity surface before implementing a guard. No new public command or payload is defined here.
+CONTRACT-001 owns derived limit rows; CONTRACT-004 owns write/report semantics; CONTRACT-009 owns lock order and final group validation. Consume CONTRACT-001 EL01–EL12 and OC01–OC07 for complete marker/context/final-state integrity; select and implement the original native bodies, dependencies, privilege and resource profiles before activating a guard. The authored protocol does not need a second public integrity surface. No new public command or payload is defined here.
 
 ## Data Model and Integration
 

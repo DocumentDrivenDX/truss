@@ -38,7 +38,7 @@ For UMF's portable authored-key subset, reuse CONTRACT-040's `umf-key-tuple-v1` 
 
 Consume ADR-006's proposed compact decimal equality tuple only through an explicitly selected key component profile. Original lexical value remains separate; mathematical order does not follow encoded tuple bytes. Pure normalization/comparator, native derivation and lookup/reservation encoding are separate implementation boundaries. Pin admitted source grammar/native domain and resource limits before selecting support. Independently authored rational fixtures in the design audit establish the proposed example meanings only, not a production codec or SQL comparison path.
 
-Implement catalog-derived business-key encoding, transactional key-row maintenance and lookup. Inherit fixed storage from SD-002; do not create per-type unique indexes. Prerequisites are US-007 exact storage, accepted key catalog derivation and the executor transaction protocol. This is a draft design; missing scalar/null policy below prevents full execution readiness.
+Implement catalog-derived business-key encoding, transactional key-row maintenance and lookup. Inherit fixed storage from SD-002; do not create per-type unique indexes. Prerequisites are US-007 exact storage, accepted key catalog derivation and the executor transaction protocol. This is a draft design; exact original key binding, scalar/null participation, native transport/guard and resource profile admission remain prerequisites. Consume the authored policies below rather than introducing a second normalizer or reopening the selected storage-versus-portable identity distinction.
 
 ## Technical Approach
 
@@ -64,7 +64,7 @@ CONTRACT-001 now distinguishes UMF portable total identity from authored Truss s
 
 Implement membership transitions from CONTRACT-004 after complete component admission: held-to-omitted reserves the old full key; omitted-to-omitted writes no key/reservation; omitted-to-held performs ordinary complete conflict/reservation checks; held-to-equal preserves membership despite a lexical change; held-to-different reserves/replaces atomically. Plan old/new buckets before effects, including removal-only transitions. A failed key transition rolls back record/version/journal effects. Catalog remapping is a separate migration boundary, not a synthetic sequence of object updates.
 
-CONTRACT-001 owns canonical text, fixed constraints and database error mapping. CONTRACT-004 owns mutations and reports; CONTRACT-007 owns transaction and exact transport. This story uses those surfaces rather than defining another lookup payload. A missing public lookup/error schema must be resolved there before package API publication.
+CONTRACT-001 owns canonical text, fixed constraints and database error mapping. CONTRACT-004 owns mutations and reports; CONTRACT-007 owns transaction and exact transport. This story uses those surfaces rather than defining another lookup payload. Consume the existing [direct lookup request](../contracts/direct-lookup-request-v0.1.schema.json), [result](../contracts/direct-lookup-result-v0.1.schema.json) and [key binding wire](../contracts/key-bindings-v0.1.schema.json) under their exact versions. Qualify original codec, visibility, full correspondence and public error/disclosure behavior before package API publication; a shape-valid lookup result cannot establish native absence or uniqueness. No parallel lookup envelope is needed.
 
 ## Data Model Changes
 
