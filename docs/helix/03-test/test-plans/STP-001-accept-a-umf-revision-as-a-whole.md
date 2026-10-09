@@ -299,3 +299,6 @@ The [installed-context temporal handoff](../../02-design/contracts/installed-con
 | IC-T04 adopted rollback | Savepoint rollback removes operation/capsule/effects while earlier caller work survives; copied/stale host issuance cannot be used after rollback; unresolved termination retains original recovery custody |
 | IC-T05 concurrent transition | Original protected writer and configuration transition race under selected exclusion order; no mixed old/new capsule and no same-transaction lock-upgrade bypass; independently observe complete committed outcomes |
 | IC-T06 historical replay | Retry a committed request after a compatible configuration change; return original result/context under independently admitted current invocation/disclosure, without rewriting historical capsule/report or reapplying effects |
+
+
+Historical configuration closure additionally follows [CC-T01–09](../configuration-custody-retention-scenarios.proposal.md): original accepted context survives current configuration change, revision-only operations retain complete prerequisites, and report/capsule resource incompatibility cannot silently change evidence. Receipt/feed/unknown/retention/disclosure cases retain their named cross-story owners. These are planned full-scope scenarios, not verdicts from the live component cohort.

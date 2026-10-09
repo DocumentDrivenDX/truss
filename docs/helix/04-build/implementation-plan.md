@@ -2783,3 +2783,8 @@ CH-01/03 now have the derived private configuration admission producer, immutabl
 ### Original configuration host projection — 2026-10-09
 
 CH-03/PY-01 now have the shared twelve-column native pre-effect snapshot protocol and issued TypeScript host projection. The 171-check cohort covers exact original profile/artifact/context bytes, owned input copy before await, copied-host/wrong-profile/current-change/ended-transaction refusal and native cut recheck. Reuse this protocol in Python with original adapter custody; do not duplicate UMF or authorization interpretation. Registered complete installation/configuration/security/resource/driver profiles, historical replay projection, protected cleanup and unavoidable report/head/finalization remain dependencies.
+
+
+### Historical configuration closure — 2026-10-09
+
+CH-03/05/06 and PY-04/06 now have a private custody locator and complete report/receipt/feed/unknown/transition/archive dependency matrix. Order implementation as original capsule→report/receipt/prerequisite correspondence, current-independent historical resolution, complete protection inventory, qualified operation-artifact export/retrieval where selected, then atomic whole-operation cleanup. Existing per-record archive v0.2 and S3 candidate cannot alone cover no-op/unknown operations; preserve local custody until explicit complete coverage is admitted. CC-T01–09 specify independent historical retry, revision-only, conflicting shared configuration, protection race, private disclosure and enclosing-wire resource cases. Locator declarations pass strict TypeScript; historical/cleanup native schedules remain unexecuted. Security and provider interpretation stay with their governing workstreams.
