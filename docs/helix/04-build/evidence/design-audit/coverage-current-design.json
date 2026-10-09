@@ -1019,7 +1019,7 @@
   ],
   "artifactSha256": {
     "02-design/technical-designs/TD-001-accept-a-umf-revision-as-a-whole.md": "269c8c78868218d01bef902f4747cb745880fbb34fd96c378ece72559819bcef",
-    "03-test/test-plans/STP-001-accept-a-umf-revision-as-a-whole.md": "825b3f69950ce40be037bc186549a982221eecacc8a784d270b3e521faf5d825",
+    "03-test/test-plans/STP-001-accept-a-umf-revision-as-a-whole.md": "b493b02ee003d23e63a7e704dcd07b212a14ce6bc220120e1674a54e4326ec1c",
     "02-design/technical-designs/TD-002-import-documents-that-depend-on-each-other.md": "1d93cda1f65f88b51851a9d4c32cd1b4bff0758f4556a78708dcd572fe09647d",
     "03-test/test-plans/STP-002-import-documents-that-depend-on-each-other.md": "2311d9c7f342ae12aa1bb3868bd593944c0ce420db6562ae448ae4f46f9b38d2",
     "02-design/technical-designs/TD-003-decide-what-happens-to-an-unknown-entity-type.md": "37ee82d66c860c439319968d39729cc174136f02f676e847a1a1caabff21c7b6",
@@ -1110,11 +1110,11 @@
     "03-test/test-plans/STP-045-bootstrap-the-internal-layout-from-umf.md": "f9edab0146b5c886f2c8ac47949aac8e1cfe00a9c5de74089ba6fc9898f806f6"
   },
   "storySha256": {
-    "01-frame/user-stories/US-001-accept-a-umf-revision-as-a-whole.md": "faa9173cc8ab9cb8c0945c2492b207ffc8ee6953cf5efef16a821a71a7a35b12",
+    "01-frame/user-stories/US-001-accept-a-umf-revision-as-a-whole.md": "d076a57fa4a69d85fd08b6945d6b2c635e94f07a0ed30fca1424656aa10066cf",
     "01-frame/user-stories/US-002-import-documents-that-depend-on-each-other.md": "4b1f63bdcf5fa1d3ef5b1ebc973a0dee8262c45f51b086ed41ad39aaf7ba6400",
     "01-frame/user-stories/US-003-decide-what-happens-to-an-unknown-entity-type.md": "8d3a8c47f4814bcd59e3551fe6dff3bc7524925bc3798612c47e4167bce69fed",
     "01-frame/user-stories/US-004-keep-identifiers-stable-across-revisions.md": "4336b6fefcde05840d6ecb2d3ce6e3d2498c6625e81881af71456957a98ab60b",
-    "01-frame/user-stories/US-005-see-every-violator-before-a-tightening-is-accepted.md": "53fe29f88524682500d23cfb4f25ca7e533621fa80888a16817932ccf95dd4ad",
+    "01-frame/user-stories/US-005-see-every-violator-before-a-tightening-is-accepted.md": "467bbee17f6bddc79718ffeaabe12ced1720669997fee0c3deb2a9a9b4136bd9",
     "01-frame/user-stories/US-006-add-a-type-without-ddl.md": "b5c6e3e0cd45f9d51fb46c095960e467a0eb8476c9ebd4682f531ac6e816ee9a",
     "01-frame/user-stories/US-007-store-and-read-objects-and-edges-exactly.md": "cbdbecef2d23a1500d3784e3293fe3da3296ff5d5d7a8697f3f30bdfefb9b110",
     "01-frame/user-stories/US-008-keep-what-the-schema-does-not-define.md": "0095bbda4a481e0a3ff58fbebad01e7dd22bb7d3d81513c5ad6e8573c7e100b6",
