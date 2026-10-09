@@ -36,6 +36,18 @@ own qualified version/profile. Aurora and Lakebase retain independent obligation
 
 ### Current integration priority
 
+The security workstream's same-endpoint occurrence finding is independently
+reproduced against original source-epoch0.16 on pgserver PostgreSQL16.2 in
+[the native edge profile receipt](evidence/design-audit/pgserver-edge-occurrence-profile.json).
+Unique `edge_out` rejects a second edge ID with the same source/relationship/target
+tuple (SQLSTATE23505), preserving the first edge's properties. Other relationship
+and target tuples remain distinct. The fixture satisfies native constraints but
+does not establish admitted UMF/catalog/security semantics. Keep parallel-occurrence
+support unavailable for this profile; do not deduplicate consumer records, drop
+the index, or adopt unfinished security APIs to make the support report pass.
+STP-040 PQ-01 retains its full gate with that limitation explicit. Complete
+installer/profile verification must include this native uniqueness meaning.
+
 The next deliverable is a complete installation composition, not another isolated
 storage check. Existing native declaration, receipt boundary and lifecycle evidence
 remain component evidence only. Work through these dependencies in order:

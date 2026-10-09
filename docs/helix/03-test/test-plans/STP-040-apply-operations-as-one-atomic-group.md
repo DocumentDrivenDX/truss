@@ -91,6 +91,21 @@ Use the [private observation query](../../02-design/contracts/reference-particip
 
 PQ-01 executes both sides against independently installed zero/one/two/three/five-occurrence native cohorts, including parallel edges with different edge identities. Compare each returned saturated count with the independently declared oracle. Place additional edges on the same source with other targets and on the same target with other sources; verify that pair-only filtering cannot pass. Place irrelevant edges on other relationship/typed scopes and verify exact scope isolation. Native source visibility must include hidden required edges without revealing them in application output.
 
+Current source-epoch0.16 qualification limit: the original unique `edge_out`
+index excludes two canonical edges with the same `(source_id, rel_type_id,
+target_id)`, even with different edge IDs and properties. The
+[local native boundary receipt](../../04-build/evidence/design-audit/pgserver-edge-occurrence-profile.json)
+records PostgreSQL16.2 SQLSTATE23505 from that exact index, preservation of the
+first occurrence, and successful distinct-relationship/distinct-target controls.
+Its administrative fixture is not admitted catalog or protected-writer evidence.
+The same-tuple parallel part of PQ-01 is therefore unavailable on this profile,
+not a skipped pass or proof that DISTINCT counting is sound. Keep the full planned
+occurrence semantics and qualification gate. Dropping the index to seed a fixture
+would change the installation and cannot qualify source-epoch0.16. A future
+parallel-capable layout needs its own reviewed source/target migration,
+uniqueness and association/key semantics, count enforcement and compiler/security
+qualification. No such layout is selected by this receipt.
+
 PQ-02 independently observes the statement's actual parameter types, one-row/two-column text descriptor, exact field names and complete completion/cycle. Accept only canonical count text outgoing 0,1,2,3 and incoming 0,1,2; NULL, leading zeros, signs, exponent text, out-of-range counts, wrong descriptor, duplicate/missing row or truncated transport refuses the whole observation. At saturation assert at-least semantics, never an exact larger degree. Original failed native execution follows containment/recovery rather than a fabricated count.
 
 PQ-03 covers zero-degree surviving endpoints after delete, deletion of an endpoint after its incident edges, and catalog tightening across complete actual endpoint inventory. This query does not enumerate affected endpoints: omit one registry/enumeration scope and require operation/profile refusal even if all invoked counts pass. Retain complete typed scope custody and separate canonical/marker parity and current-union finalization. A caller cannot choose limits or replace the private query with a visible subset.
