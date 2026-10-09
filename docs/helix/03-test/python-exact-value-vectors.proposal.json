@@ -1,0 +1,24 @@
+{
+  "status": "independently authored proposal vectors; no implementation or native qualification",
+  "carrier": "urn:truss:draft:exact-value:0.1.0",
+  "obligations": ["retain original wire bytes", "admit original definition and native domain separately", "never decode via float", "compare Python and TypeScript against these expectations independently"],
+  "vectors": [
+    {"id":"integer-even", "wire":{"present":true,"value":{"kind":"integer","text":"9007199254740992"}}, "expected":{"exactIntegerText":"9007199254740992","distinctFrom":"integer-odd"}},
+    {"id":"integer-odd", "wire":{"present":true,"value":{"kind":"integer","text":"9007199254740993"}}, "expected":{"exactIntegerText":"9007199254740993","distinctFrom":"integer-even"}},
+    {"id":"decimal-one-place", "wire":{"present":true,"value":{"kind":"decimal","text":"1.0"}}, "expected":{"originalDecimalText":"1.0","mathematicallyEqualTo":"decimal-two-places","wireDistinctFrom":"decimal-two-places"}},
+    {"id":"decimal-two-places", "wire":{"present":true,"value":{"kind":"decimal","text":"1.00"}}, "expected":{"originalDecimalText":"1.00","mathematicallyEqualTo":"decimal-one-place","wireDistinctFrom":"decimal-one-place"}},
+    {"id":"decimal-negative-zero", "wire":{"present":true,"value":{"kind":"decimal","text":"-0.00"}}, "expected":{"originalDecimalText":"-0.00","signedZero":true}},
+    {"id":"decimal-large", "wire":{"present":true,"value":{"kind":"decimal","text":"123456789012345678901234567890.123456789"}}, "expected":{"originalDecimalText":"123456789012345678901234567890.123456789","ambientPrecisionMustNotRound":true}},
+    {"id":"timestamp-nanoseconds", "wire":{"present":true,"value":{"kind":"timestamp","text":"2026-10-09T12:34:56.123456789-04:00"}}, "expected":{"originalTimestampText":"2026-10-09T12:34:56.123456789-04:00","losslessPythonDatetimeAvailable":false}},
+    {"id":"timestamp-offset", "wire":{"present":true,"value":{"kind":"timestamp","text":"2026-10-09T12:34:56.123456-04:00"}}, "expected":{"originalTimestampText":"2026-10-09T12:34:56.123456-04:00","sameInstantAs":"timestamp-utc","wireDistinctFrom":"timestamp-utc"}},
+    {"id":"timestamp-utc", "wire":{"present":true,"value":{"kind":"timestamp","text":"2026-10-09T16:34:56.123456Z"}}, "expected":{"originalTimestampText":"2026-10-09T16:34:56.123456Z","sameInstantAs":"timestamp-offset","wireDistinctFrom":"timestamp-offset"}},
+    {"id":"absent", "wire":{"present":false}, "expected":{"presence":"absent"}},
+    {"id":"explicit-null", "wire":{"present":true,"value":{"kind":"null"}}, "expected":{"presence":"present","family":"null"}},
+    {"id":"empty-string", "wire":{"present":true,"value":{"kind":"string","text":""}}, "expected":{"presence":"present","family":"string","exactText":""}},
+    {"id":"empty-sequence", "wire":{"present":true,"value":{"kind":"sequence","items":[]}}, "expected":{"presence":"present","family":"sequence","items":[]}},
+    {"id":"nested-token-and-string", "wire":{"present":true,"value":{"kind":"map","entries":[{"key":"token","value":{"kind":"decimal","text":"1.00"}},{"key":"literal","value":{"kind":"string","text":"1.00"}}]}}, "expected":{"tokenFamily":"decimal","literalFamily":"string","originalTokenText":"1.00","originalLiteralText":"1.00"}}
+  ],
+  "hostValidationVectors": [
+    {"id":"python-bool-is-not-integral", "authoredDomain":"integral", "hostValue":{"pythonType":"bool","value":true}, "expected":"reject before submission"}
+  ]
+}

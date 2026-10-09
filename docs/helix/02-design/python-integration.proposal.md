@@ -134,6 +134,14 @@ Read shapes retain absent versus explicit null, ordered key components, exact la
 
 ### PY-01 independent exact-value expectations
 
+The [shared authored vectors](../03-test/python-exact-value-vectors.proposal.json)
+now materialize fourteen CONTRACT-010 presence/value carriers plus a Python host
+bool/integral refusal. Strict Ajv compilation validates each carrier and all
+cross-vector references resolve. This is fixture shape evidence only; neither
+Python/TypeScript decoding nor native storage has been run against them. The
+nested map vector checks typed token/string separation, not raw JSON parser
+custody; original raw JSON/unknown-extension vectors remain a separate obligation.
+
 Materialize these pairs under explicitly admitted authored definitions and the
 shared CONTRACT-010 carrier; the examples do not expand a selected native domain.
 Retain the original wire alongside any Python convenience value. Compare both
