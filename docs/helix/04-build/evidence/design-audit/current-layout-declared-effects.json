@@ -13135,6 +13135,11 @@
       "composition": "separate_private_component_not_in_layout"
     },
     {
+      "path": "packages/postgresql/native/catalog-original-configuration.sql",
+      "sha256": "f11b4262ddf17a82fd7009a58dde05e64ae2cb86adce18e66bbc78d3a28063ee",
+      "composition": "separate_private_component_not_in_layout"
+    },
+    {
       "path": "packages/postgresql/native/catalog-original-context.sql",
       "sha256": "628db25db14d5bd7c979f16b2ddefcff3e41781747e75485fc1253515b55fd0d",
       "composition": "separate_private_component_not_in_layout"

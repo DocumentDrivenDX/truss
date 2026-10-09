@@ -2753,3 +2753,8 @@ JSON numeric-free procedure with original custody/account; consume STP-001
 JPAR-01–07 and the eighteen-case independent byte oracle. Exact finite
 resource/build registration and native full-input integration remain open,
 while decoder semantics no longer require a new product or UMF decision.
+
+
+### Original configuration byte custody — 2026-10-09
+
+CH-01/03 now have a private native/host configuration collector under original staged operation custody and the existing schema-head configuration lock. It retains exact generation, key-reuse/journal mode and configuration/binding/inventory bytes with independently checked SHA-256 values. The native cohort passes 125 checks, including changed artifact/generation refusal, installation/epoch mismatch, combined bounds, maximum bigint generation, copied custody and ended-transaction refusal. These are migration preflight components, not installed semantic inventory or public runtime qualification. Complete committed installation/trusted incarnation, security/resource composition, registered interpretations and immutable report/head finalization remain required; preserve the unfinished commit barrier. The current declaration worklist now hashes 42 separate private SQL components without claiming they are composed.
