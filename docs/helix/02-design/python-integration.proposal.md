@@ -604,6 +604,15 @@ separate.
 
 ### PY-01a/01b complete report resource composition
 
+The private Python report candidate now returns a fixed schema-refusal diagnostic
+instead of propagating the validator's instance-bearing exception. A large
+invalid original report remains refused without including its content in the
+outward exception or chained cause. This bounds that diagnostic surface only;
+the validator's internal traversal, errors and temporary allocations still need
+the complete resource composition below. Detailed protected diagnostics require
+their own explicitly bounded and authorized producer, rather than exposing a
+third-party validation exception as the consumer contract.
+
 The [resource-boundary probe](../04-build/evidence/design-audit/check_python_report_resource_boundaries.py)
 retains [two observed distinctions](../04-build/evidence/design-audit/python-report-resource-boundaries.json),
 separate from the 39 small shared wire controls. The original source-pinned probe observed Python accepting a shape-valid

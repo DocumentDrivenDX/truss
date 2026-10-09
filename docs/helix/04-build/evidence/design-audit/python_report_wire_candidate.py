@@ -59,5 +59,8 @@ class ReportWireCandidate:
                 return [view(child) for child in value]
             return value
 
-        self._validator.validate(view(retained.value))
+        # Do not propagate jsonschema's instance-bearing exception to consumers.
+        # This bounds the outward diagnostic, not internal validator allocations.
+        if not self._validator.is_valid(view(retained.value)):
+            raise ValueError('Original composed report schema refused')
         return ReportWire(retained)

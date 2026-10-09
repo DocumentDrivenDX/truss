@@ -29,9 +29,9 @@
   "sourceSha256": {
     "docs/helix/04-build/evidence/design-audit/check_python_report_interchange.py": "d620a4f717bb84135446cef61ddb83857a852f47e604d0ee4cfc9107148ea498",
     "docs/helix/04-build/evidence/design-audit/check-python-report-interchange.ts": "bac473964f243820619071000619621024e81b983bef550949ee9a2efea95180",
-    "docs/helix/04-build/evidence/design-audit/python_report_wire_candidate.py": "2e8f0074f43c22f8a4c08597f9c7eb7d0c8795f8ef82114621551245932bc548",
+    "docs/helix/04-build/evidence/design-audit/python_report_wire_candidate.py": "faeadfe55b315b85025ead4975208e732e3593ff7a3157eb9aa89faf70da12aa",
     "docs/helix/04-build/evidence/design-audit/python_raw_json_candidate.py": "eecc41365951d3b60c3c2adb9c7f75e0e087eb154728ad9c1c0956becf4217c6",
-    "docs/helix/04-build/evidence/design-audit/test_python_report_wire_candidate.py": "2a684b03701b4b9361e55573d19b784db5a3136a44b3c9f00b2bc1d33f0da398",
+    "docs/helix/04-build/evidence/design-audit/test_python_report_wire_candidate.py": "dd1c69c06fc54a0ab81fd56b60b42be18acbf9e09d266457dfb99c056b898b5f",
     "packages/umf-bun/src/canonical-report-handoff.ts": "1cf292afdd8c7ebf970963fdc26bde18cf2d5b38dd94588966f9d1460e358366",
     "packages/postgresql/src/acceptance-json.ts": "14a65dc9fd67b3ab53fb080a4a05422b991af63feac52fc6e0655eb03a47ed17",
     "packages/postgresql/src/canonical-wire-tree.ts": "2fcb2ff72ce7faad682800be3a4deba1f7147f814e08319179cea4ed93cc4bf6",

@@ -104,5 +104,18 @@ class ReportCandidateTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'pin mismatch'): ReportWireCandidate(Path(target))
         with self.assertRaises(ValueError): self.codec.prepare(b' '*1048577)
 
+    def test_invalid_large_report_has_bounded_instance_free_diagnostic(self):
+        report = candidate()
+        marker = 'private-original-instance-'
+        report['unexpected'] = marker + 'x' * 600000
+        source = wire(report)
+        self.assertLess(len(source), 1048576)
+        with self.assertRaises(ValueError) as rejected:
+            self.codec.prepare(source)
+        self.assertEqual(str(rejected.exception), 'Original composed report schema refused')
+        self.assertNotIn(marker, str(rejected.exception))
+        self.assertIsNone(rejected.exception.__cause__)
+        self.assertIsNone(rejected.exception.__context__)
+
 
 if __name__ == '__main__': unittest.main()
