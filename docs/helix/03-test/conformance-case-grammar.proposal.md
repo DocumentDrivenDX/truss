@@ -95,6 +95,23 @@ named `*`; it never means wildcard. Duplicate path entries and actual identity
 eligibility remain semantic refusal obligations. These controls do not qualify
 the complete registered path inventory or a native comparator.
 
+Run `bun docs/helix/04-build/evidence/design-audit/check-conformance-identity-links.ts`
+for nineteen synthetic declaration/binding controls. The comparator checks
+unique namespaces/symbols/occurrences, exact kind/profile/source-basis links,
+registered setup/result pointers, explicit eligible-surface projections and
+exact string identities. Pointer resolution preserves escaped members and
+object-versus-array index meaning; profile object-member ordering cannot hide
+a duplicate occurrence. Result indexes are parsed exactly and bounded by the
+original result array before conversion to a host index. No alias spelling is
+used to infer allocation order or identity equality.
+
+The surface eligibility flag and namespace basis in these witnesses represent
+already-admitted harness observations, not fields callers can submit to obtain
+authority. Native identity-domain validation, original issuer custody,
+transaction generation/rollback/visibility and equality/inequality/order checks
+remain independent prerequisites. This comparator does not implement input
+alias substitution or prove a complete native binding inventory.
+
 The existing `conformance-aliases-v0.1.proposal.schema.json` supplies binding
 declarations, not a path registry or substitution algorithm. Its
 `operationIndex` is the zero-based position in the original ordered input steps,
