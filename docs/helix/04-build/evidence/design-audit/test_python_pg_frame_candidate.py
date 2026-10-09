@@ -81,6 +81,19 @@ class FrameTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             data_row(b'D' * (MAX_FRAME + 1), 0)
 
+    def test_complete_valid_frame_exact_and_one_over_capacity(self):
+        self.assertEqual(MAX_FRAME, 1048576)  # Independent candidate fixture limit.
+        # Type byte + length + count + cell length occupy eleven bytes.
+        payload = b'a' * (1048576 - 11)
+        exact = frame(b'D', b'\0\1' + struct.pack('!i', len(payload)) + payload)
+        self.assertEqual(len(exact), 1048576)
+        self.assertEqual(data_row(exact, 1), (payload,))
+        larger = payload + b'a'
+        over = frame(b'D', b'\0\1' + struct.pack('!i', len(larger)) + larger)
+        self.assertEqual(len(over), 1048577)
+        with self.assertRaisesRegex(ValueError, 'capacity'):
+            data_row(over, 1)
+
 
 if __name__ == '__main__':
     unittest.main()

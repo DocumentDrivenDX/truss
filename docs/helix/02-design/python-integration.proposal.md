@@ -513,6 +513,34 @@ not a fresh native run or driver qualification.
 
 #### libpq receive-path qualification correction
 
+#### Full-report wire capacity before driver selection
+
+The frame candidate's one-MiB limit cannot transport the existing four-MiB
+canonical report ceiling. PY-01b must select its actual SQL result OID/format and
+compute protocol capacity from the complete representation before acceptance
+effects. A single-cell DataRow occupies eleven bytes plus the cell payload.
+For a 4,194,304-byte canonical report returned as binary bytea, that is 4,194,315
+frame bytes. With PostgreSQL
+[bytea hex text output](https://www.postgresql.org/docs/17/datatype-binary.html),
+two digits per byte plus the `\x` prefix produce 8,388,621 frame bytes. These
+are representation arithmetic, not an adopted SQL route or native measurement.
+
+Reserve the simultaneous native report, wire representation, receive backing,
+complete frame, decoded bytes and host report views under the selected original
+account. Bind text output settings or binary-format selection to actual metadata;
+do not infer a hex bound if escape output is possible. Multiple cells/rows,
+metadata, notices and other cycle messages need their own complete inventory.
+Increasing a frame constant alone cannot qualify those lifetimes or introduce
+support for a different result carrier. Refuse an incompatible producer/transport
+tuple before application effects, rather than discover capacity failure after
+commit or silently reduce the report guarantee to the small prototype.
+
+The syntax suite now has seven tests. The new independent exact/one-over case
+uses a complete otherwise valid single-cell frame at 1,048,576/1,048,577 bytes;
+it confirms the prototype limit rather than attributing oversized refusal to
+malformed input. The existing saved native receipt remains unchanged and scoped
+to its small read-only result.
+
 Review of PostgreSQL
 [REL_17_9 fe-misc.c](https://raw.githubusercontent.com/postgres/postgres/REL_17_9/src/interfaces/libpq/fe-misc.c)
 shows `pqReadData` moving retained input bytes and warns that input-buffer
