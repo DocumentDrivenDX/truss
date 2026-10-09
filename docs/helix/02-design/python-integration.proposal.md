@@ -68,6 +68,19 @@ implementation rather than add a Truss aggregate compiler. The explicit
 readProfile is version `weft-application-read/0.2.0`, subset `count-summary`;
 omitting it does not supply bounded interactive-read semantics.
 
+The clean Python 3.11 wheel now compiles the existing upstream-derived
+`tests/weft/fixtures/qualified-count.request.json` through public
+`weft.compile_json`, retaining the independently expected count text carrier and
+qualified backend version. The same run refuses an unsupported target profile
+without publishing SQL, rejects four wrong transport types and an invalid Unicode
+surrogate, and confirms the test-only configuration export is absent. Run
+`docs/helix/04-build/evidence/design-audit/check-weft-python-count.py` with the
+clean pinned-wheel interpreter; the [saved component receipt](../04-build/evidence/design-audit/weft-python-count-component.json)
+records fixture/checker/response hashes. The fixture has synthetic upstream
+catalog identities and is not accepted Truss state. These checks do not qualify
+native queries, complete obligation handling, actual catalog mapping or Python
+runtime publication.
+
 For this profile, grouped counts require complete grouping order and LIMIT;
 global counts have one row and exclude ORDER BY/LIMIT. Cursor and relationship
 predicates are excluded. Empty global input produces one zero-count row; empty

@@ -1,0 +1,14 @@
+{
+  "scope": "public Python compiler-only count, profile and transport checks; synthetic upstream binding, no accepted Truss IDs or native execution",
+  "python": "3.11.17 (main, Oct  3 2026, 00:54:14) [Clang 22.1.3 ]",
+  "weftVersion": "0.1.0",
+  "fixtureSha256": "0ac92dccb705f6fbfd843d3735aa02a819862e6683019134335bc15f15ed4aa8",
+  "checkerSha256": "29cffdf0341745f7454d39d83bbcdc27f12ff90796ea0d700a8ecb77c7875b3d",
+  "countResponseSha256": "a861409fbb2acb6d35eb8f0902ea47651e38edb407b92f7ace5a13de837cc3f6",
+  "countCompiled": true,
+  "unsupportedProfileRefused": true,
+  "transportRefusals": 5,
+  "testOnlyExportAbsent": true,
+  "nativeExecuted": false,
+  "qualifiedTrussPythonRuntime": false
+}
