@@ -6,13 +6,13 @@ type Prepared=ReturnType<Awaited<ReturnType<typeof createCatalogInputPreparation
 type Collection=ReturnType<typeof collectCatalogAssertionObservations>;
 export function collectCatalogCoreAssertionIdentities(prepared:Prepared,collection:Collection){
  requireOriginalCatalogPreparation(prepared);requireOriginalCatalogObservationCollection(prepared,collection);
- const manifestBytes=Buffer.from(JSON.stringify({interfaceVersion:'truss-core-assertion-source-identity/0.1.0',producer:collection.fieldProfile,
-  operations:['kind','nullability','cardinality','facets'],basis:'original',identity:'original document digest, qualified owner and exact owner-produced pointer',missing:'retained absence observation; no assertion invented',enforcement:'none/unqualified'}));
- const manifest=Object.freeze({identity:'truss.core-assertion-source-identity/0.1.0',bytesBase64:manifestBytes.toString('base64'),sha256:createHash('sha256').update(manifestBytes).digest('hex')});
- const profile=Object.freeze({identity:'truss-core-assertion-source-identity',version:'0.1.0',sha256:manifest.sha256});
+ const manifestBytes=Buffer.from(JSON.stringify({interfaceVersion:'truss-core-assertion-source-identity/0.2.0',producers:{fields:collection.fieldProfile,declarations:collection.profile},
+  operations:['kind','nullability','cardinality','facets','keys','relationships'],basis:'original',identity:'original document digest, qualified owner and exact owner-produced pointer',authored:'retain exact declaration ID with full original occurrence pointer',missing:'retained absence observation; no assertion invented',enforcement:'none/unqualified'}));
+ const manifest=Object.freeze({identity:'truss.core-assertion-source-identity/0.2.0',bytesBase64:manifestBytes.toString('base64'),sha256:createHash('sha256').update(manifestBytes).digest('hex')});
+ const profile=Object.freeze({identity:'truss-core-assertion-source-identity',version:'0.2.0',sha256:manifest.sha256});
  const entries=[];const absent=[];const deferred=[];const identities=new Set<string>();
  for(const observed of collection.observations){
-  if(observed.basis!=='original'||!['kind','nullability','cardinality','facets'].includes(observed.operation)){deferred.push(observed);continue}
+  if(observed.basis!=='original'||!['kind','nullability','cardinality','facets','keys','relationships'].includes(observed.operation)){deferred.push(observed);continue}
   const result=observed.result as any;if(result.state!=='observed'){deferred.push(observed);continue}
   const original=result.observation,meaning=original.meaning;
   if(meaning?.state==='missing'){absent.push(observed);continue}
@@ -22,9 +22,19 @@ export function collectCatalogCoreAssertionIdentities(prepared:Prepared,collecti
   let node:any=original.source;
   for(const token of original.path.slice(1).split('/')){const key=token.replace(/~1/g,'/').replace(/~0/g,'~');if(node===null||typeof node!=='object'||!Object.hasOwn(node,key))throw Error('Original asserted source node absent');node=node[key]}
   const source=prepared.original.input.documents[di].artifact,owner=Object.freeze({documentId:document.documentId,moduleId:identity.module});
-  const uniqueness=JSON.stringify([source.sha256,owner,original.path]);if(identities.has(uniqueness))throw Error('Duplicate original core assertion source identity');identities.add(uniqueness);
-  entries.push(Object.freeze({assertion:Object.freeze({sourceKind:'umf_document' as const,owner,definitionPin:source.sha256,sourcePointer:original.path,kind:'source' as const,sourceIdentityProfile:profile}),
-   source,ruleName:'core.'+observed.operation,ruleNameOrigin:'profile_generated' as const,enforcement:'none' as const,reason:'unqualified' as const,ownerEvidence:observed.evidence}));
+  const declaration=observed.operation==='keys'||observed.operation==='relationships';
+  const originalNodes=declaration?node:[node],ownerNodes=declaration?meaning[observed.operation]:[node];
+  if(!Array.isArray(originalNodes)||!Array.isArray(ownerNodes)||originalNodes.length!==ownerNodes.length)throw Error('Complete original declaration occurrence correspondence required');
+  if(originalNodes.length===0){absent.push(observed);continue}
+  for(let index=0;index<originalNodes.length;index++){
+   const pointer=original.path+(declaration?'/'+index:'');
+   const uniqueness=JSON.stringify([source.sha256,owner,pointer]);if(identities.has(uniqueness))throw Error('Duplicate original core assertion source identity');identities.add(uniqueness);
+   const authored=declaration&&typeof originalNodes[index]?.id==='string'&&originalNodes[index].id.length>0;
+   if(declaration&&originalNodes[index]?.id!==ownerNodes[index]?.id)throw Error('Original authored declaration identity correspondence required');
+   const identity=authored?{kind:'authored' as const,authoredIdentity:originalNodes[index].id as string}:{kind:'source' as const,sourceIdentityProfile:profile};
+   entries.push(Object.freeze({assertion:Object.freeze({sourceKind:'umf_document' as const,owner,definitionPin:source.sha256,sourcePointer:pointer,...identity}),
+    source,ruleName:'core.'+observed.operation,ruleNameOrigin:'profile_generated' as const,enforcement:'none' as const,reason:'unqualified' as const,ownerEvidence:observed.evidence}));
+  }
  }
  return Object.freeze({profile,manifest,entries:Object.freeze(entries),absent:Object.freeze(absent),deferred:Object.freeze(deferred),complete:false as const,scope:'original_inspected_core_source_identity_subset_only' as const});
 }

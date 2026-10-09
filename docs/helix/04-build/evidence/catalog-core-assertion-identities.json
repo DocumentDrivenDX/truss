@@ -1,10 +1,11 @@
 {
   "sources": {
-    "packages/umf-bun/src/catalog-core-assertion-identities.ts": "f93bf39c10fdd188f82aab431e3ff36cfb51fbbc416dc1fef5225c17202b5c34",
-    "tests/catalog-core-assertion-identities.test.ts": "768d395fb068e6ec3f2541fec8882b01814378626139f158e34a2e8ce4a8776c"
+    "packages/umf-bun/src/catalog-core-assertion-identities.ts": "fc6fbd3d441a0901de614398fbba1bc313ab1c5407eab5395b43544446c02fe4",
+    "tests/catalog-core-assertion-identities.test.ts": "12a86580e3b61cc5ed73029e2611cb99d88f858beab4d2db4fa16f0088219da3"
   },
-  "tests": 2,
-  "assertions": 41,
+  "tests": 3,
+  "assertions": 47,
   "strictTypeCheck": "passed",
-  "scope": "Actual pinned owner source identities for original kind/nullability/cardinality/facets subset only. Missing observations separate, others deferred, all entries unqualified and complete=false. No complete report/schema membership or admitted semantic/native enforcement."
+  "scope": "Actual pinned owner original kind/nullability/cardinality/facets/keys/relationships subset. Exact authored IDs retain occurrence pointers; missing and deferred observations separate. No complete report or admitted enforcement.",
+  "identityProfileVersion": "0.2.0"
 }
