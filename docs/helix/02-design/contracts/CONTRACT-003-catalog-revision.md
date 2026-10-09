@@ -945,3 +945,18 @@ registration and input-capacity gate, not implicit constants copied from UMF
 LIMITS. Implement the selected procedure before claiming raw ingress support;
 unsupported or unqualified registrations refuse. Use independent JPAR-01–07
 controls in STP-001 and RPDOC complete-boundary scenarios before adoption.
+
+The [reference decoder resource profile](bindings/acceptance-input-decoder-resource-v0.1.candidate.json)
+selects inclusive one-MiB original/framed artifact ceilings and a 1,048,525-byte
+canonical tree ceiling, leaving exactly 51 bytes for the fixed profile/domain
+prefix. Depth is at most 128, nodes 100,000, members/elements per container
+4,096; owned peak is 32 MiB and cumulative charged work two million units.
+All are conjunctive with original enclosing/account and six-artifact aggregate
+limits. These finite reference values are not a universal UMF/input domain or
+a guarantee every individually allowed maximum fits. Complete source sets
+whose provenance cannot fit refuse honestly until a separately registered
+compatible profile is adopted; no truncated or split acceptance is permitted.
+Actual JavaScript allocation/dependency bounds still require producer
+qualification, including container/slot/string overhead and simultaneous
+source/tree/framed/verification copies. A profile label cannot issue that
+account or claim arbitrary native memory bounds.

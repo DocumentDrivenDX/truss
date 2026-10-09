@@ -1,0 +1,41 @@
+{
+  "identity": "truss-acceptance-input-decoder-resources",
+  "version": "0.1.0",
+  "status": "selected_reference_budget_requires_producer_qualification",
+  "scope": "Complete numeric-free outer input decoding and canonical custody; controlled producer work only, no arbitrary native or JavaScript heap guarantee",
+  "limits": {
+    "originalRawUtf8Bytes": 1048576,
+    "canonicalTreeUtf8Bytes": 1048525,
+    "framedPreimageBytes": 1048576,
+    "rootDepth": 0,
+    "maximumDepth": 128,
+    "treeNodes": 100000,
+    "objectMembers": 4096,
+    "arrayElements": 4096,
+    "decodedStringUtf8Bytes": 1048576,
+    "simultaneouslyRetainedOwnedBytes": 33554432,
+    "cumulativeChargedWorkUnits": 2000000
+  },
+  "framing": {
+    "canonicalProfile": "truss-canonical/0.1.0",
+    "domain": "truss-acceptance-input/0.1.0",
+    "prefixAsciiBytes": 51
+  },
+  "rules": {
+    "conjunction": "All ceilings apply together with smaller original enclosing allowances; maxima are not a promise that all fit simultaneously",
+    "source": "Retain original immutable bytes; raw, canonical and framed artifacts remain distinct and are charged while coexisting",
+    "structure": "Each scalar, object or array counts as a node; each child adds one depth. Reserve before frame/slot/string allocation",
+    "work": "Charge every inspected byte, each full duplicate-name comparison byte, each scalar conversion, and every verification/canonical/hash/copy pass; actual repeated work never resets",
+    "ownership": "Charge conservative qualified original frame/container/slot/string/buffer allocation bounds; raw/output byte length alone does not account for host objects or copies",
+    "nativeRegistry": "Retained operation artifacts still obey one-MiB individual and four-MiB six-artifact aggregate admission; this parser profile cannot increase either limit",
+    "dependencies": "Pre-admit actual schema validator, canonical encoder, hash/base64 and other producer peak/work bounds. Missing bounds refuse before invocation"
+  },
+  "failure": "Resource refusal with no partial tree, issued input, native effects or representation fallback; retain original containment/recovery custody",
+  "qualificationRequired": [
+    "Exact immutable implementation/build and original issuer/account registration",
+    "Independent byte oracle plus exact/one-over structural, output, work and peak controls",
+    "Real packed browser and selected host observations of reserve-before-work behavior",
+    "Complete original source/canonical/framed correspondence and aggregate operation custody",
+    "Native complete-input/archive/report/finalizer integration separately"
+  ]
+}
