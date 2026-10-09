@@ -5,6 +5,16 @@ import {requireOriginalCatalogEpochContextBasis,recheckOriginalCatalogEpochConte
 import type {ProfilePin,ExactArtifact} from '../../../docs/helix/02-design/contracts/bindings/truss-acceptance-input-v0.1';
 type Epoch=Awaited<ReturnType<typeof collectCatalogEpochContextBasis>>;
 type Args=Parameters<typeof collectCatalogEpochContextBasis>;
+const issued=new WeakMap<object,{connection:Args[0];prepared:Args[1];basis:Args[2];epoch:Epoch}>();
+export function requireOriginalCatalogExecutionReportCandidate(value:object,connection:Args[0],prepared:Args[1],basis:Args[2]){
+ const original=issued.get(value);
+ if(!original||original.connection!==connection||original.prepared!==prepared||original.basis!==basis)throw Error('Original execution report candidate custody required');
+ requireOriginalCatalogEpochContextBasis(original.epoch,connection,prepared,basis);
+}
+export async function recheckOriginalCatalogExecutionReportCandidate(value:object,connection:Args[0],prepared:Args[1],basis:Args[2]){
+ requireOriginalCatalogExecutionReportCandidate(value,connection,prepared,basis);
+ await recheckOriginalCatalogEpochContextBasis(issued.get(value)!.epoch,connection,prepared,basis);
+}
 export async function composeCatalogExecutionReportCandidate(connection:Args[0],prepared:Args[1],basis:Args[2],epoch:Epoch,
  profiles:{readonly capture:ProfilePin;readonly mapping:ProfilePin;readonly mappingArtifact:ExactArtifact}){
  requireOriginalCatalogEpochContextBasis(epoch,connection,prepared,basis);
@@ -18,7 +28,8 @@ export async function composeCatalogExecutionReportCandidate(connection:Args[0],
  const mapped=mapAssertedOrigin(Buffer.from(epoch.assertedEvidence.bytesBase64,'base64'),epoch.origin.databaseRole);
  if(JSON.stringify(mapped.origin)!==JSON.stringify(epoch.origin)||JSON.stringify(mapped.journalOrigin)!==JSON.stringify(epoch.journalOrigin))throw Error('Original origin mapping correspondence required');
  await recheckOriginalCatalogEpochContextBasis(epoch,connection,prepared,basis);
- return Object.freeze({candidate:Object.freeze({installationId:epoch.installationId,sourceEpoch:epoch.sourceEpoch,origin:epoch.origin,journalOrigin:epoch.journalOrigin,
+ const result=Object.freeze({candidate:Object.freeze({installationId:epoch.installationId,sourceEpoch:epoch.sourceEpoch,origin:epoch.origin,journalOrigin:epoch.journalOrigin,
   originMappingProfile:Object.freeze(mapping),captureProfile:Object.freeze(capture),contextEvidence:epoch.contextEvidence}),
   mappingArtifact:Object.freeze(artifact),scope:'original_execution_report_candidate_only' as const});
+ issued.set(result,{connection,prepared,basis,epoch});return result;
 }
