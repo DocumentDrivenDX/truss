@@ -85,6 +85,39 @@ passing checks assembled from different layout proposals cannot qualify a route.
 These are engineering delivery dependencies, not a reopening of the owner's
 decision to ship migrations in the first release.
 
+### M1 populated preservation comparison
+
+Before selecting a route, author its expected preservation mapping independently
+of the executor. LM-T03 uses that same mapping for committed target checks;
+LM-T05 compares confirmed rollback with the original source. Counts and aggregate
+hashes are supporting observations, not substitutes for the following comparisons.
+
+| Retained surface | Required source/target comparison |
+| --- | --- |
+| Objects, keys and edges | Preserve full typed identities, key ownership, endpoint direction and membership. Compare every independently seeded property, including absent, explicit null, empty sequence, exact decimal, large integer and unknown retained content. An explicitly declared conversion needs both original bytes and independently expected target meaning |
+| Catalog and acceptance reports | Preserve original document bytes, revision lineage, immutable full reports and source artifact membership. Verify current head and lifecycle state separately; recreating an equivalent-looking report cannot replace its retained original |
+| Journal and reconstruction | Preserve group order, complete sibling membership, property deltas, metadata witnesses and declared history horizon. Reconstruct independently selected before/after states through the admitted target reader; equal row counts do not prove replay compatibility |
+| Mutation receipts | Resolve each retained original request to the same committed outcome and complete results after upgrade. Changed requests still conflict. Preserve the remaining retry protection interval; migration time does not shorten or restart it without an explicit qualified rule |
+| Feed and acknowledgments | Preserve original epoch/incarnation, positions, consumer acknowledgments and protected unread horizon under the declared compatibility mapping. Exercise a pre-upgrade token against the target resolver and verify actual continuation/reached meaning, rather than comparing token spelling |
+| Unresolved recovery and publications | Preserve original attempt references, durable recovery membership and outstanding resource/protection obligations. An unresolved attempt stays unresolved until its original settlement procedure proves an outcome. Consume the security owner's required buffer/drain observations separately from native transaction state |
+| Allocation and installation state | Verify each declared allocator's committed nonreuse obligation, complete target inventory and exact archive/marker provenance. Sequence gaps after rolled-back work may be permitted by the selected allocator profile; rollback must not reset an allocator merely to reproduce its previous numeric value |
+
+Seed at least one meaningful instance of each applicable surface, including an
+outstanding protected receipt/feed/recovery case. Explicitly identify inapplicable
+surfaces from the selected source profile; an empty fixture is not evidence that
+the route preserves an implemented surface. Retain independently encoded source
+expectations before collecting the executor's output. If a conversion cannot
+preserve an original token or decoder contract, declare its compatibility and
+recovery treatment before route admission; do not discover a silent break after
+publishing target readiness.
+
+Fault immediately before conversion, after a populated conversion, before
+receipt/marker publication and at commit acknowledgment. Confirmed rollback
+restores transactional source data and publication state while retaining allowed
+allocator gaps and original recovery evidence. Unknown settlement keeps both
+the original attempt and readiness gate intact. These are planned LM-T03/05
+comparison requirements; no populated route is qualified by this handoff.
+
 ### Security enrollment/exclusion ordering dependency
 
 The security owner’s active 2026-10-09 review identified a possible circular
