@@ -20,8 +20,10 @@ ddx:
 ## Current closure classification — 2026-10-09
 
 Latest upstream and consumer reconciliation: fetched UMF is now
-`c7c95e1c4ea5b72541f47fa0350ca467ff02f395`; Weft remains
-`5856c73db0342363e64802905a94abb96209d757`. UMF's new experimental
+`de11e172c1eb11e7082b605421ad146ae4740a0d`; Weft is now
+`f05f2df09e9c2494ac8c6d703dfe38413dbc4181`. The latest UMF dashboard
+extension and repository portability changes do not repin Truss runtime APIs;
+see the [committed-source review](evidence/design-audit/umf-dashboard-source-sync.json). UMF's experimental
 Record/dataset value operations are available owner inputs for A2, with finite
 supplied-only scope and core0.8 requirements. The
 [updated acceptance handoff](acceptance-runtime-handoff.md#a2-remaining-dynamic-producer-integration)
@@ -78,9 +80,15 @@ execution, provider durability and committed database interchange.
 The security owner's private Key-agreement interpretation now has source-pinned
 logical/browser evidence with nativeImplementationQualified=false. Default source
 qualifier refusal remains; public authenticated interpretation and compiler/native
-refinement still belong to that owner. Weft's committed compiler/CLI and affected
-application-read contract remain unchanged at inspected local HEAD94b2de5 relative
-to the prior selected source. Keep dirty owner work outside Truss release adoption.
+refinement still belong to that owner. Weft f05f2df adds original owning-core0.8 admission under its existing transport
+shapes. Truss has built that exact committed source in isolation and advanced its
+TypeScript compiler pin after twenty-one compiler/host/protocol tests, fifty-one
+assertions and strict TypeScript checking; the
+[regression receipt](evidence/design-audit/weft-f05f2df-truss-regression.json)
+retains the narrow qualification scope. Its public model type remains core0.7.
+Python and browser artifacts retain their separate historical pins; no native
+execution, consumer projection or security capability is qualified by this update.
+Keep dirty owner work outside Truss release adoption.
 
 
 This index separates authored design from capability qualification. Its older
