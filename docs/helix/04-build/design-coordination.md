@@ -15,6 +15,37 @@ ddx:
 
 # Design coordination and remaining work
 
+## Security working-source refresh — 2026-10-09
+
+The [fresh boundary review](evidence/design-audit/security-current-boundary-review-2026-10-09.json)
+observes the security owner's worktree at committed base
+`9e4bed3efe922c11e4b5a888ba6854de14f1b29f` with security work still uncommitted.
+Its current identity-component receipt reports 143 observations, replacing the
+working receipt previously reviewed at 132. Three of the earlier 86 source
+pins have changed: the identity probe, runtime harness and oracle. The earlier
+Truss review remains historical evidence, not a current source-match claim.
+The new review separately checks all 86 sources listed by the current receipt,
+with all 86 matching their current hashes;
+it does not rerun the owner tests or adopt that receipt as backend authority.
+
+Newly reviewed controls include actual effective privileges, column privileges
+and ordinary UTF8 observations for alice, bob and outsider. Consume their
+procedures in Truss's existing ordinary-principal/preflight and observer
+registration work: declared grants or role names alone cannot establish actual
+rights; the complete native response, original actor/effective actor and
+encoding remain required. The owner contract's private principal path retains
+the explicit OID19 caller carriers versus OID25 returned facts/subject keys.
+Do not normalize those wire distinctions away in the conformance adapter.
+
+The owner also retains original-response deadline/quarantine requirements and
+in-process security-read registration custody. A deadline is a coordination
+bound, not proof of rollback or publication release; a JSON-shaped/copied
+registration handle cannot authorize evaluation or supply native facts.
+Truss's registry and adapters must bind these original procedures while the
+security owner retains resolver, identity and publication ownership. Current
+source correspondence and 143 owner-reported component observations establish
+neither committed security adoption nor released Truss protected execution.
+
 ## Current committed owner baseline — 2026-10-09
 
 A fresh successful origin fetch confirms UMF `origin/master` at
