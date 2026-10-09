@@ -226,6 +226,26 @@ whole-operation resource accounting, native storage and public packaging remain
 separate PY-01a/PY-01b work. This candidate lives outside a public package while
 package ownership is pending; its green results do not qualify the Python runtime.
 
+The subsequent private `python_exact_timestamp_candidate.py` adds original-token
+retention with an optional aware datetime view for its explicit offset/precision
+subset. Nonzero submicrosecond digits refuse the convenience view; trailing zero
+digits can have an exact microsecond representation while their original spelling
+is retained. Unknown `-00:00` offset, leap seconds, offsetless forms and dates
+Python cannot represent have no datetime view. This is conversion availability,
+not source grammar/temporal-family validation. It grants no native instant,
+comparison or ordering capability.
+
+Run all numeric and timestamp candidates with:
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 python3.11 -m unittest discover -s docs/helix/04-build/evidence/design-audit -p 'test_python_exact_*_candidate.py'
+```
+
+Four tests pass on Python 3.11, including all three authored timestamp vectors,
+same-instant/different-offset preservation, exact versus lossy finer precision,
+unavailable views and capacity refusal. Recursive/presence/raw-JSON codecs and
+original source/native/resource admission remain required.
+
 ## Host transaction adapter
 
 Use the semantic Executor operations of CONTRACT-007 rather than a language-specific second transaction protocol. The adapter accepts the caller's actual live connection/transaction object, validates ownership/lifetime, and retains it internally. No transaction identifier is accepted as a substitute. Initial delivery selects one driver/transaction mode and qualifies it; sync and async modes cannot share a support claim without separate evidence. Driver selection remains explicit.

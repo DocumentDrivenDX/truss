@@ -24,13 +24,13 @@ def _bounded_text(token: str, maximum_bytes: int) -> str:
     if type(token) is not str or type(maximum_bytes) is not int or maximum_bytes <= 0:
         raise ValueError("Original text and a selected positive byte bound required")
     if len(token) > maximum_bytes:
-        raise ValueError("Numeric token exceeds selected bound")
+        raise ValueError("Exact token exceeds selected bound")
     try:
         size = len(token.encode("utf-8", errors="strict"))
     except UnicodeError as error:
         raise ValueError("Original token is not UTF-8") from error
     if size > maximum_bytes:
-        raise ValueError("Numeric token exceeds selected bound")
+        raise ValueError("Exact token exceeds selected bound")
     return token
 
 
