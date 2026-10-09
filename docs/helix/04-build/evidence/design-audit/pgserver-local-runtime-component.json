@@ -1,0 +1,18 @@
+{
+  "scope": "Owned pgserver lifecycle/readiness and native text persistence across stop/restart; no Truss installation or migration qualification",
+  "python": "3.11",
+  "platform": "macOS arm64",
+  "serverVersion": "16.2",
+  "dependencies": {
+    "pgserver": "0.1.4",
+    "fasteners": "0.20",
+    "platformdirs": "4.12.4",
+    "psutil": "7.2.2"
+  },
+  "checks": [
+    "launcher --probe readiness and cleanup",
+    "native canary write/read",
+    "same-directory stop/restart retains exact committed text"
+  ],
+  "launcherSha256": "67876a9ad90a268da30420d16cbf8e0c4cbfb2ddc07c503e652c1399db625f00"
+}

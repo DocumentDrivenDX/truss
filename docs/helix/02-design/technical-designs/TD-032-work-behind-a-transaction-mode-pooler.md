@@ -17,6 +17,19 @@ ddx:
 
 # TD-032: Transaction-mode pooling
 
+## Owner scope correction — 2026-10-09
+
+US-032 now targets a host-supplied PostgreSQL connection. Pool provisioning and
+operation are host concerns; the historical pooler-specific corpus and 0.05ms
+statistic below are optional deployment evidence, not release gates. AC1 verifies
+supplied-connection corpus correctness and caller ownership; AC2 retains safe
+parameterized unprepared execution; AC3 now verifies original connection/transaction
+custody on success, refusal and unknown outcome, with no pool creation, caller
+connection close or automatic replay. Use actual driver/native ownership probes
+for all three criteria. Pooler selection and benchmark preference require no
+further owner decision. Existing affinity, role cleanup and unknown-result rules
+still apply wherever the host obtains its connection.
+
 ## Technical Approach
 
 Every operation uses one connection-affine transaction handle under CONTRACT-007. Acquire/release at transaction boundaries; never retain role, origin, catalog snapshot or a prepared-statement name as correctness-critical session state. Caller adoption preserves host ownership and does not release its connection. Parameterized unprepared execution remains a first-class mode.

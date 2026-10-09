@@ -214,7 +214,7 @@ measured limits. *(choice)*
 
 **Negative**
 
-- No in-process Python use until a Rust core exists (T1).
+- ADR-003, accepted by the owner on 2026-10-09, permits a Truss-maintained tested embeddable Python implementation over shared contracts and storage without waiting for a Rust Truss core. Weft remains Rust-owned.
 - Every adapter carries an exact text read path and cannot use default driver
   decoding.
 - Exact decimal arithmetic must be implemented or depended on; JavaScript has no

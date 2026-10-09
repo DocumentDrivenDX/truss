@@ -17,6 +17,23 @@ ddx:
 
 # Current design closure
 
+## Owner decisions — 2026-10-09 (supersedes pending language below)
+
+Truss ships and maintains a tested embeddable Python implementation in this
+repository (ADR-003 accepted). Catalog identity is document-qualified (ADR-004
+accepted). Stale pre-effect admission returns a refusal without automatic retries.
+Pool provisioning/operation is the host's responsibility; Truss takes a PostgreSQL
+connection, retains transaction affinity and does not require a pooler performance
+statistic to close product design. Installation and shipped migration profile
+selection are Truss engineering responsibilities. The default local development
+and test runtime is pgserver; see the [installation/runtime plan](local-runtime-installation-migration-plan.md).
+
+The prior traversal question was not explained adequately. No unique-terminal or
+path-valued output choice is inferred from the owner's response. First establish
+whether a separate direct traversal API is required; this does not block Python,
+installation or migration work. Historical pending-choice lists below are
+superseded by this decision record, not renewed approval requests.
+
 ## Current closure classification — 2026-10-09
 
 Latest upstream and consumer reconciliation: fetched UMF is now

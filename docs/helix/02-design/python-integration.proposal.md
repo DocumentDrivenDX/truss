@@ -2,6 +2,17 @@
 
 This proposal implements the short-term consumer path in the [build plan](../04-build/implementation-plan.md#python-consumer-integration-priority--2026-10-09). ADR-001 remains accepted and ADR-003 remains proposed; the human requested a Python implementation promptly and asked for details before selecting the route. This document supplies those details without recording acceptance. CONTRACT-004/007/010/011/012 and the shared authorization design govern behavior. The [original consumer requirements](../04-build/evidence/consumer-python-requirements-2026-10-08.md) supply R1–R10.
 
+## Owner delivery decision — 2026-10-09
+
+Truss provides, maintains and ships a tested embeddable Python implementation
+from this repository. ADR-003 is accepted; prior package-owner and Python-route
+questions below are superseded. The initial Python3.11 runtime uses Rust Weft
+and the existing security-owner resolver with shared PostgreSQL protocols.
+Truss engineering owns the pgserver local runtime, installation and migration
+profile in the [execution plan](../04-build/local-runtime-installation-migration-plan.md).
+Complete corpus, public clean-package and committed interchange qualification
+remain delivery requirements; no alternative consumer-owned engine is selected.
+
 ## Implementation boundary
 
 Recommend a separately packaged Python 3.11 implementation of the Truss contracts, using the same fixed PostgreSQL layout and protected SQL/PLpgSQL routines as the TypeScript reference. Python owns host integration and protocol orchestration. Weft's Rust core owns logical SQL compilation. PostgreSQL owns transactions, persistence and qualified native enforcement. Authorization policy/resolver semantics and their compiled/native handoff belong to the active security workstream.

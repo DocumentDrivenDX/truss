@@ -3,7 +3,7 @@ ddx:
   id: ADR-004
   type: adr
   activity: design
-  status: proposed
+  status: accepted
   authoring:
     home: repo
   links:
@@ -19,7 +19,7 @@ ddx:
 
 # ADR-004: Document-qualified catalog ownership
 
-**Status:** proposed, pending owner/interface review. **Date:** 2026-10-05.
+**Status:** accepted by the owner on 2026-10-09; exact native/profile implementation remains unqualified. **Date:** 2026-10-05.
 
 ## Problem
 
@@ -41,7 +41,7 @@ Current core 0.7 documents do not gain successor revision semantics from matchin
 
 ## Owner-selected retirement direction — 2026-10-07
 
-Same-qualified-authored-identity reactivation preserves its original Truss storage ID after full validation; distinct incarnations require a distinct authored identity and fresh storage ID. Historical definitions/reservations remain interpretable and grants are not implicitly restored. CONTRACT-003, US-004 and STP-004 carry this selected direction. The broader qualified-identity ADR remains proposed pending exact interface/native/profile review; that status does not reopen the answered lifecycle choice.
+Same-qualified-authored-identity reactivation preserves its original Truss storage ID after full validation; distinct incarnations require a distinct authored identity and fresh storage ID. Historical definitions/reservations remain interpretable and grants are not implicitly restored. CONTRACT-003, US-004 and STP-004 carry this selected direction. Document-qualified catalog ownership is owner-selected; exact interface/native/profile implementation remains unqualified; that status does not reopen the answered lifecycle choice.
 
 ## Alternatives
 

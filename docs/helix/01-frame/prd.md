@@ -118,7 +118,7 @@ Deferred items are tracked in `docs/helix/parking-lot.md` when it exists.
 1. Traversal of one to three hops and bounded edge listing.
 2. Reads and listings that stay fast as the number of types grows.
 3. Extension points for a host: its own tables, row-level security, triggers and role grants.
-4. Operation on embedded PostgreSQL for development and test, and behind a transaction-mode pooler.
+4. A pgserver-based default PostgreSQL runtime for quick local development and testing, plus embedding on a host-supplied PostgreSQL connection.
 
 ### Nice to Have (P2)
 
@@ -206,7 +206,7 @@ Deferred items are tracked in `docs/helix/parking-lot.md` when it exists.
 
 - **FR-41** — A host may add its own tables, functions, roles, triggers and row-level security in its own schema, and may not change a truss column, key or constraint. The contracts say which are permitted.
 - **FR-42** — Writes can be governed by database role grants: a host can assume a role per transaction, and truss records the assumed role in the journal.
-- **FR-43** — truss keeps no session state and works through a transaction-mode pooler, with or without prepared statements.
+- **FR-43** — truss embeds on a host-supplied PostgreSQL connection and preserves caller transaction ownership. Connection pool provisioning and operation belong to the host. Truss keeps no mutable session dependency across completed transactions and supports parameterized execution without requiring persistent prepared statements. No pooler-specific latency threshold is a product acceptance gate.
 - **FR-44** — The layout and its protocols work on an embedded PostgreSQL for development and tests, with the same DDL as a server.
 - **FR-48** — A deployment can give database roles read or write access per UMF module, enforced by the database, without changing the layout's tables or constraints; with the layer unused, truss behaves as without it. *(P1)*
 - **FR-49** — A relationship may name a type in another module. Such an edge is visible only to a role that can read the relationship's module and both endpoints' modules. *(P1)*
@@ -274,7 +274,7 @@ This section records current decisions; it does not make them.
 |------|-------------|--------|------------|
 | Provisional layout points change after a second implementation depends on them | Medium | High | Layout versions; the corpus carries the version; re-pin by a recorded decision |
 | The corpus is too thin to catch divergence | Medium | High | Seed from SPIKE-002; require the interchange check; add a case with every contract change |
-| Catalog acceptance starves under constant write load | Medium | Medium | Lock timeout and retry; the optional advisory queue (ADR-002 D10) |
+| Catalog acceptance starves under constant write load | Medium | Medium | Bounded lock admission and explicit pre-effect refusal; no automatic retry loop |
 | Layout is slower than a hand-designed schema at the target scale | Medium | High | Measure the 2× bar at production size; reversal conditions in ADR-002 |
 | Measurements are not representative: one loaded machine, two embedded engines, no managed service | High | Medium | Re-run the harness on a quiet machine, on PostgreSQL 18 and on a managed service before fixing the targets |
 | Foreign-key and unique checks reveal that a row exists in a hidden row-level-security scope | Low | Medium | Documented in the contracts; the host decides how to report |
