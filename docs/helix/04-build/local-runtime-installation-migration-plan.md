@@ -395,3 +395,12 @@ Protected capsule/receipt production, ordinary-role authorization, complete
 retention/cleanup lifecycle, semantic default/check/index correspondence, full
 routine/grant inventory, initialization publication and migration execution remain
 unqualified. This check must not publish or substitute for an installation marker.
+
+The [updated installation gap matrix](../02-design/contracts/weft-review-installation-gap-matrix.proposal.md#current-local-installation-frontier--source-epoch016-plus-adjuncts)
+now distinguishes verified local storage/immutable components from missing
+canonical observers, ordinary scope validators, qualified authority and original
+ready-publication composition. A current-model trigger scan confirms the five
+missing handler bodies; it preserves the historical0.6 receipt rather than
+relabeling that older source evidence. The next complete-bundle work follows
+original operation dependencies → handlers/validators → independent full native
+parity → initializer/publication, while retaining all other release obligations.

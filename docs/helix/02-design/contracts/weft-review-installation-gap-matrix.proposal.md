@@ -1,6 +1,10 @@
 # Review layout installation gap matrix
 
-Bootstrap planning starts with the [first local deployment target](reference-local-deployment.proposal.md): proposed PostgreSQL 17.11 plus the actual admitted adapter-hook/transport/resource tuple. This does not close any native inventory or authority gap below, and existing 17.9 evidence remains separately scoped.
+The owner-selected first local runtime is now pgserver0.1.4 with Python3.11;
+actual macOS arm64 component evidence uses PostgreSQL16.2. The earlier proposed
+17.11 target below remains a historical external-profile input, not the default
+local requirement. See the [current delivery plan](../../04-build/local-runtime-installation-migration-plan.md).
+Other PostgreSQL, Aurora and Lakebase tuples remain separately qualified.
 
 Companion to CONTRACT-008/012. Profile 0.11 is the separately pinned compiler foundation with 106 statements, 46 tables and 442 columns. The 0.12 history review preserves that declaration inventory and makes journal sequence settings explicit; neither is an installation bundle. This matrix identifies concrete missing outputs without treating every unexecuted test as missing design. Historical profiles remain separately pinned.
 
@@ -320,3 +324,38 @@ CH-02 must compose the [reference actor custody handoff](reference-actor-custody
 The [current-policy composition handoff](reference-policy-composition.proposal.md) orders complete actual policy/role applicability, original advertised-surface reconciliation, atomic delta installation and independent public-disclosure/private-completeness admission. A restrictive host policy that filters an integrity observer prevents readiness; adding a permissive allowance, changing FORCE RLS or granting bypass is not an implicit remedy. Preserve native administrative settlement and existing current-authority generation coordination.
 
 The [protected participation extractor](reference-participation-scope-extraction.proposal.md) fixes original registry/effect/catalog inputs, retained provenance records and complete relationship/side/type/endpoint deduplication before count invocation. CH-02 composes its exact native descriptor/body/dependencies with existing observer/finalizer/current-union paths. Finalized surviving operations and deleted/zero-degree scopes remain included; a valid count query cannot compensate for an incomplete extractor inventory.
+
+## Current local installation frontier — source epoch0.16 plus adjuncts
+
+The source selection used by the local probes is native source-epoch0.16 plus
+operation configuration and layout-migration receipt adjuncts and their two
+immutable guard bodies. It is a component composition, not the full bundle
+required by this matrix. The separately emitted
+[local trigger gap inventory](../../04-build/evidence/design-audit/local-profile-trigger-body-gaps.json)
+pins the current model and all three original trigger-fragment sources without
+replacing the historical0.6 gap inventory. All13 trigger references still lack
+their five bodies in the selected model; table presence does not install them.
+
+| Installation obligation | Current local evidence | Remaining concrete output |
+| --- | --- | --- |
+| Original storage structure | 50tables,481 ordered columns,67 FKs,12 sequence configurations,25 explicit index structures and64 primary/unique constraints compare on16.2 | Full expression meaning, native identity/dependency/collation/operator-class parity and complete installed inventory |
+| Configuration/migration receipt immutability | Two original bodies, four ALWAYS triggers;12 populated update/delete/truncate refusals preserve rows under origin/replica, with independently expected bytes/hashes | Protected original production, ordinary-role rights, full retention/recovery lifecycle |
+| Unavoidable canonical observation | Original six row-home and three edge/marker/catalog trigger IDs and sources retained | row_touch_observe, row_touch_commit_check, edge_limit_observe, edge_limit_catalog_observe bodies with original operation/capacity/generation/caller custody |
+| Complete-feed union | Original four feed triggers and their associated constraint identities retained | feed_current_union_check and ordinary feed_union_validate_current_scope with original collector/codec/account dependencies |
+| Complete edge-limit scope | Existing CONTRACT-001 callable/algorithm and native schedules | Ordinary edge_limit_verify_current_scope used by deferred completion; no direct SELECT of a trigger handler |
+| Qualified authority | Accepted document-qualified ownership; security workstream remains owner | grant_module_roles(document_id,module,writes), final admitted role/RLS/callable/privilege dependency composition; no raw-DML shortcut |
+| Ready installation publication | Marker/archive homes and IM01–IM07 design | Original initializer/archive/complete inventory producer, independent verifier and atomic ready publication; fixture marker insertion is not installer evidence |
+| Populated upgrade | M1–M5 and Python handoffs exist | Complete route selection, preservation, administrative services, apply/settlement/reconcile and clean packaged deployment |
+
+Implement the original operation attribution/generation/capacity dependencies
+before the five handlers, then bind the ordinary validators and complete deferred
+cohort. Preserve the existing authored identities and include actual partition/
+constraint expansion. Native schedules must cover unknown original provenance,
+missing participation, later dirtying after early validation, finalized earlier
+operations, immediate/deferred firing, savepoint rollback and failed COMMIT.
+A no-op handler, seal-flag check or empty-scope fixture cannot supply these bodies.
+
+These are engineering implementation dependencies, not pending product votes.
+The owner supplied connection boundary, Python ownership, refusal policy and
+local runtime direction apply. Native driver/account and final security composition
+remain independent integration outputs; do not infer them from local psql probes.
