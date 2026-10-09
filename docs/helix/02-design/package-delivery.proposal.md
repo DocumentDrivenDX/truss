@@ -1,6 +1,6 @@
 # Embeddable package delivery design
 
-Architecture and ADR-001 govern this proposal. Workspace paths are internal locations, not published package names. The repository currently has no root package.json or implementation workspace. This document specifies the B-014 build outputs rather than claiming packages exist.
+Architecture and ADR-001 govern this proposal. Workspace paths are internal locations, not published package names. Experimental implementation packages now exist. This document specifies the B-014 delivery target; existing private manifests and source components do not establish published, qualified packages.
 
 ## Build and export boundaries
 
@@ -11,13 +11,34 @@ Each executable package emits ESM ES2022 JavaScript plus matching declarations i
 | packages/core | Admitted exact-value/profile/catalog planning APIs, defined by governing core bindings before export | Selected browser-compatible UMF APIs; no filesystem, credentials, driver, compiler initialization or host globals |
 | packages/postgresql | createReferenceAssembly and its declared types/capability facades | Core plus abstract executor/host service interfaces; no runtime adapter or tooling import |
 | packages/adapter-bun | Selected Bun executor/adoption bridge, after driver profile selection | PostgreSQL/core and explicit Bun runtime; no administrative startup |
-| packages/adapter-pg | Separately qualified Node/pg executor bridge | PostgreSQL/core and selected driver; provisional until its own support evidence |
+| packages/pg-runtime | Existing experimental Node/pg executor bridge, requiring separate delivery qualification | PostgreSQL/core and selected driver; provisional until its own support evidence |
 | packages/tooling | createRetentionTooling, createFeedLifecycleTooling, createReceiptLifecycleTooling and explicitly selected physical-job setup | Explicit supplied assembly/host services; native actions occur only on invoked capability methods |
 | packages/conformance | createConformanceEvidenceTooling/createConformanceRunTooling and corpus loading | Explicit runner/assessor/adapter injection; no production core dependency |
 
-Names above come from existing draft bindings; no adapter constructor name or missing core API is invented. Tooling and conformance expose separate data subpaths only after exact filenames/versions/digests are selected. Avoid a monolithic root barrel that pulls all drivers, native models and corpus into browser consumers. A package may share type-only interfaces while its emitted runtime graph remains separate.
+Names above come from existing draft bindings. The existing pg-runtime factory is `createPgConnectionSource`; package delivery must qualify that implementation rather than create a second adapter merely to match the former proposed adapter-pg path. No missing core API is invented. Tooling and conformance expose separate data subpaths only after exact filenames/versions/digests are selected. Avoid a monolithic root barrel that pulls all drivers, native models and corpus into browser consumers. A package may share type-only interfaces while its emitted runtime graph remains separate.
 
 Build validates exports against the owning declarations and fails if a public declaration references a private file, absolute author machine path, missing type/data export or an incompatible profile. Published dependencies use exact reviewed package/API versions; workspace paths in current source experiments are not distributable dependency pins. Preserve original UMF source/profile and Weft artifact compatibility in explicit host configuration rather than an implicit latest dependency.
+
+## Observed implementation homes and delivery gaps
+
+Six private manifests currently use version `0.0.0-experimental.1`:
+
+| Existing home | Observed role | Delivery qualification still required |
+| --- | --- | --- |
+| packages/postgresql | Assembly/executor interfaces and private native components | Selected public export manifest, admitted installation/runtime profiles and clean packed consumer |
+| packages/pg-runtime | Node/pg connection source and original transport custody | Exact driver support, public dependency pins, emitted declarations and native outcome qualification |
+| packages/weft | Compiler/host integration | Admitted Truss mapping and compatible published compiler/profile tuple |
+| packages/umf-bun | Private source-based UMF composition adapter | Owner API/source version selection and distributable dependency boundary |
+| packages/weft-bun | Private source-based Rust compiler host | Qualified Rust artifact/profile and distributable host boundary |
+| packages/weft-pg-probe | Private native compiler probe | Keep probe evidence separate from production capability admission |
+
+The last three currently export workspace TypeScript; they do not satisfy the
+compiled distribution contract above. Core, Bun adapter and conformance remain
+proposed delivery homes. Tooling contains the internal pure layout migration
+planner but has no package manifest; this is not a shipped migration executor.
+The Python route remains proposed in [the consumer integration design](python-integration.proposal.md)
+pending its ownership decision and ADR-003 review. It consumes shared PostgreSQL
+enforcement and Weft rather than duplicating authorization or SQL compilation.
 
 ## Dependency and declaration ownership (proposed)
 

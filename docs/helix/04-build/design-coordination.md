@@ -217,16 +217,21 @@ Sibling sources: Weft `CONTRACT-002-backend-interface.md`, `CONTRACT-003-compile
 | Gate | Required outcome | Owner/dependency | Build effect |
 | --- | --- | --- | --- |
 | D-01 | Align vision/PRD/features/concerns with toolkit, Weft and latest accepted flat layout | Truss; owner direction already supplies scope | All designs |
-| D-02 | UMF internal-table model and generation coverage matrix against layout SQL — CONTRACT-008 model/generation/install declarations exist; exact native inventory/profile closure remains, and UMF owner confirmed complete statement bytes/separators/source correspondence is missing | Truss; version-pinned UMF complete-exporter API | Bootstrap generation |
-| D-03 | Public executor/transaction API: ownership, savepoints, provisional results, cancellation and retry — drafted in CONTRACT-007; needs review and executable schema/binding mapping | Truss | Mutation implementation |
-| D-04 | Catalog identity and multi-document validity reconciliation | Truss + UMF + Weft | Catalog and Weft mapping |
-| D-05 | Exact encoding/comparison/presence contract for each supported property family | Truss; UMF native semantics | Codecs and read profiles |
-| D-06 | Whole-group validation/lock planning, alias dependencies, no-op replay and retention — CONTRACT-009 drafted; durable receipt decision pending | Truss | Atomic/idempotent groups |
-| D-07 | Complete historical envelopes, replay positions, initial snapshot and retention | Truss | History/feed |
-| D-08 | Versioned Weft mapping and read-context obligations; backend package owner | Joint interface review | Weft integration |
-| D-09 | Feature solution designs, story technical designs and per-criterion test allocation — all eight SDs exist (56 feature requirements); all 45 TD/STP pairs exist and allocate 167 criteria; semantic review pending | Truss | Build handoff |
-| D-10 | Draft implementation plan now sequences B-001–B-015 with evidence, readiness and rollback; all stories have primary slice ownership; semantic gates prevent full handoff | Truss | Runtime work items |
-| D-11 | Adversarial design review and link/coverage validation; reconcile sibling changes | Truss | Completion of design goal |
+| D-02 | UMF internal-table modeling and generation are authored and have scoped source/native evidence. Compose the complete installation bundle and close exact native inventory/profile correspondence | Truss using existing pinned UMF APIs; UMF is sufficient for this scope | Bootstrap generation; no new generic exporter prerequisite |
+| D-03 | Executor ownership, adopted transactions, savepoints, provisional publication, containment and recovery are authored in CONTRACT-007. Select exact driver/resource profiles and implement their original-attempt correlation | Truss; security workstream supplies authorization composition | Mutation and host adapter implementation |
+| D-04 | Catalog identity and multi-document reconciliation are authored; complete accepted IDs, immutable reports and atomic active-head finalization remain unqualified | Truss composition of UMF interpretation and Weft mapping | Catalog and Weft mapping |
+| D-05 | Exact numeric/presence contracts are authored. Pin owner codecs and qualify each selected property family without changing meaning | Truss consuming UMF semantics | Codecs and read profiles |
+| D-06 | Durable complete-result receipts are selected by accepted ADR-005. Implement whole-group validation/locking, original-result replay, no-op receipts and dependency-aware retention | Truss; receipt persistence and security profiles remain prerequisites | Atomic/idempotent groups; no pending product choice about durable receipts |
+| D-07 | Reconstructible envelopes, replay/snapshot cuts and retention contracts are authored. Historical configuration custody and complete protection/archive coverage remain implementation handoffs | Truss; qualified archive selection if offload is used | History/feed and cleanup |
+| D-08 | Weft owns compilation and its Rust bridge. Truss owns the accepted storage mapping and execution context; native-null Item.note semantics and public parsed-input ABI remain specific adoption dependencies | Weft compiler owner + Truss mapping owner | Use existing compiler integration; no duplicate compiler |
+| D-09 | Eight SDs, 45 TD/STP pairs and 167 criteria are allocated. The 90-pin coverage check proves structure only; semantic review and execution evidence remain separate | Truss | Build handoff without claiming semantic closure from counts |
+| D-10 | B-001–B-015 sequencing plus consumer/Python/layout-migration handoffs are authored. Required migration tooling has a pure planner; native execution/receipts remain. Python ownership, published dependency tuples and runtime profile selection remain open | Truss; Python route requires owner decision, authorization stays with security workstream | Execution-ready package and runtime handoffs |
+| D-11 | Full requirement-by-requirement closure audit remains open. Distinguish missing design selections from future native implementation/test evidence and reconcile current sibling interfaces | Truss | Completion of design goal only after full-scope review |
+
+This queue supersedes the earlier missing-exporter and pending-receipt entries.
+The current [closure index](current-design-closure.md), [decision queue](design-decision-queue.md)
+and [implementation plan](implementation-plan.md) retain the detailed profiles and
+qualification gates. Component evidence does not admit the complete public engine.
 
 ## Original discovery findings and current authority
 
