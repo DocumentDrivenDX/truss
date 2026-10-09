@@ -2,7 +2,7 @@
 
 Status: existing contracts and carrier proposals are authored; runtime services
 remain unimplemented. `packages/tooling/src` contains the layout migration planner
-and a private alias-substitution candidate helper. The conformance constructors and runner/assessor
+and private alias-substitution and case-link candidate helpers. The conformance constructors and runner/assessor
 lifecycle currently exist as declarations and type witnesses, not executable
 services. Governed inputs are CONTRACT-004/007/011, US/TD/STP-027/028, the case
 grammar and operation registry proposals. Reuse those APIs; no second runner,
@@ -16,6 +16,16 @@ composition only; it does not implement the runner, establish observer independe
 or qualify an operation against PostgreSQL or another implementation.
 
 ## Implementation sequence and independent exits
+
+C2 has a private `conformance-case-links.ts` component for shape-admitted bounded
+case projections. Twenty synthetic controls now exercise that implementation;
+strict TypeScript passes. It checks case/grammar/registry correspondence, exact
+operation/observation profiles, declared scopes, separate setup/input label
+inventories and duplicate/unknown observation references. Its boolean result is
+structural consistency only: original artifact custody, live scope admission,
+required observer/boundary coverage and complete semantic expectations still
+belong to original preparation and C4. Empty observation arrays cannot by
+themselves prove unchanged state or no journal/report effects.
 
 C5 has a reusable private `conformance-alias-substitution.ts` component over
 already admitted bounded JSON/namespace/binding/scope projections. Seventeen

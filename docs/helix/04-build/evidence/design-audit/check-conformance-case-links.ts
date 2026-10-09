@@ -1,39 +1,8 @@
-/** Independent design witnesses; no production runner or native admission. */
-type Pin={identity:string;version:string;sha256:string};
-type Step={label:string;operation:string;operationProfile:Pin;observationProfile:Pin;scope:{kind:string;label?:string}};
-type Artifact={identity:string;bytesBase64:string;sha256:string};
-type Inputs={caseId:string;registry:Artifact;grammarProfile:Pin;steps:Step[]};
-type Fixtures=Inputs;
-type Expected={caseId:string;grammarProfile:Pin}&Record<'result'|'state'|'journal'|'report',{observations:{step:string;boundary:string}[]}>;
-type Entry={operation:string;operationProfile:Pin;observationProfile:Pin;scopeKinds:readonly string[]};
-function equalPin(a:Pin,b:Pin){return a.identity===b.identity&&a.version===b.version&&a.sha256===b.sha256;}
-function admitLinks(caseId:string,inputs:Inputs,expected:Expected,registry:readonly Entry[],knownScopeLabels:ReadonlySet<string>,fixtures:Fixtures):boolean {
- if(inputs.caseId!==caseId||expected.caseId!==caseId||fixtures.caseId!==caseId)return false;
- if(!equalPin(inputs.grammarProfile,fixtures.grammarProfile)||!equalPin(inputs.grammarProfile,expected.grammarProfile))return false;
- if(inputs.registry.identity!==fixtures.registry.identity||inputs.registry.sha256!==fixtures.registry.sha256||inputs.registry.bytesBase64!==fixtures.registry.bytesBase64)return false;
- const entries=new Map<string,Entry>();
- for(const entry of registry){if(entries.has(entry.operation))return false;entries.set(entry.operation,entry);}
- const labels=new Set<string>();
- for(const steps of [fixtures.steps,inputs.steps]){
- const localLabels=new Set<string>();
- for(const step of steps){
-  if(localLabels.has(step.label))return false;localLabels.add(step.label);
-  if(steps===inputs.steps)labels.add(step.label);
-  const entry=entries.get(step.operation);
-  if(!entry||!equalPin(entry.operationProfile,step.operationProfile)||!equalPin(entry.observationProfile,step.observationProfile)||!entry.scopeKinds.includes(step.scope.kind))return false;
-  if(step.scope.kind!=='none'&&(!step.scope.label||!knownScopeLabels.has(step.scope.label)))return false;
- }
- }
- for(const surface of ['result','state','journal','report'] as const){
-  const observations=new Set<string>();
-  for(const observation of expected[surface].observations){
-   if(!labels.has(observation.step))return false;
-   const key=JSON.stringify([observation.step,observation.boundary]);
-   if(observations.has(key))return false;observations.add(key);
-  }
- }
- return true;
-}
+/** Synthetic controls of structural links; no full case/native admission. */
+import {checkAdmittedConformanceCaseLinks as admitLinks,
+ type ConformanceLinkInputs as Inputs,type ConformanceLinkFixtures as Fixtures,
+ type ConformanceLinkExpected as Expected,type ConformanceLinkEntry as Entry}
+ from '../../../../../packages/tooling/src/conformance-case-links';
 const pin={identity:'registered-test-operation',version:'0.2.0',sha256:'0'.repeat(64)};
 const artifact={identity:'test-registry',bytesBase64:'',sha256:'0'.repeat(64)};
 const inputs:Inputs={caseId:'case',registry:artifact,grammarProfile:pin,steps:[{label:'read',operation:'observeFreshness',operationProfile:pin,observationProfile:pin,scope:{kind:'adopted',label:'host'}}]};
