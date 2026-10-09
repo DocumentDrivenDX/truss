@@ -792,3 +792,20 @@ source/profile identities; documentation availability alone cannot pass this
 case. No provider changes are authorized by this planned schedule.
 
 These controls remain `not_run`; see the [managed-service source review](../../02-design/contracts/managed-extension-source-review.md#managed-service-lifecycle-handoff-refresh--2026-10-08). Actual service/profile and independent native observations are required.
+
+## Shipped layout migration system — LM-T01–08
+
+Owner-selected first-release migration delivery extends B-003/B-014 and CONTRACT-008, while retaining US-045-AC1–AC5 and independent bootstrap/conversion evidence. These are planned native/public-consumer schedules, not executed migration receipts.
+
+| Case | Independently required evidence |
+| --- | --- |
+| LM-T01 fresh deployment | Clean consumer invokes shipped tooling outside its framework's outer transaction, installs exact digested DDL, verifies original committed marker/archive/inventory and opens runtime only afterward |
+| LM-T02 ordinary model evolution | Accept an original consumer UMF revision with new type/Field/relationship; native physical layout/step ledger unchanged, catalog/report/journal effects follow existing acceptance contracts |
+| LM-T03 supported populated upgrade | Seed actual objects/keys/edges/retained values/history/reports/receipts/feed/recovery state; plan original declared edge, apply, independently verify preserved meaning and exact target native tuple |
+| LM-T04 repeat and changed recipe | Repeat identical original settled step after committed native parity: no new effects. Changed digest/body/source or matching ledger with altered native routine/grant refuses; no version-only success |
+| LM-T05 failure and uncertainty | Fail before target publication and observe full transactional rollback; lose COMMIT acknowledgment and reconcile the same original attempt. No blind DDL retry or synthetic rollback claim |
+| LM-T06 writers and policy | Hold an old-layout writer and race upgrade; observe declared fence/wait/refusal, no mixed-layout operation, preserved current-principal authorization and no temporary bypass grants/disabled guards |
+| LM-T07 unsupported paths | Different major, unknown source, downgrade without qualified reverse edge, undeclared nontransactional step and incomplete inventory all refuse before upgrade effects; import/open never auto-migrates |
+| LM-T08 deployment composition | Consumer framework fails after Truss's confirmed commit: installed result remains committed. Re-running explicit verification succeeds or reports drift; PostgreSQL/Lakebase each need their own exact version/extension/driver receipts |
+
+Retain exact expected source/target data and native effect inventories before collecting implementation observations. Test step-state and original-attempt corruption, partial archive/marker visibility and missing mandatory routines independently. No table-count, marker digest or successful framework deployment closes complete migration qualification.

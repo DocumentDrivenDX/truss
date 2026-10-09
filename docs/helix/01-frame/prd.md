@@ -31,6 +31,10 @@ Embedded execution supports engine-owned callback transactions and adoption of c
 ADR-005 durable complete-result receipts, ADR-006 exact numeric carriers with lossless JavaScript convenience, and ADR-007 reconstructable history are selected. Catalog acceptance uses a separate immutable complete-report home in the same transaction as catalog/journal effects, publishing the head only after report completion. Very short/zero local history retention is allowed subject to required durable handoff and consumer/receipt protections; history unavailable is explicit when required retained/archive evidence is absent. Exact deployment/profile selection and implementation qualification remain separate.
 
 
+## Owner decision — shipped migrations, 2026-10-09
+
+Truss ships a versioned migration system for occasional changes to its own fixed physical layout, native routines, policy installation and storage/codec protocols. Normal consumer UMF schema evolution uses catalog acceptance and does not require physical migrations. The migration system is a first-release toolkit deliverable: inspect installed version, plan supported upgrades, explicitly apply them with original-attempt recovery, and verify the resulting installation. Consumers can invoke it from deployment/migration orchestration; importing Truss or opening an application connection never applies an upgrade automatically. Supported source/target layout pairs and any downtime requirements are published with the release. Unknown drift, unsupported upgrade/downgrade or incomplete native parity prevents runtime readiness.
+
 ## Summary
 
 truss stores connected data, typed by UMF (DocumentDrivenDX's machine-readable metamodel and schema interchange fabric) schemas, in a fixed set of PostgreSQL tables. A team adds an entity type, property or relationship by publishing a UMF schema revision, never by migrating tables. Every value is kept exactly, every change is journaled in the transaction that made it, nothing the schema does not define is dropped, and for every rule truss reports whether PostgreSQL enforces it, truss enforces it, or nothing does.
