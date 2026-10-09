@@ -26,12 +26,23 @@ records 183 component observations. Earlier
 receipts retain their original narrower scopes. All owned probe databases were
 removed; no live native run is pending.
 
-Four dynamic fields remain: umf, rebinds, assertions and pending_indexes. The
+Four dynamic fields remain in the baseline 0.1 comparison: umf, rebinds,
+assertions and pending_indexes. The
 interfaceVersion constant is checked by the pinned 0.1 codec; its selected
 report-profile-to-schema mapping still requires semantic admission. Full report
 insertion, original finalization, confirmed commit and public head admission remain
 A3–A7 work. Keep unconditional deferred barriers until that complete path is
 independently qualified.
+
+That seventeen-field baseline is not the full selected reference report.
+CONTRACT-002's combined reference composition selects the existing
+[0.3 report schema](../02-design/contracts/acceptance-report-v0.3.proposal.schema.json)
+and declaration: nineteen required fields, adding `lifecycleProfile` and
+`reactivations`, with rebind entries using the existing 0.2 history event wire.
+The pinned 0.1 codec intentionally refuses this composition. Completing its four
+remaining fields cannot close A2/A3 for lifecycle support or activate the combined
+reference. Implement the selected tuple explicitly; no version relabeling,
+reactivation hidden in extensions or automatic codec upgrade is permitted.
 
 ## Ordered implementation work
 
@@ -186,7 +197,7 @@ native enforcement joins and these controls remain unimplemented.
 | Step | Implementation output | Independent exit before proceeding |
 | --- | --- | --- |
 | A1 | Pin one coherent installation/authority/executor/resource and catalog/value/key/profile composition; resolve selected model/generated/native correspondence. | Original native required inventory, grants/callable coverage and descriptor/domain correspondence match the selected composition. Component 0.15 does not imply a complete installation. |
-| A2 | Assemble all seventeen report fields from original producers, including admitted interfaceVersion, reportProfile, umf, rebinds, assertions and pending_indexes beyond the eleven-field candidate path; the existing extensions and originalExecution comparisons still require their complete semantic profile admission. | Complete independently expected field membership/content; no caller-filled or constant-empty substitute for applicable inventories. Full report input/resource capacity reserved before effects. |
+| A2 | Assemble the complete selected report from original producers: all nineteen fields for the combined 0.3 reference, including lifecycleProfile/reactivations and the compatible 0.2 rebind wire. The baseline 0.1 seventeen-field candidate is separately scoped; existing field comparisons still require complete semantic profile admission. | Complete independently expected field membership/content under one exact report/history/lifecycle tuple; no caller-filled or constant-empty substitute for applicable inventories. Full report input/resource capacity reserved before effects. |
 | A3 | Implement original catalog lifecycle: complete current-head repeat, additive declarations, retirement/reactivation, valid unresolved-endpoint policy and existing transform semantics. | Independently authored actual UMF-valid sources and resulting identity/definition/data/report expectations. Unsupported representations refuse explicitly, while required broader behavior stays open. Actual native IDs come from observed allocation, not fixtures. |
 | A4 | Produce exact immutable full report bytes and insert them in the same original transaction as accepted source/definitions, data transformations and new revision. | Report byte equality, native immutable guards, complete original revision parent/seed and report-row correspondence; late report failure rolls back every effect. |
 | A5 | Implement complete protected original operation finalization and atomic active-head publication. | Complete report/definition/history/feed prerequisites, final invariants and effect generations revalidated under original exclusion. Deferred safety barrier may be replaced only by the fully qualified selected finalizer, never bypassed. |
@@ -194,6 +205,33 @@ native enforcement joins and these controls remain unimplemented.
 | A7 | Qualify native additive/repeat/lifecycle/late-failure/concurrency and caller commit/rollback cases through the public assembly. | Retain exact public invocation/input/result, actual IDs, native final inventory/report/head/journal and original commit/termination evidence; test at least one successful acceptance and every required refusal/rollback path. |
 
 A2 can progress through independent producer work before A1's complete native installation qualifies, but no public activation follows partial correspondence. A3 cannot silently reduce acceptance to new-only operations while presenting full catalog support. Original source-level validity remains UMF-owned; Truss stores the selected complete interpretation and qualified local identities.
+
+### Combined lifecycle producer before report persistence
+
+Resolve `lifecycleProfile` through the original registered lifecycle composition,
+not from document content or a matching caller pin. Produce `reactivations` from
+the complete original accepted identity-transition plan and actual native effects:
+same typed identity, original qualified owner, lineage artifact, prior retirement
+revision, and complete before/after definition artifacts. Owner-local key identity
+remains `(typeId, keyNumber)`; it cannot become a global catalog ID. Fresh allocation,
+ordinary update, retained retirement and actual reactivation remain distinct.
+
+Reserve the complete transition inventory before effects, compare every planned
+transition with actual effects under the original acceptance cut, and issue the
+candidate only after complete correspondence. Prove zero reactivations from that
+complete inventory; new-only component tests cannot prove absence in a broader
+lifecycle acceptance. A reactivation also needs the selected journal/definition
+and preservation obligations; its report entry alone cannot establish them.
+
+Independent fixtures must cover each of type/property/key/relationship identities,
+omitted or extra transitions, wrong owner/lineage, substituted retired revision,
+changed before/after bytes and fresh-allocation disguised as reactivation. Compare
+the full selected report with an independently authored expected artifact. Fault
+report persistence after actual reactivation effects and verify complete rollback;
+on exact repeat, preserve the original immutable transition inventory without
+reapplying identity changes. Neither producer nor compatible complete report codec
+is implemented by this handoff. These are required A2/A3 outputs under the existing
+selected reactivation direction, not adoption of the whole proposed ownership ADR.
 
 ## Consumer sequencing after acceptance
 
