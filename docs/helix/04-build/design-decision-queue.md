@@ -784,3 +784,14 @@ observation; complete deferred transaction cohort; full inventory/init publicati
 Unknown control completion closes admission and retains original recovery custody,
 without automatic replay. These are implementation outputs under existing
 contracts, not another owner decision or a reason to stop independent work.
+
+## Policy-overhead measurement selection
+
+`truss-module-policy-overhead/0.1.0` now selects the existing three-block paired
+mean protocol for US-037-AC6. The [experiment](../03-test/module-policy-overhead-experiment.proposal.md)
+freezes exact integer thresholds, sample/order/correctness boundaries and invalid
+run treatment. Truss engineering owns this measurement selection; no pooler
+statistic or renewed product question is required. Security-owner admission of
+a lawful no-layer baseline, sealed exact environment/profile inputs and actual
+runner/native measurements remain separate outputs. A protocol selection cannot
+stand in for those results or relax the0.01ms requirement.
