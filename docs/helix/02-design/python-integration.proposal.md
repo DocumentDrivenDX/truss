@@ -140,7 +140,15 @@ bool/integral refusal. Strict Ajv compilation validates each carrier and all
 cross-vector references resolve. This is fixture shape evidence only; neither
 Python/TypeScript decoding nor native storage has been run against them. The
 nested map vector checks typed token/string separation, not raw JSON parser
-custody; original raw JSON/unknown-extension vectors remain a separate obligation.
+custody. The [raw JSON vectors](../03-test/python-raw-json-vectors.proposal.json)
+separately author five exact UTF-8 sources, including nested large integers,
+decimal/exponent/signed-zero spelling, unknown extensions, source escapes and
+literal identity-looking strings. Python's standard JSON parser with explicit
+token hooks checked twelve independently authored token/string expectations;
+that syntax check is not the production decoder and does not prove byte custody,
+bounded parsing, unknown-content support or native JSON qualification. Both
+adapters must retain the original source and run the complete fixture obligations
+under their selected original parser/codec/resource profiles.
 
 Materialize these pairs under explicitly admitted authored definitions and the
 shared CONTRACT-010 carrier; the examples do not expand a selected native domain.
