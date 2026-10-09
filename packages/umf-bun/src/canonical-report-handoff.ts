@@ -16,15 +16,29 @@ const schemaPins={
 } as const;
 
 export async function createCanonicalAcceptanceReportHandoff(dependenciesPackage:string){
+ return createPinnedReportHandoff(dependenciesPackage,schemaPins,'acceptance-report-v0.1.schema.json');
+}
+
+/** Explicit candidate composition. No released-profile or producer admission. */
+export async function createProposedComposedAcceptanceReportHandoff(dependenciesPackage:string){
+ return createPinnedReportHandoff(dependenciesPackage,{
+  ...schemaPins,
+  'history-retain-payload-v0.1.proposal.schema.json':'fc08e07a4b09636ac234737be9bb2cf3a9a3c26120baad612176574c17659605',
+  'history-event-v0.2.proposal.schema.json':'714923be0f86bd3508a097cabfee63a180e03b19651ebbfa38844bb3e637b425',
+  'acceptance-report-v0.3.proposal.schema.json':'c54196f8b4324aec768a33eeeab89bc2615a954af0e45559ed2038ccad7f14bf',
+ },'acceptance-report-v0.3.proposal.schema.json');
+}
+
+async function createPinnedReportHandoff(dependenciesPackage:string,pins:Readonly<Record<string,string>>,reportName:string){
  const require=createRequire(dependenciesPackage),Ajv=require('ajv/dist/2020').default,ajv=new Ajv({strict:true});
  let reportSchema:unknown;
- for(const [name,expected] of Object.entries(schemaPins)){
+ for(const [name,expected] of Object.entries(pins)){
   const bytes=await readFile(new URL('../../../docs/helix/02-design/contracts/'+name,import.meta.url));
   if(createHash('sha256').update(bytes).digest('hex')!==expected)throw Error('Original complete report schema pin mismatch');
-  const schema=JSON.parse(bytes.toString('utf8'));if(name==='acceptance-report-v0.1.schema.json')reportSchema=schema;else ajv.addSchema(schema);
+  const schema=JSON.parse(bytes.toString('utf8'));if(name===reportName)reportSchema=schema;else ajv.addSchema(schema);
  }
  const validate=ajv.compile(reportSchema);
- return Object.freeze({schemaPins:Object.freeze({...schemaPins}),prepare(original:Uint8Array){
+ return Object.freeze({schemaPins:Object.freeze({...pins}),prepare(original:Uint8Array){
   if(!(original.buffer instanceof ArrayBuffer)||original.length>1048576)throw Error('Original report wire byte custody/capacity required');
   const owned=Uint8Array.prototype.slice.call(original) as Uint8Array;
   if(!validate(decodeAcceptanceJson(owned)))throw Error('Closed complete report wire required');

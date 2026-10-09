@@ -44,6 +44,16 @@ remaining fields cannot close A2/A3 for lifecycle support or activate the combin
 reference. Implement the selected tuple explicitly; no version relabeling,
 reactivation hidden in extensions or automatic codec upgrade is permitted.
 
+`createProposedComposedAcceptanceReportHandoff` now provides an explicit private
+wire-codec candidate for that 0.3 report. It pins all eleven transitive schema
+files and reuses the existing bounded exact-byte/native-tree handoff. Nine
+baseline/composed tests with 42 assertions and strict TypeScript pass, including
+nonempty rebind/reactivation shape, missing lifecycle fields, version isolation
+and wrong owner-local key shape. Synthetic values remain unqualified. The
+baseline factory and acceptance correspondence still select 0.1; neither silently
+upgrades. The new codec does not produce lifecycle events, establish completeness,
+admit profile meaning or activate public acceptance.
+
 ## Ordered implementation work
 
 ### A2 UMF support producer before full report comparison
@@ -229,8 +239,9 @@ changed before/after bytes and fresh-allocation disguised as reactivation. Compa
 the full selected report with an independently authored expected artifact. Fault
 report persistence after actual reactivation effects and verify complete rollback;
 on exact repeat, preserve the original immutable transition inventory without
-reapplying identity changes. Neither producer nor compatible complete report codec
-is implemented by this handoff. These are required A2/A3 outputs under the existing
+reapplying identity changes. The lifecycle producer and complete semantic/native
+codec integration remain unimplemented; the explicit candidate codec above covers
+wire shape and custody only. These are required A2/A3 outputs under the existing
 selected reactivation direction, not adoption of the whole proposed ownership ADR.
 
 ## Consumer sequencing after acceptance
