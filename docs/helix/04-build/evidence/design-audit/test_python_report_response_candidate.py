@@ -1,0 +1,46 @@
+import unittest
+from check_report_response_boundary import build, CONTRACTS, check
+from python_report_response_candidate import ReportResponseCandidate
+from python_report_wire_candidate import ReportWireCandidate
+
+
+class ResponseTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.response = ReportResponseCandidate(CONTRACTS)
+        cls.legacy = ReportWireCandidate(CONTRACTS)
+
+    def test_frozen_complete_boundary_and_one_over(self):
+        check()  # Independent original fixture/schema/hash verification.
+        report, source = build(4194304)
+        result = self.response.prepare(source)
+        self.assertEqual(result.original.source_bytes, source)
+        self.assertEqual(len(result.original.value.entries), 19)
+        self.assertEqual(result.scope, 'response_schema_bytes_only_without_account_admission')
+        with self.assertRaises(ValueError):
+            self.response.prepare(build(4194305)[1])
+        with self.assertRaises(ValueError):
+            self.legacy.prepare(source)
+        with self.assertRaisesRegex(ValueError, 'profile remains unadmitted'):
+            self.response.prepare_native(source)
+
+    def test_schema_and_numeric_refusal_remain_distinct_from_capacity(self):
+        for source, message in [(b'{}', 'schema refused'),
+                                (b'{"rev":9007199254740993}', 'numeric node')]:
+            with self.subTest(source=source), self.assertRaisesRegex(ValueError, message):
+                self.response.prepare(source)
+        for source in [b'{"rev":"1","rev":"2"}', b'{"x":"\\ud800"}']:
+            with self.subTest(source=source), self.assertRaises(ValueError):
+                self.response.prepare(source)
+
+    def test_retained_response_cannot_change_with_caller_buffer(self):
+        source = bytearray(build(4194304)[1])
+        result = self.response.prepare(source)
+        before = result.original.source_bytes
+        source[:] = b'changed'
+        self.assertEqual(result.original.source_bytes, before)
+        self.assertNotEqual(result.original.source_bytes, bytes(source))
+
+
+if __name__ == '__main__':
+    unittest.main()

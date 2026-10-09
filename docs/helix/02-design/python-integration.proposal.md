@@ -768,6 +768,25 @@ response-parser exact/one-over controls, not proof that either current codec
 supports the four-MiB boundary. Original semantic/profile/account admission and
 actual report-producing integration remain required.
 
+A separate private `ReportResponseCandidate` now reuses the original pinned
+schema closure while admitting response source bytes up to four MiB. The legacy
+`ReportWireCandidate` and its one-MiB request/input behavior remain unchanged.
+Three independent tests consume the frozen boundary fixtures: complete nineteen-
+field response admission, one-over and legacy refusal, numeric/schema/duplicate/
+Unicode negatives and mutable caller-buffer isolation. Inherited native conversion
+explicitly refuses because its carrier/account composition is not admitted.
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 python3.11 -m unittest discover -s docs/helix/04-build/evidence/design-audit -p test_python_report_response_candidate.py
+```
+
+This closes the private Python response source/schema subset gap only. The scope
+is response_schema_bytes_only_without_account_admission: aggregate parser/schema
+work and heap, simultaneous copies, TypeScript parity, original registration,
+driver custody and genuine producer/native publication remain open. A structural
+four-MiB positive does not mint the required original response profile or increase
+caller request limits.
+
 #### Full-report wire capacity before driver selection
 
 The frame candidate's one-MiB limit cannot transport the existing four-MiB
