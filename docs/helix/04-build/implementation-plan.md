@@ -2537,3 +2537,17 @@ The core structural model now reflects current private 0.15 source with 46 Recor
 ### Current core ER output — 2026-10-08
 
 Current 0.15 source now has a core-driven 0.3 SVG/DOT diagram, preserving the historical 0.2 outputs. Exact current/historical renderer checks, complete original association comparison, 46-node/61-edge SVG inventory and the new required declaring-module column check pass; raster rendering was visually inspected. Current model validation remains valid=true/complete=false. Microsite integration and complete native/core DDL equivalence remain open.
+
+### Microsite UMF schema browser — 2026-10-08
+
+The current core schema is now rendered interactively by the pinned UMF-owned
+browser on the Model page. `scripts/build-umf-schema-browser.py` copies the
+owner's committed browser assets and builds an exact-source Truss catalog;
+its check mode verifies asset and source correspondence. Real Chromium
+verification in `scripts/check-schema-browser.ts` covers embedding, current
+Field navigation/deep links, byte-identical source download and mobile width.
+Hugo build plus existing link/navigation/source-seal checks pass. See
+[evidence](evidence/design-audit/schema-browser-site.md). This supersedes earlier
+microsite-location/integration blockers; native DDL interpretation and live
+publication remain distinct. Do not copy UMF's schema renderer into a new
+Truss implementation or treat successful inspection as installed semantics.
