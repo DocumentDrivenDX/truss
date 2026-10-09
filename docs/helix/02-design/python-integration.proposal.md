@@ -144,8 +144,11 @@ custody. The [raw JSON vectors](../03-test/python-raw-json-vectors.proposal.json
 separately author five exact UTF-8 sources, including nested large integers,
 decimal/exponent/signed-zero spelling, unknown extensions, source escapes and
 literal identity-looking strings. Python's standard JSON parser with explicit
-token hooks checked twelve independently authored token/string expectations;
-that syntax check is not the production decoder and does not prove byte custody,
+token hooks initially checked twelve independently authored token/string expectations.
+The saved checker `python3 docs/helix/04-build/evidence/design-audit/check-python-raw-json-vectors.py`
+now compares complete numeric-token/string inventories and three presence checks,
+for fifteen expectations across five fixtures. Missing/extra token expectations
+cannot pass from partial pointer checks. This is not the production decoder and does not prove byte custody,
 bounded parsing, unknown-content support or native JSON qualification. Both
 adapters must retain the original source and run the complete fixture obligations
 under their selected original parser/codec/resource profiles.
