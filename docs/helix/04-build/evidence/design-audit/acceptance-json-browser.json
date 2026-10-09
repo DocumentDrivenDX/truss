@@ -1,0 +1,85 @@
+{
+  "browser": "153.0.8010.12",
+  "sourceSha256": "a7ba02017bb34e2cb4cf62d8a31ac5f6549f80f94de2fea22833c3fc5a550cf0",
+  "bundleSha256": "381b2f08ef4fa6edbb879c8e336a0fa0da71caad033fee604e6e27a2b8283285",
+  "corpusSha256": "0c406d54651202cc3bede7aeb600c86d1a35ed2ea7db8c22a017341319325b2a",
+  "observations": [
+    {
+      "name": "empty object",
+      "outcome": "decoded"
+    },
+    {
+      "name": "null boolean string array",
+      "outcome": "decoded"
+    },
+    {
+      "name": "legal whitespace",
+      "outcome": "decoded"
+    },
+    {
+      "name": "inert prototype name",
+      "outcome": "decoded"
+    },
+    {
+      "name": "valid escaped surrogate pair",
+      "outcome": "decoded"
+    },
+    {
+      "name": "distinct normalization forms",
+      "outcome": "decoded"
+    },
+    {
+      "name": "escaped equivalent duplicate",
+      "outcome": "refused"
+    },
+    {
+      "name": "unpaired high surrogate",
+      "outcome": "refused"
+    },
+    {
+      "name": "unpaired low surrogate",
+      "outcome": "refused"
+    },
+    {
+      "name": "overlong utf8",
+      "outcome": "refused"
+    },
+    {
+      "name": "surrogate utf8",
+      "outcome": "refused"
+    },
+    {
+      "name": "out of range utf8",
+      "outcome": "refused"
+    },
+    {
+      "name": "outer number",
+      "outcome": "refused"
+    },
+    {
+      "name": "trailing data",
+      "outcome": "refused"
+    },
+    {
+      "name": "trailing comma",
+      "outcome": "refused"
+    },
+    {
+      "name": "bom",
+      "outcome": "refused"
+    },
+    {
+      "name": "comment",
+      "outcome": "refused"
+    },
+    {
+      "name": "opaque numeric artifact base64",
+      "outcome": "decoded"
+    },
+    {
+      "name": "complete original native/converted input fixture",
+      "outcome": "decoded"
+    }
+  ],
+  "scope": "Actual portable decoder bytes/value/refusal in Chromium plus complete planning fixture custody. No shared operation-account/heap qualification, schema/artifact/profile/native admission or committed acceptance."
+}
