@@ -1,0 +1,32 @@
+{
+  "checkedAt": "2026-10-09T17:03:32.952480+00:00",
+  "scope": "read-only dirty working-source review; authored controls only; no test execution or released tuple adoption",
+  "ownerThread": "01a11b8b-06bb-7091-a11a-b7eba0a432eb",
+  "ownerRevision": 18,
+  "sources": [
+    {
+      "path": "/Users/erik/Projects/weft/crates/weft-core/src/security_association_ref.rs",
+      "sha256": "7683d8989a765c2713272d7643b41fdd2f73cb513a04a7ed97abeb53884d5a3e"
+    },
+    {
+      "path": "/Users/erik/Projects/weft/crates/weft-core/src/security_candidate_ontology.rs",
+      "sha256": "e1fddd3d5864d22192825a6e8c52e8cd0b02199e44042bafceb52a9dddd52814"
+    },
+    {
+      "path": "/Users/erik/Projects/weft/crates/weft-core/tests/security_admission.rs",
+      "sha256": "2557bae8fba14bdd6c012592ab80b9a4b689ddf97f40950e5eb17cdf01939e72"
+    }
+  ],
+  "observedAuthoredControls": [
+    "distinct qualified Record and Relationship namespaces; ambiguous and wrong-type selectors refuse",
+    "record endpoint member ownership, key arity and selected primitive domain correspondence",
+    "directed graph source/target side, actual selected target key and association-record witness owner correspondence",
+    "negative controls for missing or substituted selector targets, duplicate roles, direction, target key and witness ownership"
+  ],
+  "remainingOriginalOwnerEvidence": [
+    "whole-document UMF semantic qualification distinct from JSON schema validity and selected correspondence",
+    "completed evaluator, query-use and source transport composition for the selected draft",
+    "released admitted security ABI and exact native locator/key/role/account/publication correspondence"
+  ],
+  "nativeImplementationQualified": false
+}

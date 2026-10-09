@@ -52,6 +52,28 @@ selected, Truss owns the fixed physical ownership/migration/grant composition
 and Weft consumes the exact admitted model identities. Neither source capture
 nor the current new-cohort probe establishes installed collision-safe ownership.
 
+## Security association closure refresh — 2026-10-09
+
+The active owner revision 18 reports selected raw-member and directed-graph
+selector correspondence against actual catalog entries. The read-only
+[source review](evidence/design-audit/security-association-closure-source-review.json)
+pins the dirty Weft reference parser, candidate closure and authored regression
+controls. Record and Relationship namespaces remain distinct. Selected checks
+cover member ownership and key arity/domain, graph direction and endpoint side,
+target-key agreement and association-record witness ownership. Truss has not
+executed these tests or adopted this draft as a released compiler capability.
+
+The owner explicitly distinguishes catalog JSON validation and selected
+correspondence from whole-document UMF semantic validity. Before acceptance or
+execution consumes this closure, obtain original semantic qualification for the
+exact retained document set, then compose the selected owner source, evaluator,
+query-use and transport procedures. A successful selected closure cannot erase
+unsupported meaning elsewhere in a retained document or substitute for that
+qualification. Keep unsupported tuples unavailable, preserving complete source
+bytes and the original refusal; no Record-only coercion of a Relationship or
+Truss-owned replacement resolver. Native locator/key/authority/account and
+publication correspondence remain separate installation/runtime obligations.
+
 ## Security formal replay refresh — 2026-10-09
 
 The active security owner reports a fresh Z3 4.15.4 replay of 147 saved formula
