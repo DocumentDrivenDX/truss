@@ -1022,7 +1022,7 @@
     "03-test/test-plans/STP-001-accept-a-umf-revision-as-a-whole.md": "b493b02ee003d23e63a7e704dcd07b212a14ce6bc220120e1674a54e4326ec1c",
     "02-design/technical-designs/TD-002-import-documents-that-depend-on-each-other.md": "1d93cda1f65f88b51851a9d4c32cd1b4bff0758f4556a78708dcd572fe09647d",
     "03-test/test-plans/STP-002-import-documents-that-depend-on-each-other.md": "2311d9c7f342ae12aa1bb3868bd593944c0ce420db6562ae448ae4f46f9b38d2",
-    "02-design/technical-designs/TD-003-decide-what-happens-to-an-unknown-entity-type.md": "aaeff408d2637489027d5c022abeb078d3c2d5d801dbc574cc52ce8801e52655",
+    "02-design/technical-designs/TD-003-decide-what-happens-to-an-unknown-entity-type.md": "e7129593ea1619bf55ded34609b5889cb3330f83f6de363fca9bda340691bbd3",
     "03-test/test-plans/STP-003-decide-what-happens-to-an-unknown-entity-type.md": "a979ebb116d2090d82b5bc080ad1782c7dc4a6654440a809dff36b171d145b30",
     "02-design/technical-designs/TD-004-keep-identifiers-stable-across-revisions.md": "bb4fd6cfafcfb4b680d96ac7f5128307f6af452bfdbdf01e95eb48990d520e56",
     "03-test/test-plans/STP-004-keep-identifiers-stable-across-revisions.md": "b47b7d51c3deb80d107ff0dadc221810284f517436b9be48a301d671106d9419",

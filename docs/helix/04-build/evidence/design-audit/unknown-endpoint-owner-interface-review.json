@@ -1,0 +1,19 @@
+{
+  "ownerRevision": "1f7b5f5d2a355c4b476e3a96b289b9048f03f567",
+  "sourceSha256": {
+    "src/extensions/ddd/index.ts": "f0b39227867483d247aeb4552355ccf47396e39061305ee13c53ff81b062d209",
+    "src/validation/relationships.ts": "6e2d48d4978361cf78b9535958f3f6ac85008c3707b051021255e6bf36d5aba3",
+    "docs/helix/02-design/contracts/CONTRACT-045-cross-document-references.md": "8f57a3196666942fcf0edd70dcb32cd83ac5a605c1ac470f4356a564ad12558f"
+  },
+  "workingPathsDifferingFromCommitted": [
+    "src/validation/relationships.ts",
+    "docs/helix/02-design/contracts/CONTRACT-045-cross-document-references.md"
+  ],
+  "observations": {
+    "ddd": "Recognized DDD references resolve in the containing document; missing target emits DDD_REFERENCE.",
+    "coreRelationship": "Current 0.7 required endpoint Record and target key must resolve locally.",
+    "crossDocument": "CONTRACT-045 is unimplemented and leaves current relationship endpoint rules unchanged."
+  },
+  "scope": "Committed source inspection of these three surfaces only; not exhaustive adapter survey or executed validator/native tests",
+  "qualified": false
+}

@@ -46,3 +46,6 @@ Later definition updates provisional false and document provenance while retaini
 ## Tests, Sequence and Rollback
 
 STP-003 allocates four criteria. Resolve valid unresolved representation, qualified identity and placeholder lifecycle; write pure policy tests and gated native cases; implement atomic allocation/definition/rebind. Failure leaves no placeholder/relationship/report/head effects. Skip is explicitly requested loss, not successful full semantic support; rollback cannot restore skipped meaning unless source bytes were retained. All runtime components are planned.
+
+
+The [owner interface review](../../04-build/evidence/design-audit/unknown-endpoint-owner-interface-review.json) pins exact committed DDD resolution, core relationship validation and CONTRACT-045 source. Recognized DDD missing concepts also reject rather than supply a valid unresolved endpoint; current core targets require local Record/key resolution. Opaque preservation of an unrecognized extension is not admission of its endpoint semantics. The source review excludes uncommitted owner validator changes and does not rule out every adapter or execute validation. A viable representation must identify an exact existing owner API/profile and prove valid original output plus endpoint/lifecycle/loss correspondence before positive cases become executable.
