@@ -1,5 +1,6 @@
 import {test,expect} from 'bun:test';
 import {createCatalogInputPreparation} from '../packages/umf-bun/src/catalog-input';
+import {createAcceptanceProfileResolver} from '../packages/umf-bun/src/acceptance-profiles';
 const directory=process.env.TRUSS_UMF_PRODUCER;if(!directory)throw Error('Original Record producer directory required');
 const preparation=await createCatalogInputPreparation(directory,'/Users/erik/Projects/umf/package.json');
 const fixture=await Bun.file('docs/helix/02-design/contracts/bindings/acceptance-input-capacity-v0.1.fixture.json').json();
@@ -14,3 +15,5 @@ test('shape-only original {} source does not become accepted UMF',()=>{const inp
 test('native archive carrier has exact five original fields without interpretation substitution',()=>{const result=run(request());expect(Object.keys(result.archiveDocuments[0]).sort()).toEqual(['documentId','originalText','revision','umfVersion','validation']);expect(Object.isFrozen(result.archiveDocuments[0].validation)).toBe(true)});
 
 test('source declaration extraction preserves original owner and Field references',()=>{const result=run(request());expect(result.declarations.map(d=>d.records[0].documentId)).toEqual(['first-doc','second-doc']);const record=result.declarations[0].records[0];expect([record.moduleId,record.elementId]).toEqual(['m','Item']);expect(record.fields[0].declaration).toBe(result.documents[0].interpretation.source.modules[0].elements[1]);expect(record.fields[0].reference).toEqual({module:'m',element:'label'});expect(Object.isFrozen(record.fields[0].declaration)).toBe(true)});
+
+test('configured original registry refuses unregistered synthetic root profiles',async()=>{const guarded=await createCatalogInputPreparation(directory!,'/Users/erik/Projects/umf/package.json',createAcceptanceProfileResolver([]));expect(()=>guarded.prepare(new TextEncoder().encode(JSON.stringify(request())))).toThrow('/layoutProfile')});
