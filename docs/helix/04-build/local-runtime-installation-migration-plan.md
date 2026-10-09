@@ -500,3 +500,14 @@ are retained. This proves native declaration/deparse correspondence only. Actual
 default execution, clock and sequence semantics, callable permissions/dependencies,
 stored-generation meaning and full routines/grants/init/publication remain
 unqualified. No installation-ready marker is issued.
+
+The separate [stored-generated declaration receipt](evidence/design-audit/pgserver-generated-declaration-component.json)
+now compares all29 digest columns with the original CREATE/ALTER ADD native AST:
+exact source byte-column operand, sha256 expression and actual stored-generation
+mode. Both originally qualified and unqualified builtin call forms are retained
+in the source capture; observed native deparse/storage tuples match on fresh16.2.
+The complete expected/observed inventory and source/capture/producer hashes are
+retained, and rollback removes the namespace. This is declaration correspondence,
+not populated generated-value evaluation, callable permission/dependency closure,
+protected write-path enforcement or complete installer readiness. Hash routing
+still requires full original byte equality; no digest becomes identity authority.
