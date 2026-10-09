@@ -15,6 +15,28 @@ ddx:
 
 # Design coordination and remaining work
 
+## Refreshed remote UMF source — 2026-10-08
+
+A fresh origin fetch establishes UMF `origin/master` at
+`e3555b9aac9e4c3caa952203958c4b0c33cdf519`, ahead of the primary checkout's
+16c35e8d. Do not equate the primary checkout with the current remote. The
+[source receipt](evidence/design-audit/umf-current-owner-source.json) pins
+reviewed numeric API, schema-properties contract and browser source. The
+committed JavaScript numeric adapter supplies `integerToken`/`decimalToken`,
+exact decimal construction and bigint conversion with optional Field-context
+checks. Truss should consume this shared owner API; no new primitive or
+competing numeric adapter is needed. Runtime producer version/profile adoption
+remains separate from discovering this available API. Existing current-core
+key operations require 0.8.0 and explicit transition custody; the Truss 0.7.0
+physical model is not silently upgraded.
+
+The microsite browser now pins this refreshed remote commit, including its
+fixed-source domain-pack discovery repair. Actual Truss Chromium checks pass
+again with the exact unchanged schema catalog. Weft committed HEAD remains
+94b2de5e, with security/core0.8 edits uncommitted and excluded. This observation
+does not resolve Weft's native-null mapping or certify complete native DDL
+parity. Historical checkpoints below retain their original scope and date.
+
 ## Latest owner qualification and existing integration review — 2026-10-08
 
 Committed Weft HEAD is `94b2de5e303fe53f0c9432458119b6fe1eef187c`; UMF primary remains `16c35e8d943769ccfa7bb57d16785aa7159abe65`. The [source sync receipt](evidence/design-audit/weft-qualified-registration-source-sync.json) pins nine original source/evidence files and verifies all eleven references in the Truss qualification record. The registration's evidence identity equals the complete record SHA-256. The owner acceptance matrix now records all thirty criteria passed. This supersedes historical compiler-registration/relational-acceptance gaps below; original historical receipts retain their scopes. This is committed source review, not a replay of owner tests.

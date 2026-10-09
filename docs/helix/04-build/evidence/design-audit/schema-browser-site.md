@@ -1,7 +1,7 @@
 # Truss microsite schema browser evidence
 
 The Model page embeds the actual UMF schema browser, pinned to owner revision
-`c433cfcdde21995803aad65234f20ba95d8c3222`. Its JavaScript, CSS, and logo are
+`e3555b9aac9e4c3caa952203958c4b0c33cdf519`. Its JavaScript, CSS, and logo are
 copied without changes from the owner's committed build. The Truss shell supplies
 one catalog entry containing the exact current structural projection 0.3 of native
 layout 0.15. The generated asset manifest records source and asset hashes.
