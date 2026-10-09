@@ -2,6 +2,8 @@
 
 Source/depth/node checks precede json.loads. This lexical preflight is not syntax
 or semantic admission, nor complete precharged allocation accounting.
+The default convenience view refuses PostgreSQL-text NUL. An explicit byte-document
+option preserves it without authorizing conversion into a PostgreSQL text cell.
 """
 from dataclasses import dataclass
 import json
@@ -24,8 +26,9 @@ class RetainedJson:
 
 
 def parse_retained_json(source: bytes | bytearray, *, maximum_bytes: int,
-                        maximum_depth: int, maximum_nodes: int) -> RetainedJson:
-    if type(source) not in (bytes, bytearray) or any(
+                        maximum_depth: int, maximum_nodes: int,
+                        preserve_byte_document_nul: bool = False) -> RetainedJson:
+    if type(preserve_byte_document_nul) is not bool or type(source) not in (bytes, bytearray) or any(
         type(bound) is not int or bound <= 0
         for bound in (maximum_bytes, maximum_depth, maximum_nodes)
     ) or maximum_depth > 128 or len(source) > maximum_bytes:
@@ -92,7 +95,7 @@ def parse_retained_json(source: bytes | bytearray, *, maximum_bytes: int,
     nodes = 0
 
     def valid_string(value):
-        if "\x00" in value:
+        if "\x00" in value and not preserve_byte_document_nul:
             raise ValueError("PostgreSQL-bound NUL string unavailable")
         value.encode("utf-8", errors="strict")
         return value

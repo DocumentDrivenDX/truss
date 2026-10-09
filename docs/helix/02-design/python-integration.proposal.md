@@ -563,3 +563,40 @@ seventeen-test run includes the explicit schema-validation dependencies. Depende
 selection here is experimental, not a package-ownership or release-route decision.
 The validator API follows its [versioned documentation](https://python-jsonschema.readthedocs.io/en/v4.23.0/validate/)
 and [local reference registry contract](https://python-jsonschema.readthedocs.io/en/v4.23.0/referencing/).
+
+
+### Original report-byte interchange and NUL correction
+
+The [shared wire checker](../04-build/evidence/design-audit/check_python_report_interchange.py)
+now runs 39 independently expected positive/negative controls through Python and
+TypeScript's explicit composed codec against identical original bytes and the
+same eleven schema pins. The [receipt](../04-build/evidence/design-audit/python-report-interchange.json)
+retains original source digests, both decisions and exact accepted-byte equality.
+Controls include all nineteen missing fields, versions, nested key reactivation,
+complete v0.2 rebind, numeric/boolean confusion, duplicate members, Unicode/escape
+spellings, byte capacity and explicit shape-valid provenance forgery. Acceptance
+of the latter remains visibly codec-only, not actual effect/provenance admission.
+
+This comparison exposed Python's inappropriate application of its PostgreSQL-text
+NUL restriction to an original byte document. The inspected native
+`canonical-string-bytes.sql` deliberately escapes original NUL bytes into canonical
+bytea without converting the original NUL to text. TypeScript's corresponding
+positive scalar/member tests already preserve this meaning. Python report parsing
+now explicitly selects byte-document NUL preservation; default PostgreSQL-text
+convenience still refuses it, and unpaired surrogates still refuse. No native SQL
+or TypeScript behavior was changed. Preserve opaque artifact bytes without
+interpreting their content or inferring native-cell suitability.
+
+The updated Python codec suite passes 18 tests; the TypeScript report/carrier suite
+passes 16 tests/77 assertions, and the checker passes strict TypeScript. The older
+17-test receipt retains its original source hashes as historical evidence. These
+controls cover shared wire shape and original bytes within their exercised bounds;
+they do not align the full host/native task/retained-allocation profiles, qualify
+transport, or run PY-07's actual bidirectional database writers/readers.
+
+Reproduce with the candidate's pinned Python environment:
+`PYTHONDONTWRITEBYTECODE=1 python docs/helix/04-build/evidence/design-audit/check_python_report_interchange.py`.
+The checker invokes the existing Bun codec with the selected local dependency
+package; this is test orchestration, not a JavaScript runtime requirement for the
+Python implementation. Public packaging/driver/security/resource adoption remains
+separate.

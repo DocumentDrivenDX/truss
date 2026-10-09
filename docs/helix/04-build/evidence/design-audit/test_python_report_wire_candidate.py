@@ -5,6 +5,7 @@ import shutil
 import tempfile
 import unittest
 from python_report_wire_candidate import PINS, ReportWireCandidate
+from python_raw_json_candidate import parse_retained_json
 
 HELIX = Path(__file__).resolve().parents[3]
 CONTRACTS = HELIX / '02-design/contracts'
@@ -84,6 +85,16 @@ class ReportCandidateTests(unittest.TestCase):
             with self.assertRaises(Exception): self.codec.prepare(wire(changed))
         changed = deepcopy(report); del changed['rebinds'][0]['retainedBefore']
         with self.assertRaises(Exception): self.codec.prepare(wire(changed))
+
+    def test_byte_report_NUL_does_not_admit_PostgreSQL_text_convenience(self):
+        report = candidate(); report['lifecycleProfile']['identity'] = '\0'
+        source = wire(report)
+        self.assertEqual(self.codec.prepare(source).original.source_bytes, source)
+        with self.assertRaisesRegex(ValueError, 'NUL'):
+            parse_retained_json(source, maximum_bytes=1048576, maximum_depth=128, maximum_nodes=100000)
+        with self.assertRaises(ValueError):
+            parse_retained_json(b'null', maximum_bytes=10, maximum_depth=2, maximum_nodes=2,
+                                preserve_byte_document_nul='yes')
 
     def test_original_schema_substitution_and_wire_capacity(self):
         with tempfile.TemporaryDirectory() as target:
