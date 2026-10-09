@@ -29,7 +29,8 @@ establish corpus completeness. C4 must still resolve the original expected and
 observed diagnostic artifacts and their version-scoped comparator procedure.
 
 C2 has a private `conformance-case-links.ts` component for shape-admitted bounded
-case projections. Twenty synthetic controls now exercise that implementation;
+case projections. Twenty-four synthetic controls now exercise that implementation, including
+performance references;
 strict TypeScript passes. It checks case/grammar/registry correspondence, exact
 operation/observation profiles, declared scopes, separate setup/input label
 inventories and duplicate/unknown observation references. Its boolean result is
@@ -40,8 +41,9 @@ themselves prove unchanged state or no journal/report effects.
 
 C2 also has a private `conformance-observation-coverage.ts` component comparing
 exact required and expected `(surface, step, boundary)` inventories, refusing
-missing, extra and duplicate keys. Five synthetic tests cover omitted empty
-inventories, boundary/surface/step substitutions, duplicates and ordering. The
+missing, extra and duplicate keys across result/state/journal/report/performance.
+Six synthetic tests cover omitted empty inventories, boundary/surface/step
+substitutions, duplicates, ordering and performance replaced by behavioral evidence. The
 required inventory must be supplied by original registered procedures under the
 [case grammar](../03-test/conformance-case-grammar.proposal.md), not inferred from
 expected arrays. This helper neither issues that registration nor establishes
@@ -83,6 +85,33 @@ catalog-concurrency choices as original profile gates; the harness cannot pick
 their behavior from an implementation's favorable result. The Python package
 ownership decision does not prevent constructing language-neutral packets, but
 it prevents claiming the supported Python delivery route settled.
+
+## Performance expectation integration for C2/C4/C6
+
+The separate [draft 0.2 expectation envelope](../02-design/contracts/conformance-case-expected-v0.2.proposal.schema.json)
+requires an explicit performance surface. The original 0.1 envelope remains
+unchanged and refuses that member. C2 selects one original registered grammar
+version; it must not silently strip performance, downgrade the envelope or infer
+an empty required inventory from an empty expected array. The private helpers
+now compare the fifth surface, but original grammar/observer registration and
+runtime execution remain unimplemented.
+
+| Slice | Required performance handoff | Independent refusal/control |
+| --- | --- | --- |
+| C2 preparation | Resolve complete original benchmark packet and expectation artifact: workload, statistic/threshold, repetitions, strata, baseline procedure, timing boundaries and sample-admission rules. Derive required performance keys from registered procedures. Reserve complete workload, sample, observer and evidence-store resources before claim. | Missing or unsupported packet/profile, omitted performance, substituted behavioral result, changed baseline or unfrozen human statistic choice cannot issue a prepared benchmark handle. A nonperformance case explicitly has no required performance keys. |
+| C4 observation | Execute only the frozen workload and registered observer. Retain raw samples with original case/step/boundary, repetition/stratum and actual native outcome correspondence; keep baseline and candidate observations distinct. | Cancellation, failed work, missing samples, exhausted observation budget and unavailable clock/source remain explicit incomplete observations. Do not replace samples, reduce repetitions, change workload or discard slow observations to obtain a passing statistic. |
+| C6 assessment | Resolve the original complete expected packet and actual immutable sample artifacts, admit sample membership using the frozen rules, and independently apply its selected comparator. Preserve performance and behavioral verdicts separately in complete case evidence. | A behavioral pass, a summary without required raw samples or an aggregate derived from an incomplete set cannot qualify performance. A recorded partial run remains partial; a rerun receives distinct evidence identity rather than filling gaps in the original run. |
+
+Author red controls before the runner: remove one required repetition, duplicate
+another, swap baseline/candidate identities, change a stratum or timing boundary,
+retain an actual failed/cancelled operation with a timing value, and substitute a
+precomputed favorable summary for the original samples. The frozen profile decides
+whether a failed operation is an admitted measured outcome; the assessor cannot
+make that choice after inspecting results. Include a complete independent positive
+packet and explicit no-performance case. Native plans, clock validity, isolation,
+managed-target execution and sample collection remain later qualification evidence.
+Pending pooler statistic and concurrency choices stay pending; this handoff supplies
+no threshold or default answer to those product questions.
 
 ## Original lifecycle and containment
 
