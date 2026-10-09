@@ -1075,7 +1075,7 @@
     "02-design/technical-designs/TD-028-pass-the-corpus-and-the-interchange-check.md": "0407f2365d823eda0a1c71e1aa5bcc2d3bb9586832a8834b6cd17acea4d616ed",
     "03-test/test-plans/STP-028-pass-the-corpus-and-the-interchange-check.md": "9a53a514e2e8a9f095888ed3da98586fc439ee220ac025c7fcf0e829b743dc92",
     "02-design/technical-designs/TD-029-declare-the-layout-version-and-check-the-ddl-on-every-version.md": "4be0dc1a16f8f6b306ccabfea375c76f59cacf8163ffb51d2ad2a8ebfad14a37",
-    "03-test/test-plans/STP-029-declare-the-layout-version-and-check-the-ddl-on-every-version.md": "e2f1ad9c9834d4c1335489b2ab806c6a9244b41642d65a5cbaa7e1aaa5478cc0",
+    "03-test/test-plans/STP-029-declare-the-layout-version-and-check-the-ddl-on-every-version.md": "9dd94c26a2fb39a1a6fb0fbf4c162a555076252f796f6dab048305b32db41b38",
     "02-design/technical-designs/TD-030-extend-the-layout-from-a-host.md": "3f4f1edc5a86425a13bb669e52bc3ee4d8942ad796d7b927ea7079858bee414d",
     "03-test/test-plans/STP-030-extend-the-layout-from-a-host.md": "3d919e46cf6bd873663973f52744c639c86cc3be443cc0b00fa6af60a5d380a1",
     "02-design/technical-designs/TD-031-govern-writes-by-role-grants.md": "565ccddc60a5058f5fd056d9ea601cc29df3d059b85fbcf5f82cf16a3996dba1",
