@@ -222,3 +222,27 @@ reservation and decode, and failure after bijection but before report insertion.
 Retain original recovery custody whenever containment/settlement is uncertain.
 These are planned full-boundary controls (`not_run`); the existing arithmetic
 checker establishes only fixture shape/artifact integrity and sizing.
+
+## Surviving report effect-count scenarios
+
+RPCOUNT-01–06 exercise CONTRACT-003's complete count extraction under the
+full protected acceptance entry. Freeze independently expected qualified
+identity sets, endpoint tuples and before/after retirement states before
+execution. Actual native IDs come from original accepted mapping custody;
+fixture labels and allocator maxima are not expected installed identities.
+All six cases remain `not_run`.
+
+| Case | Independent effect basis | Required outcome |
+| --- | --- | --- |
+| RPCOUNT-01 | Exactly one genuinely new type, two properties, one owner-local key, one relationship, two distinct endpoint tuples and one active-to-retired property | Exact canonical count strings `1`, `2`, `1`, `1`, `2`, `1` in their respective members; complete source/native identity correspondence and report/head atomicity |
+| RPCOUNT-02 | Retained active definitions update; one originally retired identity reactivates with the same ID; no genuinely new identities or endpoint tuples | Addition and retirement counts are zero, with the complete actual reactivation in its own inventory; no fresh-ID allocation or fabricated addition |
+| RPCOUNT-03 | Same six totals as RPCOUNT-01 but substitute one unexpected property/owner or swap an endpoint target | Refuse complete effect/report correspondence despite equal counts; neither count equality nor digest routing repairs wrong membership |
+| RPCOUNT-04 | Duplicate candidate endpoint occurrences, already-retired definitions and a tentative contribution rolled back to its original savepoint | Count only distinct actual surviving tuples and real active-to-retired transitions; no attempted/rolled-back/duplicate contributions survive |
+| RPCOUNT-05 | True empty new/retirement sets, then separately omit a producer or hide one member from integrity visibility | Complete empty original inventory permits zero; omitted producer or filtered scope refuses, never manufactures zero |
+| RPCOUNT-06 | Add an effect or change retirement state after count collection but before encoding/persistence/head transition; separately exceed collector resource bounds | Invalidate original readiness and require complete recollection or refuse under the original account. No stale report/head publication; preserve earlier adopted caller work after confirmed containment |
+
+Independently inspect complete catalog, journal, report and operation-generation
+inventories before/after both failure and outer settlement. Include ordinary
+role direct-helper/write bypass attempts; private collector access granted to
+a test actor cannot substitute for protected-entry qualification. Source stage
+row counts and successful encoder output do not establish these scenarios.
