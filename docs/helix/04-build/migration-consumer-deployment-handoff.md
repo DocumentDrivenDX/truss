@@ -14,7 +14,7 @@ source/target admission and M1–M5 remain separate requirements below.
 
 Implementation handoff for LM-06/B-014 under CONTRACT-008. This is a proposed
 deployment flow, not a released command or executable example. Reuse the
-[existing apply/reconcile interface](../02-design/contracts/bindings/truss-layout-migration-v0.1.proposal.d.ts)
+[existing status/verify/apply/reconcile interface](../02-design/contracts/bindings/truss-layout-migration-v0.1.proposal.d.ts)
 and LM-T01–08; public package and CLI names remain release outputs.
 
 The consumer runs this deployment step outside its framework's outer database
@@ -24,8 +24,10 @@ transaction for the entire transactional route. The framework must not supply
 application credentials as administrative authority, wrap apply in its own
 transaction, or treat its migration history row as Truss commit evidence.
 
-First inspect and independently verify the actual installed source through the
-selected installation tooling. Use the pure planner only to select an explicit
+First call the draft migration `status` and `verify` procedures under their
+original registered inspection/resource profiles to observe and independently
+verify the complete actual installed source. These methods remain unimplemented;
+the source cannot be inferred from a marker or planner input. Use the pure planner only to select an explicit
 registered route. Persist original request/attempt recovery custody before native
 submission through the governing registry procedure. Invoke apply with that
 original request; do not derive SQL from version strings or mutate the request
@@ -76,10 +78,10 @@ framework-specific ledger or recovery service.
 | Sequence | Concrete implementation output | Evidence required before the next dependent stage |
 | --- | --- | --- |
 | M1 select the first supported populated route | One exact registered source/target bundle pair, original recipes and ordered native/data/preservation inventories; declare receipt-home initialization or conversion in that route | Independently authored LM-T03 expectations cover objects, keys, edges, retained values, catalog, reports, journal, receipts, feed positions and unresolved recovery state. A metadata-only route or empty database is insufficient |
-| M2 bind original administrative services | Private composition over the existing installation verifier, installed-target HostRecoveryRegistry, registered recipes and qualified driver; durable original request/attempt recovery custody before submission | Wrong service/build/profile, modified request, unavailable registry and caller-owned transaction refuse before effects; restart recovers the same original reference. No public JSON field grants administrative authority |
+| M2 bind original administrative services | Private composition over original status/verify inspection, installation verifier, installed-target HostRecoveryRegistry, registered recipes and qualified driver; durable original request/attempt recovery custody before submission | Wrong service/build/profile, modified request, unavailable registry and caller-owned transaction refuse before effects; restart recovers the same original reference. No public JSON field grants administrative authority |
 | M3 implement transactional apply | One owned transaction runs source verification under common exclusions, ordered steps, independent target/preservation checks and atomic receipt/archive/marker publication | LM-T05 demonstrates actual first-step effects followed by second-step failure, complete rollback and no target receipt. LM-T06 and LM-P01–03 exercise the security-owned writer/context fences and any required publication drain |
 | M4 implement settlement and reconcile | Qualified original driver outcome correlation plus read-only original-attempt lookup, preserving every existing result variant | Actual lost-ack and post-commit verification failure produce commit_unknown/recovery_required/committed_unverified as applicable; reconcile never repeats recipes. LM-T04 verifies original repeat identity and fresh target parity, including changed bytes and native drift refusals |
-| M5 expose the packaged deployment flow | Existing apply/reconcile contract exposed through selected release packaging, with a clean consumer example and advertised source/target matrix | LM-T01/02/07/08 prove bootstrap separation, ordinary catalog evolution without migration, unsupported-route refusal, no automatic upgrade and framework failure after confirmed Truss commit. Each advertised PostgreSQL or managed-service tuple has its own native evidence |
+| M5 expose the packaged deployment flow | Existing status/verify/apply/reconcile contracts exposed through selected release packaging, with a clean consumer example and advertised source/target matrix | LM-T01/02/07/08 prove bootstrap separation, ordinary catalog evolution without migration, unsupported-route refusal, no automatic upgrade and framework failure after confirmed Truss commit. Each advertised PostgreSQL or managed-service tuple has its own native evidence |
 
 Truss owns route recipes, preservation obligations, executor composition and the
 deployment example. UMF owns generic schema representation and DDL generation;
@@ -270,3 +272,24 @@ source/target data and effect inventories, recipe-submission counts and original
 attempt references; framework status, table counts and version strings are supporting
 facts only. These are executable test requirements for LM-T04/05/08 and M4/M5;
 no registered original recovery service or populated route is qualified here.
+
+
+## Inspection service prerequisite and adoption boundary
+
+Before M3 dispatch, register `inspectionRequest`/`status` and
+`verificationRequest`/`verification` from the portable inspection schema and
+qualify LM-V01–06 through the exact original administrative procedures. Observe
+complete matching source, same-version routine/grant drift, unavailable collection
+and unchanged managed state independently. M2 must preserve their current-state
+scope separately from HostRecoveryRegistry's original-attempt outcomes. A failed
+inspection cannot trigger apply, bootstrap or a hidden repair.
+
+M1 still requires a real populated source/target pair. Author source/target
+preservation expectations before recipe implementation; inspection tests against
+one admitted installation are useful prerequisites but do not qualify an upgrade
+edge. The current component labels 0.15/0.16 are not stable released migration
+versions. No generated source/target manifest is published as supported until
+its full bundle/producer/security/resource correspondence and independent native
+preservation/recovery evidence pass. M5's clean consumer demonstrates inspection,
+explicit application and original reconciliation separately; a convenience deploy
+wrapper cannot collapse unavailable, drift and commit_unknown into success.
