@@ -169,7 +169,7 @@ initially identified no epoch issuer. That source gap now has an implemented
 private candidate: [epoch lifecycle](../02-design/contracts/source-epoch-lifecycle.proposal.md),
 UMF-generated fixed registry/pointer, native UUID4 issuer, immutable registry
 guards and original pointer lock/readback. Twenty-seven rollback-contained
-storage/issuer checks and seven two-connection issuer-fencing checks pass on
+storage/issuer checks and nine two-connection issuer-fencing checks pass on
 PostgreSQL17.9. Their exact-source receipts qualify components only. The
 remaining gap is complete committed-installation/deployment-incarnation
 admission, original retry/recovery custody and accepted report composition.
@@ -178,7 +178,7 @@ This is Truss ownership; no new UMF semantic or Weft compiler API is needed.
 | Required member | Existing source | Next implementation and decisive test |
 | --- | --- | --- |
 | installationId | Marker candidate and retained bootstrap archive | Independently admit committed marker plus complete installed inventory. A same-transaction bootstrap candidate or copied marker cannot qualify; exercise commit uncertainty and namespace mismatch. |
-| sourceEpoch | Private UUID4 native issuer; UMF registry/pointer; immutable guard and lock/readback; 27 component and seven concurrency checks | Adopt complete lifecycle authority and trusted clone/restore incarnation evidence; retain original retry/recovery identity and bind the original operation context. Exercise committed installation, clone/restore, retries and original capture. Tokens from component tests cannot qualify an accepted report. |
+| sourceEpoch | Private UUID4 native issuer; UMF registry/pointer; immutable guard and lock/readback; 27 component and nine concurrency checks | Adopt complete lifecycle authority and trusted clone/restore incarnation evidence; retain original retry/recovery identity and bind the original operation context. Exercise committed installation, clone/restore, retries and original capture. Tokens from component tests cannot qualify an accepted report. |
 | origin.asserted | Separate asserted-origin facade argument | Retain complete original canonical tree at attempt admission, without upgrading assertion to authority. Test mutation of caller input after capture and exact-repeat preservation. |
 | origin.databaseRole | Native context0.2 and issued original-execution basis | Compose the original acting-role observation; exercise SET ROLE, definer entry, role rename/drop/recreate and changed builder context against retained OID/name evidence. |
 | journalOrigin / originMappingProfile | Required history origin grammar and mapping registration contract | Adopt one exact mapping producer and its retained implementation/profile evidence. Verify mapping of asserted fields and native role without overwriting asserted content; unknown mapping refuses before effects. |

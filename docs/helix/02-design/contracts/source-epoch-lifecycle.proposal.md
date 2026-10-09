@@ -112,7 +112,7 @@ without adopting a complete lifecycle or deployment-admission profile.
 `packages/postgresql/native/source-epoch-issue.sql`, `source-epoch-lock.sql` and
 `source-epoch-immutability.sql` remain private SECURITY INVOKER components with
 PUBLIC execution revoked. The storage harness verifies 27 component checks;
-`bun scripts/check-source-epoch-concurrency.ts` verifies seven checks with two
+`bun scripts/check-source-epoch-concurrency.ts` verifies nine checks with two
 connections, including actual issuer blocking, timeout with no speculative
 successor, successful successor admission and predecessor lineage. Use the
 owned fixture URL on port 15434. Exact-source receipts are in the design-audit
@@ -120,3 +120,11 @@ evidence directory. These use explicit test marker/profile/incarnation inputs;
 they do not qualify trusted installation, clone/restore detection, retries,
 complete report context or managed deployment authority. No public grant or
 acceptance barrier has been opened.
+
+The issuer now also refuses when the current native xid has a retained
+row_home_operation, including completed calls in the same enclosing transaction.
+The two-connection harness's explicit writer-row fixture proves refusal and
+savepoint rollback restoration. Complete integration must prove every protected
+writer registers and retains this original admission before effects; the fixture
+is not that coverage proof. Unregistered direct writes remain governed by the
+separate public/private entry and role closure obligations.

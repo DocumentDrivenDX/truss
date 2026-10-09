@@ -19,6 +19,12 @@ BEGIN
   OR (expected_predecessor IS NOT NULL AND octet_length(expected_predecessor) NOT BETWEEN 1 AND 256) THEN
   RAISE EXCEPTION 'bounded original lifecycle inputs required' USING ERRCODE='55000';
  END IF;
+ -- Retained operation rows cover completed calls as well as unfinished ones:
+ -- their enclosing transaction must not change source incarnation afterwards.
+ IF EXISTS(SELECT 1 FROM truss.row_home_operation o
+  WHERE o.original_writer_xid=pg_current_xact_id_if_assigned()) THEN
+  RAISE EXCEPTION 'source epoch cannot transition behind an original writer' USING ERRCODE='55000';
+ END IF;
  -- Marker serializes the empty-pointer initial case as well as transitions.
  PERFORM 1 FROM truss.installation_marker m WHERE m.installation_id=expected_installation FOR UPDATE;
  IF NOT FOUND THEN RAISE EXCEPTION 'original installation marker required' USING ERRCODE='55000'; END IF;

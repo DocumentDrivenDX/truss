@@ -11,6 +11,7 @@ try {
  await a.begin(async tx=>{
   await tx.unsafe(`CREATE SCHEMA ${namespace}`);
   await tx.unsafe(`CREATE TABLE ${namespace}.installation_marker (installation_id text COLLATE pg_catalog."C" PRIMARY KEY)`);
+  await tx.unsafe(`CREATE TABLE ${namespace}.row_home_operation (original_writer_xid xid8 NOT NULL)`);
   await tx.unsafe((await Bun.file('docs/helix/04-build/evidence/source-epoch-storage.owner-export.sql').text()).replaceAll('truss.',namespace+'.'));
   await tx.unsafe((await Bun.file('packages/postgresql/native/source-epoch-immutability.sql').text()).replaceAll('truss.',namespace+'.'));
   await tx.unsafe((await Bun.file('packages/postgresql/native/source-epoch-lock.sql').text()).replaceAll('truss.',namespace+'.'));
@@ -58,9 +59,20 @@ try {
  if(duplicate!=='55000')throw Error('Second initial issuer replaced live epoch');
  checks.push('Repeated initial issuance cannot replace the established current epoch');
 
+ await a.begin(async tx=>{
+  let refusal='';try{await tx.savepoint(async sp=>{
+   await sp.unsafe(`INSERT INTO ${namespace}.row_home_operation VALUES (pg_current_xact_id())`);
+   try {await sp.unsafe(`SELECT ${namespace}.runtime_issue_source_epoch('component-installation','${successor}','component-restored-incarnation',decode('01','hex'),decode('05','hex'))`);}catch(e){refusal=(e as any).errno??(e as any).code;throw e;}
+  });}catch(e){if(refusal!=='55000')throw e;}
+  if(refusal!=='55000')throw Error('Original same-transaction writer permitted epoch transition');
+  checks.push('Retained current-transaction writer refuses native epoch transition');
+  const afterRollback=await tx.unsafe(`SELECT ${namespace}.runtime_issue_source_epoch('component-installation','${successor}','component-restored-incarnation',decode('01','hex'),decode('05','hex')) AS epoch`);
+  if(!afterRollback[0].epoch||afterRollback[0].epoch===successor)throw Error('Rolled-back writer admission remained');
+  checks.push('Savepoint rollback removes writer admission and allows subsequent lifecycle issuance');
+ });
  const version=await a`SELECT version() AS version`;
  const sources:Record<string,string>={};for(const path of ['scripts/check-source-epoch-concurrency.ts','packages/postgresql/native/source-epoch-issue.sql','packages/postgresql/native/source-epoch-lock.sql','packages/postgresql/native/source-epoch-immutability.sql','docs/helix/04-build/evidence/source-epoch-storage.owner-export.sql'])sources[path]=new Bun.CryptoHasher('sha256').update(await Bun.file(path).arrayBuffer()).digest('hex');
- await Bun.write('docs/helix/04-build/evidence/design-audit/source-epoch-concurrency.json',JSON.stringify({database:version[0].version,sources,checks,scope:'Two original native connections with native issuer-generated initial and successor tokens, synthetic component namespace/marker/profile/incarnation; issuer locking behavior only, not issuer/transition authority or complete installed admission',qualified:false},null,2)+'\n');
+ await Bun.write('docs/helix/04-build/evidence/design-audit/source-epoch-concurrency.json',JSON.stringify({database:version[0].version,sources,checks,scope:'Two original native connections with native issuer-generated initial and successor tokens, synthetic component namespace/marker/profile/incarnation and writer-row fixture; issuer locking behavior only, not issuer/transition authority or complete installed admission',qualified:false},null,2)+'\n');
  console.log(JSON.stringify({checks:checks.length,qualified:false}));
 }finally{
  if(created)await a.unsafe(`DROP SCHEMA ${namespace} CASCADE`);

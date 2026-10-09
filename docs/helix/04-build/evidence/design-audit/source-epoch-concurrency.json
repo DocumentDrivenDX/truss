@@ -1,8 +1,8 @@
 {
   "database": "PostgreSQL 17.9 (Debian 17.9-1.pgdg13+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit",
   "sources": {
-    "scripts/check-source-epoch-concurrency.ts": "4c3ae7026491638fbe033d8e973cb8fd1f443ab56a29e870ffa504dd47103305",
-    "packages/postgresql/native/source-epoch-issue.sql": "df57c993f4fdc7afc9b13d1ee9f02c7626e6a252ade2a7316fd52c34df6ba2e5",
+    "scripts/check-source-epoch-concurrency.ts": "f827018e050aa4f0271ce79a8cf48a5d54e370fbc8a4b94db0619f5a02e768f9",
+    "packages/postgresql/native/source-epoch-issue.sql": "f9a245ac08be79605dc200a7a345ead629221dbc927645b0288161f45fdd95d5",
     "packages/postgresql/native/source-epoch-lock.sql": "e811a3656a45e941d588ca21b97ab524b789948d08585288e44b158b060d73cc",
     "packages/postgresql/native/source-epoch-immutability.sql": "8e819d0b11a4497913a66a1046725577ca31acfe11b1c10820eb6f633ea4a955",
     "docs/helix/04-build/evidence/source-epoch-storage.owner-export.sql": "c1338fa024a9e7af095457cfd2adec768071475f510caa98923df4da9a3e7407"
@@ -14,8 +14,10 @@
     "Transition succeeds after writer completes and next admission returns successor evidence",
     "Only successful native issuer retains the original predecessor lineage",
     "Previously native-issued epoch refuses new current admission after transition",
-    "Repeated initial issuance cannot replace the established current epoch"
+    "Repeated initial issuance cannot replace the established current epoch",
+    "Retained current-transaction writer refuses native epoch transition",
+    "Savepoint rollback removes writer admission and allows subsequent lifecycle issuance"
   ],
-  "scope": "Two original native connections with native issuer-generated initial and successor tokens, synthetic component namespace/marker/profile/incarnation; issuer locking behavior only, not issuer/transition authority or complete installed admission",
+  "scope": "Two original native connections with native issuer-generated initial and successor tokens, synthetic component namespace/marker/profile/incarnation and writer-row fixture; issuer locking behavior only, not issuer/transition authority or complete installed admission",
   "qualified": false
 }
