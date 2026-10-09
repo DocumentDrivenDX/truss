@@ -34,3 +34,37 @@ NB-05: two requests with the same admitted identity overlap, including cancellat
 NB-06: receipt authorization revoked before replay, response exceeds its admitted size, malformed original receipt or lost recovery custody. No current-record reconstruction, incomplete result or stale authority substitutes for the original complete receipt. Keep the broader STP-043 retention/concurrency/resource corpus and STP-044 executor/pool schedules.
 
 These are planned host observations, not deployed network/native receipts. Exact transport/resolver/driver/resource and response/error encoding profiles remain implementation integration outputs. Truss supplies the reusable group/receipt/executor contracts; the reference host composes them without taking UMF or Weft ownership.
+
+## Client retry decision and original request custody
+
+The reference client retains one immutable complete semantic request and its
+admitted qualified request identity before first dispatch. Transport attempt
+metadata is separate from that semantic request. A retry reuses both original
+values; it may refresh authentication without changing the request namespace,
+operation order, aliases, original expected versions or exact numeric spelling.
+Persisting client intent is host/application policy; a process restart cannot
+reconstruct missing intent from current graph state and claim it is a retry.
+
+| Observed disposition | Permitted client action | Required host evidence |
+| --- | --- | --- |
+| Complete admitted committed result/replay | Settle that original intent once; repeated delivery is the same result | Confirmed original commit or admitted committed receipt under current disclosure |
+| Connection loss, timeout, partial or undecodable response | Keep outcome unknown; retry the identical request or reconcile original attempt through its selected recovery route | No inference of rollback from transport absence; original receipt/native settlement observation controls execution |
+| Explicit unresolved native settlement | Keep intent unresolved; use original recovery custody | No replacement writer until original termination is independently admitted |
+| Input/identity conflict | Stop automatic retry and surface conflict | Full semantic input mismatch under original receipt identity; no new identity generated as a repair |
+| Expired identity or unavailable retained receipt interpretation | Stop retry-as-replay; require explicit application reconciliation | Absence/expiry cannot authorize repeating the effect |
+| Current authorization refusal | Surface refusal without original payload disclosure | Refreshing credentials does not waive owner-union admission or disclose retained results |
+| Confirmed rollback/contained failure | Preserve the original failure semantics; retry only when the governing failure/profile permits | Actual original containment/termination, not transport status or an empty result |
+
+Backoff and finite attempt/deadline budgets belong to the selected client/host
+profile and never alter these correctness outcomes. A retry budget expiring
+leaves an unknown original outcome unknown. No callback can convert a partial
+body or locally cached pending result into committed success. A changed
+request ID is a newly authorized application intent with independent effects;
+it is never the automatic fallback for conflict, expiry or lost receipt.
+
+Extend NB-01/03/05/06 with a client restart from retained original intent,
+partial-body delivery, budget expiry during unresolved commit and independently
+changed retry identity/input controls. Compare complete source graph/version/
+journal/receipt state before and after; require at most one original committed
+effect and the complete original result. These client schedules remain planned
+and share STP-043/044 authority, rather than defining a second retry protocol.
