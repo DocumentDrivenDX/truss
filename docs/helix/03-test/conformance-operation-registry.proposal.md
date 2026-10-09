@@ -81,6 +81,29 @@ come from original trusted procedures, never from a schema-valid JSON object.
 This mapping prevents duplicate carrier work but is not an executable registry
 or qualification of any method.
 
+The proposed `capability-execution-outcomes-v0.1.proposal.schema.json` now
+supplies the outer compositions for nine complete existing business-result
+carriers. Register its exact `$defs` member rather than the root: directPage
+for page; traversal for traverse/resumeTraversal/nextTraversalPage;
+traversalRelease for releaseTraversal; journalPage for pageJournal;
+compiledExecution for executeInTransaction; feedDiscovery, feedFragment,
+feedFreshness and feedAcknowledgment for the corresponding v0.2 methods.
+The root deliberately refuses all wires because this is a definition library,
+not an untagged union that lets a method accept another method's result.
+These compositions close the outer schema work identified in those table rows;
+original method/profile/argument/observer/identity-path registration still
+remains. Catalog, standalone mutation, group and import wrapper gaps are
+unchanged. Import is explicitly excluded from generic Outcome composition.
+
+Run `bun docs/helix/04-build/evidence/design-audit/check-capability-execution-outcomes.ts <installed-Ajv-2020-module-path>`.
+Forty-six controls check all nine registered definitions' outer error/required
+value/closed branch/false durability shapes and the definitions-only root.
+They do not test complete inner business-result membership or qualify native
+effects, termination, observer independence or support availability.
+The separate [148-schema receipt](../04-build/evidence/design-audit/schema-inventory-outcomes-2026-10-09.json)
+records strict combined registration/reference compilation with zero errors;
+the earlier conformance carrier receipt remains preserved.
+
 For direct `lookup`, reuse `direct-lookup-request-v0.1.schema.json` for the
 request argument and `direct-lookup-result-v0.1.schema.json` for the inner
 business result. The proposed `direct-lookup-execution-outcome-v0.1.proposal.schema.json`
