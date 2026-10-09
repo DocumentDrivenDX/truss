@@ -132,6 +132,8 @@
     "canonical identity controls quote backslash Unicode",
     "lineage resolves original archived Record and relationship",
     "lineage refuses Field as original Record",
+    "complete source Record and relationship inventories extracted for both documents",
+    "complete original owner Field and key inventories extracted without storage IDs",
     "Field cannot be allocated as a Record type",
     "invented Record identity refuses",
     "type staging rejects caller-supplied lineage substitution",

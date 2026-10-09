@@ -1,6 +1,7 @@
 /** Original owner interpretation before native catalog effects. No acceptance authority. */
 import {createAcceptanceInputInspector} from './acceptance-input';
 import {loadUmfProducer} from './index';
+import {collectCatalogDeclarations} from './catalog-declarations';
 import type {ProfilePin} from '../../../docs/helix/02-design/contracts/bindings/truss-acceptance-input-v0.1';
 export async function createCatalogInputPreparation(directory:string,dependenciesPackage:string){
  const inspector=await createAcceptanceInputInspector(dependenciesPackage);const owner=await loadUmfProducer(directory);
@@ -21,9 +22,10 @@ export async function createCatalogInputPreparation(directory:string,dependencie
     originalText:source.originalText,validation:{sourceValidation:observation.sourceValidation,transition:observation.transition},
     interpretation:observation}));
   }
+  const declarations=documents.map(document=>collectCatalogDeclarations(document.documentId,document.interpretation.source));
   const archiveDocuments=documents.map(({interpretation,...archive})=>Object.freeze(archive));
   function freeze(value:unknown):void{if(value&&typeof value==='object'){for(const child of Object.values(value))freeze(child);Object.freeze(value)}}
-  freeze(documents);freeze(archiveDocuments);
-  return Object.freeze({original:inspected,documents:Object.freeze(documents),archiveDocuments:Object.freeze(archiveDocuments),umfProfile,scope:'original_umf_preparation_only' as const});
+  freeze(documents);freeze(archiveDocuments);freeze(declarations);
+  return Object.freeze({original:inspected,documents:Object.freeze(documents),declarations:Object.freeze(declarations),archiveDocuments:Object.freeze(archiveDocuments),umfProfile,scope:'original_umf_preparation_only' as const});
  }});
 }
