@@ -264,6 +264,16 @@ Python cannot represent have no datetime view. This is conversion availability,
 not source grammar/temporal-family validation. It grants no native instant,
 comparison or ordering capability.
 
+A later [offset regression](../04-build/evidence/design-audit/python-timestamp-offset-regression.json)
+shows that Python's `fromisoformat` accepts and normalizes minute overflow
+(`+00:60` becomes `+01:00`). The convenience candidate now checks hour/minute
+components before conversion: outside 00–23/00–59 there is no datetime view,
+while original text stays unchanged. Independent cases cover both offset signs,
+overflow and exact boundary offsets. This restricts conversion availability;
+it neither rejects an original upstream-admitted token nor assigns that token
+new temporal meaning. The earlier seventeen-test report-wire receipt retains
+its historical source pins and scope.
+
 Run all numeric and timestamp candidates with:
 
 ```sh

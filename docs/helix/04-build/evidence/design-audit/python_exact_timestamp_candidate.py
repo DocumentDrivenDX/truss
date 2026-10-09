@@ -31,6 +31,10 @@ def timestamp_from_admitted_text(token: str, maximum_bytes: int) -> ExactTimesta
     # Unknown local offset cannot be changed to an asserted UTC offset.
     if offset == "-00:00" or (fraction and any(digit != "0" for digit in fraction[6:])):
         return ExactTimestamp(original, None)
+    # Python normalizes minute overflow such as +00:60 into another offset.
+    # Conversion availability must not silently assign meaning to such a token.
+    if offset != "Z" and (int(offset[1:3]) > 23 or int(offset[4:6]) > 59):
+        return ExactTimestamp(original, None)
     try:
         view = datetime.fromisoformat(original)
     except ValueError:

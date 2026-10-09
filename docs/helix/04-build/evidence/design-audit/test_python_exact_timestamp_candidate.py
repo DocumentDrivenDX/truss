@@ -25,6 +25,19 @@ class ExactTimestampCandidateTests(unittest.TestCase):
         self.assertEqual(decoded["timestamp-offset"].datetime_view.microsecond, 123456)
         self.assertEqual(decoded["timestamp-offset"].datetime_view.utcoffset().total_seconds(), -14400)
 
+    def test_offset_components_cannot_be_normalized_by_python(self):
+        for offset in ('+00:60', '-01:99', '+24:00', '-24:00', '+99:99'):
+            token = '2026-10-09T12:34:56' + offset
+            result = timestamp_from_admitted_text(token, 64)
+            self.assertEqual(result.original_text, token)
+            self.assertIsNone(result.datetime_view)
+        for offset, seconds in (('+23:59', 86340), ('-23:59', -86340),
+                                ('+00:59', 3540), ('-01:59', -7140)):
+            token = '2026-10-09T12:34:56' + offset
+            result = timestamp_from_admitted_text(token, 64)
+            self.assertEqual(result.original_text, token)
+            self.assertEqual(result.datetime_view.utcoffset().total_seconds(), seconds)
+
     def test_lossless_precision_and_unavailable_views(self):
         token = "2026-10-09T12:34:56.123456000Z"
         result = timestamp_from_admitted_text(token, len(token))
