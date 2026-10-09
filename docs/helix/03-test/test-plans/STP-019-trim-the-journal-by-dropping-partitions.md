@@ -90,3 +90,19 @@ These supplement AH-01–06 for the [S3 candidate profile](../../02-design/contr
 | S3-05 / `privileged_mutation_and_encryption_paths_are_qualified` | Exercise every selected overwrite, version-delete, retention-change, lifecycle, policy-administration and encryption-key path with distinct qualified principals. | Required locked version remains protected for its admitted lifetime; current-key markers cannot conceal custody. Loss of retrieval authority/key availability refuses recoverability claims. If profile assumptions permit destruction of required bytes or keys, record that limitation and refuse qualification under stronger promised guarantees. No mock denial substitutes for actual policy behavior. |
 
 Retain request/response and original uncertainty traces with secrets excluded, independent version/retention/policy observations, exact recovery bytes and native pre/post horizon inventories. The assessor must distinguish an unavailable setup, an expected refusal, a confirmed provider operation and a confirmed native commit. These schedules do not authorize provisioning, privileged mutations or deletion against existing deployment data.
+
+## Zero local-window and active-partition controls
+
+Select a zero additional age window under the original qualified partition and
+archive/protection profile. Complete handoff plus release admits removal of an
+eligible whole partition; active writers or any retained consumer/receipt/
+recovery/history/configuration dependency still block it. A successful upload or
+zero setting cannot bypass full coverage/retrieval/lifetime verification. Prove
+that the next permitted write has a covering partition and journals normally;
+zero retention never disables journal production or accepts an uncovered range.
+
+Reconstruct an archived version after local removal using complete original
+meaning. Omit one event/group/definition/configuration dependency and require
+explicit unavailable, not unwritten/empty. Keep original rollback/commit-unknown
+retention settlement separate from provider success. These are planned native
+whole-partition/handoff cases, not a promise of synchronous per-row erasure.
