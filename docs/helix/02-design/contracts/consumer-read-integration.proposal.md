@@ -75,6 +75,51 @@ Read-only EXPLAIN/EXPLAIN ANALYZE on the disposable qualified corpus observes ac
 
 Do not force a native planner to claim an index is used merely because it exists. Small-fixture sequential scans can be legitimate; interactive qualification requires the declared scale/threshold and independent baseline. Preserve exact aggregate semantics even when they cost more than lookup. A result limit never grants permission to stop counting early. Oversized grouped output, recursive entities, relationship lookahead or unknown codec/obligation fails the whole public result; no partial prefix is returned.
 
+## Bounded related-list result admission
+
+Committed Weft CONTRACT-004 defines `RELATED_KEYS` as
+`{items:[keyTuples],truncated:boolean}` with declared multiplicity, complete-key
+ordering and lookahead or equivalent exact cardinality evidence. This intentional
+bounded projection is a valid logical result. Whole-result refusal on malformed
+or over-budget input must not erase the truncation marker or require fetching an
+unbounded relationship. Truss consumes the original owner artifact; it adds no
+SQL rewrite or relationship evaluator.
+
+For each selected projection, retain the original bound k, qualified relationship,
+direction, target key/codec, multiplicity and read/security context. Admit the
+owner's exact proof procedure and its descriptor/obligations before submission.
+Under a lookahead procedure, validate the original ordered candidate tuples,
+including the extra tuple, before exposing the envelope. At most k complete
+items are returned, and truncation is true exactly when the admitted procedure
+proves another qualifying item in that same read context. Exactly k items without
+end-of-stream or equivalent proof cannot establish false. A short stream caused
+by cancellation, decoder refusal or unavailable observation is not completion.
+
+A lookahead tuple is subject to original type/key/codec and disclosure admission
+and finite shared work/storage accounting even though it is not a returned item.
+Do not expose its key or identity through errors. Predicate, returned items and
+truncation must follow the same selected security meaning; raw hidden endpoint
+presence cannot manufacture a truncation flag. If that owner policy/proof is
+unavailable, refuse the projection rather than guessing false or filtering a
+previously computed raw truncation flag in the host.
+
+Related columns and lists also share the selected whole-result account. Exhausting
+that account refuses the entire operation; it cannot turn a resource failure into
+`truncated:true`, silently lower k, drop another projection or publish earlier
+rows. An admitted envelope with true truncation remains complete under its declared
+contract. Native candidate scanning/fan-out limits remain separate from k and
+from result-byte limits.
+
+IR-07/08 must independently seed k-1, k and k+1 qualifying related items, equal
+key tuples with declared bag multiplicity, and an empty relation. Compare exact
+ordered items and flags. Include a malformed or over-budget extra tuple after
+otherwise valid k items, transport loss at the completion boundary, a second
+related column exhausting the aggregate account, and a denied endpoint affecting
+the raw candidate set. Compare actual results to the selected owner's independent
+security expectation; source row filtering alone cannot qualify relationship
+publication. These are implementation-ready controls once the exact owner
+proof/security/account tuple is registered; no native execution is claimed.
+
 ## Session loss and final publication dependency
 
 The [security owner evidence review](../../04-build/evidence/design-audit/security-publication-lease-loss-review.json)
