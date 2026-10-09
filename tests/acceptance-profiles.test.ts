@@ -16,3 +16,25 @@ test('borrowed resolver method cannot impersonate original startup byte custody'
  await expect(createCatalogInputPreparation('/missing-owner','/missing-dependencies',forged)).rejects.toThrow('byte-custody resolver');
  expect(called).toBe(false);
 });
+
+
+test('report profile resolves in its own role and cannot borrow acceptance bytes',()=>{
+ const {input,registrations}=setup();const bytes=new TextEncoder().encode('registered report procedure bytes only');
+ const pin={identity:'report',version:'test',sha256:new Bun.CryptoHasher('sha256').update(bytes).digest('hex')};
+ registrations.push({role:'report',profile:pin,artifactIdentity:'report-artifact',bytes});
+ const resolver=createAcceptanceProfileResolver(registrations),result=resolver.resolveReport(pin);
+ expect(Buffer.from(result.artifact.bytesBase64,'base64').toString()).toBe('registered report procedure bytes only');
+ expect(result.scope).toBe('original_registered_report_bytes_only');
+ expect(()=>resolver.resolveReport(input.acceptanceProfile)).toThrow('report profile unavailable');
+ expect(()=>resolver.resolveReport({...pin,sha256:'0'.repeat(64)})).toThrow('report profile unavailable');
+ expect(resolver.resolve(input).profiles.every(item=>item.role!=='report')).toBe(true);
+});
+
+test('report startup bytes are frozen independently and duplicate report registrations refuse',()=>{
+ const bytes=new TextEncoder().encode('original report'),profile={identity:'report',version:'test',sha256:new Bun.CryptoHasher('sha256').update(bytes).digest('hex')};
+ const registration={role:'report' as const,profile,artifactIdentity:'report-artifact',bytes};
+ const resolver=createAcceptanceProfileResolver([registration]);bytes.fill(0);
+ expect(Buffer.from(resolver.resolveReport(profile).artifact.bytesBase64,'base64').toString()).toBe('original report');
+ const original={...registration,bytes:new TextEncoder().encode('original report')};
+ expect(()=>createAcceptanceProfileResolver([original,original])).toThrow('Duplicate');
+});

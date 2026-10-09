@@ -1,7 +1,7 @@
 /** Trusted host startup pin custody. Resolution alone is not semantic admission. */
 import {createHash} from 'node:crypto';
 import type {AcceptanceInput,ProfilePin,ExactArtifact} from '../../../docs/helix/02-design/contracts/bindings/truss-acceptance-input-v0.1';
-export type AcceptanceProfileRole='layout'|'acceptance'|'validator'|'support'|'policy'|'umf'|'adapter'|'binding'|'transform';
+export type AcceptanceProfileRole='layout'|'acceptance'|'validator'|'support'|'policy'|'umf'|'adapter'|'binding'|'transform'|'report';
 export interface AcceptanceProfileRegistration {
  readonly role:AcceptanceProfileRole;
  readonly profile:ProfilePin;
@@ -18,7 +18,7 @@ export function createAcceptanceProfileResolver(registrations:readonly Acceptanc
  let total=0;
  const entries=registrations.map(registration=>{
   const {role}=registration;const profile={...registration.profile};
-  if(!['layout','acceptance','validator','support','policy','umf','adapter','binding','transform'].includes(role))throw Error('Unknown registered profile role');
+  if(!['layout','acceptance','validator','support','policy','umf','adapter','binding','transform','report'].includes(role))throw Error('Unknown registered profile role');
   if(!profile.identity||!profile.version||!registration.artifactIdentity||!(/^[0-9a-f]{64}$/).test(profile.sha256))throw Error('Invalid original profile pin');
   if(!(registration.bytes.buffer instanceof ArrayBuffer))throw Error('Original profile byte custody required');
   if(registration.bytes.length>1048576||(total+=registration.bytes.length)>4194304)throw Error('Registered profile bytes exceeded');
@@ -28,7 +28,11 @@ export function createAcceptanceProfileResolver(registrations:readonly Acceptanc
   return Object.freeze({role,profile:Object.freeze(profile),artifact});
  });
  for(let i=0;i<entries.length;i++)for(let j=0;j<i;j++)if(entries[i].role===entries[j].role&&entries[i].profile.identity===entries[j].profile.identity&&entries[i].profile.version===entries[j].profile.version)throw Error('Duplicate original profile registration');
- const resolver=Object.freeze({resolve(input:AcceptanceInput){
+ const resolver=Object.freeze({resolveReport(pin:ProfilePin){
+  const entry=entries.find(entry=>entry.role==='report'&&entry.profile.identity===pin.identity&&entry.profile.version===pin.version&&entry.profile.sha256===pin.sha256);
+  if(!entry)throw Error('Original registered report profile unavailable');
+  return Object.freeze({profile:entry.profile,artifact:entry.artifact,scope:'original_registered_report_bytes_only' as const});
+ },resolve(input:AcceptanceInput){
   const resolved:{pointer:string;role:AcceptanceProfileRole;profile:ProfilePin;artifact:ExactArtifact}[]=[];
   function require(role:AcceptanceProfileRole,pin:ProfilePin,pointer:string){
    const entry=entries.find(entry=>entry.role===role&&entry.profile.identity===pin.identity&&entry.profile.version===pin.version&&entry.profile.sha256===pin.sha256);
