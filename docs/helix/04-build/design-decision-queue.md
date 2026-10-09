@@ -683,3 +683,27 @@ Truss-owned authorization resolver. Preserve the owner's working files.
 Weft's current local HEAD `94b2de5` is a microsite preview change; local compiler/
 security files remain dirty. No compiler rebuild, new public ABI or security
 adoption follows from that HEAD or this read-only inspection.
+
+### Association witness owner progress reconciliation
+
+The owner now authors the private `association-record-key-agreement/0.1`
+interpretation: the retained selected Relationship's associationRecord.key asserts
+the same stable Record Key selected by a Record-backed witness. Default composed
+checks still refuse it. Explicit interpretation retains qualified source path,
+profile and Key ID without editing original source; unrelated qualifiers, wrong
+Key, unselected Relationship and malformed interpretation remain refusals.
+This advances the earlier interpretation authoring dependency, not public/core
+adoption, authenticated selection or backend enforcement.
+
+The [read-only owner refresh](evidence/design-audit/security-witness-owner-refresh.json)
+pins three actual owner receipts and checks their complete recorded source
+inventories (5, 772 and 762 entries), with no missing or changed sources. Each
+receipt retains nativeImplementationQualified=false. Owner SPIKE-009 reports
+browser graph composition/Key-agreement controls and later association operand
+typing; Truss reran neither those tests nor native probes. Public versioned
+interpretation, recognized current model/profile selection, subject/resource/
+constant typing, compiler IR refinement and installed enforcement remain owner
+outputs. Consume those exact outputs before translating checked witnesses into
+Truss query-use or disclosure authority; a checked logical object is not a native
+execution permit. The original mismatch/retirement/owner-cut integration controls
+above remain required, with default refusal preserved.
