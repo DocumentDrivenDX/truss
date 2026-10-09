@@ -511,6 +511,45 @@ metadata/cell/command expectations. It performs no network access and never
 rewrites the receipt. Passing this sixth test is saved-evidence correspondence,
 not a fresh native run or driver qualification.
 
+#### pg8000 candidate hook implementation map
+
+Read-only inspection of the previously pinned pg8000 1.31.5 wheel identifies
+separate receive loops in core.py: constructor startup at lines 389/391 and
+`handle_messages` at lines 839/841. Both read a five-byte header and then dispatch
+an already materialized body through `message_types`. The buffered socket is
+created at line 339; module-level `_read` at lines 149–160 creates a bytearray,
+extends it from further reads, then copies to bytes. These line references apply
+only to the exact core.py digest already recorded above.
+
+A private adapter experiment must establish its account/custody context before
+constructor startup and instrument both loops, not override only the later
+query handler. Qualify transport read-ahead at socket/TLS/buffer construction;
+a body-size check after `makefile` has filled an unaccounted buffer is too late.
+Route both loops through one instance-owned admitted receive procedure that checks
+message eligibility, original header/length, body reservation and raw capture
+before semantic dispatch. Do not globally monkey-patch `_read`: unrelated
+connections must retain independent account and command custody. Preserve original
+complete wire separately from scalar conversion and accumulated result rows.
+
+Enumerate every query-loop caller (simple execution, prepare, execute, portal
+continuation and statement close) against the pinned source before claiming
+coverage. Map each dispatched notice, error, parameter, authentication and row
+message to its original bounded handler/account or explicit unsupported route.
+No unknown message may first allocate its body and then obtain admission by a
+handler lookup. Startup authentication and backend-key material retain their
+security/secret handling; this review authorizes no credential collection.
+
+Controlled tests must inject exhaustion into startup and each selected query
+entrypoint, observe zero forbidden subsequent reads/dispatches, and verify that a
+second connection's budget cannot be charged or released. Include partial header,
+partial body, read-ahead, notice floods, invalid signed lengths, handler errors
+and cancellation with original backend outcome still unknown. All raw bytes,
+lengths, decoded metadata and copy lifetimes must match their admitted account.
+This maps an experiment, not a supported driver selection or a maintained fork:
+exact source/build/mode, complete protocol behavior, native authority/settlement
+and upstream maintenance strategy remain adoption requirements. Do not rerun the
+already completed Weft wheel build to substitute for this driver work.
+
 #### Raw-wire probe versus pre-ingress accounting
 
 Source inspection of `check_python_pg_frame_native.py` identifies two limits of
