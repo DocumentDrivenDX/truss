@@ -20,9 +20,7 @@ This route needs no Rust port of Truss. It does require an independent Python ad
 
 Weft's committed source exposes `weft.compile_json(request: str) -> str` through the `weft-sql` PyO3/maturin package. Its `truss-postgresql-qualified` build feature is distinct from candidate/test configurations. Python packaging must pin the actual admitted feature/backend tuple, not infer it from an import or package version. Test-only configuration exports cannot serve as production registration. This source observation does not prove wheel availability or Python authorization/compiler qualification.
 
-## Host transaction adapter
-
-### Consumer count-summary integration
+## Consumer count-summary integration
 
 Committed Weft `5856c73db0342363e64802905a94abb96209d757` defines COUNT(*)
 in CONTRACT-004's application-read 0.2 dialect and resolves it in
@@ -48,6 +46,8 @@ the selected aggregate, security mapping or exact decoder; missing obligations
 refuse the whole read. Parsed-query input remains a separate Weft-owned ABI
 dependency: its availability cannot be inferred from SQL-text count support.
 
+## Host transaction adapter
+
 Use the semantic Executor operations of CONTRACT-007 rather than a language-specific second transaction protocol. The adapter accepts the caller's actual live connection/transaction object, validates ownership/lifetime, and retains it internally. No transaction identifier is accepted as a substitute. Initial delivery selects one driver/transaction mode and qualifies it; sync and async modes cannot share a support claim without separate evidence. Driver selection remains explicit.
 
 - Owned execution begins on one connection, commits after complete native finalization, and publishes durable results only after observed commit. Failed or unknown commit preserves recovery state.
@@ -71,6 +71,32 @@ A Python adapter must refuse an unavailable shared security profile; it cannot u
 Use Python `int` for admitted integral domains and `Decimal` constructed from exact text for decimals, with domain/arithmetic context explicit. Driver raw cells remain text until profile decoding. Decimal operations must not inherit an ambient low-precision context that rounds accepted values. Timestamp transport retains the original exact text and offset; expose an aware `datetime` only when its microsecond representation is lossless. Finer precision requires a lossless wrapper/text representation or explicit refusal of the convenience view. Preserve raw exact JSON bytes; a convenience parser uses an admitted numeric decoder, never the default float path. Python bool must be distinguished from int at validation boundaries.
 
 Read shapes retain absent versus explicit null, ordered key components, exact large integral values and original selected decimal/token meaning. Known JSON-like values and retained unknown extensions cannot be normalized into different meanings. Exact wire grammar remains CONTRACT-010's responsibility; these mappings are Python implementation obligations, not new UMF types.
+
+### PY-01 independent exact-value expectations
+
+Materialize these pairs under explicitly admitted authored definitions and the
+shared CONTRACT-010 carrier; the examples do not expand a selected native domain.
+Retain the original wire alongside any Python convenience value. Compare both
+original bytes/meaning and independently expected logical presence through
+Python-write/TypeScript-read and the reverse.
+
+| Input distinction | Required expectation |
+| --- | --- |
+| Adjacent integral values 9007199254740992 / 9007199254740993 | Distinct exact Python integers and readback; no float intermediary or equal rounded key |
+| Decimal text 1.0 / 1.00 | Preserve each original lexical form where the selected value contract requires it; mathematical equality or Decimal equality cannot rewrite stored/original request bytes |
+| Signed decimal zero / unsigned zero | Preserve selected lexical/sign semantics; key canonicalization is a separate admitted operation and cannot redefine value transport |
+| Decimal exceeding the process's ambient precision | Construction/readback stays exact; arithmetic requires an explicit admitted context or refusal, never incidental rounding |
+| Timestamp with nine fractional digits | Preserve all original digits and offset; a microsecond datetime is unavailable unless the actual value has an exact representation |
+| Same instant with different authored offsets | Preserve original text/offset; UTC conversion as a convenience does not replace the retained authored value |
+| Nested JSON numeric token and ordinary numeric-looking string | Preserve distinct families recursively; a number-token decoder cannot reinterpret the string or discard original unknown extension content |
+| Absent, explicit null, empty string and empty collection | Four distinct admitted values/presence states; no defaulting or truthiness conversion merges them |
+| Python True supplied for an integral field | Reject at the typed validation boundary despite bool being an int subclass; actual boolean fields retain boolean meaning |
+
+Include native domain refusals separately from host precision refusals. A value
+outside the selected database domain cannot become supported merely because
+Python can represent it. Exercise both unprojected siblings and projected values
+through the selected complete-value decoder, preserving whole-result refusal
+when mandatory meaning cannot be decoded.
 
 ## Execution slices and independent test schedule
 
