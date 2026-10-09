@@ -8,7 +8,7 @@ For local PostgreSQL:
 
 ```sh
 python3.11 -m venv .venv
-.venv/bin/pip install -r packages/python/local-runtime-requirements.txt
+.venv/bin/pip install './packages/python[local]'
 .venv/bin/python scripts/local-postgres.py --data-dir .local/truss-postgres
 ```
 
@@ -32,3 +32,25 @@ Rollback-only native profile checks (same environment):
 Each creates its own disposable server and rolls back all review DDL. The last
 compares the UMF schema-browser model with actual columns and FK mappings; it
 is not a complete installer or migration verifier.
+
+Embed the local runtime in Python3.11:
+
+```python
+from truss import LocalPostgres
+
+with LocalPostgres('.local/truss-postgres') as runtime:
+    uri = runtime.info.connection_uri
+    # Open a connection with your PostgreSQL driver. Close it before context exit.
+```
+
+The context owns only its local server lifecycle. Callers own their connections
+and transactions. Exit stops the server and retains its data, including after a
+caller exception. Use a new context to restart. Same-directory contexts refuse
+immediately through process-local and interprocess leases. Existing postmaster
+custody, nonempty non-PostgreSQL directories and incompatible major versions
+refuse without automatic retry, takeover or migration. The local candidate admits
+bundled16.2; other platform/version tuples still require qualification.
+
+The experimental truss-toolkit0.0.1.dev0 wheel exposes this lifecycle component;
+it does not yet expose the complete Truss engine, catalog acceptance, mutation,
+query or migration APIs. Test with `python -m unittest discover -s packages/python/tests -v`.

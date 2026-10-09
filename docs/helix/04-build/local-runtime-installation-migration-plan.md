@@ -101,7 +101,7 @@ control-plane limitation is a reason to stop installation/migration work.
 
 ```sh
 python3.11 -m venv .venv
-.venv/bin/pip install -r packages/python/local-runtime-requirements.txt
+.venv/bin/pip install './packages/python[local]'
 .venv/bin/python scripts/local-postgres.py --data-dir .local/truss-postgres
 ```
 
@@ -305,3 +305,27 @@ original ALTER declarations resolved the discrepancy without changing model or S
 Constraint names, backing-index operator classes/collations and dependency identities,
 check/default and index expression meaning, complete routines/grants and initializer
 publication remain unqualified. Complete migration preservation remains separate.
+
+## Embeddable Python local lifecycle component
+
+The experimental truss-toolkit package now exposes LocalPostgres and immutable
+RuntimeInfo. Its context supplies a connection URI to the host driver, owns only
+its local server, stops on normal/exception exit, retains committed data, and
+requires a new context for restart. It installs no Truss objects and upgrades
+nothing. The existing launcher consumes this same package API. Runtime requirements
+are optional so external-connection consumers need not install bundled PostgreSQL.
+
+Process-local plus nonblocking interprocess directory leases refuse overlapping
+contexts once, with no automatic retry. Existing postmaster custody is refused
+rather than taken over. Nonempty foreign directories and PostgreSQL major-version
+mismatches remain unchanged on refusal. Qualification is scoped to macOS arm64,
+Python3.11, pgserver0.1.4 and bundled PostgreSQL16.2. The full Python protected
+engine and installation/migration APIs remain unfinished.
+
+The [installed-wheel receipt](evidence/design-audit/python-local-runtime-wheel-component.json)
+pins the built wheel and sources. Three native tests pass outside the checkout
+using a separate wheel installation target, including cross-process refusal,
+concurrent isolated servers, exact-text committed persistence and exception cleanup.
+The installed-wheel launcher readiness/stop probe passes as well. Dependencies were
+reused from the pinned qualification environment; clean dependency resolution and
+other operating systems remain separate qualification work.

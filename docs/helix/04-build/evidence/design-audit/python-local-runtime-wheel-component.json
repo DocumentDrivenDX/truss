@@ -1,0 +1,53 @@
+{
+  "scope": "Installed Python local PostgreSQL lifecycle component only; no complete Truss engine, installer, migration or managed-service qualification",
+  "platform": "macOS arm64",
+  "python": "3.11",
+  "pgserver": "0.1.4",
+  "postgresql": "16.2",
+  "wheel": {
+    "name": "truss_toolkit-0.0.1.dev0-py3-none-any.whl",
+    "sha256": "63645b60de1e825d72cebfdb09475ffe95c33f5aab4415ffec7e459cc8faea18"
+  },
+  "sources": [
+    {
+      "path": "packages/python/pyproject.toml",
+      "sha256": "44c4146d1dabbcb38c977628a95e2ce45d940608c5f1c57f23d47e50d0ccf8f5"
+    },
+    {
+      "path": "packages/python/src/truss/__init__.py",
+      "sha256": "e9d7aacb2f5a5da077ffc24500422876892c3f68a7f595f059fd4189f25a83b5"
+    },
+    {
+      "path": "packages/python/src/truss/local_runtime.py",
+      "sha256": "f2fb27daaadee169df6b9aa23c990642d62da328ee4f0f1a6ac5781ef5963199"
+    },
+    {
+      "path": "packages/python/tests/test_local_runtime.py",
+      "sha256": "d3f03a092c86c71742a2c0968772eb4622a3fe97dad53e37dfdd8d4fce6242b9"
+    },
+    {
+      "path": "scripts/local-postgres.py",
+      "sha256": "64e1967e6d479964284b16f413e8545f5cfb5b765ea91f1ab37d80ba4e116759"
+    }
+  ],
+  "nativeTests": {
+    "command": "PYTHONPATH=/private/tmp/truss-python-runtime-installed python -m unittest discover -s /Users/erik/Projects/truss/packages/python/tests -v",
+    "workingDirectory": "/private/tmp",
+    "tests": 3,
+    "result": "pass",
+    "scenarios": [
+      "retained exact-text commit after exception cleanup and restart",
+      "simultaneous independent servers",
+      "same-process overlap refusal preserves active owner",
+      "cross-process overlap refusal",
+      "foreign nonempty and wrong-major directories unchanged on refusal"
+    ]
+  },
+  "dependencies": "Existing pinned local-runtime environment reused; wheel installed with --no-deps into a separate target. Not a clean dependency-resolution qualification.",
+  "launcherProbe": {
+    "installedWheel": true,
+    "version": "16.2",
+    "stopped": true,
+    "trussInstallation": "not_checked"
+  }
+}
