@@ -4,6 +4,18 @@ Status: execution sequence authored; public runtime unavailable. Governing input
 
 ## Current implementation boundary
 
+A private nonrecursive SCC/dependency-first ordering component now executes the
+already-authored STP-002 graph vectors. Ten tests/541 assertions cover all node
+and edge permutations of those small vectors, duplicate-edge charging, exact
+UTF-8 ordering, refusal bounds and a 4,096-document chain; strict TypeScript
+passes. This is `validated_graph_order_only`: explicit document, observed-edge
+and identity-byte bounds govern this controlled operation, not native budgets.
+The component does not yet consume the full original endpoint-intent basis,
+resolve accepted-source dependencies, derive whole-set definitions or persist
+`schema_doc.ord`. Those integrations and original semantic registration remain
+required before dependent-package acceptance. Existing vector files retain their
+authored status; this checkpoint records execution without rewriting their source.
+
 The endpoint-intent candidate now has a private original supplied-source
 reference resolver. It consumes only the original validated preparation and
 retains exact document/revision/artifact correspondence; five tests/21 assertions
