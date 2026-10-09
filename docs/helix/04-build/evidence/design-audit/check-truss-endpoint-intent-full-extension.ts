@@ -100,6 +100,22 @@ check('registered-restored-original-complete-language',restored.target,registry,
 const wrongTargetKey=structuredClone(transition.target) as any;
 wrongTargetKey.extensions[id].intents[0].targets=[{...local,key:{state:'selected',name:'identity'}}];
 check('transition-target-retains-authored-key-name-rule',wrongTargetKey,registry,false,false,'TRUSS_INTENT_LOCAL_KEY');
+const forgedTransition=structuredClone(transition) as any;
+forgedTransition.target.extensions[id].intents[0].name='Changed retained intent';
+let forgedRefused=false;
+try{verifySchemaPropertiesUpgrade(forgedTransition)}catch{forgedRefused=true}
+if(!forgedRefused)throw Error('Changed original transition receipt accepted');
+results.push({name:'changed-extension-transition-receipt-refuses',operation:'verifySchemaPropertiesUpgrade',refused:true});
+const editedCurrent=structuredClone(transition.target) as any;
+editedCurrent.extensions[id].intents[0].name='Subsequent retained intent';
+check('edited-current-target-still-valid-language',editedCurrent,registry,true,true);
+const editedRollback=rollbackSchemaPropertiesEnvelope(transition,editedCurrent);
+if(JSON.stringify(editedRollback.target)!==originalText||JSON.stringify(editedRollback.source)!==JSON.stringify(editedCurrent))
+ throw Error('Owner rollback failed to preserve distinct current and original sources');
+results.push({name:'rollback-preserves-edited-current-separately-from-original',operation:'rollbackSchemaPropertiesEnvelope',
+ currentSha256:createHash('sha256').update(JSON.stringify(editedRollback.source)).digest('hex'),
+ restoredOriginalSha256:createHash('sha256').update(JSON.stringify(editedRollback.target)).digest('hex'),
+ scope:'Rollback is not unchanged-current-target verification'});
 const receipt={status:'passed',ownerRevision:'1f7b5f5d2a355c4b476e3a96b289b9048f03f567',ownerTreeSha256,ownerSourceMembers:1342,schemaSha256,checkerSha256:createHash('sha256').update(await readFile(new URL(import.meta.url))).digest('hex'),manifest,results,scope:'Full candidate document language Registry/validateDocument experiment only; not adopted vocabulary, complete package membership, accepted-history custody, security, provisional/native relationship enforcement or release acceptance. Callback occurrence limit100 is not a complete decoder/resource profile.'};
-await writeFile(new URL('./truss-endpoint-intent-full-extension-transition.json',import.meta.url),JSON.stringify(receipt,null,2)+'\n');
+await writeFile(new URL('./truss-endpoint-intent-transition-correspondence.json',import.meta.url),JSON.stringify(receipt,null,2)+'\n');
 console.log(results.length+' original-owner full candidate language controls; no package/native acceptance');

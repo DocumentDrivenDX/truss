@@ -331,6 +331,26 @@ assembled producer. Do not expose a mutable shared registry that another request
 can change after preparation; final use admits the original registered profile
 and current installation/authority context under the existing acceptance rules.
 
+The later [correspondence receipt](../../04-build/evidence/design-audit/truss-endpoint-intent-transition-correspondence.json)
+contains 24 controls. It observes that changing extension content inside the
+original transition receipt makes `verifySchemaPropertiesUpgrade` refuse.
+However, `rollbackSchemaPropertiesEnvelope(receipt, current)` deliberately accepts
+a valid later edited target: its `source` retains that edited current document
+and its `target` restores the original envelope. Successful restoration of the
+original therefore does **not** prove that `current` equals the admitted
+transition target. This is preserved UMF behavior, not a proposed owner change.
+
+Before declaration/Record/key derivation, Truss must compare the complete actual
+interpretation target with the original verified transition target under the
+selected exact comparison profile, including unknown extensions and residual
+custody. A later edited target requires a separately admitted source/revision;
+it cannot enter the original preparation because rollback still restores the
+expected original. Retain both edited-current and original evidence when the
+owner operation supplies them; never substitute one for the other's source
+reference. The existing preparation's comparison of restored original alone is
+not a reusable unchanged-target validator. E1's new producer must enforce this
+additional correspondence before native effects and test it independently.
+
 The [full registry checker](../../04-build/evidence/design-audit/check-truss-endpoint-intent-full-extension.ts)
 now registers the complete unchanged candidate schema through committed UMF's
 original `Registry.register`. It verifies all 1,342 original src/spec members
