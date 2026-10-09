@@ -136,6 +136,12 @@ CH-02/03 policy activation follows the [public/private policy composition](../02
 
 CH-02/03 uses the [complete declared-store and private-entry access plan](../02-design/contracts/reference-protected-access-composition.proposal.md) to derive exact body-specific rights. The plan covers 46 stores and sixteen known selectors; it does not replace the full callable/dependency inventory or native effective-privilege qualification.
 
+### Current CH-01 native source inventory
+
+`bun scripts/collect-current-layout-effects.ts --check` now reproduces the [0.16 declaration/effect worklist](evidence/design-audit/current-layout-declared-effects.json) through UMF's original native accessor: 112 statements, 48 relations, 454 CREATE/ALTER columns, 24 explicit indexes, two allocator routines and 127 potential implicit dependency classes. Native rollback-layout relation names/column counts are independently matched. Four initialization/three privilege statements and original ALTER/drop/type changes retain their exact source nodes. Strict TypeScript passes; no durable physical IDs are allocated from names/pointers.
+
+The 41 separate private native SQL sources are pinned but not composed into the layout; the candidate has no protected operation triggers. CH-02 must supply complete selected routine/trigger/policy/role/grant/configuration/resource meaning and dependencies before CH-03 can issue an installed admission. Do not treat this source receipt or its zero unreviewed statement classes as complete semantic/native coverage, and do not remove the unfinished commit barrier to publish fixture acceptance.
+
 ### Current concrete component handoffs
 
 These close specific interface/procedure choices inside the existing CH work; native identity, dependency and runtime evidence remain separate exit outputs.
