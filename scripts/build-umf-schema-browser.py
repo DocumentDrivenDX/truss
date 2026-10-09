@@ -3,7 +3,7 @@ from pathlib import Path
 import subprocess, json, hashlib, sys
 root=Path(__file__).resolve().parents[1]
 owner=Path('/Users/erik/Projects/umf')
-revision='e3555b9aac9e4c3caa952203958c4b0c33cdf519'
+revision='44bbd8922ba4a3c7be2afa1a5ec2e6fecd473e64'
 base='docs/helix/05-deploy/microsite/dist/'
 def upstream(name):
  return subprocess.check_output(['git','show',revision+':'+base+name],cwd=owner)

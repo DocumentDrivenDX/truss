@@ -298,3 +298,9 @@ The [new-catalog cohort receipt](evidence/catalog-new-cohort.json) now records s
 Configured profile resolution now requires the original factory-issued startup resolver before loading dependencies or interpreting source. Structural copies and substituted callbacks cannot claim the byte/hash/role checks performed by the original resolver. Seventeen profile/preparation tests with fifty-nine assertions and strict type checking pass; the [receipt](evidence/acceptance-profile-resolver-custody.json) pins current sources and the actual owner preparation tests.
 
 The unconfigured source-inspection path remains explicitly without root profile resolution, and neither path admits profile meanings or acting authority. Complete root policy/layout/acceptance/validator/support interpretation, installed composition and accepted publication still require their original registered producers and independent evidence. Private object recognition establishes local custody only.
+
+## Committed owner browser refresh — 2026-10-08
+
+Fresh owner fetch finds UMF `44bbd8922ba4a3c7be2afa1a5ec2e6fecd473e64`, adding the ontology-aware explorer, and unchanged Weft `5856c73db0342363e64802905a94abb96209d757`. The [exact committed comparison](evidence/design-audit/owner-browser-refresh.json) finds no changes in UMF src/spec or Weft crates/spec/Cargo from the prior owner checkpoint. Uncommitted owner security work is not adopted.
+
+Truss now embeds the new unmodified owner JS/CSS with the same exact structural source catalog. Hugo builds and all six [Chromium site checks](evidence/design-audit/schema-browser-site.json) pass, including 491 definitions, reference navigation, exact source download and mobile layout. Runtime Record/value/compiler registration pins remain separate; explorer improvements do not resolve the observed assertion-version or compiled explicit-null dependencies.
