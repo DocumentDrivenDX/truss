@@ -32,6 +32,16 @@ class DriverFileTests(unittest.TestCase):
             self.assertTrue(f.closed)
             with self.assertRaises(ValueError): f.read(5)
             self.assertEqual(t.reads, before)
+    def test_full_report_header_refuses_before_any_body_read(self):
+        # Four-MiB single-cell DataRow: original signed length 4,194,314.
+        # A valid header is enough to prove the one-MiB driver seam mismatch.
+        t = Transport(bytes.fromhex('440040000a') + b'untouched-body')
+        f = FrameFile(t)
+        with self.assertRaises(ValueError): f.read(5)
+        self.assertTrue(f.closed)
+        self.assertEqual(t.data, b'untouched-body')
+        self.assertEqual(t.reads, [5,4,3,2,1])
+
     def test_body_request_mismatch_is_terminal_and_sibling_is_independent(self):
         f = FrameFile(Transport(bytes.fromhex('5a0000000549')))
         f.read(5)
