@@ -17,6 +17,15 @@ ddx:
 
 ## Additive Weft owning-core0.8 admission — 2026-10-09
 
+Subsequent Truss integration builds exact committed `f05f2df` in isolation and
+advances the TypeScript adapter/build/test pin. Its core0.7 compiler/host and local
+loopback regressions pass 21 tests/51 assertions; strict TypeScript and portable
+JS/declaration generation pass. The
+[scoped receipt](evidence/design-audit/weft-f05f2df-truss-regression.json)
+does not adopt public core0.8 mapping, rebuild the Python/browser distributions or
+refresh native database qualification. The earlier pin discussion below records
+the pre-build review; those historical receipts retain their original scope.
+
 Fresh fetch now advances Weft to `f05f2df09e9c2494ac8c6d703dfe38413dbc4181`;
 UMF remains `c7c95e1c4ea5b72541f47fa0350ca467ff02f395`. The
 [source review](evidence/design-audit/weft-original08-source-review.json)

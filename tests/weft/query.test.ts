@@ -2,12 +2,12 @@ import {test,expect} from 'bun:test';
 import {createQueryEngine,serializeStorageBinding,WEFT_SOURCE,type Compiler,type Host,type BindingInput} from '../../packages/weft/src/index';
 import {loadCompiler} from '../../packages/weft-bun/src/index';
 import request from './fixtures/qualified-count.request.json';
-const directory=process.env.TRUSS_WEFT_BUILD ?? '/private/tmp/truss-weft-27445317';
+const directory=process.env.TRUSS_WEFT_BUILD ?? '/private/tmp/truss-weft-f05f2df';
 const compiler=await loadCompiler(directory);
 const input:BindingInput={...request.target,modules:request.modules as BindingInput['modules']};
 test('actual pinned Rust compiler compiles count and retains original artifact',async()=>{
  const engine=await createQueryEngine(compiler,input);const plan=await engine.compile('SELECT COUNT(*) AS total FROM Customer c');
- expect(WEFT_SOURCE).toBe('2744531735c2a771fbe7ed24a7f67e3afc851b25');
+ expect(WEFT_SOURCE).toBe('f05f2df09e9c2494ac8c6d703dfe38413dbc4181');
  expect(plan.artifact.backend.backendVersion).toBe('0.1.0-qualified');
  expect(plan.artifact.sql).toContain('count(*)::text');expect(Object.isFrozen(plan.artifact)).toBe(true);
  await expect(engine.execute(plan)).rejects.toThrow('Original native query host not installed');

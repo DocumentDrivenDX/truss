@@ -1,0 +1,16 @@
+{
+  "revision": "f05f2df09e9c2494ac8c6d703dfe38413dbc4181",
+  "feature": "truss-postgresql-qualified",
+  "archiveSha256": "1784d4283b4060c39af2dee6a283472cd539eacc119abb8576a57ae106fb51ea",
+  "cargoLockSha256": "08d3d30468be6bbde701be72c4e070f60c0706b54898e8e3a0432ea0cfbe0e9e",
+  "executableSha256": "48e7bf1ca309b0c89cc985cd0d02624190e5c32faf3f23bc9655927628f01098",
+  "qualification": "Pinned compiler build; not installed Truss/native host qualification",
+  "scope": "Isolated exact committed Rust build plus Truss TypeScript core0.7 compiler/host regression and controlled loopback protocol tests; no native database execution, browser WASM rebuild or Python wheel adoption",
+  "bun": "1.4.2",
+  "tests": 21,
+  "assertions": 51,
+  "strictTypeScriptPassed": true,
+  "advertisedOwningVersion": "0.7.0",
+  "nativeExecuted": false,
+  "sourceManifestSha256": "3b0c4fd87a4106b3e79b9f1c9ad2a081f76b9d26f2f3bad4afbbd76d78502c12"
+}

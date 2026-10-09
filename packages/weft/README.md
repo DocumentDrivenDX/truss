@@ -8,6 +8,15 @@ This is a new experimental convenience API, not a claim that CONTRACT-007's comp
 
 ## Reproduce
 
+The current source pin is Weft `f05f2df09e9c2494ac8c6d703dfe38413dbc4181`.
+Its isolated `truss-postgresql-qualified` build passes 21 Truss compiler/host and
+controlled loopback protocol tests (51 assertions), strict TypeScript and the
+portable JS/declaration build. The public TypeScript model binding remains
+core0.7-only; additive upstream0.8 admission needs separately qualified selected
+meaning and host mapping. Existing Python wheel, browser WASM and native database
+receipts retain their earlier source scope. See the
+[current regression receipt](../../docs/helix/04-build/evidence/design-audit/weft-f05f2df-truss-regression.json).
+
 Build only committed upstream source, excluding another chat's edits:
 
 ```sh

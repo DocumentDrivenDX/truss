@@ -1,6 +1,6 @@
 """Build a committed Weft source tree without reading its working-tree edits."""
 import pathlib,subprocess,tarfile,io,hashlib,json,os,sys
-revision='2744531735c2a771fbe7ed24a7f67e3afc851b25'
+revision='f05f2df09e9c2494ac8c6d703dfe38413dbc4181'
 if len(sys.argv)!=4:raise SystemExit('usage: build-weft-source.py REPOSITORY OUTPUT TOOLCHAIN_ROOT')
 repository,output,toolchain=map(pathlib.Path,sys.argv[1:]);output=output.resolve()
 if output.exists() and any(output.iterdir()):raise SystemExit('Output must be empty to prevent source substitution')

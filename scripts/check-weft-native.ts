@@ -1,7 +1,7 @@
 /** Component native execution against the owner object definition; not protected engine adoption. */
 import {SQL} from 'bun';
 import {LocalPgProbe} from '../packages/weft-pg-probe/src/index';
-import {createQueryEngine,type Host,type BindingInput} from '../packages/weft/src/index';
+import {createQueryEngine,WEFT_SOURCE,type Host,type BindingInput} from '../packages/weft/src/index';
 import {loadCompiler} from '../packages/weft-bun/src/index';
 const directory=process.env.TRUSS_WEFT_BUILD;if(!directory)throw Error('TRUSS_WEFT_BUILD required');
 const url=process.env.TRUSS_WEFT_TEST_URL;if(!url)throw Error('Explicit isolated test database required');
@@ -98,7 +98,7 @@ try {
   observations.push({query:scenario.sql,result,originalResponse:admitted.originalResponse});
  }
  if(contexts!==11||integrityChecks<2)throw Error('Incomplete native checks');
- const receipt={sourceRevision:'2744531735c2a771fbe7ed24a7f67e3afc851b25',ddlSha256:new Bun.CryptoHasher('sha256').update(ddl).digest('hex'),observations,nativeProfiles,wireObservations,contextChecks:contexts,integrityChecks,forgedDigestRefused,nativeBindQueries,parameterTransport:'original SQL in Parse with explicit text OID25 and exact UTF-8 parameter bytes in native Bind; local trust-auth component, not production transport qualification',
+ const receipt={sourceRevision:WEFT_SOURCE,ddlSha256:new Bun.CryptoHasher('sha256').update(ddl).digest('hex'),observations,nativeProfiles,wireObservations,contextChecks:contexts,integrityChecks,forgedDigestRefused,nativeBindQueries,parameterTransport:'original SQL in Parse with explicit text OID25 and exact UTF-8 parameter bytes in native Bind; local trust-auth component, not production transport qualification',
   qualification:'Component COUNT, duplicate-preserving join SUM, empty SUM, exact logical-key paging, bound injection and corrupt-value refusal execution against temp object LIKE actual owner 0.13 repair definition in isolated PostgreSQL17.9. Fixture bindings/IDs only; no accepted catalog, protected mutations/feed, production authorization, complete transport/resource or installed runtime qualification.'};
  await Bun.write('docs/helix/04-build/evidence/weft-integration-native-component.json',JSON.stringify(receipt,null,2)+'\n');console.log(JSON.stringify({cases:observations.length,contextChecks:contexts,integrityChecks,forgedDigestRefused}));
 }finally{await sql.close()}
