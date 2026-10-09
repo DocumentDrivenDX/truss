@@ -1,0 +1,210 @@
+{
+  "scope": "UMF owner AST composition and saved reload/export only; no conversion or installed runtime qualification",
+  "ownerRoot": "/Users/erik/Projects/umf",
+  "ownerCommit": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+  "source": "docs/helix/02-design/models/truss-layout-qualified-property-0.15.proposal.umf.json",
+  "sourceSha256": "baed6c2707240261802d9fe87a00448acf37f13dcb33e8215717681dc4542b76",
+  "fragmentPath": "docs/helix/02-design/contracts/source-epoch-storage-v0.1.proposal.umf.json",
+  "fragmentSha256": "dce1c03b91b30a4e0ae0b7dceb1647af91e10ce87c1057b02e7cfcc6ffdc01f2",
+  "tableCount": 48,
+  "declaredCreateColumnCount": 424,
+  "tables": [
+    {
+      "name": "setting",
+      "columns": 2
+    },
+    {
+      "name": "module_access",
+      "columns": 4
+    },
+    {
+      "name": "schema_rev",
+      "columns": 3
+    },
+    {
+      "name": "schema_head",
+      "columns": 2
+    },
+    {
+      "name": "schema_doc",
+      "columns": 8
+    },
+    {
+      "name": "schema_change",
+      "columns": 6
+    },
+    {
+      "name": "type_def",
+      "columns": 12
+    },
+    {
+      "name": "prop_def",
+      "columns": 13
+    },
+    {
+      "name": "key_def",
+      "columns": 7
+    },
+    {
+      "name": "rel_def",
+      "columns": 18
+    },
+    {
+      "name": "rel_endpoint",
+      "columns": 3
+    },
+    {
+      "name": "object",
+      "columns": 10
+    },
+    {
+      "name": "edge",
+      "columns": 12
+    },
+    {
+      "name": "edge_limit",
+      "columns": 4
+    },
+    {
+      "name": "key_tombstone",
+      "columns": 7
+    },
+    {
+      "name": "record_source",
+      "columns": 5
+    },
+    {
+      "name": "feed_consumer",
+      "columns": 4
+    },
+    {
+      "name": "journal",
+      "columns": 13
+    },
+    {
+      "name": "row_home_operation",
+      "columns": 16
+    },
+    {
+      "name": "row_home_journal_stage",
+      "columns": 6
+    },
+    {
+      "name": "row_home_state",
+      "columns": 13
+    },
+    {
+      "name": "row_home_node",
+      "columns": 10
+    },
+    {
+      "name": "row_home_scalar",
+      "columns": 13
+    },
+    {
+      "name": "relationship_lineage",
+      "columns": 5
+    },
+    {
+      "name": "row_home_touch",
+      "columns": 12
+    },
+    {
+      "name": "row_home_capacity",
+      "columns": 7
+    },
+    {
+      "name": "key_bucket_guard",
+      "columns": 3
+    },
+    {
+      "name": "object_key_bucket",
+      "columns": 9
+    },
+    {
+      "name": "object_key_reservation_bucket",
+      "columns": 6
+    },
+    {
+      "name": "catalog_acceptance_report",
+      "columns": 2
+    },
+    {
+      "name": "installation_marker",
+      "columns": 11
+    },
+    {
+      "name": "installation_archive",
+      "columns": 7
+    },
+    {
+      "name": "feed_tx",
+      "columns": 12
+    },
+    {
+      "name": "feed_member",
+      "columns": 14
+    },
+    {
+      "name": "feed_prerequisite",
+      "columns": 10
+    },
+    {
+      "name": "feed_configuration_prerequisite",
+      "columns": 11
+    },
+    {
+      "name": "complete_feed_consumer",
+      "columns": 21
+    },
+    {
+      "name": "complete_feed_administration_receipt",
+      "columns": 14
+    },
+    {
+      "name": "complete_feed_seed_attempt",
+      "columns": 12
+    },
+    {
+      "name": "complete_feed_seed_artifact",
+      "columns": 10
+    },
+    {
+      "name": "key_lifecycle_history",
+      "columns": 9
+    },
+    {
+      "name": "installation_admission",
+      "columns": 12
+    },
+    {
+      "name": "key_migration_receipt",
+      "columns": 13
+    },
+    {
+      "name": "request_receipt_route_guard",
+      "columns": 3
+    },
+    {
+      "name": "request_receipt",
+      "columns": 13
+    },
+    {
+      "name": "request_receipt_protection",
+      "columns": 6
+    },
+    {
+      "name": "source_epoch_registry",
+      "columns": 8
+    },
+    {
+      "name": "source_epoch_current",
+      "columns": 3
+    }
+  ],
+  "modelPath": "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json",
+  "modelSha256": "261e32c6c62624418f124ac7fbe3c206338322a03755b7ac0f1a7c7d86002368",
+  "ddlPath": "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql",
+  "ddlSha256": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f",
+  "reloadedExportExact": true
+}

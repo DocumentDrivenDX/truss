@@ -135,3 +135,17 @@ custody guard, and savepoint rollback removes the admission. This supersedes
 fixture-only writer evidence for that path. Completed-call finalization and
 all other protected writer entry paths remain required coverage; no accepted
 commit or complete installed context is established.
+
+## Complete native layout composition candidate
+
+The [0.16 UMF candidate](../models/truss-layout-source-epoch-0.16.proposal.umf.json)
+composes the reviewed 0.15 native layout with the original epoch storage
+fragment through the UMF owner AST API. Reproduce with
+`bun scripts/compose-source-epoch-layout.ts`. Saved model reload exports exact
+[owner DDL](../../04-build/evidence/source-epoch-layout-0.16.owner-export.sql).
+The source receipt retains both input hashes and 48 unique table declarations;
+its 424 CREATE-column count excludes ALTER-added columns and is not an installed
+column inventory. Private issuer/guard/lock procedures remain separately pinned
+components. Complete installation, core ER projection update, native inventory
+parity and profile adoption remain required before replacing the 0.15 baseline
+or publishing a new Weft binding tuple.
