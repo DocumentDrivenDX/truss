@@ -735,6 +735,8 @@ and compiler/executor tuple:
 | Two witnesses: one has the required Staff endpoint but not Project; the other has Project but not Staff | A policy requiring both on one association witness does not match. Neither protected disclosure nor mutation may borrow endpoints across witnesses |
 | One admitted witness has both required endpoints | The same policy matches when all other original authority, key and profile prerequisites hold |
 | Reorder the two nonmatching witnesses or duplicate either | The correlated policy remains nonmatching; association multiplicity and order cannot manufacture a satisfying witness |
+| Two association Records have different admitted own keys but identical endpoint tuples | Preserve two distinct witness identities and their respective stored attributes. Endpoint equality is not row identity and cannot authorize deduplication before owner interpretation |
+| Repeat the same association own key, or exhaust the shared budget while comparing keys | Apply the owner's duplicate/source-integrity or resource refusal. Do not silently merge rows, reset the budget per comparison, or treat an incomplete population as a complete nonmatch |
 | Reuse endpoint text under a different qualified Record, selected key, association namespace or endpoint role | Original typed/key/role correspondence governs the result; equal text cannot merge identities or redirect a variable |
 | Omit a required endpoint observation or exhaust the selected bundle/work budget | The operation is unavailable or refused under the owner protocol, rather than a complete nonmatch or partial positive |
 
@@ -745,6 +747,17 @@ parameters and execution; include wrong-binding controls at each selected seam.
 Use an independently specified expected graph, not an expectation calculated by
 the implementation under test. No policy grammar or Python evaluator is added
 by these planned cases.
+
+The security owner's revision-27/28 progress snapshots describe raw Ownership
+projection with separate Resource/Project identities, refusal of missing endpoint
+Fields/wrong owner type/same-named Relationship substitution, and budgeted
+duplicate-key comparisons. These motivate the two identity controls above; they
+are reported owner component evidence, not an adopted native graph source or proof
+of complete association population. PY-03/C4 must bind each row's own qualified
+Record/key and endpoints under the same original source cut through Python,
+compiler parameters and native execution. Retain cumulative comparison work and
+original admission custody; Python must not implement another duplicate resolver
+or infer complete population from projection success.
 
 ## Exact transport
 
