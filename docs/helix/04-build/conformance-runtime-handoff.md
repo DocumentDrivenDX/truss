@@ -163,3 +163,13 @@ own original environment/expectations; it preserves the failed run's partial
 inventory and cannot fill that historical run's not_run cases. These are planned
 C3/C6 native/service controls; evidence storage, recovery procedures and the
 actual host services remain to select and implement.
+
+
+The [migration inspection contract walkthrough](../03-test/migration-inspection-contract-walkthrough.proposal.md)
+now gives C4 an explicit administrative example: original registered request,
+complete independent starting inventory, same-version native drift, unavailable
+observation and no-effects comparison. It uses the actual draft status/verify
+methods and direct result schemas, preserving original historical reconciliation
+as a separate operation. Like the lookup/group walkthroughs, this is author
+case design; independent implementer review and real service/native execution
+remain required.
