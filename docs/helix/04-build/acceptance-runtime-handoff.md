@@ -4,6 +4,16 @@ Status: execution sequence authored; public runtime unavailable. Governing input
 
 ## Current implementation boundary
 
+The full endpoint-intent carrier now has an original UMF registry experiment,
+not just the earlier minimal probe. Seventeen controls and strict TypeScript pass
+against the verified 1,342-member committed owner source tree. The callback checks
+complete candidate document-local declaration correspondence; external coordinates
+remain declared intent requiring the separate exact package/source resolver.
+Its receipt pins schema/checker/owner content. The prototype's 100-occurrence
+callback cap does not qualify complete registry/decoder resource accounting, and
+it is not an adopted runtime registration. Consume the representation handoff's
+full document-language checkpoint before assigning E1 or A3 completion.
+
 A private original supplied-endpoint Record/key resolver now composes the full
 carrier/source basis with the preparation's original UMF declaration inventory.
 It requires an exact Record under the selected document/module/element, retains

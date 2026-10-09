@@ -295,3 +295,40 @@ A later invalid selected endpoint and an association Field each refuse the compl
 result, with no resolved-prefix output. Duplicate authored key names are rejected
 by the original UMF validator (`KEY_DUPLICATE_NAME`) before Truss correspondence;
 this is not a new Truss override. These remain pure pre-native observations.
+
+### Full document-language registry checkpoint
+
+The [full registry checker](../../04-build/evidence/design-audit/check-truss-endpoint-intent-full-extension.ts)
+now registers the complete unchanged candidate schema through committed UMF's
+original `Registry.register`. It verifies all 1,342 original src/spec members
+before imports, checks the exact schema digest, retains its own checker digest,
+and records the [seventeen-control receipt](../../04-build/evidence/design-audit/truss-endpoint-intent-full-extension.json).
+Original document bytes remain unchanged in every control. Strict TypeScript passes.
+The earlier five-control minimal-probe receipt remains historical evidence.
+
+Its semantic callback validates declaring module and qualified intent identity,
+exact lower/upper-bound ordering, endpoint-set lineage uniqueness, unique required
+dependency selections and external selected endpoint/dependency correspondence.
+Local selected source/target/association endpoints require original Records;
+selected local keys match the owning Record's exact authored key name. Invalid
+core relationships still refuse unchanged. Unsupported full-carrier shape refuses
+in the original registry's schema validator before this callback.
+
+The registered language explicitly describes external coordinates as intent.
+A declared external selection can therefore be valid/complete in this document
+language without being a present or accepted package definition. The required
+source-inventory resolver still refuses missing/wrong document/revision/reference
+membership before acceptance; registration does not waive that check. Likewise,
+local Truss revision/sourceReference claims require containing-source correspondence
+outside UMF's document-only callback. Complete declaration of direction, lifecycle,
+inverse and composition preserves those meanings for later interpretation; schema
+or callback success cannot classify their native enforcement or derivability.
+
+The probe selects an occurrence bound of 100 for callback work and checks overflow.
+It does not precharge the original registry's schema traversal, source decoder or
+complete retained heap. Full original bounded transport/registration composition
+remains an adoption dependency. This checker is an experiment, not a release
+registration or callback exported by the runtime package. E1 still needs a pinned
+original full registration in the coherent interpretation/resource tuple, and
+E2–E5 still need complete package/accepted-history, security and native/report
+composition. No vocabulary support claim or public activation follows.
