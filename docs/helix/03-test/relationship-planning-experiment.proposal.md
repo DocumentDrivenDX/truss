@@ -91,3 +91,15 @@ clock/reporting-resolution and session profile pins before running. Independentl
 exercise failing-ratio and missing/zero/incomparable-sample controls. Report each
 block and every limitation; the runner is not yet implemented and no performance
 claim follows from this procedure or from bounded index count alone.
+
+The private `packages/tooling/src/relationship-planning-ratio.ts` implements
+one block's candidate nearest-rank p95/2× arithmetic over exactly 1,000 samples
+per arm. Inputs are canonical unsigned integer durations in one independently
+admitted common unit (at most 30 digits), plus positive reporting resolution in
+that same unit. The timing producer must losslessly convert original millisecond
+tokens; rounding or changing units to obtain a pass is forbidden. Baseline p95
+at/below resolution and malformed/missing samples are invalid. Three tests/ten
+assertions and strict TypeScript pass, including the inclusive boundary, a
+one-unit failure above 2^53 and the exact 950th order statistic. This helper does
+not admit source timing, complete statement sums, environment or instrumentation;
+the runner must verify those and require all three original blocks to pass.
