@@ -449,3 +449,15 @@ now assigns complete parser/validator/carrier/scalar/output and simultaneous-cop
 resource composition to PY-01a/01b and A1–A5, including pre-effect complete report
 capacity and UMF-authored bounded native streaming if required. No profile is
 adopted by equating source/depth/node constants; full reports remain mandatory.
+
+### Current Python/native checkpoint reconciliation
+
+The [Python integration handoff](../02-design/python-integration.proposal.md#full-report-carrier-and-native-encoding-handoff)
+now maps the completed private carrier/encoding work to PY-01a/01b/03/04/07 and
+A1–A7. The earlier container discrepancy has a scoped correction; the old scalar
+ceiling has a separate uninstalled scalar/tree candidate. Five complete synthetic
+reports through each host now produce exact independently expected native bytes,
+including original integer-like key order divergence. None proves genuine report
+production, installed authority, full operation allocations or committed database
+interchange. Those decisive exits and the existing package/profile selections
+remain open rather than being relabeled complete by codec observations.

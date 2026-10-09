@@ -690,3 +690,39 @@ allocation, native scalar/output admission and complete shared precharging still
 require the full composition above. A caller-selected counter is not an original
 registered operation account or a public capability. No report field is omitted,
 no native constant is raised and no acceptance effect is enabled by this correction.
+
+### Full-report carrier and native encoding handoff
+
+The later private PY-01a candidate implements original composed-schema → immutable
+retained tree → preflighted numeric-free native carrier. Both hosts preflight exact
+native cumulative tasks and compact ASCII length before tagged construction, and
+verify the actual serialized length. Twenty-four Python candidate tests and
+seventeen TypeScript carrier/report tests pass. The
+[resource/encoding checkpoint](contracts/report-scalar-resource-v0.2.proposal.md)
+records exact scope and the remaining allocation obligations.
+
+The [cross-host native receipt](../04-build/evidence/design-audit/python-report-tree-native.json)
+checks five complete nineteen-field synthetic reports using each host's separately
+prepared carrier against complete independently expected native canonical bytes;
+six additional malformed-tree controls refuse (16 observations, PostgreSQL 17.9).
+Original integer-like member order deliberately produces different intermediate
+carrier bytes while preserving original source bytes and equal canonical bytes.
+This is neither a genuine acceptance report producer nor PY-07 interchange.
+The older 39/42 wire inventories and scalar/container receipts remain historical
+observations of their exact pinned implementations, not the current full profile.
+
+Proceed through the existing implementation rows with these concrete exits:
+
+| Existing work | Next required output | Evidence required before advancing |
+| --- | --- | --- |
+| PY-01a / A2 | Consume the complete original producer report, including all applicable lifecycle/assertion/rebind inventories, through the pinned schema/carrier path. | Independent full expected report and exact original source artifacts; synthetic shape-valid reports cannot prove producer completeness. |
+| PY-01b / A1 | Integrate one admitted driver and operation account with original source, decoded/schema views, UTF-8 sizing, carrier, transport, native JSONB, scalar/sort/frame/sink and final-output ownership. | Exhaustion at each allocation/transition before effects, full account release or unknown-outcome custody; the numeric ceilings alone are insufficient. |
+| PY-03 / A1 / A5 | Consume the existing security owner's admitted principal, graph-source and publication interfaces. | Original owner-qualified authority/cut/profile correspondence and installed ordinary-role evidence; no Python policy resolver or direct metadata authority is introduced. |
+| PY-04 / A4–A7 | Wire complete report persistence and atomic catalog/head settlement into owned/adopted transaction handling. | Full rollback on late encoding/persistence failure; pending versus confirmed committed result, lost acknowledgment and original-attempt reconciliation. Codec success grants no finalization authority. |
+| PY-07 | Execute TS writes/Python reads and Python writes/TS reads using the same qualified installed tuple and independently expected corpus. | Actual committed database contents, full exact values/history/receipts/feed outcomes and fresh authorization on retry. Native codec parity is only a prerequisite. |
+
+Package ownership and registered release/driver/resource profiles remain explicit
+unresolved selections. The carrier implementation can be reused once selected;
+it does not activate public packaging or bypass those exits. Weft retains SQL
+lowering and its Rust/Python packaging, UMF retains schema semantics and reusable
+SQL generation, and the current security owner retains authorization meaning.
