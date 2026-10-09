@@ -132,6 +132,40 @@ allocator gaps and original recovery evidence. Unknown settlement keeps both
 the original attempt and readiness gate intact. These are planned LM-T03/05
 comparison requirements; no populated route is qualified by this handoff.
 
+### M5 deployment ordering and runtime compatibility
+
+The first packaged route must include a deployment sequence and an explicit
+runtime compatibility matrix alongside its source/target layout matrix. Same
+layout major does not admit an arbitrary runtime build. For each advertised
+runtime tuple, record whether it can open the source, open the target, retain a
+live lease across the transition, or must be stopped before application. These
+entries must reference the selected admission and exclusion procedures; a
+consumer framework's migration version is not a compatibility decision.
+
+For the default transactional route, the clean deployment example performs
+read-only source inspection, creates the inert plan, establishes the required
+writer/publication exclusions, explicitly applies, settles the original attempt,
+and independently admits the committed target before enabling its runtime.
+Consumers preserve the original recovery reference across deployment-process
+restart. An acknowledgment timeout pauses this sequence at settlement; it does
+not advance to starting the target or create a second apply attempt.
+
+LM-T06/08 must cover these independent deployment observations:
+
+| Deployment event | Required observation |
+| --- | --- |
+| Old runtime connects while upgrade is pending | Original source admission and selected fence semantics decide wait/refusal; no target-only routine is invoked under source admission |
+| Old runtime reconnects after confirmed target commit | Its declared target compatibility is checked against the actual target; an unsupported build refuses before application work, even when the major version is unchanged |
+| Target runtime starts before settlement | Target readiness remains closed until original confirmed commit and target admission; a target-looking marker cannot bypass unknown settlement |
+| Consumer application deployment fails after upgrade commit | Truss remains at the independently verified committed target. Returning to an older application build is allowed only if that build is admitted by the target compatibility matrix |
+| Operator requests physical downgrade | Only a registered, independently qualified reverse route can apply. Application rollback must not synthesize a down script or run bootstrap against the populated installation |
+
+Rolling deployment is advertised only when the selected route qualifies the
+necessary simultaneous runtime tuples and transition leases. Otherwise publish
+the route's required interruption and exclusions explicitly, without claiming
+online upgrade support. These cases extend the existing LM-T06/08 obligations;
+they are not executed evidence or a selection of a populated release pair.
+
 ### Security enrollment/exclusion ordering dependency
 
 The security owner’s active 2026-10-09 review identified a possible circular
