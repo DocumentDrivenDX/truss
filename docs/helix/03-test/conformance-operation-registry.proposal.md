@@ -2,6 +2,32 @@
 
 Companion to [case grammar](conformance-case-grammar.proposal.md). These entries bind existing declarations; they introduce no public methods. Status: proposed inventory, not a complete executable registry. Exact input/result schemas, identity paths, original profiles and semantic observation scope must be registered before execution.
 
+## Capability carrier closeout — 2026-10-09
+
+All twenty-two capability entries in the following table now have proposed
+return-carrier mappings using existing payloads and the specialized
+compositions described below. This closes the return-carrier authoring gap;
+it does not close complete operation registration or administrative/executor
+inventory. Catalog-view available/unavailable now has its explicit business
+wrapper and exact outer Outcome member alongside its existing request schema.
+
+The [fresh 153-schema receipt](../04-build/evidence/design-audit/schema-inventory-capability-wires-2026-10-09.json)
+records strict combined registration/reference compilation with zero errors.
+The seven capability composition checks pass 55 generic, 25 import, 14 catalog,
+24 group, 19 mutation, 24 retained-history and 8 direct-lookup controls: 169
+enumerated shape/layering witnesses. Earlier receipts retain their original
+source hashes and scopes. This run does not establish complete inner-result
+semantics, native effects, authority or implementation availability.
+
+The next registry outputs are exact argument envelopes for methods with
+separate origin/request/options arguments, original handle/verified-application
+issuance, selected method/profile pins, complete identity paths and independent
+observation procedures. Then freeze full cases and perform the contract-only
+independent implementer review. Administrative/lifecycle/configuration methods
+retain their separate missing carrier and procedure inventory. Nothing in this
+closeout authorizes reducing the required corpus or replacing the protected
+runtime with fixture results.
+
 | Family | Existing capability method | Original declaration | Transaction and comparison boundary |
 | --- | --- | --- | --- |
 | catalog | acceptInTransaction | truss-catalog-capability-v0.1 | Original supplied transaction; complete acceptance/report/head state, pending until confirmed termination |
@@ -100,9 +126,9 @@ This mapping prevents duplicate carrier work but is not an executable registry
 or qualification of any method.
 
 The proposed `capability-execution-outcomes-v0.1.proposal.schema.json` now
-supplies the outer compositions for nine complete existing business-result
+supplies the outer compositions for ten complete existing business-result
 carriers. Register its exact `$defs` member rather than the root: directPage
-for page; traversal for traverse/resumeTraversal/nextTraversalPage;
+for page; catalogViewResult/catalogView for catalogView; traversal for traverse/resumeTraversal/nextTraversalPage;
 traversalRelease for releaseTraversal; journalPage for pageJournal;
 compiledExecution for executeInTransaction; feedDiscovery, feedFragment,
 feedFreshness and feedAcknowledgment for the corresponding v0.2 methods.
@@ -180,8 +206,9 @@ forbidden generic Outcome wrapping. Native progress, count coherence,
 resource containment and actual transaction outcome remain unqualified.
 
 Run `bun docs/helix/04-build/evidence/design-audit/check-capability-execution-outcomes.ts <installed-Ajv-2020-module-path>`.
-Forty-six controls check all nine registered definitions' outer error/required
-value/closed branch/false durability shapes and the definitions-only root.
+Fifty-five controls check all ten registered definitions' outer error/required
+value/closed branch/false durability shapes, the catalog-view business wrapper
+and the definitions-only root.
 They do not test complete inner business-result membership or qualify native
 effects, termination, observer independence or support availability.
 The separate [148-schema receipt](../04-build/evidence/design-audit/schema-inventory-outcomes-2026-10-09.json)
