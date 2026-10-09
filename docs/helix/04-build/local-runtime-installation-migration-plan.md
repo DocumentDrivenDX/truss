@@ -481,3 +481,22 @@ finds new explicit arithmetic/positional-output semantics but unchanged original
 PostgreSQL native/qualified17.9 profile bytes. The local16.2 qualification task
 above remains unchanged. Retain closed version/obligation admission and do not
 adopt Databricks registrations as Lakebase/PostgreSQL execution evidence.
+
+## Native default declaration correspondence
+
+The [default component receipt](evidence/design-audit/pgserver-default-declaration-component.json)
+now compares all41 original CREATE/ALTER ADD ColumnDef defaults with fresh
+PostgreSQL16.2 pg_attrdef/pg_get_expr observations on the same composed three-model
+layout. Expected forms derive from the retained original native AST capture,
+including exact literals, JSONB empty objects, original qualified sequence homes
+and selected built-in clock/xid calls. Unsupported AST forms refuse. Native
+stored-generated expressions share pg_attrdef but are explicitly excluded from
+this ordinary-default inventory; they remain a separate verification obligation.
+
+All41 declaration correspondences match, and outer rollback removes the namespace.
+The script is a scoped installation assessor, not an alternative UMF DDL generator.
+Source/model/capture/producer hashes and complete expected/observed inventories
+are retained. This proves native declaration/deparse correspondence only. Actual
+default execution, clock and sequence semantics, callable permissions/dependencies,
+stored-generation meaning and full routines/grants/init/publication remain
+unqualified. No installation-ready marker is issued.
