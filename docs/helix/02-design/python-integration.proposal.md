@@ -384,6 +384,33 @@ original unresolved execution and quarantine custody until qualified native
 termination under CONTRACT-007. Security-owned routine/privilege closure and
 actual Python driver evidence remain dependencies of this slice.
 
+### Association correlation integration controls
+
+The security owner's revision-24 progress snapshot on 2026-10-09 describes a
+bounded existential simulation over endpoint bundles. This is work in progress,
+not an adopted evaluator or proof of native enforcement. Truss consumes the
+selected owner interpretation; Python must not flatten association endpoint
+bundles into independent sets to answer a correlated policy.
+
+Author these independent cases for each admitted Python/TypeScript graph-source
+and compiler/executor tuple:
+
+| Case | Independently expected observation |
+| --- | --- |
+| Two witnesses: one has the required Staff endpoint but not Project; the other has Project but not Staff | A policy requiring both on one association witness does not match. Neither protected disclosure nor mutation may borrow endpoints across witnesses |
+| One admitted witness has both required endpoints | The same policy matches when all other original authority, key and profile prerequisites hold |
+| Reorder the two nonmatching witnesses or duplicate either | The correlated policy remains nonmatching; association multiplicity and order cannot manufacture a satisfying witness |
+| Reuse endpoint text under a different qualified Record, selected key, association namespace or endpoint role | Original typed/key/role correspondence governs the result; equal text cannot merge identities or redirect a variable |
+| Omit a required endpoint observation or exhaust the selected bundle/work budget | The operation is unavailable or refused under the owner protocol, rather than a complete nonmatch or partial positive |
+
+Observe both the owner result and actual Truss protected publication/effects.
+An application-side Boolean simulation alone cannot establish native enforcement.
+Keep original witness-to-endpoint bindings through source admission, compiler
+parameters and execution; include wrong-binding controls at each selected seam.
+Use an independently specified expected graph, not an expectation calculated by
+the implementation under test. No policy grammar or Python evaluator is added
+by these planned cases.
+
 ## Exact transport
 
 ### Initial Python driver qualification packet

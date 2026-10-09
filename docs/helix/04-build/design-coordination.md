@@ -88,6 +88,23 @@ coefficient equality alone cannot authorize a key, predicate or disclosure.
 These controls remain planned until the complete owner tuple and original Truss
 mapping/authority/account/publication procedures are qualified.
 
+## Security association correlation handoff — 2026-10-09
+
+A fresh read-only status snapshot of “Assess security control support” is active
+at revision 24. The owner is adding a bounded endpoint-bundle existential
+simulation, specifically testing that Staff on one edge and Project on another
+cannot satisfy a policy requiring both on the same edge. This is a reported
+implementation intention, not inspected finished source or independent execution
+evidence. No owner files are changed or released security interface adopted.
+
+The [Python integration controls](../02-design/python-integration.proposal.md#association-correlation-integration-controls)
+now require paired same-witness/cross-witness cases, permutation/duplication,
+qualified identity/key/role substitution and incomplete/budget-exhausted input.
+Carry original association-variable bindings through source, compiler and actual
+protected publication. Do not infer complete nonmatch from missing facts or
+implement a second local evaluator. Native protected outcomes and the selected
+owner interpretation/account tuple remain qualification exits.
+
 ## Security witness policy handoff — 2026-10-09
 
 Owner revision 22 is implementing draft qualified-association term checking.

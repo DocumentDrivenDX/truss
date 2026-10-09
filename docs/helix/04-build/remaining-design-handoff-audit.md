@@ -87,7 +87,7 @@ decisions from the governing queue.
 | 5 complete conformance services | Implement C1 original service composition, C2 complete preparation and C3–C7 execution/assessment/interchange in the [runtime handoff](conformance-runtime-handoff.md) | Actual registered methods/observer boundaries, independently reviewed full cases and complete evidence. Private link/alias/coverage helpers and fixture checks do not implement factories or qualify skipped surfaces |
 
 Python driver frontier update: the pinned pg8000 1.31.5 instance-hook experiment
-now has actual local read-only PostgreSQL evidence and five controlled transport
+now has actual local read-only PostgreSQL evidence and six controlled transport
 checks. It retains exact raw cells/metadata through the bounded receiver and
 instance-bound handlers, with no global driver patch. Its one-MiB frame limit
 still refuses a valid four-MiB report DataRow header before body reception; this
@@ -98,8 +98,9 @@ not silently widen that driver profile.
 A subsequent separate report-only pg8000 experiment now carries the full
 four-MiB frozen nineteen-field wire through the actual driver, strict original
 metadata/frame decoder and response schema. Its own raw bounds leave the generic
-one-MiB driver and caller-input paths unchanged. Seven total controlled tests
-include report exact/one-over capacity. The saved full-driver receipt proves
+one-MiB driver and caller-input paths unchanged. Eight total controlled tests
+include report exact/one-over capacity and original-driver dispatch failure
+quarantine. The saved full-driver receipt proves
 local synthetic byte/schema correspondence, not a genuine producer or original
 complete account/custody/authority profile. Raw-capacity experimentation is no
 longer the missing deliverable; original admission and complete lifetimes remain.
@@ -108,8 +109,8 @@ Next compose one explicitly selected complete response/driver/copy-account route
 then qualify original transaction/cancellation/termination custody and consume
 the security owner's final TLS/person/publication services. Preserve the one-MiB
 request path and historical probe receipts. Do not rerun unchanged wheel/parity
-work or label the small driver query as PY-01b completion. The five tests are
-controlled raw-file checks; full account/port/native authority remains unqualified.
+work or label the small driver query as PY-01b completion. The eight tests are
+controlled adapter checks; full account/port/native authority remains unqualified.
 
 Python frontier reconciliation: the current source plan retains the clean Python
 3.11 wheel build/smoke, count component and complete owner-corpus response parity
