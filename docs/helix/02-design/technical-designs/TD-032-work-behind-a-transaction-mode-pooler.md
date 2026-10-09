@@ -25,7 +25,7 @@ Every operation uses one connection-affine transaction handle under CONTRACT-007
 
 | Planned files | Responsibility | Criteria |
 | --- | --- | --- |
-| `packages/adapter-bun/src/executor.ts`, `packages/adapter-pg/src/executor.ts` | Affine execution and explicit prepared/unprepared capability | US-032-AC1, US-032-AC2 |
+| `packages/adapter-bun/src/executor.ts` (planned Bun), existing `packages/pg-runtime/src/index.ts` and original transport modules (Node/pg) | Affine execution and explicit prepared/unprepared capability | US-032-AC1, US-032-AC2 |
 | `tests/host/pooler.test.ts` | Real pooler corpus and context-leak probes | US-032-AC1, US-032-AC2 |
 | `tests/performance/unprepared.test.ts` | Paired 1,000-type point-read measurement | US-032-AC3 |
 
@@ -43,6 +43,11 @@ STP-032 allocates all three criteria. Run the selected corpus through an actual 
 
 ## Sequence, Rollback and Gates
 
-Finalize capability/profile and measurement protocol; write red native pooling tests; implement adapters; run correctness before performance. Disable an unqualified prepared profile without changing stored data. Pooler product/version/configuration, complete selected corpus manifest, timing statistic and target matrix remain unresolved. No direct-server or mocked-driver result qualifies pooling.
+Finalize capability/profile and measurement protocol; write red native pooling tests; qualify/extend the existing Node/pg bridge and separately implement the selected Bun adapter; run correctness before performance. Disable an unqualified prepared profile without changing stored data. Pooler product/version/configuration, complete selected corpus manifest, timing statistic and target matrix remain unresolved. No direct-server or mocked-driver result qualifies pooling.
 
 The executor handoff E01 in the implementation plan now requires original host transaction/generation recognition and one custody entry shared by compatible wrappers. CONTRACT-007 supplies adoption reservation, post-observation recheck, duplicate refusal, per-entry execution/containment serialization and unresolved retention. Exact driver recognition and host-side exclusion mechanism remain selected native profile outputs. Backend PID or adapter-only mutex is insufficient; pooling cannot rebind an old handle to a later transaction.
+
+
+## Existing driver ownership
+
+Consume [the package delivery boundary](../package-delivery.proposal.md): Node/pg uses the existing experimental pg-runtime `createPgConnectionSource` bridge, not a second adapter-pg package. Its original command-cycle, raw-cell, termination and transaction-custody procedures are the starting implementation; pooling requires its own exact driver/pooler/build/configuration and original backend-affinity evidence. Existing direct-server component passes cannot transfer to transaction-mode pooling. Other-agent driver/security changes remain independently owned and are not adopted by this source reconciliation. The proposed Bun adapter requires its own original producer evidence; common interface shape cannot qualify either driver or permit replacing a caller-owned connection.

@@ -1080,7 +1080,7 @@
     "03-test/test-plans/STP-030-extend-the-layout-from-a-host.md": "3d919e46cf6bd873663973f52744c639c86cc3be443cc0b00fa6af60a5d380a1",
     "02-design/technical-designs/TD-031-govern-writes-by-role-grants.md": "dd4e1fe3a47a43d808a30b3f548e90e5e460d186adf3c277463777baeb5ce41f",
     "03-test/test-plans/STP-031-govern-writes-by-role-grants.md": "0e706ffc933411a0e4e3a652d770aa8a8f443cff1bc8538fc0417d84a755eb37",
-    "02-design/technical-designs/TD-032-work-behind-a-transaction-mode-pooler.md": "392c6085425bbebb88a8782d0dce6f2f474daccdc1963a7a82e922f45a31ff0c",
+    "02-design/technical-designs/TD-032-work-behind-a-transaction-mode-pooler.md": "44f723795e0dc7bfe190adb628295f16e5f0280ac1372595834b8aa016db6871",
     "03-test/test-plans/STP-032-work-behind-a-transaction-mode-pooler.md": "6d24ae81eebb74f4edd57d898d8df21a526d20251a44e7cc4bfddff63c5309d7",
     "02-design/technical-designs/TD-033-run-the-layout-on-an-embedded-postgres.md": "1132e1e6afff98fe861d644470ac28499df99088f14befd8c42b62ce97634d43",
     "03-test/test-plans/STP-033-run-the-layout-on-an-embedded-postgres.md": "ee11943bb9ee848b38e3d0dbe7f3f472abb80c4a820c4b946586d2a18bdcebd6",
