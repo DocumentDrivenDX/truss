@@ -852,3 +852,28 @@ These cases apply only to a selected upgrade/authority transition that requires 
 | LM-P03 rollback and uncertain drain | Fault the upgrade after drain/retirement processing and before target publication; separately lose its outer commit acknowledgment. Preserve original migration and publication recovery/capacity custody and actual committed-versus-pending observations. No old handle resurrection, sibling capacity refund or confirmed target readiness follows callback failure. Independently verify the required fresh source/target inventory and original outcome before any explicit retry. |
 
 Retain native lock/cut/identity/generation and application-buffer evidence separately. A conditional formal retirement proof is not native multi-publisher qualification, and a successful writer-fencing schedule cannot stand in for these applicable publication tests. These schedules remain planned/not_run and do not execute unauthorized disclosure.
+
+## Read-only migration inspection — LM-V01–06
+
+These planned controls implement CONTRACT-008's `status`/`verify` carriers under
+LM-T01/05. Select independently authored original expected bundle/inventory and
+an admitted observation profile before execution. The implementation's own
+collector output cannot supply expected completeness or privilege semantics.
+
+| Case | Independent action and required observation |
+| --- | --- |
+| LM-V01 matching installation | After independently confirmed installation commit, inspect status and verify the complete expected pin. Compare exact original installation/native/correspondence artifacts, including required routines, guards, rights and dependency closure. Observe matches; no attempt or step receipt is created. |
+| LM-V02 same-version drift | Keep marker/version fixed while changing one required routine body, grant or dependency in the owned disposable fixture. Independently capture the original change. Complete observation reports drift and exact differences; marker equality cannot produce matches or automatic repair. |
+| LM-V03 wrong expected tuple | Supply another registered bundle/inventory under the same version, then an unregistered pin. The former reports a complete mismatch when observation is admitted; the latter refuses profile admission/unavailable. Neither selects recipes or upgrades by comparing version numbers. |
+| LM-V04 incomplete or denied observation | Deny a required observation, omit one mandatory result, exhaust its admitted account or use an unknown installation. Return unavailable with no partial ready/layout/correspondence result. Missing evidence cannot be rewritten as drift, an empty installation or a guessed current version. |
+| LM-V05 changing observation cut | Independently change policy or required native state between collection phases. The selected exclusion/coherent-cut protocol either retains one valid original observation or refuses unavailable; a mixed old/new inventory cannot match. No probe executes a conversion, repairs a grant or disables a guard. |
+| LM-V06 historical outcome separation | Retain an actual original unknown migration attempt and separately a confirmed-commit attempt whose target later drifted. A current matches result cannot settle the unknown attempt; drift cannot reclassify the confirmed commit as rollback. Only original-attempt reconciliation resolves history, and the confirmed drifted result stays committed_unverified. |
+
+For every case, independent before/after observations compare installation,
+archive/marker, migration ledger/attempts, epoch/allocators, selected catalog,
+data/history/receipts/feed and relevant grants. Inspection creates no persistent
+write, repair, new epoch or publication. The fixture's explicit test mutation in
+LM-V02/05 is separate from inspection effects. Retain actual transaction/role,
+original request, selected profile and complete result artifacts; counters and
+method stubs alone cannot pass. All six controls remain `not_run` until a genuine
+registered inspection adapter and independent native observers exist.
