@@ -132,3 +132,9 @@ are recorded in the Python implementation handoff. A compiled artifact is not a
 native execution permit: this component has no database connection or execute
 method. Host obligation admission, current-person read context, exact result
 decoding and complete execution/profile qualification remain unfinished.
+
+The current base wheel's compiler boundary has also been tested outside the
+checkout, without PYTHONPATH, alongside the frozen original Rust extension.
+All nine delivered module payloads match the wheel/source, and the focused compiler
+and boundary tests pass. This qualifies that development packaging component;
+the local extra and complete Truss installation are separate delivery gates.

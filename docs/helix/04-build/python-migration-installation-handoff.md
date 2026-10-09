@@ -163,6 +163,23 @@ SQL compiler or Weft0.3 adoption is introduced. The full Python engine, original
 obligation services, native decoder and complete installed distribution remain
 required delivery work.
 
+The subsequent [installed compiler wheel receipt](evidence/design-audit/python-weft-wheel-component.json)
+closes the source-only packaging gap for this component. A new truss-toolkit
+0.0.1.dev0 wheel, built with setuptools79.0.1, was installed with --no-index
+--no-deps into the fresh Python3.11 environment already containing only the frozen
+Weft wheel and packaging tools. Outside the checkout and without PYTHONPATH,
+the boundary resolves inside that environment. All nine delivered Python module
+payloads equal both the original wheel and current source; no module is omitted.
+The five actual compiler/CLI cases, five invalid native transport controls and
+five boundary unittest methods pass with that installed Truss package.
+
+This is the base compiler-component distribution only. The native Weft wheel
+remains separately delivered, and the conditional local extra is not installed
+in this environment. No clean local-extra resolution, pgserver lifecycle rerun,
+full engine API, database execution or original recipe/profile delivery is
+established by these packaging checks. Historical source-only and older component
+receipts retain their original scope and pins.
+
 ## Shared planner corpus before the Python port
 
 `tests/fixtures/layout-migration-planning.json` now supplies sixteen independent
