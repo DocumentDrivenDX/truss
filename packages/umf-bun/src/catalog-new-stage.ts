@@ -15,6 +15,8 @@ export async function stageNewCatalogCohort(connection:CatalogStageConnection,pr
  const savepoint='truss_catalog_'+randomUUID().replaceAll('-','');
  await connection.unsafe('SAVEPOINT '+savepoint);
  try{
+  await connection.unsafe("SELECT truss.runtime_require_catalog_input(decode($1::text,'hex'))",[prepared.original.originalUtf8Hex]);
+  await connection.unsafe('SELECT truss.runtime_require_catalog_document_carrier($1::text::jsonb)',[JSON.stringify(prepared.archiveDocuments)]);
   const revision=await connection.unsafe("SELECT * FROM truss.runtime_stage_catalog_documents($1::text::jsonb,$2::text::jsonb)",[JSON.stringify(prepared.archiveDocuments),JSON.stringify(origin)]);
   if(revision.length!==1)throw Error('Original staged revision correspondence');const rev=id(revision[0].provisional_revision);
   const types=records.length?await connection.unsafe('SELECT * FROM truss.runtime_stage_new_types($1::int,$2::text::jsonb)',[rev,JSON.stringify(records.map(({documentId,moduleId,elementId})=>({documentId,moduleId,elementId})))]):[];

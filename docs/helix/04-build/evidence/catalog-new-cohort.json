@@ -17,11 +17,12 @@
     "catalog-relationship-stage": "d32c213f607d4f8ca9dd4afcdc7bb4fd2bb7cf39dbf35057a82987859632933e",
     "catalog-report-documents": "362b6df87be8f22387c59921af9f827248e79536183e342b7894a3c4e36f4207",
     "catalog-new-inventory": "872d921797dee82b851edcba2fc275f00a6f69a5ba3a2945cb8827e0bc43f687",
-    "catalog-observation-recheck": "68bf56799bbcce0a1cfbf46a9a9b58d1870bb29a6e6214302296d8af1e4c38b2"
+    "catalog-observation-recheck": "68bf56799bbcce0a1cfbf46a9a9b58d1870bb29a6e6214302296d8af1e4c38b2",
+    "catalog-input-custody": "b48222a7eafabfa854568422d9ffd7e76c355563e144fe2c620c216b1af5d230"
   },
   "reportDocumentProducerSha256": "f5e6c74c87f9133027fe04e2ca543f0f60a513a13e0052ec6b112dc399af3754",
   "defaultHomeProducerSha256": "f7bea9fd414f75e43a2d26a940a32083976a7ea13b91027a5b019f5e141734d5",
-  "stageProducerSha256": "9a6793f582e3591ea48c115736ead13f651aef8044ff4033c27255678b4e4c30",
+  "stageProducerSha256": "d192447bae892f4dd0c841680726b4551809a3b08d4ebe44ba0cdf8447c149ec",
   "originalInputSha256": "b8c64857b2cd73ef99471ebc8310e76f27102c62d30854d80bc40441dcbe609c",
   "engine": "17.9 (Debian 17.9-1.pgdg13+1)",
   "umfProfile": {
@@ -33,8 +34,13 @@
     "actual PostgreSQL17.9",
     "eleven ALWAYS catalog generation observers installed",
     "incomplete property home inventory refuses before persistence",
-    "unsupported original unnamed Field refuses native property staging",
+    "altered Field candidate refuses against original archived source after Record staging",
+    "different complete original input cannot borrow native operation admission",
+    "same interpreted source cannot substitute different original artifact bytes under admitted input",
     "failed cohort savepoint removes earlier revision and Record effects",
+    "original operation custody refuses UPDATE substitution/removal",
+    "original operation custody refuses UPDATE substitution/removal",
+    "original operation custody refuses DELETE substitution/removal",
     "default homes derive from original absent-binding input, never guessed native IDs",
     "entire original declared catalog stages using actual native IDs",
     "native sorted allocator assigns Record identities",
@@ -74,6 +80,7 @@
     "new-only collector cannot hide retirement or report it as addition",
     "provisional cohort never publishes accepted head",
     "unfinished complete acceptance cannot commit",
+    "operation truncate guard refuses even with no pending admission trigger",
     "ended native transaction cannot reuse captured report observation",
     "failed commit removes all provisional catalog effects"
   ],
