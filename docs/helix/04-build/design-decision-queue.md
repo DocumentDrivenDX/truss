@@ -1006,3 +1006,24 @@ qualification, or an ordinary-writer bypass. Fixture artifact contents are
 explicitly opaque and must not be promoted to installer evidence. Full PKG-01/02/08
 and original populated migration remain not_run. Security-owner closure is still
 absent; the latest chat read remains systemError/failed with no live handle.
+
+
+## Native archive observer availability — 2026-10-10
+
+[Archive12](evidence/design-audit/installation-archive-visibility-native.json)
+retains Archive9's four membership drift/rollback controls. The opaque fixture
+artifacts are committed before a separate ordinary connecting observer reads
+them. With explicit schema/table SELECT rights, all five original full
+role/identity/byte tuples match. Revoking archive SELECT yields one native42501
+while marker SELECT still returns the marker. The harness records observation
+unavailable, not missing archive or readiness, and performs no automatic retry.
+An explicit grant restoration followed by a separate read recovers the same
+original bytes without initializer replay.
+
+Complete installation status/verify must preserve this unavailable-versus-integrity
+distinction under original observer authority and coherent cut. Readable marker
+or previous successful observation cannot bypass current archive observation.
+This is fixture-role/component evidence, not the actual public status API,
+complete registered release, selected effective-rights/dependency/security profile
+or installed qualification. Original Archive9 producer/evidence remain unchanged;
+complete PKG-01/02/08 and populated migration gates remain open.
