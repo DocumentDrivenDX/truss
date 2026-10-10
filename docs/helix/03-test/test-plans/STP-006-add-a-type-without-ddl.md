@@ -113,3 +113,33 @@ the unchanged applicable admission; CW-02 preserves the selected stale-refusal
 semantics without claiming1024 successful commits. Arbitrary data contention,
 long caller-owned transactions and unavailable instrumentation remain separate
 profiles. This candidate and all native observations are not_run.
+
+
+### Registered candidate observation windows
+
+The [writer workload packet](../catalog-writer-workload-v0.1.proposal.json)
+fixes candidate limits of300 seconds for complete run observation,10 seconds
+for one native barrier observation,30 seconds for one native statement/lock
+acquisition and5 seconds for separate containment observation. Each stream has
+at most one submitted unresolved group; retries remain zero. These are inclusive
+monotonic observation windows, not hard guarantees of native termination.
+
+Begin the run clock before the first writer dispatch and include acceptance,
+barrier waiting, all1024 planned-group outcomes and complete final observation.
+No pause/reset while a barrier is held or recovery is unresolved. Before each
+new dispatch require both its selected procedure budget and the remaining run
+allowance; expiry closes new dispatch without cancelling evidence collection
+or freeing original custody. The separately reserved containment allowance
+cannot be spent on a new write. A late outcome is retained as evidence but cannot
+turn an expired run into a timely pass.
+
+Native timeout values are admitted and observed only on dedicated fixture
+connections through the exact selected executor/settings profile. The runner
+cannot mutate arbitrary production connections or use a convenient timeout as
+proof of rollback. Deliberately inject expired barrier, blocked statement and
+lost cancellation reply; independently confirm monotone closure, remaining
+not_submitted groups and original unknown recovery. Actual settings/timer/native
+containment and whole resource-profile qualification remain not_run. The local
+16.15 absence of transaction_timeout is retained; no whole-host-transaction
+bound is claimed. Changes to these limits require a new sealed experiment
+registration before sampling, never adjustment after a slow run.
