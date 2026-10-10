@@ -69,3 +69,47 @@ outcome checks and three blocks of1000 measured pairs. The proposed2x p95
 comparison remains a release-profile selection; no native sample or runner is
 implemented. Repeated accepted revisions and catalog-INSERT-only timing cannot
 pass US-006-AC3. Exact fixture/runtime/resource/caching registration remains open.
+
+
+## Finite continuous-writer workload candidate
+
+For CW-01/02/04, prepare sixteen existing-type objects with independently
+observed original identities, one per ordinary-role connection. Each object has
+one required string label, initially `writer-i-initial` for i=0 through15.
+Each stream invokes64 separately identified request-free single-operation groups
+in order, setting its own label to `writer-i-step-j` for j=0 through63. No stream
+writes another stream's object; no group is a no-op. The acceptance adds only its
+new type/property/relationship and does not change the existing label definition.
+Disable unrelated jobs and hold one original connection per stream. Connection
+acquisition is setup; this is not a host-pool benchmark.
+
+Every run accounts for exactly1024 planned groups as not_submitted, submitted
+with original pending/confirmed outcome, or expected pre-effect stale refusal.
+A refused group is not secretly retried to reach1024 commits. Subsequent planned
+groups may obtain fresh original admission under the current head only through
+the explicitly authored stream schedule; they retain their distinct step IDs and
+cannot impersonate recovery of the refused input. An unknown submitted group
+stops further dispatch on that stream until original settlement/containment;
+remaining planned groups stay not_submitted rather than passing as skipped.
+CW-03 uses its separate single paused stale-admission attempt on fresh setup.
+
+Use actual native barriers to place the selected original pending group from
+each stream at CW-01 shared custody or CW-02/04 head admission. Retain ordered
+submission/settlement traces proving earlier and later stream work as well as
+the sixteen-way overlap; sixteen isolated writes alone are not continuous load.
+The runner's finite wall-clock, native statement and containment deadlines and
+resource bounds must be registered before execution. Deadline expiry preserves
+original unknown custody and invalidates the success run; it cannot discard the
+pending cohort or synthesize rollback. Actual delay evidence separately identifies
+catalog-head waits, record/guard locks, native processing and host decoding.
+
+Independently derive each object's expected final label/version and complete
+journal membership from its actual confirmed ordered groups, not an assumed64
+commits. Confirm exactly one effect per committed group, zero effect per stale
+refusal, no changes to another writer's object, and the complete acceptance or
+rollback outcome. A final-value count alone cannot detect missing intermediate
+writes. For CW-01 and confirmed-rollback CW-04, all1024 groups must commit under
+the unchanged applicable admission; CW-02 preserves the selected stale-refusal
+semantics without claiming1024 successful commits. Arbitrary data contention,
+long caller-owned transactions and unavailable instrumentation remain separate
+profiles. This candidate and all native observations are not_run.
