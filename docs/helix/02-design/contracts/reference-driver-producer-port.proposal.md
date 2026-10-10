@@ -130,3 +130,42 @@ control submissions: two calls with one confirmation produce at most one native
 invocation, including after refusal, exception, savepoint rollback and lost result.
 Foreign/copy/current-state controls must produce zero. These are required producer
 integration schedules, not capabilities supplied by static brands.
+
+## Physical connection and adopted transaction lifetime
+
+The trusted host/registered adapter owns one original dispatch registry for each
+physical connection lifetime under ADR-008. Each confirmed top-level transaction
+adoption has a separate opaque original token and monotonically distinct host
+generation. Bind every facade to that same token/issuer/account while it survives;
+constructing a facade cannot create another counter. Neither native xid text nor
+ReadyForQuery T identifies this host adoption. Observe an unassigned native xid
+without assigning one merely to name the scope; later actual xid correspondence
+is an additional check, not a replacement token.
+
+| Original transition | Registry and connection action | Admission rule |
+| --- | --- | --- |
+| Adopt an already active caller transaction | Register its original generation under exclusive dispatch and the admitted complete native control observation | Start no implicit BEGIN and retain no permission to commit caller work. Refuse if the adapter cannot establish original lifetime/control correspondence. |
+| Another facade uses the same surviving adoption | Resolve the retained original issuer/account/control registry | Share monotonic issuance; refuse a competing independently constructed registry rather than merging counters. |
+| Confirmed operation savepoint rollback | Invalidate affected control/admission permissions and pending result custody under the original procedure | Retain the transaction issuer and all burned ordinals; preserve earlier caller work. Fresh work needs a new control and ordinal. |
+| Confirmed top-level COMMIT or ROLLBACK | Irreversibly close that adoption and every associated ordinary dispatch permission | Old facade/token refuses even if the same socket later reports T. Reconcile charges and recovery from original termination evidence before releasing their custody. |
+| Unknown transaction/control completion or backend loss | Close new admission and retain original command/cycle/account/recovery associations | Quarantine reuse. No status-property read, new BEGIN, replacement token or reconnect classifies the unresolved attempt. |
+| Explicit later adoption on an admissible connection | Create a new generation only after the original settlement/reuse protocol confirms that connection state and custody permit it | New issuer starts its own ordinal domain; earlier tokens remain closed and retained. A new socket is a new physical lifetime and does not inherit or resolve old attempts. |
+
+Physical connection reuse and transaction recovery are separate facts. A clean
+new connection may support new independently admitted work while an old attempt
+remains unresolved in durable recovery custody; it cannot retry that old request
+without the existing request-receipt protocol. Conversely, a native idle status
+alone cannot authorize returning the old connection while required framing,
+termination or account custody is unknown. Truss supplies no pool provisioning
+or automatic re-adoption loop.
+
+Qualify same-transaction two-facade issuance, top-level rollback followed by a new
+transaction on the same physical connection, and old-token use after that new
+adoption. Include an initially unassigned xid, savepoint rollback preserving
+prior caller effects, lost COMMIT response, backend replacement and explicit
+recovery before reuse. Independently observe native transaction/control frames,
+submission counts, persisted versus rolled-back effects and original issuer
+identity/nonreuse. Test that no re-adoption submits BEGIN/COMMIT or repeats old
+effects without its explicit owning protocol. These are added implementation
+exits for STP-044/DH and existing adoption controls, all not_run; the psql native
+decoder experiment does not implement this lifetime registry or prove framing.
