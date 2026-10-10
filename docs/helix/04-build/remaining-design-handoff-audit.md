@@ -1683,3 +1683,10 @@ methods. Supplied touch decoding and original manifest correspondence now exist;
 complete same-cut native capture and full operation-registry/owner-codec/current
 authority composition remain the next inputs. Older stored seals are retained
 without a readiness claim. No installed-wheel, public API or body gate is promoted.
+
+The [native touch point decoding receipt](evidence/design-audit/touch-point-decode-native.json)
+adds24 observations/22 original control captures for exact UMF-exported tuple
+lookup, original descriptor/completion and private Python decoding. Fresh, sealed
+and advanced full rows match. Complete cohort/current-cut capture, semantic
+owner/authority admission and operation correspondence remain distinct outputs;
+empty selected-tuple projection is not an authority-qualified absence result.

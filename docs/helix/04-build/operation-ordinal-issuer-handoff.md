@@ -1371,3 +1371,24 @@ meaning; opaque byte equality cannot do so. Full subject/current-authority,
 held guards/capacity, event provenance, finalization and whole resource/settlement
 qualification remain outstanding. The decoder performs no DML and changes no
 public exports, layout/UMF schema or seven-body readiness field.
+
+### Original touch point read through Python decoding (2026-10-10)
+
+`touch-point-decode-native.json` pins24 PostgreSQL16.15 observations and22
+original control captures. It executes the existing exact UMF-exported five-
+parameter current-writer tuple lookup without rewriting positional SQL. All12
+original text/null cells and column names/OIDs/formats, SELECT completion frame
+and transaction status are checked before private Python decoding. Original
+first-touch, sealed and advanced complete contributor-manifest rows round trip
+without cell replacement. Unassigned lookup leaves xid unassigned; foreign kind
+and confirmed rollback produce empty selected-tuple projections. Previous18-
+observation transition producer/receipt remain untouched.
+
+The lookup is a selected owner/property tuple read, not the complete touch cohort
+scan. Empty projection alone cannot prove authorized absence: original visibility,
+same-cut control, protected scope/owner codec/current authority must be admitted
+separately. No LIMIT/phase/readiness filter or caller-xid fallback is introduced.
+Receiver byte permits/native control capture qualify only their selected seam,
+not whole allocation/work/deadline or privileged original actor evidence.
+Full operation-registry correspondence and complete observer/finalization remain
+required before publication; no public or seven-body gate changes.
