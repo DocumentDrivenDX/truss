@@ -722,6 +722,69 @@ settled by ADR-003. No parser success claims native JSONB fidelity or UMF suppor
 
 ## Host transaction adapter
 
+### Python process-lifetime traversal store handoff
+
+The JavaScript `truss-traversal-process-store/0.1.0` candidate in CONTRACT-004
+does not qualify a Python service by changing its language label. Select a
+separate candidate `truss-traversal-python-process-store/0.1.0` for one original
+CPython3.11 service instance, with the same existing query/private-state/ledger,
+publication/store-observation/completion/cleanup wires and exact counter domains.
+No additional public traversal request or competing graph semantics is defined.
+Free-threaded interpreters, process/worker transfer, durable restart and other
+Python implementations require separate qualification. The pending traversal
+output choice remains independent of store mechanics.
+
+The host explicitly constructs, registers and closes the original service.
+Construction is inert: no database, scheduler, thread, filesystem or environment
+lookup. Original connection/snapshot/issuer/account handles retain identity;
+copied dictionaries, serialized records and a new service cannot recover them.
+Keep one immutable root with the complete stage/ledger/lease/permit/attempt
+inventory, exactly as required by CONTRACT-004. The GIL is not the serialization
+or original-custody mechanism.
+
+Use one original nonreentrant lock with nonblocking admission for root transitions.
+Concurrent or reentrant entry refuses without changing root or retrying. Build
+and fully admit replacement plain data outside the lock under precharged copy/
+retention capacity. Inside, compare exact original root identity and sequence,
+frontier/accounting generations, attempt and issuer custody, then replace the
+single root reference once. A conflicting root requires a new explicit admission;
+it does not authorize an internal retry or reset a spent work permit. Store
+operations may not invoke caller equality/hash/repr, getters, logging, clock,
+allocator callbacks, native SQL or awaitables in this critical section. Use exact
+builtin immutable carriers and original identity checks rather than caller-defined
+objects as map keys. Retain predecessor/candidate references locally through lock
+release so replacement cannot intentionally trigger their finalizers inside it.
+
+Interpreter allocations, automatic collection, signal/tracing hooks and object
+destruction need an exact runtime correspondence review; source-level absence of
+explicit callbacks does not prove all interpreter activity is absent or bounded.
+Do not globally disable the host's GC, tracing or signal handling to manufacture
+a pass. Missing enforceable callback/allocation/critical-section bounds leave
+this store profile unavailable. This candidate chooses the transition algorithm,
+not a measured memory ceiling or a hard scheduling guarantee.
+
+An exception before replacement leaves the predecessor authoritative. After
+replacement, reply/encoding failure reconciles the original attempt record in
+the replacement root; it cannot undo the transition or publish it again. Prepare
+original attempt/completion observations before replacement. Invalidation first
+closes admission in that same root, then performs any waiting/containment outside
+the lock. Track every native worker before its effects; unresolved workers,
+permits, old roots or buffers remain charged. Logical reference deletion is not
+confirmed physical reclamation. Shutdown closes admission and preserves required
+unknown custody; process loss cannot report successful cleanup or resume an old
+snapshot. Native transaction settlement remains the original driver's authority.
+
+Required independent Python controls, all `not_run`: two concurrent transitions
+from one predecessor permit at most one replacement; stale accounting-cut and
+copied-attempt refusals; reentry without deadlock/retry; every pre-replacement
+failure preserves the full predecessor; lost reply after replacement resolves
+once; delayed native completion after invalidation cannot reopen admission;
+retained old-root/worker/permit prevents refund; and process restart refuses old
+service/snapshot handles. Compare complete state and ledger facts against the
+same language-neutral expectations used for TypeScript, then separately qualify
+runtime allocations, destruction/hook behavior, native custody and public staged
+reads. Candidate equality or model exploration alone cannot close these exits.
+
 Use the semantic Executor operations of CONTRACT-007 rather than a language-specific second transaction protocol. The adapter accepts the caller's actual live connection/transaction object, validates ownership/lifetime, and retains it internally. No transaction identifier is accepted as a substitute. Initial delivery selects one driver/transaction mode and qualifies it; sync and async modes cannot share a support claim without separate evidence. Driver selection remains explicit.
 
 - Owned execution begins on one connection, commits after complete native finalization, and publishes durable results only after observed commit. Failed or unknown commit preserves recovery state.
