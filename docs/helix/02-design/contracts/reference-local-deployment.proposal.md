@@ -71,3 +71,34 @@ Planning assumption: use local PostgreSQL 17.11 as the first disposable M00–M0
 Prepare the exact disposable server/runtime/transport inputs and original administrative identity, then qualify the native observation/containment/resource hooks before relying on them in bootstrap or mutation. Complete the original bundle's source/body/dependency/security custody and fresh-install/conversion procedures. Produce independent installed parity before admitting runtime operations. Execute the existing M00–M07 checkpoint plus its full native fault/resource/authority controls, with unavailable compiler/provider prerequisites recorded separately. Do not reduce the full release corpus to this checkpoint.
 
 The next deployment artifact must contain actual server/build/encoding/settings, installed adapter/runtime and hook bytes, full native resource and cancellation/account mechanism, role/callable inventory and assessor access. Every unresolved field prevents qualification of its dependent capability, while independent source design can proceed. A later owner choice of a managed target requires re-admission of the complete tuple; it cannot inherit local evidence by changing a label. Any extension still requires verified availability on all owner-named managed targets.
+
+
+## Controlled work versus native guarantees — accepted scope reconciliation
+
+CONTRACT-007's owner-selected scope bounds toolkit/protected-procedure controlled
+work and classifies arbitrary native/bypass guarantees separately. The local
+profile must preserve that distinction. PostgreSQL16.15's absence of
+transaction_timeout is a real limitation, not a new product decision or proof
+that all controlled-operation design must stop.
+
+| Claim domain | Required profile/evidence and local disposition |
+| --- | --- |
+| Truss-controlled admission, input/frame/encoding/copy/decoder work, dispatch attempts and publication | Finite original shared bounds with pre-effect reservation, actual producer enforcement and explicit refusal/unknown containment. These remain required and currently unqualified; wire counts alone cannot supply allocation/work correspondence. |
+| Selected native statement/lock/control observation and containment | Exact server/role/settings/driver mechanism, finite observation and separately reserved containment, original completion or unknown outcome. Qualify each controlled procedure independently; timeout is not rollback or backend-termination proof. |
+| Entire host-owned transaction lifetime or arbitrary native/bypass resource use | A separate hard guarantee only when a realizable unavoidable native mechanism and complete target evidence support it. Local16.15 has no transaction_timeout and carries no such claim; statement_timeout and host counters cannot be substituted. |
+
+Do not advertise whole-transaction termination, physical PostgreSQL disk/heap
+bounds or arbitrary SQL resource safety from a controlled-operation pass. Equally,
+do not use their unqualified status to reopen accepted bounds or replace original
+driver/account implementation with repeated source probes. Capability publication
+must retain the exact claim domain and independent evidence. A dependent capability
+that explicitly requires an unavailable hard native mechanism still refuses;
+classification cannot silently waive its requirement.
+
+Original integrity, authenticated actor/isolation, complete effect/finalizer
+coverage, retained settlement/recovery and final security publication remain
+mandatory in every usable engine profile. Trusted local/private designation does
+not remove those gates. A host may retain an outer transaction beyond a completed
+Truss operation under its accepted responsibility; Truss must neither commit it
+nor promise an unqualified deadline for its lifetime. Unknown native completion
+retains original custody and closes new admission under the selected protocol.
