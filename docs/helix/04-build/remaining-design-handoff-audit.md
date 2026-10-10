@@ -1474,3 +1474,45 @@ admission and unknown command settlement still must wrap this call; supplied OID
 bytes or same-name lookup cannot replace original custody. Complete memo/invalidation/
 resource/security and all seven mandatory semantic bodies remain required. Native
 full reservation/installer qualification remain false; no criterion is promoted.
+
+## Current capacity source handoff and installer frontier — 2026-10-10
+
+The [source handoff](../02-design/contracts/capacity-component-source-handoff-v0.1.proposal.json)
+now enumerates17 actual private capacity routines from eight pinned source/UMF
+owner-export groups and their manually reviewed direct Truss call edges. It retains
+an acyclic direct-call dependency order, actual source signatures/attributes and
+the additional memo/trigger objects. This is not a complete transitive native
+inventory: PL/pgSQL/built-in/operator/cast/implicit effects, installed identities,
+roles/private ACL and current profile/DDL/account/security closure remain explicit.
+The original seven mandatory semantic routines still have49 missing native binding
+fields; none are filled by these capacity helpers or their native component tests.
+
+The implementation plan's authoritative CH-01/02/04/05 rows now name native0.16,
+core0.8 (51/491/61), the current capacity handoff, adopted experimental Weftf05f2df0.2,
+separate unadopted Weftf823aee path CLI, and the tested private Python wheel/public
+runtime-only boundary. Prior profile evidence remains historical. Full45 stories,
+167 criteria and B-001–B-015 scope stay intact; more component checks do not close
+the design goal or the accepted catalog/mutation/journal/feed/receipt contract.
+
+Next integration batches are concrete:
+
+1. Construct the original installer callable/dependency fixed point from these
+   retained bodies plus the actual seven semantic bodies and journal-phase code.
+   Independently qualify missing/extra/dependency/parent/source corruption; direct
+   source calls cannot substitute for that transitive native set.
+2. Bind body-specific native owners/private caller ACL and original namespace/DDL
+   closure. Preserve capacity helpers' INVOKER attributes separately from selected
+   semantic wrappers' DEFINER attributes. Consume the security owner's authenticated
+   person/current-authority boundary across elevation; do not invent a resolver.
+3. Wire original transaction/control/account and issuer into named-constraint
+   recognition/deferral, reservation, actual semantic effects, complete finalization,
+   release and bounded native cache callback. Retain full cohort/unknown settlement,
+   profile conversion and resource work/overhead/cleanup obligations.
+4. Run complete ordinary-role canonical graph effects and native bypass/rollback/
+   commit/inventory publication cases before marking any installer ready. Python
+   public install/apply/import/key/edge/feed and TS interchange depend on that shared
+   protected native chain; private runtime/package tests do not advertise them.
+
+Known source realization is now reviewable without inventing native registrations.
+Exact role/dependency/native full-system outputs remain implementation work. No
+acceptance criterion is promoted or shared-owner API adopted by this handoff.

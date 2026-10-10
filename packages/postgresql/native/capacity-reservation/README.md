@@ -114,3 +114,8 @@ name collisions, disabled/security/ACL/replica drift, foreign object bindings an
 actual ordinary-role42501 denial. Independently authenticated binding provenance,
 complete dependency/private ACL and DDL/namespace closure remain external; the
 helper does not make supplied OIDs or bytes authoritative.
+
+The source-handoff artifact in the contracts directory enumerates all17 private
+capacity routines and reviewed direct Truss call dependencies from these eight
+original source/UMF export groups. It is not a complete native dependency/ACL or
+installer inventory; all seven mandatory semantic bodies remain independent.
