@@ -18,6 +18,7 @@ ALLOWED = {
     '_operation_admission': {'dataclasses', 'inspect', 'threading'},
     '_operation_ordinal': {'dataclasses', 'threading'},
     '_query_execution': {'dataclasses', 'inspect', 'threading', 'types', 'weakref', 'truss.weft'},
+    '_resource_account': {'dataclasses', 'threading'},
     '_receipt_position': {'base64', 'binascii', 'dataclasses', 'json', 're', 'truss._acceptance_json'},
     'cli': {'argparse', 'json', 'pathlib', 'signal', 'threading', 'truss'},
     'local_runtime': {'dataclasses', 'importlib.metadata', 'importlib.resources', 'pathlib',

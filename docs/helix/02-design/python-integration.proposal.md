@@ -2514,3 +2514,44 @@ account implementation. Implementing a local byte counter and claiming complete
 containment would duplicate or bypass that boundary. The private reader can be
 implemented against an explicit unqualified port, but its component tests must
 retain that limitation until original account/native composition is exercised.
+
+
+### Private host byte-permit bookkeeping implementation
+
+`_resource_account.py:BytePermitAccount` now implements the host scalar byte
+arithmetic of CONTRACT-007/008. One original trusted producer owns the account.
+A successful reserve retains an original identity-only permit and atomically
+checks both live capacity (`owned + outstanding + proposed`) and cumulative
+allocation capacity (`spent + outstanding + proposed`). Drawdown atomically
+moves permitted bytes from outstanding to owned and spent without double charge.
+Release removes only original owned occupancy; terminate releases the original
+unused permit after the trusted producer confirms no further work. Closure keeps
+unknown owned/outstanding charges. Bounds and byte amounts use exact Python
+integers, rejecting booleans, floats and strings.
+
+Exhaustion/overrun closes ordinary reserve/drawdown admission while preserving
+release/termination bookkeeping; no retry or retrospective reserve occurs.
+Permits and allocations are strongly retained and identity-only. Their cumulative
+record capacity never refunds on termination/release, bounding the ledger's record
+count. This bound does not establish actual Python object/heap size. The lock
+serializes local transitions; it neither instruments allocations nor proves
+native operation ordering, asynchronous termination or a latency guarantee.
+
+The [component receipt](../04-build/evidence/design-audit/python-byte-permit-account.json)
+retains four tests against the six original independently authored scalar
+witnesses, plus original/copy/foreign tokens, cumulative exhaustion after release,
+unknown closure and nonrefunded record capacity. Source import ownership now
+explicitly maps this private module to dataclasses/threading; the checker passes
+53 imports. No public export, installed-wheel claim or complete account/profile
+admission follows. The preceding statement that no qualified account interface
+exists remains true: this is an implementation of selected host bookkeeping,
+not complete allocator/native metering.
+
+For the resource reader, wire reserve/drawdown before each selected bounded read,
+decode/copy/hash/retain unit; retain the original permit and allocation through
+archive/use. Supply independently qualified original release/termination facts,
+including exception/cancellation and escaped result ownership. The next adapter
+must account for all simultaneous allocations, work/row/deadline dimensions and
+preallocated containment/recovery permits. This scalar component must not become
+a second account per facade or replace unavoidable native accounting. SQL
+savepoint rollback has no transition that resets its spent or outstanding state.
