@@ -40,6 +40,14 @@ for name, version in inputs['wheelBuildDependencies'].items():
 changed = set(run(['git', 'diff', '--name-only', 'HEAD']).splitlines())
 if not changed <= {'pgbuild/Makefile', 'pyproject.toml'}:
     raise RuntimeError('Undeclared upstream source changes')
+tracked_python = {name for name in run(['git', 'ls-tree', '-r', '--name-only', 'HEAD', 'src/pgserver']).splitlines()
+    if name.endswith('.py')}
+actual_python = {str(path.relative_to(source)) for path in (source / 'src/pgserver').rglob('*.py')}
+if actual_python != tracked_python:
+    raise RuntimeError('Undeclared Python source membership')
+for name in tracked_python:
+    if (source / name).read_bytes() != subprocess.check_output(['git', 'show', 'HEAD:' + name], cwd=source):
+        raise RuntimeError('Original Python source drift: ' + name)
 project = source / 'pyproject.toml'
 original = subprocess.check_output(['git', 'show', 'HEAD:pyproject.toml'], cwd=source)
 selected = original.replace(b'version = "0.1.4"',
