@@ -1738,7 +1738,21 @@ where native transport is involved.
 | PY-04 groups, dry-run and retries | Complete accepted catalog/install, PY-01/03, protected group/receipt procedures | Real group/preconditions; operation rollback preserves prior caller work; dry-run and apply violations agree; lost acknowledgment replays original ordered results; changed input conflicts; all-no-op receipt survives; commit_unknown remains unresolved |
 | PY-05 reads/import/enumeration | PY-02/03/04 and native indexed/direct routes | Bounded key/equality/relationship/page/aggregate cases with actual plans; read-only enforcement; atomic/per-item imports/provenance; module revisions and incompatible layout refusal |
 | PY-06 feed/visibility | Complete source manifest/application/ACK and receipt-token design | Whole transactions only; durable applied position; restart equality; reached false before apply only with admitted original token commitment and snapshot-exclusion evidence, otherwise unavailable; true only after complete durable inclusion proof; old snapshots, incomparable epochs and missing retention evidence explicit; no numeric xid-order shortcut |
-| PY-07 publication/interchange | All applicable slices and versioned shared corpus | Clean wheel install; named layout/corpus/backend versions; Python-write/TypeScript-read and reverse on one real database; independent state/journal/receipt observations; unknown/newer required corpus and skipped cases prevent qualification |
+| PY-07 publication/interchange | All applicable slices and versioned shared corpus | Clean wheel install including exact registered installation/migration/verification inputs; named layout/corpus/backend versions; Python-write/TypeScript-read and reverse on one real database; independent state/journal/receipt observations; unknown/newer required corpus and skipped cases prevent qualification |
+
+The current development wheel has no installation resource registration. PY-07
+must inspect the built wheel and installed resources independently of the checkout:
+retain original UMF source, generated DDL, complete native routines/grants,
+initialization/verifier inputs, profile pins and registered migration recipes with
+their exact manifest paths and byte digests. No runtime dependency on repository
+relative paths or build-only files is permitted. Manifest membership and hashes
+establish packaging correspondence only; they cannot authorize native execution
+or prove readiness. Test missing/changed resources before submission, then execute
+fresh install/verify and the selected populated migration from a clean installed
+package with the checkout unavailable. Keep actual generated identifiers and
+runtime observations separate from static release inputs. Source distribution and
+wheel must reconstruct the same selected resource set; no unregistered SQL glob
+or downloaded replacement may substitute for the original bundle.
 
 Author setup/call/expected-result/error/journal fixtures before collecting observations. Reuse the existing conformance manifest's separate fixture/input/expected/identity-alias artifacts. Opaque identities are saved aliases, not fixed generated IDs. Complete selected accepted reports and original source epochs remain native outputs; no fixture accepted revision or invented epoch enables these slices. The combined reference uses the existing nineteen-field 0.3 lifecycle/history report, including lifecycleProfile/reactivations and 0.2 rebind events. A Python baseline 0.1 codec may preserve its separately qualified seventeen-field subset but cannot claim combined lifecycle compatibility by dropping fields or relabeling versions. Consume the same original selected schema/profile tuple as the TypeScript implementation; report version numbers alone are insufficient.
 
@@ -1790,7 +1804,16 @@ is introduced here.
 
 ## Decisions still required
 
-ADR-003 acceptance and Python package/repository ownership; initial driver and sync/async mode; published Weft wheel/feature tuple; admitted authorization ABI; stable install version and consumer-migration route; exact managed Lakebase version/extension/identity/transaction profile; native realization of CONTRACT-009's specified minimum 24-hour receipt protection; and receipt-token/reached ABI. Python adapter/codec/corpus work can start independently where these choices do not affect semantics. Complete public capability release still waits for the shared protected runtime and qualification.
+ADR-003 is accepted: Truss owns the Python implementation in this repository.
+Remaining engineering selections are the qualified driver and sync/async mode,
+published Weft wheel/feature tuple, adopted authorization ABI, stable installation
+version and populated migration route, exact managed Lakebase version/extension/
+identity/transaction profile, and native receipt/reached realization. The minimum
+24-hour receipt protection is already specified by CONTRACT-009; implementation
+and evidence remain, not a new retention decision. Original native issuer trust
+and admission authority remain unresolved and must not be inferred from Python
+object identity. Adapter/codec/corpus work can proceed where independent; public
+capabilities require the shared protected runtime and corresponding qualification.
 
 
 ## Consumer closure order and accountable outputs
