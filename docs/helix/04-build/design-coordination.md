@@ -1175,3 +1175,24 @@ independent case coverage; a count alone or compiled SQL cannot certify native
 key stability/uniqueness. Keep business-key paging proof under its actual admitted
 catalog/native/authority profile. This published source review adopts no unfinished
 security lineage API and promotes no acceptance case.
+
+### Security owner source-to-scope demand binding observation — 2026-10-10
+
+The read-only [source review](evidence/design-audit/security-source-scope-owner-review.json)
+records three unfinished untracked Weft owner sources at working HEAD94b2de5.
+Private `issue_demands` now borrows scope keys from retained OwnerCoverage,
+associates original source IDs with scan/action/application scopes, and obtains
+candidate capabilities from that same original assignment relation. Four focused
+source-demand test methods cover complete maps/budgets, distinct actions on one
+field, output/self-join/false-branch ownership and disjoint candidates/zero-edge
+selection. This advances the shared owner's declaration-lineage work; Truss does
+not reconstruct capability products or infer assignments from backend labels.
+
+The owner thread reports118 tests while reconciling aggregate evidence validation;
+its current turn includes failed aggregate runs. Truss has not rerun those tests,
+verified their whole selected source set or adopted a new API/ABI. Per-capability
+source/site/case native assignment proof, exact registered Truss layout/profile,
+authenticated subject/current authority and complete publication remain required.
+Keep the existing owner interface and original source-byte retention until the
+owner publishes a closed qualified handoff. The Truss native registry/OC02 checks
+are separate integrity correspondence and grant no security authority.

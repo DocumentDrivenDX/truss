@@ -72,23 +72,3 @@ def check_registry_correspondence(body, installation, actual_xid, rows, maximum_
                 raise ValueError('Original registry contributor artifact mismatch')
         contributors.append(original)
     return RegistryCorrespondence(tuple(cohort),tuple(contributors))
-
-
-def resolve_unfinished_operation(correspondence):
-    """OC02 selection from an independently admitted complete captured cohort.
-
-    Commit uses the entire cohort instead; it must not call this observer selector.
-    Native custody/current authority and liveness remain external, and neither
-    this projection type nor a phase label grants permission to produce effects.
-    """
-    if type(correspondence) is not RegistryCorrespondence:
-        raise ValueError('Original complete registry correspondence required')
-    selected = None
-    for operation in correspondence.cohort:
-        if operation.cells[3] != 'application_finalized':
-            if selected is not None:
-                raise ValueError('Original unfinished operation is ambiguous')
-            selected = operation
-    if selected is None:
-        raise ValueError('Original unfinished operation is missing')
-    return selected

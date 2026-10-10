@@ -1048,3 +1048,30 @@ callable dependency closure, complete touch contributor coverage, resource/nativ
 work/deadline, seven semantic bodies and original application settlement remain
 unqualified. No synthetic historical carrier is relabeled, public API released or
 consumer acceptance case promoted.
+
+### OC02 unique unfinished selection after complete correspondence (2026-10-10)
+
+The private Python `resolve_unfinished_operation` now applies the existing OC02
+rule to the complete retained correspondence cohort: zero unfinished operations
+refuses missing custody; more than one refuses ambiguity; exactly one returns
+that original operation object. Finalized later ordinals do not replace the
+unfinished operation. OC06 commit continues to use the complete cohort, not this
+observer selector. Projection constructors, supplied labels and phase strings
+cannot establish native admission/current authority/liveness.
+
+`evidence/design-audit/python-registry-unfinished-source.json` pins 95 passing
+Python source tests. It also maps the two changed source/test files to retained
+exact initial archives matching the historical94-test receipt.
+`registry-unfinished-native.json` records twelve passing native observations and
+nine complete registry captures on PostgreSQL16.15. It adds actual native phase
+schedules: two unfinished7/11 refuse without latest fallback; unique unfinished7
+is selected with finalized11/20 retained; three finalized operations refuse
+observer selection while remaining in the complete cohort. Fixture-owner phase
+updates are synthetic scheduling, not semantic readiness/finalization proof. The
+original nine read/cell/substitution/rollback checks remain in this separately
+pinned producer; its initial checker/receipt are preserved unchanged.
+
+This realizes OC02's host-side selection component without filling the seven
+semantic wrappers' native body/owner/ACL/dependency registrations. Complete
+protected producer/context/authority, OC03–OC07 actual effect/settlement/account
+composition and ordinary-role installation remain outstanding.

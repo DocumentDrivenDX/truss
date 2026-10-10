@@ -1,0 +1,36 @@
+{
+  "checkedAt": "2026-10-10T10:46:35.811356+00:00",
+  "scope": "read-only unfinished owner source inspection; no owner tests rerun, publication or adoption",
+  "ownerHead": "94b2de5e303fe53f0c9432458119b6fe1eef187c",
+  "ownerStatus": "?? crates/weft-core/src/security_obligation_custody.rs\n?? crates/weft-core/src/security_obligation_sources.rs\n?? crates/weft-core/src/security_semantic_coverage.rs\n",
+  "sourceSha256": {
+    "crates/weft-core/src/security_obligation_sources.rs": "571e3131fe5b67eb402ff4e5b87eda249d6867440eeb7fd0cf3ae419cd9a10bf",
+    "crates/weft-core/src/security_semantic_coverage.rs": "ff8a8472cc97a731a4dcb5cba0ccab1d44d4d0e6c2f334a2339bc550ff8bee72",
+    "crates/weft-core/src/security_obligation_custody.rs": "881ee322e3ba861c08ab2f96268f486fbb265c57872c02a5fdff6b9da13c8c12"
+  },
+  "observed": [
+    "private source IDs now bind to borrowed retained CoverageScope values",
+    "candidate lookup uses original OwnerCoverage assignments",
+    "scan/action and application scopes retained; no Truss capability product or label parser",
+    "bounded work/text/source-demand edge charging",
+    "four independent source-demand semantic test methods present"
+  ],
+  "testMethodsPresent": [
+    "issued_source_demands_match_independent_complete_fixture_map_and_exact_budgets",
+    "issued_source_demands_accumulate_distinct_original_actions_on_one_field",
+    "issued_source_demands_keep_output_selfjoin_and_false_branch_ownership",
+    "issued_source_demands_preserve_disjoint_candidates_and_zero_edge_selection"
+  ],
+  "ownerThread": "01a11b8b-06bb-7091-a11a-b7eba0a432eb",
+  "ownerTurn": "01a12565-0089-7ea0-ac01-f9121c3b8722",
+  "ownerReportedTestCount": 118,
+  "ownerEvidenceIntegrationStatus": "in progress; thread includes failed aggregate validation runs",
+  "nativeAuthorityAdopted": false,
+  "remaining": [
+    "published closed owner interface",
+    "per-capability source/site/case native assignment proof",
+    "original authenticated subject and current authority",
+    "registered Truss physical layout codec/profile",
+    "complete owner evidence validation"
+  ]
+}

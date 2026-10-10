@@ -4,7 +4,7 @@ import unittest
 from dataclasses import FrozenInstanceError
 from truss._row_operation_address import encode_row_operation_address
 from truss._row_operation_custody import decode_row_operation_custody
-from truss._row_registry_correspondence import check_registry_correspondence, resolve_unfinished_operation
+from truss._row_registry_correspondence import check_registry_correspondence
 from test_row_operation_context import fixtures
 
 
@@ -58,22 +58,6 @@ class RegistryCorrespondenceTests(unittest.TestCase):
             with self.subTest(field=field),self.assertRaises(ValueError):check(body,rows)
         body,rows=fixture();g=json.loads(bytes.fromhex(rows[0][14]));g['operationKind']='import';rows[0][14]=json.dumps(g).encode().hex()
         with self.assertRaises(ValueError):check(body,rows)
-
-    def test_unique_unfinished_selection_without_latest_fallback(self):
-        body,rows=fixture()
-        with self.assertRaisesRegex(ValueError,'ambiguous'):
-            resolve_unfinished_operation(check(body,rows))
-        # A finalized later ordinal must never replace the unfinished ordinal7.
-        rows[2][3]='application_finalized'
-        rows[2][5:8]=['0','0','0'];rows[2][15]='ff'
-        result=check(body,rows)
-        self.assertIs(resolve_unfinished_operation(result),result.contributors[0])
-        self.assertEqual(resolve_unfinished_operation(result).cells[1],'7')
-        rows[1][3]='application_finalized'
-        rows[1][5:8]=['0','0','0'];rows[1][15]='ff'
-        with self.assertRaisesRegex(ValueError,'missing'):
-            resolve_unfinished_operation(check(body,rows))
-        with self.assertRaises(ValueError):resolve_unfinished_operation(None)
 
     def test_duplicate_foreign_and_complete_capture_bounds(self):
         body,rows=fixture()
