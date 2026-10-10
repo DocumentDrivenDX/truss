@@ -86,29 +86,44 @@ variant; an exception without recovery custody cannot replace it.
 
 ## Implementation and qualification order
 
-1. Select the complete installed bundle on the local16.2 profile, including all
-   routine/grant/initializer obligations. Current structural checks do not satisfy
-   this step. Define one complete populated M1 source/target route and independent
-   preservation expectations, retaining historical receipt/feed/epoch semantics.
-2. Implement original status/verify inspection and verifier on the selected
-   driver, proving no writes and refusing incomplete source observations. Package
-   these original inputs; test byte-modified or missing delivered artifacts.
-3. Bind original administrative admission, installed-target recovery registry and
-   driver settlement services. Wrong service/profile, changed request, unavailable
-   recovery custody and caller-owned transaction must refuse before effects.
-4. Implement apply under the exact M1 route. Exercise real first-step effects then
-   late-step failure, complete rollback and no target publication. Independently
-   verify objects, keys, edges, exact values, reports, journal, receipts, feed
-   positions and unresolved recovery state.
-5. Implement settlement and fresh-process reconcile using actual lost acknowledgement
-   and post-commit verification failure. Prove that reconcile repeats no recipes,
-   confirmed commits survive framework rollback, and unavailable lookup keeps
-   readiness closed.
-6. Qualify a built Python distribution outside the checkout with only its declared
-   dependencies and delivered route artifacts. Prove fresh bootstrap separation,
-   unsupported-route refusal, no upgrade on startup and ordinary UMF model changes
-   without DDL. Run corresponding TypeScript/Python committed interchange on the
-   same selected source/target/security/driver tuple.
+The [accelerated queue](local-runtime-installation-migration-plan.md#accelerated-capability-queue--owner-direction-2026-10-09)
+supersedes the earlier ordering that required a populated route before fresh
+installation and usable Python operations.
+
+1. P0/P1: select a complete fresh-install bundle on a corrected local runtime
+   tuple, with actual original issuer/account, all routine/grant/initializer
+   obligations and protected authority. Published pgserver0.1.4/16.2 has the
+   observed caller-reset defect; the private16.15 candidate has scoped evidence
+   but is not a published default. Complete reproducible delivery and actual
+   original driver/security/native integration before advertising installation.
+2. P1: implement explicit fresh install, original status/verify inspection and
+   independent verifier. Package the original inputs; byte-modified/missing
+   artifacts refuse. Prove late bootstrap failure leaves no ready installation,
+   and distinguish lost commit acknowledgement from confirmed commit with
+   unverified readiness. Bind original attempt recovery/admission and settlement
+   services before effects; wrong service/profile, unavailable recovery custody
+   or caller-owned transaction refuses. Fresh install does not require M1.
+3. P2/P3: qualify installed Python consumer operations and the executable preview
+   corpus, including R4/R5/document qualification in the first usable slice,
+   followed by feed/durable retry receipts. Status/verify and migration recipe
+   packaging remain alongside installation; do not wait for a populated upgrade
+   to make application operations usable. No migration apply is implied by this.
+4. P4: select a real coherent populated M1 source/target route with an actual
+   physical-change requirement and independent preservation expectations. Then
+   implement apply under its original registered administrative composition.
+   Exercise first-step effects followed by late failure, complete rollback and
+   no target publication. Independently verify objects, keys, edges, exact values,
+   reports, journal, receipts, feed positions and unresolved recovery state.
+5. P4: qualify populated settlement/fresh-process reconcile with actual lost
+   acknowledgement and post-commit verification failure. Reconcile repeats no
+   recipes; confirmed commits survive later framework failure; unavailable lookup
+   preserves original uncertainty/readiness closure. Earlier bootstrap settlement
+   qualification remains distinct and is not deferred to this stage.
+6. Qualify built Python distributions outside the checkout at each applicable
+   milestone using only declared dependencies and delivered original artifacts.
+   Prove bootstrap separation, unsupported-route refusal, no startup upgrade and
+   ordinary UMF evolution without DDL. Complete corresponding TypeScript/Python
+   committed interchange and the full populated preservation corpus for release.
 
 Aurora and Lakebase remain separate advertised-target qualifications. The current
 pgserver/Python lifecycle wheel is useful local infrastructure, not evidence that
@@ -414,3 +429,43 @@ not authenticate references, select fallback SQL or initialize native state.
 Embedded callers inject their connection directly. Environment layering belongs
 to the reference launcher, and native current-state/profile checks remain with
 their existing owner. CFG-01–12 are qualification cases, not passed implementation.
+
+
+## Bounded administrative execution and recovery
+
+Use the existing original resource/cancellation/settlement profiles, not a new
+migration retry policy. The selected composition must name finite bounds for
+artifact input/validation, statement and result bytes/work, exclusion acquisition,
+native statement execution, response observation and cleanup/reconciliation.
+Their producers reserve required forward/containment capacity before effects.
+No unbounded blocking lock wait or stock-driver default can serve as admission.
+Use the security owner's qualified exclusion procedure and its exact timeout/
+refusal semantics; do not add a parallel advisory lock domain in Python.
+
+A refused exclusion or pre-effect deadline returns once with no recipe execution.
+A deadline after submission is not a refusal proving no effect: retain original
+attempt/cycle/transaction evidence, use the admitted cancellation/containment
+path, and return the original uncertain/recovery variant when confirmation is
+unavailable. A timeout cannot fabricate rollback, clean connection return or
+ready publication. Native statement_timeout is one selected component, not an
+end-to-end deadline or a substitute for resource/native transaction-lifetime
+qualification.16.15's missing transaction_timeout remains a profile limitation.
+
+Reconciliation is one explicit caller invocation against the same original
+attempt, bounded by the admitted observation profile. It performs no polling
+loop, apply call, callback replay or recipe resubmission. An unavailable result
+preserves original recovery custody; the caller decides whether/when to invoke
+again. Retain original confirmed commit even when later observation times out.
+Do not infer an attempt's outcome from target version equality, row absence,
+backend PID disappearance or a diagnostic event. Cleanup cannot silently reset
+pending original accounting or release quarantined custody.
+
+Required administrative schedules: exclusion contention before effects; deadline
+before first SQL; native timeout after a real first-step change; cancellation with
+and without correlated completion; lost COMMIT response; confirmed COMMIT followed
+by observation/cleanup timeout; bounded unavailable reconcile; explicit later
+reconcile resolving the same original attempt without any recipe call. Record
+actual timings/profile bounds, native status/control observations and independent
+ready/archive/receipt/source-target facts. These schedules are execution gates,
+not passed cases; original driver/account/security/recovery producers are still
+missing. Synthetic exceptions and component schemas cannot close them.

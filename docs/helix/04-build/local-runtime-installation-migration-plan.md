@@ -1103,3 +1103,16 @@ not Truss profile adoption. Keep native routine/profile comparison with that own
 retain the Truss original issuer/account and seven-body handoff separately, and do
 not wait for unrelated security backends or interpret a routine lock as policy
 activation or complete R4/R5 qualification.
+
+
+### Administrative ordering and bounded-recovery correction
+
+The owning Python migration/install handoff now follows P0–P4 explicitly: fresh
+install and bootstrap settlement precede preview operations, while actual populated
+M1 selection/apply/reconcile follows a coherent admitted source/target. It no longer
+selects defective16.2 or makes M1 a prerequisite for usable application operations.
+The bounded-administration section names original forward/containment/observation
+profile responsibilities, one explicit reconciliation invocation and timeout versus
+pre-effect-refusal distinctions. Actual native contention/cancellation/lost-commit/
+post-commit-cleanup schedules remain implementation gates; no stock driver or
+secondary lock/recovery mechanism is silently adopted.
