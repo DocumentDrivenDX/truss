@@ -1,8 +1,22 @@
 {
-  "owner": "DocumentDrivenDX/umf",
-  "revision": "322b193cef7c940d07b741860cf0170272628868",
-  "model": "docs/helix/02-design/models/truss-layout-core-structural-0.8.proposal.umf.json",
-  "assets": {
+  "scope": "Actual Chromium current static schema browser only; no Hugo rebuild/deployment, installed layout or complete native interpretation",
+  "browser": "153.0.8010.12",
+  "ownerRevision": "322b193cef7c940d07b741860cf0170272628868",
+  "coreProjection": "0.8",
+  "nativeBaseline": "0.16",
+  "definitions": 542,
+  "checks": [
+    "542 definitions and incomplete-semantics notice observed",
+    "Original memo Record includes all four cache Fields",
+    "Qualified writer Field fragment and exact Record row preserve native xid8",
+    "Memo Record renders the original capacity singleton FK",
+    "Core and cache native downloads byte-identical to original sources",
+    "390px mobile browser has no page overflow"
+  ],
+  "errors": [],
+  "modelSha256": "1cf0c1eb94196d1aecb4e41240e92dcf3aff78ea6457b1e6cf29c97b1bf1ea6d",
+  "nativeSourceSha256": "779130093789b2a0639ab55b050a21f2e32195dd3617cd15de36b42592afdab3",
+  "assetSha256": {
     "explorer.js": "ced5812c5c376036254da0960055a113a0232a26cf74f633128c2dd63b92ce60",
     "explorer.css": "f4f15ddfc7dfa1f04d1a3d3604fdbf039e566293e4ee834c424f83642e440ceb",
     "style.css": "6c686ba762afdb65112034b3666bb8079cf137e8365fc160fece1d7fc2482f7a",
@@ -16,9 +30,6 @@
     "truss-capacity-reservation.native.umf.json": "2e9f9459d37994e4b1e10a5f35b59e916c04328f774282e50cc3b7c52bd9de3e",
     "truss-capacity-cache.native.umf.json": "779130093789b2a0639ab55b050a21f2e32195dd3617cd15de36b42592afdab3"
   },
-  "scope": "Unmodified UMF browser JS/CSS; Truss HTML shell and exact current schema catalog. No production deployment.",
-  "coreProjection": "0.8",
-  "nativeBaseline": "0.16",
-  "interpretationComplete": false,
+  "producerSha256": "dd3a701b124db37bc6ab89fed285b39b9ccedb0d05e5ad4d5317c4218c976ef8",
   "installerReady": false
 }

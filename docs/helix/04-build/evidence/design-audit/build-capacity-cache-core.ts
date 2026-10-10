@@ -1,0 +1,53 @@
+/** Structural authoring from UMF's original declaration; no SQL parser/generator fork. */
+import {readDocument,writeDocument} from '/Users/erik/Projects/umf/src/model/document';
+import {getPostgresqlDdlDeclarations} from '/Users/erik/Projects/umf/src/adapters/postgresql/declarations';
+import {getPostgresqlSource} from '/Users/erik/Projects/umf/src/adapters/postgresql';
+import {renderTree} from '/Users/erik/Projects/umf/src/model/native-json';
+import {validateDocument} from '/Users/erik/Projects/umf/src/validation/document';
+const basePath='docs/helix/02-design/models/truss-layout-core-structural-0.7.proposal.umf.json';
+const sourcePath='docs/helix/02-design/contracts/capacity-cache-v0.1.proposal.umf.json';
+const sqlPath='packages/postgresql/native/capacity-reservation/commit-cache.sql';
+const modelPath='docs/helix/02-design/models/truss-layout-core-structural-0.8.proposal.umf.json';
+const receiptPath='docs/helix/04-build/evidence/design-audit/capacity-cache-core-source.json';
+for(const p of [modelPath,receiptPath])if(await Bun.file(p).exists())throw Error('Original output exists');
+const hash=(v:string|ArrayBuffer)=>new Bun.CryptoHasher('sha256').update(v).digest('hex');
+const frozen=new Map(await Promise.all([basePath,sourcePath,sqlPath].map(async p=>[p,await Bun.file(p).text()] as const)));
+const base=readDocument(frozen.get(basePath)!,'json'),model=readDocument(frozen.get(basePath)!,'json');
+const native=readDocument(frozen.get(sourcePath)!,'json');
+if(getPostgresqlSource(native)!==frozen.get(sqlPath))throw Error('Original source differs');
+const inventory=getPostgresqlDdlDeclarations(native);
+if(inventory.declarations.length!==1||inventory.unhandled.length!==10||inventory.complete!==false)throw Error('Original declaration scope differs');
+const d=inventory.declarations[0],relation=JSON.parse(renderTree(d.relation));
+if(d.kind!=='create-table'||relation.schemaname!=='truss'||relation.relname!=='capacity_check_memo')throw Error('Wrong original table');
+if(JSON.stringify(d.columns.map(c=>c.element.name))!==JSON.stringify(['singleton_id','writer_xid','dirty_generation','verified_generation']))throw Error('Incomplete columns');
+const module=model.modules.find(m=>m.id==='truss-layout')!;
+const ref=(element:string)=>({module:module.id,element});
+const record:any={id:relation.relname,name:relation.relname,kind:'record',members:[],references:[],keys:[],extensions:{'truss.layout.native':{sourceModel:sourcePath,sourcePointer:d.path,nativeStatement:JSON.parse(renderTree(d.nativeStatement)),scope:'Uninstalled cache adjunct; native CHECK/NULL/transaction identity retained, not portable semantic equivalence'}}};
+const fields:any[]=[];let foreign:any;
+for(const c of d.columns){
+ const column=JSON.parse(renderTree(c.nativeColumn)),constraints=(column.constraints??[]).map((v:any)=>v.Constraint),family=column.typeName.names.at(-1).String.sval;
+ const scalarType=family==='xid8'?'postgresql.xid8':['int2','int8'].includes(family)?'integer':undefined;
+ if(!scalarType)throw Error('Unreviewed native type');
+ const id=record.id+'.'+column.colname;
+ const required=constraints.some((v:any)=>['CONSTR_PRIMARY','CONSTR_NOTNULL'].includes(v.contype));
+ const field={id,name:column.colname,kind:'field',scalarType,cardinality:'one',nullability:required?'required':'unspecified',extensions:{'truss.layout.native':{sourceModel:sourcePath,sourcePointer:c.path,nativeType:column.typeName,constraints:column.constraints??[],sqlNullMeaning:'SQL NULL/coupled CHECK retained; core absence is not inferred',scope:'Native xid8 identity and integer bounds are not portable equality/admission proof'}}};
+ fields.push(field);record.members.push(ref(id));record.references.push({role:'member',...ref(id)});
+ if(constraints.some((v:any)=>v.contype==='CONSTR_PRIMARY'))record.keys.push({id:'primary-0',name:'primary-0',fields:[ref(id)],primary:true});
+ if(constraints.some((v:any)=>v.contype==='CONSTR_FOREIGN')){if(foreign)throw Error('Extra FK');const index=constraints.findIndex((v:any)=>v.contype==='CONSTR_FOREIGN');foreign={definition:constraints[index],sourcePointer:c.path+'/constraints/'+index+'/Constraint',source:id};}
+}
+if(!foreign||foreign.definition.pktable.schemaname!=='truss'||foreign.definition.pktable.relname!=='row_home_capacity'||JSON.stringify(foreign.definition.pk_attrs.map((v:any)=>v.String.sval))!==JSON.stringify(['singleton_id']))throw Error('Original FK differs');
+const target=module.elements.find(e=>e.id==='row_home_capacity')!;
+if(!target.keys?.some(k=>k.id==='primary-0'&&k.fields.length===1&&k.fields[0].element==='row_home_capacity.singleton_id'))throw Error('Original selected target Key differs');
+const relationship:any={id:'capacity-cache-fk-0',name:'capacity-cache-fk-0',source:[ref(record.id)],target:[{...ref(target.id),key:'primary-0'}],sourceMultiplicity:{min:0,max:1},targetMultiplicity:{min:0,max:1},targetLifecycle:'unspecified',directed:true,fieldCorrespondence:[{source:ref(foreign.source),target:ref('row_home_capacity.singleton_id')}],nativeCorrespondence:{sourceModel:sourcePath,sourcePointer:foreign.sourcePointer,definition:foreign.definition,scope:'Original singleton PK/FK structural association; not installed enforcement or transaction semantics'}};
+if(module.elements.some(e=>e.id===record.id)||module.relationships?.some(r=>r.id===relationship.id))throw Error('Duplicate adjunct');
+module.elements.push(record,...fields);module.relationships!.push(relationship);
+model.id='truss-layout-core-structural-0.8-cache-review';
+model.extensions!['truss.layout.native']={...(model.extensions!['truss.layout.native'] as any),structuralSource:basePath,structuralSourceSha256:hash(frozen.get(basePath)!),cacheSourceModel:sourcePath,cacheSourceSha256:hash(frozen.get(sourcePath)!),scope:'Native0.16 structural baseline plus uncomposed configuration/migration/reservation/cache adjuncts; not installed protected engine'};
+const restored=JSON.parse(JSON.stringify(model));restored.id=base.id;restored.extensions=base.extensions;restored.modules[0].elements=restored.modules[0].elements.filter((e:any)=>e.id!==record.id&&!fields.some(f=>f.id===e.id));restored.modules[0].relationships.pop();
+if(JSON.stringify(restored)!==JSON.stringify(base))throw Error('Original core content changed');
+const validation=validateDocument(model);if(!validation.valid)throw Error('Invalid core structure');
+const serialized=writeDocument(model,'json');if(JSON.stringify(readDocument(serialized,'json'))!==JSON.stringify(model))throw Error('Saved meaning differs');
+for(const [p,b] of frozen)if(await Bun.file(p).text()!==b)throw Error('Original input drift');
+await Bun.write(modelPath,serialized);
+const result={scope:'Core Record/four Fields/PK/singleton FK from original UMF native declaration; not SQL generation or installed equality/enforcement',sourceSha256:Object.fromEntries([...frozen].map(([p,b])=>[p,hash(b)])),modelPath,modelSha256:hash(serialized),producerSha256:hash(await Bun.file(import.meta.path).arrayBuffer()),recordCount:module.elements.filter(e=>e.kind==='record').length,fieldCount:module.elements.filter(e=>e.kind==='field').length,associationCount:module.relationships?.length,originalCoreRestoresExactly:true,originalRelationshipsUnchanged:true,addedRelationship:relationship,valid:validation.valid,complete:validation.complete,diagnostics:validation.diagnostics,installerReady:false};
+await Bun.write(receiptPath,JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify({valid:result.valid,complete:result.complete,records:result.recordCount,fields:result.fieldCount,associations:result.associationCount}));

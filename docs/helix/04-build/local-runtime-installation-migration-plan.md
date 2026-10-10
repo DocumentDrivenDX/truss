@@ -2190,3 +2190,28 @@ current security, native cumulative callback/work/overhead, cleanup and all seve
 semantic bodies remain required. Stored ledger profile bytes cannot authenticate
 themselves. Named-only operation-entry deferral remains necessary. Full reservation/
 installer readiness remain false and no criterion is promoted.
+
+## Commit-cache core/browser projection — 2026-10-10
+
+[Core structural0.8](../02-design/models/truss-layout-core-structural-0.8.proposal.umf.json)
+now includes the original memo Record, four Fields, singleton primary Key and FK
+from UMF's original table declaration. It has51 Records491 Fields61 associations.
+[Source correspondence](evidence/design-audit/capacity-cache-core-source.json)
+removes only the five new elements, one new relationship and explicit projection
+metadata to restore core0.7 exactly. All60 prior associations remain unchanged.
+Structural validation passes, semantic interpretation remains incomplete; native
+xid8 equality, SQL NULL and coupled CHECK/transaction meanings remain retained
+and separately qualified. This authors Truss core metadata from the owner's
+native inventory, not a SQL parser/generator or a new portable meaning for xid8.
+
+The site catalog/core download now use0.8 and expose the original native cache
+adjunct as a fifth separate source download. [Fresh UMF browser synchronization](evidence/design-audit/capacity-cache-browser-owner-sync.json)
+observes origin/main322b193 unchanged and matches all four owner JS/CSS/logo assets
+byte-for-byte. [Actual Chromium evidence](evidence/design-audit/capacity-cache-browser.json)
+passes six checks:542 displayed definitions and incomplete-semantics notice, all
+four memo Fields, exact qualified writer field/native xid8 row, original singleton
+FK rendering, byte-identical core/cache downloads and390px no overflow. There are
+no page errors; all site manifest asset pins match. This is static browser evidence,
+not a Hugo rebuild, production deployment, complete native interpretation or ready
+installer. Native baseline0.16 remains unchanged and the cache remains an
+unadopted installation/migration adjunct. No criterion is promoted.

@@ -105,6 +105,5 @@ callback. Ledger changes invalidate the actual-transaction proof; repeated queue
 events share one complete closeout verification. The30-check native receipt covers
 early/later checks, equal-image/new-epoch invalidation, rollback, overflow and actual
 COMMIT refusal for an unreleased operation or corrupt counters. UMF retains the
-source and one table/FK declaration. This unadopted adjunct still needs core/browser
-projection, original installed identity/ACL/profile/account closure and all seven
-semantic bodies. The callback's native cache is not cumulative work or authorization.
+source and one table/FK declaration. Core0.8/browser now includes this unadopted adjunct; original installed
+identity/ACL/profile/account closure and all seven semantic bodies remain required. The callback's native cache is not cumulative work or authorization.
