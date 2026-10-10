@@ -139,3 +139,53 @@ calls and context; quiet console alone is not success. Native state and durable
 receipts remain the independent authority for outcomes, even when diagnostics
 are missing or misleading. Exact carrier schema and selected SDK bridge are still
 implementation work; this candidate cannot be advertised as a released telemetry API.
+
+## Operation-path isolation and delivery lifetime
+
+The [installed Python logging source review](../../04-build/evidence/design-audit/python-logging-synchronous-boundary-review.json)
+shows that Handler.handle synchronously invokes filters/emit under its handler
+lock, and Logger.callHandlers can propagate to parent/lastResort handlers. A
+standard logger call on the product thread therefore cannot establish the
+nonblocking behavior above. Do not rely on raiseExceptions, a returned coroutine
+or an exporter timeout to contain arbitrary synchronous handler work.
+
+The selected implementation must split controlled emission from delivery:
+
+1. The owning original producer constructs only the closed safe fields, assigns
+   its original per-source sequence and reserves record/serialization/queue
+   overlap before allocation. No exception formatting, host repr, user filter,
+   logging handler, exporter or file callback runs at this boundary. Capture
+   admission is finite and invokes no native operation or automatic retry.
+2. Enqueue through a Truss-controlled bounded procedure. Queue denial, contention
+   or capture failure reports bounded loss/incomplete capture through the separate
+   status channel; it cannot wait for a handler or alter the product outcome.
+   Never invent a sequence, wrap/reset a spent counter or claim complete capture
+   when original sequence issuance is unavailable. Exact concurrent sequence/
+   queue/byte-account realization remains a qualification gate.
+3. Only an explicitly started delivery owner invokes the selected Python logging
+   facade and bridge/file transports from validated safe records. Pin its actual
+   handler propagation/filter/formatter/export path. It receives no original
+   connection, transaction, issuer, native result or recovery handle. Arbitrary
+   host callback/native resource use remains outside a controlled-ingress claim
+   unless a separately realizable complete delivery profile is qualified.
+4. Close diagnostic ingress explicitly on disposal. The one-second flush bound
+   stops waiting and reports incomplete delivery; it is not proof a blocked host
+   handler/thread/process stopped or released retained records. Keep original
+   queued/in-flight charges until the delivery producer establishes their actual
+   lifetime end. No timeout, dropped reference or logger close invents release.
+
+Include diagnostic capacity in the original enclosing accounting plan with
+explicit forward/capture/delivery ownership. It cannot consume or refund the
+separately reserved native containment/recovery capacity. If optional diagnostic
+capacity is unavailable, preserve the native operation and record capture loss;
+do not allocate an independent unmetered fallback buffer. Required product
+results, durable receipts, recovery references and conformance evidence keep
+their own complete custody contracts and are never droppable diagnostic records.
+
+An exporter exception cannot become a SQL/transaction error classification. A
+native exception, cancellation or unknown COMMIT cannot be caught as merely an
+export failure. First preserve the original product settlement/containment and
+recovery; attempt safe diagnostics only through the isolated boundary. No success
+or clean-disposal claim follows from silent logs or a successful flush. The actual
+emitter, original account/sequence producer, delivery worker and independent
+outage/lifetime schedules remain unimplemented/unqualified.

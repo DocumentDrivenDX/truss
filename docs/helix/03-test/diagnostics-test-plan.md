@@ -38,3 +38,24 @@ need their own target evidence. Product receipts and native observations are
 separate references: neither missing logs nor a matching diagnostic digest proves
 commit, authority or recovery. Current CLI output includes local connection data;
 that is an explicit local result, not a safe diagnostic record to ingest wholesale.
+
+OBS-05/06 must additionally install host filters/handlers/formatters that block,
+throw, reenter logging and propagate to a parent/lastResort handler. Independently
+observe that none runs on the native product operation path and that queue
+denial/contended admission produces bounded incomplete-capture status without an
+operation wait, resubmission or altered settlement. Use original sequence/byte
+producer observations; a fake handler reporting nonblocking cannot be its oracle.
+
+Hold a selected delivery callback past the flush deadline. Require bounded return
+with incomplete delivery and retained in-flight charges; do not report worker
+termination or memory release from timeout alone. Concurrent emission/drop cases
+must retain exact source sequence/loss correspondence and refuse counter wrap or
+reset. Missing original issuance/account correspondence keeps that diagnostic
+profile unqualified, without manufacturing a product failure.
+
+Combine exporter failure with native confirmed rollback, unknown response and
+confirmed commit followed by cleanup failure. Compare exact independent product
+result, durable receipt/recovery custody and native submissions with diagnostics
+disabled. Neither optional telemetry loss nor exporter recovery may discard
+required result/conformance evidence or retry a Truss write. These extend existing
+OBS-01/05/06/08 controls; no new case is passed by the source review.
