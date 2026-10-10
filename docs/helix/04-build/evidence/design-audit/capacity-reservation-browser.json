@@ -1,8 +1,21 @@
 {
-  "owner": "DocumentDrivenDX/umf",
-  "revision": "322b193cef7c940d07b741860cf0170272628868",
-  "model": "docs/helix/02-design/models/truss-layout-core-structural-0.7.proposal.umf.json",
-  "assets": {
+  "scope": "Actual Chromium current static schema browser only; no Hugo rebuild/deployment, installed layout or complete native interpretation",
+  "browser": "153.0.8010.12",
+  "ownerRevision": "322b193cef7c940d07b741860cf0170272628868",
+  "coreProjection": "0.7",
+  "nativeBaseline": "0.16",
+  "definitions": 537,
+  "checks": [
+    "537 definitions and incomplete-semantics notice observed",
+    "Original ledger Record includes all six reservation Fields",
+    "Qualified writer Field fragment and exact Record row preserve native xid8",
+    "Core and reservation native downloads byte-identical to original sources",
+    "390px mobile browser has no page overflow"
+  ],
+  "errors": [],
+  "modelSha256": "e08142c25e98f131b75a794ad8cb38bb51ffb696a3a5aa3ef4e970c853ddd3f1",
+  "nativeSourceSha256": "2e9f9459d37994e4b1e10a5f35b59e916c04328f774282e50cc3b7c52bd9de3e",
+  "assetSha256": {
     "explorer.js": "ced5812c5c376036254da0960055a113a0232a26cf74f633128c2dd63b92ce60",
     "explorer.css": "f4f15ddfc7dfa1f04d1a3d3604fdbf039e566293e4ee834c424f83642e440ceb",
     "style.css": "6c686ba762afdb65112034b3666bb8079cf137e8365fc160fece1d7fc2482f7a",
@@ -15,9 +28,6 @@
     "truss-layout-migration.native.umf.json": "45e1f57588c21e6b107031732cd6c135d759e4c8f7221e19642d053437e9bf79",
     "truss-capacity-reservation.native.umf.json": "2e9f9459d37994e4b1e10a5f35b59e916c04328f774282e50cc3b7c52bd9de3e"
   },
-  "scope": "Unmodified UMF browser JS/CSS; Truss HTML shell and exact current schema catalog. No production deployment.",
-  "coreProjection": "0.7",
-  "nativeBaseline": "0.16",
-  "interpretationComplete": false,
+  "producerSha256": "6acbe80c65c611e225876be8b106f6840103dba221e00952e70041f00d642c59",
   "installerReady": false
 }

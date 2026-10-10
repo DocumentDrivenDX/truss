@@ -1,0 +1,29 @@
+{
+  "scope": "Fresh origin/main observation and exact selected UMF browser/site byte comparison; no owner tests rerun or native qualification",
+  "ownerRevision": "322b193cef7c940d07b741860cf0170272628868",
+  "observedOriginMain": "322b193cef7c940d07b741860cf0170272628868",
+  "assets": [
+    {
+      "name": "explorer.js",
+      "sha256": "ced5812c5c376036254da0960055a113a0232a26cf74f633128c2dd63b92ce60",
+      "siteBytesMatch": true
+    },
+    {
+      "name": "explorer.css",
+      "sha256": "f4f15ddfc7dfa1f04d1a3d3604fdbf039e566293e4ee834c424f83642e440ceb",
+      "siteBytesMatch": true
+    },
+    {
+      "name": "style.css",
+      "sha256": "6c686ba762afdb65112034b3666bb8079cf137e8365fc160fece1d7fc2482f7a",
+      "siteBytesMatch": true
+    },
+    {
+      "name": "logo.svg",
+      "sha256": "5f40ae4ea560f51199abac4dda14b93d72b1667487a9791f4846cab73e4e114d",
+      "siteBytesMatch": true
+    }
+  ],
+  "coreProjection": "0.7",
+  "installerReady": false
+}

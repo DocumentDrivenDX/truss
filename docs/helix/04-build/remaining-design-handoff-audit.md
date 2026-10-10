@@ -962,3 +962,23 @@ remains an unadopted proposal rather than a renewed consumer vote. This does not
 block the original Truss reservation/guard implementation or adopt a new compiler
 ABI. Continue those native components, then qualify the exact matching owner
 physical/security route before protected installation and public operations.
+
+
+## Reservation core/browser handoff — 2026-10-10
+
+The current structural inspection projection is now core0.7, with six original
+reservation Fields on the existing ledger,50 Records/487 Fields and all60 original
+associations unchanged. [Source correspondence](evidence/design-audit/capacity-reservation-core-source.json)
+restores all prior core0.6 content exactly after removing the explicit adjunct.
+UMF validation is valid/complete=false: native xid8/SQL NULL/coupled CHECK and
+protected operation attribution remain separate. No pre-insertion operation FK,
+new accepted native layout or replacement core-generated DDL is invented.
+
+[Actual Chromium inspection](evidence/design-audit/capacity-reservation-browser.json)
+passes537 displayed definitions, complete ledger members, qualified writer/xid8
+navigation, byte-exact source downloads and390px mobile/error controls.
+[Fresh owner comparison](evidence/design-audit/capacity-reservation-browser-owner-sync.json)
+confirms latest observed origin/main322b193 and unchanged owner browser assets.
+This updates current schema-browser assets only; Hugo rebuild/deployment and
+native installation were not performed. The reservation producer/guard/resource/
+physical-ID/native closure remains the next execution work.

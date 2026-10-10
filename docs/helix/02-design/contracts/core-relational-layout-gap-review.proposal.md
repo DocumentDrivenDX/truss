@@ -86,3 +86,33 @@ installed enforcement. Those separate capabilities must retain their own
 explicit limits and evidence. The Model-page owner browser presents the
 validated current structural projection and its retained native payloads;
 its complete=false notice is part of the truthful supported contract.
+
+
+## Reservation structural/browser projection — 2026-10-10
+
+[Core0.7](../models/truss-layout-core-structural-0.7.proposal.umf.json) adds six
+original reservation Fields to the existing row_home_capacity Record. The
+[original-source authoring receipt](../../04-build/evidence/design-audit/capacity-reservation-core-source.json)
+uses UMF's declaration inventory and native-tree rendering, not a second SQL
+parser/generator. It verifies all original core0.6 content can be restored
+exactly after removing this adjunct, with every existing relationship unchanged.
+There are50 Records/487 Fields/60 associations. Core validation is valid but
+interpretation complete=false; xid8 stays an explicit native family and SQL NULL
+is not silently relabeled as core absence. The full original coupled CHECK is
+retained on the Record, with source pointers/model pins on all added Fields.
+
+No operation FK is invented: reservation must precede insertion of the operation
+it reserves. Exact native operation/reservation correspondence belongs to the
+protected producer/observer protocol. This projection is not installed native0.16
+or an accepted new physical layout/version and cannot generate replacement DDL
+from unsupported portable key meanings.
+
+The site's current UMF browser now loads this model and offers the exact original
+reservation native-model download. [Chromium evidence](../../04-build/evidence/design-audit/capacity-reservation-browser.json)
+observes537 definitions, all six ledger members, qualified writer-field fragment/
+xid8 row, exact core/native downloads and no390px overflow or page errors. Scope
+is the current static schema browser; Hugo rebuild and deployment were not run.
+[Fresh owner sync](../../04-build/evidence/design-audit/capacity-reservation-browser-owner-sync.json)
+retains origin/main322b193 and exact byte equality of all four selected owner
+browser JS/CSS/logo assets. No owner browser implementation is forked. Earlier
+core0.6/browser observations retain their historical model/count scope.

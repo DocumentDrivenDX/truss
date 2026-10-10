@@ -1,0 +1,42 @@
+/** Actual Chromium inspection of current static schema assets; no deploy/native proof. */
+import {chromium} from '/Users/erik/Projects/umf/node_modules/playwright';
+const base='http://127.0.0.1:8767/schema/';
+const modelPath='docs/helix/02-design/models/truss-layout-core-structural-0.7.proposal.umf.json';
+const nativePath='docs/helix/02-design/contracts/row-home-capacity-reservation-v0.1.proposal.umf.json';
+const receiptPath='docs/helix/04-build/evidence/design-audit/capacity-reservation-browser.json';
+if(await Bun.file(receiptPath).exists())throw Error('Original receipt exists');
+const hash=(v:string|ArrayBuffer)=>new Bun.CryptoHasher('sha256').update(v).digest('hex');
+const model=await Bun.file(modelPath).text(),native=await Bun.file(nativePath).text();
+const checks=[] as string[],errors=[] as string[];
+const browser=await chromium.launch();
+try{
+ const page=await browser.newPage();page.on('pageerror',e=>errors.push(e.message));
+ await page.goto(base,{waitUntil:'networkidle'});
+ const overview=await page.locator('#inspector').innerText();
+ if(!overview.includes('537 definitions')||!overview.includes('Core structure valid')||!overview.includes('Some semantics are not interpreted'))throw Error('Current definition/qualification observation mismatch');
+ checks.push('537 definitions and incomplete-semantics notice observed');
+ await page.getByRole('link',{name:'row_home_capacity',exact:true}).click();
+ const record=await page.locator('#inspector').innerText();
+ const names=['reservation_writer_xid','reservation_operation_ordinal','reservation_context_bytes','reservation_plan_bytes','reservation_initial_rows','reservation_initial_custody_bytes'];
+ if(!names.every(name=>record.includes(name)))throw Error('Complete reservation Record members missing');
+ checks.push('Original ledger Record includes all six reservation Fields');
+ await page.getByRole('link',{name:'reservation_writer_xid',exact:true}).last().click();
+ const identity=JSON.parse(new URLSearchParams(new URL(page.url()).hash.slice(1)).get('definition')!);
+ const row=page.locator('#inspector table tr').filter({hasText:'reservation_writer_xid'});
+ if(JSON.stringify(identity)!==JSON.stringify(['truss-layout','row_home_capacity.reservation_writer_xid'])||await row.count()!==1||!(await row.innerText()).includes('postgresql.xid8'))throw Error('Qualified field fragment/native row mismatch');
+ checks.push('Qualified writer Field fragment and exact Record row preserve native xid8');
+ const response=await page.request.get(base+'truss-layout.umf.json');
+ if(!response.ok()||await response.text()!==model)throw Error('Core download differs');
+ const adjunct=await page.request.get(base+'truss-capacity-reservation.native.umf.json');
+ if(!adjunct.ok()||await adjunct.text()!==native)throw Error('Original native download differs');
+ checks.push('Core and reservation native downloads byte-identical to original sources');
+ await page.setViewportSize({width:390,height:844});
+ if(await page.evaluate(()=>document.documentElement.scrollWidth>window.innerWidth))throw Error('Mobile horizontal overflow');
+ checks.push('390px mobile browser has no page overflow');
+ if(errors.length)throw Error('Browser errors: '+JSON.stringify(errors));
+ const manifest=JSON.parse(await Bun.file('website/static/schema/manifest.json').text());
+ for(const [name,pin] of Object.entries(manifest.assets))if(hash(await Bun.file('website/static/schema/'+name).arrayBuffer())!==pin)throw Error('Site asset pin mismatch');
+ if(await Bun.file(modelPath).text()!==model||await Bun.file(nativePath).text()!==native)throw Error('Original model drift');
+ await Bun.write(receiptPath,JSON.stringify({scope:'Actual Chromium current static schema browser only; no Hugo rebuild/deployment, installed layout or complete native interpretation',browser:browser.version(),ownerRevision:manifest.revision,coreProjection:'0.7',nativeBaseline:'0.16',definitions:537,checks,errors,modelSha256:hash(model),nativeSourceSha256:hash(native),assetSha256:manifest.assets,producerSha256:hash(await Bun.file(import.meta.path).arrayBuffer()),installerReady:false},null,2)+'\n');
+ console.log(JSON.stringify({definitions:537,checks:checks.length,errors:errors.length,installerReady:false}));
+}finally{await browser.close();}
