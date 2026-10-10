@@ -75,6 +75,16 @@ The next owner exit is complete public query resolution/backend/host composition
 not reimplementing the new syntax parser in Truss. No upstream tests were rerun
 or story/acceptance cases promoted by this source review.
 
+The seven-body manifest's CONTRACT-006 pin is reconciled with the current
+original-payload/per-fragment disclosure clarification. The [semantic review](evidence/design-audit/routine-feed-disclosure-source-review.json)
+archives the previous exact manifest and records why selected signatures,
+attributes, producer membership and counting meanings remain unchanged.
+Current source checking passes seven routines/thirteen trigger references;
+[normal/optimized corruption controls](evidence/design-audit/routine-feed-disclosure-controls.json)
+pass16 cases. Native bodies, roles, complete dependencies and readiness remain
+unqualified. A corrected source pin cannot substitute original authority or
+publish a working installer.
+
 ### Recent handoffs allocated to the existing execution queue
 
 These inputs refine existing work packages. They create no separate release lane,
