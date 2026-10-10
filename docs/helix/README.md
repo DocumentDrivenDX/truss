@@ -59,8 +59,17 @@ tracks the remaining work. [ADR-001](02-design/adr/ADR-001-language-and-portable
 AGENTS.md precondition for code is met; implementation should still trace to
 framed requirements.
 
-Owner direction: PostgreSQL is the initial backing engine; implementation is
-TypeScript first, with Rust only if a measured need arises.
+Owner direction: PostgreSQL is the initial backing engine. Accepted
+[ADR-003](02-design/adr/ADR-003-conforming-implementations-and-shared-contracts.md)
+selects a Truss-owned, tested Python 3.11 implementation as the immediate delivery
+priority, without waiting for a Rust port or a complete TypeScript engine. Weft
+owns the Rust SQL compiler; authorization stays with its existing workstream.
+The TypeScript core/package split remains governed by ADR-001. Both implementations
+must satisfy the shared contracts and language-neutral corpus, including interchange.
+The [installation and migration plan](04-build/local-runtime-installation-migration-plan.md)
+selects pgserver as the default local development/test runtime, explicit installation
+and migrations, one stale refusal without retry loops, document-qualified identities
+and host-supplied PostgreSQL connections. Pool operations belong to the host.
 
 Key open decisions: supported PostgreSQL versions, backend distribution and shared-interface gates,
 how a future Rust core would read UMF (the TypeScript core uses UMF's library, ADR-001 D4), and first users.

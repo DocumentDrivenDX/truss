@@ -31,6 +31,17 @@ full acceptance → mutation → journal → feed → acknowledgement contract.
 Follow these unless a later ADR supersedes them. Points an ADR marks
 provisional may change when its validation measurements report.
 
+- Accepted ADR-003 amends ADR-001's Python restriction. Prioritize the Truss-owned,
+  tested embeddable Python 3.11 implementation; do not wait for a Rust port or a
+  complete TypeScript engine. Consume Weft's Rust Python bridge and the existing
+  authorization boundary without implementing competing compiler/resolver semantics.
+  Qualify both implementations against the shared corpus and native interchange.
+- The owner-selected local runtime is pgserver, with explicit installation and
+  infrequent migrations. The host supplies the PostgreSQL connection and operates
+  any pool. Stale admission returns one refusal without internal retries. Catalog
+  identity is document-qualified. Consult the current installation/migration plan
+  for the observed PostgreSQL16.2 component scope and remaining complete-runtime gates.
+
 - [ADR-001](docs/helix/02-design/adr/ADR-001-language-and-portable-core.md):
   TypeScript (strict, ES modules), with Bun for development, tests and tooling.
   The library supports Bun and Node 22 and later LTS lines (Node provisional
@@ -71,8 +82,10 @@ provisional may change when its validation measurements report.
 CONTRACT-001 through CONTRACT-012 describe the storage, journal, catalog,
 mutation, embedding, bootstrap and Weft handoff boundaries. Start physical
 layout work with CONTRACT-012 and its installation gap matrix. The current
-reviewed native component model is 0.15; its separate core structural projection
-is 0.3. Earlier layout and compiler packets remain historical evidence and must
+reviewed source-epoch native component model is 0.16; the separate core structural
+projection is 0.6 and includes uncomposed configuration/migration adjuncts. These
+are component review inputs, not a complete installed profile. Earlier layout and
+compiler packets remain historical evidence and must
 not be silently combined into an installed profile.
 
 PostgreSQL 17.9 has component evidence. Supported deployment versions, complete

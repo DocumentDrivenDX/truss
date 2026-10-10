@@ -23,7 +23,7 @@ ddx:
 
 ## Scope
 
-Truss is an embeddable property-graph storage toolkit and a first TypeScript reference implementation over PostgreSQL. It consumes UMF meaning and exposes a versioned storage contract to Weft. The host owns deployment, authentication, connections and transaction lifetime. Public requirements and contracts remain drafts; this architecture does not approve them or claim implemented support.
+Truss is an embeddable property-graph storage toolkit with Truss-owned Python and TypeScript implementations over one PostgreSQL storage contract. The immediate delivery priority is the tested Python 3.11 implementation selected in [ADR-003](adr/ADR-003-conforming-implementations-and-shared-contracts.md), using Weft's Rust Python bridge and the shared authorization boundary. Python does not wait for a Rust port or a complete TypeScript engine. It consumes UMF meaning and exposes a versioned storage contract to Weft. The host owns deployment, authentication, connections and transaction lifetime. Public requirements and contracts remain drafts; this architecture does not claim implemented support.
 
 UMF is the machine-readable metamodel and schema interchange fabric. Weft owns source SQL semantics, logical query planning and compiler embedding. Truss owns physical graph storage, catalog acceptance, write enforcement, history and execution obligations. A reference Truss implementation is a consumer of UMF, not UMF's semantic authority.
 
@@ -40,7 +40,7 @@ UMF is the machine-readable metamodel and schema interchange fabric. Weft owns s
 
 ## Level 2: Containers and Packages
 
-These are in-process packages, not required services. ADR-001 governs TypeScript first, separate packages and the host-neutral core. Package names below are proposed workspace locations, not published package identifiers.
+These are in-process packages, not required services. ADR-001 governs the TypeScript package split and host-neutral core; accepted ADR-003 amends its Python restriction. The following TypeScript workspace map does not postpone the Python delivery path or require a JavaScript service in a Python host. Package names below are proposed workspace locations, not published package identifiers.
 
 | Package | Responsibility | Allowed dependencies |
 | --- | --- | --- |
@@ -180,7 +180,7 @@ The reference example demonstrates metadata admission, explicit native mapping r
 
 ### PostgreSQL helper language versus portable-core language
 
-ADR-001 settles TypeScript first and the portable-core/runtime adapter split. Its measurable triggers for a future Rust core are architectural decision criteria, not a choice of Rust-written PostgreSQL triggers. Weft's Rust compiler remains a separately owned capability. Native database verifier/parser/comparator/resource/helper declarations belong to the selected PostgreSQL deployment profile; exact language/build/type/security/grant/extension requirements remain unresolved and must be inventoried before adoption. A compiled helper, if proposed, requires explicit original source/build/deployment review and stays outside browser core/package imports. No missing native procedure may be replaced with a synchronous TypeScript/network callback at COMMIT.
+ADR-001 settles the TypeScript portable-core/runtime adapter split; ADR-003 selects a Truss-owned Python implementation against the same contracts and corpus. Its measurable triggers for a future Rust core are architectural decision criteria, not a choice of Rust-written PostgreSQL triggers. Weft's Rust compiler remains a separately owned capability. Native database verifier/parser/comparator/resource/helper declarations belong to the selected PostgreSQL deployment profile; exact language/build/type/security/grant/extension requirements remain unresolved and must be inventoried before adoption. A compiled helper, if proposed, requires explicit original source/build/deployment review and stays outside browser core/package imports. No missing native procedure may be replaced with a synchronous host-language/network callback at COMMIT.
 
 ### Native PostgreSQL artifact distribution boundary
 
@@ -231,7 +231,7 @@ Owner deployment constraint, 2026-10-07: an extension dependency is permitted on
 
 ### Selected reference implementation languages
 
-The reference implementation uses the ADR-001 portable TypeScript core and SQL plus PL/pgSQL for PostgreSQL fixed observations and protected orchestration. This is the implementation-language selection for CH-02, not acceptance of an installed native profile. Use SQL for fixed relational observations; PL/pgSQL for the five trigger handlers, two ordinary complete-scope validators, and mutation/catalog/receipt/lifecycle orchestration. The [managed routine review](contracts/managed-extension-source-review.md) supplies the availability basis and remaining exact provider checks. No Rust/C extension, alternative procedural language or telemetry extension is a required default correctness dependency.
+The Python and TypeScript implementations share SQL plus PL/pgSQL for PostgreSQL fixed observations and protected orchestration. This is the implementation-language selection for CH-02, not acceptance of an installed native profile. Use SQL for fixed relational observations; PL/pgSQL for the five trigger handlers, two ordinary complete-scope validators, and mutation/catalog/receipt/lifecycle orchestration. The [managed routine review](contracts/managed-extension-source-review.md) supplies the availability basis and remaining exact provider checks. No Rust/C extension, alternative procedural language or telemetry extension is a required default correctness dependency.
 
 Do not implement a second UMF semantic engine or a Truss SQL compiler in those routines. Portable metadata interpretation and value admission reuse pinned UMF APIs; compiler lowering remains Weft-owned. Native guards must still enforce their selected stored-domain/integrity responsibilities, using explicitly inventoried codec/comparator dependencies. Choosing PL/pgSQL for orchestration does not choose an unproved implementation language for every byte scanner, native codec or resource primitive. Register those dependencies separately and report a concrete unsupported boundary if the selected composition cannot supply them.
 
