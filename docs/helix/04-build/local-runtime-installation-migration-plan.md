@@ -203,11 +203,14 @@ own qualified version/profile. Aurora and Lakebase retain independent obligation
 
 ## Delivery sequence
 
-The [local deadline handoff](local-deadline-installation-handoff.md) now fixes
-admission/cancellation/containment/COMMIT/recovery ordering for the16.2 profile.
-Published pgserver remains0.1.4; no assumed newer binary solves the compatibility
-gap. Native transaction termination and the host's deadline remain separate facts.
-Original producer qualification is still required before complete readiness.
+The [local deadline handoff](local-deadline-installation-handoff.md) fixes
+admission/cancellation/containment/COMMIT/recovery responsibilities. Its original
+16.2 observations remain historical; that binary cannot qualify the selected
+R4/R5 profile. Use the corrected 16.15 candidate for the next integrated experiment,
+with its exact package/native tuple and independently admitted deadline mechanism.
+The private corrected wheel is not yet a shipped default. Native transaction
+termination and the host's deadline remain separate facts; original producer
+qualification is required before complete readiness.
 
 ### Current integration priority
 
@@ -239,10 +242,16 @@ remain component evidence only. Work through these dependencies in order:
 3. Compose generated storage with those routines, original grants, initialization,
    archive and complete inventory verification. Publish readiness only after the
    complete bundle verifies atomically on the selected PostgreSQL version.
-4. Select the populated M1 route from that complete source/target composition;
-   implement Python status/verify/apply/reconcile and M2–M5 preservation/recovery
-   scenarios using the same artifacts. Package the actual installation inputs and
-   recipes with the Python distribution.
+4. In P1, package actual installation inputs and implement Python explicit fresh
+   install, status/verify and bootstrap reconciliation against that composition.
+   Apply the reference configuration and diagnostic contracts at this boundary;
+   check Python module ownership and the specified settlement invariants. Native
+   failure/unknown-outcome evidence remains required in addition to these checks.
+5. Proceed to P2/P3 consumer operations and durable retry/feed qualification on the
+   same installation. In P4, select the populated M1 route from coherent admitted
+   source/target bundles, then implement migration apply/reconcile and M2–M5
+   preservation/recovery. Full populated migration qualification is a release gate,
+   not a prerequisite for fresh installation or the preview operations.
 
 The security owner's grants and publication work is a composition dependency;
 it does not require a second authorization implementation. Weft's PostgreSQL17.9
