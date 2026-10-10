@@ -74,15 +74,20 @@ def decode_resource_index(original, expected_sha256, expected_release,
         raise ValueError('Original bounded index bytes required')
     if not _digest(expected_sha256) or sha256(original).hexdigest() != expected_sha256:
         raise ValueError('Independent index pin mismatch')
-    if not _text(expected_release) or type(expected_entries) is not tuple:
+    if (not _text(expected_release) or type(expected_entries) is not tuple
+            or len(expected_entries)>maximum_entries):
         raise ValueError('Original release registration required')
     # Dataclass equality alone would equate True/1 and 1.0/1. Independently
     # registered lengths must preserve the same exact integer carrier as input.
+    registered_total=0
     for entry in expected_entries:
         if (type(entry) is not ResourceEntry
                 or type(entry.byte_length) is not int
                 or entry.byte_length < 0):
             raise ValueError('Exact registered resource length required')
+        if entry.byte_length>maximum_total_bytes-registered_total:
+            raise ValueError('Registered aggregate resource bound exceeded')
+        registered_total+=entry.byte_length
 
     def pairs(items):
         result = {}

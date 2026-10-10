@@ -2,9 +2,11 @@
 
 ## Current execution frontier — 2026-10-10
 
-The current [Python source checkpoint](evidence/design-audit/python-touch-contributor-bound-source.json)
-passes112 tests. The [current fresh installed wheel](evidence/design-audit/python-current-touch-installed-suite.json)
-passes the same112 tests with all25 modules matching source/wheel/installed bytes.
+The current [Python source checkpoint](evidence/design-audit/python-resource-registration-preflight-source.json)
+passes114 tests. The [current fresh installed wheel](evidence/design-audit/python-current-touch-installed-suite.json)
+passes112 tests with all25 modules matching its pinned source/wheel/installed bytes.
+It predates the new resource registration preflight; current114 source is not yet
+a replacement installed-wheel checkpoint.
 The71-test installed wheel below is historical. Public
 Python exports remain local-runtime lifecycle only. Catalog install/apply/import,
 key/edge reads, mutation, journal/feed and migration APIs remain unreleased.
@@ -1814,3 +1816,11 @@ native evidence and missing complete observer outputs. All full observer and
 PKG-02/08 installed acceptance schedules remain not_run. Implementation order
 starts with independently complete release membership, observation rights and
 the owner-admitted cut, rather than treating helper probe success as an installer.
+
+Registered resource count and aggregate bytes now refuse before index JSON
+parsing; exact limits preserve full expected membership. Two new independent
+controls pass in the114-test source suite. This is structural registration
+preflight, not complete resource accounting or filesystem drift/unavailable
+classification. Missing initializers/archives still need the independent complete
+observer and protected observation rights/cut. Prior112 installed wheel evidence
+remains pinned to its earlier exact source bytes.

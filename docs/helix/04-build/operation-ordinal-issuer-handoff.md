@@ -8,8 +8,8 @@ issued by a JSON field.
 ## Current composition entry point — 2026-10-10
 
 Use the [current frontier](remaining-design-handoff-audit.md#current-execution-frontier--2026-10-10)
-for the verified component/dependency matrix. Current source and fresh installed wheel both pass112;
-all25 modules match exact bytes. The older installed wheel71 is historical. Actual complete touch/cohort reads and shared
+for the verified component/dependency matrix. Current source passes114; the separately pinned installed wheel passes112
+and predates resource registration preflight. All25 wheel modules match its original bytes. The older installed wheel71 is historical. Actual complete touch/cohort reads and shared
 operation correspondence exist; protected original capture/authority, full
 resource and semantic bodies remain missing. The ordered PA01–PA05 packet below
 remains the release path. Later component sections supply scoped evidence, not
