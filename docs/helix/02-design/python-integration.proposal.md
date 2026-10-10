@@ -2412,3 +2412,61 @@ routines/owners/grants/installation checks and independent allowed/denied native
 evidence. Installation and initial Python operations consume this owner composition;
 unrelated security capabilities need not finish first. Truss's counter/driver
 binding and four native allocator corrections remain Truss integration work.
+
+### Python installed-resource selection boundary
+
+Engineering selection for P1: use an inert private resource reader behind the
+planned `truss.installation` surface. Package ownership is settled by ADR-003;
+release, driver and complete native support pins remain unadmitted. This section
+refines delivery, not CONTRACT-008's bootstrap bundle or its digest preimages.
+
+The installed resource index has interface `truss-python-resources/0.1.0`, exact
+`releaseId`, and an ordered `entries` list. Each entry has exactly `id`, `path`,
+`role`, `byteLength` and `sha256`. IDs and paths are unique. Paths are relative
+POSIX paths under the installed `truss` package, with no empty/dot/parent segments,
+backslashes, absolute roots or filesystem links. Lengths are nonnegative exact
+integers; hashes are lowercase 64-character hex. The original index bytes are
+retained, hashed directly and decoded with duplicate-key rejection. No JSON
+reserialization supplies the expected index hash. The entry order is inventory
+order only: it grants no SQL execution order or executable recipe authority.
+
+The caller's registered release selection supplies the independent expected
+`releaseId`, original index digest and bootstrap bundle/inventory pins. The index
+cannot supply its own expected digest or select itself by package version. A
+wheel RECORD checksum establishes packaging correspondence only; it does not
+replace the registered release pin. The resource index itself is outside its
+entries, preventing a self-digest cycle. CONTRACT-008's original bundle and
+inventory retain their own established preimages and exact bytes.
+
+The reader receives an original installed package resource handle, release
+selection and enclosing resource account. Before database submission it verifies
+the index pin, closed shape, complete registered membership, every entry length
+and direct byte hash, then binds retained verified bytes to the original release
+selection. It reserves index/entry/aggregate retained-byte and work bounds before
+allocation through the existing account. Limits come from the selected profile,
+not an unbounded manifest claim. It returns immutable verified input references;
+no SQL string, callback, transport or authority is accepted from application
+model content. A filesystem/package read failure or correspondence mismatch
+returns one pre-effect refusal, without fallback or automatic retry.
+
+At use, installation consumes the same retained bytes and release binding rather
+than reopening mutable paths after checking them. If the admitted execution
+profile requires streaming instead, that profile must qualify correspondence and
+account ownership across the complete read/use interval; it cannot silently use
+unchecked subsequent reads. Import and configuration construction do not open
+resources, initialize Weft, acquire connections or start a server.
+
+All required role members must be independently registered: original UMF models,
+owner-generated storage, protected routine/trigger bodies, roles/grants,
+initialization, native verifier inputs, admitted profiles and explicit recipes.
+The complete installer additionally checks CONTRACT-008 IM01–IM05 against actual
+native state. A resource reader cannot manufacture missing native bodies, resolve
+owner authorization, publish readiness or admit a populated migration. Never ship
+current component candidates as a complete registered release merely because
+this reader accepts their bytes.
+
+Implementation order: first implement the private reader and independent altered
+package controls; then integrate it with the complete installer and actual
+installed-resource archive; finally run PKG-01–06/08 with checkout unavailable.
+PKG-07 still requires the complete populated source/target migration route. No
+reader, index schema or executable resource index exists yet at this checkpoint.

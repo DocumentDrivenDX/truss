@@ -97,3 +97,21 @@ exact public package entrypoints are assigned when the actual composition exists
 this plan does not invent an executable installer or count absent cases as passes.
 PKG-01–06/08 belong to fresh-package P1/P2 qualification; PKG-07's complete populated
 migration is P4. Full PY-07 publication also retains bidirectional native interchange.
+
+
+### Resource-reader controls before complete installation
+
+Use the [selected Python resource boundary](../02-design/python-integration.proposal.md#python-installed-resource-selection-boundary)
+for component controls: retain independently authored expected index and original
+resource bytes; refuse duplicate IDs/paths/keys, invalid relative paths, truncated
+or appended bytes, foreign index pins, absent required membership and exhausted
+original account bounds. A mutable reader changes an entry after verification:
+use must retain the original verified bytes or refuse under its selected profile,
+never execute the changed bytes. Install a separate test package outside checkout
+and instrument database dispatch; each pre-effect refusal must observe zero calls.
+A callback that merely asserts its own dispatch count is insufficient evidence.
+
+These controls remain not_run. They refine PKG-03–06 without satisfying complete
+PKG-01 membership, PKG-02 native installation, PKG-07 preservation or PKG-08 late
+settlement. The eventual installed suite must keep both component and actual
+installer observations, with original source/package/profile hashes.

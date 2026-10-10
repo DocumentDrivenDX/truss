@@ -1197,3 +1197,19 @@ not prove atomic import; visible row counts cannot prove full native containment
 Retain ID/ordinal/resource non-refund and original uncertain recovery semantics.
 The new test plan links exact original case IDs, without marking any as executed
 Truss conformance or changing the consumer's source files.
+
+
+## P1 installed-resource implementation handoff
+
+Use the [Python installed-resource selection boundary](../02-design/python-integration.proposal.md#python-installed-resource-selection-boundary)
+for the next packaging implementation. Implement the private inert reader with
+independently pinned original index bytes, closed unique membership, exact byte
+length/hash checks, original account reservations and retained use-time bytes.
+This work can proceed while native routine/security composition is unfinished;
+its success must remain component evidence. Then package the complete admitted
+CONTRACT-008 bundle and integrate IM01–IM05 with explicit install/verify and
+unknown-outcome reconciliation. Do not publish installation readiness from a
+resource-reader result, current candidate inventory or a recomputed local pin.
+The [PKG schedules](../03-test/migration-inspection-contract-walkthrough.proposal.md#clean-installed-package-qualification--py-07)
+retain actual wheel/sdist and native execution exits. The shipped pgserver default
+and populated migration gates remain unchanged.
