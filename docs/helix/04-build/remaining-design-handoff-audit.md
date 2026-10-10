@@ -3,8 +3,9 @@
 ## Current execution frontier — 2026-10-10
 
 The current [Python source checkpoint](evidence/design-audit/python-touch-contributor-bound-source.json)
-passes112 tests. The71-test installed wheel below is historical; the newer private
-components have not been qualified as a replacement installed wheel. Public
+passes112 tests. The [current fresh installed wheel](evidence/design-audit/python-current-touch-installed-suite.json)
+passes the same112 tests with all25 modules matching source/wheel/installed bytes.
+The71-test installed wheel below is historical. Public
 Python exports remain local-runtime lifecycle only. Catalog install/apply/import,
 key/edge reads, mutation, journal/feed and migration APIs remain unreleased.
 
@@ -1772,3 +1773,16 @@ inventory, denied observation-right behavior, independently protected coherent
 cut and final freshness check remain required. Do not turn this selected helper
 collector into the installer's sole complete observer oracle or a readiness
 certificate. No seven-body/native owner authority/API gate is promoted.
+
+### Current Python wheel delivery — 2026-10-10
+
+The [fresh installed wheel receipt](evidence/design-audit/python-current-touch-installed-suite.json)
+qualifies source/wheel/installed parity for all25 Python modules and passes112
+component tests, including local lifecycle checks on the private corrected
+pgserver16.15 runtime. Build occurs in a fresh temporary source tree, preserving
+peer build/egg metadata; installation uses a separate target rather than replacing
+the shared runtime environment. The observed loaded package is that exact target.
+Wheel digest, full module/test source pins and retained test log distinguish this
+0.0.1.dev0 checkpoint from historical wheels of the same experimental version.
+The wheel remains unpublished and public exports remain lifecycle-only; full
+engine/installation/managed profile release gates are unchanged.
