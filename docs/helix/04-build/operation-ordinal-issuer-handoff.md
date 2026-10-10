@@ -965,3 +965,24 @@ including the existing local runtime tests. This is source evidence, not a rebui
 installed wheel or native group-producer qualification. Original context/manifest/
 registry correspondence, full family semantics, accounting and completion remain
 unexecuted integration gates. Public exports are unchanged.
+
+### Python complete context and correspondence component (2026-10-10)
+
+`_row_operation_context.py` decodes the complete existing context0.1 carrier,
+retaining original bytes and all nine exact artifacts. It checks closed protocol
+fields, exact artifact digests and native xid8/nonnegative-bigint address ranges.
+`check_context_group_manifest` compares selected profile, complete canonical
+address, operation/group identity, kind, original layout/operation definition and
+family-admission artifact across the three decoded projections. Manifest local
+position0 remains distinct from native ordinal7. The comparison grants no native
+registry or authority admission and does not choose a current/newest operation.
+
+The source-pinned `evidence/design-audit/python-context-group-manifest-source.json`
+and retained log record 90 passing Python source tests. Three focused methods
+cover nine required-artifact omissions, seven context mutations, seven independent
+correspondence substitutions and four invalid local positions. Existing local
+PostgreSQL tests run in the same source suite; this does not constitute a native
+context/group producer or installed-wheel test. Original registry byte matching,
+complete contributor/cohort coverage, native family semantics, current authority,
+readiness, protected effects and original settlement remain independent integration
+exits. No public exports or seven-body readiness claims change.

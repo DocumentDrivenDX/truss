@@ -1,0 +1,194 @@
+{
+  "checkedAt": "2026-10-10T10:38:07.751958+00:00",
+  "pythonVersion": "3.11.17 (main, Oct  3 2026, 00:54:14) [Clang 22.1.3 ]",
+  "scope": "private source projection and correspondence; no native registry or authority qualification",
+  "tests": 90,
+  "passed": true,
+  "focusedMethods": 3,
+  "contextArtifactOmissionControls": 9,
+  "contextMutationControls": 7,
+  "correspondenceSubstitutionControls": 7,
+  "positionRefusalControls": 4,
+  "sources": [
+    {
+      "path": "packages/python/src/truss/__init__.py",
+      "sha256": "e9d7aacb2f5a5da077ffc24500422876892c3f68a7f595f059fd4189f25a83b5"
+    },
+    {
+      "path": "packages/python/src/truss/_acceptance_json.py",
+      "sha256": "303638af137138a796542aa5425985d147e510a23639fca9b2d6221966337a01"
+    },
+    {
+      "path": "packages/python/src/truss/_accounted_receive.py",
+      "sha256": "f1f6bc7d84d3cbdc4ba93ddb514d68898f60c99358c7cb2a719701139d674e78"
+    },
+    {
+      "path": "packages/python/src/truss/_directory_resources.py",
+      "sha256": "1c3bff1ec23e9d241b710188223539adfdf896a31601c6ce5d46f46d2bc0ab48"
+    },
+    {
+      "path": "packages/python/src/truss/_installation_resources.py",
+      "sha256": "507c6a788c685579108548442f01cc0021a6ed425cb0e1f52e04ca2316dd6931"
+    },
+    {
+      "path": "packages/python/src/truss/_operation_admission.py",
+      "sha256": "f96462208c14230670370d0b12f9b5d38ef1c20861175bcab8777c2c687dbb30"
+    },
+    {
+      "path": "packages/python/src/truss/_operation_ordinal.py",
+      "sha256": "10d4717462ff14c7524ed793db0ac7b94f56e1d6b88158081a4f300981193977"
+    },
+    {
+      "path": "packages/python/src/truss/_operation_registry.py",
+      "sha256": "7e74c34c9b0a874af8e7c0c743357aff2c848cc4c8ae3ed2404542ce18ec667d"
+    },
+    {
+      "path": "packages/python/src/truss/_query_execution.py",
+      "sha256": "9cf9d08a45f0b31ef1621c9bed47eb879715771583dd467ecb57b8278115b0aa"
+    },
+    {
+      "path": "packages/python/src/truss/_receipt_position.py",
+      "sha256": "e7c42049947c4bda44c0ac9e62e23b73143c6129f07f9ee889ef186364f19eba"
+    },
+    {
+      "path": "packages/python/src/truss/_resource_account.py",
+      "sha256": "6a10966e502c16a3ab8972bba34a999ca675fdb7a59e5c3ac93a7c713b6468f1"
+    },
+    {
+      "path": "packages/python/src/truss/_row_group_custody.py",
+      "sha256": "b39f7f4e17243d846fc60b3fff02807d168a93c23adf793a8be4fcd2abf3dcdd"
+    },
+    {
+      "path": "packages/python/src/truss/_row_operation_address.py",
+      "sha256": "51af38dbda5c94f8a3ca8c92af3abef1f9919d1d44f6ae1c872c609b747eaf08"
+    },
+    {
+      "path": "packages/python/src/truss/_row_operation_context.py",
+      "sha256": "aeaa86163233a597c554f977d3c82badcbf8290a336e47b5e1ff8c64c66794ca"
+    },
+    {
+      "path": "packages/python/src/truss/_row_operation_custody.py",
+      "sha256": "1783d3bccfae06526f3be9149622e7f4ae9afd0cd833a7905e7a8b27300a0445"
+    },
+    {
+      "path": "packages/python/src/truss/cli.py",
+      "sha256": "6a6b3fb751a73b7d338f531d514ec3e4b94c7fb58d4fe80351ff630a7cc7df37"
+    },
+    {
+      "path": "packages/python/src/truss/local_runtime.py",
+      "sha256": "1a837b5575c2f8b08e2b699256a90d971ed7e2112d40bccc7c197b92ad6023a9"
+    },
+    {
+      "path": "packages/python/src/truss/migration_planning.py",
+      "sha256": "1523a466555ab7b4075f501edd0570f9465c67a67558d2733b5c06984571c3a6"
+    },
+    {
+      "path": "packages/python/src/truss/numeric.py",
+      "sha256": "4833d54fda887fa70171511761d28ea75a0dc22aa89a50c3eae2a88f2b972d18"
+    },
+    {
+      "path": "packages/python/src/truss/timestamp.py",
+      "sha256": "b08dbf2a9c48754282f05429a58b66515c75a815f6e1282d3c485248f762120c"
+    },
+    {
+      "path": "packages/python/src/truss/weft.py",
+      "sha256": "331af0ce6b2f974f7d8ba69c1da90825dfa92c7e57a06cec5aed90a3ec4cd3be"
+    },
+    {
+      "path": "packages/python/tests/test_acceptance_json.py",
+      "sha256": "fdef3f104a89070ac6377a08af3970f351b4c8994916758db5469f3542c90eb2"
+    },
+    {
+      "path": "packages/python/tests/test_accounted_receive.py",
+      "sha256": "076cd45bae4ed12fd594aabad9674bbb5a2663cffcf865d76ff56c19954289f5"
+    },
+    {
+      "path": "packages/python/tests/test_directory_resources.py",
+      "sha256": "928878bb47c12c90ee9f98033dda36e9838cce80c0de83c5e3ee25140494f7d4"
+    },
+    {
+      "path": "packages/python/tests/test_exact_numeric.py",
+      "sha256": "1b7753e6692cd19575e401612056159dae06df6c2769589800ce0429a165c458"
+    },
+    {
+      "path": "packages/python/tests/test_exact_timestamp.py",
+      "sha256": "8d9d1c2364d474d98f1ab63ad586a8c3c11148ff12950e94bef424f1e997379f"
+    },
+    {
+      "path": "packages/python/tests/test_installation_resources.py",
+      "sha256": "24a7baca8b7034360a01982dd09c6b88818f9518ac922ef73e5000f93f3703ee"
+    },
+    {
+      "path": "packages/python/tests/test_local_runtime.py",
+      "sha256": "9c690fa7be8839eca9d95663e3af2dae1289ba01909adbdf693e5a5dc7a176f5"
+    },
+    {
+      "path": "packages/python/tests/test_migration_planning.py",
+      "sha256": "f967bffffefc22e62378e8410f19c5f5ddd6b84895c53c0a9fccb0c65388e8d6"
+    },
+    {
+      "path": "packages/python/tests/test_operation_admission.py",
+      "sha256": "50ed2a3ebbd82e02f7e1a055ba66d38db347ec8c27965052d3cecfe68b1f98b7"
+    },
+    {
+      "path": "packages/python/tests/test_operation_ordinal.py",
+      "sha256": "a5fa4ede8f756767c7916e9e4cfba35496c43114247d82ebea914f186af3293a"
+    },
+    {
+      "path": "packages/python/tests/test_operation_registry.py",
+      "sha256": "bb210a0e1ca1428ece5b63fbdae0a02ff09ad9807e0f6400c04da73e8e995db3"
+    },
+    {
+      "path": "packages/python/tests/test_query_execution.py",
+      "sha256": "403759cc37ae7c1b5b0bdf025bed23e4eaa84fc0715ce362c605ffe4edc30ed0"
+    },
+    {
+      "path": "packages/python/tests/test_receipt_position.py",
+      "sha256": "deb2f95c0dc04bb6f615f680aadcf88bc7d707e0dabebb407f2d4212af4068a7"
+    },
+    {
+      "path": "packages/python/tests/test_resource_account.py",
+      "sha256": "c74ad5271cca163249e65dad15cfdbfb3ba2ff75bf42462f6fbf72aa5eba09b2"
+    },
+    {
+      "path": "packages/python/tests/test_row_group_custody.py",
+      "sha256": "91c9ff5078d4f6e18414227487f6991db44785433c3761d481727c08d06aa0a3"
+    },
+    {
+      "path": "packages/python/tests/test_row_operation_address.py",
+      "sha256": "71a468e516a3c3bdd257b9e1abc7cd18ffee114e1af889a425780aad61bd43ec"
+    },
+    {
+      "path": "packages/python/tests/test_row_operation_context.py",
+      "sha256": "f59a659d5afa1d543060c0ef4653ab946249c183f67e258c11ae18257615b35a"
+    },
+    {
+      "path": "packages/python/tests/test_row_operation_custody.py",
+      "sha256": "10384de66272d5dcfe296aa5387b463995cf4a8f3036ec7e116636076bece853"
+    },
+    {
+      "path": "packages/python/tests/test_row_operation_json.py",
+      "sha256": "c99efd63b0a78b35bc8c7d9de0565bb2b5bd30244e1babf88550ecb5cceb910f"
+    },
+    {
+      "path": "packages/python/tests/test_weft.py",
+      "sha256": "7ff2541d371c16c8d8d84b573f20a7961c4cbb2f5d434db3ce45d207e83d7591"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/truss-row-operation-context-v0.1.proposal.schema.json",
+      "sha256": "e5b906ada259af29afe28f6cf29b7f5b980ec84af6eaf6a96ab6c879e0b6be50"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/truss-row-group-custody-v0.1.proposal.schema.json",
+      "sha256": "01107937a0123f6151801de4ccf32ce5d01028005bdc3dd04b6837e5e06859c9"
+    }
+  ],
+  "logSha256": "38125323900858d0e1ac88e869e839ca98cf72bcfeb29b425d78f73f5f0b889e",
+  "unqualified": [
+    "native original scope and registry capture",
+    "complete contributor/cohort coverage",
+    "family semantics and current authority",
+    "native effect readiness and settlement",
+    "installed wheel and public operations"
+  ]
+}
