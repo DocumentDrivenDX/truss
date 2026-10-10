@@ -1690,3 +1690,11 @@ lookup, original descriptor/completion and private Python decoding. Fresh, seale
 and advanced full rows match. Complete cohort/current-cut capture, semantic
 owner/authority admission and operation correspondence remain distinct outputs;
 empty selected-tuple projection is not an authority-qualified absence result.
+
+The [complete touch cohort receipt](evidence/design-audit/touch-cohort-decode-final-native.json)
+adds29 native observations/27 original captures for an exact UMF-represented
+current-writer SELECT with no tuple/phase/seal/LIMIT filter. Both owner kinds and
+older seals survive complete-cell Python decoding. This closes the finite query
+composition gap; independently protected complete visibility/cut, owner-codec
+meaning, operation correspondence, authority and finalization remain open.
+The earlier point lookup remains a separate selected-tuple observation.

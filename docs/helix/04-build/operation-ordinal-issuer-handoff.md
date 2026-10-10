@@ -1392,3 +1392,34 @@ Receiver byte permits/native control capture qualify only their selected seam,
 not whole allocation/work/deadline or privileged original actor evidence.
 Full operation-registry correspondence and complete observer/finalization remain
 required before publication; no public or seven-body gate changes.
+
+### Complete current-writer touch cohort query (2026-10-10)
+
+`row-touch-current-writer-cohort-v0.1.proposal.sql` selects every touch for the
+actual assigned xid with all12 original text/null fields and deterministic native
+identity order. It has no caller-xid parameter, tuple/phase/seal filter, LIMIT or
+partial row cap. Native receive/decode resource exhaustion must refuse capture,
+not silently publish a prefix as complete. This is a commit-cohort projection,
+separate from the five-parameter point lookup and from observer OC02 selection.
+
+The existing UMF owner APIs preserve the original source, serialized reload and
+export exactly. The new source artifact carries a retained SELECT native AST;
+DDL declaration extraction reports zero declarations/one unhandled statement
+and complete=false. No reusable SQL generator or metadata semantics are copied
+into Truss. There is no physical table/ER layout change.
+
+`touch-cohort-decode-final-native.json` passes29 observations with27 original
+control captures on PostgreSQL16.15 through the pinned accounted driver seam.
+Complete empty/unassigned, single-row, two-owner-kind and rollback cohorts match
+full native descriptors/completion/status and Python-decoded originals. A stored
+seal older than dirty generation remains present. The initial receipt retains
+inherited text incorrectly denying the newly tested cohort scan; its exact
+producer is archived as `check_touch_cohort_decode_initial_native.py`. A separate
+actual rerun corrects that scope text without rewriting the initial receipt.
+
+The two-kind fixture is administrative, including supplied owner-property
+artifacts and a manually staged old seal. It proves finite native query/decoder
+composition, not semantic owner-codec admission, original protected visibility/
+coherent cut/current authority, full contributor operation correspondence or
+complete accounting. Those inputs remain mandatory for commit finalization and
+publication. Seven-body readiness and public exports remain unchanged.
