@@ -2708,3 +2708,30 @@ explicit unconfirmed native cleanup. Existing receipt paths still refuse overwri
 The successful run exercises normal verification only, not an injected timeout
 writer control. Public installation, complete release resources and full account/
 authority/native composition remain separate gates.
+
+
+### Python structural operation-registry decoder
+
+Private `_operation_registry.py` now implements the existing16-column text/null
+projection: exact aliases/SELECT completion count, actual-xid correspondence,
+unique ordinal identities, native-bounded canonical integers, selected kinds and
+four phase/generation/result-presence combinations, and nonempty lowercase even
+hex carriers. Immutable output preserves the full supplied unordered multiset;
+no filtering/latest-row choice or native authority is introduced.
+
+The [source receipt](../04-build/evidence/design-audit/python-operation-registry-decoder.json)
+retains three passing tests and Python, original SQL and TypeScript source hashes.
+Cases cover all phases, foreign/duplicate rows, exact numeric/null/carrier rules,
+projection order, completion and exact/one-over byte bounds. The first projection
+extractor also collected table alias o; the corrected check limits extraction to
+the actual SELECT projection. No native statement/result-descriptor completeness
+or installed-wheel claim follows. The pure module has an explicit zero-import
+boundary mapping;61 source import edges pass. Earlier15-module/58-test wheel
+receipts retain their preceding source scope and exclude this new module.
+
+Next bind both original observation statements to the actual admitted physical
+connection/cycle/cut/account, native descriptors and complete termination; compare
+original context/principal/epoch/configuration facts. Observer exactly-one
+unfinished selection and commit all-surviving validation require independent
+native evidence. Decoded rows cannot grant producer/role custody or enable the
+seven missing routine bodies. No UMF/Weft/security-owner semantics are duplicated.

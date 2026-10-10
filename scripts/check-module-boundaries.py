@@ -18,6 +18,7 @@ ALLOWED = {
     '_directory_resources': {'os', 'stat', 'threading', 'truss._installation_resources'},
     '_installation_resources': {'dataclasses', 'hashlib', 'json', 'truss._resource_account'},
     '_operation_admission': {'dataclasses', 'inspect', 'threading'},
+    '_operation_registry': set(),
     '_operation_ordinal': {'dataclasses', 'threading'},
     '_query_execution': {'dataclasses', 'inspect', 'threading', 'types', 'weakref', 'truss.weft'},
     '_resource_account': {'dataclasses', 'threading'},
