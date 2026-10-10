@@ -639,3 +639,26 @@ exercise a valid completed operation commit, unfinished and early-immediate refu
 savepoint rollback, unrelated caller work and lost settlement on the same selected
 installation/security/issuer tuple. The current artifact is not qualified by
 storage projection checks or lifecycle startup tests.
+
+
+## Remaining ownership and dependency scope
+
+Do not wait for all132 UMF/Ashlar/Truss security cases before performing Truss-owned
+integration work. The security workstream's26 registered passes are scoped evidence;
+its unimplemented remainder is not automatically Truss's prerequisite set. Select
+and trace only the complete authority/publication/resource contracts required by
+the particular Truss installed capability, without promoting partial evidence.
+
+| Deliverable | Owning work and required input |
+| --- | --- |
+| Original transaction ordinal/control issuer and correction of all four admission families | Truss driver/executor integration owns implementation, original custody and native verification. Security grants must protect the selected private entrypoint, but another security graph renderer cannot issue this proof. |
+| Seven canonical orchestration bodies and development barrier replacement | Truss owns the complete algorithm/source/dependency composition. Their language/optimizer/null attributes and SECURITY DEFINER direction are already selected in the installation gap matrix; exact owners, trusted search paths and effective rights follow the selected security composition. |
+| Actual caller/current-authority admission and publication drain | Consume the security owner's exact selected contract and qualified subset; do not fork a resolver, trust a role name or require unrelated Ashlar acceptance cases. |
+| Structural/native model generation | UMF owns export/generation primitives; Truss owns complete model/source/inventory correspondence and installation behavior. No copied DDL generator. |
+| Logical SQL lowering and executing-engine compatibility | Weft owns compiler/profile changes. Truss owns binding, exact result decoding, native execution and the actual16.2/managed-target qualification.17.9 fixtures do not confer16.2 support. |
+| Bootstrap, populated route and migration/recovery distribution | Truss owns the installed Python tooling, original registered artifacts and failure/preservation corpus. M1 selection follows a complete coherent source/target bundle, not arbitrary version labels. |
+
+The immediate Truss-owned task remains original issuer/native admission integration.
+The runtime/CLI wheel is usable component infrastructure, not a substitute for that
+work. Record a precise unavailable owner input when encountered; broad statements
+that security must finish first cannot close, defer or reassign Truss's own work.
