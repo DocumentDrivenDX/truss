@@ -1,0 +1,46 @@
+{
+  "scope": "Private proposed Python native-address codec and manifest/scope projection correspondence; no native original encoder, registry resolution or authority qualification",
+  "sourceSha256": {
+    "packages/python/src/truss/_row_operation_address.py": "e6ae11f082984dc183fa9fc16a2c4040ffbfe328d02fc86ee220ee6ea7b684c7",
+    "packages/python/tests/test_row_operation_address.py": "dac9cf27c8659405f2937227ae0149604acc32097ad70bb2b3f82113cb740e32",
+    "packages/python/src/truss/_row_operation_custody.py": "1783d3bccfae06526f3be9149622e7f4ae9afd0cd833a7905e7a8b27300a0445",
+    "docs/helix/02-design/contracts/CONTRACT-001-storage-layout.md": "00c48513196eeb357ea27d36d45d7944662f2d9be3d6441ef09868cac72b2d57"
+  },
+  "codec": {
+    "domain": "truss-row-operation-address/0.1.0",
+    "arity": 4,
+    "members": [
+      "domain",
+      "installationIdentity",
+      "originalWriterXid",
+      "operationOrdinal"
+    ],
+    "integerCarriers": "Canonical decimal strings; unsigned64 xid/signed63-nonnegative ordinal",
+    "candidateScalarSpelling": "Python json.dumps ensure_ascii=False separators comma/colon, then strict UTF8; same recipe as the existing Python receipt codec",
+    "maximumBytes": 8388608
+  },
+  "tests": {
+    "command": "PYTHONPATH=packages/python/src python3.11 -m unittest discover -s packages/python/tests -v",
+    "passed": 82,
+    "exitCode": 0,
+    "newFocusedTests": 3,
+    "logPath": "docs/helix/04-build/evidence/design-audit/python-row-operation-address-source.tests.log",
+    "logSha256": "e55381fc619d38128e09b18b17de7c72692872cea6f60aa141e689bb60f39a83"
+  },
+  "componentChecks": [
+    "Exact independent byte expectation for Unicode/quotes/backslash/newline and maximum native domains",
+    "Noncanonical/domain/arity/numeric shape/range refusals",
+    "Both manifest identities name the same complete address",
+    "Native ordinals7/11 remain distinct from local positions0/1",
+    "Installation/xid projection mismatch refusal and original native ordinal ordering"
+  ],
+  "limitations": [
+    "Input installation/xid projections are not authenticated by this codec",
+    "No complete native profile/encoder or registered original provenance adoption",
+    "No native context/group/artifact readiness or complete registry contributor checks",
+    "No allocator/serializer/account/native-work containment claim",
+    "No public API, installed wheel, engine interchange or native semantic body readiness"
+  ],
+  "installerReady": false,
+  "acceptanceCasesPromoted": []
+}

@@ -801,3 +801,28 @@ component, not a scope/current-authority factory. Actual callable identities,
 private ACL, complete indirect dependencies and native receipts must qualify the
 installed path. None of these six integration steps is passed by the current
 parser tests; keep all consumer/corpus/interchange/release exits in scope.
+
+## Python candidate address codec and manifest correspondence
+
+Private `_row_operation_address` supplies the RC01 candidate four-string encoder/
+decoder and selected manifest address correspondence. Integer strings stay exact
+through native unsigned64 xid and nonnegative signed64 ordinal domains. The
+candidate scalar recipe uses literal UTF-8, compact comma/colon JSON and standard
+string escapes, matching the existing Python receipt codec's recipe; decoding
+compares complete original bytes and refuses alternate spelling, whitespace,
+BOM/newline, wrong domain/arity or noncanonical/overflowing integer carriers.
+Native encoder/profile correspondence still needs independent qualification.
+
+The pure `check_custody_addresses` component checks both identity fields against
+the same original address, the supplied original installation/xid projection and
+strictly increasing native ordinals in manifest execution order. Local positions
+remain 0/1 while native ordinals may be 7/11. These arguments are already admitted
+scope projections at the intended integration boundary; supplying strings to this
+helper does not authenticate them, acquire authority or permit a database lookup.
+
+The [source receipt](evidence/design-audit/python-row-operation-address-source.json)
+records 82 passing Python source tests and three new focused controls, including an
+independent exact Unicode/control/maximum-domain byte expectation. RC01 gains this
+host codec component; native production registration, complete codec/resource
+qualification and RC02–RC06 remain incomplete. No caller-address registry selection,
+installed wheel/public API or semantic body readiness is advertised.
