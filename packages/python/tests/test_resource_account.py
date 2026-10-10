@@ -72,6 +72,24 @@ class BytePermitTests(unittest.TestCase):
                           lambda: account.close(object())]:
             with self.assertRaises(ValueError): operation()
             self.assertEqual(account.snapshot(producer), (0, 60, 0, False))
+        calls = []
+        class Proxy:
+            def __hash__(self):
+                calls.append('hash')
+                return hash(permit)
+            def __eq__(self, other):
+                calls.append('equality')
+                return True
+        class PermitSubclass(BytePermit):
+            __hash__ = Proxy.__hash__
+            __eq__ = Proxy.__eq__
+        for token in (Proxy(), PermitSubclass(), []):
+            for operation in (lambda: account.allocate(producer, token, 1),
+                              lambda: account.terminate(producer, token),
+                              lambda: account.release(producer, token)):
+                with self.assertRaises(ValueError): operation()
+                self.assertEqual(account.snapshot(producer), (0, 60, 0, False))
+        self.assertEqual(calls, [])
         allocation = account.allocate(producer, permit, 60)
         account.release(producer, allocation)
         account.terminate(producer, permit)

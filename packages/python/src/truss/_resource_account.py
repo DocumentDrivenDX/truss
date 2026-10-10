@@ -66,6 +66,8 @@ class BytePermitAccount:
     def allocate(self, producer, permit, amount):
         """Draw down before the trusted producer allocates/hands off bytes."""
         self._amount(amount)
+        if type(permit) is not BytePermit:
+            raise ValueError('Original byte permit required')
         with self._lock:
             self._original(producer)
             state = self._permits.get(permit)
@@ -84,6 +86,8 @@ class BytePermitAccount:
 
     def release(self, producer, allocation):
         """Producer asserts original allocation no longer has any consumer."""
+        if type(allocation) is not ByteAllocation:
+            raise ValueError('Original byte allocation required')
         with self._lock:
             self._original(producer)
             state = self._allocations.get(allocation)
@@ -94,6 +98,8 @@ class BytePermitAccount:
 
     def terminate(self, producer, permit):
         """Producer confirms no further work can consume the original permit."""
+        if type(permit) is not BytePermit:
+            raise ValueError('Original byte permit required')
         with self._lock:
             self._original(producer)
             state = self._permits.get(permit)

@@ -2967,3 +2967,25 @@ refusals. Earlier registry evidence remains historical for its source hashes.
 This removes a concrete temporary allocation path but does not qualify actual
 upstream string capture, retained tuple/set footprint, complete work/heap/native
 accounting or a new installed wheel. The supported registry meaning is unchanged.
+
+
+### Byte-account token lookup correction — 2026-10-10
+
+The private BytePermitAccount now checks exact BytePermit/ByteAllocation types
+before dictionary lookup. Previously an arbitrary proxy could run hash/equality
+callbacks under the account lock, and a matching proxy could impersonate an
+issued dictionary key. Exact minted-but-foreign tokens still fail original
+identity lookup; subclasses, unhashable carriers and callback-bearing proxies
+refuse without invoking their callbacks or changing ledger state. This protects
+the supported token boundary, not arbitrary hostile Python reflection or native
+allocation custody. Original producer identity, release evidence and all native
+account/driver gates remain independently required.
+
+The [installed-wheel receipt](../04-build/evidence/design-audit/python-account-token-installed-suite.json)
+passes71 tests across17 source/wheel/installed modules, including proxy/subclass/
+unhashable token controls and unchanged ledger observations. The current wheel
+SHA256 is48fd439ccf6d810124d888a2cf1177a5d624c3fbaee0bcb3688e615e6b024184.
+Python boundary checks pass64 imports. This is a real account component fix;
+full native metering, authority and installed Truss operations remain unqualified.
+Earlier wheel/model receipts retain their original source scope and are not
+silently relabeled evidence for the revised component.
