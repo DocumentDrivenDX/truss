@@ -571,3 +571,41 @@ all 158 contract schemas. Structural coverage remains 45 stories/167 criteria/
 90 primary pins. Native probes were not rerun. This verifies current component
 integration; the complete original composition, pending selections and full
 independent native/public/corpus exits remain explicitly incomplete.
+
+
+## Installation-path checkpoint — 2026-10-09
+
+The [issuer handoff](operation-ordinal-issuer-handoff.md) now has actual local
+PostgreSQL16.2 rollback reproductions for all four admission families: base,
+asserted-origin, epoch-context and configuration-context. Each reissues ordinal0
+in the same top-level transaction after savepoint rollback. Advanced probes verify
+original epoch/profile and separate configuration bytes/digest correspondence.
+These are passing bug reproductions with contractConformant=false, not corrected
+admission. The producer design now explicitly consumes confirmed-control native
+admission permission once; rollback, failure or unknown completion cannot restore it.
+
+Python delivery has a ten-module installed wheel. The historical clean local-extra
+[receipt](evidence/design-audit/python-current-wheel-local-extra.json) records all34
+then-current tests, including four actual16.2 lifecycle tests. The later
+[rebuilt-wheel receipt](evidence/design-audit/python-async-fixed-wheel.json) covers
+the synchronous compiler correction with six compiler and eleven coordinator
+tests against installed payloads. These scopes cannot be combined into a claimed
+fresh35-test whole-engine pass. The compiler callback fix adds no SQL compiler,
+native authority or migration execution.
+
+The [migration handoff](python-migration-installation-handoff.md) now defines M1's
+complete populated preservation matrix and late-failure/lost-ack/committed-unverified
+reconciliation requirements. Exact M1 source/target artifacts remain unselected;
+the defective review-only layout cannot be treated as an admitted source merely
+to get a successful upgrade. The complete installer still needs original issuer
+verification, five mandatory guard bodies, two scope validators, full grants,
+initializer/archive/inventory composition and atomic readiness publication.
+
+The UMF schema browser is updated to committedb51c300d with eleven actual Chromium
+checks and532 browsable definitions. UMF document preservation and Weft9fbbbab's
+Spark DISTINCT additions have an [exact source review](evidence/design-audit/upstream-preservation-distinct-review.json).
+They do not replace Truss recovery or qualify PostgreSQL DISTINCT; the adopted
+compiler remainsf05f2df and PostgreSQL profile source bytes are unchanged. All
+seven reference composition boundaries remain incomplete. The live security-owner
+work is still component qualification; it supplies no adopted complete native
+admission/publication tuple yet.
