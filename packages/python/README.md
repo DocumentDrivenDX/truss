@@ -201,3 +201,13 @@ LocalPostgres lifecycle and restores prior signal handlers on exit. Signal-drive
 termination itself remains separately unqualified by this probe. Startup performs
 no Truss installation or migration; the repository script now delegates to this
 packaged implementation rather than carrying a second launcher.
+
+
+The later [installed signal receipt](../../docs/helix/04-build/evidence/design-audit/python-installed-cli-signals.json)
+qualifies graceful SIGTERM and SIGINT for this installed CLI on the same macOS
+arm64/PG16.2 tuple. The probe waits for actual readiness, signals only its own
+recorded child PID, observes exit0 and an absent postmaster marker, and restarts
+the retained directory between runs. Reproduce with
+`scripts/check-python-installed-cli-signals.py` in the installed local-extra
+environment. This supersedes the earlier probe-only signal limitation without
+claiming crash, forced-kill or complete installation recovery.
