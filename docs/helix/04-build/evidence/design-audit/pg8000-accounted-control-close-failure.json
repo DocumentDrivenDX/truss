@@ -1,0 +1,18 @@
+{
+  "scope": "Original native probe failure observed in exec session85162; no ledger values or backend settlement inferred",
+  "status": "failed",
+  "exitCode": 1,
+  "error": "ValueError: Original payload custody missing after close",
+  "boundary": "After connection.close, before successful receipt publication",
+  "successfulReceiptWritten": false,
+  "driverPortQualified": false,
+  "nativeCleanupConfirmed": false,
+  "sourceSha256": {
+    "check_pg8000_accounted_control_native.py": "3d1ff5ad70e6bb001b86872ba8e46f25c959e22dd9d24b84ec17db83918c7d89",
+    "pg8000_accounted_instance_candidate.py": "e78e4b63d7d2b98d27026d6b30e8f4474a385279067d5c3b1f22c83b95e494d8"
+  },
+  "limitations": [
+    "The exception identifies a failed compound account postcondition; individual ledger values were not emitted",
+    "Frozen pg8000 close calls supplied socket.close rather than file.close; inspected separately after this run"
+  ]
+}

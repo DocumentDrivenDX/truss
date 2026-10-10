@@ -23,6 +23,20 @@ class Transport:
 
 
 class AccountedReceiveTests(unittest.TestCase):
+    def test_complete_header_body_slices_share_pre_ingress_reservation(self):
+        producer, account, transport, receiver, observed = self.setup_receiver(capacity=101,cumulative=101)
+        self.assertEqual(receiver.receive_parts(), (FRAME[:5],FRAME[5:]))
+        self.assertEqual(observed, [(5,96,5,False)] * 3 + [(11,90,11,False)])
+        # Header5 + mutable6 + immutable6 + sliced header5 + sliced body1.
+        self.assertEqual(account.snapshot(producer), (23,0,23,False))
+
+    def test_slice_capacity_refuses_before_header_ingress(self):
+        producer, account, transport, receiver, _ = self.setup_receiver(capacity=100,cumulative=101)
+        with self.assertRaises(ValueError): receiver.receive_parts()
+        self.assertEqual(transport.calls, 0)
+        self.assertEqual(account.snapshot(producer), (0,0,0,True))
+        with self.assertRaises(ValueError): receiver.receive()
+
     def setup_receiver(self, data=FRAME, capacity=69, cumulative=100, reads=10):
         producer = object()
         account = BytePermitAccount(producer, capacity, cumulative, 30)

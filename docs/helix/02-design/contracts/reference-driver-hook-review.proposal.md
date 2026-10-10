@@ -206,7 +206,7 @@ Partial ingress, malformed length and budget failure close new admission while
 retaining the original account's allocations and reservation. Reentrant receives
 submit no additional read.
 
-The [installed component receipt](../../04-build/evidence/design-audit/python-accounted-receive-body-fault-installed-suite.json)
+The [installed component receipt](../../04-build/evidence/design-audit/python-accounted-parts-installed-suite.json)
 records the rebuilt wheel and source/installed payload correspondence. Its five
 new synthetic tests independently check payload arithmetic, pre-read refusal,
 partial header/body and read-budget failure, shared-account exhaustion, original
@@ -216,6 +216,29 @@ historical experiment or a qualified pg8000 adapter. Integrate FrameFile slicing
 core _read copies, descriptor/cell parsing, object/view overhead, transport/TLS,
 outbound and containment reservations before claiming the complete profile.
 No public export or dependency change accompanies this private component.
+
+The receiver's receive_parts path now reserves the additional maximum combined
+header/body slice payload before ingress and charges both slices before making
+them. Two additional independent controls check the exact reservation boundary
+and one-byte-short refusal with zero reads. The current installed wheel passes68
+tests across17 modules; the prior66-test receipt remains historical.
+
+The [accounted native seam receipt](../../04-build/evidence/design-audit/pg8000-accounted-control-native.json)
+executes the five original fixed control statements through an instance-scoped
+AccountedFrameFile/AccountedSocket and installed receive_parts on PostgreSQL16.15.
+All ten independently expected control frames match. Its original selected
+payload account retains1689 charged bytes, zero unused reservation, and closed
+admission after connection close. Those observed ledger values are not an
+independent oracle for complete native allocation. Core _read, frame
+reconstruction, handler/metadata allocation, outbound, transport and containment
+still require accounting; driverPortQualified remains false. This reused local
+environment has no new dependency-resolution or current-person authority claim.
+
+The [first close-path failure](../../04-build/evidence/design-audit/pg8000-accounted-control-close-failure.json)
+is retained separately. Frozen pg8000 closes its supplied socket without closing
+the file wrapper. The accounted socket now closes file/account admission before
+closing transport, including failure paths. Neither action releases charges nor
+establishes backend termination, transaction outcome or reusable connection.
 
 
 ### Corrected local control-frame compatibility

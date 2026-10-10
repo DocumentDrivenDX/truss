@@ -2,7 +2,7 @@
 
 The trusted transport must implement synchronous recv_into. Payload charges cover
 the header and mutable/immutable whole frame only: transport, object overhead,
-views, pg8000 copies and parsing still need their original producer accounting.
+views, pg8000 core copies and parsing still need original producer accounting.
 All allocation custody stays charged; this component issues no release facts.
 """
 import struct
@@ -43,6 +43,13 @@ class AccountedReceiver:
             offset += count
 
     def receive(self):
+        return self._receive(False)
+
+    def receive_parts(self):
+        """Return the original header/body with their slice payloads charged."""
+        return self._receive(True)
+
+    def _receive(self, split):
         if not self._gate.acquire(blocking=False):
             raise ValueError('Concurrent or reentrant receive refused')
         try:
@@ -52,7 +59,10 @@ class AccountedReceiver:
                 raise ValueError('Message/header capacity exhausted')
             # Admit maximum payload overlap before even the header read. A peer's
             # length cannot authorize a later unreserved allocation.
-            permit = self._account.reserve(self._producer, 5 + 2 * self._frame_bytes)
+            # Header/body slices together require one additional whole-frame
+            # payload. Reserve it before ingress, not after receiving the frame.
+            permit = self._account.reserve(self._producer,
+                5 + (3 if split else 2) * self._frame_bytes)
             self._messages -= 1
             self._remaining_bytes -= 5
             self._account.allocate(self._producer, permit, 5)
@@ -71,6 +81,12 @@ class AccountedReceiver:
             self._fill(source, 5)
             self._account.allocate(self._producer, permit, size + 1)
             result = bytes(source)
+            if split:
+                self._account.allocate(self._producer, permit, 5)
+                original_header = result[:5]
+                self._account.allocate(self._producer, permit, body_size)
+                original_body = result[5:]
+                result = (original_header, original_body)
             # This synchronous receive cannot consume more of its reservation.
             # No allocation charge is released, including local temporary bytes.
             self._account.terminate(self._producer, permit)
