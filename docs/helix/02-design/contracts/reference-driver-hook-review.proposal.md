@@ -240,6 +240,58 @@ the file wrapper. The accounted socket now closes file/account admission before
 closing transport, including failure paths. Neither action releases charges nor
 establishes backend termination, transaction outcome or reusable connection.
 
+### Frozen core _read copy integration exit
+
+For the pinned pg8000 core SHA256cac1e505, _read first constructs
+bytearray(sock.read(size)) and finally bytes(buff). Its extend path is reachable
+only if the initial read returns fewer than size bytes. The selected instance
+file must return exactly the requested original header or complete body, or
+raise; partial returns are not an admitted optimization. A successful exact
+return therefore excludes buffer growth under this specific source pin. An
+unexpected second read for the same part must refuse and retain custody rather
+than supply another frame as continuation. This remains an implementation exit,
+not a property established by source inspection alone.
+
+Before enabling ingress for a frame, the next producer integration must reserve
+both core payload copies of its header and body in the same original account,
+in addition to the receive/slice payload reservation. Draw down those copy
+charges before the original read returns bytes to _read; retain them if _read,
+its handler or a later part fails. With frame payload F, those two additional
+copies total2F. The current receive_parts reservation does not include them.
+The resulting payload subtotal5+5F still excludes object/capacity overhead,
+views, parser products, frame reconstruction, transport, outbound and separately
+reserved containment; it is not a complete heap or work ceiling.
+
+Required independent exits: exact header/body correspondence and copy order;
+zero driver returns when reservation is one byte short; fragmented transport
+with exact file returns and zero core extensions; duplicate/wrong-length body
+requests with no further ingress; failure after header return retaining both
+parts' reservations/custody; and callback failure after body copying with no
+resubmission. Observe core entry/read counts and actual allocation placements
+independently of producer-issued ledger events. Freeze the full source/runtime
+tuple and original cycle with the result. All six exits remain not_run; the
+successful control-frame/account probe cannot stand in for them.
+
+### Current security-owner requirements boundary
+
+The [working-source review](../../04-build/evidence/design-audit/weft-security-requirements-working-review.json)
+finds an uncommitted compiler-private SecurityRequirements inventory derived
+from the admitted profiled query and logical plan. It retains actual scan/action
+rules, operator disclosure versus original-authorized modes, and ordered output
+expressions. Truss must consume the eventual qualified owner inventory rather
+than reconstruct it from SQL text, declaration counts or its own query walker.
+The current compiler still refuses physical/result/dependency coverage with
+WFT-SECURITY-LOWERING-UNSUPPORTED. No Truss compiler/runtime pin or backend API
+changes from this review, and no owner test count supplies installed authority.
+
+The eventual shared handoff must distinguish source text, normalized numeric
+payload and comparison/derivation work, preserve exact numeric meaning, and
+account for their cumulative limits without assuming raw token length bounds
+expanded values. Let the owner finish that derivation/correspondence mechanism;
+Truss owns its original admission/account and safe refusal integration. A
+missing or exhausted owner requirement refuses once before native submission;
+it does not trigger a local reinterpretation, truncation or compiler retry.
+
 
 ### Corrected local control-frame compatibility
 
