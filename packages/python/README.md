@@ -133,15 +133,25 @@ native execution permit: this component has no database connection or execute
 method. Host obligation admission, current-person read context, exact result
 decoding and complete execution/profile qualification remain unfinished.
 
-The earlier base wheel's compiler boundary was tested outside the
-checkout, without PYTHONPATH, alongside the frozen original Rust extension.
-All nine delivered module payloads match the wheel/source, and the focused compiler
-and boundary tests pass. This qualifies that development packaging component;
-the local extra and complete Truss installation are separate delivery gates.
+The current development wheel contains ten Python modules, including the private
+`_query_execution` coordinator. All module payloads match the installed wheel and
+source. In a fresh Python3.11 environment outside the checkout, the declared local
+extra resolves and all34 existing component tests pass, including four actual
+PostgreSQL16.2 lifecycle tests. The qualification tuple is macOS arm64 with the
+pinned dependencies above; it does not qualify other platforms or a complete
+Truss installation. See the [installed-wheel evidence](../../docs/helix/04-build/evidence/design-audit/python-current-wheel-local-extra.json).
 
-The subsequent private `_query_execution` coordinator is source-tested and is
-not included in that earlier nine-module wheel evidence. It orders original host
-obligations before read acquisition, checks context through publication and waits
-for cleanup before returning immutable exact-carrier results. Its seven tests use
-synthetic callbacks. Public query activation still requires the original native,
-decoder and security services and their complete qualification.
+The private coordinator orders original host obligations before read acquisition,
+checks context through publication and waits for cleanup before returning immutable
+exact-carrier results. Its eleven installed-wheel tests use synthetic callbacks,
+including asynchronous callback refusal, disposal, reentrancy and failed cleanup.
+It is not a public supported query API. Public query activation still requires
+original native, decoder and security services and their complete qualification.
+
+Installation and migration administration are designed but not implemented in
+this wheel. The metadata planner above cannot substitute for them. The next
+integration work is to bind the original nonrewinding operation issuer, finish
+mandatory native guards and assemble a complete verified installation bundle,
+then exercise a registered populated migration and fresh-process recovery. See
+[the Python installation/migration handoff](../../docs/helix/04-build/python-migration-installation-handoff.md)
+for entrypoint contracts, connection ownership and preservation/failure gates.
