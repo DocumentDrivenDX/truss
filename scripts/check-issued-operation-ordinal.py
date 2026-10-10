@@ -78,15 +78,26 @@ with tempfile.TemporaryDirectory(prefix='truss-issued-ordinal-') as directory:
                 "COALESCE((SELECT json_agg(json_build_array(" +
                 ','.join('r.' + name for name in COLUMNS) +
                 ")) FROM (SELECT\n" + projection + ") r),'[]'::json));")
-            def decode_current_registry(label, expected_ordinals):
+            def decode_current_registry(label, expected_ordinals, admitted_context_hex=None):
                 send(registry_observation_sql)
                 raw = observe()
                 rows = decode_operation_registry(raw['xid'], COLUMNS, raw['rows'],
                     'SELECT', str(len(raw['rows'])), 8, 65536)
                 assert sorted(row[1] for row in rows) == expected_ordinals
                 assert all(row[0] == raw['xid'] and row[2:5] == ('mutation','admitted','0') for row in rows)
+                if expected_ordinals:
+                    assert admitted_context_hex is not None
+                    expected_rows = [(raw['xid'], ordinal, 'mutation', 'admitted', '0',
+                        None, None, None, admitted_context_hex,
+                        '01', '02', '03', '04', '05', '06', None)
+                        for ordinal in expected_ordinals]
+                    assert sorted(rows, key=lambda row: row[1]) == expected_rows
+                else:
+                    expected_rows = []
                 decoded_registries.append({'boundary': label, 'actualXid': raw['xid'],
-                    'originalRows': raw['rows'], 'decodedRows': [list(row) for row in rows]})
+                    'originalRows': raw['rows'], 'decodedRows': [list(row) for row in rows],
+                    'expectedRows': [list(row) for row in expected_rows],
+                    'expectationBasis': 'Independent literal fixture arguments and phase/nulls; original admission context observation is a separately correlated native fact'})
             tail = ''
             if family != 'base':
                 tail += ",convert_to('original asserted fixture','UTF8'),convert_to('original capture profile fixture','UTF8')"
@@ -127,7 +138,7 @@ with tempfile.TemporaryDirectory(prefix='truss-issued-ordinal-') as directory:
             issued_first = issuer.reserve(custody)
             send('SAVEPOINT operation_probe;')
             first = admit(issued_first)
-            decode_current_registry('first-admission', ['0'])
+            decode_current_registry('first-admission', ['0'], first['contextHex'])
             snapshot_sql = "SELECT json_build_object('registry',(SELECT jsonb_agg(to_jsonb(o) ORDER BY operation_ordinal) FROM truss.row_home_operation o)"
             if family == 'configuration':
                 snapshot_sql += ",'configuration',(SELECT jsonb_agg(to_jsonb(c) ORDER BY operation_ordinal) FROM truss.operation_configuration c)"
@@ -156,7 +167,7 @@ with tempfile.TemporaryDirectory(prefix='truss-issued-ordinal-') as directory:
             issued_second = second_facade_issuer.reserve(custody)
             send('SAVEPOINT operation_second;')
             second = admit(issued_second)
-            decode_current_registry('second-admission', ['1'])
+            decode_current_registry('second-admission', ['1'], second['contextHex'])
             assert first['writerXid'] == second['writerXid']
             assert [first['ordinal'], second['ordinal']] == ['0', '1']
             for observation in (first, second):
@@ -184,7 +195,7 @@ with tempfile.TemporaryDirectory(prefix='truss-issued-ordinal-') as directory:
             assert issued_third.ordinal == '3'
             send('SAVEPOINT operation_third;')
             third = admit(issued_third)
-            decode_current_registry('third-admission', ['3'])
+            decode_current_registry('third-admission', ['3'], third['contextHex'])
             assert third['writerXid'] == first['writerXid']
             assert third['ordinal'] == '3'
             send("ROLLBACK; SELECT json_build_object('assignedXid',pg_current_xact_id_if_assigned()::text,'namespaceAbsent',to_regnamespace('truss') IS NULL);")
@@ -200,7 +211,7 @@ with tempfile.TemporaryDirectory(prefix='truss-issued-ordinal-') as directory:
             send('BEGIN;\n' + setup + ';\n' + originals[1].decode() + '\n')
             replacement = admit(replacement_issuer.reserve(replacement_custody))
             assert replacement['ordinal'] == '0' and replacement['writerXid'] != first['writerXid']
-            decode_current_registry('new-top-level-transaction', ['0'])
+            decode_current_registry('new-top-level-transaction', ['0'], replacement['contextHex'])
             assert issuer.reserve(custody).reason == 'closed'
             transaction_reuse = {'samePsqlProcess': True, 'confirmedPriorEndObservation': ended,
                 'oldIssuerRefused': closed_result.reason, 'oldBindingRetained': True,

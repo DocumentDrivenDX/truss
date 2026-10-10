@@ -443,3 +443,22 @@ In particular, the post-rollback unassigned xid alone does not authorize product
 connection reuse. Qualified driver confirmation, original cleanup/recovery and
 framing must establish the full reuse gate from the producer handoff. Lost COMMIT,
 backend replacement and unresolved prior attempts remain separate unrun exits.
+
+## Complete native cell expectation
+
+The four `issued-operation-ordinal-{base,asserted,epoch,configuration}-complete-cell-oracle-native.json`
+receipts strengthen these schedules by comparing every decoded cell. Expected
+definition/input/prestate/candidate/obligation/group-custody hex comes from the
+independent original literal fixture arguments01/02/03/04/05/06; admitted phase,
+generation0 and nullable generations/result have independently stated expectations.
+Context hex is compared with a separately correlated original native admission
+observation, whose nested identity/configuration fields retain their existing
+checks. This is correspondence between two native observations, not an independent
+complete context producer or authenticity proof. The receipts retain the full
+expected/original/decoded rows and this expectation basis.
+
+All four families pass the complete-cell comparisons at0/1/3 and the distinct
+new-transaction0, plus both empty savepoint rollback observations. Swapped payload
+columns can no longer pass merely because ordinal, phase and hex shape match.
+Original descriptor/completion, bounded ingress/account, ordinary authority and
+full installer/finalizer qualification remain unchanged open obligations.
