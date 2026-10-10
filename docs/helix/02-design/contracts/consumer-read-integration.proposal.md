@@ -324,3 +324,44 @@ lease/publication custody before readiness. Source-column codecs do not replace
 the separately admitted complete result-cell decoder. Truss's adopted f05f2df
 compiler remains unchanged; no policies, semantic interpreter or lowerer are
 forked here.
+
+## Registration and obligation custody handoff — 2026-10-10
+
+[The read-only owner refresh](../../04-build/evidence/design-audit/owner-custody-cli-refresh-2026-10-10.json) records unfinished security work on
+immutable backend registration. Truss's future query/read admission must consume
+one owner-registered declaration and exact target selection, preserving the
+original registration bytes and complete opaque obligation parameters together
+with every selected-capability provenance occurrence. Matching backend ID/version,
+target labels or obligation IDs alone cannot authenticate this correspondence.
+Do not call a mutable declaration callback again, reconstruct authority from a
+response's obligation names, drop repeated selected origins or accept conflicting
+parameters/owner/failure codes through deduplication.
+
+The proposed closed security0.4 response has no generic obligation-parameter
+member. Truss must await the owner's admitted registration/selection interface or
+explicitly qualified original-host reconstruction before native submission. Exact
+host reconstruction requires the same immutable original registration bytes and
+selected target, not an independently fetched same-label manifest. This is an
+owner interface dependency, not a Truss-owned security registry/resolver fork or
+a request to add arbitrary response fields locally. Unknown parameter semantics
+remain unsupported until interpreted and natively discharged; retention is not
+execution authority. Preserve the earlier original-current-authority/subject/
+publication/complete native proof requirements.
+
+The owner found ordinary nested object keys `$serde_json::private::Number` and
+`$serde_json::private::RawValue` could be reinterpreted by typed serde conversion.
+Its unfinished reader/extraction fixes are not adopted here. Before consuming
+that boundary, require raw-string controls covering nested/sibling/order and
+non-string values in all four opaque channels: session settings, logical domain,
+result domain and obligation parameters. Retaining raw bytes alongside a changed
+parsed tree is insufficient. Truss Python/TypeScript adapters must preserve the
+same source/tree correspondence and exact numeric carriers without regenerating
+unknown content from lossy numeric values.
+
+Future integration tests must cover callback drift after registration, exact
+whitespace/number-token custody, repeated-ID parameter/owner/failure conflicts,
+complete multi-capability provenance, duplicate/missing/inapplicable selections,
+same-label substituted host registration, reserved-looking ordinary JSON keys and
+resource exhaustion before copies/comparisons. These are integration exit cases,
+not completed native evidence. Owner work is still in progress; no API/profile,
+backend acceptance case or Truss installer readiness is promoted.

@@ -1982,3 +1982,36 @@ update qualifies capacity arithmetic only, not a guard-complete finalizer. Nativ
 argument/copy/work/cancellation/physical overhead, qualified cleanup, complete
 commit cohorts, ordinary-role graph effects and all seven bodies remain required.
 Full reservation/installer qualification remain false; no criterion is promoted.
+
+## Owner CLI and security-custody refresh — 2026-10-10
+
+Fresh origin/main fetches observe UMF322b193 unchanged and Weftf823aee, with new
+commits c6fe2a6 and f823aee. [The source review](evidence/design-audit/owner-custody-cli-refresh-2026-10-10.json)
+pins five published Weft sources, four matching current browser assets and four
+unfinished security-owner working sources. UMF's current browser remains
+byte-exact in the Truss site; no stale regeneration or asset replacement is needed.
+
+Weft now supplies a feature-selected `weft-paths` one-shot CLI, calling original
+`weft_runtime::paths::compile_json`, with16MiB UTF8 input bounds and constant
+transport errors. Its source-owned Backend03 metadata exporter remains separate
+from executable/native qualification. These published sources and test definitions
+were inspected, not built or rerun here. Ashlar/Databricks paths remain candidate;
+they do not provide Truss PostgreSQL mapping or discharge host obligations. Truss's
+adopted f05f2df0.2 compiler stays unchanged. Route by the complete entrypoint,
+compile/language/backend/storage/security tuple, not the shared0.4 label. The
+ordinary Python bridge still requires its own explicit owner-selected path route
+before any proposed CLI/bridge packaging change is adopted for Truss.
+
+The security owner is actively implementing immutable manifest-byte custody,
+complete obligation parameters and all selected-capability origins. It also found
+a serde raw-object reinterpretation defect affecting opaque parameter trees.
+[Python integration](../02-design/python-integration.proposal.md#registration-and-obligation-custody-handoff--2026-10-10)
+and [consumer reads](../02-design/contracts/consumer-read-integration.proposal.md#registration-and-obligation-custody-handoff--2026-10-10)
+now require original registration/target correspondence, opaque raw/tree fidelity
+and owner-provided semantic/native discharge. Same IDs/labels are insufficient;
+unknown meaning does not become accepted through byte retention. The closed
+security0.4 response lacks generic parameter transport, so admitted owner custody
+or qualified original-host reconstruction remains an explicit integration gate.
+Working sources/tests/formulas remain unfinished; Truss neither reruns nor adopts
+them, sends cross-chat messages or duplicates security interpretation. Full45-story/
+167-criterion scope and all seven mandatory bodies remain unchanged.
