@@ -1372,3 +1372,41 @@ source pins and the native counterexample change the next integration action;
 dirty-generation storage, complete invalidation and unavoidable bounded original
 callback registration remain open. All seven mandatory semantic bodies and full
 installer/publication qualification remain required, with no criterion promoted.
+
+## Actual native commit-cache component — 2026-10-10
+
+[The cache candidate](../02-design/contracts/capacity-commit-coalescing-v0.1.proposal.md#actual-native-cache-candidate--2026-10-10)
+now has actual fixed storage, ledger invalidation and a deferred callback in
+[commit-cache.sql](../../../packages/postgresql/native/capacity-reservation/commit-cache.sql).
+Four memo columns retain original singleton FK, actual xid and dirty/verified
+native generations. Every ledger UPDATE invalidates, including equal values;
+actual epoch changes start a new cache generation without resetting original
+work/issuer state. Native overflow refuses before wrap. A successful complete
+closeout writes proof once for the current dirty state; queued duplicate callbacks
+skip without recursive invalidation. Ledger deletion/truncation refuse.
+
+[The30-check native receipt](evidence/design-audit/capacity-cache-commit-native.json)
+executes the owner export with original native capacity admission/observers and
+complete framed parity. Four ledger changes coalesce to one proof for A, then a
+later B after early checking causes one more proof. Independent reads observe
+committed members/ledger/cache. Child faults restore the prior original memo;
+equal images in a new actual epoch invalidate; exhausted generation refuses.
+Actual COMMIT refuses an unreleased operation and corrupted counters, with full
+native rollback preserving earlier committed state. The test-only proof-write
+audit is not cumulative work. The prior23-check receipt/producers remain original.
+
+[UMF source capture](evidence/design-audit/capacity-cache-source.json) retains/
+reloads/exports the complete candidate exactly, extracts one table declaration and
+retains ten unhandled statements, complete=false. The new fixed memo FK/four fields
+must be reflected in the next core/browser projection; current core0.7 accurately
+remains the baseline plus its previously documented adjuncts, not this new cache.
+This is an unadopted installation/migration adjunct, with no silent baseline change.
+
+Scoped automatic capacity checking now exists in the native component; complete
+unavoidable engine commit enforcement remains unqualified. Original registered
+constraint/name/body/trigger/dependency identity, native memo field ownership and
+ordinary-role privileges, full invalidation, independent resource-profile adoption,
+current security, native cumulative callback/work/overhead, cleanup and all seven
+semantic bodies remain required. Stored ledger profile bytes cannot authenticate
+themselves. Named-only operation-entry deferral remains necessary. Full reservation/
+installer readiness remain false and no criterion is promoted.

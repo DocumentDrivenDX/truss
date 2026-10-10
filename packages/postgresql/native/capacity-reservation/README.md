@@ -99,3 +99,12 @@ aggregate refusals and rollback restoration. Native compressible fixtures and
 single-run timings establish logical framed limits only; physical/native-work,
 security, cleanup, complete deferred invocation and installer qualification remain
 open. Earlier5/9-check boundary receipts retain their original producers.
+
+`commit-cache.sql` adds a fixed four-column native memo and deferred capacity
+callback. Ledger changes invalidate the actual-transaction proof; repeated queued
+events share one complete closeout verification. The30-check native receipt covers
+early/later checks, equal-image/new-epoch invalidation, rollback, overflow and actual
+COMMIT refusal for an unreleased operation or corrupt counters. UMF retains the
+source and one table/FK declaration. This unadopted adjunct still needs core/browser
+projection, original installed identity/ACL/profile/account closure and all seven
+semantic bodies. The callback's native cache is not cumulative work or authorization.
