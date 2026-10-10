@@ -2015,3 +2015,46 @@ or qualified original-host reconstruction remains an explicit integration gate.
 Working sources/tests/formulas remain unfinished; Truss neither reruns nor adopts
 them, sends cross-chat messages or duplicates security interpretation. Full45-story/
 167-criterion scope and all seven mandatory bodies remain unchanged.
+
+## Explicit native capacity closeout — 2026-10-10
+
+[The private commit-boundary check](../../../packages/postgresql/native/capacity-reservation/commit-check.sql)
+now composes complete retained-inventory parity with release and operation-phase
+closeout. It requires zero remaining reserved rows/bytes and all six reservation
+identity/initial-budget fields cleared. Every retained operation must have the
+application_finalized phase; a foreign unfinished orphan is not exempt through
+current-xid filtering. It changes no rows, repairs no counters and does not
+rewrite phases or evict capacity. Original profile/current native custody and
+full semantic finalizer authority remain external requirements.
+
+[The48-check PostgreSQL16.15 receipt](evidence/design-audit/capacity-commit-native.json)
+replays the native reserve/admission/event-derived capacity schedule and adds
+active/unreleased reservation refusals, successful released closeout, actual
+COMMIT and independent connection visibility of the original operation/result
+and complete framed counters. Counter corruption and a foreign unfinished orphan
+with correct size parity both refuse. Rollback preserves the committed earlier
+operation. Orphan construction deliberately disables only an isolated fixture
+observer inside a savepoint; it is a fault control, not a supported repair route.
+The initial success assertion assumed a particular driver `void` representation;
+the corrected query returns a concrete scalar after invoking the VOLATILE original
+check. Native source/behavior was not changed to accommodate that assertion.
+
+[UMF source capture](evidence/design-audit/capacity-commit-source.json) retains/
+reloads/exports both CREATE/REVOKE statements exactly; the native checker executes
+the owner export. Declaration coverage remains zero declarations/two unhandled,
+complete=false. This adds no automatic deferred trigger, native commit hook or
+public commit API. An explicit call followed by administrative COMMIT proves
+component closeout/durability, not unavoidable commit-time enforcement or ordinary
+protected graph acceptance. Repeated whole-inventory checks per deferred row must
+not be installed without a bounded complete-cohort work profile; qualification
+must choose and register the actual invocation/coalescing protocol.
+
+The seven mandatory semantic bodies still must validate original definitions,
+effects, generations, journal/feed/contributions and complete transaction cohorts.
+Their protected finalizer must invoke this capacity closeout after original
+release, and original unavoidable commit/installer guards must bind that invocation,
+full helper/trigger dependencies, roles/private ACL and current resource/security
+profiles. Administrative phase markers in this receipt do not supply those guards.
+Native work/cancellation/physical overhead, full bounds, cleanup, counter conversion
+and installer publication remain unfinished. Full reservation/installer
+qualification remain false, and no acceptance criterion is promoted.

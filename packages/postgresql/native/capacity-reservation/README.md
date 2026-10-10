@@ -58,7 +58,8 @@ rows and framing boundaries against an independent Python oracle. UMF retains
 and exports all eight CREATE/REVOKE statements; declaration coverage is incomplete.
 See the installation plan's “Complete-row custody accounting codec” section for
 its grammar, counter-conversion obligation and remaining native work/overhead
-and protected-producer gaps. This codec is not yet bound to ledger transfers.
+and protected-producer gaps. Its length-only wrappers now drive the candidate native observers below;
+complete protected installation remains unqualified.
 
 `custody-size.sql` supplies three private length-only functions using the same
 complete column profile and frame-size formula. The24-check native receipt
@@ -83,3 +84,11 @@ rollback. This is administrative component evidence; trigger/dependency inventor
 protected semantic/finalizer authority, resource adoption and all seven mandatory
 bodies remain uninstalled. Its BEFORE UPDATE ordering requires closed original
 trigger dependencies and complete parity before commit/publication.
+
+`commit-check.sql` supplies an explicit private capacity closeout check: full
+retained parity, complete reservation release and no retained unfinished operation.
+The48-check native composition receipt includes actual COMMIT, independent
+connection visibility, counter corruption/orphan refusal and preserved committed
+state after rollback. It is not automatic deferred/commit-hook enforcement and
+does not replace the seven semantic guards. The protected finalizer/installer must
+register and enforce its original invocation under a bounded full-cohort profile.
