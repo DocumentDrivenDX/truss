@@ -115,6 +115,24 @@ so corrected observations cannot overwrite the historical16.2 failure receipt.
 Only after this succeeds continue the full R4/R5 matrix and local lifecycle/loader
 qualification; a packaging command or source parse is not those exits.
 
+The first corrected build and private wheel now complete. The
+[installed payload receipt](evidence/design-audit/pgserver-corrected-installed-wheel.json)
+records0.1.4+truss.pg16.15, wheel SHA256
+706ab843c9e8d8613a2a6cde6cf8156d8b83fa1921237e883c0aa878cfac88d9,
+and1,620 installed/wheel/build-directory payload correspondences. The wheel is
+cp311-cp311-macosx_27_0_arm64, so no older macOS, other Python or platform claim
+follows. It is a local build artifact, not a published or adopted dependency.
+The original build-input record's pending fields describe its earlier checkpoint.
+
+The [corrected reset receipt](evidence/design-audit/pgserver-corrected-caller-reset.json)
+now records actual PostgreSQL16.15 and all18 expected observations matching,
+including the three rollback cases that failed on16.2. This resolves that
+reproduced binary defect for this installed candidate. It does not qualify the
+complete R4 isolation/R5 origin paths, native issuer, default LocalPostgres wrapper
+or public application operations. Continue full security/role/prepared/lifecycle
+qualification and deliberate packaging/profile adoption before changing the
+default0.1.4/16.2 component pin.
+
 ## Ownership and profile selection
 
 Truss owns the Python package in this repository, installation bundles, migration
