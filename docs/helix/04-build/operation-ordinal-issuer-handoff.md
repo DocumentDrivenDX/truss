@@ -901,3 +901,30 @@ bindings with this codec, adopt the administrative postgres owner/OID as product
 registration, or use callable success as authority to resolve a caller address.
 Original registered owner/dependency/profile/resource adoption and RC02–RC06 remain
 incomplete. No installer, public operation or managed-service gate is promoted.
+
+## Actual native address decoder pair
+
+Private operation_address_decode_original(bytea) now returns typed installation
+text, native xid8 and bigint ordinal. It bounds original bytes before UTF8/JSON
+parsing, rejects any root/entry that is not the required four-string array,
+checks domain and canonical integer spelling/range, and compares complete original
+bytes with operation_address_original. JSONB parsing cannot admit object/number
+content as strings: these kinds refuse before fields are projected. No generic
+object round-trip or unknown-content preservation claim follows from this codec.
+
+The [decoder source receipt](evidence/design-audit/operation-address-decode-source.json)
+proves exact UMF archive/reload/export; declaration interpretation remains partial
+(zero declarations/two unhandled statements). The
+[paired native receipt](evidence/design-audit/operation-address-pair-native.json)
+passes 43 PostgreSQL16.15 observations. It includes the earlier 19 encoder controls,
+eight exact native field round trips, maximum domains, thirteen malformed/
+noncanonical/type/domain refusals, exact 8-MiB decoding and ordinary-role SQLSTATE42501.
+Earlier receipts and producers retain their original scopes and hashes.
+
+RC01 now has native encoder/decoder components. Neither returns an admitted
+transaction or an operation permission. Preserve original installation/current
+scope and context/group/artifact/readiness checks in RC02–RC06; native casts and
+address lookup cannot reconstruct that authority. Complete production callable/
+owner/private ACL/dependency/resource and JSON parser workspace/error containment
+qualification remain absent. Native text/NUL and UTF8 limitations remain explicit,
+and no full address profile, semantic body, public operation or installer is ready.

@@ -20,3 +20,19 @@ This helper is separate from the seventeen capacity routines and seven required
 semantic bodies. It does not qualify an installed address profile, protected
 admission, resource-account/deadline containment, managed targets or a public API.
 Consume it only through an explicitly qualified original installed profile.
+
+`decoder.sql` adds the paired private
+`operation_address_decode_original(bytea)` -> (text,xid8,bigint) candidate.
+It bounds original bytes, decodes UTF8, requires exactly four JSON strings and
+native integer domains, then compares the original frame with the paired encoder.
+Objects/numbers are never accepted as address scalars; decoded native fields are
+data projections, not scope or registry authority.
+
+[The paired native receipt](../../../../docs/helix/04-build/evidence/design-audit/operation-address-pair-native.json)
+passes 43 observations, retaining the earlier encoder controls plus scalar/max-domain
+round trips, thirteen malformed/noncanonical/type/domain refusal controls, exact
+8-MiB decoding and ordinary decoder denial. The
+[decoder UMF artifact](../../../../docs/helix/02-design/contracts/operation-address-decode-v0.1.proposal.umf.json)
+archives/export/reloads exactly with partial declaration coverage. Full native JSON
+parser workspace, production role/dependency/profile/error/authority and original
+registry qualification remain unfinished.

@@ -1,0 +1,271 @@
+{
+  "scope": "Installed private native address encoding/decoding, attributes/ACL and output preflight against Python candidate; isolated administrative fixture, no original registry/authority qualification",
+  "serverVersion": "16.15",
+  "sql": "SELECT truss.operation_address_original(CAST(:installation AS text),CAST(:xid AS xid8),CAST(:ordinal AS bigint))",
+  "observations": [
+    {
+      "id": "private-native-binding",
+      "binding": [
+        "16385",
+        "10",
+        false,
+        "v",
+        "u",
+        [
+          "search_path=pg_catalog, pg_temp"
+        ],
+        "{postgres=X/postgres}",
+        "CREATE OR REPLACE FUNCTION truss.operation_address_original(installation text, writer_xid xid8, operation_ordinal bigint)\n RETURNS bytea\n LANGUAGE plpgsql\n SET search_path TO 'pg_catalog', 'pg_temp'\nAS $function$\nDECLARE\n  domain_text constant text := 'truss-row-operation-address/0.1.0';\n  ceiling constant bigint := 8388608;\n  raw bytea;\n  size bigint;\n  byte_value integer;\n  i integer;\n  output bytea;\nBEGIN\n  IF installation IS NULL OR octet_length(installation) NOT BETWEEN 1 AND ceiling\n     OR writer_xid IS NULL OR operation_ordinal IS NULL OR operation_ordinal < 0 THEN\n    RAISE EXCEPTION 'original address input domain required' USING ERRCODE='22023';\n  END IF;\n  IF getdatabaseencoding() <> 'UTF8' THEN\n    RAISE EXCEPTION 'original UTF8 address profile required' USING ERRCODE='55000';\n  END IF;\n  -- Four quoted strings, three commas, two brackets and exact ASCII integers.\n  size := 13 + octet_length(domain_text) + octet_length(writer_xid::text)\n          + octet_length(operation_ordinal::text) + octet_length(installation);\n  IF size > ceiling THEN\n    RAISE EXCEPTION 'original address byte bound' USING ERRCODE='54000';\n  END IF;\n  raw := convert_to(installation,'UTF8');\n  -- Count only escape expansion; each original UTF8 byte is already charged.\n  FOR i IN 0..octet_length(raw)-1 LOOP\n    byte_value := get_byte(raw,i);\n    IF byte_value IN (34,92,8,9,10,12,13) THEN\n      size := size + 1;\n    ELSIF byte_value < 32 THEN\n      size := size + 5;\n    END IF;\n    IF size > ceiling THEN\n      RAISE EXCEPTION 'original address byte bound' USING ERRCODE='54000';\n    END IF;\n  END LOOP;\n  output := convert_to('[' || array_to_string(ARRAY[\n    to_json(domain_text)::text,to_json(installation)::text,\n    to_json(writer_xid::text)::text,to_json(operation_ordinal::text)::text],',') || ']','UTF8');\n  IF octet_length(output) <> size THEN\n    RAISE EXCEPTION 'original address encoder size mismatch' USING ERRCODE='55000';\n  END IF;\n  RETURN output;\nEND;\n$function$\n",
+        false
+      ]
+    },
+    {
+      "id": "scalar-0",
+      "installationUtf8Hex": "696e7374616c6c6174696f6e",
+      "originalAddressHex": "5b2274727573732d726f772d6f7065726174696f6e2d616464726573732f302e312e30222c22696e7374616c6c6174696f6e222c22373334222c2237225d",
+      "writerXid": "734",
+      "operationOrdinal": "7"
+    },
+    {
+      "id": "scalar-1",
+      "installationUtf8Hex": "71756f7465732220616e64206261636b736c6173685c",
+      "originalAddressHex": "5b2274727573732d726f772d6f7065726174696f6e2d616464726573732f302e312e30222c2271756f7465735c2220616e64206261636b736c6173685c5c222c22373334222c223131225d",
+      "writerXid": "734",
+      "operationOrdinal": "11"
+    },
+    {
+      "id": "scalar-2",
+      "installationUtf8Hex": "080c0a0d09",
+      "originalAddressHex": "5b2274727573732d726f772d6f7065726174696f6e2d616464726573732f302e312e30222c225c625c665c6e5c725c74222c22373334222c223135225d",
+      "writerXid": "734",
+      "operationOrdinal": "15"
+    },
+    {
+      "id": "scalar-3",
+      "installationUtf8Hex": "0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+      "originalAddressHex": "5b2274727573732d726f772d6f7065726174696f6e2d616464726573732f302e312e30222c225c75303030315c75303030325c75303030335c75303030345c75303030355c75303030365c75303030375c625c745c6e5c75303030625c665c725c75303030655c75303030665c75303031305c75303031315c75303031325c75303031335c75303031345c75303031355c75303031365c75303031375c75303031385c75303031395c75303031615c75303031625c75303031635c75303031645c75303031655c7530303166222c22373334222c223139225d",
+      "writerXid": "734",
+      "operationOrdinal": "19"
+    },
+    {
+      "id": "scalar-4",
+      "installationUtf8Hex": "7f",
+      "originalAddressHex": "5b2274727573732d726f772d6f7065726174696f6e2d616464726573732f302e312e30222c227f222c22373334222c223233225d",
+      "writerXid": "734",
+      "operationOrdinal": "23"
+    },
+    {
+      "id": "scalar-5",
+      "installationUtf8Hex": "c3a9",
+      "originalAddressHex": "5b2274727573732d726f772d6f7065726174696f6e2d616464726573732f302e312e30222c22c3a9222c22373334222c223237225d",
+      "writerXid": "734",
+      "operationOrdinal": "27"
+    },
+    {
+      "id": "scalar-6",
+      "installationUtf8Hex": "e280a8e280a9",
+      "originalAddressHex": "5b2274727573732d726f772d6f7065726174696f6e2d616464726573732f302e312e30222c22e280a8e280a9222c22373334222c223331225d",
+      "writerXid": "734",
+      "operationOrdinal": "31"
+    },
+    {
+      "id": "scalar-7",
+      "installationUtf8Hex": "c280dfbfe0a080ed9fbfee8080efbfbff0908080f48fbfbf",
+      "originalAddressHex": "5b2274727573732d726f772d6f7065726174696f6e2d616464726573732f302e312e30222c22c280dfbfe0a080ed9fbfee8080efbfbff0908080f48fbfbf222c22373334222c223335225d",
+      "writerXid": "734",
+      "operationOrdinal": "35"
+    },
+    {
+      "id": "native-text-nul-refusal",
+      "sqlstate": "22021"
+    },
+    {
+      "id": "same-native-xid-after-confirmed-refusal",
+      "writerXid": "734"
+    },
+    {
+      "id": "null-installation",
+      "sqlstate": "22023"
+    },
+    {
+      "id": "null-writer",
+      "sqlstate": "22023"
+    },
+    {
+      "id": "negative-ordinal",
+      "sqlstate": "22023"
+    },
+    {
+      "id": "exact-eight-mib-output",
+      "bytes": 8388608,
+      "sha256": "5a5ffdc02187131e2ea60d9b5769c34816189585ac3fdaec2735bc257b647aac",
+      "fullPythonByteEquality": true,
+      "inputPattern": "ASCII a repeated to full output ceiling; ordinal0 and captured xid"
+    },
+    {
+      "id": "one-byte-over-output",
+      "sqlstate": "54000"
+    },
+    {
+      "id": "escaped-expansion-over-output",
+      "sqlstate": "54000"
+    },
+    {
+      "id": "native-maximum-domains",
+      "originalAddressHex": "5b2274727573732d726f772d6f7065726174696f6e2d616464726573732f302e312e30222c22696e7374616c6c6174696f6e222c223138343436373434303733373039353531363135222c2239323233333732303336383534373735383037225d"
+    },
+    {
+      "id": "ordinary-private-call-denial",
+      "sqlstate": "42501"
+    },
+    {
+      "id": "native-decoder-scalar-0",
+      "fields": [
+        "installation",
+        "734",
+        "7"
+      ]
+    },
+    {
+      "id": "native-decoder-scalar-1",
+      "fields": [
+        "quotes\" and backslash\\",
+        "734",
+        "11"
+      ]
+    },
+    {
+      "id": "native-decoder-scalar-2",
+      "fields": [
+        "\b\f\n\r\t",
+        "734",
+        "15"
+      ]
+    },
+    {
+      "id": "native-decoder-scalar-3",
+      "fields": [
+        "\u0001\u0002\u0003\u0004\u0005\u0006\u0007\b\t\n\u000b\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001a\u001b\u001c\u001d\u001e\u001f",
+        "734",
+        "19"
+      ]
+    },
+    {
+      "id": "native-decoder-scalar-4",
+      "fields": [
+        "\u007f",
+        "734",
+        "23"
+      ]
+    },
+    {
+      "id": "native-decoder-scalar-5",
+      "fields": [
+        "\u00e9",
+        "734",
+        "27"
+      ]
+    },
+    {
+      "id": "native-decoder-scalar-6",
+      "fields": [
+        "\u2028\u2029",
+        "734",
+        "31"
+      ]
+    },
+    {
+      "id": "native-decoder-scalar-7",
+      "fields": [
+        "\u0080\u07ff\u0800\ud7ff\ue000\uffff\ud800\udc00\udbff\udfff",
+        "734",
+        "35"
+      ]
+    },
+    {
+      "id": "native-decoder-maximum-domains",
+      "originalHex": "5b2274727573732d726f772d6f7065726174696f6e2d616464726573732f302e312e30222c22696e7374616c6c6174696f6e222c223138343436373434303733373039353531363135222c2239323233333732303336383534373735383037225d"
+    },
+    {
+      "id": "native-decoder-refusal-null",
+      "sqlstate": "22023"
+    },
+    {
+      "id": "native-decoder-refusal-empty",
+      "sqlstate": "22023"
+    },
+    {
+      "id": "native-decoder-refusal-malformed",
+      "sqlstate": "22023"
+    },
+    {
+      "id": "native-decoder-refusal-wrong-arity",
+      "sqlstate": "22023"
+    },
+    {
+      "id": "native-decoder-refusal-trailing-newline",
+      "sqlstate": "22023"
+    },
+    {
+      "id": "native-decoder-refusal-alternate-spacing",
+      "sqlstate": "22023"
+    },
+    {
+      "id": "native-decoder-refusal-wrong-domain",
+      "sqlstate": "22023"
+    },
+    {
+      "id": "native-decoder-refusal-leading-zero",
+      "sqlstate": "22023"
+    },
+    {
+      "id": "native-decoder-refusal-numeric-node",
+      "sqlstate": "22023"
+    },
+    {
+      "id": "native-decoder-refusal-wrong-kind",
+      "sqlstate": "22023"
+    },
+    {
+      "id": "native-decoder-refusal-bad-utf8",
+      "sqlstate": "22023"
+    },
+    {
+      "id": "native-decoder-refusal-ordinal-overflow",
+      "sqlstate": "22023"
+    },
+    {
+      "id": "native-decoder-refusal-writer-overflow",
+      "sqlstate": "22023"
+    },
+    {
+      "id": "native-decoder-eight-mib",
+      "installationBytes": 8388558,
+      "writerXid": "734",
+      "operationOrdinal": "0"
+    },
+    {
+      "id": "native-decoder-ordinary-denial",
+      "sqlstate": "42501"
+    }
+  ],
+  "sourceSha256": {
+    "packages/python/src/truss/_row_operation_address.py": "51af38dbda5c94f8a3ca8c92af3abef1f9919d1d44f6ae1c872c609b747eaf08",
+    "packages/python/src/truss/_acceptance_json.py": "303638af137138a796542aa5425985d147e510a23639fca9b2d6221966337a01",
+    "packages/postgresql/native/operation-address/encoder.sql": "a993f30c394a3d3136de590e4dfd407eb108c6d3a8f66a08a924d42288b081f2",
+    "docs/helix/04-build/evidence/design-audit/operation-address-source.owner-export.sql": "f535091b21932df872ac7f37c6b3ac654045799b32745e20345dad68a4b330ec",
+    "packages/postgresql/native/operation-address/decoder.sql": "8b4a02af4162f197695abe0a4496facc12cee8c8d00928631a6b983e7993603a",
+    "docs/helix/04-build/evidence/design-audit/operation-address-decode-source.owner-export.sql": "105a3fa9fd0ff3905710c456e1713874de9d6af7f3fdce76a5cc9efa22406eae"
+  },
+  "producerSha256": "a0a4a652e01f3b3d862dc66b971c849a7ba89c1f298b68427e1c45783e86b5c2",
+  "nativeAddressProfileQualified": false,
+  "installerReady": false,
+  "acceptanceCasesPromoted": [],
+  "limitations": [
+    "Eight finite scalar samples are not all native scalar/domain/encoding profiles",
+    "PostgreSQL text rejects NUL even though a host JSON string can represent it; original native installation identity admission must reject unsupported text",
+    "Ordinals are manually selected fixtures, not original host issuer custody",
+    "Actual fixture identity/attributes and one ordinary role tested; complete production owner/private ACL/dependency/resource qualification absent",
+    "No original installation/context/group registry resolution, semantic body, resource or authority qualification"
+  ]
+}
