@@ -162,5 +162,9 @@ objects at construction and closes unexecuted coroutine results from synchronous
 wrappers before refusal, including disposal during the callback. Six compiler
 boundary source tests pass with warnings treated as errors. This correction is
 newer than the recorded ten-module wheel and34-test installed-suite evidence;
-that wheel remains historical until rebuilt. No asynchronous compiler execution
+that wheel remains historical. The [rebuilt-wheel receipt](../../docs/helix/04-build/evidence/design-audit/python-async-fixed-wheel.json)
+verifies all ten installed payloads against current source and passes the six
+compiler plus eleven coordinator regression tests outside the checkout, in the
+existing local-extra environment. Native lifecycle tests were not repeated for
+this compiler-only correction. No asynchronous compiler execution
 or automatic retry is introduced.
