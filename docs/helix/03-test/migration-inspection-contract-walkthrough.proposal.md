@@ -68,3 +68,32 @@ reclassify confirmed commit as rollback. LM-V06 independently covers those
 histories via original migration reconciliation. This walkthrough qualifies
 neither apply nor provider/managed-service behavior; full populated migration
 preservation and separate PostgreSQL/Aurora/Lakebase evidence remain required.
+
+## Clean installed-package qualification — PY-07
+
+These required schedules implement the resource gate in the Python design. They
+remain **not_run**: the development wheel does not yet register a complete
+installation bundle. Packaging checks are contract-level; actual install/verify
+and populated migration are native integration checks. Preserve existing LM-V
+case ownership rather than treating these as replacement migration scenarios.
+
+| Case | Independent setup / action | Required observation |
+| --- | --- | --- |
+| PKG-01 complete membership | Independently enumerate the selected release resources, build wheel and source distribution, install wheel into a clean Python environment | Every original UMF/generated/native/grant/initialization/verifier/profile/recipe resource has exactly its registered path and bytes; reconstructing the source distribution yields the same selected resource set. Package version alone cannot pass. |
+| PKG-02 checkout unavailable | Run the public install/verify entrypoints from an unrelated working directory with no checkout on import/resource paths | Actual fresh install and complete verification succeed using installed resources; retain native inventory and atomic readiness observations. Reading a repository file or downloading replacement SQL fails the gate. |
+| PKG-03 missing resource | Separately omit one mandatory resource from the disposable package, retaining the original expected release manifest | Refuse before any installation/migration submission; no native attempt, receipt, marker or ready publication. Do not repair from ambient files. |
+| PKG-04 changed resource | Change one SQL, profile or recipe byte without changing the independent release pin | Refuse correspondence before submission; a checksum recomputed from the altered package cannot author expected bytes. Preserve exact original diagnostic classification under the selected contract. |
+| PKG-05 release mismatch | Present an internally hash-consistent resource set from a different release with the original requested bundle/profile pin | Refuse the original release correspondence. Shape-valid manifest and matching local hashes cannot authorize a foreign installation. |
+| PKG-06 inert import | Import the installed library and construct its process configuration with a registered connection/diagnostic receiver | No database, compiler initialization, server startup, network fetch or migration effect. Actual runtime/installation invocation remains explicit. |
+| PKG-07 populated route | From a coherent admitted populated source, invoke the registered migration using only installed selected source/target/recipe inputs | Run full existing preservation and unknown-outcome/reconciliation schedules, with exact committed graph/keys/edges/journal/receipts/feed and original custody. Resource delivery alone cannot qualify this case. |
+| PKG-08 late install failure | Inject a separately registered failure after required DDL but before readiness publication through the actual installer | No ready installation survives confirmed rollback; uncertain settlement retains the original attempt/recovery association and is not reported as rolled back from marker absence. No automatic resubmission. |
+
+Retain original wheel/source-distribution hashes, build/toolchain/environment pins,
+installed resource inventory, selected native tuple and independent before/after
+observations. A test harness may inspect resources without granting execution
+power; the original installer/admission/profile still determines permission.
+No mocks or synthetic accepted installations satisfy PKG-02/07/08. Commands and
+exact public package entrypoints are assigned when the actual composition exists;
+this plan does not invent an executable installer or count absent cases as passes.
+PKG-01–06/08 belong to fresh-package P1/P2 qualification; PKG-07's complete populated
+migration is P4. Full PY-07 publication also retains bidirectional native interchange.
