@@ -2542,3 +2542,25 @@ shape: install the new wheel into a fresh environment, verify relocated payload
 and rerun applicable native controls before adoption. Complete driver/security/
 installation gates and published default delivery remain open. No wheel binary
 is published or included as a supported package by these receipts.
+
+
+## Fresh rebuilt runtime installed-component qualification
+
+[Installed candidate evidence](evidence/design-audit/pgserver-fresh-installed-component-20261010.json)
+loads the freshly rebuilt a7b637a7 wheel from a new target directory and the
+existing independently built Truss wheel from its installed directory. All1620
+pgserver wheel payloads and29 Truss modules match their original receipt hashes.
+The full132-test warnings-as-errors component suite passes against these loaded
+binaries. [Native caller-reset18](evidence/design-audit/pgserver-fresh-caller-reset-20261010.json)
+observes PostgreSQL16.15 with zero mismatches. Original compressed install/test/
+caller-reset logs accompany the evidence. Existing test-source pins are verified
+after the run; no new before/after source freeze is claimed.
+
+This advances the fresh rebuilt candidate beyond packaging to local installed
+component compatibility. Dependencies still come from the existing corrected
+Python environment, so this is not a new fully isolated resolver/delivery proof.
+The current macOS27 arm64/Python3.11 tuple is the only tested target. Native
+isolation/origin, original authority/driver closure, all seven semantic bodies,
+complete installation and migration/public APIs remain separate missing gates.
+Do not transfer prior broader native results to this new wheel by version alone,
+or mark it published/default-supported from these component passes.

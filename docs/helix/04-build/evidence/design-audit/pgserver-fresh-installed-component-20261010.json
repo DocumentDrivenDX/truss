@@ -1,0 +1,38 @@
+{
+  "scope": "Fresh target-installed rebuilt runtime payload and installed Truss component suite plus native caller-reset compatibility; not complete engine qualification",
+  "wheelSha256": "a7b637a77556b2d33919f1d9ac0ebf2d67f1a1004b923e503bf534164e375ff7",
+  "pgserverLoaded": "/private/tmp/truss-pgserver-fresh-installed-20261010/pgserver/__init__.py",
+  "trussLoaded": "/private/tmp/truss-fresh-wheel-qcnck6lx/installed/truss/__init__.py",
+  "pgserverVersion": "0.1.4+truss.pg16.15",
+  "payloadMembersMatching": 1620,
+  "trussModulesMatching": 29,
+  "componentTestsPassed": 132,
+  "testSourcePinsVerifiedAfterRun": true,
+  "callerResetReceiptSha256": "c7c05214d198843f1dbe77eafb3f69021a24368f4584612c10e05fb458fb16ec",
+  "logs": {
+    "install": {
+      "path": "docs/helix/04-build/evidence/design-audit/pgserver-fresh-install-20261010.log.gz",
+      "originalSha256": "1078617c79d1763f313ce5b80f572dc57560e2e3a1ccb065395d704ed44a68f7",
+      "compressedSha256": "071792293f5c446afd4315840588155a74c5b34e174661e0dce9b7dce332d5df"
+    },
+    "runtime-tests": {
+      "path": "docs/helix/04-build/evidence/design-audit/pgserver-fresh-runtime-tests-20261010.log.gz",
+      "originalSha256": "24c7def7939736d060eee5b2c94485b208d76e2de48f60e77b45f6b1166bf2f8",
+      "compressedSha256": "5dcc88ba091836f20c13188ef44d437f62651b16b3105e9eb2e602de50ad8de6"
+    },
+    "caller-reset": {
+      "path": "docs/helix/04-build/evidence/design-audit/pgserver-fresh-caller-reset-20261010.log.gz",
+      "originalSha256": "efb087cbcddf9d7468fd958aec17d9e67e061ce28b1df8fb78cd8c3b517ffdd3",
+      "compressedSha256": "946039fc4add2a72e5a651b0be4e73102d64e5c6e333b1140f4e761b7bdc66fd"
+    }
+  },
+  "completeRuntimeQualified": false,
+  "installationQualified": false,
+  "publishedDefault": false,
+  "limitations": [
+    "Existing corrected Python environment supplies shared dependencies; fresh pgserver target and existing fresh installed Truss wheel, not new fully isolated dependency closure",
+    "Only current macOS27 arm64 Python3.11 local tuple",
+    "Original test-source pins verified after run, not a new before/after source freeze",
+    "No R4/R5 or all-seven-body engine, managed-target or public API qualification"
+  ]
+}
