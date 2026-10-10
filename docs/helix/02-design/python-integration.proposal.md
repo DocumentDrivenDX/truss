@@ -2149,7 +2149,7 @@ of the existing private Python counter and admission registry. Authority remains
 CONTRACT-007's original issuer/transaction/arbitration obligations and the
 [Python operation-control declaration](contracts/bindings/truss-operation-control-v0.1.proposal.py),
 with CONTRACT-004 governing mutation outcomes. This specification does not create
-an API, supply a native producer or select the still-open embedding-host trust
+an API, supply a native producer or change the accepted ADR-008 embedding-host trust
 boundary. Truss engineering owns the component and correspondence; native authority
 and security integration remain with their existing owners.
 
@@ -2209,7 +2209,7 @@ returns a deferred object; no rollback or committed-outcome inference follows.
 | PY-ADM-003 | Escaped verification/admission failure closes later registry admission without retry. | `except BaseException` / `finally`; failure/deferred/nonvoid tests. | No native rollback, connection termination or recovery observation is supplied. Invalid pre-consumption ticket refusal alone need not close an otherwise valid registry. |
 | PY-ADM-004 | Verification-time close and reentrant work cannot pass the post-verification close gate. | busy guard / close gate; `test_close_and_reentrant_verification_prevent_dispatch`. | Closure after this gate can precede callback entry/effects. The original native port must arbitrate authority/cancellation; a Python lock alone is insufficient. |
 | PY-ADM-005 | Async/generator ports are refused; supported returned deferred bodies cannot be resumed as a later admission. | Constructor inspection and `_sync`; deferred/async tests observe closed generator/coroutine and no body execution. | An ordinary callback can act before returning an unsupported result. This property neither promises no earlier effect nor contains malicious callback/reflection. |
-| PY-NATIVE-001 | CONTRACT-007 requires original issuer/epoch/account/cycle/actor/configuration/native authority before effects. | Declared control/admission ports only; local origin/reset observations cover separate native facts. | **Unmapped end-to-end enforcement**: actual registered producer, native issuer/account, all-path arbitration and trust assumption remain unresolved. No formal or implementation claim is made for this property. |
+| PY-NATIVE-001 | CONTRACT-007 requires original issuer/epoch/account/cycle/actor/configuration/native authority before effects. | Declared control/admission ports only; local origin/reset observations cover separate native facts. | **Unmapped end-to-end enforcement**: actual registered producer, native issuer/account, all-path arbitration remain unresolved; ADR-008 settles host trust. No formal or implementation claim is made for this property. |
 
 ### Liveness, assumptions and exclusions
 
@@ -2227,8 +2227,9 @@ crash durability, fork/serialization, multiple wrappers over an unmediated physi
 connection, native resource charging and settlement recovery. Those exclusions
 cannot become support claims: their required composition remains open. A native
 transaction rollback does not roll back Python state, but neither does Python
-state authenticate a database issuer. The host trust question remains explicitly
-unresolved and must be fixed before selecting the integrated abstraction.
+state authenticate a database issuer. ADR-008 now selects the trusted host/adapter boundary. Native integration must
+qualify host custody and native authority separately; Python identity is not
+database-authenticated provenance.
 
 ### Witnesses, review and later analysis
 
@@ -2399,3 +2400,15 @@ a 60-second fixture deadline and refuses replacement of an existing receipt. It
 uses explicitly reported cached dependencies, performs no automatic dependency
 installation and removes its owned temporary source directory. Actual replay again
 passed four groups/77 assertions; it does not update Truss's adopted UMF pin.
+
+
+### Accepted embedding trust and minimum security handoff
+
+[ADR-008](adr/ADR-008-trusted-embedding-host.md) records the owner-approved trusted
+embedding host/adapter. It settles the trust selection without claiming native
+integration. The minimum security handoff is exact subset/interface, authenticated
+actor and current permissions, freshness/revocation/publication protocol, required
+routines/owners/grants/installation checks and independent allowed/denied native
+evidence. Installation and initial Python operations consume this owner composition;
+unrelated security capabilities need not finish first. Truss's counter/driver
+binding and four native allocator corrections remain Truss integration work.

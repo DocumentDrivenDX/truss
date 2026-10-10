@@ -5,6 +5,18 @@ executor/transaction issuer. It precedes the missing canonical observer bodies;
 it adds no public transaction ID, database counter, session setting or authority
 issued by a JSON field.
 
+## Accepted host boundary — ADR-008
+
+The owner accepts the [trusted embedding host and adapter](../02-design/adr/ADR-008-trusted-embedding-host.md).
+Original Python/TypeScript issuer custody is a qualified trusted-host obligation;
+PostgreSQL does not authenticate Python object identity. Native transaction,
+privilege/current-authority, conflict, epoch/configuration and full-effect checks
+remain required. Correct all four families with the original host-issued ordinal;
+do not replace MAX with a new rollback-sensitive counter. The original driver
+port must bind exclusive physical-connection/transaction custody and retain
+uncertain attempts without reuse. This decision permits the integration experiment,
+not readiness or relaxation of ordinary-writer enforcement.
+
 ## Verified conflict
 
 The private runtime_admit_operation, runtime_admit_operation_with_asserted_origin,
