@@ -15,7 +15,7 @@ remain delivery requirements; no alternative consumer-owned engine is selected.
 
 ## Implementation boundary
 
-Recommend a separately packaged Python 3.11 implementation of the Truss contracts, using the same fixed PostgreSQL layout and protected SQL/PLpgSQL routines as the TypeScript reference. Python owns host integration and protocol orchestration. Weft's Rust core owns logical SQL compilation. PostgreSQL owns transactions, persistence and qualified native enforcement. Authorization policy/resolver semantics and their compiled/native handoff belong to the active security workstream.
+Ship the Truss-maintained Python 3.11 implementation of the Truss contracts from this repository, using the same fixed PostgreSQL layout and protected SQL/PLpgSQL routines as the TypeScript reference. Python owns host integration and protocol orchestration. Weft's Rust core owns logical SQL compilation. PostgreSQL owns transactions, persistence and qualified native enforcement. Authorization policy/resolver semantics and their compiled/native handoff belong to the active security workstream.
 
 This route needs no Rust port of Truss. It does require an independent Python adapter and exact codecs, shared callable database protocols, and a corpus that catches divergence from TypeScript. Shared native enforcement is intentional; language-neutral expected results remain independently authored. Performance evidence must determine whether any Python planning/resolution step needs a native implementation.
 
@@ -49,8 +49,9 @@ decision, not a missing Truss ADR. It assigns the client facade, backend routing
 and adapters to the consumer and generic storage/layout/import/isolation/feed to
 the backend projects. Keep that split in PY-03–06: Truss implements generic
 protected operations; the consumer maps its actions and interface to them.
-Its rejection of a separately owned generic Python engine informs the package
-discussion but does not select Truss's pending package home or approve ADR-003.
+Its rejection of a separately owned generic Python engine informs the original
+consumer context. The owner subsequently accepted ADR-003: Truss maintains the
+implementation in this repository; package ownership is no longer pending.
 
 The consumer's cross-backend references are keys resolved through bounded reads;
 destination feed materialization is a separate backend operation. The Truss
@@ -157,8 +158,9 @@ qualifiers against `namespace`; they do not require a module `name`. Both origin
 consumer documents already provide module ID and namespace `catalog`, so this
 path needs no additional module-name declaration. Selecting both documents with
 the same queryable Record names would still produce `WFT-NAME-AMBIGUOUS` rather
-than document-qualified resolution. The pending catalog naming policy must resolve
-that deployment choice; Truss must not silently rename modules or restrict a
+than document-qualified resolution. Accepted ADR-004 selects document-qualified
+catalog identity; matching compiler qualifier/binding adoption remains required
+for that deployment. Truss must not silently rename modules or restrict a
 consumer's selected bundle to hide a collision. This is source evidence only,
 not proof that the proposed documents compile or have native registrations.
 
@@ -731,8 +733,9 @@ CPython3.11 service instance, with the same existing query/private-state/ledger,
 publication/store-observation/completion/cleanup wires and exact counter domains.
 No additional public traversal request or competing graph semantics is defined.
 Free-threaded interpreters, process/worker transfer, durable restart and other
-Python implementations require separate qualification. The pending traversal
-output choice remains independent of store mechanics.
+Python implementations require separate qualification. This general direct
+traversal proposal remains unadopted; current consumer discovery selects existing
+direct/Weft reads and creates no additional traversal product vote.
 
 The host explicitly constructs, registers and closes the original service.
 Construction is inert: no database, scheduler, thread, filesystem or environment
@@ -3126,3 +3129,32 @@ compatible complete embedding tuple; Truss must not implement a competing parser
 capability matcher or policy resolver. Exact two-hop SQL bags still do not select
 the pending separate direct traversal behavior. This owner progress does not
 change the original consumer/native/current-authority/publication gates.
+
+
+## Security Record-home owner handoff — 2026-10-10
+
+The [read-only owner checkpoint](../04-build/evidence/design-audit/security-record-home-source-review-2026-10-10.json)
+records a moving, unadopted `weft.security.record-homes/0.1.0` physical-binding
+proposal. Its ten conditional correspondence laws and389 schema observations
+had matching recorded source digests at this read. Truss did not reexecute them.
+The owner is still implementing/reviewing physical interpretation; shape/formal
+results grant no installed mapping, policy or native authority. The security
+backend's26/132 acceptance frontier is unchanged.
+
+| Required integration | Truss continuation and owning boundary |
+| --- | --- |
+| Exact engine/profile | The first proposal selects PostgreSQL17.9, UTF8 and C text collation. The local16.15 candidate needs explicit owner-supported interpretation and independently qualified native correspondence. Keep the actual engine/version plus binding/backend/compiler/storage/security tuple; no target-name alias or relabeled17.9 receipt. |
+| Generic storage | Truss supplies original qualified generic property/Record/relationship/Key identities and exact physical source observations to the owner. The first required-column Record-home interpreter cannot be assumed to describe props maps or row-home graphs. Do not create per-type columns/tables/indexes to fit it: ADR-002's fixed layout and DDL-free catalog revisions remain required. Any selected view or derived source requires its original registered definition, complete dependencies and native/host correspondence. A matching owner interpretation is an integration dependency, not a second Truss compiler/resolver. |
+| Logical/native values | The proposal's required singular text/boolean/signed64 codecs do not admit optional/null, exact decimal, binary, structured or unsupported transformed outputs. Complete logical-value reads, including absent/null Item.note, remain required. Supply the applicable original domain/presence/carrier meanings; do not erase fields or coerce them into this restricted set. Text NUL has no PostgreSQL text image and must produce the owner's explicit refusal, not a silent domain rewrite. |
+| Population and identity | Preserve document/revision-qualified refs, ordered Keys and endpoint role/target/selected-Key/domain equality. Identical source selection may be reused for the same qualified type without merging scan occurrences; distinct types require the owner's exact native discriminator/disjointness interpretation. Bidirectional carrier membership, multiplicity and field-value coherence require actual complete original source observations. Counts, hashes or forward-only matching cannot establish them. |
+| Authenticated person | The first subject mechanism is pg-session-user and context is empty. Actual unique subject resolution and current privilege/source/disclosure closure still come from the owner. Caller labels/GUCs and elevated integrity owners cannot supply the authenticated person. Existing R4/R5 and current-authority/drain obligations remain intact. |
+| Resource and literal admission | The proposed interpreter requires four-MiB input, depth64, one million work visits and16000000 aggregate retained/copy/normalized UTF8 bytes. These owner requirements need an original bounded invocation under Truss's stricter enclosing account, not fresh per-field budgets or schema maxima as runtime guarantees. Check all known policy/disclosure/application/parameter/domain literals even in dead branches and empty results. |
+
+Continue the original Truss issuer/account/native reservation and guard work
+without adopting this moving API. The physical handoff must receive an owner
+interpreter and exact public Rust/Python bridge realization, full original
+Truss mapping plus ordinary-role/native16.15 evidence, and current security
+lease/publication custody before readiness. Source-column codecs do not replace
+the separately admitted complete result-cell decoder. Truss's adopted f05f2df
+compiler remains unchanged; no policies, semantic interpreter or lowerer are
+forked here.

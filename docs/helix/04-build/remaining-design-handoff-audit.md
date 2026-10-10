@@ -938,3 +938,27 @@ source hashes after the owning design/test edits. It supersedes the earlier
 writer-deadline allocation receipt for source freshness; it does not close
 semantic or native criteria. Full original release scope and current security
 handoff remain required.
+
+
+## Current security physical-binding dependency — 2026-10-10
+
+The [original owner source review](evidence/design-audit/security-record-home-source-review-2026-10-10.json)
+finds new Record-home shape and conditional correspondence evidence:389 schema
+observations/ten laws, with matching recorded source digests at this read. The
+working proposal is not adopted or reexecuted by Truss. Its first target is
+PostgreSQL17.9/UTF8/C, required singular text/boolean/signed64 and an authenticated
+pg-session-user subject with no context provider. Local16.15, generic property
+homes, optional/null/decimal/structured values and complete logical result cells
+need explicit owner interpretation/native correspondence. No per-type DDL,
+field dropping, numeric coercion or competing security interpreter may bridge
+these gaps. Full original source/carrier/Key/endpoint population and current
+subject/authority/disclosure/drain obligations remain required;26/132 owner
+backend acceptance is unchanged.
+
+The Python and consumer-read handoffs now specify exact reuse/refusal/budget
+boundaries. Superseded language about pending Python package ownership and catalog
+identity is corrected in place to accepted ADR-003/004; general direct traversal
+remains an unadopted proposal rather than a renewed consumer vote. This does not
+block the original Truss reservation/guard implementation or adopt a new compiler
+ABI. Continue those native components, then qualify the exact matching owner
+physical/security route before protected installation and public operations.

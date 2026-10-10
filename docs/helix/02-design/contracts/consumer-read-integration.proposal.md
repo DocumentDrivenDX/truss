@@ -295,3 +295,32 @@ The checker now accepts explicit exact commit/archive digest and a fresh receipt
 basename after its existing ACTION/WORKSPACE/OWNER/TOOLCHAIN arguments. It verifies
 all original committed regular-file bytes before harness execution and refuses
 existing receipt destinations; no previous review is overwritten or adopted.
+
+
+## Security Record-home owner handoff — 2026-10-10
+
+The [read-only owner checkpoint](../../04-build/evidence/design-audit/security-record-home-source-review-2026-10-10.json)
+records a moving, unadopted `weft.security.record-homes/0.1.0` physical-binding
+proposal. Its ten conditional correspondence laws and389 schema observations
+had matching recorded source digests at this read. Truss did not reexecute them.
+The owner is still implementing/reviewing physical interpretation; shape/formal
+results grant no installed mapping, policy or native authority. The security
+backend's26/132 acceptance frontier is unchanged.
+
+| Required integration | Truss continuation and owning boundary |
+| --- | --- |
+| Exact engine/profile | The first proposal selects PostgreSQL17.9, UTF8 and C text collation. The local16.15 candidate needs explicit owner-supported interpretation and independently qualified native correspondence. Keep the actual engine/version plus binding/backend/compiler/storage/security tuple; no target-name alias or relabeled17.9 receipt. |
+| Generic storage | Truss supplies original qualified generic property/Record/relationship/Key identities and exact physical source observations to the owner. The first required-column Record-home interpreter cannot be assumed to describe props maps or row-home graphs. Do not create per-type columns/tables/indexes to fit it: ADR-002's fixed layout and DDL-free catalog revisions remain required. Any selected view or derived source requires its original registered definition, complete dependencies and native/host correspondence. A matching owner interpretation is an integration dependency, not a second Truss compiler/resolver. |
+| Logical/native values | The proposal's required singular text/boolean/signed64 codecs do not admit optional/null, exact decimal, binary, structured or unsupported transformed outputs. Complete logical-value reads, including absent/null Item.note, remain required. Supply the applicable original domain/presence/carrier meanings; do not erase fields or coerce them into this restricted set. Text NUL has no PostgreSQL text image and must produce the owner's explicit refusal, not a silent domain rewrite. |
+| Population and identity | Preserve document/revision-qualified refs, ordered Keys and endpoint role/target/selected-Key/domain equality. Identical source selection may be reused for the same qualified type without merging scan occurrences; distinct types require the owner's exact native discriminator/disjointness interpretation. Bidirectional carrier membership, multiplicity and field-value coherence require actual complete original source observations. Counts, hashes or forward-only matching cannot establish them. |
+| Authenticated person | The first subject mechanism is pg-session-user and context is empty. Actual unique subject resolution and current privilege/source/disclosure closure still come from the owner. Caller labels/GUCs and elevated integrity owners cannot supply the authenticated person. Existing R4/R5 and current-authority/drain obligations remain intact. |
+| Resource and literal admission | The proposed interpreter requires four-MiB input, depth64, one million work visits and16000000 aggregate retained/copy/normalized UTF8 bytes. These owner requirements need an original bounded invocation under Truss's stricter enclosing account, not fresh per-field budgets or schema maxima as runtime guarantees. Check all known policy/disclosure/application/parameter/domain literals even in dead branches and empty results. |
+
+Continue the original Truss issuer/account/native reservation and guard work
+without adopting this moving API. The physical handoff must receive an owner
+interpreter and exact public Rust/Python bridge realization, full original
+Truss mapping plus ordinary-role/native16.15 evidence, and current security
+lease/publication custody before readiness. Source-column codecs do not replace
+the separately admitted complete result-cell decoder. Truss's adopted f05f2df
+compiler remains unchanged; no policies, semantic interpreter or lowerer are
+forked here.
