@@ -622,3 +622,25 @@ is not committed external deletion recovery, ordinary-role DDL support or a
 complete status/verify observer. Full archive membership/removal, original owner
 cut/authority, all managed inventory and final publication remain unqualified.
 The drift fixture cannot become an installer repair/reset recipe.
+
+
+### Boundary-gated wheel verification
+
+The fresh-wheel verifier now runs the actual `check-module-boundaries.py` before
+creating a build stage. It refuses any failed/unmapped Python source map, retains
+the checker command/result/digest in a completed receipt and checks unchanged
+checker bytes plus full source/test membership after execution. This prevents
+its top-level module snapshot from silently omitting a newly added nested module.
+[Positive installed evidence](evidence/design-audit/python-boundary-gated-installed-suite.json)
+passes114 tests with25 exact source/wheel/installed modules and99 allowed import
+edges. Original build/install/import/test logs remain alongside the receipt.
+[Actual refusal control](evidence/design-audit/python-wheel-boundary-refusal.json)
+adds an unmapped nested module in a disposable source copy and invokes the real
+verifier. Python audit events confirm only the checker subprocess ran: no build
+stage, pip build/install, test execution or completed receipt was created.
+
+This gate belongs to the current qualification tool. It does not imply every
+external setuptools invocation or future release workflow already invokes it,
+nor qualify native dependency closure, runtime privacy or the protected engine.
+The release pipeline must invoke this same verifier/gate rather than rebuilding
+a test-only dependency checker or excluding new source from the release map.

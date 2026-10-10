@@ -3,7 +3,7 @@
 ## Current execution frontier — 2026-10-10
 
 The current [Python source checkpoint](evidence/design-audit/python-resource-registration-preflight-source.json)
-passes114 tests. A [fresh separately installed wheel](evidence/design-audit/python-current-resource-installed-suite.json)
+passes114 tests. A [fresh separately installed wheel](evidence/design-audit/python-boundary-gated-installed-suite.json)
 also passes114 tests, including the resource registration preflight, with all25
 modules matching original source/wheel/installed bytes. Build/install/import/test
 logs are retained alongside the receipt. The earlier112-test wheel remains
@@ -2001,3 +2001,11 @@ and memo FK protections were observed before the explicit rollback-only admin
 drift fixture. Exact initializer/memo bytes and both trigger inventories restore
 without reinitialization. Full archive removal and complete PKG02/08 observer/
 publication remain open; fixture DDL is not an ordinary-consumer or repair path.
+
+
+[Boundary-gated installed114](evidence/design-audit/python-boundary-gated-installed-suite.json)
+now couples the real99-edge Python import gate to fresh-wheel qualification and
+checks unchanged checker/source/test membership. The real negative control refuses
+an unmapped nested module before staging/build/install/test. Complete installation
+inventory/native security and published release automation remain separate gates;
+this is not a setuptools-wide or protected-engine support claim.

@@ -8,6 +8,13 @@ if len(sys.argv)!=3 or not sys.argv[1].isdigit() or Path(sys.argv[2]).name!=sys.
 expected=int(sys.argv[1]);out=ROOT/'docs/helix/04-build/evidence/design-audit'/sys.argv[2]
 if out.exists():raise SystemExit('Receipt exists')
 def digest(raw):return hashlib.sha256(raw).hexdigest()
+boundary_checker=ROOT/'scripts/check-module-boundaries.py'
+boundary_original=boundary_checker.read_bytes()
+boundary_command=[sys.executable,str(boundary_checker),'--json']
+boundary_result=subprocess.run(boundary_command,cwd=ROOT,capture_output=True,text=True,timeout=30)
+boundary=json.loads(boundary_result.stdout)
+if boundary_result.returncode or boundary.get('passed') is not True:
+ raise RuntimeError('Module boundary refused before build: '+repr(boundary.get('errors')))
 source_paths=[ROOT/'packages/python/pyproject.toml',*sorted((ROOT/'packages/python/src/truss').glob('*.py'))]
 test_paths=sorted((ROOT/'packages/python/tests').glob('test_*.py'))
 source={str(p.relative_to(ROOT)):p.read_bytes() for p in source_paths}
@@ -44,6 +51,10 @@ result=run([sys.executable,'-W','error','-m','unittest','discover','-s',str(ROOT
 if re.search(r'Ran '+str(expected)+r' tests\b',result.stderr) is None or not result.stderr.rstrip().endswith('OK'):raise RuntimeError('Unexpected test count or completion')
 for name,raw in {**source,**tests}.items():
  if (ROOT/name).read_bytes()!=raw:raise RuntimeError('Source/test changed during execution')
-receipt={'scope':'Fresh separately installed wheel complete existing Python component suite; not protected engine release','stage':str(stage),'wheel':str(wheel),'installed':str(installed),'wheelSha256':digest(wheel.read_bytes()),'python':sys.version,'testsPassed':expected,'loadedPackage':identity['loaded'],'exports':identity['exports'],'modules':modules,'sourceTestSha256':{p:digest(raw) for p,raw in tests.items()},'sourcePackagingSha256':digest(source['packages/python/pyproject.toml']),'commands':commands,'logs':{name:digest((stage/name).read_bytes()) for name in ('build.log','install.log','import.log','tests.log')},'producerSha256':digest(Path(__file__).read_bytes()),'sourceWheelInstalledBytesExact':True,'published':False,'completeEngineQualified':False,'installationQualified':False,'migrationExecutionQualified':False,'limitations':['Local corrected pgserver environment, not published default or managed profile','Source tests use checked-in external fixture files; not hermetic dependency closure','Public exports remain local runtime lifecycle only','Private component checks do not prove protected mutation/query/journal/feed or installation APIs']}
+if boundary_checker.read_bytes()!=boundary_original:
+ raise RuntimeError('Boundary checker changed during execution')
+if sorted((ROOT/'packages/python/src/truss').rglob('*.py'))!=sorted(p for p in source_paths if p.suffix=='.py') or sorted((ROOT/'packages/python/tests').glob('test_*.py'))!=test_paths:
+ raise RuntimeError('Source/test membership changed during execution')
+receipt={'scope':'Fresh separately installed wheel complete existing Python component suite; not protected engine release','stage':str(stage),'wheel':str(wheel),'installed':str(installed),'wheelSha256':digest(wheel.read_bytes()),'python':sys.version,'testsPassed':expected,'loadedPackage':identity['loaded'],'exports':identity['exports'],'modules':modules,'sourceTestSha256':{p:digest(raw) for p,raw in tests.items()},'sourcePackagingSha256':digest(source['packages/python/pyproject.toml']),'moduleBoundary':{'command':boundary_command,'checkerSha256':digest(boundary_original),'result':boundary,'beforeBuild':True,'sourceTestMembershipUnchanged':True},'commands':commands,'logs':{name:digest((stage/name).read_bytes()) for name in ('build.log','install.log','import.log','tests.log')},'producerSha256':digest(Path(__file__).read_bytes()),'sourceWheelInstalledBytesExact':True,'published':False,'completeEngineQualified':False,'installationQualified':False,'migrationExecutionQualified':False,'limitations':['Local corrected pgserver environment, not published default or managed profile','Source tests use checked-in external fixture files; not hermetic dependency closure','Public exports remain local runtime lifecycle only','Private component checks do not prove protected mutation/query/journal/feed or installation APIs']}
 with out.open('x') as f:f.write(json.dumps(receipt,indent=2)+'\n')
 print(json.dumps({'tests':expected,'modules':len(modules),'stage':str(stage),'completeEngineQualified':False}))
