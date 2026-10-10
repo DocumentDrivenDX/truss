@@ -2816,3 +2816,8 @@ bundle is supplied and qualified. No old-layout fallback, placeholder native
 guard, fixture catalog registration, native source mutation or Truss feed is
 installed by this package. Continue the selected required native composition
 and public schema/mutation/feed paths; the full end-to-end goal remains open.
+
+
+## Python consumer integration priority
+
+The [Python consumer integration plan](python-consumer-integration-plan.md) sequences the missing public surface into PY-C01–PY-C10. Start contract/result mapping, host executor and original UMF input preparation now; prioritize real accepted installation → grouped mutation/replay → reads → committed feed/ordinary-role durable ACK. Reuse that protected runtime for import and receipt visibility. Capability declarations and lifecycle exports are not completion. Preserve the full existing corpus, migration and managed-profile scope; the first commerce scenario narrows input only.

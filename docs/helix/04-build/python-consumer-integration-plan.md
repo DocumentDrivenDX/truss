@@ -1,0 +1,73 @@
+---
+ddx:
+  id: PLAN-PYTHON-CONSUMER-001
+  type: implementation-plan
+  activity: build
+  status: draft
+  authoring:
+    home: repo
+  links:
+    - id: truss.implementation-plan
+      kind: informed_by
+    - id: CONTRACT-003
+      kind: informed_by
+    - id: CONTRACT-004
+      kind: informed_by
+    - id: CONTRACT-006
+      kind: informed_by
+    - id: CONTRACT-007
+      kind: informed_by
+    - id: CONTRACT-009
+      kind: informed_by
+---
+
+# Python consumer integration: first real workflow
+
+The consumer needs host-supplied PostgreSQL transactions, accepted UMF registration, catalog inspection, exact reads, grouped writes, imports, receipt visibility and status. Current Python public exports provide local-server lifecycle only. TypeScript capability declarations describe intended contracts, not implemented Python behavior. The next release must provide a tested embeddable Python implementation, rather than merely translating interfaces or emitting administrative fixture identities.
+
+Prioritize this plan ahead of more isolated component probes. It narrows the first test input to a synthetic commerce catalog, not the required authority, durability, exact-value or recovery behavior. Full corpus, broader schema coverage, managed deployment profiles and migrations remain required follow-on exits in the existing implementation plan.
+
+## Execution order and dependencies
+
+| Work item | Deliverable | Can start now / dependency | Completion evidence |
+| --- | --- | --- | --- |
+| PY-C01 | Python contract package: generic execution outcomes, semantic result variants, exact identities, opaque receipt tokens, request selection, import reports and capability Protocols | Start now from original versioned TS bindings; review every discriminant and nested result | Shared language-neutral valid/invalid vectors; exhaustive consumer mapping; type checking; wheel consumer imports outside checkout |
+| PY-C02 | Python ReferenceAssembly construction, explicit capability readiness, host connection executor and adopt_transaction | Start driver/lifetime work now; protected capability readiness depends on installed owner/profile closure | Real PostgreSQL caller ownership, isolation/access verification, per-call savepoint rollback, cancellation, unusable/unknown outcome, disposal; no implicit host commit or pool management |
+| PY-C03 | Registered acceptance-input preparation from original full UMF document bytes and document-qualified bindings | Start bounded source/shape/profile preparation now; acceptance requires full UMF check coverage, custody and security owner admission | Original document retained exactly; unknown meaning retained/reported; declared module identity preserved; no synthetic accepted IDs |
+| PY-C04 | Explicit install/status plus first accepted commerce catalog, report and catalog view | Security contract PA01–PA04, seven native bodies/PA05 and complete PKG release/observer closure | Fresh pgserver-based install outside checkout; real accepted installation/catalog/revision/head IDs; unsupported profile refusal; actual report enforcement coverage; rollback/late-failure/unknown-install recovery |
+| PY-C05 | Group apply/apply_batch, host dry run and durable idempotent replay | Protected mutation/finalization/journal composition; original authenticated actor and request namespace | One real product/order relationship mutation; rollback leaves no graph/key/journal/receipt effects; same request returns original complete ordered result; changed input conflicts; flaky-network recovery never reexecutes an unresolved original attempt |
+| PY-C06 | Direct lookup/page/relationships and compiled query capability | Accepted catalog/read authority; selected Weft PostgreSQL realization and original query obligations | Exact integer/decimal/timestamp values, absent/null/empty distinctions, authorized full-page publication, alias/count/filter scenarios against real rows; no alternate SQL compiler |
+| PY-C07 | Readable committed mutation feed and durable ACK by ordinary authorized source role | Complete journal/feed publication and original consumer authority | Mutation/feed boundary atomicity, crash before/after ACK, duplicate delivery, revoked/foreign role denied ACK, last durable checkpoint survives reconnect; retained outstanding events cannot be silently lost |
+| PY-C08 | Import capability and report | Reuse accepted catalog, mutation, authority and batch settlement from C04–C07 | Objects before edges; per-record original-index creation/skip/rejection/attempt-unknown; load/source provenance; adopted scope stays pending; interruption/resume and exact aggregate counts |
+| PY-C09 | Receipt visibility reached_in_transaction | Close existing proposal against real receipt producer, original read authority and snapshot comparison profile | Same supplied read-only transaction; false vs unavailable distinct; invalid/expired/unauthorized/unsupported token cases; no new connection, waiting or retry loop |
+| PY-C10 | Versioned consumer example and release qualification | All selected capabilities above qualified independently | Reproducible public Python client and CLI workflow plus installed shared corpus/native interchange. Consumer runs without Truss source checkout and receives only actual committed identities |
+
+C01–C03 proceed while the security owner finishes the handoff. C02 can expose supported executor/readiness behavior before mutation is ready; construction must refuse unavailable selections honestly. C04–C07 are the highest-priority behavioral delivery. C08 and C09 reuse that runtime rather than spawning a second engine. Do not wait for complete TypeScript parity, every adapter, or every deployment profile before releasing a qualified Python capability. Do not declare a complete consumer workflow before all of its required calls work.
+
+## Decisions the consumer can implement against
+
+**Construction.** Proposed Python naming is `create_reference_assembly(executor, configuration, registrations)` and `executor.adopt_transaction(...)`, with snake_case capability methods. The host owns the live connection/transaction and any pool. Configuration selects explicit installation/database/schema/profile pins and requested capabilities; connection availability alone cannot establish readiness. These names are a proposal to settle in C01, not callable exports today. Python 3.11 remains the initial target; synchronous versus asynchronous driver support must be selected explicitly in C02 before publishing signatures. Avoid an async-looking API that blocks the event loop.
+
+**Results.** Mirror `truss-execution-v0.1.d.ts`: outer `Outcome[T]` is `ok(value)` or `error(ExecutionFailure)`. Group semantic success/failure/unavailable and applied/replayed response are nested values. Caller-adopted application is pending until the host commits; it must not become a committed consumer Receipt merely because SQL returned. Preserve native execution-unknown and commit-unknown with original recovery references, independently from semantic invalidity. The consumer's four labels cannot erase unknown outcome or pending durability: mapping must retain those fields or add explicit pending/unknown variants. C01 must publish an exhaustive mapping table and refusal/retry scope vectors, not broad exception-to-Unavailable conversion.
+
+**Request key.** No key maps to request selection `none`. A present key maps to the declared RequestIdentity in an independently authorized namespace, with exact key text and full verified semantic-input identity. A scope string is not namespace authorization. Repeat of the same authorized input returns the original complete ordered result, including no-op entries; a different input gives request_conflict. An expired/unavailable receipt is not permission to run again. No implicit retry loop, and no journal-only replay reconstruction. Consumer keys must never be silently normalized, truncated or randomized on retry.
+
+**Receipt token and reached.** Publish an opaque versioned locator produced from qualified receipt evidence, never a caller-built xid/sequence token. Proposed `reached_in_transaction(transaction, request)` takes token and explicit reduced limits from the current visibility binding. Authenticated principal is captured from original admitted transaction/context; asserted principal text cannot grant access. Return available/included or unavailable/reason inside outer execution Outcome. It observes one supplied read snapshot; it does not promise future replication progress or wait for the token. Token issuance and comparison remain C05/C09 qualification work.
+
+**Import.** Bind input/load id, original source facts and asserted origin to the declared import input/payload profiles. Keep indexed per-record outcomes and batch durability: created, skipped, rejected and attempt_unknown, plus unprocessed indices and distinct committed/pending/rolled-back/commit-unknown/transaction-unresolved counts. A record created inside a caller transaction is not durably created. Map consumer initiated_by into an explicitly admitted asserted-origin/source metadata field; it never overrides the captured actor. Exact batch shape and selected ceilings are part of C01/C08; do not reduce the report to three totals.
+
+**Actor and action.** Preserve original authenticated connecting person across any privileged writer. assertedOrigin is separate provenance. Preserve consumer action name under the chosen namespaced `x-` origin key, subject to existing origin validation; callers cannot overwrite actor/db_role or invent an authenticated identity. C04/C05 tests must show connecting person and asserted action simultaneously in actual retained journal/report evidence. The security owner supplies the subject/authority protocol; Truss owns correct integration and persistence.
+
+**Document/module registration.** Prepare AcceptanceInput from the full original UMF document and selected binding/profile evidence through the registered producer. Module references retain document qualification; do not infer a document from a module name. Accepted IDs come from actual acceptance and are pending inside an adopted transaction until committed. Preparation produces no accepted revision/head. C03/C04 tests include two documents with the same module name and foreign/missing profile refusal.
+
+## First end-to-end acceptance scenario
+
+Use synthetic commerce data with an exact price, a large integer identifier and a typed order-to-product relationship. Start the selected local pgserver runtime, explicitly install the qualified Truss profile, connect as the ordinary person, construct the selected assembly and adopt the host transaction. Prepare/accept the original UMF catalog and commit under host ownership. Read actual installation/catalog/head/report identities. Apply a request-enabled multi-operation group, then read by key/page and through Weft. Read its committed feed event and durably ACK as the ordinary authorized source role. Disconnect/reconnect and repeat the same request: observe the original result and durable ACK without duplicate mutation.
+
+Repeat with caller rollback/dry run, changed input under the same key, dropped connection at unknown commit, revoked ACK authority, duplicate module names, absent/null/empty values, exact decimal/large integer values, invalid import record and a receipt not included in the supplied snapshot. Assertions compare real original evidence and full state/journal/receipt/feed effects, never invented catalog or feed IDs. CLI examples must distinguish pending from committed output.
+
+## Work control and release gates
+
+Truss owns Python contracts, executor composition, installed native engine, receipts/feed/import and examples. UMF owns metadata/value/check semantics and reusable DDL; Weft owns logical SQL compilation; the security owner owns shared subject/authority/resolver contracts. Do not fork these meanings to meet the schedule. The approved security handoff is now sent; its closed contract remains pending.
+
+Merge each reviewed work item into main with its scoped tests and support statement. Preserve ongoing owner changes. Verify the complete implementation and consumer workflow before advertising APIs as ready. The first planning/type-binding deliverables can land immediately; behavioral delivery dates are not credible until PA01–PA05 and complete installation scope are closed. Measure progress by the milestone exits above, not growing private component test counts.
