@@ -81,3 +81,27 @@ and the CLI probe reports16.15 and exits successfully on its own data directory.
 The wheels and actual probe output are retained by hash/evidence. This closes
 clean local candidate dependency installation on the one macOS27 arm64 tuple;
 no full suite, Truss schema installation or public distribution is claimed.
+
+## Current isolated installed consumer checkpoint
+
+The [current installed-suite receipt](evidence/design-audit/python-current-clean-consumer-installed-suite.json)
+matches17 module payloads between source, current wheel and installed package,
+and passes71 tests outside the checkout. It includes the23-case shared migration
+corpus and before/after pins for test files and eight checked-in inputs. The
+wheel SHA256 is3d9eb6c2581a893e2d01bb06217f4b7d8e097f142cc694267072ee1fdb24acd8;
+its source includes the resource-length and complete migration-pin consistency
+fixes after the older98c8137 handoff checkpoint above.
+
+The [environment inventory](evidence/design-audit/python-current-clean-consumer-inventory.json)
+records separate venv provisioning, disabled system-site packages and exactly
+six selected runtime distributions plus pip/setuptools. The generic suite
+checker conservatively labels environments reused because it does not construct
+them; this companion inventory supplies the construction command and observed
+membership, without claiming precreation directory-absence evidence. Its initial
+tooling-version assertion expected older setuptools; the actual79.0.1 is retained,
+and all six runtime pins match. The original71-test run and inventory are distinct
+evidence, not a rewritten earlier clean-install receipt.
+
+This updates isolated current-wheel consumption and scoped local lifecycle tests,
+not a released package, complete Truss schema installation or mutation/read/feed
+API. The availability table and P1–P4 obligations above remain in force.
