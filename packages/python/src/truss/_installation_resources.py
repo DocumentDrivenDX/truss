@@ -76,6 +76,13 @@ def decode_resource_index(original, expected_sha256, expected_release,
         raise ValueError('Independent index pin mismatch')
     if not _text(expected_release) or type(expected_entries) is not tuple:
         raise ValueError('Original release registration required')
+    # Dataclass equality alone would equate True/1 and 1.0/1. Independently
+    # registered lengths must preserve the same exact integer carrier as input.
+    for entry in expected_entries:
+        if (type(entry) is not ResourceEntry
+                or type(entry.byte_length) is not int
+                or entry.byte_length < 0):
+            raise ValueError('Exact registered resource length required')
 
     def pairs(items):
         result = {}
@@ -122,7 +129,7 @@ def decode_resource_index(original, expected_sha256, expected_release,
         ids.add(item['id']); paths.add(path); total += length
         entries.append(ResourceEntry(item['id'], path, item['role'], length, item['sha256']))
     result = tuple(entries)
-    if any(type(entry) is not ResourceEntry for entry in expected_entries) or result != expected_entries:
+    if result != expected_entries:
         raise ValueError('Complete registered resource membership mismatch')
     return result
 

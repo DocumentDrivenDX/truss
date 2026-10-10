@@ -71,6 +71,19 @@ class ResourceIndexTests(unittest.TestCase):
         with self.assertRaises(ValueError): self.decode(self.ORIGINAL, expected_entries=())
         with self.assertRaises(ValueError): self.decode(self.ORIGINAL.replace(b'release-1', b'release-2'))
 
+    def test_registered_length_cannot_alias_boolean_or_float(self):
+        from truss._installation_resources import ResourceEntry
+        original = self.ORIGINAL.replace(b'"byteLength":10', b'"byteLength":1')
+        for length in (True, 1.0):
+            with self.subTest(length=length):
+                expected = (ResourceEntry('storage', 'resources/storage.sql',
+                                         'generated-storage', length, '0'*64),)
+                with self.assertRaisesRegex(ValueError, 'Exact registered resource length'):
+                    self.decode(original, expected_entries=expected)
+        exact = (ResourceEntry('storage', 'resources/storage.sql',
+                               'generated-storage', 1, '0'*64),)
+        self.assertEqual(self.decode(original, expected_entries=exact), exact)
+
     def test_duplicate_and_unsafe_closed_entries(self):
         mutations = [self.ORIGINAL.replace(b'"releaseId":"release-1"', b'"releaseId":"release-1","releaseId":"release-1"'),
                      self.ORIGINAL.replace(b'"byteLength":10', b'"byteLength":true'),

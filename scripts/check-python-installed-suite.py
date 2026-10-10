@@ -39,7 +39,7 @@ def save_failure(status, stdout, stderr, returncode=None):
   return value.decode('utf-8', errors='replace') if isinstance(value, bytes) else (value or '')
  failure = {'scope':'Installed suite failure observation; no pass or native cleanup claim',
   'status':status,'timeoutSeconds':180,'returncode':returncode,'command':command,
-  'stdout':captured(stdout),'stderr':captured(stderr),'expectedTests':70,
+  'stdout':captured(stdout),'stderr':captured(stderr),'expectedTests':71,
   'modules':modules,'dependencies':dependencies,'loadedPackage':str(loaded),
   'wheelSha256':hashlib.sha256(wheel.read_bytes()).hexdigest(),
   'producerSha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
@@ -51,17 +51,17 @@ try:
 except subprocess.TimeoutExpired as error:
  save_failure('timeout', error.stdout, error.stderr)
  raise SystemExit('Installed suite timed out; original partial output retained in '+filename)
-if result.returncode or 'Ran 70 tests' not in result.stderr or not result.stderr.rstrip().endswith('OK'):
+if result.returncode or 'Ran 71 tests' not in result.stderr or not result.stderr.rstrip().endswith('OK'):
  save_failure('failed', result.stdout, result.stderr, result.returncode)
  raise SystemExit('Installed suite failed; original output retained in '+filename)
 receipt = {'scope':'Installed current wheel full existing component suite; four native lifecycle tests plus synthetic/pure controls',
  'wheelSha256':hashlib.sha256(wheel.read_bytes()).hexdigest(),'python':sys.version,
  'loadedPackage':str(loaded),'modules':modules,'dependencies':dependencies,
- 'environmentReused':True,'correctedPgserverCandidate':corrected,'tests':70,'command':command,'output':result.stdout+result.stderr,
+ 'environmentReused':True,'correctedPgserverCandidate':corrected,'tests':71,'command':command,'output':result.stdout+result.stderr,
  'testSources':[{'path':str(p.relative_to(root)),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in sorted((root/'packages/python/tests').glob('test_*.py'))],
  'producerSha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
  'completeEngineQualified':False,'installationQualified':False,'migrationExecutionQualified':False,
  'platformScope':('macOS27 arm64 Python3.11 pgserver0.1.4+truss.pg16.15 PostgreSQL16.15' if corrected else 'macOS arm64 Python3.11 pgserver0.1.4 PostgreSQL16.2')+'; no process-crash or cross-platform qualification'}
 with receipt_path.open('x') as output:
  output.write(json.dumps(receipt,indent=2)+'\n')
-print(json.dumps({'modules':len(modules),'tests':70,'completeEngineQualified':False}))
+print(json.dumps({'modules':len(modules),'tests':71,'completeEngineQualified':False}))

@@ -16,7 +16,7 @@ engineering requirements. TD-020 now selects full-byte bucket lookup for the
 Python preview without baseline fallback. Actual codec/account/privilege and
 publication admission remains open.
 
-The installed Python70-test/17-module checkpoint and four native admission-family
+The installed Python71-test/17-module checkpoint and four native admission-family
 complete-cell/lifetime schedules provide scoped component evidence. They do not
 produce the original driver adoption/framing/account port, current native security
 handoff, seven guard/validator bodies or complete release resources. The executable
@@ -25,8 +25,15 @@ their named source-byte observations only; native writer/reader encoding remains
 unqualified. These observations must not create another round of identical source
 probes in place of completing installation.
 
-The [current installed Python suite](evidence/design-audit/python-accounted-core-installed-suite.json)
-matches all17 source/wheel/installed module payloads and passes70 component tests.
+The [current installed Python suite](evidence/design-audit/python-resource-length-installed-suite-cache-access.json)
+matches all17 source/wheel/installed module payloads and passes71 component tests.
+The resource-index gate now refuses Boolean/float registered lengths before
+Python dataclass equality can alias them to integer lengths. The new independent
+control verifies both refusals and exact integer acceptance. The initial
+[sandbox-denied run](evidence/design-audit/python-resource-length-installed-suite.json)
+is retained separately: three pgserver lifecycle tests could not open the cache
+lock. The unchanged wheel passed with that required access. Boundary checks
+retain64 allowed imports; complete release resources/install/migration remain open.
 The [accounted driver seam](evidence/design-audit/pg8000-core-accounted-control-native.json)
 preserves ten original fixed control frames on16.15 with shared frame/slice and
 conservative core-copy charges. This advances receive/account composition, but
