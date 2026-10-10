@@ -2343,3 +2343,14 @@ protected admission/owner authority and the seven semantic bodies remain require
 The receipt does not qualify ready publication, a public installer, migration or
 any consumer operation, and promotes no acceptance criteria. Continue with the
 protected admission packet rather than treating this component as a release gate.
+
+## Explicit local runtime dependency selection
+
+The [installed dependency matcher evidence](evidence/design-audit/python-local-runtime-dependency-selection.json)
+checks pip 24.0's actual equality specifier: pgserver==0.1.4 accepts both the public
+0.1.4 and local 0.1.4+truss.pg16.15, and rejects 0.1.5. Corrected-wheel selection must
+therefore remain an explicit admitted artifact operation, followed by observed
+package/native version checks; the public equality requirement alone cannot
+select, exclude or imply replacement of that candidate. The Python package guide
+now preserves this distinction. These three metadata observations do not qualify
+package-index resolution, wheel/native installation or a shipped default.

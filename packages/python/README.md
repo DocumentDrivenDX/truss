@@ -31,9 +31,11 @@ by LocalPostgres only when the native server reports16.15. RuntimeInfo and CLI
 output retain that actual package version. The paired published0.1.4/16.2 check
 remains separate; arbitrary package/server versions refuse. The corrected wheel
 is a private macOS27 arm64/Python3.11 build, not a published dependency. For that
-candidate, install the base Truss package, the independently verified corrected
-wheel and explicit lifecycle dependencies together; do not install `[local]`,
-whose exact pgserver0.1.4 pin can replace the corrected candidate:
+candidate, select the independently verified corrected wheel explicitly with the
+base Truss package and lifecycle dependencies. The `[local]` requirement
+`pgserver==0.1.4` also accepts `0.1.4+truss.pg16.15`; it does not select or exclude
+the private candidate. Use an explicit artifact path and verify the installed
+package and actual server versions:
 
 ```sh
 .venv/bin/pip install ./packages/python fasteners==0.20 platformdirs==4.12.4 psutil==7.2.2 /path/to/admitted/pgserver-0.1.4+truss.pg16.15-cp311-cp311-macosx_27_0_arm64.whl
@@ -45,7 +47,11 @@ The wheel path is a placeholder for the separately admitted private artifact,
 not a published download or a clean-install qualification claim. Verify its
 original hash/platform before installation; the retained wheel receipt is linked
 from the runtime plan. Check the actual CLI serverVersion16.15 as well as package
-metadata. Ordinary `[local]` resolution still selects published0.1.4/16.2.
+metadata. A fresh `[local]` installation with only the public index available
+uses published0.1.4/16.2; an already installed matching local build also satisfies
+that requirement. Do not infer replacement or candidate selection from the
+public equality pin. The [installed matcher evidence](../../docs/helix/04-build/evidence/design-audit/python-local-runtime-dependency-selection.json)
+checks these version matches only, not index resolution or installation.
 Neither tuple installs Truss or qualifies complete R4/R5 enforcement.
 
 See the [installation and migration execution plan](../../docs/helix/04-build/local-runtime-installation-migration-plan.md)
