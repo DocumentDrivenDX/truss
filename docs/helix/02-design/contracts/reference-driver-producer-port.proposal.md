@@ -53,6 +53,22 @@ the ingress operations. Keep operation ordinals, protocol-cycle ordinals and
 savepoint-control identities separate, with explicit original correspondence.
 No additional database table or independently resettable issuer is introduced.
 
+The [Python3.11 binding](bindings/truss-operation-control-v0.1.proposal.py)
+now records the same reservation/binding/control outcome split as the
+[TypeScript binding](bindings/truss-operation-control-v0.1.proposal.d.ts).
+Its candidate synchronous adapter waits for original native observation before
+returning; this does not select the public Python API's scheduling model or qualify
+native cancellation/deadlines. An async Python adapter requires a corresponding
+selected protocol rather than returning awaitables through this synchronous port.
+Refusal before submission carries no confirmed control; confirmed failure and
+unavailable completion each retain original recovery. Only confirmed control
+reaches the admission interface. Structural Python protocols, like TypeScript
+brands, are guidance: implementation must independently recognize original object
+identity and reject extra/forged result fields under the selected result grammar.
+Neither declaration supplies that registry, native authority or an installed
+routine. Transport keeps ordinal as exact canonical text, with native bigint
+bounds checked by the original issuer and admission composition.
+
 reserveOperationControl must complete before bindIssuedOperation and before any
 savepoint is submitted. If cancellation or epoch/profile change occurs during
 reservation, recheck under the original arbitration before publishing its ticket.
