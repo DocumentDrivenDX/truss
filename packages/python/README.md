@@ -307,3 +307,20 @@ Python source import gate, and `python3 scripts/check-module-boundaries-controls
 for its real-checker allowed/forbidden controls. CI runs the same commands. New
 modules/imports require a reviewed checker map change. This AST check is scoped
 to Python imports; it does not qualify native behavior or runtime object privacy.
+
+## Python execution contracts
+
+`ExecutionFailure`, `Ok`, `Error` and `Outcome` are public Python result contracts.
+`Outcome` carries execution success/failure; semantic application/replay and
+pending/committed durability remain nested capability results, not synonyms for
+`ok`. A retry failure requires `whole_transaction`; commit-unknown permits only
+its explicitly qualified lookup scope. Result tags cannot be supplied by callers.
+
+`truss._host_execution` is a private synchronous adoption candidate. It exercises
+host ownership and savepoint lifetime without beginning, committing, ending or
+closing the host transaction. Tests qualify trusted-port behavior only. It is
+not a native driver adapter or protected transaction capability: E06 original
+arbitration, host-command exclusion, generation and cross-assembly custody must
+be integrated and qualified before publication. Unresolved original custody
+blocks re-adoption and survives executor disposal. No public catalog/mutation/
+feed/ACK or ReferenceAssembly is supplied by this iteration.

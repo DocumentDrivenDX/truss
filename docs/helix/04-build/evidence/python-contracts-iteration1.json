@@ -1,0 +1,33 @@
+{
+  "iteration": "Python execution contracts and private host adoption candidate",
+  "reviewer": {
+    "model": "gpt-6-astra",
+    "reasoningEffort": "ultra",
+    "task": "/root/astra_plan_review",
+    "finalDisposition": "No remaining blockers for limited iteration; public outcome types and private candidate only",
+    "fixedFindings": [
+      "Uncertain completion cannot bypass quarantine by re-adopting",
+      "Native observation loss is transaction_unusable, confirmed foreign/replaced handles remain invalid_transaction",
+      "Failed native transaction may roll back to original savepoint",
+      "Disposal preserves unresolved original custody",
+      "Plan explicitly requires E06 command exclusion/generation/cross-assembly custody"
+    ]
+  },
+  "sourceSha256": {
+    "packages/python/src/truss/execution.py": "e74ef864bc3539b326cc31bf0f08d16913aa376a58260b11be6ea7a35def7a28",
+    "packages/python/src/truss/_host_execution.py": "fc1897a0b6f6d8528712e6189d1033d85f9139e95a29732acb7f294cfd21d273",
+    "packages/python/src/truss/__init__.py": "bf1506e355d85a9a406689be1ee0751d98e6c1feaae1409a00a678b6f658411c",
+    "packages/python/tests/test_host_execution.py": "eb6ff954fa2ed25fccba2cdc8246414f7f0322ef129824b924079e49096721a0"
+  },
+  "targetedTests": 7,
+  "pythonVersion": "3.11.17",
+  "wheelSha256": "c98fc2cf76f16a9c66c79ffe46a863d4d977df5216be0f1aa35378fc2305ef49",
+  "wheelImport": "Installed outside checkout; public outcome exports verified; HostExecutor not exported",
+  "scope": "Trusted-port component tests and public execution result contract only. No native adoption, E06, protected authority, complete C01/C02, catalog/mutation/feed/ACK qualification.",
+  "fullSourceSuite": {
+    "tests": 139,
+    "result": "passed",
+    "logSha256": "0d8466bd5818622b43622c255767904793a5c5a349b0d4011809558fc8412e0f",
+    "scope": "Source-checkout Python suite including original fixtures/local pgserver lifecycle, not complete external interface qualification"
+  }
+}
