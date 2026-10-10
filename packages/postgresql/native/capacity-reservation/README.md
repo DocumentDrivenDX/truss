@@ -107,3 +107,10 @@ early/later checks, equal-image/new-epoch invalidation, rollback, overflow and a
 COMMIT refusal for an unreleased operation or corrupt counters. UMF retains the
 source and one table/FK declaration. Core0.8/browser now includes this unadopted adjunct; original installed
 identity/ACL/profile/account closure and all seven semantic bodies remain required. The callback's native cache is not cumulative work or authorization.
+
+`defer-check.sql` recognizes the original constraint/trigger/routine/owner/body
+binding before deferring the fixed owned name. Its41-check native receipt includes
+name collisions, disabled/security/ACL/replica drift, foreign object bindings and
+actual ordinary-role42501 denial. Independently authenticated binding provenance,
+complete dependency/private ACL and DDL/namespace closure remain external; the
+helper does not make supplied OIDs or bytes authoritative.

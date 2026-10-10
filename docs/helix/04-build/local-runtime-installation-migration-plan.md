@@ -2215,3 +2215,42 @@ no page errors; all site manifest asset pins match. This is static browser evide
 not a Hugo rebuild, production deployment, complete native interpretation or ready
 installer. Native baseline0.16 remains unchanged and the cache remains an
 unadopted installation/migration adjunct. No criterion is promoted.
+
+## Native recognition before owned constraint deferral — 2026-10-10
+
+[The private recognition helper](../../../packages/postgresql/native/capacity-reservation/defer-check.sql)
+now requires complete original constraint/trigger/routine OIDs, owner OID and
+bounded original pg_get_functiondef bytes before named SET CONSTRAINTS. It checks
+one qualified constraint name in the Truss namespace, actual memo relation/type/
+deferrability, exactly one bound trigger, exact trigger identity/routine/update-row
+mode and unconditional enabled origin execution. Native routine identity, owner,
+full bytes, language, security/volatility/parallel attributes, search_path and no
+PUBLIC EXECUTE must match. Replica execution mode refuses. Only then does it defer
+the fixed Truss-owned name; no supplied identifier is interpolated.
+
+[The41-check PostgreSQL16.15 receipt](evidence/design-audit/capacity-defer-binding-native.json)
+composes this owner-exported function with actual native cache/capacity operations.
+It refuses wrong original bytes/owner, duplicate qualified names, disabled trigger,
+security attribute/public ACL drift, replica mode and existing foreign constraint,
+trigger or routine bindings. Fault rollback preserves original ledger and actor;
+an actual ordinary role receives42501. Correct recognition permits B after early
+checking, preserves a host-owned immediate constraint and committed A/B/cache state.
+The prior33-check receipt retains its exact archived producer.
+
+[UMF capture](evidence/design-audit/capacity-defer-source.json) preserves/reloads/
+exports both CREATE/REVOKE statements exactly; native execution uses that owner
+export. Declaration extraction remains zero/two unhandled, complete=false. The
+helper does not create original registration authority: independently authenticated
+profile/binding provenance, complete private caller ACL/callee dependencies and
+native DDL/namespace exclusion remain external. The fixture captures its tuple
+from a fresh administrative installation and does not prove those boundaries.
+A check followed by name-based SET is safe only under that original DDL closure;
+concurrent privileged name/trigger/body changes are not contained by this helper.
+No claim of OID-based SET, malicious-host isolation or ready installer is made.
+
+This advances the actual operation-entry implementation without changing native
+baseline0.16, core0.8 or the current schema browser. Original bounded control/work
+admission and unknown command settlement still must wrap this call; supplied OIDs,
+bytes or same-name lookup cannot replace original custody. Complete memo/invalidation/
+resource/security and all seven mandatory semantic bodies remain required. Native
+full reservation/installer qualification remain false; no criterion is promoted.
