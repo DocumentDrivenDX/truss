@@ -1179,3 +1179,28 @@ output preflight and its remaining native resource limits. Original protected
 prestate/event/association/family/current-authority, complete native dependency/
 private role closure, full resource admission and seven semantic bodies remain
 required before installation/public effects; no readiness field is promoted.
+
+### Python original native row-image framing and span retention (2026-10-10)
+
+The [native row-image profile](../02-design/contracts/native-row-image.proposal.md)
+and private `_row_image.py` now give the subsequent prestate/event correspondence
+path a complete bounded Python projection. The decoder checks domain/version,
+original ordered OIDs/required/null fields, complete lengths, primitive widths,
+UTF8/Boolean representation and absence of trailing bytes. Immutable original
+bytes and frozen cell offsets/lengths provide read-only memoryview payload spans;
+NULL remains None and present empty bytes remains a zero-length view. Numeric/
+temporal payloads, original tokens/text and codec/source bytes stay independent.
+The decoder does not infer logical native numeric/temporal validity or event
+provenance from framing or OIDs.
+
+`evidence/design-audit/python-row-image-source.json` pins99 passing Python source
+tests including existing local-runtime tests. Four focused methods replay ten
+retained native image vectors and test eleven framing/type/null/length corruptions,
+four primitive/UTF8 corruptions, exact eight-MiB input/overflow and invalid cell
+indices. Cell views refer to original bytes without per-cell retained payload
+copies. UTF8 validation still creates temporary copy/text work; this is not whole
+resource qualification. Native execution remains the separately pinned31-case
+codec receipt, not a new native producer or installed-wheel run. Full original
+OLD/NEW/prestate/candidate/allocation, current authority and semantic wrapper/
+resource composition remain required. Public exports and seven-body readiness
+fields are unchanged.
