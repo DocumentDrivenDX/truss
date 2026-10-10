@@ -369,3 +369,27 @@ unchanged. Keep the adopted0.2 compiler refusal until an exact owner-admitted
 PostgreSQL composition is selected and qualified. DISTINCT must never repair the
 native parallel-edge limitation by silently deduplicating relationship inputs;
 source guards and original occurrence identities remain independently required.
+
+
+## Security-owner issued renderer integration boundary
+
+The [working-owner review](evidence/design-audit/security-issued-renderer-review.json)
+captures the new `lowerOriginalUseTextRowsReturn` component and native/browser
+receipts without adopting an unfinished API. It binds original authorization and
+source-completeness preflight, application SQL and positional exact-text output
+wrapping to one original issued program. Copied/substituted programs refuse;
+assembling preflight from one program and SQL from another is not an integration
+route. Preserve that complete fragment and its original source/profile identity
+in any eventual installed routine inventory, rather than accepting separately
+editable SQL/prelude strings from an application caller.
+
+The enclosing selected installer still supplies authenticated original authority
+cut, publication guards, effective privileges and the full lifetime/resource
+composition. Those requirements are not produced by renderer identity checks.
+The owner's489 native observations use PostgreSQL17.9 raw fixtures, with12
+Chromium program matches including two-column/empty outputs and signed64 values.
+These are scoped draft evidence, not pgserver16.2 qualification or full protected
+property/graph support. The owner reports full security acceptance26/132 and
+dependent replay still outstanding. Python must consume the selected eventual
+owner composition, not port this draft renderer into a second compiler/resolver
+or activate it from the receipt alone.

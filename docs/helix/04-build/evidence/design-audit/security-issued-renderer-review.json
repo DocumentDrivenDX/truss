@@ -1,0 +1,22 @@
+{
+  "scope": "Working security-owner component review; no public API or native authority adoption",
+  "artifacts": [
+    {
+      "path": "/Users/erik/Projects/truss/packages/postgresql/src/security-query-use.ts",
+      "sha256": "796ba775eb864b0ad1b93702072b149490ab175427a5eb280a0598296bb335b0"
+    },
+    {
+      "path": "/Users/erik/.codex/worktrees/1598/umf/docs/helix/04-build/evidence/security/truss-original-use.json",
+      "sha256": "92d9925b22da9a836dff02473f8e735de71c24b1139f2e5242034575c5eeb402"
+    },
+    {
+      "path": "/Users/erik/.codex/worktrees/1598/umf/docs/helix/04-build/evidence/security/truss-original-use-browser.json",
+      "sha256": "e5fb20fe0d10c04bcddfda73a3ee7f73e6e17bab86128795bb6416672a05b899"
+    }
+  ],
+  "nativeProfile": "PostgreSQL17.9 raw fixture",
+  "nativeObservations": 489,
+  "browserProgramMatches": 12,
+  "completeSecurityAcceptance": "26/132 owner-reported; dependent replay outstanding",
+  "installationAuthorityQualified": false
+}
