@@ -1571,3 +1571,23 @@ full original native invocation/data/ACL closure before asserting advanced
 ordinary-role denial. Current same-source registration and nested-DEFINER guard
 checks cannot certify those unexecuted paths. Public protected APIs and all
 semantic body gates remain closed. Broad earlier fixture grants are not adopted.
+
+### Original epoch helper jointly installed for ordinary denial (2026-10-10)
+
+The [53-observation joint receipt](evidence/design-audit/four-family-joint-dependency-native.json)
+actually installs the original source-epoch lock helper alongside all four
+issued-admission families and the original UMF layout. Original helper body,
+INVOKER attribute, native routine/owner IDs and ACL cells are retained. All four
+entry points now refuse42501 for the separate minimal ordinary role. Granting
+that role helper EXECUTE still leaves epoch/configuration admission denied42501
+without underlying epoch data rights. Confirmed containment leaves no surviving
+registry row. The prior49-observation missing-helper fixture remains unchanged
+and is not reclassified as permission evidence.
+
+This closes the observed missing-helper fixture composition gap and gives actual
+advanced-family ordinary-denial evidence. It does not establish a complete
+transitive installed closure, protected actor/subject capture, complete source-
+epoch/configuration authority or ordinary successful admission. Dependency
+EXECUTE and data authority are distinct; broad grants are not a protected route.
+No epoch marker is initialized from caller labels, no invoker guard is weakened
+and no public readiness/semantic-body gate changes.
