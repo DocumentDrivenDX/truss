@@ -32,7 +32,7 @@ authorizing weaker guarantees. Do not count component tests as milestone complet
 
 The P0 dependency checkpoint now has actual evidence: shared host issuer/native
 family admission, original driver controls, corrected16.15 pgserver lifecycle,
-current Python source114/historical installed112, native registration/ordinary
+current Python source114/fresh installed114, native registration/ordinary
 denial and original epoch helper composition. These close their named experiments,
 not the integrated protected admission exit. All seven complete semantic bodies
 and their49 native binding fields remain missing. The P1–P3 calendar estimates
@@ -277,9 +277,11 @@ remain component evidence only. Work through these dependencies in order:
    check Python module ownership and the specified settlement invariants. Native
    failure/unknown-outcome evidence remains required in addition to these checks.
 5. Proceed to P2/P3 consumer operations and durable retry/feed qualification on the
-   same installation. In P4, select the populated M1 route from coherent admitted
-   source/target bundles, then implement migration apply/reconcile and M2–M5
-   preservation/recovery. Full populated migration qualification is a release gate,
+   same installation. Start M1 source/target qualification and M2 recovery/service
+   preparation alongside installation now; do not defer them to a calendar phase.
+   Once coherent complete source/target bundles exist, bind that one route and
+   implement migration apply/reconcile and M3–M5 preservation/recovery. Full
+   populated migration qualification is a release gate,
    not a prerequisite for fresh installation or the preview operations.
 
 The security owner's grants and publication work is a composition dependency;

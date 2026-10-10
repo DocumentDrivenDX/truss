@@ -640,3 +640,45 @@ checked-in fixtures/source inputs before execution and compares them afterward.
 This includes the complete migration corpus; prior receipts omitted its hash.
 That improves selected-input correspondence, not hermetic build or host-tamper
 assurance. The earlier compatibility run remains retained separately.
+
+
+## M1 selection prerequisites and immediate execution — 2026-10-10
+
+Start route preparation alongside the complete installation work. The historical
+P4 forecast is not a dependency and does not postpone M1/M2 preparation. Reuse
+`LayoutMigrationRequest`, `LayoutMigrationStepEvidence` and the retained receipt
+binding; the following is an implementation checklist, not another wire format.
+A supported route is selected only after every prerequisite below is evidenced
+for one coherent pair. A fresh-only initializer is not a populated conversion.
+
+| Required selection fact | Concrete output and current evidence |
+| --- | --- |
+| Actual source installation | Complete independently registered source bundle, inventory, runtime/security/codec tuple and original read-only source observation. Source must be supported as a migration source; the authored0.15 proposal and0.16 component installation do not establish this. Complete installer/native body closure is still missing. |
+| Required target change | Exact target bundle/inventory and a written reason the installed runtime or retained meaning must change. A dependency version, changed proposal number or browser projection is insufficient. No currently admitted target change is selected. |
+| Ordered original recipes | Retained original recipe bytes and procedure profiles for every declared step; source preconditions, actual effects and independent target checks correspond to `LayoutMigrationStepEvidence`. Include initializer/receipt-home conversion explicitly, with no reset/upsert over populated state. UMF continues to own generic DDL generation. |
+| Populated preservation basis | Independently authored original setup and expected state for every domain below, paired with source/target codec meaning. Do not derive expected results solely from the executor or use empty tables to pass preservation. |
+| Original authority and settlement | Selected administrative observer/writer, common exclusion/freshness/publication profile, qualified driver and installed-target recovery registry. Retain the original request/attempt durably before submission; callback retries or a framework migration row are insufficient. Closed security-owner interface remains external. |
+| Same-pair packaging | Manifest, recipes, source/target inventories and compatibility claims come from the selected release artifacts. Bind every M2–M5 case to these same original bytes; no mixture of unrelated component receipts or mutable latest downloads. Complete release packaging remains open. |
+
+Build the preservation fixture and independent assertions now, without claiming
+any unsupported source/target route. Register exact physical/semantic setup only
+when the complete pair is available. LM-T03 must cover these parallel domains:
+
+| Domain | Independent before/after assertion |
+| --- | --- |
+| Catalog and reports | Document-qualified identities, accepted revisions/head, original UMF/unknown extension bytes and enforcement reports retain their meaning; permitted changes are explicitly declared by the route. |
+| Objects, keys and edges | Complete typed identities, uniqueness/reservations, relationship endpoint/association meaning and all original property homes survive. Include object/edge equal numeric IDs, optional absence/present-null and nested row-home parents. |
+| Exact values and retained content | Exact large integers, decimal tokens, temporal/binary/opaque values and unknown retained content preserve original supported codec meaning; no JavaScript-number conversion or generic JSON snapshot substitutes for original evidence. |
+| Journal and durable receipts | Original actor/provenance, transaction grouping, ordered effects, receipt/idempotency keys and their required retention survive or undergo the declared exact conversion; retry does not repeat effects. |
+| Feed positions and source epoch | Previously issued original position custody remains correctly comparable under the declared installation/epoch transition; no inferred xid ordering or fabricated reached result. Preserve unfinished acknowledgements and declared offload/reconstruction obligations. |
+| Unresolved recovery state | Original attempts, evidence and recovery references retain exact correspondence across process restart. A missing response or current target marker does not prove commit or rollback; reconcile remains read-only and never reruns recipes. |
+
+Prepare M2 negative cases against these prerequisites in parallel: caller-owned
+transaction, wrong service/profile, changed original request, missing resource
+and unavailable recovery registry must refuse before the first recipe effect.
+Keep M3's actual first-step/second-step-failure rollback and M4's lost-ack/confirmed-
+commit-then-verification-failure schedules tied to the eventual selected pair.
+Component initializer/right-refusal evidence advances fixture mechanics, not
+these complete acceptance gates. M1 remains unselected until its facts are true;
+no additional product approval or competing policy/compiler implementation is
+needed to perform this preparation.
