@@ -38,7 +38,7 @@ remain outputs before PKG-02/08. Security-owner requirements derivation is revie
 as uncommitted source only; no compiler/backend pin changes or parallel policy
 walker are authorized by that observation.
 
-Fresh upstream fetch retains UMF322b193 and advances Weft to b8867c9. The
+The earlier upstream fetch retained UMF322b193 and advanced Weft to b8867c9. The
 [participation review](evidence/design-audit/weft-b8867c9-participation-review.json)
 finds distinct associated-Record degree semantics and preserved occurrence bags.
 Truss's current occurrence-cap marker is not equivalent UMF participation
@@ -48,6 +48,34 @@ mapping before claiming owning UMF participation; do not change existing guards
 or the adopted compiler pin from this Databricks-only source change. The fresh
 full allocation check above includes both updated primary documents and retains
 all45 stories/167 criteria without semantic or native completion claims.
+
+The subsequent committed-source review advances the observed Weft frontier to
+e810335, while UMF origin/main remains322b193. Its
+[two-hop proposal review](evidence/design-audit/weft-e810335-two-hop-design-review.json)
+records draft language/IR/result semantics, not implementation or adopted ABI.
+The frozen Truss compiler remains f05f2df. Direct unique-terminal/path-local-cycle
+semantics remain a pending owner choice; the SQL path-bag proposal cannot select
+that behavior implicitly.
+
+### Recent handoffs allocated to the existing execution queue
+
+These inputs refine existing work packages. They create no separate release lane,
+remove no criterion and do not authorize ready/public-operation publication.
+
+| Existing owner/work package | Current handoff | Next concrete implementation/qualification exit |
+| --- | --- | --- |
+| CH-02/05 driver and embedded lifetime | [Equal-length read-phase witness](evidence/design-audit/pg8000-read-phase-alias.json) and [driver review](../02-design/contracts/reference-driver-hook-review.proposal.md#frozen-core-_read-copy-integration-exit) | Establish original core phase/cycle correspondence, including five-byte and zero-byte bodies; independently run all six read/copy exits before treating the local seam as a qualified original driver. Length checks alone are insufficient. |
+| CH-02/04 security composition | [Completed string-cell checkpoint audit](evidence/design-audit/security-native-string-cell-checkpoint-review.json) | Obtain the minimum exact current owner registration, protected codecs, policy truth, authenticated authority and guarded-release tuple. Six correspondence-only samples are useful evidence, with zero released rows and no ABI adoption. |
+| B-008/CH-06 direct traversal | [Selected benchmark sampling](../03-test/direct-traversal-experiment.proposal.md), TD/STP-023 and committed Weft proposal review | Resolve pending direct-output interpretation, register complete corpus/baseline and realizable native limits, then execute one/two/three-hop correctness and each required performance stratum. Compiled two-hop bags remain separate. |
+| CH-05/06 configuration and observability | [Construction contract](../02-design/contracts/reference-configuration.proposal.md), [diagnostic tests](../03-test/diagnostics-test-plan.md#obs-09-measurement-packet) | Implement inert original-registration construction and controlled bounded emission; choose release-bound overhead/retrieval limits before samples, then qualify real delivery/outage/privacy and product-outcome isolation. |
+| CH-03/06 managed installation and delivery | [Managed PostgreSQL schedules](../03-test/managed-postgresql-qualification.proposal.md) | Independently qualify Aurora and Lakebase restart durability, ended sessions, real roles, complete feed recovery, instrumentation and required extensions on exact installed tuples. Documentation is not execution evidence. |
+| CH-02/05/06 original custody analysis | [Bounded model receipt](evidence/design-audit/python-custody-bounded-model-controls.json) and STP-044 native replay mapping | Replay local-close versus actual native admission/effects under real original driver/security/account barriers. The finite abstract model does not prove native fencing, source refinement or unbounded liveness. |
+
+P0/P1 still precede usable public operations; complete profile selection is not
+replaced by repeated component probes. The current structural allocation receipt
+above covers all45 stories/167 criteria, while the criterion audit preserves
+incomplete semantic dispositions. Populated migration M1, complete conformance
+registration and managed qualification remain in their original full-scope lanes.
 
 Continue the existing P0/P1 composition: original bounded driver/account integration,
 minimum exact current security-owner packet, complete native callable/trigger/grant
