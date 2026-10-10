@@ -384,3 +384,30 @@ Native original receipt writer and protection update writer are different facts.
 The candidate UMF capture/source hashes and all existing 43 authored IDs were deliberately rebound without unrelated AST changes; two new columns and one named check bring allocation to 46 entries. Both native xid8 fields remain unresolved preserved types under the reviewed UMF boundary. Scoped owner round-trip and 13 physical negative controls pass; native producer/commit/cut/privilege proof is still unqualified.
 
 The native receipt candidate separates expiry provenance from receipt creation and protection updates. Complete rows have NULL `expiry_writer_xid` and `expiry_writer_context_bytes`; expired rows require both. The protected purge procedure captures the actual expiry transaction/context once and verifies exact correspondence with the minimal artifact's `expiryWriterContext` before finalization. Caller-supplied transaction text is never sufficient custody. Observing the committed original receipt or protection update cannot establish expiry durability. Rollback restores complete payload and NULL expiry provenance atomically; fresh observation must establish the actual expiry writer's commit through its qualified native profile. The `xid8` capture preserves native semantics without asserting a portable scalar interpretation.
+
+
+## Retry outcome is a refusal, not automatic execution
+
+The owner's selected behavior is one returned pre-effect refusal without an
+internal retry loop. Existing `retry` outcome spelling denotes that the original
+attempt cannot proceed against its current observations/lock plan; it is not an
+instruction or permission for Truss to rerun a callback, mutation group, discovery
+loop, request or transaction. This clarification preserves existing wire/result
+variants rather than inventing a new status.
+
+Contain the original operation attempt according to CONTRACT-007, preserve its
+burnt identities/ordinal and original request/outcome/recovery evidence, then
+return once. If containment is unconfirmed, return the existing unusable/unknown
+outcome with original custody; do not label it a safe retry. Under a fixed snapshot,
+Truss cannot obtain fresh visibility by silently restarting an adopted caller
+transaction. Only the host may end/restart that transaction and choose an explicit
+new submission. A fresh submission still satisfies current catalog, authority,
+request identity/idempotency and ordered-guard admission.
+
+This applies to newly discovered earlier-level locks, changed key/configuration
+or owner scope, stale source observations and native serialization/deadlock
+outcomes. No later profile generation, released savepoint, elapsed backoff or new
+facade reopens the original consumed attempt. Bounded discovery in one admitted
+attempt is permitted only within its selected complete procedure/account; it may
+not disguise repeated native attempts as planning. Receipt lookup/reconciliation
+remains original-attempt observation and cannot replay effects.

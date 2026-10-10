@@ -319,3 +319,16 @@ operational choice cannot waive original physical identity, transaction affinity
 bounded custody or settlement; it also cannot force unrelated direct consumers to
 install a pooler. This clarification changes no selected reference-profile capacity
 limit and supplies no driver qualification by itself.
+
+
+For CONTRACT-009's returned retry/refusal schedules, independently instrument
+callback, operation-control, native admission and group-effect invocation counts.
+Force stale revalidation, discovery of an earlier guard and native conflict in
+separate original attempts. Each returns once after confirmed attempt containment,
+with no second callback, control/admission submission or outer transaction restart.
+A fixed-snapshot adopted transaction remains host-owned; unconfirmed cleanup
+retains unusable/unknown recovery custody rather than a safe-retry result. Explicit
+host resubmission is a separately counted attempt with fresh original admission,
+nonreused ordinal and unchanged request idempotency rules. This test extension is
+not_run pending the full driver/issuer/guard composition; synthetic no-retry
+callbacks alone cannot pass it.
