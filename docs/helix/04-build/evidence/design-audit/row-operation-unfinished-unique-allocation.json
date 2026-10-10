@@ -1,0 +1,17 @@
+{
+  "status": "pass",
+  "scope": "one original source-bound partial index identity, full selected predicate grammar and existing registry table/column source correspondence; no actual native dependency/grant/definition/adoption or enforcement",
+  "allocationSha256": "dc7d84c5b66e28954d330c7444d5f9d2ffe352b9f2456313b0254ceff44f7969",
+  "createdEntries": 1,
+  "referencedEntries": 3,
+  "expectedRefusals": [
+    "nonunique",
+    "wrong-key",
+    "reversed-predicate",
+    "unqualified-predicate-operator",
+    "wrong-parent",
+    "concurrent-creation"
+  ],
+  "nativeExecution": false,
+  "installable": false
+}

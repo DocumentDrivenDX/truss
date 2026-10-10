@@ -1,0 +1,22 @@
+{
+  "interfaceVersion": "truss-group-resource/0.1.0",
+  "identity": "truss-group-bounded-reference",
+  "version": "0.1.0",
+  "status": "unqualified_candidate",
+  "limits": {
+    "operations": "1024",
+    "canonicalInputBytes": "16777216",
+    "inputTreeNodes": "262144",
+    "inputTreeDepth": "64",
+    "plannedTypedRows": "100000",
+    "distinctGuardIdentities": "100000",
+    "simulationVisits": "1000000",
+    "semanticResultBytes": "16777216",
+    "completeReceiptBytes": "67108864",
+    "operationElapsedMilliseconds": "30000",
+    "containmentObservationMilliseconds": "5000"
+  },
+  "retryPolicy": "no_automatic_reexecution",
+  "counterEncoding": "canonical_nonnegative_decimal",
+  "selection": "exact original artifact pinned by registered group capability profile"
+}

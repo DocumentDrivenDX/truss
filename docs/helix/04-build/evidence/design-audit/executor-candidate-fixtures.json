@@ -1,0 +1,22 @@
+{
+  "scope": "Draft tag-fixture grammar/expected-count, failure scope/ownership/cancellation-lifetime consistency and resource arithmetic only; excludes production parser, non-count tags, driver metadata, full metering, native execution and profile adoption",
+  "status": "pass",
+  "tagCases": 14,
+  "sources": [
+    {
+      "path": "02-design/contracts/bindings/command-complete-v0.1.vectors.proposal.json",
+      "sha256": "e930c950d8c631d7b0f1b6966af2eef591b0516ed5501c8a27352491e84d28a4"
+    },
+    {
+      "path": "02-design/contracts/bindings/savepoint-resource-v0.1.proposal.json",
+      "sha256": "a0743b63aa6f16668c02e96c165ecac029fe44d679a7c8e704693944ee78ab99"
+    },
+    {
+      "path": "02-design/contracts/bindings/failure-order-v0.1.vectors.proposal.json",
+      "sha256": "a6c8bfb65e111596ba4b1421e7ca9df742bc48829669a9100827ff346c12abc4"
+    }
+  ],
+  "failureCases": 12,
+  "checkerSha256": "442a1439534a2c5c6c653163f9afb36597da291fb57d5e3197fb7ec08b9dae68",
+  "pythonVersion": "3.9.6"
+}

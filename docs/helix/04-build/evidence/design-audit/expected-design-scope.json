@@ -1,0 +1,489 @@
+{
+  "interfaceVersion": "truss-design-scope/0.1.0",
+  "status": "authored_design_baseline_not_product_acceptance",
+  "scope": "Frozen membership of the current 45-story/167-criterion design scope; source hashes identify capture only, not ongoing prose equality. Changes require explicit governed scope reconciliation.",
+  "entries": [
+    {
+      "story": "US-001",
+      "source": "01-frame/user-stories/US-001-accept-a-umf-revision-as-a-whole.md",
+      "sourceSha256AtCapture": "faa9173cc8ab9cb8c0945c2492b207ffc8ee6953cf5efef16a821a71a7a35b12",
+      "criteria": [
+        "US-001-AC1",
+        "US-001-AC2",
+        "US-001-AC3"
+      ]
+    },
+    {
+      "story": "US-002",
+      "source": "01-frame/user-stories/US-002-import-documents-that-depend-on-each-other.md",
+      "sourceSha256AtCapture": "4b1f63bdcf5fa1d3ef5b1ebc973a0dee8262c45f51b086ed41ad39aaf7ba6400",
+      "criteria": [
+        "US-002-AC1",
+        "US-002-AC2",
+        "US-002-AC3"
+      ]
+    },
+    {
+      "story": "US-003",
+      "source": "01-frame/user-stories/US-003-decide-what-happens-to-an-unknown-entity-type.md",
+      "sourceSha256AtCapture": "8d3a8c47f4814bcd59e3551fe6dff3bc7524925bc3798612c47e4167bce69fed",
+      "criteria": [
+        "US-003-AC1",
+        "US-003-AC2",
+        "US-003-AC3",
+        "US-003-AC4"
+      ]
+    },
+    {
+      "story": "US-004",
+      "source": "01-frame/user-stories/US-004-keep-identifiers-stable-across-revisions.md",
+      "sourceSha256AtCapture": "4336b6fefcde05840d6ecb2d3ce6e3d2498c6625e81881af71456957a98ab60b",
+      "criteria": [
+        "US-004-AC1",
+        "US-004-AC2",
+        "US-004-AC3"
+      ]
+    },
+    {
+      "story": "US-005",
+      "source": "01-frame/user-stories/US-005-see-every-violator-before-a-tightening-is-accepted.md",
+      "sourceSha256AtCapture": "53fe29f88524682500d23cfb4f25ca7e533621fa80888a16817932ccf95dd4ad",
+      "criteria": [
+        "US-005-AC1",
+        "US-005-AC2",
+        "US-005-AC3",
+        "US-005-AC4"
+      ]
+    },
+    {
+      "story": "US-006",
+      "source": "01-frame/user-stories/US-006-add-a-type-without-ddl.md",
+      "sourceSha256AtCapture": "b5c6e3e0cd45f9d51fb46c095960e467a0eb8476c9ebd4682f531ac6e816ee9a",
+      "criteria": [
+        "US-006-AC1",
+        "US-006-AC2",
+        "US-006-AC3"
+      ]
+    },
+    {
+      "story": "US-007",
+      "source": "01-frame/user-stories/US-007-store-and-read-objects-and-edges-exactly.md",
+      "sourceSha256AtCapture": "cbdbecef2d23a1500d3784e3293fe3da3296ff5d5d7a8697f3f30bdfefb9b110",
+      "criteria": [
+        "US-007-AC1",
+        "US-007-AC2",
+        "US-007-AC3",
+        "US-007-AC4"
+      ]
+    },
+    {
+      "story": "US-008",
+      "source": "01-frame/user-stories/US-008-keep-what-the-schema-does-not-define.md",
+      "sourceSha256AtCapture": "0095bbda4a481e0a3ff58fbebad01e7dd22bb7d3d81513c5ad6e8573c7e100b6",
+      "criteria": [
+        "US-008-AC1",
+        "US-008-AC2",
+        "US-008-AC3"
+      ]
+    },
+    {
+      "story": "US-009",
+      "source": "01-frame/user-stories/US-009-find-an-object-by-its-key.md",
+      "sourceSha256AtCapture": "8644ae0ba5efd9658153e67f7ffe85f72061b00b1be28bfae4d6d938013c28ed",
+      "criteria": [
+        "US-009-AC1",
+        "US-009-AC2",
+        "US-009-AC3",
+        "US-009-AC4"
+      ]
+    },
+    {
+      "story": "US-010",
+      "source": "01-frame/user-stories/US-010-refuse-bad-edges-and-protect-connected-objects.md",
+      "sourceSha256AtCapture": "c4a703a40ca4f8d75a97f57e31e2240b979b5ce9ab6de56e71f184a5a7be6b39",
+      "criteria": [
+        "US-010-AC1",
+        "US-010-AC2",
+        "US-010-AC3",
+        "US-010-AC4"
+      ]
+    },
+    {
+      "story": "US-011",
+      "source": "01-frame/user-stories/US-011-limit-an-edges-multiplicity.md",
+      "sourceSha256AtCapture": "7a4cbb6129408b3ae9c87a640fd788abae507d3d8e713da0abc9ff0dfe59654e",
+      "criteria": [
+        "US-011-AC1",
+        "US-011-AC2",
+        "US-011-AC3",
+        "US-011-AC4"
+      ]
+    },
+    {
+      "story": "US-012",
+      "source": "01-frame/user-stories/US-012-write-with-one-protocol-and-report-every-violation.md",
+      "sourceSha256AtCapture": "e6ba83d7e216cd8124c3147a92f29389bd6608a7944fda858a39131276fe0e62",
+      "criteria": [
+        "US-012-AC1",
+        "US-012-AC2",
+        "US-012-AC3",
+        "US-012-AC4"
+      ]
+    },
+    {
+      "story": "US-013",
+      "source": "01-frame/user-stories/US-013-refuse-a-write-against-a-stale-catalog.md",
+      "sourceSha256AtCapture": "a0ad9938d3d5b0ad8ce0635d23acba946597d194c7f42a98b7395641a23f1838",
+      "criteria": [
+        "US-013-AC1",
+        "US-013-AC2",
+        "US-013-AC3",
+        "US-013-AC4"
+      ]
+    },
+    {
+      "story": "US-014",
+      "source": "01-frame/user-stories/US-014-keep-cross-row-rules-honest.md",
+      "sourceSha256AtCapture": "8877f279733b9ac9d3502771a5f07271bd7a7034bc86f7c9019b37a49d712f1a",
+      "criteria": [
+        "US-014-AC1",
+        "US-014-AC2",
+        "US-014-AC3"
+      ]
+    },
+    {
+      "story": "US-015",
+      "source": "01-frame/user-stories/US-015-journal-every-change-atomically.md",
+      "sourceSha256AtCapture": "02e8e376a1bbd1e46ba706c1ef2c50dca39163af1f41cbc4c75e4898d3825ca9",
+      "criteria": [
+        "US-015-AC1",
+        "US-015-AC2",
+        "US-015-AC3",
+        "US-015-AC4"
+      ]
+    },
+    {
+      "story": "US-016",
+      "source": "01-frame/user-stories/US-016-journal-plain-sql-changes-too.md",
+      "sourceSha256AtCapture": "92cada475f73339c70a4b5407e66b71d452f3aa26570be7e62656f6d82f7a999",
+      "criteria": [
+        "US-016-AC1",
+        "US-016-AC2",
+        "US-016-AC3"
+      ]
+    },
+    {
+      "story": "US-017",
+      "source": "01-frame/user-stories/US-017-read-the-journal-incrementally-without-missing-a-change.md",
+      "sourceSha256AtCapture": "b18c41af7e2fb33dd2878804d5907cde5962b66bd984833b6e5dd2a6e6666bec",
+      "criteria": [
+        "US-017-AC1",
+        "US-017-AC2",
+        "US-017-AC3"
+      ]
+    },
+    {
+      "story": "US-018",
+      "source": "01-frame/user-stories/US-018-reconstruct-a-record-as-of-a-version.md",
+      "sourceSha256AtCapture": "8486e75442b822208b707afe98635b787073028ca6a4fae4adb4a686b0df3b00",
+      "criteria": [
+        "US-018-AC1",
+        "US-018-AC2",
+        "US-018-AC3"
+      ]
+    },
+    {
+      "story": "US-019",
+      "source": "01-frame/user-stories/US-019-trim-the-journal-by-dropping-partitions.md",
+      "sourceSha256AtCapture": "7b0086a5d49d3365c25f5175840ed81ac50e22baf8800868c9428b0295e7dc54",
+      "criteria": [
+        "US-019-AC1",
+        "US-019-AC2",
+        "US-019-AC3",
+        "US-019-AC4"
+      ]
+    },
+    {
+      "story": "US-020",
+      "source": "01-frame/user-stories/US-020-read-an-object-by-id-or-key.md",
+      "sourceSha256AtCapture": "86ed160b149e9b7d5e54d84cabab6cfcb5e154406ede31f5acd72af003717876",
+      "criteria": [
+        "US-020-AC1",
+        "US-020-AC2",
+        "US-020-AC3",
+        "US-020-AC4"
+      ]
+    },
+    {
+      "story": "US-021",
+      "source": "01-frame/user-stories/US-021-list-a-types-objects-in-pages.md",
+      "sourceSha256AtCapture": "3107ce9dc5508f41f5900131af9458153e7fc82a83859595e19d687ca8462e3f",
+      "criteria": [
+        "US-021-AC1",
+        "US-021-AC2",
+        "US-021-AC3",
+        "US-021-AC4"
+      ]
+    },
+    {
+      "story": "US-022",
+      "source": "01-frame/user-stories/US-022-list-an-objects-edges-bounded.md",
+      "sourceSha256AtCapture": "1f23400136eef987df15b434340a8fef6783932ec505b38e18cef21ff2b3e844",
+      "criteria": [
+        "US-022-AC1",
+        "US-022-AC2",
+        "US-022-AC3"
+      ]
+    },
+    {
+      "story": "US-023",
+      "source": "01-frame/user-stories/US-023-traverse-one-to-three-hops.md",
+      "sourceSha256AtCapture": "d5faa0e4761daf3127746ab18670acc81dc0738e34534e5c39b5d0a0369451f0",
+      "criteria": [
+        "US-023-AC1",
+        "US-023-AC2",
+        "US-023-AC3"
+      ]
+    },
+    {
+      "story": "US-024",
+      "source": "01-frame/user-stories/US-024-enumerate-the-types-of-the-catalog.md",
+      "sourceSha256AtCapture": "d30659a04485b2c4bc6a5f8febf04cabcce5a0ba9e7063c16c0c0b2a484bc093",
+      "criteria": [
+        "US-024-AC1",
+        "US-024-AC2",
+        "US-024-AC3"
+      ]
+    },
+    {
+      "story": "US-025",
+      "source": "01-frame/user-stories/US-025-report-the-enforcement-layer-of-every-assertion.md",
+      "sourceSha256AtCapture": "ea5b5deaa93f491ee3fd4a0cac68add3ceca53e82110b80aa630b00b44b5fa7f",
+      "criteria": [
+        "US-025-AC1",
+        "US-025-AC2",
+        "US-025-AC3",
+        "US-025-AC4"
+      ]
+    },
+    {
+      "story": "US-026",
+      "source": "01-frame/user-stories/US-026-back-every-support-claim-with-evidence.md",
+      "sourceSha256AtCapture": "0e6486710b233e6d738f206396820b047ec9f29fb6cd84ca594dd9a41ce27ccb",
+      "criteria": [
+        "US-026-AC1",
+        "US-026-AC2",
+        "US-026-AC3"
+      ]
+    },
+    {
+      "story": "US-027",
+      "source": "01-frame/user-stories/US-027-build-an-implementation-from-the-contracts.md",
+      "sourceSha256AtCapture": "ea7d1cbcac5f029281425f949172b35c67dd8f02877b9288fb06fdeeb28b3a10",
+      "criteria": [
+        "US-027-AC1",
+        "US-027-AC2",
+        "US-027-AC3"
+      ]
+    },
+    {
+      "story": "US-028",
+      "source": "01-frame/user-stories/US-028-pass-the-corpus-and-the-interchange-check.md",
+      "sourceSha256AtCapture": "fcc86c1c9e021fe919380cd8c9c24ed19e7f3a4ebe9eca16fdaf37780b51913e",
+      "criteria": [
+        "US-028-AC1",
+        "US-028-AC2",
+        "US-028-AC3"
+      ]
+    },
+    {
+      "story": "US-029",
+      "source": "01-frame/user-stories/US-029-declare-the-layout-version-and-check-the-ddl.md",
+      "sourceSha256AtCapture": "94347dd6ea8d486c464a8649d8d713fc38d8adc8c1cc2b8a4609371022b4e5bc",
+      "criteria": [
+        "US-029-AC1",
+        "US-029-AC2",
+        "US-029-AC3"
+      ]
+    },
+    {
+      "story": "US-030",
+      "source": "01-frame/user-stories/US-030-extend-the-layout-from-a-host.md",
+      "sourceSha256AtCapture": "d8b01ef2e561d27cdbd6658499e9bbd86710b491088100cdb4d28141e72fa0c4",
+      "criteria": [
+        "US-030-AC1",
+        "US-030-AC2",
+        "US-030-AC3"
+      ]
+    },
+    {
+      "story": "US-031",
+      "source": "01-frame/user-stories/US-031-govern-writes-by-role-grants.md",
+      "sourceSha256AtCapture": "0fed239710947adba4247a4c6506c316e69ea6be55b0cd37a593933a9f19c764",
+      "criteria": [
+        "US-031-AC1",
+        "US-031-AC2",
+        "US-031-AC3"
+      ]
+    },
+    {
+      "story": "US-032",
+      "source": "01-frame/user-stories/US-032-work-behind-a-transaction-mode-pooler.md",
+      "sourceSha256AtCapture": "835e1092d435c1e12f8a29ca965265eff31b2a82a62447b6b21bbcfa8a4949e9",
+      "criteria": [
+        "US-032-AC1",
+        "US-032-AC2",
+        "US-032-AC3"
+      ]
+    },
+    {
+      "story": "US-033",
+      "source": "01-frame/user-stories/US-033-run-the-layout-on-an-embedded-postgres.md",
+      "sourceSha256AtCapture": "6fd7955c6bfa389771b6d64552d10a86ccc1b12ac66fb1104f89b0e4a4df3083",
+      "criteria": [
+        "US-033-AC1",
+        "US-033-AC2",
+        "US-033-AC3"
+      ]
+    },
+    {
+      "story": "US-034",
+      "source": "01-frame/user-stories/US-034-repeat-an-import-and-change-nothing.md",
+      "sourceSha256AtCapture": "114bb39f6760b6994945d521fb069e983f0a625ff90f9401098752ee5ac0983f",
+      "criteria": [
+        "US-034-AC1",
+        "US-034-AC2",
+        "US-034-AC3",
+        "US-034-AC4",
+        "US-034-AC5",
+        "US-034-AC6"
+      ]
+    },
+    {
+      "story": "US-035",
+      "source": "01-frame/user-stories/US-035-keep-the-source-facts-of-an-imported-record.md",
+      "sourceSha256AtCapture": "3cc1e3deef8f34d22515a1d63c1f3068f2e91e2231a63455587b51e4608c30cd",
+      "criteria": [
+        "US-035-AC1",
+        "US-035-AC2",
+        "US-035-AC3",
+        "US-035-AC4"
+      ]
+    },
+    {
+      "story": "US-036",
+      "source": "01-frame/user-stories/US-036-record-who-accepted-a-revision.md",
+      "sourceSha256AtCapture": "b51bc16e8421a4ad89572bdc5be572771d255eba084c66c305c58d997b444660",
+      "criteria": [
+        "US-036-AC1",
+        "US-036-AC2",
+        "US-036-AC3",
+        "US-036-AC4"
+      ]
+    },
+    {
+      "story": "US-037",
+      "source": "01-frame/user-stories/US-037-give-roles-access-to-modules-only.md",
+      "sourceSha256AtCapture": "1962bbf6e1df62123c73b0fa034c6e6c732113d89038c8a3aabec3dffaa1348e",
+      "criteria": [
+        "US-037-AC1",
+        "US-037-AC2",
+        "US-037-AC3",
+        "US-037-AC4",
+        "US-037-AC5",
+        "US-037-AC6"
+      ]
+    },
+    {
+      "story": "US-038",
+      "source": "01-frame/user-stories/US-038-link-modules-and-see-the-link-only-with-both.md",
+      "sourceSha256AtCapture": "6cea90e3fd8a2073c35acf3c3f0d109ead413749e8a7a91fcc08fd7bc9b09357",
+      "criteria": [
+        "US-038-AC1",
+        "US-038-AC2",
+        "US-038-AC3",
+        "US-038-AC4"
+      ]
+    },
+    {
+      "story": "US-039",
+      "source": "01-frame/user-stories/US-039-read-umf-the-same-way-as-the-reference.md",
+      "sourceSha256AtCapture": "5f591ef21a4de6c554b02d15898f8c31fe1b3f19397c3591b5c4b43247454992",
+      "criteria": [
+        "US-039-AC1",
+        "US-039-AC2",
+        "US-039-AC3",
+        "US-039-AC4"
+      ]
+    },
+    {
+      "story": "US-040",
+      "source": "01-frame/user-stories/US-040-apply-operations-as-one-atomic-group.md",
+      "sourceSha256AtCapture": "41d4a649f98bbb3e8e493753927917b93f485342c74d2ed66c0b96e200f751e8",
+      "criteria": [
+        "US-040-AC1",
+        "US-040-AC2",
+        "US-040-AC3",
+        "US-040-AC4"
+      ]
+    },
+    {
+      "story": "US-041",
+      "source": "01-frame/user-stories/US-041-publish-the-journal-without-losing-or-reordering-a-change.md",
+      "sourceSha256AtCapture": "beffaf56e890326b973dbdbd04815e2e110240253f8d60f54b93f69d158dd53a",
+      "criteria": [
+        "US-041-AC1",
+        "US-041-AC2",
+        "US-041-AC3",
+        "US-041-AC4",
+        "US-041-AC5",
+        "US-041-AC6"
+      ]
+    },
+    {
+      "story": "US-042",
+      "source": "01-frame/user-stories/US-042-read-how-far-behind-a-downstream-copy-is.md",
+      "sourceSha256AtCapture": "49abb2c987d93c42f7aaa9eabece65498634c37ae8e779c7de53c613b2606c56",
+      "criteria": [
+        "US-042-AC1",
+        "US-042-AC2",
+        "US-042-AC3",
+        "US-042-AC4"
+      ]
+    },
+    {
+      "story": "US-043",
+      "source": "01-frame/user-stories/US-043-make-a-group-safe-to-repeat.md",
+      "sourceSha256AtCapture": "9a9e32922205511110359246de13070caf695ad26f944a3b5aaa689b2f35b98f",
+      "criteria": [
+        "US-043-AC1",
+        "US-043-AC2",
+        "US-043-AC3",
+        "US-043-AC4"
+      ]
+    },
+    {
+      "story": "US-044",
+      "source": "01-frame/user-stories/US-044-run-a-change-in-a-transaction-and-roll-it-back.md",
+      "sourceSha256AtCapture": "d4b77f4b255eb5d99852e6507da40b14b2de40b6f6748a64e3a09711e53d66a2",
+      "criteria": [
+        "US-044-AC1",
+        "US-044-AC2",
+        "US-044-AC3",
+        "US-044-AC4"
+      ]
+    },
+    {
+      "story": "US-045",
+      "source": "01-frame/user-stories/US-045-bootstrap-the-internal-layout-from-umf.md",
+      "sourceSha256AtCapture": "7c766bfb28b6159dff9d6b8b237a8018d0af69aaf7a7e25e38129158e6209053",
+      "criteria": [
+        "US-045-AC1",
+        "US-045-AC2",
+        "US-045-AC3",
+        "US-045-AC4",
+        "US-045-AC5"
+      ]
+    }
+  ]
+}

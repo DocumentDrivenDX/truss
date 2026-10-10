@@ -1,0 +1,145 @@
+---
+ddx:
+  id: STP-006
+  type: story-test-plan
+  activity: test
+  status: draft
+  authoring:
+    home: repo
+  links:
+    - id: US-006
+      kind: informed_by
+    - id: TD-006
+      kind: informed_by
+    - id: SD-001
+      kind: informed_by
+---
+
+# STP-006: Type addition without DDL
+
+## Story Reference and Scope
+
+US-006, TD-006, SD-001, TP-001 and CONTRACT-003. Tests are planned. Fixed physical inventory, actual writer overlap and predeclared scaling protocol are independent proof dimensions.
+
+## Acceptance Criteria Test Mapping
+
+Separate postcommit readiness probes under CONTRACT-003: pending caller acceptance never dispatches; confirmed commit permits one fenced job attempt; exact acceptance repeat does not redispatch. Same index name/different definition refuses. Failure/cancellation preserves committed acceptance and records actual inventory/cleanup outcome; only matching valid native inventory yields ready. Drift produces stale qualification. Optional optimization failure cannot change correctness; any required path must check readiness or use a separately qualified fallback. These are planned job-profile cases, not evidence of acceptance-time DDL.
+
+| AC ID | Planned failing test | Asserted behavior | Citation | Primary layer | Setup |
+| --- | --- | --- | --- | --- | --- |
+| US-006-AC1 | `type_property_relationship_addition_has_no_ddl` | Complete physical inventory identical and trace contains no transient per-type DDL; catalog rows added correctly | `@covers US-006-AC1` | Native integration | `tests/catalog/no-ddl.test.ts`; no-index-binding fixture |
+| US-006-AC2 | `sixteen_continuous_writers_only_wait_on_head` | Admitted workload completes without failure; observed acceptance overlap shows catalog-head wait and preserves every write | `@covers US-006-AC2` | Native concurrency | `tests/concurrency/catalog-writers.test.ts`; 16 connections/barriers |
+| US-006-AC3 | `matched_type_addition_scale_meets_declared_comparison` | 10 versus 1,000 existing types satisfies predeclared end-to-end time statistic/ratio with raw samples | `@covers US-006-AC3` | Performance integration | `tests/performance/catalog-scale.test.ts`; matched candidates/data |
+
+## Data and Additional Probes
+
+Statistics lifecycle vectors create a definition without collecting data and require defined/not_confirmed rather than collected. Test qualified empty dataset versus unavailable collection observation, failed collection leaving the original definition, changed collection profile and competing refresh/replacement. Current data drift cannot turn a historical collection receipt into a guaranteed fresh/performance result. Unsupported native definition meaning refuses; exact generated artifacts and actual native observations are required. Acceptance report remains unchanged through every later outcome.
+
+Postcommit job vectors verify pending adopted acceptance cannot dispatch, exact repeat does not duplicate jobs, two dispatchers serialize and a generation change cannot permit overlapping unresolved DDL. Lose the connection around native completion and require observed outcome before retry. A stale attempt cannot publish ready after declaration/profile change; a same-name wrong-definition or host-owned index cannot be dropped as cleanup. Ready requires native validity and full definition/target match, with immutable acceptance/attempt evidence. Statistics jobs are a separate unresolved profile rather than assumed covered by index state.
+
+Independent inventory includes indexes/columns/constraints/functions/partitions; table count alone is insufficient. Binding-index control must remain pending until separate job completes. Native lock traces prove writers really overlap acceptance, not finish before it. Record retries/stale refusals separately and reconcile AC2 admission semantics before passing. Assert exact committed writer count/data/journal, not only zero exceptions.
+
+Pin native target/adapter/role/isolation and hardware/load. Benchmark candidate size, data and report scope stay fixed; key-on-populated-type and transforms are separately measured data-dependent work. Missing predefined scale threshold cannot yield a pass.
+
+## Executable Proof and Handoff
+
+Future commands `bun test tests/catalog/no-ddl.test.ts tests/concurrency/catalog-writers.test.ts tests/performance/catalog-scale.test.ts` require actual files, harness and finalized measurement/admission interpretation. All three criteria block closeout. Historical spike evidence does not qualify changed runtime automatically.
+
+
+## Original writer admission schedules
+
+Use sixteen ordinary-role connections, independently identifiable operation inputs and one acceptance connection. The fixture adds only a new type/property/relationship; existing writer definitions, values, keys and ownership are unchanged. Disable optional index jobs for this schedule. Native observation must establish real overlap and complete original operation custody; wall-clock overlap or sixteen launched promises is insufficient.
+
+- CW-01: Admit and hold one existing-type write on each connection under the current shared-head protocol. Start acceptance and independently observe it waiting for the writers' shared custody. Complete the original writes and confirm their actual outer outcomes, then allow acceptance to acquire exclusion. Independently verify all sixteen graph/journal results and the complete accepted head/report. No writer may be reissued merely because acceptance waited.
+- CW-02: Hold acceptance's exclusive head after complete candidate validation but before finalization. Start sixteen current writer admission attempts; observe their actual head wait and release acceptance with confirmed commit. Classify each attempt against its original observed revision and current native head. Successful admission must preserve its exact original input; stale admission must refuse before write/journal/report effects. The owner selected exposing the pre-effect refusal on 2026-10-09; the public facade must not retry it automatically. Neither path may silently refresh a transaction-pinned capability or reinterpret an input against changed definitions.
+- CW-03: Deliberately pause one writer after its original revision observation and before shared-head acquisition. Commit the add-only acceptance, then resume admission. This is a deterministic stale-catalog control, not an unexpected write failure to erase from the results. Retain the original refusal, any separately authorized new admission and its actual outcome as distinct attempt evidence.
+- CW-04: Roll back acceptance while sixteen writers wait. Confirm they resume under the unchanged original head and preserve complete original writes. If acceptance termination is unknown, keep original custody and classification; a new connection or later head cannot stand in for its outcome.
+
+Report every submitted operation, admission attempt, stale refusal, retry, wait and confirmed/unknown outer outcome. Reconcile full original graph and journal membership, not only aggregate counts. Measure catalog-head waiting separately from declared fixed-work processing; unexpected data-table/DDL locks, missing operations or unrelated refusals cannot be relabeled as expected catalog delay. Host deadlines, pool pressure and arbitrary competing workloads remain separate profiles.
+
+CW-01–04 are planned, not_run. They provide concrete independent fault/overlap schedules under the selected public pre-effect refusal policy. US-006-AC2 cannot pass until a finite workload/deadline profile is selected and every original submitted operation is accounted for. There is no automatic pre-effect retry loop; effects-started, adopted transaction restart and uncertain commit recovery retain their existing separate classifications.
+
+
+## Acceptance scaling execution candidate
+
+The [add-only scaling procedure](../acceptance-scaling-experiment.proposal.md)
+now supplies matched10/1000-type fixtures, complete public acceptance through
+confirmed commit, fresh source state for every invocation, independent full
+outcome checks and three blocks of1000 measured pairs. The proposed2x p95
+comparison remains a release-profile selection; no native sample or runner is
+implemented. Repeated accepted revisions and catalog-INSERT-only timing cannot
+pass US-006-AC3. Exact fixture/runtime/resource/caching registration remains open.
+
+
+## Finite continuous-writer workload candidate
+
+For CW-01/02/04, prepare sixteen existing-type objects with independently
+observed original identities, one per ordinary-role connection. Each object has
+one required string label, initially `writer-i-initial` for i=0 through15.
+Each stream invokes64 separately identified request-free single-operation groups
+in order, setting its own label to `writer-i-step-j` for j=0 through63. No stream
+writes another stream's object; no group is a no-op. The acceptance adds only its
+new type/property/relationship and does not change the existing label definition.
+Disable unrelated jobs and hold one original connection per stream. Connection
+acquisition is setup; this is not a host-pool benchmark.
+
+Every run accounts for exactly1024 planned groups as not_submitted, submitted
+with original pending/confirmed outcome, or expected pre-effect stale refusal.
+A refused group is not secretly retried to reach1024 commits. Subsequent planned
+groups may obtain fresh original admission under the current head only through
+the explicitly authored stream schedule; they retain their distinct step IDs and
+cannot impersonate recovery of the refused input. An unknown submitted group
+stops further dispatch on that stream until original settlement/containment;
+remaining planned groups stay not_submitted rather than passing as skipped.
+CW-03 uses its separate single paused stale-admission attempt on fresh setup.
+
+Use actual native barriers to place the selected original pending group from
+each stream at CW-01 shared custody or CW-02/04 head admission. Retain ordered
+submission/settlement traces proving earlier and later stream work as well as
+the sixteen-way overlap; sixteen isolated writes alone are not continuous load.
+The runner's finite wall-clock, native statement and containment deadlines and
+resource bounds must be registered before execution. Deadline expiry preserves
+original unknown custody and invalidates the success run; it cannot discard the
+pending cohort or synthesize rollback. Actual delay evidence separately identifies
+catalog-head waits, record/guard locks, native processing and host decoding.
+
+Independently derive each object's expected final label/version and complete
+journal membership from its actual confirmed ordered groups, not an assumed64
+commits. Confirm exactly one effect per committed group, zero effect per stale
+refusal, no changes to another writer's object, and the complete acceptance or
+rollback outcome. A final-value count alone cannot detect missing intermediate
+writes. For CW-01 and confirmed-rollback CW-04, all1024 groups must commit under
+the unchanged applicable admission; CW-02 preserves the selected stale-refusal
+semantics without claiming1024 successful commits. Arbitrary data contention,
+long caller-owned transactions and unavailable instrumentation remain separate
+profiles. This candidate and all native observations are not_run.
+
+
+### Registered candidate observation windows
+
+The [writer workload packet](../catalog-writer-workload-v0.1.proposal.json)
+fixes candidate limits of300 seconds for complete run observation,10 seconds
+for one native barrier observation,30 seconds for one native statement/lock
+acquisition and5 seconds for separate containment observation. Each stream has
+at most one submitted unresolved group; retries remain zero. These are inclusive
+monotonic observation windows, not hard guarantees of native termination.
+
+Begin the run clock before the first writer dispatch and include acceptance,
+barrier waiting, all1024 planned-group outcomes and complete final observation.
+No pause/reset while a barrier is held or recovery is unresolved. Before each
+new dispatch require both its selected procedure budget and the remaining run
+allowance; expiry closes new dispatch without cancelling evidence collection
+or freeing original custody. The separately reserved containment allowance
+cannot be spent on a new write. A late outcome is retained as evidence but cannot
+turn an expired run into a timely pass.
+
+Native timeout values are admitted and observed only on dedicated fixture
+connections through the exact selected executor/settings profile. The runner
+cannot mutate arbitrary production connections or use a convenient timeout as
+proof of rollback. Deliberately inject expired barrier, blocked statement and
+lost cancellation reply; independently confirm monotone closure, remaining
+not_submitted groups and original unknown recovery. Actual settings/timer/native
+containment and whole resource-profile qualification remain not_run. The local
+16.15 absence of transaction_timeout is retained; no whole-host-transaction
+bound is claimed. Changes to these limits require a new sealed experiment
+registration before sampling, never adjustment after a slow run.

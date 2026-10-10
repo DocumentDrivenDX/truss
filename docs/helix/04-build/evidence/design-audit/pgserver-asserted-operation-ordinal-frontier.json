@@ -1,0 +1,59 @@
+{
+  "scope": "Native reproduction of private asserted-origin admission ordinal conflict and fixture byte capture only; no supported executor/issuer, original artifact admission or protected mutation qualification",
+  "pgserver": "0.1.4",
+  "serverVersion": "16.2",
+  "observations": [
+    {
+      "writerXid": "730",
+      "ordinal": "0",
+      "context": {
+        "xid": "730",
+        "ordinal": "0",
+        "database": "postgres",
+        "actingUser": "postgres",
+        "backendPid": "90427",
+        "sessionUser": "postgres",
+        "actorRoleOid": "10",
+        "sessionRoleOid": "10",
+        "interfaceVersion": "truss-native-operation-context/0.3",
+        "assertedOriginUtf8Hex": "6f726967696e616c2061737365727465642066697874757265",
+        "assertedOriginCaptureProfileHex": "6f726967696e616c20636170747572652070726f66696c652066697874757265"
+      }
+    },
+    {
+      "writerXid": "730",
+      "ordinal": "0",
+      "context": {
+        "xid": "730",
+        "ordinal": "0",
+        "database": "postgres",
+        "actingUser": "postgres",
+        "backendPid": "90427",
+        "sessionUser": "postgres",
+        "actorRoleOid": "10",
+        "sessionRoleOid": "10",
+        "interfaceVersion": "truss-native-operation-context/0.3",
+        "assertedOriginUtf8Hex": "6f726967696e616c2061737365727465642066697874757265",
+        "assertedOriginCaptureProfileHex": "6f726967696e616c20636170747572652070726f66696c652066697874757265"
+      }
+    }
+  ],
+  "sameNativeTopLevelTransaction": true,
+  "fixtureAssertedBytesPreserved": true,
+  "originalOriginAdmissionQualified": false,
+  "savepointRollbackReissuedOrdinal": true,
+  "contractConformant": false,
+  "requiredBehavior": "Consume the original executor issuer ordinal, preserve issuer nonrewind across savepoint rollback and verify original custody; never allocate from surviving registry rows",
+  "rollbackRemovedNamespace": true,
+  "sources": [
+    {
+      "path": "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql",
+      "sha256": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f"
+    },
+    {
+      "path": "packages/postgresql/native/operation-asserted-origin-admission.sql",
+      "sha256": "7fefe615b0d296e627e18f187c52e4d47f890852b5ca5c0d8e225133b5a5efec"
+    }
+  ],
+  "producerSha256": "e9308ca7a01c738aa13d5e2d24ec60bf7eeb19b9430f60fd6ad5a87b56b8c420"
+}

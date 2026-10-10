@@ -1,0 +1,54 @@
+{
+  "reviewVersion": "truss-owner-runtime-source-sync/0.1",
+  "umfDefaultRevision": "9e4bed3efe922c11e4b5a888ba6854de14f1b29f",
+  "recordProducerRevision": "c45c72a2a8a3c4fba61c40c5927dd9091acf8cc3",
+  "numericProducer": {
+    "revision": "9e4bed3efe922c11e4b5a888ba6854de14f1b29f",
+    "producerMode": "numeric",
+    "buildDependencies": {
+      "yaml": {
+        "version": "2.9.1",
+        "packageSha256": "1c6441703d8204a23ded0d37ddf57c3b69d821dc392f20852d1f605bb9b8861c"
+      },
+      "ajv": {
+        "version": "8.20.0",
+        "packageSha256": "1f9033ee5a6515e7d76938b7072941862d1ed228a6879cc7fe10cdeb75107989"
+      }
+    },
+    "archiveSha256": "b868efe48fda9f3870587367fc7bb2adcdcdafbceca750d093c722b89cb6361b",
+    "bundleSha256": "2963205d9c14e264e73b3eb57fd48416253a86f020bc82087374a9fffad0c3d5",
+    "operations": [
+      "exactDecimal",
+      "integerFromBigInt",
+      "integerToBigInt",
+      "admitJavascriptNumber",
+      "numericToNumberLossless"
+    ],
+    "scope": "Original logical UMF producers only; no native acceptance/containment qualification."
+  },
+  "weftDefaultRevision": "5856c73db0342363e64802905a94abb96209d757",
+  "weftIntegrationRevision": "2744531735c2a771fbe7ed24a7f67e3afc851b25",
+  "weftCompilerSourceDelta": [],
+  "logicalProducerTests": {
+    "tests": 4,
+    "assertions": 28,
+    "result": "pass",
+    "runtime": "Bun1.4.2",
+    "scope": "Original independently pinned Record and current-core JavaScript numeric owner APIs; no native database/codec/installed/containment claim"
+  },
+  "sourceSeparation": "Current UMF default has no model/record-values.ts; Record branch is not merged into the default. Do not relabel older Record results as current-core qualification or blend sources implicitly.",
+  "consumerSources": [
+    {
+      "path": "scripts/build-umf-runtime.ts",
+      "sha256": "8a218b37f61f8e51a60befc5a5b4413f3f59c272d657d7934e402fb7d4a57618"
+    },
+    {
+      "path": "packages/umf-bun/src/index.ts",
+      "sha256": "86a2a81cc01de2fe8ea60116e74d43eebd7f53d3e5d8e352ea9607b4c67e878b"
+    },
+    {
+      "path": "tests/umf-numeric-runtime.test.ts",
+      "sha256": "6deb37c5e58b3ffd03a2da6466d65d7be3619dc4f4c749012c6e694716209884"
+    }
+  ]
+}

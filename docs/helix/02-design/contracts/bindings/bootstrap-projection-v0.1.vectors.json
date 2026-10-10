@@ -1,0 +1,86 @@
+{
+  "profile": "truss-bootstrap-inventory-basis/0.1.0",
+  "encoding": "truss-canonical/0.1.0",
+  "status": "unadopted independently authored fragment bytes; not complete valid installation bases",
+  "scope": "Content hash only, matching CONTRACT-008; no group-domain prefix and no projection/runtime qualification",
+  "vectors": [
+    {
+      "name": "resolved declaration",
+      "canonicalUtf8": "{\"definition\":{\"columns\":[\"a\",\"b\"]},\"physicalIdentity\":\"truss.example\"}",
+      "canonicalUtf8Hex": "7b22646566696e6974696f6e223a7b22636f6c756d6e73223a5b2261222c2262225d7d2c22706879736963616c4964656e74697479223a2274727573732e6578616d706c65227d",
+      "contentSha256": "2024015be881a698f10d67dcc2e2c4c6c59642dfa89dab1d2325cc4ea506b05e"
+    },
+    {
+      "name": "same declaration other local OID",
+      "canonicalUtf8": "{\"definition\":{\"columns\":[\"a\",\"b\"]},\"physicalIdentity\":\"truss.example\"}",
+      "canonicalUtf8Hex": "7b22646566696e6974696f6e223a7b22636f6c756d6e73223a5b2261222c2262225d7d2c22706879736963616c4964656e74697479223a2274727573732e6578616d706c65227d",
+      "contentSha256": "2024015be881a698f10d67dcc2e2c4c6c59642dfa89dab1d2325cc4ea506b05e"
+    },
+    {
+      "name": "changed column order",
+      "canonicalUtf8": "{\"definition\":{\"columns\":[\"b\",\"a\"]},\"physicalIdentity\":\"truss.example\"}",
+      "canonicalUtf8Hex": "7b22646566696e6974696f6e223a7b22636f6c756d6e73223a5b2262222c2261225d7d2c22706879736963616c4964656e74697479223a2274727573732e6578616d706c65227d",
+      "contentSha256": "4da5c4a194190aa8a20c88669ccd35f70f7b50dca1c694a52aef4683c94d871e"
+    },
+    {
+      "name": "one dependency occurrence",
+      "canonicalUtf8": "{\"dependencies\":[{\"count\":\"1\",\"from\":\"a\",\"kind\":\"n\",\"to\":\"b\"}]}",
+      "canonicalUtf8Hex": "7b22646570656e64656e63696573223a5b7b22636f756e74223a2231222c2266726f6d223a2261222c226b696e64223a226e222c22746f223a2262227d5d7d",
+      "contentSha256": "1a6be84ed71a2b070875987ab8e7febf505bf77bed279e3296110e3c63aa0b70"
+    },
+    {
+      "name": "two dependency occurrences",
+      "canonicalUtf8": "{\"dependencies\":[{\"count\":\"2\",\"from\":\"a\",\"kind\":\"n\",\"to\":\"b\"}]}",
+      "canonicalUtf8Hex": "7b22646570656e64656e63696573223a5b7b22636f756e74223a2232222c2266726f6d223a2261222c226b696e64223a226e222c22746f223a2262227d5d7d",
+      "contentSha256": "8e390e82bcdddf4db39a12155a500d79bf53757e6765b730606f4728d6bd6b0b"
+    },
+    {
+      "name": "explicit nullable declaration",
+      "canonicalUtf8": "{\"declaredVersion\":null}",
+      "canonicalUtf8Hex": "7b226465636c6172656456657273696f6e223a6e756c6c7d",
+      "contentSha256": "3cd4f1bb68d39d7a3fef931f38d001181ac3c1aba2ed299e3f087fdd0042daa4"
+    },
+    {
+      "name": "unobserved field fragment",
+      "canonicalUtf8": "{}",
+      "canonicalUtf8Hex": "7b7d",
+      "contentSha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    {
+      "name": "composed unicode",
+      "canonicalUtf8": "{\"name\":\"é\"}",
+      "canonicalUtf8Hex": "7b226e616d65223a22c3a9227d",
+      "contentSha256": "2f16b8477146a1b2ba7d6bb7cf7c9979c191cc2838a107dbf5f0d920b4cb3ba1"
+    },
+    {
+      "name": "decomposed unicode",
+      "canonicalUtf8": "{\"name\":\"é\"}",
+      "canonicalUtf8Hex": "7b226e616d65223a2265cc81227d",
+      "contentSha256": "6a547588c4055916e090ed61467326046dd52810679d03bfb84d862a7123522e"
+    }
+  ],
+  "equalPairs": [
+    [
+      0,
+      1
+    ]
+  ],
+  "distinctPairs": [
+    [
+      0,
+      2
+    ],
+    [
+      3,
+      4
+    ],
+    [
+      5,
+      6
+    ],
+    [
+      7,
+      8
+    ]
+  ]
+}

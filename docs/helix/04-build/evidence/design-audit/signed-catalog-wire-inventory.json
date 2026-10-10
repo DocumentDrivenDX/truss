@@ -1,0 +1,70 @@
+{
+  "scope": "Authored draft shape correction for named catalog integer fields; graph IDs/generations unchanged; native bounds, selected profile and original provenance remain semantic admission",
+  "changes": [
+    {
+      "file": "docs/helix/02-design/contracts/history-event-v0.1.schema.json",
+      "catalogFields": [
+        "/oneOf/2/properties/propertyId",
+        "/oneOf/3/properties/propertyId",
+        "/oneOf/4/properties/propertyId"
+      ]
+    },
+    {
+      "file": "docs/helix/02-design/contracts/seed-baseline-inventory-v0.1.schema.json",
+      "catalogFields": [
+        "/$defs/reservation/properties/reservation/oneOf/0/properties/keyNumber"
+      ]
+    },
+    {
+      "file": "docs/helix/02-design/contracts/import-report-v0.1.schema.json",
+      "catalogFields": [
+        "/$defs/identity/properties/typeId"
+      ]
+    },
+    {
+      "file": "docs/helix/02-design/contracts/feed-transaction-v0.2.schema.json",
+      "catalogFields": [
+        "/$defs/memberKey/oneOf/3/properties/typeId",
+        "/$defs/memberKey/oneOf/3/properties/keyNumber"
+      ]
+    },
+    {
+      "file": "docs/helix/02-design/contracts/catalog-view-v0.1.schema.json",
+      "catalogFields": [
+        "/$defs/reference/oneOf/0/properties/typeId",
+        "/$defs/reference/oneOf/1/properties/propertyId",
+        "/$defs/reference/oneOf/1/properties/typeId",
+        "/$defs/reference/oneOf/2/properties/typeId",
+        "/$defs/reference/oneOf/2/properties/keyNumber",
+        "/$defs/reference/oneOf/3/properties/relationshipId"
+      ]
+    },
+    {
+      "file": "docs/helix/02-design/contracts/direct-lookup-request-v0.1.schema.json",
+      "catalogFields": [
+        "/properties/selection/oneOf/2/properties/keyNumber"
+      ]
+    },
+    {
+      "file": "docs/helix/02-design/contracts/history-record-v0.1.schema.json",
+      "catalogFields": [
+        "/oneOf/0/properties/properties/items/properties/propertyId",
+        "/oneOf/1/properties/properties/items/properties/propertyId",
+        "/$defs/identity/properties/typeId"
+      ]
+    },
+    {
+      "file": "docs/helix/02-design/contracts/key-migration-source-inventory-v0.1.schema.json",
+      "catalogFields": [
+        "/properties/entries/items/oneOf/0/properties/localKeyNumber",
+        "/properties/entries/items/oneOf/1/properties/localKeyNumber"
+      ]
+    },
+    {
+      "file": "docs/helix/02-design/contracts/key-migration-bucket-collection-v0.1.schema.json",
+      "catalogFields": [
+        "/properties/entries/items/properties/locator/oneOf/0/properties/localKeyNumber"
+      ]
+    }
+  ]
+}

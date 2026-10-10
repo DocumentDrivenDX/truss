@@ -1,0 +1,81 @@
+{
+  "interfaceVersion": "truss-bootstrap-route-entry/0.1.0",
+  "routeIdentity": "pg17.language.direct/0.1.0",
+  "status": "unadopted; source pins only verified; native class/cut/transport/semantic producers unqualified",
+  "nativeClass": {
+    "namespace": "pg_catalog",
+    "relation": "pg_language",
+    "classOid": "resolve from original target; never constant",
+    "storageScope": "database",
+    "subobjectNumber": "0"
+  },
+  "selector": "direct original pg_language OIDs",
+  "artifacts": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-language-observation-pg17.proposal.sql",
+      "sha256": "af473fdcf50c0eb01cbdbb7bd64bf35e81e3d8ffa1b8796b188de67a8091adf2"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-language-observation-pg17.proposal.umf.json",
+      "sha256": "f21c6c8aecb56118cd8781fa3462040a8d1fd8d9fd50d7fdc7f48b615d053946"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/bootstrap-language-observation.owner-export.sql",
+      "sha256": "ea5f74e8fde32b53966013d16a4b386fac2cea2ac599c364c77a3779ed18ceca"
+    }
+  ],
+  "parameterGrammar": {
+    "slot": "1",
+    "nativeType": "pg_catalog.oid[]",
+    "dimensions": "exactly one",
+    "lowerBound": "1",
+    "nullAllowed": false,
+    "nullItemsAllowed": false,
+    "uniqueItems": true,
+    "countInclusive": [
+      "1",
+      "256"
+    ],
+    "itemDomain": "canonical nonzero uint32 decimal text; actual pg_language object OID",
+    "encoder": "selected original canonical PostgreSQL array encoder; no JS numeric round trip"
+  },
+  "orderedColumns": [
+    "catalog_class_oid",
+    "object_oid",
+    "lanacl_native_text",
+    "lanacl_native_dimensions",
+    "original_catalog_row_json"
+  ],
+  "coverage": "Exact unique requested language bijection; missing absent, duplicate/extra/wrong-class refuses",
+  "requiredKnownFields": [
+    "oid",
+    "lanname",
+    "lanowner",
+    "lanispl",
+    "lanpltrusted",
+    "lanplcallfoid",
+    "laninline",
+    "lanvalidator",
+    "lanacl"
+  ],
+  "preservation": "Retain full exact returned row JSON text and every unknown extension member; lossless bounded selected native JSON decoder; no parse/stringify reconstruction",
+  "dependencyExtraction": {
+    "routines": "nonzero lanplcallfoid/laninline/lanvalidator reach actual pg_proc under original native handler meaning; zero category/optional sentinels retained",
+    "owner": "lanowner actual shared pg_authid",
+    "aclTrust": "complete raw lanacl/null/dimensions and actual trust/use semantics retained; language USAGE is not routine EXECUTE",
+    "bodyGrammar": "language-specific original source/body definition grammar must be selected; observed language name/trust cannot establish body decoding or execution support",
+    "definitionSpecification": {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-language-definition-v0.1.proposal.json",
+      "sha256": "090c5d453c4a61c84ce3b5b30fc2e56f31a03dfa29b2a1fa9f750aba95402610",
+      "admission": "Unadopted field specification; not executable/native qualification"
+    }
+  },
+  "adjuncts": [
+    "complete handler/inline/validator routine and local/shared dependency closure",
+    "language ACL/effective USAGE and original shared-owner authority observations",
+    "registered language-specific native definition semantics"
+  ],
+  "resourceProfile": "truss-bootstrap-collector-resource/0.1.0",
+  "refusal": "Unsupported native language/body/aggregate/handler meaning or incomplete reached definition/authority refuses semantic completeness; observation invokes no routine, handler or initializer",
+  "resourceObligations": "Shared enclosing totals, complete original cut/authority and explicit pre-materialization/native-work permits; no independent per-route allowance"
+}

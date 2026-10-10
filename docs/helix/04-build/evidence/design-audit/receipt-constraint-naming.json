@@ -1,0 +1,85 @@
+{
+  "scope": "Deliberate unadopted constraint naming only; complete raw AST equal after removing conname and source offsets; all authored IDs preserved; no native installation",
+  "beforeCapture": "docs/helix/04-build/evidence/design-audit/receipt-before-constraint-names.umf.json",
+  "beforeSha256": "04376755325cc61ae80a4b6f6fd6f6217dde7f68a31721257df7045ec0cb1c53",
+  "afterSha256": "2c2d5931fbdb10062825b335579539fbe45bd734d8dc16e9b1e081ad625f62b2",
+  "changes": [
+    {
+      "entryId": "truss.physical.85a27ef0-f451-4d85-8843-6908c7dba35b",
+      "before": null,
+      "after": "rr_guard_namespace_digest"
+    },
+    {
+      "entryId": "truss.physical.f5562af1-ac67-4478-a0f3-6520240aa0b7",
+      "before": null,
+      "after": "rr_guard_request_digest"
+    },
+    {
+      "entryId": "truss.physical.812c7e29-2d7d-467a-8b31-310e3b49d82f",
+      "before": null,
+      "after": "rr_guard_generation"
+    },
+    {
+      "entryId": "truss.physical.95ab3f75-d549-44b1-b1ed-f080d5e8edab",
+      "before": null,
+      "after": "rr_guard_pk"
+    },
+    {
+      "entryId": "truss.physical.01520a32-28f7-47ab-8ff6-d51c869cb156",
+      "before": null,
+      "after": "rr_receipt_pk"
+    },
+    {
+      "entryId": "truss.physical.1551b22e-c29e-4125-b58d-18ac2bc7e186",
+      "before": null,
+      "after": "rr_namespace_identity_bytes"
+    },
+    {
+      "entryId": "truss.physical.18c44cce-7856-4f8d-a521-e30116231067",
+      "before": null,
+      "after": "rr_request_identity_bytes"
+    },
+    {
+      "entryId": "truss.physical.112f144c-68fe-4b0f-bde9-f0f9d3a7679c",
+      "before": null,
+      "after": "rr_writer_context_bytes"
+    },
+    {
+      "entryId": "truss.physical.f6e96c34-8902-400f-936b-adce55580c73",
+      "before": null,
+      "after": "rr_lifecycle_generation"
+    },
+    {
+      "entryId": "truss.physical.a61bb16c-6775-4193-b300-8585dd3ffe63",
+      "before": null,
+      "after": "rr_payload_state"
+    },
+    {
+      "entryId": "truss.physical.aa4782b4-5e83-47d6-b709-eca0fe611532",
+      "before": null,
+      "after": "rr_protection_pk"
+    },
+    {
+      "entryId": "truss.physical.7373c9c1-f05b-4a05-9e9e-606eeb80caa4",
+      "before": null,
+      "after": "rr_protection_receipt_fk"
+    },
+    {
+      "entryId": "truss.physical.cb517af1-715d-490c-afba-115c68cc6618",
+      "before": null,
+      "after": "rr_protection_generation"
+    },
+    {
+      "entryId": "truss.physical.b9ab7b52-0b1a-495f-a586-b0e6dbccd84c",
+      "before": null,
+      "after": "rr_protection_artifact_bytes"
+    },
+    {
+      "entryId": "truss.physical.7bfcdc56-00bc-4066-bfc9-1c581846ef6f",
+      "before": null,
+      "after": "rr_protection_evidence_bytes"
+    }
+  ],
+  "authoredIdsPreserved": true,
+  "nativeInstalled": false
+}

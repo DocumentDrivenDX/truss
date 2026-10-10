@@ -1,0 +1,205 @@
+{
+  "scope": "original field inventory for existing M00-M07 candidate only; not complete release/consumer schema selection or native profile adoption",
+  "sourcePath": "docs/helix/02-design/contracts/bindings/reference-account-items-v0.1.proposal.umf.json",
+  "sourceSha256": "94f8367c3dd2462fb3f32a624f053bf56f023ddd3bf86bf5219bbc1e24b6fcc1",
+  "identityReceiptSha256": "420c2521075243c4db367a75350c2e98ef6d37c95fb8ef0fe0fa553d22be4b15",
+  "fields": [
+    {
+      "qualifiedIdentity": {
+        "document": "truss.integration.account-items.v1",
+        "module": "integration",
+        "field": "Account.code"
+      },
+      "sourcePointer": "/modules/0/elements/0",
+      "originalDefinition": {
+        "id": "Account.code",
+        "name": "code",
+        "kind": "field",
+        "scalarType": "string",
+        "nullability": "required",
+        "cardinality": "one",
+        "extensions": {}
+      },
+      "recordOwners": [
+        "Account"
+      ],
+      "storageHome": null,
+      "nativeCodec": null,
+      "comparatorKeyProfile": null,
+      "nullSemantics": "original required declaration; exact native admission pending"
+    },
+    {
+      "qualifiedIdentity": {
+        "document": "truss.integration.account-items.v1",
+        "module": "integration",
+        "field": "Item.code"
+      },
+      "sourcePointer": "/modules/0/elements/1",
+      "originalDefinition": {
+        "id": "Item.code",
+        "name": "code",
+        "kind": "field",
+        "scalarType": "string",
+        "nullability": "required",
+        "cardinality": "one",
+        "extensions": {}
+      },
+      "recordOwners": [
+        "Item"
+      ],
+      "storageHome": null,
+      "nativeCodec": null,
+      "comparatorKeyProfile": null,
+      "nullSemantics": "original required declaration; exact native admission pending"
+    },
+    {
+      "qualifiedIdentity": {
+        "document": "truss.integration.account-items.v1",
+        "module": "integration",
+        "field": "Item.amount"
+      },
+      "sourcePointer": "/modules/0/elements/2",
+      "originalDefinition": {
+        "id": "Item.amount",
+        "name": "amount",
+        "kind": "field",
+        "scalarType": "decimal",
+        "nullability": "required",
+        "cardinality": "one",
+        "extensions": {},
+        "facets": {
+          "precision": 21,
+          "scale": 3
+        }
+      },
+      "recordOwners": [
+        "Item"
+      ],
+      "storageHome": null,
+      "nativeCodec": null,
+      "comparatorKeyProfile": null,
+      "nullSemantics": "original required declaration; exact native admission pending"
+    },
+    {
+      "qualifiedIdentity": {
+        "document": "truss.integration.account-items.v1",
+        "module": "integration",
+        "field": "Item.note"
+      },
+      "sourcePointer": "/modules/0/elements/3",
+      "originalDefinition": {
+        "id": "Item.note",
+        "name": "note",
+        "kind": "field",
+        "scalarType": "string",
+        "nullability": "absent-allowed",
+        "cardinality": "one",
+        "extensions": {}
+      },
+      "recordOwners": [
+        "Item"
+      ],
+      "storageHome": null,
+      "nativeCodec": null,
+      "comparatorKeyProfile": null,
+      "nullSemantics": "unresolved explicit-null meaning"
+    }
+  ],
+  "records": [
+    {
+      "sourcePointer": "/modules/0/elements/4",
+      "originalDefinition": {
+        "id": "Account",
+        "name": "Account",
+        "kind": "record",
+        "members": [
+          {
+            "module": "integration",
+            "element": "Account.code"
+          }
+        ],
+        "keys": [
+          {
+            "id": "by-code",
+            "name": "by-code",
+            "fields": [
+              {
+                "module": "integration",
+                "element": "Account.code"
+              }
+            ],
+            "primary": true
+          }
+        ],
+        "extensions": {}
+      }
+    },
+    {
+      "sourcePointer": "/modules/0/elements/5",
+      "originalDefinition": {
+        "id": "Item",
+        "name": "Item",
+        "kind": "record",
+        "members": [
+          {
+            "module": "integration",
+            "element": "Item.code"
+          },
+          {
+            "module": "integration",
+            "element": "Item.amount"
+          },
+          {
+            "module": "integration",
+            "element": "Item.note"
+          }
+        ],
+        "keys": [
+          {
+            "id": "by-code",
+            "name": "by-code",
+            "fields": [
+              {
+                "module": "integration",
+                "element": "Item.code"
+              }
+            ],
+            "primary": true
+          }
+        ],
+        "extensions": {}
+      }
+    }
+  ],
+  "relationships": [
+    {
+      "id": "account-items",
+      "name": "items",
+      "source": [
+        {
+          "module": "integration",
+          "element": "Account"
+        }
+      ],
+      "target": [
+        {
+          "module": "integration",
+          "element": "Item",
+          "key": "by-code"
+        }
+      ],
+      "sourceMultiplicity": {
+        "min": 0,
+        "max": 1
+      },
+      "targetMultiplicity": {
+        "min": 0,
+        "max": 2
+      },
+      "targetLifecycle": "independent",
+      "directed": true
+    }
+  ],
+  "nativeAdopted": false,
+  "fullConsumerRequirementsReconciled": false
+}

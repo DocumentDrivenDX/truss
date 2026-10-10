@@ -1,0 +1,97 @@
+{
+  "interfaceVersion": "truss-bootstrap-route-entry/0.1.0",
+  "routeIdentity": "pg17.type-acl.expanded-grants/0.1.0",
+  "status": "unadopted; source pins only verified; native class/cut/transport/semantic producers unqualified",
+  "nativeClass": {
+    "namespace": "pg_catalog",
+    "relation": "pg_type",
+    "classOid": "actual original database pg_type catalog identity",
+    "storageScope": "database",
+    "subobjectNumber": "0"
+  },
+  "selector": "Native type/domain T defaults and USAGE grants; complete original type definition and effective rights are separate. No invented per-invocation authorization check.",
+  "artifacts": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-type-acl-observation-pg17.proposal.sql",
+      "sha256": "878f0472b656964cd5dc1b17836a596776497cc948ab0000c0f4961ba72ac687"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-type-acl-observation-pg17.proposal.umf.json",
+      "sha256": "7b88f0cd2bc07e79c7b52a8fcce809dc18eb639e847d188ba0e829860401c883"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/bootstrap-type-acl-observation.owner-export.sql",
+      "sha256": "92bf9b61733d11e4a6a6ceb7d29748473ad94fe35d6785c52ddf1f328a2e9bbc"
+    }
+  ],
+  "parameterGrammar": {
+    "slots": [
+      1
+    ],
+    "nativeTypes": [
+      "pg_catalog.oid[]"
+    ],
+    "nativeInput": "Nonnull one-dimensional lower-bound-one array of 1..256 unique canonical nonzero original pg_type OIDs; no null items. Full original definition/kind/attribute inventory admitted independently."
+  },
+  "orderedColumns": [
+    "catalog_class_oid",
+    "object_oid",
+    "namespace_oid",
+    "owner_oid",
+    "original_acl_is_null",
+    "original_acl_native_text",
+    "original_acl_native_dimensions",
+    "assumed_acl_item_count",
+    "has_expanded_grant",
+    "grantor_oid",
+    "grantee_oid",
+    "privilege_type",
+    "is_grantable"
+  ],
+  "coverage": "Complete original object/attribute fanout; each requested object must be independently proven present. Empty/missing output cannot certify unsupported kind or absent column grants.",
+  "requiredKnownFields": [
+    "catalog_class_oid",
+    "object_oid",
+    "namespace_oid",
+    "owner_oid",
+    "original_acl_is_null",
+    "original_acl_native_text",
+    "original_acl_native_dimensions",
+    "assumed_acl_item_count",
+    "has_expanded_grant",
+    "grantor_oid",
+    "grantee_oid",
+    "privilege_type",
+    "is_grantable"
+  ],
+  "preservation": "Retain full exact returned row JSON text and every unknown extension member; lossless bounded selected native JSON decoder; no parse/stringify reconstruction",
+  "dependencyExtraction": {
+    "header": "Identical repeated original object/attribute identity and raw ACL/null/dimensions; kind/namespace/owner/dropped/name fields where present match complete original definitions. Native type/domain T defaults and USAGE grants; complete original type definition and effective rights are separate. No invented per-invocation authorization check.",
+    "grants": "Complete nonnull grantor/grantee/privilege/grantOption for real rows; tagged PUBLIC only as grantee zero. Selected object-specific privilege grammar; preserve full grant multiset and original role correspondence.",
+    "sentinel": "Exactly one empty-expansion sentinel per object/attribute with all expanded fields NULL; no real row mixed. Unsupported relation kind is not an admitted empty expansion. Item cardinality where present is not expanded-row count.",
+    "authority": "Native object-kind defaults are distinct from current creation defaults; original effective authority, implicit owner rights and role paths remain separately admitted.",
+    "fieldClassification": {
+      "catalog_class_oid": "original native class correlation; resolve selected object class/scope",
+      "object_oid": "original parent object correlation; resolve complete definition identity",
+      "namespace_oid": "original namespace correlation; resolve complete namespace definition",
+      "owner_oid": "original shared owner correlation; resolve complete owner policy",
+      "original_acl_is_null": "original policy-origin tag, default versus explicit; not empty/no-privilege inference",
+      "original_acl_native_text": "exact original nullable ACL text with admitted complete item meaning",
+      "original_acl_native_dimensions": "original dimensions carrier; paired with exact text/null, never inferred from expanded count",
+      "assumed_acl_item_count": "original default-or-explicit ACL item count evidence; not expanded privilege row count",
+      "has_expanded_grant": "original grant-or-sentinel framing evidence; sentinel never a semantic grant",
+      "grantor_oid": "original nonzero shared grantor correlation on real grant; resolve policy identity; null only admitted sentinel",
+      "grantee_oid": "original shared grantee correlation or explicit PUBLIC zero tag on real grant; null only admitted sentinel",
+      "privilege_type": "exact selected native object-specific privilege on real grant; null only admitted sentinel",
+      "is_grantable": "exact native grant-option boolean on real grant; null only admitted sentinel"
+    },
+    "canonicalProcedure": "CONTRACT-008 ACL policy projection and CONTRACT-011 selected multiset normalization: original parent/owner/source tag plus complete resolved grantor/grantee/privilege/grant-option multiset; sentinel excluded only after complete coverage, raw original ACL retained"
+  },
+  "adjuncts": [
+    "complete original object/role/namespace and selected ACL/default meanings",
+    "complete effective inquiry/current-authority context"
+  ],
+  "resourceProfile": "truss-bootstrap-collector-resource/0.1.0",
+  "refusal": "Unsupported native kind/category, incomplete parent/attribute coverage, mixed sentinel/grants, inconsistent repeated headers, invalid role or resource/cut/termination refuses publication",
+  "resourceObligations": "Shared enclosing totals, complete original cut/authority and explicit pre-materialization/native-work permits; no independent per-route allowance"
+}

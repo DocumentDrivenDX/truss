@@ -1,0 +1,143 @@
+{
+  "scope": "Declared security syntax in current review AST only; no installed/default/inherited/ownership/implicit privilege closure",
+  "source": {
+    "path": "04-build/evidence/design-audit/reference-history-layout-native-ast.json",
+    "sha256": "cb20f840e8d4ab9a3b45e6bb95d24db61defa958d98c73b99374d57d5add9e43"
+  },
+  "statementKinds": {
+    "CreateSchemaStmt": 1,
+    "CommentStmt": 1,
+    "CreateStmt": 46,
+    "InsertStmt": 4,
+    "CreateSeqStmt": 11,
+    "IndexStmt": 24,
+    "AlterTableStmt": 15,
+    "CreateFunctionStmt": 2,
+    "GrantStmt": 2
+  },
+  "policyDeclarations": [],
+  "rowSecurityCommands": [],
+  "aclStatements": [
+    {
+      "originalPointer": "/71/stmt/GrantStmt",
+      "action": "revoke",
+      "originalNode": {
+        "targtype": "ACL_TARGET_OBJECT",
+        "objtype": "OBJECT_FUNCTION",
+        "objects": [
+          {
+            "ObjectWithArgs": {
+              "objname": [
+                {
+                  "String": {
+                    "sval": "truss"
+                  }
+                },
+                {
+                  "String": {
+                    "sval": "catalog_global_high_water_v01"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "grantees": [
+          {
+            "RoleSpec": {
+              "roletype": "ROLESPEC_PUBLIC",
+              "location": 1046
+            }
+          }
+        ],
+        "behavior": "DROP_RESTRICT"
+      }
+    },
+    {
+      "originalPointer": "/73/stmt/GrantStmt",
+      "action": "revoke",
+      "originalNode": {
+        "targtype": "ACL_TARGET_OBJECT",
+        "objtype": "OBJECT_FUNCTION",
+        "objects": [
+          {
+            "ObjectWithArgs": {
+              "objname": [
+                {
+                  "String": {
+                    "sval": "truss"
+                  }
+                },
+                {
+                  "String": {
+                    "sval": "catalog_key_high_water_v01"
+                  }
+                }
+              ],
+              "objargs": [
+                {
+                  "TypeName": {
+                    "names": [
+                      {
+                        "String": {
+                          "sval": "pg_catalog"
+                        }
+                      },
+                      {
+                        "String": {
+                          "sval": "int4"
+                        }
+                      }
+                    ],
+                    "typemod": -1,
+                    "location": 1800
+                  }
+                }
+              ],
+              "objfuncargs": [
+                {
+                  "FunctionParameter": {
+                    "argType": {
+                      "names": [
+                        {
+                          "String": {
+                            "sval": "pg_catalog"
+                          }
+                        },
+                        {
+                          "String": {
+                            "sval": "int4"
+                          }
+                        }
+                      ],
+                      "typemod": -1,
+                      "location": 1800
+                    },
+                    "mode": "FUNC_PARAM_DEFAULT"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "grantees": [
+          {
+            "RoleSpec": {
+              "roletype": "ROLESPEC_PUBLIC",
+              "location": 1810
+            }
+          }
+        ],
+        "behavior": "DROP_RESTRICT"
+      }
+    }
+  ],
+  "legacyIsolationSource": {
+    "path": "02-design/contracts/module-isolation.sql",
+    "sha256": "242c1f9f6287ef083ac0699c0753730365a984b85f8e2b9b0beea6962f9d2e5e",
+    "scope": "Separate optional layout 0.2 source; not composed or qualified for document-qualified 0.12 stores"
+  },
+  "nativeQualified": false,
+  "installerReady": false,
+  "requiredComposition": "Complete selected current-policy/read/writer/producer/admin/retention/security dependency inventory and original privilege paths for every declared store, plus transitive native effects. Two explicit revokes do not establish protected schema or routine closure."
+}

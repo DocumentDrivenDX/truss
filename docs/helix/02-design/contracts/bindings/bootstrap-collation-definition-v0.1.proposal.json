@@ -1,0 +1,108 @@
+{
+  "interfaceVersion": "truss-bootstrap-collation-definition-profile/0.1.0",
+  "status": "unadopted field specification; native environment/comparator/canonical producers unqualified",
+  "nativeVersion": "PostgreSQL 17; exact build separately admitted",
+  "requiredRawFieldInventory": [
+    "oid",
+    "collname",
+    "collnamespace",
+    "collowner",
+    "collprovider",
+    "collisdeterministic",
+    "collencoding",
+    "collcollate",
+    "collctype",
+    "colllocale",
+    "collicurules",
+    "collversion"
+  ],
+  "fields": [
+    {
+      "nativeField": "oid",
+      "domain": "nonzero canonical uint32; original correlation only",
+      "classification": "original correlation only",
+      "rawPreservation": "Complete original nullable carrier and unknown fields retained"
+    },
+    {
+      "nativeField": "collname",
+      "domain": "exact native name; retain encoding in complete catalog identity",
+      "classification": "resolved definition or exact declared fact; never sufficient comparator evidence",
+      "rawPreservation": "Complete original nullable carrier and unknown fields retained"
+    },
+    {
+      "nativeField": "collnamespace",
+      "domain": "nonzero uint32 resolved to original namespace definition",
+      "classification": "resolved definition or exact declared fact; never sufficient comparator evidence",
+      "rawPreservation": "Complete original nullable carrier and unknown fields retained"
+    },
+    {
+      "nativeField": "collowner",
+      "domain": "nonzero uint32 resolved to original shared owner definition",
+      "classification": "resolved definition or exact declared fact; never sufficient comparator evidence",
+      "rawPreservation": "Complete original nullable carrier and unknown fields retained"
+    },
+    {
+      "nativeField": "collprovider",
+      "domain": "exact registered d/b/c/i provider; unknown preserved unsupported",
+      "classification": "resolved definition or exact declared fact; never sufficient comparator evidence",
+      "rawPreservation": "Complete original nullable carrier and unknown fields retained"
+    },
+    {
+      "nativeField": "collisdeterministic",
+      "domain": "actual native boolean; no comparator qualification implied",
+      "classification": "resolved definition or exact declared fact; never sufficient comparator evidence",
+      "rawPreservation": "Complete original nullable carrier and unknown fields retained"
+    },
+    {
+      "nativeField": "collencoding",
+      "domain": "canonical signed int32; -1 any-encoding sentinel, other values require original native encoding admission",
+      "classification": "resolved definition or exact declared fact; never sufficient comparator evidence",
+      "rawPreservation": "Complete original nullable carrier and unknown fields retained"
+    },
+    {
+      "nativeField": "collcollate",
+      "domain": "exact nullable text; libc LC_COLLATE declaration",
+      "classification": "resolved definition or exact declared fact; never sufficient comparator evidence",
+      "rawPreservation": "Complete original nullable carrier and unknown fields retained"
+    },
+    {
+      "nativeField": "collctype",
+      "domain": "exact nullable text; libc LC_CTYPE declaration",
+      "classification": "resolved definition or exact declared fact; never sufficient comparator evidence",
+      "rawPreservation": "Complete original nullable carrier and unknown fields retained"
+    },
+    {
+      "nativeField": "colllocale",
+      "domain": "exact nullable text; non-libc provider locale declaration",
+      "classification": "resolved definition or exact declared fact; never sufficient comparator evidence",
+      "rawPreservation": "Complete original nullable carrier and unknown fields retained"
+    },
+    {
+      "nativeField": "collicurules",
+      "domain": "exact nullable text; provider rules without normalization",
+      "classification": "resolved definition or exact declared fact; never sufficient comparator evidence",
+      "rawPreservation": "Complete original nullable carrier and unknown fields retained"
+    },
+    {
+      "nativeField": "collversion",
+      "domain": "exact nullable recorded provider-version text; stable declared evidence, not actual runtime version",
+      "classification": "resolved definition or exact declared fact; never sufficient comparator evidence",
+      "rawPreservation": "Complete original nullable carrier and unknown fields retained"
+    }
+  ],
+  "unknownFields": "Preserved unsupported pending complete governing classification",
+  "catalogIdentity": "Resolved namespace plus exact name plus native encoding, including non-applicable encoding entries; do not collapse namespace fanout by qualified SQL name",
+  "providerAdmission": "Validate selected native provider/null-field grammar; libc uses collcollate/collctype and null colllocale, other providers use colllocale and null libc fields. Do not convert null to empty or derive defaults without original target context. Default provider requires complete original database-default definition. Unknown/inconsistent provider meaning remains unsupported.",
+  "additionalRequiredDefinitions": [
+    "resolved namespace/owner and original dependency/comment/extension closure",
+    "original target encoding/default provider/locale context",
+    "selected actual provider build/library/locale/rules and independently qualified comparator profile",
+    "complete affected index/constraint dependencies and independent usability/rebuild evidence when version compatibility is uncertain"
+  ],
+  "canonicalProducer": "Separate declared-definition comparison from runtime comparator/environment admission. OID reassignment alone may preserve meaning; encoding, determinism, provider, locale/rules or recorded version changes remain explicit. Equal recorded version strings do not establish equal comparator behavior. NULL version means unavailable recorded information, not compatibility.",
+  "repairPolicy": "Observation never executes REFRESH VERSION, REINDEX or locale repair. A refreshed version is not proof dependent objects were rebuilt.",
+  "sources": [
+    "https://www.postgresql.org/docs/17/catalog-pg-collation.html",
+    "https://www.postgresql.org/docs/17/sql-altercollation.html"
+  ]
+}

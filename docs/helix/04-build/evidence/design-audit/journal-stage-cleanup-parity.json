@@ -1,0 +1,16 @@
+{
+  "scope": "original source/model/export hashes and full SELECT/DELETE stage/parent/cohort/projection AST parity ignoring locations only; no native eligibility, containment, settlement or execution",
+  "helperSha256": "fc88aa7ef6b908ef67d1a76f0402cbe84ae689b115b0b1374b08b23bac29e183",
+  "sourceReceiptSha256": "8097ac76faaf6b560dcff279c014d122cd2441647bdbbf59fc949728d208d761",
+  "statementPairs": 1,
+  "returnedFields": 6,
+  "negativeControls": [
+    "wrong_stage",
+    "wrong_parent",
+    "missing_context",
+    "missing_body",
+    "reordered_fields",
+    "extra_modifier"
+  ],
+  "nativeExecuted": false
+}

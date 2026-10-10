@@ -1,0 +1,31 @@
+{
+  "scope": "Current 0.15 authored structural mirror with exact native archive; physical-only key/FK semantics remain explicitly uninterpreted. No SQL generation or installed identity adoption.",
+  "nativeSource": "02-design/models/truss-layout-qualified-property-0.15.proposal.umf.json",
+  "nativeSourceSha256": "baed6c2707240261802d9fe87a00448acf37f13dcb33e8215717681dc4542b76",
+  "priorStructuralSource": "02-design/models/truss-layout-core-structural-0.2.proposal.umf.json",
+  "priorStructuralSourceSha256": "0f3c1c48f3d8263cda5e7e1201059c7fe19bf45d376f52301114b93b71208339",
+  "nativeAstPaths": [
+    "04-build/evidence/design-audit/core-refresh-0.12.native-ast.json",
+    "04-build/evidence/design-audit/core-refresh-0.15.native-ast.json"
+  ],
+  "nativeAstSha256": [
+    "cb20f840e8d4ab9a3b45e6bb95d24db61defa958d98c73b99374d57d5add9e43",
+    "195611b24ac06cfd8761e2424b9df4cdefe0c7e749fb6bb7d1ab2fb4cd3b8bf6"
+  ],
+  "changedOriginalStatements": [
+    1,
+    76
+  ],
+  "appendedStatements": [
+    106,
+    107,
+    108
+  ],
+  "modelPath": "02-design/models/truss-layout-core-structural-0.3.proposal.umf.json",
+  "modelSha256": "bf8e377219eb5c604dd04a9c1393f87a30ea7a63b1505dc3e29593fa8af82e8a",
+  "records": 46,
+  "fields": 443,
+  "portableKeys": 48,
+  "coreRelationships": 57,
+  "physicalFkReferences": 4
+}

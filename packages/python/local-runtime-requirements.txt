@@ -1,0 +1,5 @@
+# Initial local-runtime qualification tuple; full Truss package is not yet released.
+pgserver==0.1.4
+fasteners==0.20
+platformdirs==4.12.4
+psutil==7.2.2

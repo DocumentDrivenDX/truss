@@ -1,0 +1,241 @@
+{
+  "scope": "Original custom trigger references only; no builtin type/operator/function resolver, native OID admission or body semantics",
+  "selectedAstPath": "docs/helix/04-build/evidence/design-audit/complete-feed-layout-profile.native-ast.json",
+  "selectedAstSha256": "2f307313cb7a1f9708bc7718cc3ccb5c0c434080a78d1351edbfc11d61c43c87",
+  "triggerSources": [
+    {
+      "path": "docs/helix/02-design/contracts/row-home-triggers-v0.1.proposal.umf.json",
+      "sha256": "9ea38425b17611e209c75f599273f7d8b3814cb1d6e0cd121ed41c4f221e7fa7"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/edge-limit-triggers-v0.1.proposal.umf.json",
+      "sha256": "7a5d6d4741c88abac79396c4e1cfe8c95a793eeb807f89bb7dd30efdc2bff075"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/feed-current-union-triggers-v0.1.proposal.umf.json",
+      "sha256": "c3d790b7b4ecd3c5a100f8c01e71232d0950023b2df046f9a306042fee60d09a"
+    }
+  ],
+  "providedRoutineNames": [
+    "truss.catalog_global_high_water_v01",
+    "truss.catalog_key_high_water_v01"
+  ],
+  "references": [
+    {
+      "source": "docs/helix/02-design/contracts/row-home-triggers-v0.1.proposal.umf.json",
+      "ordinal": 0,
+      "trigger": "row_home_state_touch_observe",
+      "relation": {
+        "schemaname": "truss",
+        "relname": "row_home_state",
+        "inh": true,
+        "relpersistence": "p",
+        "location": 240
+      },
+      "routine": "truss.row_touch_observe",
+      "bodyDeclaredInSelectedModel": false,
+      "requiredReturnType": "trigger",
+      "arguments": []
+    },
+    {
+      "source": "docs/helix/02-design/contracts/row-home-triggers-v0.1.proposal.umf.json",
+      "ordinal": 1,
+      "trigger": "row_home_node_touch_observe",
+      "relation": {
+        "schemaname": "truss",
+        "relname": "row_home_node",
+        "inh": true,
+        "relpersistence": "p",
+        "location": 401
+      },
+      "routine": "truss.row_touch_observe",
+      "bodyDeclaredInSelectedModel": false,
+      "requiredReturnType": "trigger",
+      "arguments": []
+    },
+    {
+      "source": "docs/helix/02-design/contracts/row-home-triggers-v0.1.proposal.umf.json",
+      "ordinal": 2,
+      "trigger": "row_home_scalar_touch_observe",
+      "relation": {
+        "schemaname": "truss",
+        "relname": "row_home_scalar",
+        "inh": true,
+        "relpersistence": "p",
+        "location": 563
+      },
+      "routine": "truss.row_touch_observe",
+      "bodyDeclaredInSelectedModel": false,
+      "requiredReturnType": "trigger",
+      "arguments": []
+    },
+    {
+      "source": "docs/helix/02-design/contracts/row-home-triggers-v0.1.proposal.umf.json",
+      "ordinal": 3,
+      "trigger": "row_home_touch_commit_guard",
+      "relation": {
+        "schemaname": "truss",
+        "relname": "row_home_touch",
+        "inh": true,
+        "relpersistence": "p",
+        "location": 726
+      },
+      "routine": "truss.row_touch_commit_check",
+      "bodyDeclaredInSelectedModel": false,
+      "requiredReturnType": "trigger",
+      "arguments": []
+    },
+    {
+      "source": "docs/helix/02-design/contracts/row-home-triggers-v0.1.proposal.umf.json",
+      "ordinal": 4,
+      "trigger": "row_home_capacity_commit_guard",
+      "relation": {
+        "schemaname": "truss",
+        "relname": "row_home_capacity",
+        "inh": true,
+        "relpersistence": "p",
+        "location": 928
+      },
+      "routine": "truss.row_touch_commit_check",
+      "bodyDeclaredInSelectedModel": false,
+      "requiredReturnType": "trigger",
+      "arguments": []
+    },
+    {
+      "source": "docs/helix/02-design/contracts/row-home-triggers-v0.1.proposal.umf.json",
+      "ordinal": 5,
+      "trigger": "row_home_operation_commit_guard",
+      "relation": {
+        "schemaname": "truss",
+        "relname": "row_home_operation",
+        "inh": true,
+        "relpersistence": "p",
+        "location": 1134
+      },
+      "routine": "truss.row_touch_commit_check",
+      "bodyDeclaredInSelectedModel": false,
+      "requiredReturnType": "trigger",
+      "arguments": []
+    },
+    {
+      "source": "docs/helix/02-design/contracts/edge-limit-triggers-v0.1.proposal.umf.json",
+      "ordinal": 0,
+      "trigger": "edge_limit_edge_observe",
+      "relation": {
+        "schemaname": "truss",
+        "relname": "edge",
+        "inh": true,
+        "relpersistence": "p",
+        "location": 299
+      },
+      "routine": "truss.edge_limit_observe",
+      "bodyDeclaredInSelectedModel": false,
+      "requiredReturnType": "trigger",
+      "arguments": []
+    },
+    {
+      "source": "docs/helix/02-design/contracts/edge-limit-triggers-v0.1.proposal.umf.json",
+      "ordinal": 1,
+      "trigger": "edge_limit_marker_observe",
+      "relation": {
+        "schemaname": "truss",
+        "relname": "edge_limit",
+        "inh": true,
+        "relpersistence": "p",
+        "location": 449
+      },
+      "routine": "truss.edge_limit_observe",
+      "bodyDeclaredInSelectedModel": false,
+      "requiredReturnType": "trigger",
+      "arguments": []
+    },
+    {
+      "source": "docs/helix/02-design/contracts/edge-limit-triggers-v0.1.proposal.umf.json",
+      "ordinal": 2,
+      "trigger": "edge_limit_catalog_observe",
+      "relation": {
+        "schemaname": "truss",
+        "relname": "rel_def",
+        "inh": true,
+        "relpersistence": "p",
+        "location": 606
+      },
+      "routine": "truss.edge_limit_catalog_observe",
+      "bodyDeclaredInSelectedModel": false,
+      "requiredReturnType": "trigger",
+      "arguments": []
+    },
+    {
+      "source": "docs/helix/02-design/contracts/feed-current-union-triggers-v0.1.proposal.umf.json",
+      "ordinal": 0,
+      "trigger": "feed_tx_current_union_guard",
+      "relation": {
+        "schemaname": "truss",
+        "relname": "feed_tx",
+        "inh": true,
+        "relpersistence": "p",
+        "location": 253
+      },
+      "routine": "truss.feed_current_union_check",
+      "bodyDeclaredInSelectedModel": false,
+      "requiredReturnType": "trigger",
+      "arguments": []
+    },
+    {
+      "source": "docs/helix/02-design/contracts/feed-current-union-triggers-v0.1.proposal.umf.json",
+      "ordinal": 1,
+      "trigger": "feed_member_current_union_guard",
+      "relation": {
+        "schemaname": "truss",
+        "relname": "feed_member",
+        "inh": true,
+        "relpersistence": "p",
+        "location": 461
+      },
+      "routine": "truss.feed_current_union_check",
+      "bodyDeclaredInSelectedModel": false,
+      "requiredReturnType": "trigger",
+      "arguments": []
+    },
+    {
+      "source": "docs/helix/02-design/contracts/feed-current-union-triggers-v0.1.proposal.umf.json",
+      "ordinal": 2,
+      "trigger": "feed_prerequisite_current_union_guard",
+      "relation": {
+        "schemaname": "truss",
+        "relname": "feed_prerequisite",
+        "inh": true,
+        "relpersistence": "p",
+        "location": 679
+      },
+      "routine": "truss.feed_current_union_check",
+      "bodyDeclaredInSelectedModel": false,
+      "requiredReturnType": "trigger",
+      "arguments": []
+    },
+    {
+      "source": "docs/helix/02-design/contracts/feed-current-union-triggers-v0.1.proposal.umf.json",
+      "ordinal": 3,
+      "trigger": "feed_configuration_prerequisite_current_union_guard",
+      "relation": {
+        "schemaname": "truss",
+        "relname": "feed_configuration_prerequisite",
+        "inh": true,
+        "relpersistence": "p",
+        "location": 917
+      },
+      "routine": "truss.feed_current_union_check",
+      "bodyDeclaredInSelectedModel": false,
+      "requiredReturnType": "trigger",
+      "arguments": []
+    }
+  ],
+  "missingBodyNames": [
+    "truss.edge_limit_catalog_observe",
+    "truss.edge_limit_observe",
+    "truss.feed_current_union_check",
+    "truss.row_touch_commit_check",
+    "truss.row_touch_observe"
+  ],
+  "nativeQualified": false
+}

@@ -31,6 +31,8 @@ ddx:
 
 A relationship may name an entity that no document in the set and no earlier revision defines.
 
+This story describes desired behavior and is upstream-gated. All four criteria require a representation that UMF regards as valid while leaving the qualified endpoint unresolved. The current local relationship profile rejects missing required endpoints. Under that profile, reject, provisional and skip all return the upstream validation diagnostics before any Truss policy effects. The walkthrough and positive scenarios below are conditional future cases, not examples of accepted current UMF input. Proposed external-reference work does not yet discharge this gate. TD-003 owns the identity and lifecycle design; the current criteria and intended scope remain unchanged.
+
 ## Walkthrough
 
 1. Engineer registers `orders` without `sales`.
@@ -50,6 +52,7 @@ A relationship may name an entity that no document in the set and no earlier rev
 
 - **Data held for a provisional type**: retained and reported (US-008).
 - **A type that stays provisional**: listed in every later report.
+- **Upstream-invalid missing endpoint**: rejected before policy under every policy, with no synthetic type, relationship, report persistence or catalog-head change.
 
 ## Test Scenarios
 

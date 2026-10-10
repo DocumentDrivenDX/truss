@@ -1,0 +1,102 @@
+{
+  "status": "proposed_owner_choice_pending",
+  "scope": "Independent logical oracle for proposed unique-terminal/path-local-cycle semantics; no native IDs or executed evidence",
+  "objects": [
+    "a",
+    "b",
+    "c",
+    "d"
+  ],
+  "edges": [
+    {
+      "id": "ab",
+      "source": "a",
+      "target": "b"
+    },
+    {
+      "id": "ac",
+      "source": "a",
+      "target": "c"
+    },
+    {
+      "id": "bd",
+      "source": "b",
+      "target": "d"
+    },
+    {
+      "id": "cd",
+      "source": "c",
+      "target": "d"
+    },
+    {
+      "id": "db",
+      "source": "d",
+      "target": "b"
+    },
+    {
+      "id": "aa",
+      "source": "a",
+      "target": "a"
+    }
+  ],
+  "cases": [
+    {
+      "hops": 1,
+      "validPaths": [
+        [
+          "a",
+          "b"
+        ],
+        [
+          "a",
+          "c"
+        ]
+      ],
+      "terminals": [
+        "b",
+        "c"
+      ]
+    },
+    {
+      "hops": 2,
+      "validPaths": [
+        [
+          "a",
+          "b",
+          "d"
+        ],
+        [
+          "a",
+          "c",
+          "d"
+        ]
+      ],
+      "terminals": [
+        "d"
+      ]
+    },
+    {
+      "hops": 3,
+      "validPaths": [
+        [
+          "a",
+          "c",
+          "d",
+          "b"
+        ]
+      ],
+      "terminals": [
+        "b"
+      ],
+      "rejectedPaths": [
+        [
+          "a",
+          "b",
+          "d",
+          "b"
+        ]
+      ]
+    }
+  ],
+  "identityRule": "All aliases denote distinct complete typed objects under one admitted original graph; repeated display labels or numeric IDs alone do not establish identity."
+}

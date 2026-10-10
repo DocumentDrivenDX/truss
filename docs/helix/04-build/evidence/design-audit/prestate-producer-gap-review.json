@@ -1,0 +1,9 @@
+{
+  "scope": "source-reviewed original prestate producer gap; no replacement implementation or native qualification",
+  "sourcePath": "packages/postgresql/native/row-prestate-capture.sql",
+  "sourceSha256": "8f111fab8dccb3ff4cd5a4050861138e0fb82c47f99305b0a567d1f9cf6fb6df",
+  "observed": "generic to_jsonb snapshots do not qualify complete typed original row-image correspondence",
+  "replacementRequired": true,
+  "priorCarrierSilentlyReinterpreted": false,
+  "acceptanceCasesPromoted": []
+}

@@ -1,0 +1,15 @@
+{
+  "scope": "Strict TypeScript positive field classification and three expected rejection controls only; no original custody, coverage, runtime/native validation",
+  "status": "pass",
+  "command": "tsc --noEmit --strict --target ES2022 --moduleResolution bundler --module ESNext docs/helix/04-build/evidence/design-audit/bootstrap-definition-typecheck.ts",
+  "files": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-bootstrap-definition-v0.1.proposal.d.ts",
+      "sha256": "e107df94df3b1235fcdd93620275d9d18f8b1ad4afd97d9a63d6a5d9d32bc1cb"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/bootstrap-definition-typecheck.ts",
+      "sha256": "6baf17c716b5a3a579482e984ac0d7efb6f00856553fe10b317b767bea7fd936"
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "interfaceVersion": "truss-bootstrap-route-entry/0.1.0",
+  "routeIdentity": "pg17.opfamily-support.family-fanout/0.1.0",
+  "status": "unadopted; source pins only verified; native class/cut/transport/semantic producers unqualified",
+  "nativeClass": {
+    "namespace": "pg_catalog",
+    "relation": "pg_amproc",
+    "classOid": "resolve from original target; never constant",
+    "storageScope": "database",
+    "subobjectNumber": "0"
+  },
+  "selector": "complete actual pg_opfamily parent membership",
+  "artifacts": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-opfamily-support-observation-pg17.proposal.sql",
+      "sha256": "010347e9b13cf0d6688a21a9bfc65ab47d2703a81e2fde13ea65cb65db0cf182"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-opfamily-support-observation-pg17.proposal.umf.json",
+      "sha256": "026b09a1cdf4efb46903d97ef5f24a1c4cc287b032dbd7a879b6e7cad57985ea"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/bootstrap-opfamily-support-observation.owner-export.sql",
+      "sha256": "0a27707dde81ff5e9f7afffb0dcb945a801653669fe590be65e1b2f2e8119030"
+    }
+  ],
+  "parameterGrammar": {
+    "slot": "1",
+    "nativeType": "pg_catalog.oid[]",
+    "dimensions": "exactly one",
+    "lowerBound": "1",
+    "nullAllowed": false,
+    "nullItemsAllowed": false,
+    "uniqueItems": true,
+    "countInclusive": [
+      "1",
+      "256"
+    ],
+    "itemDomain": "canonical nonzero uint32 decimal text; independently admitted actual pg_opfamily parent",
+    "encoder": "selected original canonical PostgreSQL array encoder; no JS numeric round trip"
+  },
+  "orderedColumns": [
+    "catalog_class_oid",
+    "object_oid",
+    "family_oid",
+    "support_routine_oid",
+    "original_catalog_row_json"
+  ],
+  "coverage": "Complete unique original member-row fanout for every admitted family; empty valid only with independent complete parent/cut/authority proof. Named child requires exact membership and selected pg17.opfamily-support.child-direct/0.1.0 original resolution. Input family count never bounds output rows.",
+  "requiredKnownFields": [
+    "oid",
+    "amprocfamily",
+    "amproclefttype",
+    "amprocrighttype",
+    "amprocnum",
+    "amproc"
+  ],
+  "preservation": "Retain full exact returned row JSON text and every unknown extension member; lossless bounded selected native JSON decoder; no parse/stringify reconstruction",
+  "dependencyExtraction": {
+    "family": "amprocfamily actual pg_opfamily parent",
+    "types": "amproclefttype/amprocrighttype actual pg_type; do not infer routine argument signature from these lookup labels",
+    "routine": "nonzero original amproc actual pg_proc; projected support_routine_oid must agree with admitted native raw definition",
+    "meaning": "amprocnum interpreted only under selected actual family/method profile; unknown numbers retained and unsupported meaning refused",
+    "fieldClassification": {
+      "oid": "original member correlation only; resolve parent/member association",
+      "amprocfamily": "resolved original complete operator family",
+      "amproclefttype": "resolved original supported operator left type; not universally function argument type",
+      "amprocrighttype": "resolved original supported operator right type; not universally function argument type",
+      "amprocnum": "exact native signed int2 support slot; selected method-specific signature/behavior meaning",
+      "amproc": "original regproc plus independently projected nonzero routine OID; resolve actual signature and implementation"
+    },
+    "canonicalProcedure": "CONTRACT-008 Operator-family member projection: resolved parent and ordered left/right types plus exact method-specific strategy/purpose or support slot, complete operator/routine/sort-family definitions and original parent fanout coverage"
+  },
+  "adjuncts": [
+    "complete original parent family/method context",
+    "all reached actual type/operator/routine/sort-family definitions and local dependencies",
+    "selected method-specific native strategy/purpose/support semantics"
+  ],
+  "resourceProfile": "truss-bootstrap-collector-resource/0.1.0",
+  "refusal": "Unsupported member/method meaning or missing original child-parent/closure proof refuses complete semantic support; preserve all raw members and forbid strategy/name/count truncation",
+  "resourceObligations": "Shared enclosing totals, complete original cut/authority and explicit pre-materialization/native-work permits; no independent per-route allowance"
+}

@@ -1,0 +1,27 @@
+{
+  "scope": "Installed pip dependency specifier semantics only; not index resolution, installation, native runtime or shipped release qualification",
+  "pythonVersion": "3.11.17",
+  "pipVersion": "24.0",
+  "specifier": "==0.1.4",
+  "observations": [
+    {
+      "candidate": "0.1.4",
+      "accepted": true,
+      "expected": true
+    },
+    {
+      "candidate": "0.1.4+truss.pg16.15",
+      "accepted": true,
+      "expected": true
+    },
+    {
+      "candidate": "0.1.5",
+      "accepted": false,
+      "expected": false
+    }
+  ],
+  "specifierImplementationSha256": "2d1434905b07ae5e6a7dc14d10426b20562c9c81d05095d8f5f22c6a44ebaea1",
+  "trussProjectMetadataSha256": "e9d7bc6f562394cde73f0508c0157704fd102c421c0b4477fa2924a4f61d9067",
+  "selectionRule": "Explicit corrected wheel/artifact selection plus observed package/native version verification; public equality pin does not exclude local versions",
+  "installerReady": false
+}

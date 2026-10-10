@@ -1,0 +1,26 @@
+{
+  "version": "PostgreSQL 17.9 (Debian 17.9-1.pgdg13+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit",
+  "cases": [
+    {
+      "name": "all seventeen untrusted complete-report fields",
+      "canonicalSha256": "c91c2eead658209c9f09079da62367c6a2f0313c78b933f6f5b070a84b2bf673"
+    },
+    {
+      "name": "UTF-8 object order, NUL, controls and exact integer string",
+      "canonicalSha256": "482300ccb2f99bfc81db96986902a814110aca0a7a66c00c321f9cca7fc9e987"
+    },
+    {
+      "name": "original whitespace and escape spelling",
+      "canonicalSha256": "3daaa43644439bb2512f22d27b9b4539fff0a363ea7ed9dd09196952ac494f77"
+    }
+  ],
+  "sources": {
+    "scripts/check-canonical-report-native.ts": "0481ea0ad7216aa9f88ce00ee12798611564a31c6a27265f6a120d7cdf792f08",
+    "docs/helix/03-test/report-wire-untrusted.fixture.json": "b817b1610e86cfa956427dbbc84b9ef7485ccd0e66d1e2c7939b861e9a715368",
+    "packages/postgresql/src/canonical-wire-tree.ts": "2fcb2ff72ce7faad682800be3a4deba1f7147f814e08319179cea4ed93cc4bf6",
+    "packages/umf-bun/src/canonical-report-handoff.ts": "7a35baab3cb20db87ff42424617fe13c4c1b6e56989478897069a86fcc83940a",
+    "packages/postgresql/native/canonical-string-bytes.sql": "fe943bfd4397325ed3dff16cec7436070653f6ad6c19fbe67e853348c508dbc1",
+    "packages/postgresql/native/canonical-tree-bytes.sql": "c35cbe7cced69fc660142d62e4bd04d7b08d9c844738289cbd4d6aab01389429"
+  },
+  "scope": "Temporary native codec functions and independent original wire byte oracle only. No installed layout, actual report producer/provenance admission, accepted commit or shared resource qualification."
+}

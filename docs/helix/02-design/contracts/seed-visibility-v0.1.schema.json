@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:seed-visibility:0.1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["interfaceVersion", "seedId", "sourceEpoch", "feedProfile", "scopeIdentity", "catalogRevision", "snapshot", "baseline", "procedure"],
+  "properties": {
+    "interfaceVersion": {"const": "truss-seed-visibility/0.1.0"},
+    "seedId": {"$ref": "#/$defs/identity"},
+    "sourceEpoch": {"$ref": "#/$defs/identity"},
+    "feedProfile": {"$ref": "#/$defs/identity"},
+    "scopeIdentity": {"$ref": "#/$defs/identity"},
+    "catalogRevision": {"$ref": "#/$defs/integer"},
+    "snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["xmin", "xmax", "inProgress"],
+      "properties": {
+        "xmin": {"$ref": "#/$defs/integer"},
+        "xmax": {"$ref": "#/$defs/integer"},
+        "inProgress": {"type": "array", "uniqueItems": true, "maxItems": 100000, "items": {"$ref": "#/$defs/integer"}}
+      }
+    },
+    "baseline": {"$ref": "#/$defs/artifact"},
+    "procedure": {"$ref": "#/$defs/artifact"}
+  },
+  "$defs": {
+    "identity": {"type": "string", "minLength": 1, "maxLength": 1024},
+    "integer": {"type": "string", "pattern": "^(0|[1-9][0-9]*)$", "maxLength": 20},
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reference", "sha256"],
+      "properties": {
+        "reference": {"$ref": "#/$defs/identity"},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

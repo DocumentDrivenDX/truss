@@ -1,0 +1,14 @@
+{
+  "checkedAt": "2026-10-10T11:02:13.262858+00:00",
+  "scope": "preserve exact prior native codec source after adding length preflight; no native readiness claim",
+  "initialSourceArchive": "docs/helix/04-build/evidence/design-audit/row-image-codec-initial.sql",
+  "initialSourceSha256": "cb61042abea3742f6026b4aad3fb3fffd75cd468a8b55df9f3133e2bccb01ab2",
+  "matchesHistoricalSourceReceipt": true,
+  "matchesHistoricalNativeReceipt": true,
+  "historicalSourceReceipt": "row-image-codec-source.json",
+  "historicalNativeReceipt": "row-image-codec-native.json",
+  "currentSourceReceipt": "row-image-codec-preflight-source.json",
+  "currentNativeReceipt": "row-image-preflight-native.json",
+  "wireEncodingChanged": false,
+  "protectedAdmissionReady": false
+}

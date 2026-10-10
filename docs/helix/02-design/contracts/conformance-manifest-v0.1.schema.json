@@ -1,0 +1,300 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:conformance-manifest:0.1.0",
+  "title": "Draft complete required conformance case manifest",
+  "description": "Registered original procedures and exact evidence inventory only; no executable paths/callbacks/credentials. Completeness, independence, profile support and original producer custody are semantic admission.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-conformance-manifest/0.1.0"
+    },
+    "qualificationProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "corpusProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "targetProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "contractInventory": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "inputInventory": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "resourceProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100000,
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "coverage": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "procedureProfile": {
+                "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+              },
+              "fixtures": {
+                "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+              },
+              "inputs": {
+                "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+              },
+              "expected": {
+                "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+              },
+              "identityAliases": {
+                "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+              },
+              "isolationProfile": {
+                "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+              },
+              "cleanupProfile": {
+                "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+              },
+              "producerProvenance": {
+                "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+              },
+              "requiredSurfaces": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "enum": [
+                    "result",
+                    "state",
+                    "journal",
+                    "report",
+                    "performance"
+                  ]
+                }
+              },
+              "resourceRequirements": {
+                "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+              },
+              "mode": {
+                "const": "single"
+              },
+              "implementationProfile": {
+                "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+              },
+              "observer": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "native"
+                      },
+                      "profile": {
+                        "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "profile"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "component"
+                      },
+                      "profile": {
+                        "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "profile"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "coverage",
+              "procedureProfile",
+              "fixtures",
+              "inputs",
+              "expected",
+              "identityAliases",
+              "observer",
+              "isolationProfile",
+              "cleanupProfile",
+              "producerProvenance",
+              "requiredSurfaces",
+              "resourceRequirements",
+              "mode",
+              "implementationProfile"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "coverage": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "procedureProfile": {
+                "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+              },
+              "fixtures": {
+                "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+              },
+              "inputs": {
+                "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+              },
+              "expected": {
+                "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+              },
+              "identityAliases": {
+                "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+              },
+              "isolationProfile": {
+                "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+              },
+              "cleanupProfile": {
+                "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+              },
+              "producerProvenance": {
+                "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+              },
+              "requiredSurfaces": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "enum": [
+                    "result",
+                    "state",
+                    "journal",
+                    "report",
+                    "performance"
+                  ]
+                }
+              },
+              "resourceRequirements": {
+                "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+              },
+              "mode": {
+                "const": "interchange"
+              },
+              "implementationA": {
+                "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+              },
+              "implementationB": {
+                "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+              },
+              "independenceRequirements": {
+                "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+              },
+              "observer": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "native"
+                      },
+                      "profile": {
+                        "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "profile"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "component"
+                      },
+                      "profile": {
+                        "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "profile"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "coverage",
+              "procedureProfile",
+              "fixtures",
+              "inputs",
+              "expected",
+              "identityAliases",
+              "observer",
+              "isolationProfile",
+              "cleanupProfile",
+              "producerProvenance",
+              "requiredSurfaces",
+              "resourceRequirements",
+              "mode",
+              "implementationA",
+              "implementationB",
+              "independenceRequirements"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    "explicitHostExtensionExclusions": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "qualificationProfile",
+    "corpusProfile",
+    "targetProfile",
+    "contractInventory",
+    "inputInventory",
+    "resourceProfile",
+    "cases",
+    "explicitHostExtensionExclusions"
+  ],
+  "additionalProperties": false
+}

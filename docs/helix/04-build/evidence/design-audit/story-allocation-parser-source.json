@@ -1,0 +1,684 @@
+{
+  "scope": "Current source size and syntax inventory only; not parser execution or limit qualification",
+  "documents": 135,
+  "totalBytes": 841407,
+  "largestDocumentBytes": 55924,
+  "longestLineBytes": 1630,
+  "sourceInventory": [
+    {
+      "path": "01-frame/user-stories/US-001-accept-a-umf-revision-as-a-whole.md",
+      "sha256": "faa9173cc8ab9cb8c0945c2492b207ffc8ee6953cf5efef16a821a71a7a35b12",
+      "bytes": 2527
+    },
+    {
+      "path": "01-frame/user-stories/US-002-import-documents-that-depend-on-each-other.md",
+      "sha256": "4b1f63bdcf5fa1d3ef5b1ebc973a0dee8262c45f51b086ed41ad39aaf7ba6400",
+      "bytes": 2261
+    },
+    {
+      "path": "01-frame/user-stories/US-003-decide-what-happens-to-an-unknown-entity-type.md",
+      "sha256": "8d3a8c47f4814bcd59e3551fe6dff3bc7524925bc3798612c47e4167bce69fed",
+      "bytes": 3575
+    },
+    {
+      "path": "01-frame/user-stories/US-004-keep-identifiers-stable-across-revisions.md",
+      "sha256": "40e07e33d56d23c96f46de4b3abf12523f6a920d816473a94377a1b9aedfb72f",
+      "bytes": 2469
+    },
+    {
+      "path": "01-frame/user-stories/US-005-see-every-violator-before-a-tightening-is-accepted.md",
+      "sha256": "53fe29f88524682500d23cfb4f25ca7e533621fa80888a16817932ccf95dd4ad",
+      "bytes": 2340
+    },
+    {
+      "path": "01-frame/user-stories/US-006-add-a-type-without-ddl.md",
+      "sha256": "b5c6e3e0cd45f9d51fb46c095960e467a0eb8476c9ebd4682f531ac6e816ee9a",
+      "bytes": 2255
+    },
+    {
+      "path": "01-frame/user-stories/US-007-store-and-read-objects-and-edges-exactly.md",
+      "sha256": "53554256cd7f3e6fb3d4b1a148e5a168c9a81465383647de0f70d6dab12b22bf",
+      "bytes": 2476
+    },
+    {
+      "path": "01-frame/user-stories/US-008-keep-what-the-schema-does-not-define.md",
+      "sha256": "0095bbda4a481e0a3ff58fbebad01e7dd22bb7d3d81513c5ad6e8573c7e100b6",
+      "bytes": 2247
+    },
+    {
+      "path": "01-frame/user-stories/US-009-find-an-object-by-its-key.md",
+      "sha256": "8644ae0ba5efd9658153e67f7ffe85f72061b00b1be28bfae4d6d938013c28ed",
+      "bytes": 2277
+    },
+    {
+      "path": "01-frame/user-stories/US-010-refuse-bad-edges-and-protect-connected-objects.md",
+      "sha256": "c4a703a40ca4f8d75a97f57e31e2240b979b5ce9ab6de56e71f184a5a7be6b39",
+      "bytes": 2345
+    },
+    {
+      "path": "01-frame/user-stories/US-011-limit-an-edges-multiplicity.md",
+      "sha256": "7a4cbb6129408b3ae9c87a640fd788abae507d3d8e713da0abc9ff0dfe59654e",
+      "bytes": 2410
+    },
+    {
+      "path": "01-frame/user-stories/US-012-write-with-one-protocol-and-report-every-violation.md",
+      "sha256": "e6ba83d7e216cd8124c3147a92f29389bd6608a7944fda858a39131276fe0e62",
+      "bytes": 2494
+    },
+    {
+      "path": "01-frame/user-stories/US-013-refuse-a-write-against-a-stale-catalog.md",
+      "sha256": "a0ad9938d3d5b0ad8ce0635d23acba946597d194c7f42a98b7395641a23f1838",
+      "bytes": 2537
+    },
+    {
+      "path": "01-frame/user-stories/US-014-keep-cross-row-rules-honest.md",
+      "sha256": "8877f279733b9ac9d3502771a5f07271bd7a7034bc86f7c9019b37a49d712f1a",
+      "bytes": 2290
+    },
+    {
+      "path": "01-frame/user-stories/US-015-journal-every-change-atomically.md",
+      "sha256": "3aa218f5d32c274d8d386d5996ebf6ed05cb7605dac063cfc838355e03ddf820",
+      "bytes": 2525
+    },
+    {
+      "path": "01-frame/user-stories/US-016-journal-plain-sql-changes-too.md",
+      "sha256": "92cada475f73339c70a4b5407e66b71d452f3aa26570be7e62656f6d82f7a999",
+      "bytes": 2055
+    },
+    {
+      "path": "01-frame/user-stories/US-017-read-the-journal-incrementally-without-missing-a-change.md",
+      "sha256": "b18c41af7e2fb33dd2878804d5907cde5962b66bd984833b6e5dd2a6e6666bec",
+      "bytes": 2089
+    },
+    {
+      "path": "01-frame/user-stories/US-018-reconstruct-a-record-as-of-a-version.md",
+      "sha256": "8486e75442b822208b707afe98635b787073028ca6a4fae4adb4a686b0df3b00",
+      "bytes": 2066
+    },
+    {
+      "path": "01-frame/user-stories/US-019-trim-the-journal-by-dropping-partitions.md",
+      "sha256": "7b0086a5d49d3365c25f5175840ed81ac50e22baf8800868c9428b0295e7dc54",
+      "bytes": 2278
+    },
+    {
+      "path": "01-frame/user-stories/US-020-read-an-object-by-id-or-key.md",
+      "sha256": "86ed160b149e9b7d5e54d84cabab6cfcb5e154406ede31f5acd72af003717876",
+      "bytes": 2235
+    },
+    {
+      "path": "01-frame/user-stories/US-021-list-a-types-objects-in-pages.md",
+      "sha256": "3107ce9dc5508f41f5900131af9458153e7fc82a83859595e19d687ca8462e3f",
+      "bytes": 2290
+    },
+    {
+      "path": "01-frame/user-stories/US-022-list-an-objects-edges-bounded.md",
+      "sha256": "1f23400136eef987df15b434340a8fef6783932ec505b38e18cef21ff2b3e844",
+      "bytes": 1921
+    },
+    {
+      "path": "01-frame/user-stories/US-023-traverse-one-to-three-hops.md",
+      "sha256": "d5faa0e4761daf3127746ab18670acc81dc0738e34534e5c39b5d0a0369451f0",
+      "bytes": 1844
+    },
+    {
+      "path": "01-frame/user-stories/US-024-enumerate-the-types-of-the-catalog.md",
+      "sha256": "d30659a04485b2c4bc6a5f8febf04cabcce5a0ba9e7063c16c0c0b2a484bc093",
+      "bytes": 1999
+    },
+    {
+      "path": "01-frame/user-stories/US-025-report-the-enforcement-layer-of-every-assertion.md",
+      "sha256": "ea5b5deaa93f491ee3fd4a0cac68add3ceca53e82110b80aa630b00b44b5fa7f",
+      "bytes": 2282
+    },
+    {
+      "path": "01-frame/user-stories/US-026-back-every-support-claim-with-evidence.md",
+      "sha256": "0e6486710b233e6d738f206396820b047ec9f29fb6cd84ca594dd9a41ce27ccb",
+      "bytes": 1958
+    },
+    {
+      "path": "01-frame/user-stories/US-027-build-an-implementation-from-the-contracts.md",
+      "sha256": "ea7d1cbcac5f029281425f949172b35c67dd8f02877b9288fb06fdeeb28b3a10",
+      "bytes": 2284
+    },
+    {
+      "path": "01-frame/user-stories/US-028-pass-the-corpus-and-the-interchange-check.md",
+      "sha256": "fcc86c1c9e021fe919380cd8c9c24ed19e7f3a4ebe9eca16fdaf37780b51913e",
+      "bytes": 2132
+    },
+    {
+      "path": "01-frame/user-stories/US-029-declare-the-layout-version-and-check-the-ddl.md",
+      "sha256": "94347dd6ea8d486c464a8649d8d713fc38d8adc8c1cc2b8a4609371022b4e5bc",
+      "bytes": 2181
+    },
+    {
+      "path": "01-frame/user-stories/US-030-extend-the-layout-from-a-host.md",
+      "sha256": "d8b01ef2e561d27cdbd6658499e9bbd86710b491088100cdb4d28141e72fa0c4",
+      "bytes": 2162
+    },
+    {
+      "path": "01-frame/user-stories/US-031-govern-writes-by-role-grants.md",
+      "sha256": "0fed239710947adba4247a4c6506c316e69ea6be55b0cd37a593933a9f19c764",
+      "bytes": 2004
+    },
+    {
+      "path": "01-frame/user-stories/US-032-work-behind-a-transaction-mode-pooler.md",
+      "sha256": "835e1092d435c1e12f8a29ca965265eff31b2a82a62447b6b21bbcfa8a4949e9",
+      "bytes": 2070
+    },
+    {
+      "path": "01-frame/user-stories/US-033-run-the-layout-on-an-embedded-postgres.md",
+      "sha256": "6fd7955c6bfa389771b6d64552d10a86ccc1b12ac66fb1104f89b0e4a4df3083",
+      "bytes": 1978
+    },
+    {
+      "path": "01-frame/user-stories/US-034-repeat-an-import-and-change-nothing.md",
+      "sha256": "114bb39f6760b6994945d521fb069e983f0a625ff90f9401098752ee5ac0983f",
+      "bytes": 3077
+    },
+    {
+      "path": "01-frame/user-stories/US-035-keep-the-source-facts-of-an-imported-record.md",
+      "sha256": "3cc1e3deef8f34d22515a1d63c1f3068f2e91e2231a63455587b51e4608c30cd",
+      "bytes": 2310
+    },
+    {
+      "path": "01-frame/user-stories/US-036-record-who-accepted-a-revision.md",
+      "sha256": "b51bc16e8421a4ad89572bdc5be572771d255eba084c66c305c58d997b444660",
+      "bytes": 2352
+    },
+    {
+      "path": "01-frame/user-stories/US-037-give-roles-access-to-modules-only.md",
+      "sha256": "1962bbf6e1df62123c73b0fa034c6e6c732113d89038c8a3aabec3dffaa1348e",
+      "bytes": 2875
+    },
+    {
+      "path": "01-frame/user-stories/US-038-link-modules-and-see-the-link-only-with-both.md",
+      "sha256": "6cea90e3fd8a2073c35acf3c3f0d109ead413749e8a7a91fcc08fd7bc9b09357",
+      "bytes": 2549
+    },
+    {
+      "path": "01-frame/user-stories/US-039-read-umf-the-same-way-as-the-reference.md",
+      "sha256": "5f591ef21a4de6c554b02d15898f8c31fe1b3f19397c3591b5c4b43247454992",
+      "bytes": 2712
+    },
+    {
+      "path": "01-frame/user-stories/US-040-apply-operations-as-one-atomic-group.md",
+      "sha256": "41d4a649f98bbb3e8e493753927917b93f485342c74d2ed66c0b96e200f751e8",
+      "bytes": 2889
+    },
+    {
+      "path": "01-frame/user-stories/US-041-publish-the-journal-without-losing-or-reordering-a-change.md",
+      "sha256": "beffaf56e890326b973dbdbd04815e2e110240253f8d60f54b93f69d158dd53a",
+      "bytes": 3114
+    },
+    {
+      "path": "01-frame/user-stories/US-042-read-how-far-behind-a-downstream-copy-is.md",
+      "sha256": "49abb2c987d93c42f7aaa9eabece65498634c37ae8e779c7de53c613b2606c56",
+      "bytes": 2256
+    },
+    {
+      "path": "01-frame/user-stories/US-043-make-a-group-safe-to-repeat.md",
+      "sha256": "01df6e59e54da8bf39ebf5a89de02dfe32b395194d0107e20c991de259bf36a4",
+      "bytes": 3371
+    },
+    {
+      "path": "01-frame/user-stories/US-044-run-a-change-in-a-transaction-and-roll-it-back.md",
+      "sha256": "d4b77f4b255eb5d99852e6507da40b14b2de40b6f6748a64e3a09711e53d66a2",
+      "bytes": 2448
+    },
+    {
+      "path": "01-frame/user-stories/US-045-bootstrap-the-internal-layout-from-umf.md",
+      "sha256": "7c766bfb28b6159dff9d6b8b237a8018d0af69aaf7a7e25e38129158e6209053",
+      "bytes": 3392
+    },
+    {
+      "path": "02-design/technical-designs/TD-001-accept-a-umf-revision-as-a-whole.md",
+      "sha256": "8f31c0c6aba0c618671871ded3c11e5dc608076fc6ee40dbd0004e3a756297f5",
+      "bytes": 6799
+    },
+    {
+      "path": "02-design/technical-designs/TD-002-import-documents-that-depend-on-each-other.md",
+      "sha256": "1d93cda1f65f88b51851a9d4c32cd1b4bff0758f4556a78708dcd572fe09647d",
+      "bytes": 3406
+    },
+    {
+      "path": "02-design/technical-designs/TD-003-decide-what-happens-to-an-unknown-entity-type.md",
+      "sha256": "37ee82d66c860c439319968d39729cc174136f02f676e847a1a1caabff21c7b6",
+      "bytes": 4317
+    },
+    {
+      "path": "02-design/technical-designs/TD-004-keep-identifiers-stable-across-revisions.md",
+      "sha256": "566974ee032de13cc27b4110f0698c2d89ab5d2f1d11266ca5b7ae7c4dddcfb5",
+      "bytes": 6883
+    },
+    {
+      "path": "02-design/technical-designs/TD-005-see-every-violator-before-a-tightening-is-accepted.md",
+      "sha256": "0dd0079760ab9ac29d433da0696485ea62e86071cefd3e5836ccdb0306185b69",
+      "bytes": 5478
+    },
+    {
+      "path": "02-design/technical-designs/TD-006-add-a-type-without-ddl.md",
+      "sha256": "0e44cfd39f4306b5986e4a5254458c86d8b15b0bde1dfbd031288f8830d71065",
+      "bytes": 3289
+    },
+    {
+      "path": "02-design/technical-designs/TD-007-store-and-read-objects-and-edges-exactly.md",
+      "sha256": "d1d850132f38530f799ca171deed71e91b6552cc4864d96427aae88b8a34e939",
+      "bytes": 6550
+    },
+    {
+      "path": "02-design/technical-designs/TD-008-keep-what-the-schema-does-not-define.md",
+      "sha256": "11d0c71fcc8b08f52c57d2f50a679aa4e3d9ac3f8a371de00a2ea16f2854261f",
+      "bytes": 5347
+    },
+    {
+      "path": "02-design/technical-designs/TD-009-find-an-object-by-its-key.md",
+      "sha256": "fd4fc92bc40c3b79173284ddbf143a24e5a8104d8fa798c2e685314d2721008a",
+      "bytes": 33261
+    },
+    {
+      "path": "02-design/technical-designs/TD-010-refuse-bad-edges-and-protect-connected-objects.md",
+      "sha256": "e67e3592998f0ec7cc92f5c96835ffb20e81f70c95cb5fafd039efdde9ec7a3d",
+      "bytes": 4261
+    },
+    {
+      "path": "02-design/technical-designs/TD-011-limit-an-edges-multiplicity.md",
+      "sha256": "9eb1e5025efe22132716619c87cd65db25a03d71269d334502b317005219296f",
+      "bytes": 4956
+    },
+    {
+      "path": "02-design/technical-designs/TD-012-write-with-one-protocol-and-report-every-violation.md",
+      "sha256": "4463200481ccd7103b4540004d9d8ab45517c00810a9751e427357903bcbadfa",
+      "bytes": 5178
+    },
+    {
+      "path": "02-design/technical-designs/TD-013-refuse-a-write-against-a-stale-catalog.md",
+      "sha256": "7547d952d8e4f1970a5ae1de0caab060f9c2fd17e31aecfba7341565fe415613",
+      "bytes": 8773
+    },
+    {
+      "path": "02-design/technical-designs/TD-014-keep-cross-row-rules-honest.md",
+      "sha256": "2e7949c3eaa88999f0c173d0fa4480a24ac64d59be63633bc5dc3cd643e6384d",
+      "bytes": 4590
+    },
+    {
+      "path": "02-design/technical-designs/TD-015-journal-every-change-atomically-with-its-origin.md",
+      "sha256": "290fa9848137fb2087b3edd9b20c75e5e268efdcfce744e0a384542c01740f43",
+      "bytes": 4335
+    },
+    {
+      "path": "02-design/technical-designs/TD-016-journal-plain-sql-changes-too.md",
+      "sha256": "9ebfa5889a8d40b85922d87bdfbcee41743d47ca3d5a916e6447d2789b79ba10",
+      "bytes": 4135
+    },
+    {
+      "path": "02-design/technical-designs/TD-017-read-the-journal-incrementally-without-missing-a-change.md",
+      "sha256": "7f3b6025cd539c08c1b318d5bd20fa77ed1e978b528c161467fdccc89d6270fb",
+      "bytes": 3999
+    },
+    {
+      "path": "02-design/technical-designs/TD-018-reconstruct-a-record-as-of-a-version.md",
+      "sha256": "4a791299cc674393bb00d069b081492cd33f96c4f8b885517b3b8d13d0de90de",
+      "bytes": 4610
+    },
+    {
+      "path": "02-design/technical-designs/TD-019-trim-the-journal-by-dropping-partitions.md",
+      "sha256": "4ca2e784df8410a334b10fb6f83859cae44cb3f2bdc68cfea32e5955d69f7d32",
+      "bytes": 4757
+    },
+    {
+      "path": "02-design/technical-designs/TD-020-read-an-object-by-identifier-or-key.md",
+      "sha256": "4ec42330c6a243f93435bf31b5de05849ac495dd723ad767a3bc9676809d7908",
+      "bytes": 8367
+    },
+    {
+      "path": "02-design/technical-designs/TD-021-list-a-types-objects-in-pages.md",
+      "sha256": "d8715cf23bc1d5fa65d8e58de487f549b1d9339f9cf531f7cda2a09ff9e43bb8",
+      "bytes": 5549
+    },
+    {
+      "path": "02-design/technical-designs/TD-022-list-an-objects-edges-bounded.md",
+      "sha256": "c89ec2db85c7aabd05329b93f9126da4e728cfc0041b037c59d7735a708052fd",
+      "bytes": 5696
+    },
+    {
+      "path": "02-design/technical-designs/TD-023-traverse-one-to-three-hops.md",
+      "sha256": "482d8195dbc1553a2cb66848b7bf25b1d55fed39e6f04ddff09c2e38beebeae3",
+      "bytes": 11831
+    },
+    {
+      "path": "02-design/technical-designs/TD-024-enumerate-the-types-of-the-catalog.md",
+      "sha256": "1e8192b0333fff61bd827efa732f0fadd992eef16781023d35cbafb99d48e895",
+      "bytes": 4190
+    },
+    {
+      "path": "02-design/technical-designs/TD-025-report-the-enforcement-layer-of-every-assertion.md",
+      "sha256": "f13bc6fee9575dfbd921396a1466a37fd808e47284d5a54c7fafc74a1395aabb",
+      "bytes": 4794
+    },
+    {
+      "path": "02-design/technical-designs/TD-026-back-every-support-claim-with-evidence.md",
+      "sha256": "35625b85d3a7570cc43a20da26aac085ab35a4a4794af006e4adf3315b1ba165",
+      "bytes": 4565
+    },
+    {
+      "path": "02-design/technical-designs/TD-027-build-an-implementation-from-the-contracts.md",
+      "sha256": "4f565c83d7304d1d945896fb3986602580f91cbcf267347a421942a921d43a17",
+      "bytes": 4137
+    },
+    {
+      "path": "02-design/technical-designs/TD-028-pass-the-corpus-and-the-interchange-check.md",
+      "sha256": "0407f2365d823eda0a1c71e1aa5bcc2d3bb9586832a8834b6cd17acea4d616ed",
+      "bytes": 5702
+    },
+    {
+      "path": "02-design/technical-designs/TD-029-declare-the-layout-version-and-check-the-ddl-on-every-version.md",
+      "sha256": "6fca2bba36afaa3f256b9b5749c4131bbb3e4f34de28cc165ef62881d590a90e",
+      "bytes": 4050
+    },
+    {
+      "path": "02-design/technical-designs/TD-030-extend-the-layout-from-a-host.md",
+      "sha256": "3f4f1edc5a86425a13bb669e52bc3ee4d8942ad796d7b927ea7079858bee414d",
+      "bytes": 4823
+    },
+    {
+      "path": "02-design/technical-designs/TD-031-govern-writes-by-role-grants.md",
+      "sha256": "dd4e1fe3a47a43d808a30b3f548e90e5e460d186adf3c277463777baeb5ce41f",
+      "bytes": 3932
+    },
+    {
+      "path": "02-design/technical-designs/TD-032-work-behind-a-transaction-mode-pooler.md",
+      "sha256": "392c6085425bbebb88a8782d0dce6f2f474daccdc1963a7a82e922f45a31ff0c",
+      "bytes": 3636
+    },
+    {
+      "path": "02-design/technical-designs/TD-033-run-the-layout-on-an-embedded-postgres.md",
+      "sha256": "1132e1e6afff98fe861d644470ac28499df99088f14befd8c42b62ce97634d43",
+      "bytes": 3360
+    },
+    {
+      "path": "02-design/technical-designs/TD-034-repeat-an-import-and-change-nothing.md",
+      "sha256": "554395fd03f98b2ba03b2013c1b67c1cfdc60a43cf7b7edd8f06e9ec7b3e34d1",
+      "bytes": 7287
+    },
+    {
+      "path": "02-design/technical-designs/TD-035-keep-the-source-facts-of-an-imported-record.md",
+      "sha256": "7d1e3c81a0644c0853b992bc8c0dcdf64c6f497f4924bf5ecfcfbaf4e0a7a032",
+      "bytes": 4684
+    },
+    {
+      "path": "02-design/technical-designs/TD-036-record-who-accepted-a-revision.md",
+      "sha256": "7104f430928314f81b626297bd7708bb04b74ee063cbe9b8f6bdb055a0d412ff",
+      "bytes": 3602
+    },
+    {
+      "path": "02-design/technical-designs/TD-037-give-roles-access-to-modules-only.md",
+      "sha256": "c2307a7d104a7d833211881d767166da77c564fcdfe2d7187fab6f30c452fae3",
+      "bytes": 4809
+    },
+    {
+      "path": "02-design/technical-designs/TD-038-link-modules-and-see-the-link-only-with-both.md",
+      "sha256": "517cdd18365d3c17bfc66ae2fd3bde797c5027ab232f4f024d6d1f1df93d99e7",
+      "bytes": 3958
+    },
+    {
+      "path": "02-design/technical-designs/TD-039-read-umf-the-same-way-as-the-reference.md",
+      "sha256": "f51034b3ac86929ba3dfa3cf07b280de7b1bfa19f740f3dc9bf62ac5c9ddbde0",
+      "bytes": 3946
+    },
+    {
+      "path": "02-design/technical-designs/TD-040-apply-operations-as-one-atomic-group.md",
+      "sha256": "114a5717da520042602d78be26591f1ef2e67f0a2b5eca9b249f5f11e442315e",
+      "bytes": 5514
+    },
+    {
+      "path": "02-design/technical-designs/TD-041-publish-the-journal-without-losing-or-reordering-a-change.md",
+      "sha256": "f514a4c26c62ceba08c880bdc74d55758737436a31ca86d774d8ea96f3cedd27",
+      "bytes": 5429
+    },
+    {
+      "path": "02-design/technical-designs/TD-042-read-how-far-behind-a-downstream-copy-is.md",
+      "sha256": "bec70e8dc72577e8298915f0a67ee04b3b255460e8f88d540f7e3b63688f9270",
+      "bytes": 3947
+    },
+    {
+      "path": "02-design/technical-designs/TD-043-make-a-group-safe-to-repeat.md",
+      "sha256": "11d11c49a4011894828c7fd552c3946afcd1b4cc1bdf57f99b52bc3752bb25f0",
+      "bytes": 7859
+    },
+    {
+      "path": "02-design/technical-designs/TD-044-run-a-change-in-a-transaction-and-roll-it-back.md",
+      "sha256": "81d6a4421e2c824f1161a4912afbd758e6824031f37f0469ef4f63f713714f8a",
+      "bytes": 3856
+    },
+    {
+      "path": "02-design/technical-designs/TD-045-bootstrap-the-internal-layout-from-umf.md",
+      "sha256": "31d31cb5f1c8fc8e8b73ff124cf4bd3ed3e41f8fde9aef39b0f9c2426a6fb16d",
+      "bytes": 16987
+    },
+    {
+      "path": "03-test/test-plans/STP-001-accept-a-umf-revision-as-a-whole.md",
+      "sha256": "0c75939f78ebd59b4c0e514b07b1648731ebeaaf55548e880a2dd0a467e67515",
+      "bytes": 24523
+    },
+    {
+      "path": "03-test/test-plans/STP-002-import-documents-that-depend-on-each-other.md",
+      "sha256": "2311d9c7f342ae12aa1bb3868bd593944c0ce420db6562ae448ae4f46f9b38d2",
+      "bytes": 3098
+    },
+    {
+      "path": "03-test/test-plans/STP-003-decide-what-happens-to-an-unknown-entity-type.md",
+      "sha256": "a979ebb116d2090d82b5bc080ad1782c7dc4a6654440a809dff36b171d145b30",
+      "bytes": 4334
+    },
+    {
+      "path": "03-test/test-plans/STP-004-keep-identifiers-stable-across-revisions.md",
+      "sha256": "2446c2b1c96aab250e8e6ee638f071b4f8bca5aae99859a157da35c1195ba0c4",
+      "bytes": 16254
+    },
+    {
+      "path": "03-test/test-plans/STP-005-see-every-violator-before-a-tightening-is-accepted.md",
+      "sha256": "b16b9a214471012259e53a579bcc9e37bd5f5c857e91648bb35f7bfbfdbb44f5",
+      "bytes": 7740
+    },
+    {
+      "path": "03-test/test-plans/STP-006-add-a-type-without-ddl.md",
+      "sha256": "edd9b1b969fca00571080e7945315baa2e913509155d0a3c642680b85ed13ca4",
+      "bytes": 4527
+    },
+    {
+      "path": "03-test/test-plans/STP-007-store-and-read-objects-and-edges-exactly.md",
+      "sha256": "194b6fe404cb4c06473141d05489c7fb9aac746639926b82b6d56d1335e3f06f",
+      "bytes": 4340
+    },
+    {
+      "path": "03-test/test-plans/STP-008-keep-what-the-schema-does-not-define.md",
+      "sha256": "d5821646c96140848c481c5d2b61392114d212aaebc2fee14450e89440b2f4bf",
+      "bytes": 4542
+    },
+    {
+      "path": "03-test/test-plans/STP-009-find-an-object-by-its-key.md",
+      "sha256": "085ae2fdf3541c8cfe23c7bc2d174332094bcf464032da359f89893a0814d2f6",
+      "bytes": 55924
+    },
+    {
+      "path": "03-test/test-plans/STP-010-refuse-bad-edges-and-protect-connected-objects.md",
+      "sha256": "fa0d3b900abcbd5fb624251998edc217ea9d711abe0970909e33178c3866117b",
+      "bytes": 3189
+    },
+    {
+      "path": "03-test/test-plans/STP-011-limit-an-edges-multiplicity.md",
+      "sha256": "48d44b6b838f72302e477067fbb6b25aa5c0028abc8b6d892068167f9d23dd74",
+      "bytes": 3305
+    },
+    {
+      "path": "03-test/test-plans/STP-012-write-with-one-protocol-and-report-every-violation.md",
+      "sha256": "38e181833fe378fb438b7c2f2ac6e554ddf37c57749eebc6c16e15adc938243b",
+      "bytes": 3165
+    },
+    {
+      "path": "03-test/test-plans/STP-013-refuse-a-write-against-a-stale-catalog.md",
+      "sha256": "a8881acb61a094be8df694be05fbe15db50d28de0447b8d1e69a0e391a1319cb",
+      "bytes": 9523
+    },
+    {
+      "path": "03-test/test-plans/STP-014-keep-cross-row-rules-honest.md",
+      "sha256": "1f6d93755ae0a5978d5384791902ff3e17896c4e7774f5e5fb9692e94c0d73e3",
+      "bytes": 2843
+    },
+    {
+      "path": "03-test/test-plans/STP-015-journal-every-change-atomically-with-its-origin.md",
+      "sha256": "8e87a64c9c04ceb11320d4b3ccfe43e0671014d737f5c7556060294d7c7839ed",
+      "bytes": 2931
+    },
+    {
+      "path": "03-test/test-plans/STP-016-journal-plain-sql-changes-too.md",
+      "sha256": "25dd05ff0919680e0ec5f83bb6ccd3f4eaba66c21316a4c07669ffd9eb81592e",
+      "bytes": 2807
+    },
+    {
+      "path": "03-test/test-plans/STP-017-read-the-journal-incrementally-without-missing-a-change.md",
+      "sha256": "921b513ace2247593f0db9ca31823d96c5ea69e38018de46af5dd0775f0a99cb",
+      "bytes": 3392
+    },
+    {
+      "path": "03-test/test-plans/STP-018-reconstruct-a-record-as-of-a-version.md",
+      "sha256": "7b20845d1ab33147bfd51d7a18e06f3acfa317c6e46a78a740bcb626ffd10077",
+      "bytes": 5923
+    },
+    {
+      "path": "03-test/test-plans/STP-019-trim-the-journal-by-dropping-partitions.md",
+      "sha256": "bd6dd05be2261b61dfb989529a53095036f1d32dc26402cf7513e8e02613a35c",
+      "bytes": 4714
+    },
+    {
+      "path": "03-test/test-plans/STP-020-read-an-object-by-identifier-or-key.md",
+      "sha256": "2318e401c1efa85c733e42c56a4a249c92306872915fcb876165f0363780fbe5",
+      "bytes": 23218
+    },
+    {
+      "path": "03-test/test-plans/STP-021-list-a-types-objects-in-pages.md",
+      "sha256": "1b458f26b49d6d2a4673fa910c7f91fe1c56252385398bb2f10b0053d9c3b6c2",
+      "bytes": 7160
+    },
+    {
+      "path": "03-test/test-plans/STP-022-list-an-objects-edges-bounded.md",
+      "sha256": "8600dc40d919d726f158cb66f8a9fe96942c3a4c1d1cd0b399f7d9168c504f7e",
+      "bytes": 10049
+    },
+    {
+      "path": "03-test/test-plans/STP-023-traverse-one-to-three-hops.md",
+      "sha256": "cb6a98cf4051ec9a784b34c93eb2e85c9c1ed1e9c877f3ec28585a437504df02",
+      "bytes": 15536
+    },
+    {
+      "path": "03-test/test-plans/STP-024-enumerate-the-types-of-the-catalog.md",
+      "sha256": "8bae052a2562cc918479d805d535b10d69eab88a5e2c4fb4455d62e47f34a39c",
+      "bytes": 6702
+    },
+    {
+      "path": "03-test/test-plans/STP-025-report-the-enforcement-layer-of-every-assertion.md",
+      "sha256": "d522ed245ea1b4c69cf01c99734851bb9dfc5d7c167013bcce4640cf22b45684",
+      "bytes": 6002
+    },
+    {
+      "path": "03-test/test-plans/STP-026-back-every-support-claim-with-evidence.md",
+      "sha256": "6cc772a1a47465647e7aabaf942e0813317a53b35d4f6af1f2c70a97f7212427",
+      "bytes": 6024
+    },
+    {
+      "path": "03-test/test-plans/STP-027-build-an-implementation-from-the-contracts.md",
+      "sha256": "48185a190c2b87be5b0f9e1f3b60cc87460b49d7be6fa18476e6ffac437b2283",
+      "bytes": 3811
+    },
+    {
+      "path": "03-test/test-plans/STP-028-pass-the-corpus-and-the-interchange-check.md",
+      "sha256": "9a53a514e2e8a9f095888ed3da98586fc439ee220ac025c7fcf0e829b743dc92",
+      "bytes": 14911
+    },
+    {
+      "path": "03-test/test-plans/STP-029-declare-the-layout-version-and-check-the-ddl-on-every-version.md",
+      "sha256": "a43b5fe40adb5dcf850fd1f422d2c7cb110813d6245771bdc403ac0bcfd6d447",
+      "bytes": 2616
+    },
+    {
+      "path": "03-test/test-plans/STP-030-extend-the-layout-from-a-host.md",
+      "sha256": "2132057f4389cc86717483582d36b24e37370fa415ca65b08b8373044652c206",
+      "bytes": 16301
+    },
+    {
+      "path": "03-test/test-plans/STP-031-govern-writes-by-role-grants.md",
+      "sha256": "0e706ffc933411a0e4e3a652d770aa8a8f443cff1bc8538fc0417d84a755eb37",
+      "bytes": 2517
+    },
+    {
+      "path": "03-test/test-plans/STP-032-work-behind-a-transaction-mode-pooler.md",
+      "sha256": "bcbbc8feae6a89d8cccc12b39f747ac8817ef699657b7d7da46c1fa894d1d276",
+      "bytes": 13031
+    },
+    {
+      "path": "03-test/test-plans/STP-033-run-the-layout-on-an-embedded-postgres.md",
+      "sha256": "ee11943bb9ee848b38e3d0dbe7f3f472abb80c4a820c4b946586d2a18bdcebd6",
+      "bytes": 2507
+    },
+    {
+      "path": "03-test/test-plans/STP-034-repeat-an-import-and-change-nothing.md",
+      "sha256": "0852954db6c2458f24918006a1e1fae7e60be277de5930024c518a46c4f49f6a",
+      "bytes": 15018
+    },
+    {
+      "path": "03-test/test-plans/STP-035-keep-the-source-facts-of-an-imported-record.md",
+      "sha256": "2a37f9c4d6efa81456808161817ac0b0d7dce85b85bec734f4b96026ff5623ba",
+      "bytes": 4392
+    },
+    {
+      "path": "03-test/test-plans/STP-036-record-who-accepted-a-revision.md",
+      "sha256": "b209c8c82c5e0709df79baa6f08ddab71386c72b688775603e38caf6dbb2faa5",
+      "bytes": 2525
+    },
+    {
+      "path": "03-test/test-plans/STP-037-give-roles-access-to-modules-only.md",
+      "sha256": "834533b79d16382a3f7e6d207cb91e5f18ab1403f77b70f1836acbf988d58837",
+      "bytes": 14142
+    },
+    {
+      "path": "03-test/test-plans/STP-038-link-modules-and-see-the-link-only-with-both.md",
+      "sha256": "3774a2d2751356b55b02921d5c41c9b35cacbca6642fdc9e160fedc13596e326",
+      "bytes": 5939
+    },
+    {
+      "path": "03-test/test-plans/STP-039-read-umf-the-same-way-as-the-reference.md",
+      "sha256": "be51a7bf53835864f75cb47d17391f34363b7c1b963588c3285f4570bf79b3b3",
+      "bytes": 3610
+    },
+    {
+      "path": "03-test/test-plans/STP-040-apply-operations-as-one-atomic-group.md",
+      "sha256": "92eec2495021ff940e3852e417409af9325bd02671a9850ca5149c06d6f7efdf",
+      "bytes": 7139
+    },
+    {
+      "path": "03-test/test-plans/STP-041-publish-the-journal-without-losing-or-reordering-a-change.md",
+      "sha256": "f6e552afdd38fd43b05858fde2be6302cf1d103376ecddb01a6b895e9b5ddce7",
+      "bytes": 43906
+    },
+    {
+      "path": "03-test/test-plans/STP-042-read-how-far-behind-a-downstream-copy-is.md",
+      "sha256": "e1d0b529dd8db841d7e17633540c444c6e631bb93c654d24ba29fc95df8927ce",
+      "bytes": 4997
+    },
+    {
+      "path": "03-test/test-plans/STP-043-make-a-group-safe-to-repeat.md",
+      "sha256": "4d573b37574504ae0b1680ebbcd50f0ddb4ee9a1824a1f2eed50882910100418",
+      "bytes": 31355
+    },
+    {
+      "path": "03-test/test-plans/STP-044-run-a-change-in-a-transaction-and-roll-it-back.md",
+      "sha256": "459f9670a7816370b51f403e7f7babe36b6727d3ad7a6ab27ca3cfd2a8bc13e3",
+      "bytes": 5891
+    },
+    {
+      "path": "03-test/test-plans/STP-045-bootstrap-the-internal-layout-from-umf.md",
+      "sha256": "69f39ae0fa3ec457edd924bd6ab1ac4003affeb55fd6b4ee6d686d1251a83942",
+      "bytes": 25399
+    }
+  ]
+}

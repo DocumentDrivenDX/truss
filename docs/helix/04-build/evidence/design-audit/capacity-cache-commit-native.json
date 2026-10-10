@@ -1,0 +1,503 @@
+{
+  "scope": "Actual native capacity cache/deferred-check composition with original reservation/admission/observers/closeout; administrative semantic/host/audit fixtures, not installed authority",
+  "serverVersion": "16.15",
+  "observations": [
+    {
+      "id": "native-admission-0",
+      "expected": [
+        "742",
+        "0",
+        "7b22786964223a2022373432222c20226f7264696e616c223a202230222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a20223335333235222c202273657373696f6e55736572223a2022706f737467726573222c20226163746f72526f6c654f6964223a20223130222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e32227d"
+      ],
+      "observed": [
+        "742",
+        "0",
+        "7b22786964223a2022373432222c20226f7264696e616c223a202230222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a20223335333235222c202273657373696f6e55736572223a2022706f737467726573222c20226163746f72526f6c654f6964223a20223130222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e32227d"
+      ]
+    },
+    {
+      "id": "early-closed-A-one-verification",
+      "expected": [
+        [
+          1
+        ]
+      ],
+      "observed": [
+        [
+          1
+        ]
+      ]
+    },
+    {
+      "id": "immediate-mode-blocks-next-native-reservation",
+      "expected": "55000",
+      "observed": "55000"
+    },
+    {
+      "id": "immediate-mode-blocks-next-native-reservation-ledger-unchanged",
+      "expected": [
+        1,
+        453,
+        0,
+        0,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "observed": [
+        1,
+        453,
+        0,
+        0,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "id": "failed-next-reservation-preserves-A",
+      "expected": [
+        1,
+        453,
+        0,
+        0,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "observed": [
+        1,
+        453,
+        0,
+        0,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "id": "failed-next-reservation-restores-cache",
+      "expected": [
+        [
+          "742",
+          4,
+          4
+        ]
+      ],
+      "observed": [
+        [
+          "742",
+          4,
+          4
+        ]
+      ]
+    },
+    {
+      "id": "failed-next-reservation-keeps-only-original-A",
+      "expected": [
+        [
+          0
+        ]
+      ],
+      "observed": [
+        [
+          0
+        ]
+      ]
+    },
+    {
+      "id": "named-truss-deferral-preserves-host-immediate-guard",
+      "expected": "23514",
+      "observed": "23514"
+    },
+    {
+      "id": "host-value-preserved",
+      "expected": [
+        [
+          7
+        ]
+      ],
+      "observed": [
+        [
+          7
+        ]
+      ]
+    },
+    {
+      "id": "native-admission-2",
+      "expected": [
+        "742",
+        "2",
+        "7b22786964223a2022373432222c20226f7264696e616c223a202232222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a20223335333235222c202273657373696f6e55736572223a2022706f737467726573222c20226163746f72526f6c654f6964223a20223130222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e32227d"
+      ],
+      "observed": [
+        "742",
+        "2",
+        "7b22786964223a2022373432222c20226f7264696e616c223a202232222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a20223335333235222c202273657373696f6e55736572223a2022706f737467726573222c20226163746f72526f6c654f6964223a20223130222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e32227d"
+      ]
+    },
+    {
+      "id": "later-B-one-additional-verification",
+      "expected": [
+        [
+          2
+        ]
+      ],
+      "observed": [
+        [
+          2
+        ]
+      ]
+    },
+    {
+      "id": "two-operations-generation-eight-proof",
+      "expected": [
+        [
+          "742",
+          8,
+          8
+        ]
+      ],
+      "observed": [
+        [
+          "742",
+          8,
+          8
+        ]
+      ]
+    },
+    {
+      "id": "two-original-finalized-members-before-commit",
+      "expected": [
+        [
+          0,
+          "application_finalized"
+        ],
+        [
+          2,
+          "application_finalized"
+        ]
+      ],
+      "observed": [
+        [
+          0,
+          "application_finalized"
+        ],
+        [
+          2,
+          "application_finalized"
+        ]
+      ]
+    },
+    {
+      "id": "independent-committed-A-and-B",
+      "expected": [
+        [
+          0,
+          "application_finalized"
+        ],
+        [
+          2,
+          "application_finalized"
+        ]
+      ],
+      "observed": [
+        [
+          0,
+          "application_finalized"
+        ],
+        [
+          2,
+          "application_finalized"
+        ]
+      ]
+    },
+    {
+      "id": "independent-complete-closeout-rows",
+      "expected": [
+        [
+          2
+        ]
+      ],
+      "observed": [
+        [
+          2
+        ]
+      ]
+    },
+    {
+      "id": "host-guard-remains-original-committed-value",
+      "expected": [
+        [
+          7
+        ]
+      ],
+      "observed": [
+        [
+          7
+        ]
+      ]
+    },
+    {
+      "id": "independent-committed-cache-generation",
+      "expected": [
+        [
+          "742",
+          8,
+          8
+        ]
+      ],
+      "observed": [
+        [
+          "742",
+          8,
+          8
+        ]
+      ]
+    },
+    {
+      "id": "new-epoch-equal-image-invalidates",
+      "expected": [
+        [
+          "745",
+          1,
+          null
+        ]
+      ],
+      "observed": [
+        [
+          "745",
+          1,
+          null
+        ]
+      ]
+    },
+    {
+      "id": "new-epoch-original-proof",
+      "expected": [
+        [
+          "745",
+          1,
+          1
+        ]
+      ],
+      "observed": [
+        [
+          "745",
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "id": "equal-image-one-more-verification",
+      "expected": [
+        [
+          3
+        ]
+      ],
+      "observed": [
+        [
+          3
+        ]
+      ]
+    },
+    {
+      "id": "generation-max-refuses-before-wrap",
+      "expected": "54000",
+      "observed": "54000"
+    },
+    {
+      "id": "exhaustion-rollback-preserves-original-ledger",
+      "expected": [
+        2,
+        906,
+        0,
+        0,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "observed": [
+        2,
+        906,
+        0,
+        0,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "id": "exhaustion-rollback-preserves-prior-proof",
+      "expected": [
+        [
+          "745",
+          1,
+          1
+        ]
+      ],
+      "observed": [
+        [
+          "745",
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "id": "native-admission-0",
+      "expected": [
+        "748",
+        "0",
+        "7b22786964223a2022373438222c20226f7264696e616c223a202230222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a20223335333235222c202273657373696f6e55736572223a2022706f737467726573222c20226163746f72526f6c654f6964223a20223130222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e32227d"
+      ],
+      "observed": [
+        "748",
+        "0",
+        "7b22786964223a2022373438222c20226f7264696e616c223a202230222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a20223335333235222c202273657373696f6e55736572223a2022706f737467726573222c20226163746f72526f6c654f6964223a20223130222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e32227d"
+      ]
+    },
+    {
+      "id": "automatic-commit-refuses-unreleased-operation",
+      "expected": "55000",
+      "observed": "55000"
+    },
+    {
+      "id": "failed-commit-restores-prior-two-members",
+      "expected": [
+        [
+          0,
+          "application_finalized"
+        ],
+        [
+          2,
+          "application_finalized"
+        ]
+      ],
+      "observed": [
+        [
+          0,
+          "application_finalized"
+        ],
+        [
+          2,
+          "application_finalized"
+        ]
+      ]
+    },
+    {
+      "id": "failed-commit-restores-prior-cache",
+      "expected": [
+        [
+          "745",
+          1,
+          1
+        ]
+      ],
+      "observed": [
+        [
+          "745",
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "id": "automatic-commit-refuses-counter-corruption",
+      "expected": "55000",
+      "observed": "55000"
+    },
+    {
+      "id": "counter-commit-failure-restores-ledger",
+      "expected": [
+        2,
+        906,
+        0,
+        0,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "observed": [
+        2,
+        906,
+        0,
+        0,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "id": "counter-commit-failure-restores-proof",
+      "expected": [
+        [
+          "745",
+          1,
+          1
+        ]
+      ],
+      "observed": [
+        [
+          "745",
+          1,
+          1
+        ]
+      ]
+    }
+  ],
+  "sourceSha256": {
+    "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f",
+    "docs/helix/04-build/evidence/design-audit/capacity-reservation-source.owner-export.sql": "ea3926f7c6c1ed711868c64918acacc6957989ecad2035eae631bea6e110c254",
+    "docs/helix/04-build/evidence/design-audit/capacity-accounting-source.owner-export.sql": "b50d3d2b12baeabf07d285895f6d9bef37f5d5aecfdefce2cff0bcb1840a3f9b",
+    "packages/postgresql/native/issued-operation-admission/operation-admission.sql": "4b72ebf3727b9c887befce0280256f73587857fcae5fb363af0917b816b1e335",
+    "docs/helix/02-design/contracts/row-home-capacity-initialization-v0.1.proposal.sql": "6f13404b818ecd92ff336ece8d5cb08d84e05e6e4a0c4b5a158fc054287ed7d9",
+    "docs/helix/02-design/contracts/bindings/truss-row-touch-retention-resource-v0.1.proposal.json": "046e5ac11f470c4d6ce8e54193b38d2252ab10c2533999be13b17e629d1c2ee6",
+    "packages/postgresql/native/capacity-reservation/accounting.sql": "99f2dfc4eaf0a57eeebab375698a265d2d22f092983e2aeb0f01bda6e7c06ada",
+    "docs/helix/04-build/evidence/design-audit/custody-codec-source.owner-export.sql": "5e40bdee7ec68277b34266cd60cfd3fca4ada24b417cccf5c041dd44dd56aa1d",
+    "docs/helix/04-build/evidence/design-audit/custody-size-source.owner-export.sql": "9e053ca758888ce7b37ee2f460346c32a97a9386ab88297cd4486c70dea711d5",
+    "docs/helix/04-build/evidence/design-audit/capacity-inventory-source.owner-export.sql": "7e76e9309f3923574259190613551352930abbe7efb991662ae9a25672c8836b",
+    "docs/helix/04-build/evidence/design-audit/capacity-observation-source.owner-export.sql": "4c7662dc4a8baed7813465dc28b253908748bd8191b7d8b96f3d625d51281827",
+    "packages/postgresql/native/capacity-reservation/observation.sql": "164c7bda8407840b9886a5f3eef2f859e4b45d7c534da7a0942af7e01e55d72e",
+    "docs/helix/04-build/evidence/design-audit/capacity-commit-source.owner-export.sql": "335cbdacb324835f42c9b6668b52ba253207efd45c68f47011ae314499595957",
+    "packages/postgresql/native/capacity-reservation/commit-check.sql": "aabd34475c87136d0862129efd39c50bfa166da3cc4641ab9a6ac9f7cad65dd0",
+    "docs/helix/04-build/evidence/design-audit/capacity-cache-source.owner-export.sql": "16498f71ab1774630c3261400de4b7763009189c56b759c6d89b43c2495b6051",
+    "packages/postgresql/native/capacity-reservation/commit-cache.sql": "416ecbfa46b0949a334c154b653c3a266732ba61bce257332f917db1dfc43cea"
+  },
+  "producerSha256": "e2c21f21b960804f1e40e2b062017e743fc9fd556d491a22835ebe07b8326367",
+  "installerReady": false,
+  "nativeFullReservationQualified": false,
+  "acceptanceCasesPromoted": [],
+  "limitations": [
+    "Native cache reads stored fixture ledger profiles; original independently registered profile/identity/ACL closure still required",
+    "Verification audit counts actual cache proof writes; no complete callback/native-work/copy budget qualification",
+    "Manual ordinal0/1-burn/2 fixture is not original host issuer factory",
+    "Administrative phase updates are not protected finalization or ordinary graph/security acceptance",
+    "Exact original native constraint identity/name collision/role/DDL dependency and all seven-body installation remain required"
+  ]
+}

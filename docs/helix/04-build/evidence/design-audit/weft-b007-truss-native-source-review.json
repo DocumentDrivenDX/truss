@@ -1,0 +1,55 @@
+{
+  "status": "committed-owner-source-review-not-Truss-execution",
+  "ownerCommit": "09da2772f772808126093e824477eb8ae064c03a",
+  "previousCheckpoint": "c0f3852b8367b4b9d3ee16c4a51a9095a312af2c",
+  "sourcePins": [
+    {
+      "path": "docs/helix/04-build/evidence/B-007-truss-application-native/summary.json",
+      "bytes": 395,
+      "sha256": "f9b32c7bf68a37ed5ca8ab858d59421584e22f2d38ad38a2308108b1942bc73a"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/B-007-truss-application-native/reports-custody.json",
+      "bytes": 294,
+      "sha256": "1572c7ff666d04296d210cac63bd2568b21b91bd01c5f37a70f3684b3480f590"
+    },
+    {
+      "path": "tests/truss-postgresql/application-native.py",
+      "bytes": 31869,
+      "sha256": "cb8264bd4e2be7864b74e62efcee883974d8ef28f7fbacd0bad36502d2265a46"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/B-007-truss-application-native/reports.json.gz",
+      "bytes": 438332,
+      "sha256": "c8e06878b1eec0b86d34f2fae7ba1224009f0a6cff90f2947e5769138b44b220",
+      "decodedBytes": 6201567,
+      "decodedSha256": "f14716680afeb3ae926e3c2ad8b0a66e1eade2020fa8c692b8dc9ce1a16264b5"
+    }
+  ],
+  "changedPaths": [
+    "docs/helix/04-build/evidence/B-007-acceptance-matrix.json",
+    "docs/helix/04-build/evidence/B-007-ashlar-application-reconciliation/controls.json",
+    "docs/helix/04-build/evidence/B-007-ashlar-application-reconciliation/summary.json",
+    "docs/helix/04-build/evidence/B-007-ashlar-compound-page-reconciliation/summary.json",
+    "docs/helix/04-build/evidence/B-007-ashlar-relationship-reconciliation/summary.json",
+    "docs/helix/04-build/evidence/B-007-preparation.md",
+    "docs/helix/04-build/evidence/B-007-retained-evidence-replay/summary.json",
+    "docs/helix/04-build/evidence/B-007-truss-application-native/build.log",
+    "docs/helix/04-build/evidence/B-007-truss-application-native/reports-custody.json",
+    "docs/helix/04-build/evidence/B-007-truss-application-native/reports.json.gz",
+    "docs/helix/04-build/evidence/B-007-truss-application-native/run.log",
+    "docs/helix/04-build/evidence/B-007-truss-application-native/summary.json",
+    "tests/qualify-and-evolve/README.md",
+    "tests/qualify-and-evolve/check-retained-evidence.py",
+    "tests/qualify-and-evolve/reconcile-ashlar-application.py",
+    "tests/qualify-and-evolve/reconcile-ashlar-compound-pages.py",
+    "tests/qualify-and-evolve/reconcile-ashlar-relationships.py",
+    "tests/qualify-and-evolve/reconcile-controls.py",
+    "tests/truss-postgresql/application-native.py"
+  ],
+  "postgresqlBackendProductionSourceChanged": false,
+  "ownerReportedNativeCases": 76,
+  "propsCases": 37,
+  "rowHomeCases": 39,
+  "scope": "Fresh owner-run PostgreSQL 17.9 aarch64 UTF8 temporary candidate fixtures; not installed Truss, production authority or three-state note adoption. Truss did not rerun the native suite."
+}

@@ -1,0 +1,80 @@
+{
+  "scope": "Selected admission family with actual source Python counter and native savepoint rollback only; synthetic artifact inputs, administrative local-trust fixture, no original driver/security/resource/finalizer qualification",
+  "family": "base",
+  "pgserver": "0.1.4+truss.pg16.15",
+  "serverVersion": "16.15",
+  "observations": [
+    {
+      "writerXid": "730",
+      "ordinal": "0",
+      "contextHex": "7b22786964223a2022373330222c20226f7264696e616c223a202230222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a202233383034222c202273657373696f6e55736572223a2022706f737467726573222c20226163746f72526f6c654f6964223a20223130222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e32227d",
+      "context": {
+        "xid": "730",
+        "ordinal": "0",
+        "database": "postgres",
+        "actingUser": "postgres",
+        "backendPid": "3804",
+        "sessionUser": "postgres",
+        "actorRoleOid": "10",
+        "sessionRoleOid": "10",
+        "interfaceVersion": "truss-native-operation-context/0.2"
+      }
+    },
+    {
+      "writerXid": "730",
+      "ordinal": "1",
+      "contextHex": "7b22786964223a2022373330222c20226f7264696e616c223a202231222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a202233383034222c202273657373696f6e55736572223a2022706f737467726573222c20226163746f72526f6c654f6964223a20223130222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e32227d",
+      "context": {
+        "xid": "730",
+        "ordinal": "1",
+        "database": "postgres",
+        "actingUser": "postgres",
+        "backendPid": "3804",
+        "sessionUser": "postgres",
+        "actorRoleOid": "10",
+        "sessionRoleOid": "10",
+        "interfaceVersion": "truss-native-operation-context/0.2"
+      }
+    },
+    {
+      "writerXid": "730",
+      "ordinal": "3",
+      "contextHex": "7b22786964223a2022373330222c20226f7264696e616c223a202233222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a202233383034222c202273657373696f6e55736572223a2022706f737467726573222c20226163746f72526f6c654f6964223a20223130222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e32227d",
+      "context": {
+        "xid": "730",
+        "ordinal": "3",
+        "database": "postgres",
+        "actingUser": "postgres",
+        "backendPid": "3804",
+        "sessionUser": "postgres",
+        "actorRoleOid": "10",
+        "sessionRoleOid": "10",
+        "interfaceVersion": "truss-native-operation-context/0.2"
+      }
+    }
+  ],
+  "refusedIssuedOrdinal": "2",
+  "nativeRefusalSqlstate": "22023",
+  "configurationObservations": [],
+  "rollbackRegistryRows": 0,
+  "rollbackRemovedNamespace": true,
+  "sources": [
+    {
+      "path": "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql",
+      "sha256": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f"
+    },
+    {
+      "path": "packages/postgresql/native/issued-operation-admission/operation-admission.sql",
+      "sha256": "4b72ebf3727b9c887befce0280256f73587857fcae5fb363af0917b816b1e335"
+    },
+    {
+      "path": "packages/python/src/truss/_operation_ordinal.py",
+      "sha256": "9be8b93fbdaa7595e8330b9e8edd3d048fbff25b1b670c1587647ef1908ddcd3"
+    }
+  ],
+  "producerSha256": "defa1a9ad0338426f5407d0bd2827765c412082fc9985dba3cb8a6747136a603",
+  "psqlSha256": "564f8a86c5670d522fbb478393fae48ca3de536d74d1fa5dd6017fc87f5300da",
+  "completeDriverQualified": false,
+  "allFourFamiliesQualified": false,
+  "readyInstallation": false
+}

@@ -1,0 +1,4055 @@
+{
+  "interfaceVersion": "truss-physical-id-allocation/0.1.0",
+  "status": "draft-baseline-fragment",
+  "layoutVersion": "0.2",
+  "complete": false,
+  "sourceSha256": "8b6978ae29e22c0f961b586a2a9b312a0e9d20bf3c7ef920159f7946902d7145",
+  "identityMeaning": "Explicit authored Truss IDs; retain under native rename only through deliberate versioned binding review",
+  "entries": [
+    {
+      "entryId": "truss.layout.schema.truss",
+      "objectKind": "schema",
+      "nativeIdentity": {
+        "schema": "truss"
+      },
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "6",
+        "meaning": "original text locator only; not qualified native binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "0",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateSchemaStmt",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity"
+      }
+    },
+    {
+      "entryId": "truss.layout.table.setting",
+      "objectKind": "table",
+      "nativeIdentity": {
+        "schema": "truss",
+        "name": "setting"
+      },
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "12",
+        "meaning": "original text locator only; not qualified native binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "2",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/2/members/stmt/members/CreateStmt",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity"
+      }
+    },
+    {
+      "entryId": "truss.layout.table.module_access",
+      "objectKind": "table",
+      "nativeIdentity": {
+        "schema": "truss",
+        "name": "module_access"
+      },
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "24",
+        "meaning": "original text locator only; not qualified native binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "5",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/5/members/stmt/members/CreateStmt",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity"
+      }
+    },
+    {
+      "entryId": "truss.layout.table.schema_rev",
+      "objectKind": "table",
+      "nativeIdentity": {
+        "schema": "truss",
+        "name": "schema_rev"
+      },
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "32",
+        "meaning": "original text locator only; not qualified native binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "6",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/6/members/stmt/members/CreateStmt",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity"
+      }
+    },
+    {
+      "entryId": "truss.layout.table.schema_head",
+      "objectKind": "table",
+      "nativeIdentity": {
+        "schema": "truss",
+        "name": "schema_head"
+      },
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "42",
+        "meaning": "original text locator only; not qualified native binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "8",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/8/members/stmt/members/CreateStmt",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity"
+      }
+    },
+    {
+      "entryId": "truss.layout.table.schema_doc",
+      "objectKind": "table",
+      "nativeIdentity": {
+        "schema": "truss",
+        "name": "schema_doc"
+      },
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "48",
+        "meaning": "original text locator only; not qualified native binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "10",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/10/members/stmt/members/CreateStmt",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity"
+      }
+    },
+    {
+      "entryId": "truss.layout.table.schema_change",
+      "objectKind": "table",
+      "nativeIdentity": {
+        "schema": "truss",
+        "name": "schema_change"
+      },
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "61",
+        "meaning": "original text locator only; not qualified native binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "11",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/11/members/stmt/members/CreateStmt",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity"
+      }
+    },
+    {
+      "entryId": "truss.layout.table.type_def",
+      "objectKind": "table",
+      "nativeIdentity": {
+        "schema": "truss",
+        "name": "type_def"
+      },
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "72",
+        "meaning": "original text locator only; not qualified native binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "12",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/12/members/stmt/members/CreateStmt",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity"
+      }
+    },
+    {
+      "entryId": "truss.layout.table.prop_def",
+      "objectKind": "table",
+      "nativeIdentity": {
+        "schema": "truss",
+        "name": "prop_def"
+      },
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "84",
+        "meaning": "original text locator only; not qualified native binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "13",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/13/members/stmt/members/CreateStmt",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity"
+      }
+    },
+    {
+      "entryId": "truss.layout.table.key_def",
+      "objectKind": "table",
+      "nativeIdentity": {
+        "schema": "truss",
+        "name": "key_def"
+      },
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "102",
+        "meaning": "original text locator only; not qualified native binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "14",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/14/members/stmt/members/CreateStmt",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity"
+      }
+    },
+    {
+      "entryId": "truss.layout.table.rel_def",
+      "objectKind": "table",
+      "nativeIdentity": {
+        "schema": "truss",
+        "name": "rel_def"
+      },
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "113",
+        "meaning": "original text locator only; not qualified native binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "15",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/15/members/stmt/members/CreateStmt",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity"
+      }
+    },
+    {
+      "entryId": "truss.layout.table.rel_endpoint",
+      "objectKind": "table",
+      "nativeIdentity": {
+        "schema": "truss",
+        "name": "rel_endpoint"
+      },
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "134",
+        "meaning": "original text locator only; not qualified native binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "16",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/16/members/stmt/members/CreateStmt",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity"
+      }
+    },
+    {
+      "entryId": "truss.layout.table.object",
+      "objectKind": "table",
+      "nativeIdentity": {
+        "schema": "truss",
+        "name": "object"
+      },
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "144",
+        "meaning": "original text locator only; not qualified native binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "18",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/18/members/stmt/members/CreateStmt",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity"
+      }
+    },
+    {
+      "entryId": "truss.layout.table.object_key",
+      "objectKind": "table",
+      "nativeIdentity": {
+        "schema": "truss",
+        "name": "object_key"
+      },
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "165",
+        "meaning": "original text locator only; not qualified native binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "20",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/20/members/stmt/members/CreateStmt",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity"
+      }
+    },
+    {
+      "entryId": "truss.layout.table.edge",
+      "objectKind": "table",
+      "nativeIdentity": {
+        "schema": "truss",
+        "name": "edge"
+      },
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "177",
+        "meaning": "original text locator only; not qualified native binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "21",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/21/members/stmt/members/CreateStmt",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity"
+      }
+    },
+    {
+      "entryId": "truss.layout.table.edge_limit",
+      "objectKind": "table",
+      "nativeIdentity": {
+        "schema": "truss",
+        "name": "edge_limit"
+      },
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "206",
+        "meaning": "original text locator only; not qualified native binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "24",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/24/members/stmt/members/CreateStmt",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity"
+      }
+    },
+    {
+      "entryId": "truss.layout.table.key_tombstone",
+      "objectKind": "table",
+      "nativeIdentity": {
+        "schema": "truss",
+        "name": "key_tombstone"
+      },
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "220",
+        "meaning": "original text locator only; not qualified native binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "26",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/26/members/stmt/members/CreateStmt",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity"
+      }
+    },
+    {
+      "entryId": "truss.layout.table.record_source",
+      "objectKind": "table",
+      "nativeIdentity": {
+        "schema": "truss",
+        "name": "record_source"
+      },
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "234",
+        "meaning": "original text locator only; not qualified native binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "27",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/27/members/stmt/members/CreateStmt",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity"
+      }
+    },
+    {
+      "entryId": "truss.layout.table.feed_consumer",
+      "objectKind": "table",
+      "nativeIdentity": {
+        "schema": "truss",
+        "name": "feed_consumer"
+      },
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "248",
+        "meaning": "original text locator only; not qualified native binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "29",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/29/members/stmt/members/CreateStmt",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity"
+      }
+    },
+    {
+      "entryId": "truss.layout.table.journal",
+      "objectKind": "table",
+      "nativeIdentity": {
+        "schema": "truss",
+        "name": "journal"
+      },
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "257",
+        "meaning": "original text locator only; not qualified native binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "31",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/31/members/stmt/members/CreateStmt",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity"
+      }
+    },
+    {
+      "entryId": "truss.layout.sequence.id_seq",
+      "objectKind": "sequence",
+      "nativeIdentity": {
+        "schema": "truss",
+        "name": "id_seq"
+      },
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "142",
+        "meaning": "original text locator only; not qualified native binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "17",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/17/members/stmt/members/CreateSeqStmt",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity"
+      }
+    },
+    {
+      "entryId": "truss.layout.sequence.journal_seq",
+      "objectKind": "sequence",
+      "nativeIdentity": {
+        "schema": "truss",
+        "name": "journal_seq"
+      },
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "256",
+        "meaning": "original text locator only; not qualified native binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "30",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/30/members/stmt/members/CreateSeqStmt",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity"
+      }
+    },
+    {
+      "entryId": "truss.layout.index.object_type_id",
+      "objectKind": "index",
+      "nativeIdentity": {
+        "schema": "truss",
+        "name": "object_type_id"
+      },
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "161",
+        "meaning": "original text locator only; not qualified native binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "19",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/19/members/stmt/members/IndexStmt",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity"
+      }
+    },
+    {
+      "entryId": "truss.layout.index.edge_out",
+      "objectKind": "index",
+      "nativeIdentity": {
+        "schema": "truss",
+        "name": "edge_out"
+      },
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "200",
+        "meaning": "original text locator only; not qualified native binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "22",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/22/members/stmt/members/IndexStmt",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity"
+      }
+    },
+    {
+      "entryId": "truss.layout.index.edge_in",
+      "objectKind": "index",
+      "nativeIdentity": {
+        "schema": "truss",
+        "name": "edge_in"
+      },
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "201",
+        "meaning": "original text locator only; not qualified native binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "23",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/23/members/stmt/members/IndexStmt",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity"
+      }
+    },
+    {
+      "entryId": "truss.layout.index.edge_limit_edge",
+      "objectKind": "index",
+      "nativeIdentity": {
+        "schema": "truss",
+        "name": "edge_limit_edge"
+      },
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "213",
+        "meaning": "original text locator only; not qualified native binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "25",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/25/members/stmt/members/IndexStmt",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity"
+      }
+    },
+    {
+      "entryId": "truss.layout.index.record_source_load",
+      "objectKind": "index",
+      "nativeIdentity": {
+        "schema": "truss",
+        "name": "record_source_load"
+      },
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "243",
+        "meaning": "original text locator only; not qualified native binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "28",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/28/members/stmt/members/IndexStmt",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity"
+      }
+    },
+    {
+      "entryId": "truss.layout.index.journal_entity",
+      "objectKind": "index",
+      "nativeIdentity": {
+        "schema": "truss",
+        "name": "journal_entity"
+      },
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "275",
+        "meaning": "original text locator only; not qualified native binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "32",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/32/members/stmt/members/IndexStmt",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity"
+      }
+    },
+    {
+      "entryId": "truss.layout.index.journal_feed",
+      "objectKind": "index",
+      "nativeIdentity": {
+        "schema": "truss",
+        "name": "journal_feed"
+      },
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "276",
+        "meaning": "original text locator only; not qualified native binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "33",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/33/members/stmt/members/IndexStmt",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity"
+      }
+    },
+    {
+      "entryId": "truss.layout.index.journal_request",
+      "objectKind": "index",
+      "nativeIdentity": {
+        "schema": "truss",
+        "name": "journal_request"
+      },
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "279",
+        "meaning": "original text locator only; not qualified native binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "34",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/34/members/stmt/members/IndexStmt",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.setting.key",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "setting"
+        },
+        "name": "key",
+        "ordinal": "1"
+      },
+      "parentEntryId": "truss.layout.table.setting",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "13",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "2",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/2/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "1"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.setting.value",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "setting"
+        },
+        "name": "value",
+        "ordinal": "2"
+      },
+      "parentEntryId": "truss.layout.table.setting",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "14",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "2",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/2/members/stmt/members/CreateStmt/members/tableElts/items/1/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "2"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.module_access.module",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "module_access"
+        },
+        "name": "module",
+        "ordinal": "1"
+      },
+      "parentEntryId": "truss.layout.table.module_access",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "25",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "5",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/5/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "1"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.module_access.reader_role",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "module_access"
+        },
+        "name": "reader_role",
+        "ordinal": "2"
+      },
+      "parentEntryId": "truss.layout.table.module_access",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "26",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "5",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/5/members/stmt/members/CreateStmt/members/tableElts/items/1/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "2"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.module_access.writer_role",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "module_access"
+        },
+        "name": "writer_role",
+        "ordinal": "3"
+      },
+      "parentEntryId": "truss.layout.table.module_access",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "27",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "5",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/5/members/stmt/members/CreateStmt/members/tableElts/items/2/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "3"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.schema_rev.rev",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "schema_rev"
+        },
+        "name": "rev",
+        "ordinal": "1"
+      },
+      "parentEntryId": "truss.layout.table.schema_rev",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "33",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "6",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/6/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "1"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.schema_rev.accepted_at",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "schema_rev"
+        },
+        "name": "accepted_at",
+        "ordinal": "2"
+      },
+      "parentEntryId": "truss.layout.table.schema_rev",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "34",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "6",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/6/members/stmt/members/CreateStmt/members/tableElts/items/1/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "2"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.schema_rev.report",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "schema_rev"
+        },
+        "name": "report",
+        "ordinal": "3"
+      },
+      "parentEntryId": "truss.layout.table.schema_rev",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "35",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "6",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/6/members/stmt/members/CreateStmt/members/tableElts/items/2/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "3"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.schema_rev.origin",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "schema_rev"
+        },
+        "name": "origin",
+        "ordinal": "4"
+      },
+      "parentEntryId": "truss.layout.table.schema_rev",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "36",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "6",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/6/members/stmt/members/CreateStmt/members/tableElts/items/3/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "4"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.schema_head.id",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "schema_head"
+        },
+        "name": "id",
+        "ordinal": "1"
+      },
+      "parentEntryId": "truss.layout.table.schema_head",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "43",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "8",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/8/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "1"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.schema_head.rev",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "schema_head"
+        },
+        "name": "rev",
+        "ordinal": "2"
+      },
+      "parentEntryId": "truss.layout.table.schema_head",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "44",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "8",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/8/members/stmt/members/CreateStmt/members/tableElts/items/1/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "2"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.schema_doc.rev",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "schema_doc"
+        },
+        "name": "rev",
+        "ordinal": "1"
+      },
+      "parentEntryId": "truss.layout.table.schema_doc",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "49",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "10",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/10/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "1"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.schema_doc.ord",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "schema_doc"
+        },
+        "name": "ord",
+        "ordinal": "2"
+      },
+      "parentEntryId": "truss.layout.table.schema_doc",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "50",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "10",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/10/members/stmt/members/CreateStmt/members/tableElts/items/1/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "2"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.schema_doc.doc_id",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "schema_doc"
+        },
+        "name": "doc_id",
+        "ordinal": "3"
+      },
+      "parentEntryId": "truss.layout.table.schema_doc",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "51",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "10",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/10/members/stmt/members/CreateStmt/members/tableElts/items/2/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "3"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.schema_doc.doc_revision",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "schema_doc"
+        },
+        "name": "doc_revision",
+        "ordinal": "4"
+      },
+      "parentEntryId": "truss.layout.table.schema_doc",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "52",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "10",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/10/members/stmt/members/CreateStmt/members/tableElts/items/3/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "4"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.schema_doc.umf_version",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "schema_doc"
+        },
+        "name": "umf_version",
+        "ordinal": "5"
+      },
+      "parentEntryId": "truss.layout.table.schema_doc",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "53",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "10",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/10/members/stmt/members/CreateStmt/members/tableElts/items/4/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "5"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.schema_doc.content_sha256",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "schema_doc"
+        },
+        "name": "content_sha256",
+        "ordinal": "6"
+      },
+      "parentEntryId": "truss.layout.table.schema_doc",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "54",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "10",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/10/members/stmt/members/CreateStmt/members/tableElts/items/5/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "6"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.schema_doc.document",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "schema_doc"
+        },
+        "name": "document",
+        "ordinal": "7"
+      },
+      "parentEntryId": "truss.layout.table.schema_doc",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "55",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "10",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/10/members/stmt/members/CreateStmt/members/tableElts/items/6/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "7"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.schema_doc.validation",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "schema_doc"
+        },
+        "name": "validation",
+        "ordinal": "8"
+      },
+      "parentEntryId": "truss.layout.table.schema_doc",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "56",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "10",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/10/members/stmt/members/CreateStmt/members/tableElts/items/7/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "8"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.schema_change.rev",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "schema_change"
+        },
+        "name": "rev",
+        "ordinal": "1"
+      },
+      "parentEntryId": "truss.layout.table.schema_change",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "62",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "11",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/11/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "1"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.schema_change.seq",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "schema_change"
+        },
+        "name": "seq",
+        "ordinal": "2"
+      },
+      "parentEntryId": "truss.layout.table.schema_change",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "63",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "11",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/11/members/stmt/members/CreateStmt/members/tableElts/items/1/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "2"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.schema_change.kind",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "schema_change"
+        },
+        "name": "kind",
+        "ordinal": "3"
+      },
+      "parentEntryId": "truss.layout.table.schema_change",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "64",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "11",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/11/members/stmt/members/CreateStmt/members/tableElts/items/2/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "3"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.schema_change.def_id",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "schema_change"
+        },
+        "name": "def_id",
+        "ordinal": "4"
+      },
+      "parentEntryId": "truss.layout.table.schema_change",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "65",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "11",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/11/members/stmt/members/CreateStmt/members/tableElts/items/3/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "4"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.schema_change.before",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "schema_change"
+        },
+        "name": "before",
+        "ordinal": "5"
+      },
+      "parentEntryId": "truss.layout.table.schema_change",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "66",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "11",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/11/members/stmt/members/CreateStmt/members/tableElts/items/4/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "5"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.schema_change.after",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "schema_change"
+        },
+        "name": "after",
+        "ordinal": "6"
+      },
+      "parentEntryId": "truss.layout.table.schema_change",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "67",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "11",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/11/members/stmt/members/CreateStmt/members/tableElts/items/5/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "6"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.type_def.type_id",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "type_def"
+        },
+        "name": "type_id",
+        "ordinal": "1"
+      },
+      "parentEntryId": "truss.layout.table.type_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "73",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "12",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/12/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "1"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.type_def.module",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "type_def"
+        },
+        "name": "module",
+        "ordinal": "2"
+      },
+      "parentEntryId": "truss.layout.table.type_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "74",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "12",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/12/members/stmt/members/CreateStmt/members/tableElts/items/1/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "2"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.type_def.element",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "type_def"
+        },
+        "name": "element",
+        "ordinal": "3"
+      },
+      "parentEntryId": "truss.layout.table.type_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "75",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "12",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/12/members/stmt/members/CreateStmt/members/tableElts/items/2/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "3"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.type_def.kind",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "type_def"
+        },
+        "name": "kind",
+        "ordinal": "4"
+      },
+      "parentEntryId": "truss.layout.table.type_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "76",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "12",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/12/members/stmt/members/CreateStmt/members/tableElts/items/3/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "4"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.type_def.provisional",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "type_def"
+        },
+        "name": "provisional",
+        "ordinal": "5"
+      },
+      "parentEntryId": "truss.layout.table.type_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "77",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "12",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/12/members/stmt/members/CreateStmt/members/tableElts/items/4/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "5"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.type_def.since_rev",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "type_def"
+        },
+        "name": "since_rev",
+        "ordinal": "6"
+      },
+      "parentEntryId": "truss.layout.table.type_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "78",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "12",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/12/members/stmt/members/CreateStmt/members/tableElts/items/5/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "6"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.type_def.doc_ord",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "type_def"
+        },
+        "name": "doc_ord",
+        "ordinal": "7"
+      },
+      "parentEntryId": "truss.layout.table.type_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "79",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "12",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/12/members/stmt/members/CreateStmt/members/tableElts/items/6/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "7"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.type_def.retired_rev",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "type_def"
+        },
+        "name": "retired_rev",
+        "ordinal": "8"
+      },
+      "parentEntryId": "truss.layout.table.type_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "80",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "12",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/12/members/stmt/members/CreateStmt/members/tableElts/items/7/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "8"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.prop_def.prop_id",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "prop_def"
+        },
+        "name": "prop_id",
+        "ordinal": "1"
+      },
+      "parentEntryId": "truss.layout.table.prop_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "85",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "13",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/13/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "1"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.prop_def.type_id",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "prop_def"
+        },
+        "name": "type_id",
+        "ordinal": "2"
+      },
+      "parentEntryId": "truss.layout.table.prop_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "86",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "13",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/13/members/stmt/members/CreateStmt/members/tableElts/items/1/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "2"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.prop_def.element",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "prop_def"
+        },
+        "name": "element",
+        "ordinal": "3"
+      },
+      "parentEntryId": "truss.layout.table.prop_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "87",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "13",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/13/members/stmt/members/CreateStmt/members/tableElts/items/2/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "3"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.prop_def.name",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "prop_def"
+        },
+        "name": "name",
+        "ordinal": "4"
+      },
+      "parentEntryId": "truss.layout.table.prop_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "88",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "13",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/13/members/stmt/members/CreateStmt/members/tableElts/items/3/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "4"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.prop_def.scalar_type",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "prop_def"
+        },
+        "name": "scalar_type",
+        "ordinal": "5"
+      },
+      "parentEntryId": "truss.layout.table.prop_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "89",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "13",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/13/members/stmt/members/CreateStmt/members/tableElts/items/4/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "5"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.prop_def.nullability",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "prop_def"
+        },
+        "name": "nullability",
+        "ordinal": "6"
+      },
+      "parentEntryId": "truss.layout.table.prop_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "90",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "13",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/13/members/stmt/members/CreateStmt/members/tableElts/items/5/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "6"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.prop_def.cardinality",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "prop_def"
+        },
+        "name": "cardinality",
+        "ordinal": "7"
+      },
+      "parentEntryId": "truss.layout.table.prop_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "91",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "13",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/13/members/stmt/members/CreateStmt/members/tableElts/items/6/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "7"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.prop_def.facets",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "prop_def"
+        },
+        "name": "facets",
+        "ordinal": "8"
+      },
+      "parentEntryId": "truss.layout.table.prop_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "92",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "13",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/13/members/stmt/members/CreateStmt/members/tableElts/items/7/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "8"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.prop_def.item",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "prop_def"
+        },
+        "name": "item",
+        "ordinal": "9"
+      },
+      "parentEntryId": "truss.layout.table.prop_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "93",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "13",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/13/members/stmt/members/CreateStmt/members/tableElts/items/8/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "9"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.prop_def.home",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "prop_def"
+        },
+        "name": "home",
+        "ordinal": "10"
+      },
+      "parentEntryId": "truss.layout.table.prop_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "94",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "13",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/13/members/stmt/members/CreateStmt/members/tableElts/items/9/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "10"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.prop_def.since_rev",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "prop_def"
+        },
+        "name": "since_rev",
+        "ordinal": "11"
+      },
+      "parentEntryId": "truss.layout.table.prop_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "95",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "13",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/13/members/stmt/members/CreateStmt/members/tableElts/items/10/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "11"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.prop_def.doc_ord",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "prop_def"
+        },
+        "name": "doc_ord",
+        "ordinal": "12"
+      },
+      "parentEntryId": "truss.layout.table.prop_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "96",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "13",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/13/members/stmt/members/CreateStmt/members/tableElts/items/11/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "12"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.prop_def.retired_rev",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "prop_def"
+        },
+        "name": "retired_rev",
+        "ordinal": "13"
+      },
+      "parentEntryId": "truss.layout.table.prop_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "97",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "13",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/13/members/stmt/members/CreateStmt/members/tableElts/items/12/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "13"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.key_def.type_id",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "key_def"
+        },
+        "name": "type_id",
+        "ordinal": "1"
+      },
+      "parentEntryId": "truss.layout.table.key_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "103",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "14",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/14/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "1"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.key_def.key_id",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "key_def"
+        },
+        "name": "key_id",
+        "ordinal": "2"
+      },
+      "parentEntryId": "truss.layout.table.key_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "104",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "14",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/14/members/stmt/members/CreateStmt/members/tableElts/items/1/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "2"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.key_def.key_num",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "key_def"
+        },
+        "name": "key_num",
+        "ordinal": "3"
+      },
+      "parentEntryId": "truss.layout.table.key_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "105",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "14",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/14/members/stmt/members/CreateStmt/members/tableElts/items/2/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "3"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.key_def.prop_ids",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "key_def"
+        },
+        "name": "prop_ids",
+        "ordinal": "4"
+      },
+      "parentEntryId": "truss.layout.table.key_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "106",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "14",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/14/members/stmt/members/CreateStmt/members/tableElts/items/3/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "4"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.key_def.is_primary",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "key_def"
+        },
+        "name": "is_primary",
+        "ordinal": "5"
+      },
+      "parentEntryId": "truss.layout.table.key_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "107",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "14",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/14/members/stmt/members/CreateStmt/members/tableElts/items/4/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "5"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.key_def.since_rev",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "key_def"
+        },
+        "name": "since_rev",
+        "ordinal": "6"
+      },
+      "parentEntryId": "truss.layout.table.key_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "108",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "14",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/14/members/stmt/members/CreateStmt/members/tableElts/items/5/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "6"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.key_def.retired_rev",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "key_def"
+        },
+        "name": "retired_rev",
+        "ordinal": "7"
+      },
+      "parentEntryId": "truss.layout.table.key_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "109",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "14",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/14/members/stmt/members/CreateStmt/members/tableElts/items/6/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "7"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.rel_def.rel_type_id",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "rel_def"
+        },
+        "name": "rel_type_id",
+        "ordinal": "1"
+      },
+      "parentEntryId": "truss.layout.table.rel_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "114",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "15",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/15/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "1"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.rel_def.module",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "rel_def"
+        },
+        "name": "module",
+        "ordinal": "2"
+      },
+      "parentEntryId": "truss.layout.table.rel_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "115",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "15",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/15/members/stmt/members/CreateStmt/members/tableElts/items/1/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "2"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.rel_def.rel_id",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "rel_def"
+        },
+        "name": "rel_id",
+        "ordinal": "3"
+      },
+      "parentEntryId": "truss.layout.table.rel_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "116",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "15",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/15/members/stmt/members/CreateStmt/members/tableElts/items/2/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "3"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.rel_def.name",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "rel_def"
+        },
+        "name": "name",
+        "ordinal": "4"
+      },
+      "parentEntryId": "truss.layout.table.rel_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "117",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "15",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/15/members/stmt/members/CreateStmt/members/tableElts/items/3/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "4"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.rel_def.source_min",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "rel_def"
+        },
+        "name": "source_min",
+        "ordinal": "5"
+      },
+      "parentEntryId": "truss.layout.table.rel_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "118",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "15",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/15/members/stmt/members/CreateStmt/members/tableElts/items/4/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "5"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.rel_def.source_max",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "rel_def"
+        },
+        "name": "source_max",
+        "ordinal": "6"
+      },
+      "parentEntryId": "truss.layout.table.rel_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "119",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "15",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/15/members/stmt/members/CreateStmt/members/tableElts/items/5/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "6"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.rel_def.target_min",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "rel_def"
+        },
+        "name": "target_min",
+        "ordinal": "7"
+      },
+      "parentEntryId": "truss.layout.table.rel_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "120",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "15",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/15/members/stmt/members/CreateStmt/members/tableElts/items/6/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "7"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.rel_def.target_max",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "rel_def"
+        },
+        "name": "target_max",
+        "ordinal": "8"
+      },
+      "parentEntryId": "truss.layout.table.rel_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "121",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "15",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/15/members/stmt/members/CreateStmt/members/tableElts/items/7/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "8"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.rel_def.lifecycle",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "rel_def"
+        },
+        "name": "lifecycle",
+        "ordinal": "9"
+      },
+      "parentEntryId": "truss.layout.table.rel_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "122",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "15",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/15/members/stmt/members/CreateStmt/members/tableElts/items/8/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "9"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.rel_def.directed",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "rel_def"
+        },
+        "name": "directed",
+        "ordinal": "10"
+      },
+      "parentEntryId": "truss.layout.table.rel_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "123",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "15",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/15/members/stmt/members/CreateStmt/members/tableElts/items/9/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "10"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.rel_def.target_key",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "rel_def"
+        },
+        "name": "target_key",
+        "ordinal": "11"
+      },
+      "parentEntryId": "truss.layout.table.rel_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "124",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "15",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/15/members/stmt/members/CreateStmt/members/tableElts/items/10/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "11"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.rel_def.composition",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "rel_def"
+        },
+        "name": "composition",
+        "ordinal": "12"
+      },
+      "parentEntryId": "truss.layout.table.rel_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "125",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "15",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/15/members/stmt/members/CreateStmt/members/tableElts/items/11/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "12"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.rel_def.assoc_type_id",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "rel_def"
+        },
+        "name": "assoc_type_id",
+        "ordinal": "13"
+      },
+      "parentEntryId": "truss.layout.table.rel_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "126",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "15",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/15/members/stmt/members/CreateStmt/members/tableElts/items/12/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "13"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.rel_def.inverse",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "rel_def"
+        },
+        "name": "inverse",
+        "ordinal": "14"
+      },
+      "parentEntryId": "truss.layout.table.rel_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "127",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "15",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/15/members/stmt/members/CreateStmt/members/tableElts/items/13/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "14"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.rel_def.since_rev",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "rel_def"
+        },
+        "name": "since_rev",
+        "ordinal": "15"
+      },
+      "parentEntryId": "truss.layout.table.rel_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "128",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "15",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/15/members/stmt/members/CreateStmt/members/tableElts/items/14/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "15"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.rel_def.doc_ord",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "rel_def"
+        },
+        "name": "doc_ord",
+        "ordinal": "16"
+      },
+      "parentEntryId": "truss.layout.table.rel_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "129",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "15",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/15/members/stmt/members/CreateStmt/members/tableElts/items/15/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "16"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.rel_def.retired_rev",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "rel_def"
+        },
+        "name": "retired_rev",
+        "ordinal": "17"
+      },
+      "parentEntryId": "truss.layout.table.rel_def",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "130",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "15",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/15/members/stmt/members/CreateStmt/members/tableElts/items/16/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "17"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.rel_endpoint.rel_type_id",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "rel_endpoint"
+        },
+        "name": "rel_type_id",
+        "ordinal": "1"
+      },
+      "parentEntryId": "truss.layout.table.rel_endpoint",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "135",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "16",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/16/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "1"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.rel_endpoint.source_type",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "rel_endpoint"
+        },
+        "name": "source_type",
+        "ordinal": "2"
+      },
+      "parentEntryId": "truss.layout.table.rel_endpoint",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "136",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "16",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/16/members/stmt/members/CreateStmt/members/tableElts/items/1/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "2"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.rel_endpoint.target_type",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "rel_endpoint"
+        },
+        "name": "target_type",
+        "ordinal": "3"
+      },
+      "parentEntryId": "truss.layout.table.rel_endpoint",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "137",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "16",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/16/members/stmt/members/CreateStmt/members/tableElts/items/2/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "3"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.object.id",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "object"
+        },
+        "name": "id",
+        "ordinal": "1"
+      },
+      "parentEntryId": "truss.layout.table.object",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "145",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "18",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/18/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "1"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.object.type_id",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "object"
+        },
+        "name": "type_id",
+        "ordinal": "2"
+      },
+      "parentEntryId": "truss.layout.table.object",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "146",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "18",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/18/members/stmt/members/CreateStmt/members/tableElts/items/1/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "2"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.object.props",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "object"
+        },
+        "name": "props",
+        "ordinal": "3"
+      },
+      "parentEntryId": "truss.layout.table.object",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "147",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "18",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/18/members/stmt/members/CreateStmt/members/tableElts/items/2/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "3"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.object.retained",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "object"
+        },
+        "name": "retained",
+        "ordinal": "4"
+      },
+      "parentEntryId": "truss.layout.table.object",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "148",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "18",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/18/members/stmt/members/CreateStmt/members/tableElts/items/3/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "4"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.object.root_id",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "object"
+        },
+        "name": "root_id",
+        "ordinal": "5"
+      },
+      "parentEntryId": "truss.layout.table.object",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "149",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "18",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/18/members/stmt/members/CreateStmt/members/tableElts/items/4/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "5"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.object.root_type",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "object"
+        },
+        "name": "root_type",
+        "ordinal": "6"
+      },
+      "parentEntryId": "truss.layout.table.object",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "150",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "18",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/18/members/stmt/members/CreateStmt/members/tableElts/items/5/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "6"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.object.rev",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "object"
+        },
+        "name": "rev",
+        "ordinal": "7"
+      },
+      "parentEntryId": "truss.layout.table.object",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "151",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "18",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/18/members/stmt/members/CreateStmt/members/tableElts/items/6/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "7"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.object.ver",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "object"
+        },
+        "name": "ver",
+        "ordinal": "8"
+      },
+      "parentEntryId": "truss.layout.table.object",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "152",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "18",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/18/members/stmt/members/CreateStmt/members/tableElts/items/7/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "8"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.object.created_at",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "object"
+        },
+        "name": "created_at",
+        "ordinal": "9"
+      },
+      "parentEntryId": "truss.layout.table.object",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "153",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "18",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/18/members/stmt/members/CreateStmt/members/tableElts/items/8/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "9"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.object.updated_at",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "object"
+        },
+        "name": "updated_at",
+        "ordinal": "10"
+      },
+      "parentEntryId": "truss.layout.table.object",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "154",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "18",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/18/members/stmt/members/CreateStmt/members/tableElts/items/9/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "10"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.object_key.type_id",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "object_key"
+        },
+        "name": "type_id",
+        "ordinal": "1"
+      },
+      "parentEntryId": "truss.layout.table.object_key",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "166",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "20",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/20/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "1"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.object_key.key_num",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "object_key"
+        },
+        "name": "key_num",
+        "ordinal": "2"
+      },
+      "parentEntryId": "truss.layout.table.object_key",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "167",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "20",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/20/members/stmt/members/CreateStmt/members/tableElts/items/1/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "2"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.object_key.k",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "object_key"
+        },
+        "name": "k",
+        "ordinal": "3"
+      },
+      "parentEntryId": "truss.layout.table.object_key",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "168",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "20",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/20/members/stmt/members/CreateStmt/members/tableElts/items/2/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "3"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.object_key.object_id",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "object_key"
+        },
+        "name": "object_id",
+        "ordinal": "4"
+      },
+      "parentEntryId": "truss.layout.table.object_key",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "169",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "20",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/20/members/stmt/members/CreateStmt/members/tableElts/items/3/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "4"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.edge.id",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "edge"
+        },
+        "name": "id",
+        "ordinal": "1"
+      },
+      "parentEntryId": "truss.layout.table.edge",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "178",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "21",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/21/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "1"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.edge.rel_type_id",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "edge"
+        },
+        "name": "rel_type_id",
+        "ordinal": "2"
+      },
+      "parentEntryId": "truss.layout.table.edge",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "179",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "21",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/21/members/stmt/members/CreateStmt/members/tableElts/items/1/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "2"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.edge.source_id",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "edge"
+        },
+        "name": "source_id",
+        "ordinal": "3"
+      },
+      "parentEntryId": "truss.layout.table.edge",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "180",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "21",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/21/members/stmt/members/CreateStmt/members/tableElts/items/2/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "3"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.edge.source_type",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "edge"
+        },
+        "name": "source_type",
+        "ordinal": "4"
+      },
+      "parentEntryId": "truss.layout.table.edge",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "181",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "21",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/21/members/stmt/members/CreateStmt/members/tableElts/items/3/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "4"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.edge.target_id",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "edge"
+        },
+        "name": "target_id",
+        "ordinal": "5"
+      },
+      "parentEntryId": "truss.layout.table.edge",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "182",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "21",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/21/members/stmt/members/CreateStmt/members/tableElts/items/4/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "5"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.edge.target_type",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "edge"
+        },
+        "name": "target_type",
+        "ordinal": "6"
+      },
+      "parentEntryId": "truss.layout.table.edge",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "183",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "21",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/21/members/stmt/members/CreateStmt/members/tableElts/items/5/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "6"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.edge.props",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "edge"
+        },
+        "name": "props",
+        "ordinal": "7"
+      },
+      "parentEntryId": "truss.layout.table.edge",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "184",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "21",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/21/members/stmt/members/CreateStmt/members/tableElts/items/6/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "7"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.edge.order_key",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "edge"
+        },
+        "name": "order_key",
+        "ordinal": "8"
+      },
+      "parentEntryId": "truss.layout.table.edge",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "185",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "21",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/21/members/stmt/members/CreateStmt/members/tableElts/items/7/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "8"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.edge.rev",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "edge"
+        },
+        "name": "rev",
+        "ordinal": "9"
+      },
+      "parentEntryId": "truss.layout.table.edge",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "186",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "21",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/21/members/stmt/members/CreateStmt/members/tableElts/items/8/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "9"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.edge.ver",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "edge"
+        },
+        "name": "ver",
+        "ordinal": "10"
+      },
+      "parentEntryId": "truss.layout.table.edge",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "187",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "21",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/21/members/stmt/members/CreateStmt/members/tableElts/items/9/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "10"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.edge.created_at",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "edge"
+        },
+        "name": "created_at",
+        "ordinal": "11"
+      },
+      "parentEntryId": "truss.layout.table.edge",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "188",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "21",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/21/members/stmt/members/CreateStmt/members/tableElts/items/10/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "11"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.edge.updated_at",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "edge"
+        },
+        "name": "updated_at",
+        "ordinal": "12"
+      },
+      "parentEntryId": "truss.layout.table.edge",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "189",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "21",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/21/members/stmt/members/CreateStmt/members/tableElts/items/11/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "12"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.edge_limit.rel_type_id",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "edge_limit"
+        },
+        "name": "rel_type_id",
+        "ordinal": "1"
+      },
+      "parentEntryId": "truss.layout.table.edge_limit",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "207",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "24",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/24/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "1"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.edge_limit.side",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "edge_limit"
+        },
+        "name": "side",
+        "ordinal": "2"
+      },
+      "parentEntryId": "truss.layout.table.edge_limit",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "208",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "24",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/24/members/stmt/members/CreateStmt/members/tableElts/items/1/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "2"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.edge_limit.endpoint_id",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "edge_limit"
+        },
+        "name": "endpoint_id",
+        "ordinal": "3"
+      },
+      "parentEntryId": "truss.layout.table.edge_limit",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "209",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "24",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/24/members/stmt/members/CreateStmt/members/tableElts/items/2/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "3"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.edge_limit.edge_id",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "edge_limit"
+        },
+        "name": "edge_id",
+        "ordinal": "4"
+      },
+      "parentEntryId": "truss.layout.table.edge_limit",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "210",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "24",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/24/members/stmt/members/CreateStmt/members/tableElts/items/3/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "4"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.key_tombstone.entity_kind",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "key_tombstone"
+        },
+        "name": "entity_kind",
+        "ordinal": "1"
+      },
+      "parentEntryId": "truss.layout.table.key_tombstone",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "221",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "26",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/26/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "1"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.key_tombstone.type_id",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "key_tombstone"
+        },
+        "name": "type_id",
+        "ordinal": "2"
+      },
+      "parentEntryId": "truss.layout.table.key_tombstone",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "222",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "26",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/26/members/stmt/members/CreateStmt/members/tableElts/items/1/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "2"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.key_tombstone.key_num",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "key_tombstone"
+        },
+        "name": "key_num",
+        "ordinal": "3"
+      },
+      "parentEntryId": "truss.layout.table.key_tombstone",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "223",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "26",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/26/members/stmt/members/CreateStmt/members/tableElts/items/2/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "3"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.key_tombstone.k",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "key_tombstone"
+        },
+        "name": "k",
+        "ordinal": "4"
+      },
+      "parentEntryId": "truss.layout.table.key_tombstone",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "224",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "26",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/26/members/stmt/members/CreateStmt/members/tableElts/items/3/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "4"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.key_tombstone.entity_id",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "key_tombstone"
+        },
+        "name": "entity_id",
+        "ordinal": "5"
+      },
+      "parentEntryId": "truss.layout.table.key_tombstone",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "225",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "26",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/26/members/stmt/members/CreateStmt/members/tableElts/items/4/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "5"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.key_tombstone.ver",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "key_tombstone"
+        },
+        "name": "ver",
+        "ordinal": "6"
+      },
+      "parentEntryId": "truss.layout.table.key_tombstone",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "226",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "26",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/26/members/stmt/members/CreateStmt/members/tableElts/items/5/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "6"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.key_tombstone.at",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "key_tombstone"
+        },
+        "name": "at",
+        "ordinal": "7"
+      },
+      "parentEntryId": "truss.layout.table.key_tombstone",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "227",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "26",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/26/members/stmt/members/CreateStmt/members/tableElts/items/6/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "7"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.record_source.entity_kind",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "record_source"
+        },
+        "name": "entity_kind",
+        "ordinal": "1"
+      },
+      "parentEntryId": "truss.layout.table.record_source",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "235",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "27",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/27/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "1"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.record_source.entity_id",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "record_source"
+        },
+        "name": "entity_id",
+        "ordinal": "2"
+      },
+      "parentEntryId": "truss.layout.table.record_source",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "236",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "27",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/27/members/stmt/members/CreateStmt/members/tableElts/items/1/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "2"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.record_source.load_id",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "record_source"
+        },
+        "name": "load_id",
+        "ordinal": "3"
+      },
+      "parentEntryId": "truss.layout.table.record_source",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "237",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "27",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/27/members/stmt/members/CreateStmt/members/tableElts/items/2/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "3"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.record_source.source",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "record_source"
+        },
+        "name": "source",
+        "ordinal": "4"
+      },
+      "parentEntryId": "truss.layout.table.record_source",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "238",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "27",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/27/members/stmt/members/CreateStmt/members/tableElts/items/3/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "4"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.record_source.imported_at",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "record_source"
+        },
+        "name": "imported_at",
+        "ordinal": "5"
+      },
+      "parentEntryId": "truss.layout.table.record_source",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "239",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "27",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/27/members/stmt/members/CreateStmt/members/tableElts/items/4/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "5"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.feed_consumer.consumer",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "feed_consumer"
+        },
+        "name": "consumer",
+        "ordinal": "1"
+      },
+      "parentEntryId": "truss.layout.table.feed_consumer",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "249",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "29",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/29/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "1"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.feed_consumer.xid",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "feed_consumer"
+        },
+        "name": "xid",
+        "ordinal": "2"
+      },
+      "parentEntryId": "truss.layout.table.feed_consumer",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "250",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "29",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/29/members/stmt/members/CreateStmt/members/tableElts/items/1/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "2"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.feed_consumer.seq",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "feed_consumer"
+        },
+        "name": "seq",
+        "ordinal": "3"
+      },
+      "parentEntryId": "truss.layout.table.feed_consumer",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "251",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "29",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/29/members/stmt/members/CreateStmt/members/tableElts/items/2/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "3"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.feed_consumer.updated_at",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "feed_consumer"
+        },
+        "name": "updated_at",
+        "ordinal": "4"
+      },
+      "parentEntryId": "truss.layout.table.feed_consumer",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "252",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "29",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/29/members/stmt/members/CreateStmt/members/tableElts/items/3/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "4"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.journal.seq",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "journal"
+        },
+        "name": "seq",
+        "ordinal": "1"
+      },
+      "parentEntryId": "truss.layout.table.journal",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "258",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "31",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/31/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "1"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.journal.at",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "journal"
+        },
+        "name": "at",
+        "ordinal": "2"
+      },
+      "parentEntryId": "truss.layout.table.journal",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "259",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "31",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/31/members/stmt/members/CreateStmt/members/tableElts/items/1/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "2"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.journal.xid",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "journal"
+        },
+        "name": "xid",
+        "ordinal": "3"
+      },
+      "parentEntryId": "truss.layout.table.journal",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "260",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "31",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/31/members/stmt/members/CreateStmt/members/tableElts/items/2/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "3"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.journal.entity_kind",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "journal"
+        },
+        "name": "entity_kind",
+        "ordinal": "4"
+      },
+      "parentEntryId": "truss.layout.table.journal",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "261",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "31",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/31/members/stmt/members/CreateStmt/members/tableElts/items/3/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "4"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.journal.entity_id",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "journal"
+        },
+        "name": "entity_id",
+        "ordinal": "5"
+      },
+      "parentEntryId": "truss.layout.table.journal",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "262",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "31",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/31/members/stmt/members/CreateStmt/members/tableElts/items/4/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "5"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.journal.entity_type",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "journal"
+        },
+        "name": "entity_type",
+        "ordinal": "6"
+      },
+      "parentEntryId": "truss.layout.table.journal",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "263",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "31",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/31/members/stmt/members/CreateStmt/members/tableElts/items/5/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "6"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.journal.ver",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "journal"
+        },
+        "name": "ver",
+        "ordinal": "7"
+      },
+      "parentEntryId": "truss.layout.table.journal",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "264",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "31",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/31/members/stmt/members/CreateStmt/members/tableElts/items/6/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "7"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.journal.op",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "journal"
+        },
+        "name": "op",
+        "ordinal": "8"
+      },
+      "parentEntryId": "truss.layout.table.journal",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "265",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "31",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/31/members/stmt/members/CreateStmt/members/tableElts/items/7/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "8"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.journal.prop_id",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "journal"
+        },
+        "name": "prop_id",
+        "ordinal": "9"
+      },
+      "parentEntryId": "truss.layout.table.journal",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "266",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "31",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/31/members/stmt/members/CreateStmt/members/tableElts/items/8/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "9"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.journal.old_value",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "journal"
+        },
+        "name": "old_value",
+        "ordinal": "10"
+      },
+      "parentEntryId": "truss.layout.table.journal",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "267",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "31",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/31/members/stmt/members/CreateStmt/members/tableElts/items/9/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "10"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.journal.new_value",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "journal"
+        },
+        "name": "new_value",
+        "ordinal": "11"
+      },
+      "parentEntryId": "truss.layout.table.journal",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "268",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "31",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/31/members/stmt/members/CreateStmt/members/tableElts/items/10/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "11"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.journal.rev",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "journal"
+        },
+        "name": "rev",
+        "ordinal": "12"
+      },
+      "parentEntryId": "truss.layout.table.journal",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "269",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "31",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/31/members/stmt/members/CreateStmt/members/tableElts/items/11/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "12"
+      }
+    },
+    {
+      "entryId": "truss.layout.column.journal.origin",
+      "objectKind": "column",
+      "nativeIdentity": {
+        "relation": {
+          "schema": "truss",
+          "name": "journal"
+        },
+        "name": "origin",
+        "ordinal": "13"
+      },
+      "parentEntryId": "truss.layout.table.journal",
+      "sourceLocator": {
+        "path": "docs/helix/02-design/contracts/storage-layout.sql",
+        "line": "270",
+        "meaning": "original declaration locator and authored column order only; not native catalog attnum or semantic binding"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/models/truss-layout-0.2.umf.json",
+        "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+        "statementIndex": "31",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/31/members/stmt/members/CreateStmt/members/tableElts/items/12/members/ColumnDef",
+        "meaning": "Exact captured tagged-tree locator; not generated statement correspondence or durable physical identity",
+        "capturedColumnOrder": "13"
+      }
+    }
+  ],
+  "notIncluded": [
+    "column native type/default/null/collation/generated meaning (column IDs allocated)",
+    "constraints/implicit indexes",
+    "functions/triggers/grants/policies",
+    "initial rows/archive bytes",
+    "optional module isolation",
+    "new toolkit configuration/receipt/history/feed/installation additions"
+  ],
+  "notEstablished": [
+    "semantic/native definition qualification beyond exact captured-node locator",
+    "complete exporter statement provenance",
+    "native catalog completeness/validity",
+    "migration/authoring authority transition"
+  ]
+}

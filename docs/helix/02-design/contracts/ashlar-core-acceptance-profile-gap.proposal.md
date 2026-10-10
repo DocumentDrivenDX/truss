@@ -1,0 +1,70 @@
+# Ashlar core 0.7 acceptance profile gap
+
+Reviewed Truss candidate a87c6d3's committed check-umf-semantic-ingress probe/report. It pins UMF fac1497a5ac5cb39bbaaac34eb0da8dc8b208c69, builds the actual reader/validator for browser target and executes it in Bun on four exact original Ashlar artifacts. The report retains valid=true/complete=false and all diagnostics; no accepted revision exists. This review did not rerun the probe or qualify native acceptance.
+
+## Three separate admission conclusions
+
+1. **Document validity and preservation.** CONTRACT-003 Verify consumes the actual pinned UMF validator and retains original bytes and exact severity/code/path diagnostics. Experimental core warnings cannot be deleted, converted into complete=true or treated as native enforcement evidence. valid=true establishes only the original document-validity conclusion.
+2. **Supported interpretation and selected required checks.** The immutable supportProfile must enumerate every original source-qualified Record/Field/Key/Relationship meaning, native codec/equality/availability/storage binding, retained-only versus required-check purpose and exact UMF operation/result producer. Every selected required semantic check needs its own actual UMF aggregate valid and complete=true. A generic validateDocument result is not automatically that aggregate; neither warnings alone nor a host allowlist manufactures complete required-check evidence.
+3. **Actual acceptance/native readiness.** Independently verify full current values/keys/endpoints/ownership/source, identity/high-water, actual native enforcement/security/resource and atomic complete report/head effects under original transaction custody. Document or value-check success supplies no accepted native IDs. Until the full composition exists, writable acceptance remains unavailable.
+
+This distinction follows CONTRACT-003's selected semantic-check paragraphs and ordered Verify/Derive/Validate/Persist steps. No current owner-qualified profile has been established for these four inputs; the probe's unavailable disposition is therefore correct for the supplied composition. It is not proof that all future core 0.7 acceptance is impossible.
+
+## Exact input dispositions
+
+| Original input | Existing owner result | Required next evidence |
+| --- | --- | --- |
+| schema-v1 and schema-v3 | Valid but incomplete, with experimental nullability/cardinality/facets/keys/relationships warnings | Explicit supported core interpretation plus original complete required-check results and native binding/enforcement. Preserve experimental limitations in the immutable acceptance report; do not strip warning codes. |
+| schema-v2 | Same experimental warnings plus UNKNOWN_NULLABILITY | Establish exact meaning with an admitted upstream interpreter, or classify the owning meaning as retained-only and disable its dependent writable/read/Weft capability. Do not reinterpret unknown availability as required or absent-allowed. |
+| schema-unknown | Same experimental warnings plus UNKNOWN_CORE_FIELD; x-future-assertion retained | Preserve the assertion and unresolved interpretation. Its scope/dependency impact must be established before any capability uses the affected meaning; unknown document-level assertion cannot be presumed harmless. Metadata-only preservation cannot become writable catalog acceptance. |
+
+## Required supported-profile deliverable
+
+Produce an immutable source-qualified check inventory covering complete original declarations and every required constraint, with explicit interpretation/definition/result/resource producers. Identify which actual UMF operation can yield complete results for the selected values/subset while preserving the generic envelope's incomplete diagnostics. If no such producer exists for a required meaning, record an UMF capability gap and refuse the affected writable profile. Truss must not add its own semantic validator or turn its native fixture comparison into upstream semantic completeness.
+
+Known experimental warnings describe non-native guarantees; a selected native binding must independently establish those guarantees where required. Unknown qualifiers remain unknown until interpreted. The profile must distinguish these cases through exact original evidence, not by deleting or severity-rewriting diagnostics. Any adopted policy change belongs in governed acceptance/support contracts and their independent tests; this review does not relax valid/complete requirements.
+
+Independent acceptance scenarios must retain original warnings/report bytes on success, reject unavailable required meaning before persistence, preserve unresolved retained-only content and disable dependent capabilities, refuse unknown→known profile substitution on exact repeat, and roll back all earlier acceptance effects on later interpretation/native failure. Full original check inventory and complete report/head ordering remain mandatory. No installed profile, accepted IDs or generator support is supplied by this review.
+
+## Available scoped field-value producer — candidate 28bc152
+
+The later committed `check-umf-field-values.ts` and `umf-field-values.json` identify actual UMF `validateCoreFieldValue` at source 16c35e8d943769ccfa7bb57d16785aa7159abe65 (`src/model/schema-properties.ts`). The [source checkpoint](../../04-build/evidence/design-audit/umf-field-value-producer-source-review.json) pins both candidate artifacts. This review inspected committed source/results; it did not rerun Bun, Chromium or PostgreSQL. The candidate reports identical results in Bun 1.4.2 and Chromium 153.0.8010.12.
+
+The checker requires core 0.8. Original core 0.7 calls refuse. The candidate explicitly calls `upgradeSchemaPropertiesEnvelope`, verifies the receipt with `verifySchemaPropertiesUpgrade` and restores the original parsed document with `rollbackSchemaPropertiesEnvelope`; original artifact bytes/hashes remain separately retained. Preserve source and target versions, complete transition receipt/residuals and both original document-validation results. Reversible parsed-document equality is not original byte equality and does not authorize silent envelope substitution in a support profile.
+
+Four explicitly mapped present string values from the retained `local-string-source.jsonl` produce actual valid=true/complete=true with no diagnostics against the upgraded v3 fields. This resolves producer discovery for those scoped value checks. Fixture property IDs 23/24 are local source mappings, not accepted catalog IDs. Required label null and wrong scalar-family integer probes refuse. The v3 absent-allowed caption accepts a literal null; this is the upstream literal contract, not evidence of Truss's three-state absent/present-null/string storage or Weft projection binding. Those mappings need their own original presence and native evidence.
+
+Original and upgraded envelope validation remains valid/incomplete. V2 unknown availability and the unknown top-level assertion remain unresolved. A complete label check does not resolve another declaration or document-level assertion. No whole-record membership, omitted required-field, key, relationship, native enforcement, validator containment, immutable acceptance-report/head, feed or ACK qualification follows. The next supported-profile task is to enumerate all required checks and pin each source-to-target interpretation, actual producer and original result; reuse this available upstream checker rather than authoring a Truss semantic validator.
+
+## Available logical Record producer — candidate 8af84f7
+
+UMF's separate, unmerged `codex/core-record-value-check` source c45c72a2a8a3c4fba61c40c5927dd9091acf8cc3 supplies `validateCoreRecordValues` operation 1.0.0 (`src/model/record-values.ts`, CONTRACT-049-schema-properties). The [source checkpoint](../../04-build/evidence/design-audit/umf-record-value-producer-source-review.json) pins the consuming Truss probe and original report at 8af84f7. This is source/report review, not runtime rerun, default-branch adoption or installed profile qualification.
+
+The operation retains original documentValidation separately and composes the actual Field checker with explicit qualified Record membership, absent/present states and known availability/cardinality. Omitted members count as absent; required absence, duplicates, undeclared values and invalid literals refuse. It never inserts defaults. Unknown source meaning conservatively prevents completeness; declared keys and relationships require separately qualified dataset checks. Explicit absent and present null remain distinct logical inputs without qualifying native representation.
+
+Three original mapped create/replace records receive valid=true/complete=true with no selected diagnostics; the candidate reports Bun 1.4.2/Chromium 153.0.8010.12 parity after the explicit verified reversible upgrade. V1/v3 logical probes are complete; v2 unknown availability and the unknown document assertion remain incomplete. Delete is outside this value-check operation. Fixture IDs remain mappings rather than accepted native IDs. The committed report's qualification still includes the older “whole-record” unresolved wording, while its explicit recordChecks show these scoped complete results; retain the exact artifact and do not inflate either statement into full acceptance.
+
+This resolves logical membership/presence/value producer discovery for the selected record subset. Remaining work is explicit source/API/profile adoption, complete required-check inventory, dataset keys/relationships, native presence/equality/enforcement, validator isolation and atomic immutable report/head effects. The earlier field-only review is historical evidence, not a claim that this new scoped Record producer is unavailable. No Truss semantic validator is needed for this subset.
+
+## Implementation-ready acceptance coverage boundary
+
+This inventory covers the selected Ashlar v1/v3 Record example, not the complete Truss supported profile. Build the original declaration-derived inventory before admission; absence of keys/relationships in this example is an explicit inspected exclusion, never a general waiver. Retained v2/unknown documents remain unavailable for dependent writable capabilities.
+
+| Required check/effect | Available producer or selected design | Remaining concrete output before acceptance |
+| --- | --- | --- |
+| Original document bytes, validity and diagnostics | Pinned UMF readDocument/validateDocument; original artifact hashes | Admitted immutable source/dependency custody, exact byte limits and original report projection |
+| Explicit version interpretation | Verified reversible upgrade receipt, core0.7→0.8 | Registered immutable transition/profile identity; retain original bytes, source/target and residuals; exact-repeat comparison |
+| Qualified Record/member identity, required absence and literal value | UMF c45c72a2 validateCoreRecordValues 1.0.0, composing actual Field checker | Adopt exact producer revision/API; retain full original result and input; bound invocation and copies |
+| Unknown availability/assertion | Actual incomplete results for v2/unknown | Refuse dependent profile before native effects; preserve diagnostics and content |
+| Dataset key/equality and relationships | Separate governing UMF/Truss key and graph contracts | Full original declaration scan, actual applicable producers and native checks, or explicit inspected no-declaration result for this example |
+| Native logical presence | Complete logical values selected; absent/present-null/present-string distinct | Exact admitted presence/carrier mapping, row/home/Field attribution and round-trip evidence; absent state cannot collapse to SQL NULL |
+| Native equality | Source-qualified native operator/type/collation/cast binding required | Pin actual selected string operator/encoding/collation and native resource producer; do not infer equality from JS string checks or fixture IDs |
+| Validator containment | Host-approved immutable producer registration, bounded pure-check profile | Actual isolation/termination/accounting and failure cleanup; caller cannot select code, replace registry or load remote definitions |
+| Current catalog/data validation | CONTRACT-003 Validate under catalog exclusion | Original complete current values, key reservations, endpoints, ownership and authority; include retained reactivation state and rollback evidence |
+| Stable native identities and derived rows | CONTRACT-003 Derive and native qualified identity mappings | Real allocations under transaction custody, exact same-identity repeat/reactivation and conflict handling; no fixture-ID import |
+| Complete acceptance report/head | Separate immutable report home; protected native persistence boundary | One registered native invocation: revision parent, admitted effects, original event IDs, complete report once, then verified head, all in one transaction |
+| Installation readiness | Selected 0.12 layout and seven-unit protected-chain composition | Full body/trigger/policy/grant/dependency inventory, conversion/genesis, effective access and complete commit checks before ready marker |
+
+The small example must use the same protected chain and original acceptance custody as the full selected profile. It may reduce input size and declared schema features, but cannot publish ordinary readiness with partial triggers, unqualified report production or fixture feed rows. Existing substrate tests do not establish this closure.
+
+The next runtime handoff should identify exact layout/model/DDL/source revisions, immutable support/transition/check composition, installer and protected function identities with body/dependency/security hashes, original acceptance transaction/report/head receipt, real allocated mappings, and the public mutation/feed/consumer API profile. Until those outputs exist, Ashlar can consume only unavailable dispositions or explicitly scoped component evidence. A coordinator's request to run the slice is not itself an adopted profile or authority to mutate the database.

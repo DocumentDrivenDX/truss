@@ -1,0 +1,199 @@
+{
+  "scope": "Embedded Rust Python extension pinned to the same source/features as the Truss CLI; focused independent compiler expectations and complete cross-binding response correspondence only",
+  "python": "3.11.17 (main, Oct  3 2026, 00:54:14) [Clang 22.1.3 ]",
+  "revision": "f05f2df09e9c2494ac8c6d703dfe38413dbc4181",
+  "weftVersion": "0.1.0",
+  "platform": "darwin",
+  "machine": "arm64",
+  "declaredRuntimeDependencies": [],
+  "build": {
+    "revision": "f05f2df09e9c2494ac8c6d703dfe38413dbc4181",
+    "sourceArchiveSha256": "1784d4283b4060c39af2dee6a283472cd539eacc119abb8576a57ae106fb51ea",
+    "features": [
+      "truss-postgresql-qualified"
+    ],
+    "maturin": "1.9.6",
+    "rust": "rustc 1.90.0 (1159e78c4 2025-09-14)",
+    "python": "Python 3.11.17",
+    "buildOptions": [
+      "locked",
+      "offline",
+      "release"
+    ],
+    "sources": [
+      {
+        "path": "crates/weft-python/src/lib.rs",
+        "sha256": "4a348481922988a364ab280b6f3fb4fae1a9940afa447e4282f4a704b6905366"
+      },
+      {
+        "path": "crates/weft-python/Cargo.toml",
+        "sha256": "d5d5286827fd19c3980f6b1028aaff9e4dbb25cf448b8d6d325a287122c42edc"
+      },
+      {
+        "path": "crates/weft-python/pyproject.toml",
+        "sha256": "e61c33fdc35b192e848111dc810e5aae8e053d43f14b1f10ea8a9bdeddc86c7a"
+      },
+      {
+        "path": "Cargo.lock",
+        "sha256": "08d3d30468be6bbde701be72c4e070f60c0706b54898e8e3a0432ea0cfbe0e9e"
+      }
+    ],
+    "wheel": {
+      "path": "/private/tmp/truss-weft-python-f05f2df/dist/weft_sql-0.1.0-cp39-abi3-macosx_11_0_arm64.whl",
+      "filename": "weft_sql-0.1.0-cp39-abi3-macosx_11_0_arm64.whl",
+      "sha256": "63019c98bb004809ff977d147b4d3458eb2a7235ccfda5043b9b52eb4ee65dec"
+    },
+    "producerSha256": "bdce3176a786b2bfd5e55dcad9d7631ecbc95a5b2ca0d3eeb58266dacd813155",
+    "qualification": "Original pinned Python extension build only; no Truss host or native database qualification"
+  },
+  "loadedExtensionSha256": "80918bdd02cf495dbb57939d0439f08c2dea739ea224fbd5315d32e015aa3d61",
+  "loadedExtensionMatchesWheel": true,
+  "cliExecutableSha256": "48e7bf1ca309b0c89cc985cd0d02624190e5c32faf3f23bc9655927628f01098",
+  "fixtureSha256": "0ac92dccb705f6fbfd843d3735aa02a819862e6683019134335bc15f15ed4aa8",
+  "cases": [
+    {
+      "id": "count",
+      "expectedCompiled": true,
+      "inputSha256": "7eec2c3b5f672d0efeb49aa7bffaa19018d745168f47640f1717b51100a9b5b1",
+      "pythonResponseSha256": "a861409fbb2acb6d35eb8f0902ea47651e38edb407b92f7ace5a13de837cc3f6",
+      "cliResponseSha256": "c3a89438815b84e4409017cb71fa81bc1a02e418b3c5e46b0b2560de18560148",
+      "fullParsedResponseEqual": true
+    },
+    {
+      "id": "bounded_group_count",
+      "expectedCompiled": true,
+      "inputSha256": "0f6b3f805c00a700af2d942b67681fe290a31699da5e565d13c0ebc44f617fa8",
+      "pythonResponseSha256": "f8b885962c47367e3cf808d3a3ae6dc90815422f9f226725047cb93a38e7bd9b",
+      "cliResponseSha256": "042f152d6ac2ec835ce984f9798999b02865b84ff06078cb5f8d35230a383238",
+      "fullParsedResponseEqual": true
+    },
+    {
+      "id": "unbounded_group_count",
+      "expectedCompiled": false,
+      "inputSha256": "265eb9fd67454b5519ba864f0d08a352649de3aac59b3e8b9c913f2e3119eedd",
+      "pythonResponseSha256": "d6c5c2f697b4c3f1c4aec1323b8cfc48c833b66db9d835c685c1448b1070e4a1",
+      "cliResponseSha256": "07336be4a6d3be5e084b78f953e0661131f9ce59b91b70ed62dcf3565bebebdc",
+      "fullParsedResponseEqual": true
+    },
+    {
+      "id": "unsupported_profile",
+      "expectedCompiled": false,
+      "inputSha256": "e6e768bcd40d7daac7460c9997755877a69efd063d0679ae803802e0144a9c03",
+      "pythonResponseSha256": "9a78f987c01b576e308c2b8d2846b70954ed8fc4c3d54a521a16e6c1197b2cb2",
+      "cliResponseSha256": "15869e92d853bb9709e79f675d270bd6e9503f7a2dcc77d68dde34e5231e892d",
+      "fullParsedResponseEqual": true
+    },
+    {
+      "id": "missing_version",
+      "expectedCompiled": false,
+      "inputSha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "pythonResponseSha256": "445f49fdec6c3b4bb9b3c78a69a79829fb6e38a284ec7627457abd19ba3f8db5",
+      "cliResponseSha256": "e57d2b4296e3e1fa00cbb580a2f32ad2c1fc891ab1f4ce596bf7b6c8b10f8493",
+      "fullParsedResponseEqual": true
+    }
+  ],
+  "transportRefusals": 5,
+  "testOnlyExportAbsent": true,
+  "nativeDatabaseExecuted": false,
+  "qualifiedTrussPythonRuntime": false,
+  "pythonBoundarySourceSha256": "331af0ce6b2f974f7d8ba69c1da90825dfa92c7e57a06cec5aed90a3ec4cd3be",
+  "pythonBoundarySourceOnly": false,
+  "trussWheelDelivery": {
+    "wheel": {
+      "path": "/private/tmp/truss-python-cli-wheel/truss_toolkit-0.0.1.dev0-py3-none-any.whl",
+      "sha256": "43ef23897b831ad637eb5502997a7b8cfa86df1eeabfc56a4f9f1d977296445b"
+    },
+    "loadedBoundary": "/private/tmp/truss-python-coordinator-env/lib/python3.11/site-packages/truss/weft.py",
+    "modules": [
+      {
+        "path": "truss/__init__.py",
+        "sha256": "e9d7aacb2f5a5da077ffc24500422876892c3f68a7f595f059fd4189f25a83b5"
+      },
+      {
+        "path": "truss/_acceptance_json.py",
+        "sha256": "fba890deb660bf461e6bcf4eeef0c0704962f0c1814d879c9509e2f994842f77"
+      },
+      {
+        "path": "truss/_operation_ordinal.py",
+        "sha256": "9be8b93fbdaa7595e8330b9e8edd3d048fbff25b1b670c1587647ef1908ddcd3"
+      },
+      {
+        "path": "truss/_query_execution.py",
+        "sha256": "8209768fe1f78b6234bae24545a221beca6b2ff60f22d9f3be501834604342e7"
+      },
+      {
+        "path": "truss/_receipt_position.py",
+        "sha256": "e7c42049947c4bda44c0ac9e62e23b73143c6129f07f9ee889ef186364f19eba"
+      },
+      {
+        "path": "truss/cli.py",
+        "sha256": "6a6b3fb751a73b7d338f531d514ec3e4b94c7fb58d4fe80351ff630a7cc7df37"
+      },
+      {
+        "path": "truss/local_runtime.py",
+        "sha256": "b17d3f5174a4c100a635012f7b6228d9151e1b2a2174fb36f75b331f365bb808"
+      },
+      {
+        "path": "truss/migration_planning.py",
+        "sha256": "12fabf2bd14a6af133f70488e704ff7a7fe8aded3158695655ba26acfb69fcce"
+      },
+      {
+        "path": "truss/numeric.py",
+        "sha256": "4833d54fda887fa70171511761d28ea75a0dc22aa89a50c3eae2a88f2b972d18"
+      },
+      {
+        "path": "truss/timestamp.py",
+        "sha256": "b08dbf2a9c48754282f05429a58b66515c75a815f6e1282d3c485248f762120c"
+      },
+      {
+        "path": "truss/weft.py",
+        "sha256": "331af0ce6b2f974f7d8ba69c1da90825dfa92c7e57a06cec5aed90a3ec4cd3be"
+      }
+    ],
+    "allModulePayloadsMatch": true,
+    "version": "0.0.1.dev0",
+    "requiresDist": [
+      "pgserver==0.1.4; extra == \"local\"",
+      "fasteners==0.20; extra == \"local\"",
+      "platformdirs==4.12.4; extra == \"local\"",
+      "psutil==7.2.2; extra == \"local\""
+    ],
+    "installedDistributions": [
+      {
+        "name": "fasteners",
+        "version": "0.20"
+      },
+      {
+        "name": "pgserver",
+        "version": "0.1.4"
+      },
+      {
+        "name": "pip",
+        "version": "24.0"
+      },
+      {
+        "name": "platformdirs",
+        "version": "4.12.4"
+      },
+      {
+        "name": "psutil",
+        "version": "7.2.2"
+      },
+      {
+        "name": "setuptools",
+        "version": "79.0.1"
+      },
+      {
+        "name": "truss-toolkit",
+        "version": "0.0.1.dev0"
+      },
+      {
+        "name": "weft-sql",
+        "version": "0.1.0"
+      }
+    ],
+    "localExtraInstalled": true,
+    "nativeInstallationQualified": false
+  },
+  "producerSha256": "f4e8cf6d3d3f50133e53877ab0b8408255d95ec557b5c80d9065af22f5ce3180"
+}

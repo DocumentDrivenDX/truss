@@ -1,0 +1,288 @@
+{
+  "interfaceVersion": "truss-bootstrap-foreign-query-set/0.1.0",
+  "status": "unadopted source-only; no native query execution",
+  "parameterGrammar": {
+    "type": "pg_catalog.oid[]",
+    "dimensions": 1,
+    "lowerBound": 1,
+    "countInclusive": [
+      1,
+      256
+    ],
+    "nonzero": true,
+    "unique": true,
+    "nullItems": false
+  },
+  "entries": [
+    {
+      "query": "foreign-table-header",
+      "source": "docs/helix/02-design/contracts/bindings/bootstrap-foreign-table-header-observation-pg17.proposal.sql",
+      "sourceSha256": "a97c48f001e51404eb4fd787896e77f2bf0571679f7c4e149e4eba2256cafcc4",
+      "archive": "docs/helix/02-design/contracts/bindings/bootstrap-foreign-table-header-observation-pg17.proposal.umf.json",
+      "archiveSha256": "778b9a9bf4872c4222a6df90b8fb8967a7bd91ff6bf93ea35a8487e5079b65ed",
+      "export": "docs/helix/04-build/evidence/design-audit/bootstrap-foreign-table-header-observation.owner-export.sql",
+      "exportSha256": "eed2350fe11b7afc4e83f481b0f48120b7cff338fa60a8e4fe5c603f669f61f9",
+      "columns": [
+        {
+          "name": "adjunct_catalog_class_oid",
+          "transport": "original native text",
+          "nullable": false,
+          "meaning": "Original actual nonzero uint32 decimal catalog identity; exact source address/class correspondence required"
+        },
+        {
+          "name": "relation_oid",
+          "transport": "original native text",
+          "nullable": false,
+          "meaning": "Original actual nonzero uint32 decimal catalog identity; exact source address/class correspondence required"
+        },
+        {
+          "name": "server_oid",
+          "transport": "original native text",
+          "nullable": false,
+          "meaning": "Original actual nonzero uint32 decimal catalog identity; exact source address/class correspondence required"
+        }
+      ],
+      "disclosure": "header fields only; options unobserved and no whole-row JSON",
+      "coverage": "unadopted masked known fields only; not complete unknown fields, runtime access or registered route"
+    },
+    {
+      "query": "foreign-table-options",
+      "source": "docs/helix/02-design/contracts/bindings/bootstrap-foreign-table-options-observation-pg17.proposal.sql",
+      "sourceSha256": "a497df4c8c4f9feee0dec5e365d8d35155cc5180f72adff3854a6e787502dab4",
+      "archive": "docs/helix/02-design/contracts/bindings/bootstrap-foreign-table-options-observation-pg17.proposal.umf.json",
+      "archiveSha256": "a525c1274a0b3957b69a88cd2f3f5948b7e3a4c0d4a19490dab16bb964e85cdc",
+      "export": "docs/helix/04-build/evidence/design-audit/bootstrap-foreign-table-options-observation.owner-export.sql",
+      "exportSha256": "4e2add321d8b5fc467fbd53bd00d93c0154ce915cb96d3d36c64d301f8d7e2ad",
+      "columns": [
+        {
+          "name": "catalog_class_oid",
+          "transport": "original native text",
+          "nullable": false,
+          "meaning": "Original actual nonzero uint32 decimal catalog identity; exact source address/class correspondence required"
+        },
+        {
+          "name": "original_object_oid",
+          "transport": "original native text",
+          "nullable": false,
+          "meaning": "Original actual nonzero uint32 decimal catalog identity; exact source address/class correspondence required"
+        },
+        {
+          "name": "options_native_text",
+          "transport": "original native text",
+          "nullable": true,
+          "meaning": "Exact native array text/dimensions with selected null/empty/order grammar; not JS-array reconstruction"
+        },
+        {
+          "name": "options_native_dimensions",
+          "transport": "original native text",
+          "nullable": true,
+          "meaning": "Exact native array text/dimensions with selected null/empty/order grammar; not JS-array reconstruction"
+        }
+      ],
+      "disclosure": "separate explicit options authorization before materialization",
+      "coverage": "unadopted masked known fields only; not complete unknown fields, runtime access or registered route"
+    },
+    {
+      "query": "foreign-server-header",
+      "source": "docs/helix/02-design/contracts/bindings/bootstrap-foreign-server-header-observation-pg17.proposal.sql",
+      "sourceSha256": "a3083bcd3ec79e51037a9479bce53e4ca1810a7cdea5d17a8c00deaa6635a45a",
+      "archive": "docs/helix/02-design/contracts/bindings/bootstrap-foreign-server-header-observation-pg17.proposal.umf.json",
+      "archiveSha256": "572a2f4dd73eb5c95a0ebdd946cca72066336fc9485dc3b8a8159150d1cdc867",
+      "export": "docs/helix/04-build/evidence/design-audit/bootstrap-foreign-server-header-observation.owner-export.sql",
+      "exportSha256": "390e71dcb7d1efa5e40b37263f4451616482f66ac968b77a6597bc31f9511b12",
+      "columns": [
+        {
+          "name": "catalog_class_oid",
+          "transport": "original native text",
+          "nullable": false,
+          "meaning": "Original actual nonzero uint32 decimal catalog identity; exact source address/class correspondence required"
+        },
+        {
+          "name": "server_oid",
+          "transport": "original native text",
+          "nullable": false,
+          "meaning": "Original actual nonzero uint32 decimal catalog identity; exact source address/class correspondence required"
+        },
+        {
+          "name": "server_name",
+          "transport": "original native text",
+          "nullable": false,
+          "meaning": "Original exact native name or nullable declared text; no folding or software/version inference"
+        },
+        {
+          "name": "owner_oid",
+          "transport": "original native text",
+          "nullable": false,
+          "meaning": "Original actual nonzero uint32 decimal catalog identity; exact source address/class correspondence required"
+        },
+        {
+          "name": "wrapper_oid",
+          "transport": "original native text",
+          "nullable": false,
+          "meaning": "Original actual nonzero uint32 decimal catalog identity; exact source address/class correspondence required"
+        },
+        {
+          "name": "declared_server_type",
+          "transport": "original native text",
+          "nullable": true,
+          "meaning": "Original exact native name or nullable declared text; no folding or software/version inference"
+        },
+        {
+          "name": "declared_server_version",
+          "transport": "original native text",
+          "nullable": true,
+          "meaning": "Original exact native name or nullable declared text; no folding or software/version inference"
+        },
+        {
+          "name": "acl_native_text",
+          "transport": "original native text",
+          "nullable": true,
+          "meaning": "Exact native array text/dimensions with selected null/empty/order grammar; not JS-array reconstruction"
+        },
+        {
+          "name": "acl_native_dimensions",
+          "transport": "original native text",
+          "nullable": true,
+          "meaning": "Exact native array text/dimensions with selected null/empty/order grammar; not JS-array reconstruction"
+        }
+      ],
+      "disclosure": "header fields only; options unobserved and no whole-row JSON",
+      "coverage": "unadopted masked known fields only; not complete unknown fields, runtime access or registered route"
+    },
+    {
+      "query": "foreign-server-options",
+      "source": "docs/helix/02-design/contracts/bindings/bootstrap-foreign-server-options-observation-pg17.proposal.sql",
+      "sourceSha256": "950e03e142af638ed9ed74d7b40a925152721b0f6acb7214065df0c36549f47d",
+      "archive": "docs/helix/02-design/contracts/bindings/bootstrap-foreign-server-options-observation-pg17.proposal.umf.json",
+      "archiveSha256": "8a1dcfa8e25202edf1034c63cd028b316c9b1e1f9a757c2f5cb107acb82f3372",
+      "export": "docs/helix/04-build/evidence/design-audit/bootstrap-foreign-server-options-observation.owner-export.sql",
+      "exportSha256": "f56f863f3ee9dc70f8df55fb461f9050a695f3c3c6cc5f5c23077a3c506c2b09",
+      "columns": [
+        {
+          "name": "catalog_class_oid",
+          "transport": "original native text",
+          "nullable": false,
+          "meaning": "Original actual nonzero uint32 decimal catalog identity; exact source address/class correspondence required"
+        },
+        {
+          "name": "original_object_oid",
+          "transport": "original native text",
+          "nullable": false,
+          "meaning": "Original actual nonzero uint32 decimal catalog identity; exact source address/class correspondence required"
+        },
+        {
+          "name": "options_native_text",
+          "transport": "original native text",
+          "nullable": true,
+          "meaning": "Exact native array text/dimensions with selected null/empty/order grammar; not JS-array reconstruction"
+        },
+        {
+          "name": "options_native_dimensions",
+          "transport": "original native text",
+          "nullable": true,
+          "meaning": "Exact native array text/dimensions with selected null/empty/order grammar; not JS-array reconstruction"
+        }
+      ],
+      "disclosure": "separate explicit options authorization before materialization",
+      "coverage": "unadopted masked known fields only; not complete unknown fields, runtime access or registered route"
+    },
+    {
+      "query": "foreign-wrapper-header",
+      "source": "docs/helix/02-design/contracts/bindings/bootstrap-foreign-wrapper-header-observation-pg17.proposal.sql",
+      "sourceSha256": "31d0f7ad80278f154bc9a1b116b5c61fdbca5ffc85c350f5346c58b5acdfda49",
+      "archive": "docs/helix/02-design/contracts/bindings/bootstrap-foreign-wrapper-header-observation-pg17.proposal.umf.json",
+      "archiveSha256": "fab281e7f925b557f93ed5ef628f457d93d667d1bd8ecfc0f7ffd136845caf17",
+      "export": "docs/helix/04-build/evidence/design-audit/bootstrap-foreign-wrapper-header-observation.owner-export.sql",
+      "exportSha256": "9b4c63fbc8da840ccd500ffed20de0d3740e56e790b9bd9d55e2de48e8bb227e",
+      "columns": [
+        {
+          "name": "catalog_class_oid",
+          "transport": "original native text",
+          "nullable": false,
+          "meaning": "Original actual nonzero uint32 decimal catalog identity; exact source address/class correspondence required"
+        },
+        {
+          "name": "wrapper_oid",
+          "transport": "original native text",
+          "nullable": false,
+          "meaning": "Original actual nonzero uint32 decimal catalog identity; exact source address/class correspondence required"
+        },
+        {
+          "name": "wrapper_name",
+          "transport": "original native text",
+          "nullable": false,
+          "meaning": "Original exact native name or nullable declared text; no folding or software/version inference"
+        },
+        {
+          "name": "owner_oid",
+          "transport": "original native text",
+          "nullable": false,
+          "meaning": "Original actual nonzero uint32 decimal catalog identity; exact source address/class correspondence required"
+        },
+        {
+          "name": "handler_oid",
+          "transport": "original native text",
+          "nullable": false,
+          "meaning": "Original uint32 decimal routine reference; zero explicitly no callback, nonzero resolves actual original pg_proc; never invoke during collection"
+        },
+        {
+          "name": "validator_oid",
+          "transport": "original native text",
+          "nullable": false,
+          "meaning": "Original uint32 decimal routine reference; zero explicitly no callback, nonzero resolves actual original pg_proc; never invoke during collection"
+        },
+        {
+          "name": "acl_native_text",
+          "transport": "original native text",
+          "nullable": true,
+          "meaning": "Exact native array text/dimensions with selected null/empty/order grammar; not JS-array reconstruction"
+        },
+        {
+          "name": "acl_native_dimensions",
+          "transport": "original native text",
+          "nullable": true,
+          "meaning": "Exact native array text/dimensions with selected null/empty/order grammar; not JS-array reconstruction"
+        }
+      ],
+      "disclosure": "header fields only; options unobserved and no whole-row JSON",
+      "coverage": "unadopted masked known fields only; not complete unknown fields, runtime access or registered route"
+    },
+    {
+      "query": "foreign-wrapper-options",
+      "source": "docs/helix/02-design/contracts/bindings/bootstrap-foreign-wrapper-options-observation-pg17.proposal.sql",
+      "sourceSha256": "c0348265880ff560eededf6288aaafb9e8ee3c880fd8c396aef0edce381241cf",
+      "archive": "docs/helix/02-design/contracts/bindings/bootstrap-foreign-wrapper-options-observation-pg17.proposal.umf.json",
+      "archiveSha256": "d434bf6649a853a27b891bb01cbe6ce6e85dba0d1873e8e1454373f655ea4c22",
+      "export": "docs/helix/04-build/evidence/design-audit/bootstrap-foreign-wrapper-options-observation.owner-export.sql",
+      "exportSha256": "7fba7ab684116269d6f315a1c64f46341a054ddf7e6316c527778f8818de4dd5",
+      "columns": [
+        {
+          "name": "catalog_class_oid",
+          "transport": "original native text",
+          "nullable": false,
+          "meaning": "Original actual nonzero uint32 decimal catalog identity; exact source address/class correspondence required"
+        },
+        {
+          "name": "original_object_oid",
+          "transport": "original native text",
+          "nullable": false,
+          "meaning": "Original actual nonzero uint32 decimal catalog identity; exact source address/class correspondence required"
+        },
+        {
+          "name": "options_native_text",
+          "transport": "original native text",
+          "nullable": true,
+          "meaning": "Exact native array text/dimensions with selected null/empty/order grammar; not JS-array reconstruction"
+        },
+        {
+          "name": "options_native_dimensions",
+          "transport": "original native text",
+          "nullable": true,
+          "meaning": "Exact native array text/dimensions with selected null/empty/order grammar; not JS-array reconstruction"
+        }
+      ],
+      "disclosure": "separate explicit options authorization before materialization",
+      "coverage": "unadopted masked known fields only; not complete unknown fields, runtime access or registered route"
+    }
+  ]
+}

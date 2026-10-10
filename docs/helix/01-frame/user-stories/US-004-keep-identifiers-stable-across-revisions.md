@@ -29,7 +29,7 @@ ddx:
 
 ## Context
 
-Stored values are keyed by property identifier, so a changed or reused identifier would corrupt meaning.
+Stored values are keyed by property identifier, so a changed or reused identifier would corrupt meaning. Identifier stability follows the complete qualified authored identity, not a display name or source position. For the nonreuse criterion, an issued catalog identifier means one durably accepted in a committed revision. Candidate allocations remain provisional inside their original transaction and cannot be published as durable identifiers before confirmed commitment; rollback or an unacknowledged outcome follows US-044 and the original recovery protocol. No observed high-water mark or later committed identifier proves an earlier attempt committed. Key numbers are owner-local: the complete identity includes the owning type, and a retired number cannot be reassigned within that type. Equal numbers in different types are not reuse of one identifier.
 
 ## Walkthrough
 
@@ -42,11 +42,11 @@ Stored values are keyed by property identifier, so a changed or reused identifie
 
 - [ ] **US-004-AC1** — Given an element whose UMF identity is unchanged, when a revision is accepted, then its identifier is unchanged.
 - [ ] **US-004-AC2** — Given a retired property, when a new property is added, then the new identifier differs from every identifier ever issued.
-- [ ] **US-004-AC3** — Given the same document bytes registered twice, when the second registration runs, then no new revision is created.
+- [ ] **US-004-AC3** — Given the same document bytes and complete verified acceptance context repeated at the current head, when the second registration runs, then no new revision is created and the original report and origin are preserved.
 
 ## Edge Cases
 
-- **A retired element redefined**: follows the identity rule; it is not given a retired identifier.
+- **A retired element redefined**: the same exact qualified authored identity reactivates its original storage identifier only after full lifecycle validation. A distinct authored identity receives a fresh identifier; reactivation does not automatically restore permissions.
 - **Two documents defining one element differently**: rejected as a duplicate definition.
 
 ## Test Scenarios
@@ -55,7 +55,7 @@ Stored values are keyed by property identifier, so a changed or reused identifie
 |----------|-------|---------------|--------|-----------------|
 | Stable | US-004-AC1 | `Customer.email` id 12 | Register revision 2 | Still id 12 |
 | No reuse | US-004-AC2 | `email` retired | Add `phone` | New id, not 12 |
-| Idempotent | US-004-AC3 | Revision 2 accepted | Register same bytes | No new revision |
+| Idempotent | US-004-AC3 | Revision 2 accepted at current head | Register same bytes and verified acceptance context | No new revision; original report/origin |
 
 ## Dependencies
 

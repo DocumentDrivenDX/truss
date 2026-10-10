@@ -1,0 +1,182 @@
+{
+  "profile": "truss-document-order-vectors/0.1.0",
+  "status": "authored_not_run",
+  "scope": "Abstract already-validated dependency graphs only; not UMF input syntax or native acceptance evidence",
+  "edgeDirection": "dependent_to_dependency",
+  "comparison": "Exact UTF-8 bytes; ready SCCs compare sorted member vectors lexicographically; emit all members before selecting another ready SCC",
+  "cases": [
+    {
+      "name": "cycle_then_dependent",
+      "nodes": [
+        "C",
+        "B",
+        "A"
+      ],
+      "edges": [
+        [
+          "A",
+          "B"
+        ],
+        [
+          "B",
+          "A"
+        ],
+        [
+          "C",
+          "A"
+        ]
+      ],
+      "expectedOrder": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "name": "newly_ready_precedes_old_ready",
+      "nodes": [
+        "D",
+        "C",
+        "B",
+        "A"
+      ],
+      "edges": [
+        [
+          "A",
+          "B"
+        ],
+        [
+          "B",
+          "A"
+        ],
+        [
+          "C",
+          "A"
+        ]
+      ],
+      "expectedOrder": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "name": "shared_dependency",
+      "nodes": [
+        "D",
+        "C",
+        "B",
+        "A"
+      ],
+      "edges": [
+        [
+          "A",
+          "C"
+        ],
+        [
+          "B",
+          "C"
+        ]
+      ],
+      "expectedOrder": [
+        "C",
+        "A",
+        "B",
+        "D"
+      ]
+    },
+    {
+      "name": "utf8_not_utf16",
+      "nodes": [
+        "𐀀",
+        ""
+      ],
+      "edges": [],
+      "expectedOrder": [
+        "",
+        "𐀀"
+      ],
+      "expectedUtf8Hex": [
+        "ee8080",
+        "f0908080"
+      ],
+      "reason": "Default JavaScript string comparison orders the supplementary character first; byte comparison must order U+E000 first."
+    },
+    {
+      "name": "normalization_and_prefix",
+      "nodes": [
+        "é",
+        "é",
+        "aa",
+        "a"
+      ],
+      "edges": [],
+      "expectedOrder": [
+        "a",
+        "aa",
+        "é",
+        "é"
+      ],
+      "expectedUtf8Hex": [
+        "61",
+        "6161",
+        "65cc81",
+        "c3a9"
+      ]
+    },
+    {
+      "name": "emit_complete_component",
+      "nodes": [
+        "B",
+        "Z",
+        "A"
+      ],
+      "edges": [
+        [
+          "A",
+          "Z"
+        ],
+        [
+          "Z",
+          "A"
+        ]
+      ],
+      "expectedOrder": [
+        "A",
+        "Z",
+        "B"
+      ],
+      "reason": "Ready component [A,Z] precedes [B]; emitting A does not interleave B before Z."
+    },
+    {
+      "name": "duplicate_identity",
+      "nodes": [
+        "A",
+        "A"
+      ],
+      "edges": [],
+      "expectedRefusal": "duplicate_document_identity"
+    },
+    {
+      "name": "missing_dependency",
+      "nodes": [
+        "A"
+      ],
+      "edges": [
+        [
+          "A",
+          "B"
+        ]
+      ],
+      "expectedRefusal": "missing_dependency_identity"
+    }
+  ],
+  "runnerObligations": [
+    "For every valid case enumerate all node-order and edge-order permutations; compare complete expected output, not only membership.",
+    "Duplicate identical dependency edges, where the admitted graph profile permits them, cannot change the order; charge every observed edge before deduplication.",
+    "Invalid cases refuse before persisted ord or any candidate effects; a pure refusal is not native rollback proof.",
+    "Use the independent expected arrays directly; do not derive expected orders with the production SCC or comparison helper.",
+    "Finite resource boundary tests require the selected operation resource profile and remain separate from these small graphs."
+  ]
+}

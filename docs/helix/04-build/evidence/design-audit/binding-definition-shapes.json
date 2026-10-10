@@ -1,0 +1,91 @@
+{
+  "scope": "Nested shape controls only; unresolved references, duplicate nodes and unknown obligations intentionally demonstrate missing semantic authority",
+  "bunVersion": "1.4.2",
+  "sourcePins": [
+    {
+      "path": "truss-value-definition-v0.1.proposal.schema.json",
+      "sha256": "ae6d9227ddfe82bd531e3fb2754382f4bbe898ef20afc8690a197d78a16d62f3"
+    },
+    {
+      "path": "truss-presence-definition-v0.1.proposal.schema.json",
+      "sha256": "08270a400dceb28e855ead142e31cfad1a30fd116d84b5380022fa3de4542f11"
+    },
+    {
+      "path": "truss-read-context-definition-v0.1.proposal.schema.json",
+      "sha256": "01eef30067e6ce3ff3957475e163e8c9e870d1fa36b67c94aa6b2fe11d5e14cb"
+    }
+  ],
+  "observations": [
+    {
+      "name": "structured record sequence map scalar graph",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "structured record reference missing",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "unknown shape",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "missing graph reference requires semantic refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "duplicate nodes require semantic refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "presence definition",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "absence collapsed to null",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "read default injected",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "native null advertised",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "read context",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "snapshot authority frozen",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "serialized transaction",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "no consistency mode",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "unknown obligation requires semantic refusal",
+      "expected": true,
+      "actual": true
+    }
+  ],
+  "failures": []
+}

@@ -1,0 +1,26 @@
+{
+  "profile": "truss-native-layout-capture/0.1.0",
+  "id": "truss-module-isolation-0.2",
+  "layoutVersion": "0.2",
+  "source": "module-isolation.sql",
+  "sourceSha256": "242c1f9f6287ef083ac0699c0753730365a984b85f8e2b9b0beea6962f9d2e5e",
+  "modelSha256": "d14abfa08dd5b418adddbdfd952517698836e289ac5c6661bae7255e66bd00f4",
+  "generatedSqlSha256": "22578430ab9aa8ff8196c4ffbb95c7ecd2ebf862ac215d7f6036bff7b5f69fe9",
+  "umfVersion": "0.1.0",
+  "backendIdentity": "@libpg-query/parser@17.6.10",
+  "checks": {
+    "sourceArchiveExact": true,
+    "jsonRoundtrip": true,
+    "deterministicExport": true,
+    "umfNativeExportGuard": true
+  },
+  "qualification": "design-candidate",
+  "notEstablished": [
+    "independent catalog parity",
+    "PostgreSQL 16/17 execution",
+    "PL/pgSQL body validation",
+    "complete coverage inventory",
+    "browser execution",
+    "authority transition"
+  ]
+}

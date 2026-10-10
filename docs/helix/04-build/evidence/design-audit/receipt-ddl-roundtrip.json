@@ -1,0 +1,186 @@
+{
+  "scope": "UMF pinned parser/export codec and AST reparse guard only; no database execution, permissions, complete statement correspondence API or installed layout support",
+  "backend": "@libpg-query/parser@17.6.10",
+  "results": [
+    {
+      "path": "docs/helix/02-design/contracts/request-receipt-layout-v0.1.draft.sql",
+      "inputSha256": "84344d87881fb784c6093919ffae88325837bcea6f7193075797d8ee56128ff4",
+      "exportSha256": "7e027935ad5ccbf741403930052b50621869734d009629e5ea09a2e163bf0280",
+      "originalSourcePreserved": true,
+      "declarationStatus": "observed",
+      "complete": false,
+      "declarations": 3,
+      "unhandled": 2,
+      "xidColumns": [
+        {
+          "name": "original_writer_xid",
+          "typeResolution": "unresolved"
+        },
+        {
+          "name": "expiry_writer_xid",
+          "typeResolution": "unresolved"
+        },
+        {
+          "name": "original_update_writer_xid",
+          "typeResolution": "unresolved"
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "severity": "warning",
+          "path": ""
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "severity": "warning",
+          "path": "/stmts/0/stmt/CreateStmt/tableElts/0/ColumnDef/typeName"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "severity": "warning",
+          "path": "/stmts/0/stmt/CreateStmt/tableElts/1/ColumnDef/typeName"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "severity": "warning",
+          "path": "/stmts/1/stmt"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "severity": "warning",
+          "path": "/stmts/2/stmt/CreateStmt/tableElts/1/ColumnDef/typeName"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "severity": "warning",
+          "path": "/stmts/2/stmt/CreateStmt/tableElts/2/ColumnDef/typeName"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "severity": "warning",
+          "path": "/stmts/2/stmt/CreateStmt/tableElts/3/ColumnDef/typeName"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "severity": "warning",
+          "path": "/stmts/2/stmt/CreateStmt/tableElts/4/ColumnDef/typeName"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "severity": "warning",
+          "path": "/stmts/2/stmt/CreateStmt/tableElts/6/ColumnDef/typeName"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "severity": "warning",
+          "path": "/stmts/2/stmt/CreateStmt/tableElts/7/ColumnDef/typeName"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "severity": "warning",
+          "path": "/stmts/2/stmt/CreateStmt/tableElts/8/ColumnDef/typeName"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "severity": "warning",
+          "path": "/stmts/2/stmt/CreateStmt/tableElts/9/ColumnDef/typeName"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "severity": "warning",
+          "path": "/stmts/2/stmt/CreateStmt/tableElts/10/ColumnDef/typeName"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "severity": "warning",
+          "path": "/stmts/2/stmt/CreateStmt/tableElts/13/ColumnDef/typeName"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "severity": "warning",
+          "path": "/stmts/2/stmt/CreateStmt/tableElts/14/ColumnDef/typeName"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "severity": "warning",
+          "path": "/stmts/3/stmt"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "severity": "warning",
+          "path": "/stmts/4/stmt/CreateStmt/tableElts/2/ColumnDef/typeName"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "severity": "warning",
+          "path": "/stmts/4/stmt/CreateStmt/tableElts/3/ColumnDef/typeName"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "severity": "warning",
+          "path": "/stmts/4/stmt/CreateStmt/tableElts/4/ColumnDef/typeName"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "severity": "warning",
+          "path": "/stmts/4/stmt/CreateStmt/tableElts/5/ColumnDef/typeName"
+        }
+      ]
+    },
+    {
+      "path": "docs/helix/02-design/contracts/request-receipt-statements-v0.1.draft.sql",
+      "inputSha256": "06c999badd1c26f5653ac384ed218cfb2e7d9266bc50e8cb3918dee4814ece8c",
+      "exportSha256": "63cf3e5af4c64ec909b463ba6f64ef581b7956b2eee34797a571573d5a584b33",
+      "originalSourcePreserved": true,
+      "declarationStatus": "observed",
+      "complete": false,
+      "declarations": 0,
+      "unhandled": 7,
+      "xidColumns": [],
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "severity": "warning",
+          "path": ""
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "severity": "warning",
+          "path": "/stmts/0/stmt"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "severity": "warning",
+          "path": "/stmts/1/stmt"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "severity": "warning",
+          "path": "/stmts/2/stmt"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "severity": "warning",
+          "path": "/stmts/3/stmt"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "severity": "warning",
+          "path": "/stmts/4/stmt"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "severity": "warning",
+          "path": "/stmts/5/stmt"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "severity": "warning",
+          "path": "/stmts/6/stmt"
+        }
+      ]
+    }
+  ],
+  "failures": []
+}

@@ -1,0 +1,98 @@
+{
+  "scope": "Committed upstream source/contract comparison; no compiler/native execution or adoption",
+  "observedAt": "2026-10-10T04:47:43.266469+00:00",
+  "umfFreshFetchedMain": "322b193cef7c940d07b741860cf0170272628868",
+  "weftFreshFetchedMain": "b8867c91bce3f01c21938ab1b09df0e1be45adf9",
+  "priorWeftMain": "be49fff8b642105d76ab369387dea6139c0868d4",
+  "changedPaths": [
+    "crates/weft-databricks/src/candidate/relationships.rs",
+    "crates/weft-databricks/tests/relationship_degree.rs",
+    "docs/helix/02-design/contracts/CONTRACT-004-application-reads.md"
+  ],
+  "weftSourceSha256": {
+    "crates/weft-databricks/src/candidate/relationships.rs": "0b4831fa06ba31d83d1d61ace4a842fe8834272dacb76dcb15125b4e8553496d",
+    "crates/weft-databricks/tests/relationship_degree.rs": "ae2ebfbea870a3a78df0f58740f10f3eedbc7524919d08cf4124213443647cbf",
+    "docs/helix/02-design/contracts/CONTRACT-004-application-reads.md": "8c0b94cd5e9085a4428a9c9ede04a41c095f40727efca12b77aa9be50c8a7020"
+  },
+  "umfRelationshipContractSha256": "e113602dd3fe81eb56e43cebd4aef1948e82910254229962cf37f22eb0ab2524",
+  "trussStorySha256": "7a4cbb6129408b3ae9c87a640fd788abae507d3d8e713da0abc9ff0dfe59654e",
+  "observations": [
+    "Databricks degree guard deduplicates complete source_id,target_id pairs before counting",
+    "Occurrence CTE and relationship result SQL remain bags; degree deduplication must not remove result occurrences",
+    "UMF relationship contract counts distinct associated record instances",
+    "Truss US-011 specifies refusal of a second edge for max1 and fourth edge for max3; this occurrence cap is not equivalent to distinct-neighbor participation",
+    "Only Databricks relationship code/test and owner contract changed in the reviewed range; no Truss PostgreSQL lowering or Python wrapper change"
+  ],
+  "independentCases": [
+    {
+      "id": "parallel",
+      "edges": [
+        [
+          101,
+          1,
+          7
+        ],
+        [
+          102,
+          1,
+          7
+        ]
+      ],
+      "edgeOccurrences": 2,
+      "distinctTargetRecords": 1,
+      "maxOneOccurrenceCap": "refuse",
+      "maxOneNeighborParticipation": "passes_upper_bound",
+      "relatedOccurrenceCount": 2
+    },
+    {
+      "id": "different-neighbors",
+      "edges": [
+        [
+          101,
+          1,
+          7
+        ],
+        [
+          102,
+          1,
+          8
+        ]
+      ],
+      "edgeOccurrences": 2,
+      "distinctTargetRecords": 2,
+      "maxOneOccurrenceCap": "refuse",
+      "maxOneNeighborParticipation": "refuse",
+      "relatedOccurrenceCount": 2
+    },
+    {
+      "id": "delete-one-parallel",
+      "edges": [
+        [
+          102,
+          1,
+          7
+        ]
+      ],
+      "edgeOccurrences": 1,
+      "distinctTargetRecords": 1,
+      "maxOneOccurrenceCap": "passes_upper_bound",
+      "maxOneNeighborParticipation": "passes_upper_bound",
+      "relatedOccurrenceCount": 1
+    },
+    {
+      "id": "zero-neighbors",
+      "edges": [],
+      "edgeOccurrences": 0,
+      "distinctTargetRecords": 0,
+      "minimumOneNeighborParticipation": "refuse",
+      "relatedOccurrenceCount": 0
+    }
+  ],
+  "adoptedCompilerPin": "f05f2df09e9c2494ac8c6d703dfe38413dbc4181",
+  "adoptedCompilerChanged": false,
+  "ownerTestsExecutedHere": false,
+  "nativeQualified": false,
+  "requiredDisposition": "Keep occurrence-cap and owning UMF participation meanings separate. Refuse unqualified equivalent mapping; qualify actual typed identity/pair representation and complete writer/guard/read schedules before adoption.",
+  "umfCommittedRelationshipContractSha256": "b84ed0a802fd8a7f7585dddda69a040f2133c28928d126d352b5d979ae76554a",
+  "umfWorkspaceContractMatchesCommitted": false
+}

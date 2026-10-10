@@ -1,0 +1,47 @@
+-- Unadopted RT05 protected deletion effects, not standalone cleanup.
+-- Only after original RT01-RT04 settlement/dependency/authority/exclusion proof.
+-- Parameter ownership equals the original selected-row snapshot statements.
+-- RETURNING preserves every removed field for exact snapshot/membership parity.
+-- The enclosing protected procedure must reject mismatch and roll back together
+-- with dependency evidence and actual native capacity settlement.
+DELETE FROM truss.row_home_operation AS o
+WHERE o.original_writer_xid = $1::pg_catalog.text::pg_catalog.xid8
+  AND o.operation_ordinal = $2::pg_catalog.text::pg_catalog.int8
+RETURNING
+  o.original_writer_xid::pg_catalog.text AS original_writer_xid,
+  o.operation_ordinal::pg_catalog.text AS operation_ordinal,
+  o.operation_kind::pg_catalog.text AS operation_kind,
+  o.phase::pg_catalog.text AS phase,
+  o.effect_generation::pg_catalog.text AS effect_generation,
+  o.readiness_generation::pg_catalog.text AS readiness_generation,
+  o.sealed_generation::pg_catalog.text AS sealed_generation,
+  o.application_generation::pg_catalog.text AS application_generation,
+  pg_catalog.encode(o.original_context_bytes, 'hex') AS original_context_bytes_hex,
+  pg_catalog.encode(o.original_definition_bytes, 'hex') AS original_definition_bytes_hex,
+  pg_catalog.encode(o.original_input_bytes, 'hex') AS original_input_bytes_hex,
+  pg_catalog.encode(o.original_prestate_bytes, 'hex') AS original_prestate_bytes_hex,
+  pg_catalog.encode(o.admitted_candidate_bytes, 'hex') AS admitted_candidate_bytes_hex,
+  pg_catalog.encode(o.effect_obligation_bytes, 'hex') AS effect_obligation_bytes_hex,
+  pg_catalog.encode(o.original_group_custody_bytes, 'hex') AS original_group_custody_bytes_hex,
+  pg_catalog.encode(o.application_result_bytes, 'hex') AS application_result_bytes_hex;
+DELETE FROM truss.row_home_touch AS t
+WHERE t.transaction_id = $1::pg_catalog.text::pg_catalog.xid8
+  AND t.owner_kind = $2::pg_catalog.text COLLATE pg_catalog."C"
+  AND t.owner_id = $3::pg_catalog.text::pg_catalog.int8
+  AND t.owner_discriminator_id = $4::pg_catalog.text::pg_catalog.int4
+  AND t.property_owner_type_id = $5::pg_catalog.text::pg_catalog.int4
+  AND t.property_id = $6::pg_catalog.text::pg_catalog.int4
+RETURNING
+  t.transaction_id::pg_catalog.text AS transaction_id,
+  t.owner_kind::pg_catalog.text AS owner_kind,
+  t.owner_id::pg_catalog.text AS owner_id,
+  t.owner_discriminator_id::pg_catalog.text AS owner_discriminator_id,
+  t.property_owner_type_id::pg_catalog.text AS property_owner_type_id,
+  t.property_id::pg_catalog.text AS property_id,
+  t.dirty_generation::pg_catalog.text AS dirty_generation,
+  t.sealed_generation::pg_catalog.text AS sealed_generation,
+  pg_catalog.encode(t.original_layout_bytes, 'hex') AS original_layout_bytes_hex,
+  pg_catalog.encode(t.original_home_bytes, 'hex') AS original_home_bytes_hex,
+  pg_catalog.encode(t.original_owner_property_bytes, 'hex') AS original_owner_property_bytes_hex,
+  pg_catalog.encode(t.original_operation_bytes, 'hex') AS original_operation_bytes_hex;
+-- No ordinary-role DELETE grant, TRUNCATE, horizon advance or count-only success.

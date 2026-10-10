@@ -1,0 +1,2290 @@
+{
+  "scope": "exact explicit parent/stage source declaration inventory only; not complete implicit/native dependency inventory",
+  "helperSha256": "bcb6199ff12767944f94bdf815d3fb4a9068db0b3b2ae598072e7b6d1f3ceeb4",
+  "inputs": [
+    {
+      "path": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "sha256": "e399f0b68a068b3ff828d31e7a0d8d3443f9619d5e84845d64dc7ba0b0ea53a6"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/row-home-journal-stage-v0.2.proposal.umf.json",
+      "sha256": "1760e57aafe2a4c567e9f599afe188e7081030a79a0612f3c6b4f01c8cdd7337"
+    }
+  ],
+  "entries": [
+    {
+      "id": "truss.row_home_operation",
+      "kind": "table",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt",
+      "nativeStatus": "unresolved"
+    },
+    {
+      "id": "truss.row_home_operation.original_writer_xid",
+      "kind": "column",
+      "parent": "truss.row_home_operation",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/0/ColumnDef",
+      "originalDeclaration": {
+        "colname": "original_writer_xid",
+        "typeName": {
+          "names": [
+            {
+              "String": {
+                "sval": "xid8"
+              }
+            }
+          ],
+          "typemod": -1
+        },
+        "is_local": true,
+        "constraints": [
+          {
+            "Constraint": {
+              "contype": "CONSTR_NOTNULL"
+            }
+          }
+        ]
+      },
+      "nativeStatus": "unresolved"
+    },
+    {
+      "id": "truss.row_home_operation.operation_ordinal",
+      "kind": "column",
+      "parent": "truss.row_home_operation",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/1/ColumnDef",
+      "originalDeclaration": {
+        "colname": "operation_ordinal",
+        "typeName": {
+          "names": [
+            {
+              "String": {
+                "sval": "pg_catalog"
+              }
+            },
+            {
+              "String": {
+                "sval": "int8"
+              }
+            }
+          ],
+          "typemod": -1
+        },
+        "is_local": true,
+        "constraints": [
+          {
+            "Constraint": {
+              "contype": "CONSTR_NOTNULL"
+            }
+          }
+        ]
+      },
+      "nativeStatus": "unresolved"
+    },
+    {
+      "id": "truss.row_home_operation.operation_kind",
+      "kind": "column",
+      "parent": "truss.row_home_operation",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/2/ColumnDef",
+      "originalDeclaration": {
+        "colname": "operation_kind",
+        "typeName": {
+          "names": [
+            {
+              "String": {
+                "sval": "text"
+              }
+            }
+          ],
+          "typemod": -1
+        },
+        "is_local": true,
+        "collClause": {
+          "collname": [
+            {
+              "String": {
+                "sval": "pg_catalog"
+              }
+            },
+            {
+              "String": {
+                "sval": "C"
+              }
+            }
+          ]
+        },
+        "constraints": [
+          {
+            "Constraint": {
+              "contype": "CONSTR_NOTNULL"
+            }
+          }
+        ]
+      },
+      "nativeStatus": "unresolved"
+    },
+    {
+      "id": "truss.row_home_operation.phase",
+      "kind": "column",
+      "parent": "truss.row_home_operation",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/3/ColumnDef",
+      "originalDeclaration": {
+        "colname": "phase",
+        "typeName": {
+          "names": [
+            {
+              "String": {
+                "sval": "text"
+              }
+            }
+          ],
+          "typemod": -1
+        },
+        "is_local": true,
+        "collClause": {
+          "collname": [
+            {
+              "String": {
+                "sval": "pg_catalog"
+              }
+            },
+            {
+              "String": {
+                "sval": "C"
+              }
+            }
+          ]
+        },
+        "constraints": [
+          {
+            "Constraint": {
+              "contype": "CONSTR_NOTNULL"
+            }
+          }
+        ]
+      },
+      "nativeStatus": "unresolved"
+    },
+    {
+      "id": "truss.row_home_operation.effect_generation",
+      "kind": "column",
+      "parent": "truss.row_home_operation",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/4/ColumnDef",
+      "originalDeclaration": {
+        "colname": "effect_generation",
+        "typeName": {
+          "names": [
+            {
+              "String": {
+                "sval": "pg_catalog"
+              }
+            },
+            {
+              "String": {
+                "sval": "int8"
+              }
+            }
+          ],
+          "typemod": -1
+        },
+        "is_local": true,
+        "constraints": [
+          {
+            "Constraint": {
+              "contype": "CONSTR_NOTNULL"
+            }
+          }
+        ]
+      },
+      "nativeStatus": "unresolved"
+    },
+    {
+      "id": "truss.row_home_operation.readiness_generation",
+      "kind": "column",
+      "parent": "truss.row_home_operation",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/5/ColumnDef",
+      "originalDeclaration": {
+        "colname": "readiness_generation",
+        "typeName": {
+          "names": [
+            {
+              "String": {
+                "sval": "pg_catalog"
+              }
+            },
+            {
+              "String": {
+                "sval": "int8"
+              }
+            }
+          ],
+          "typemod": -1
+        },
+        "is_local": true
+      },
+      "nativeStatus": "unresolved"
+    },
+    {
+      "id": "truss.row_home_operation.sealed_generation",
+      "kind": "column",
+      "parent": "truss.row_home_operation",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/6/ColumnDef",
+      "originalDeclaration": {
+        "colname": "sealed_generation",
+        "typeName": {
+          "names": [
+            {
+              "String": {
+                "sval": "pg_catalog"
+              }
+            },
+            {
+              "String": {
+                "sval": "int8"
+              }
+            }
+          ],
+          "typemod": -1
+        },
+        "is_local": true
+      },
+      "nativeStatus": "unresolved"
+    },
+    {
+      "id": "truss.row_home_operation.application_generation",
+      "kind": "column",
+      "parent": "truss.row_home_operation",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/7/ColumnDef",
+      "originalDeclaration": {
+        "colname": "application_generation",
+        "typeName": {
+          "names": [
+            {
+              "String": {
+                "sval": "pg_catalog"
+              }
+            },
+            {
+              "String": {
+                "sval": "int8"
+              }
+            }
+          ],
+          "typemod": -1
+        },
+        "is_local": true
+      },
+      "nativeStatus": "unresolved"
+    },
+    {
+      "id": "truss.row_home_operation.original_context_bytes",
+      "kind": "column",
+      "parent": "truss.row_home_operation",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/8/ColumnDef",
+      "originalDeclaration": {
+        "colname": "original_context_bytes",
+        "typeName": {
+          "names": [
+            {
+              "String": {
+                "sval": "bytea"
+              }
+            }
+          ],
+          "typemod": -1
+        },
+        "is_local": true,
+        "constraints": [
+          {
+            "Constraint": {
+              "contype": "CONSTR_NOTNULL"
+            }
+          }
+        ]
+      },
+      "nativeStatus": "unresolved"
+    },
+    {
+      "id": "truss.row_home_operation.original_definition_bytes",
+      "kind": "column",
+      "parent": "truss.row_home_operation",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/9/ColumnDef",
+      "originalDeclaration": {
+        "colname": "original_definition_bytes",
+        "typeName": {
+          "names": [
+            {
+              "String": {
+                "sval": "bytea"
+              }
+            }
+          ],
+          "typemod": -1
+        },
+        "is_local": true,
+        "constraints": [
+          {
+            "Constraint": {
+              "contype": "CONSTR_NOTNULL"
+            }
+          }
+        ]
+      },
+      "nativeStatus": "unresolved"
+    },
+    {
+      "id": "truss.row_home_operation.original_input_bytes",
+      "kind": "column",
+      "parent": "truss.row_home_operation",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/10/ColumnDef",
+      "originalDeclaration": {
+        "colname": "original_input_bytes",
+        "typeName": {
+          "names": [
+            {
+              "String": {
+                "sval": "bytea"
+              }
+            }
+          ],
+          "typemod": -1
+        },
+        "is_local": true,
+        "constraints": [
+          {
+            "Constraint": {
+              "contype": "CONSTR_NOTNULL"
+            }
+          }
+        ]
+      },
+      "nativeStatus": "unresolved"
+    },
+    {
+      "id": "truss.row_home_operation.original_prestate_bytes",
+      "kind": "column",
+      "parent": "truss.row_home_operation",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/11/ColumnDef",
+      "originalDeclaration": {
+        "colname": "original_prestate_bytes",
+        "typeName": {
+          "names": [
+            {
+              "String": {
+                "sval": "bytea"
+              }
+            }
+          ],
+          "typemod": -1
+        },
+        "is_local": true,
+        "constraints": [
+          {
+            "Constraint": {
+              "contype": "CONSTR_NOTNULL"
+            }
+          }
+        ]
+      },
+      "nativeStatus": "unresolved"
+    },
+    {
+      "id": "truss.row_home_operation.admitted_candidate_bytes",
+      "kind": "column",
+      "parent": "truss.row_home_operation",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/12/ColumnDef",
+      "originalDeclaration": {
+        "colname": "admitted_candidate_bytes",
+        "typeName": {
+          "names": [
+            {
+              "String": {
+                "sval": "bytea"
+              }
+            }
+          ],
+          "typemod": -1
+        },
+        "is_local": true,
+        "constraints": [
+          {
+            "Constraint": {
+              "contype": "CONSTR_NOTNULL"
+            }
+          }
+        ]
+      },
+      "nativeStatus": "unresolved"
+    },
+    {
+      "id": "truss.row_home_operation.effect_obligation_bytes",
+      "kind": "column",
+      "parent": "truss.row_home_operation",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/13/ColumnDef",
+      "originalDeclaration": {
+        "colname": "effect_obligation_bytes",
+        "typeName": {
+          "names": [
+            {
+              "String": {
+                "sval": "bytea"
+              }
+            }
+          ],
+          "typemod": -1
+        },
+        "is_local": true,
+        "constraints": [
+          {
+            "Constraint": {
+              "contype": "CONSTR_NOTNULL"
+            }
+          }
+        ]
+      },
+      "nativeStatus": "unresolved"
+    },
+    {
+      "id": "truss.row_home_operation.original_group_custody_bytes",
+      "kind": "column",
+      "parent": "truss.row_home_operation",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/14/ColumnDef",
+      "originalDeclaration": {
+        "colname": "original_group_custody_bytes",
+        "typeName": {
+          "names": [
+            {
+              "String": {
+                "sval": "bytea"
+              }
+            }
+          ],
+          "typemod": -1
+        },
+        "is_local": true,
+        "constraints": [
+          {
+            "Constraint": {
+              "contype": "CONSTR_NOTNULL"
+            }
+          }
+        ]
+      },
+      "nativeStatus": "unresolved"
+    },
+    {
+      "id": "truss.row_home_operation.application_result_bytes",
+      "kind": "column",
+      "parent": "truss.row_home_operation",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/15/ColumnDef",
+      "originalDeclaration": {
+        "colname": "application_result_bytes",
+        "typeName": {
+          "names": [
+            {
+              "String": {
+                "sval": "bytea"
+              }
+            }
+          ],
+          "typemod": -1
+        },
+        "is_local": true
+      },
+      "nativeStatus": "unresolved"
+    },
+    {
+      "id": "truss.row_home_operation.row_home_operation_pk",
+      "kind": "constraint",
+      "parent": "truss.row_home_operation",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/16/Constraint",
+      "originalDeclaration": {
+        "contype": "CONSTR_PRIMARY",
+        "conname": "row_home_operation_pk",
+        "keys": [
+          {
+            "String": {
+              "sval": "original_writer_xid"
+            }
+          },
+          {
+            "String": {
+              "sval": "operation_ordinal"
+            }
+          }
+        ]
+      },
+      "nativeStatus": "unresolved"
+    },
+    {
+      "id": "truss.row_home_operation.row_home_operation_identity",
+      "kind": "constraint",
+      "parent": "truss.row_home_operation",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/17/Constraint",
+      "originalDeclaration": {
+        "contype": "CONSTR_CHECK",
+        "conname": "row_home_operation_identity",
+        "initially_valid": true,
+        "raw_expr": {
+          "A_Expr": {
+            "kind": "AEXPR_OP",
+            "name": [
+              {
+                "String": {
+                  "sval": ">="
+                }
+              }
+            ],
+            "lexpr": {
+              "ColumnRef": {
+                "fields": [
+                  {
+                    "String": {
+                      "sval": "operation_ordinal"
+                    }
+                  }
+                ]
+              }
+            },
+            "rexpr": {
+              "A_Const": {
+                "ival": {}
+              }
+            }
+          }
+        }
+      },
+      "nativeStatus": "unresolved"
+    },
+    {
+      "id": "truss.row_home_operation.row_home_operation_kind",
+      "kind": "constraint",
+      "parent": "truss.row_home_operation",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/18/Constraint",
+      "originalDeclaration": {
+        "contype": "CONSTR_CHECK",
+        "conname": "row_home_operation_kind",
+        "initially_valid": true,
+        "raw_expr": {
+          "A_Expr": {
+            "kind": "AEXPR_IN",
+            "name": [
+              {
+                "String": {
+                  "sval": "="
+                }
+              }
+            ],
+            "lexpr": {
+              "ColumnRef": {
+                "fields": [
+                  {
+                    "String": {
+                      "sval": "operation_kind"
+                    }
+                  }
+                ]
+              }
+            },
+            "rexpr": {
+              "List": {
+                "items": [
+                  {
+                    "A_Const": {
+                      "sval": {
+                        "sval": "mutation"
+                      }
+                    }
+                  },
+                  {
+                    "A_Const": {
+                      "sval": {
+                        "sval": "import"
+                      }
+                    }
+                  },
+                  {
+                    "A_Const": {
+                      "sval": {
+                        "sval": "catalog-transform"
+                      }
+                    }
+                  },
+                  {
+                    "A_Const": {
+                      "sval": {
+                        "sval": "catalog-acceptance"
+                      }
+                    }
+                  },
+                  {
+                    "A_Const": {
+                      "sval": {
+                        "sval": "home-migration"
+                      }
+                    }
+                  },
+                  {
+                    "A_Const": {
+                      "sval": {
+                        "sval": "administrative-repair"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "nativeStatus": "unresolved"
+    },
+    {
+      "id": "truss.row_home_operation.row_home_operation_generation",
+      "kind": "constraint",
+      "parent": "truss.row_home_operation",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/19/Constraint",
+      "originalDeclaration": {
+        "contype": "CONSTR_CHECK",
+        "conname": "row_home_operation_generation",
+        "initially_valid": true,
+        "raw_expr": {
+          "BoolExpr": {
+            "boolop": "AND_EXPR",
+            "args": [
+              {
+                "A_Expr": {
+                  "kind": "AEXPR_OP",
+                  "name": [
+                    {
+                      "String": {
+                        "sval": ">="
+                      }
+                    }
+                  ],
+                  "lexpr": {
+                    "ColumnRef": {
+                      "fields": [
+                        {
+                          "String": {
+                            "sval": "effect_generation"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "rexpr": {
+                    "A_Const": {
+                      "ival": {}
+                    }
+                  }
+                }
+              },
+              {
+                "BoolExpr": {
+                  "boolop": "OR_EXPR",
+                  "args": [
+                    {
+                      "NullTest": {
+                        "arg": {
+                          "ColumnRef": {
+                            "fields": [
+                              {
+                                "String": {
+                                  "sval": "readiness_generation"
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        "nulltesttype": "IS_NULL"
+                      }
+                    },
+                    {
+                      "A_Expr": {
+                        "kind": "AEXPR_OP",
+                        "name": [
+                          {
+                            "String": {
+                              "sval": "="
+                            }
+                          }
+                        ],
+                        "lexpr": {
+                          "ColumnRef": {
+                            "fields": [
+                              {
+                                "String": {
+                                  "sval": "readiness_generation"
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        "rexpr": {
+                          "ColumnRef": {
+                            "fields": [
+                              {
+                                "String": {
+                                  "sval": "effect_generation"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "BoolExpr": {
+                  "boolop": "OR_EXPR",
+                  "args": [
+                    {
+                      "NullTest": {
+                        "arg": {
+                          "ColumnRef": {
+                            "fields": [
+                              {
+                                "String": {
+                                  "sval": "sealed_generation"
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        "nulltesttype": "IS_NULL"
+                      }
+                    },
+                    {
+                      "A_Expr": {
+                        "kind": "AEXPR_OP",
+                        "name": [
+                          {
+                            "String": {
+                              "sval": "="
+                            }
+                          }
+                        ],
+                        "lexpr": {
+                          "ColumnRef": {
+                            "fields": [
+                              {
+                                "String": {
+                                  "sval": "sealed_generation"
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        "rexpr": {
+                          "ColumnRef": {
+                            "fields": [
+                              {
+                                "String": {
+                                  "sval": "effect_generation"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "BoolExpr": {
+                  "boolop": "OR_EXPR",
+                  "args": [
+                    {
+                      "NullTest": {
+                        "arg": {
+                          "ColumnRef": {
+                            "fields": [
+                              {
+                                "String": {
+                                  "sval": "application_generation"
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        "nulltesttype": "IS_NULL"
+                      }
+                    },
+                    {
+                      "A_Expr": {
+                        "kind": "AEXPR_OP",
+                        "name": [
+                          {
+                            "String": {
+                              "sval": "="
+                            }
+                          }
+                        ],
+                        "lexpr": {
+                          "ColumnRef": {
+                            "fields": [
+                              {
+                                "String": {
+                                  "sval": "application_generation"
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        "rexpr": {
+                          "ColumnRef": {
+                            "fields": [
+                              {
+                                "String": {
+                                  "sval": "effect_generation"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      },
+      "nativeStatus": "unresolved"
+    },
+    {
+      "id": "truss.row_home_operation.row_home_operation_phase",
+      "kind": "constraint",
+      "parent": "truss.row_home_operation",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/20/Constraint",
+      "originalDeclaration": {
+        "contype": "CONSTR_CHECK",
+        "conname": "row_home_operation_phase",
+        "initially_valid": true,
+        "raw_expr": {
+          "BoolExpr": {
+            "boolop": "OR_EXPR",
+            "args": [
+              {
+                "BoolExpr": {
+                  "boolop": "AND_EXPR",
+                  "args": [
+                    {
+                      "A_Expr": {
+                        "kind": "AEXPR_OP",
+                        "name": [
+                          {
+                            "String": {
+                              "sval": "="
+                            }
+                          }
+                        ],
+                        "lexpr": {
+                          "ColumnRef": {
+                            "fields": [
+                              {
+                                "String": {
+                                  "sval": "phase"
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        "rexpr": {
+                          "A_Const": {
+                            "sval": {
+                              "sval": "admitted"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "NullTest": {
+                        "arg": {
+                          "ColumnRef": {
+                            "fields": [
+                              {
+                                "String": {
+                                  "sval": "readiness_generation"
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        "nulltesttype": "IS_NULL"
+                      }
+                    },
+                    {
+                      "NullTest": {
+                        "arg": {
+                          "ColumnRef": {
+                            "fields": [
+                              {
+                                "String": {
+                                  "sval": "sealed_generation"
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        "nulltesttype": "IS_NULL"
+                      }
+                    },
+                    {
+                      "NullTest": {
+                        "arg": {
+                          "ColumnRef": {
+                            "fields": [
+                              {
+                                "String": {
+                                  "sval": "application_generation"
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        "nulltesttype": "IS_NULL"
+                      }
+                    },
+                    {
+                      "NullTest": {
+                        "arg": {
+                          "ColumnRef": {
+                            "fields": [
+                              {
+                                "String": {
+                                  "sval": "application_result_bytes"
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        "nulltesttype": "IS_NULL"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "BoolExpr": {
+                  "boolop": "AND_EXPR",
+                  "args": [
+                    {
+                      "A_Expr": {
+                        "kind": "AEXPR_OP",
+                        "name": [
+                          {
+                            "String": {
+                              "sval": "="
+                            }
+                          }
+                        ],
+                        "lexpr": {
+                          "ColumnRef": {
+                            "fields": [
+                              {
+                                "String": {
+                                  "sval": "phase"
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        "rexpr": {
+                          "A_Const": {
+                            "sval": {
+                              "sval": "effects_ready"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "NullTest": {
+                        "arg": {
+                          "ColumnRef": {
+                            "fields": [
+                              {
+                                "String": {
+                                  "sval": "readiness_generation"
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        "nulltesttype": "IS_NOT_NULL"
+                      }
+                    },
+                    {
+                      "NullTest": {
+                        "arg": {
+                          "ColumnRef": {
+                            "fields": [
+                              {
+                                "String": {
+                                  "sval": "sealed_generation"
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        "nulltesttype": "IS_NULL"
+                      }
+                    },
+                    {
+                      "NullTest": {
+                        "arg": {
+                          "ColumnRef": {
+                            "fields": [
+                              {
+                                "String": {
+                                  "sval": "application_generation"
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        "nulltesttype": "IS_NULL"
+                      }
+                    },
+                    {
+                      "NullTest": {
+                        "arg": {
+                          "ColumnRef": {
+                            "fields": [
+                              {
+                                "String": {
+                                  "sval": "application_result_bytes"
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        "nulltesttype": "IS_NULL"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "BoolExpr": {
+                  "boolop": "AND_EXPR",
+                  "args": [
+                    {
+                      "A_Expr": {
+                        "kind": "AEXPR_OP",
+                        "name": [
+                          {
+                            "String": {
+                              "sval": "="
+                            }
+                          }
+                        ],
+                        "lexpr": {
+                          "ColumnRef": {
+                            "fields": [
+                              {
+                                "String": {
+                                  "sval": "phase"
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        "rexpr": {
+                          "A_Const": {
+                            "sval": {
+                              "sval": "row_sealed"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "NullTest": {
+                        "arg": {
+                          "ColumnRef": {
+                            "fields": [
+                              {
+                                "String": {
+                                  "sval": "readiness_generation"
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        "nulltesttype": "IS_NOT_NULL"
+                      }
+                    },
+                    {
+                      "NullTest": {
+                        "arg": {
+                          "ColumnRef": {
+                            "fields": [
+                              {
+                                "String": {
+                                  "sval": "sealed_generation"
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        "nulltesttype": "IS_NOT_NULL"
+                      }
+                    },
+                    {
+                      "NullTest": {
+                        "arg": {
+                          "ColumnRef": {
+                            "fields": [
+                              {
+                                "String": {
+                                  "sval": "application_generation"
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        "nulltesttype": "IS_NULL"
+                      }
+                    },
+                    {
+                      "NullTest": {
+                        "arg": {
+                          "ColumnRef": {
+                            "fields": [
+                              {
+                                "String": {
+                                  "sval": "application_result_bytes"
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        "nulltesttype": "IS_NULL"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "BoolExpr": {
+                  "boolop": "AND_EXPR",
+                  "args": [
+                    {
+                      "A_Expr": {
+                        "kind": "AEXPR_OP",
+                        "name": [
+                          {
+                            "String": {
+                              "sval": "="
+                            }
+                          }
+                        ],
+                        "lexpr": {
+                          "ColumnRef": {
+                            "fields": [
+                              {
+                                "String": {
+                                  "sval": "phase"
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        "rexpr": {
+                          "A_Const": {
+                            "sval": {
+                              "sval": "application_finalized"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "NullTest": {
+                        "arg": {
+                          "ColumnRef": {
+                            "fields": [
+                              {
+                                "String": {
+                                  "sval": "readiness_generation"
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        "nulltesttype": "IS_NOT_NULL"
+                      }
+                    },
+                    {
+                      "NullTest": {
+                        "arg": {
+                          "ColumnRef": {
+                            "fields": [
+                              {
+                                "String": {
+                                  "sval": "sealed_generation"
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        "nulltesttype": "IS_NOT_NULL"
+                      }
+                    },
+                    {
+                      "NullTest": {
+                        "arg": {
+                          "ColumnRef": {
+                            "fields": [
+                              {
+                                "String": {
+                                  "sval": "application_generation"
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        "nulltesttype": "IS_NOT_NULL"
+                      }
+                    },
+                    {
+                      "NullTest": {
+                        "arg": {
+                          "ColumnRef": {
+                            "fields": [
+                              {
+                                "String": {
+                                  "sval": "application_result_bytes"
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        "nulltesttype": "IS_NOT_NULL"
+                      }
+                    },
+                    {
+                      "A_Expr": {
+                        "kind": "AEXPR_OP",
+                        "name": [
+                          {
+                            "String": {
+                              "sval": ">"
+                            }
+                          }
+                        ],
+                        "lexpr": {
+                          "FuncCall": {
+                            "funcname": [
+                              {
+                                "String": {
+                                  "sval": "octet_length"
+                                }
+                              }
+                            ],
+                            "args": [
+                              {
+                                "ColumnRef": {
+                                  "fields": [
+                                    {
+                                      "String": {
+                                        "sval": "application_result_bytes"
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            ],
+                            "funcformat": "COERCE_EXPLICIT_CALL"
+                          }
+                        },
+                        "rexpr": {
+                          "A_Const": {
+                            "ival": {}
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      },
+      "nativeStatus": "unresolved"
+    },
+    {
+      "id": "truss.row_home_operation.row_home_operation_originals",
+      "kind": "constraint",
+      "parent": "truss.row_home_operation",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/21/Constraint",
+      "originalDeclaration": {
+        "contype": "CONSTR_CHECK",
+        "conname": "row_home_operation_originals",
+        "initially_valid": true,
+        "raw_expr": {
+          "BoolExpr": {
+            "boolop": "AND_EXPR",
+            "args": [
+              {
+                "A_Expr": {
+                  "kind": "AEXPR_OP",
+                  "name": [
+                    {
+                      "String": {
+                        "sval": ">"
+                      }
+                    }
+                  ],
+                  "lexpr": {
+                    "FuncCall": {
+                      "funcname": [
+                        {
+                          "String": {
+                            "sval": "octet_length"
+                          }
+                        }
+                      ],
+                      "args": [
+                        {
+                          "ColumnRef": {
+                            "fields": [
+                              {
+                                "String": {
+                                  "sval": "original_context_bytes"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ],
+                      "funcformat": "COERCE_EXPLICIT_CALL"
+                    }
+                  },
+                  "rexpr": {
+                    "A_Const": {
+                      "ival": {}
+                    }
+                  }
+                }
+              },
+              {
+                "A_Expr": {
+                  "kind": "AEXPR_OP",
+                  "name": [
+                    {
+                      "String": {
+                        "sval": ">"
+                      }
+                    }
+                  ],
+                  "lexpr": {
+                    "FuncCall": {
+                      "funcname": [
+                        {
+                          "String": {
+                            "sval": "octet_length"
+                          }
+                        }
+                      ],
+                      "args": [
+                        {
+                          "ColumnRef": {
+                            "fields": [
+                              {
+                                "String": {
+                                  "sval": "original_definition_bytes"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ],
+                      "funcformat": "COERCE_EXPLICIT_CALL"
+                    }
+                  },
+                  "rexpr": {
+                    "A_Const": {
+                      "ival": {}
+                    }
+                  }
+                }
+              },
+              {
+                "A_Expr": {
+                  "kind": "AEXPR_OP",
+                  "name": [
+                    {
+                      "String": {
+                        "sval": ">"
+                      }
+                    }
+                  ],
+                  "lexpr": {
+                    "FuncCall": {
+                      "funcname": [
+                        {
+                          "String": {
+                            "sval": "octet_length"
+                          }
+                        }
+                      ],
+                      "args": [
+                        {
+                          "ColumnRef": {
+                            "fields": [
+                              {
+                                "String": {
+                                  "sval": "original_input_bytes"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ],
+                      "funcformat": "COERCE_EXPLICIT_CALL"
+                    }
+                  },
+                  "rexpr": {
+                    "A_Const": {
+                      "ival": {}
+                    }
+                  }
+                }
+              },
+              {
+                "A_Expr": {
+                  "kind": "AEXPR_OP",
+                  "name": [
+                    {
+                      "String": {
+                        "sval": ">"
+                      }
+                    }
+                  ],
+                  "lexpr": {
+                    "FuncCall": {
+                      "funcname": [
+                        {
+                          "String": {
+                            "sval": "octet_length"
+                          }
+                        }
+                      ],
+                      "args": [
+                        {
+                          "ColumnRef": {
+                            "fields": [
+                              {
+                                "String": {
+                                  "sval": "original_prestate_bytes"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ],
+                      "funcformat": "COERCE_EXPLICIT_CALL"
+                    }
+                  },
+                  "rexpr": {
+                    "A_Const": {
+                      "ival": {}
+                    }
+                  }
+                }
+              },
+              {
+                "A_Expr": {
+                  "kind": "AEXPR_OP",
+                  "name": [
+                    {
+                      "String": {
+                        "sval": ">"
+                      }
+                    }
+                  ],
+                  "lexpr": {
+                    "FuncCall": {
+                      "funcname": [
+                        {
+                          "String": {
+                            "sval": "octet_length"
+                          }
+                        }
+                      ],
+                      "args": [
+                        {
+                          "ColumnRef": {
+                            "fields": [
+                              {
+                                "String": {
+                                  "sval": "admitted_candidate_bytes"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ],
+                      "funcformat": "COERCE_EXPLICIT_CALL"
+                    }
+                  },
+                  "rexpr": {
+                    "A_Const": {
+                      "ival": {}
+                    }
+                  }
+                }
+              },
+              {
+                "A_Expr": {
+                  "kind": "AEXPR_OP",
+                  "name": [
+                    {
+                      "String": {
+                        "sval": ">"
+                      }
+                    }
+                  ],
+                  "lexpr": {
+                    "FuncCall": {
+                      "funcname": [
+                        {
+                          "String": {
+                            "sval": "octet_length"
+                          }
+                        }
+                      ],
+                      "args": [
+                        {
+                          "ColumnRef": {
+                            "fields": [
+                              {
+                                "String": {
+                                  "sval": "effect_obligation_bytes"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ],
+                      "funcformat": "COERCE_EXPLICIT_CALL"
+                    }
+                  },
+                  "rexpr": {
+                    "A_Const": {
+                      "ival": {}
+                    }
+                  }
+                }
+              },
+              {
+                "A_Expr": {
+                  "kind": "AEXPR_OP",
+                  "name": [
+                    {
+                      "String": {
+                        "sval": ">"
+                      }
+                    }
+                  ],
+                  "lexpr": {
+                    "FuncCall": {
+                      "funcname": [
+                        {
+                          "String": {
+                            "sval": "octet_length"
+                          }
+                        }
+                      ],
+                      "args": [
+                        {
+                          "ColumnRef": {
+                            "fields": [
+                              {
+                                "String": {
+                                  "sval": "original_group_custody_bytes"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ],
+                      "funcformat": "COERCE_EXPLICIT_CALL"
+                    }
+                  },
+                  "rexpr": {
+                    "A_Const": {
+                      "ival": {}
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "nativeStatus": "unresolved"
+    },
+    {
+      "id": "truss.row_home_journal_stage",
+      "kind": "table",
+      "source": "docs/helix/02-design/contracts/row-home-journal-stage-v0.2.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt",
+      "nativeStatus": "unresolved"
+    },
+    {
+      "id": "truss.row_home_journal_stage.original_writer_xid",
+      "kind": "column",
+      "parent": "truss.row_home_journal_stage",
+      "source": "docs/helix/02-design/contracts/row-home-journal-stage-v0.2.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/0/ColumnDef",
+      "originalDeclaration": {
+        "colname": "original_writer_xid",
+        "typeName": {
+          "names": [
+            {
+              "String": {
+                "sval": "pg_catalog"
+              }
+            },
+            {
+              "String": {
+                "sval": "xid8"
+              }
+            }
+          ],
+          "typemod": -1
+        },
+        "is_local": true,
+        "constraints": [
+          {
+            "Constraint": {
+              "contype": "CONSTR_NOTNULL"
+            }
+          }
+        ]
+      },
+      "nativeStatus": "unresolved"
+    },
+    {
+      "id": "truss.row_home_journal_stage.operation_ordinal",
+      "kind": "column",
+      "parent": "truss.row_home_journal_stage",
+      "source": "docs/helix/02-design/contracts/row-home-journal-stage-v0.2.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/1/ColumnDef",
+      "originalDeclaration": {
+        "colname": "operation_ordinal",
+        "typeName": {
+          "names": [
+            {
+              "String": {
+                "sval": "pg_catalog"
+              }
+            },
+            {
+              "String": {
+                "sval": "int8"
+              }
+            }
+          ],
+          "typemod": -1
+        },
+        "is_local": true,
+        "constraints": [
+          {
+            "Constraint": {
+              "contype": "CONSTR_NOTNULL"
+            }
+          }
+        ]
+      },
+      "nativeStatus": "unresolved"
+    },
+    {
+      "id": "truss.row_home_journal_stage.stage_name",
+      "kind": "column",
+      "parent": "truss.row_home_journal_stage",
+      "source": "docs/helix/02-design/contracts/row-home-journal-stage-v0.2.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/2/ColumnDef",
+      "originalDeclaration": {
+        "colname": "stage_name",
+        "typeName": {
+          "names": [
+            {
+              "String": {
+                "sval": "pg_catalog"
+              }
+            },
+            {
+              "String": {
+                "sval": "text"
+              }
+            }
+          ],
+          "typemod": -1
+        },
+        "is_local": true,
+        "collClause": {
+          "collname": [
+            {
+              "String": {
+                "sval": "pg_catalog"
+              }
+            },
+            {
+              "String": {
+                "sval": "C"
+              }
+            }
+          ]
+        },
+        "constraints": [
+          {
+            "Constraint": {
+              "contype": "CONSTR_NOTNULL"
+            }
+          }
+        ]
+      },
+      "nativeStatus": "unresolved"
+    },
+    {
+      "id": "truss.row_home_journal_stage.stage_ordinal",
+      "kind": "column",
+      "parent": "truss.row_home_journal_stage",
+      "source": "docs/helix/02-design/contracts/row-home-journal-stage-v0.2.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/3/ColumnDef",
+      "originalDeclaration": {
+        "colname": "stage_ordinal",
+        "typeName": {
+          "names": [
+            {
+              "String": {
+                "sval": "pg_catalog"
+              }
+            },
+            {
+              "String": {
+                "sval": "int8"
+              }
+            }
+          ],
+          "typemod": -1
+        },
+        "is_local": true,
+        "constraints": [
+          {
+            "Constraint": {
+              "contype": "CONSTR_NOTNULL"
+            }
+          }
+        ]
+      },
+      "nativeStatus": "unresolved"
+    },
+    {
+      "id": "truss.row_home_journal_stage.effect_generation",
+      "kind": "column",
+      "parent": "truss.row_home_journal_stage",
+      "source": "docs/helix/02-design/contracts/row-home-journal-stage-v0.2.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/4/ColumnDef",
+      "originalDeclaration": {
+        "colname": "effect_generation",
+        "typeName": {
+          "names": [
+            {
+              "String": {
+                "sval": "pg_catalog"
+              }
+            },
+            {
+              "String": {
+                "sval": "int8"
+              }
+            }
+          ],
+          "typemod": -1
+        },
+        "is_local": true,
+        "constraints": [
+          {
+            "Constraint": {
+              "contype": "CONSTR_NOTNULL"
+            }
+          }
+        ]
+      },
+      "nativeStatus": "unresolved"
+    },
+    {
+      "id": "truss.row_home_journal_stage.body_bytes",
+      "kind": "column",
+      "parent": "truss.row_home_journal_stage",
+      "source": "docs/helix/02-design/contracts/row-home-journal-stage-v0.2.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/5/ColumnDef",
+      "originalDeclaration": {
+        "colname": "body_bytes",
+        "typeName": {
+          "names": [
+            {
+              "String": {
+                "sval": "pg_catalog"
+              }
+            },
+            {
+              "String": {
+                "sval": "bytea"
+              }
+            }
+          ],
+          "typemod": -1
+        },
+        "is_local": true,
+        "constraints": [
+          {
+            "Constraint": {
+              "contype": "CONSTR_NOTNULL"
+            }
+          }
+        ]
+      },
+      "nativeStatus": "unresolved"
+    },
+    {
+      "id": "truss.row_home_journal_stage.row_home_journal_stage_pk",
+      "kind": "constraint",
+      "parent": "truss.row_home_journal_stage",
+      "source": "docs/helix/02-design/contracts/row-home-journal-stage-v0.2.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/6/Constraint",
+      "originalDeclaration": {
+        "contype": "CONSTR_PRIMARY",
+        "conname": "row_home_journal_stage_pk",
+        "keys": [
+          {
+            "String": {
+              "sval": "original_writer_xid"
+            }
+          },
+          {
+            "String": {
+              "sval": "operation_ordinal"
+            }
+          },
+          {
+            "String": {
+              "sval": "stage_name"
+            }
+          },
+          {
+            "String": {
+              "sval": "stage_ordinal"
+            }
+          }
+        ]
+      },
+      "nativeStatus": "unresolved"
+    },
+    {
+      "id": "truss.row_home_journal_stage.row_home_journal_stage_operation_fk",
+      "kind": "constraint",
+      "parent": "truss.row_home_journal_stage",
+      "source": "docs/helix/02-design/contracts/row-home-journal-stage-v0.2.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/7/Constraint",
+      "originalDeclaration": {
+        "contype": "CONSTR_FOREIGN",
+        "conname": "row_home_journal_stage_operation_fk",
+        "initially_valid": true,
+        "pktable": {
+          "schemaname": "truss",
+          "relname": "row_home_operation",
+          "inh": true,
+          "relpersistence": "p"
+        },
+        "fk_attrs": [
+          {
+            "String": {
+              "sval": "original_writer_xid"
+            }
+          },
+          {
+            "String": {
+              "sval": "operation_ordinal"
+            }
+          }
+        ],
+        "pk_attrs": [
+          {
+            "String": {
+              "sval": "original_writer_xid"
+            }
+          },
+          {
+            "String": {
+              "sval": "operation_ordinal"
+            }
+          }
+        ],
+        "fk_matchtype": "s",
+        "fk_upd_action": "a",
+        "fk_del_action": "r"
+      },
+      "nativeStatus": "unresolved"
+    },
+    {
+      "id": "truss.row_home_journal_stage.row_home_journal_stage_phase",
+      "kind": "constraint",
+      "parent": "truss.row_home_journal_stage",
+      "source": "docs/helix/02-design/contracts/row-home-journal-stage-v0.2.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/8/Constraint",
+      "originalDeclaration": {
+        "contype": "CONSTR_CHECK",
+        "conname": "row_home_journal_stage_phase",
+        "initially_valid": true,
+        "raw_expr": {
+          "A_Expr": {
+            "kind": "AEXPR_IN",
+            "name": [
+              {
+                "String": {
+                  "sval": "="
+                }
+              }
+            ],
+            "lexpr": {
+              "ColumnRef": {
+                "fields": [
+                  {
+                    "String": {
+                      "sval": "stage_name"
+                    }
+                  }
+                ]
+              }
+            },
+            "rexpr": {
+              "List": {
+                "items": [
+                  {
+                    "A_Const": {
+                      "sval": {
+                        "sval": "start"
+                      }
+                    }
+                  },
+                  {
+                    "A_Const": {
+                      "sval": {
+                        "sval": "transition"
+                      }
+                    }
+                  },
+                  {
+                    "A_Const": {
+                      "sval": {
+                        "sval": "final"
+                      }
+                    }
+                  },
+                  {
+                    "A_Const": {
+                      "sval": {
+                        "sval": "reserved"
+                      }
+                    }
+                  },
+                  {
+                    "A_Const": {
+                      "sval": {
+                        "sval": "publication"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "nativeStatus": "unresolved"
+    },
+    {
+      "id": "truss.row_home_journal_stage.row_home_journal_stage_ordinals",
+      "kind": "constraint",
+      "parent": "truss.row_home_journal_stage",
+      "source": "docs/helix/02-design/contracts/row-home-journal-stage-v0.2.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/9/Constraint",
+      "originalDeclaration": {
+        "contype": "CONSTR_CHECK",
+        "conname": "row_home_journal_stage_ordinals",
+        "initially_valid": true,
+        "raw_expr": {
+          "BoolExpr": {
+            "boolop": "AND_EXPR",
+            "args": [
+              {
+                "A_Expr": {
+                  "kind": "AEXPR_OP",
+                  "name": [
+                    {
+                      "String": {
+                        "sval": ">="
+                      }
+                    }
+                  ],
+                  "lexpr": {
+                    "ColumnRef": {
+                      "fields": [
+                        {
+                          "String": {
+                            "sval": "operation_ordinal"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "rexpr": {
+                    "A_Const": {
+                      "ival": {}
+                    }
+                  }
+                }
+              },
+              {
+                "A_Expr": {
+                  "kind": "AEXPR_OP",
+                  "name": [
+                    {
+                      "String": {
+                        "sval": ">="
+                      }
+                    }
+                  ],
+                  "lexpr": {
+                    "ColumnRef": {
+                      "fields": [
+                        {
+                          "String": {
+                            "sval": "stage_ordinal"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "rexpr": {
+                    "A_Const": {
+                      "ival": {}
+                    }
+                  }
+                }
+              },
+              {
+                "A_Expr": {
+                  "kind": "AEXPR_OP",
+                  "name": [
+                    {
+                      "String": {
+                        "sval": ">="
+                      }
+                    }
+                  ],
+                  "lexpr": {
+                    "ColumnRef": {
+                      "fields": [
+                        {
+                          "String": {
+                            "sval": "effect_generation"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "rexpr": {
+                    "A_Const": {
+                      "ival": {}
+                    }
+                  }
+                }
+              },
+              {
+                "BoolExpr": {
+                  "boolop": "OR_EXPR",
+                  "args": [
+                    {
+                      "A_Expr": {
+                        "kind": "AEXPR_OP",
+                        "name": [
+                          {
+                            "String": {
+                              "sval": "="
+                            }
+                          }
+                        ],
+                        "lexpr": {
+                          "ColumnRef": {
+                            "fields": [
+                              {
+                                "String": {
+                                  "sval": "stage_name"
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        "rexpr": {
+                          "A_Const": {
+                            "sval": {
+                              "sval": "transition"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "A_Expr": {
+                        "kind": "AEXPR_OP",
+                        "name": [
+                          {
+                            "String": {
+                              "sval": "="
+                            }
+                          }
+                        ],
+                        "lexpr": {
+                          "ColumnRef": {
+                            "fields": [
+                              {
+                                "String": {
+                                  "sval": "stage_ordinal"
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        "rexpr": {
+                          "A_Const": {
+                            "ival": {}
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      },
+      "nativeStatus": "unresolved"
+    },
+    {
+      "id": "truss.row_home_journal_stage.row_home_journal_stage_body",
+      "kind": "constraint",
+      "parent": "truss.row_home_journal_stage",
+      "source": "docs/helix/02-design/contracts/row-home-journal-stage-v0.2.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/10/Constraint",
+      "originalDeclaration": {
+        "contype": "CONSTR_CHECK",
+        "conname": "row_home_journal_stage_body",
+        "initially_valid": true,
+        "raw_expr": {
+          "A_Expr": {
+            "kind": "AEXPR_OP",
+            "name": [
+              {
+                "String": {
+                  "sval": ">"
+                }
+              }
+            ],
+            "lexpr": {
+              "FuncCall": {
+                "funcname": [
+                  {
+                    "String": {
+                      "sval": "pg_catalog"
+                    }
+                  },
+                  {
+                    "String": {
+                      "sval": "octet_length"
+                    }
+                  }
+                ],
+                "args": [
+                  {
+                    "ColumnRef": {
+                      "fields": [
+                        {
+                          "String": {
+                            "sval": "body_bytes"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "funcformat": "COERCE_EXPLICIT_CALL"
+              }
+            },
+            "rexpr": {
+              "A_Const": {
+                "ival": {}
+              }
+            }
+          }
+        }
+      },
+      "nativeStatus": "unresolved"
+    }
+  ],
+  "explicitEntryCount": 35,
+  "dependencyEdges": [
+    {
+      "from": "truss.row_home_journal_stage",
+      "to": "truss.row_home_operation",
+      "kind": "foreign-key",
+      "constraint": "truss.row_home_journal_stage.row_home_journal_stage_operation_fk"
+    }
+  ],
+  "unresolvedNativeSurfaces": [
+    "PK supporting indexes and index definitions",
+    "FK enforcement triggers and dependency identities",
+    "native type/collation/operator/function resolution",
+    "namespace/object ownership and effective grants/policies",
+    "protected producer/observer/recovery/retention routines and accounts",
+    "complete retained conversion and installation effects"
+  ],
+  "nativeExecuted": false,
+  "installationReady": false
+}

@@ -1,0 +1,14 @@
+{
+  "scope": "Read-only installed declaration and proposed host-stack procedure correspondence; no native execution or driver support claim",
+  "source": {
+    "path": "/Users/erik/Projects/umf/node_modules/bun-types/sql.d.ts",
+    "sha256": "9ae72ea9b6e33001dbe932bc3b8c6566601eb0b5f7c262998c9c68f4c121986e"
+  },
+  "checkedDeclarations": [
+    "TransactionSQL callback savepoint overloads",
+    "TransactionSQL.reserve unrelated connection declaration"
+  ],
+  "unqualifiedRequirement": "Actual original host mediation and complete savepoint history/completion evidence; installed declaration inspection does not establish these capabilities",
+  "capturedContractSha256": "b7338bde89ee9c0a309e58cd7696f8f338e0a2ee90c51f33cfcd8ae0a85907a9",
+  "contractDigestScope": "Snapshot when the host-stack section was authored; later command/cycle sections are outside this read-only declaration review"
+}

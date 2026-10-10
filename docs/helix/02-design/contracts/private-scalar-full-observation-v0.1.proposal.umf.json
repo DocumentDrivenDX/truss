@@ -1,0 +1,2141 @@
+{
+  "umf": "0.1.0",
+  "id": "truss-private-scalar-full-observation-proposal",
+  "vocabularies": {
+    "umf.postgresql": {
+      "version": "0.1.0"
+    }
+  },
+  "modules": [
+    {
+      "id": "schema",
+      "namespace": "",
+      "elements": [
+        {
+          "id": "schema",
+          "extensions": {
+            "umf.postgresql": {
+              "profile": "postgresql-raw-parse-tree",
+              "source": "-- Design-only direct-reader scalar observation, not a Weft result ABI.\n-- Requires selected complete owner/state/node visibility and original read cut.\n-- $1 original positive state_id bigint; $2 original positive node_id bigint.\n-- Missing row does not classify absent property, null or container.\n-- LIMIT 2 detects duplicate identity; it does not prove complete tree coverage.\nSELECT s.state_id::pg_catalog.text AS state_id,\n       s.node_id::pg_catalog.text AS node_id,\n       s.scalar_kind AS scalar_kind,\n       s.text_value AS text_value,\n       s.boolean_value::pg_catalog.text AS boolean_value,\n       s.numeric_value::pg_catalog.text AS native_numeric_text,\n       s.numeric_token AS original_numeric_token,\n       pg_catalog.encode(s.binary_value, 'hex') AS binary_value_hex,\n       s.temporal_text AS temporal_text,\n       s.temporal_instant::pg_catalog.text AS temporal_instant_text,\n       pg_catalog.encode(s.opaque_bytes, 'hex') AS opaque_bytes_hex,\n       pg_catalog.encode(s.codec_definition_bytes, 'hex') AS codec_bytes_hex,\n       pg_catalog.encode(s.original_source_bytes, 'hex') AS source_bytes_hex,\n       pg_catalog.current_setting('DateStyle') AS metadata_date_style,\n       pg_catalog.current_setting('TimeZone') AS metadata_time_zone\nFROM truss.row_home_scalar AS s\nWHERE s.state_id = $1::pg_catalog.int8\n  AND s.node_id = $2::pg_catalog.int8\nLIMIT 2;\n",
+              "root": {
+                "kind": "object",
+                "members": {
+                  "version": {
+                    "kind": "number",
+                    "value": "170004"
+                  },
+                  "stmts": {
+                    "kind": "array",
+                    "items": [
+                      {
+                        "kind": "object",
+                        "members": {
+                          "stmt": {
+                            "kind": "object",
+                            "members": {
+                              "SelectStmt": {
+                                "kind": "object",
+                                "members": {
+                                  "targetList": {
+                                    "kind": "array",
+                                    "items": [
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "ResTarget": {
+                                            "kind": "object",
+                                            "members": {
+                                              "name": {
+                                                "kind": "string",
+                                                "value": "state_id"
+                                              },
+                                              "val": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "TypeCast": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "arg": {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "ColumnRef": {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "fields": {
+                                                                "kind": "array",
+                                                                "items": [
+                                                                  {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "String": {
+                                                                        "kind": "object",
+                                                                        "members": {
+                                                                          "sval": {
+                                                                            "kind": "string",
+                                                                            "value": "s"
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  },
+                                                                  {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "String": {
+                                                                        "kind": "object",
+                                                                        "members": {
+                                                                          "sval": {
+                                                                            "kind": "string",
+                                                                            "value": "state_id"
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                ]
+                                                              },
+                                                              "location": {
+                                                                "kind": "number",
+                                                                "value": "388"
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      },
+                                                      "typeName": {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "names": {
+                                                            "kind": "array",
+                                                            "items": [
+                                                              {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "String": {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "sval": {
+                                                                        "kind": "string",
+                                                                        "value": "pg_catalog"
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              },
+                                                              {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "String": {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "sval": {
+                                                                        "kind": "string",
+                                                                        "value": "text"
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            ]
+                                                          },
+                                                          "typemod": {
+                                                            "kind": "number",
+                                                            "value": "-1"
+                                                          },
+                                                          "location": {
+                                                            "kind": "number",
+                                                            "value": "400"
+                                                          }
+                                                        }
+                                                      },
+                                                      "location": {
+                                                        "kind": "number",
+                                                        "value": "398"
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "location": {
+                                                "kind": "number",
+                                                "value": "388"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "ResTarget": {
+                                            "kind": "object",
+                                            "members": {
+                                              "name": {
+                                                "kind": "string",
+                                                "value": "node_id"
+                                              },
+                                              "val": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "TypeCast": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "arg": {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "ColumnRef": {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "fields": {
+                                                                "kind": "array",
+                                                                "items": [
+                                                                  {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "String": {
+                                                                        "kind": "object",
+                                                                        "members": {
+                                                                          "sval": {
+                                                                            "kind": "string",
+                                                                            "value": "s"
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  },
+                                                                  {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "String": {
+                                                                        "kind": "object",
+                                                                        "members": {
+                                                                          "sval": {
+                                                                            "kind": "string",
+                                                                            "value": "node_id"
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                ]
+                                                              },
+                                                              "location": {
+                                                                "kind": "number",
+                                                                "value": "436"
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      },
+                                                      "typeName": {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "names": {
+                                                            "kind": "array",
+                                                            "items": [
+                                                              {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "String": {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "sval": {
+                                                                        "kind": "string",
+                                                                        "value": "pg_catalog"
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              },
+                                                              {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "String": {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "sval": {
+                                                                        "kind": "string",
+                                                                        "value": "text"
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            ]
+                                                          },
+                                                          "typemod": {
+                                                            "kind": "number",
+                                                            "value": "-1"
+                                                          },
+                                                          "location": {
+                                                            "kind": "number",
+                                                            "value": "447"
+                                                          }
+                                                        }
+                                                      },
+                                                      "location": {
+                                                        "kind": "number",
+                                                        "value": "445"
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "location": {
+                                                "kind": "number",
+                                                "value": "436"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "ResTarget": {
+                                            "kind": "object",
+                                            "members": {
+                                              "name": {
+                                                "kind": "string",
+                                                "value": "scalar_kind"
+                                              },
+                                              "val": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "ColumnRef": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "fields": {
+                                                        "kind": "array",
+                                                        "items": [
+                                                          {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "String": {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "sval": {
+                                                                    "kind": "string",
+                                                                    "value": "s"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          },
+                                                          {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "String": {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "sval": {
+                                                                    "kind": "string",
+                                                                    "value": "scalar_kind"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        ]
+                                                      },
+                                                      "location": {
+                                                        "kind": "number",
+                                                        "value": "482"
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "location": {
+                                                "kind": "number",
+                                                "value": "482"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "ResTarget": {
+                                            "kind": "object",
+                                            "members": {
+                                              "name": {
+                                                "kind": "string",
+                                                "value": "text_value"
+                                              },
+                                              "val": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "ColumnRef": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "fields": {
+                                                        "kind": "array",
+                                                        "items": [
+                                                          {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "String": {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "sval": {
+                                                                    "kind": "string",
+                                                                    "value": "s"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          },
+                                                          {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "String": {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "sval": {
+                                                                    "kind": "string",
+                                                                    "value": "text_value"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        ]
+                                                      },
+                                                      "location": {
+                                                        "kind": "number",
+                                                        "value": "519"
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "location": {
+                                                "kind": "number",
+                                                "value": "519"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "ResTarget": {
+                                            "kind": "object",
+                                            "members": {
+                                              "name": {
+                                                "kind": "string",
+                                                "value": "boolean_value"
+                                              },
+                                              "val": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "TypeCast": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "arg": {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "ColumnRef": {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "fields": {
+                                                                "kind": "array",
+                                                                "items": [
+                                                                  {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "String": {
+                                                                        "kind": "object",
+                                                                        "members": {
+                                                                          "sval": {
+                                                                            "kind": "string",
+                                                                            "value": "s"
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  },
+                                                                  {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "String": {
+                                                                        "kind": "object",
+                                                                        "members": {
+                                                                          "sval": {
+                                                                            "kind": "string",
+                                                                            "value": "boolean_value"
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                ]
+                                                              },
+                                                              "location": {
+                                                                "kind": "number",
+                                                                "value": "554"
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      },
+                                                      "typeName": {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "names": {
+                                                            "kind": "array",
+                                                            "items": [
+                                                              {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "String": {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "sval": {
+                                                                        "kind": "string",
+                                                                        "value": "pg_catalog"
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              },
+                                                              {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "String": {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "sval": {
+                                                                        "kind": "string",
+                                                                        "value": "text"
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            ]
+                                                          },
+                                                          "typemod": {
+                                                            "kind": "number",
+                                                            "value": "-1"
+                                                          },
+                                                          "location": {
+                                                            "kind": "number",
+                                                            "value": "571"
+                                                          }
+                                                        }
+                                                      },
+                                                      "location": {
+                                                        "kind": "number",
+                                                        "value": "569"
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "location": {
+                                                "kind": "number",
+                                                "value": "554"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "ResTarget": {
+                                            "kind": "object",
+                                            "members": {
+                                              "name": {
+                                                "kind": "string",
+                                                "value": "native_numeric_text"
+                                              },
+                                              "val": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "TypeCast": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "arg": {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "ColumnRef": {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "fields": {
+                                                                "kind": "array",
+                                                                "items": [
+                                                                  {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "String": {
+                                                                        "kind": "object",
+                                                                        "members": {
+                                                                          "sval": {
+                                                                            "kind": "string",
+                                                                            "value": "s"
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  },
+                                                                  {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "String": {
+                                                                        "kind": "object",
+                                                                        "members": {
+                                                                          "sval": {
+                                                                            "kind": "string",
+                                                                            "value": "numeric_value"
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                ]
+                                                              },
+                                                              "location": {
+                                                                "kind": "number",
+                                                                "value": "612"
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      },
+                                                      "typeName": {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "names": {
+                                                            "kind": "array",
+                                                            "items": [
+                                                              {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "String": {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "sval": {
+                                                                        "kind": "string",
+                                                                        "value": "pg_catalog"
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              },
+                                                              {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "String": {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "sval": {
+                                                                        "kind": "string",
+                                                                        "value": "text"
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            ]
+                                                          },
+                                                          "typemod": {
+                                                            "kind": "number",
+                                                            "value": "-1"
+                                                          },
+                                                          "location": {
+                                                            "kind": "number",
+                                                            "value": "629"
+                                                          }
+                                                        }
+                                                      },
+                                                      "location": {
+                                                        "kind": "number",
+                                                        "value": "627"
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "location": {
+                                                "kind": "number",
+                                                "value": "612"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "ResTarget": {
+                                            "kind": "object",
+                                            "members": {
+                                              "name": {
+                                                "kind": "string",
+                                                "value": "original_numeric_token"
+                                              },
+                                              "val": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "ColumnRef": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "fields": {
+                                                        "kind": "array",
+                                                        "items": [
+                                                          {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "String": {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "sval": {
+                                                                    "kind": "string",
+                                                                    "value": "s"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          },
+                                                          {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "String": {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "sval": {
+                                                                    "kind": "string",
+                                                                    "value": "numeric_token"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        ]
+                                                      },
+                                                      "location": {
+                                                        "kind": "number",
+                                                        "value": "676"
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "location": {
+                                                "kind": "number",
+                                                "value": "676"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "ResTarget": {
+                                            "kind": "object",
+                                            "members": {
+                                              "name": {
+                                                "kind": "string",
+                                                "value": "binary_value_hex"
+                                              },
+                                              "val": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "FuncCall": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "funcname": {
+                                                        "kind": "array",
+                                                        "items": [
+                                                          {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "String": {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "sval": {
+                                                                    "kind": "string",
+                                                                    "value": "pg_catalog"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          },
+                                                          {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "String": {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "sval": {
+                                                                    "kind": "string",
+                                                                    "value": "encode"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        ]
+                                                      },
+                                                      "args": {
+                                                        "kind": "array",
+                                                        "items": [
+                                                          {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "ColumnRef": {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "fields": {
+                                                                    "kind": "array",
+                                                                    "items": [
+                                                                      {
+                                                                        "kind": "object",
+                                                                        "members": {
+                                                                          "String": {
+                                                                            "kind": "object",
+                                                                            "members": {
+                                                                              "sval": {
+                                                                                "kind": "string",
+                                                                                "value": "s"
+                                                                              }
+                                                                            }
+                                                                          }
+                                                                        }
+                                                                      },
+                                                                      {
+                                                                        "kind": "object",
+                                                                        "members": {
+                                                                          "String": {
+                                                                            "kind": "object",
+                                                                            "members": {
+                                                                              "sval": {
+                                                                                "kind": "string",
+                                                                                "value": "binary_value"
+                                                                              }
+                                                                            }
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    ]
+                                                                  },
+                                                                  "location": {
+                                                                    "kind": "number",
+                                                                    "value": "744"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          },
+                                                          {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "A_Const": {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "sval": {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "sval": {
+                                                                        "kind": "string",
+                                                                        "value": "hex"
+                                                                      }
+                                                                    }
+                                                                  },
+                                                                  "location": {
+                                                                    "kind": "number",
+                                                                    "value": "760"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        ]
+                                                      },
+                                                      "funcformat": {
+                                                        "kind": "string",
+                                                        "value": "COERCE_EXPLICIT_CALL"
+                                                      },
+                                                      "location": {
+                                                        "kind": "number",
+                                                        "value": "726"
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "location": {
+                                                "kind": "number",
+                                                "value": "726"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "ResTarget": {
+                                            "kind": "object",
+                                            "members": {
+                                              "name": {
+                                                "kind": "string",
+                                                "value": "temporal_text"
+                                              },
+                                              "val": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "ColumnRef": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "fields": {
+                                                        "kind": "array",
+                                                        "items": [
+                                                          {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "String": {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "sval": {
+                                                                    "kind": "string",
+                                                                    "value": "s"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          },
+                                                          {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "String": {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "sval": {
+                                                                    "kind": "string",
+                                                                    "value": "temporal_text"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        ]
+                                                      },
+                                                      "location": {
+                                                        "kind": "number",
+                                                        "value": "795"
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "location": {
+                                                "kind": "number",
+                                                "value": "795"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "ResTarget": {
+                                            "kind": "object",
+                                            "members": {
+                                              "name": {
+                                                "kind": "string",
+                                                "value": "temporal_instant_text"
+                                              },
+                                              "val": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "TypeCast": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "arg": {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "ColumnRef": {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "fields": {
+                                                                "kind": "array",
+                                                                "items": [
+                                                                  {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "String": {
+                                                                        "kind": "object",
+                                                                        "members": {
+                                                                          "sval": {
+                                                                            "kind": "string",
+                                                                            "value": "s"
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  },
+                                                                  {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "String": {
+                                                                        "kind": "object",
+                                                                        "members": {
+                                                                          "sval": {
+                                                                            "kind": "string",
+                                                                            "value": "temporal_instant"
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                ]
+                                                              },
+                                                              "location": {
+                                                                "kind": "number",
+                                                                "value": "836"
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      },
+                                                      "typeName": {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "names": {
+                                                            "kind": "array",
+                                                            "items": [
+                                                              {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "String": {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "sval": {
+                                                                        "kind": "string",
+                                                                        "value": "pg_catalog"
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              },
+                                                              {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "String": {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "sval": {
+                                                                        "kind": "string",
+                                                                        "value": "text"
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            ]
+                                                          },
+                                                          "typemod": {
+                                                            "kind": "number",
+                                                            "value": "-1"
+                                                          },
+                                                          "location": {
+                                                            "kind": "number",
+                                                            "value": "856"
+                                                          }
+                                                        }
+                                                      },
+                                                      "location": {
+                                                        "kind": "number",
+                                                        "value": "854"
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "location": {
+                                                "kind": "number",
+                                                "value": "836"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "ResTarget": {
+                                            "kind": "object",
+                                            "members": {
+                                              "name": {
+                                                "kind": "string",
+                                                "value": "opaque_bytes_hex"
+                                              },
+                                              "val": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "FuncCall": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "funcname": {
+                                                        "kind": "array",
+                                                        "items": [
+                                                          {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "String": {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "sval": {
+                                                                    "kind": "string",
+                                                                    "value": "pg_catalog"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          },
+                                                          {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "String": {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "sval": {
+                                                                    "kind": "string",
+                                                                    "value": "encode"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        ]
+                                                      },
+                                                      "args": {
+                                                        "kind": "array",
+                                                        "items": [
+                                                          {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "ColumnRef": {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "fields": {
+                                                                    "kind": "array",
+                                                                    "items": [
+                                                                      {
+                                                                        "kind": "object",
+                                                                        "members": {
+                                                                          "String": {
+                                                                            "kind": "object",
+                                                                            "members": {
+                                                                              "sval": {
+                                                                                "kind": "string",
+                                                                                "value": "s"
+                                                                              }
+                                                                            }
+                                                                          }
+                                                                        }
+                                                                      },
+                                                                      {
+                                                                        "kind": "object",
+                                                                        "members": {
+                                                                          "String": {
+                                                                            "kind": "object",
+                                                                            "members": {
+                                                                              "sval": {
+                                                                                "kind": "string",
+                                                                                "value": "opaque_bytes"
+                                                                              }
+                                                                            }
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    ]
+                                                                  },
+                                                                  "location": {
+                                                                    "kind": "number",
+                                                                    "value": "923"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          },
+                                                          {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "A_Const": {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "sval": {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "sval": {
+                                                                        "kind": "string",
+                                                                        "value": "hex"
+                                                                      }
+                                                                    }
+                                                                  },
+                                                                  "location": {
+                                                                    "kind": "number",
+                                                                    "value": "939"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        ]
+                                                      },
+                                                      "funcformat": {
+                                                        "kind": "string",
+                                                        "value": "COERCE_EXPLICIT_CALL"
+                                                      },
+                                                      "location": {
+                                                        "kind": "number",
+                                                        "value": "905"
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "location": {
+                                                "kind": "number",
+                                                "value": "905"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "ResTarget": {
+                                            "kind": "object",
+                                            "members": {
+                                              "name": {
+                                                "kind": "string",
+                                                "value": "codec_bytes_hex"
+                                              },
+                                              "val": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "FuncCall": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "funcname": {
+                                                        "kind": "array",
+                                                        "items": [
+                                                          {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "String": {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "sval": {
+                                                                    "kind": "string",
+                                                                    "value": "pg_catalog"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          },
+                                                          {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "String": {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "sval": {
+                                                                    "kind": "string",
+                                                                    "value": "encode"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        ]
+                                                      },
+                                                      "args": {
+                                                        "kind": "array",
+                                                        "items": [
+                                                          {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "ColumnRef": {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "fields": {
+                                                                    "kind": "array",
+                                                                    "items": [
+                                                                      {
+                                                                        "kind": "object",
+                                                                        "members": {
+                                                                          "String": {
+                                                                            "kind": "object",
+                                                                            "members": {
+                                                                              "sval": {
+                                                                                "kind": "string",
+                                                                                "value": "s"
+                                                                              }
+                                                                            }
+                                                                          }
+                                                                        }
+                                                                      },
+                                                                      {
+                                                                        "kind": "object",
+                                                                        "members": {
+                                                                          "String": {
+                                                                            "kind": "object",
+                                                                            "members": {
+                                                                              "sval": {
+                                                                                "kind": "string",
+                                                                                "value": "codec_definition_bytes"
+                                                                              }
+                                                                            }
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    ]
+                                                                  },
+                                                                  "location": {
+                                                                    "kind": "number",
+                                                                    "value": "992"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          },
+                                                          {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "A_Const": {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "sval": {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "sval": {
+                                                                        "kind": "string",
+                                                                        "value": "hex"
+                                                                      }
+                                                                    }
+                                                                  },
+                                                                  "location": {
+                                                                    "kind": "number",
+                                                                    "value": "1018"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        ]
+                                                      },
+                                                      "funcformat": {
+                                                        "kind": "string",
+                                                        "value": "COERCE_EXPLICIT_CALL"
+                                                      },
+                                                      "location": {
+                                                        "kind": "number",
+                                                        "value": "974"
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "location": {
+                                                "kind": "number",
+                                                "value": "974"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "ResTarget": {
+                                            "kind": "object",
+                                            "members": {
+                                              "name": {
+                                                "kind": "string",
+                                                "value": "source_bytes_hex"
+                                              },
+                                              "val": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "FuncCall": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "funcname": {
+                                                        "kind": "array",
+                                                        "items": [
+                                                          {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "String": {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "sval": {
+                                                                    "kind": "string",
+                                                                    "value": "pg_catalog"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          },
+                                                          {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "String": {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "sval": {
+                                                                    "kind": "string",
+                                                                    "value": "encode"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        ]
+                                                      },
+                                                      "args": {
+                                                        "kind": "array",
+                                                        "items": [
+                                                          {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "ColumnRef": {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "fields": {
+                                                                    "kind": "array",
+                                                                    "items": [
+                                                                      {
+                                                                        "kind": "object",
+                                                                        "members": {
+                                                                          "String": {
+                                                                            "kind": "object",
+                                                                            "members": {
+                                                                              "sval": {
+                                                                                "kind": "string",
+                                                                                "value": "s"
+                                                                              }
+                                                                            }
+                                                                          }
+                                                                        }
+                                                                      },
+                                                                      {
+                                                                        "kind": "object",
+                                                                        "members": {
+                                                                          "String": {
+                                                                            "kind": "object",
+                                                                            "members": {
+                                                                              "sval": {
+                                                                                "kind": "string",
+                                                                                "value": "original_source_bytes"
+                                                                              }
+                                                                            }
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    ]
+                                                                  },
+                                                                  "location": {
+                                                                    "kind": "number",
+                                                                    "value": "1070"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          },
+                                                          {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "A_Const": {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "sval": {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "sval": {
+                                                                        "kind": "string",
+                                                                        "value": "hex"
+                                                                      }
+                                                                    }
+                                                                  },
+                                                                  "location": {
+                                                                    "kind": "number",
+                                                                    "value": "1095"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        ]
+                                                      },
+                                                      "funcformat": {
+                                                        "kind": "string",
+                                                        "value": "COERCE_EXPLICIT_CALL"
+                                                      },
+                                                      "location": {
+                                                        "kind": "number",
+                                                        "value": "1052"
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "location": {
+                                                "kind": "number",
+                                                "value": "1052"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "ResTarget": {
+                                            "kind": "object",
+                                            "members": {
+                                              "name": {
+                                                "kind": "string",
+                                                "value": "metadata_date_style"
+                                              },
+                                              "val": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "FuncCall": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "funcname": {
+                                                        "kind": "array",
+                                                        "items": [
+                                                          {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "String": {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "sval": {
+                                                                    "kind": "string",
+                                                                    "value": "pg_catalog"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          },
+                                                          {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "String": {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "sval": {
+                                                                    "kind": "string",
+                                                                    "value": "current_setting"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        ]
+                                                      },
+                                                      "args": {
+                                                        "kind": "array",
+                                                        "items": [
+                                                          {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "A_Const": {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "sval": {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "sval": {
+                                                                        "kind": "string",
+                                                                        "value": "DateStyle"
+                                                                      }
+                                                                    }
+                                                                  },
+                                                                  "location": {
+                                                                    "kind": "number",
+                                                                    "value": "1157"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        ]
+                                                      },
+                                                      "funcformat": {
+                                                        "kind": "string",
+                                                        "value": "COERCE_EXPLICIT_CALL"
+                                                      },
+                                                      "location": {
+                                                        "kind": "number",
+                                                        "value": "1130"
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "location": {
+                                                "kind": "number",
+                                                "value": "1130"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "ResTarget": {
+                                            "kind": "object",
+                                            "members": {
+                                              "name": {
+                                                "kind": "string",
+                                                "value": "metadata_time_zone"
+                                              },
+                                              "val": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "FuncCall": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "funcname": {
+                                                        "kind": "array",
+                                                        "items": [
+                                                          {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "String": {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "sval": {
+                                                                    "kind": "string",
+                                                                    "value": "pg_catalog"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          },
+                                                          {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "String": {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "sval": {
+                                                                    "kind": "string",
+                                                                    "value": "current_setting"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        ]
+                                                      },
+                                                      "args": {
+                                                        "kind": "array",
+                                                        "items": [
+                                                          {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "A_Const": {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "sval": {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "sval": {
+                                                                        "kind": "string",
+                                                                        "value": "TimeZone"
+                                                                      }
+                                                                    }
+                                                                  },
+                                                                  "location": {
+                                                                    "kind": "number",
+                                                                    "value": "1228"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        ]
+                                                      },
+                                                      "funcformat": {
+                                                        "kind": "string",
+                                                        "value": "COERCE_EXPLICIT_CALL"
+                                                      },
+                                                      "location": {
+                                                        "kind": "number",
+                                                        "value": "1201"
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "location": {
+                                                "kind": "number",
+                                                "value": "1201"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "fromClause": {
+                                    "kind": "array",
+                                    "items": [
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "RangeVar": {
+                                            "kind": "object",
+                                            "members": {
+                                              "schemaname": {
+                                                "kind": "string",
+                                                "value": "truss"
+                                              },
+                                              "relname": {
+                                                "kind": "string",
+                                                "value": "row_home_scalar"
+                                              },
+                                              "inh": {
+                                                "kind": "boolean",
+                                                "value": true
+                                              },
+                                              "relpersistence": {
+                                                "kind": "string",
+                                                "value": "p"
+                                              },
+                                              "alias": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "aliasname": {
+                                                    "kind": "string",
+                                                    "value": "s"
+                                                  }
+                                                }
+                                              },
+                                              "location": {
+                                                "kind": "number",
+                                                "value": "1267"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "whereClause": {
+                                    "kind": "object",
+                                    "members": {
+                                      "BoolExpr": {
+                                        "kind": "object",
+                                        "members": {
+                                          "boolop": {
+                                            "kind": "string",
+                                            "value": "AND_EXPR"
+                                          },
+                                          "args": {
+                                            "kind": "array",
+                                            "items": [
+                                              {
+                                                "kind": "object",
+                                                "members": {
+                                                  "A_Expr": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "kind": {
+                                                        "kind": "string",
+                                                        "value": "AEXPR_OP"
+                                                      },
+                                                      "name": {
+                                                        "kind": "array",
+                                                        "items": [
+                                                          {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "String": {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "sval": {
+                                                                    "kind": "string",
+                                                                    "value": "="
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        ]
+                                                      },
+                                                      "lexpr": {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "ColumnRef": {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "fields": {
+                                                                "kind": "array",
+                                                                "items": [
+                                                                  {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "String": {
+                                                                        "kind": "object",
+                                                                        "members": {
+                                                                          "sval": {
+                                                                            "kind": "string",
+                                                                            "value": "s"
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  },
+                                                                  {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "String": {
+                                                                        "kind": "object",
+                                                                        "members": {
+                                                                          "sval": {
+                                                                            "kind": "string",
+                                                                            "value": "state_id"
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                ]
+                                                              },
+                                                              "location": {
+                                                                "kind": "number",
+                                                                "value": "1300"
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      },
+                                                      "rexpr": {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "TypeCast": {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "arg": {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "ParamRef": {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "number": {
+                                                                        "kind": "number",
+                                                                        "value": "1"
+                                                                      },
+                                                                      "location": {
+                                                                        "kind": "number",
+                                                                        "value": "1313"
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              },
+                                                              "typeName": {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "names": {
+                                                                    "kind": "array",
+                                                                    "items": [
+                                                                      {
+                                                                        "kind": "object",
+                                                                        "members": {
+                                                                          "String": {
+                                                                            "kind": "object",
+                                                                            "members": {
+                                                                              "sval": {
+                                                                                "kind": "string",
+                                                                                "value": "pg_catalog"
+                                                                              }
+                                                                            }
+                                                                          }
+                                                                        }
+                                                                      },
+                                                                      {
+                                                                        "kind": "object",
+                                                                        "members": {
+                                                                          "String": {
+                                                                            "kind": "object",
+                                                                            "members": {
+                                                                              "sval": {
+                                                                                "kind": "string",
+                                                                                "value": "int8"
+                                                                              }
+                                                                            }
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    ]
+                                                                  },
+                                                                  "typemod": {
+                                                                    "kind": "number",
+                                                                    "value": "-1"
+                                                                  },
+                                                                  "location": {
+                                                                    "kind": "number",
+                                                                    "value": "1317"
+                                                                  }
+                                                                }
+                                                              },
+                                                              "location": {
+                                                                "kind": "number",
+                                                                "value": "1315"
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      },
+                                                      "location": {
+                                                        "kind": "number",
+                                                        "value": "1311"
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              {
+                                                "kind": "object",
+                                                "members": {
+                                                  "A_Expr": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "kind": {
+                                                        "kind": "string",
+                                                        "value": "AEXPR_OP"
+                                                      },
+                                                      "name": {
+                                                        "kind": "array",
+                                                        "items": [
+                                                          {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "String": {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "sval": {
+                                                                    "kind": "string",
+                                                                    "value": "="
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        ]
+                                                      },
+                                                      "lexpr": {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "ColumnRef": {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "fields": {
+                                                                "kind": "array",
+                                                                "items": [
+                                                                  {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "String": {
+                                                                        "kind": "object",
+                                                                        "members": {
+                                                                          "sval": {
+                                                                            "kind": "string",
+                                                                            "value": "s"
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  },
+                                                                  {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "String": {
+                                                                        "kind": "object",
+                                                                        "members": {
+                                                                          "sval": {
+                                                                            "kind": "string",
+                                                                            "value": "node_id"
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                ]
+                                                              },
+                                                              "location": {
+                                                                "kind": "number",
+                                                                "value": "1339"
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      },
+                                                      "rexpr": {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "TypeCast": {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "arg": {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "ParamRef": {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "number": {
+                                                                        "kind": "number",
+                                                                        "value": "2"
+                                                                      },
+                                                                      "location": {
+                                                                        "kind": "number",
+                                                                        "value": "1351"
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              },
+                                                              "typeName": {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "names": {
+                                                                    "kind": "array",
+                                                                    "items": [
+                                                                      {
+                                                                        "kind": "object",
+                                                                        "members": {
+                                                                          "String": {
+                                                                            "kind": "object",
+                                                                            "members": {
+                                                                              "sval": {
+                                                                                "kind": "string",
+                                                                                "value": "pg_catalog"
+                                                                              }
+                                                                            }
+                                                                          }
+                                                                        }
+                                                                      },
+                                                                      {
+                                                                        "kind": "object",
+                                                                        "members": {
+                                                                          "String": {
+                                                                            "kind": "object",
+                                                                            "members": {
+                                                                              "sval": {
+                                                                                "kind": "string",
+                                                                                "value": "int8"
+                                                                              }
+                                                                            }
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    ]
+                                                                  },
+                                                                  "typemod": {
+                                                                    "kind": "number",
+                                                                    "value": "-1"
+                                                                  },
+                                                                  "location": {
+                                                                    "kind": "number",
+                                                                    "value": "1355"
+                                                                  }
+                                                                }
+                                                              },
+                                                              "location": {
+                                                                "kind": "number",
+                                                                "value": "1353"
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      },
+                                                      "location": {
+                                                        "kind": "number",
+                                                        "value": "1349"
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            ]
+                                          },
+                                          "location": {
+                                            "kind": "number",
+                                            "value": "1335"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "limitCount": {
+                                    "kind": "object",
+                                    "members": {
+                                      "A_Const": {
+                                        "kind": "object",
+                                        "members": {
+                                          "ival": {
+                                            "kind": "object",
+                                            "members": {
+                                              "ival": {
+                                                "kind": "number",
+                                                "value": "2"
+                                              }
+                                            }
+                                          },
+                                          "location": {
+                                            "kind": "number",
+                                            "value": "1377"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "limitOption": {
+                                    "kind": "string",
+                                    "value": "LIMIT_OPTION_COUNT"
+                                  },
+                                  "op": {
+                                    "kind": "string",
+                                    "value": "SETOP_NONE"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "stmt_len": {
+                            "kind": "number",
+                            "value": "1378"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "scope": "Five fixed local control submissions with original command/ready frames captured at instance handlers; shared frame/slice payload account exercised; no complete account, original savepoint authority or unknown-outcome qualification",
+  "pgserver": "0.1.4+truss.pg16.15",
+  "serverVersion": "16.15",
+  "driver": "pg8000 1.31.5",
+  "driverCoreSha256": "cac1e50502901bcea3ddab588e0350149dd8fd771156ae1c531a2a04b3925e26",
+  "controls": [
+    "BEGIN",
+    "SAVEPOINT original_probe",
+    "ROLLBACK TO SAVEPOINT original_probe",
+    "RELEASE SAVEPOINT original_probe",
+    "ROLLBACK"
+  ],
+  "frames": [
+    {
+      "cycle": "startup",
+      "kind": "Z",
+      "hex": "5a0000000549"
+    },
+    {
+      "cycle": "0",
+      "kind": "C",
+      "hex": "430000000a424547494e00"
+    },
+    {
+      "cycle": "0",
+      "kind": "Z",
+      "hex": "5a0000000554"
+    },
+    {
+      "cycle": "1",
+      "kind": "C",
+      "hex": "430000000e53415645504f494e5400"
+    },
+    {
+      "cycle": "1",
+      "kind": "Z",
+      "hex": "5a0000000554"
+    },
+    {
+      "cycle": "2",
+      "kind": "C",
+      "hex": "430000000d524f4c4c4241434b00"
+    },
+    {
+      "cycle": "2",
+      "kind": "Z",
+      "hex": "5a0000000554"
+    },
+    {
+      "cycle": "3",
+      "kind": "C",
+      "hex": "430000000c52454c4541534500"
+    },
+    {
+      "cycle": "3",
+      "kind": "Z",
+      "hex": "5a0000000554"
+    },
+    {
+      "cycle": "4",
+      "kind": "C",
+      "hex": "430000000d524f4c4c4241434b00"
+    },
+    {
+      "cycle": "4",
+      "kind": "Z",
+      "hex": "5a0000000549"
+    }
+  ],
+  "independentExpectedControlFrames": 10,
+  "driverPortQualified": false,
+  "payloadAccountAfterClose": [
+    1689,
+    0,
+    1689,
+    true
+  ],
+  "payloadAccountLimits": {
+    "live": 134217728,
+    "cumulative": 268435456,
+    "records": 1024
+  },
+  "installedTrussModuleSha256": {
+    "_accounted_receive.py": "9552ca6e73c50186d0870ceed1a399a328f42c33656781525e589adfae742560",
+    "_resource_account.py": "640d37b2f517339b2a0ff0a7438ff17dd717644d5464f1af1cce732370b99a2a"
+  },
+  "sourceSha256": {
+    "check_pg8000_accounted_control_native.py": "3d1ff5ad70e6bb001b86872ba8e46f25c959e22dd9d24b84ec17db83918c7d89",
+    "pg8000_instance_candidate.py": "0e3a6fb3860e9f2315711cc44957e841f54640c18214955f57c87a3c6fd437de",
+    "pg8000_accounted_instance_candidate.py": "4b88faba536ce70173f28659e162fc83398b2cca19087b5f311f4a2644a56386",
+    "python_pg_receive_candidate.py": "fd9c23e3da2358cf56abc6b561c893e5d56dd9c95756fe18ec7510f52a55f4bb",
+    "python_pg_frame_candidate.py": "ed92bfc5240f17f3447f868fb88e3647cc4bd9583e21ed18ad88eb7de1eb9968"
+  },
+  "limitations": [
+    "Local trust only; no TLS/current-person admission",
+    "Probe cycle labels are not original issuer authority",
+    "No lost-response/cancellation/cleanup evidence",
+    "Payload account excludes transport/object overhead, core/parser/outbound and containment; no native preservation qualification"
+  ]
+}

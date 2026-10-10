@@ -1,0 +1,404 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:reference-composition-review:0.1.0-proposal",
+  "title": "Private reference composition review record",
+  "description": "Review data only; no activation, installed-state or authority claim. Exact bytes, role uniqueness, dependencies, coherent cut, recognized reviewer and qualification correspondence require semantic admission.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-reference-composition-review/0.1.0-proposal"
+    },
+    "scope": {
+      "const": "review_record_only"
+    },
+    "boundaries": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": {
+        "type": "object",
+        "properties": {
+          "boundary": {
+            "enum": [
+              "umf_acceptance",
+              "physical_installation",
+              "acceptance_history",
+              "storage_compiler",
+              "execution_security_resources",
+              "installation_upgrades",
+              "typescript_python"
+            ]
+          },
+          "membership": {
+            "type": "array",
+            "maxItems": 1024,
+            "items": {
+              "type": "object",
+              "properties": {
+                "role": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4096
+                },
+                "artifact": {
+                  "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+                }
+              },
+              "required": [
+                "role",
+                "artifact"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "authored": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "state": {
+                    "enum": [
+                      "not_reviewed",
+                      "incomplete"
+                    ]
+                  },
+                  "remaining": {
+                    "type": "array",
+                    "minItems": 1,
+                    "maxItems": 256,
+                    "items": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 4096
+                    }
+                  }
+                },
+                "required": [
+                  "state",
+                  "remaining"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "state": {
+                    "const": "reviewed"
+                  },
+                  "evidence": {
+                    "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+                  }
+                },
+                "required": [
+                  "state",
+                  "evidence"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          },
+          "independentReview": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "state": {
+                    "enum": [
+                      "not_reviewed",
+                      "incomplete"
+                    ]
+                  },
+                  "remaining": {
+                    "type": "array",
+                    "minItems": 1,
+                    "maxItems": 256,
+                    "items": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 4096
+                    }
+                  }
+                },
+                "required": [
+                  "state",
+                  "remaining"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "state": {
+                    "const": "reviewed"
+                  },
+                  "evidence": {
+                    "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+                  }
+                },
+                "required": [
+                  "state",
+                  "evidence"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          },
+          "nativeQualification": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "state": {
+                    "enum": [
+                      "not_reviewed",
+                      "incomplete"
+                    ]
+                  },
+                  "remaining": {
+                    "type": "array",
+                    "minItems": 1,
+                    "maxItems": 256,
+                    "items": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 4096
+                    }
+                  }
+                },
+                "required": [
+                  "state",
+                  "remaining"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "state": {
+                    "const": "reviewed"
+                  },
+                  "evidence": {
+                    "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+                  }
+                },
+                "required": [
+                  "state",
+                  "evidence"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          }
+        },
+        "required": [
+          "boundary",
+          "membership",
+          "authored",
+          "independentReview",
+          "nativeQualification"
+        ],
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "independentReview": {
+                  "properties": {
+                    "state": {
+                      "const": "reviewed"
+                    }
+                  },
+                  "required": [
+                    "state"
+                  ],
+                  "type": "object"
+                }
+              },
+              "required": [
+                "independentReview"
+              ],
+              "type": "object"
+            },
+            "then": {
+              "properties": {
+                "authored": {
+                  "properties": {
+                    "state": {
+                      "const": "reviewed"
+                    }
+                  },
+                  "required": [
+                    "state"
+                  ],
+                  "type": "object"
+                }
+              },
+              "type": "object"
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "nativeQualification": {
+                  "properties": {
+                    "state": {
+                      "const": "reviewed"
+                    }
+                  },
+                  "required": [
+                    "state"
+                  ],
+                  "type": "object"
+                }
+              },
+              "required": [
+                "nativeQualification"
+              ],
+              "type": "object"
+            },
+            "then": {
+              "properties": {
+                "authored": {
+                  "properties": {
+                    "state": {
+                      "const": "reviewed"
+                    }
+                  },
+                  "required": [
+                    "state"
+                  ],
+                  "type": "object"
+                },
+                "independentReview": {
+                  "properties": {
+                    "state": {
+                      "const": "reviewed"
+                    }
+                  },
+                  "required": [
+                    "state"
+                  ],
+                  "type": "object"
+                }
+              },
+              "type": "object"
+            }
+          }
+        ]
+      },
+      "allOf": [
+        {
+          "contains": {
+            "properties": {
+              "boundary": {
+                "const": "umf_acceptance"
+              }
+            },
+            "required": [
+              "boundary"
+            ],
+            "type": "object"
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "properties": {
+              "boundary": {
+                "const": "physical_installation"
+              }
+            },
+            "required": [
+              "boundary"
+            ],
+            "type": "object"
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "properties": {
+              "boundary": {
+                "const": "acceptance_history"
+              }
+            },
+            "required": [
+              "boundary"
+            ],
+            "type": "object"
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "properties": {
+              "boundary": {
+                "const": "storage_compiler"
+              }
+            },
+            "required": [
+              "boundary"
+            ],
+            "type": "object"
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "properties": {
+              "boundary": {
+                "const": "execution_security_resources"
+              }
+            },
+            "required": [
+              "boundary"
+            ],
+            "type": "object"
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "properties": {
+              "boundary": {
+                "const": "installation_upgrades"
+              }
+            },
+            "required": [
+              "boundary"
+            ],
+            "type": "object"
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "properties": {
+              "boundary": {
+                "const": "typescript_python"
+              }
+            },
+            "required": [
+              "boundary"
+            ],
+            "type": "object"
+          },
+          "minContains": 1,
+          "maxContains": 1
+        }
+      ]
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "scope",
+    "boundaries"
+  ],
+  "additionalProperties": false
+}

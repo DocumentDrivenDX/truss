@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:proposal:retained-history-archive:0.2.0",
+  "description": "Unadopted consumer proposal for the exact complete event 0.2 proposal. Existing 0.1 consumers remain unchanged. Original context/profile/authority/native semantic validation and migration remain required.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-retained-history-archive/0.2.0-proposal"
+    },
+    "sourceEpoch": {
+      "$ref": "urn:truss:draft:retained-history-archive:0.1.0#/properties/sourceEpoch"
+    },
+    "archiveProfile": {
+      "$ref": "urn:truss:draft:retained-history-archive:0.1.0#/properties/archiveProfile"
+    },
+    "identity": {
+      "$ref": "urn:truss:draft:retained-history-archive:0.1.0#/properties/identity"
+    },
+    "baseline": {
+      "$ref": "urn:truss:draft:retained-history-archive:0.1.0#/properties/baseline"
+    },
+    "throughVersion": {
+      "$ref": "urn:truss:draft:retained-history-archive:0.1.0#/properties/throughVersion"
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "$ref": "urn:truss:proposal:history-event:0.2.0"
+      }
+    },
+    "definitions": {
+      "$ref": "urn:truss:draft:retained-history-archive:0.1.0#/properties/definitions"
+    },
+    "baselineEvidence": {
+      "$ref": "urn:truss:draft:retained-history-archive:0.1.0#/properties/baselineEvidence"
+    },
+    "completeEventInventory": {
+      "$ref": "urn:truss:draft:retained-history-archive:0.1.0#/properties/completeEventInventory"
+    },
+    "retainedOwnerInventory": {
+      "$ref": "urn:truss:draft:retained-history-archive:0.1.0#/properties/retainedOwnerInventory"
+    },
+    "retentionEvidence": {
+      "$ref": "urn:truss:draft:retained-history-archive:0.1.0#/properties/retentionEvidence"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "sourceEpoch",
+    "archiveProfile",
+    "identity",
+    "baseline",
+    "throughVersion",
+    "events",
+    "definitions",
+    "baselineEvidence",
+    "completeEventInventory",
+    "retainedOwnerInventory",
+    "retentionEvidence"
+  ],
+  "additionalProperties": false
+}

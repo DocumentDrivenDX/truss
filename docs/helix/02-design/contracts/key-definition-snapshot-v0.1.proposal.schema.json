@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:key-definition-snapshot:0.1.0",
+  "title": "Unadopted complete key-definition snapshot envelope",
+  "description": "Closed shape only. Full native/source custody, exact signed ranges, component ownership/order, source interpretation and lifecycle continuity require semantic admission. Artifact contents are not reduced to these mirrored fields.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-key-definition-snapshot/0.1.0"
+    },
+    "snapshotProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "catalogRevision": {
+      "type": "string",
+      "pattern": "^(0|-?[1-9][0-9]*)$",
+      "maxLength": 11
+    },
+    "owner": {
+      "$ref": "urn:truss:draft:history-record:0.1.0#/$defs/owner"
+    },
+    "lineage": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "typeId": {
+      "type": "string",
+      "pattern": "^(0|-?[1-9][0-9]*)$",
+      "maxLength": 11
+    },
+    "keyNumber": {
+      "type": "string",
+      "pattern": "^(0|-?[1-9][0-9]*)$",
+      "maxLength": 6
+    },
+    "keyId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "propertyIds": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^(0|-?[1-9][0-9]*)$",
+        "maxLength": 11
+      }
+    },
+    "isPrimary": {
+      "type": "boolean"
+    },
+    "sinceRevision": {
+      "type": "string",
+      "pattern": "^(0|-?[1-9][0-9]*)$",
+      "maxLength": 11
+    },
+    "retiredRevision": {
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "maxLength": 11
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "nativeDefinition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "sourceDefinition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "acceptedBinding": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "interpretation": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "snapshotProfile",
+    "catalogRevision",
+    "owner",
+    "lineage",
+    "typeId",
+    "keyNumber",
+    "keyId",
+    "propertyIds",
+    "isPrimary",
+    "sinceRevision",
+    "retiredRevision",
+    "nativeDefinition",
+    "sourceDefinition",
+    "acceptedBinding",
+    "interpretation"
+  ],
+  "additionalProperties": false
+}

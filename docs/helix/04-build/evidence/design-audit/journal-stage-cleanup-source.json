@@ -1,0 +1,100 @@
+{
+  "scope": "UMF parser/source archive/JSON reload/guarded export only; no PostgreSQL execution, complete native inventory/semantics, privileges, dependencies or installed parity",
+  "bunVersion": "1.4.2",
+  "ownerSource": {
+    "root": "/Users/erik/Projects/umf",
+    "commit": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+    "status": "",
+    "files": [
+      {
+        "path": "native/postgresql/runtime.ts",
+        "sha256": "a88fea4cf15c9c3c3f0ad1f0a36d8f5de42a42ce8ea9712499f609beee3ea751"
+      },
+      {
+        "path": "src/adapters/postgresql/index.ts",
+        "sha256": "7baa071d95e5f9863a4ce2bf892d87fb27cab9d8605ba4cf8887016d14ca17b4"
+      },
+      {
+        "path": "src/adapters/postgresql/declarations.ts",
+        "sha256": "e47ebd6366fee86fb8ccaf1270555bcd338957bff511f30cdcae22a088c6d8d9"
+      },
+      {
+        "path": "src/model/document.ts",
+        "sha256": "a0422042659defdea425dff8bb0618eaa4bbf125f68da16aa5ad21af0b6c282f"
+      },
+      {
+        "path": "spec/extensions/postgresql/native-ast.schema.json",
+        "sha256": "aa3d3b50bc04edbc3ab3430e113ee8710edb1c10ff5cee15d4bcc7b16d9a9039"
+      },
+      {
+        "path": "bun.lock",
+        "sha256": "98a99f7d306f7269db103bdbfafe5f9ad9ed34b02024276ad0cce45df27f5cc3"
+      }
+    ]
+  },
+  "backend": "@libpg-query/parser@17.6.10",
+  "observations": [
+    {
+      "path": "docs/helix/02-design/contracts/journal-stage-cleanup-observation-v0.2.proposal.sql",
+      "sourceSha256": "f94c70efe36d99f733beab3e0ff4ed26d033f77f250df9a532a119ca4fb801d9",
+      "artifactPath": "docs/helix/02-design/contracts/journal-stage-cleanup-observation-v0.2.proposal.umf.json",
+      "artifactSha256": "fce2c9f87a84807f1e9c26d6e9e367cb1f1f16736048a433836f96843ebcebed",
+      "exportPath": "docs/helix/04-build/evidence/design-audit/journal-stage-cleanup-observation.owner-export.sql",
+      "exportSha256": "5e6ebaabb64f265e725b99f3693604aaf4b947dd97fc5d0f942894252b673203",
+      "sourceArchiveExact": true,
+      "reloadedExportExact": true,
+      "complete": false,
+      "declarationCount": 0,
+      "unhandled": [
+        {
+          "path": "/stmts/0/stmt"
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning",
+          "message": "Raw syntax is not catalog resolution, SQL execution, permissions or server-state validation"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt",
+          "severity": "warning",
+          "message": "Statement is retained without declaration extraction or execution"
+        }
+      ]
+    },
+    {
+      "path": "docs/helix/02-design/contracts/journal-stage-cleanup-delete-v0.2.proposal.sql",
+      "sourceSha256": "422f09ddfc9ba8a6a9ae773565fd3b1c87ded9118f35593f80d05d208f8a25de",
+      "artifactPath": "docs/helix/02-design/contracts/journal-stage-cleanup-delete-v0.2.proposal.umf.json",
+      "artifactSha256": "c3cd8a86bcb969201dadb27c0b6d3381d9e9dea6eb0e4e1caf98204c2fc6d45a",
+      "exportPath": "docs/helix/04-build/evidence/design-audit/journal-stage-cleanup-delete.owner-export.sql",
+      "exportSha256": "164345be3e9652b155251a8910c8bea542176f1232357359615775cc279bd8ba",
+      "sourceArchiveExact": true,
+      "reloadedExportExact": true,
+      "complete": false,
+      "declarationCount": 0,
+      "unhandled": [
+        {
+          "path": "/stmts/0/stmt"
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning",
+          "message": "Raw syntax is not catalog resolution, SQL execution, permissions or server-state validation"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt",
+          "severity": "warning",
+          "message": "Statement is retained without declaration extraction or execution"
+        }
+      ]
+    }
+  ]
+}

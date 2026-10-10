@@ -1,0 +1,38 @@
+{
+  "interfaceVersion": "truss-private-custody-cleanup-resource/0.1.0",
+  "status": "unadopted; native accounting/cleanup/settlement unqualified",
+  "integerCarrier": "canonical positive decimal text",
+  "scope": "One RT01\u2013RT06 mixed operation/touch cleanup attempt and aggregate per-installation original custody admission. Separate unadopted profile; preserves the previous touch-only profile unchanged.",
+  "limits": {
+    "observedDependencyOccurrences": "65536",
+    "allSelectedAndDecodedEvidenceBytes": "16777216",
+    "peakOwnedBytes": "134217728",
+    "cumulativeAllocationBytes": "536870912",
+    "abstractWorkUnits": "32000000",
+    "wallDeadlineMilliseconds": "30000",
+    "diagnosticCount": "64",
+    "diagnosticBytesTotal": "65536",
+    "oneCustodyRowOriginalBytes": "8388608",
+    "retainedCustodyRowsPerInstallation": "65536",
+    "retainedOriginalCustodyBytesPerInstallation": "536870912",
+    "selectedCustodyRows": "512"
+  },
+  "accounting": {
+    "custodyAdmission": "Reserve complete worst-case bounded original custody before first canonical writer submission; preserve aggregate reservation through generation/appended-operation updates. A late growth failure rolls back the governing operation under its original containment, never drops earlier obligations.",
+    "rowBytes": "Count every original carrier occurrence in operation and touch rows, decoded snapshots, wire artifacts, transfer/disposition/closure/capacity evidence, and result/archive copies. Shared identity/hash does not eliminate actual copies. The 8-MiB per-row original cap does not exempt that row from 16-MiB aggregate selected/decoded evidence or 128-MiB peak ownership; envelope/base64/native transport expansion has separate pre-materialization admission.",
+    "persistentCapacity": "Account actual retained rows/bytes and in-flight reservations under qualified native exclusion; concurrent writers cannot spend the same remaining capacity. Full native storage/index/WAL overhead needs its separately selected deployment budget.",
+    "collection": "Count repeated original source/artifact/dependency decode, collision comparisons, RT04 recollection, transfer/receipt buffers and complete deleted-identity inventory. Field transport is bounded before full host allocation.",
+    "work": "Charge every observed row/reference/allocation plus every byte hashed/decoded/copied/compared; exact settlement/archive codecs have additionally selected weights.",
+    "saturation": "Refuse new reservation without eviction; existing unsettled original recovery and already admitted obligations remain retained. Cleanup does not infer expiration from age or storage pressure.",
+    "capacityRelease": "Release persistent source custody only after actual cleanup commit or exact original reconciliation plus discharged archive/recovery dependencies; release working reservations only after actual native/worker containment.",
+    "deadline": "Minimum of 30-second stage and governing administrative deadline, monotonically measured from admission; lock/native/worker limits separately pinned.",
+    "maxima": "Individual bounds are not a simultaneous-fit or successful-throughput guarantee; exceeding any bound refuses the whole attempt.",
+    "operationRegistry": "Operation and touch rows share persistent reservation/retention caps. Charge actual duplicated native carriers in each row; no unbounded operation table or future registry proof is supplied by counters.",
+    "rowMembership": "Selected operation and touch rows share one 512-row cap. Observed/recollected/returned occurrences and dependency work additionally charge their original ledgers; duplicate selection is semantic refusal, not deduplication to fit the cap."
+  },
+  "adoption": "Select exact native ledger/exclusion/codec/transport/statement/lock/archive receipt realization and independently prove concurrent reservation, full/one-over admission, large-field and commit-unknown cleanup behavior.",
+  "derivedFrom": {
+    "path": "truss-row-touch-retention-resource-v0.1.proposal.json",
+    "sha256": "046e5ac11f470c4d6ce8e54193b38d2252ab10c2533999be13b17e629d1c2ee6"
+  }
+}

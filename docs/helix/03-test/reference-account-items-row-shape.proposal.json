@@ -1,0 +1,39 @@
+{
+  "scope": "Independent proposed scalar/null row-home expectations checked against retained logical fixture; counts supplement complete memberships, never native qualification",
+  "logicalOraclePath": "docs/helix/03-test/reference-account-items-expected-states.proposal.json",
+  "logicalOracleSha256": "15716233428d3fe0716c52a44a89b74232cf18e5dae803ba4d6245a347b7a4ac",
+  "proposedMappingPath": "docs/helix/02-design/contracts/reference-row-home-binding.proposal.md",
+  "expectedCuts": {
+    "M03_committed": {
+      "states": 9,
+      "rootNodes": 9,
+      "scalarPayloads": 8
+    },
+    "M04_each_confirmed_refusal": {
+      "states": 9,
+      "rootNodes": 9,
+      "scalarPayloads": 8
+    },
+    "M05_original_transaction_pending": {
+      "states": 10,
+      "rootNodes": 10,
+      "scalarPayloads": 8
+    },
+    "M05_independent_committed_observer": {
+      "states": 9,
+      "rootNodes": 9,
+      "scalarPayloads": 8
+    },
+    "M05_after_confirmed_rollback": {
+      "states": 9,
+      "rootNodes": 9,
+      "scalarPayloads": 8
+    },
+    "M06_after_confirmed_commit": {
+      "states": 10,
+      "rootNodes": 10,
+      "scalarPayloads": 8
+    }
+  },
+  "nativeExecuted": false
+}

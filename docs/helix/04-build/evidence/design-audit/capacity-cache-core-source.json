@@ -1,0 +1,1215 @@
+{
+  "scope": "Core Record/four Fields/PK/singleton FK from original UMF native declaration; not SQL generation or installed equality/enforcement",
+  "sourceSha256": {
+    "docs/helix/02-design/models/truss-layout-core-structural-0.7.proposal.umf.json": "e08142c25e98f131b75a794ad8cb38bb51ffb696a3a5aa3ef4e970c853ddd3f1",
+    "docs/helix/02-design/contracts/capacity-cache-v0.1.proposal.umf.json": "779130093789b2a0639ab55b050a21f2e32195dd3617cd15de36b42592afdab3",
+    "packages/postgresql/native/capacity-reservation/commit-cache.sql": "416ecbfa46b0949a334c154b653c3a266732ba61bce257332f917db1dfc43cea"
+  },
+  "modelPath": "docs/helix/02-design/models/truss-layout-core-structural-0.8.proposal.umf.json",
+  "modelSha256": "1cf0c1eb94196d1aecb4e41240e92dcf3aff78ea6457b1e6cf29c97b1bf1ea6d",
+  "producerSha256": "b5f71348a051f0464f63168c9d4252f7912734303167544f32b153adf6529036",
+  "recordCount": 51,
+  "fieldCount": 491,
+  "associationCount": 61,
+  "originalCoreRestoresExactly": true,
+  "originalRelationshipsUnchanged": true,
+  "addedRelationship": {
+    "id": "capacity-cache-fk-0",
+    "name": "capacity-cache-fk-0",
+    "source": [
+      {
+        "module": "truss-layout",
+        "element": "capacity_check_memo"
+      }
+    ],
+    "target": [
+      {
+        "module": "truss-layout",
+        "element": "row_home_capacity",
+        "key": "primary-0"
+      }
+    ],
+    "sourceMultiplicity": {
+      "min": 0,
+      "max": 1
+    },
+    "targetMultiplicity": {
+      "min": 0,
+      "max": 1
+    },
+    "targetLifecycle": "unspecified",
+    "directed": true,
+    "fieldCorrespondence": [
+      {
+        "source": {
+          "module": "truss-layout",
+          "element": "capacity_check_memo.singleton_id"
+        },
+        "target": {
+          "module": "truss-layout",
+          "element": "row_home_capacity.singleton_id"
+        }
+      }
+    ],
+    "nativeCorrespondence": {
+      "sourceModel": "docs/helix/02-design/contracts/capacity-cache-v0.1.proposal.umf.json",
+      "sourcePointer": "/stmts/0/stmt/CreateStmt/tableElts/0/ColumnDef/constraints/1/Constraint",
+      "definition": {
+        "contype": "CONSTR_FOREIGN",
+        "initially_valid": true,
+        "pktable": {
+          "schemaname": "truss",
+          "relname": "row_home_capacity",
+          "inh": true,
+          "relpersistence": "p",
+          "location": 184
+        },
+        "pk_attrs": [
+          {
+            "String": {
+              "sval": "singleton_id"
+            }
+          }
+        ],
+        "fk_matchtype": "s",
+        "fk_upd_action": "a",
+        "fk_del_action": "a",
+        "location": 173
+      },
+      "scope": "Original singleton PK/FK structural association; not installed enforcement or transaction semantics"
+    }
+  },
+  "valid": true,
+  "complete": false,
+  "diagnostics": [
+    {
+      "code": "EXPERIMENTAL_CORE_NULLABILITY",
+      "path": "/umf",
+      "message": "Nullability envelope is experimental; no native absence encoding or default execution is implied",
+      "severity": "warning"
+    },
+    {
+      "code": "EXPERIMENTAL_CORE_CARDINALITY",
+      "path": "/umf",
+      "message": "Cardinality envelope is experimental; native shape and item semantics require explicit bindings",
+      "severity": "warning"
+    },
+    {
+      "code": "EXPERIMENTAL_CORE_FACETS",
+      "path": "/umf",
+      "message": "Facet envelope is experimental; bounds do not establish native enforcement or value conversion",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_EXTENSION",
+      "path": "/vocabularies/umf.postgresql",
+      "message": "Exact extension version unavailable; content retained",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_EXTENSION",
+      "path": "/vocabularies/truss.layout.native",
+      "message": "Exact extension version unavailable; content retained",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/2/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/11/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/23/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/29/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/30/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/59/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/60/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/120/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/121/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/135/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/141/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/159/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/163/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/169/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/176/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/177/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/179/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/181/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/198/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/250/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/317/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/330/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/345/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/356/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/381/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/400/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/411/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/471/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/479/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/486/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_NULLABILITY",
+      "path": "/modules/0/elements/493/nullability",
+      "message": "Availability label retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/495/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/496/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_NULLABILITY",
+      "path": "/modules/0/elements/497/nullability",
+      "message": "Availability label retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/497/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/502/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/510/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/511/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/512/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/513/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/514/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_NULLABILITY",
+      "path": "/modules/0/elements/515/nullability",
+      "message": "Availability label retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/515/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_NULLABILITY",
+      "path": "/modules/0/elements/516/nullability",
+      "message": "Availability label retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/516/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_NULLABILITY",
+      "path": "/modules/0/elements/517/nullability",
+      "message": "Availability label retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/517/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/523/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/524/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/525/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/526/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_NULLABILITY",
+      "path": "/modules/0/elements/527/nullability",
+      "message": "Availability label retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/527/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_NULLABILITY",
+      "path": "/modules/0/elements/528/nullability",
+      "message": "Availability label retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/528/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_NULLABILITY",
+      "path": "/modules/0/elements/529/nullability",
+      "message": "Availability label retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/529/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/531/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_SCALAR_TYPE",
+      "path": "/modules/0/elements/539/scalarType",
+      "message": "Scalar family retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "EXPERIMENTAL_CORE_KEYS",
+      "path": "/umf",
+      "message": "Candidate key profile; native uniqueness and author provenance are not inferred",
+      "severity": "warning"
+    },
+    {
+      "code": "EXPERIMENTAL_CORE_RELATIONSHIPS",
+      "path": "/umf",
+      "message": "Candidate authored relationship profile; native enforcement and storage are not inferred",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/0/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/0/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/1/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/1/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/2/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/2/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/3/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/3/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/4/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/4/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/5/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/5/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/6/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/6/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/7/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/7/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/8/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/8/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/9/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/9/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/10/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/10/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/11/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/11/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/12/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/12/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/13/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/13/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/14/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/14/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/15/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/15/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/16/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/16/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/17/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/17/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/18/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/18/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/19/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/19/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/20/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/20/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/21/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/21/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/22/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/22/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/23/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/23/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/24/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/24/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/25/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/25/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/26/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/26/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/27/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/27/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/28/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/28/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/29/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/29/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/30/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/30/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/31/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/31/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/32/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/32/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/33/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/33/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/34/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/34/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/35/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/35/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/36/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/36/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/37/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/37/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/38/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/38/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/39/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/39/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/40/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/40/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/41/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/41/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/42/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/42/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/43/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/43/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/44/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/44/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/45/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/45/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/46/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/46/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/47/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/47/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/48/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/48/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/49/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/49/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/50/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/50/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/51/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/51/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/52/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/52/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/53/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/53/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/54/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/54/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/55/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/55/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/56/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/56/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/57/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/57/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/58/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/58/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/59/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/59/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/60/fieldCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    },
+    {
+      "code": "UNKNOWN_RELATIONSHIP_QUALIFIER",
+      "path": "/modules/0/relationships/60/nativeCorrespondence",
+      "message": "Qualifier retained without interpretation",
+      "severity": "warning"
+    }
+  ],
+  "installerReady": false
+}

@@ -1,0 +1,1493 @@
+{
+  "scope": "explicit syntactic type/collation/function/operator occurrences only; not overload/type/operator/dependency resolution or native completeness",
+  "helperSha256": "8928e2ec7b14423be1a9252e00dcc5b5d88468d4b28d8f482b50b0bc83396143",
+  "inputs": [
+    {
+      "path": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "sha256": "e399f0b68a068b3ff828d31e7a0d8d3443f9619d5e84845d64dc7ba0b0ea53a6"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/row-home-journal-stage-v0.2.proposal.umf.json",
+      "sha256": "1760e57aafe2a4c567e9f599afe188e7081030a79a0612f3c6b4f01c8cdd7337"
+    }
+  ],
+  "references": [
+    {
+      "kind": "type-name",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/0/ColumnDef/typeName",
+      "nameParts": [
+        "xid8"
+      ],
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "type-name",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/1/ColumnDef/typeName",
+      "nameParts": [
+        "pg_catalog",
+        "int8"
+      ],
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "type-name",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/2/ColumnDef/typeName",
+      "nameParts": [
+        "text"
+      ],
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "collation-name",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/2/ColumnDef/collClause",
+      "nameParts": [
+        "pg_catalog",
+        "C"
+      ],
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "type-name",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/3/ColumnDef/typeName",
+      "nameParts": [
+        "text"
+      ],
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "collation-name",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/3/ColumnDef/collClause",
+      "nameParts": [
+        "pg_catalog",
+        "C"
+      ],
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "type-name",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/4/ColumnDef/typeName",
+      "nameParts": [
+        "pg_catalog",
+        "int8"
+      ],
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "type-name",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/5/ColumnDef/typeName",
+      "nameParts": [
+        "pg_catalog",
+        "int8"
+      ],
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "type-name",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/6/ColumnDef/typeName",
+      "nameParts": [
+        "pg_catalog",
+        "int8"
+      ],
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "type-name",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/7/ColumnDef/typeName",
+      "nameParts": [
+        "pg_catalog",
+        "int8"
+      ],
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "type-name",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/8/ColumnDef/typeName",
+      "nameParts": [
+        "bytea"
+      ],
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "type-name",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/9/ColumnDef/typeName",
+      "nameParts": [
+        "bytea"
+      ],
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "type-name",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/10/ColumnDef/typeName",
+      "nameParts": [
+        "bytea"
+      ],
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "type-name",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/11/ColumnDef/typeName",
+      "nameParts": [
+        "bytea"
+      ],
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "type-name",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/12/ColumnDef/typeName",
+      "nameParts": [
+        "bytea"
+      ],
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "type-name",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/13/ColumnDef/typeName",
+      "nameParts": [
+        "bytea"
+      ],
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "type-name",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/14/ColumnDef/typeName",
+      "nameParts": [
+        "bytea"
+      ],
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "type-name",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/15/ColumnDef/typeName",
+      "nameParts": [
+        "bytea"
+      ],
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "operator-expression",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/17/Constraint/raw_expr/A_Expr",
+      "nameParts": [
+        ">="
+      ],
+      "expressionKind": "AEXPR_OP",
+      "originalExpression": {
+        "kind": "AEXPR_OP",
+        "name": [
+          {
+            "String": {
+              "sval": ">="
+            }
+          }
+        ],
+        "lexpr": {
+          "ColumnRef": {
+            "fields": [
+              {
+                "String": {
+                  "sval": "operation_ordinal"
+                }
+              }
+            ]
+          }
+        },
+        "rexpr": {
+          "A_Const": {
+            "ival": {}
+          }
+        }
+      },
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "operator-expression",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/18/Constraint/raw_expr/A_Expr",
+      "nameParts": [
+        "="
+      ],
+      "expressionKind": "AEXPR_IN",
+      "originalExpression": {
+        "kind": "AEXPR_IN",
+        "name": [
+          {
+            "String": {
+              "sval": "="
+            }
+          }
+        ],
+        "lexpr": {
+          "ColumnRef": {
+            "fields": [
+              {
+                "String": {
+                  "sval": "operation_kind"
+                }
+              }
+            ]
+          }
+        },
+        "rexpr": {
+          "List": {
+            "items": [
+              {
+                "A_Const": {
+                  "sval": {
+                    "sval": "mutation"
+                  }
+                }
+              },
+              {
+                "A_Const": {
+                  "sval": {
+                    "sval": "import"
+                  }
+                }
+              },
+              {
+                "A_Const": {
+                  "sval": {
+                    "sval": "catalog-transform"
+                  }
+                }
+              },
+              {
+                "A_Const": {
+                  "sval": {
+                    "sval": "catalog-acceptance"
+                  }
+                }
+              },
+              {
+                "A_Const": {
+                  "sval": {
+                    "sval": "home-migration"
+                  }
+                }
+              },
+              {
+                "A_Const": {
+                  "sval": {
+                    "sval": "administrative-repair"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "operator-expression",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/19/Constraint/raw_expr/BoolExpr/args/0/A_Expr",
+      "nameParts": [
+        ">="
+      ],
+      "expressionKind": "AEXPR_OP",
+      "originalExpression": {
+        "kind": "AEXPR_OP",
+        "name": [
+          {
+            "String": {
+              "sval": ">="
+            }
+          }
+        ],
+        "lexpr": {
+          "ColumnRef": {
+            "fields": [
+              {
+                "String": {
+                  "sval": "effect_generation"
+                }
+              }
+            ]
+          }
+        },
+        "rexpr": {
+          "A_Const": {
+            "ival": {}
+          }
+        }
+      },
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "operator-expression",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/19/Constraint/raw_expr/BoolExpr/args/1/BoolExpr/args/1/A_Expr",
+      "nameParts": [
+        "="
+      ],
+      "expressionKind": "AEXPR_OP",
+      "originalExpression": {
+        "kind": "AEXPR_OP",
+        "name": [
+          {
+            "String": {
+              "sval": "="
+            }
+          }
+        ],
+        "lexpr": {
+          "ColumnRef": {
+            "fields": [
+              {
+                "String": {
+                  "sval": "readiness_generation"
+                }
+              }
+            ]
+          }
+        },
+        "rexpr": {
+          "ColumnRef": {
+            "fields": [
+              {
+                "String": {
+                  "sval": "effect_generation"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "operator-expression",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/19/Constraint/raw_expr/BoolExpr/args/2/BoolExpr/args/1/A_Expr",
+      "nameParts": [
+        "="
+      ],
+      "expressionKind": "AEXPR_OP",
+      "originalExpression": {
+        "kind": "AEXPR_OP",
+        "name": [
+          {
+            "String": {
+              "sval": "="
+            }
+          }
+        ],
+        "lexpr": {
+          "ColumnRef": {
+            "fields": [
+              {
+                "String": {
+                  "sval": "sealed_generation"
+                }
+              }
+            ]
+          }
+        },
+        "rexpr": {
+          "ColumnRef": {
+            "fields": [
+              {
+                "String": {
+                  "sval": "effect_generation"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "operator-expression",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/19/Constraint/raw_expr/BoolExpr/args/3/BoolExpr/args/1/A_Expr",
+      "nameParts": [
+        "="
+      ],
+      "expressionKind": "AEXPR_OP",
+      "originalExpression": {
+        "kind": "AEXPR_OP",
+        "name": [
+          {
+            "String": {
+              "sval": "="
+            }
+          }
+        ],
+        "lexpr": {
+          "ColumnRef": {
+            "fields": [
+              {
+                "String": {
+                  "sval": "application_generation"
+                }
+              }
+            ]
+          }
+        },
+        "rexpr": {
+          "ColumnRef": {
+            "fields": [
+              {
+                "String": {
+                  "sval": "effect_generation"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "operator-expression",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/20/Constraint/raw_expr/BoolExpr/args/0/BoolExpr/args/0/A_Expr",
+      "nameParts": [
+        "="
+      ],
+      "expressionKind": "AEXPR_OP",
+      "originalExpression": {
+        "kind": "AEXPR_OP",
+        "name": [
+          {
+            "String": {
+              "sval": "="
+            }
+          }
+        ],
+        "lexpr": {
+          "ColumnRef": {
+            "fields": [
+              {
+                "String": {
+                  "sval": "phase"
+                }
+              }
+            ]
+          }
+        },
+        "rexpr": {
+          "A_Const": {
+            "sval": {
+              "sval": "admitted"
+            }
+          }
+        }
+      },
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "operator-expression",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/20/Constraint/raw_expr/BoolExpr/args/1/BoolExpr/args/0/A_Expr",
+      "nameParts": [
+        "="
+      ],
+      "expressionKind": "AEXPR_OP",
+      "originalExpression": {
+        "kind": "AEXPR_OP",
+        "name": [
+          {
+            "String": {
+              "sval": "="
+            }
+          }
+        ],
+        "lexpr": {
+          "ColumnRef": {
+            "fields": [
+              {
+                "String": {
+                  "sval": "phase"
+                }
+              }
+            ]
+          }
+        },
+        "rexpr": {
+          "A_Const": {
+            "sval": {
+              "sval": "effects_ready"
+            }
+          }
+        }
+      },
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "operator-expression",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/20/Constraint/raw_expr/BoolExpr/args/2/BoolExpr/args/0/A_Expr",
+      "nameParts": [
+        "="
+      ],
+      "expressionKind": "AEXPR_OP",
+      "originalExpression": {
+        "kind": "AEXPR_OP",
+        "name": [
+          {
+            "String": {
+              "sval": "="
+            }
+          }
+        ],
+        "lexpr": {
+          "ColumnRef": {
+            "fields": [
+              {
+                "String": {
+                  "sval": "phase"
+                }
+              }
+            ]
+          }
+        },
+        "rexpr": {
+          "A_Const": {
+            "sval": {
+              "sval": "row_sealed"
+            }
+          }
+        }
+      },
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "operator-expression",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/20/Constraint/raw_expr/BoolExpr/args/3/BoolExpr/args/0/A_Expr",
+      "nameParts": [
+        "="
+      ],
+      "expressionKind": "AEXPR_OP",
+      "originalExpression": {
+        "kind": "AEXPR_OP",
+        "name": [
+          {
+            "String": {
+              "sval": "="
+            }
+          }
+        ],
+        "lexpr": {
+          "ColumnRef": {
+            "fields": [
+              {
+                "String": {
+                  "sval": "phase"
+                }
+              }
+            ]
+          }
+        },
+        "rexpr": {
+          "A_Const": {
+            "sval": {
+              "sval": "application_finalized"
+            }
+          }
+        }
+      },
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "operator-expression",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/20/Constraint/raw_expr/BoolExpr/args/3/BoolExpr/args/5/A_Expr",
+      "nameParts": [
+        ">"
+      ],
+      "expressionKind": "AEXPR_OP",
+      "originalExpression": {
+        "kind": "AEXPR_OP",
+        "name": [
+          {
+            "String": {
+              "sval": ">"
+            }
+          }
+        ],
+        "lexpr": {
+          "FuncCall": {
+            "funcname": [
+              {
+                "String": {
+                  "sval": "octet_length"
+                }
+              }
+            ],
+            "args": [
+              {
+                "ColumnRef": {
+                  "fields": [
+                    {
+                      "String": {
+                        "sval": "application_result_bytes"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "funcformat": "COERCE_EXPLICIT_CALL"
+          }
+        },
+        "rexpr": {
+          "A_Const": {
+            "ival": {}
+          }
+        }
+      },
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "function-call",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/20/Constraint/raw_expr/BoolExpr/args/3/BoolExpr/args/5/A_Expr/lexpr/FuncCall",
+      "nameParts": [
+        "octet_length"
+      ],
+      "argumentCount": 1,
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "operator-expression",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/21/Constraint/raw_expr/BoolExpr/args/0/A_Expr",
+      "nameParts": [
+        ">"
+      ],
+      "expressionKind": "AEXPR_OP",
+      "originalExpression": {
+        "kind": "AEXPR_OP",
+        "name": [
+          {
+            "String": {
+              "sval": ">"
+            }
+          }
+        ],
+        "lexpr": {
+          "FuncCall": {
+            "funcname": [
+              {
+                "String": {
+                  "sval": "octet_length"
+                }
+              }
+            ],
+            "args": [
+              {
+                "ColumnRef": {
+                  "fields": [
+                    {
+                      "String": {
+                        "sval": "original_context_bytes"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "funcformat": "COERCE_EXPLICIT_CALL"
+          }
+        },
+        "rexpr": {
+          "A_Const": {
+            "ival": {}
+          }
+        }
+      },
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "function-call",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/21/Constraint/raw_expr/BoolExpr/args/0/A_Expr/lexpr/FuncCall",
+      "nameParts": [
+        "octet_length"
+      ],
+      "argumentCount": 1,
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "operator-expression",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/21/Constraint/raw_expr/BoolExpr/args/1/A_Expr",
+      "nameParts": [
+        ">"
+      ],
+      "expressionKind": "AEXPR_OP",
+      "originalExpression": {
+        "kind": "AEXPR_OP",
+        "name": [
+          {
+            "String": {
+              "sval": ">"
+            }
+          }
+        ],
+        "lexpr": {
+          "FuncCall": {
+            "funcname": [
+              {
+                "String": {
+                  "sval": "octet_length"
+                }
+              }
+            ],
+            "args": [
+              {
+                "ColumnRef": {
+                  "fields": [
+                    {
+                      "String": {
+                        "sval": "original_definition_bytes"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "funcformat": "COERCE_EXPLICIT_CALL"
+          }
+        },
+        "rexpr": {
+          "A_Const": {
+            "ival": {}
+          }
+        }
+      },
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "function-call",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/21/Constraint/raw_expr/BoolExpr/args/1/A_Expr/lexpr/FuncCall",
+      "nameParts": [
+        "octet_length"
+      ],
+      "argumentCount": 1,
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "operator-expression",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/21/Constraint/raw_expr/BoolExpr/args/2/A_Expr",
+      "nameParts": [
+        ">"
+      ],
+      "expressionKind": "AEXPR_OP",
+      "originalExpression": {
+        "kind": "AEXPR_OP",
+        "name": [
+          {
+            "String": {
+              "sval": ">"
+            }
+          }
+        ],
+        "lexpr": {
+          "FuncCall": {
+            "funcname": [
+              {
+                "String": {
+                  "sval": "octet_length"
+                }
+              }
+            ],
+            "args": [
+              {
+                "ColumnRef": {
+                  "fields": [
+                    {
+                      "String": {
+                        "sval": "original_input_bytes"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "funcformat": "COERCE_EXPLICIT_CALL"
+          }
+        },
+        "rexpr": {
+          "A_Const": {
+            "ival": {}
+          }
+        }
+      },
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "function-call",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/21/Constraint/raw_expr/BoolExpr/args/2/A_Expr/lexpr/FuncCall",
+      "nameParts": [
+        "octet_length"
+      ],
+      "argumentCount": 1,
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "operator-expression",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/21/Constraint/raw_expr/BoolExpr/args/3/A_Expr",
+      "nameParts": [
+        ">"
+      ],
+      "expressionKind": "AEXPR_OP",
+      "originalExpression": {
+        "kind": "AEXPR_OP",
+        "name": [
+          {
+            "String": {
+              "sval": ">"
+            }
+          }
+        ],
+        "lexpr": {
+          "FuncCall": {
+            "funcname": [
+              {
+                "String": {
+                  "sval": "octet_length"
+                }
+              }
+            ],
+            "args": [
+              {
+                "ColumnRef": {
+                  "fields": [
+                    {
+                      "String": {
+                        "sval": "original_prestate_bytes"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "funcformat": "COERCE_EXPLICIT_CALL"
+          }
+        },
+        "rexpr": {
+          "A_Const": {
+            "ival": {}
+          }
+        }
+      },
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "function-call",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/21/Constraint/raw_expr/BoolExpr/args/3/A_Expr/lexpr/FuncCall",
+      "nameParts": [
+        "octet_length"
+      ],
+      "argumentCount": 1,
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "operator-expression",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/21/Constraint/raw_expr/BoolExpr/args/4/A_Expr",
+      "nameParts": [
+        ">"
+      ],
+      "expressionKind": "AEXPR_OP",
+      "originalExpression": {
+        "kind": "AEXPR_OP",
+        "name": [
+          {
+            "String": {
+              "sval": ">"
+            }
+          }
+        ],
+        "lexpr": {
+          "FuncCall": {
+            "funcname": [
+              {
+                "String": {
+                  "sval": "octet_length"
+                }
+              }
+            ],
+            "args": [
+              {
+                "ColumnRef": {
+                  "fields": [
+                    {
+                      "String": {
+                        "sval": "admitted_candidate_bytes"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "funcformat": "COERCE_EXPLICIT_CALL"
+          }
+        },
+        "rexpr": {
+          "A_Const": {
+            "ival": {}
+          }
+        }
+      },
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "function-call",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/21/Constraint/raw_expr/BoolExpr/args/4/A_Expr/lexpr/FuncCall",
+      "nameParts": [
+        "octet_length"
+      ],
+      "argumentCount": 1,
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "operator-expression",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/21/Constraint/raw_expr/BoolExpr/args/5/A_Expr",
+      "nameParts": [
+        ">"
+      ],
+      "expressionKind": "AEXPR_OP",
+      "originalExpression": {
+        "kind": "AEXPR_OP",
+        "name": [
+          {
+            "String": {
+              "sval": ">"
+            }
+          }
+        ],
+        "lexpr": {
+          "FuncCall": {
+            "funcname": [
+              {
+                "String": {
+                  "sval": "octet_length"
+                }
+              }
+            ],
+            "args": [
+              {
+                "ColumnRef": {
+                  "fields": [
+                    {
+                      "String": {
+                        "sval": "effect_obligation_bytes"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "funcformat": "COERCE_EXPLICIT_CALL"
+          }
+        },
+        "rexpr": {
+          "A_Const": {
+            "ival": {}
+          }
+        }
+      },
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "function-call",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/21/Constraint/raw_expr/BoolExpr/args/5/A_Expr/lexpr/FuncCall",
+      "nameParts": [
+        "octet_length"
+      ],
+      "argumentCount": 1,
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "operator-expression",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/21/Constraint/raw_expr/BoolExpr/args/6/A_Expr",
+      "nameParts": [
+        ">"
+      ],
+      "expressionKind": "AEXPR_OP",
+      "originalExpression": {
+        "kind": "AEXPR_OP",
+        "name": [
+          {
+            "String": {
+              "sval": ">"
+            }
+          }
+        ],
+        "lexpr": {
+          "FuncCall": {
+            "funcname": [
+              {
+                "String": {
+                  "sval": "octet_length"
+                }
+              }
+            ],
+            "args": [
+              {
+                "ColumnRef": {
+                  "fields": [
+                    {
+                      "String": {
+                        "sval": "original_group_custody_bytes"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "funcformat": "COERCE_EXPLICIT_CALL"
+          }
+        },
+        "rexpr": {
+          "A_Const": {
+            "ival": {}
+          }
+        }
+      },
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "function-call",
+      "source": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/21/Constraint/raw_expr/BoolExpr/args/6/A_Expr/lexpr/FuncCall",
+      "nameParts": [
+        "octet_length"
+      ],
+      "argumentCount": 1,
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "type-name",
+      "source": "docs/helix/02-design/contracts/row-home-journal-stage-v0.2.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/0/ColumnDef/typeName",
+      "nameParts": [
+        "pg_catalog",
+        "xid8"
+      ],
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "type-name",
+      "source": "docs/helix/02-design/contracts/row-home-journal-stage-v0.2.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/1/ColumnDef/typeName",
+      "nameParts": [
+        "pg_catalog",
+        "int8"
+      ],
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "type-name",
+      "source": "docs/helix/02-design/contracts/row-home-journal-stage-v0.2.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/2/ColumnDef/typeName",
+      "nameParts": [
+        "pg_catalog",
+        "text"
+      ],
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "collation-name",
+      "source": "docs/helix/02-design/contracts/row-home-journal-stage-v0.2.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/2/ColumnDef/collClause",
+      "nameParts": [
+        "pg_catalog",
+        "C"
+      ],
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "type-name",
+      "source": "docs/helix/02-design/contracts/row-home-journal-stage-v0.2.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/3/ColumnDef/typeName",
+      "nameParts": [
+        "pg_catalog",
+        "int8"
+      ],
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "type-name",
+      "source": "docs/helix/02-design/contracts/row-home-journal-stage-v0.2.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/4/ColumnDef/typeName",
+      "nameParts": [
+        "pg_catalog",
+        "int8"
+      ],
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "type-name",
+      "source": "docs/helix/02-design/contracts/row-home-journal-stage-v0.2.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/5/ColumnDef/typeName",
+      "nameParts": [
+        "pg_catalog",
+        "bytea"
+      ],
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "operator-expression",
+      "source": "docs/helix/02-design/contracts/row-home-journal-stage-v0.2.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/8/Constraint/raw_expr/A_Expr",
+      "nameParts": [
+        "="
+      ],
+      "expressionKind": "AEXPR_IN",
+      "originalExpression": {
+        "kind": "AEXPR_IN",
+        "name": [
+          {
+            "String": {
+              "sval": "="
+            }
+          }
+        ],
+        "lexpr": {
+          "ColumnRef": {
+            "fields": [
+              {
+                "String": {
+                  "sval": "stage_name"
+                }
+              }
+            ]
+          }
+        },
+        "rexpr": {
+          "List": {
+            "items": [
+              {
+                "A_Const": {
+                  "sval": {
+                    "sval": "start"
+                  }
+                }
+              },
+              {
+                "A_Const": {
+                  "sval": {
+                    "sval": "transition"
+                  }
+                }
+              },
+              {
+                "A_Const": {
+                  "sval": {
+                    "sval": "final"
+                  }
+                }
+              },
+              {
+                "A_Const": {
+                  "sval": {
+                    "sval": "reserved"
+                  }
+                }
+              },
+              {
+                "A_Const": {
+                  "sval": {
+                    "sval": "publication"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "operator-expression",
+      "source": "docs/helix/02-design/contracts/row-home-journal-stage-v0.2.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/9/Constraint/raw_expr/BoolExpr/args/0/A_Expr",
+      "nameParts": [
+        ">="
+      ],
+      "expressionKind": "AEXPR_OP",
+      "originalExpression": {
+        "kind": "AEXPR_OP",
+        "name": [
+          {
+            "String": {
+              "sval": ">="
+            }
+          }
+        ],
+        "lexpr": {
+          "ColumnRef": {
+            "fields": [
+              {
+                "String": {
+                  "sval": "operation_ordinal"
+                }
+              }
+            ]
+          }
+        },
+        "rexpr": {
+          "A_Const": {
+            "ival": {}
+          }
+        }
+      },
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "operator-expression",
+      "source": "docs/helix/02-design/contracts/row-home-journal-stage-v0.2.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/9/Constraint/raw_expr/BoolExpr/args/1/A_Expr",
+      "nameParts": [
+        ">="
+      ],
+      "expressionKind": "AEXPR_OP",
+      "originalExpression": {
+        "kind": "AEXPR_OP",
+        "name": [
+          {
+            "String": {
+              "sval": ">="
+            }
+          }
+        ],
+        "lexpr": {
+          "ColumnRef": {
+            "fields": [
+              {
+                "String": {
+                  "sval": "stage_ordinal"
+                }
+              }
+            ]
+          }
+        },
+        "rexpr": {
+          "A_Const": {
+            "ival": {}
+          }
+        }
+      },
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "operator-expression",
+      "source": "docs/helix/02-design/contracts/row-home-journal-stage-v0.2.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/9/Constraint/raw_expr/BoolExpr/args/2/A_Expr",
+      "nameParts": [
+        ">="
+      ],
+      "expressionKind": "AEXPR_OP",
+      "originalExpression": {
+        "kind": "AEXPR_OP",
+        "name": [
+          {
+            "String": {
+              "sval": ">="
+            }
+          }
+        ],
+        "lexpr": {
+          "ColumnRef": {
+            "fields": [
+              {
+                "String": {
+                  "sval": "effect_generation"
+                }
+              }
+            ]
+          }
+        },
+        "rexpr": {
+          "A_Const": {
+            "ival": {}
+          }
+        }
+      },
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "operator-expression",
+      "source": "docs/helix/02-design/contracts/row-home-journal-stage-v0.2.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/9/Constraint/raw_expr/BoolExpr/args/3/BoolExpr/args/0/A_Expr",
+      "nameParts": [
+        "="
+      ],
+      "expressionKind": "AEXPR_OP",
+      "originalExpression": {
+        "kind": "AEXPR_OP",
+        "name": [
+          {
+            "String": {
+              "sval": "="
+            }
+          }
+        ],
+        "lexpr": {
+          "ColumnRef": {
+            "fields": [
+              {
+                "String": {
+                  "sval": "stage_name"
+                }
+              }
+            ]
+          }
+        },
+        "rexpr": {
+          "A_Const": {
+            "sval": {
+              "sval": "transition"
+            }
+          }
+        }
+      },
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "operator-expression",
+      "source": "docs/helix/02-design/contracts/row-home-journal-stage-v0.2.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/9/Constraint/raw_expr/BoolExpr/args/3/BoolExpr/args/1/A_Expr",
+      "nameParts": [
+        "="
+      ],
+      "expressionKind": "AEXPR_OP",
+      "originalExpression": {
+        "kind": "AEXPR_OP",
+        "name": [
+          {
+            "String": {
+              "sval": "="
+            }
+          }
+        ],
+        "lexpr": {
+          "ColumnRef": {
+            "fields": [
+              {
+                "String": {
+                  "sval": "stage_ordinal"
+                }
+              }
+            ]
+          }
+        },
+        "rexpr": {
+          "A_Const": {
+            "ival": {}
+          }
+        }
+      },
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "operator-expression",
+      "source": "docs/helix/02-design/contracts/row-home-journal-stage-v0.2.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/10/Constraint/raw_expr/A_Expr",
+      "nameParts": [
+        ">"
+      ],
+      "expressionKind": "AEXPR_OP",
+      "originalExpression": {
+        "kind": "AEXPR_OP",
+        "name": [
+          {
+            "String": {
+              "sval": ">"
+            }
+          }
+        ],
+        "lexpr": {
+          "FuncCall": {
+            "funcname": [
+              {
+                "String": {
+                  "sval": "pg_catalog"
+                }
+              },
+              {
+                "String": {
+                  "sval": "octet_length"
+                }
+              }
+            ],
+            "args": [
+              {
+                "ColumnRef": {
+                  "fields": [
+                    {
+                      "String": {
+                        "sval": "body_bytes"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "funcformat": "COERCE_EXPLICIT_CALL"
+          }
+        },
+        "rexpr": {
+          "A_Const": {
+            "ival": {}
+          }
+        }
+      },
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "function-call",
+      "source": "docs/helix/02-design/contracts/row-home-journal-stage-v0.2.proposal.umf.json",
+      "pointer": "/stmts/0/stmt/CreateStmt/tableElts/10/Constraint/raw_expr/A_Expr/lexpr/FuncCall",
+      "nameParts": [
+        "pg_catalog",
+        "octet_length"
+      ],
+      "argumentCount": 1,
+      "nativeResolution": "unresolved"
+    }
+  ],
+  "occurrenceCount": 59,
+  "unresolvedAdditionalSurfaces": [
+    "native operator overload and coercion dependencies from every original expression",
+    "native type/collation/function object identity and overload/privilege correspondence",
+    "PK index/access-method/operator-class dependencies",
+    "FK internal enforcement triggers and original parent-key correspondence",
+    "routine/role/account/grant and complete installation dependency closure"
+  ],
+  "nativeExecuted": false
+}

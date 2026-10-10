@@ -1,0 +1,110 @@
+{
+  "scope": "Native original UMF-exported installation archive table and opaque administrative fixture membership; not installer/status/verifier or release qualification",
+  "serverVersion": "16.15",
+  "observations": [
+    {
+      "id": "complete-fixture-archive-original-bytes",
+      "members": [
+        [
+          "bundle",
+          "fixture:bundle",
+          "6f70617175652061646d696e69737472617469766520666978747572652062756e646c65"
+        ],
+        [
+          "expected_inventory",
+          "fixture:expected_inventory",
+          "6f70617175652061646d696e69737472617469766520666978747572652065787065637465645f696e76656e746f7279"
+        ],
+        [
+          "installed_inventory",
+          "fixture:installed_inventory",
+          "6f70617175652061646d696e697374726174697665206669787475726520696e7374616c6c65645f696e76656e746f7279"
+        ],
+        [
+          "input",
+          "fixture:input",
+          "6f70617175652061646d696e697374726174697665206669787475726520696e707574"
+        ],
+        [
+          "marker",
+          "fixture:marker",
+          "6f70617175652061646d696e6973747261746976652066697874757265206d61726b6572"
+        ]
+      ],
+      "completeReleaseQualified": false
+    },
+    {
+      "id": "native-archive-missing-with-marker",
+      "rows": 4,
+      "markerPresent": true,
+      "fixtureMembershipMatches": false,
+      "constraintsCheckedImmediately": true
+    },
+    {
+      "id": "archive-missing-rollback",
+      "originalBytesExact": true
+    },
+    {
+      "id": "native-archive-duplicate-with-marker",
+      "rows": 6,
+      "markerPresent": true,
+      "fixtureMembershipMatches": false,
+      "constraintsCheckedImmediately": true
+    },
+    {
+      "id": "archive-duplicate-rollback",
+      "originalBytesExact": true
+    },
+    {
+      "id": "native-archive-changed-with-marker",
+      "rows": 5,
+      "markerPresent": true,
+      "fixtureMembershipMatches": false,
+      "constraintsCheckedImmediately": true
+    },
+    {
+      "id": "archive-changed-rollback",
+      "originalBytesExact": true
+    },
+    {
+      "id": "native-archive-extra-with-marker",
+      "rows": 6,
+      "markerPresent": true,
+      "fixtureMembershipMatches": false,
+      "constraintsCheckedImmediately": true
+    },
+    {
+      "id": "archive-extra-rollback",
+      "originalBytesExact": true
+    },
+    {
+      "id": "ordinary-fixture-observer-full-archive",
+      "rows": 5,
+      "originalBytesExact": true,
+      "observerAuthorityQualified": false
+    },
+    {
+      "id": "revoked-archive-select-unavailable-with-readable-marker",
+      "sqlstate": "42501",
+      "markerPresent": true,
+      "archiveObservation": "unavailable",
+      "archiveAbsentProven": false,
+      "automaticRetry": false
+    },
+    {
+      "id": "separate-explicit-read-after-right-restoration",
+      "originalBytesExact": true,
+      "initializerReplay": false
+    }
+  ],
+  "sourceSha256": {
+    "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f"
+  },
+  "producerSha256": "05dc2298bff07b1f9ef0ccbb6733a4cfe8e79d4042344702e7280ba57b7c8bae",
+  "installationQualified": false,
+  "limitations": [
+    "Five opaque fixture artifacts do not represent a registered complete release or actual inventory/receipt",
+    "Administrative DML counterexamples, not ordinary-writer bypass or security qualification",
+    "Complete release membership, native observer authority/cut/account and public APIs remain missing"
+  ]
+}

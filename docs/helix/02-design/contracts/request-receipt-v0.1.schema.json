@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:request-receipt:0.1.0",
+  "description": "Immutable original complete receipt shape; scope/full-input hash/equality/native membership/authority/configuration/time/commit admission remain semantic.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-request-receipt/0.1.0"
+    },
+    "authorizedScopeIdentity": {
+      "type": "string"
+    },
+    "requestId": {
+      "type": "string"
+    },
+    "canonicalProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "semanticDomain": {
+      "const": "truss-group-input/0.1.0"
+    },
+    "inputSha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "input": {
+      "$ref": "urn:truss:draft:group-input:0.1.0"
+    },
+    "result": {
+      "$ref": "urn:truss:draft:group-result:0.1.0#/$defs/semantic"
+    },
+    "authorization": {
+      "type": "object",
+      "properties": {
+        "policyProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "requiredOwners": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "urn:truss:draft:history-record:0.1.0#/$defs/owner"
+          }
+        },
+        "retainedDefinitionPins": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "policyProfile",
+        "requiredOwners",
+        "retainedDefinitionPins"
+      ],
+      "additionalProperties": false
+    },
+    "originalExecutionRole": {
+      "type": "string"
+    },
+    "originalExecutionConfiguration": {
+      "$ref": "urn:truss:draft:import-report:0.1.0#/properties/selectedConfiguration"
+    },
+    "createdAt": {
+      "type": "string"
+    },
+    "retainUntil": {
+      "type": "string"
+    },
+    "creationClockProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "authorizedScopeIdentity",
+    "requestId",
+    "canonicalProfile",
+    "semanticDomain",
+    "inputSha256",
+    "input",
+    "result",
+    "authorization",
+    "originalExecutionRole",
+    "originalExecutionConfiguration",
+    "createdAt",
+    "retainUntil",
+    "creationClockProfile"
+  ],
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "creationClockProfile": {
+            "type": "object",
+            "properties": {
+              "identity": {
+                "const": "truss-receipt-clock"
+              },
+              "version": {
+                "const": "0.1.0"
+              }
+            },
+            "required": [
+              "identity",
+              "version"
+            ]
+          }
+        },
+        "required": [
+          "creationClockProfile"
+        ]
+      },
+      "then": {
+        "properties": {
+          "createdAt": {
+            "type": "string",
+            "pattern": "^(?!0000)[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{6}Z(?![\\s\\S])"
+          },
+          "retainUntil": {
+            "type": "string",
+            "pattern": "^(?!0000)[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{6}Z(?![\\s\\S])"
+          }
+        }
+      }
+    }
+  ]
+}

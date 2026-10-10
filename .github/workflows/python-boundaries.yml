@@ -1,0 +1,20 @@
+name: Python module boundaries
+on:
+  push:
+    paths: ['packages/python/**', 'scripts/check-module-boundaries*.py', '.github/workflows/python-boundaries.yml']
+  pull_request:
+    paths: ['packages/python/**', 'scripts/check-module-boundaries*.py', '.github/workflows/python-boundaries.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  boundaries:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Check actual Python source map
+        run: python3 scripts/check-module-boundaries.py
+      - name: Exercise allowed and forbidden controls
+        run: python3 scripts/check-module-boundaries-controls.py

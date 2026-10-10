@@ -1,0 +1,95 @@
+{
+  "scope": "Truss compiled-consumer supplemental allocation; not Weft compiler conformance or complete STP-030 coverage",
+  "profileSelection": "unresolved",
+  "testPlan": "docs/helix/03-test/test-plans/STP-030-extend-the-layout-from-a-host.md",
+  "sourcePins": [
+    {
+      "path": "docs/helix/03-test/test-plans/STP-030-extend-the-layout-from-a-host.md",
+      "sha256": "a1286bff7a23758390fabe1cfec32e51cb12219fb6d7f18143f0d8912ce13cc5"
+    },
+    {
+      "path": "docs/helix/02-design/solution-designs/SD-005-reads-and-traversal.md",
+      "sha256": "840191b94339db73c19b4edc572491c4507c5abff95ae56ce09999b5e54dcd9a"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/CONTRACT-007-embedding-and-execution.md",
+      "sha256": "b88a1cac0a44b3ae589fa01d6e9faed69a66c76acf5f3c0fe2dd35ce9df1a128"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/compiled-execution-request-v0.1.schema.json",
+      "sha256": "4da8fc56d0b737fb186bcfabb1480bc05d177a2384cb0c79876f1f1482dcdc32"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/compiled-execution-result-v0.1.schema.json",
+      "sha256": "70935eccfaf4017382bead0f614444ed2c89a5185983a53cbd4341f6b0c94254"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-compiled-execution-capability-v0.1.d.ts",
+      "sha256": "ff8100a9988332823e489ece996e21711a9b106316f987939d48bb7168012064"
+    }
+  ],
+  "requiredIndependentEvidence": [
+    "original exact artifact bytes, integrity and registered backend/frontend/decoder/obligation pins",
+    "qualified host provenance association",
+    "native executor/adapter/savepoint/resource profile",
+    "current catalog/authority/readiness and original transaction observation",
+    "actual submission count, command termination and containment separately",
+    "independently expected ordered values/presence and no-partial-publication result"
+  ],
+  "cases": [
+    {
+      "id": "CE-01",
+      "function": "compiled_execution_retains_original_artifact_bytes",
+      "expectedObservation": "Pause provenance, mutate caller containers/cache and verify original artifact/selection through submission and decoding.",
+      "nativeStatus": "not_run",
+      "layer": "native and packed consumer",
+      "primaryAcceptanceCoverage": false
+    },
+    {
+      "id": "CE-02",
+      "function": "compiled_execution_refuses_foreign_provenance",
+      "expectedObservation": "Valid provenance for another artifact with identical SQL text cannot authorize original execution.",
+      "nativeStatus": "not_run",
+      "layer": "native and packed consumer",
+      "primaryAcceptanceCoverage": false
+    },
+    {
+      "id": "CE-03",
+      "function": "compiled_refusal_retains_actual_submission_stage",
+      "expectedObservation": "Independently distinguish zero submissions, confirmed post-command publication refusal and unresolved native termination.",
+      "nativeStatus": "not_run",
+      "layer": "native and packed consumer",
+      "primaryAcceptanceCoverage": false
+    },
+    {
+      "id": "CE-04",
+      "function": "compiled_execution_preserves_original_decoder_binding",
+      "expectedObservation": "Registration change cannot substitute original decoder/obligation meanings or reinterpret admitted rows.",
+      "nativeStatus": "not_run",
+      "layer": "native and packed consumer",
+      "primaryAcceptanceCoverage": false
+    },
+    {
+      "id": "CE-05",
+      "function": "compiled_read_revalidates_current_authority",
+      "expectedObservation": "Original artifact/decoder custody cannot preserve revoked authority or stale catalog/context admission.",
+      "nativeStatus": "not_run",
+      "layer": "native and packed consumer",
+      "primaryAcceptanceCoverage": false
+    },
+    {
+      "id": "CE-06",
+      "function": "compiled_execution_withholds_incomplete_results",
+      "expectedObservation": "Capture resource failure, malformed later rows and unresolved obligations yield no partial executed result or automatic retry.",
+      "nativeStatus": "not_run",
+      "layer": "native and packed consumer",
+      "primaryAcceptanceCoverage": false
+    }
+  ],
+  "replacementMechanism": "optional; explicit unavailable if not selected, never a passed race receipt",
+  "nativeSupportClaim": false,
+  "newWeftOrUmfApiRequired": false,
+  "plannedTestFile": "tests/host/extensions.test.ts",
+  "plannedCommand": "bun test tests/host/extensions.test.ts",
+  "coverageRule": "CE cases supplement Truss host execution planning. Primary US-030 coverage and Weft compiler conformance remain separate; no passing support claim follows inventory presence."
+}

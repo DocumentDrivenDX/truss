@@ -1,0 +1,104 @@
+{
+  "scope": "Read-only published-owner source review and unfinished security-custody handoff; no owner tests rerun, binary build or API adoption",
+  "observedAtUtc": "2026-10-10T08:37:32.299442+00:00",
+  "umfOriginMain": "322b193cef7c940d07b741860cf0170272628868",
+  "weftOriginMain": "f823aeea527ba48c1be630df7a4b8ceedd14b9f1",
+  "publishedWeftSources": [
+    {
+      "path": "crates/weft-runtime/Cargo.toml",
+      "revision": "f823aeea527ba48c1be630df7a4b8ceedd14b9f1",
+      "sha256": "3253de87574d34afe58d8391fa9b99d90279e029fab1fe52ce55ddbbe3a68399"
+    },
+    {
+      "path": "crates/weft-runtime/src/paths_cli.rs",
+      "revision": "f823aeea527ba48c1be630df7a4b8ceedd14b9f1",
+      "sha256": "4aabd6a7fff0da6dfb7630ca7db356afbf9fa286d189372b362a509addd802c3"
+    },
+    {
+      "path": "crates/weft-runtime/tests/paths_cli.rs",
+      "revision": "f823aeea527ba48c1be630df7a4b8ceedd14b9f1",
+      "sha256": "7216f89d3c1f4991830683271223787023433b878293e9ca81a08980bcbaf98b"
+    },
+    {
+      "path": "scripts/distribution/backend-paths-metadata.rs",
+      "revision": "f823aeea527ba48c1be630df7a4b8ceedd14b9f1",
+      "sha256": "4d9141327cac82550a662043cbf371b4ee3a20336fca776dcd77d94219ca2964"
+    },
+    {
+      "path": ".github/workflows/conformance.yml",
+      "revision": "f823aeea527ba48c1be630df7a4b8ceedd14b9f1",
+      "sha256": "1d2f3ce5bca556ffc4dd91b5048f8096a28d463fdc19e1097f80991ddf184f3d"
+    }
+  ],
+  "schemaBrowserAssets": [
+    {
+      "ownerPath": "docs/helix/05-deploy/microsite/dist/explorer.js",
+      "sitePath": "website/static/schema/explorer.js",
+      "sha256": "ced5812c5c376036254da0960055a113a0232a26cf74f633128c2dd63b92ce60",
+      "siteBytesMatch": true
+    },
+    {
+      "ownerPath": "docs/helix/05-deploy/microsite/dist/explorer.css",
+      "sitePath": "website/static/schema/explorer.css",
+      "sha256": "f4f15ddfc7dfa1f04d1a3d3604fdbf039e566293e4ee834c424f83642e440ceb",
+      "siteBytesMatch": true
+    },
+    {
+      "ownerPath": "docs/helix/05-deploy/microsite/dist/style.css",
+      "sitePath": "website/static/schema/style.css",
+      "sha256": "6c686ba762afdb65112034b3666bb8079cf137e8365fc160fece1d7fc2482f7a",
+      "siteBytesMatch": true
+    },
+    {
+      "ownerPath": "docs/helix/05-deploy/microsite/dist/logo.svg",
+      "sitePath": "website/static/schema/logo.svg",
+      "sha256": "5f40ae4ea560f51199abac4dda14b93d72b1667487a9791f4846cab73e4e114d",
+      "siteBytesMatch": true
+    }
+  ],
+  "securityThread": {
+    "id": "01a11b8b-06bb-7091-a11a-b7eba0a432eb",
+    "turnId": "01a124e9-115f-7a80-ac8a-149b68c5a88d",
+    "observedStatus": "inProgress"
+  },
+  "unfinishedOwnerSources": [
+    {
+      "root": "/Users/erik/.codex/worktrees/1598/umf",
+      "path": "docs/helix/02-design/spikes/SPIKE-010-security-result-coverage.md",
+      "sha256": "9394d792c2bae708f9009f2dfc326b29cfe635d0ec944a4fe13d4b42c9ac158b",
+      "status": "unfinished owner working source; not adopted"
+    },
+    {
+      "root": "/Users/erik/Projects/weft",
+      "path": "crates/weft-core/src/security_obligation_custody.rs",
+      "sha256": "ab88384ed2a671474828b8c51a1a8013474cf5dcffb6a7282c680ad318a6e135",
+      "status": "unfinished owner working source; not adopted"
+    },
+    {
+      "root": "/Users/erik/Projects/weft",
+      "path": "crates/weft-core/src/security_backend.rs",
+      "sha256": "0ed6ea9d1025de05da1bb58b2c957a05b746cbac7f862cd2f0a20c6d918da732",
+      "status": "unfinished owner working source; not adopted"
+    },
+    {
+      "root": "/Users/erik/Projects/weft",
+      "path": "crates/weft-core/src/json.rs",
+      "sha256": "f29336c58ced205722e32f2ba18f535cf8e46c1638fc61bf40d9860a435d7e75",
+      "status": "unfinished owner working source; not adopted"
+    }
+  ],
+  "trussCompilerRevision": "f05f2df09e9c2494ac8c6d703dfe38413dbc4181",
+  "compilerAdoptionChanged": false,
+  "nativeImplementationQualified": false,
+  "installerReady": false,
+  "findings": [
+    "Published weft-paths CLI explicitly selects paths::compile_json;16MiB bounded UTF8 one-shot input, no SQL execution or host obligation discharge",
+    "Source-owned Backend03 metadata export is separate from executable/native qualification",
+    "Shared0.4 interface version is insufficient routing identity; path backend remains distinct from proposed security0.4/SQL0.2 route",
+    "Unfinished security registration custody must retain exact immutable manifest bytes, complete opaque obligation parameters and every selected capability provenance occurrence",
+    "Unknown parameter meanings do not become enforced by preservation; reserved-looking serde object keys require raw-tree fidelity controls",
+    "UMF browser322b193 assets still match Truss byte-for-byte"
+  ],
+  "ownerTestsRerun": false,
+  "acceptanceCasesPromoted": []
+}

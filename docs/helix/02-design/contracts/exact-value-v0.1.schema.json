@@ -1,0 +1,307 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:exact-value:0.1.0",
+  "title": "Proposed exact value presence carrier",
+  "description": "Structural draft only. Semantic validation and qualified native encoding are required.",
+  "$ref": "#/$defs/presence",
+  "$defs": {
+    "string": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "string"
+        },
+        "text": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "text"
+      ],
+      "additionalProperties": false
+    },
+    "integer": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "integer"
+        },
+        "text": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "text"
+      ],
+      "additionalProperties": false
+    },
+    "decimal": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "decimal"
+        },
+        "text": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "text"
+      ],
+      "additionalProperties": false
+    },
+    "binary": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "binary"
+        },
+        "text": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "text"
+      ],
+      "additionalProperties": false
+    },
+    "timestamp": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "timestamp"
+        },
+        "text": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "text"
+      ],
+      "additionalProperties": false
+    },
+    "boolean": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "boolean"
+        },
+        "value": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "kind",
+        "value"
+      ],
+      "additionalProperties": false
+    },
+    "null": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "null"
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "additionalProperties": false
+    },
+    "sequence": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "sequence"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/value"
+          }
+        }
+      },
+      "required": [
+        "kind",
+        "items"
+      ],
+      "additionalProperties": false
+    },
+    "mapEntry": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "value": {
+          "$ref": "#/$defs/value"
+        }
+      },
+      "required": [
+        "key",
+        "value"
+      ],
+      "additionalProperties": false
+    },
+    "map": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "map"
+        },
+        "entries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/mapEntry"
+          }
+        }
+      },
+      "required": [
+        "kind",
+        "entries"
+      ],
+      "additionalProperties": false
+    },
+    "recordEntry": {
+      "type": "object",
+      "properties": {
+        "fieldId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "value": {
+          "$ref": "#/$defs/value"
+        }
+      },
+      "required": [
+        "fieldId",
+        "value"
+      ],
+      "additionalProperties": false
+    },
+    "record": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "record"
+        },
+        "definitionPin": {
+          "type": "string",
+          "minLength": 1
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/recordEntry"
+          }
+        }
+      },
+      "required": [
+        "kind",
+        "definitionPin",
+        "fields"
+      ],
+      "additionalProperties": false
+    },
+    "opaque": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "opaque"
+        },
+        "format": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceText": {
+          "type": "string"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "kind",
+        "format",
+        "sourceText",
+        "sha256"
+      ],
+      "additionalProperties": false
+    },
+    "value": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/string"
+        },
+        {
+          "$ref": "#/$defs/integer"
+        },
+        {
+          "$ref": "#/$defs/decimal"
+        },
+        {
+          "$ref": "#/$defs/binary"
+        },
+        {
+          "$ref": "#/$defs/timestamp"
+        },
+        {
+          "$ref": "#/$defs/boolean"
+        },
+        {
+          "$ref": "#/$defs/null"
+        },
+        {
+          "$ref": "#/$defs/sequence"
+        },
+        {
+          "$ref": "#/$defs/map"
+        },
+        {
+          "$ref": "#/$defs/record"
+        },
+        {
+          "$ref": "#/$defs/opaque"
+        }
+      ]
+    },
+    "presence": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "present": {
+              "const": false
+            }
+          },
+          "required": [
+            "present"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "present": {
+              "const": true
+            },
+            "value": {
+              "$ref": "#/$defs/value"
+            }
+          },
+          "required": [
+            "present",
+            "value"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

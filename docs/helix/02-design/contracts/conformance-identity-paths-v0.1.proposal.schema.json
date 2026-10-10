@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:proposal:conformance-identity-paths:0.1.0",
+  "title": "Proposed exact conformance alias-eligible identity paths",
+  "description": "Closed path declarations only. Complete registry membership, original namespaces, semantic identity eligibility, actual occurrence resolution and native invariants require independent admission. No wildcard or name-based inference.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-conformance-identity-paths/0.1.0"
+    },
+    "grammarProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "registry": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "entries": {
+      "type": "array",
+      "maxItems": 100000,
+      "items": {
+        "type": "object",
+        "properties": {
+          "operation": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "surface": {
+            "enum": [
+              "setup_result",
+              "input",
+              "result",
+              "state",
+              "journal",
+              "report"
+            ]
+          },
+          "surfaceProfile": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+          },
+          "pointer": {
+            "type": "string",
+            "maxLength": 8192,
+            "pattern": "^(?:/(?:[^~/]|~[01])*)*$"
+          },
+          "namespaceIdentity": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "identityProfile": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+          },
+          "entityKind": {
+            "enum": [
+              "object",
+              "edge",
+              "catalog_type",
+              "catalog_property",
+              "catalog_relationship",
+              "catalog_key"
+            ]
+          },
+          "aliasEligible": {
+            "const": true
+          }
+        },
+        "required": [
+          "operation",
+          "surface",
+          "surfaceProfile",
+          "pointer",
+          "namespaceIdentity",
+          "identityProfile",
+          "entityKind",
+          "aliasEligible"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "grammarProfile",
+    "registry",
+    "entries"
+  ],
+  "additionalProperties": false
+}

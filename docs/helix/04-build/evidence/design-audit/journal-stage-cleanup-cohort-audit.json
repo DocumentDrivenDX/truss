@@ -1,0 +1,85 @@
+{
+  "scope": "closed cohort shape only; fixture artifacts are placeholders",
+  "bunVersion": "1.4.2",
+  "sources": [
+    {
+      "path": "docs/helix/02-design/contracts/acceptance-input-v0.1.schema.json",
+      "sha256": "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/private-custody-snapshot-v0.1.proposal.schema.json",
+      "sha256": "b5db25c905bbbad5449e1f8cbcaba2dd185b9de8bfe6d4a5fa9f719c5ce428b0"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/journal-stage-snapshot-v0.2.proposal.schema.json",
+      "sha256": "9220ad8661438b9c9de0aad4f2371135460c55aa1d6dbac15b40e408c11ef050"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/journal-stage-cleanup-cohort-v0.2.proposal.schema.json",
+      "sha256": "91868e6081c41f0a1b53fa5f45a7ce415f52ec1be1666fdac17443fa825f778b"
+    },
+    {
+      "path": "/private/tmp/claude-501/truss-spec-wt/docs/helix/04-build/evidence/design-audit/check-journal-stage-cleanup-cohort.ts",
+      "sha256": "e052779d594374c7ba617743c3269cf68be2dca038f267229f9fe0a704d30a54"
+    }
+  ],
+  "results": [
+    {
+      "name": "complete cohort shape",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "empty with proof",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "empty without proof",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "nonempty with empty claim",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "missing parent",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "missing settlement",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "missing membership",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "extra deletion success",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "foreign parent stage needs semantic refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "duplicate stage needs semantic refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "forged artifact needs native refusal",
+      "expected": true,
+      "actual": true
+    }
+  ],
+  "nativeExecuted": false,
+  "adopted": false
+}

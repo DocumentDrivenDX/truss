@@ -1,0 +1,109 @@
+{
+  "scope": "Author-reviewed finite abstract component model; no implementation refinement, native authority or liveness proof",
+  "tool": "Truss standard-library explicit-state BFS/0.1",
+  "python": "3.11.17 (main, Oct  3 2026, 00:54:14) [Clang 22.1.3 ]",
+  "command": [
+    "/private/tmp/truss-pgserver-corrected-test-env/bin/python",
+    "/Users/erik/Projects/truss/docs/helix/04-build/evidence/design-audit/python_custody_model.py",
+    "python-custody-bounded-model.json"
+  ],
+  "configuration": {
+    "issuers": 1,
+    "ordinalMaximum": 1,
+    "confirmationCapacity": 2,
+    "stateCeiling": 100000,
+    "search": "complete reachable-state BFS"
+  },
+  "modelSha256": "9a36fc13c23604a29e0274ff9aed08336a8e16fb16458748780853852146e8d8",
+  "sourceSha256": {
+    "packages/python/src/truss/_operation_ordinal.py": "10d4717462ff14c7524ed793db0ac7b94f56e1d6b88158081a4f300981193977",
+    "packages/python/src/truss/_operation_admission.py": "f96462208c14230670370d0b12f9b5d38ef1c20861175bcab8777c2c687dbb30"
+  },
+  "properties": [
+    "PY-ORD-001",
+    "PY-ORD-002",
+    "PY-ADM-001",
+    "PY-ADM-002",
+    "PY-ADM-003",
+    "PY-ADM-004"
+  ],
+  "positive": {
+    "status": "completed_bounded_check",
+    "states": 906,
+    "transitions": 6224,
+    "seconds": 0.013319166959263384,
+    "nonVacuity": [
+      "failure-or-close-after-effect",
+      "native-effect",
+      "two-original-tickets-dispatched"
+    ]
+  },
+  "negativeControls": {
+    "rewind": {
+      "status": "violation",
+      "property": "PY-ORD-002",
+      "trace": [
+        "issue",
+        "close-issuer",
+        "rollback"
+      ],
+      "states": 25,
+      "transitions": 54,
+      "seconds": 0.00013462500646710396
+    },
+    "restore-permission": {
+      "status": "violation",
+      "property": "PY-ADM-002",
+      "trace": [
+        "register-0",
+        "begin-0",
+        "escaped-failure"
+      ],
+      "states": 38,
+      "transitions": 114,
+      "seconds": 0.0002299999468959868
+    },
+    "copied-ticket": {
+      "status": "violation",
+      "property": "PY-ADM-001",
+      "trace": [
+        "accept-copied-ticket"
+      ],
+      "states": 4,
+      "transitions": 7,
+      "seconds": 1.425005029886961e-05
+    }
+  },
+  "localCloseFenceCounterexample": {
+    "status": "violation",
+    "property": "LOCAL-CLOSE-IS-NATIVE-FENCE (expected false implication)",
+    "trace": [
+      "register-0",
+      "begin-0",
+      "verify-success",
+      "check-open-gate",
+      "close-registry",
+      "dispatch",
+      "callback-effect"
+    ],
+    "states": 244,
+    "transitions": 1251,
+    "seconds": 0.0024552919785492122
+  },
+  "expectedAnalysisOutcomesObserved": false,
+  "implementationRefinementProven": false,
+  "nativeQualified": false,
+  "review": {
+    "reviewer": "Truss author-agent",
+    "independentReview": "not performed"
+  },
+  "excluded": [
+    "liveness/fairness/timing",
+    "PY-ADM-005 Python deferred-object semantics",
+    "full PY-NATIVE-001 authority",
+    "account/driver/security integration",
+    "connection registry/epochs",
+    "process crash and durable recovery",
+    "larger/unbounded state domains"
+  ]
+}

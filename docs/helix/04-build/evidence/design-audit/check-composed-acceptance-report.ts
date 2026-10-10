@@ -1,0 +1,20 @@
+/** Candidate composition shapes only; no lifecycle/history adoption or native proof. */
+const {default:Ajv}=await import(process.argv[2]);const ajv=new Ajv({strict:true});
+for(const f of new Bun.Glob('*.schema.json').scanSync('docs/helix/02-design/contracts'))ajv.addSchema(await Bun.file('docs/helix/02-design/contracts/'+f).json());
+const id='urn:truss:proposal:acceptance-report:0.3.0';
+const schema=ajv.getSchema(id);if(!schema)throw Error('missing schema');
+const root=schema.schema as any;
+if(!root.required.includes('reactivations')||!root.required.includes('lifecycleProfile')||!root.required.includes('rebinds'))throw Error('incomplete composed required fields');
+const version=ajv.getSchema(id+'#/properties/interfaceVersion')!;
+for(const old of ['truss-acceptance-report/0.1.0','truss-acceptance-report/0.2.0','truss-acceptance-report/0.2.0-proposal'])if(version(old))throw Error('old version admitted');
+if(!version('truss-acceptance-report/0.3.0-proposal'))throw Error('new version refused');
+const react=ajv.getSchema(id+'#/properties/reactivations')!;
+const artifact={identity:'fixture',bytesBase64:'e30=',sha256:'a'.repeat(64)};
+const entry={identity:{kind:'key',typeId:'2',keyNumber:'1'},owner:{documentId:'d',moduleId:'m'},lineage:artifact,beforeRetiredRevision:'1',beforeDefinition:artifact,afterDefinition:artifact};
+const cases:[string,unknown,boolean][]=[['owner-local key',[entry],true],['global key substitution',[{...entry,identity:{kind:'key',keyId:'k'}}],false],['missing original before',[{...entry,beforeDefinition:undefined}],false],['duplicate requires semantic refusal',[entry,entry],true]];
+for(const [name,value,expected]of cases)if(Boolean(react(value))!==expected)throw Error(name);
+const rebinds=root.properties.rebinds;
+if(rebinds.items.allOf[0].$ref!=='urn:truss:proposal:history-event:0.2.0'||rebinds.items.allOf[1].properties.operation.const!=='rebind')throw Error('history composition lost');
+const receipt={scope:'strict composed schema compilation, required-field allocation, version refusals, four lifecycle fragment controls and original history-reference preservation; not full report/native semantic qualification',cases:cases.length,nativeQualified:false,adopted:false};
+await Bun.write('docs/helix/04-build/evidence/design-audit/composed-acceptance-report-shapes.json',JSON.stringify(receipt,null,2)+'\n');console.log(JSON.stringify(receipt));
+export {};

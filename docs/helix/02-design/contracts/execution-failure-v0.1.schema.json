@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:execution-failure:0.1.0",
+  "title": "Draft shared portable execution failure",
+  "description": "Closed existing code/retry-scope/message shape only. Original failure classification, no automatic retry, qualified current diagnostic disclosure and native SQLSTATE mapping require adapter admission. No credential or reusable handle belongs here.",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "code": {
+          "const": "retry"
+        },
+        "retryScope": {
+          "const": "whole_transaction"
+        },
+        "message": {
+          "type": "string"
+        },
+        "sqlState": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "retryScope",
+        "message"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "code": {
+          "const": "commit_unknown"
+        },
+        "retryScope": {
+          "enum": [
+            "none",
+            "qualified_request_lookup"
+          ]
+        },
+        "message": {
+          "type": "string"
+        },
+        "sqlState": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "retryScope",
+        "message"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "code": {
+          "enum": [
+            "invalid_transaction",
+            "transaction_unusable",
+            "execution_obligation",
+            "cancelled"
+          ]
+        },
+        "retryScope": {
+          "const": "none"
+        },
+        "message": {
+          "type": "string"
+        },
+        "sqlState": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "retryScope",
+        "message"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

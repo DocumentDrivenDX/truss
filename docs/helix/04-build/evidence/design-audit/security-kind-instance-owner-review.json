@@ -1,0 +1,36 @@
+{
+  "checkedAt": "2026-10-10T11:42:28.466235+00:00",
+  "scope": "read-only snapshot of unfinished owner source/design; no owner tests executed or API adopted",
+  "ownerHead": "94b2de5e303fe53f0c9432458119b6fe1eef187c",
+  "ownerThread": "01a11b8b-06bb-7091-a11a-b7eba0a432eb",
+  "observedOwnerTurn": "01a12595-f413-7910-8280-dc94a8b9ee9f",
+  "ownerTurnStateWhenObserved": "inProgress",
+  "sourceSha256": {
+    "/Users/erik/Projects/weft/crates/weft-core/src/security_obligation_matching.rs": "c545f2477501f4db5ccc018d8c0ed44df981973337f480d88166c9cf52a48ad0",
+    "/Users/erik/Projects/weft/crates/weft-core/src/security_semantic_coverage.rs": "dab5dcd078f128790c73a053f98afcf5cce343d758a8840841022b2371f47f60",
+    "/Users/erik/.codex/worktrees/1598/umf/docs/helix/02-design/spikes/security/backend-requirement-issuer-v0.2.md": "5c1ed7103034524cae9655e06bf2a1fb4d409ac9a8a7361b14490c8ce22e6014"
+  },
+  "privateMatcherVersion": "weft.security.required-instances/0.2.0",
+  "observed": [
+    "Explicit source/scope/kind/occurrence identity separate from source-level premise",
+    "Every actual source/scope edge and required semantic atom must be represented",
+    "One candidate per scope must cover every represented instance; fragments across candidates do not suffice",
+    "Shared original declaration must retain consistent kind/occurrence meaning",
+    "Native evidence, independently complete production requirement issuance and authentication remain separate",
+    "Issuer design explicitly retains private authorization-fact confidentiality B10"
+  ],
+  "testMethodsPresent": [
+    "scoped_instance_matching_requires_all_kinds_at_one_origin"
+  ],
+  "testsRerunByTruss": false,
+  "publishedInterfaceAdopted": false,
+  "acceptanceCasesPromoted": [],
+  "trussIntegrationCriteria": [
+    "Consume owner-issued complete typed demands rather than infer kinds from source IDs or backend labels",
+    "Retain original scope/capability/origin/site/case membership; no Cartesian product or fragment union",
+    "Require independent full inventory expectation for each kind and occurrence, including private authorization-fact isolation",
+    "Qualify exact original Truss layout/codec/native role and current subject/authority evidence for each assignment",
+    "Keep source-level and kind-instance evidence/version claims separate; refuse unknown profile duties",
+    "Do not duplicate compiler, resolver or requirement-issuer semantics in Truss"
+  ]
+}

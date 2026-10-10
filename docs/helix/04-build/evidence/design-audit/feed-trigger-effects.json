@@ -1,0 +1,42 @@
+{
+  "scope": "Eight authored trigger/associated-constraint identities and original table/source/node/creator correspondence only; no installed object count or native enforcement proof",
+  "allocationPath": "docs/helix/02-design/models/truss-feed-current-union-trigger-effects.proposal.json",
+  "allocationSha256": "e4d9528c5da89c7536b45687d50217d8450a8aabd1c7366b9f20b29b6f40eb46",
+  "entries": 8,
+  "controls": [
+    {
+      "case": "missing associated constraint",
+      "refused": true
+    },
+    {
+      "case": "wrong trigger parent",
+      "refused": true
+    },
+    {
+      "case": "wrong constraint creator",
+      "refused": true
+    },
+    {
+      "case": "duplicate identity",
+      "refused": true
+    },
+    {
+      "case": "forged native binding",
+      "refused": true
+    },
+    {
+      "case": "invented supporting index",
+      "refused": true
+    },
+    {
+      "case": "altered source node hash",
+      "refused": true
+    },
+    {
+      "case": "inflated completeness",
+      "refused": true
+    }
+  ],
+  "nativeExecution": false,
+  "complete": false
+}

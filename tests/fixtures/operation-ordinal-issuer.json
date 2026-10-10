@@ -1,0 +1,11 @@
+{
+  "scope": "Independent counter/custody component expectations; no native issuer admission",
+  "cases": [
+    {"id":"rollback-does-not-reuse", "maximum":"3", "events":["reserve","savepoint_rollback","reserve","failed_admission","reserve"], "expected":["0","1","2"]},
+    {"id":"finite-exhaustion-does-not-wrap", "maximum":"1", "events":["reserve","savepoint_rollback","reserve","reserve"], "expected":["0","1","exhausted"]},
+    {"id":"unknown-control-closes-admission", "maximum":"3", "events":["reserve","control_unknown","reserve"], "expected":["0","closed"]},
+    {"id":"cancellation-closes-admission", "maximum":"3", "events":["reserve","cancel","reserve"], "expected":["0","closed"]},
+    {"id":"wrong-custody-consumes-nothing", "maximum":"3", "events":["foreign_reserve","reserve","reserve"], "expected":["custody","0","1"]},
+    {"id":"ended-epoch-cannot-resume", "maximum":"3", "events":["reserve","end","reserve"], "expected":["0","closed"]}
+  ]
+}

@@ -1,0 +1,105 @@
+{
+  "interfaceVersion": "truss-history-supplement-plan/0.1.0",
+  "status": "proposal",
+  "scope": "Planned complete-history HR cases only; not an approved runtime corpus or execution receipt",
+  "source": {
+    "artifactId": "STP-018",
+    "path": "03-test/test-plans/STP-018-reconstruct-a-record-as-of-a-version.md",
+    "sha256": "dcdf4e4b03179f8d8ee102a2327c90b208afe42a06b55c98d76263187d6e042c"
+  },
+  "profileSelection": {
+    "status": "unresolved",
+    "required": [
+      "event/record/archive/page/layout/codec",
+      "historical definition and kind",
+      "authority",
+      "resource",
+      "adapter/native producer and loader"
+    ]
+  },
+  "cases": [
+    {
+      "id": "HR-01",
+      "plannedTest": "metadata_boundary_position_and_missing_delta",
+      "criteria": [
+        "US-018-AC1"
+      ],
+      "primaryLayer": "Pure reducer plus native producer",
+      "executionStatus": "not_run",
+      "nativeEvidence": false
+    },
+    {
+      "id": "HR-02",
+      "plannedTest": "original_capture_two_operations_and_rollback",
+      "criteria": [
+        "US-018-AC1"
+      ],
+      "primaryLayer": "Native integration",
+      "executionStatus": "not_run",
+      "nativeEvidence": false
+    },
+    {
+      "id": "HR-03",
+      "plannedTest": "reserved_positions_exact_publication",
+      "criteria": [
+        "US-018-AC1"
+      ],
+      "primaryLayer": "Native integration",
+      "executionStatus": "not_run",
+      "nativeEvidence": false
+    },
+    {
+      "id": "HR-04",
+      "plannedTest": "complete_historical_owner_union_current_authority",
+      "criteria": [
+        "US-018-AC1",
+        "US-018-AC2"
+      ],
+      "primaryLayer": "Native authorization/concurrency",
+      "executionStatus": "not_run",
+      "nativeEvidence": false
+    },
+    {
+      "id": "HR-05",
+      "plannedTest": "retained_addition_then_rebind",
+      "criteria": [
+        "US-018-AC1",
+        "US-018-AC2"
+      ],
+      "primaryLayer": "Pure reducer plus native integration",
+      "executionStatus": "not_run",
+      "nativeEvidence": false
+    },
+    {
+      "id": "HR-06",
+      "plannedTest": "original_definition_kind_and_versioned_carriers",
+      "criteria": [
+        "US-018-AC1",
+        "US-018-AC2"
+      ],
+      "primaryLayer": "Semantic admission plus native loader",
+      "executionStatus": "not_run",
+      "nativeEvidence": false
+    },
+    {
+      "id": "HR-07",
+      "plannedTest": "partition_checkpoint_horizon_not_unwritten",
+      "criteria": [
+        "US-018-AC3"
+      ],
+      "primaryLayer": "Native retention/reconstruction",
+      "executionStatus": "not_run",
+      "nativeEvidence": false
+    },
+    {
+      "id": "HR-08",
+      "plannedTest": "cumulative_snapshot_resource_and_interruption",
+      "criteria": [
+        "US-018-AC1"
+      ],
+      "primaryLayer": "Native resource/fault",
+      "executionStatus": "not_run",
+      "nativeEvidence": false
+    }
+  ]
+}

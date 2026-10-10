@@ -1,0 +1,69 @@
+{
+  "interfaceVersion": "truss-bootstrap-route-entry/0.1.0",
+  "routeIdentity": "pg17.inheritance.namespace-scope/0.1.0",
+  "status": "unadopted; source pins only verified; native class/cut/transport/semantic producers unqualified",
+  "nativeClass": {
+    "namespace": "pg_catalog",
+    "relation": "pg_inherits",
+    "classOid": "resolve actual catalog relation on original target",
+    "storageScope": "database",
+    "addressability": "No invented adjunct/link object OID; original identities use actual pg_class endpoints and native parent ordinal or partrelid",
+    "subobjectNumber": "0 on original relation scope"
+  },
+  "selector": "complete original either-endpoint hierarchy links",
+  "artifacts": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-inheritance-observation-pg17.proposal.sql",
+      "sha256": "163f554624f7528b092432b61876045303f05af88cb7efc71364e483ba70a1dc"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-inheritance-observation-pg17.proposal.umf.json",
+      "sha256": "55c7ed9d538e2d73b22f1a6b726e31a3bb9d88a0a7632e2de28c3573e1a63ed9"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/bootstrap-inheritance-observation.owner-export.sql",
+      "sha256": "c9a63f1e45ca247fb7d68a0ad43ff1f0c8e7b3da20b168890122bca3cf1ba407"
+    }
+  ],
+  "parameterGrammar": {
+    "slot": "1",
+    "nativeType": "pg_catalog.oid",
+    "nullAllowed": false,
+    "itemDomain": "canonical nonzero uint32 decimal text; independently admitted original pg_namespace",
+    "encoder": "exact original text parameter"
+  },
+  "orderedColumns": [
+    "catalog_class_oid",
+    "child_relation_oid",
+    "parent_relation_oid",
+    "parent_ordinal",
+    "original_catalog_row_json"
+  ],
+  "coverage": "Complete unique original either-endpoint link membership for every admitted namespace/relation scope; preserve all overlap provenance. Empty needs independent complete endpoint/kind/cut proof; retain ordered parents, index hierarchy and detach state.",
+  "requiredKnownFields": [
+    "inhrelid",
+    "inhparent",
+    "inhseqno",
+    "inhdetachpending"
+  ],
+  "preservation": "Retain full exact returned row JSON text and every unknown extension member; lossless bounded selected native JSON decoder; no parse/stringify reconstruction",
+  "dependencyExtraction": {
+    "endpoints": "nonzero inhrelid/inhparent actual pg_class; complete both original relation/index definitions and cross-namespace hierarchy closure",
+    "ordinal": "original inhseqno/raw parent order retained; semantic parent order is not relation OID/name/set sorting",
+    "state": "original detach-pending/table/index/inheritance/partition meaning separately admitted; cycles/conflicting links preserved then supported native grammar assessed",
+    "fieldClassification": {
+      "inhrelid": "resolved original child table/index definition; not invented inheritance-row identity",
+      "inhparent": "resolved original direct parent table/index definition",
+      "inhseqno": "exact native signed int32 positive parent-order fact; preserve native ordering and selected consistency grammar",
+      "inhdetachpending": "actual native transition state; retained evidence, pending detach cannot qualify stable installed hierarchy"
+    },
+    "canonicalProcedure": "CONTRACT-008 Hierarchy/partition projection: resolved directed parent-child definitions with native parent order and transition readiness, ordered aligned key/expression/opclass/collation tuples and complete default/bound/member meaning"
+  },
+  "adjuncts": [
+    "complete original child/parent relation/index/constraint/partition definitions",
+    "all reached hierarchy/local dependencies and original current endpoint owner authority"
+  ],
+  "resourceProfile": "truss-bootstrap-collector-resource/0.1.0",
+  "refusal": "Unsupported original hierarchy/ordinal/detach/partition/key/bound/native meaning or incomplete endpoint/adjunct coverage refuses completeness; no new partition layout, repair or invented link OID",
+  "resourceObligations": "Shared enclosing totals, complete original cut/authority and explicit pre-materialization/native-work permits; no independent per-route allowance"
+}

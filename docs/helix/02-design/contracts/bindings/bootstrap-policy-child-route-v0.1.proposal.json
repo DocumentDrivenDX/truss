@@ -1,0 +1,91 @@
+{
+  "interfaceVersion": "truss-bootstrap-route-entry/0.1.0",
+  "routeIdentity": "pg17.policy.child-direct/0.1.0",
+  "status": "unadopted; source pins only verified; native class/cut/transport/semantic producers unqualified",
+  "nativeClass": {
+    "namespace": "pg_catalog",
+    "relation": "pg_policy",
+    "classOid": "resolve from original target; never constant",
+    "storageScope": "database",
+    "subobjectNumber": "0"
+  },
+  "selector": "direct actual pg_policy object OIDs",
+  "artifacts": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-policy-child-observation-pg17.proposal.sql",
+      "sha256": "7fbbb197e6d3bdf3d5816b62a534028cf306609970962b447bcde8be85234ac5"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-policy-child-observation-pg17.proposal.umf.json",
+      "sha256": "189f71b36400a55ca0ced3209029870ad12d746896b64ae249545ec36c1e94cb"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/bootstrap-policy-child-observation.owner-export.sql",
+      "sha256": "6628bf7fd98ce9b0b2a39b3dc3b08a6867c8587d9367c9d58a62af87496dcae4"
+    }
+  ],
+  "parameterGrammar": {
+    "slot": "1",
+    "nativeType": "pg_catalog.oid[]",
+    "dimensions": "exactly one",
+    "lowerBound": "1",
+    "nullAllowed": false,
+    "nullItemsAllowed": false,
+    "uniqueItems": true,
+    "countInclusive": [
+      "1",
+      "256"
+    ],
+    "itemDomain": "canonical nonzero uint32 decimal text; actual pg_policy child OID, not pg_class parent",
+    "encoder": "selected original canonical PostgreSQL array encoder; no JS numeric round trip"
+  },
+  "orderedColumns": [
+    "catalog_class_oid",
+    "object_oid",
+    "relation_oid",
+    "using_native_tree",
+    "check_native_tree",
+    "using_deparsed_sql",
+    "check_deparsed_sql",
+    "polroles_native_text",
+    "polroles_native_dimensions",
+    "original_catalog_row_json"
+  ],
+  "coverage": "Exact unique requested child-address bijection; missing absent, duplicate/extra/wrong-class refuses. Compare projected relation_oid to raw polrelid and independently admit actual pg_class parent before complete fanout.",
+  "requiredKnownFields": [
+    "oid",
+    "polname",
+    "polrelid",
+    "polcmd",
+    "polpermissive",
+    "polroles",
+    "polqual",
+    "polwithcheck"
+  ],
+  "preservation": "Retain full exact returned row JSON text and every unknown extension member; lossless bounded selected native JSON decoder; no parse/stringify reconstruction",
+  "dependencyExtraction": {
+    "parent": "polrelid actual pg_class with original RLS/force-RLS/owner/authority state",
+    "principals": "ordered raw polroles/null/dimensions preserved; zero PUBLIC is a tagged applicability principal, never shared role OID 0; nonzero actual shared pg_authid",
+    "expressions": "exact using/check native trees/nulls/deparse and command-compatible native meaning; omitted check is not blindly copied into stored definition",
+    "state": "retain native polcmd/permissive/composition meaning; selected actual-role path/current authority independently observed",
+    "fieldClassification": {
+      "oid": "original native policy correlation only",
+      "polname": "exact native policy name under resolved parent relation",
+      "polrelid": "resolved original parent relation and complete RLS flags/policy inventory",
+      "polcmd": "exact r/a/w/d/* native command declaration; no generic SQL-privilege equivalence",
+      "polpermissive": "actual permissive/restrictive composition declaration; no single-row authorization inference",
+      "polroles": "original nullable/dimensional native role array; resolve shared principals with distinct PUBLIC zero tag under selected policy grammar",
+      "polqual": "exact nullable original USING tree/deparse and complete native relation/type/role/dependency context",
+      "polwithcheck": "exact nullable original WITH CHECK tree/deparse; preserve declared absence and separately admit command-specific native fallback"
+    },
+    "canonicalProcedure": "CONTRACT-008 Row-security policy projection: resolved parent/name, command/composition/principals and distinct exact USING/WITH CHECK declarations with complete native context; current actor applicability and execution separate"
+  },
+  "adjuncts": [
+    "complete original parent/child-kind/type/routine/operator/collation/role/native expression dependencies",
+    "original current parent/owner/module authority and actual installed policy/enforcement context",
+    "pg17.policy.relation-fanout/0.1.0 under same original parent/cut"
+  ],
+  "resourceProfile": "truss-bootstrap-collector-resource/0.1.0",
+  "refusal": "Unsupported child/native expression/parent meaning or unresolved original class/cut/authority/resources refuses; finding one child cannot prove complete parent membership",
+  "resourceObligations": "Shared enclosing totals, complete original cut/authority and explicit pre-materialization/native-work permits; no independent per-route allowance"
+}

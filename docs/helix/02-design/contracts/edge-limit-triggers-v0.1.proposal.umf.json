@@ -1,0 +1,315 @@
+{
+  "umf": "0.1.0",
+  "id": "truss-edge-limit-triggers-proposal",
+  "vocabularies": {
+    "umf.postgresql": {
+      "version": "0.1.0"
+    }
+  },
+  "modules": [
+    {
+      "id": "schema",
+      "namespace": "",
+      "elements": [
+        {
+          "id": "schema",
+          "extensions": {
+            "umf.postgresql": {
+              "profile": "postgresql-raw-parse-tree",
+              "source": "-- Unadopted EL08-EL12 observer declarations for exact legacy namespace/layout.\n-- Referenced routines and actual context/phase/resource/privilege realization\n-- remain missing. Do not install this fragment independently.\nCREATE TRIGGER edge_limit_edge_observe\n  AFTER INSERT OR UPDATE OR DELETE ON truss.edge\n  FOR EACH ROW EXECUTE FUNCTION truss.edge_limit_observe();\nCREATE TRIGGER edge_limit_marker_observe\n  AFTER INSERT OR UPDATE OR DELETE ON truss.edge_limit\n  FOR EACH ROW EXECUTE FUNCTION truss.edge_limit_observe();\nCREATE TRIGGER edge_limit_catalog_observe\n  AFTER INSERT OR UPDATE OR DELETE ON truss.rel_def\n  FOR EACH ROW EXECUTE FUNCTION truss.edge_limit_catalog_observe();\n-- No WHEN/UPDATE OF/arguments/transition-table filter. TRUNCATE and disabling,\n-- role/replication mode changes or routine/table/trigger alteration are denied\n-- separately by the original qualified privilege/setting profile.\n-- Existing operation-registry deferred dispatcher performs full current EL\n-- non-row validation; these AFTER observers are not independent commit proof.\n",
+              "root": {
+                "kind": "object",
+                "members": {
+                  "version": {
+                    "kind": "number",
+                    "value": "170004"
+                  },
+                  "stmts": {
+                    "kind": "array",
+                    "items": [
+                      {
+                        "kind": "object",
+                        "members": {
+                          "stmt": {
+                            "kind": "object",
+                            "members": {
+                              "CreateTrigStmt": {
+                                "kind": "object",
+                                "members": {
+                                  "trigname": {
+                                    "kind": "string",
+                                    "value": "edge_limit_edge_observe"
+                                  },
+                                  "relation": {
+                                    "kind": "object",
+                                    "members": {
+                                      "schemaname": {
+                                        "kind": "string",
+                                        "value": "truss"
+                                      },
+                                      "relname": {
+                                        "kind": "string",
+                                        "value": "edge"
+                                      },
+                                      "inh": {
+                                        "kind": "boolean",
+                                        "value": true
+                                      },
+                                      "relpersistence": {
+                                        "kind": "string",
+                                        "value": "p"
+                                      },
+                                      "location": {
+                                        "kind": "number",
+                                        "value": "299"
+                                      }
+                                    }
+                                  },
+                                  "funcname": {
+                                    "kind": "array",
+                                    "items": [
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "String": {
+                                            "kind": "object",
+                                            "members": {
+                                              "sval": {
+                                                "kind": "string",
+                                                "value": "truss"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "String": {
+                                            "kind": "object",
+                                            "members": {
+                                              "sval": {
+                                                "kind": "string",
+                                                "value": "edge_limit_observe"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "row": {
+                                    "kind": "boolean",
+                                    "value": true
+                                  },
+                                  "events": {
+                                    "kind": "number",
+                                    "value": "28"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "stmt_len": {
+                            "kind": "number",
+                            "value": "368"
+                          }
+                        }
+                      },
+                      {
+                        "kind": "object",
+                        "members": {
+                          "stmt": {
+                            "kind": "object",
+                            "members": {
+                              "CreateTrigStmt": {
+                                "kind": "object",
+                                "members": {
+                                  "trigname": {
+                                    "kind": "string",
+                                    "value": "edge_limit_marker_observe"
+                                  },
+                                  "relation": {
+                                    "kind": "object",
+                                    "members": {
+                                      "schemaname": {
+                                        "kind": "string",
+                                        "value": "truss"
+                                      },
+                                      "relname": {
+                                        "kind": "string",
+                                        "value": "edge_limit"
+                                      },
+                                      "inh": {
+                                        "kind": "boolean",
+                                        "value": true
+                                      },
+                                      "relpersistence": {
+                                        "kind": "string",
+                                        "value": "p"
+                                      },
+                                      "location": {
+                                        "kind": "number",
+                                        "value": "449"
+                                      }
+                                    }
+                                  },
+                                  "funcname": {
+                                    "kind": "array",
+                                    "items": [
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "String": {
+                                            "kind": "object",
+                                            "members": {
+                                              "sval": {
+                                                "kind": "string",
+                                                "value": "truss"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "String": {
+                                            "kind": "object",
+                                            "members": {
+                                              "sval": {
+                                                "kind": "string",
+                                                "value": "edge_limit_observe"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "row": {
+                                    "kind": "boolean",
+                                    "value": true
+                                  },
+                                  "events": {
+                                    "kind": "number",
+                                    "value": "28"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "stmt_location": {
+                            "kind": "number",
+                            "value": "369"
+                          },
+                          "stmt_len": {
+                            "kind": "number",
+                            "value": "155"
+                          }
+                        }
+                      },
+                      {
+                        "kind": "object",
+                        "members": {
+                          "stmt": {
+                            "kind": "object",
+                            "members": {
+                              "CreateTrigStmt": {
+                                "kind": "object",
+                                "members": {
+                                  "trigname": {
+                                    "kind": "string",
+                                    "value": "edge_limit_catalog_observe"
+                                  },
+                                  "relation": {
+                                    "kind": "object",
+                                    "members": {
+                                      "schemaname": {
+                                        "kind": "string",
+                                        "value": "truss"
+                                      },
+                                      "relname": {
+                                        "kind": "string",
+                                        "value": "rel_def"
+                                      },
+                                      "inh": {
+                                        "kind": "boolean",
+                                        "value": true
+                                      },
+                                      "relpersistence": {
+                                        "kind": "string",
+                                        "value": "p"
+                                      },
+                                      "location": {
+                                        "kind": "number",
+                                        "value": "606"
+                                      }
+                                    }
+                                  },
+                                  "funcname": {
+                                    "kind": "array",
+                                    "items": [
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "String": {
+                                            "kind": "object",
+                                            "members": {
+                                              "sval": {
+                                                "kind": "string",
+                                                "value": "truss"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "String": {
+                                            "kind": "object",
+                                            "members": {
+                                              "sval": {
+                                                "kind": "string",
+                                                "value": "edge_limit_catalog_observe"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "row": {
+                                    "kind": "boolean",
+                                    "value": true
+                                  },
+                                  "events": {
+                                    "kind": "number",
+                                    "value": "28"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "stmt_location": {
+                            "kind": "number",
+                            "value": "525"
+                          },
+                          "stmt_len": {
+                            "kind": "number",
+                            "value": "161"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

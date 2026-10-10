@@ -1,0 +1,40 @@
+{
+  "profile": "truss-feed-finalization-resource/0.1.0",
+  "status": "unadopted_unqualified_candidate",
+  "scope": "One original producing transaction feed registration/finalization resource account, shared across all four stores and repeated finalization. Child limits never enlarge enclosing operation/group/transaction budgets.",
+  "limits": {
+    "retainedMembers": "100000",
+    "retainedCatalogPrerequisites": "100000",
+    "retainedConfigurationPrerequisites": "100000",
+    "completeOriginalCarrierBytes": "67108864",
+    "singleCanonicalManifestBytes": "67108864",
+    "peakMaterializedBytes": "134217728",
+    "cumulativeAllocatedBytes": "536870912",
+    "cumulativeComparedBytes": "268435456",
+    "cumulativeRowVisits": "1000000",
+    "cumulativeWorkUnits": "32000000",
+    "elapsedMilliseconds": "30000"
+  },
+  "counterEncoding": "canonical_nonnegative_decimal",
+  "accounting": {
+    "originalCarrierBytes": "Count each original projected field carrier with selected native text/hex and raw-byte accounting; enclosing transport charges encoded amplification separately. No digest-only replacement.",
+    "retainedCounts": "All required members/prerequisites in original transaction, not only one call or finalizer list.",
+    "peakBytes": "All simultaneous native/transport/candidate/sort/canonical/hash/archive buffers and staging copies; scalar/frame overhead through selected producer accounting.",
+    "comparedBytes": "Every original identity/profile/payload/owner/key byte inspected by complete duplicate comparison or semantic sorting, including repeated prefixes and collision candidates.",
+    "rowVisits": "Each actual collection/verification/update-result row occurrence, repeated across finalization passes.",
+    "workUnits": "Selected registered producer counts before bounded work; host estimate from output count is insufficient.",
+    "repetition": "No fresh account on finalizer retry, exact-repeat registration, another helper, savepoint release or rebuilt delivery order.",
+    "rollback": "Native retained counts/custody follow actual rollback; historical work/allocation/elapsed usage is not erased. Peak reclamation only after confirmed release. Unknown completion receives no speculative refund.",
+    "nativeOwnership": "Raw ordinary COMMIT validation uses selected native account/producers. A host-only ledger cannot qualify unavoidable native enforcement."
+  },
+  "refusal": "Reserve before collection/materialization/comparison/sort/update/encoding. Missing exact accounting producer or remaining capacity refuses; no truncated inventory or prefix digest. Actual post-submission containment/recovery remains original executor responsibility.",
+  "openOutputs": [
+    "exact native transaction/account lifetime and rollback-resistant usage producers",
+    "transport and native query materialization bounds",
+    "comparison/sort/encoder/hash allocator/clock instrumentation",
+    "guard-side resource/termination and ordinary-role bypass qualification",
+    "enclosing profile adoption and independent at-limit/one-over cases"
+  ],
+  "nativeExecution": false,
+  "complete": false
+}

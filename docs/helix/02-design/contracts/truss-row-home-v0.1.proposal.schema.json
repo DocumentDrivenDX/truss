@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:row-home:0.1.0",
+  "title": "Proposed fixed value-tree row home binding",
+  "description": "Exact logical join selectors only; original physical inventory, state closure, scalar/edge interpretation and native qualification required. Baseline 0.2 has no such tables.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {"const": "truss-row-home/0.1.0"},
+    "layoutInventory": {"$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"},
+    "recordKind": {"enum": ["object", "edge"]},
+    "ownerCatalogId": {"type": "string", "pattern": "^(0|-?[1-9][0-9]*)$", "maxLength": 11},
+    "propertyCatalogId": {"type": "string", "pattern": "^(0|-?[1-9][0-9]*)$", "maxLength": 11},
+    "stateRelationPhysicalIdentity": {"type": "string", "minLength": 1},
+    "nodeRelationPhysicalIdentity": {"type": "string", "minLength": 1},
+    "scalarRelationPhysicalIdentity": {"type": "string", "minLength": 1},
+    "joinProfile": {"$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"},
+    "joinDefinition": {"$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"},
+    "access": {"enum": ["scalar-root", "complete-value-tree"]},
+    "presenceDefinition": {"$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"},
+    "valueDefinition": {"$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"},
+    "storedDomainObligation": {"type": "string", "minLength": 1},
+    "edgeAssociationProfile": {"$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"},
+    "edgeAssociationDefinition": {"$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"}
+  },
+  "required": ["interfaceVersion", "layoutInventory", "recordKind", "ownerCatalogId", "propertyCatalogId", "stateRelationPhysicalIdentity", "nodeRelationPhysicalIdentity", "scalarRelationPhysicalIdentity", "joinProfile", "joinDefinition", "access", "presenceDefinition", "valueDefinition", "storedDomainObligation"],
+  "additionalProperties": false,
+  "allOf": [
+    {"if": {"properties": {"recordKind": {"const": "edge"}}}, "then": {"properties": {"edgeAssociationProfile": {}, "edgeAssociationDefinition": {}}, "required": ["edgeAssociationProfile", "edgeAssociationDefinition"]}},
+    {"if": {"properties": {"recordKind": {"const": "object"}}}, "then": {"not": {"anyOf": [{"properties": {"edgeAssociationProfile": {}}, "required": ["edgeAssociationProfile"]}, {"properties": {"edgeAssociationDefinition": {}}, "required": ["edgeAssociationDefinition"]}]}}}
+  ]
+}

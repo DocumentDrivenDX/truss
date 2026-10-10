@@ -1,0 +1,5 @@
+{
+  "scope": "14 structural request probes only; forged bytes/profile controls need semantic admission, no native qualification",
+  "cases": 14,
+  "failures": []
+}

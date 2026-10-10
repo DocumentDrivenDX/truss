@@ -1,0 +1,161 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:jsonb-leaf-codec:0.1.0",
+  "title": "Proposed exact JSONB leaf codec definition",
+  "description": "Interpretation rules for selected string/boolean and owner-selected ADR-006 numeric token direction. Exact numeric/source/native profile adoption remains required; no universal scalar support.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-jsonb-leaf-codec/0.1.0"
+    },
+    "profile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "authoredDefinition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "sourceInterpretationProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "sourceInterpretationDefinition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "nativeDomainProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "nativeDomainDefinition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "rule": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "family": {
+              "const": "string"
+            },
+            "storageRepresentation": {
+              "const": "json-string"
+            },
+            "encoding": {
+              "const": "preserve-unicode-scalars"
+            },
+            "decodedCarrierKind": {
+              "const": "string"
+            }
+          },
+          "required": [
+            "family",
+            "storageRepresentation",
+            "encoding",
+            "decodedCarrierKind"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "family": {
+              "const": "boolean"
+            },
+            "storageRepresentation": {
+              "const": "json-boolean"
+            },
+            "encoding": {
+              "const": "preserve-boolean"
+            },
+            "decodedCarrierKind": {
+              "const": "boolean"
+            }
+          },
+          "required": [
+            "family",
+            "storageRepresentation",
+            "encoding",
+            "decodedCarrierKind"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "family": {
+              "const": "integer"
+            },
+            "storageRepresentation": {
+              "const": "json-string"
+            },
+            "encoding": {
+              "const": "preserve-admitted-source-token"
+            },
+            "decodedCarrierKind": {
+              "const": "integer"
+            },
+            "numericAdoptionEvidence": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            }
+          },
+          "required": [
+            "family",
+            "storageRepresentation",
+            "encoding",
+            "decodedCarrierKind",
+            "numericAdoptionEvidence"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "family": {
+              "const": "decimal"
+            },
+            "storageRepresentation": {
+              "const": "json-string"
+            },
+            "encoding": {
+              "const": "preserve-admitted-source-token"
+            },
+            "decodedCarrierKind": {
+              "const": "decimal"
+            },
+            "numericAdoptionEvidence": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            }
+          },
+          "required": [
+            "family",
+            "storageRepresentation",
+            "encoding",
+            "decodedCarrierKind",
+            "numericAdoptionEvidence"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "coercion": {
+      "const": "none"
+    },
+    "readDefault": {
+      "const": "none"
+    },
+    "invalidStoredValue": {
+      "const": "complete-result-refusal"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "profile",
+    "authoredDefinition",
+    "sourceInterpretationProfile",
+    "sourceInterpretationDefinition",
+    "nativeDomainProfile",
+    "nativeDomainDefinition",
+    "rule",
+    "coercion",
+    "readDefault",
+    "invalidStoredValue"
+  ],
+  "additionalProperties": false
+}

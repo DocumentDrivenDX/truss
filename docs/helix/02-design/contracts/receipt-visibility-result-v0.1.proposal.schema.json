@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:receipt-visibility-result:0.1.0",
+  "description": "Closed semantic result only; no commitment/visibility/disclosure/settlement proof. Outer execution Outcome remains separate.",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-receipt-visibility-result/0.1.0"
+        },
+        "outcome": {
+          "const": "available"
+        },
+        "included": {
+          "type": "boolean"
+        },
+        "comparisonProfile": {
+          "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/profilePin"
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "outcome",
+        "included",
+        "comparisonProfile"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-receipt-visibility-result/0.1.0"
+        },
+        "outcome": {
+          "const": "unavailable"
+        },
+        "reason": {
+          "enum": [
+            "authorization",
+            "epoch_profile",
+            "retention",
+            "observation_integrity",
+            "resource",
+            "invalid_token"
+          ]
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "outcome",
+        "reason"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

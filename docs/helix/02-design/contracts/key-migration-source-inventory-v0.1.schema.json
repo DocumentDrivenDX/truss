@@ -1,0 +1,342 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:key-migration-source-inventory:0.1.0",
+  "description": "Shape only; original native scope, complete bytes and custody require semantic admission.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-key-migration-source-inventory/0.1.0"
+    },
+    "originalAttempt": {
+      "$ref": "urn:truss:draft:key-migration-result:0.1.0#/$defs/attempt"
+    },
+    "source": {
+      "$ref": "urn:truss:draft:key-profile-migration:0.1.0#/$defs/basis"
+    },
+    "inventoryProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "entries": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "entryId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "binding": {
+                "$ref": "urn:truss:draft:key-bindings:0.1.0#/properties/bindings/items"
+              },
+              "localKeyNumber": {
+                "type": "string",
+                "pattern": "^(0|-?[1-9][0-9]*)$"
+              },
+              "originalDefinition": {
+                "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+              },
+              "components": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "const": "preserved"
+                      },
+                      "original": {
+                        "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+                      }
+                    },
+                    "required": [
+                      "state",
+                      "original"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "const": "unavailable"
+                      },
+                      "reason": {
+                        "const": "not_retained"
+                      }
+                    },
+                    "required": [
+                      "state",
+                      "reason"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              "kind": {
+                "const": "live"
+              },
+              "identity": {
+                "$ref": "urn:truss:draft:history-record:0.1.0#/$defs/identity"
+              },
+              "recordVersion": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]*)$",
+                "maxLength": 20
+              },
+              "membership": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "const": "held"
+                      },
+                      "fullKey": {
+                        "$ref": "#/$defs/fullKey"
+                      }
+                    },
+                    "required": [
+                      "state",
+                      "fullKey"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "const": "omitted"
+                      },
+                      "originalMissingComponentReport": {
+                        "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+                      }
+                    },
+                    "required": [
+                      "state",
+                      "originalMissingComponentReport"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "required": [
+              "entryId",
+              "binding",
+              "localKeyNumber",
+              "originalDefinition",
+              "components",
+              "kind",
+              "identity",
+              "recordVersion",
+              "membership"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "entryId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "binding": {
+                "$ref": "urn:truss:draft:key-bindings:0.1.0#/properties/bindings/items"
+              },
+              "localKeyNumber": {
+                "type": "string",
+                "pattern": "^(0|-?[1-9][0-9]*)$"
+              },
+              "originalDefinition": {
+                "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+              },
+              "components": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "const": "preserved"
+                      },
+                      "original": {
+                        "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+                      }
+                    },
+                    "required": [
+                      "state",
+                      "original"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "const": "unavailable"
+                      },
+                      "reason": {
+                        "const": "not_retained"
+                      }
+                    },
+                    "required": [
+                      "state",
+                      "reason"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              "kind": {
+                "const": "reservation"
+              },
+              "originalReservation": {
+                "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+              },
+              "originalRecordIdentity": {
+                "$ref": "urn:truss:draft:history-record:0.1.0#/$defs/identity"
+              },
+              "fullKey": {
+                "$ref": "#/$defs/fullKey"
+              }
+            },
+            "required": [
+              "entryId",
+              "binding",
+              "localKeyNumber",
+              "originalDefinition",
+              "components",
+              "kind",
+              "originalReservation",
+              "originalRecordIdentity",
+              "fullKey"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    "collection": {
+      "type": "object",
+      "properties": {
+        "procedure": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "observation": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "rawEvidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          }
+        },
+        "completeScopeEvidence": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        }
+      },
+      "required": [
+        "procedure",
+        "observation",
+        "rawEvidence",
+        "completeScopeEvidence"
+      ],
+      "additionalProperties": false
+    },
+    "entryIdentityProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "originalAttempt",
+    "source",
+    "inventoryProfile",
+    "entries",
+    "collection",
+    "entryIdentityProfile"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "fullKey": {
+      "type": "object",
+      "properties": {
+        "namespace": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "key": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "encoding": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "namespaceSha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "keySha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "namespace",
+        "key",
+        "encoding",
+        "namespaceSha256",
+        "keySha256"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "entryIdentityProfile": {
+            "properties": {
+              "identity": {
+                "const": "truss-migration-entry-ordinal"
+              },
+              "version": {
+                "const": "0.1.0"
+              }
+            },
+            "required": [
+              "identity",
+              "version"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "entryIdentityProfile"
+        ]
+      },
+      "then": {
+        "properties": {
+          "entries": {
+            "items": {
+              "type": "object",
+              "properties": {
+                "entryId": {
+                  "type": "string",
+                  "pattern": "^entry:[0-9]{19}$",
+                  "not": {
+                    "const": "entry:0000000000000000000"
+                  }
+                }
+              },
+              "required": [
+                "entryId"
+              ]
+            },
+            "type": "array"
+          }
+        }
+      }
+    }
+  ]
+}

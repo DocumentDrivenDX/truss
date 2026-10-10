@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:direct-page-result:0.1.0",
+  "title": "Draft direct page admission result",
+  "description": "Closed shapes only. Exact context, current interpretation, authorized membership, order, n+1 lookahead, last-returned boundary and whole-page resource admission require semantic/native evidence. Reused historical carrier does not certify history. Transport failures remain execution outcomes.",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "const": "page"
+        },
+        "page": {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/context"
+            },
+            "records": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/record"
+              }
+            },
+            "continuation": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "state": {
+                      "const": "end"
+                    }
+                  },
+                  "required": [
+                    "state"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "state": {
+                      "const": "more"
+                    },
+                    "cursor": {
+                      "$ref": "urn:truss:draft:direct-cursor:0.1.0"
+                    }
+                  },
+                  "required": [
+                    "state",
+                    "cursor"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
+          "required": [
+            "context",
+            "records",
+            "continuation"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "outcome",
+        "page"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "const": "invalid"
+        },
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "path": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "outcome",
+        "code",
+        "path"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "const": "unavailable"
+        },
+        "reason": {
+          "enum": [
+            "context",
+            "profile",
+            "snapshot",
+            "observation",
+            "resource"
+          ]
+        }
+      },
+      "required": [
+        "outcome",
+        "reason"
+      ],
+      "additionalProperties": false
+    }
+  ],
+  "$defs": {
+    "record": {
+      "type": "object",
+      "properties": {
+        "view": {
+          "const": "current"
+        },
+        "readCatalogRevision": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        },
+        "record": {
+          "$ref": "urn:truss:draft:history-record:0.1.0"
+        }
+      },
+      "required": [
+        "view",
+        "readCatalogRevision",
+        "record"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

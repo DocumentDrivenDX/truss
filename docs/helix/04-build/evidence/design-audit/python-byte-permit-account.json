@@ -1,0 +1,39 @@
+{
+  "scope": "Private Python host byte-permit arithmetic only; trusted producer facts, no allocator/native/driver instrumentation",
+  "command": [
+    "/private/tmp/truss-pgserver-corrected-test-env/bin/python",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "packages/python/tests",
+    "-p",
+    "test_resource_account.py",
+    "-v"
+  ],
+  "output": "test_original_arithmetic_witnesses (test_resource_account.BytePermitTests.test_original_arithmetic_witnesses) ... ok\ntest_original_tokens_and_atomic_cumulative_refusal (test_resource_account.BytePermitTests.test_original_tokens_and_atomic_cumulative_refusal) ... ok\ntest_retained_record_capacity_never_refunded (test_resource_account.BytePermitTests.test_retained_record_capacity_never_refunded) ... ok\ntest_spent_and_unknown_custody_survive_release_and_close (test_resource_account.BytePermitTests.test_spent_and_unknown_custody_survive_release_and_close) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.001s\n\nOK\n",
+  "tests": 4,
+  "originalWitnesses": 6,
+  "sources": [
+    {
+      "path": "packages/python/src/truss/_resource_account.py",
+      "sha256": "640d37b2f517339b2a0ff0a7438ff17dd717644d5464f1af1cce732370b99a2a"
+    },
+    {
+      "path": "packages/python/tests/test_resource_account.py",
+      "sha256": "e34911a586d21f91311de0bc356e85de1ad674c30c4c93207eb414a2c1e2e7e8"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-permit-arithmetic-v0.1.proposal.json",
+      "sha256": "8400d5ffb244ca9e2066a9fb1287de65b1883e26f31a16a489e7b299a44647fc"
+    },
+    {
+      "path": "scripts/check-module-boundaries.py",
+      "sha256": "e49392a9412eeb3c939c2fff18408b5fff6c206006e4832f210e8032553ca7c6"
+    }
+  ],
+  "actualHeapBoundQualified": false,
+  "nativeAccountQualified": false,
+  "completeInstallationQualified": false,
+  "installedWheelRebuilt": false
+}

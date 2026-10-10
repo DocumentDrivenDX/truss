@@ -1,0 +1,41 @@
+{
+  "scope": "Committed-source review only; no synthetic verifier or native/runtime tests rerun",
+  "sourceCommit": "22d3d8c0682b3c6aa0950d1a05459173cc19597c",
+  "previousCheckpoint": "1ed1c24dce356e1dfe34ae049959f4af52ea0bc5",
+  "sourcePins": [
+    {
+      "path": "docs/helix/04-build/evidence/B-007-preparation.md",
+      "sha256": "5ed9d4fb46740e1cc90d665f0494b5ec0ea61484c4252d544134fbb19d90b769",
+      "bytes": 2348
+    },
+    {
+      "path": "tests/qualify-and-evolve/evidence_audit.py",
+      "sha256": "c3c70dbb2ac3e719f40632b7a6844aad5b7bc1aaebc631cfa02b565c7fc723bf",
+      "bytes": 3273
+    },
+    {
+      "path": "tests/qualify-and-evolve/evidence-check.py",
+      "sha256": "7954a2fb1f354b0b8a11eb1aa31667d4267771720581eee10f0dc56635baa994",
+      "bytes": 4624
+    },
+    {
+      "path": "docs/helix/04-build/evidence/B-007-support-audit/summary.json",
+      "sha256": "7ab7f1d0412e18e5fa31677cdbfd9a8688b08a43903b037202aa16a2cd6df71e",
+      "bytes": 1060
+    }
+  ],
+  "completeChangedPathInventory": [
+    "docs/helix/04-build/evidence/B-007-preparation.md",
+    "docs/helix/04-build/evidence/B-007-support-audit/before.log",
+    "docs/helix/04-build/evidence/B-007-support-audit/digest-before.log",
+    "docs/helix/04-build/evidence/B-007-support-audit/order-before.log",
+    "docs/helix/04-build/evidence/B-007-support-audit/summary.json",
+    "docs/helix/04-build/implementation-plan.md",
+    "tests/qualify-and-evolve/evidence-check.py",
+    "tests/qualify-and-evolve/evidence_audit.py"
+  ],
+  "compilerBackendChanged": false,
+  "ownerReportedControls": 41,
+  "interpretation": "B-007 now in progress, not complete. Local trusted-report custody/profile and independent expected bag/ordered comparisons are explicit; report consistency cannot establish producer provenance or oracle independence. Full criterion/property/mutation/fuzz/support/release and license gates remain open.",
+  "execution": "not_run"
+}

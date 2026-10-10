@@ -1,0 +1,184 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:complete-feed-freshness:0.2.0",
+  "description": "Existing v0.2 request/result shape only; timestamps, original fact clock, owner scope, source progress and native evidence require semantic admission. No downstream durability inference.",
+  "$ref": "#/$defs/request",
+  "$defs": {
+    "request": {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-complete-feed-freshness/0.2.0"
+        },
+        "worker": {
+          "$ref": "urn:truss:draft:feed-progress:0.2.0#/$defs/worker"
+        },
+        "observationProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "worker",
+        "observationProfile"
+      ],
+      "additionalProperties": false
+    },
+    "result": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "observed"
+            },
+            "worker": {
+              "$ref": "urn:truss:draft:feed-progress:0.2.0#/$defs/worker"
+            },
+            "sourceApplied": {
+              "$ref": "urn:truss:draft:feed-progress:0.2.0"
+            },
+            "checkpointUpdatedAt": {
+              "type": "string",
+              "minLength": 1
+            },
+            "observedAt": {
+              "type": "string",
+              "minLength": 1
+            },
+            "safeWatermarkXid": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$"
+            },
+            "publishable": {
+              "$ref": "#/$defs/backlog"
+            },
+            "held": {
+              "$ref": "#/$defs/backlog"
+            },
+            "observationProfile": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+            },
+            "factClockProfile": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+            },
+            "observation": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            },
+            "limitations": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "outcome",
+            "worker",
+            "sourceApplied",
+            "checkpointUpdatedAt",
+            "observedAt",
+            "safeWatermarkXid",
+            "publishable",
+            "held",
+            "observationProfile",
+            "factClockProfile",
+            "observation",
+            "limitations"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "unavailable"
+            },
+            "reason": {
+              "enum": [
+                "authorization",
+                "context",
+                "generation",
+                "awaiting_seed",
+                "retention",
+                "profile",
+                "observation",
+                "clock",
+                "resource"
+              ]
+            }
+          },
+          "required": [
+            "outcome",
+            "reason"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "backlog": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "state": {
+              "const": "present"
+            },
+            "oldestWriteAt": {
+              "type": "string",
+              "minLength": 1
+            },
+            "ageNanoseconds": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$"
+            }
+          },
+          "required": [
+            "state",
+            "oldestWriteAt",
+            "ageNanoseconds"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "state": {
+              "const": "empty"
+            },
+            "ageNanoseconds": {
+              "const": "0"
+            }
+          },
+          "required": [
+            "state",
+            "ageNanoseconds"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "state": {
+              "const": "unavailable"
+            },
+            "reason": {
+              "enum": [
+                "scope",
+                "retention",
+                "epoch",
+                "observation",
+                "clock"
+              ]
+            }
+          },
+          "required": [
+            "state",
+            "reason"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

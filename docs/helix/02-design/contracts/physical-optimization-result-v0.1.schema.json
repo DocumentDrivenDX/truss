@@ -1,0 +1,167 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:physical-optimization-result:0.1.0",
+  "title": "Draft supplied-scope physical optimization result",
+  "description": "Pending result is not committed or future-growth budget evidence. Exact installed/native ownership and budget arithmetic/measurement require independent admission.",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "const": "pending"
+        },
+        "durability": {
+          "const": "pending"
+        },
+        "originalRequest": {
+          "$ref": "urn:truss:draft:physical-optimization-request:0.1.0"
+        },
+        "admittedPlan": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "ownedObjectInventory": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "resultingInventory": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "budgetObservation": {
+          "$ref": "#/$defs/budgetObservation"
+        }
+      },
+      "required": [
+        "outcome",
+        "durability",
+        "originalRequest",
+        "admittedPlan",
+        "ownedObjectInventory",
+        "resultingInventory",
+        "budgetObservation"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "const": "refused"
+        },
+        "reason": {
+          "enum": [
+            "authorization",
+            "affinity",
+            "inventory_changed",
+            "profile",
+            "integrity",
+            "budget",
+            "nontransactional"
+          ]
+        }
+      },
+      "required": [
+        "outcome",
+        "reason"
+      ],
+      "additionalProperties": false
+    }
+  ],
+  "$defs": {
+    "budgetObservation": {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-physical-index-budget/0.1.0"
+        },
+        "profile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "countedInventory": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "before": {
+          "type": "object",
+          "properties": {
+            "indexCount": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$"
+            },
+            "measuredBytes": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$"
+            },
+            "observation": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            }
+          },
+          "required": [
+            "indexCount",
+            "measuredBytes",
+            "observation"
+          ],
+          "additionalProperties": false
+        },
+        "admission": {
+          "type": "object",
+          "properties": {
+            "proposedCount": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$"
+            },
+            "totalByteUpperBound": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$"
+            },
+            "method": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+            },
+            "evidence": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            }
+          },
+          "required": [
+            "proposedCount",
+            "totalByteUpperBound",
+            "method",
+            "evidence"
+          ],
+          "additionalProperties": false
+        },
+        "after": {
+          "type": "object",
+          "properties": {
+            "indexCount": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$"
+            },
+            "measuredBytes": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$"
+            },
+            "observation": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            }
+          },
+          "required": [
+            "indexCount",
+            "measuredBytes",
+            "observation"
+          ],
+          "additionalProperties": false
+        },
+        "scope": {
+          "const": "supplied_transaction"
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "profile",
+        "countedInventory",
+        "before",
+        "admission",
+        "after",
+        "scope"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

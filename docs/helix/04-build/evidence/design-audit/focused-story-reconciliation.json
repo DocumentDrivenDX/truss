@@ -1,0 +1,419 @@
+{
+  "scope": "Recent focused design reconciliations only; not a full 45-story semantic audit, runtime verdict or release qualification",
+  "basisCommit": "33d8a44bcf00449f95970a0ab20fbbb3d75ff68e",
+  "entries": [
+    {
+      "story": "US-001",
+      "reviewedSurface": "Acceptance report and diagnostic capacity",
+      "source": "docs/helix/02-design/technical-designs/TD-001-accept-a-umf-revision-as-a-whole.md",
+      "sha256": "b4f2c4162c68b1e199f88294fa04014985d941da4e0f44a21b71a5f9475b2877",
+      "finding": "Consumes selected separate report storage and existing job interfaces; capacity refusal does not commission spill/export.",
+      "remainingHandoff": "Complete original producer/profile composition and protected native report/head finalization remain unfinished.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-002",
+      "reviewedSurface": "Deterministic document graph ordering",
+      "source": "docs/helix/02-design/technical-designs/TD-002-import-documents-that-depend-on-each-other.md",
+      "sha256": "f214baae305ee3e904e4259f8b598114f7fde10bd257cd9f5fae924b1f4faa39",
+      "finding": "Existing component/UTF-8 rule is consumed; eight exact graph vectors supply independent expected orders.",
+      "remainingHandoff": "Already-valid owner cross-document/cycle representation remains unresolved; pure order is independently implementable.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-003",
+      "reviewedSurface": "Valid unresolved endpoint representation",
+      "source": "docs/helix/02-design/technical-designs/TD-003-decide-what-happens-to-an-unknown-entity-type.md",
+      "sha256": "e7129593ea1619bf55ded34609b5889cb3330f83f6de363fca9bda340691bbd3",
+      "finding": "Current recognized UMF missing endpoints reject; provisional/skip cannot bypass upstream validity.",
+      "remainingHandoff": "Concrete already-valid owner representation or explicit product reconciliation remains required.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-004",
+      "reviewedSurface": "Retired lineage allocation expectations",
+      "source": "docs/helix/02-design/technical-designs/TD-004-keep-identifiers-stable-across-revisions.md",
+      "sha256": "bb4fd6cfafcfb4b680d96ac7f5128307f6af452bfdbdf01e95eb48990d520e56",
+      "finding": "Retired-reintroduction vector now consumes selected validated reactivation instead of reopening the product choice.",
+      "remainingHandoff": "Actual lifecycle/native allocation and complete report/history correspondence remain implementation obligations.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-005",
+      "reviewedSurface": "Complete violator-report capacity",
+      "source": "docs/helix/02-design/technical-designs/TD-005-see-every-violator-before-a-tightening-is-accepted.md",
+      "sha256": "635d2912077d8f6ed6044a44829cd814f7c67aaeee2c8dc2cd062dd644bad3da",
+      "finding": "Explicit incomplete/resource refusal replaces the stale spill/export prerequisite.",
+      "remainingHandoff": "Exact bounded scan/transform/report/native profile and execution remain unqualified.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-006",
+      "reviewedSurface": "Continuous-writer admission semantics",
+      "source": "docs/helix/02-design/technical-designs/TD-006-add-a-type-without-ddl.md",
+      "sha256": "0e44cfd39f4306b5986e4a5254458c86d8b15b0bde1dfbd031288f8830d71065",
+      "finding": "CW-01\u201304 specify shared custody, waiting writers, stale observation race and acceptance rollback.",
+      "remainingHandoff": "Public pre-effect retry versus exposed stale refusal is an unanswered owner choice; no effects-started or uncertain-outcome retry is inferred.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-007",
+      "reviewedSurface": "UMF numeric conversion ownership",
+      "source": "docs/helix/02-design/technical-designs/TD-007-store-and-read-objects-and-edges-exactly.md",
+      "sha256": "b19f9eb36490f622cfa2c4926c3090d7fb02c3bcec94b6b211220fa470f0382c",
+      "finding": "Consumes existing pinned owner APIs and Truss registration; independent binary-rational oracle does not commission a duplicate converter.",
+      "remainingHandoff": "Wrapper/shared resource precharging, error translation, signed-zero view and full native codec qualification remain explicit.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-008",
+      "reviewedSurface": "Retained collisions and rebind",
+      "source": "docs/helix/02-design/technical-designs/TD-008-keep-what-the-schema-does-not-define.md",
+      "sha256": "6e5bba27d4c38cfdac417435c08d56fad53f590c03567014afb2bc9a322cde41",
+      "finding": "Consumes existing refusal/no-op/absent-destination rules.",
+      "remainingHandoff": "Original owner/name, recursive codec and complete event/native mapping remain unqualified.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-009",
+      "reviewedSurface": "Key and direct lookup interface ownership",
+      "source": "docs/helix/02-design/technical-designs/TD-009-find-an-object-by-its-key.md",
+      "sha256": "a551b30285c96d465e77ab12ed84f2b672b4089575cd799f99295f8df6c128c8",
+      "finding": "Consumes existing lookup and key-binding wires, retaining portable versus storage identity distinction.",
+      "remainingHandoff": "Complete selected key/visibility/guard/native profiles remain unqualified.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-010",
+      "reviewedSurface": "Endpoint representation boundary",
+      "source": "docs/helix/02-design/technical-designs/TD-010-refuse-bad-edges-and-protect-connected-objects.md",
+      "sha256": "28d7e20d91856deed010edad6650d0c32a1ed16825ca6c2dbf3bed4aba21eefd",
+      "finding": "Names the concrete cross-document representation conflict rather than assuming a new generic UMF prerequisite.",
+      "remainingHandoff": "An already-valid owner representation or explicit product reconciliation remains required.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-011",
+      "reviewedSurface": "Multiplicity protocol and planning experiment",
+      "source": "docs/helix/02-design/technical-designs/TD-011-limit-an-edges-multiplicity.md",
+      "sha256": "c94e6c6633440bc9b7cb58f95c8e7c0ef91b92b6f5797f9a013d52b92ccf010a",
+      "finding": "Consumes existing EL/OC procedures; paired native planning procedure is authored.",
+      "remainingHandoff": "Actual guards/context/privileges and adopted benchmark tuple/runner remain unqualified.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-012",
+      "reviewedSurface": "Native failure precedence",
+      "source": "docs/helix/02-design/technical-designs/TD-012-write-with-one-protocol-and-report-every-violation.md",
+      "sha256": "b69570bfce6a4707a22ee654e81be5a533126a19d6a7ea6222f211f7c9e6ce49",
+      "finding": "Consumes existing shared failure-order wire and vectors; original outcome/containment evidence precedes diagnostic classification.",
+      "remainingHandoff": "Exact driver-native cause/error/termination/containment producers and complete mutation/native tests remain unfinished.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-013",
+      "reviewedSurface": "Optional catalog admission prelude",
+      "source": "docs/helix/02-design/technical-designs/TD-013-refuse-a-write-against-a-stale-catalog.md",
+      "sha256": "508ed5c6124b0de5df4ec9666de6586c01e8ebe13ca7154733c5fe78ed9bf5e0",
+      "finding": "Consumes authored transaction-scoped advisory prelude, reentry and timeout custody.",
+      "remainingHandoff": "Exact native participating paths, fairness and selected complete sixteen-writer measurement profile remain unqualified.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-014",
+      "reviewedSurface": "Parent lock and snapshot freshness",
+      "source": "docs/helix/02-design/technical-designs/TD-014-keep-cross-row-rules-honest.md",
+      "sha256": "83a7b2b14c104499f83c02cde8ee6999c62c2db27a47408737d1fc01f987801b",
+      "finding": "Requires separately qualified post-lock participation observation and independent stale-statement control.",
+      "remainingHandoff": "Actual native observation/authority/final-state concurrency remains unqualified.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-015",
+      "reviewedSurface": "Complete journal event count",
+      "source": "docs/helix/02-design/technical-designs/TD-015-journal-every-change-atomically-with-its-origin.md",
+      "sha256": "6f174b5b4ff9c8c5a5ff1d35ed9a0d82bc346c14e5590a60666549c7e8d9983c",
+      "finding": "Consumes selected two property deltas plus metadata witness; removes obsolete product conflict.",
+      "remainingHandoff": "Complete original sibling/position/digest/native producer and history migration qualification remain required.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-016",
+      "reviewedSurface": "Mode-only switch readiness ordering",
+      "source": "docs/helix/02-design/technical-designs/TD-016-journal-plain-sql-changes-too.md",
+      "sha256": "6545ed719ce0c9d5653cfac7538d14c8415a4f57549cf6baa6a00cbc9abf864c",
+      "finding": "Target dispatcher readiness precedes exclusive mode admission; original correspondence is rechecked and drift refuses without DDL repair.",
+      "remainingHandoff": "Native dispatcher/exclusion/current observation and security-owned installation transition realization remain required.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-017",
+      "reviewedSurface": "Journal fragment versus complete group",
+      "source": "docs/helix/02-design/technical-designs/TD-017-read-the-journal-incrementally-without-missing-a-change.md",
+      "sha256": "437f9b44d92ac33d21d17e25c15d9c22f1a0e140afc27eafaacc61dcfd2b3269",
+      "finding": "Raw row pages do not establish complete selected three-event mutation delivery.",
+      "remainingHandoff": "Actual native watermark/context/cursor/retention producers remain unqualified.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-018",
+      "reviewedSurface": "Complete reconstruction boundary",
+      "source": "docs/helix/02-design/technical-designs/TD-018-reconstruct-a-record-as-of-a-version.md",
+      "sha256": "4d9d827fe89d9e2364e4a90c100abd83d11b822c2eca003138630dc6ed997ee3",
+      "finding": "Reviewed original sibling/definition/horizon and selected metadata witness requirements.",
+      "remainingHandoff": "Native producer, complete loader/reducer and archive horizon/profile adoption remain unqualified.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-019",
+      "reviewedSurface": "Partition retention and append-only behavior",
+      "source": "docs/helix/02-design/technical-designs/TD-019-trim-the-journal-by-dropping-partitions.md",
+      "sha256": "69acfcbce5795c9e66aaf870bad883c569542a36e2dc553278db0671f71bc018",
+      "finding": "Separates mandatory refusal from recommended trigger mechanism; consumes existing retention API.",
+      "remainingHandoff": "Complete security-owned writer routes, original eligibility/archive/settlement/native procedures remain unqualified.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-020",
+      "reviewedSurface": "Direct lookup and shared decoder ownership",
+      "source": "docs/helix/02-design/technical-designs/TD-020-read-an-object-by-identifier-or-key.md",
+      "sha256": "4ec42330c6a243f93435bf31b5de05849ac495dd723ad767a3bc9676809d7908",
+      "finding": "Consumes closed lookup wires and fixed original statements, with complete termination before not_found.",
+      "remainingHandoff": "Exact descriptor/decoder/context/current-authority/native/resource producer composition remains unfinished.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-021",
+      "reviewedSurface": "Object paging and cost metric",
+      "source": "docs/helix/02-design/technical-designs/TD-021-list-a-types-objects-in-pages.md",
+      "sha256": "d8715cf23bc1d5fa65d8e58de487f549b1d9339f9cf531f7cda2a09ff9e43bb8",
+      "finding": "Consumes authored paging wires; concrete paired public-call cost experiment is authored.",
+      "remainingHandoff": "Actual paging/authority/native profile and benchmark adoption/runner remain unqualified.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-022",
+      "reviewedSurface": "Edge order and continuation",
+      "source": "docs/helix/02-design/technical-designs/TD-022-list-an-objects-edges-bounded.md",
+      "sha256": "c89ec2db85c7aabd05329b93f9126da4e728cfc0041b037c59d7735a708052fd",
+      "finding": "Reviewed fixed comparator, typed endpoint, lookahead and live versus held-context distinction.",
+      "remainingHandoff": "Actual comparator/context/current-authority/native query execution remain unqualified.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-023",
+      "reviewedSurface": "Traversal interface versus output choice",
+      "source": "docs/helix/02-design/technical-designs/TD-023-traverse-one-to-three-hops.md",
+      "sha256": "7dc20334945300e42d0324f6559d5e0796250340a9661edf01daf8b6ef703fcb",
+      "finding": "Existing traversal/service/state/ledger candidates are authored; output selection is still explicitly pending.",
+      "remainingHandoff": "Human result choice and exact original expansion/store/resource/native realization remain required.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-024",
+      "reviewedSurface": "Catalog enumeration interface ownership",
+      "source": "docs/helix/02-design/technical-designs/TD-024-enumerate-the-types-of-the-catalog.md",
+      "sha256": "260b71999a476a90e16bb3609639f17fbf9d63a6873fba8f85a1cf6c949fd622",
+      "finding": "Consumes existing complete view binding and context rules rather than designing another contract.",
+      "remainingHandoff": "Exact native loader/assembly/resource/authority and experiment profile realization remain required.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-025",
+      "reviewedSurface": "Assertion-specific enforcement",
+      "source": "docs/helix/02-design/technical-designs/TD-025-report-the-enforcement-layer-of-every-assertion.md",
+      "sha256": "f8fc7d64a62988434b79816d89e0d2e48e4ea94473ef94300eca6f94a7949802",
+      "finding": "Physical marker uniqueness cannot qualify authored key derivation; existing report interface is consumed.",
+      "remainingHandoff": "Complete unavoidable ordinary-writer derivation and trusted assertion/installed inventory evidence remain required.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-026",
+      "reviewedSurface": "Support evidence wire ownership",
+      "source": "docs/helix/02-design/technical-designs/TD-026-back-every-support-claim-with-evidence.md",
+      "sha256": "adcd98ceb75f5148085eda414588e6e88db3173cf0ea984f1c17902243eca80f",
+      "finding": "Consumes existing receipt, manifest, run-result and assessment schemas; shape success is separate from trusted semantic qualification.",
+      "remainingHandoff": "Original runner trust, independently complete case inventory, bounded parser and profile/reference correspondence remain unqualified.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-027",
+      "reviewedSurface": "Language-neutral case and alias contract",
+      "source": "docs/helix/02-design/technical-designs/TD-027-build-an-implementation-from-the-contracts.md",
+      "sha256": "0442ac48ad9af14dd6eb8342385536b6b9d60b81bfafddcfdffb82ff5589a29e",
+      "finding": "Existing manifests and typed alias procedure/wire avoid duplicate schemas and identity normalization errors.",
+      "remainingHandoff": "Complete case operation/expectation/identity-path grammars, namespace interpretation and runner handshake still need composition.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-028",
+      "reviewedSurface": "Independent bidirectional interchange",
+      "source": "docs/helix/02-design/technical-designs/TD-028-pass-the-corpus-and-the-interchange-check.md",
+      "sha256": "0407f2365d823eda0a1c71e1aa5bcc2d3bb9586832a8834b6cd17acea4d616ed",
+      "finding": "Independent normative expected observations arbitrate both directions; agreement alone is insufficient.",
+      "remainingHandoff": "Complete corpus/native observer/runner profile and truly independent implementation remain required.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-029",
+      "reviewedSurface": "Within-major layout compatibility",
+      "source": "docs/helix/02-design/technical-designs/TD-029-declare-the-layout-version-and-check-the-ddl-on-every-version.md",
+      "sha256": "4be0dc1a16f8f6b306ccabfea375c76f59cacf8163ffb51d2ad2a8ebfad14a37",
+      "finding": "Consumes explicit supported release ranges and complete selected inventory; no blanket same-major support.",
+      "remainingHandoff": "Exact release ranges, bundle/current verifier and managed-target qualification remain unfinished.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-030",
+      "reviewedSurface": "Host extension journal ownership",
+      "source": "docs/helix/02-design/technical-designs/TD-030-extend-the-layout-from-a-host.md",
+      "sha256": "3f4f1edc5a86425a13bb669e52bc3ee4d8942ad796d7b927ea7079858bee414d",
+      "finding": "Named separate host ledger must coexist with exclusive Truss event producer; arbitrary extensions gain no universal guarantee.",
+      "remainingHandoff": "Exact extension/policy inventory and complete native corpus/rollback/privilege qualification remain required.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-031",
+      "reviewedSurface": "Role-context driver ownership",
+      "source": "docs/helix/02-design/technical-designs/TD-031-govern-writes-by-role-grants.md",
+      "sha256": "565ccddc60a5058f5fd056d9ea601cc29df3d059b85fbcf5f82cf16a3996dba1",
+      "finding": "Node/pg reuses pg-runtime; security owner supplies caller/authorization/publication protocol.",
+      "remainingHandoff": "Exact original security contract integration and ordinary-principal role/reset/pooler qualification remain unfinished.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-032",
+      "reviewedSurface": "Pooling driver ownership",
+      "source": "docs/helix/02-design/technical-designs/TD-032-work-behind-a-transaction-mode-pooler.md",
+      "sha256": "44f723795e0dc7bfe190adb628295f16e5f0280ac1372595834b8aa016db6871",
+      "finding": "Extends existing Node/pg bridge instead of creating adapter-pg; direct-server evidence does not transfer to pooler.",
+      "remainingHandoff": "Actual pooler/build/configuration/backend affinity and finite workload/performance qualification remain required.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-033",
+      "reviewedSurface": "Embedded target qualification",
+      "source": "docs/helix/02-design/technical-designs/TD-033-run-the-layout-on-an-embedded-postgres.md",
+      "sha256": "1132e1e6afff98fe861d644470ac28499df99088f14befd8c42b62ce97634d43",
+      "finding": "Same byte-pinned bundle and semantic inventory apply; disposable process ownership is scoped to original harness resources.",
+      "remainingHandoff": "Embedded distribution/platform, complete native corpus and actual adapter/parallel lifecycle realization remain required.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-034",
+      "reviewedSurface": "Import retry versus receipt replay",
+      "source": "docs/helix/02-design/technical-designs/TD-034-repeat-an-import-and-change-nothing.md",
+      "sha256": "392ab7969a03acbee3cb9ecaea21ce4483327f939d5473ebbf74417ff2df13ed",
+      "finding": "Create-or-skip identity preserves records; load ID does not provide original report replay or whole-import atomicity.",
+      "remainingHandoff": "Exact original batch/reservation/configuration/report/resource/native producer qualification remains unfinished.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-035",
+      "reviewedSurface": "Provenance absence versus evidence loss",
+      "source": "docs/helix/02-design/technical-designs/TD-035-keep-the-source-facts-of-an-imported-record.md",
+      "sha256": "ad5731d685ed1dfa6f074dafc1b18a30e5ed3482920506a43cf0aeaf741c339c",
+      "finding": "Empty imported source is found; missing original imported source cannot be direct-create absence.",
+      "remainingHandoff": "Exact source/creation/current-authority/native loader and retained historical wire/resource realization remain required.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-036",
+      "reviewedSurface": "Acceptance origin and repeat",
+      "source": "docs/helix/02-design/technical-designs/TD-036-record-who-accepted-a-revision.md",
+      "sha256": "f68b500e3ef3190c6f02264a5fc1acb2c0063435958c2e11cd77111788ea5b58",
+      "finding": "Complete-input/current-head repeat preserves original origin; equal derived rows do not establish repeat.",
+      "remainingHandoff": "Trusted original role/context, protected origin insertion and authorized report/read projection remain required.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-037",
+      "reviewedSurface": "Historical endpoint-owner disclosure",
+      "source": "docs/helix/02-design/technical-designs/TD-037-give-roles-access-to-modules-only.md",
+      "sha256": "291436fbb7c6048f306277412ca3afd381ab0646fbbf536658ed3dca97ff59f6",
+      "finding": "Consumes declaring plus both original endpoint-owner contexts under current grants.",
+      "remainingHandoff": "Security-owned original exclusion/authority and complete native loader/predicate/privilege realization remain required.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-038",
+      "reviewedSurface": "Relationship current and historical authority",
+      "source": "docs/helix/02-design/technical-designs/TD-038-link-modules-and-see-the-link-only-with-both.md",
+      "sha256": "517cdd18365d3c17bfc66ae2fd3bde797c5027ab232f4f024d6d1f1df93d99e7",
+      "finding": "Valid in-document references and declaring/source/target owner intersection are distinct from cross-document support.",
+      "remainingHandoff": "Original owner mapping, complete native policy/direct/compiler path and retained historical qualification remain required.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-039",
+      "reviewedSurface": "UMF validator adapter parity",
+      "source": "docs/helix/02-design/technical-designs/TD-039-read-umf-the-same-way-as-the-reference.md",
+      "sha256": "e3146f575b9b1edd866169b19e34cd2443eaeee410ad3b773cb5bd6c08b7e6eb",
+      "finding": "Independent multiplicity/path/warning/byte/version controls are authored.",
+      "remainingHandoff": "Pinned parse/validator/normalization transport and complete corpus execution remain unqualified.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-040",
+      "reviewedSurface": "Group catalog custody after host rollback",
+      "source": "docs/helix/02-design/technical-designs/TD-040-apply-operations-as-one-atomic-group.md",
+      "sha256": "5904cd046c758d2fbfeee7e0c530187f012f7b09b26ce9f2a7c9dc60ca56ae92",
+      "finding": "Earlier host-savepoint rollback can remove pending group and later-acquired catalog locks; removed result cannot settle at later outer COMMIT.",
+      "remainingHandoff": "Actual original adapter capture/rollback/lock lifetime and group closure/finalization remain unqualified.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-041",
+      "reviewedSurface": "Complete feed versus journal scan",
+      "source": "docs/helix/02-design/technical-designs/TD-041-publish-the-journal-without-losing-or-reordering-a-change.md",
+      "sha256": "5a977cd0ee2e19a2537601a017317c6f65cb5bfb6b65531510234b0df7155d16",
+      "finding": "Transaction/member/prerequisite custody and source acknowledgments cannot be reconstructed from journal row counts alone.",
+      "remainingHandoff": "Exact native manifest/configuration/fact-clock/retention/snapshot-cut and downstream application proof remain required.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-042",
+      "reviewedSurface": "Complete-feed freshness",
+      "source": "docs/helix/02-design/technical-designs/TD-042-read-how-far-behind-a-downstream-copy-is.md",
+      "sha256": "2b36eb214a7741a71f0d23a7b612e4c147e4f95d72a7bc40784c5ef4c80ab36e",
+      "finding": "Consumes v0.2 wire with complete fact timing and separate source/downstream progress.",
+      "remainingHandoff": "Native membership/clock/acknowledgment/coherent authorized observation remain unqualified.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-043",
+      "reviewedSurface": "Durable retry strategy",
+      "source": "docs/helix/02-design/technical-designs/TD-043-make-a-group-safe-to-repeat.md",
+      "sha256": "98fe69a5fddf9b42ac49824e9be44e65d27c7be150d92509b7a6a17917b5c6e6",
+      "finding": "Reviewed selected fixed complete receipts and exact original retry ordering; no new persistence choice found in inspected surface.",
+      "remainingHandoff": "Complete canonical input/result, namespace/authority/lifecycle/native producer qualification remains required.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-044",
+      "reviewedSurface": "Caller savepoint lifetime",
+      "source": "docs/helix/02-design/technical-designs/TD-044-run-a-change-in-a-transaction-and-roll-it-back.md",
+      "sha256": "539477aee3355ca950c98fb2e9b030d879be1d8c7dee9b1d13fd0400917fb75e",
+      "finding": "Corrects unconditional lock lifetime; rolled-back pending operation cannot settle after later COMMIT.",
+      "remainingHandoff": "Actual adapter/capture/resource/rollback/lock evidence remains unqualified.",
+      "verdict": "focused_review_only_not_story_completion"
+    },
+    {
+      "story": "US-045",
+      "reviewedSurface": "Required bootstrap inventory",
+      "source": "docs/helix/02-design/technical-designs/TD-045-bootstrap-the-internal-layout-from-umf.md",
+      "sha256": "a2e38b2730a8eb273a61a65eaf597cb16da154bc5c07129fa37bbd0213df2310",
+      "finding": "Includes selected receipts/reports and shipped migration subsystem; fresh genesis stays separate from upgrade.",
+      "remainingHandoff": "Coherent complete bundle, initializer/installer/native parity and registered upgrade qualification remain unfinished.",
+      "verdict": "focused_review_only_not_story_completion"
+    }
+  ],
+  "allStoriesSemanticallyComplete": false,
+  "runtimeQualified": false,
+  "limitations": [
+    "Hashes prove source custody only, not correctness.",
+    "Only named surfaces are reviewed; other requirements within these stories still need completion audit.",
+    "Structural coverage and historical scoped reviews remain separate evidence.",
+    "Uncommitted security/site/driver work is neither adopted nor staged by this review."
+  ]
+}

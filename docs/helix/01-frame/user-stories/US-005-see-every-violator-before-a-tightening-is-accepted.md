@@ -30,6 +30,10 @@ ddx:
 ## Context
 
 A revision that shortens a text limit may leave existing values invalid.
+Validate the complete applicable existing dataset under the selected original
+catalog/authority and finite work profile before publishing the revision.
+Transform effects, complete report and active-head publication share one
+acceptance transaction; no partial transform is accepted.
 
 ## Walkthrough
 
@@ -48,7 +52,7 @@ A revision that shortens a text limit may leave existing values invalid.
 
 ## Edge Cases
 
-- **Many violators**: the list is complete, not truncated at the first.
+- **Many violators**: a complete rejection lists all applicable violators. If a controlled-work/report limit prevents completion, return explicit incomplete/resource and refuse acceptance; do not present a truncated list as complete.
 - **A transform that cannot be total**: rejected.
 
 ## Test Scenarios

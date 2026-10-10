@@ -1,0 +1,37 @@
+{
+  "status": "passed_read_only_native_receive_full_carrier_size_candidate",
+  "query": "BEGIN READ ONLY; SET LOCAL bytea_output = 'hex'; SELECT repeat('a', 4194304)::bytea AS carrier; ROLLBACK;",
+  "expectedPayloadBytes": 4194304,
+  "observedCellBytes": 8388610,
+  "observedDataRowBytes": [
+    8388621
+  ],
+  "completeCellEqualsIndependentLiteral": true,
+  "fixedOneMiBDecoderRefused": true,
+  "framesHex": [
+    "5a0000000549",
+    "430000000a424547494e00",
+    "430000000853455400",
+    "54000000200001636172726965720000000000000000000011ffffffffffff0000",
+    "430000000d53454c454354203100",
+    "430000000d524f4c4c4241434b00",
+    "5a0000000549"
+  ],
+  "orderedTypeOids": [
+    17
+  ],
+  "rawCellsSha256": [
+    "820f9f94a260aed19f672101a113dcfc2048ea4903438a16add8ab59bf0b6cce"
+  ],
+  "sourceSha256": {
+    "python_pg_frame_candidate.py": "ed92bfc5240f17f3447f868fb88e3647cc4bd9583e21ed18ad88eb7de1eb9968",
+    "python_pg_receive_candidate.py": "fd9c23e3da2358cf56abc6b561c893e5d56dd9c95756fe18ec7510f52a55f4bb",
+    "check_python_pg_receive_full_carrier_native.py": "3413b073236362851954390a46944fe30bb2143001e98385e06e898bd160ad8a"
+  },
+  "remainingRawBounds": {
+    "bytes": 8388072,
+    "messages": 76,
+    "readCalls": 9837
+  },
+  "scope": "Administrative local trust-auth probe, BEGIN READ ONLY/ROLLBACK; raw recv_into framing and independent complete carrier-byte comparison only; fixed-one-MiB decoder refused as expected. No installed changes, supported driver, ingress/account/TLS/native containment, current security or publication qualification."
+}

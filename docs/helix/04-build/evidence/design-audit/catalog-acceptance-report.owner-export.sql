@@ -1,0 +1,1 @@
+CREATE TABLE truss.catalog_acceptance_report (rev int PRIMARY KEY REFERENCES truss.schema_rev (rev), report_bytes pg_catalog.bytea NOT NULL, CONSTRAINT catalog_acceptance_report_positive_revision CHECK (rev > 0), CONSTRAINT catalog_acceptance_report_nonempty CHECK (pg_catalog.octet_length(report_bytes) > 0))

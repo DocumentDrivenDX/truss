@@ -1,0 +1,26 @@
+{
+  "scope": "Isolated current consumer environment inventory; six exact runtime distributions plus captured packaging tools",
+  "environment": "/private/tmp/truss-current-clean-consumer-env",
+  "distributions": {
+    "platformdirs": "4.12.4",
+    "pip": "24.0",
+    "fasteners": "0.20",
+    "setuptools": "79.0.1",
+    "weft-sql": "0.1.0",
+    "truss-toolkit": "0.0.1.dev0",
+    "pgserver": "0.1.4+truss.pg16.15",
+    "psutil": "7.2.2"
+  },
+  "configSha256": "8332674267ccd11e5ef8b9047a1ce55748e27c5c9b3ba3bd5e66bd8d5316fbd5",
+  "systemSitePackages": false,
+  "installReportSha256": "73cbc929a6dc97d9bc2a2e76b1eeeaff96ac5de660601285062ad8bae03d9d1d",
+  "constructionCommand": "python3.11 -m venv /private/tmp/truss-current-clean-consumer-env",
+  "precreationDirectoryAbsenceCaptured": false,
+  "priorInventoryAssertion": {
+    "expectedSetuptools": "65.5.0",
+    "observedSetuptools": "79.0.1",
+    "result": "failed tooling-version expectation; runtime dependencies unchanged"
+  },
+  "completeEngineQualified": false,
+  "publicDistributionQualified": false
+}

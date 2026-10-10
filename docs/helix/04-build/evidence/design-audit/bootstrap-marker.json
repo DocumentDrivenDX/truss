@@ -1,0 +1,46 @@
+{
+  "scope": "Draft marker structure only; no digest, timestamp, namespace, inventory or commit qualification",
+  "cases": 8,
+  "outcomes": [
+    {
+      "name": "complete fixture",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "missing inventory digest",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "numeric layout version",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "uppercase digest",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "caller ready claim",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "missing database identity",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "unknown marker version",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "syntactically valid forged digest",
+      "expected": true,
+      "actual": true
+    }
+  ]
+}

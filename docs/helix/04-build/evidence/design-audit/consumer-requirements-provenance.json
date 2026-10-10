@@ -1,0 +1,38 @@
+{
+  "scope": "read-only external consumer requirements provenance and ownership review; not local ADR acceptance or capability qualification",
+  "sources": [
+    {
+      "path": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/docs/helix/02-design/truss-requirements.md",
+      "sha256": "c8d93d8df7f37f004061fee06552238857f234e073dd75418e8eea94e3ef6d09"
+    },
+    {
+      "path": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/docs/helix/02-design/adr/ADR-013-hohfeld-is-an-ontology-interface-over-truss-and-ashlar.md",
+      "sha256": "6dd70d59f9f4b8b617ac92b5c1158cbda1041894d879e768a36961217bd100a5"
+    },
+    {
+      "path": "/Users/erik/Projects/truss/docs/helix/04-build/evidence/consumer-python-requirements-2026-10-08.md",
+      "sha256": "c8d93d8df7f37f004061fee06552238857f234e073dd75418e8eea94e3ef6d09"
+    }
+  ],
+  "externalReference": {
+    "artifactId": "ADR-013",
+    "repository": "hohfeld",
+    "path": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/docs/helix/02-design/adr/ADR-013-hohfeld-is-an-ontology-interface-over-truss-and-ashlar.md",
+    "sourceStatus": "accepted",
+    "trussLocalArtifact": false
+  },
+  "ownershipObservations": [
+    "Consumer owns its client-specific interface, backend adapters and routing.",
+    "Generic Truss storage, layout, import, isolation and feed remain Truss-owned; consumer adds no storage beyond its migration history.",
+    "The consumer rejects a separate generic engine owned by itself and a service wrapping the TypeScript engine.",
+    "Cross-backend relationships use keys and bounded reads; feed materialization belongs to the destination backend.",
+    "Consumer expects exact revision pins and recorded re-pinning."
+  ],
+  "limits": [
+    "The external decision does not approve Truss ADR-003 or select the Python package home/owner.",
+    "The external Current State paragraph is an authored consumer view, not evidence that Truss runtime or Ashlar exists.",
+    "Consumer action semantics are not admitted UMF core semantics or a Truss action compiler.",
+    "No cross-backend transaction or live stub-entity route is added."
+  ],
+  "localAuditDisposition": "The copied external ADR-013 link is unresolved under the local-only link audit. Preserve original evidence and use this repository-qualified source mapping; do not create a same-ID Truss ADR to make the audit pass."
+}

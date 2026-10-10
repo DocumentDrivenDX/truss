@@ -1,0 +1,85 @@
+{
+  "interfaceVersion": "truss-bootstrap-route-entry/0.1.0",
+  "routeIdentity": "pg17.target-database.original-context/0.1.0",
+  "status": "unadopted; source pins only verified; native class/cut/transport/semantic producers unqualified",
+  "nativeClass": {
+    "namespace": "pg_catalog",
+    "relation": "pg_database",
+    "classOid": "actual original shared pg_database catalog identity",
+    "storageScope": "shared",
+    "subobjectNumber": "0"
+  },
+  "selector": "actual database row of original current connection",
+  "artifacts": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-target-database-observation-pg17.proposal.sql",
+      "sha256": "1b8f06eae69cfc60e17c0597548ba93766595394f073a1a86fb0d1331345250d"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-target-database-observation-pg17.proposal.umf.json",
+      "sha256": "27bed71ac025253665b5c0a0a5ae5ee0c545e624b00b8fba5a2a802e1f6751fe"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/bootstrap-target-database-observation.owner-export.sql",
+      "sha256": "da2971707272ef204db4537e6ba7d51121730329fbfb2ce95b32e81133c6a2c9"
+    }
+  ],
+  "parameterGrammar": {
+    "slots": [],
+    "nativeTypes": [],
+    "nativeInput": "current_database on original admitted connection only; no host-supplied name fallback"
+  },
+  "orderedColumns": [
+    "catalog_class_oid",
+    "database_oid",
+    "database_name",
+    "owner_oid",
+    "original_acl_is_null",
+    "original_acl_native_text",
+    "original_acl_native_dimensions",
+    "original_catalog_row_json"
+  ],
+  "coverage": "Exactly one unique original database row matching actual current connection/native state; missing/multiple/foreign connection refuses",
+  "requiredKnownFields": [
+    "oid",
+    "datname",
+    "datdba",
+    "encoding",
+    "datlocprovider",
+    "datcollate",
+    "datctype",
+    "datlocale",
+    "daticurules",
+    "datcollversion",
+    "dattablespace",
+    "datacl"
+  ],
+  "preservation": "Retain full exact returned row JSON text and every unknown extension member; lossless bounded selected native JSON decoder; no parse/stringify reconstruction",
+  "dependencyExtraction": {
+    "ownerTablespace": "nonzero datdba/shared pg_authid and dattablespace/shared pg_tablespace require complete original definitions",
+    "nativeTarget": "actual encoding/locale/provider/version/default collation/access/ACL raw facts interpreted under exact selected build; trusted deployment/restore identity is independently issued, not inferred from row/name/OID",
+    "connection": "original query connection/transaction/cut and lifetime correspondence mandatory; clones/restores/OID reuse cannot inherit authority",
+    "fieldClassification": {
+      "oid": "original target correlation only; independently issued deployment/restore identity required",
+      "datname": "exact original database-name fact; selected logical target-name mapping required, never proof of deployment identity",
+      "datdba": "resolved original shared owner policy",
+      "encoding": "exact original native encoding identifier with qualified selected encoding meaning",
+      "datlocprovider": "exact registered original locale-provider fact; selected provider/environment compatibility separate",
+      "datcollate": "exact nullable declared LC_COLLATE; provider-specific native grammar",
+      "datctype": "exact nullable declared LC_CTYPE; provider-specific native grammar",
+      "datlocale": "exact nullable declared provider locale; no normalization/default synthesis",
+      "daticurules": "exact nullable declared ICU rules; no evaluation or whitespace normalization",
+      "datcollversion": "exact nullable recorded version fact; not current provider build/comparator evidence",
+      "dattablespace": "resolved original nonzero shared default-tablespace definition; no filesystem placement inference",
+      "datacl": "exact original nullable native ACL and complete resolved shared grant/default policy"
+    },
+    "canonicalProcedure": "CONTRACT-008 Target/session context projection: declared target meanings and selected logical target mapping separate from operational issuer/session custody and actual environment compatibility"
+  },
+  "adjuncts": [
+    "original deployment/restore identity issuer and database access/default/native environment proof",
+    "complete shared-owner/tablespace/ACL/dependency and selected target profile"
+  ],
+  "resourceProfile": "truss-bootstrap-collector-resource/0.1.0",
+  "refusal": "Unresolved target/deployment/restore/provider/default/shared definition refuses admission; current_database name and original row alone never prove deployment identity",
+  "resourceObligations": "Shared enclosing totals, complete original cut/authority and explicit pre-materialization/native-work permits; no independent per-route allowance"
+}

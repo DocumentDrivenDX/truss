@@ -1,0 +1,240 @@
+{
+  "profile": "truss-feed-derived-effects/0.1.0",
+  "status": "unadopted_candidate",
+  "complete": false,
+  "scope": "Five expected constraint-supporting indexes and three original FK relation/ordered-column references. Reference IDs describe source edges, not extra pg_constraint objects. No FK referencing-side index is inferred. Native names/OIDs, generated triggers, operator classes, collations, privileges and dependencies remain unresolved.",
+  "allocationPath": "docs/helix/02-design/models/truss-feed-native-layout.physical-ids.proposal.json",
+  "allocationSha256": "5163f1a5dcf4420ac164bbcea2288a38bd3a8dfa003a8f2166fffbfc9645613c",
+  "sources": [
+    {
+      "source": "docs/helix/02-design/contracts/feed-native-layout-v0.1.proposal.sql",
+      "sourceSha256": "b334d849ae5ceb08b322259ebce0a97c166f6bd55b99d8d569f4b626c268e1ad",
+      "model": "docs/helix/02-design/contracts/feed-native-layout-v0.1.proposal.umf.json",
+      "modelSha256": "f59fa94c5eb1580835df22058959f45457709cd4980a6d68e47c1748d1a79b3c"
+    }
+  ],
+  "entries": [
+    {
+      "creatorId": "truss.feed.constraint.feed_tx.feed_tx_pk",
+      "parentId": "truss.feed.table.feed_tx",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/feed-native-layout-v0.1.proposal.umf.json",
+        "modelSha256": "f59fa94c5eb1580835df22058959f45457709cd4980a6d68e47c1748d1a79b3c",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/12/members/Constraint"
+      },
+      "originalNativeNodeSha256": "d44aa1139b260d7862186f3cfad0e48a25fb75bc6378cba82d5a6fc062920987",
+      "nativeBinding": {
+        "state": "unresolved"
+      },
+      "entryId": "truss.feed.supporting-index.feed_tx.feed_tx_pk",
+      "objectKind": "expected_supporting_index",
+      "orderedColumnIds": [
+        "truss.feed.column.feed_tx.source_epoch",
+        "truss.feed.column.feed_tx.feed_profile",
+        "truss.feed.column.feed_tx.original_writer_xid"
+      ],
+      "constraintKind": "CONSTR_PRIMARY",
+      "nativeName": null
+    },
+    {
+      "creatorId": "truss.feed.constraint.feed_member.feed_member_pk",
+      "parentId": "truss.feed.table.feed_member",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/feed-native-layout-v0.1.proposal.umf.json",
+        "modelSha256": "f59fa94c5eb1580835df22058959f45457709cd4980a6d68e47c1748d1a79b3c",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/1/members/stmt/members/CreateStmt/members/tableElts/items/14/members/Constraint"
+      },
+      "originalNativeNodeSha256": "db137532ed88c8f35a4f289fa326f137b3d3fb1ec5c6a58fded3d10d4df5a8fd",
+      "nativeBinding": {
+        "state": "unresolved"
+      },
+      "entryId": "truss.feed.supporting-index.feed_member.feed_member_pk",
+      "objectKind": "expected_supporting_index",
+      "orderedColumnIds": [
+        "truss.feed.column.feed_member.source_epoch",
+        "truss.feed.column.feed_member.feed_profile",
+        "truss.feed.column.feed_member.original_writer_xid",
+        "truss.feed.column.feed_member.registration_address"
+      ],
+      "constraintKind": "CONSTR_PRIMARY",
+      "nativeName": null
+    },
+    {
+      "creatorId": "truss.feed.constraint.feed_member.feed_member_tx_fk",
+      "parentId": "truss.feed.table.feed_member",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/feed-native-layout-v0.1.proposal.umf.json",
+        "modelSha256": "f59fa94c5eb1580835df22058959f45457709cd4980a6d68e47c1748d1a79b3c",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/1/members/stmt/members/CreateStmt/members/tableElts/items/15/members/Constraint"
+      },
+      "originalNativeNodeSha256": "02220ba86259d1fa3a9d632e267cd2075be7d2c555c91a6e021fa026fd520e8d",
+      "nativeBinding": {
+        "state": "unresolved"
+      },
+      "entryId": "truss.feed.reference.feed_member.feed_member_tx_fk",
+      "objectKind": "source_foreign_key_reference",
+      "targetTableId": "truss.feed.table.feed_tx",
+      "targetKeyCreatorId": "truss.feed.constraint.feed_tx.feed_tx_pk",
+      "orderedColumnPairs": [
+        {
+          "sourceColumnId": "truss.feed.column.feed_member.source_epoch",
+          "targetColumnId": "truss.feed.column.feed_tx.source_epoch"
+        },
+        {
+          "sourceColumnId": "truss.feed.column.feed_member.feed_profile",
+          "targetColumnId": "truss.feed.column.feed_tx.feed_profile"
+        },
+        {
+          "sourceColumnId": "truss.feed.column.feed_member.original_writer_xid",
+          "targetColumnId": "truss.feed.column.feed_tx.original_writer_xid"
+        }
+      ],
+      "nativeActions": {
+        "fk_matchtype": "s",
+        "fk_upd_action": "a",
+        "fk_del_action": "a"
+      }
+    },
+    {
+      "creatorId": "truss.feed.constraint.feed_member.feed_member_delivery_unique",
+      "parentId": "truss.feed.table.feed_member",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/feed-native-layout-v0.1.proposal.umf.json",
+        "modelSha256": "f59fa94c5eb1580835df22058959f45457709cd4980a6d68e47c1748d1a79b3c",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/1/members/stmt/members/CreateStmt/members/tableElts/items/16/members/Constraint"
+      },
+      "originalNativeNodeSha256": "e49e6178147e399f8d41bfefff201d1c714213c2fae5aeffc6322f7e45cc933a",
+      "nativeBinding": {
+        "state": "unresolved"
+      },
+      "entryId": "truss.feed.supporting-index.feed_member.feed_member_delivery_unique",
+      "objectKind": "expected_supporting_index",
+      "orderedColumnIds": [
+        "truss.feed.column.feed_member.source_epoch",
+        "truss.feed.column.feed_member.feed_profile",
+        "truss.feed.column.feed_member.original_writer_xid",
+        "truss.feed.column.feed_member.delivery_ordinal"
+      ],
+      "constraintKind": "CONSTR_UNIQUE",
+      "nativeName": null
+    },
+    {
+      "creatorId": "truss.feed.constraint.feed_prerequisite.feed_prerequisite_pk",
+      "parentId": "truss.feed.table.feed_prerequisite",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/feed-native-layout-v0.1.proposal.umf.json",
+        "modelSha256": "f59fa94c5eb1580835df22058959f45457709cd4980a6d68e47c1748d1a79b3c",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/2/members/stmt/members/CreateStmt/members/tableElts/items/10/members/Constraint"
+      },
+      "originalNativeNodeSha256": "09f74b04b9b2e42c9c628e480e2684f46cf9e3660e2e319572748e130d8a4d3b",
+      "nativeBinding": {
+        "state": "unresolved"
+      },
+      "entryId": "truss.feed.supporting-index.feed_prerequisite.feed_prerequisite_pk",
+      "objectKind": "expected_supporting_index",
+      "orderedColumnIds": [
+        "truss.feed.column.feed_prerequisite.source_epoch",
+        "truss.feed.column.feed_prerequisite.feed_profile",
+        "truss.feed.column.feed_prerequisite.original_writer_xid",
+        "truss.feed.column.feed_prerequisite.prerequisite_address"
+      ],
+      "constraintKind": "CONSTR_PRIMARY",
+      "nativeName": null
+    },
+    {
+      "creatorId": "truss.feed.constraint.feed_prerequisite.feed_prerequisite_tx_fk",
+      "parentId": "truss.feed.table.feed_prerequisite",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/feed-native-layout-v0.1.proposal.umf.json",
+        "modelSha256": "f59fa94c5eb1580835df22058959f45457709cd4980a6d68e47c1748d1a79b3c",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/2/members/stmt/members/CreateStmt/members/tableElts/items/11/members/Constraint"
+      },
+      "originalNativeNodeSha256": "fae70593f176d9dcbe21f3bed08c7af69bc3aaf3dad5eee91344caccf4e81913",
+      "nativeBinding": {
+        "state": "unresolved"
+      },
+      "entryId": "truss.feed.reference.feed_prerequisite.feed_prerequisite_tx_fk",
+      "objectKind": "source_foreign_key_reference",
+      "targetTableId": "truss.feed.table.feed_tx",
+      "targetKeyCreatorId": "truss.feed.constraint.feed_tx.feed_tx_pk",
+      "orderedColumnPairs": [
+        {
+          "sourceColumnId": "truss.feed.column.feed_prerequisite.source_epoch",
+          "targetColumnId": "truss.feed.column.feed_tx.source_epoch"
+        },
+        {
+          "sourceColumnId": "truss.feed.column.feed_prerequisite.feed_profile",
+          "targetColumnId": "truss.feed.column.feed_tx.feed_profile"
+        },
+        {
+          "sourceColumnId": "truss.feed.column.feed_prerequisite.original_writer_xid",
+          "targetColumnId": "truss.feed.column.feed_tx.original_writer_xid"
+        }
+      ],
+      "nativeActions": {
+        "fk_matchtype": "s",
+        "fk_upd_action": "a",
+        "fk_del_action": "a"
+      }
+    },
+    {
+      "creatorId": "truss.feed.constraint.feed_configuration_prerequisite.feed_configuration_prerequisite_pk",
+      "parentId": "truss.feed.table.feed_configuration_prerequisite",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/feed-native-layout-v0.1.proposal.umf.json",
+        "modelSha256": "f59fa94c5eb1580835df22058959f45457709cd4980a6d68e47c1748d1a79b3c",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/3/members/stmt/members/CreateStmt/members/tableElts/items/11/members/Constraint"
+      },
+      "originalNativeNodeSha256": "6db5d1dda474e96ec96b2b4a8f933f1d1d25b011628f69488c1da195257195bc",
+      "nativeBinding": {
+        "state": "unresolved"
+      },
+      "entryId": "truss.feed.supporting-index.feed_configuration_prerequisite.feed_configuration_prerequisite_pk",
+      "objectKind": "expected_supporting_index",
+      "orderedColumnIds": [
+        "truss.feed.column.feed_configuration_prerequisite.source_epoch",
+        "truss.feed.column.feed_configuration_prerequisite.feed_profile",
+        "truss.feed.column.feed_configuration_prerequisite.original_writer_xid",
+        "truss.feed.column.feed_configuration_prerequisite.configuration_address"
+      ],
+      "constraintKind": "CONSTR_PRIMARY",
+      "nativeName": null
+    },
+    {
+      "creatorId": "truss.feed.constraint.feed_configuration_prerequisite.feed_configuration_prerequisite_tx_fk",
+      "parentId": "truss.feed.table.feed_configuration_prerequisite",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/feed-native-layout-v0.1.proposal.umf.json",
+        "modelSha256": "f59fa94c5eb1580835df22058959f45457709cd4980a6d68e47c1748d1a79b3c",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/3/members/stmt/members/CreateStmt/members/tableElts/items/12/members/Constraint"
+      },
+      "originalNativeNodeSha256": "1f88b00bd62a0e25ab0aa73d0c382d3000dbed70eb03d252203d26676e25b570",
+      "nativeBinding": {
+        "state": "unresolved"
+      },
+      "entryId": "truss.feed.reference.feed_configuration_prerequisite.feed_configuration_prerequisite_tx_fk",
+      "objectKind": "source_foreign_key_reference",
+      "targetTableId": "truss.feed.table.feed_tx",
+      "targetKeyCreatorId": "truss.feed.constraint.feed_tx.feed_tx_pk",
+      "orderedColumnPairs": [
+        {
+          "sourceColumnId": "truss.feed.column.feed_configuration_prerequisite.source_epoch",
+          "targetColumnId": "truss.feed.column.feed_tx.source_epoch"
+        },
+        {
+          "sourceColumnId": "truss.feed.column.feed_configuration_prerequisite.feed_profile",
+          "targetColumnId": "truss.feed.column.feed_tx.feed_profile"
+        },
+        {
+          "sourceColumnId": "truss.feed.column.feed_configuration_prerequisite.original_writer_xid",
+          "targetColumnId": "truss.feed.column.feed_tx.original_writer_xid"
+        }
+      ],
+      "nativeActions": {
+        "fk_matchtype": "s",
+        "fk_upd_action": "a",
+        "fk_del_action": "a"
+      }
+    }
+  ]
+}

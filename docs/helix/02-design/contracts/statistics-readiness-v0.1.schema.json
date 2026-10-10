@@ -1,0 +1,269 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:statistics-readiness:0.1.0",
+  "title": "Draft statistics readiness",
+  "description": "Closed original job/attempt shape only. Actual installed inventory, original committed acceptance/current attempt custody and native observation require semantic admission. No performance or integrity guarantee.",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "state": {
+          "const": "declared"
+        },
+        "job": {
+          "$ref": "#/$defs/job"
+        }
+      },
+      "required": [
+        "state",
+        "job"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "state": {
+          "enum": [
+            "queued",
+            "building"
+          ]
+        },
+        "attempt": {
+          "$ref": "#/$defs/attempt"
+        },
+        "committedAcceptanceEvidenceSha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "state",
+        "attempt",
+        "committedAcceptanceEvidenceSha256"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "state": {
+          "const": "defined"
+        },
+        "attempt": {
+          "$ref": "#/$defs/attempt"
+        },
+        "observedAt": {
+          "type": "string",
+          "minLength": 1
+        },
+        "installedInventory": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "collection": {
+          "const": "not_confirmed"
+        }
+      },
+      "required": [
+        "state",
+        "attempt",
+        "observedAt",
+        "installedInventory",
+        "collection"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "state": {
+          "const": "collected"
+        },
+        "attempt": {
+          "$ref": "#/$defs/attempt"
+        },
+        "observedAt": {
+          "type": "string",
+          "minLength": 1
+        },
+        "installedInventory": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "collectionEvidence": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "collectionOutcome": {
+          "enum": [
+            "populated",
+            "empty_qualified"
+          ]
+        }
+      },
+      "required": [
+        "state",
+        "attempt",
+        "observedAt",
+        "installedInventory",
+        "collectionEvidence",
+        "collectionOutcome"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "state": {
+          "const": "failed"
+        },
+        "attempt": {
+          "$ref": "#/$defs/attempt"
+        },
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "outcomeEvidence": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "physicalOutcome": {
+          "enum": [
+            "absent",
+            "defined",
+            "unknown"
+          ]
+        }
+      },
+      "required": [
+        "state",
+        "attempt",
+        "code",
+        "outcomeEvidence",
+        "physicalOutcome"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "state": {
+          "const": "stale"
+        },
+        "job": {
+          "$ref": "#/$defs/job"
+        },
+        "reason": {
+          "enum": [
+            "installation",
+            "catalog",
+            "layout",
+            "binding",
+            "definition",
+            "inventory",
+            "collection_profile"
+          ]
+        }
+      },
+      "required": [
+        "state",
+        "job",
+        "reason"
+      ],
+      "additionalProperties": false
+    }
+  ],
+  "$defs": {
+    "job": {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-statistics-job/0.1.0"
+        },
+        "installationId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "acceptedCatalogRevision": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        },
+        "layoutProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "bindingProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "declarationIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "definition": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "target": {
+          "type": "object",
+          "properties": {
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "relation": {
+              "type": "string",
+              "minLength": 1
+            },
+            "statistics": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "schema",
+            "relation",
+            "statistics"
+          ],
+          "additionalProperties": false
+        },
+        "collectionProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "installationId",
+        "acceptedCatalogRevision",
+        "layoutProfile",
+        "bindingProfile",
+        "declarationIdentity",
+        "definition",
+        "target",
+        "collectionProfile"
+      ],
+      "additionalProperties": false
+    },
+    "attempt": {
+      "type": "object",
+      "properties": {
+        "job": {
+          "$ref": "#/$defs/job"
+        },
+        "attemptId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "generation": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        },
+        "dispatcherProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        }
+      },
+      "required": [
+        "job",
+        "attemptId",
+        "generation",
+        "dispatcherProfile"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

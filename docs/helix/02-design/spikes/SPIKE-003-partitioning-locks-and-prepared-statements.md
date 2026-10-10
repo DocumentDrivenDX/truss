@@ -32,7 +32,7 @@ Executed evidence for three questions ADR-002 left provisional. The scripts, the
 - **Engines.** PostgreSQL 16.2 (`pgserver` 0.1.4, Python 3.11) and 17.9 (`pgembed` 0.2.0, Python 3.12), each a fresh embedded server per run. Both were exercised on every question. No managed PostgreSQL service was tested.
 - **Data.** 200,000 objects and 400,000 edges spread over 10, 100 and 1,000 types, generated with a fixed seed ([`common.py`](SPIKE-003-partitioning-locks-and-prepared-statements/common.py)).
 - **Layouts.** L0: one `object` table with a partial index per type. L1: `object` list-partitioned by type. L2: one flat `object` table with a separate `object_key` table (the layout adopted). L3: 20 hot types in their own partitions plus a default partition.
-- **Experiments.** E1 layouts ([`e1_layout.py`](SPIKE-003-partitioning-locks-and-prepared-statements/e1_layout.py)); E1b follow-ups on L2 ([`e1b_followups.py`](SPIKE-003-partitioning-locks-and-prepared-statements/e1b_followups.py)); E2 catalog-lock mechanisms A to E ([`e2_catalog_lock.py`](SPIKE-003-partitioning-locks-and-prepared-statements/e2_catalog_lock.py)); E3 prepared-statement modes ([`e3_prepared.py`](SPIKE-003-partitioning-locks-and-prepared-statements/e3_prepared.py)). Run scripts: `run_e1.sh`, `run_e1b.sh`, `run_e2_e3.sh`, `run_e2e.sh`, `run_e3_n1000.sh`, `run_e4.sh`, `run_e5.sh`.
+- **Experiments.** E1 layouts ([`e1_layout.py`](SPIKE-003-partitioning-locks-and-prepared-statements/e1_layout.py)); E1b follow-ups on L2 ([`e1b_followups.py`](SPIKE-003-partitioning-locks-and-prepared-statements/e1b_followups.py)); E2 catalog-lock mechanisms A to E ([`e2_catalog_lock.py`](SPIKE-003-partitioning-locks-and-prepared-statements/e2_catalog_lock.py)); E3 prepared-statement modes ([`e3_prepared.py`](SPIKE-003-partitioning-locks-and-prepared-statements/e3_prepared.py)). Run scripts: `run_e1.sh`, `run_e1b.sh`, `run_e2_e3.sh`, `run_e2e.sh`, `run_e3_n1000.sh`, `run_e4.sh`, `run_e5.sh`, and `e6_request_ids.py` (run on its own).
 - **Limits of the environment.** One machine (18 cores, 128 GB) under other load: endpoint-protection daemons and other sessions' PostgreSQL servers kept the load average between 7 and 15. Timings are single runs, not repeats. Treat DDL and index-build durations as upper bounds and differences under about 30% as noise. Latencies are in milliseconds on a local socket, so they exclude network time.
 
 ## Findings
@@ -176,6 +176,23 @@ Two connections created the same new edge (same relationship, source and target)
 - Making the existing traversal index unique adds no table and no index and no measured insert cost, and traversal still uses it by its first two columns.
 - The price is that one relationship cannot have two edges between the same two objects; a second kind of link is a second relationship.
 - Single run on a loaded machine; p95 insert latency (about 2 ms, mean 0.5 to 0.6 ms) was dominated by noise and is not reported per option.
+
+### F10. Idempotent groups need no table (E6)
+
+A group that carries a request id in its journal origin can be found again through a partial expression index on the origin, and concurrent duplicates serialize on an advisory lock ([`e6_request_ids.py`](SPIKE-003-partitioning-locks-and-prepared-statements/e6_request_ids.py)). 14 monthly partitions, 400,000 ordinary journal rows and 2,000 rows with request ids; PostgreSQL 16.2 / 17.9:
+
+| | 16.2 | 17.9 |
+|---|---|---|
+| Lookup of a request id across three months of partitions, p50 / p95 (ms) | 0.045 / 0.082 | 0.057 / 0.103 |
+| Index size for the 2,000 keyed rows (MB) | 0.21 | 0.21 |
+| Insert of 100,000 ordinary rows without / with the index (ms) | 371 / 380 | 408 / 408 |
+| Duplicate groups in 300 concurrent same-id requests, without the lock | **300** | **300** |
+| The same with the advisory lock | 0 | 0 |
+
+- The partial index holds entries only for keyed rows and costs the other rows nothing measurable.
+- Without serialization every concurrent duplicate committed twice; the advisory lock removed all of them.
+- The lookup prunes partitions by the time window and probes the remaining ones' small indexes.
+- Single run on a loaded machine; the lookup window was three months and the table had no rows from a real retention policy.
 
 ## Decisions
 

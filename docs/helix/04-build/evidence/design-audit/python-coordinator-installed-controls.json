@@ -1,0 +1,23 @@
+{
+  "scope": "Installed current base wheel and synthetic-host coordinator controls only",
+  "loadedCoordinator": "/private/tmp/truss-python-coordinator-env/lib/python3.11/site-packages/truss/_query_execution.py",
+  "coordinatorSha256": "8209768fe1f78b6234bae24545a221beca6b2ff60f22d9f3be501834604342e7",
+  "deliveryReceiptSha256": "ffc87e8ace36dbeaf91c2425d067f621968876b2725f3687bffd0ce3f3692a4f",
+  "python": "3.11.17 (main, Oct  3 2026, 00:54:14) [Clang 22.1.3 ]",
+  "tests": 11,
+  "output": "test_async_and_nonvoid_checks_cannot_permit_sql (test_query_execution.QueryExecutionTests.test_async_and_nonvoid_checks_cannot_permit_sql) ... ok\ntest_async_context_exit_cannot_publish_or_enter (test_query_execution.QueryExecutionTests.test_async_context_exit_cannot_publish_or_enter) ... ok\ntest_async_context_verification_cannot_permit_sql (test_query_execution.QueryExecutionTests.test_async_context_verification_cannot_permit_sql) ... ok\ntest_disposal_and_reentrancy_do_not_repeat_native_work (test_query_execution.QueryExecutionTests.test_disposal_and_reentrancy_do_not_repeat_native_work) ... ok\ntest_disposal_during_context_exit_withholds_buffered_result (test_query_execution.QueryExecutionTests.test_disposal_during_context_exit_withholds_buffered_result) ... ok\ntest_drift_cleanup_and_numeric_transport_withhold_results (test_query_execution.QueryExecutionTests.test_drift_cleanup_and_numeric_transport_withhold_results) ... ok\ntest_missing_host_foreign_plan_and_unknown_obligation_never_acquire (test_query_execution.QueryExecutionTests.test_missing_host_foreign_plan_and_unknown_obligation_never_acquire) ... ok\ntest_obligations_and_publication_recheck_have_original_order (test_query_execution.QueryExecutionTests.test_obligations_and_publication_recheck_have_original_order) ... ok\ntest_original_host_functions_are_captured_at_construction (test_query_execution.QueryExecutionTests.test_original_host_functions_are_captured_at_construction) ... ok\ntest_suppressed_host_failure_cannot_become_empty_success (test_query_execution.QueryExecutionTests.test_suppressed_host_failure_cannot_become_empty_success) ... ok\ntest_wrapped_async_cleanup_withholds_buffered_result (test_query_execution.QueryExecutionTests.test_wrapped_async_cleanup_withholds_buffered_result) ... ok\n\n----------------------------------------------------------------------\nRan 11 tests in 0.005s\n\nOK\n",
+  "sources": [
+    {
+      "path": "packages/python/tests/test_query_execution.py",
+      "sha256": "9c922c0657d372377d44188e8c8f2e45270ce5ae9a9f5fc9719c025152e7eacf"
+    },
+    {
+      "path": "packages/python/tests/test_weft.py",
+      "sha256": "7ff2541d371c16c8d8d84b573f20a7961c4cbb2f5d434db3ce45d207e83d7591"
+    }
+  ],
+  "producerSha256": "09d836ee3f06e723dd87d35150d97666398be762931e4a343a9934b7f789b527",
+  "nativeDatabaseExecuted": false,
+  "originalSecurityAuthorityQualified": false,
+  "completePythonEngineQualified": false
+}

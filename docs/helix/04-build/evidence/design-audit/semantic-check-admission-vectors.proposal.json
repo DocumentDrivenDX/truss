@@ -1,0 +1,115 @@
+{
+  "interfaceVersion": "truss-semantic-check-admission-vectors/0.1.0",
+  "scope": "Independently authored planned aggregate/admission expectations; not execution or native enforcement evidence",
+  "ownerSource": "UMF 88be379f src/model/semantic-types.ts and src/extensions/semantic-types/index.ts",
+  "vectors": [
+    {
+      "name": "no declaration",
+      "originalChecks": [],
+      "expectedUmfAggregate": {
+        "status": "unknown",
+        "complete": false
+      },
+      "requiredCheckMayAdmit": false,
+      "expectedCheckCount": 0
+    },
+    {
+      "name": "all complete valid",
+      "originalChecks": [
+        {
+          "status": "valid",
+          "complete": true
+        },
+        {
+          "status": "valid",
+          "complete": true
+        }
+      ],
+      "expectedUmfAggregate": {
+        "status": "valid",
+        "complete": true
+      },
+      "requiredCheckMayAdmit": true,
+      "expectedCheckCount": 2
+    },
+    {
+      "name": "valid but incomplete",
+      "originalChecks": [
+        {
+          "status": "valid",
+          "complete": false
+        }
+      ],
+      "expectedUmfAggregate": {
+        "status": "valid",
+        "complete": false
+      },
+      "requiredCheckMayAdmit": false,
+      "expectedCheckCount": 1
+    },
+    {
+      "name": "invalid plus unknown",
+      "originalChecks": [
+        {
+          "status": "invalid",
+          "complete": true
+        },
+        {
+          "status": "unknown",
+          "complete": false
+        }
+      ],
+      "expectedUmfAggregate": {
+        "status": "invalid",
+        "complete": false
+      },
+      "requiredCheckMayAdmit": false,
+      "expectedCheckCount": 2
+    },
+    {
+      "name": "all complete with invalid",
+      "originalChecks": [
+        {
+          "status": "valid",
+          "complete": true
+        },
+        {
+          "status": "invalid",
+          "complete": true
+        }
+      ],
+      "expectedUmfAggregate": {
+        "status": "invalid",
+        "complete": true
+      },
+      "requiredCheckMayAdmit": false,
+      "expectedCheckCount": 2
+    },
+    {
+      "name": "unknown plus valid",
+      "originalChecks": [
+        {
+          "status": "unknown",
+          "complete": false
+        },
+        {
+          "status": "valid",
+          "complete": true
+        }
+      ],
+      "expectedUmfAggregate": {
+        "status": "unknown",
+        "complete": false
+      },
+      "requiredCheckMayAdmit": false,
+      "expectedCheckCount": 2
+    }
+  ],
+  "additionalProducerControls": [
+    "Unknown qualifier retains declared reference and yields unknown/incomplete without validator invocation",
+    "Thrown/malformed validator yields unknown/incomplete with original diagnostic",
+    "Unknown result with complete=true is malformed and becomes unknown/incomplete",
+    "Module/document-scoped same-named content cannot create an element declaration",
+    "Retained-only selection performs no value validator invocation"
+  ]
+}

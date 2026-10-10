@@ -1,0 +1,54 @@
+{
+  "scope": "Existing UMF composition/export/reload of complete-history review plus parent registry then journal child-store declarations only; no native dependency/grant/body/install qualification",
+  "ownerSource": {
+    "root": "/Users/erik/Projects/umf",
+    "commit": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+    "files": [
+      {
+        "path": "src/adapters/postgresql/index.ts",
+        "sha256": "7baa071d95e5f9863a4ce2bf892d87fb27cab9d8605ba4cf8887016d14ca17b4"
+      },
+      {
+        "path": "src/model/native-json.ts",
+        "sha256": "1459a3e030419c3ae09b300972e27aed8b8ee1f7e41972b3cc00627dff7d7882"
+      },
+      {
+        "path": "src/model/document.ts",
+        "sha256": "a0422042659defdea425dff8bb0618eaa4bbf125f68da16aa5ad21af0b6c282f"
+      },
+      {
+        "path": "native/postgresql/runtime.ts",
+        "sha256": "a88fea4cf15c9c3c3f0ad1f0a36d8f5de42a42ce8ea9712499f609beee3ea751"
+      },
+      {
+        "path": "bun.lock",
+        "sha256": "98a99f7d306f7269db103bdbfafe5f9ad9ed34b02024276ad0cce45df27f5cc3"
+      }
+    ]
+  },
+  "bunVersion": "1.4.2",
+  "backend": "@libpg-query/parser@17.6.10",
+  "inputs": [
+    {
+      "path": "docs/helix/02-design/models/truss-layout-complete-history.proposal.umf.json",
+      "sha256": "8ea7f38e330cae7f0cd691e3c2f29840907a3c4c1c034f3af05fdaa7e41c1afa"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/row-home-operation-v0.1.proposal.umf.json",
+      "sha256": "e399f0b68a068b3ff828d31e7a0d8d3443f9619d5e84845d64dc7ba0b0ea53a6"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/row-home-journal-stage-v0.2.proposal.umf.json",
+      "sha256": "1760e57aafe2a4c567e9f599afe188e7081030a79a0612f3c6b4f01c8cdd7337"
+    }
+  ],
+  "modelPath": "docs/helix/02-design/models/truss-layout-journal-stage.proposal.umf.json",
+  "modelSha256": "3ab7f3eb162597e954f5f15ab310b6ba0d381b238fb56888ed9ffe13e8ff860e",
+  "exportPath": "docs/helix/04-build/evidence/design-audit/truss-layout-journal-stage.owner-export.sql",
+  "exportSha256": "6360ccba7d410ab3a36d30d82e5878a5f3b68c70d78035f7eb3a483056a8dfe2",
+  "statements": 43,
+  "parentBeforeChild": true,
+  "baselineArchivePreserved": true,
+  "reloadedExportExact": true,
+  "installationReady": false
+}

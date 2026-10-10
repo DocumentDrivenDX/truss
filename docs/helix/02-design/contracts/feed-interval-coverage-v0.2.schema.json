@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:feed-interval-coverage:0.2.0",
+  "description": "Shape only; complete v0.2 source transition membership and protected native representation/application require admission.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-feed-coverage/0.2.0"
+    },
+    "context": {
+      "$ref": "urn:truss:draft:feed-interval-coverage:0.1.0#/properties/context"
+    },
+    "fromInclusiveXid": {
+      "$ref": "urn:truss:draft:feed-interval-coverage:0.1.0#/properties/fromInclusiveXid"
+    },
+    "throughExclusiveXid": {
+      "$ref": "urn:truss:draft:feed-interval-coverage:0.1.0#/properties/throughExclusiveXid"
+    },
+    "observedSafeWatermarkXid": {
+      "$ref": "urn:truss:draft:feed-interval-coverage:0.1.0#/properties/observedSafeWatermarkXid"
+    },
+    "sourceEnumerationEvidence": {
+      "$ref": "urn:truss:draft:feed-interval-coverage:0.1.0#/properties/sourceEnumerationEvidence"
+    },
+    "retentionProtectionEvidence": {
+      "$ref": "urn:truss:draft:feed-interval-coverage:0.1.0#/properties/retentionProtectionEvidence"
+    },
+    "transactions": {
+      "$ref": "urn:truss:draft:feed-interval-coverage:0.1.0#/properties/transactions"
+    },
+    "coverageProfile": {
+      "$ref": "urn:truss:draft:feed-interval-coverage:0.1.0#/properties/coverageProfile"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "context",
+    "fromInclusiveXid",
+    "throughExclusiveXid",
+    "observedSafeWatermarkXid",
+    "sourceEnumerationEvidence",
+    "retentionProtectionEvidence",
+    "transactions",
+    "coverageProfile"
+  ],
+  "additionalProperties": false
+}

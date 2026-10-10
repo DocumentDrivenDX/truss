@@ -1,0 +1,295 @@
+{
+  "profile": "truss-private-scalar-custody-vectors/0.1.0",
+  "status": "planned_unadopted",
+  "nativeExecution": false,
+  "scope": "Independent scalar-stage outcomes only; no public ABI, codec registration, complete record publication or native support claim",
+  "columns": [
+    "scalar_present",
+    "scalar_kind",
+    "text_value",
+    "boolean_value",
+    "native_numeric_text",
+    "original_numeric_token",
+    "codec_bytes_hex",
+    "source_bytes_hex"
+  ],
+  "fixturePrerequisites": {
+    "codecs": "00/01/02/03 are symbolic original registered codec artifact bytes, not existing production definitions; implementation fixture must explicitly register reviewed definitions for string/boolean/uint64/lexical decimal respectively",
+    "context": "Except stated negatives, exact admitted descriptors, complete original read custody, grammar/facets/domain, resource limits and independent full-slot/structural preflight must be supplied",
+    "source": "source_bytes_hex contains independently authored UTF-8 JSON scalar tokens; candidate decoder output must not supply expected meanings",
+    "fullSlotPreflight": "Every positive scalar case requires native NULL in all unused physical slots, including slots outside the eight projections"
+  },
+  "cases": [
+    {
+      "id": "SC01",
+      "family": "string",
+      "nativeObservations": [
+        "true",
+        "string",
+        "",
+        null,
+        null,
+        null,
+        "00",
+        "2222"
+      ],
+      "originalSourceMeaning": "Empty string",
+      "expected": {
+        "outcome": "accept_scalar",
+        "reason": "Present empty text is distinct from native NULL",
+        "publicationPermitted": false,
+        "publicationReason": "Scalar-stage outcome alone does not establish complete record, full-slot preflight or execution/publication custody"
+      },
+      "logicalValue": "",
+      "physicalStageExpected": "scalar_observation"
+    },
+    {
+      "id": "SC02",
+      "family": "string",
+      "nativeObservations": [
+        "true",
+        "string",
+        "é😀  ",
+        null,
+        null,
+        null,
+        "00",
+        "22c3a9f09f9880202022"
+      ],
+      "originalSourceMeaning": "Exact Unicode string with two trailing spaces",
+      "expected": {
+        "outcome": "accept_scalar",
+        "reason": "No normalization or trimming",
+        "publicationPermitted": false,
+        "publicationReason": "Scalar-stage outcome alone does not establish complete record, full-slot preflight or execution/publication custody"
+      },
+      "logicalValue": "é😀  ",
+      "physicalStageExpected": "scalar_observation"
+    },
+    {
+      "id": "SC03",
+      "family": "boolean",
+      "nativeObservations": [
+        "true",
+        "boolean",
+        null,
+        "false",
+        null,
+        null,
+        "01",
+        "66616c7365"
+      ],
+      "originalSourceMeaning": "Boolean false",
+      "expected": {
+        "outcome": "accept_scalar",
+        "reason": "False is a present value",
+        "publicationPermitted": false,
+        "publicationReason": "Scalar-stage outcome alone does not establish complete record, full-slot preflight or execution/publication custody"
+      },
+      "logicalValue": false,
+      "physicalStageExpected": "scalar_observation"
+    },
+    {
+      "id": "SC04",
+      "family": "integer",
+      "nativeObservations": [
+        "true",
+        "integer",
+        null,
+        null,
+        "18446744073709551615",
+        "18446744073709551615",
+        "02",
+        "3138343436373434303733373039353531363135"
+      ],
+      "originalSourceMeaning": "Unsigned integer maximum with exact declared uint64 facets",
+      "expected": {
+        "outcome": "accept_scalar",
+        "reason": "Host floating-point rounding is forbidden",
+        "publicationPermitted": false,
+        "publicationReason": "Scalar-stage outcome alone does not establish complete record, full-slot preflight or execution/publication custody"
+      },
+      "logicalToken": "18446744073709551615",
+      "physicalStageExpected": "scalar_observation"
+    },
+    {
+      "id": "SC05",
+      "family": "decimal",
+      "nativeObservations": [
+        "true",
+        "decimal",
+        null,
+        null,
+        "0.00",
+        "-0.00",
+        "03",
+        "2d302e3030"
+      ],
+      "originalSourceMeaning": "Lexically preserved negative-zero decimal",
+      "expected": {
+        "outcome": "accept_scalar",
+        "reason": "Mathematical zero correspondence does not rewrite original token",
+        "publicationPermitted": false,
+        "publicationReason": "Scalar-stage outcome alone does not establish complete record, full-slot preflight or execution/publication custody"
+      },
+      "logicalToken": "-0.00",
+      "physicalStageExpected": "scalar_observation"
+    },
+    {
+      "id": "SC06",
+      "family": "decimal",
+      "nativeObservations": [
+        "true",
+        "decimal",
+        null,
+        null,
+        "1.25",
+        "1.26",
+        "03",
+        "312e3236"
+      ],
+      "originalSourceMeaning": "Decimal 1.26",
+      "expected": {
+        "outcome": "refuse",
+        "reason": "Native/source mathematical mismatch",
+        "publicationPermitted": false,
+        "publicationReason": "Scalar-stage outcome alone does not establish complete record, full-slot preflight or execution/publication custody"
+      },
+      "physicalStageExpected": "scalar_observation"
+    },
+    {
+      "id": "SC07",
+      "family": "string",
+      "nativeObservations": [
+        "true",
+        "string",
+        null,
+        null,
+        null,
+        null,
+        "00",
+        "2222"
+      ],
+      "originalSourceMeaning": "Empty string",
+      "expected": {
+        "outcome": "refuse",
+        "reason": "Missing required text payload cannot become empty string",
+        "publicationPermitted": false,
+        "publicationReason": "Scalar-stage outcome alone does not establish complete record, full-slot preflight or execution/publication custody"
+      },
+      "physicalStageExpected": "refuse_missing_payload"
+    },
+    {
+      "id": "SC08",
+      "family": "boolean",
+      "nativeObservations": [
+        "true",
+        "boolean",
+        "unexpected",
+        "false",
+        null,
+        null,
+        "01",
+        "66616c7365"
+      ],
+      "originalSourceMeaning": "Boolean false",
+      "expected": {
+        "outcome": "refuse",
+        "reason": "Unused text payload is not native NULL",
+        "publicationPermitted": false,
+        "publicationReason": "Scalar-stage outcome alone does not establish complete record, full-slot preflight or execution/publication custody"
+      },
+      "physicalStageExpected": "refuse_mixed_payload"
+    },
+    {
+      "id": "SC09",
+      "family": "string",
+      "nativeObservations": [
+        "true",
+        "string",
+        "",
+        null,
+        null,
+        null,
+        "0",
+        "2222"
+      ],
+      "originalSourceMeaning": "Empty string",
+      "expected": {
+        "outcome": "refuse",
+        "reason": "Odd-length codec hex fails before byte decoding",
+        "publicationPermitted": false,
+        "publicationReason": "Scalar-stage outcome alone does not establish complete record, full-slot preflight or execution/publication custody"
+      },
+      "physicalStageExpected": "refuse_hex_grammar"
+    },
+    {
+      "id": "SC10",
+      "family": "string",
+      "nativeObservations": [
+        "false",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "originalSourceMeaning": "Original node meaning not supplied",
+      "expected": {
+        "outcome": "require_separate_node_admission",
+        "reason": "Missing scalar observation cannot distinguish absent property, null or container",
+        "publicationPermitted": false,
+        "publicationReason": "Scalar-stage outcome alone does not establish complete record, full-slot preflight or execution/publication custody"
+      },
+      "physicalStageExpected": "no_scalar_observation"
+    },
+    {
+      "id": "SC11",
+      "family": "binary",
+      "nativeObservations": [
+        "true",
+        "binary",
+        null,
+        null,
+        null,
+        null,
+        "04",
+        "2222"
+      ],
+      "originalSourceMeaning": "Present empty binary under a hypothetical admitted binary codec",
+      "expected": {
+        "outcome": "refuse_unavailable_bridge",
+        "reason": "Eight-column projection omits native binary payload; cannot fabricate empty bytes",
+        "publicationPermitted": false,
+        "publicationReason": "Scalar-stage outcome alone does not establish complete record, full-slot preflight or execution/publication custody"
+      },
+      "physicalStageExpected": "unavailable_family_dispatch"
+    },
+    {
+      "id": "SC12",
+      "family": "string",
+      "nativeObservations": [
+        "true",
+        "string",
+        "",
+        null,
+        null,
+        null,
+        "00",
+        "2222"
+      ],
+      "originalSourceMeaning": "Empty string",
+      "expected": {
+        "outcome": "refuse",
+        "reason": "Independent full-slot preflight observes non-NULL hidden timestamp payload",
+        "publicationPermitted": false,
+        "publicationReason": "Scalar-stage outcome alone does not establish complete record, full-slot preflight or execution/publication custody"
+      },
+      "fullSlotPreflight": "conflicting_unprojected_payload",
+      "physicalStageExpected": "scalar_observation"
+    }
+  ],
+  "stageOwnership": "Weft owns selected physical custody admission; Truss supplies original source/facet/domain/full-slot/read-context and complete logical/publication procedures. Expected outcomes are independent authored controls, not current helper execution."
+}

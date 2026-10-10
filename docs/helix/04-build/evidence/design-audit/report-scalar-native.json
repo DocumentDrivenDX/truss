@@ -1,0 +1,114 @@
+{
+  "status": "passed_temporary_native_scalar_candidate",
+  "serverVersionNum": "170009",
+  "observations": [
+    {
+      "name": "two-byte-scalar-crosses-source-boundary",
+      "expected": "e5b572c5d24f3fbc02cbabd575df6515fb47e060e798bad49694304527eb1bb7",
+      "completeOriginalBytesEqual": true,
+      "nativeBytes": 65539,
+      "observed": "e5b572c5d24f3fbc02cbabd575df6515fb47e060e798bad49694304527eb1bb7"
+    },
+    {
+      "name": "three-byte-scalar-crosses-source-boundary",
+      "expected": "699981d2206a95d151f5f576470ae43850432ec2fa762266e3afae0af4e02616",
+      "completeOriginalBytesEqual": true,
+      "nativeBytes": 65540,
+      "observed": "699981d2206a95d151f5f576470ae43850432ec2fa762266e3afae0af4e02616"
+    },
+    {
+      "name": "four-byte-scalar-crosses-source-boundary",
+      "expected": "18f65fdec3653d755ae27ae75a47691af119ab76a5cbefb7e0a1cbb00d99402e",
+      "completeOriginalBytesEqual": true,
+      "nativeBytes": 65541,
+      "observed": "18f65fdec3653d755ae27ae75a47691af119ab76a5cbefb7e0a1cbb00d99402e"
+    },
+    {
+      "name": "highest-Unicode-scalar",
+      "expected": "d6be601594ff380c4a5e3cb7fcfc5f8f827847026cefe9d66c8bd17112d83f8a",
+      "completeOriginalBytesEqual": true,
+      "nativeBytes": 65541,
+      "observed": "d6be601594ff380c4a5e3cb7fcfc5f8f827847026cefe9d66c8bd17112d83f8a"
+    },
+    {
+      "name": "byte-document-controls-and-quotes",
+      "expected": "47590db6d0f80eae9c53c04ffaaa0b86bb34016a39d0a4b9a3bbe245117bf734",
+      "completeOriginalBytesEqual": true,
+      "nativeBytes": 65566,
+      "observed": "47590db6d0f80eae9c53c04ffaaa0b86bb34016a39d0a4b9a3bbe245117bf734"
+    },
+    {
+      "name": "overlong-two-byte",
+      "expected": "refused_22021",
+      "observed": "refused_22021"
+    },
+    {
+      "name": "overlong-three-byte",
+      "expected": "refused_22021",
+      "observed": "refused_22021"
+    },
+    {
+      "name": "surrogate-encoding",
+      "expected": "refused_22021",
+      "observed": "refused_22021"
+    },
+    {
+      "name": "above-Unicode-maximum",
+      "expected": "refused_22021",
+      "observed": "refused_22021"
+    },
+    {
+      "name": "invalid-five-byte-lead",
+      "expected": "refused_22021",
+      "observed": "refused_22021"
+    },
+    {
+      "name": "isolated-continuation",
+      "expected": "refused_22021",
+      "observed": "refused_22021"
+    },
+    {
+      "name": "unfinished-final-scalar",
+      "expected": "refused_22021",
+      "observed": "refused_22021"
+    },
+    {
+      "name": "ASCII-in-continuation",
+      "expected": "refused_22021",
+      "observed": "refused_22021"
+    },
+    {
+      "name": "short-escape-expands-beyond-one-MiB",
+      "expected": "d1ee889173f57e6ba96832f5f802412f571d9eb6904bf3cf8e674442e28d25e1",
+      "completeOriginalBytesEqual": true,
+      "nativeBytes": 1200002,
+      "observed": "d1ee889173f57e6ba96832f5f802412f571d9eb6904bf3cf8e674442e28d25e1"
+    },
+    {
+      "name": "exact-output-capacity",
+      "expected": "2d35feb8c4e23f24bf7d223798c4effd41d7d24e0fca51b4b8964125845502a7",
+      "completeOriginalBytesEqual": true,
+      "nativeBytes": 4194304,
+      "observed": "2d35feb8c4e23f24bf7d223798c4effd41d7d24e0fca51b4b8964125845502a7"
+    },
+    {
+      "name": "one-over-output-capacity",
+      "expected": "refused_54000",
+      "observed": "refused_54000"
+    },
+    {
+      "name": "output-capacity",
+      "expected": "refused_54000",
+      "observed": "refused_54000"
+    },
+    {
+      "name": "source-capacity",
+      "expected": "refused_54000",
+      "observed": "refused_54000"
+    }
+  ],
+  "sourceSha256": "5b99f2f05920a77c7617239acc9f183bc321248831acecc8e4fef7884c25de63",
+  "fixtureSha256": "8d9796d6359b1aec328b0a90ce7fe0c03f17f5b3d322562cff85b33152edc7b6",
+  "checkerSha256": "ef01cbee34840f77565417364d6a4013e857acc6fad671e60564ddd82cd7b24a",
+  "scope": "Temporary function in one rolled-back native session; exact independent scalar bytes and invalid UTF-8/capacity refusals only. No installed routine, whole-report encoder, precharged native/driver resource profile, authority or acceptance effects."
+}

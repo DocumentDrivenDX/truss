@@ -1,0 +1,1 @@
+SELECT o.tableoid::pg_catalog.oid::pg_catalog.text AS catalog_class_oid, o.oid::pg_catalog.text AS object_oid, o.amopfamily::pg_catalog.text AS family_oid, pg_catalog.to_jsonb(o)::pg_catalog.text AS original_catalog_row_json FROM pg_catalog.pg_amop o WHERE o.amopfamily = ANY($1::pg_catalog.oid[]) ORDER BY o.oid

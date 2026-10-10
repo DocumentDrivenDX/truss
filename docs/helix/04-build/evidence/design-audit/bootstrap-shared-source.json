@@ -1,0 +1,98 @@
+{
+  "scope": "UMF parser/source archive/JSON reload/guarded export only; no PostgreSQL execution, query result grammar, complete native scope, privileges, dependencies or installed parity",
+  "bunVersion": "1.4.2",
+  "ownerSource": {
+    "root": "/Users/erik/Projects/umf",
+    "commit": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+    "status": "",
+    "files": [
+      {
+        "path": "native/postgresql/runtime.ts",
+        "sha256": "a88fea4cf15c9c3c3f0ad1f0a36d8f5de42a42ce8ea9712499f609beee3ea751"
+      },
+      {
+        "path": "src/adapters/postgresql/index.ts",
+        "sha256": "7baa071d95e5f9863a4ce2bf892d87fb27cab9d8605ba4cf8887016d14ca17b4"
+      },
+      {
+        "path": "src/adapters/postgresql/declarations.ts",
+        "sha256": "e47ebd6366fee86fb8ccaf1270555bcd338957bff511f30cdcae22a088c6d8d9"
+      },
+      {
+        "path": "src/model/document.ts",
+        "sha256": "a0422042659defdea425dff8bb0618eaa4bbf125f68da16aa5ad21af0b6c282f"
+      },
+      {
+        "path": "spec/extensions/postgresql/native-ast.schema.json",
+        "sha256": "aa3d3b50bc04edbc3ab3430e113ee8710edb1c10ff5cee15d4bcc7b16d9a9039"
+      },
+      {
+        "path": "bun.lock",
+        "sha256": "98a99f7d306f7269db103bdbfafe5f9ad9ed34b02024276ad0cce45df27f5cc3"
+      }
+    ]
+  },
+  "backend": "@libpg-query/parser@17.6.10",
+  "observations": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-default-acl-observation-pg17.proposal.sql",
+      "sourceSha256": "c25954750b4672bf1b48fe2d0aec17cad8eb19f6772a16021c233dc25ee362a4",
+      "artifactPath": "docs/helix/02-design/contracts/bindings/bootstrap-default-acl-observation-pg17.proposal.umf.json",
+      "artifactSha256": "859731eaed027b041fd40ce77f325d9deabdf0287ee6d80b738cd84f0c655251",
+      "exportPath": "docs/helix/04-build/evidence/design-audit/bootstrap-default-acl-observation.owner-export.sql",
+      "exportSha256": "2e299f92ab62b5e850fd081dfd491c974429b75e61b6a2844d3f3ef7808fbe67",
+      "sourceArchiveExact": true,
+      "reloadedExportExact": true,
+      "complete": false,
+      "unhandled": [
+        {
+          "path": "/stmts/0/stmt"
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning",
+          "message": "Raw syntax is not catalog resolution, SQL execution, permissions or server-state validation"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt",
+          "severity": "warning",
+          "message": "Statement is retained without declaration extraction or execution"
+        }
+      ]
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-shared-description-observation-pg17.proposal.sql",
+      "sourceSha256": "844905be9b08be0cddfb8575e43fc854e9f72d88bd89bdd4053498f6975cb335",
+      "artifactPath": "docs/helix/02-design/contracts/bindings/bootstrap-shared-description-observation-pg17.proposal.umf.json",
+      "artifactSha256": "db4e05c27982a08e12f89742f056202e2cd5c9a8405392e1e4fc6d97019d9d65",
+      "exportPath": "docs/helix/04-build/evidence/design-audit/bootstrap-shared-description-observation.owner-export.sql",
+      "exportSha256": "38d82599fdf36ca17d77fe328e57ba9589fcc3646cea6150c0c028544e8d9889",
+      "sourceArchiveExact": true,
+      "reloadedExportExact": true,
+      "complete": false,
+      "unhandled": [
+        {
+          "path": "/stmts/0/stmt"
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning",
+          "message": "Raw syntax is not catalog resolution, SQL execution, permissions or server-state validation"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt",
+          "severity": "warning",
+          "message": "Statement is retained without declaration extraction or execution"
+        }
+      ]
+    }
+  ]
+}

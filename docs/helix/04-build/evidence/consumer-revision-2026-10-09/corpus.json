@@ -1,0 +1,2588 @@
+{
+ "version": 1,
+ "module": "module.umf.json",
+ "covers": [
+  "key-lookups",
+  "bounded-lists",
+  "filters",
+  "relationship-predicates",
+  "alias-star",
+  "counts",
+  "page-contract",
+  "unsupported-capabilities",
+  "latest-from-authority",
+  "at-least",
+  "empty-refused-unavailable",
+  "atomicity",
+  "idempotency",
+  "receipt",
+  "bulk-changes",
+  "refused-changes-nothing",
+  "dry-run",
+  "tokens",
+  "import",
+  "position-and-lag",
+  "replica-read-only",
+  "registry",
+  "attribution"
+ ],
+ "fixtures": {
+  "basic": [
+   {
+    "op": "install"
+   },
+   {
+    "op": "grant",
+    "user": "erik",
+    "modules": {
+     "catalog": [
+      "read",
+      "write"
+     ]
+    },
+    "admin": true
+   },
+   {
+    "op": "grant",
+    "user": "rita",
+    "modules": {
+     "catalog": [
+      "read"
+     ]
+    }
+   },
+   {
+    "op": "grant",
+    "user": "wes",
+    "modules": {
+     "catalog": [
+      "read",
+      "write"
+     ]
+    }
+   },
+   {
+    "op": "grant",
+    "user": "sam",
+    "modules": {}
+   },
+   {
+    "op": "seed",
+    "as": "erik",
+    "records": [
+     {
+      "type": "UseCase",
+      "key": "uc-1",
+      "properties": {
+       "name": "Lease abstraction",
+       "practiceArea": "real-estate"
+      }
+     },
+     {
+      "type": "UseCase",
+      "key": "uc-2",
+      "properties": {
+       "name": "NDA review",
+       "practiceArea": "corporate"
+      }
+     },
+     {
+      "type": "Solution",
+      "key": "sol-1",
+      "properties": {
+       "name": "Lease extractor"
+      }
+     },
+     {
+      "relationship": "addresses",
+      "source": "sol-1",
+      "target": "uc-1"
+     }
+    ]
+   },
+   {
+    "op": "sync"
+   }
+  ],
+  "empty": [
+   {
+    "op": "install"
+   },
+   {
+    "op": "grant",
+    "user": "erik",
+    "modules": {
+     "catalog": [
+      "read",
+      "write"
+     ]
+    },
+    "admin": true
+   },
+   {
+    "op": "grant",
+    "user": "rita",
+    "modules": {
+     "catalog": [
+      "read"
+     ]
+    }
+   },
+   {
+    "op": "grant",
+    "user": "wes",
+    "modules": {
+     "catalog": [
+      "read",
+      "write"
+     ]
+    }
+   },
+   {
+    "op": "grant",
+    "user": "sam",
+    "modules": {}
+   },
+   {
+    "op": "sync"
+   }
+  ]
+ },
+ "cases": [
+  {
+   "id": "read.key-lookup-whole-entity",
+   "tags": [
+    "authority",
+    "replica"
+   ],
+   "covers": [
+    "key-lookups",
+    "alias-star"
+   ],
+   "description": "alias.* by key returns every property, the relationship keys, the version and attribution",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "query",
+     "as": "rita",
+     "sql": "SELECT u.* FROM catalog.UseCase u WHERE u.code = 'uc-1'",
+     "expect": {
+      "rows": [
+       {
+        "code": "uc-1",
+        "name": "Lease abstraction",
+        "practiceArea": "real-estate",
+        "addressedBy": [
+         "sol-1"
+        ],
+        "_version": 1,
+        "_created_by": "erik",
+        "_updated_by": "erik",
+        "_original_author": null,
+        "_original_at": null
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "read.relationship-columns-follow-ends",
+   "tags": [
+    "authority",
+    "replica"
+   ],
+   "covers": [
+    "alias-star",
+    "relationship-predicates"
+   ],
+   "description": "a relationship is a column of the types at its ends, under its own name or its inverse",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "query",
+     "as": "rita",
+     "sql": "SELECT s.* FROM catalog.Solution s WHERE s.code = 'sol-1'",
+     "expect": {
+      "rows": [
+       {
+        "addresses": [
+         "uc-1"
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "read.missing-key-is-no-rows",
+   "tags": [
+    "authority",
+    "replica"
+   ],
+   "covers": [
+    "key-lookups",
+    "empty-refused-unavailable"
+   ],
+   "description": "a query for an absent key is an empty answer, not an error",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "query",
+     "as": "rita",
+     "sql": "SELECT u.* FROM catalog.UseCase u WHERE u.code = 'nope'",
+     "expect": {
+      "rows": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "read.columns-and-filters",
+   "tags": [
+    "authority",
+    "replica"
+   ],
+   "covers": [
+    "bounded-lists",
+    "filters",
+    "unsupported-capabilities"
+   ],
+   "description": "required scalar columns, equality on a field; a backend that does not declare the columns answers Unsupported",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "query",
+     "as": "rita",
+     "sql": "SELECT u.code, u.name FROM catalog.UseCase u WHERE u.name = 'NDA review'",
+     "requires": {
+      "type": "catalog.UseCase",
+      "columns": [
+       "code",
+       "name"
+      ]
+     },
+     "expect": {
+      "columns": [
+       "code",
+       "name"
+      ],
+      "rows": [
+       {
+        "code": "uc-2",
+        "name": "NDA review"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "read.relationship-filter-both-directions",
+   "tags": [
+    "authority",
+    "replica"
+   ],
+   "covers": [
+    "relationship-predicates",
+    "unsupported-capabilities"
+   ],
+   "description": "entities related to a key, by name and by inverse",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "query",
+     "as": "rita",
+     "sql": "SELECT s.code FROM catalog.Solution s WHERE s.addresses = 'uc-1'",
+     "requires": {
+      "type": "catalog.Solution",
+      "columns": [
+       "code"
+      ],
+      "relationships": [
+       "addresses"
+      ]
+     },
+     "expect": {
+      "rows": [
+       {
+        "code": "sol-1"
+       }
+      ]
+     }
+    },
+    {
+     "op": "query",
+     "as": "rita",
+     "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.addressedBy = 'sol-1'",
+     "requires": {
+      "type": "catalog.UseCase",
+      "columns": [
+       "code"
+      ],
+      "relationships": [
+       "addressedBy"
+      ]
+     },
+     "expect": {
+      "rows": [
+       {
+        "code": "uc-1"
+       }
+      ]
+     }
+    },
+    {
+     "op": "query",
+     "as": "rita",
+     "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.addressedBy = 'nobody'",
+     "requires": {
+      "type": "catalog.UseCase",
+      "columns": [
+       "code"
+      ],
+      "relationships": [
+       "addressedBy"
+      ]
+     },
+     "expect": {
+      "rows": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "read.repeated-relationship-predicates-mean-both",
+   "tags": [
+    "authority",
+    "replica"
+   ],
+   "covers": [
+    "relationship-predicates"
+   ],
+   "description": "two relationship predicates on one name select entities related to both",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "seed",
+     "as": "erik",
+     "records": [
+      {
+       "relationship": "addresses",
+       "source": "sol-1",
+       "target": "uc-2"
+      }
+     ]
+    },
+    {
+     "op": "sync"
+    },
+    {
+     "op": "query",
+     "as": "rita",
+     "sql": "SELECT s.code FROM catalog.Solution s WHERE s.addresses = 'uc-1' AND s.addresses = 'uc-2'",
+     "requires": {
+      "type": "catalog.Solution",
+      "columns": [
+       "code"
+      ],
+      "relationships": [
+       "addresses"
+      ]
+     },
+     "expect": {
+      "rows": [
+       {
+        "code": "sol-1"
+       }
+      ]
+     }
+    },
+    {
+     "op": "query",
+     "as": "rita",
+     "sql": "SELECT s.code FROM catalog.Solution s WHERE s.addresses = 'uc-1' AND s.addresses = 'nope'",
+     "requires": {
+      "type": "catalog.Solution",
+      "columns": [
+       "code"
+      ],
+      "relationships": [
+       "addresses"
+      ]
+     },
+     "expect": {
+      "rows": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "read.count-group-by",
+   "tags": [
+    "authority",
+    "replica"
+   ],
+   "covers": [
+    "counts",
+    "unsupported-capabilities"
+   ],
+   "description": "COUNT(*) grouped by one property, exact integers; a backend that does not declare count answers Unsupported",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "seed",
+     "as": "erik",
+     "records": [
+      {
+       "type": "UseCase",
+       "key": "uc-3",
+       "properties": {
+        "name": "NDA review"
+       }
+      }
+     ]
+    },
+    {
+     "op": "sync"
+    },
+    {
+     "op": "query",
+     "as": "rita",
+     "sql": "SELECT u.name, COUNT(*) FROM catalog.UseCase u GROUP BY u.name",
+     "requires": {
+      "type": "catalog.UseCase",
+      "columns": [
+       "name"
+      ],
+      "count": true
+     },
+     "expect": {
+      "rows": [
+       {
+        "name": "Lease abstraction",
+        "count": 1
+       },
+       {
+        "name": "NDA review",
+        "count": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "read.paging-by-key",
+   "tags": [
+    "authority",
+    "replica"
+   ],
+   "covers": [
+    "page-contract"
+   ],
+   "description": "pages are ordered by key; a cursor continues; the last page has none",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "query",
+     "as": "rita",
+     "sql": "SELECT u.code FROM catalog.UseCase u",
+     "limit": 1,
+     "save": {
+      "cursor": "c1"
+     },
+     "expect": {
+      "rows": [
+       {
+        "code": "uc-1"
+       }
+      ],
+      "next_cursor": true
+     }
+    },
+    {
+     "op": "query",
+     "as": "rita",
+     "sql": "SELECT u.code FROM catalog.UseCase u",
+     "limit": 1,
+     "after": "$c1",
+     "expect": {
+      "rows": [
+       {
+        "code": "uc-2"
+       }
+      ],
+      "next_cursor": false
+     }
+    }
+   ]
+  },
+  {
+   "id": "read.relationship-columns-are-capped",
+   "tags": [
+    "authority",
+    "replica"
+   ],
+   "covers": [
+    "alias-star",
+    "page-contract"
+   ],
+   "description": "alias.* returns at most 100 keys per relationship column and says it truncated",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "seed_many",
+     "as": "erik",
+     "type": "Solution",
+     "count": 101,
+     "key": "m{:03}",
+     "properties": {
+      "name": "n"
+     },
+     "link": {
+      "relationship": "addresses",
+      "target": "uc-2"
+     }
+    },
+    {
+     "op": "sync"
+    },
+    {
+     "op": "query",
+     "as": "rita",
+     "sql": "SELECT u.* FROM catalog.UseCase u WHERE u.code = 'uc-2'",
+     "expect": {
+      "truncated": true,
+      "row_len": {
+       "addressedBy": 100
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "access.no-token-is-refused",
+   "tags": [
+    "authority",
+    "replica"
+   ],
+   "covers": [
+    "tokens"
+   ],
+   "description": "a call with no token is refused",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "query",
+     "as": "anon",
+     "sql": "SELECT u.code FROM catalog.UseCase u",
+     "expect": {
+      "error": "Refused"
+     }
+    }
+   ]
+  },
+  {
+   "id": "access.anothers-token-is-refused",
+   "tags": [
+    "authority",
+    "replica"
+   ],
+   "covers": [
+    "tokens"
+   ],
+   "description": "a person presenting another person's token is refused, never answered from a shared identity",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "query",
+     "as": "sam@erik",
+     "sql": "SELECT u.code FROM catalog.UseCase u",
+     "expect": {
+      "error": "Refused"
+     }
+    },
+    {
+     "op": "query",
+     "as": "erik",
+     "sql": "SELECT u.code FROM catalog.UseCase u",
+     "expect": {
+      "row_count": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "access.no-grant-is-refused-not-empty",
+   "tags": [
+    "authority",
+    "replica"
+   ],
+   "covers": [
+    "empty-refused-unavailable"
+   ],
+   "description": "a person with no access to the module is refused, never answered empty",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "query",
+     "as": "sam",
+     "sql": "SELECT u.code FROM catalog.UseCase u",
+     "expect": {
+      "error": "Refused"
+     }
+    }
+   ]
+  },
+  {
+   "id": "access.expired-token-is-refused-not-unavailable",
+   "tags": [
+    "authority",
+    "replica"
+   ],
+   "covers": [
+    "tokens",
+    "empty-refused-unavailable"
+   ],
+   "description": "an expired token is Refused",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "expire",
+     "user": "rita"
+    },
+    {
+     "op": "query",
+     "as": "rita",
+     "sql": "SELECT u.code FROM catalog.UseCase u",
+     "expect": {
+      "error": "Refused"
+     }
+    }
+   ]
+  },
+  {
+   "id": "access.outage-is-unavailable-never-empty",
+   "tags": [
+    "authority",
+    "replica"
+   ],
+   "covers": [
+    "empty-refused-unavailable"
+   ],
+   "description": "an unreachable backend is Unavailable with its reason, never an empty answer",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "outage",
+     "reason": "unreachable"
+    },
+    {
+     "op": "query",
+     "as": "rita",
+     "sql": "SELECT u.code FROM catalog.UseCase u",
+     "expect": {
+      "error": "Unavailable",
+      "reason": "unreachable"
+     }
+    },
+    {
+     "op": "outage",
+     "reason": "access_denied"
+    },
+    {
+     "op": "query",
+     "as": "rita",
+     "sql": "SELECT u.code FROM catalog.UseCase u",
+     "expect": {
+      "error": "Unavailable",
+      "reason": "access_denied"
+     }
+    },
+    {
+     "op": "outage",
+     "reason": null
+    },
+    {
+     "op": "query",
+     "as": "rita",
+     "sql": "SELECT u.code FROM catalog.UseCase u",
+     "expect": {
+      "row_count": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "access.no-token-is-refused-even-when-down",
+   "tags": [
+    "authority",
+    "replica"
+   ],
+   "covers": [
+    "tokens"
+   ],
+   "description": "a call with no token is refused before the backend is reached",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "outage",
+     "reason": "unreachable"
+    },
+    {
+     "op": "query",
+     "as": "anon",
+     "sql": "SELECT u.code FROM catalog.UseCase u",
+     "expect": {
+      "error": "Refused"
+     }
+    }
+   ]
+  },
+  {
+   "id": "access.outage-during-a-write-changes-nothing",
+   "tags": [
+    "authority"
+   ],
+   "covers": [
+    "empty-refused-unavailable",
+    "atomicity"
+   ],
+   "description": "a write against an unreachable authority is Unavailable and nothing is applied",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "outage",
+     "reason": "unreachable"
+    },
+    {
+     "op": "apply",
+     "as": "erik",
+     "action": "catalog.AddUseCase",
+     "inputs": {
+      "code": "uc-9",
+      "name": "N"
+     },
+     "expect": {
+      "error": "Unavailable",
+      "reason": "unreachable"
+     }
+    },
+    {
+     "op": "import",
+     "as": "erik",
+     "load_id": "L",
+     "records": [],
+     "expect": {
+      "error": "Unavailable",
+      "reason": "unreachable"
+     }
+    },
+    {
+     "op": "outage",
+     "reason": null
+    },
+    {
+     "op": "query",
+     "as": "rita",
+     "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'uc-9'",
+     "expect": {
+      "rows": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "freshness.status-states-availability",
+   "tags": [
+    "authority",
+    "replica"
+   ],
+   "covers": [
+    "position-and-lag"
+   ],
+   "description": "status says whether the backend is available and why not",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "status",
+     "expect": {
+      "available": true
+     }
+    },
+    {
+     "op": "outage",
+     "reason": "unsupported_version"
+    },
+    {
+     "op": "status",
+     "expect": {
+      "available": false,
+      "reason": "unsupported_version"
+     }
+    }
+   ]
+  },
+  {
+   "id": "freshness.replica-status-states-its-position",
+   "tags": [
+    "replica"
+   ],
+   "covers": [
+    "position-and-lag"
+   ],
+   "description": "a replica states the position it reflects in status",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "status",
+     "expect": {
+      "available": true,
+      "has_position": true
+     }
+    },
+    {
+     "op": "outage",
+     "reason": "unreachable"
+    },
+    {
+     "op": "status",
+     "expect": {
+      "available": false,
+      "reason": "unreachable",
+      "has_position": false
+     }
+    }
+   ]
+  },
+  {
+   "id": "freshness.unissued-token-is-invalid",
+   "tags": [
+    "replica"
+   ],
+   "covers": [
+    "at-least"
+   ],
+   "description": "a token the authority never issued, or that is not a token, is invalid, never \"not yet reached\"",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "reached",
+     "token": "$foreign",
+     "expect": {
+      "error": "Invalid"
+     }
+    },
+    {
+     "op": "reached",
+     "token": "garbage",
+     "expect": {
+      "error": "Invalid"
+     }
+    }
+   ]
+  },
+  {
+   "id": "freshness.replica-catches-up-to-a-token",
+   "tags": [
+    "replica"
+   ],
+   "covers": [
+    "at-least",
+    "position-and-lag"
+   ],
+   "description": "a replica has reached a receipt's token only once its feed carried the write",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "authority_write",
+     "as": "erik",
+     "action": "catalog.AddUseCase",
+     "inputs": {
+      "code": "uc-9",
+      "name": "N"
+     },
+     "expect": {
+      "ok": "written"
+     },
+     "save": {
+      "token": "t1"
+     }
+    },
+    {
+     "op": "reached",
+     "token": "$t1",
+     "expect": {
+      "value": false
+     }
+    },
+    {
+     "op": "query",
+     "as": "rita",
+     "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'uc-9'",
+     "expect": {
+      "rows": []
+     }
+    },
+    {
+     "op": "sync"
+    },
+    {
+     "op": "reached",
+     "token": "$t1",
+     "expect": {
+      "value": true
+     }
+    },
+    {
+     "op": "query",
+     "as": "rita",
+     "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'uc-9'",
+     "expect": {
+      "rows": [
+       {
+        "code": "uc-9"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "freshness.authority-has-reached-its-own-tokens",
+   "tags": [
+    "authority"
+   ],
+   "covers": [
+    "at-least",
+    "latest-from-authority"
+   ],
+   "description": "the authority has reached every token it issued, and the write is visible",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "apply",
+     "as": "erik",
+     "action": "catalog.AddUseCase",
+     "inputs": {
+      "code": "uc-9",
+      "name": "N"
+     },
+     "expect": {
+      "receipt": {
+       "created": 1
+      }
+     },
+     "save": {
+      "token": "t1"
+     }
+    },
+    {
+     "op": "reached",
+     "token": "$t1",
+     "expect": {
+      "value": true
+     }
+    },
+    {
+     "op": "query",
+     "as": "rita",
+     "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'uc-9'",
+     "expect": {
+      "rows": [
+       {
+        "code": "uc-9"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "describe.capabilities-by-kind",
+   "tags": [
+    "authority",
+    "replica"
+   ],
+   "covers": [
+    "unsupported-capabilities",
+    "latest-from-authority"
+   ],
+   "description": "an authority declares mutable types, a replica read-only ones",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "describe",
+     "expect": {
+      "kind": "$kind",
+      "capabilities": {
+       "catalog.UseCase": {
+        "read": true,
+        "mutable": "$mutable"
+       }
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "replica.refuses-every-change",
+   "tags": [
+    "replica"
+   ],
+   "covers": [
+    "replica-read-only"
+   ],
+   "description": "a replica raises Unsupported for apply, apply_batch, import, register and does not take attach from a reader",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "apply",
+     "as": "erik",
+     "action": "catalog.AddUseCase",
+     "inputs": {
+      "code": "x",
+      "name": "N"
+     },
+     "expect": {
+      "error": "Unsupported"
+     }
+    },
+    {
+     "op": "apply_batch",
+     "as": "erik",
+     "action": "catalog.AddUseCase",
+     "atomic": false,
+     "items": [
+      {
+       "code": "x",
+       "name": "N"
+      }
+     ],
+     "expect": {
+      "error": "Unsupported"
+     }
+    },
+    {
+     "op": "import",
+     "as": "erik",
+     "records": [],
+     "load_id": "L",
+     "expect": {
+      "error": "Unsupported"
+     }
+    },
+    {
+     "op": "register",
+     "as": "erik",
+     "expect": {
+      "error": "Unsupported"
+     }
+    },
+    {
+     "op": "attach",
+     "as": "rita",
+     "expect": {
+      "error": "Refused"
+     }
+    }
+   ]
+  },
+  {
+   "id": "authority.registers-for-writers-only-and-never-attaches",
+   "tags": [
+    "authority"
+   ],
+   "covers": [
+    "registry"
+   ],
+   "description": "registering the held module changes nothing; a reader may not; an authority is not attached to",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "register",
+     "as": "erik",
+     "expect": {
+      "changed": false
+     }
+    },
+    {
+     "op": "register",
+     "as": "rita",
+     "expect": {
+      "error": "Refused"
+     }
+    },
+    {
+     "op": "attach",
+     "as": "erik",
+     "expect": {
+      "error": "Unsupported"
+     }
+    }
+   ]
+  },
+  {
+   "id": "action.applies-atomically-and-reads-back",
+   "tags": [
+    "authority"
+   ],
+   "covers": [
+    "atomicity",
+    "receipt"
+   ],
+   "description": "an action's effects apply as one unit; the receipt counts them and the read side sees them",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "apply",
+     "as": "erik",
+     "action": "catalog.AddSolution",
+     "inputs": {
+      "code": "sol-2",
+      "name": "S",
+      "useCase": "uc-2"
+     },
+     "expect": {
+      "receipt": {
+       "created": 1,
+       "linked": 1,
+       "replayed": false
+      },
+      "refs": [
+       {
+        "key": "sol-2",
+        "version": 1
+       }
+      ]
+     },
+     "save": {
+      "token": "t1"
+     }
+    },
+    {
+     "op": "reached",
+     "token": "$t1",
+     "expect": {
+      "value": true
+     }
+    },
+    {
+     "op": "query",
+     "as": "rita",
+     "sql": "SELECT s.* FROM catalog.Solution s WHERE s.code = 'sol-2'",
+     "expect": {
+      "rows": [
+       {
+        "addresses": [
+         "uc-2"
+        ],
+        "_created_by": "erik",
+        "_version": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "action.failed-precondition-changes-nothing",
+   "tags": [
+    "authority"
+   ],
+   "covers": [
+    "atomicity",
+    "refused-changes-nothing"
+   ],
+   "description": "every failed precondition is listed and nothing is applied",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "apply",
+     "as": "erik",
+     "action": "catalog.AddSolution",
+     "inputs": {
+      "code": "sol-2",
+      "name": "S",
+      "useCase": "nope"
+     },
+     "expect": {
+      "error": "PreconditionFailed",
+      "failure_ids": [
+       "use_case_exists"
+      ]
+     }
+    },
+    {
+     "op": "query",
+     "as": "erik",
+     "sql": "SELECT s.code FROM catalog.Solution s",
+     "expect": {
+      "row_count": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "action.conflict-rolls-back-the-unit",
+   "tags": [
+    "authority"
+   ],
+   "covers": [
+    "atomicity",
+    "refused-changes-nothing"
+   ],
+   "description": "a create on a held key is a Conflict and the unit changes nothing",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "apply",
+     "as": "erik",
+     "action": "catalog.AddSolution",
+     "inputs": {
+      "code": "sol-1",
+      "name": "S",
+      "useCase": "uc-2"
+     },
+     "expect": {
+      "error": "Conflict",
+      "reason": "exists"
+     }
+    },
+    {
+     "op": "query",
+     "as": "rita",
+     "sql": "SELECT s.* FROM catalog.Solution s WHERE s.code = 'sol-1'",
+     "expect": {
+      "rows": [
+       {
+        "addresses": [
+         "uc-1"
+        ],
+        "_version": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "action.update-bumps-the-version-once",
+   "tags": [
+    "authority"
+   ],
+   "covers": [
+    "receipt",
+    "attribution"
+   ],
+   "description": "an update is attributed to the caller and bumps the version",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "apply",
+     "as": "wes",
+     "action": "catalog.CorrectSolution",
+     "inputs": {
+      "solution": "sol-1",
+      "level": "full"
+     },
+     "expect": {
+      "receipt": {
+       "updated": 1
+      },
+      "refs": [
+       {
+        "key": "sol-1",
+        "version": 2
+       }
+      ]
+     }
+    },
+    {
+     "op": "query",
+     "as": "rita",
+     "sql": "SELECT s.* FROM catalog.Solution s WHERE s.code = 'sol-1'",
+     "expect": {
+      "rows": [
+       {
+        "coverageLevel": "full",
+        "_version": 2,
+        "_updated_by": "wes",
+        "_created_by": "erik"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "action.read-only-principal-is-refused",
+   "tags": [
+    "authority"
+   ],
+   "covers": [
+    "refused-changes-nothing",
+    "tokens"
+   ],
+   "description": "a principal without write access is Refused and nothing changes",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "apply",
+     "as": "rita",
+     "action": "catalog.AddUseCase",
+     "inputs": {
+      "code": "x",
+      "name": "N"
+     },
+     "expect": {
+      "error": "Refused"
+     }
+    },
+    {
+     "op": "query",
+     "as": "rita",
+     "sql": "SELECT u.code FROM catalog.UseCase u",
+     "expect": {
+      "row_count": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "action.anothers-token-cannot-write",
+   "tags": [
+    "authority"
+   ],
+   "covers": [
+    "tokens",
+    "refused-changes-nothing"
+   ],
+   "description": "a write made with another person's token is refused",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "apply",
+     "as": "rita@erik",
+     "action": "catalog.AddUseCase",
+     "inputs": {
+      "code": "x",
+      "name": "N"
+     },
+     "expect": {
+      "error": "Refused"
+     }
+    },
+    {
+     "op": "query",
+     "as": "rita",
+     "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'x'",
+     "expect": {
+      "rows": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "action.idempotent-retry-returns-the-original",
+   "tags": [
+    "authority"
+   ],
+   "covers": [
+    "idempotency"
+   ],
+   "description": "the same key and inputs return the original receipt, replayed, applying nothing",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "apply",
+     "as": "erik",
+     "action": "catalog.AddUseCase",
+     "inputs": {
+      "code": "uc-9",
+      "name": "N"
+     },
+     "expect": {
+      "receipt": {
+       "replayed": false
+      }
+     },
+     "key": "k1",
+     "save": {
+      "token": "t1"
+     }
+    },
+    {
+     "op": "apply",
+     "as": "erik",
+     "action": "catalog.AddUseCase",
+     "inputs": {
+      "code": "uc-9",
+      "name": "N"
+     },
+     "expect": {
+      "receipt": {
+       "replayed": true,
+       "token_is": "$t1"
+      }
+     },
+     "key": "k1"
+    },
+    {
+     "op": "query",
+     "as": "rita",
+     "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'uc-9'",
+     "expect": {
+      "row_count": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "action.key-reused-with-other-inputs-conflicts",
+   "tags": [
+    "authority"
+   ],
+   "covers": [
+    "idempotency",
+    "refused-changes-nothing"
+   ],
+   "description": "the same key with different inputs is a Conflict and applies nothing",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "apply",
+     "as": "erik",
+     "action": "catalog.AddUseCase",
+     "inputs": {
+      "code": "uc-9",
+      "name": "N"
+     },
+     "expect": {
+      "ok": "receipt"
+     },
+     "key": "k1"
+    },
+    {
+     "op": "apply",
+     "as": "erik",
+     "action": "catalog.AddUseCase",
+     "inputs": {
+      "code": "uc-8",
+      "name": "N"
+     },
+     "expect": {
+      "error": "Conflict",
+      "reason": "idempotency_key_reused"
+     },
+     "key": "k1"
+    },
+    {
+     "op": "query",
+     "as": "rita",
+     "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'uc-8'",
+     "expect": {
+      "rows": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "action.dry-run-writes-nothing-and-keeps-the-key",
+   "tags": [
+    "authority"
+   ],
+   "covers": [
+    "dry-run",
+    "idempotency"
+   ],
+   "description": "validate reports the resolved effects, writes nothing, and does not use up the key",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "apply",
+     "as": "erik",
+     "action": "catalog.AddSolution",
+     "inputs": {
+      "code": "sol-2",
+      "name": "S",
+      "useCase": "uc-2"
+     },
+     "expect": {
+      "validation": {
+       "ok": true,
+       "effects": [
+        "Create",
+        "Link"
+       ],
+       "replay": false
+      }
+     },
+     "dry_run": true,
+     "key": "k1"
+    },
+    {
+     "op": "apply",
+     "as": "erik",
+     "action": "catalog.AddSolution",
+     "inputs": {
+      "code": "sol-2",
+      "name": "S",
+      "useCase": "nope"
+     },
+     "expect": {
+      "validation": {
+       "ok": false,
+       "failure_ids": [
+        "use_case_exists"
+       ]
+      }
+     },
+     "dry_run": true
+    },
+    {
+     "op": "query",
+     "as": "rita",
+     "sql": "SELECT s.code FROM catalog.Solution s",
+     "expect": {
+      "row_count": 1
+     }
+    },
+    {
+     "op": "apply",
+     "as": "erik",
+     "action": "catalog.AddSolution",
+     "inputs": {
+      "code": "sol-2",
+      "name": "S",
+      "useCase": "uc-2"
+     },
+     "expect": {
+      "receipt": {
+       "created": 1,
+       "replayed": false
+      }
+     },
+     "key": "k1"
+    }
+   ]
+  },
+  {
+   "id": "action.deleted-keys-stay-deleted",
+   "tags": [
+    "authority"
+   ],
+   "covers": [
+    "import",
+    "refused-changes-nothing"
+   ],
+   "description": "after a delete, the key cannot be created again",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "apply",
+     "as": "erik",
+     "action": "catalog.RetireUseCase",
+     "inputs": {
+      "useCase": "uc-2"
+     },
+     "expect": {
+      "receipt": {
+       "deleted": 1
+      }
+     }
+    },
+    {
+     "op": "query",
+     "as": "rita",
+     "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'uc-2'",
+     "expect": {
+      "rows": []
+     }
+    },
+    {
+     "op": "apply",
+     "as": "erik",
+     "action": "catalog.AddUseCase",
+     "inputs": {
+      "code": "uc-2",
+      "name": "N"
+     },
+     "expect": {
+      "error": "Conflict",
+      "reason": "deleted"
+     }
+    },
+    {
+     "op": "query",
+     "as": "rita",
+     "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'uc-2'",
+     "expect": {
+      "rows": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "action.atomic-batch-is-all-or-nothing",
+   "tags": [
+    "authority"
+   ],
+   "covers": [
+    "bulk-changes",
+    "atomicity",
+    "idempotency"
+   ],
+   "description": "an atomic batch applies as one group with one token, or not at all; a repeat with its key replays",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "apply_batch",
+     "as": "erik",
+     "action": "catalog.AddUseCase",
+     "atomic": true,
+     "key": "ab",
+     "items": [
+      {
+       "code": "b1",
+       "name": "B"
+      },
+      {
+       "code": "b2",
+       "name": "B"
+      }
+     ],
+     "expect": {
+      "batch": {
+       "succeeded": 2,
+       "failed": 0,
+       "one_token": true
+      }
+     }
+    },
+    {
+     "op": "apply_batch",
+     "as": "erik",
+     "action": "catalog.AddUseCase",
+     "atomic": true,
+     "key": "ab",
+     "items": [
+      {
+       "code": "b1",
+       "name": "B"
+      },
+      {
+       "code": "b2",
+       "name": "B"
+      }
+     ],
+     "expect": {
+      "batch": {
+       "succeeded": 2,
+       "replayed": [
+        0,
+        1
+       ]
+      }
+     }
+    },
+    {
+     "op": "apply_batch",
+     "as": "erik",
+     "action": "catalog.AddUseCase",
+     "atomic": true,
+     "items": [
+      {
+       "code": "b3",
+       "name": "B"
+      },
+      {
+       "code": "b1",
+       "name": "dup"
+      }
+     ],
+     "expect": {
+      "error": "PreconditionFailed",
+      "failure_ids": [
+       "fresh"
+      ]
+     }
+    },
+    {
+     "op": "query",
+     "as": "rita",
+     "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'b3'",
+     "expect": {
+      "rows": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "action.independent-batch-reports-each-item",
+   "tags": [
+    "authority"
+   ],
+   "covers": [
+    "bulk-changes",
+    "idempotency"
+   ],
+   "description": "an independent batch applies each item as its own group and says which refused; stop_on_error stops",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "apply_batch",
+     "as": "erik",
+     "action": "catalog.AddUseCase",
+     "atomic": false,
+     "key": "bk",
+     "items": [
+      {
+       "code": "b1",
+       "name": "B"
+      },
+      {
+       "code": "uc-1",
+       "name": "dup"
+      },
+      {
+       "code": "b2",
+       "name": "B"
+      }
+     ],
+     "expect": {
+      "batch": {
+       "succeeded": 2,
+       "failed": 1,
+       "refusals": {
+        "1": "PreconditionFailed"
+       }
+      }
+     }
+    },
+    {
+     "op": "apply_batch",
+     "as": "erik",
+     "action": "catalog.AddUseCase",
+     "atomic": false,
+     "key": "bk",
+     "items": [
+      {
+       "code": "b1",
+       "name": "B"
+      },
+      {
+       "code": "uc-1",
+       "name": "dup"
+      },
+      {
+       "code": "b2",
+       "name": "B"
+      }
+     ],
+     "expect": {
+      "batch": {
+       "succeeded": 2,
+       "failed": 1,
+       "replayed": [
+        0,
+        2
+       ]
+      }
+     }
+    },
+    {
+     "op": "apply_batch",
+     "as": "erik",
+     "action": "catalog.AddUseCase",
+     "atomic": false,
+     "stop_on_error": true,
+     "items": [
+      {
+       "code": "uc-1",
+       "name": "dup"
+      },
+      {
+       "code": "b9",
+       "name": "B"
+      }
+     ],
+     "expect": {
+      "batch": {
+       "items": 1,
+       "failed": 1
+      }
+     }
+    },
+    {
+     "op": "query",
+     "as": "rita",
+     "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'b9'",
+     "expect": {
+      "rows": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "action.batch-shape-and-access",
+   "tags": [
+    "authority"
+   ],
+   "covers": [
+    "bulk-changes",
+    "refused-changes-nothing"
+   ],
+   "description": "a batch holds 1 to 100 items; a reader's batch is refused and changes nothing",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "apply_batch",
+     "as": "erik",
+     "action": "catalog.AddUseCase",
+     "atomic": false,
+     "items": [],
+     "expect": {
+      "error": "Invalid",
+      "code": "bound"
+     }
+    },
+    {
+     "op": "apply_batch",
+     "as": "erik",
+     "action": "catalog.AddUseCase",
+     "atomic": false,
+     "items": [
+      {
+       "code": "x0",
+       "name": "x"
+      },
+      {
+       "code": "x1",
+       "name": "x"
+      },
+      {
+       "code": "x2",
+       "name": "x"
+      },
+      {
+       "code": "x3",
+       "name": "x"
+      },
+      {
+       "code": "x4",
+       "name": "x"
+      },
+      {
+       "code": "x5",
+       "name": "x"
+      },
+      {
+       "code": "x6",
+       "name": "x"
+      },
+      {
+       "code": "x7",
+       "name": "x"
+      },
+      {
+       "code": "x8",
+       "name": "x"
+      },
+      {
+       "code": "x9",
+       "name": "x"
+      },
+      {
+       "code": "x10",
+       "name": "x"
+      },
+      {
+       "code": "x11",
+       "name": "x"
+      },
+      {
+       "code": "x12",
+       "name": "x"
+      },
+      {
+       "code": "x13",
+       "name": "x"
+      },
+      {
+       "code": "x14",
+       "name": "x"
+      },
+      {
+       "code": "x15",
+       "name": "x"
+      },
+      {
+       "code": "x16",
+       "name": "x"
+      },
+      {
+       "code": "x17",
+       "name": "x"
+      },
+      {
+       "code": "x18",
+       "name": "x"
+      },
+      {
+       "code": "x19",
+       "name": "x"
+      },
+      {
+       "code": "x20",
+       "name": "x"
+      },
+      {
+       "code": "x21",
+       "name": "x"
+      },
+      {
+       "code": "x22",
+       "name": "x"
+      },
+      {
+       "code": "x23",
+       "name": "x"
+      },
+      {
+       "code": "x24",
+       "name": "x"
+      },
+      {
+       "code": "x25",
+       "name": "x"
+      },
+      {
+       "code": "x26",
+       "name": "x"
+      },
+      {
+       "code": "x27",
+       "name": "x"
+      },
+      {
+       "code": "x28",
+       "name": "x"
+      },
+      {
+       "code": "x29",
+       "name": "x"
+      },
+      {
+       "code": "x30",
+       "name": "x"
+      },
+      {
+       "code": "x31",
+       "name": "x"
+      },
+      {
+       "code": "x32",
+       "name": "x"
+      },
+      {
+       "code": "x33",
+       "name": "x"
+      },
+      {
+       "code": "x34",
+       "name": "x"
+      },
+      {
+       "code": "x35",
+       "name": "x"
+      },
+      {
+       "code": "x36",
+       "name": "x"
+      },
+      {
+       "code": "x37",
+       "name": "x"
+      },
+      {
+       "code": "x38",
+       "name": "x"
+      },
+      {
+       "code": "x39",
+       "name": "x"
+      },
+      {
+       "code": "x40",
+       "name": "x"
+      },
+      {
+       "code": "x41",
+       "name": "x"
+      },
+      {
+       "code": "x42",
+       "name": "x"
+      },
+      {
+       "code": "x43",
+       "name": "x"
+      },
+      {
+       "code": "x44",
+       "name": "x"
+      },
+      {
+       "code": "x45",
+       "name": "x"
+      },
+      {
+       "code": "x46",
+       "name": "x"
+      },
+      {
+       "code": "x47",
+       "name": "x"
+      },
+      {
+       "code": "x48",
+       "name": "x"
+      },
+      {
+       "code": "x49",
+       "name": "x"
+      },
+      {
+       "code": "x50",
+       "name": "x"
+      },
+      {
+       "code": "x51",
+       "name": "x"
+      },
+      {
+       "code": "x52",
+       "name": "x"
+      },
+      {
+       "code": "x53",
+       "name": "x"
+      },
+      {
+       "code": "x54",
+       "name": "x"
+      },
+      {
+       "code": "x55",
+       "name": "x"
+      },
+      {
+       "code": "x56",
+       "name": "x"
+      },
+      {
+       "code": "x57",
+       "name": "x"
+      },
+      {
+       "code": "x58",
+       "name": "x"
+      },
+      {
+       "code": "x59",
+       "name": "x"
+      },
+      {
+       "code": "x60",
+       "name": "x"
+      },
+      {
+       "code": "x61",
+       "name": "x"
+      },
+      {
+       "code": "x62",
+       "name": "x"
+      },
+      {
+       "code": "x63",
+       "name": "x"
+      },
+      {
+       "code": "x64",
+       "name": "x"
+      },
+      {
+       "code": "x65",
+       "name": "x"
+      },
+      {
+       "code": "x66",
+       "name": "x"
+      },
+      {
+       "code": "x67",
+       "name": "x"
+      },
+      {
+       "code": "x68",
+       "name": "x"
+      },
+      {
+       "code": "x69",
+       "name": "x"
+      },
+      {
+       "code": "x70",
+       "name": "x"
+      },
+      {
+       "code": "x71",
+       "name": "x"
+      },
+      {
+       "code": "x72",
+       "name": "x"
+      },
+      {
+       "code": "x73",
+       "name": "x"
+      },
+      {
+       "code": "x74",
+       "name": "x"
+      },
+      {
+       "code": "x75",
+       "name": "x"
+      },
+      {
+       "code": "x76",
+       "name": "x"
+      },
+      {
+       "code": "x77",
+       "name": "x"
+      },
+      {
+       "code": "x78",
+       "name": "x"
+      },
+      {
+       "code": "x79",
+       "name": "x"
+      },
+      {
+       "code": "x80",
+       "name": "x"
+      },
+      {
+       "code": "x81",
+       "name": "x"
+      },
+      {
+       "code": "x82",
+       "name": "x"
+      },
+      {
+       "code": "x83",
+       "name": "x"
+      },
+      {
+       "code": "x84",
+       "name": "x"
+      },
+      {
+       "code": "x85",
+       "name": "x"
+      },
+      {
+       "code": "x86",
+       "name": "x"
+      },
+      {
+       "code": "x87",
+       "name": "x"
+      },
+      {
+       "code": "x88",
+       "name": "x"
+      },
+      {
+       "code": "x89",
+       "name": "x"
+      },
+      {
+       "code": "x90",
+       "name": "x"
+      },
+      {
+       "code": "x91",
+       "name": "x"
+      },
+      {
+       "code": "x92",
+       "name": "x"
+      },
+      {
+       "code": "x93",
+       "name": "x"
+      },
+      {
+       "code": "x94",
+       "name": "x"
+      },
+      {
+       "code": "x95",
+       "name": "x"
+      },
+      {
+       "code": "x96",
+       "name": "x"
+      },
+      {
+       "code": "x97",
+       "name": "x"
+      },
+      {
+       "code": "x98",
+       "name": "x"
+      },
+      {
+       "code": "x99",
+       "name": "x"
+      },
+      {
+       "code": "x100",
+       "name": "x"
+      }
+     ],
+     "expect": {
+      "error": "Invalid",
+      "code": "bound"
+     }
+    },
+    {
+     "op": "apply_batch",
+     "as": "rita",
+     "action": "catalog.AddUseCase",
+     "atomic": false,
+     "items": [
+      {
+       "code": "x",
+       "name": "x"
+      }
+     ],
+     "expect": {
+      "error": "Refused"
+     }
+    },
+    {
+     "op": "query",
+     "as": "rita",
+     "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'x'",
+     "expect": {
+      "rows": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "import.identity-skip-and-provenance",
+   "tags": [
+    "authority"
+   ],
+   "covers": [
+    "import"
+   ],
+   "description": "an import creates what is new, skips what is held and leaves it alone, rejects what fails, and records the load",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "import",
+     "as": "erik",
+     "load_id": "L1",
+     "records": [
+      {
+       "type": "UseCase",
+       "key": "uc-7",
+       "properties": {
+        "name": "Old"
+       },
+       "original_author": "ann",
+       "original_at": null
+      },
+      {
+       "type": "UseCase",
+       "key": "uc-1",
+       "properties": {
+        "name": "overwritten?"
+       }
+      },
+      {
+       "type": "UseCase",
+       "key": "uc-6",
+       "properties": {}
+      },
+      {
+       "relationship": "addresses",
+       "source": "ghost",
+       "target": "uc-7"
+      }
+     ],
+     "expect": {
+      "import": {
+       "created": 1,
+       "skipped": 1,
+       "rejected": 2,
+       "rejected_kinds": [
+        "entity",
+        "relationship"
+       ]
+      }
+     }
+    },
+    {
+     "op": "query",
+     "as": "rita",
+     "sql": "SELECT u.* FROM catalog.UseCase u WHERE u.code = 'uc-7'",
+     "expect": {
+      "rows": [
+       {
+        "_created_by": "erik",
+        "_original_author": "ann",
+        "_load_id": "L1"
+       }
+      ]
+     }
+    },
+    {
+     "op": "query",
+     "as": "rita",
+     "sql": "SELECT u.* FROM catalog.UseCase u WHERE u.code = 'uc-1'",
+     "expect": {
+      "rows": [
+       {
+        "name": "Lease abstraction",
+        "_version": 1
+       }
+      ]
+     }
+    },
+    {
+     "op": "import",
+     "as": "erik",
+     "load_id": "L1",
+     "records": [
+      {
+       "type": "UseCase",
+       "key": "uc-7",
+       "properties": {
+        "name": "Old"
+       }
+      }
+     ],
+     "expect": {
+      "import": {
+       "created": 0,
+       "skipped": 1,
+       "rejected": 0
+      }
+     }
+    },
+    {
+     "op": "import",
+     "as": "erik",
+     "load_id": "L1",
+     "records": [
+      {
+       "type": "UseCase",
+       "key": "uc-7",
+       "properties": {
+        "name": "Old"
+       }
+      }
+     ],
+     "expect": {
+      "import": {
+       "created": 0,
+       "skipped": 1,
+       "rejected": 0
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "import.entities-before-relationships",
+   "tags": [
+    "authority"
+   ],
+   "covers": [
+    "import"
+   ],
+   "description": "entities are applied before relationship instances across the whole input",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "import",
+     "as": "erik",
+     "load_id": "L2",
+     "records": [
+      {
+       "relationship": "addresses",
+       "source": "sol-9",
+       "target": "uc-1"
+      },
+      {
+       "type": "Solution",
+       "key": "sol-9",
+       "properties": {
+        "name": "late"
+       }
+      }
+     ],
+     "expect": {
+      "import": {
+       "created": 2,
+       "skipped": 0,
+       "rejected": 0
+      }
+     }
+    },
+    {
+     "op": "query",
+     "as": "rita",
+     "sql": "SELECT s.* FROM catalog.Solution s WHERE s.code = 'sol-9'",
+     "expect": {
+      "rows": [
+       {
+        "addresses": [
+         "uc-1"
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "import.administrative-principals-only",
+   "tags": [
+    "authority"
+   ],
+   "covers": [
+    "import",
+    "tokens"
+   ],
+   "description": "only an administrative principal may import, and a load is its caller's own",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "import",
+     "as": "wes",
+     "load_id": "L",
+     "records": [],
+     "expect": {
+      "error": "Refused"
+     }
+    },
+    {
+     "op": "import",
+     "as": "rita",
+     "load_id": "L",
+     "records": [],
+     "expect": {
+      "error": "Refused"
+     }
+    },
+    {
+     "op": "import",
+     "as": "anon",
+     "load_id": "L",
+     "records": [],
+     "expect": {
+      "error": "Refused"
+     }
+    },
+    {
+     "op": "import",
+     "as": "erik",
+     "load_id": "L",
+     "initiated_by": "someone-else",
+     "records": [],
+     "expect": {
+      "error": "Invalid",
+      "code": "attribution"
+     }
+    }
+   ]
+  },
+  {
+   "id": "import.deleted-stays-deleted",
+   "tags": [
+    "authority"
+   ],
+   "covers": [
+    "import"
+   ],
+   "description": "an import never brings back an entity an action deleted",
+   "fixture": "basic",
+   "steps": [
+    {
+     "op": "apply",
+     "as": "erik",
+     "action": "catalog.RetireUseCase",
+     "inputs": {
+      "useCase": "uc-2"
+     },
+     "expect": {
+      "receipt": {
+       "deleted": 1
+      }
+     }
+    },
+    {
+     "op": "query",
+     "as": "rita",
+     "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'uc-2'",
+     "expect": {
+      "rows": []
+     }
+    },
+    {
+     "op": "import",
+     "as": "erik",
+     "load_id": "L",
+     "records": [
+      {
+       "type": "UseCase",
+       "key": "uc-2",
+       "properties": {
+        "name": "back"
+       }
+      }
+     ],
+     "expect": {
+      "import": {
+       "created": 0,
+       "skipped": 1,
+       "rejected": 0
+      }
+     }
+    },
+    {
+     "op": "query",
+     "as": "rita",
+     "sql": "SELECT u.code FROM catalog.UseCase u WHERE u.code = 'uc-2'",
+     "expect": {
+      "rows": []
+     }
+    }
+   ]
+  }
+ ]
+}

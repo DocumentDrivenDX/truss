@@ -1,0 +1,162 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:property-home:0.1.0",
+  "title": "Proposed exact JSONB property home definition",
+  "description": "Decoded homeDefinition content for a registered props profile. Shape does not prove physical/source binding, native types, ownership or supported value semantics. No arbitrary SQL expressions.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-property-home/0.1.0"
+    },
+    "layoutInventory": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "recordKind": {
+      "enum": [
+        "object",
+        "edge"
+      ]
+    },
+    "relationPhysicalIdentity": {
+      "type": "string",
+      "minLength": 1
+    },
+    "propsColumnPhysicalIdentity": {
+      "type": "string",
+      "minLength": 1
+    },
+    "discriminatorColumnPhysicalIdentity": {
+      "type": "string",
+      "minLength": 1
+    },
+    "relationName": {
+      "enum": [
+        "object",
+        "edge"
+      ]
+    },
+    "propsColumnName": {
+      "const": "props"
+    },
+    "discriminatorColumnName": {
+      "enum": [
+        "type_id",
+        "rel_type_id"
+      ]
+    },
+    "ownerCatalogId": {
+      "type": "string",
+      "pattern": "^(0|-?[1-9][0-9]*)$",
+      "maxLength": 11
+    },
+    "propertyCatalogId": {
+      "type": "string",
+      "pattern": "^(0|-?[1-9][0-9]*)$",
+      "maxLength": 11
+    },
+    "memberName": {
+      "type": "string",
+      "pattern": "^(0|-?[1-9][0-9]*)$",
+      "maxLength": 11
+    },
+    "accessor": {
+      "const": "jsonb-top-level-member"
+    },
+    "presenceProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "valueProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "edgeAssociationProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "edgeAssociationDefinition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "layoutInventory",
+    "recordKind",
+    "relationPhysicalIdentity",
+    "propsColumnPhysicalIdentity",
+    "discriminatorColumnPhysicalIdentity",
+    "relationName",
+    "propsColumnName",
+    "discriminatorColumnName",
+    "ownerCatalogId",
+    "propertyCatalogId",
+    "memberName",
+    "accessor",
+    "presenceProfile",
+    "valueProfile"
+  ],
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "recordKind": {
+            "const": "object"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "relationName": {
+            "const": "object"
+          },
+          "discriminatorColumnName": {
+            "const": "type_id"
+          }
+        },
+        "not": {
+          "anyOf": [
+            {
+              "required": [
+                "edgeAssociationProfile"
+              ],
+              "properties": {
+                "edgeAssociationProfile": {}
+              }
+            },
+            {
+              "required": [
+                "edgeAssociationDefinition"
+              ],
+              "properties": {
+                "edgeAssociationDefinition": {}
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "recordKind": {
+            "const": "edge"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "relationName": {
+            "const": "edge"
+          },
+          "discriminatorColumnName": {
+            "const": "rel_type_id"
+          },
+          "edgeAssociationProfile": {},
+          "edgeAssociationDefinition": {}
+        },
+        "required": [
+          "edgeAssociationProfile",
+          "edgeAssociationDefinition"
+        ]
+      }
+    }
+  ]
+}

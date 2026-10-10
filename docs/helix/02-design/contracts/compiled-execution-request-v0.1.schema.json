@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:compiled-execution-request:0.1.0",
+  "title": "Draft Truss compiled execution request",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-compiled-execution/0.1.0"
+    },
+    "artifact": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "bridgeProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "artifact",
+    "bridgeProfile"
+  ],
+  "additionalProperties": false
+}

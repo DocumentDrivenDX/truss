@@ -1,0 +1,110 @@
+{
+  "scope": "Original UMF PostgreSQL extension archive/reload/export; not core structural declaration coverage, capacity semantics or installation",
+  "ownerSource": {
+    "root": "/Users/erik/Projects/umf",
+    "commit": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+    "files": [
+      {
+        "path": "native/postgresql/runtime.ts",
+        "sha256": "a88fea4cf15c9c3c3f0ad1f0a36d8f5de42a42ce8ea9712499f609beee3ea751"
+      },
+      {
+        "path": "src/adapters/postgresql/index.ts",
+        "sha256": "7baa071d95e5f9863a4ce2bf892d87fb27cab9d8605ba4cf8887016d14ca17b4"
+      },
+      {
+        "path": "src/adapters/postgresql/declarations.ts",
+        "sha256": "e47ebd6366fee86fb8ccaf1270555bcd338957bff511f30cdcae22a088c6d8d9"
+      },
+      {
+        "path": "src/model/document.ts",
+        "sha256": "a0422042659defdea425dff8bb0618eaa4bbf125f68da16aa5ad21af0b6c282f"
+      },
+      {
+        "path": "spec/extensions/postgresql/native-ast.schema.json",
+        "sha256": "aa3d3b50bc04edbc3ab3430e113ee8710edb1c10ff5cee15d4bcc7b16d9a9039"
+      },
+      {
+        "path": "bun.lock",
+        "sha256": "98a99f7d306f7269db103bdbfafe5f9ad9ed34b02024276ad0cce45df27f5cc3"
+      }
+    ]
+  },
+  "backend": "@libpg-query/parser@17.6.10",
+  "sourcePath": "packages/postgresql/native/capacity-reservation/accounting.sql",
+  "sourceSha256": "99f2dfc4eaf0a57eeebab375698a265d2d22f092983e2aeb0f01bda6e7c06ada",
+  "artifactPath": "docs/helix/02-design/contracts/capacity-accounting-v0.1.proposal.umf.json",
+  "artifactSha256": "762cf1c575a7eac4e4da8db3a536223796a9332ca99a09c43db599bc3e1e81de",
+  "exportPath": "docs/helix/04-build/evidence/design-audit/capacity-accounting-source.owner-export.sql",
+  "exportSha256": "b50d3d2b12baeabf07d285895f6d9bef37f5d5aecfdefce2cff0bcb1840a3f9b",
+  "producerSha256": "b159da3b715070bbeff55bd8cefff44d3844a5f2f00dde8f96168316c25de8c4",
+  "sourceArchiveExact": true,
+  "reloadedExportExact": true,
+  "complete": false,
+  "declarations": 0,
+  "unhandled": [
+    {
+      "path": "/stmts/0/stmt"
+    },
+    {
+      "path": "/stmts/1/stmt"
+    },
+    {
+      "path": "/stmts/2/stmt"
+    },
+    {
+      "path": "/stmts/3/stmt"
+    },
+    {
+      "path": "/stmts/4/stmt"
+    },
+    {
+      "path": "/stmts/5/stmt"
+    }
+  ],
+  "diagnostics": [
+    {
+      "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+      "path": "",
+      "severity": "warning",
+      "message": "Raw syntax is not catalog resolution, SQL execution, permissions or server-state validation"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/0/stmt",
+      "severity": "warning",
+      "message": "Statement is retained without declaration extraction or execution"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/1/stmt",
+      "severity": "warning",
+      "message": "Statement is retained without declaration extraction or execution"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/2/stmt",
+      "severity": "warning",
+      "message": "Statement is retained without declaration extraction or execution"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/3/stmt",
+      "severity": "warning",
+      "message": "Statement is retained without declaration extraction or execution"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/4/stmt",
+      "severity": "warning",
+      "message": "Statement is retained without declaration extraction or execution"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/5/stmt",
+      "severity": "warning",
+      "message": "Statement is retained without declaration extraction or execution"
+    }
+  ],
+  "installerReady": false
+}

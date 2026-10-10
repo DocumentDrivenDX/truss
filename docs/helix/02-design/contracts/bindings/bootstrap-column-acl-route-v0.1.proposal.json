@@ -1,0 +1,94 @@
+{
+  "interfaceVersion": "truss-bootstrap-route-entry/0.1.0",
+  "routeIdentity": "pg17.column-acl.expanded-grants/0.1.0",
+  "status": "unadopted; source pins only verified; native class/cut/transport/semantic producers unqualified",
+  "nativeClass": {
+    "namespace": "pg_catalog",
+    "relation": "pg_attribute",
+    "classOid": "actual original database pg_attribute catalog identity",
+    "storageScope": "database",
+    "subobjectNumber": "original pg_class parent and signed attnum; no attribute OID"
+  },
+  "selector": "Original pg_class parent and signed attnum identify column; no pg_attribute object OID. Complete original attribute fanout includes system/dropped columns. NULL attacl expands only explicit column ACL here, never table/default privileges; actual effective column rights include separate relation context.",
+  "artifacts": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-column-acl-observation-pg17.proposal.sql",
+      "sha256": "7f3b09cd25db08d6a69c6fa569ec5a0454aa28909c6e40d12d6758f85acf3721"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-column-acl-observation-pg17.proposal.umf.json",
+      "sha256": "c64b80b76d1ed152d444086615fa3a43143d295bf70217321d72bae901b0d8ee"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/bootstrap-column-acl-observation.owner-export.sql",
+      "sha256": "f328a40200427d5e5b67179233e9d77b77c6ed4478608d1f5e269122976090fd"
+    }
+  ],
+  "parameterGrammar": {
+    "slots": [
+      1
+    ],
+    "nativeTypes": [
+      "pg_catalog.oid[]"
+    ],
+    "nativeInput": "Nonnull one-dimensional lower-bound-one array of 1..256 unique canonical nonzero original pg_class parent OIDs; no null items. Full original definition/kind/attribute inventory admitted independently."
+  },
+  "orderedColumns": [
+    "relation_oid",
+    "attribute_number",
+    "original_attribute_name",
+    "is_dropped",
+    "original_acl_is_null",
+    "original_acl_native_text",
+    "original_acl_native_dimensions",
+    "has_expanded_grant",
+    "grantor_oid",
+    "grantee_oid",
+    "privilege_type",
+    "is_grantable"
+  ],
+  "coverage": "Complete original object/attribute fanout; each requested object must be independently proven present. Empty/missing output cannot certify unsupported kind or absent column grants.",
+  "requiredKnownFields": [
+    "relation_oid",
+    "attribute_number",
+    "original_attribute_name",
+    "is_dropped",
+    "original_acl_is_null",
+    "original_acl_native_text",
+    "original_acl_native_dimensions",
+    "has_expanded_grant",
+    "grantor_oid",
+    "grantee_oid",
+    "privilege_type",
+    "is_grantable"
+  ],
+  "preservation": "Retain full exact returned row JSON text and every unknown extension member; lossless bounded selected native JSON decoder; no parse/stringify reconstruction",
+  "dependencyExtraction": {
+    "header": "Identical repeated original object/attribute identity and raw ACL/null/dimensions; kind/namespace/owner/dropped/name fields where present match complete original definitions. Original pg_class parent and signed attnum identify column; no pg_attribute object OID. Complete original attribute fanout includes system/dropped columns. NULL attacl expands only explicit column ACL here, never table/default privileges; actual effective column rights include separate relation context.",
+    "grants": "Complete nonnull grantor/grantee/privilege/grantOption for real rows; tagged PUBLIC only as grantee zero. Selected object-specific privilege grammar; preserve full grant multiset and original role correspondence.",
+    "sentinel": "Exactly one empty-expansion sentinel per object/attribute with all expanded fields NULL; no real row mixed. Unsupported relation kind is not an admitted empty expansion. Item cardinality where present is not expanded-row count.",
+    "authority": "Native object-kind defaults are distinct from current creation defaults; original effective authority, implicit owner rights and role paths remain separately admitted.",
+    "fieldClassification": {
+      "relation_oid": "original relation correlation; resolve complete parent definition",
+      "attribute_number": "original signed class-specific association; resolve complete original column identity",
+      "original_attribute_name": "exact original header/name correspondence; not sufficient column identity",
+      "is_dropped": "original native dropped-column fact; never silently filter",
+      "original_acl_is_null": "original policy-origin tag, default versus explicit; not empty/no-privilege inference",
+      "original_acl_native_text": "exact original nullable ACL text with admitted complete item meaning",
+      "original_acl_native_dimensions": "original dimensions carrier; paired with exact text/null, never inferred from expanded count",
+      "has_expanded_grant": "original grant-or-sentinel framing evidence; sentinel never a semantic grant",
+      "grantor_oid": "original nonzero shared grantor correlation on real grant; resolve policy identity; null only admitted sentinel",
+      "grantee_oid": "original shared grantee correlation or explicit PUBLIC zero tag on real grant; null only admitted sentinel",
+      "privilege_type": "exact selected native object-specific privilege on real grant; null only admitted sentinel",
+      "is_grantable": "exact native grant-option boolean on real grant; null only admitted sentinel"
+    },
+    "canonicalProcedure": "CONTRACT-008 ACL policy projection and CONTRACT-011 selected multiset normalization: original parent/owner/source tag plus complete resolved grantor/grantee/privilege/grant-option multiset; sentinel excluded only after complete coverage, raw original ACL retained"
+  },
+  "adjuncts": [
+    "complete original object/role/namespace and selected ACL/default meanings",
+    "complete effective inquiry/current-authority context"
+  ],
+  "resourceProfile": "truss-bootstrap-collector-resource/0.1.0",
+  "refusal": "Unsupported native kind/category, incomplete parent/attribute coverage, mixed sentinel/grants, inconsistent repeated headers, invalid role or resource/cut/termination refuses publication",
+  "resourceObligations": "Shared enclosing totals, complete original cut/authority and explicit pre-materialization/native-work permits; no independent per-route allowance"
+}

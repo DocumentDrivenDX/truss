@@ -1,0 +1,39 @@
+{
+  "scope": "Exact UMF source capture/reload/export only; no native uniqueness, allocator visibility/grants or installed body qualification",
+  "ownerSource": {
+    "commit": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+    "files": [
+      {
+        "path": "src/adapters/postgresql/index.ts",
+        "sha256": "7baa071d95e5f9863a4ce2bf892d87fb27cab9d8605ba4cf8887016d14ca17b4"
+      },
+      {
+        "path": "src/model/document.ts",
+        "sha256": "a0422042659defdea425dff8bb0618eaa4bbf125f68da16aa5ad21af0b6c282f"
+      },
+      {
+        "path": "native/postgresql/runtime.ts",
+        "sha256": "a88fea4cf15c9c3c3f0ad1f0a36d8f5de42a42ce8ea9712499f609beee3ea751"
+      }
+    ]
+  },
+  "backend": "@libpg-query/parser@17.6.10",
+  "results": [
+    {
+      "path": "docs/helix/02-design/contracts/key-bucket-layout-v0.1.draft.sql",
+      "sha256": "96740784b8f6ccc25c334eca80740eb6f83cd11073587667f1f80ef65906333b",
+      "modelPath": "docs/helix/02-design/contracts/key-bucket-layout-v0.1.draft.umf.json",
+      "modelSha256": "011ff87b7a9406627bb11b7dbd7884624240d89596e6d3bfc8d688afa3981cb2",
+      "sourceArchiveExact": true,
+      "reloadedExportExact": true
+    },
+    {
+      "path": "docs/helix/02-design/contracts/catalog-id-high-water-v0.1.draft.sql",
+      "sha256": "9d8538d39951d9d74dac73d741a298cbda21cbe3839b2f212b12b6545b794931",
+      "modelPath": "docs/helix/02-design/contracts/catalog-id-high-water-v0.1.draft.umf.json",
+      "modelSha256": "683cf3f5f5415a50befa0317907de96c1bb7ee15747c38616cc68d8e98835c58",
+      "sourceArchiveExact": true,
+      "reloadedExportExact": true
+    }
+  ]
+}

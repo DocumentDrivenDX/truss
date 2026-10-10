@@ -1,0 +1,64 @@
+{
+  "scope": "Existing v0.2 manifest schema correspondence; no archive/profile/native custody or semantic admission",
+  "schemaSha256": "e5399a14f2a366ee3591b2a159b21717cb432e762fb5e46fa267ffe380873d7a",
+  "vectorsSha256": "cd8dfba437b0dc0a8e7b7ac370d2dc28e654b12d0f2fb2f631c1e3b81579a855",
+  "cases": [
+    {
+      "name": "complete canonical original v0.2 shape",
+      "shapeAccepted": true,
+      "requiresSemanticAdmission": true
+    },
+    {
+      "name": "digest-excluded private tree is incomplete wire",
+      "shapeAccepted": false,
+      "requiresSemanticAdmission": false
+    },
+    {
+      "name": "foreign manifest interface version",
+      "shapeAccepted": false,
+      "requiresSemanticAdmission": false
+    },
+    {
+      "name": "host-number xid",
+      "shapeAccepted": false,
+      "requiresSemanticAdmission": false
+    },
+    {
+      "name": "missing configuration prerequisites",
+      "shapeAccepted": false,
+      "requiresSemanticAdmission": false
+    },
+    {
+      "name": "unknown outer member",
+      "shapeAccepted": false,
+      "requiresSemanticAdmission": false
+    },
+    {
+      "name": "direct artifact hash substituted for semantic digest remains shape valid",
+      "shapeAccepted": true,
+      "requiresSemanticAdmission": true
+    },
+    {
+      "name": "wrong original payload hash remains shape valid",
+      "shapeAccepted": true,
+      "requiresSemanticAdmission": true
+    },
+    {
+      "name": "MF-0.2.0 original full envelope",
+      "shapeAccepted": true,
+      "requiresSemanticAdmission": true
+    },
+    {
+      "name": "MF-0.2.0-configuration-transition original full envelope",
+      "shapeAccepted": true,
+      "requiresSemanticAdmission": true
+    },
+    {
+      "name": "MF-0.2.0-transition-revision-order original full envelope",
+      "shapeAccepted": true,
+      "requiresSemanticAdmission": true
+    }
+  ],
+  "nativeExecution": false,
+  "complete": false
+}

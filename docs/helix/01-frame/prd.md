@@ -22,11 +22,24 @@ kind: product
 
 # Product Requirements Document
 
+## Owner decisions — 2026-10-07
+
+The owner selected bounded work for toolkit and protected procedures Truss controls; arbitrary native/bypass work has separately reported database-wide guarantees. Database-enforced graph integrity remains required and every enforcement claim keeps its database/engine/none classification. No rollback-resistant universal native account or custom extension is selected.
+
+Embedded execution supports engine-owned callback transactions and adoption of caller-owned live transactions. Handles are connection/lifetime-bound, not commit-by-string-ID resources. Pending numeric object/edge IDs may be used only within their original transaction; durable external publication requires confirmed outer commit. Unknown commit remains unresolved. Network mutation consumers submit complete atomic batches in one request; no live transaction handle crosses the network, and success acknowledgment follows confirmed commit.
+
+ADR-005 durable complete-result receipts, ADR-006 exact numeric carriers with lossless JavaScript convenience, and ADR-007 reconstructable history are selected. Catalog acceptance uses a separate immutable complete-report home in the same transaction as catalog/journal effects, publishing the head only after report completion. Very short/zero local history retention is allowed subject to required durable handoff and consumer/receipt protections; history unavailable is explicit when required retained/archive evidence is absent. Exact deployment/profile selection and implementation qualification remain separate.
+
+
+## Owner decision — shipped migrations, 2026-10-09
+
+Truss ships a versioned migration system for occasional changes to its own fixed physical layout, native routines, policy installation and storage/codec protocols. Normal consumer UMF schema evolution uses catalog acceptance and does not require physical migrations. The migration system is a first-release toolkit deliverable: inspect installed version, plan supported upgrades, explicitly apply them with original-attempt recovery, and verify the resulting installation. Consumers can invoke it from deployment/migration orchestration; importing Truss or opening an application connection never applies an upgrade automatically. Supported source/target layout pairs and any downtime requirements are published with the release. Unknown drift, unsupported upgrade/downgrade or incomplete native parity prevents runtime readiness.
+
 ## Summary
 
 truss stores connected data, typed by UMF (DocumentDrivenDX's machine-readable metamodel and schema interchange fabric) schemas, in a fixed set of PostgreSQL tables. A team adds an entity type, property or relationship by publishing a UMF schema revision, never by migrating tables. Every value is kept exactly, every change is journaled in the transaction that made it, nothing the schema does not define is dropped, and for every rule truss reports whether PostgreSQL enforces it, truss enforces it, or nothing does.
 
-The users are data platform engineers who run PostgreSQL and keep evolving, connected domain data in it, and the engineers who embed or reimplement truss in another language or host. The problem is that the usual options hide integrity (JSONB), churn migrations (per-type tables), or need a second database. The approach is a fixed table layout, written down as contracts and verified by a language-neutral conformance corpus, so that more than one implementation can share one database.
+The users are data platform engineers who run PostgreSQL and keep evolving, connected domain data in it, and the engineers who embed or reimplement truss in another language or host. Truss is an embeddable storage toolkit with a TypeScript reference implementation; Weft supplies logical SQL compilation through a registered Truss backend. The problem is that the usual options hide integrity (JSONB), churn migrations (per-type tables), or need a second database. The approach is a fixed table layout, written down as contracts and verified by a language-neutral conformance corpus, so that more than one implementation can share one database.
 
 The three measures that matter first: every UMF assertion in the corpus carries a verified enforcement status; no value is dropped on import; and single-object reads, single writes and one-to-three hop traversals meet stated latency targets on the supported PostgreSQL versions.
 
@@ -58,13 +71,14 @@ Software that sits on the same database has further needs the first three do not
 | Singleton latency (proposed) | p95 read of one object by id or key at most 1 ms; p95 write of one object, with its journal rows, at most 3 ms; both on a local connection at 1,000,000 objects and 1,000 types, with prepared statements | The benchmark harness; baseline in SPIKE-003: 0.02 ms and 0.09 to 0.17 ms at 200,000 objects |
 | Type enumeration (proposed) | p95 listing of all types in the catalog at most 20 ms at 1,000 types | The benchmark harness; not yet measured |
 | Catalog independence (proposed) | Planning cost of a read does not change with the number of types: p95 plan time at 1,000 types within 2× of the figure at 10 | SPIKE-003 method; baseline: 0.02 ms for a key lookup and 0.04 ms for a one-hop query at both 10 and 1,000 types |
+| Feed freshness (proposed) | A downstream copy reflects a committed change within 10 s at p95 under normal load, and its lag is always readable | End-to-end measurement through a real publisher; the figure is the transport's and has not been measured |
 | Adoption | At least 1 production consumer outside the truss maintainers | Reported by the consumer |
 
 The proposed targets are for the owner to agree. Measured baselines come from embedded PostgreSQL 16.2 and 17.9 on a loaded development machine over a local socket (SPIKE-003), so they are indicative, not a guarantee.
 
 ### Non-Goals
 
-- truss does not define UMF semantics. It consumes UMF and never extends it.
+- truss does not define UMF semantics. It consumes the published model; Truss-owned physical policy may use a separately versioned extension without redefining core meaning (ADR-002 D12).
 - truss does not authenticate people or manage accounts. It records an asserted actor and the database role, and an optional layer lets a deployment give roles access per UMF module.
 - truss does not provide a user interface or a hosted service.
 - truss does not generate per-type tables, and does not make a document the unit of storage.
@@ -104,12 +118,12 @@ Deferred items are tracked in `docs/helix/parking-lot.md` when it exists.
 1. Traversal of one to three hops and bounded edge listing.
 2. Reads and listings that stay fast as the number of types grows.
 3. Extension points for a host: its own tables, row-level security, triggers and role grants.
-4. Operation on embedded PostgreSQL for development and test, and behind a transaction-mode pooler.
+4. A pgserver-based default PostgreSQL runtime for quick local development and testing, plus embedding on a host-supplied PostgreSQL connection.
 
 ### Nice to Have (P2)
 
 1. Declared indexes and extended statistics, within a reported index budget.
-2. A journal consumer that publishes to a warehouse.
+2. A turnkey publisher for a particular warehouse; the feed contract itself is P1 (FR-52).
 3. Typed views over the graph for tools that expect tables.
 
 ## Functional Requirements
@@ -119,6 +133,8 @@ Deferred items are tracked in `docs/helix/parking-lot.md` when it exists.
 - **FR-1** — A set of UMF documents is accepted as one catalog revision, or rejected as a whole with every reason reported; a rejected set changes nothing.
 - **FR-2** — Documents are ordered so a document comes after those it depends on, deterministically, and documents that depend on each other are accepted together.
 - **FR-3** — A relationship may name an entity type that no document in the set defines. The import policy decides: reject, create a provisional type that is reported until defined, or skip the relationship and report the loss.
+
+  This is desired product behavior, gated by an upstream-valid unresolved-reference representation. The current UMF local relationship profile rejects missing required endpoints; provisional and skip cannot override that rejection. Neither an external-reference proposal nor a synthetic local stub qualifies this requirement as supported. See CONTRACT-003 and TD-003 for the validity boundary and required owner resolution.
 - **FR-4** — A type, property, key or relationship keeps its identifier for as long as its UMF identity is unchanged, and an identifier is never reused, including after the element is retired.
 - **FR-5** — A revision that tightens or adds a rule lists every stored object that would violate it before it is accepted, and is rejected if any does.
 - **FR-6** — A revision that changes a property's type or cardinality is accepted only with a declared total transform applied in the same acceptance.
@@ -134,18 +150,21 @@ Deferred items are tracked in `docs/helix/parking-lot.md` when it exists.
 - **FR-12** — An object may hold named keys. A key value is unique within its type, is held in a way the database enforces, and is looked up by its canonical text, which is equal for equal values of the declared type.
 - **FR-13** — An edge connects two existing objects of types its relationship allows, and the database refuses any other. There is at most one edge for a relationship, a source and a target, enforced by the database even under concurrent creates. An object that still has edges cannot be deleted.
 - **FR-14** — A maximum multiplicity of one on a relationship is enforced by the database, without a per-relationship index; larger maxima are enforced in the write protocol under the parent lock.
-- **FR-15** — Every identifier of an object or an edge comes from one sequence and is never reused.
+- **FR-15** — Every object/edge identifier comes from one sequence. Committed identifiers are never reused. Precommit identifiers are transaction-scoped provisional values and must not be published as durable external identities before confirmed outer commit; rollback/crash before commit supplies no permanent reservation guarantee.
 - **FR-45** — Importing the same records again changes nothing: a record is identified by its type and primary key (an edge by its relationship and endpoints); one that is held or was deleted is skipped; and the import reports what was created, skipped and rejected. A deployment chooses whether a key an object has held stays reserved against a direct create.
 - **FR-46** — An imported record keeps the load it came from and the source's own facts (author, time, system), recorded once and never changed, apart from the actor recorded in the journal.
 
 ### Subsystem: Mutation and concurrency
 
 - **FR-16** — Every write follows one protocol in one transaction: check the catalog revision, lock the target, check the expected version, validate against the catalog and report every violation, apply the change, and write the journal.
-- **FR-17** — A catalog revision accepted while a write runs is detected, under READ COMMITTED and under REPEATABLE READ, and the write is not accepted against the old revision.
+- **FR-17** — Catalog acceptance and writes serialize through the catalog head lock under READ COMMITTED and REPEATABLE READ. If acceptance wins the lock, a writer holding the older revision is refused; if the writer wins, acceptance waits until that writer’s transaction ends. No writer commits against an older revision after a newer acceptance has committed.
 - **FR-18** — A catalog acceptance can wait for running writers, sets a timeout, and may be retried; an optional queue keeps it from starving under constant write load.
 - **FR-19** — A writer may pass an expected version and the write is refused if it differs; a change that alters no value writes nothing and does not raise the version.
 - **FR-20** — Errors are of defined kinds (invalid, endpoint violation, has edges, key conflict, version conflict, catalog changed, retry, not found, unavailable), each with a stated retry rule.
 - **FR-21** — Cross-row rules lock the parent object or run serializable; a deferred trigger under READ COMMITTED alone is never reported as database enforcement.
+- **FR-51** — A caller can apply several operations as one atomic group that commits or fails as a whole, with one origin and one catalog check; a failure names the failing operation. *(P1)*
+- **FR-54** — A caller can give a group a request identifier so that retries within its protected replay lifetime return the complete original ordered results and change nothing, including all-no-op groups and concurrent identical requests. Reusing the identifier with different inputs is refused. After eligible result expiry, retained request identity yields explicit expiry/conflict rather than silently reapplying the group. *(P1)*
+- **FR-55** — A caller can run any operation or group inside a transaction it controls, see its effects there, and roll it back; a rolled-back operation leaves no object, edge, key, journal row, tombstone, request record or lock. *(P1)*
 
 ### Subsystem: Journal and history
 
@@ -155,6 +174,8 @@ Deferred items are tracked in `docs/helix/parking-lot.md` when it exists.
 - **FR-25** — A consumer can read the journal incrementally, in a stable order, without missing a row that commits late.
 - **FR-26** — A record can be reconstructed as of any version from its journal, interpreting each value with the definition in force when it was written.
 - **FR-27** — The journal is append-only for every role truss or a host recognizes, is partitioned by time with no default partition, and is trimmed only by dropping whole partitions.
+- **FR-52** — Any publisher of the journal to a downstream copy preserves the change feed contract: every committed change included once in a forward scan in a stable order, deletes carrying the old record, catalog revisions before the changes that use them, replayable delivery after restart, and retention that waits for registered consumers. Transport replay may deliver a change again; a downstream copy applies it once using durable deduplication and advances its applied position atomically with its state changes. *(P1)*
+- **FR-53** — The lag of a downstream copy is observable: each consumer's position is recorded, and the age of the oldest change it has not applied can be read. *(P1)*
 
 ### Subsystem: Reads and traversal
 
@@ -179,11 +200,13 @@ Deferred items are tracked in `docs/helix/parking-lot.md` when it exists.
 - **FR-40** — The layout DDL and its check pass on every supported PostgreSQL version.
 - **FR-50** — An implementation reads UMF so that it accepts and rejects the same documents, with the same diagnostics, as the reference validator, shown by corpus cases that give each document's expected diagnostics.
 
+- **FR-56** — Truss’s internal physical layout is described in a versioned UMF artifact and generates reproducible database-bootstrap SQL, with every required physical object accounted for and unsupported generation explicitly reported. The generated layout must pass catalog-parity and behavior checks before replacing the checked SQL baseline.
+
 ### Subsystem: Host integration
 
 - **FR-41** — A host may add its own tables, functions, roles, triggers and row-level security in its own schema, and may not change a truss column, key or constraint. The contracts say which are permitted.
 - **FR-42** — Writes can be governed by database role grants: a host can assume a role per transaction, and truss records the assumed role in the journal.
-- **FR-43** — truss keeps no session state and works through a transaction-mode pooler, with or without prepared statements.
+- **FR-43** — truss embeds on a host-supplied PostgreSQL connection and preserves caller transaction ownership. Connection pool provisioning and operation belong to the host. Truss keeps no mutable session dependency across completed transactions and supports parameterized execution without requiring persistent prepared statements. No pooler-specific latency threshold is a product acceptance gate.
 - **FR-44** — The layout and its protocols work on an embedded PostgreSQL for development and tests, with the same DDL as a server.
 - **FR-48** — A deployment can give database roles read or write access per UMF module, enforced by the database, without changing the layout's tables or constraints; with the layer unused, truss behaves as without it. *(P1)*
 - **FR-49** — A relationship may name a type in another module. Such an edge is visible only to a role that can read the relationship's module and both endpoints' modules. *(P1)*
@@ -198,11 +221,15 @@ Deferred items are tracked in `docs/helix/parking-lot.md` when it exists.
 | FR-5 | Tightened rule | A revision shortening a text limit, with 3 objects over it | Rejected; the 3 objects listed |
 | FR-7 | No DDL | Accept a revision that adds a type, a property and a relationship, with sixteen writers running | No table, partition or index created; writers not blocked beyond the head-row wait |
 | FR-10, FR-11 | Exact values and retention | The value corpus plus a field the schema does not define | Every value reads back exactly; the extra field is retained and reported |
+| FR-55 | Roll back | Apply a group inside a caller's transaction, read its effects, roll back | The effects were visible inside the transaction; afterwards no row, journal row, tombstone, request record or lock remains |
+| FR-54 | Idempotent group | Apply a group with request id `r`, then again, then concurrently twice, then with different inputs | The repeat returns the original results; the concurrent pair applies once; different inputs are refused |
+| FR-51 | Atomic group | Apply a create, an update and an edge as one group where the edge's target is invalid | Nothing in the group takes effect and the error names the edge's index |
+| FR-52, FR-53 | Feed | Publish through a consumer, restart it from an earlier position, delete a record, accept a revision | The forward scan includes every change once in order; replay after restart may repeat deliveries, but durable downstream deduplication applies each change once; the delete carries the old record; the revision arrives before the first change that uses it; the consumer's lag is readable |
 | FR-50 | UMF reading | Run the corpus's UMF cases through a second implementation's reader | Same validity and the same diagnostics, by severity, code and path, as the reference |
 | FR-48, FR-49 | Module access | Give role `a` module `sales` and role `b` module `billing`, with a link between them | Each sees only its module; the link is seen only by a role that reads both |
 | FR-45, FR-46 | Repeat an import | Import 51 records with source facts, correct one, delete one, import again | Nothing changes, the deleted record stays deleted, each imported record still names its load and source facts |
 | FR-12, FR-13 | Keys and endpoints | A second object with the same key; an edge to a missing or wrongly typed object; delete of an object with an edge | Each refused by the database with its error kind |
-| FR-17 | Stale writer | A write that read revision N while revision N+1 is accepted, under READ COMMITTED and REPEATABLE READ | Never accepted against N; reported as catalog changed or retry |
+| FR-17 | Stale writer | A write that read revision N while revision N+1 is accepted, under READ COMMITTED and REPEATABLE READ | When acceptance wins the head lock, the stale write is refused as catalog changed or retry. When the writer wins, acceptance waits for its transaction to end before accepting N+1 |
 | FR-22, FR-23 | Journal | Change two properties of one object as role `w` with actor `a` | Two rows with old and new values, the same version, origin actor `a` and role `w`; a forced journal failure leaves the change unmade |
 | FR-24 | Plain SQL | Update an object with plain SQL in journal-trigger mode | A journal row is written |
 | FR-25 | Late commit | An older transaction still open when a newer one commits | The consumer's read withholds the newer rows until the older transaction ends, then returns both in order |
@@ -247,7 +274,7 @@ This section records current decisions; it does not make them.
 |------|-------------|--------|------------|
 | Provisional layout points change after a second implementation depends on them | Medium | High | Layout versions; the corpus carries the version; re-pin by a recorded decision |
 | The corpus is too thin to catch divergence | Medium | High | Seed from SPIKE-002; require the interchange check; add a case with every contract change |
-| Catalog acceptance starves under constant write load | Medium | Medium | Lock timeout and retry; the optional advisory queue (ADR-002 D10) |
+| Catalog acceptance starves under constant write load | Medium | Medium | Bounded lock admission and explicit pre-effect refusal; no automatic retry loop |
 | Layout is slower than a hand-designed schema at the target scale | Medium | High | Measure the 2× bar at production size; reversal conditions in ADR-002 |
 | Measurements are not representative: one loaded machine, two embedded engines, no managed service | High | Medium | Re-run the harness on a quiet machine, on PostgreSQL 18 and on a managed service before fixing the targets |
 | Foreign-key and unique checks reveal that a row exists in a hidden row-level-security scope | Low | Medium | Documented in the contracts; the host decides how to report |

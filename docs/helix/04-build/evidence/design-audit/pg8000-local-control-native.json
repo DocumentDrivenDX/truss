@@ -1,0 +1,85 @@
+{
+  "scope": "Five fixed local control submissions with original command/ready frames captured at instance handlers; no original issuer/account/permit, savepoint authority or unknown-outcome qualification",
+  "pgserver": "0.1.4",
+  "serverVersion": "16.2",
+  "driver": "pg8000 1.31.5",
+  "driverCoreSha256": "cac1e50502901bcea3ddab588e0350149dd8fd771156ae1c531a2a04b3925e26",
+  "controls": [
+    "BEGIN",
+    "SAVEPOINT original_probe",
+    "ROLLBACK TO SAVEPOINT original_probe",
+    "RELEASE SAVEPOINT original_probe",
+    "ROLLBACK"
+  ],
+  "frames": [
+    {
+      "cycle": "startup",
+      "kind": "Z",
+      "hex": "5a0000000549"
+    },
+    {
+      "cycle": "0",
+      "kind": "C",
+      "hex": "430000000a424547494e00"
+    },
+    {
+      "cycle": "0",
+      "kind": "Z",
+      "hex": "5a0000000554"
+    },
+    {
+      "cycle": "1",
+      "kind": "C",
+      "hex": "430000000e53415645504f494e5400"
+    },
+    {
+      "cycle": "1",
+      "kind": "Z",
+      "hex": "5a0000000554"
+    },
+    {
+      "cycle": "2",
+      "kind": "C",
+      "hex": "430000000d524f4c4c4241434b00"
+    },
+    {
+      "cycle": "2",
+      "kind": "Z",
+      "hex": "5a0000000554"
+    },
+    {
+      "cycle": "3",
+      "kind": "C",
+      "hex": "430000000c52454c4541534500"
+    },
+    {
+      "cycle": "3",
+      "kind": "Z",
+      "hex": "5a0000000554"
+    },
+    {
+      "cycle": "4",
+      "kind": "C",
+      "hex": "430000000d524f4c4c4241434b00"
+    },
+    {
+      "cycle": "4",
+      "kind": "Z",
+      "hex": "5a0000000549"
+    }
+  ],
+  "independentExpectedControlFrames": 10,
+  "driverPortQualified": false,
+  "sourceSha256": {
+    "check_pg8000_local_control_native.py": "165b7e67180c4afb5d8c14a26d7cb233ab7263a09222eef6079a60275d8a19bf",
+    "pg8000_instance_candidate.py": "0e3a6fb3860e9f2315711cc44957e841f54640c18214955f57c87a3c6fd437de",
+    "python_pg_receive_candidate.py": "fd9c23e3da2358cf56abc6b561c893e5d56dd9c95756fe18ec7510f52a55f4bb",
+    "python_pg_frame_candidate.py": "ed92bfc5240f17f3447f868fb88e3647cc4bd9583e21ed18ad88eb7de1eb9968"
+  },
+  "limitations": [
+    "Local trust only; no TLS/current-person admission",
+    "Probe cycle labels are not original issuer authority",
+    "No lost-response/cancellation/cleanup evidence",
+    "No pre-ingress/account or native preservation qualification"
+  ]
+}

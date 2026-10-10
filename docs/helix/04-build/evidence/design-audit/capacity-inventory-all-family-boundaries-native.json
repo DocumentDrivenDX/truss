@@ -1,0 +1,249 @@
+{
+  "scope": "Actual declared row and framed-byte boundary execution for original native inventory component; administrative compressible fixtures, not installed authority/performance qualification",
+  "serverVersion": "16.15",
+  "observations": [
+    {
+      "id": "exact65536-operation-rows",
+      "expected": [
+        [
+          65536,
+          14472346
+        ]
+      ],
+      "observed": [
+        [
+          65536,
+          14472346
+        ]
+      ]
+    },
+    {
+      "id": "one-over65536-operation-rows",
+      "expected": "54000",
+      "observed": "54000"
+    },
+    {
+      "id": "exact65536-touch-rows",
+      "expected": [
+        [
+          65536,
+          10081438
+        ]
+      ],
+      "observed": [
+        [
+          65536,
+          10081438
+        ]
+      ]
+    },
+    {
+      "id": "one-over65536-touch-rows",
+      "expected": "54000",
+      "observed": "54000"
+    },
+    {
+      "id": "exact65536-mixed-families",
+      "expected": [
+        [
+          65536,
+          12265784
+        ]
+      ],
+      "observed": [
+        [
+          65536,
+          12265784
+        ]
+      ]
+    },
+    {
+      "id": "one-over65536-mixed-families",
+      "expected": "54000",
+      "observed": "54000"
+    },
+    {
+      "id": "exact512MiB-complete-framed-bytes",
+      "expected": [
+        [
+          64,
+          536870912
+        ]
+      ],
+      "observed": [
+        [
+          64,
+          536870912
+        ]
+      ]
+    },
+    {
+      "id": "exact512MiB-mixed-complete-frames",
+      "expected": [
+        [
+          64,
+          536870912
+        ]
+      ],
+      "observed": [
+        [
+          64,
+          536870912
+        ]
+      ]
+    },
+    {
+      "id": "exact-one-byte-over512MiB-across65-rows",
+      "expected": "54000",
+      "observed": "54000"
+    },
+    {
+      "id": "over-byte-rollback-restores-exact512MiB",
+      "expected": [
+        [
+          64,
+          536870912
+        ]
+      ],
+      "observed": [
+        [
+          64,
+          536870912
+        ]
+      ]
+    },
+    {
+      "id": "exact512MiB-touch-complete-frames",
+      "expected": [
+        [
+          64,
+          536870912
+        ]
+      ],
+      "observed": [
+        [
+          64,
+          536870912
+        ]
+      ]
+    },
+    {
+      "id": "exact-one-byte-over512MiB-touch-frames",
+      "expected": "54000",
+      "observed": "54000"
+    },
+    {
+      "id": "over-touch-byte-rollback-restores512MiB",
+      "expected": [
+        [
+          64,
+          536870912
+        ]
+      ],
+      "observed": [
+        [
+          64,
+          536870912
+        ]
+      ]
+    }
+  ],
+  "measurements": [
+    {
+      "id": "exact65536-operation-rows",
+      "elapsedSeconds": 1.3825458750361577,
+      "statementTimeoutSeconds": 45,
+      "lockTimeoutSeconds": 5
+    },
+    {
+      "id": "one-over65536-operation-rows",
+      "elapsedSeconds": 1.3062000410282053,
+      "statementTimeoutSeconds": 45,
+      "lockTimeoutSeconds": 5
+    },
+    {
+      "id": "exact65536-touch-rows",
+      "elapsedSeconds": 1.2625400419929065,
+      "statementTimeoutSeconds": 45,
+      "lockTimeoutSeconds": 5
+    },
+    {
+      "id": "one-over65536-touch-rows",
+      "elapsedSeconds": 1.2665876669925638,
+      "statementTimeoutSeconds": 45,
+      "lockTimeoutSeconds": 5
+    },
+    {
+      "id": "exact65536-mixed-families",
+      "elapsedSeconds": 1.29088608402526,
+      "statementTimeoutSeconds": 45,
+      "lockTimeoutSeconds": 5
+    },
+    {
+      "id": "one-over65536-mixed-families",
+      "elapsedSeconds": 1.2911642499966547,
+      "statementTimeoutSeconds": 45,
+      "lockTimeoutSeconds": 5
+    },
+    {
+      "id": "exact512MiB-complete-framed-bytes",
+      "elapsedSeconds": 0.0040188750135712326,
+      "statementTimeoutSeconds": 45,
+      "lockTimeoutSeconds": 5
+    },
+    {
+      "id": "exact512MiB-mixed-complete-frames",
+      "elapsedSeconds": 0.003103833005297929,
+      "statementTimeoutSeconds": 45,
+      "lockTimeoutSeconds": 5
+    },
+    {
+      "id": "exact-one-byte-over512MiB-across65-rows",
+      "elapsedSeconds": 0.0031797089613974094,
+      "statementTimeoutSeconds": 45,
+      "lockTimeoutSeconds": 5
+    },
+    {
+      "id": "over-byte-rollback-restores-exact512MiB",
+      "elapsedSeconds": 0.003063624957576394,
+      "statementTimeoutSeconds": 45,
+      "lockTimeoutSeconds": 5
+    },
+    {
+      "id": "exact512MiB-touch-complete-frames",
+      "elapsedSeconds": 0.003237708006054163,
+      "statementTimeoutSeconds": 45,
+      "lockTimeoutSeconds": 5
+    },
+    {
+      "id": "exact-one-byte-over512MiB-touch-frames",
+      "elapsedSeconds": 0.0031218749936670065,
+      "statementTimeoutSeconds": 45,
+      "lockTimeoutSeconds": 5
+    },
+    {
+      "id": "over-touch-byte-rollback-restores512MiB",
+      "elapsedSeconds": 0.00790858402615413,
+      "statementTimeoutSeconds": 45,
+      "lockTimeoutSeconds": 5
+    }
+  ],
+  "sourceSha256": {
+    "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f",
+    "docs/helix/04-build/evidence/design-audit/custody-codec-source.owner-export.sql": "5e40bdee7ec68277b34266cd60cfd3fca4ada24b417cccf5c041dd44dd56aa1d",
+    "docs/helix/04-build/evidence/design-audit/custody-size-source.owner-export.sql": "9e053ca758888ce7b37ee2f460346c32a97a9386ab88297cd4486c70dea711d5",
+    "docs/helix/04-build/evidence/design-audit/capacity-inventory-source.owner-export.sql": "7e76e9309f3923574259190613551352930abbe7efb991662ae9a25672c8836b",
+    "packages/postgresql/native/capacity-reservation/inventory.sql": "5434543bf157633469e5dd41d68126934667c912df64f915131ce1bc617847fe"
+  },
+  "producerSha256": "9418af3226cdc81d04f647932eceb9509c4de2e5f6e06f6bc63146d2bcb9b398",
+  "installerReady": false,
+  "nativeFullReservationQualified": false,
+  "acceptanceCasesPromoted": [],
+  "limitations": [
+    "Compressible native payloads qualify framed logical bytes, not512MiB physical storage or native detoasting/copy budgets",
+    "Single run timings are descriptive, not benchmark/native-work-account qualification",
+    "No ordinary-role security/issuer/finalizer/deferred-cohort or cancellation qualification",
+    "Administrative source population/reset is not protected mutation or cleanup",
+    "Declared framed bounds cover operation, touch and mixed populations; semantic/native work profiles remain separate"
+  ]
+}

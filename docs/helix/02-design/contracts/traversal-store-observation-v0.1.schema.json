@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:traversal-store-observation:0.1.0",
+  "title": "Draft original process-store publication transition record",
+  "description": "Private original issuer record created atomically with root replacement. Decoded shape is not original custody or actual atomic replacement evidence.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-traversal-store-observation/0.1.0"
+    },
+    "storeProfile": {
+      "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/profilePin"
+    },
+    "serviceIdentity": {
+      "type": "string",
+      "minLength": 1
+    },
+    "serviceGeneration": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$"
+    },
+    "assemblyId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "handle": {
+      "$ref": "urn:truss:draft:direct-traversal-request:0.1.0#/$defs/handle"
+    },
+    "originalAttemptIdentity": {
+      "type": "string",
+      "minLength": 1
+    },
+    "transition": {
+      "const": "publish"
+    },
+    "previousRootSequence": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$"
+    },
+    "resultingRootSequence": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$"
+    },
+    "previousWorkVersion": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$"
+    },
+    "resultingWorkVersion": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$"
+    },
+    "accountingVersion": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$"
+    },
+    "originalQuery": {
+      "$ref": "urn:truss:draft:traversal-resource-ledger:0.1.0#/$defs/reference"
+    },
+    "previousState": {
+      "$ref": "urn:truss:draft:traversal-resource-ledger:0.1.0#/$defs/reference"
+    },
+    "resultingState": {
+      "$ref": "urn:truss:draft:traversal-resource-ledger:0.1.0#/$defs/reference"
+    },
+    "resourceLedger": {
+      "$ref": "urn:truss:draft:traversal-resource-ledger:0.1.0#/$defs/reference"
+    },
+    "resultingPhase": {
+      "enum": [
+        "working",
+        "sealed"
+      ]
+    },
+    "retention": {
+      "const": "process_lifetime"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "storeProfile",
+    "serviceIdentity",
+    "serviceGeneration",
+    "assemblyId",
+    "handle",
+    "originalAttemptIdentity",
+    "transition",
+    "previousRootSequence",
+    "resultingRootSequence",
+    "previousWorkVersion",
+    "resultingWorkVersion",
+    "accountingVersion",
+    "originalQuery",
+    "previousState",
+    "resultingState",
+    "resourceLedger",
+    "resultingPhase",
+    "retention"
+  ],
+  "additionalProperties": false
+}

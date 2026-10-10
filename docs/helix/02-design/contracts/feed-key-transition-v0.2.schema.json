@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:feed-key-transition:0.2.0",
+  "description": "Exact transition/receipt originals only; no commit or manifest claim.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-feed-key-transition/0.2.0"
+    },
+    "transition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "receipt": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "transition",
+    "receipt"
+  ],
+  "additionalProperties": false
+}

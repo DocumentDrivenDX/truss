@@ -1,0 +1,13 @@
+{
+  "name": "truss-workspace",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "test": "bun test ./tests/weft/query.test.ts",
+    "typecheck": "bun scripts/typecheck-weft.ts",
+    "build": "bun scripts/build-weft.ts"
+  }
+}

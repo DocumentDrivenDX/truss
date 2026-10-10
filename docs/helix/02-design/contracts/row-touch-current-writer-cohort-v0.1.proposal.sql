@@ -1,0 +1,21 @@
+-- Private complete current-writer touch cohort projection for OC06.
+-- No caller xid, tuple, phase or seal filter. Original complete private
+-- visibility/cut/account/authority admission remains external.
+SELECT
+  t.transaction_id::pg_catalog.text AS transaction_id,
+  t.owner_kind::pg_catalog.text AS owner_kind,
+  t.owner_id::pg_catalog.text AS owner_id,
+  t.owner_discriminator_id::pg_catalog.text AS owner_discriminator_id,
+  t.property_owner_type_id::pg_catalog.text AS property_owner_type_id,
+  t.property_id::pg_catalog.text AS property_id,
+  t.dirty_generation::pg_catalog.text AS dirty_generation,
+  t.sealed_generation::pg_catalog.text AS sealed_generation,
+  pg_catalog.encode(t.original_layout_bytes, 'hex') AS original_layout_bytes_hex,
+  pg_catalog.encode(t.original_home_bytes, 'hex') AS original_home_bytes_hex,
+  pg_catalog.encode(t.original_owner_property_bytes, 'hex') AS original_owner_property_bytes_hex,
+  pg_catalog.encode(t.original_operation_bytes, 'hex') AS original_operation_bytes_hex
+FROM truss.row_home_touch AS t
+WHERE t.transaction_id = pg_catalog.pg_current_xact_id_if_assigned()
+ORDER BY t.owner_kind, t.owner_id, t.owner_discriminator_id,
+  t.property_owner_type_id, t.property_id;
+-- No LIMIT, partial row cap, native xid allocation or readiness claim.

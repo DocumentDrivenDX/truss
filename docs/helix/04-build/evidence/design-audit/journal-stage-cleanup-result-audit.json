@@ -1,0 +1,94 @@
+{
+  "scope": "closed pending cleanup result shape only; artifacts are placeholders",
+  "bunVersion": "1.4.2",
+  "sources": [
+    {
+      "path": "docs/helix/02-design/contracts/acceptance-input-v0.1.schema.json",
+      "sha256": "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/private-custody-snapshot-v0.1.proposal.schema.json",
+      "sha256": "b5db25c905bbbad5449e1f8cbcaba2dd185b9de8bfe6d4a5fa9f719c5ce428b0"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/journal-stage-snapshot-v0.2.proposal.schema.json",
+      "sha256": "9220ad8661438b9c9de0aad4f2371135460c55aa1d6dbac15b40e408c11ef050"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/journal-stage-cleanup-cohort-v0.2.proposal.schema.json",
+      "sha256": "91868e6081c41f0a1b53fa5f45a7ce415f52ec1be1666fdac17443fa825f778b"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/journal-stage-cleanup-result-v0.2.proposal.schema.json",
+      "sha256": "9e74a98acbda583b65679c04ba1530d084a4bfff5ffba49e265a5407e4333c41"
+    },
+    {
+      "path": "/private/tmp/claude-501/truss-spec-wt/docs/helix/04-build/evidence/design-audit/check-journal-stage-cleanup-result.ts",
+      "sha256": "1cabfc89b76543e2fb3d4433e8868dd1f346f014b6c8ad642b22ee047863e614"
+    }
+  ],
+  "results": [
+    {
+      "name": "complete pending shape",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "missing returned membership",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "missing child absence",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "missing parent absence",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "missing capacity",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "commit label",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "extra feed acknowledgment",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "missing parent snapshot",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "omitted stage requires original cohort refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "duplicate stage requires native refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "foreign stage requires native refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "forged absence needs native refusal",
+      "expected": true,
+      "actual": true
+    }
+  ],
+  "nativeExecuted": false,
+  "adopted": false
+}

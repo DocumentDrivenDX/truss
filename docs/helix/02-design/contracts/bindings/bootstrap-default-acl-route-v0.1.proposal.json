@@ -1,0 +1,74 @@
+{
+  "interfaceVersion": "truss-bootstrap-route-entry/0.1.0",
+  "routeIdentity": "pg17.default-acl.creation-scope/0.1.0",
+  "status": "unadopted; source pins only verified; native class/cut/transport/semantic producers unqualified",
+  "nativeClass": {
+    "namespace": "pg_catalog",
+    "relation": "pg_default_acl",
+    "classOid": "actual original database pg_default_acl catalog identity",
+    "storageScope": "database",
+    "subobjectNumber": "0"
+  },
+  "selector": "All original namespace creation-default entries union global entries for reached original owners",
+  "artifacts": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-default-acl-observation-pg17.proposal.sql",
+      "sha256": "c25954750b4672bf1b48fe2d0aec17cad8eb19f6772a16021c233dc25ee362a4"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-default-acl-observation-pg17.proposal.umf.json",
+      "sha256": "859731eaed027b041fd40ce77f325d9deabdf0287ee6d80b738cd84f0c655251"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/bootstrap-default-acl-observation.owner-export.sql",
+      "sha256": "2e299f92ab62b5e850fd081dfd491c974429b75e61b6a2844d3f3ef7808fbe67"
+    }
+  ],
+  "parameterGrammar": {
+    "slots": [
+      1,
+      2
+    ],
+    "nativeTypes": [
+      "pg_catalog.oid",
+      "pg_catalog.oid[]"
+    ],
+    "nativeInput": "Slot 1 nonzero original namespace OID; slot 2 nonnull one-dimensional lower-bound-one array of 0..256 unique nonzero canonical owner OID tokens, no null items. Empty owner frontier does not suppress namespace enumeration; selected empty-array encoding admitted."
+  },
+  "orderedColumns": [
+    "catalog_class_oid",
+    "object_oid",
+    "defaclacl_native_text",
+    "defaclacl_native_dimensions",
+    "original_catalog_row_json"
+  ],
+  "coverage": "Complete namespace entries across all owners plus global entries for every admitted reached owner; no filtering to intended grants or expected object types",
+  "requiredKnownFields": [
+    "oid",
+    "defaclrole",
+    "defaclnamespace",
+    "defaclobjtype",
+    "defaclacl"
+  ],
+  "preservation": "Retain full exact returned row JSON text and every unknown extension member; lossless bounded selected native JSON decoder; no parse/stringify reconstruction",
+  "dependencyExtraction": {
+    "ownerNamespace": "Resolve actual defaclrole through original complete shared-role graph; nonzero defaclnamespace through original namespace definition. Zero namespace is global scope, never pg_namespace OID zero.",
+    "acl": "Preserve exact defaclacl text/dimensions/raw row and selected native ACL semantics; grantor/grantee/grantOption and tagged PUBLIC admission follow object-specific grammar. Unknown defaclobjtype remains preserved and unsupported unless explicitly selected.",
+    "creation": "Global defaults and per-schema additions require original role/object-type/native creation composition; existing object ACL and effective authority are separate observations.",
+    "fieldClassification": {
+      "oid": "original native default-ACL row correlation; not cross-install semantic identity",
+      "defaclrole": "original nonzero shared role correlation; resolve actual creator-role definition",
+      "defaclnamespace": "original namespace correlation or explicit global zero tag; never invented namespace address",
+      "defaclobjtype": "exact registered r/S/f/T/n object-type code under PG17; case-sensitive, no relation/sequence/type conflation",
+      "defaclacl": "complete exact native ACL text/dimensions/raw items; resolve grantor/grantee/PUBLIC/privilege/options and native creation meaning"
+    },
+    "canonicalProcedure": "CONTRACT-008 Creation-default policy projection: unique resolved creator-role/global-or-namespace/object-kind entry plus complete grant multiset; compose global override and per-schema additions against selected hard-wired native defaults, never installed ACL substitution"
+  },
+  "adjuncts": [
+    "complete original role/namespace/native ACL and object-type default definitions",
+    "selected installer acting-role and creation-default composition"
+  ],
+  "resourceProfile": "truss-bootstrap-collector-resource/0.1.0",
+  "refusal": "Unknown object-type/ACL/default composition, missing role/namespace or incomplete scope refuses admission; no creation-default row means neither no installed grants nor unrestricted creation",
+  "resourceObligations": "Shared enclosing totals, complete original cut/authority and explicit pre-materialization/native-work permits; no independent per-route allowance"
+}

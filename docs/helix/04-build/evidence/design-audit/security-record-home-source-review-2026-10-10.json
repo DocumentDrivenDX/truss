@@ -1,0 +1,97 @@
+{
+  "scope": "Read-only review of moving owner Record-home shape/conditional correspondence; no API adoption, execution or native support qualification",
+  "ownerRoot": "/Users/erik/.codex/worktrees/1598/umf",
+  "ownerCommit": "9e4bed3efe922c11e4b5a888ba6854de14f1b29f",
+  "ownerWorkingSource": true,
+  "sources": {
+    "docs/helix/02-design/spikes/SPIKE-010-security-result-coverage.md": "07b84e96d244ba10b09c988c0756aba0277df837cd8444c5d28872b68b5a05f7",
+    "docs/helix/02-design/spikes/security/record-homes-v0.1.schema.json": "ede23e1a814b1e2bfe1b1e06758f20a2cdf7f1a71cdeb68e690ec2e04cacde91",
+    "docs/helix/04-build/evidence/security/record-home-correspondence-formal.json": "5c15d62b6432136e39575688f7a000d568254d71b9ee26dc6277cb3daf6e3cb6",
+    "docs/helix/04-build/evidence/security/record-home-shape-execution.json": "b8f9cbf2f9e5fc89998240880b58af4eabf8c2e8e1b7a170faf9dc187a6004c5"
+  },
+  "receipts": [
+    {
+      "path": "docs/helix/04-build/evidence/security/record-home-correspondence-formal.json",
+      "recordedStatus": "conditional-proof-passed",
+      "recordedNativeQualified": false,
+      "recordedInterpreterImplemented": null,
+      "recordedObservations": null,
+      "recordedLaws": 10,
+      "sourceFreshness": [
+        {
+          "path": "tools/security/prove-record-home-correspondence.py",
+          "matches": true
+        },
+        {
+          "path": "docs/helix/02-design/spikes/SPIKE-010-security-result-coverage.md",
+          "matches": true
+        },
+        {
+          "path": "docs/helix/02-design/spikes/security/record-homes-v0.1.schema.json",
+          "matches": true
+        },
+        {
+          "path": "/Users/erik/Projects/weft/crates/weft-core/src/security_requirements.rs",
+          "matches": true
+        }
+      ],
+      "allRecordedSourcesMatchNow": true,
+      "reexecutedByTruss": false
+    },
+    {
+      "path": "docs/helix/04-build/evidence/security/record-home-shape-execution.json",
+      "recordedStatus": "shape-experiment-passed",
+      "recordedNativeQualified": false,
+      "recordedInterpreterImplemented": false,
+      "recordedObservations": 389,
+      "recordedLaws": 0,
+      "sourceFreshness": [
+        {
+          "path": "/Users/erik/.codex/worktrees/1598/umf/tools/security/record-home-shape-probe.ts",
+          "matches": true
+        },
+        {
+          "path": "docs/helix/02-design/spikes/security/record-homes-v0.1.schema.json",
+          "matches": true
+        },
+        {
+          "path": "docs/helix/02-design/spikes/SPIKE-010-security-result-coverage.md",
+          "matches": true
+        },
+        {
+          "path": "spec/core/schema-properties-document.schema.json",
+          "matches": true
+        },
+        {
+          "path": "/Users/erik/Projects/umf/node_modules/ajv/dist/2020.js",
+          "matches": true
+        }
+      ],
+      "allRecordedSourcesMatchNow": true,
+      "reexecutedByTruss": false
+    }
+  ],
+  "selection": {
+    "bindingProfile": "weft.security.record-homes/0.1.0",
+    "engine": "postgresql",
+    "engineVersion": "17.9",
+    "encoding": "UTF8",
+    "textCollation": "C",
+    "codecs": [
+      "required singular text",
+      "required singular boolean",
+      "required singular signed64 integer"
+    ],
+    "contextProviders": []
+  },
+  "trussGaps": [
+    "Local candidate PostgreSQL16.15 differs from exact owner17.9 target",
+    "Generic property homes need original qualified physical mapping; a Record column declaration cannot be substituted",
+    "Optional/null/decimal/binary/structured fields and transformed outputs exceed this first closed interpreter",
+    "Authenticated subject and full source/carrier/field/Key/population meaning remain native obligations",
+    "Owner interpreter, source-current evidence and public bridge/ABI adoption remain unfinished"
+  ],
+  "compilerAdopted": "f05f2df09e9c2494ac8c6d703dfe38413dbc4181",
+  "installerReady": false,
+  "acceptanceCasesPromoted": []
+}

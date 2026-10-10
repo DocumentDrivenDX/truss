@@ -1,0 +1,3825 @@
+{
+  "profile": "truss-row-home-physical-allocation/0.1.0",
+  "status": "unadopted_candidate",
+  "complete": false,
+  "scope": "Explicit table/column/sequence/index and CHECK/FK/PK/UNIQUE source nodes only; default/NOT NULL/type/collation/implicit supporting index/native dependency/guard/grant inventory remains separate and incomplete. Source IDs do not resolve PostgreSQL OIDs or generated statement correspondence.",
+  "sources": [
+    {
+      "source": "docs/helix/02-design/contracts/row-home-capacity-v0.1.proposal.sql",
+      "sourceSha256": "fc16308d0c1dc19842a59e75b58ed7038dc09c2c43852cdb6b0b43102cabfe33",
+      "model": "docs/helix/02-design/contracts/row-home-capacity-v0.1.proposal.umf.json",
+      "modelSha256": "98066d3397e138e1e4e2e86ffde784bd536f4c433053b90aa99d5b01e55d751d"
+    }
+  ],
+  "entries": [
+    {
+      "entryId": "truss.row-home.table.row_home_capacity",
+      "objectKind": "table",
+      "nativeName": "row_home_capacity",
+      "nativeBinding": {
+        "state": "unresolved"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/row-home-capacity-v0.1.proposal.umf.json",
+        "modelSha256": "98066d3397e138e1e4e2e86ffde784bd536f4c433053b90aa99d5b01e55d751d",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt"
+      },
+      "originalNativeNode": {
+        "kind": "object",
+        "members": {
+          "relation": {
+            "kind": "object",
+            "members": {
+              "schemaname": {
+                "kind": "string",
+                "value": "truss"
+              },
+              "relname": {
+                "kind": "string",
+                "value": "row_home_capacity"
+              },
+              "inh": {
+                "kind": "boolean",
+                "value": true
+              },
+              "relpersistence": {
+                "kind": "string",
+                "value": "p"
+              },
+              "location": {
+                "kind": "number",
+                "value": "170"
+              }
+            }
+          },
+          "tableElts": {
+            "kind": "array",
+            "items": [
+              {
+                "kind": "object",
+                "members": {
+                  "ColumnDef": {
+                    "kind": "object",
+                    "members": {
+                      "colname": {
+                        "kind": "string",
+                        "value": "singleton_id"
+                      },
+                      "typeName": {
+                        "kind": "object",
+                        "members": {
+                          "names": {
+                            "kind": "array",
+                            "items": [
+                              {
+                                "kind": "object",
+                                "members": {
+                                  "String": {
+                                    "kind": "object",
+                                    "members": {
+                                      "sval": {
+                                        "kind": "string",
+                                        "value": "pg_catalog"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "object",
+                                "members": {
+                                  "String": {
+                                    "kind": "object",
+                                    "members": {
+                                      "sval": {
+                                        "kind": "string",
+                                        "value": "int2"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          "typemod": {
+                            "kind": "number",
+                            "value": "-1"
+                          },
+                          "location": {
+                            "kind": "number",
+                            "value": "211"
+                          }
+                        }
+                      },
+                      "is_local": {
+                        "kind": "boolean",
+                        "value": true
+                      },
+                      "constraints": {
+                        "kind": "array",
+                        "items": [
+                          {
+                            "kind": "object",
+                            "members": {
+                              "Constraint": {
+                                "kind": "object",
+                                "members": {
+                                  "contype": {
+                                    "kind": "string",
+                                    "value": "CONSTR_PRIMARY"
+                                  },
+                                  "location": {
+                                    "kind": "number",
+                                    "value": "220"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "location": {
+                        "kind": "number",
+                        "value": "198"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "kind": "object",
+                "members": {
+                  "ColumnDef": {
+                    "kind": "object",
+                    "members": {
+                      "colname": {
+                        "kind": "string",
+                        "value": "retained_rows"
+                      },
+                      "typeName": {
+                        "kind": "object",
+                        "members": {
+                          "names": {
+                            "kind": "array",
+                            "items": [
+                              {
+                                "kind": "object",
+                                "members": {
+                                  "String": {
+                                    "kind": "object",
+                                    "members": {
+                                      "sval": {
+                                        "kind": "string",
+                                        "value": "pg_catalog"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "object",
+                                "members": {
+                                  "String": {
+                                    "kind": "object",
+                                    "members": {
+                                      "sval": {
+                                        "kind": "string",
+                                        "value": "int8"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          "typemod": {
+                            "kind": "number",
+                            "value": "-1"
+                          },
+                          "location": {
+                            "kind": "number",
+                            "value": "249"
+                          }
+                        }
+                      },
+                      "is_local": {
+                        "kind": "boolean",
+                        "value": true
+                      },
+                      "constraints": {
+                        "kind": "array",
+                        "items": [
+                          {
+                            "kind": "object",
+                            "members": {
+                              "Constraint": {
+                                "kind": "object",
+                                "members": {
+                                  "contype": {
+                                    "kind": "string",
+                                    "value": "CONSTR_NOTNULL"
+                                  },
+                                  "location": {
+                                    "kind": "number",
+                                    "value": "256"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "location": {
+                        "kind": "number",
+                        "value": "235"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "kind": "object",
+                "members": {
+                  "ColumnDef": {
+                    "kind": "object",
+                    "members": {
+                      "colname": {
+                        "kind": "string",
+                        "value": "retained_custody_bytes"
+                      },
+                      "typeName": {
+                        "kind": "object",
+                        "members": {
+                          "names": {
+                            "kind": "array",
+                            "items": [
+                              {
+                                "kind": "object",
+                                "members": {
+                                  "String": {
+                                    "kind": "object",
+                                    "members": {
+                                      "sval": {
+                                        "kind": "string",
+                                        "value": "pg_catalog"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "object",
+                                "members": {
+                                  "String": {
+                                    "kind": "object",
+                                    "members": {
+                                      "sval": {
+                                        "kind": "string",
+                                        "value": "int8"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          "typemod": {
+                            "kind": "number",
+                            "value": "-1"
+                          },
+                          "location": {
+                            "kind": "number",
+                            "value": "291"
+                          }
+                        }
+                      },
+                      "is_local": {
+                        "kind": "boolean",
+                        "value": true
+                      },
+                      "constraints": {
+                        "kind": "array",
+                        "items": [
+                          {
+                            "kind": "object",
+                            "members": {
+                              "Constraint": {
+                                "kind": "object",
+                                "members": {
+                                  "contype": {
+                                    "kind": "string",
+                                    "value": "CONSTR_NOTNULL"
+                                  },
+                                  "location": {
+                                    "kind": "number",
+                                    "value": "298"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "location": {
+                        "kind": "number",
+                        "value": "268"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "kind": "object",
+                "members": {
+                  "ColumnDef": {
+                    "kind": "object",
+                    "members": {
+                      "colname": {
+                        "kind": "string",
+                        "value": "reserved_rows"
+                      },
+                      "typeName": {
+                        "kind": "object",
+                        "members": {
+                          "names": {
+                            "kind": "array",
+                            "items": [
+                              {
+                                "kind": "object",
+                                "members": {
+                                  "String": {
+                                    "kind": "object",
+                                    "members": {
+                                      "sval": {
+                                        "kind": "string",
+                                        "value": "pg_catalog"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "object",
+                                "members": {
+                                  "String": {
+                                    "kind": "object",
+                                    "members": {
+                                      "sval": {
+                                        "kind": "string",
+                                        "value": "int8"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          "typemod": {
+                            "kind": "number",
+                            "value": "-1"
+                          },
+                          "location": {
+                            "kind": "number",
+                            "value": "324"
+                          }
+                        }
+                      },
+                      "is_local": {
+                        "kind": "boolean",
+                        "value": true
+                      },
+                      "constraints": {
+                        "kind": "array",
+                        "items": [
+                          {
+                            "kind": "object",
+                            "members": {
+                              "Constraint": {
+                                "kind": "object",
+                                "members": {
+                                  "contype": {
+                                    "kind": "string",
+                                    "value": "CONSTR_NOTNULL"
+                                  },
+                                  "location": {
+                                    "kind": "number",
+                                    "value": "331"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "location": {
+                        "kind": "number",
+                        "value": "310"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "kind": "object",
+                "members": {
+                  "ColumnDef": {
+                    "kind": "object",
+                    "members": {
+                      "colname": {
+                        "kind": "string",
+                        "value": "reserved_custody_bytes"
+                      },
+                      "typeName": {
+                        "kind": "object",
+                        "members": {
+                          "names": {
+                            "kind": "array",
+                            "items": [
+                              {
+                                "kind": "object",
+                                "members": {
+                                  "String": {
+                                    "kind": "object",
+                                    "members": {
+                                      "sval": {
+                                        "kind": "string",
+                                        "value": "pg_catalog"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "object",
+                                "members": {
+                                  "String": {
+                                    "kind": "object",
+                                    "members": {
+                                      "sval": {
+                                        "kind": "string",
+                                        "value": "int8"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          "typemod": {
+                            "kind": "number",
+                            "value": "-1"
+                          },
+                          "location": {
+                            "kind": "number",
+                            "value": "366"
+                          }
+                        }
+                      },
+                      "is_local": {
+                        "kind": "boolean",
+                        "value": true
+                      },
+                      "constraints": {
+                        "kind": "array",
+                        "items": [
+                          {
+                            "kind": "object",
+                            "members": {
+                              "Constraint": {
+                                "kind": "object",
+                                "members": {
+                                  "contype": {
+                                    "kind": "string",
+                                    "value": "CONSTR_NOTNULL"
+                                  },
+                                  "location": {
+                                    "kind": "number",
+                                    "value": "373"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "location": {
+                        "kind": "number",
+                        "value": "343"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "kind": "object",
+                "members": {
+                  "ColumnDef": {
+                    "kind": "object",
+                    "members": {
+                      "colname": {
+                        "kind": "string",
+                        "value": "original_layout_bytes"
+                      },
+                      "typeName": {
+                        "kind": "object",
+                        "members": {
+                          "names": {
+                            "kind": "array",
+                            "items": [
+                              {
+                                "kind": "object",
+                                "members": {
+                                  "String": {
+                                    "kind": "object",
+                                    "members": {
+                                      "sval": {
+                                        "kind": "string",
+                                        "value": "bytea"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          "typemod": {
+                            "kind": "number",
+                            "value": "-1"
+                          },
+                          "location": {
+                            "kind": "number",
+                            "value": "407"
+                          }
+                        }
+                      },
+                      "is_local": {
+                        "kind": "boolean",
+                        "value": true
+                      },
+                      "constraints": {
+                        "kind": "array",
+                        "items": [
+                          {
+                            "kind": "object",
+                            "members": {
+                              "Constraint": {
+                                "kind": "object",
+                                "members": {
+                                  "contype": {
+                                    "kind": "string",
+                                    "value": "CONSTR_NOTNULL"
+                                  },
+                                  "location": {
+                                    "kind": "number",
+                                    "value": "413"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "location": {
+                        "kind": "number",
+                        "value": "385"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "kind": "object",
+                "members": {
+                  "ColumnDef": {
+                    "kind": "object",
+                    "members": {
+                      "colname": {
+                        "kind": "string",
+                        "value": "original_resource_profile_bytes"
+                      },
+                      "typeName": {
+                        "kind": "object",
+                        "members": {
+                          "names": {
+                            "kind": "array",
+                            "items": [
+                              {
+                                "kind": "object",
+                                "members": {
+                                  "String": {
+                                    "kind": "object",
+                                    "members": {
+                                      "sval": {
+                                        "kind": "string",
+                                        "value": "bytea"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          "typemod": {
+                            "kind": "number",
+                            "value": "-1"
+                          },
+                          "location": {
+                            "kind": "number",
+                            "value": "457"
+                          }
+                        }
+                      },
+                      "is_local": {
+                        "kind": "boolean",
+                        "value": true
+                      },
+                      "constraints": {
+                        "kind": "array",
+                        "items": [
+                          {
+                            "kind": "object",
+                            "members": {
+                              "Constraint": {
+                                "kind": "object",
+                                "members": {
+                                  "contype": {
+                                    "kind": "string",
+                                    "value": "CONSTR_NOTNULL"
+                                  },
+                                  "location": {
+                                    "kind": "number",
+                                    "value": "463"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "location": {
+                        "kind": "number",
+                        "value": "425"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "kind": "object",
+                "members": {
+                  "Constraint": {
+                    "kind": "object",
+                    "members": {
+                      "contype": {
+                        "kind": "string",
+                        "value": "CONSTR_CHECK"
+                      },
+                      "conname": {
+                        "kind": "string",
+                        "value": "row_home_capacity_singleton"
+                      },
+                      "initially_valid": {
+                        "kind": "boolean",
+                        "value": true
+                      },
+                      "raw_expr": {
+                        "kind": "object",
+                        "members": {
+                          "A_Expr": {
+                            "kind": "object",
+                            "members": {
+                              "kind": {
+                                "kind": "string",
+                                "value": "AEXPR_OP"
+                              },
+                              "name": {
+                                "kind": "array",
+                                "items": [
+                                  {
+                                    "kind": "object",
+                                    "members": {
+                                      "String": {
+                                        "kind": "object",
+                                        "members": {
+                                          "sval": {
+                                            "kind": "string",
+                                            "value": "="
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                ]
+                              },
+                              "lexpr": {
+                                "kind": "object",
+                                "members": {
+                                  "ColumnRef": {
+                                    "kind": "object",
+                                    "members": {
+                                      "fields": {
+                                        "kind": "array",
+                                        "items": [
+                                          {
+                                            "kind": "object",
+                                            "members": {
+                                              "String": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "sval": {
+                                                    "kind": "string",
+                                                    "value": "singleton_id"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        ]
+                                      },
+                                      "location": {
+                                        "kind": "number",
+                                        "value": "521"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "rexpr": {
+                                "kind": "object",
+                                "members": {
+                                  "A_Const": {
+                                    "kind": "object",
+                                    "members": {
+                                      "ival": {
+                                        "kind": "object",
+                                        "members": {
+                                          "ival": {
+                                            "kind": "number",
+                                            "value": "1"
+                                          }
+                                        }
+                                      },
+                                      "location": {
+                                        "kind": "number",
+                                        "value": "536"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "location": {
+                                "kind": "number",
+                                "value": "534"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "location": {
+                        "kind": "number",
+                        "value": "475"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "kind": "object",
+                "members": {
+                  "Constraint": {
+                    "kind": "object",
+                    "members": {
+                      "contype": {
+                        "kind": "string",
+                        "value": "CONSTR_CHECK"
+                      },
+                      "conname": {
+                        "kind": "string",
+                        "value": "row_home_capacity_nonnegative"
+                      },
+                      "initially_valid": {
+                        "kind": "boolean",
+                        "value": true
+                      },
+                      "raw_expr": {
+                        "kind": "object",
+                        "members": {
+                          "BoolExpr": {
+                            "kind": "object",
+                            "members": {
+                              "boolop": {
+                                "kind": "string",
+                                "value": "AND_EXPR"
+                              },
+                              "args": {
+                                "kind": "array",
+                                "items": [
+                                  {
+                                    "kind": "object",
+                                    "members": {
+                                      "A_Expr": {
+                                        "kind": "object",
+                                        "members": {
+                                          "kind": {
+                                            "kind": "string",
+                                            "value": "AEXPR_OP"
+                                          },
+                                          "name": {
+                                            "kind": "array",
+                                            "items": [
+                                              {
+                                                "kind": "object",
+                                                "members": {
+                                                  "String": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "sval": {
+                                                        "kind": "string",
+                                                        "value": ">="
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            ]
+                                          },
+                                          "lexpr": {
+                                            "kind": "object",
+                                            "members": {
+                                              "ColumnRef": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "fields": {
+                                                    "kind": "array",
+                                                    "items": [
+                                                      {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "String": {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "sval": {
+                                                                "kind": "string",
+                                                                "value": "retained_rows"
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    ]
+                                                  },
+                                                  "location": {
+                                                    "kind": "number",
+                                                    "value": "594"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "rexpr": {
+                                            "kind": "object",
+                                            "members": {
+                                              "A_Const": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "ival": {
+                                                    "kind": "object",
+                                                    "members": {}
+                                                  },
+                                                  "location": {
+                                                    "kind": "number",
+                                                    "value": "611"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "location": {
+                                            "kind": "number",
+                                            "value": "608"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "kind": "object",
+                                    "members": {
+                                      "A_Expr": {
+                                        "kind": "object",
+                                        "members": {
+                                          "kind": {
+                                            "kind": "string",
+                                            "value": "AEXPR_OP"
+                                          },
+                                          "name": {
+                                            "kind": "array",
+                                            "items": [
+                                              {
+                                                "kind": "object",
+                                                "members": {
+                                                  "String": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "sval": {
+                                                        "kind": "string",
+                                                        "value": ">="
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            ]
+                                          },
+                                          "lexpr": {
+                                            "kind": "object",
+                                            "members": {
+                                              "ColumnRef": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "fields": {
+                                                    "kind": "array",
+                                                    "items": [
+                                                      {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "String": {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "sval": {
+                                                                "kind": "string",
+                                                                "value": "retained_custody_bytes"
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    ]
+                                                  },
+                                                  "location": {
+                                                    "kind": "number",
+                                                    "value": "617"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "rexpr": {
+                                            "kind": "object",
+                                            "members": {
+                                              "A_Const": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "ival": {
+                                                    "kind": "object",
+                                                    "members": {}
+                                                  },
+                                                  "location": {
+                                                    "kind": "number",
+                                                    "value": "643"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "location": {
+                                            "kind": "number",
+                                            "value": "640"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "kind": "object",
+                                    "members": {
+                                      "A_Expr": {
+                                        "kind": "object",
+                                        "members": {
+                                          "kind": {
+                                            "kind": "string",
+                                            "value": "AEXPR_OP"
+                                          },
+                                          "name": {
+                                            "kind": "array",
+                                            "items": [
+                                              {
+                                                "kind": "object",
+                                                "members": {
+                                                  "String": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "sval": {
+                                                        "kind": "string",
+                                                        "value": ">="
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            ]
+                                          },
+                                          "lexpr": {
+                                            "kind": "object",
+                                            "members": {
+                                              "ColumnRef": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "fields": {
+                                                    "kind": "array",
+                                                    "items": [
+                                                      {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "String": {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "sval": {
+                                                                "kind": "string",
+                                                                "value": "reserved_rows"
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    ]
+                                                  },
+                                                  "location": {
+                                                    "kind": "number",
+                                                    "value": "655"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "rexpr": {
+                                            "kind": "object",
+                                            "members": {
+                                              "A_Const": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "ival": {
+                                                    "kind": "object",
+                                                    "members": {}
+                                                  },
+                                                  "location": {
+                                                    "kind": "number",
+                                                    "value": "672"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "location": {
+                                            "kind": "number",
+                                            "value": "669"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "kind": "object",
+                                    "members": {
+                                      "A_Expr": {
+                                        "kind": "object",
+                                        "members": {
+                                          "kind": {
+                                            "kind": "string",
+                                            "value": "AEXPR_OP"
+                                          },
+                                          "name": {
+                                            "kind": "array",
+                                            "items": [
+                                              {
+                                                "kind": "object",
+                                                "members": {
+                                                  "String": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "sval": {
+                                                        "kind": "string",
+                                                        "value": ">="
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            ]
+                                          },
+                                          "lexpr": {
+                                            "kind": "object",
+                                            "members": {
+                                              "ColumnRef": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "fields": {
+                                                    "kind": "array",
+                                                    "items": [
+                                                      {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "String": {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "sval": {
+                                                                "kind": "string",
+                                                                "value": "reserved_custody_bytes"
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    ]
+                                                  },
+                                                  "location": {
+                                                    "kind": "number",
+                                                    "value": "678"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "rexpr": {
+                                            "kind": "object",
+                                            "members": {
+                                              "A_Const": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "ival": {
+                                                    "kind": "object",
+                                                    "members": {}
+                                                  },
+                                                  "location": {
+                                                    "kind": "number",
+                                                    "value": "704"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "location": {
+                                            "kind": "number",
+                                            "value": "701"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                ]
+                              },
+                              "location": {
+                                "kind": "number",
+                                "value": "613"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "location": {
+                        "kind": "number",
+                        "value": "542"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "kind": "object",
+                "members": {
+                  "Constraint": {
+                    "kind": "object",
+                    "members": {
+                      "contype": {
+                        "kind": "string",
+                        "value": "CONSTR_CHECK"
+                      },
+                      "conname": {
+                        "kind": "string",
+                        "value": "row_home_capacity_reference_caps"
+                      },
+                      "initially_valid": {
+                        "kind": "boolean",
+                        "value": true
+                      },
+                      "raw_expr": {
+                        "kind": "object",
+                        "members": {
+                          "BoolExpr": {
+                            "kind": "object",
+                            "members": {
+                              "boolop": {
+                                "kind": "string",
+                                "value": "AND_EXPR"
+                              },
+                              "args": {
+                                "kind": "array",
+                                "items": [
+                                  {
+                                    "kind": "object",
+                                    "members": {
+                                      "A_Expr": {
+                                        "kind": "object",
+                                        "members": {
+                                          "kind": {
+                                            "kind": "string",
+                                            "value": "AEXPR_OP"
+                                          },
+                                          "name": {
+                                            "kind": "array",
+                                            "items": [
+                                              {
+                                                "kind": "object",
+                                                "members": {
+                                                  "String": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "sval": {
+                                                        "kind": "string",
+                                                        "value": "<="
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            ]
+                                          },
+                                          "lexpr": {
+                                            "kind": "object",
+                                            "members": {
+                                              "A_Expr": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "kind": {
+                                                    "kind": "string",
+                                                    "value": "AEXPR_OP"
+                                                  },
+                                                  "name": {
+                                                    "kind": "array",
+                                                    "items": [
+                                                      {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "String": {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "sval": {
+                                                                "kind": "string",
+                                                                "value": "+"
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    ]
+                                                  },
+                                                  "lexpr": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "ColumnRef": {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "fields": {
+                                                            "kind": "array",
+                                                            "items": [
+                                                              {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "String": {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "sval": {
+                                                                        "kind": "string",
+                                                                        "value": "retained_rows"
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            ]
+                                                          },
+                                                          "location": {
+                                                            "kind": "number",
+                                                            "value": "765"
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  "rexpr": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "ColumnRef": {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "fields": {
+                                                            "kind": "array",
+                                                            "items": [
+                                                              {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "String": {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "sval": {
+                                                                        "kind": "string",
+                                                                        "value": "reserved_rows"
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            ]
+                                                          },
+                                                          "location": {
+                                                            "kind": "number",
+                                                            "value": "781"
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  "location": {
+                                                    "kind": "number",
+                                                    "value": "779"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "rexpr": {
+                                            "kind": "object",
+                                            "members": {
+                                              "A_Const": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "ival": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "ival": {
+                                                        "kind": "number",
+                                                        "value": "65536"
+                                                      }
+                                                    }
+                                                  },
+                                                  "location": {
+                                                    "kind": "number",
+                                                    "value": "798"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "location": {
+                                            "kind": "number",
+                                            "value": "795"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "kind": "object",
+                                    "members": {
+                                      "A_Expr": {
+                                        "kind": "object",
+                                        "members": {
+                                          "kind": {
+                                            "kind": "string",
+                                            "value": "AEXPR_OP"
+                                          },
+                                          "name": {
+                                            "kind": "array",
+                                            "items": [
+                                              {
+                                                "kind": "object",
+                                                "members": {
+                                                  "String": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "sval": {
+                                                        "kind": "string",
+                                                        "value": "<="
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            ]
+                                          },
+                                          "lexpr": {
+                                            "kind": "object",
+                                            "members": {
+                                              "A_Expr": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "kind": {
+                                                    "kind": "string",
+                                                    "value": "AEXPR_OP"
+                                                  },
+                                                  "name": {
+                                                    "kind": "array",
+                                                    "items": [
+                                                      {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "String": {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "sval": {
+                                                                "kind": "string",
+                                                                "value": "+"
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    ]
+                                                  },
+                                                  "lexpr": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "ColumnRef": {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "fields": {
+                                                            "kind": "array",
+                                                            "items": [
+                                                              {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "String": {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "sval": {
+                                                                        "kind": "string",
+                                                                        "value": "retained_custody_bytes"
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            ]
+                                                          },
+                                                          "location": {
+                                                            "kind": "number",
+                                                            "value": "814"
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  "rexpr": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "ColumnRef": {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "fields": {
+                                                            "kind": "array",
+                                                            "items": [
+                                                              {
+                                                                "kind": "object",
+                                                                "members": {
+                                                                  "String": {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "sval": {
+                                                                        "kind": "string",
+                                                                        "value": "reserved_custody_bytes"
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            ]
+                                                          },
+                                                          "location": {
+                                                            "kind": "number",
+                                                            "value": "839"
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  "location": {
+                                                    "kind": "number",
+                                                    "value": "837"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "rexpr": {
+                                            "kind": "object",
+                                            "members": {
+                                              "A_Const": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "ival": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "ival": {
+                                                        "kind": "number",
+                                                        "value": "536870912"
+                                                      }
+                                                    }
+                                                  },
+                                                  "location": {
+                                                    "kind": "number",
+                                                    "value": "865"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "location": {
+                                            "kind": "number",
+                                            "value": "862"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                ]
+                              },
+                              "location": {
+                                "kind": "number",
+                                "value": "810"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "location": {
+                        "kind": "number",
+                        "value": "710"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "kind": "object",
+                "members": {
+                  "Constraint": {
+                    "kind": "object",
+                    "members": {
+                      "contype": {
+                        "kind": "string",
+                        "value": "CONSTR_CHECK"
+                      },
+                      "conname": {
+                        "kind": "string",
+                        "value": "row_home_capacity_originals"
+                      },
+                      "initially_valid": {
+                        "kind": "boolean",
+                        "value": true
+                      },
+                      "raw_expr": {
+                        "kind": "object",
+                        "members": {
+                          "BoolExpr": {
+                            "kind": "object",
+                            "members": {
+                              "boolop": {
+                                "kind": "string",
+                                "value": "AND_EXPR"
+                              },
+                              "args": {
+                                "kind": "array",
+                                "items": [
+                                  {
+                                    "kind": "object",
+                                    "members": {
+                                      "A_Expr": {
+                                        "kind": "object",
+                                        "members": {
+                                          "kind": {
+                                            "kind": "string",
+                                            "value": "AEXPR_OP"
+                                          },
+                                          "name": {
+                                            "kind": "array",
+                                            "items": [
+                                              {
+                                                "kind": "object",
+                                                "members": {
+                                                  "String": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "sval": {
+                                                        "kind": "string",
+                                                        "value": ">"
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            ]
+                                          },
+                                          "lexpr": {
+                                            "kind": "object",
+                                            "members": {
+                                              "FuncCall": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "funcname": {
+                                                    "kind": "array",
+                                                    "items": [
+                                                      {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "String": {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "sval": {
+                                                                "kind": "string",
+                                                                "value": "octet_length"
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    ]
+                                                  },
+                                                  "args": {
+                                                    "kind": "array",
+                                                    "items": [
+                                                      {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "ColumnRef": {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "fields": {
+                                                                "kind": "array",
+                                                                "items": [
+                                                                  {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "String": {
+                                                                        "kind": "object",
+                                                                        "members": {
+                                                                          "sval": {
+                                                                            "kind": "string",
+                                                                            "value": "original_layout_bytes"
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                ]
+                                                              },
+                                                              "location": {
+                                                                "kind": "number",
+                                                                "value": "942"
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    ]
+                                                  },
+                                                  "funcformat": {
+                                                    "kind": "string",
+                                                    "value": "COERCE_EXPLICIT_CALL"
+                                                  },
+                                                  "location": {
+                                                    "kind": "number",
+                                                    "value": "929"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "rexpr": {
+                                            "kind": "object",
+                                            "members": {
+                                              "A_Const": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "ival": {
+                                                    "kind": "object",
+                                                    "members": {}
+                                                  },
+                                                  "location": {
+                                                    "kind": "number",
+                                                    "value": "967"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "location": {
+                                            "kind": "number",
+                                            "value": "965"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "kind": "object",
+                                    "members": {
+                                      "A_Expr": {
+                                        "kind": "object",
+                                        "members": {
+                                          "kind": {
+                                            "kind": "string",
+                                            "value": "AEXPR_OP"
+                                          },
+                                          "name": {
+                                            "kind": "array",
+                                            "items": [
+                                              {
+                                                "kind": "object",
+                                                "members": {
+                                                  "String": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "sval": {
+                                                        "kind": "string",
+                                                        "value": ">"
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            ]
+                                          },
+                                          "lexpr": {
+                                            "kind": "object",
+                                            "members": {
+                                              "FuncCall": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "funcname": {
+                                                    "kind": "array",
+                                                    "items": [
+                                                      {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "String": {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "sval": {
+                                                                "kind": "string",
+                                                                "value": "octet_length"
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    ]
+                                                  },
+                                                  "args": {
+                                                    "kind": "array",
+                                                    "items": [
+                                                      {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "ColumnRef": {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "fields": {
+                                                                "kind": "array",
+                                                                "items": [
+                                                                  {
+                                                                    "kind": "object",
+                                                                    "members": {
+                                                                      "String": {
+                                                                        "kind": "object",
+                                                                        "members": {
+                                                                          "sval": {
+                                                                            "kind": "string",
+                                                                            "value": "original_resource_profile_bytes"
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                ]
+                                                              },
+                                                              "location": {
+                                                                "kind": "number",
+                                                                "value": "992"
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    ]
+                                                  },
+                                                  "funcformat": {
+                                                    "kind": "string",
+                                                    "value": "COERCE_EXPLICIT_CALL"
+                                                  },
+                                                  "location": {
+                                                    "kind": "number",
+                                                    "value": "979"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "rexpr": {
+                                            "kind": "object",
+                                            "members": {
+                                              "A_Const": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "ival": {
+                                                    "kind": "object",
+                                                    "members": {}
+                                                  },
+                                                  "location": {
+                                                    "kind": "number",
+                                                    "value": "1027"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "location": {
+                                            "kind": "number",
+                                            "value": "1025"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                ]
+                              },
+                              "location": {
+                                "kind": "number",
+                                "value": "975"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "location": {
+                        "kind": "number",
+                        "value": "879"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "oncommit": {
+            "kind": "string",
+            "value": "ONCOMMIT_NOOP"
+          }
+        }
+      }
+    },
+    {
+      "entryId": "truss.row-home.column.row_home_capacity.singleton_id",
+      "objectKind": "column",
+      "nativeName": "singleton_id",
+      "nativeBinding": {
+        "state": "unresolved"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/row-home-capacity-v0.1.proposal.umf.json",
+        "modelSha256": "98066d3397e138e1e4e2e86ffde784bd536f4c433053b90aa99d5b01e55d751d",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef"
+      },
+      "originalNativeNode": {
+        "kind": "object",
+        "members": {
+          "colname": {
+            "kind": "string",
+            "value": "singleton_id"
+          },
+          "typeName": {
+            "kind": "object",
+            "members": {
+              "names": {
+                "kind": "array",
+                "items": [
+                  {
+                    "kind": "object",
+                    "members": {
+                      "String": {
+                        "kind": "object",
+                        "members": {
+                          "sval": {
+                            "kind": "string",
+                            "value": "pg_catalog"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "kind": "object",
+                    "members": {
+                      "String": {
+                        "kind": "object",
+                        "members": {
+                          "sval": {
+                            "kind": "string",
+                            "value": "int2"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "typemod": {
+                "kind": "number",
+                "value": "-1"
+              },
+              "location": {
+                "kind": "number",
+                "value": "211"
+              }
+            }
+          },
+          "is_local": {
+            "kind": "boolean",
+            "value": true
+          },
+          "constraints": {
+            "kind": "array",
+            "items": [
+              {
+                "kind": "object",
+                "members": {
+                  "Constraint": {
+                    "kind": "object",
+                    "members": {
+                      "contype": {
+                        "kind": "string",
+                        "value": "CONSTR_PRIMARY"
+                      },
+                      "location": {
+                        "kind": "number",
+                        "value": "220"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "location": {
+            "kind": "number",
+            "value": "198"
+          }
+        }
+      },
+      "parentId": "truss.row-home.table.row_home_capacity"
+    },
+    {
+      "entryId": "truss.row-home.constraint.row_home_capacity.singleton_id.constr_primary",
+      "objectKind": "constraint",
+      "nativeName": "constr_primary",
+      "nativeBinding": {
+        "state": "unresolved"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/row-home-capacity-v0.1.proposal.umf.json",
+        "modelSha256": "98066d3397e138e1e4e2e86ffde784bd536f4c433053b90aa99d5b01e55d751d",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef/members/constraints/items/0/members/Constraint"
+      },
+      "originalNativeNode": {
+        "kind": "object",
+        "members": {
+          "contype": {
+            "kind": "string",
+            "value": "CONSTR_PRIMARY"
+          },
+          "location": {
+            "kind": "number",
+            "value": "220"
+          }
+        }
+      },
+      "parentId": "truss.row-home.table.row_home_capacity",
+      "nativeKind": "CONSTR_PRIMARY"
+    },
+    {
+      "entryId": "truss.row-home.column.row_home_capacity.retained_rows",
+      "objectKind": "column",
+      "nativeName": "retained_rows",
+      "nativeBinding": {
+        "state": "unresolved"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/row-home-capacity-v0.1.proposal.umf.json",
+        "modelSha256": "98066d3397e138e1e4e2e86ffde784bd536f4c433053b90aa99d5b01e55d751d",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/1/members/ColumnDef"
+      },
+      "originalNativeNode": {
+        "kind": "object",
+        "members": {
+          "colname": {
+            "kind": "string",
+            "value": "retained_rows"
+          },
+          "typeName": {
+            "kind": "object",
+            "members": {
+              "names": {
+                "kind": "array",
+                "items": [
+                  {
+                    "kind": "object",
+                    "members": {
+                      "String": {
+                        "kind": "object",
+                        "members": {
+                          "sval": {
+                            "kind": "string",
+                            "value": "pg_catalog"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "kind": "object",
+                    "members": {
+                      "String": {
+                        "kind": "object",
+                        "members": {
+                          "sval": {
+                            "kind": "string",
+                            "value": "int8"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "typemod": {
+                "kind": "number",
+                "value": "-1"
+              },
+              "location": {
+                "kind": "number",
+                "value": "249"
+              }
+            }
+          },
+          "is_local": {
+            "kind": "boolean",
+            "value": true
+          },
+          "constraints": {
+            "kind": "array",
+            "items": [
+              {
+                "kind": "object",
+                "members": {
+                  "Constraint": {
+                    "kind": "object",
+                    "members": {
+                      "contype": {
+                        "kind": "string",
+                        "value": "CONSTR_NOTNULL"
+                      },
+                      "location": {
+                        "kind": "number",
+                        "value": "256"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "location": {
+            "kind": "number",
+            "value": "235"
+          }
+        }
+      },
+      "parentId": "truss.row-home.table.row_home_capacity"
+    },
+    {
+      "entryId": "truss.row-home.column.row_home_capacity.retained_custody_bytes",
+      "objectKind": "column",
+      "nativeName": "retained_custody_bytes",
+      "nativeBinding": {
+        "state": "unresolved"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/row-home-capacity-v0.1.proposal.umf.json",
+        "modelSha256": "98066d3397e138e1e4e2e86ffde784bd536f4c433053b90aa99d5b01e55d751d",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/2/members/ColumnDef"
+      },
+      "originalNativeNode": {
+        "kind": "object",
+        "members": {
+          "colname": {
+            "kind": "string",
+            "value": "retained_custody_bytes"
+          },
+          "typeName": {
+            "kind": "object",
+            "members": {
+              "names": {
+                "kind": "array",
+                "items": [
+                  {
+                    "kind": "object",
+                    "members": {
+                      "String": {
+                        "kind": "object",
+                        "members": {
+                          "sval": {
+                            "kind": "string",
+                            "value": "pg_catalog"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "kind": "object",
+                    "members": {
+                      "String": {
+                        "kind": "object",
+                        "members": {
+                          "sval": {
+                            "kind": "string",
+                            "value": "int8"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "typemod": {
+                "kind": "number",
+                "value": "-1"
+              },
+              "location": {
+                "kind": "number",
+                "value": "291"
+              }
+            }
+          },
+          "is_local": {
+            "kind": "boolean",
+            "value": true
+          },
+          "constraints": {
+            "kind": "array",
+            "items": [
+              {
+                "kind": "object",
+                "members": {
+                  "Constraint": {
+                    "kind": "object",
+                    "members": {
+                      "contype": {
+                        "kind": "string",
+                        "value": "CONSTR_NOTNULL"
+                      },
+                      "location": {
+                        "kind": "number",
+                        "value": "298"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "location": {
+            "kind": "number",
+            "value": "268"
+          }
+        }
+      },
+      "parentId": "truss.row-home.table.row_home_capacity"
+    },
+    {
+      "entryId": "truss.row-home.column.row_home_capacity.reserved_rows",
+      "objectKind": "column",
+      "nativeName": "reserved_rows",
+      "nativeBinding": {
+        "state": "unresolved"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/row-home-capacity-v0.1.proposal.umf.json",
+        "modelSha256": "98066d3397e138e1e4e2e86ffde784bd536f4c433053b90aa99d5b01e55d751d",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/3/members/ColumnDef"
+      },
+      "originalNativeNode": {
+        "kind": "object",
+        "members": {
+          "colname": {
+            "kind": "string",
+            "value": "reserved_rows"
+          },
+          "typeName": {
+            "kind": "object",
+            "members": {
+              "names": {
+                "kind": "array",
+                "items": [
+                  {
+                    "kind": "object",
+                    "members": {
+                      "String": {
+                        "kind": "object",
+                        "members": {
+                          "sval": {
+                            "kind": "string",
+                            "value": "pg_catalog"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "kind": "object",
+                    "members": {
+                      "String": {
+                        "kind": "object",
+                        "members": {
+                          "sval": {
+                            "kind": "string",
+                            "value": "int8"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "typemod": {
+                "kind": "number",
+                "value": "-1"
+              },
+              "location": {
+                "kind": "number",
+                "value": "324"
+              }
+            }
+          },
+          "is_local": {
+            "kind": "boolean",
+            "value": true
+          },
+          "constraints": {
+            "kind": "array",
+            "items": [
+              {
+                "kind": "object",
+                "members": {
+                  "Constraint": {
+                    "kind": "object",
+                    "members": {
+                      "contype": {
+                        "kind": "string",
+                        "value": "CONSTR_NOTNULL"
+                      },
+                      "location": {
+                        "kind": "number",
+                        "value": "331"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "location": {
+            "kind": "number",
+            "value": "310"
+          }
+        }
+      },
+      "parentId": "truss.row-home.table.row_home_capacity"
+    },
+    {
+      "entryId": "truss.row-home.column.row_home_capacity.reserved_custody_bytes",
+      "objectKind": "column",
+      "nativeName": "reserved_custody_bytes",
+      "nativeBinding": {
+        "state": "unresolved"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/row-home-capacity-v0.1.proposal.umf.json",
+        "modelSha256": "98066d3397e138e1e4e2e86ffde784bd536f4c433053b90aa99d5b01e55d751d",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/4/members/ColumnDef"
+      },
+      "originalNativeNode": {
+        "kind": "object",
+        "members": {
+          "colname": {
+            "kind": "string",
+            "value": "reserved_custody_bytes"
+          },
+          "typeName": {
+            "kind": "object",
+            "members": {
+              "names": {
+                "kind": "array",
+                "items": [
+                  {
+                    "kind": "object",
+                    "members": {
+                      "String": {
+                        "kind": "object",
+                        "members": {
+                          "sval": {
+                            "kind": "string",
+                            "value": "pg_catalog"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "kind": "object",
+                    "members": {
+                      "String": {
+                        "kind": "object",
+                        "members": {
+                          "sval": {
+                            "kind": "string",
+                            "value": "int8"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "typemod": {
+                "kind": "number",
+                "value": "-1"
+              },
+              "location": {
+                "kind": "number",
+                "value": "366"
+              }
+            }
+          },
+          "is_local": {
+            "kind": "boolean",
+            "value": true
+          },
+          "constraints": {
+            "kind": "array",
+            "items": [
+              {
+                "kind": "object",
+                "members": {
+                  "Constraint": {
+                    "kind": "object",
+                    "members": {
+                      "contype": {
+                        "kind": "string",
+                        "value": "CONSTR_NOTNULL"
+                      },
+                      "location": {
+                        "kind": "number",
+                        "value": "373"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "location": {
+            "kind": "number",
+            "value": "343"
+          }
+        }
+      },
+      "parentId": "truss.row-home.table.row_home_capacity"
+    },
+    {
+      "entryId": "truss.row-home.column.row_home_capacity.original_layout_bytes",
+      "objectKind": "column",
+      "nativeName": "original_layout_bytes",
+      "nativeBinding": {
+        "state": "unresolved"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/row-home-capacity-v0.1.proposal.umf.json",
+        "modelSha256": "98066d3397e138e1e4e2e86ffde784bd536f4c433053b90aa99d5b01e55d751d",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/5/members/ColumnDef"
+      },
+      "originalNativeNode": {
+        "kind": "object",
+        "members": {
+          "colname": {
+            "kind": "string",
+            "value": "original_layout_bytes"
+          },
+          "typeName": {
+            "kind": "object",
+            "members": {
+              "names": {
+                "kind": "array",
+                "items": [
+                  {
+                    "kind": "object",
+                    "members": {
+                      "String": {
+                        "kind": "object",
+                        "members": {
+                          "sval": {
+                            "kind": "string",
+                            "value": "bytea"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "typemod": {
+                "kind": "number",
+                "value": "-1"
+              },
+              "location": {
+                "kind": "number",
+                "value": "407"
+              }
+            }
+          },
+          "is_local": {
+            "kind": "boolean",
+            "value": true
+          },
+          "constraints": {
+            "kind": "array",
+            "items": [
+              {
+                "kind": "object",
+                "members": {
+                  "Constraint": {
+                    "kind": "object",
+                    "members": {
+                      "contype": {
+                        "kind": "string",
+                        "value": "CONSTR_NOTNULL"
+                      },
+                      "location": {
+                        "kind": "number",
+                        "value": "413"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "location": {
+            "kind": "number",
+            "value": "385"
+          }
+        }
+      },
+      "parentId": "truss.row-home.table.row_home_capacity"
+    },
+    {
+      "entryId": "truss.row-home.column.row_home_capacity.original_resource_profile_bytes",
+      "objectKind": "column",
+      "nativeName": "original_resource_profile_bytes",
+      "nativeBinding": {
+        "state": "unresolved"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/row-home-capacity-v0.1.proposal.umf.json",
+        "modelSha256": "98066d3397e138e1e4e2e86ffde784bd536f4c433053b90aa99d5b01e55d751d",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/6/members/ColumnDef"
+      },
+      "originalNativeNode": {
+        "kind": "object",
+        "members": {
+          "colname": {
+            "kind": "string",
+            "value": "original_resource_profile_bytes"
+          },
+          "typeName": {
+            "kind": "object",
+            "members": {
+              "names": {
+                "kind": "array",
+                "items": [
+                  {
+                    "kind": "object",
+                    "members": {
+                      "String": {
+                        "kind": "object",
+                        "members": {
+                          "sval": {
+                            "kind": "string",
+                            "value": "bytea"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "typemod": {
+                "kind": "number",
+                "value": "-1"
+              },
+              "location": {
+                "kind": "number",
+                "value": "457"
+              }
+            }
+          },
+          "is_local": {
+            "kind": "boolean",
+            "value": true
+          },
+          "constraints": {
+            "kind": "array",
+            "items": [
+              {
+                "kind": "object",
+                "members": {
+                  "Constraint": {
+                    "kind": "object",
+                    "members": {
+                      "contype": {
+                        "kind": "string",
+                        "value": "CONSTR_NOTNULL"
+                      },
+                      "location": {
+                        "kind": "number",
+                        "value": "463"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "location": {
+            "kind": "number",
+            "value": "425"
+          }
+        }
+      },
+      "parentId": "truss.row-home.table.row_home_capacity"
+    },
+    {
+      "entryId": "truss.row-home.constraint.row_home_capacity.row_home_capacity_singleton",
+      "objectKind": "constraint",
+      "nativeName": "row_home_capacity_singleton",
+      "nativeBinding": {
+        "state": "unresolved"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/row-home-capacity-v0.1.proposal.umf.json",
+        "modelSha256": "98066d3397e138e1e4e2e86ffde784bd536f4c433053b90aa99d5b01e55d751d",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/7/members/Constraint"
+      },
+      "originalNativeNode": {
+        "kind": "object",
+        "members": {
+          "contype": {
+            "kind": "string",
+            "value": "CONSTR_CHECK"
+          },
+          "conname": {
+            "kind": "string",
+            "value": "row_home_capacity_singleton"
+          },
+          "initially_valid": {
+            "kind": "boolean",
+            "value": true
+          },
+          "raw_expr": {
+            "kind": "object",
+            "members": {
+              "A_Expr": {
+                "kind": "object",
+                "members": {
+                  "kind": {
+                    "kind": "string",
+                    "value": "AEXPR_OP"
+                  },
+                  "name": {
+                    "kind": "array",
+                    "items": [
+                      {
+                        "kind": "object",
+                        "members": {
+                          "String": {
+                            "kind": "object",
+                            "members": {
+                              "sval": {
+                                "kind": "string",
+                                "value": "="
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "lexpr": {
+                    "kind": "object",
+                    "members": {
+                      "ColumnRef": {
+                        "kind": "object",
+                        "members": {
+                          "fields": {
+                            "kind": "array",
+                            "items": [
+                              {
+                                "kind": "object",
+                                "members": {
+                                  "String": {
+                                    "kind": "object",
+                                    "members": {
+                                      "sval": {
+                                        "kind": "string",
+                                        "value": "singleton_id"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          "location": {
+                            "kind": "number",
+                            "value": "521"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "rexpr": {
+                    "kind": "object",
+                    "members": {
+                      "A_Const": {
+                        "kind": "object",
+                        "members": {
+                          "ival": {
+                            "kind": "object",
+                            "members": {
+                              "ival": {
+                                "kind": "number",
+                                "value": "1"
+                              }
+                            }
+                          },
+                          "location": {
+                            "kind": "number",
+                            "value": "536"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "location": {
+                    "kind": "number",
+                    "value": "534"
+                  }
+                }
+              }
+            }
+          },
+          "location": {
+            "kind": "number",
+            "value": "475"
+          }
+        }
+      },
+      "parentId": "truss.row-home.table.row_home_capacity",
+      "nativeKind": "CONSTR_CHECK"
+    },
+    {
+      "entryId": "truss.row-home.constraint.row_home_capacity.row_home_capacity_nonnegative",
+      "objectKind": "constraint",
+      "nativeName": "row_home_capacity_nonnegative",
+      "nativeBinding": {
+        "state": "unresolved"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/row-home-capacity-v0.1.proposal.umf.json",
+        "modelSha256": "98066d3397e138e1e4e2e86ffde784bd536f4c433053b90aa99d5b01e55d751d",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/8/members/Constraint"
+      },
+      "originalNativeNode": {
+        "kind": "object",
+        "members": {
+          "contype": {
+            "kind": "string",
+            "value": "CONSTR_CHECK"
+          },
+          "conname": {
+            "kind": "string",
+            "value": "row_home_capacity_nonnegative"
+          },
+          "initially_valid": {
+            "kind": "boolean",
+            "value": true
+          },
+          "raw_expr": {
+            "kind": "object",
+            "members": {
+              "BoolExpr": {
+                "kind": "object",
+                "members": {
+                  "boolop": {
+                    "kind": "string",
+                    "value": "AND_EXPR"
+                  },
+                  "args": {
+                    "kind": "array",
+                    "items": [
+                      {
+                        "kind": "object",
+                        "members": {
+                          "A_Expr": {
+                            "kind": "object",
+                            "members": {
+                              "kind": {
+                                "kind": "string",
+                                "value": "AEXPR_OP"
+                              },
+                              "name": {
+                                "kind": "array",
+                                "items": [
+                                  {
+                                    "kind": "object",
+                                    "members": {
+                                      "String": {
+                                        "kind": "object",
+                                        "members": {
+                                          "sval": {
+                                            "kind": "string",
+                                            "value": ">="
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                ]
+                              },
+                              "lexpr": {
+                                "kind": "object",
+                                "members": {
+                                  "ColumnRef": {
+                                    "kind": "object",
+                                    "members": {
+                                      "fields": {
+                                        "kind": "array",
+                                        "items": [
+                                          {
+                                            "kind": "object",
+                                            "members": {
+                                              "String": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "sval": {
+                                                    "kind": "string",
+                                                    "value": "retained_rows"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        ]
+                                      },
+                                      "location": {
+                                        "kind": "number",
+                                        "value": "594"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "rexpr": {
+                                "kind": "object",
+                                "members": {
+                                  "A_Const": {
+                                    "kind": "object",
+                                    "members": {
+                                      "ival": {
+                                        "kind": "object",
+                                        "members": {}
+                                      },
+                                      "location": {
+                                        "kind": "number",
+                                        "value": "611"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "location": {
+                                "kind": "number",
+                                "value": "608"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "kind": "object",
+                        "members": {
+                          "A_Expr": {
+                            "kind": "object",
+                            "members": {
+                              "kind": {
+                                "kind": "string",
+                                "value": "AEXPR_OP"
+                              },
+                              "name": {
+                                "kind": "array",
+                                "items": [
+                                  {
+                                    "kind": "object",
+                                    "members": {
+                                      "String": {
+                                        "kind": "object",
+                                        "members": {
+                                          "sval": {
+                                            "kind": "string",
+                                            "value": ">="
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                ]
+                              },
+                              "lexpr": {
+                                "kind": "object",
+                                "members": {
+                                  "ColumnRef": {
+                                    "kind": "object",
+                                    "members": {
+                                      "fields": {
+                                        "kind": "array",
+                                        "items": [
+                                          {
+                                            "kind": "object",
+                                            "members": {
+                                              "String": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "sval": {
+                                                    "kind": "string",
+                                                    "value": "retained_custody_bytes"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        ]
+                                      },
+                                      "location": {
+                                        "kind": "number",
+                                        "value": "617"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "rexpr": {
+                                "kind": "object",
+                                "members": {
+                                  "A_Const": {
+                                    "kind": "object",
+                                    "members": {
+                                      "ival": {
+                                        "kind": "object",
+                                        "members": {}
+                                      },
+                                      "location": {
+                                        "kind": "number",
+                                        "value": "643"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "location": {
+                                "kind": "number",
+                                "value": "640"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "kind": "object",
+                        "members": {
+                          "A_Expr": {
+                            "kind": "object",
+                            "members": {
+                              "kind": {
+                                "kind": "string",
+                                "value": "AEXPR_OP"
+                              },
+                              "name": {
+                                "kind": "array",
+                                "items": [
+                                  {
+                                    "kind": "object",
+                                    "members": {
+                                      "String": {
+                                        "kind": "object",
+                                        "members": {
+                                          "sval": {
+                                            "kind": "string",
+                                            "value": ">="
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                ]
+                              },
+                              "lexpr": {
+                                "kind": "object",
+                                "members": {
+                                  "ColumnRef": {
+                                    "kind": "object",
+                                    "members": {
+                                      "fields": {
+                                        "kind": "array",
+                                        "items": [
+                                          {
+                                            "kind": "object",
+                                            "members": {
+                                              "String": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "sval": {
+                                                    "kind": "string",
+                                                    "value": "reserved_rows"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        ]
+                                      },
+                                      "location": {
+                                        "kind": "number",
+                                        "value": "655"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "rexpr": {
+                                "kind": "object",
+                                "members": {
+                                  "A_Const": {
+                                    "kind": "object",
+                                    "members": {
+                                      "ival": {
+                                        "kind": "object",
+                                        "members": {}
+                                      },
+                                      "location": {
+                                        "kind": "number",
+                                        "value": "672"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "location": {
+                                "kind": "number",
+                                "value": "669"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "kind": "object",
+                        "members": {
+                          "A_Expr": {
+                            "kind": "object",
+                            "members": {
+                              "kind": {
+                                "kind": "string",
+                                "value": "AEXPR_OP"
+                              },
+                              "name": {
+                                "kind": "array",
+                                "items": [
+                                  {
+                                    "kind": "object",
+                                    "members": {
+                                      "String": {
+                                        "kind": "object",
+                                        "members": {
+                                          "sval": {
+                                            "kind": "string",
+                                            "value": ">="
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                ]
+                              },
+                              "lexpr": {
+                                "kind": "object",
+                                "members": {
+                                  "ColumnRef": {
+                                    "kind": "object",
+                                    "members": {
+                                      "fields": {
+                                        "kind": "array",
+                                        "items": [
+                                          {
+                                            "kind": "object",
+                                            "members": {
+                                              "String": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "sval": {
+                                                    "kind": "string",
+                                                    "value": "reserved_custody_bytes"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        ]
+                                      },
+                                      "location": {
+                                        "kind": "number",
+                                        "value": "678"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "rexpr": {
+                                "kind": "object",
+                                "members": {
+                                  "A_Const": {
+                                    "kind": "object",
+                                    "members": {
+                                      "ival": {
+                                        "kind": "object",
+                                        "members": {}
+                                      },
+                                      "location": {
+                                        "kind": "number",
+                                        "value": "704"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "location": {
+                                "kind": "number",
+                                "value": "701"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "location": {
+                    "kind": "number",
+                    "value": "613"
+                  }
+                }
+              }
+            }
+          },
+          "location": {
+            "kind": "number",
+            "value": "542"
+          }
+        }
+      },
+      "parentId": "truss.row-home.table.row_home_capacity",
+      "nativeKind": "CONSTR_CHECK"
+    },
+    {
+      "entryId": "truss.row-home.constraint.row_home_capacity.row_home_capacity_reference_caps",
+      "objectKind": "constraint",
+      "nativeName": "row_home_capacity_reference_caps",
+      "nativeBinding": {
+        "state": "unresolved"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/row-home-capacity-v0.1.proposal.umf.json",
+        "modelSha256": "98066d3397e138e1e4e2e86ffde784bd536f4c433053b90aa99d5b01e55d751d",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/9/members/Constraint"
+      },
+      "originalNativeNode": {
+        "kind": "object",
+        "members": {
+          "contype": {
+            "kind": "string",
+            "value": "CONSTR_CHECK"
+          },
+          "conname": {
+            "kind": "string",
+            "value": "row_home_capacity_reference_caps"
+          },
+          "initially_valid": {
+            "kind": "boolean",
+            "value": true
+          },
+          "raw_expr": {
+            "kind": "object",
+            "members": {
+              "BoolExpr": {
+                "kind": "object",
+                "members": {
+                  "boolop": {
+                    "kind": "string",
+                    "value": "AND_EXPR"
+                  },
+                  "args": {
+                    "kind": "array",
+                    "items": [
+                      {
+                        "kind": "object",
+                        "members": {
+                          "A_Expr": {
+                            "kind": "object",
+                            "members": {
+                              "kind": {
+                                "kind": "string",
+                                "value": "AEXPR_OP"
+                              },
+                              "name": {
+                                "kind": "array",
+                                "items": [
+                                  {
+                                    "kind": "object",
+                                    "members": {
+                                      "String": {
+                                        "kind": "object",
+                                        "members": {
+                                          "sval": {
+                                            "kind": "string",
+                                            "value": "<="
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                ]
+                              },
+                              "lexpr": {
+                                "kind": "object",
+                                "members": {
+                                  "A_Expr": {
+                                    "kind": "object",
+                                    "members": {
+                                      "kind": {
+                                        "kind": "string",
+                                        "value": "AEXPR_OP"
+                                      },
+                                      "name": {
+                                        "kind": "array",
+                                        "items": [
+                                          {
+                                            "kind": "object",
+                                            "members": {
+                                              "String": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "sval": {
+                                                    "kind": "string",
+                                                    "value": "+"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        ]
+                                      },
+                                      "lexpr": {
+                                        "kind": "object",
+                                        "members": {
+                                          "ColumnRef": {
+                                            "kind": "object",
+                                            "members": {
+                                              "fields": {
+                                                "kind": "array",
+                                                "items": [
+                                                  {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "String": {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "sval": {
+                                                            "kind": "string",
+                                                            "value": "retained_rows"
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                ]
+                                              },
+                                              "location": {
+                                                "kind": "number",
+                                                "value": "765"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "rexpr": {
+                                        "kind": "object",
+                                        "members": {
+                                          "ColumnRef": {
+                                            "kind": "object",
+                                            "members": {
+                                              "fields": {
+                                                "kind": "array",
+                                                "items": [
+                                                  {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "String": {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "sval": {
+                                                            "kind": "string",
+                                                            "value": "reserved_rows"
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                ]
+                                              },
+                                              "location": {
+                                                "kind": "number",
+                                                "value": "781"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "location": {
+                                        "kind": "number",
+                                        "value": "779"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "rexpr": {
+                                "kind": "object",
+                                "members": {
+                                  "A_Const": {
+                                    "kind": "object",
+                                    "members": {
+                                      "ival": {
+                                        "kind": "object",
+                                        "members": {
+                                          "ival": {
+                                            "kind": "number",
+                                            "value": "65536"
+                                          }
+                                        }
+                                      },
+                                      "location": {
+                                        "kind": "number",
+                                        "value": "798"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "location": {
+                                "kind": "number",
+                                "value": "795"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "kind": "object",
+                        "members": {
+                          "A_Expr": {
+                            "kind": "object",
+                            "members": {
+                              "kind": {
+                                "kind": "string",
+                                "value": "AEXPR_OP"
+                              },
+                              "name": {
+                                "kind": "array",
+                                "items": [
+                                  {
+                                    "kind": "object",
+                                    "members": {
+                                      "String": {
+                                        "kind": "object",
+                                        "members": {
+                                          "sval": {
+                                            "kind": "string",
+                                            "value": "<="
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                ]
+                              },
+                              "lexpr": {
+                                "kind": "object",
+                                "members": {
+                                  "A_Expr": {
+                                    "kind": "object",
+                                    "members": {
+                                      "kind": {
+                                        "kind": "string",
+                                        "value": "AEXPR_OP"
+                                      },
+                                      "name": {
+                                        "kind": "array",
+                                        "items": [
+                                          {
+                                            "kind": "object",
+                                            "members": {
+                                              "String": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "sval": {
+                                                    "kind": "string",
+                                                    "value": "+"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        ]
+                                      },
+                                      "lexpr": {
+                                        "kind": "object",
+                                        "members": {
+                                          "ColumnRef": {
+                                            "kind": "object",
+                                            "members": {
+                                              "fields": {
+                                                "kind": "array",
+                                                "items": [
+                                                  {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "String": {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "sval": {
+                                                            "kind": "string",
+                                                            "value": "retained_custody_bytes"
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                ]
+                                              },
+                                              "location": {
+                                                "kind": "number",
+                                                "value": "814"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "rexpr": {
+                                        "kind": "object",
+                                        "members": {
+                                          "ColumnRef": {
+                                            "kind": "object",
+                                            "members": {
+                                              "fields": {
+                                                "kind": "array",
+                                                "items": [
+                                                  {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "String": {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "sval": {
+                                                            "kind": "string",
+                                                            "value": "reserved_custody_bytes"
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                ]
+                                              },
+                                              "location": {
+                                                "kind": "number",
+                                                "value": "839"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "location": {
+                                        "kind": "number",
+                                        "value": "837"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "rexpr": {
+                                "kind": "object",
+                                "members": {
+                                  "A_Const": {
+                                    "kind": "object",
+                                    "members": {
+                                      "ival": {
+                                        "kind": "object",
+                                        "members": {
+                                          "ival": {
+                                            "kind": "number",
+                                            "value": "536870912"
+                                          }
+                                        }
+                                      },
+                                      "location": {
+                                        "kind": "number",
+                                        "value": "865"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "location": {
+                                "kind": "number",
+                                "value": "862"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "location": {
+                    "kind": "number",
+                    "value": "810"
+                  }
+                }
+              }
+            }
+          },
+          "location": {
+            "kind": "number",
+            "value": "710"
+          }
+        }
+      },
+      "parentId": "truss.row-home.table.row_home_capacity",
+      "nativeKind": "CONSTR_CHECK"
+    },
+    {
+      "entryId": "truss.row-home.constraint.row_home_capacity.row_home_capacity_originals",
+      "objectKind": "constraint",
+      "nativeName": "row_home_capacity_originals",
+      "nativeBinding": {
+        "state": "unresolved"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/row-home-capacity-v0.1.proposal.umf.json",
+        "modelSha256": "98066d3397e138e1e4e2e86ffde784bd536f4c433053b90aa99d5b01e55d751d",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/10/members/Constraint"
+      },
+      "originalNativeNode": {
+        "kind": "object",
+        "members": {
+          "contype": {
+            "kind": "string",
+            "value": "CONSTR_CHECK"
+          },
+          "conname": {
+            "kind": "string",
+            "value": "row_home_capacity_originals"
+          },
+          "initially_valid": {
+            "kind": "boolean",
+            "value": true
+          },
+          "raw_expr": {
+            "kind": "object",
+            "members": {
+              "BoolExpr": {
+                "kind": "object",
+                "members": {
+                  "boolop": {
+                    "kind": "string",
+                    "value": "AND_EXPR"
+                  },
+                  "args": {
+                    "kind": "array",
+                    "items": [
+                      {
+                        "kind": "object",
+                        "members": {
+                          "A_Expr": {
+                            "kind": "object",
+                            "members": {
+                              "kind": {
+                                "kind": "string",
+                                "value": "AEXPR_OP"
+                              },
+                              "name": {
+                                "kind": "array",
+                                "items": [
+                                  {
+                                    "kind": "object",
+                                    "members": {
+                                      "String": {
+                                        "kind": "object",
+                                        "members": {
+                                          "sval": {
+                                            "kind": "string",
+                                            "value": ">"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                ]
+                              },
+                              "lexpr": {
+                                "kind": "object",
+                                "members": {
+                                  "FuncCall": {
+                                    "kind": "object",
+                                    "members": {
+                                      "funcname": {
+                                        "kind": "array",
+                                        "items": [
+                                          {
+                                            "kind": "object",
+                                            "members": {
+                                              "String": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "sval": {
+                                                    "kind": "string",
+                                                    "value": "octet_length"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        ]
+                                      },
+                                      "args": {
+                                        "kind": "array",
+                                        "items": [
+                                          {
+                                            "kind": "object",
+                                            "members": {
+                                              "ColumnRef": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "fields": {
+                                                    "kind": "array",
+                                                    "items": [
+                                                      {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "String": {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "sval": {
+                                                                "kind": "string",
+                                                                "value": "original_layout_bytes"
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    ]
+                                                  },
+                                                  "location": {
+                                                    "kind": "number",
+                                                    "value": "942"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        ]
+                                      },
+                                      "funcformat": {
+                                        "kind": "string",
+                                        "value": "COERCE_EXPLICIT_CALL"
+                                      },
+                                      "location": {
+                                        "kind": "number",
+                                        "value": "929"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "rexpr": {
+                                "kind": "object",
+                                "members": {
+                                  "A_Const": {
+                                    "kind": "object",
+                                    "members": {
+                                      "ival": {
+                                        "kind": "object",
+                                        "members": {}
+                                      },
+                                      "location": {
+                                        "kind": "number",
+                                        "value": "967"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "location": {
+                                "kind": "number",
+                                "value": "965"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "kind": "object",
+                        "members": {
+                          "A_Expr": {
+                            "kind": "object",
+                            "members": {
+                              "kind": {
+                                "kind": "string",
+                                "value": "AEXPR_OP"
+                              },
+                              "name": {
+                                "kind": "array",
+                                "items": [
+                                  {
+                                    "kind": "object",
+                                    "members": {
+                                      "String": {
+                                        "kind": "object",
+                                        "members": {
+                                          "sval": {
+                                            "kind": "string",
+                                            "value": ">"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                ]
+                              },
+                              "lexpr": {
+                                "kind": "object",
+                                "members": {
+                                  "FuncCall": {
+                                    "kind": "object",
+                                    "members": {
+                                      "funcname": {
+                                        "kind": "array",
+                                        "items": [
+                                          {
+                                            "kind": "object",
+                                            "members": {
+                                              "String": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "sval": {
+                                                    "kind": "string",
+                                                    "value": "octet_length"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        ]
+                                      },
+                                      "args": {
+                                        "kind": "array",
+                                        "items": [
+                                          {
+                                            "kind": "object",
+                                            "members": {
+                                              "ColumnRef": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "fields": {
+                                                    "kind": "array",
+                                                    "items": [
+                                                      {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "String": {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "sval": {
+                                                                "kind": "string",
+                                                                "value": "original_resource_profile_bytes"
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    ]
+                                                  },
+                                                  "location": {
+                                                    "kind": "number",
+                                                    "value": "992"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        ]
+                                      },
+                                      "funcformat": {
+                                        "kind": "string",
+                                        "value": "COERCE_EXPLICIT_CALL"
+                                      },
+                                      "location": {
+                                        "kind": "number",
+                                        "value": "979"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "rexpr": {
+                                "kind": "object",
+                                "members": {
+                                  "A_Const": {
+                                    "kind": "object",
+                                    "members": {
+                                      "ival": {
+                                        "kind": "object",
+                                        "members": {}
+                                      },
+                                      "location": {
+                                        "kind": "number",
+                                        "value": "1027"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "location": {
+                                "kind": "number",
+                                "value": "1025"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "location": {
+                    "kind": "number",
+                    "value": "975"
+                  }
+                }
+              }
+            }
+          },
+          "location": {
+            "kind": "number",
+            "value": "879"
+          }
+        }
+      },
+      "parentId": "truss.row-home.table.row_home_capacity",
+      "nativeKind": "CONSTR_CHECK"
+    }
+  ]
+}

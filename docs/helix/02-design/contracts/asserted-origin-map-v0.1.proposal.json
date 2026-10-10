@@ -1,0 +1,31 @@
+{
+  "identity": "truss.asserted-origin-map",
+  "version": "0.1.0-candidate",
+  "scope": "Pure numeric-free asserted tree to exact tagged journal value; supplied role is not observed native authority",
+  "sources": {
+    "docs/helix/02-design/contracts/acceptance-input-v0.1.schema.json": "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd",
+    "docs/helix/02-design/contracts/exact-value-v0.1.schema.json": "0c804796bfbf68339c299f0c55d24db58fcfcc929bffe2d5ffaf4a2f27e24880",
+    "docs/helix/02-design/contracts/acceptance-report-v0.1.schema.json": "ccdc9976de3c158fae0a14d6cc41685d5f5a289d67daeb86b5e998b4a611e902",
+    "docs/helix/02-design/contracts/history-event-v0.1.schema.json": "e42f9b48642528cabbb646ccb758eb12b7f030029b712cf5d6f5174cbd90bfa6",
+    "packages/postgresql/src/asserted-origin-map.ts": "acc0e1c8a08ca64cf17bad8fb58a9d0dacd706d635b0ee3ee34f930715e1c7d6"
+  },
+  "mapping": {
+    "null": "null",
+    "boolean": "boolean",
+    "string": "string without interpretation",
+    "array": "ordered sequence",
+    "object": "map ordered by unsigned UTF8 original keys"
+  },
+  "preservation": [
+    "Complete original asserted tree",
+    "Exact original UTF8 bytes",
+    "User labels and kind-like fields remain asserted",
+    "No overwrite from separately supplied databaseRole"
+  ],
+  "limits": {
+    "sourceBytes": "1048576",
+    "mappedNodes": "32768",
+    "encodedOutputBytes": "4194304"
+  },
+  "adoption": "Requires original actor and asserted-origin capture custody, immutable registration, shared resource/native parity qualification and complete originalExecution composition"
+}

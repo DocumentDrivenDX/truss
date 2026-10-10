@@ -1,0 +1,16 @@
+{
+  "scriptSha256": "0481ea0ad7216aa9f88ce00ee12798611564a31c6a27265f6a120d7cdf792f08",
+  "hostPreflight": {
+    "cases": 3,
+    "status": "passed"
+  },
+  "strictTypeCheck": "passed",
+  "nativeAttempt": {
+    "status": "unverified",
+    "errorCode": "ERR_POSTGRES_CONNECTION_TIMEOUT",
+    "detail": "Startup message sent; no response within five seconds on explicitly owned port 15434. Original docker inspect session 51460 still live without output."
+  },
+  "scope": "Runnable native parity schedule and host case preparation; no native parity or accepted report evidence.",
+  "supersededBy": "canonical-report-native.json",
+  "note": "Historical timeout retained. Original inspect completed and subsequent exact-source native parity run passed; no daemon restart or duplicate launch."
+}

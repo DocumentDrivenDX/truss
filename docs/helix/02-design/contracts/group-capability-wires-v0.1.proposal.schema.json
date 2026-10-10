@@ -1,0 +1,352 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:proposal:group-capability-wires:0.1.0",
+  "title": "Existing request-free and idempotent group facade compositions",
+  "description": "Definitions only. Exact overload selection and original request/report/progress/receipt/native durability require independent admission. Applied results in supplied scope stay pending; committed receipt replay is a distinct original observation.",
+  "not": {},
+  "$defs": {
+    "requestFreeResult": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "success"
+            },
+            "response": {
+              "allOf": [
+                {
+                  "$ref": "urn:truss:draft:group-result:0.1.0"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "disposition": {
+                      "const": "applied"
+                    },
+                    "durability": {
+                      "const": "pending"
+                    }
+                  },
+                  "required": [
+                    "disposition",
+                    "durability"
+                  ]
+                }
+              ]
+            }
+          },
+          "required": [
+            "outcome",
+            "response"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "failed"
+            },
+            "failure": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "const": "group_failed"
+                    },
+                    "operationIndex": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "errorProfile": {
+                      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+                    },
+                    "innerError": {
+                      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "operationIndex",
+                    "errorProfile",
+                    "innerError"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "invalid"
+                      ]
+                    },
+                    "diagnosticProfile": {
+                      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+                    },
+                    "diagnostic": {
+                      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "diagnosticProfile",
+                    "diagnostic"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
+          "required": [
+            "outcome",
+            "failure"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "unavailable"
+            },
+            "reason": {
+              "enum": [
+                "profile",
+                "observation",
+                "resource"
+              ]
+            }
+          },
+          "required": [
+            "outcome",
+            "reason"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "requestBearingResult": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "success"
+            },
+            "response": {
+              "oneOf": [
+                {
+                  "allOf": [
+                    {
+                      "$ref": "urn:truss:draft:group-result:0.1.0"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "disposition": {
+                          "const": "applied"
+                        },
+                        "durability": {
+                          "const": "pending"
+                        }
+                      },
+                      "required": [
+                        "disposition",
+                        "durability"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "allOf": [
+                    {
+                      "$ref": "urn:truss:draft:group-result:0.1.0"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "disposition": {
+                          "const": "replayed"
+                        }
+                      },
+                      "required": [
+                        "disposition"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "required": [
+            "outcome",
+            "response"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "failed"
+            },
+            "failure": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "const": "group_failed"
+                    },
+                    "operationIndex": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "errorProfile": {
+                      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+                    },
+                    "innerError": {
+                      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "operationIndex",
+                    "errorProfile",
+                    "innerError"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "invalid",
+                        "request_conflict"
+                      ]
+                    },
+                    "diagnosticProfile": {
+                      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+                    },
+                    "diagnostic": {
+                      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "diagnosticProfile",
+                    "diagnostic"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
+          "required": [
+            "outcome",
+            "failure"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "unavailable"
+            },
+            "reason": {
+              "enum": [
+                "profile",
+                "receipt",
+                "receipt_expired",
+                "observation",
+                "resource"
+              ]
+            }
+          },
+          "required": [
+            "outcome",
+            "reason"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "requestFreeOutcome": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "status": {
+              "const": "ok"
+            },
+            "value": {
+              "$ref": "urn:truss:proposal:group-capability-wires:0.1.0#/$defs/requestFreeResult"
+            }
+          },
+          "required": [
+            "status",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "status": {
+              "const": "error"
+            },
+            "error": {
+              "$ref": "urn:truss:draft:execution-failure:0.1.0"
+            }
+          },
+          "required": [
+            "status",
+            "error"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "requestBearingOutcome": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "status": {
+              "const": "ok"
+            },
+            "value": {
+              "$ref": "urn:truss:proposal:group-capability-wires:0.1.0#/$defs/requestBearingResult"
+            }
+          },
+          "required": [
+            "status",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "status": {
+              "const": "error"
+            },
+            "error": {
+              "$ref": "urn:truss:draft:execution-failure:0.1.0"
+            }
+          },
+          "required": [
+            "status",
+            "error"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

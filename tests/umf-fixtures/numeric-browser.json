@@ -1,0 +1,18 @@
+[
+  {"name":"safe integer number","action":"admit-number","numberToken":"123","family":"integer","expected":{"integerToken":"123"}},
+  {"name":"exact decimal number","action":"admit-number","numberToken":"0.5","family":"decimal","expected":{"decimalToken":"0.5"}},
+  {"name":"inexact decimal number","action":"admit-number","numberToken":"0.1","family":"decimal","error":"JAVASCRIPT_NUMERIC"},
+  {"name":"unsafe integer number","action":"admit-number","numberToken":"9007199254740992","family":"integer","error":"JAVASCRIPT_NUMERIC"},
+  {"name":"negative zero number","action":"admit-number","numberToken":"-0","family":"decimal","error":"JAVASCRIPT_NUMERIC"},
+  {"name":"nonfinite number","action":"admit-number","numberToken":"Infinity","family":"decimal","error":"JAVASCRIPT_NUMERIC"},
+  {"name":"decimal spelling retained","action":"exact-decimal","token":"0.500","expected":{"decimalToken":"0.500"}},
+  {"name":"exact decimal output","action":"to-number","literal":{"decimalToken":"0.500"},"expected":0.5},
+  {"name":"lossy decimal output","action":"to-number","literal":{"decimalToken":"0.1"},"error":"JAVASCRIPT_NUMERIC"},
+  {"name":"large bigint input","action":"from-bigint","token":"9007199254740993","expected":{"integerToken":"9007199254740993"}},
+  {"name":"large bigint output","action":"to-bigint","literal":{"integerToken":"9007199254740993"},"expected":"9007199254740993"},
+  {"name":"lossy integer output","action":"to-number","literal":{"integerToken":"9007199254740993"},"error":"JAVASCRIPT_NUMERIC"},
+  {"name":"negative zero bigint output","action":"to-bigint","literal":{"integerToken":"-0"},"error":"JAVASCRIPT_NUMERIC"},
+  {"name":"original Field scale admitted","action":"exact-decimal","token":"1.250","fieldContext":true,"expected":{"decimalToken":"1.250"}},
+  {"name":"original Field scale exceeded","action":"exact-decimal","token":"1.2345","fieldContext":true,"error":"JAVASCRIPT_NUMERIC"},
+  {"name":"original Field precision exceeded","action":"exact-decimal","token":"1000000000000000000","fieldContext":true,"error":"JAVASCRIPT_NUMERIC"}
+]

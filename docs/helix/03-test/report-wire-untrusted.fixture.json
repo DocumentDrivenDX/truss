@@ -1,0 +1,173 @@
+{
+  "scope": "Untrusted shape-only report fixture; invented profile/digest/authority and empty inventories are not acceptance evidence.",
+  "report": {
+    "interfaceVersion": "truss-acceptance-report/0.1.0",
+    "reportProfile": {
+      "identity": "fixture",
+      "version": "0.1.0",
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "rev": "1",
+    "originalExecution": {
+      "installationId": "installation",
+      "sourceEpoch": "epoch",
+      "origin": {
+        "asserted": {
+          "operation": "accept"
+        },
+        "databaseRole": "role"
+      },
+      "journalOrigin": {
+        "asserted": {
+          "kind": "string",
+          "text": "origin"
+        },
+        "databaseRole": "role"
+      },
+      "originMappingProfile": {
+        "identity": "fixture",
+        "version": "0.1.0",
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "captureProfile": {
+        "identity": "fixture",
+        "version": "0.1.0",
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "contextEvidence": {
+        "identity": "fixture",
+        "bytesBase64": "e30=",
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    "acceptedInput": {
+      "interfaceVersion": "truss-acceptance-input/0.1.0",
+      "layoutProfile": {
+        "identity": "fixture",
+        "version": "0.1.0",
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "acceptanceProfile": {
+        "identity": "fixture",
+        "version": "0.1.0",
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "validatorProfile": {
+        "identity": "fixture",
+        "version": "0.1.0",
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "supportProfile": {
+        "identity": "fixture",
+        "version": "0.1.0",
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "documents": [
+        {
+          "documentId": "doc",
+          "documentRevision": "r1",
+          "artifact": {
+            "identity": "fixture",
+            "bytesBase64": "e30=",
+            "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "umfProfile": {
+            "identity": "fixture",
+            "version": "0.1.0",
+            "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "ingress": {
+            "kind": "native"
+          }
+        }
+      ],
+      "binding": {
+        "state": "absent"
+      },
+      "policy": {
+        "unknownEndpoint": "reject",
+        "loss": "strict",
+        "profile": {
+          "identity": "fixture",
+          "version": "0.1.0",
+          "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      },
+      "transforms": []
+    },
+    "transformRegistrations": [],
+    "umf": [
+      {
+        "version": "0.7.0",
+        "interpretationProfile": {
+          "identity": "fixture",
+          "version": "0.1.0",
+          "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "supportedSubset": {
+          "identity": "fixture",
+          "bytesBase64": "e30=",
+          "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      }
+    ],
+    "documents": [
+      {
+        "doc_id": "doc",
+        "doc_revision": "r1",
+        "content_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "ord": "0"
+      }
+    ],
+    "diagnostics": [],
+    "documentInterpretations": [
+      {
+        "documentId": "doc",
+        "contentSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "interpretationProfile": {
+          "identity": "fixture",
+          "version": "0.1.0",
+          "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "completeness": "complete",
+        "evidence": {
+          "identity": "fixture",
+          "bytesBase64": "e30=",
+          "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      }
+    ],
+    "counts": {
+      "typesAdded": "0",
+      "propertiesAdded": "0",
+      "keysAdded": "0",
+      "relationshipsAdded": "0",
+      "endpointsAdded": "0",
+      "elementsRetired": "0"
+    },
+    "provisional": [],
+    "rebinds": [],
+    "assertions": {
+      "interfaceVersion": "truss-enforcement-report/0.1.0",
+      "catalogRevision": "1",
+      "reportProfile": {
+        "identity": "fixture",
+        "version": "0.1.0",
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "layoutProfile": {
+        "identity": "fixture",
+        "version": "0.1.0",
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "scope": {
+        "kind": "complete"
+      },
+      "assertionInventorySha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "entries": []
+    },
+    "pending_indexes": [],
+    "losses": [],
+    "extensions": []
+  }
+}

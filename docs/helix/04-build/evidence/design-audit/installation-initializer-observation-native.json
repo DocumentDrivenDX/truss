@@ -1,0 +1,1178 @@
+{
+  "scope": "Actual initializer original-byte correspondence and one-shot revoked-rights component observation plus 17-helper identity/attribute/effective-EXECUTE inventory, administrative fixture",
+  "serverVersion": "16.15",
+  "routines": [
+    {
+      "sourceSelector": "truss.capacity_reserve_original(bigint,bytea,bytea,bigint,bigint,bytea,bytea)",
+      "routineOid": "17341",
+      "namespaceOid": "16384",
+      "ownerOid": "10",
+      "owner": "postgres",
+      "acl": "{postgres=X/postgres}",
+      "nativeDefinition": "CREATE OR REPLACE FUNCTION truss.capacity_reserve_original(issued_ordinal bigint, context_bytes bytea, plan_bytes bytea, row_budget bigint, byte_budget bigint, layout_bytes bytea, resource_bytes bytea)\n RETURNS void\n LANGUAGE plpgsql\n SET search_path TO 'pg_catalog', 'pg_temp'\nAS $function$\nDECLARE\n  actual_xid xid8;\n  ledger truss.row_home_capacity%ROWTYPE;\n  head_revision integer;\nBEGIN\n  IF issued_ordinal IS NULL OR issued_ordinal < 0\n    OR context_bytes IS NULL OR octet_length(context_bytes) NOT BETWEEN 1 AND 1048576\n    OR plan_bytes IS NULL OR octet_length(plan_bytes) NOT BETWEEN 1 AND 8388608\n    OR octet_length(context_bytes) + octet_length(plan_bytes) > 8388608\n    OR row_budget IS NULL OR row_budget NOT BETWEEN 1 AND 65536\n    OR byte_budget IS NULL OR byte_budget NOT BETWEEN 1 AND 536870912\n    OR layout_bytes IS NULL OR resource_bytes IS NULL THEN\n    RAISE EXCEPTION 'original bounded reservation inputs required' USING ERRCODE='22023';\n  END IF;\n  actual_xid := pg_current_xact_id_if_assigned();\n  IF actual_xid IS NULL THEN\n    RAISE EXCEPTION 'original assigned transaction required' USING ERRCODE='55000';\n  END IF;\n  -- The original producer must enter before every lower policy/key/owner lock.\n  SELECT h.rev INTO STRICT head_revision FROM truss.schema_head h WHERE h.id=1 FOR SHARE;\n  SELECT c.* INTO STRICT ledger FROM truss.row_home_capacity c WHERE c.singleton_id=1 FOR UPDATE;\n  IF ledger.original_layout_bytes IS DISTINCT FROM layout_bytes\n    OR ledger.original_resource_profile_bytes IS DISTINCT FROM resource_bytes\n    OR ledger.reservation_writer_xid IS NOT NULL THEN\n    RAISE EXCEPTION 'original available ledger/profile required' USING ERRCODE='55000';\n  END IF;\n  IF EXISTS (SELECT 1 FROM truss.row_home_operation o WHERE o.original_writer_xid=actual_xid\n      AND (o.phase <> 'application_finalized' OR o.operation_ordinal >= issued_ordinal)) THEN\n    RAISE EXCEPTION 'original issued operation frontier required' USING ERRCODE='55000';\n  END IF;\n  -- Subtract before adding: no overflowing trial sum or capacity eviction.\n  IF row_budget > 65536-ledger.retained_rows\n    OR byte_budget > 536870912-ledger.retained_custody_bytes THEN\n    RAISE EXCEPTION 'original capacity unavailable' USING ERRCODE='54000';\n  END IF;\n  UPDATE truss.row_home_capacity SET reserved_rows=row_budget,reserved_custody_bytes=byte_budget,\n    reservation_writer_xid=actual_xid,reservation_operation_ordinal=issued_ordinal,\n    reservation_context_bytes=context_bytes,reservation_plan_bytes=plan_bytes,\n    reservation_initial_rows=row_budget,reservation_initial_custody_bytes=byte_budget\n  WHERE singleton_id=1;\nEND;\n$function$\n",
+      "nativeDefinitionSha256": "00e0b6dfdcb32ae293dc1a804658af1a6bd88f094fc585b4a1dd8bdc0302df88"
+    },
+    {
+      "sourceSelector": "truss.capacity_transfer_original(bytea,bytea,bigint,bigint,bigint)",
+      "routineOid": "17342",
+      "namespaceOid": "16384",
+      "ownerOid": "10",
+      "owner": "postgres",
+      "acl": "{postgres=X/postgres}",
+      "nativeDefinition": "CREATE OR REPLACE FUNCTION truss.capacity_transfer_original(context_bytes bytea, plan_bytes bytea, new_rows bigint, positive_growth_bytes bigint, removed_bytes bigint)\n RETURNS void\n LANGUAGE plpgsql\n SET search_path TO 'pg_catalog', 'pg_temp'\nAS $function$\nDECLARE\n  actual_xid xid8;\n  ledger truss.row_home_capacity%ROWTYPE;\n  operation truss.row_home_operation%ROWTYPE;\nBEGIN\n  IF new_rows IS NULL OR new_rows < 0 OR positive_growth_bytes IS NULL OR positive_growth_bytes < 0\n    OR removed_bytes IS NULL OR removed_bytes < 0\n    OR positive_growth_bytes < new_rows\n    OR context_bytes IS NULL OR octet_length(context_bytes) NOT BETWEEN 1 AND 1048576\n    OR plan_bytes IS NULL OR octet_length(plan_bytes) NOT BETWEEN 1 AND 8388608\n    OR octet_length(context_bytes)+octet_length(plan_bytes)>8388608 THEN\n    RAISE EXCEPTION 'original nonnegative event deltas required' USING ERRCODE='22023';\n  END IF;\n  actual_xid := pg_current_xact_id_if_assigned();\n  IF actual_xid IS NULL THEN RAISE EXCEPTION 'original assigned transaction required' USING ERRCODE='55000'; END IF;\n  -- No FOR UPDATE: the original reserve UPDATE already owns the ledger through\n  -- termination. Observers cannot acquire an earlier capacity lock here.\n  SELECT c.* INTO STRICT ledger FROM truss.row_home_capacity c WHERE c.singleton_id=1;\n  IF ledger.reservation_writer_xid IS DISTINCT FROM actual_xid\n    OR ledger.reservation_context_bytes IS DISTINCT FROM context_bytes\n    OR ledger.reservation_plan_bytes IS DISTINCT FROM plan_bytes THEN\n    RAISE EXCEPTION 'original held reservation required' USING ERRCODE='55000';\n  END IF;\n  -- Unique unfinished scope, not latest ordinal or a caller-selected operation.\n  SELECT o.* INTO STRICT operation FROM truss.row_home_operation o\n  WHERE o.original_writer_xid=actual_xid AND o.phase <> 'application_finalized';\n  IF operation.operation_ordinal IS DISTINCT FROM ledger.reservation_operation_ordinal\n    OR operation.original_context_bytes IS DISTINCT FROM ledger.reservation_context_bytes THEN\n    RAISE EXCEPTION 'original operation/reservation correspondence required' USING ERRCODE='55000';\n  END IF;\n  IF new_rows > ledger.reserved_rows OR positive_growth_bytes > ledger.reserved_custody_bytes\n    OR removed_bytes > ledger.retained_custody_bytes THEN\n    RAISE EXCEPTION 'original event capacity unavailable' USING ERRCODE='54000';\n  END IF;\n  -- Producer independently derives complete OLD/NEW membership and exact row/\n  -- carrier/overhead deltas; arithmetic cannot authenticate these supplied deltas.\n  UPDATE truss.row_home_capacity\n  SET retained_rows=retained_rows+new_rows,\n    retained_custody_bytes=retained_custody_bytes-removed_bytes+positive_growth_bytes,\n    reserved_rows=reserved_rows-new_rows,\n    reserved_custody_bytes=reserved_custody_bytes-positive_growth_bytes\n  WHERE singleton_id=1;\n  -- Shrink never refunds remaining capacity. Immutable initial budgets remain.\nEND;\n$function$\n",
+      "nativeDefinitionSha256": "1ddec8417e4eb7490a0f302ad4d05b603ffd5594c887123b1a36b03f39e2c502"
+    },
+    {
+      "sourceSelector": "truss.capacity_release_original(bytea,bytea)",
+      "routineOid": "17343",
+      "namespaceOid": "16384",
+      "ownerOid": "10",
+      "owner": "postgres",
+      "acl": "{postgres=X/postgres}",
+      "nativeDefinition": "CREATE OR REPLACE FUNCTION truss.capacity_release_original(context_bytes bytea, plan_bytes bytea)\n RETURNS void\n LANGUAGE plpgsql\n SET search_path TO 'pg_catalog', 'pg_temp'\nAS $function$\nDECLARE\n  actual_xid xid8;\n  ledger truss.row_home_capacity%ROWTYPE;\n  operation truss.row_home_operation%ROWTYPE;\nBEGIN\n  IF context_bytes IS NULL OR octet_length(context_bytes) NOT BETWEEN 1 AND 1048576\n    OR plan_bytes IS NULL OR octet_length(plan_bytes) NOT BETWEEN 1 AND 8388608\n    OR octet_length(context_bytes)+octet_length(plan_bytes)>8388608 THEN\n    RAISE EXCEPTION 'original bounded release inputs required' USING ERRCODE='22023';\n  END IF;\n  actual_xid := pg_current_xact_id_if_assigned();\n  IF actual_xid IS NULL THEN RAISE EXCEPTION 'original assigned transaction required' USING ERRCODE='55000'; END IF;\n  SELECT c.* INTO STRICT ledger FROM truss.row_home_capacity c WHERE c.singleton_id=1;\n  IF ledger.reservation_writer_xid IS DISTINCT FROM actual_xid\n    OR ledger.reservation_context_bytes IS DISTINCT FROM context_bytes\n    OR ledger.reservation_plan_bytes IS DISTINCT FROM plan_bytes THEN\n    RAISE EXCEPTION 'original held reservation required' USING ERRCODE='55000';\n  END IF;\n  SELECT o.* INTO STRICT operation FROM truss.row_home_operation o\n  WHERE o.original_writer_xid=actual_xid AND o.operation_ordinal=ledger.reservation_operation_ordinal;\n  IF operation.phase <> 'application_finalized'\n    OR operation.original_context_bytes IS DISTINCT FROM ledger.reservation_context_bytes THEN\n    RAISE EXCEPTION 'original finalized operation required' USING ERRCODE='55000';\n  END IF;\n  IF EXISTS (SELECT 1 FROM truss.row_home_operation o\n      WHERE o.original_writer_xid=actual_xid AND o.phase <> 'application_finalized') THEN\n    RAISE EXCEPTION 'unfinished transaction scope cannot release reservation' USING ERRCODE='55000';\n  END IF;\n  -- Full protected finalizer establishes complete original guards/results; phase\n  -- CHECKs alone do not confer it. Release only remaining, never initial totals.\n  UPDATE truss.row_home_capacity SET reserved_rows=0,reserved_custody_bytes=0,\n    reservation_writer_xid=NULL,reservation_operation_ordinal=NULL,\n    reservation_context_bytes=NULL,reservation_plan_bytes=NULL,\n    reservation_initial_rows=NULL,reservation_initial_custody_bytes=NULL\n  WHERE singleton_id=1;\nEND;\n$function$\n",
+      "nativeDefinitionSha256": "9918024771cb239aa8cbd9b09a073e06d7abc4f6353f9fe307f3f63f5801c39c"
+    },
+    {
+      "sourceSelector": "truss.custody_codec_columns_original(text)",
+      "routineOid": "17344",
+      "namespaceOid": "16384",
+      "ownerOid": "10",
+      "owner": "postgres",
+      "acl": "{postgres=X/postgres}",
+      "nativeDefinition": "CREATE OR REPLACE FUNCTION truss.custody_codec_columns_original(kind text)\n RETURNS void\n LANGUAGE plpgsql\n SET search_path TO 'pg_catalog', 'pg_temp'\nAS $function$\nDECLARE\n  target regclass;\n  expected_names text[];\n  expected_types oid[];\n  expected_required boolean[];\n  names text[]; types oid[]; required boolean[]; modifiers integer[];\nBEGIN\n  IF current_setting('server_encoding') <> 'UTF8' THEN\n    RAISE EXCEPTION 'original UTF8 custody image required' USING ERRCODE='55000';\n  END IF;\n  IF kind='operation' THEN\n    target := 'truss.row_home_operation'::regclass;\n    expected_names := ARRAY['original_writer_xid','operation_ordinal','operation_kind','phase',\n      'effect_generation','readiness_generation','sealed_generation','application_generation',\n      'original_context_bytes','original_definition_bytes','original_input_bytes','original_prestate_bytes',\n      'admitted_candidate_bytes','effect_obligation_bytes','original_group_custody_bytes','application_result_bytes'];\n    expected_types := ARRAY['xid8'::regtype::oid,'int8'::regtype::oid,'text'::regtype::oid,'text'::regtype::oid,\n      'int8'::regtype::oid,'int8'::regtype::oid,'int8'::regtype::oid,'int8'::regtype::oid,\n      'bytea'::regtype::oid,'bytea'::regtype::oid,'bytea'::regtype::oid,'bytea'::regtype::oid,\n      'bytea'::regtype::oid,'bytea'::regtype::oid,'bytea'::regtype::oid,'bytea'::regtype::oid];\n    expected_required := ARRAY[true,true,true,true,true,false,false,false,true,true,true,true,true,true,true,false];\n  ELSIF kind='touch' THEN\n    target := 'truss.row_home_touch'::regclass;\n    expected_names := ARRAY['transaction_id','owner_kind','owner_id','owner_discriminator_id',\n      'property_owner_type_id','property_id','dirty_generation','sealed_generation',\n      'original_layout_bytes','original_home_bytes','original_owner_property_bytes','original_operation_bytes'];\n    expected_types := ARRAY['xid8'::regtype::oid,'text'::regtype::oid,'int8'::regtype::oid,'int4'::regtype::oid,\n      'int4'::regtype::oid,'int4'::regtype::oid,'int8'::regtype::oid,'int8'::regtype::oid,\n      'bytea'::regtype::oid,'bytea'::regtype::oid,'bytea'::regtype::oid,'bytea'::regtype::oid];\n    expected_required := ARRAY[true,true,true,true,true,true,true,false,true,true,true,true];\n  ELSE\n    RAISE EXCEPTION 'original custody kind required' USING ERRCODE='22023';\n  END IF;\n  -- Include dropped/user columns: new, removed or replaced fields cannot vanish\n  -- from accounting. This does not verify CHECKs/defaults/triggers/ACL/authority.\n  SELECT array_agg(a.attname::text ORDER BY a.attnum),array_agg(a.atttypid ORDER BY a.attnum),\n    array_agg(a.attnotnull ORDER BY a.attnum),array_agg(a.atttypmod ORDER BY a.attnum)\n  INTO names,types,required,modifiers FROM pg_attribute a WHERE a.attrelid=target AND a.attnum>0;\n  IF names IS DISTINCT FROM expected_names OR types IS DISTINCT FROM expected_types\n    OR required IS DISTINCT FROM expected_required\n    OR modifiers IS DISTINCT FROM array_fill(-1,ARRAY[cardinality(expected_names)]) THEN\n    RAISE EXCEPTION 'original complete custody column profile required' USING ERRCODE='55000';\n  END IF;\nEND;\n$function$\n",
+      "nativeDefinitionSha256": "cfe613e96c26c30ca2e6cce416c9fcb85ef76cf95ee7f85f65699369be9108ad"
+    },
+    {
+      "sourceSelector": "truss.custody_frame_original(text,bytea[])",
+      "routineOid": "17345",
+      "namespaceOid": "16384",
+      "ownerOid": "10",
+      "owner": "postgres",
+      "acl": "{postgres=X/postgres}",
+      "nativeDefinition": "CREATE OR REPLACE FUNCTION truss.custody_frame_original(kind text, cells bytea[])\n RETURNS bytea\n LANGUAGE plpgsql\n SET search_path TO 'pg_catalog', 'pg_temp'\nAS $function$\nDECLARE\n  expected_count integer;\n  prefix bytea;\n  item bytea;\n  total bigint;\n  result bytea;\nBEGIN\n  IF kind='operation' THEN expected_count:=16;\n  ELSIF kind='touch' THEN expected_count:=12;\n  ELSE RAISE EXCEPTION 'original custody kind required' USING ERRCODE='22023'; END IF;\n  IF cells IS NULL OR array_ndims(cells) IS DISTINCT FROM 1\n    OR array_lower(cells,1) IS DISTINCT FROM 1 OR cardinality(cells)<>expected_count THEN\n    RAISE EXCEPTION 'complete ordered custody cells required' USING ERRCODE='22023';\n  END IF;\n  prefix:=convert_to('truss.custody.'||kind||'/0.1','UTF8')||decode('00','hex')||int2send(expected_count::smallint);\n  total:=octet_length(prefix);\n  FOREACH item IN ARRAY cells LOOP\n    total:=total+9+coalesce(octet_length(item),0)::bigint;\n    IF total>8388608 THEN RAISE EXCEPTION 'complete custody row bound' USING ERRCODE='54000'; END IF;\n  END LOOP;\n  -- Complete size preflight precedes frame construction. This bounds output,\n  -- not native composite argument materialization or repeated copy work.\n  result:=prefix;\n  FOREACH item IN ARRAY cells LOOP\n    IF item IS NULL THEN result:=result||decode('00','hex')||int8send(0);\n    ELSE result:=result||decode('01','hex')||int8send(octet_length(item)::bigint)||item; END IF;\n  END LOOP;\n  RETURN result;\nEND;\n$function$\n",
+      "nativeDefinitionSha256": "2c02c055b5bbb3608cb3b3fef7ca047ca095000e9bee9956efd3e04927869d61"
+    },
+    {
+      "sourceSelector": "truss.custody_operation_original(truss.row_home_operation)",
+      "routineOid": "17346",
+      "namespaceOid": "16384",
+      "ownerOid": "10",
+      "owner": "postgres",
+      "acl": "{postgres=X/postgres}",
+      "nativeDefinition": "CREATE OR REPLACE FUNCTION truss.custody_operation_original(value truss.row_home_operation)\n RETURNS bytea\n LANGUAGE plpgsql\n SET search_path TO 'pg_catalog', 'pg_temp'\nAS $function$\nBEGIN\n  IF value IS NULL THEN RAISE EXCEPTION 'original operation row required' USING ERRCODE='22023'; END IF;\n  PERFORM truss.custody_codec_columns_original('operation');\n  RETURN truss.custody_frame_original('operation',ARRAY[\n    convert_to(value.original_writer_xid::text,'UTF8'),convert_to(value.operation_ordinal::text,'UTF8'),\n    convert_to(value.operation_kind,'UTF8'),convert_to(value.phase,'UTF8'),\n    convert_to(value.effect_generation::text,'UTF8'),convert_to(value.readiness_generation::text,'UTF8'),\n    convert_to(value.sealed_generation::text,'UTF8'),convert_to(value.application_generation::text,'UTF8'),\n    value.original_context_bytes,value.original_definition_bytes,value.original_input_bytes,value.original_prestate_bytes,\n    value.admitted_candidate_bytes,value.effect_obligation_bytes,value.original_group_custody_bytes,value.application_result_bytes]);\nEND;\n$function$\n",
+      "nativeDefinitionSha256": "4e432439b091fe37123ca46f55708551421e1b4bc758182741f9526780a9f1d6"
+    },
+    {
+      "sourceSelector": "truss.custody_touch_original(truss.row_home_touch)",
+      "routineOid": "17347",
+      "namespaceOid": "16384",
+      "ownerOid": "10",
+      "owner": "postgres",
+      "acl": "{postgres=X/postgres}",
+      "nativeDefinition": "CREATE OR REPLACE FUNCTION truss.custody_touch_original(value truss.row_home_touch)\n RETURNS bytea\n LANGUAGE plpgsql\n SET search_path TO 'pg_catalog', 'pg_temp'\nAS $function$\nBEGIN\n  IF value IS NULL THEN RAISE EXCEPTION 'original touch row required' USING ERRCODE='22023'; END IF;\n  PERFORM truss.custody_codec_columns_original('touch');\n  RETURN truss.custody_frame_original('touch',ARRAY[\n    convert_to(value.transaction_id::text,'UTF8'),convert_to(value.owner_kind,'UTF8'),\n    convert_to(value.owner_id::text,'UTF8'),convert_to(value.owner_discriminator_id::text,'UTF8'),\n    convert_to(value.property_owner_type_id::text,'UTF8'),convert_to(value.property_id::text,'UTF8'),\n    convert_to(value.dirty_generation::text,'UTF8'),convert_to(value.sealed_generation::text,'UTF8'),\n    value.original_layout_bytes,value.original_home_bytes,value.original_owner_property_bytes,value.original_operation_bytes]);\nEND;\n$function$\n",
+      "nativeDefinitionSha256": "688e9ce5194342931cc3513f1b45894b2b5df832aac6acad63d850e5419f2ec9"
+    },
+    {
+      "sourceSelector": "truss.custody_size_original(text,integer[])",
+      "routineOid": "17348",
+      "namespaceOid": "16384",
+      "ownerOid": "10",
+      "owner": "postgres",
+      "acl": "{postgres=X/postgres}",
+      "nativeDefinition": "CREATE OR REPLACE FUNCTION truss.custody_size_original(kind text, lengths integer[])\n RETURNS bigint\n LANGUAGE plpgsql\n SET search_path TO 'pg_catalog', 'pg_temp'\nAS $function$\nDECLARE expected_count integer; item integer; total bigint;\nBEGIN\n  IF kind='operation' THEN expected_count:=16;\n  ELSIF kind='touch' THEN expected_count:=12;\n  ELSE RAISE EXCEPTION 'original custody kind required' USING ERRCODE='22023'; END IF;\n  IF lengths IS NULL OR array_ndims(lengths) IS DISTINCT FROM 1\n    OR array_lower(lengths,1) IS DISTINCT FROM 1 OR cardinality(lengths)<>expected_count THEN\n    RAISE EXCEPTION 'complete ordered custody lengths required' USING ERRCODE='22023';\n  END IF;\n  total:=octet_length(convert_to('truss.custody.'||kind||'/0.1','UTF8'))+3;\n  FOREACH item IN ARRAY lengths LOOP\n    IF item<0 THEN RAISE EXCEPTION 'nonnegative original custody length required' USING ERRCODE='22023'; END IF;\n    total:=total+9+coalesce(item,0)::bigint;\n    IF total>8388608 THEN RAISE EXCEPTION 'complete custody row bound' USING ERRCODE='54000'; END IF;\n  END LOOP;\n  RETURN total;\nEND;\n$function$\n",
+      "nativeDefinitionSha256": "d0eb5d84e51ce7b9bc6f7a1f34dd6007138b49481e9e5867864b47036e1bda0b"
+    },
+    {
+      "sourceSelector": "truss.custody_operation_size_original(truss.row_home_operation)",
+      "routineOid": "17349",
+      "namespaceOid": "16384",
+      "ownerOid": "10",
+      "owner": "postgres",
+      "acl": "{postgres=X/postgres}",
+      "nativeDefinition": "CREATE OR REPLACE FUNCTION truss.custody_operation_size_original(value truss.row_home_operation)\n RETURNS bigint\n LANGUAGE plpgsql\n SET search_path TO 'pg_catalog', 'pg_temp'\nAS $function$\nBEGIN\n  IF value IS NULL THEN RAISE EXCEPTION 'original operation row required' USING ERRCODE='22023'; END IF;\n  PERFORM truss.custody_codec_columns_original('operation');\n  RETURN truss.custody_size_original('operation',ARRAY[\n    octet_length(convert_to(value.original_writer_xid::text,'UTF8')),octet_length(convert_to(value.operation_ordinal::text,'UTF8')),\n    octet_length(convert_to(value.operation_kind,'UTF8')),octet_length(convert_to(value.phase,'UTF8')),\n    octet_length(convert_to(value.effect_generation::text,'UTF8')),octet_length(convert_to(value.readiness_generation::text,'UTF8')),\n    octet_length(convert_to(value.sealed_generation::text,'UTF8')),octet_length(convert_to(value.application_generation::text,'UTF8')),\n    octet_length(value.original_context_bytes),octet_length(value.original_definition_bytes),octet_length(value.original_input_bytes),octet_length(value.original_prestate_bytes),\n    octet_length(value.admitted_candidate_bytes),octet_length(value.effect_obligation_bytes),octet_length(value.original_group_custody_bytes),octet_length(value.application_result_bytes)]);\nEND;\n$function$\n",
+      "nativeDefinitionSha256": "49f747b3fef559e292c05f2e01268b3877d4a9ae4a0b391cd3d1797bb9fa260f"
+    },
+    {
+      "sourceSelector": "truss.custody_touch_size_original(truss.row_home_touch)",
+      "routineOid": "17350",
+      "namespaceOid": "16384",
+      "ownerOid": "10",
+      "owner": "postgres",
+      "acl": "{postgres=X/postgres}",
+      "nativeDefinition": "CREATE OR REPLACE FUNCTION truss.custody_touch_size_original(value truss.row_home_touch)\n RETURNS bigint\n LANGUAGE plpgsql\n SET search_path TO 'pg_catalog', 'pg_temp'\nAS $function$\nBEGIN\n  IF value IS NULL THEN RAISE EXCEPTION 'original touch row required' USING ERRCODE='22023'; END IF;\n  PERFORM truss.custody_codec_columns_original('touch');\n  RETURN truss.custody_size_original('touch',ARRAY[\n    octet_length(convert_to(value.transaction_id::text,'UTF8')),octet_length(convert_to(value.owner_kind,'UTF8')),\n    octet_length(convert_to(value.owner_id::text,'UTF8')),octet_length(convert_to(value.owner_discriminator_id::text,'UTF8')),\n    octet_length(convert_to(value.property_owner_type_id::text,'UTF8')),octet_length(convert_to(value.property_id::text,'UTF8')),\n    octet_length(convert_to(value.dirty_generation::text,'UTF8')),octet_length(convert_to(value.sealed_generation::text,'UTF8')),\n    octet_length(value.original_layout_bytes),octet_length(value.original_home_bytes),octet_length(value.original_owner_property_bytes),octet_length(value.original_operation_bytes)]);\nEND;\n$function$\n",
+      "nativeDefinitionSha256": "dcf4b6b723845af5c1ff353a1afa2b7af7dc8a078f668b8d0163f5c6cf60a80f"
+    },
+    {
+      "sourceSelector": "truss.capacity_operation_observe_original()",
+      "routineOid": "17351",
+      "namespaceOid": "16384",
+      "ownerOid": "10",
+      "owner": "postgres",
+      "acl": "{postgres=X/postgres}",
+      "nativeDefinition": "CREATE OR REPLACE FUNCTION truss.capacity_operation_observe_original()\n RETURNS trigger\n LANGUAGE plpgsql\n SET search_path TO 'pg_catalog', 'pg_temp'\nAS $function$\nDECLARE ledger truss.row_home_capacity%ROWTYPE; old_size bigint:=0; new_size bigint; added bigint:=0;\nBEGIN\n  IF TG_RELID<>'truss.row_home_operation'::regclass OR TG_OP NOT IN ('INSERT','UPDATE')\n    OR (TG_OP='INSERT' AND TG_WHEN<>'AFTER') OR (TG_OP='UPDATE' AND TG_WHEN<>'BEFORE') THEN\n    RAISE EXCEPTION 'original operation capacity event required' USING ERRCODE='55000';\n  END IF;\n  SELECT c.* INTO STRICT ledger FROM truss.row_home_capacity c WHERE c.singleton_id=1;\n  IF ledger.reservation_writer_xid IS DISTINCT FROM pg_current_xact_id_if_assigned()\n    OR NEW.original_writer_xid IS DISTINCT FROM ledger.reservation_writer_xid\n    OR NEW.operation_ordinal IS DISTINCT FROM ledger.reservation_operation_ordinal\n    OR NEW.original_context_bytes IS DISTINCT FROM ledger.reservation_context_bytes THEN\n    RAISE EXCEPTION 'original operation event/reservation correspondence required' USING ERRCODE='55000';\n  END IF;\n  IF TG_OP='INSERT' THEN added:=1;\n  ELSE\n    IF OLD.original_writer_xid IS DISTINCT FROM NEW.original_writer_xid\n      OR OLD.operation_ordinal IS DISTINCT FROM NEW.operation_ordinal\n      OR OLD.original_context_bytes IS DISTINCT FROM NEW.original_context_bytes\n      OR OLD.phase='application_finalized' THEN\n      RAISE EXCEPTION 'original unfinished operation update required' USING ERRCODE='55000';\n    END IF;\n    old_size:=truss.custody_operation_size_original(OLD);\n  END IF;\n  new_size:=truss.custody_operation_size_original(NEW);\n  -- BEFORE UPDATE sees the original unfinished registry row during finalization.\n  -- Other BEFORE triggers/dependencies must be closed and final parity verified.\n  PERFORM truss.capacity_transfer_original(ledger.reservation_context_bytes,ledger.reservation_plan_bytes,\n    added,greatest(new_size-old_size,0),greatest(old_size-new_size,0));\n  RETURN NEW;\nEND;\n$function$\n",
+      "nativeDefinitionSha256": "a8da3ce02b208e5be631e9b12ffb47201b2454f921c943ac5dfee649162a3328"
+    },
+    {
+      "sourceSelector": "truss.capacity_touch_observe_original()",
+      "routineOid": "17352",
+      "namespaceOid": "16384",
+      "ownerOid": "10",
+      "owner": "postgres",
+      "acl": "{postgres=X/postgres}",
+      "nativeDefinition": "CREATE OR REPLACE FUNCTION truss.capacity_touch_observe_original()\n RETURNS trigger\n LANGUAGE plpgsql\n SET search_path TO 'pg_catalog', 'pg_temp'\nAS $function$\nDECLARE ledger truss.row_home_capacity%ROWTYPE; old_size bigint:=0; new_size bigint; added bigint:=0;\nBEGIN\n  IF TG_RELID<>'truss.row_home_touch'::regclass OR TG_OP NOT IN ('INSERT','UPDATE')\n    OR (TG_OP='INSERT' AND TG_WHEN<>'AFTER') OR (TG_OP='UPDATE' AND TG_WHEN<>'BEFORE') THEN\n    RAISE EXCEPTION 'original touch capacity event required' USING ERRCODE='55000';\n  END IF;\n  SELECT c.* INTO STRICT ledger FROM truss.row_home_capacity c WHERE c.singleton_id=1;\n  IF ledger.reservation_writer_xid IS DISTINCT FROM pg_current_xact_id_if_assigned()\n    OR NEW.transaction_id IS DISTINCT FROM ledger.reservation_writer_xid THEN\n    RAISE EXCEPTION 'original touch event/reservation correspondence required' USING ERRCODE='55000';\n  END IF;\n  IF TG_OP='INSERT' THEN added:=1;\n  ELSE\n    IF ROW(OLD.transaction_id,OLD.owner_kind,OLD.owner_id,OLD.owner_discriminator_id,OLD.property_owner_type_id,OLD.property_id)\n      IS DISTINCT FROM ROW(NEW.transaction_id,NEW.owner_kind,NEW.owner_id,NEW.owner_discriminator_id,NEW.property_owner_type_id,NEW.property_id) THEN\n      RAISE EXCEPTION 'original touch member identity required' USING ERRCODE='55000';\n    END IF;\n    old_size:=truss.custody_touch_size_original(OLD);\n  END IF;\n  new_size:=truss.custody_touch_size_original(NEW);\n  PERFORM truss.capacity_transfer_original(ledger.reservation_context_bytes,ledger.reservation_plan_bytes,\n    added,greatest(new_size-old_size,0),greatest(old_size-new_size,0));\n  RETURN NEW;\nEND;\n$function$\n",
+      "nativeDefinitionSha256": "77f1411a34c8d8021340f1171e565aafeb20eddb07ec71c5d35a42eb8ac0c026"
+    },
+    {
+      "sourceSelector": "truss.capacity_verify_inventory_original(bytea,bytea)",
+      "routineOid": "17361",
+      "namespaceOid": "16384",
+      "ownerOid": "10",
+      "owner": "postgres",
+      "acl": "{postgres=X/postgres}",
+      "nativeDefinition": "CREATE OR REPLACE FUNCTION truss.capacity_verify_inventory_original(layout_bytes bytea, resource_bytes bytea)\n RETURNS TABLE(observed_rows bigint, observed_custody_bytes bigint)\n LANGUAGE plpgsql\n SET search_path TO 'pg_catalog', 'pg_temp'\nAS $function$\nDECLARE\n  ledger truss.row_home_capacity%ROWTYPE;\n  operation truss.row_home_operation%ROWTYPE;\n  touch truss.row_home_touch%ROWTYPE;\n  revision integer;\n  member_size bigint;\n  targets oid[]:=ARRAY['truss.schema_head'::regclass::oid,'truss.row_home_capacity'::regclass::oid,\n    'truss.row_home_operation'::regclass::oid,'truss.row_home_touch'::regclass::oid];\nBEGIN\n  IF layout_bytes IS NULL OR resource_bytes IS NULL THEN\n    RAISE EXCEPTION 'original installation profiles required' USING ERRCODE='22023';\n  END IF;\n  -- Do not let owner bypass or FORCE RLS make a filtered inventory look complete.\n  -- Physical identity, dependencies, triggers and write privileges remain external.\n  IF EXISTS (SELECT 1 FROM pg_class c WHERE c.oid=ANY(targets)\n      AND (c.relrowsecurity OR c.relforcerowsecurity OR c.relkind<>'r'))\n    OR EXISTS (SELECT 1 FROM pg_inherits i WHERE i.inhrelid=ANY(targets) OR i.inhparent=ANY(targets)) THEN\n    RAISE EXCEPTION 'original unfiltered noninherited inventory required' USING ERRCODE='55000';\n  END IF;\n  PERFORM truss.custody_codec_columns_original('operation');\n  PERFORM truss.custody_codec_columns_original('touch');\n  SELECT h.rev INTO STRICT revision FROM truss.schema_head h WHERE h.id=1 FOR SHARE;\n  SELECT c.* INTO STRICT ledger FROM truss.row_home_capacity c WHERE c.singleton_id=1 FOR UPDATE;\n  IF ledger.original_layout_bytes IS DISTINCT FROM layout_bytes\n    OR ledger.original_resource_profile_bytes IS DISTINCT FROM resource_bytes THEN\n    RAISE EXCEPTION 'original ledger profile correspondence required' USING ERRCODE='55000';\n  END IF;\n  observed_rows:=0; observed_custody_bytes:=0;\n  -- No current-xid, phase, ordinal or caller-selected member filter.\n  FOR operation IN SELECT o.* FROM truss.row_home_operation o LOOP\n    member_size:=truss.custody_operation_size_original(operation);\n    IF observed_rows>=65536 OR member_size>536870912-observed_custody_bytes THEN\n      RAISE EXCEPTION 'complete retained inventory bound' USING ERRCODE='54000';\n    END IF;\n    observed_rows:=observed_rows+1; observed_custody_bytes:=observed_custody_bytes+member_size;\n  END LOOP;\n  FOR touch IN SELECT t.* FROM truss.row_home_touch t LOOP\n    member_size:=truss.custody_touch_size_original(touch);\n    IF observed_rows>=65536 OR member_size>536870912-observed_custody_bytes THEN\n      RAISE EXCEPTION 'complete retained inventory bound' USING ERRCODE='54000';\n    END IF;\n    observed_rows:=observed_rows+1; observed_custody_bytes:=observed_custody_bytes+member_size;\n  END LOOP;\n  IF observed_rows IS DISTINCT FROM ledger.retained_rows\n    OR observed_custody_bytes IS DISTINCT FROM ledger.retained_custody_bytes THEN\n    RAISE EXCEPTION 'complete retained inventory/ledger parity required' USING ERRCODE='55000';\n  END IF;\n  RETURN NEXT;\nEND;\n$function$\n",
+      "nativeDefinitionSha256": "a039ab0f141ce0c88d627699fb88ec9d8adc76fada9116ad268e1aea667d2940"
+    },
+    {
+      "sourceSelector": "truss.capacity_commit_check_original(bytea,bytea)",
+      "routineOid": "17362",
+      "namespaceOid": "16384",
+      "ownerOid": "10",
+      "owner": "postgres",
+      "acl": "{postgres=X/postgres}",
+      "nativeDefinition": "CREATE OR REPLACE FUNCTION truss.capacity_commit_check_original(layout_bytes bytea, resource_bytes bytea)\n RETURNS void\n LANGUAGE plpgsql\n SET search_path TO 'pg_catalog', 'pg_temp'\nAS $function$\nDECLARE ledger truss.row_home_capacity%ROWTYPE;\nBEGIN\n  -- Full scope, original head/ledger exclusion and complete size/counter parity.\n  PERFORM truss.capacity_verify_inventory_original(layout_bytes,resource_bytes);\n  SELECT c.* INTO STRICT ledger FROM truss.row_home_capacity c WHERE c.singleton_id=1;\n  IF ledger.reserved_rows<>0 OR ledger.reserved_custody_bytes<>0\n    OR ledger.reservation_writer_xid IS NOT NULL\n    OR ledger.reservation_operation_ordinal IS NOT NULL\n    OR ledger.reservation_context_bytes IS NOT NULL\n    OR ledger.reservation_plan_bytes IS NOT NULL\n    OR ledger.reservation_initial_rows IS NOT NULL\n    OR ledger.reservation_initial_custody_bytes IS NOT NULL THEN\n    RAISE EXCEPTION 'original reservation must be released before commit' USING ERRCODE='55000';\n  END IF;\n  -- A persisted foreign unfinished row is not exempt from closeout. No repair,\n  -- phase rewrite, capacity eviction or current-xid-only accounting here.\n  IF EXISTS (SELECT 1 FROM truss.row_home_operation o WHERE o.phase<>'application_finalized') THEN\n    RAISE EXCEPTION 'complete retained operation closeout required' USING ERRCODE='55000';\n  END IF;\nEND;\n$function$\n",
+      "nativeDefinitionSha256": "cd18bba95bf871c880b69e236b3eec6e40e3118690ca9108eb889a4565fc06a0"
+    },
+    {
+      "sourceSelector": "truss.capacity_cache_invalidate_original()",
+      "routineOid": "17375",
+      "namespaceOid": "16384",
+      "ownerOid": "10",
+      "owner": "postgres",
+      "acl": "{postgres=X/postgres}",
+      "nativeDefinition": "CREATE OR REPLACE FUNCTION truss.capacity_cache_invalidate_original()\n RETURNS trigger\n LANGUAGE plpgsql\n SET search_path TO 'pg_catalog', 'pg_temp'\nAS $function$\nDECLARE actual_xid xid8; memo truss.capacity_check_memo%ROWTYPE; next_generation bigint;\nBEGIN\n  IF TG_RELID<>'truss.row_home_capacity'::regclass OR TG_OP<>'UPDATE' OR TG_WHEN<>'AFTER' THEN\n    RAISE EXCEPTION 'original capacity update required; deletion/truncation unavailable' USING ERRCODE='55000';\n  END IF;\n  actual_xid:=pg_current_xact_id_if_assigned();\n  IF actual_xid IS NULL THEN RAISE EXCEPTION 'actual assigned capacity transaction required' USING ERRCODE='55000'; END IF;\n  SELECT m.* INTO STRICT memo FROM truss.capacity_check_memo m WHERE m.singleton_id=1 FOR UPDATE;\n  IF memo.writer_xid IS DISTINCT FROM actual_xid THEN next_generation:=1;\n  ELSE\n    IF memo.dirty_generation=9223372036854775807 THEN\n      RAISE EXCEPTION 'original capacity generation exhausted' USING ERRCODE='54000';\n    END IF;\n    next_generation:=memo.dirty_generation+1;\n  END IF;\n  -- Even equal counter images invalidate. Memo updates do not change the ledger.\n  UPDATE truss.capacity_check_memo SET writer_xid=actual_xid,\n    dirty_generation=next_generation,verified_generation=NULL WHERE singleton_id=1;\n  RETURN NEW;\nEND;\n$function$\n",
+      "nativeDefinitionSha256": "fbb26aa98b48b145c0b302ba39a3b28f7bedec79fdf596be213d3392e765a4ba"
+    },
+    {
+      "sourceSelector": "truss.capacity_cache_check_original()",
+      "routineOid": "17376",
+      "namespaceOid": "16384",
+      "ownerOid": "10",
+      "owner": "postgres",
+      "acl": "{postgres=X/postgres}",
+      "nativeDefinition": "CREATE OR REPLACE FUNCTION truss.capacity_cache_check_original()\n RETURNS trigger\n LANGUAGE plpgsql\n SET search_path TO 'pg_catalog', 'pg_temp'\nAS $function$\nDECLARE actual_xid xid8; memo truss.capacity_check_memo%ROWTYPE; layout_bytes bytea;resource_bytes bytea;\nBEGIN\n  IF TG_RELID<>'truss.capacity_check_memo'::regclass OR TG_OP<>'UPDATE' OR TG_WHEN<>'AFTER' THEN\n    RAISE EXCEPTION 'original capacity memo callback required' USING ERRCODE='55000';\n  END IF;\n  actual_xid:=pg_current_xact_id_if_assigned();\n  SELECT m.* INTO STRICT memo FROM truss.capacity_check_memo m WHERE m.singleton_id=1;\n  IF actual_xid IS NULL OR memo.writer_xid IS DISTINCT FROM actual_xid THEN\n    RAISE EXCEPTION 'original capacity memo transaction required' USING ERRCODE='55000';\n  END IF;\n  IF memo.verified_generation IS NOT DISTINCT FROM memo.dirty_generation THEN RETURN NULL; END IF;\n  SELECT c.original_layout_bytes,c.original_resource_profile_bytes INTO STRICT layout_bytes,resource_bytes\n    FROM truss.row_home_capacity c WHERE c.singleton_id=1;\n  -- Stored profile equality is not independently registered profile authority.\n  PERFORM truss.capacity_commit_check_original(layout_bytes,resource_bytes);\n  UPDATE truss.capacity_check_memo SET verified_generation=dirty_generation WHERE singleton_id=1;\n  RETURN NULL;\nEND;\n$function$\n",
+      "nativeDefinitionSha256": "03a0ae68e898afee89c0ac9958b9fa15598bd8f4a105dd49fa3af8cf726d2722"
+    },
+    {
+      "sourceSelector": "truss.capacity_defer_check_original(oid,oid,oid,oid,bytea)",
+      "routineOid": "17382",
+      "namespaceOid": "16384",
+      "ownerOid": "10",
+      "owner": "postgres",
+      "acl": "{postgres=X/postgres}",
+      "nativeDefinition": "CREATE OR REPLACE FUNCTION truss.capacity_defer_check_original(constraint_oid oid, trigger_oid oid, routine_oid oid, owner_oid oid, routine_bytes bytea)\n RETURNS void\n LANGUAGE plpgsql\n SET search_path TO 'pg_catalog', 'pg_temp'\nAS $function$\nDECLARE c pg_constraint%ROWTYPE; t pg_trigger%ROWTYPE; p pg_proc%ROWTYPE;\nBEGIN\n  IF constraint_oid IS NULL OR trigger_oid IS NULL OR routine_oid IS NULL OR owner_oid IS NULL\n    OR routine_bytes IS NULL OR octet_length(routine_bytes) NOT BETWEEN 1 AND 1048576 THEN\n    RAISE EXCEPTION 'bounded original constraint binding required' USING ERRCODE='22023';\n  END IF;\n  IF current_setting('session_replication_role')<>'origin' THEN\n    RAISE EXCEPTION 'original native trigger execution mode required' USING ERRCODE='55000';\n  END IF;\n  -- Qualified names can denote more than one constraint. Reject before SET.\n  IF (SELECT count(*) FROM pg_constraint n WHERE n.connamespace='truss'::regnamespace\n      AND n.conname='capacity_cache_check')<>1 THEN\n    RAISE EXCEPTION 'unique original owned constraint name required' USING ERRCODE='55000';\n  END IF;\n  SELECT n.* INTO STRICT c FROM pg_constraint n WHERE n.oid=constraint_oid;\n  IF c.connamespace<>'truss'::regnamespace OR c.conname<>'capacity_cache_check'\n    OR c.conrelid<>'truss.capacity_check_memo'::regclass OR c.contype<>'t'\n    OR NOT c.condeferrable OR NOT c.condeferred OR NOT c.convalidated OR c.conparentid<>0 THEN\n    RAISE EXCEPTION 'original native constraint correspondence required' USING ERRCODE='55000';\n  END IF;\n  IF (SELECT count(*) FROM pg_trigger n WHERE n.tgconstraint=constraint_oid)<>1 THEN\n    RAISE EXCEPTION 'complete original constraint trigger correspondence required' USING ERRCODE='55000';\n  END IF;\n  SELECT n.* INTO STRICT t FROM pg_trigger n WHERE n.oid=trigger_oid;\n  IF t.tgconstraint<>constraint_oid OR t.tgrelid<>c.conrelid OR t.tgname<>c.conname\n    OR t.tgfoid<>routine_oid OR t.tgtype<>17 OR t.tgenabled<>'O' OR t.tgisinternal\n    OR NOT t.tgdeferrable OR NOT t.tginitdeferred OR t.tgnargs<>0\n    OR octet_length(t.tgargs)<>0 OR t.tgqual IS NOT NULL THEN\n    RAISE EXCEPTION 'original enabled unconditional trigger required' USING ERRCODE='55000';\n  END IF;\n  SELECT n.* INTO STRICT p FROM pg_proc n WHERE n.oid=routine_oid;\n  IF routine_oid<>'truss.capacity_cache_check_original()'::regprocedure\n    OR p.proowner<>owner_oid OR p.prosecdef OR p.provolatile<>'v' OR p.proparallel<>'u'\n    OR p.prokind<>'f' OR p.prorettype<>'trigger'::regtype OR p.pronargs<>0\n    OR p.prolang<>(SELECT oid FROM pg_language WHERE lanname='plpgsql')\n    OR p.proconfig IS DISTINCT FROM ARRAY['search_path=pg_catalog, pg_temp']\n    OR convert_to(pg_get_functiondef(routine_oid),'UTF8') IS DISTINCT FROM routine_bytes\n    OR EXISTS (SELECT 1 FROM aclexplode(coalesce(p.proacl,acldefault('f',p.proowner))) a\n      WHERE a.grantee=0 AND a.privilege_type='EXECUTE') THEN\n    RAISE EXCEPTION 'original private routine bytes/attributes required' USING ERRCODE='55000';\n  END IF;\n  -- Complete original dependency/role/profile/DDL exclusion remains external;\n  -- supplied OIDs and byte equality cannot authenticate their provenance.\n  SET CONSTRAINTS truss.capacity_cache_check DEFERRED;\nEND;\n$function$\n",
+      "nativeDefinitionSha256": "2194c729111157e86518683adc35b37ddbdb45707f1d1e50d05b7ba6b9d58975"
+    }
+  ],
+  "observations": [
+    {
+      "id": "complete-original-initializer",
+      "rows": 1,
+      "originalLayoutSha256": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f",
+      "originalResourceSha256": "046e5ac11f470c4d6ce8e54193b38d2252ab10c2533999be13b17e629d1c2ee6"
+    },
+    {
+      "id": "changed-original-initializer-original_layout_bytes",
+      "originalBytesCorrespondence": false,
+      "markerPublished": false
+    },
+    {
+      "id": "restored-original-initializer-original_layout_bytes",
+      "originalBytesCorrespondence": true
+    },
+    {
+      "id": "changed-original-initializer-original_resource_profile_bytes",
+      "originalBytesCorrespondence": false,
+      "markerPublished": false
+    },
+    {
+      "id": "restored-original-initializer-original_resource_profile_bytes",
+      "originalBytesCorrespondence": true
+    },
+    {
+      "id": "authorized-initializer-observation",
+      "originalBytesCorrespondence": true
+    },
+    {
+      "id": "revoked-initializer-observation-rights",
+      "outcome": "observation_unavailable",
+      "returnedObservation": null,
+      "callsInInvocation": 1,
+      "recipeReplays": 0,
+      "markerPublished": false
+    },
+    {
+      "id": "explicit-observation-after-rights-restored",
+      "originalBytesCorrespondence": true,
+      "callsInInvocation": 1,
+      "recipeReplays": 0
+    },
+    {
+      "id": "observation-initializer-effects-inert",
+      "originalBytesCorrespondence": true
+    },
+    {
+      "id": "truss.capacity_reserve_original(bigint,bytea,bytea,bigint,bigint,bytea,bytea)-native-attributes",
+      "expected": [
+        "postgres",
+        "plpgsql",
+        false,
+        "v",
+        "u",
+        false,
+        false,
+        [
+          "search_path=pg_catalog, pg_temp"
+        ]
+      ],
+      "observed": [
+        "postgres",
+        "plpgsql",
+        false,
+        "v",
+        "u",
+        false,
+        false,
+        [
+          "search_path=pg_catalog, pg_temp"
+        ]
+      ]
+    },
+    {
+      "id": "truss.capacity_reserve_original(bigint,bytea,bytea,bigint,bigint,bytea,bytea)-effective-execute",
+      "expected": [
+        false,
+        false,
+        true
+      ],
+      "observed": [
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "truss.capacity_reserve_original(bigint,bytea,bytea,bigint,bigint,bytea,bytea)-result-type",
+      "expected": "void",
+      "observed": "void"
+    },
+    {
+      "id": "truss.capacity_reserve_original(bigint,bytea,bytea,bigint,bigint,bytea,bytea)-direct-call-refusal",
+      "expected": "42501",
+      "observed": "42501"
+    },
+    {
+      "id": "truss.capacity_transfer_original(bytea,bytea,bigint,bigint,bigint)-native-attributes",
+      "expected": [
+        "postgres",
+        "plpgsql",
+        false,
+        "v",
+        "u",
+        false,
+        false,
+        [
+          "search_path=pg_catalog, pg_temp"
+        ]
+      ],
+      "observed": [
+        "postgres",
+        "plpgsql",
+        false,
+        "v",
+        "u",
+        false,
+        false,
+        [
+          "search_path=pg_catalog, pg_temp"
+        ]
+      ]
+    },
+    {
+      "id": "truss.capacity_transfer_original(bytea,bytea,bigint,bigint,bigint)-effective-execute",
+      "expected": [
+        false,
+        false,
+        true
+      ],
+      "observed": [
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "truss.capacity_transfer_original(bytea,bytea,bigint,bigint,bigint)-result-type",
+      "expected": "void",
+      "observed": "void"
+    },
+    {
+      "id": "truss.capacity_transfer_original(bytea,bytea,bigint,bigint,bigint)-direct-call-refusal",
+      "expected": "42501",
+      "observed": "42501"
+    },
+    {
+      "id": "truss.capacity_release_original(bytea,bytea)-native-attributes",
+      "expected": [
+        "postgres",
+        "plpgsql",
+        false,
+        "v",
+        "u",
+        false,
+        false,
+        [
+          "search_path=pg_catalog, pg_temp"
+        ]
+      ],
+      "observed": [
+        "postgres",
+        "plpgsql",
+        false,
+        "v",
+        "u",
+        false,
+        false,
+        [
+          "search_path=pg_catalog, pg_temp"
+        ]
+      ]
+    },
+    {
+      "id": "truss.capacity_release_original(bytea,bytea)-effective-execute",
+      "expected": [
+        false,
+        false,
+        true
+      ],
+      "observed": [
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "truss.capacity_release_original(bytea,bytea)-result-type",
+      "expected": "void",
+      "observed": "void"
+    },
+    {
+      "id": "truss.capacity_release_original(bytea,bytea)-direct-call-refusal",
+      "expected": "42501",
+      "observed": "42501"
+    },
+    {
+      "id": "truss.custody_codec_columns_original(text)-native-attributes",
+      "expected": [
+        "postgres",
+        "plpgsql",
+        false,
+        "v",
+        "u",
+        false,
+        false,
+        [
+          "search_path=pg_catalog, pg_temp"
+        ]
+      ],
+      "observed": [
+        "postgres",
+        "plpgsql",
+        false,
+        "v",
+        "u",
+        false,
+        false,
+        [
+          "search_path=pg_catalog, pg_temp"
+        ]
+      ]
+    },
+    {
+      "id": "truss.custody_codec_columns_original(text)-effective-execute",
+      "expected": [
+        false,
+        false,
+        true
+      ],
+      "observed": [
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "truss.custody_codec_columns_original(text)-result-type",
+      "expected": "void",
+      "observed": "void"
+    },
+    {
+      "id": "truss.custody_codec_columns_original(text)-direct-call-refusal",
+      "expected": "42501",
+      "observed": "42501"
+    },
+    {
+      "id": "truss.custody_frame_original(text,bytea[])-native-attributes",
+      "expected": [
+        "postgres",
+        "plpgsql",
+        false,
+        "v",
+        "u",
+        false,
+        false,
+        [
+          "search_path=pg_catalog, pg_temp"
+        ]
+      ],
+      "observed": [
+        "postgres",
+        "plpgsql",
+        false,
+        "v",
+        "u",
+        false,
+        false,
+        [
+          "search_path=pg_catalog, pg_temp"
+        ]
+      ]
+    },
+    {
+      "id": "truss.custody_frame_original(text,bytea[])-effective-execute",
+      "expected": [
+        false,
+        false,
+        true
+      ],
+      "observed": [
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "truss.custody_frame_original(text,bytea[])-result-type",
+      "expected": "bytea",
+      "observed": "bytea"
+    },
+    {
+      "id": "truss.custody_frame_original(text,bytea[])-direct-call-refusal",
+      "expected": "42501",
+      "observed": "42501"
+    },
+    {
+      "id": "truss.custody_operation_original(truss.row_home_operation)-native-attributes",
+      "expected": [
+        "postgres",
+        "plpgsql",
+        false,
+        "v",
+        "u",
+        false,
+        false,
+        [
+          "search_path=pg_catalog, pg_temp"
+        ]
+      ],
+      "observed": [
+        "postgres",
+        "plpgsql",
+        false,
+        "v",
+        "u",
+        false,
+        false,
+        [
+          "search_path=pg_catalog, pg_temp"
+        ]
+      ]
+    },
+    {
+      "id": "truss.custody_operation_original(truss.row_home_operation)-effective-execute",
+      "expected": [
+        false,
+        false,
+        true
+      ],
+      "observed": [
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "truss.custody_operation_original(truss.row_home_operation)-result-type",
+      "expected": "bytea",
+      "observed": "bytea"
+    },
+    {
+      "id": "truss.custody_operation_original(truss.row_home_operation)-direct-call-refusal",
+      "expected": "42501",
+      "observed": "42501"
+    },
+    {
+      "id": "truss.custody_touch_original(truss.row_home_touch)-native-attributes",
+      "expected": [
+        "postgres",
+        "plpgsql",
+        false,
+        "v",
+        "u",
+        false,
+        false,
+        [
+          "search_path=pg_catalog, pg_temp"
+        ]
+      ],
+      "observed": [
+        "postgres",
+        "plpgsql",
+        false,
+        "v",
+        "u",
+        false,
+        false,
+        [
+          "search_path=pg_catalog, pg_temp"
+        ]
+      ]
+    },
+    {
+      "id": "truss.custody_touch_original(truss.row_home_touch)-effective-execute",
+      "expected": [
+        false,
+        false,
+        true
+      ],
+      "observed": [
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "truss.custody_touch_original(truss.row_home_touch)-result-type",
+      "expected": "bytea",
+      "observed": "bytea"
+    },
+    {
+      "id": "truss.custody_touch_original(truss.row_home_touch)-direct-call-refusal",
+      "expected": "42501",
+      "observed": "42501"
+    },
+    {
+      "id": "truss.custody_size_original(text,integer[])-native-attributes",
+      "expected": [
+        "postgres",
+        "plpgsql",
+        false,
+        "v",
+        "u",
+        false,
+        false,
+        [
+          "search_path=pg_catalog, pg_temp"
+        ]
+      ],
+      "observed": [
+        "postgres",
+        "plpgsql",
+        false,
+        "v",
+        "u",
+        false,
+        false,
+        [
+          "search_path=pg_catalog, pg_temp"
+        ]
+      ]
+    },
+    {
+      "id": "truss.custody_size_original(text,integer[])-effective-execute",
+      "expected": [
+        false,
+        false,
+        true
+      ],
+      "observed": [
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "truss.custody_size_original(text,integer[])-result-type",
+      "expected": "bigint",
+      "observed": "bigint"
+    },
+    {
+      "id": "truss.custody_size_original(text,integer[])-direct-call-refusal",
+      "expected": "42501",
+      "observed": "42501"
+    },
+    {
+      "id": "truss.custody_operation_size_original(truss.row_home_operation)-native-attributes",
+      "expected": [
+        "postgres",
+        "plpgsql",
+        false,
+        "v",
+        "u",
+        false,
+        false,
+        [
+          "search_path=pg_catalog, pg_temp"
+        ]
+      ],
+      "observed": [
+        "postgres",
+        "plpgsql",
+        false,
+        "v",
+        "u",
+        false,
+        false,
+        [
+          "search_path=pg_catalog, pg_temp"
+        ]
+      ]
+    },
+    {
+      "id": "truss.custody_operation_size_original(truss.row_home_operation)-effective-execute",
+      "expected": [
+        false,
+        false,
+        true
+      ],
+      "observed": [
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "truss.custody_operation_size_original(truss.row_home_operation)-result-type",
+      "expected": "bigint",
+      "observed": "bigint"
+    },
+    {
+      "id": "truss.custody_operation_size_original(truss.row_home_operation)-direct-call-refusal",
+      "expected": "42501",
+      "observed": "42501"
+    },
+    {
+      "id": "truss.custody_touch_size_original(truss.row_home_touch)-native-attributes",
+      "expected": [
+        "postgres",
+        "plpgsql",
+        false,
+        "v",
+        "u",
+        false,
+        false,
+        [
+          "search_path=pg_catalog, pg_temp"
+        ]
+      ],
+      "observed": [
+        "postgres",
+        "plpgsql",
+        false,
+        "v",
+        "u",
+        false,
+        false,
+        [
+          "search_path=pg_catalog, pg_temp"
+        ]
+      ]
+    },
+    {
+      "id": "truss.custody_touch_size_original(truss.row_home_touch)-effective-execute",
+      "expected": [
+        false,
+        false,
+        true
+      ],
+      "observed": [
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "truss.custody_touch_size_original(truss.row_home_touch)-result-type",
+      "expected": "bigint",
+      "observed": "bigint"
+    },
+    {
+      "id": "truss.custody_touch_size_original(truss.row_home_touch)-direct-call-refusal",
+      "expected": "42501",
+      "observed": "42501"
+    },
+    {
+      "id": "truss.capacity_operation_observe_original()-native-attributes",
+      "expected": [
+        "postgres",
+        "plpgsql",
+        false,
+        "v",
+        "u",
+        false,
+        false,
+        [
+          "search_path=pg_catalog, pg_temp"
+        ]
+      ],
+      "observed": [
+        "postgres",
+        "plpgsql",
+        false,
+        "v",
+        "u",
+        false,
+        false,
+        [
+          "search_path=pg_catalog, pg_temp"
+        ]
+      ]
+    },
+    {
+      "id": "truss.capacity_operation_observe_original()-effective-execute",
+      "expected": [
+        false,
+        false,
+        true
+      ],
+      "observed": [
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "truss.capacity_operation_observe_original()-result-type",
+      "expected": "trigger",
+      "observed": "trigger"
+    },
+    {
+      "id": "truss.capacity_operation_observe_original()-direct-call-refusal",
+      "expected": "42501",
+      "observed": "42501"
+    },
+    {
+      "id": "truss.capacity_touch_observe_original()-native-attributes",
+      "expected": [
+        "postgres",
+        "plpgsql",
+        false,
+        "v",
+        "u",
+        false,
+        false,
+        [
+          "search_path=pg_catalog, pg_temp"
+        ]
+      ],
+      "observed": [
+        "postgres",
+        "plpgsql",
+        false,
+        "v",
+        "u",
+        false,
+        false,
+        [
+          "search_path=pg_catalog, pg_temp"
+        ]
+      ]
+    },
+    {
+      "id": "truss.capacity_touch_observe_original()-effective-execute",
+      "expected": [
+        false,
+        false,
+        true
+      ],
+      "observed": [
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "truss.capacity_touch_observe_original()-result-type",
+      "expected": "trigger",
+      "observed": "trigger"
+    },
+    {
+      "id": "truss.capacity_touch_observe_original()-direct-call-refusal",
+      "expected": "42501",
+      "observed": "42501"
+    },
+    {
+      "id": "truss.capacity_verify_inventory_original(bytea,bytea)-native-attributes",
+      "expected": [
+        "postgres",
+        "plpgsql",
+        false,
+        "v",
+        "u",
+        false,
+        false,
+        [
+          "search_path=pg_catalog, pg_temp"
+        ]
+      ],
+      "observed": [
+        "postgres",
+        "plpgsql",
+        false,
+        "v",
+        "u",
+        false,
+        false,
+        [
+          "search_path=pg_catalog, pg_temp"
+        ]
+      ]
+    },
+    {
+      "id": "truss.capacity_verify_inventory_original(bytea,bytea)-effective-execute",
+      "expected": [
+        false,
+        false,
+        true
+      ],
+      "observed": [
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "truss.capacity_verify_inventory_original(bytea,bytea)-result-type",
+      "expected": "TABLE(observed_rows bigint, observed_custody_bytes bigint)",
+      "observed": "TABLE(observed_rows bigint, observed_custody_bytes bigint)"
+    },
+    {
+      "id": "truss.capacity_verify_inventory_original(bytea,bytea)-direct-call-refusal",
+      "expected": "42501",
+      "observed": "42501"
+    },
+    {
+      "id": "truss.capacity_commit_check_original(bytea,bytea)-native-attributes",
+      "expected": [
+        "postgres",
+        "plpgsql",
+        false,
+        "v",
+        "u",
+        false,
+        false,
+        [
+          "search_path=pg_catalog, pg_temp"
+        ]
+      ],
+      "observed": [
+        "postgres",
+        "plpgsql",
+        false,
+        "v",
+        "u",
+        false,
+        false,
+        [
+          "search_path=pg_catalog, pg_temp"
+        ]
+      ]
+    },
+    {
+      "id": "truss.capacity_commit_check_original(bytea,bytea)-effective-execute",
+      "expected": [
+        false,
+        false,
+        true
+      ],
+      "observed": [
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "truss.capacity_commit_check_original(bytea,bytea)-result-type",
+      "expected": "void",
+      "observed": "void"
+    },
+    {
+      "id": "truss.capacity_commit_check_original(bytea,bytea)-direct-call-refusal",
+      "expected": "42501",
+      "observed": "42501"
+    },
+    {
+      "id": "truss.capacity_cache_invalidate_original()-native-attributes",
+      "expected": [
+        "postgres",
+        "plpgsql",
+        false,
+        "v",
+        "u",
+        false,
+        false,
+        [
+          "search_path=pg_catalog, pg_temp"
+        ]
+      ],
+      "observed": [
+        "postgres",
+        "plpgsql",
+        false,
+        "v",
+        "u",
+        false,
+        false,
+        [
+          "search_path=pg_catalog, pg_temp"
+        ]
+      ]
+    },
+    {
+      "id": "truss.capacity_cache_invalidate_original()-effective-execute",
+      "expected": [
+        false,
+        false,
+        true
+      ],
+      "observed": [
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "truss.capacity_cache_invalidate_original()-result-type",
+      "expected": "trigger",
+      "observed": "trigger"
+    },
+    {
+      "id": "truss.capacity_cache_invalidate_original()-direct-call-refusal",
+      "expected": "42501",
+      "observed": "42501"
+    },
+    {
+      "id": "truss.capacity_cache_check_original()-native-attributes",
+      "expected": [
+        "postgres",
+        "plpgsql",
+        false,
+        "v",
+        "u",
+        false,
+        false,
+        [
+          "search_path=pg_catalog, pg_temp"
+        ]
+      ],
+      "observed": [
+        "postgres",
+        "plpgsql",
+        false,
+        "v",
+        "u",
+        false,
+        false,
+        [
+          "search_path=pg_catalog, pg_temp"
+        ]
+      ]
+    },
+    {
+      "id": "truss.capacity_cache_check_original()-effective-execute",
+      "expected": [
+        false,
+        false,
+        true
+      ],
+      "observed": [
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "truss.capacity_cache_check_original()-result-type",
+      "expected": "trigger",
+      "observed": "trigger"
+    },
+    {
+      "id": "truss.capacity_cache_check_original()-direct-call-refusal",
+      "expected": "42501",
+      "observed": "42501"
+    },
+    {
+      "id": "truss.capacity_defer_check_original(oid,oid,oid,oid,bytea)-native-attributes",
+      "expected": [
+        "postgres",
+        "plpgsql",
+        false,
+        "v",
+        "u",
+        false,
+        false,
+        [
+          "search_path=pg_catalog, pg_temp"
+        ]
+      ],
+      "observed": [
+        "postgres",
+        "plpgsql",
+        false,
+        "v",
+        "u",
+        false,
+        false,
+        [
+          "search_path=pg_catalog, pg_temp"
+        ]
+      ]
+    },
+    {
+      "id": "truss.capacity_defer_check_original(oid,oid,oid,oid,bytea)-effective-execute",
+      "expected": [
+        false,
+        false,
+        true
+      ],
+      "observed": [
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "id": "truss.capacity_defer_check_original(oid,oid,oid,oid,bytea)-result-type",
+      "expected": "void",
+      "observed": "void"
+    },
+    {
+      "id": "truss.capacity_defer_check_original(oid,oid,oid,oid,bytea)-direct-call-refusal",
+      "expected": "42501",
+      "observed": "42501"
+    },
+    {
+      "id": "complete-new-routine-inventory",
+      "expected": [
+        "17341",
+        "17342",
+        "17343",
+        "17344",
+        "17345",
+        "17346",
+        "17347",
+        "17348",
+        "17349",
+        "17350",
+        "17351",
+        "17352",
+        "17361",
+        "17362",
+        "17375",
+        "17376",
+        "17382"
+      ],
+      "observed": [
+        "17341",
+        "17342",
+        "17343",
+        "17344",
+        "17345",
+        "17346",
+        "17347",
+        "17348",
+        "17349",
+        "17350",
+        "17351",
+        "17352",
+        "17361",
+        "17362",
+        "17375",
+        "17376",
+        "17382"
+      ]
+    },
+    {
+      "id": "inherited-extra-grant-detected",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "inherited-grant-removal-restores-denial",
+      "expected": false,
+      "observed": false
+    },
+    {
+      "id": "public-extra-grant-detected",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "public-grant-removal-restores-denial",
+      "expected": false,
+      "observed": false
+    }
+  ],
+  "sourceSha256": {
+    "docs/helix/02-design/contracts/capacity-component-source-handoff-v0.1.proposal.json": "cab27b9672f2c494a7b44f4aa00c30fbc8641bac117c62875a5eaacf2d516481",
+    "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f",
+    "docs/helix/04-build/evidence/design-audit/capacity-reservation-source.owner-export.sql": "ea3926f7c6c1ed711868c64918acacc6957989ecad2035eae631bea6e110c254",
+    "docs/helix/02-design/contracts/row-home-capacity-initialization-v0.1.proposal.sql": "6f13404b818ecd92ff336ece8d5cb08d84e05e6e4a0c4b5a158fc054287ed7d9",
+    "docs/helix/02-design/contracts/bindings/truss-row-touch-retention-resource-v0.1.proposal.json": "046e5ac11f470c4d6ce8e54193b38d2252ab10c2533999be13b17e629d1c2ee6",
+    "packages/postgresql/native/capacity-reservation/accounting.sql": "99f2dfc4eaf0a57eeebab375698a265d2d22f092983e2aeb0f01bda6e7c06ada",
+    "docs/helix/04-build/evidence/design-audit/capacity-accounting-source.owner-export.sql": "b50d3d2b12baeabf07d285895f6d9bef37f5d5aecfdefce2cff0bcb1840a3f9b",
+    "docs/helix/04-build/evidence/design-audit/capacity-accounting-source.json": "b38bb6dce5eddde40e029d344b0e632445ca32f0560e1aa9ccbb1e9401dfe7f7",
+    "packages/postgresql/native/capacity-reservation/custody-codec.sql": "7e998e2f3d5213503143b4b61af4a92e1e0a2d37912f9516bf2f14cdb98b5daa",
+    "docs/helix/04-build/evidence/design-audit/custody-codec-source.owner-export.sql": "5e40bdee7ec68277b34266cd60cfd3fca4ada24b417cccf5c041dd44dd56aa1d",
+    "docs/helix/04-build/evidence/design-audit/custody-codec-source.json": "6e4ff651563840f865bf07047eb2e01f223dbf0b25e8501f4c9f54928f51a7e4",
+    "packages/postgresql/native/capacity-reservation/custody-size.sql": "956fd70051216d9c05ec8c8e13a961979ea85618b44fea39d5d5ea1d99996fa8",
+    "docs/helix/04-build/evidence/design-audit/custody-size-source.owner-export.sql": "9e053ca758888ce7b37ee2f460346c32a97a9386ab88297cd4486c70dea711d5",
+    "docs/helix/04-build/evidence/design-audit/custody-size-source.json": "c7a8d1c84b408f0622c3ec2d82af9384a9b3167a0e419d501b3a9f139eb80736",
+    "packages/postgresql/native/capacity-reservation/observation.sql": "164c7bda8407840b9886a5f3eef2f859e4b45d7c534da7a0942af7e01e55d72e",
+    "docs/helix/04-build/evidence/design-audit/capacity-observation-source.owner-export.sql": "4c7662dc4a8baed7813465dc28b253908748bd8191b7d8b96f3d625d51281827",
+    "docs/helix/04-build/evidence/design-audit/capacity-observation-source.json": "bf3ca7726d4a48033eb9bb5e351b24471b78a335cd9f5cace0d0e3c49b583f70",
+    "packages/postgresql/native/capacity-reservation/inventory.sql": "5434543bf157633469e5dd41d68126934667c912df64f915131ce1bc617847fe",
+    "docs/helix/04-build/evidence/design-audit/capacity-inventory-source.owner-export.sql": "7e76e9309f3923574259190613551352930abbe7efb991662ae9a25672c8836b",
+    "docs/helix/04-build/evidence/design-audit/capacity-inventory-source.json": "947bb642ac72b6d42684201ec6a6bab66faad424d1f09245e9a604e0fd31208d",
+    "packages/postgresql/native/capacity-reservation/commit-check.sql": "aabd34475c87136d0862129efd39c50bfa166da3cc4641ab9a6ac9f7cad65dd0",
+    "docs/helix/04-build/evidence/design-audit/capacity-commit-source.owner-export.sql": "335cbdacb324835f42c9b6668b52ba253207efd45c68f47011ae314499595957",
+    "docs/helix/04-build/evidence/design-audit/capacity-commit-source.json": "880664150c5e23092a6cdfb709c69c5072d3167372e3cddbfef04a4d00ae40ec",
+    "packages/postgresql/native/capacity-reservation/commit-cache.sql": "416ecbfa46b0949a334c154b653c3a266732ba61bce257332f917db1dfc43cea",
+    "docs/helix/04-build/evidence/design-audit/capacity-cache-source.owner-export.sql": "16498f71ab1774630c3261400de4b7763009189c56b759c6d89b43c2495b6051",
+    "docs/helix/04-build/evidence/design-audit/capacity-cache-source.json": "126a9883672b9a1bf14080c60bcd1c2aba9bee80793e9d67c53d1d4915e35ed0",
+    "packages/postgresql/native/capacity-reservation/defer-check.sql": "6cca1d76518bab1c1e0da43e81fa05704db0bb73df34a7f20e96b54e68976ddd",
+    "docs/helix/04-build/evidence/design-audit/capacity-defer-source.owner-export.sql": "cb7bffc142e02117158dba02a155512753d4ccd3e7337ab4ba6f20eb0c1d97bb",
+    "docs/helix/04-build/evidence/design-audit/capacity-defer-source.json": "cfdb37f3dd94b2b25d6d8676f171f9910229f8968e7a80077b08eb9595173e91"
+  },
+  "producerSha256": "f95a2f9e4dabf1aa662c5724578d48f6e05e19c687cd2a7820f9204fa76718b5",
+  "installerReady": false,
+  "completeProtectedCallableClosureQualified": false,
+  "acceptanceCasesPromoted": [],
+  "limitations": [
+    "Native OIDs and postgres owner belong only to this ephemeral fixture, not adopted production registrations",
+    "One-shot observation refusal is a harness component, not complete status/verify/reconcile implementation or full native inventory authority/cut/publication closure",
+    "No complete indirect/transitive dependency or native data-rights closure",
+    "Seven semantic bodies and owner subject/current-authority integration remain absent",
+    "Effective EXECUTE denial does not prove trigger-path or administrative bypass security",
+    "No protected mutation, journal/feed/receipt or installation publication qualification"
+  ]
+}

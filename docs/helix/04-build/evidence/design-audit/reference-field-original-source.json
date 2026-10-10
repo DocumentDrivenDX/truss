@@ -1,0 +1,91 @@
+{
+  "scope": "Original full-source custody for four reference fields; not accepted/native registration.",
+  "sourceArtifact": {
+    "identity": "docs/helix/02-design/contracts/bindings/reference-account-items-v0.1.proposal.umf.json",
+    "bytesBase64": "ewogICJ1bWYiOiAiMC43LjAiLAogICJpZCI6ICJ0cnVzcy5pbnRlZ3JhdGlvbi5hY2NvdW50LWl0ZW1zLnYxIiwKICAidm9jYWJ1bGFyaWVzIjoge30sCiAgIm1vZHVsZXMiOiBbCiAgICB7CiAgICAgICJpZCI6ICJpbnRlZ3JhdGlvbiIsCiAgICAgICJuYW1lc3BhY2UiOiAidHJ1c3MuaW50ZWdyYXRpb24iLAogICAgICAiZWxlbWVudHMiOiBbCiAgICAgICAgewogICAgICAgICAgImlkIjogIkFjY291bnQuY29kZSIsCiAgICAgICAgICAibmFtZSI6ICJjb2RlIiwKICAgICAgICAgICJraW5kIjogImZpZWxkIiwKICAgICAgICAgICJzY2FsYXJUeXBlIjogInN0cmluZyIsCiAgICAgICAgICAibnVsbGFiaWxpdHkiOiAicmVxdWlyZWQiLAogICAgICAgICAgImNhcmRpbmFsaXR5IjogIm9uZSIsCiAgICAgICAgICAiZXh0ZW5zaW9ucyI6IHt9CiAgICAgICAgfSwKICAgICAgICB7CiAgICAgICAgICAiaWQiOiAiSXRlbS5jb2RlIiwKICAgICAgICAgICJuYW1lIjogImNvZGUiLAogICAgICAgICAgImtpbmQiOiAiZmllbGQiLAogICAgICAgICAgInNjYWxhclR5cGUiOiAic3RyaW5nIiwKICAgICAgICAgICJudWxsYWJpbGl0eSI6ICJyZXF1aXJlZCIsCiAgICAgICAgICAiY2FyZGluYWxpdHkiOiAib25lIiwKICAgICAgICAgICJleHRlbnNpb25zIjoge30KICAgICAgICB9LAogICAgICAgIHsKICAgICAgICAgICJpZCI6ICJJdGVtLmFtb3VudCIsCiAgICAgICAgICAibmFtZSI6ICJhbW91bnQiLAogICAgICAgICAgImtpbmQiOiAiZmllbGQiLAogICAgICAgICAgInNjYWxhclR5cGUiOiAiZGVjaW1hbCIsCiAgICAgICAgICAibnVsbGFiaWxpdHkiOiAicmVxdWlyZWQiLAogICAgICAgICAgImNhcmRpbmFsaXR5IjogIm9uZSIsCiAgICAgICAgICAiZXh0ZW5zaW9ucyI6IHt9LAogICAgICAgICAgImZhY2V0cyI6IHsKICAgICAgICAgICAgInByZWNpc2lvbiI6IDIxLAogICAgICAgICAgICAic2NhbGUiOiAzCiAgICAgICAgICB9CiAgICAgICAgfSwKICAgICAgICB7CiAgICAgICAgICAiaWQiOiAiSXRlbS5ub3RlIiwKICAgICAgICAgICJuYW1lIjogIm5vdGUiLAogICAgICAgICAgImtpbmQiOiAiZmllbGQiLAogICAgICAgICAgInNjYWxhclR5cGUiOiAic3RyaW5nIiwKICAgICAgICAgICJudWxsYWJpbGl0eSI6ICJhYnNlbnQtYWxsb3dlZCIsCiAgICAgICAgICAiY2FyZGluYWxpdHkiOiAib25lIiwKICAgICAgICAgICJleHRlbnNpb25zIjoge30KICAgICAgICB9LAogICAgICAgIHsKICAgICAgICAgICJpZCI6ICJBY2NvdW50IiwKICAgICAgICAgICJuYW1lIjogIkFjY291bnQiLAogICAgICAgICAgImtpbmQiOiAicmVjb3JkIiwKICAgICAgICAgICJtZW1iZXJzIjogWwogICAgICAgICAgICB7CiAgICAgICAgICAgICAgIm1vZHVsZSI6ICJpbnRlZ3JhdGlvbiIsCiAgICAgICAgICAgICAgImVsZW1lbnQiOiAiQWNjb3VudC5jb2RlIgogICAgICAgICAgICB9CiAgICAgICAgICBdLAogICAgICAgICAgImtleXMiOiBbCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAiaWQiOiAiYnktY29kZSIsCiAgICAgICAgICAgICAgIm5hbWUiOiAiYnktY29kZSIsCiAgICAgICAgICAgICAgImZpZWxkcyI6IFsKICAgICAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICAgIm1vZHVsZSI6ICJpbnRlZ3JhdGlvbiIsCiAgICAgICAgICAgICAgICAgICJlbGVtZW50IjogIkFjY291bnQuY29kZSIKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICBdLAogICAgICAgICAgICAgICJwcmltYXJ5IjogdHJ1ZQogICAgICAgICAgICB9CiAgICAgICAgICBdLAogICAgICAgICAgImV4dGVuc2lvbnMiOiB7fQogICAgICAgIH0sCiAgICAgICAgewogICAgICAgICAgImlkIjogIkl0ZW0iLAogICAgICAgICAgIm5hbWUiOiAiSXRlbSIsCiAgICAgICAgICAia2luZCI6ICJyZWNvcmQiLAogICAgICAgICAgIm1lbWJlcnMiOiBbCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAibW9kdWxlIjogImludGVncmF0aW9uIiwKICAgICAgICAgICAgICAiZWxlbWVudCI6ICJJdGVtLmNvZGUiCiAgICAgICAgICAgIH0sCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAibW9kdWxlIjogImludGVncmF0aW9uIiwKICAgICAgICAgICAgICAiZWxlbWVudCI6ICJJdGVtLmFtb3VudCIKICAgICAgICAgICAgfSwKICAgICAgICAgICAgewogICAgICAgICAgICAgICJtb2R1bGUiOiAiaW50ZWdyYXRpb24iLAogICAgICAgICAgICAgICJlbGVtZW50IjogIkl0ZW0ubm90ZSIKICAgICAgICAgICAgfQogICAgICAgICAgXSwKICAgICAgICAgICJrZXlzIjogWwogICAgICAgICAgICB7CiAgICAgICAgICAgICAgImlkIjogImJ5LWNvZGUiLAogICAgICAgICAgICAgICJuYW1lIjogImJ5LWNvZGUiLAogICAgICAgICAgICAgICJmaWVsZHMiOiBbCiAgICAgICAgICAgICAgICB7CiAgICAgICAgICAgICAgICAgICJtb2R1bGUiOiAiaW50ZWdyYXRpb24iLAogICAgICAgICAgICAgICAgICAiZWxlbWVudCI6ICJJdGVtLmNvZGUiCiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgXSwKICAgICAgICAgICAgICAicHJpbWFyeSI6IHRydWUKICAgICAgICAgICAgfQogICAgICAgICAgXSwKICAgICAgICAgICJleHRlbnNpb25zIjoge30KICAgICAgICB9CiAgICAgIF0sCiAgICAgICJyZWxhdGlvbnNoaXBzIjogWwogICAgICAgIHsKICAgICAgICAgICJpZCI6ICJhY2NvdW50LWl0ZW1zIiwKICAgICAgICAgICJuYW1lIjogIml0ZW1zIiwKICAgICAgICAgICJzb3VyY2UiOiBbCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAibW9kdWxlIjogImludGVncmF0aW9uIiwKICAgICAgICAgICAgICAiZWxlbWVudCI6ICJBY2NvdW50IgogICAgICAgICAgICB9CiAgICAgICAgICBdLAogICAgICAgICAgInRhcmdldCI6IFsKICAgICAgICAgICAgewogICAgICAgICAgICAgICJtb2R1bGUiOiAiaW50ZWdyYXRpb24iLAogICAgICAgICAgICAgICJlbGVtZW50IjogIkl0ZW0iLAogICAgICAgICAgICAgICJrZXkiOiAiYnktY29kZSIKICAgICAgICAgICAgfQogICAgICAgICAgXSwKICAgICAgICAgICJzb3VyY2VNdWx0aXBsaWNpdHkiOiB7CiAgICAgICAgICAgICJtaW4iOiAwLAogICAgICAgICAgICAibWF4IjogMQogICAgICAgICAgfSwKICAgICAgICAgICJ0YXJnZXRNdWx0aXBsaWNpdHkiOiB7CiAgICAgICAgICAgICJtaW4iOiAwLAogICAgICAgICAgICAibWF4IjogMgogICAgICAgICAgfSwKICAgICAgICAgICJ0YXJnZXRMaWZlY3ljbGUiOiAiaW5kZXBlbmRlbnQiLAogICAgICAgICAgImRpcmVjdGVkIjogdHJ1ZQogICAgICAgIH0KICAgICAgXQogICAgfQogIF0KfQo=",
+    "sha256": "94f8367c3dd2462fb3f32a624f053bf56f023ddd3bf86bf5219bbc1e24b6fcc1"
+  },
+  "fields": [
+    {
+      "documentId": "truss.integration.account-items.v1",
+      "module": "integration",
+      "element": "Account.code",
+      "recordOwner": "Account",
+      "sourcePointer": "/modules/0/elements/0",
+      "sourceArtifactIdentity": "docs/helix/02-design/contracts/bindings/reference-account-items-v0.1.proposal.umf.json",
+      "decodedDefinitionWitness": {
+        "id": "Account.code",
+        "name": "code",
+        "kind": "field",
+        "scalarType": "string",
+        "nullability": "required",
+        "cardinality": "one",
+        "extensions": {}
+      },
+      "acceptedRevisionIdentity": null,
+      "nativeCatalogIdentity": null
+    },
+    {
+      "documentId": "truss.integration.account-items.v1",
+      "module": "integration",
+      "element": "Item.code",
+      "recordOwner": "Item",
+      "sourcePointer": "/modules/0/elements/1",
+      "sourceArtifactIdentity": "docs/helix/02-design/contracts/bindings/reference-account-items-v0.1.proposal.umf.json",
+      "decodedDefinitionWitness": {
+        "id": "Item.code",
+        "name": "code",
+        "kind": "field",
+        "scalarType": "string",
+        "nullability": "required",
+        "cardinality": "one",
+        "extensions": {}
+      },
+      "acceptedRevisionIdentity": null,
+      "nativeCatalogIdentity": null
+    },
+    {
+      "documentId": "truss.integration.account-items.v1",
+      "module": "integration",
+      "element": "Item.amount",
+      "recordOwner": "Item",
+      "sourcePointer": "/modules/0/elements/2",
+      "sourceArtifactIdentity": "docs/helix/02-design/contracts/bindings/reference-account-items-v0.1.proposal.umf.json",
+      "decodedDefinitionWitness": {
+        "id": "Item.amount",
+        "name": "amount",
+        "kind": "field",
+        "scalarType": "decimal",
+        "nullability": "required",
+        "cardinality": "one",
+        "extensions": {},
+        "facets": {
+          "precision": 21,
+          "scale": 3
+        }
+      },
+      "acceptedRevisionIdentity": null,
+      "nativeCatalogIdentity": null
+    },
+    {
+      "documentId": "truss.integration.account-items.v1",
+      "module": "integration",
+      "element": "Item.note",
+      "recordOwner": "Item",
+      "sourcePointer": "/modules/0/elements/3",
+      "sourceArtifactIdentity": "docs/helix/02-design/contracts/bindings/reference-account-items-v0.1.proposal.umf.json",
+      "decodedDefinitionWitness": {
+        "id": "Item.note",
+        "name": "note",
+        "kind": "field",
+        "scalarType": "string",
+        "nullability": "absent-allowed",
+        "cardinality": "one",
+        "extensions": {}
+      },
+      "acceptedRevisionIdentity": null,
+      "nativeCatalogIdentity": null
+    }
+  ],
+  "sourceRule": "Field locator resolves original full source bytes. Decoded witness is supplementary; reserialized fragments are not original document bytes. Accepted revision/profile and native identity remain unassigned."
+}

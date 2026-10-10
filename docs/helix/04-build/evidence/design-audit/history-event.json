@@ -1,0 +1,66 @@
+{
+  "scope": "Draft operation shape only; no identity/owner/definition/group/continuity/native qualification",
+  "cases": 12,
+  "outcomes": [
+    {
+      "name": "create",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "delete",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "property presence",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "transform pins",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "rebind four homes",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "metadata envelopes",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "create missing full record",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "rebind missing home",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "absent with stray value",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "empty group",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "unknown operation",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "forged manifest needs semantic rejection",
+      "expected": true,
+      "actual": true
+    }
+  ]
+}

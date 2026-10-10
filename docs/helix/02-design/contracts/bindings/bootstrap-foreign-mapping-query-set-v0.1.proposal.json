@@ -1,0 +1,97 @@
+{
+  "interfaceVersion": "truss-bootstrap-foreign-mapping-query-set/0.1.0",
+  "status": "unadopted source-only; no restricted catalog or secret read authorization",
+  "parameterGrammar": {
+    "type": "pg_catalog.oid[]",
+    "dimensions": 1,
+    "lowerBound": 1,
+    "countInclusive": [
+      1,
+      256
+    ],
+    "nonzero": true,
+    "unique": true,
+    "nullItems": false
+  },
+  "entries": [
+    {
+      "query": "foreign-mapping-header",
+      "parameterDomain": "original-admitted-server-oids",
+      "selectorColumn": "umserver",
+      "resultCorrespondence": "complete requested-server fanout",
+      "source": "docs/helix/02-design/contracts/bindings/bootstrap-foreign-mapping-header-observation-pg17.proposal.sql",
+      "sourceSha256": "7e9dad390410f35ceef094709934b20e6776245617fea52dff1e22c6ad3ea4ba",
+      "archive": "docs/helix/02-design/contracts/bindings/bootstrap-foreign-mapping-header-observation-pg17.proposal.umf.json",
+      "archiveSha256": "cf2b216afa04fad06ee7f779e25de70c6ba7407e89a1000f207d8a1f3e2e3e26",
+      "export": "docs/helix/04-build/evidence/design-audit/bootstrap-foreign-mapping-header-observation.owner-export.sql",
+      "exportSha256": "571353854aaa6558d5b48f6484cbf89ef77ed050e993acc4d43caecb3a638858",
+      "columns": [
+        {
+          "name": "catalog_class_oid",
+          "nullable": false,
+          "transport": "original native text",
+          "meaning": "actual pg_user_mapping catalog class"
+        },
+        {
+          "name": "mapping_oid",
+          "nullable": false,
+          "transport": "original native text",
+          "meaning": "original nonzero mapping identity"
+        },
+        {
+          "name": "local_role_oid",
+          "nullable": false,
+          "transport": "original native text",
+          "meaning": "zero means PUBLIC; nonzero requires original role correspondence"
+        },
+        {
+          "name": "server_oid",
+          "nullable": false,
+          "transport": "original native text",
+          "meaning": "original requested server identity"
+        }
+      ],
+      "disclosure": "restricted catalog header fields; options unobserved"
+    },
+    {
+      "query": "foreign-mapping-options",
+      "parameterDomain": "original-admitted-mapping-oids",
+      "selectorColumn": "oid",
+      "resultCorrespondence": "exact requested-mapping bijection",
+      "source": "docs/helix/02-design/contracts/bindings/bootstrap-foreign-mapping-options-observation-pg17.proposal.sql",
+      "sourceSha256": "004f64d0fc3c070270a81cb50c3ce5108f2c611810e8364944e53a0fe2567c71",
+      "archive": "docs/helix/02-design/contracts/bindings/bootstrap-foreign-mapping-options-observation-pg17.proposal.umf.json",
+      "archiveSha256": "d6d1a365a696ec125a941a47bff9a206da834b1d48d297738fb9e942827fb819",
+      "export": "docs/helix/04-build/evidence/design-audit/bootstrap-foreign-mapping-options-observation.owner-export.sql",
+      "exportSha256": "fc6d31c65c85d772a9e45dbdca4e8f5c720fdd6c7228330c962305bd219cf1db",
+      "columns": [
+        {
+          "name": "catalog_class_oid",
+          "nullable": false,
+          "transport": "original native text",
+          "meaning": "actual pg_user_mapping catalog class"
+        },
+        {
+          "name": "mapping_oid",
+          "nullable": false,
+          "transport": "original native text",
+          "meaning": "original nonzero mapping identity"
+        },
+        {
+          "name": "options_native_text",
+          "nullable": true,
+          "transport": "original native text",
+          "meaning": "complete original native text array; NULL distinct from empty"
+        },
+        {
+          "name": "options_native_dimensions",
+          "nullable": true,
+          "transport": "original native text",
+          "meaning": "original array dimensions; native grammar admission required"
+        }
+      ],
+      "disclosure": "separate original field/object/principal/sink/lifetime option admission before materialization"
+    }
+  ],
+  "coverage": "separate F05 candidate; not adopted 73-route inventory or six-query F02-F04 manifest; full fanout/cut/role/array/resource/disclosure qualification required"
+}

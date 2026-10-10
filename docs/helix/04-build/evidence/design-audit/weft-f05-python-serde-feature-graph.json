@@ -1,0 +1,54 @@
+{
+  "scope": "Actual effective feature graph of frozen qualified Python compiler; no native encoding qualification",
+  "revision": "f05f2df09e9c2494ac8c6d703dfe38413dbc4181",
+  "command": [
+    "/private/tmp/weft-toolchain/cargo/bin/cargo",
+    "+1.90.0",
+    "tree",
+    "--locked",
+    "--offline",
+    "-p",
+    "weft-python",
+    "--features",
+    "truss-postgresql-qualified",
+    "-e",
+    "features",
+    "-i",
+    "serde_json"
+  ],
+  "returncode": 0,
+  "stdout": "serde_json v1.0.145\n\u251c\u2500\u2500 serde_json feature \"arbitrary_precision\"\n\u2502   \u251c\u2500\u2500 weft-core v0.1.0 (/private/tmp/truss-weft-f05f2df/crates/weft-core)\n\u2502   \u2502   \u2514\u2500\u2500 weft-core feature \"default\"\n\u2502   \u2502       \u251c\u2500\u2500 weft-postgresql v0.1.0 (/private/tmp/truss-weft-f05f2df/crates/weft-postgresql)\n\u2502   \u2502       \u2502   \u2514\u2500\u2500 weft-postgresql feature \"default\"\n\u2502   \u2502       \u2502       \u2514\u2500\u2500 weft-runtime v0.1.0 (/private/tmp/truss-weft-f05f2df/crates/weft-runtime)\n\u2502   \u2502       \u2502           \u251c\u2500\u2500 weft-runtime feature \"default\"\n\u2502   \u2502       \u2502           \u2502   \u2514\u2500\u2500 weft-python v0.1.0 (/private/tmp/truss-weft-f05f2df/crates/weft-python)\n\u2502   \u2502       \u2502           \u2502       \u251c\u2500\u2500 weft-python feature \"default\" (command-line)\n\u2502   \u2502       \u2502           \u2502       \u2514\u2500\u2500 weft-python feature \"truss-postgresql-qualified\" (command-line)\n\u2502   \u2502       \u2502           \u2514\u2500\u2500 weft-runtime feature \"truss-postgresql-qualified\"\n\u2502   \u2502       \u2502               \u2514\u2500\u2500 weft-python feature \"truss-postgresql-qualified\" (command-line)\n\u2502   \u2502       \u2514\u2500\u2500 weft-runtime v0.1.0 (/private/tmp/truss-weft-f05f2df/crates/weft-runtime) (*)\n\u2502   \u2514\u2500\u2500 weft-postgresql v0.1.0 (/private/tmp/truss-weft-f05f2df/crates/weft-postgresql) (*)\n\u2502   \u251c\u2500\u2500 jsonschema feature \"arbitrary-precision\"\n\u2502   \u2502   \u251c\u2500\u2500 weft-core v0.1.0 (/private/tmp/truss-weft-f05f2df/crates/weft-core) (*)\n\u2502   \u2502   \u2514\u2500\u2500 weft-postgresql v0.1.0 (/private/tmp/truss-weft-f05f2df/crates/weft-postgresql) (*)\n\u2502   \u2514\u2500\u2500 jsonschema-value feature \"arbitrary-precision\"\n\u2502       \u2514\u2500\u2500 jsonschema feature \"arbitrary-precision\" (*)\n\u251c\u2500\u2500 serde_json feature \"default\"\n\u2502   \u251c\u2500\u2500 jsonschema v0.56.0\n\u2502   \u2502   \u251c\u2500\u2500 jsonschema feature \"arbitrary-precision\" (*)\n\u2502   \u2502   \u251c\u2500\u2500 jsonschema feature \"jsonschema-macros\"\n\u2502   \u2502   \u2502   \u2514\u2500\u2500 jsonschema feature \"macros\"\n\u2502   \u2502   \u2502       \u251c\u2500\u2500 weft-core v0.1.0 (/private/tmp/truss-weft-f05f2df/crates/weft-core) (*)\n\u2502   \u2502   \u2502       \u2514\u2500\u2500 weft-postgresql v0.1.0 (/private/tmp/truss-weft-f05f2df/crates/weft-postgresql) (*)\n\u2502   \u2502   \u2514\u2500\u2500 jsonschema feature \"macros\" (*)\n\u2502   \u251c\u2500\u2500 jsonschema-value v0.56.0\n\u2502   \u2502   \u251c\u2500\u2500 jsonschema-value feature \"arbitrary-precision\" (*)\n\u2502   \u2502   \u251c\u2500\u2500 jsonschema-value feature \"default\"\n\u2502   \u2502   \u2502   \u2514\u2500\u2500 jsonschema v0.56.0 (*)\n\u2502   \u2502   \u251c\u2500\u2500 jsonschema-value feature \"macros\"\n\u2502   \u2502   \u2502   \u2514\u2500\u2500 jsonschema feature \"macros\" (*)\n\u2502   \u2502   \u2514\u2500\u2500 jsonschema-value feature \"serde_json\"\n\u2502   \u2502       \u2514\u2500\u2500 jsonschema-value feature \"default\" (*)\n\u2502   \u251c\u2500\u2500 weft-core v0.1.0 (/private/tmp/truss-weft-f05f2df/crates/weft-core) (*)\n\u2502   \u2514\u2500\u2500 weft-postgresql v0.1.0 (/private/tmp/truss-weft-f05f2df/crates/weft-postgresql) (*)\n\u251c\u2500\u2500 serde_json feature \"float_roundtrip\"\n\u2502   \u251c\u2500\u2500 jsonschema v0.56.0 (*)\n\u2502   \u2514\u2500\u2500 jsonschema-value v0.56.0 (*)\n\u251c\u2500\u2500 serde_json feature \"raw_value\"\n\u2502   \u251c\u2500\u2500 weft-core v0.1.0 (/private/tmp/truss-weft-f05f2df/crates/weft-core) (*)\n\u2502   \u2514\u2500\u2500 weft-postgresql v0.1.0 (/private/tmp/truss-weft-f05f2df/crates/weft-postgresql) (*)\n\u2514\u2500\u2500 serde_json feature \"std\"\n    \u2514\u2500\u2500 serde_json feature \"default\" (*)\n\nserde_json v1.0.145\n\u251c\u2500\u2500 serde_json feature \"arbitrary_precision\"\n\u2502   \u2514\u2500\u2500 jsonschema-macros-core feature \"arbitrary-precision\"\n\u2502       \u2514\u2500\u2500 jsonschema-macros feature \"arbitrary-precision\"\n\u2502           \u2514\u2500\u2500 jsonschema feature \"arbitrary-precision\" (*)\n\u251c\u2500\u2500 serde_json feature \"default\"\n\u2502   \u251c\u2500\u2500 jsonschema-macros-core v0.56.0\n\u2502   \u2502   \u251c\u2500\u2500 jsonschema-macros-core feature \"arbitrary-precision\" (*)\n\u2502   \u2502   \u251c\u2500\u2500 jsonschema-macros-core feature \"default\"\n\u2502   \u2502   \u2502   \u2514\u2500\u2500 jsonschema-macros v0.56.0 (proc-macro)\n\u2502   \u2502   \u2502       \u251c\u2500\u2500 jsonschema-macros feature \"arbitrary-precision\" (*)\n\u2502   \u2502   \u2502       \u251c\u2500\u2500 jsonschema-macros feature \"default\"\n\u2502   \u2502   \u2502       \u2502   \u2514\u2500\u2500 jsonschema v0.56.0 (*)\n\u2502   \u2502   \u2502       \u2514\u2500\u2500 jsonschema-macros feature \"float-roundtrip\"\n\u2502   \u2502   \u2502           \u2514\u2500\u2500 jsonschema feature \"macros\" (*)\n\u2502   \u2502   \u2514\u2500\u2500 jsonschema-macros-core feature \"float-roundtrip\"\n\u2502   \u2502       \u2514\u2500\u2500 jsonschema-macros feature \"float-roundtrip\" (*)\n\u2502   \u2514\u2500\u2500 referencing v0.56.0\n\u2502       \u2514\u2500\u2500 referencing feature \"default\"\n\u2502           \u251c\u2500\u2500 jsonschema v0.56.0 (*)\n\u2502           \u2514\u2500\u2500 jsonschema-macros-core v0.56.0 (*)\n\u251c\u2500\u2500 serde_json feature \"float_roundtrip\"\n\u2502   \u2514\u2500\u2500 jsonschema-macros-core feature \"float-roundtrip\" (*)\n\u2514\u2500\u2500 serde_json feature \"std\"\n    \u2514\u2500\u2500 serde_json feature \"default\" (*)\n",
+  "stderr": "",
+  "preserveOrderEnabled": false,
+  "arbitraryPrecisionEnabled": true,
+  "rawValueEnabled": true,
+  "sources": [
+    {
+      "path": "Cargo.lock",
+      "sha256": "08d3d30468be6bbde701be72c4e070f60c0706b54898e8e3a0432ea0cfbe0e9e"
+    },
+    {
+      "path": "Cargo.toml",
+      "sha256": "c27253232c3d1d17536c2c1006546c20b09d6872f1a87c379dc9f0699eb44ca5"
+    },
+    {
+      "path": "crates/weft-python/Cargo.toml",
+      "sha256": "d5d5286827fd19c3980f6b1028aaff9e4dbb25cf448b8d6d325a287122c42edc"
+    },
+    {
+      "path": "crates/weft-runtime/Cargo.toml",
+      "sha256": "1d1fbfeefc847555c317bc0a9b522b9924ebedb0663e9550c39efecf6c105ef0"
+    },
+    {
+      "path": "crates/weft-core/Cargo.toml",
+      "sha256": "fee97599e261ef413b9850a03f45130308e87eeaa7b73ea393f4f3b359fbb549"
+    },
+    {
+      "path": "crates/weft-core/src/ir.rs",
+      "sha256": "ec75a449cd52b95930c1aed95e201cd3317e4171f482d8d17be111e28f559f9f"
+    }
+  ],
+  "priorObservation": "Unqualified rustup invocation attempted channel sync and failed DNS before cargo tree; explicit installed toolchain succeeds offline",
+  "nativeQualified": false,
+  "typescriptFeatureGraphQualified": false
+}

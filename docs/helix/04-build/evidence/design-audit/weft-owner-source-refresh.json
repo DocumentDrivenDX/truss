@@ -1,0 +1,35 @@
+{
+  "scope": "Read-only original owner-source/selected-expression/comparator/relational preparation refresh; no Truss rerun or backend adoption",
+  "weftHead": "e4a81dd5a14f53cfb96542a811c4fff4e07be957",
+  "clean": true,
+  "sourcePins": [
+    {
+      "path": "crates/weft-postgresql/src/property_definition.rs",
+      "sha256": "0d1cca5e661fd3d95186c3597b252f68fb002785019f2e13e85bf301a35d9328"
+    },
+    {
+      "path": "crates/weft-postgresql/src/registered_access.rs",
+      "sha256": "3bf3a16696587e1de592232c7b6c65284ec7031be9553089d013be88ebe01f01"
+    },
+    {
+      "path": "crates/weft-postgresql/src/row_join_definition.rs",
+      "sha256": "27ab9b7cbf1fb59b207c705533ccfad14e8f56a5b5cbc52079b060d4f8126ad1"
+    },
+    {
+      "path": "crates/weft-postgresql/src/relational.rs",
+      "sha256": "2eca0e30cfd4404a0db6bd544b3f8d42cafac9f2030cbae43d469bd3246678d6"
+    },
+    {
+      "path": "crates/weft-postgresql/src/comparator_requirements.rs",
+      "sha256": "89e2e1629c4bef07a43385700f66369ddb9c6d9a6cec94171fabb03086198846"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/B-005-native-preparation.md",
+      "sha256": "7980e6cbe5d7460825da6adee09c7d0c3ff8767d97b399cf15d6f8b682198eaf"
+    }
+  ],
+  "ownerReportedLatestCrateTests": 62,
+  "ownerReportedEarlierV01NativeCases": 26,
+  "nativeExecutionByTruss": false,
+  "complete": false
+}

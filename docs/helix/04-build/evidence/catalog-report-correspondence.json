@@ -1,0 +1,31 @@
+{
+  "sources": {
+    "packages/umf-bun/src/catalog-report-correspondence.ts": "2554a8e6d8df8f7e26bd4df3a207af2c06c0c6f098485d53e847975f2c5bec53",
+    "packages/umf-bun/src/catalog-report-preparation.ts": "125c0e99bf7e187bc1f126dbde73e81a9cb291d83aa891a6e8fdc2b493b32881",
+    "tests/catalog-report-preparation.test.ts": "996d3c8dd3412be046753a23f503170f2c3ac40746be082de08291c1c722f8a5",
+    "packages/umf-bun/src/catalog-ingress-report-basis.ts": "3d1650163c390a9ea58de1996b017aeae66b048fe72a6d37413d4d7fcd91e50e"
+  },
+  "tests": 11,
+  "assertions": 108,
+  "strictTypeCheck": "passed",
+  "verifiedFields": [
+    "rev",
+    "acceptedInput",
+    "documents",
+    "counts",
+    "provisional",
+    "diagnostics",
+    "documentInterpretations",
+    "losses",
+    "transformRegistrations"
+  ],
+  "scope": "Actual owner host and PostgreSQL75-check cohort correspondence for nine fields under original native ingress, absent binding and transforms. Eight remaining report fields and complete semantic/actor/effect admission are unqualified.",
+  "nativeEvidence": "catalog-new-cohort.json",
+  "nativeCases": [
+    "nine issued producer fields match actual staged catalog",
+    "schema-valid count forgery refuses",
+    "copied report basis refuses",
+    "later native event invalidates correspondence",
+    "rollback restores original correspondence"
+  ]
+}

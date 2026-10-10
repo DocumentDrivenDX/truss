@@ -1,0 +1,90 @@
+{
+  "interfaceVersion": "truss-postgresql-command-complete/0.1.0",
+  "status": "independently authored planned grammar fixtures; no production parser or native execution",
+  "cases": [
+    {
+      "id": "insert-zero",
+      "nativeTag": "INSERT 0 0",
+      "expectedAdmission": true,
+      "expectedCount": "0"
+    },
+    {
+      "id": "large-update",
+      "nativeTag": "UPDATE 9007199254740993",
+      "expectedAdmission": true,
+      "expectedCount": "9007199254740993"
+    },
+    {
+      "id": "max-count",
+      "nativeTag": "SELECT 18446744073709551615",
+      "expectedAdmission": true,
+      "expectedCount": "18446744073709551615"
+    },
+    {
+      "id": "merge",
+      "nativeTag": "MERGE 12",
+      "expectedAdmission": true,
+      "expectedCount": "12"
+    },
+    {
+      "id": "fetch",
+      "nativeTag": "FETCH 0",
+      "expectedAdmission": true,
+      "expectedCount": "0"
+    },
+    {
+      "id": "insert-middle",
+      "nativeTag": "INSERT 7 1",
+      "expectedAdmission": false,
+      "expectedCount": null
+    },
+    {
+      "id": "padded",
+      "nativeTag": "UPDATE 01",
+      "expectedAdmission": false,
+      "expectedCount": null
+    },
+    {
+      "id": "overflow",
+      "nativeTag": "SELECT 18446744073709551616",
+      "expectedAdmission": false,
+      "expectedCount": null
+    },
+    {
+      "id": "double-space",
+      "nativeTag": "DELETE  1",
+      "expectedAdmission": false,
+      "expectedCount": null
+    },
+    {
+      "id": "trailing-space",
+      "nativeTag": "UPDATE 1 ",
+      "expectedAdmission": false,
+      "expectedCount": null
+    },
+    {
+      "id": "missing-count",
+      "nativeTag": "SELECT",
+      "expectedAdmission": false,
+      "expectedCount": null
+    },
+    {
+      "id": "extra-token",
+      "nativeTag": "SELECT 1 2",
+      "expectedAdmission": false,
+      "expectedCount": null
+    },
+    {
+      "id": "unicode-digit",
+      "nativeTag": "SELECT ١",
+      "expectedAdmission": false,
+      "expectedCount": null
+    },
+    {
+      "id": "terminator",
+      "nativeTag": "SELECT 1\u0000",
+      "expectedAdmission": false,
+      "expectedCount": null
+    }
+  ]
+}

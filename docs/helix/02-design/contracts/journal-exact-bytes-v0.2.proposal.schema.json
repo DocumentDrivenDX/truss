@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:proposal:journal-exact-bytes:0.2.0",
+  "title": "Unadopted exact journal component byte carrier",
+  "description": "Physical JSONB wrapper proposal only. Original exact UTF-8 JSON bytes, canonical base64/pad bits, hash, selected canonicalization profile, event/origin correspondence and native resource/authority admission require semantic validation. No legacy origin/request projection compatibility.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-journal-exact-bytes/0.2.0-proposal"
+    },
+    "eventInterfaceVersion": {
+      "const": "truss-history-event/0.2.0-proposal"
+    },
+    "component": {
+      "enum": [
+        "event",
+        "origin"
+      ]
+    },
+    "canonicalizationProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "bytesBase64": {
+      "type": "string",
+      "minLength": 4,
+      "pattern": "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+    },
+    "bytesSha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "eventInterfaceVersion",
+    "component",
+    "canonicalizationProfile",
+    "bytesBase64",
+    "bytesSha256"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:proposal:journal-stage-cleanup-cohort:0.2.0",
+  "title": "Unadopted whole original operation and journal stage cleanup cohort",
+  "description": "Private complete selection candidate only. Parent/stage identity, actual membership, full dependencies, current authority, settlement and resource eligibility require independent native admission.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "interfaceVersion",
+    "profile",
+    "originalOperationSnapshot",
+    "stages",
+    "originalInstallation",
+    "originalLayout",
+    "originalAdministrativeContext",
+    "originalSettlement",
+    "originalDependencyClosure",
+    "originalResourceReservation",
+    "originalStageMembership"
+  ],
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-journal-stage-cleanup-cohort/0.2.0-proposal"
+    },
+    "profile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "originalOperationSnapshot": {
+      "$ref": "urn:truss:draft:private-custody-snapshot:0.1.0#/oneOf/0"
+    },
+    "stages": {
+      "type": "array",
+      "items": {
+        "$ref": "urn:truss:proposal:journal-stage-snapshot:0.2.0"
+      }
+    },
+    "originalInstallation": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "originalLayout": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "originalAdministrativeContext": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "originalSettlement": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "originalDependencyClosure": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "originalResourceReservation": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "originalStageMembership": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "originalEmptyStageEvidence": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "stages": {
+            "maxItems": 0,
+            "type": "array"
+          }
+        },
+        "required": [
+          "stages"
+        ]
+      },
+      "then": {
+        "required": [
+          "originalEmptyStageEvidence"
+        ],
+        "properties": {
+          "originalEmptyStageEvidence": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          }
+        }
+      },
+      "else": {
+        "not": {
+          "required": [
+            "originalEmptyStageEvidence"
+          ],
+          "properties": {
+            "originalEmptyStageEvidence": {}
+          }
+        }
+      }
+    }
+  ]
+}

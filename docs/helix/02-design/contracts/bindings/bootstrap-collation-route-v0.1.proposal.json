@@ -1,0 +1,77 @@
+{
+  "interfaceVersion": "truss-bootstrap-route-entry/0.1.0",
+  "routeIdentity": "pg17.collation.namespace-fanout/0.1.0",
+  "status": "unadopted; source pins only verified; native class/cut/transport/semantic producers unqualified",
+  "nativeClass": {
+    "namespace": "pg_catalog",
+    "relation": "pg_collation",
+    "classOid": "resolve from original target; never constant",
+    "storageScope": "database",
+    "subobjectNumber": "0"
+  },
+  "selector": "complete original admitted namespace fanout",
+  "artifacts": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-collation-observation-pg17.proposal.sql",
+      "sha256": "16a0e672e35d46ff6440de61754c5b2fac69e036e760f7e97dbd0b465fc9d8ac"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-collation-observation-pg17.proposal.umf.json",
+      "sha256": "2f27be3576731542f51690b3ae3ec43a8432c6345f13582f294cd1bbc0a6c857"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/bootstrap-collation-observation.owner-export.sql",
+      "sha256": "a3be05012c3ead9c914e2ed2e7189ba9eff13cd377b361fbea6299b1d2cf6a7a"
+    }
+  ],
+  "parameterGrammar": {
+    "slot": "1",
+    "nativeType": "pg_catalog.oid",
+    "nullAllowed": false,
+    "itemDomain": "canonical nonzero uint32 decimal text; independently admitted pg_namespace OID",
+    "encoder": "exact original text parameter"
+  },
+  "orderedColumns": [
+    "catalog_class_oid",
+    "object_oid",
+    "namespace_oid",
+    "original_catalog_row_json"
+  ],
+  "coverage": "Complete unique original namespace membership; empty fanout valid only with independent namespace/cut/authority/coverage proof; no encoding/provider/name filter",
+  "requiredKnownFields": [
+    "oid",
+    "collname",
+    "collnamespace",
+    "collowner",
+    "collprovider",
+    "collisdeterministic",
+    "collencoding",
+    "collcollate",
+    "collctype",
+    "colllocale",
+    "collicurules",
+    "collversion"
+  ],
+  "preservation": "Retain full exact returned row JSON text and every unknown extension member; lossless bounded selected native JSON decoder; no parse/stringify reconstruction",
+  "dependencyExtraction": {
+    "collnamespace": "required nonzero actual pg_namespace address in original database scope",
+    "collowner": "required nonzero actual shared pg_authid address with shared scope, not local database address",
+    "provider": "retain exact d/b/c/i and original applicable locale/rules/nulls; unregistered provider meaning refuses",
+    "encoding": "exact signed int4; -1 native any-encoding sentinel, not OID; current applicability independently assessed without filtering source membership",
+    "version": "recorded collversion text/null retained; actual provider environment/version compatibility requires separately qualified evidence, not inferred from recorded text",
+    "definitionSpecification": {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-collation-definition-v0.1.proposal.json",
+      "sha256": "d26c37edea26c9d963b47d37c2535a00ac77d52aa72024e92f4c01bdc1911fc8",
+      "admission": "Complete original field classification plus separate provider/environment/comparator admission; no version refresh during collection"
+    }
+  },
+  "adjuncts": [
+    "original local/shared dependency closure",
+    "namespace and owner authority definition closure",
+    "original target database encoding/default-collation context",
+    "selected actual locale/provider/version/comparator environment observation"
+  ],
+  "resourceProfile": "truss-bootstrap-collector-resource/0.1.0",
+  "refusal": "Unknown provider/native meaning or unresolved environment/comparator profile refuses relevant semantic support; source observation alone never qualifies equality/order or repairs collation version",
+  "resourceObligations": "Shared enclosing totals, complete original cut/authority and explicit pre-materialization/native-work permits; no independent per-route allowance"
+}

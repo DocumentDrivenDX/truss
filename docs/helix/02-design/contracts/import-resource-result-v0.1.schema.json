@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:import-resource-result:0.1.0",
+  "title": "Draft confirmed import resource interruption",
+  "description": "Requires coherent original attempt progress and confirmed containment. Counts, ownership, unsubmitted indices, prior durability, current disclosure and actual resource profile are semantic admission obligations.",
+  "type": "object",
+  "properties": {
+    "outcome": {
+      "const": "resource_limited"
+    },
+    "reason": {
+      "enum": [
+        "candidate_bytes",
+        "report_bytes",
+        "operation_deadline"
+      ]
+    },
+    "resourceProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "report": {
+      "allOf": [
+        {
+          "$ref": "urn:truss:draft:import-report:0.1.0"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "status": {
+              "const": "interrupted"
+            }
+          },
+          "required": [
+            "status"
+          ]
+        }
+      ]
+    }
+  },
+  "required": [
+    "outcome",
+    "reason",
+    "resourceProfile",
+    "report"
+  ],
+  "additionalProperties": false
+}

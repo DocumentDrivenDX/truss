@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:seed-snapshot-evidence:0.1.0",
+  "description": "Shape only; native snapshot ordering/classifier truth, authority, protection and attempt trust require semantic admission.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-seed-snapshot-evidence/0.1.0"
+    },
+    "attempt": {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-seed-activation/0.1.0"
+        },
+        "seedId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "worker": {
+          "type": "object",
+          "properties": {
+            "context": {
+              "type": "object",
+              "properties": {
+                "sourceEpoch": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "feedProfile": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "scopeIdentity": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "sourceEpoch",
+                "feedProfile",
+                "scopeIdentity"
+              ],
+              "additionalProperties": false
+            },
+            "consumerId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "registrationId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "generation": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$",
+              "maxLength": 20
+            }
+          },
+          "required": [
+            "context",
+            "consumerId",
+            "registrationId",
+            "generation"
+          ],
+          "additionalProperties": false
+        },
+        "activationProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "seedId",
+        "worker",
+        "activationProfile"
+      ],
+      "additionalProperties": false
+    },
+    "snapshotProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "layoutProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "valueProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "interpretationProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "catalogRevision": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$",
+      "maxLength": 20
+    },
+    "snapshot": {
+      "type": "object",
+      "properties": {
+        "xmin": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$",
+          "maxLength": 20
+        },
+        "xmax": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$",
+          "maxLength": 20
+        },
+        "inProgress": {
+          "type": "array",
+          "uniqueItems": true,
+          "maxItems": 100000,
+          "items": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]*)$",
+            "maxLength": 20
+          }
+        }
+      },
+      "required": [
+        "xmin",
+        "xmax",
+        "inProgress"
+      ],
+      "additionalProperties": false
+    },
+    "procedure": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "protection": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "currentAuthority": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "attempt",
+    "snapshotProfile",
+    "layoutProfile",
+    "valueProfile",
+    "interpretationProfile",
+    "catalogRevision",
+    "snapshot",
+    "procedure",
+    "protection",
+    "currentAuthority"
+  ],
+  "additionalProperties": false
+}

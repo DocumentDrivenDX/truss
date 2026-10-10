@@ -1,0 +1,36 @@
+{
+  "scope": "Original server-rejected malformed savepoint control and adapter quarantine on local trust transport only; no complete issuer/account/recovery qualification",
+  "pgserver": "0.1.4+truss.pg16.15",
+  "serverVersion": "16.15",
+  "driver": "pg8000 1.31.5",
+  "driverCoreSha256": "cac1e50502901bcea3ddab588e0350149dd8fd771156ae1c531a2a04b3925e26",
+  "faultFrames": [
+    {
+      "cycle": "faulted-savepoint",
+      "kind": "E",
+      "hex": "450000005b534552524f5200564552524f5200433432363031004d73796e746178206572726f7220617420656e64206f6620696e7075740050313000467363616e2e6c004c3132343000527363616e6e65725f79796572726f720000"
+    },
+    {
+      "cycle": "faulted-savepoint",
+      "kind": "Z",
+      "hex": "5a0000000545"
+    }
+  ],
+  "backendStateBeforeExplicitSocketClose": "idle in transaction (aborted)",
+  "newSubmissionRefusedWithoutSend": true,
+  "backendTerminationAfterExplicitCloseObserved": true,
+  "originalPendingWriteAbsentAfterTermination": true,
+  "driverPortQualified": false,
+  "sourceSha256": {
+    "check_pg8000_local_control_rejection_native.py": "a957533599d2319674209f69f9f92d1bd662b0ce90ac855e7d2dfaf445e0a1c3",
+    "pg8000_instance_candidate.py": "0e3a6fb3860e9f2315711cc44957e841f54640c18214955f57c87a3c6fd437de",
+    "python_pg_receive_candidate.py": "fd9c23e3da2358cf56abc6b561c893e5d56dd9c95756fe18ec7510f52a55f4bb",
+    "python_pg_frame_candidate.py": "ed92bfc5240f17f3447f868fb88e3647cc4bd9583e21ed18ad88eb7de1eb9968"
+  },
+  "limitations": [
+    "Malformed negative control only; no original registered savepoint authority",
+    "No original issuer/account/control permit admission",
+    "No ordinary-person/TLS qualification",
+    "No unknown COMMIT settlement or durable recovery registry qualification"
+  ]
+}

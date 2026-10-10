@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:traversal-work-completion:0.1.0",
+  "title": "Draft private traversal work completion",
+  "description": "Original permit/worker/usage metadata only. Termination, monotonic time, physical usage and issuer correspondence must be independently observed; no caller assertion or schema pass grants a refund.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-traversal-work-completion/0.1.0"
+    },
+    "assemblyId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "handle": {
+      "$ref": "urn:truss:draft:direct-traversal-request:0.1.0#/$defs/handle"
+    },
+    "storeProfile": {
+      "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/profilePin"
+    },
+    "completionProfile": {
+      "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/profilePin"
+    },
+    "permitIdentity": {
+      "type": "string",
+      "minLength": 1
+    },
+    "workerIdentity": {
+      "type": "string",
+      "minLength": 1
+    },
+    "originalAdmission": {
+      "$ref": "urn:truss:draft:traversal-resource-ledger:0.1.0#/$defs/reference"
+    },
+    "admittedAccountingVersion": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$"
+    },
+    "actualIncrements": {
+      "$ref": "urn:truss:draft:traversal-resource-ledger:0.1.0#/$defs/increments"
+    },
+    "retainedBytes": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$"
+    },
+    "reservationBytes": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$"
+    },
+    "termination": {
+      "const": "confirmed"
+    },
+    "originalTermination": {
+      "$ref": "urn:truss:draft:traversal-resource-ledger:0.1.0#/$defs/reference"
+    },
+    "originalUsage": {
+      "$ref": "urn:truss:draft:traversal-resource-ledger:0.1.0#/$defs/reference"
+    },
+    "originalClockSpan": {
+      "$ref": "urn:truss:draft:traversal-resource-ledger:0.1.0#/$defs/reference"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "assemblyId",
+    "handle",
+    "storeProfile",
+    "completionProfile",
+    "permitIdentity",
+    "workerIdentity",
+    "originalAdmission",
+    "admittedAccountingVersion",
+    "actualIncrements",
+    "retainedBytes",
+    "reservationBytes",
+    "termination",
+    "originalTermination",
+    "originalUsage",
+    "originalClockSpan"
+  ],
+  "additionalProperties": false
+}

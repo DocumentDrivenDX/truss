@@ -1,0 +1,319 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "urn:truss:proposal:endpoint-intents:0.1.0",
+ "title": "Proposed complete Truss catalog endpoint intent carrier",
+ "description": "Truss-owned extension candidate; structure does not resolve endpoints, admit package bytes, authorize policy or change UMF core relationship semantics.",
+ "type": "object",
+ "properties": {
+  "interfaceVersion": {
+   "const": "truss-endpoint-intents/0.1.0"
+  },
+  "dependencies": {
+   "type": "array",
+   "minItems": 0,
+   "items": {
+    "$ref": "#/$defs/dependency"
+   }
+  },
+  "intents": {
+   "type": "array",
+   "minItems": 0,
+   "items": {
+    "$ref": "#/$defs/intent"
+   }
+  }
+ },
+ "required": [
+  "interfaceVersion",
+  "dependencies",
+  "intents"
+ ],
+ "additionalProperties": false,
+ "$defs": {
+  "definitionSelection": {
+   "oneOf": [
+    {
+     "type": "object",
+     "properties": {
+      "state": {
+       "const": "pending"
+      },
+      "expectedRevision": {
+       "oneOf": [
+        {
+         "type": "null"
+        },
+        {
+         "type": "string",
+         "minLength": 1
+        }
+       ]
+      }
+     },
+     "required": [
+      "state",
+      "expectedRevision"
+     ],
+     "additionalProperties": false
+    },
+    {
+     "type": "object",
+     "properties": {
+      "state": {
+       "const": "selected"
+      },
+      "revision": {
+       "type": "string",
+       "minLength": 1
+      },
+      "sourceReference": {
+       "type": "string",
+       "minLength": 1
+      }
+     },
+     "required": [
+      "state",
+      "revision",
+      "sourceReference"
+     ],
+     "additionalProperties": false
+    }
+   ]
+  },
+  "keySelection": {
+   "oneOf": [
+    {
+     "type": "object",
+     "properties": {
+      "state": {
+       "const": "absent"
+      }
+     },
+     "required": [
+      "state"
+     ],
+     "additionalProperties": false
+    },
+    {
+     "type": "object",
+     "properties": {
+      "state": {
+       "const": "pending"
+      },
+      "name": {
+       "type": "string",
+       "minLength": 1
+      }
+     },
+     "required": [
+      "state",
+      "name"
+     ],
+     "additionalProperties": false
+    },
+    {
+     "type": "object",
+     "properties": {
+      "state": {
+       "const": "selected"
+      },
+      "name": {
+       "type": "string",
+       "minLength": 1
+      }
+     },
+     "required": [
+      "state",
+      "name"
+     ],
+     "additionalProperties": false
+    }
+   ]
+  },
+  "sourceEndpoint": {
+   "type": "object",
+   "properties": {
+    "document": {
+     "type": "string",
+     "minLength": 1
+    },
+    "module": {
+     "type": "string",
+     "minLength": 1
+    },
+    "element": {
+     "type": "string",
+     "minLength": 1
+    },
+    "definition": {
+     "$ref": "#/$defs/definitionSelection"
+    }
+   },
+   "required": [
+    "document",
+    "module",
+    "element",
+    "definition"
+   ],
+   "additionalProperties": false
+  },
+  "targetEndpoint": {
+   "type": "object",
+   "properties": {
+    "document": {
+     "type": "string",
+     "minLength": 1
+    },
+    "module": {
+     "type": "string",
+     "minLength": 1
+    },
+    "element": {
+     "type": "string",
+     "minLength": 1
+    },
+    "definition": {
+     "$ref": "#/$defs/definitionSelection"
+    },
+    "key": {
+     "$ref": "#/$defs/keySelection"
+    }
+   },
+   "required": [
+    "document",
+    "module",
+    "element",
+    "definition",
+    "key"
+   ],
+   "additionalProperties": false
+  },
+  "bounds": {
+   "type": "object",
+   "properties": {
+    "min": {
+     "type": "string",
+     "pattern": "^(0|[1-9][0-9]*)$"
+    },
+    "max": {
+     "type": "string",
+     "pattern": "^(\\*|0|[1-9][0-9]*)$"
+    }
+   },
+   "required": [
+    "min",
+    "max"
+   ],
+   "additionalProperties": false
+  },
+  "dependency": {
+   "type": "object",
+   "properties": {
+    "document": {
+     "type": "string",
+     "minLength": 1
+    },
+    "revision": {
+     "type": "string",
+     "minLength": 1
+    },
+    "sourceReference": {
+     "type": "string",
+     "minLength": 1
+    }
+   },
+   "required": [
+    "document",
+    "revision",
+    "sourceReference"
+   ],
+   "additionalProperties": false
+  },
+  "intent": {
+   "type": "object",
+   "properties": {
+    "id": {
+     "type": "string",
+     "minLength": 1
+    },
+    "module": {
+     "type": "string",
+     "minLength": 1
+    },
+    "name": {
+     "type": "string",
+     "minLength": 1
+    },
+    "sources": {
+     "type": "array",
+     "minItems": 1,
+     "items": {
+      "$ref": "#/$defs/sourceEndpoint"
+     }
+    },
+    "targets": {
+     "type": "array",
+     "minItems": 1,
+     "items": {
+      "$ref": "#/$defs/targetEndpoint"
+     }
+    },
+    "sourceBounds": {
+     "$ref": "#/$defs/bounds"
+    },
+    "targetBounds": {
+     "$ref": "#/$defs/bounds"
+    },
+    "directed": {
+     "type": "boolean"
+    },
+    "lifecycle": {
+     "enum": [
+      "independent",
+      "owned",
+      "unspecified"
+     ]
+    },
+    "composition": {
+     "type": "boolean"
+    },
+    "inverse": {
+     "oneOf": [
+      {
+       "type": "null"
+      },
+      {
+       "type": "string",
+       "minLength": 1
+      }
+     ]
+    },
+    "associationRecord": {
+     "oneOf": [
+      {
+       "type": "null"
+      },
+      {
+       "$ref": "#/$defs/sourceEndpoint"
+      }
+     ]
+    }
+   },
+   "required": [
+    "id",
+    "module",
+    "name",
+    "sources",
+    "targets",
+    "sourceBounds",
+    "targetBounds",
+    "directed",
+    "lifecycle",
+    "composition",
+    "inverse",
+    "associationRecord"
+   ],
+   "additionalProperties": false
+  }
+ }
+}

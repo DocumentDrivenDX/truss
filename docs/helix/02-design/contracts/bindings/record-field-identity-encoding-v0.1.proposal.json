@@ -1,0 +1,28 @@
+{
+  "profile": "truss-weft-field-identity-json/0.1.0",
+  "status": "proposed_unadopted",
+  "identityMembers": [
+    "documentId",
+    "revision",
+    "module",
+    "element"
+  ],
+  "serializedMemberOrder": [
+    "documentId",
+    "element",
+    "module",
+    "revision"
+  ],
+  "representation": "compact_JSON_object_UTF8",
+  "stringEncoding": "JSON double-quoted strings; escape quote/backslash; short escapes for backspace/formfeed/newline/carriage-return/tab; other U+0001..U+001F as lowercase four-digit unicode escapes; literal valid Unicode otherwise; no normalization",
+  "nulPermitted": false,
+  "unpairedSurrogatesPermitted": false,
+  "unknownIdentityMembersPermitted": false,
+  "sourceMeaning": "Original complete qualified Identity only; no display-name or portable-key substitution",
+  "compilerCondition": "Pinned serde_json 1.0.145 Value map serialization with effective preserve_order disabled; exact runtime byte agreement required",
+  "nativeQualified": false,
+  "maximumComponentUtf8Bytes": "4096",
+  "maximumEncodedBytes": "98360",
+  "boundDerivation": "56 fixed ASCII syntax bytes + 4 components * 4096 admitted UTF8 bytes * at most 6 emitted JSON bytes per input byte; actual original identity/source validation remains required",
+  "allocationAdmission": "Reserve actual escaped UTF8 length and all retained input/output/native-parameter copies before construction under original containing account"
+}

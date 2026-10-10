@@ -1,0 +1,17 @@
+{
+  "scope": "Four historical UMF source-capture families/six SELECT statements/sixteen artifact pins only; no source semantic, native descriptor, installation or decoder qualification",
+  "inventorySha256": "ecb2fd217cbcb3d337a64c6625f94d8482163e780382816672a2909e91b94ef5",
+  "families": 4,
+  "statements": 6,
+  "artifactPins": 16,
+  "corruptionControls": [
+    "missing_family",
+    "duplicate_family",
+    "stale_artifact",
+    "changed_owner_tuple",
+    "complete_claim",
+    "narrow_statement_count"
+  ],
+  "nativeExecution": false,
+  "complete": false
+}

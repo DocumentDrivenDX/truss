@@ -1,0 +1,39 @@
+{
+  "sourceRepository": "https://github.com/DocumentDrivenDX/umf",
+  "previousRevision": "c7c95e1c4ea5b72541f47fa0350ca467ff02f395",
+  "reviewedRevision": "de11e172c1eb11e7082b605421ad146ae4740a0d",
+  "changedPaths": [
+    ".gitattributes",
+    "docs/helix/01-frame/features/FEAT-026-dashboard-profile.md",
+    "docs/helix/01-frame/user-stories/US-077-dashboard-profile.md",
+    "docs/helix/02-design/contracts/CONTRACT-055-dashboard-profile.md",
+    "docs/helix/02-design/technical-designs/TD-077-dashboard-profile.md",
+    "docs/helix/03-test/acceptance-criteria-ledger.json",
+    "fixtures/dashboard/marketing-campaign.json",
+    "fixtures/extension-package-audit.json",
+    "fixtures/json-schema-audit.json",
+    "scripts/acceptance-traceability.ts",
+    "scripts/audit-extension-packages.ts",
+    "scripts/audit-json-schemas.ts",
+    "scripts/core-ideals/cardinality-conformance.ts",
+    "scripts/core-ideals/facets-evidence.ts",
+    "scripts/core-ideals/key-evidence.ts",
+    "scripts/core-ideals/nullability-conformance.ts",
+    "scripts/core-ideals/relationship-gate-inputs.ts",
+    "scripts/domain-pack-family.ts",
+    "scripts/export-domain-pack.ts",
+    "spec/extensions/dashboard/package.json",
+    "spec/extensions/dashboard/schema.json",
+    "src/extensions/dashboard/index.ts",
+    "src/index.ts",
+    "tests/dashboard/profile.test.ts"
+  ],
+  "dashboardContractSha256": "c72e27f9508c51acaf16e0a580d6eb176284e5377e4bb1beaa5c16327954e327",
+  "scope": "Read-only committed-source review; no Truss runtime repin, owner test rerun, dashboard adoption or browser qualification",
+  "findings": [
+    "umf.dashboard 0.1.0 adds platform-neutral dashboard metadata; expressions remain opaque and no SQL execution or translation is claimed",
+    "Platform-independent repository paths and line endings change owner tooling, not Truss model or PostgreSQL adapter source",
+    "No changed paths in src/model, src/adapters/postgresql or src/visualization; current Truss numeric/dataset/browser qualification pins retain their own scope"
+  ],
+  "continuation": "Preserve unknown dashboard extension content under existing UMF support disposition; do not execute dataset query text or infer compiler registration from dashboard metadata"
+}

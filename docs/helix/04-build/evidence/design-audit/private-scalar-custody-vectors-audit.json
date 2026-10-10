@@ -1,0 +1,7 @@
+{
+  "scope": "Independent authored UTF-8 source bytes and finite numeric fixture facts only; no decoder, native descriptors, codec registration or host qualification",
+  "fixtureSha256": "f205f3b065e10472d8b2713b389d462c0fba396e5e80f8bb843fc3b96e76147d",
+  "cases": 12,
+  "nativeExecution": false,
+  "complete": false
+}

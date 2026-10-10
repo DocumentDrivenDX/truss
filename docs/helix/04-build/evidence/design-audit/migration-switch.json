@@ -1,0 +1,67 @@
+{
+  "scope": "Twelve switch evidence shapes including deliberate semantic/native counterexamples; no native producer/guard/commit qualification",
+  "cases": 12,
+  "results": [
+    {
+      "name": "existing guard effects",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "created guard effects",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "missing exclusion",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "missing locator artifact",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "missing actual guard evidence",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "native numeric generation",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "future receipt excluded",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "future commit excluded",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "duplicate route needs semantic refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "wrong sum needs semantic refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "created guard deletion needs semantic refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "native overflow needs semantic refusal",
+      "expected": true,
+      "actual": true
+    }
+  ],
+  "failures": []
+}

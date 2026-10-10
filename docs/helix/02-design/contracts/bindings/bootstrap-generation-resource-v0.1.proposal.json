@@ -1,0 +1,35 @@
+{
+  "interfaceVersion": "truss-bootstrap-generation-resource/0.1.0",
+  "status": "unadopted; no runtime/native qualification",
+  "integerCarrier": "canonical positive decimal text",
+  "limits": {
+    "originalRequestBytes": "33554432",
+    "oneArtifactDecodedBytes": "16777216",
+    "allArtifactDecodedBytes": "67108864",
+    "originalTreeDepth": "128",
+    "originalTreeOccurrences": "524288",
+    "statementCount": "4096",
+    "coverageEntries": "131072",
+    "oneStatementUtf8Bytes": "16777216",
+    "completeOutputBytes": "134217728",
+    "peakOwnedBytes": "268435456",
+    "cumulativeAllocationBytes": "1073741824",
+    "abstractWorkUnits": "256000000",
+    "wallDeadlineMilliseconds": "30000",
+    "containmentObservationMilliseconds": "5000",
+    "diagnosticCount": "64",
+    "oneDiagnosticUtf8Bytes": "4096",
+    "diagnosticBytesTotal": "65536"
+  },
+  "accounting": {
+    "request": "charge complete original request transport before buffering; preserve original bytes",
+    "artifacts": "charge every actual decoded occurrence, including repeated references; simultaneous retained originals and output count toward peak",
+    "trees": "count every object/array/scalar occurrence, root depth zero; shared references do not remove serialized occurrence charges",
+    "composition": "charge all original tree scans, guarded edits, per-statement exports, complete reimport/reexport and full source comparisons; never treat statement count as actual work",
+    "output": "charge full serialized candidate including base64 artifacts, joins, source paths/pins, coverage, obligations and qualification; SQL byte length alone is insufficient",
+    "work": "one unit per visited tree occurrence plus every compared, hashed, copied, encoded or decoded byte; repeated owner calls charge each occurrence and actual additional work",
+    "containment": "backend execution requires a registered isolated runtime accounting/cancellation profile; stop public waiting cannot release active work capacity",
+    "failure": "no SQL or partial statement inventory on refusal; diagnostics obey independent bounded totals"
+  },
+  "scope": "Pure generation using existing pinned UMF APIs and Truss-owned composition. Native installation/catalog collection and Weft compilation have separate resource profiles; no profile receives an unlimited allowance."
+}

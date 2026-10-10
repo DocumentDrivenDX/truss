@@ -1,0 +1,559 @@
+{
+  "status": "pass",
+  "scope": "all current binding *typecheck.ts consumers under strict no-emit TypeScript; no runtime/native/profile adoption proof",
+  "consumers": 45,
+  "declarations": 88,
+  "sourcePins": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-acceptance-input-v0.1.typecheck.ts",
+      "sha256": "e8265761e8e1768a106c8bb5a8f91c723c982cfbdb008a63a7399479f7f8d847"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-authority-coordinator-v0.1.typecheck.ts",
+      "sha256": "63dfd355ff2f5374ce6c5c8e44ed58d328533a7c0075527821e8aa1dfbdf9262"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-bootstrap-collection-result-v0.1.typecheck.ts",
+      "sha256": "7a6c002d0de1dd98d736690353bd7415d31c50abba8c17d88cb0a4256fc0400e"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-bootstrap-generation-v0.1.typecheck.ts",
+      "sha256": "5b314d5159fe8a67ed00ba0a3333adf6fc2879203ee87eae49f6ed588e03c20c"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-bootstrap-installation-v0.1.typecheck.ts",
+      "sha256": "6a7e94870a9cf38f6176101a4fbbb57935c52809b43b2f14a578dd0b58d5415e"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-bootstrap-inventory-v0.1.typecheck.ts",
+      "sha256": "179b9220966a939a4334d3247ae6b3fbdf96d1e4d6a239aa07254555b7d5f42b"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-bootstrap-projection-v0.1.typecheck.ts",
+      "sha256": "84216a729ba23233cd77989802e4ce1248924faeb200544100594495fe68fd5d"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-catalog-capability-v0.1.typecheck.ts",
+      "sha256": "7ff11126960bc764dd483536ca83b1ea119eb6a78d66bd544739658deb9e462f"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-catalog-transform-v0.1.typecheck.ts",
+      "sha256": "1f7b74a23eb0bc6a805f9b58eb39190479e8cbdf6931075c37cb7f8998914e19"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-compiled-execution-capability-v0.1.typecheck.ts",
+      "sha256": "c3c89da3ed5bbd74f29ce1566ad46dbaa6e15efe072ca1099f8e2c1688352b97"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-conformance-tooling-v0.1.typecheck.ts",
+      "sha256": "7119401f6b004f2a71b2fa3c9d2b04f012f57821b2d8a08897b65cc70af3db74"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-direct-read-capability-v0.1.typecheck.ts",
+      "sha256": "4053408ce812365e535d9ed1e7e131bec9c97857974f6df01ce01a441c56c5d0"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-direct-read-v0.1.typecheck.ts",
+      "sha256": "595506fa938695becaaaeaa5d1f5a1d390c7abc7e31546a9a2b1bf4cc2a4b095"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-direct-traversal-release-v0.1.typecheck.ts",
+      "sha256": "19b7f2c67ebe21ef72edb6384736720a7a000dbbee212c8dee8c8977f2ca76ef"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-execution-v0.1.typecheck.ts",
+      "sha256": "7cb24ea319aea3c9e383dea167be54cd79964dba0c854eb4a65ebd898beaf0ac"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-feed-administration-v0.1.typecheck.ts",
+      "sha256": "699e407e6970b6c391b0557064c44bb601d708309e06c4648359d296986c0cbd"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-feed-application-adapter-v0.1.typecheck.ts",
+      "sha256": "8bebce9d58139a72d2426aff414c95c6126d46e4b073c8afae0149cb66722d1e"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-feed-application-evidence-v0.1.typecheck.ts",
+      "sha256": "9aa77b89949d4721cef11974381c679f421ffb5fe567dfec0632055de164c993"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-feed-capability-v0.1.typecheck.ts",
+      "sha256": "41ce446be8132c13741a85f42638791c2018fb86c9e651634c1799d7c40b214c"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-feed-downstream-adapter-v0.1.typecheck.ts",
+      "sha256": "60e7c2b9cb39297cad42df76dce6ae3a85faf5e7da086b3606e52b65f79522eb"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-feed-freshness-v0.1.typecheck.ts",
+      "sha256": "cc9a764ad93d1a39013032e06c97e3698e34c4009bb5ca5a734dedf4be2cfdd6"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-feed-observation-v0.1.typecheck.ts",
+      "sha256": "1de53ce77362660a2172082a5f3adcb0069c4647a7a985bb891ef2d6e8241f56"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-feed-proof-verifier-v0.1.typecheck.ts",
+      "sha256": "4b701bcc1e440f8230c558855198159dc7756a1205f82d7c2e88f7801c49b93c"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-feed-registration-v0.1.typecheck.ts",
+      "sha256": "e40f04215b918aeec066e5f7fcbac8560f5b226bbeac006d4e95091d07a5d4ca"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-feed-tooling-v0.1.typecheck.ts",
+      "sha256": "a5000f422dc109bc22e96d416dda316178ec9cb6ccc82da599294d0cce62cdda"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-feed-transaction-v0.1.typecheck.ts",
+      "sha256": "6d69ee49b596c71dd83d50dee17ce7f794ff7fd8735c4423577558580fbe2e35"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-feed-worker-administration-v0.1.typecheck.ts",
+      "sha256": "591f2c8af20e859009cc87cd90fe14ff538eaa4e0532b92656acc994252e7d56"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-feed-worker-v0.1.typecheck.ts",
+      "sha256": "77ea7dd94731d3fcffa6adc17be5daf43c5131c4a3050f0fd53b7b13773ad44a"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-group-result-v0.1.typecheck.ts",
+      "sha256": "2e4ab1d6e7b0b5bdd744943b85d27abfcfbe104f45bbf4705d478682e237cac1"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-historical-source-v0.1.typecheck.ts",
+      "sha256": "439130046deabc14f8c551c6cb2e978c59adab5970adf4deb8a3871a8adc4d42"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-history-capability-v0.1.typecheck.ts",
+      "sha256": "1c020e73591f3be310c38ae447e9b11d6c40911de491c7b5be63b73ae454e717"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-import-capability-v0.1.typecheck.ts",
+      "sha256": "c105f20a2a955551aae34dc889c04e421f79ecae9fed94c54f1ea41c12e6ba20"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-journal-page-v0.1.typecheck.ts",
+      "sha256": "64657d82583ec912d41706fb44e4991be0d4a4a900e7e978c047d5fc32e092c2"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-mutation-group-capability-v0.1.typecheck.ts",
+      "sha256": "6bc9ffecbe565e62d6aff9a89774b2e1a353b7a2fe6aade82458a4219d1a50c6"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-operation-arbitration-v0.1.typecheck.ts",
+      "sha256": "8c78770a17dc76008708ad62c6f72d425dba4834975ad8c0aeac66d62048fe46"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-physical-job-tooling-v0.1.typecheck.ts",
+      "sha256": "2e54c305a0a9714010722e778876a03254e47bc06c28fb4ef2def675e09770f1"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-physical-optimization-v0.1.typecheck.ts",
+      "sha256": "c316a7c7718bad204db4170c1c5b53f7c8cb3e3679df48372415609cdd11509d"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-recovery-registry-v0.1.typecheck.ts",
+      "sha256": "2db397b101d321356623c54ac4dbdc00797cac72370929c6bf9812cdba521998"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-reference-assembly-v0.1.typecheck.ts",
+      "sha256": "26e6a4245f95fb22d47f35de64ad7a33cb4783e21a2ea28e128350371edb2a07"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-retention-tooling-v0.1.typecheck.ts",
+      "sha256": "424909f332f6c323b0ae624c8ddfbc14e7d9ce28008b97234bc2d008c8ead486"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-seed-abandonment-v0.1.typecheck.ts",
+      "sha256": "28b1c694a25446fcc0ad653851853e00ec944cdf28a7619f976a5f100966b069"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-seed-capability-v0.1.typecheck.ts",
+      "sha256": "40c3806657c5733ddf8820078f8deefa6ad8d47a188697ea14c7e531c47c54c8"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-seed-extraction-staging-v0.1.typecheck.ts",
+      "sha256": "92d10672a2f7dd0bdc49a39ee8f68e3e51ec981a4d1bba57147a40fc252cd67f"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-seed-restart-v0.1.typecheck.ts",
+      "sha256": "b6a1aebd839a1147830a56ed2ab8381a8b39d1b27c14953365b59d4f097a3299"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-traversal-stage-service-v0.1.typecheck.ts",
+      "sha256": "ffb4a550b836cd16e9965bc2e55cfff8436d6b542f4ad6b32b1982272b113f3d"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-acceptance-input-v0.1.d.ts",
+      "sha256": "bde6c1a386b41efc24cee68495ee878656e35bca1072ff0fdd3ad14179b48db3"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-acceptance-report-v0.1.d.ts",
+      "sha256": "12172476709999e968e288faac1906c0f283ca58b606926821b111a9cdce94db"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-authority-coordinator-v0.1.d.ts",
+      "sha256": "687e770466a187b663fd1f68da667f8399054ddd40c6307cf5a59086f3de7827"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-bootstrap-collection-result-v0.1.d.ts",
+      "sha256": "73c3d0790275ec8ff6d03064ae51234b2b66a6d3ec67cec4364520f8dbed25a9"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-bootstrap-definition-v0.1.proposal.d.ts",
+      "sha256": "e107df94df3b1235fcdd93620275d9d18f8b1ad4afd97d9a63d6a5d9d32bc1cb"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-bootstrap-dependency-reconciliation-v0.1.proposal.d.ts",
+      "sha256": "127090ec88d46c59b4244dde50e7701e507c357e82d504ed3aa0ab4fa7709f9d"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-bootstrap-generation-v0.1.d.ts",
+      "sha256": "c2add33aef70389e3a47faa9c4ac6c2264ec76c363c00e8e7c7051b4017f39a3"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-bootstrap-installation-v0.1.d.ts",
+      "sha256": "f6078fae54b2d6496621b405fea99d60f8a49d9fb0cc9314e01205d0b60d316e"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-bootstrap-inventory-v0.1.d.ts",
+      "sha256": "3001fccaa8ca7e1820270d4bea200df6b0cf522b6cd8ffe15ac221117aa595cb"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-capability-readiness-v0.1.d.ts",
+      "sha256": "7b6e14f9aa62080b0eecdb2a66d6c2951f5f4c49f6c47132385d11a88d76b15d"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-catalog-binding-source-v0.1.d.ts",
+      "sha256": "6c590a9729d24b6eba21b7b3d58fea10314e9f7331f1eb37f4ceb410ceeff643"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-catalog-capability-v0.1.d.ts",
+      "sha256": "f9a293e4cfdf9c2d87ef0a5bbb4d0d3de977dac78a44685b79495e7179a7a0be"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-catalog-transform-v0.1.d.ts",
+      "sha256": "879d0a9ad406d44f0f4e87b4a2a5b55c4ba5ffb106f6fe9d3b0896f209d5c59b"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-catalog-view-v0.1.d.ts",
+      "sha256": "2a9d48369ade2cbcd237ec202b00434928b2c65def904aedff3a4a71037b33c8"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-compiled-execution-capability-v0.1.d.ts",
+      "sha256": "ff8100a9988332823e489ece996e21711a9b106316f987939d48bb7168012064"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-conformance-tooling-v0.1.d.ts",
+      "sha256": "66f533f026f46198f49a08cebb84d708d4dd82b41f0c5d3a06a7731f0dc74883"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-direct-read-capability-v0.1.d.ts",
+      "sha256": "7288f270092f3964e41a22933dc45061be1127e641c6dbcf8521808a66093e3d"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-direct-read-v0.1.d.ts",
+      "sha256": "ce1eea86ac412b7b688589dbdf9ff95c14c84e3b86ded7056e96d6a54af42cfe"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-direct-traversal-v0.1.d.ts",
+      "sha256": "6933ea69df3db05972381eaa3288b61ea9891f5a4551b0ce4b2e172f05dda5a8"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-enforcement-report-v0.1.d.ts",
+      "sha256": "d645bd711012c8ae19ee4f05a36363febd8bea8859ee7960b441db7bc1e6070f"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-execution-v0.1.d.ts",
+      "sha256": "b6d6d30d9a4804ae5d8c2ae34028edb8abeb6d36909bee658e3b5da6ec2270df"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-expiry-evidence-v0.1.d.ts",
+      "sha256": "378b92ab6f59ab9f203a5abf7f13e8b2048274a8c3f7c7e855b752c84dbd0a26"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-feed-administration-v0.1.d.ts",
+      "sha256": "966895298e6794a337853bbed955894c7be396090d1b3d1bbe0e873236e3cca1"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-feed-application-adapter-v0.1.d.ts",
+      "sha256": "8d49fde74e6479e95470423e31873d249770b74cbf5c301f1a47dc9f25738b12"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-feed-application-evidence-v0.1.d.ts",
+      "sha256": "8262901721e581fc69e51aef951afd594f779e7c52f918a46d86f2bb2ae40c03"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-feed-capability-v0.1.d.ts",
+      "sha256": "86057ff1071442e276abe5f4de7af2f3569a888762d83658ea5a5abcb07393d6"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-feed-discovery-v0.1.d.ts",
+      "sha256": "77bf3bc4e7ebc37c31a051a90143b594c450e434373b3f914065b9b91e7c46db"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-feed-downstream-adapter-v0.1.d.ts",
+      "sha256": "1ff145e9d7a99d25a63bdee818c192631e031ba10d07772197b8102aef8e61b6"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-feed-freshness-v0.1.d.ts",
+      "sha256": "bc1db0a34922d10d663644dcb9aaffd1d084d5036ec496b2af9dd8b7d0905a96"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-feed-host-composition-v0.2.d.ts",
+      "sha256": "f1ba981ca9c207667a748bf9cd4b7519612d9b49471740d579b60ca50936c980"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-feed-key-transition-v0.2.d.ts",
+      "sha256": "00ab8e3487ea782f7bb220f88ddef6b80afb87c4dbdd9154df6ddcecf268ee90"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-feed-lifecycle-v0.2.d.ts",
+      "sha256": "23372b271621e79f6599ebd0ecdf21074b18715f1ef5ea65976556d740c768e5"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-feed-observation-v0.1.d.ts",
+      "sha256": "ff0c9a03aab06a955caac4c518495192938873d6ca3dc4b98fd29103eab0438d"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-feed-proof-verifier-v0.1.d.ts",
+      "sha256": "9715b00bfa88a0803b45dabd1f827fcd90f36e48a4e23b1a7a6200690c46a738"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-feed-registration-v0.1.d.ts",
+      "sha256": "0f23c10f2b943262c8bae396360d7da077c45e18a62d3489e34b5051a50aed7b"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-feed-side-record-v0.1.d.ts",
+      "sha256": "1d32090fd6074d253047ac153e76e859b28c78a3b1e28ac5f3b0bb6503717924"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-feed-tooling-v0.1.d.ts",
+      "sha256": "8cbfedb11a05de6c9fa30805bbe18fa19e1571b0f080eaa9b98c1e5eee8ded2b"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-feed-transaction-v0.1.d.ts",
+      "sha256": "010d2ea005d712bb016943e244cda0f10510ab494edbd434f9bc47668479547f"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-feed-worker-administration-v0.1.d.ts",
+      "sha256": "195f62217ca1d4b653ca9ecaae28daaf8d8d328f199727bd7d782b2fd335f289"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-feed-worker-v0.1.d.ts",
+      "sha256": "e04c5196bafb284fa209441b41e427535de1363d34422be8d2c0a528674e9bd8"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-group-capability-v0.1.d.ts",
+      "sha256": "470481e1789cfd9eb3463843d177cae4fc34c6c3ec9d4c0ce946e03d3b32d471"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-group-input-v0.1.d.ts",
+      "sha256": "d8ad7048124b09dd953628ea3f70b2e55935db54243a9a3264743d9c14be8506"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-group-result-v0.1.d.ts",
+      "sha256": "84a08f1174e3961683a0322d53df74865701cb9728419a79fc0d92a2b4cfbf17"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-historical-source-v0.1.d.ts",
+      "sha256": "6ff6910e1297aa1b10877b0fd90fd6f879d2a3ff7fed2e06fa9bc8c1ba894789"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-history-capability-v0.1.d.ts",
+      "sha256": "af055b7989a15bc01edc418d7fc663bd74d67afd5217a12c7667bb2cb4ba3269"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-history-reconstruction-v0.1.d.ts",
+      "sha256": "3a55778757ee720230d348c1804e24bb0c801b6be4fc24fc1262a254d4b963bb"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-history-v0.1.d.ts",
+      "sha256": "c9514718cb22ad0645ab32b81666de95fd952ca40396f762ea2529ba33bb7549"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-import-capability-v0.1.d.ts",
+      "sha256": "457200c63b98445eeb205583af7659f9897aa39524c8dc2e058be4e4eeaabf13"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-import-input-v0.1.d.ts",
+      "sha256": "e8a774a71740791f718a66cbf60bc1ec0a4eb5a710fd738045c8f903cf81354b"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-import-payload-v0.1.d.ts",
+      "sha256": "8ca6d28fdd5bbbcbed47ddb590370312f2370c365b1ea31c983ea5e952af13eb"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-import-report-v0.1.d.ts",
+      "sha256": "b23514f406e746c40f030c6d52da23a5da269068b41cf4954e317e8dd50ac5bc"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-index-readiness-v0.1.d.ts",
+      "sha256": "0eb1e2989b35f735a64c1ca50100ec3272444f6b0a934692ffae51246a6389ee"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-installation-admission-v0.1.d.ts",
+      "sha256": "ae841873315e7afcd31931eec9b8936f6f044523aef8bc113fed6301b289281a"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-installed-policy-v0.1.d.ts",
+      "sha256": "60a6bf697aa671245339b8e713b3ac491c3106c3b3e5f6b393bab55471ebf735"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-journal-page-v0.1.d.ts",
+      "sha256": "1047adee84af03ae4b9f0caceacbe3c2890c2d98a8fc20d9ba5633c968a58026"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-key-bindings-v0.1.d.ts",
+      "sha256": "4641ca5b1c1f6da8fe8188211e019fdd931a0952f7e6ba851c9b9cdc7fc65f97"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-key-definition-snapshot-v0.1.proposal.d.ts",
+      "sha256": "1eec73f8b21558720d25a872b884c877755fc36fb5a9022d584cb2d218bc18ac"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-key-migration-collection-v0.1.d.ts",
+      "sha256": "201430c5d06bd3216978f0ad35c779ba5bfc9e8c77df7fdb3307574a4035f6c5"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-key-migration-inventory-v0.1.d.ts",
+      "sha256": "03dc218dce77a0003bd8a6d0a1cd2fdc1dc07bd5f3bff790bfe6b3257425be55"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-key-migration-locators-v0.1.d.ts",
+      "sha256": "a94e02230c3cb14047f91509d5690e4d233a007a69a919d4723ce96acb5f8ca9"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-key-migration-switch-v0.1.d.ts",
+      "sha256": "559571e0f16b2f5daf43364c97330e9c5fa5f6b0780e3dd2efee5c79daa811c1"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-key-profile-migration-v0.1.d.ts",
+      "sha256": "97d04375ea5b24b9303b0ffc3396a5a8922470dca64bccb5d17f8bb9f725046a"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-mutation-capability-v0.1.d.ts",
+      "sha256": "00738ae4f58559d416ed7332939877bf82cbc66315aba75d4f85a8524ccaa5e9"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-mutation-configuration-v0.1.d.ts",
+      "sha256": "0852e0500acef9bdaa2fd5b61cec471a8f80383cebb8ab27902984f3627a3f2b"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-operation-arbitration-v0.1.d.ts",
+      "sha256": "dc7d8f9ab66349fa081595474101ea0a2e0eddd348d4a01af769fd2985b34569"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-physical-job-tooling-v0.1.d.ts",
+      "sha256": "ea864fc6be5ac01cf9bb1f8e6093a76b1a305209375d9c1fa2d283bab5c36249"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-physical-optimization-v0.1.d.ts",
+      "sha256": "375f1018239388a631ef1eada8923ecdefbca40db0bc976e73df4bc04748ccdf"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-reactivation-report-v0.2.proposal.d.ts",
+      "sha256": "126978d301c4ea57f98a281ffb2102baaf49d9d829fcc4589f36817217002fd1"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-receipt-expiry-tooling-v0.1.d.ts",
+      "sha256": "9d373f2ba6ead8bc6e2ba3c743b2ce7a2efd1527445d18c46d56930e9c9460f1"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-receipt-lifecycle-tooling-v0.1.d.ts",
+      "sha256": "ab2fd46f7bd3ff7d1c73c203af9b43c877ea985abe6e0d5a534ae5efe4b49af5"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-receipt-observation-coordinator-v0.1.d.ts",
+      "sha256": "ea29fbb08f766853f2c1e036fce741bec12cc73272918bbed1f17d9e70b848cf"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-receipt-protection-tooling-v0.1.d.ts",
+      "sha256": "6f0a93a268d2b7a147dfd661cfaf50427da1e5a279f9fd5bd0647b32905abd4f"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-recovery-registry-v0.1.d.ts",
+      "sha256": "20c2b0bd54045f7e8c3f199db865bea75fe526ed4e47092ab7cc7f0e1e2ef0a5"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-reference-assembly-v0.1.d.ts",
+      "sha256": "617660fe6436526c4355a1a4d92e3e620403a887465b90957f6bc41d47720307"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-request-namespace-v0.1.d.ts",
+      "sha256": "2d7b522da1a904d0061a76d610e8db9696469f2b6c46963d3a7e1ee8b2b0cc9a"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-request-receipt-v0.1.d.ts",
+      "sha256": "88f36f156afc530bf859f73ee9b99f06bb5693a6e6aaf1322994a4e12264f1bc"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-retained-history-archive-v0.1.d.ts",
+      "sha256": "dabc7bfe2aa9a2736ef28dee299ca7d527d952bec118518b7db401114efea850"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-retention-tooling-v0.1.d.ts",
+      "sha256": "95ec756898e9aaac17311e5e2eed5e8dcf2202b4b3ce901cedd39f9c6fdf3478"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-seed-abandonment-v0.1.d.ts",
+      "sha256": "71de1cded183966544b6517b3c7975f05754dde11fcc71e703fe84e6402277be"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-seed-activation-v0.1.d.ts",
+      "sha256": "54f3d4d912f77ca6c638d0f788f9f8c17301ccd93260a223b5d51f6a32302e97"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-seed-baseline-v0.1.d.ts",
+      "sha256": "263af23dc82874439ff9dfd278d0ed4cd8e49b000d5b702fb2e7496d8711a687"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-seed-confirmation-v0.1.d.ts",
+      "sha256": "2ddc59479b3fa935a765f1605df664951779bb0f0e82317647c9808b9a7618ee"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-seed-downstream-adapter-v0.1.d.ts",
+      "sha256": "04b434e37730808bd17ae55214fafdaa3ff90d6e65a7154ee2661928c4d2d5cd"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-seed-extraction-v0.1.d.ts",
+      "sha256": "5bacfdbaad7fe96bdcf4609d7f77164fa2175cd638339325810358e58e9b52ba"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-seed-restart-v0.1.d.ts",
+      "sha256": "2703b9fa9a02998788dba39e4699111f35ee27bcd342c257b864596ca1b72af3"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-seed-staging-v0.1.d.ts",
+      "sha256": "212786901721020cc69ce4e32dad814bf5540a2ca03859678b0c59f7c52709e3"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-statistics-readiness-v0.1.d.ts",
+      "sha256": "dc10a3b48517ae800130ebaefd21487e8e3c447e76ba838d9684757d45aa86ed"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-traversal-stage-service-v0.1.d.ts",
+      "sha256": "9ad17a39bf94117489cf83056ca28cacfea501b1b88236212ece56261327d91a"
+    }
+  ],
+  "compilerVersion": "Version 7.0.2",
+  "compilerOptions": [
+    "--noEmit",
+    "--strict",
+    "--target",
+    "ES2022",
+    "--module",
+    "ESNext",
+    "--moduleResolution",
+    "bundler"
+  ],
+  "selection": "sorted current docs/helix/02-design/contracts/bindings/*typecheck.ts",
+  "notCovered": [
+    "runtime validators",
+    "transitive external dependency package qualification",
+    "browser execution",
+    "native adapter or transaction behavior",
+    "profile adoption"
+  ]
+}

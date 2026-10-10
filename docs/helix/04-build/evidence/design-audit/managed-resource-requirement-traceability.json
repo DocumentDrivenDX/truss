@@ -1,0 +1,31 @@
+{
+  "scope": "Resource-account traceability review of current PRD and draft embedding contract; no automatic requirement removal",
+  "sources": [
+    {
+      "path": "docs/helix/01-frame/prd.md",
+      "sha256": "4507a800117bb2468124e3a358ee6a15846e26c0f0fc2bf914d8f8d001634f99"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/CONTRACT-007-embedding-and-execution.md",
+      "sha256": "dfefb444b53089ce161d9234828f75a207f683f3242bec54d39a6255523254b6"
+    }
+  ],
+  "productRequirementsObserved": [
+    "bounded edge listing/traversal",
+    "reported index budget",
+    "atomic mutation groups and caller-owned rollback",
+    "honest database-versus-engine enforcement reporting",
+    "exact values/history and transaction ordering"
+  ],
+  "draftDesignAddition": "CONTRACT-007 introduces unavoidable native transaction-wide accounting of spent work/allocation across all calls and host savepoints. The inspected PRD does not state this as a standalone numbered functional requirement.",
+  "distinction": "Logical graph invariants and transaction atomicity remain mandatory. Native transaction-wide resource accounting is a stronger draft mechanism/claim whose necessity and realizability require explicit design reconciliation.",
+  "candidateManagedDirection": "Host/executor-owned cumulative account plus bounded native per-invocation procedures; preserve database graph invariants and explicit server/provider limits. Do not advertise transaction-wide native allocation/work accounting until actually qualified.",
+  "candidateStatus": "unadopted evolution proposal; existing draft accounting obligations are not silently removed",
+  "requiredReconciliation": [
+    "trace other governing artifacts before changing the contract",
+    "define per-call versus host-transaction versus native/provider limits and failure evidence",
+    "retain full graph enforcement/atomicity/history and required tests",
+    "reconcile all account/wire/profile/support claims together"
+  ],
+  "nativeExecuted": false
+}

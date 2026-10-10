@@ -1,0 +1,186 @@
+{
+  "interfaceVersion": "truss-postgresql-failure-order/0.1.0",
+  "status": "planned semantic expectations; no producer grammar, driver classification or native support claim",
+  "scope": "Original execution outcome/admission only; diagnostic SQLSTATE disclosure and durable archive duties are separate. RecoveryRequired means unresolved native obligations, not absence of evidence retention.",
+  "cases": [
+    {
+      "id": "confirmed-commit-late-cancel",
+      "ownership": "engine",
+      "independentlyRequiredObservations": [
+        "original COMMIT confirmed",
+        "late cancellation before bookkeeping finishes"
+      ],
+      "expectedClassification": "committed",
+      "expectedRetryScope": "none",
+      "expectedOriginalGenerationAdmission": "ended",
+      "originalRecoveryRequired": false,
+      "automaticReplayPermitted": false,
+      "trussWholeCallerTerminationPermitted": false
+    },
+    {
+      "id": "sent-commit-lost-confirmation",
+      "ownership": "engine",
+      "independentlyRequiredObservations": [
+        "original COMMIT may have been submitted",
+        "confirmation unavailable",
+        "later connection error"
+      ],
+      "expectedClassification": "commit_unknown",
+      "expectedRetryScope": "qualified_request_lookup",
+      "expectedOriginalGenerationAdmission": "quarantined",
+      "originalRecoveryRequired": true,
+      "automaticReplayPermitted": false,
+      "trussWholeCallerTerminationPermitted": false
+    },
+    {
+      "id": "caller-serialization-known-failed",
+      "ownership": "caller",
+      "independentlyRequiredObservations": [
+        "original native serialization error",
+        "statement terminated",
+        "known failed transaction state",
+        "no unresolved cleanup or commit"
+      ],
+      "expectedClassification": "retry",
+      "expectedRetryScope": "whole_transaction",
+      "expectedOriginalGenerationAdmission": "closed",
+      "originalRecoveryRequired": false,
+      "automaticReplayPermitted": false,
+      "trussWholeCallerTerminationPermitted": false
+    },
+    {
+      "id": "caller-deadlock-no-termination",
+      "ownership": "caller",
+      "independentlyRequiredObservations": [
+        "original native deadlock error",
+        "statement termination unavailable"
+      ],
+      "expectedClassification": "transaction_unusable",
+      "expectedRetryScope": "none",
+      "expectedOriginalGenerationAdmission": "quarantined",
+      "originalRecoveryRequired": true,
+      "automaticReplayPermitted": false,
+      "trussWholeCallerTerminationPermitted": false
+    },
+    {
+      "id": "engine-serialization-rollback-confirmed",
+      "ownership": "engine",
+      "independentlyRequiredObservations": [
+        "original native serialization error",
+        "statement terminated",
+        "owned rollback and release confirmed"
+      ],
+      "expectedClassification": "retry",
+      "expectedRetryScope": "whole_transaction",
+      "expectedOriginalGenerationAdmission": "ended",
+      "originalRecoveryRequired": false,
+      "automaticReplayPermitted": false,
+      "trussWholeCallerTerminationPermitted": false
+    },
+    {
+      "id": "engine-serialization-rollback-lost",
+      "ownership": "engine",
+      "independentlyRequiredObservations": [
+        "original native serialization error",
+        "owned rollback completion unavailable"
+      ],
+      "expectedClassification": "transaction_unusable",
+      "expectedRetryScope": "none",
+      "expectedOriginalGenerationAdmission": "quarantined",
+      "originalRecoveryRequired": true,
+      "automaticReplayPermitted": false,
+      "trussWholeCallerTerminationPermitted": false
+    },
+    {
+      "id": "caller-cancel-contained",
+      "ownership": "caller",
+      "independentlyRequiredObservations": [
+        "original admitted cancellation cause",
+        "native termination confirmed",
+        "operation-only rollback and restoration confirmed",
+        "original host transaction usable"
+      ],
+      "expectedClassification": "cancelled",
+      "expectedRetryScope": "none",
+      "expectedOriginalGenerationAdmission": "closed_by_latched_cancellation",
+      "originalRecoveryRequired": false,
+      "automaticReplayPermitted": false,
+      "trussWholeCallerTerminationPermitted": false,
+      "expectedNativeHostTransactionState": "usable_pending"
+    },
+    {
+      "id": "cancel-signal-alone",
+      "ownership": "caller",
+      "independentlyRequiredObservations": [
+        "cancel signal delivered",
+        "native termination unavailable"
+      ],
+      "expectedClassification": "transaction_unusable",
+      "expectedRetryScope": "none",
+      "expectedOriginalGenerationAdmission": "quarantined",
+      "originalRecoveryRequired": true,
+      "automaticReplayPermitted": false,
+      "trussWholeCallerTerminationPermitted": false
+    },
+    {
+      "id": "pre-native-foreign-handle",
+      "ownership": "caller",
+      "independentlyRequiredObservations": [
+        "foreign original issuer recognized before submission",
+        "no native work submitted"
+      ],
+      "expectedClassification": "invalid_transaction",
+      "expectedRetryScope": "none",
+      "expectedOriginalGenerationAdmission": "foreign_handle_refused",
+      "originalRecoveryRequired": false,
+      "automaticReplayPermitted": false,
+      "trussWholeCallerTerminationPermitted": false
+    },
+    {
+      "id": "contained-decoder-failure",
+      "ownership": "caller",
+      "independentlyRequiredObservations": [
+        "write statement completed",
+        "exact result decoder failed",
+        "operation rollback and restoration confirmed",
+        "original host transaction usable"
+      ],
+      "expectedClassification": "execution_obligation",
+      "expectedRetryScope": "none",
+      "expectedOriginalGenerationAdmission": "available_after_fresh_admission",
+      "originalRecoveryRequired": false,
+      "automaticReplayPermitted": false,
+      "trussWholeCallerTerminationPermitted": false
+    },
+    {
+      "id": "post-write-decoder-unknown",
+      "ownership": "caller",
+      "independentlyRequiredObservations": [
+        "write may have executed",
+        "result decoder failed",
+        "native outcome or operation cleanup unavailable"
+      ],
+      "expectedClassification": "transaction_unusable",
+      "expectedRetryScope": "none",
+      "expectedOriginalGenerationAdmission": "quarantined",
+      "originalRecoveryRequired": true,
+      "automaticReplayPermitted": false,
+      "trussWholeCallerTerminationPermitted": false
+    },
+    {
+      "id": "missing-codec-before-submit",
+      "ownership": "caller",
+      "independentlyRequiredObservations": [
+        "original host transaction usable",
+        "required codec profile missing",
+        "no native work submitted"
+      ],
+      "expectedClassification": "execution_obligation",
+      "expectedRetryScope": "none",
+      "expectedOriginalGenerationAdmission": "available_after_fresh_admission",
+      "originalRecoveryRequired": false,
+      "automaticReplayPermitted": false,
+      "trussWholeCallerTerminationPermitted": false
+    }
+  ]
+}

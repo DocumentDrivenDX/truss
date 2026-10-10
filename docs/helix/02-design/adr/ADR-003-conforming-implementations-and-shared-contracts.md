@@ -3,7 +3,7 @@ ddx:
   id: ADR-003
   type: adr
   activity: design
-  status: proposed
+  status: accepted
   authoring:
     home: repo
   links:
@@ -21,7 +21,7 @@ ddx:
 
 | Field | Value |
 |-------|-------|
-| Status | **Proposed** |
+| Status | **Accepted — owner decision 2026-10-09** |
 | Date | Proposed 2026-10-04 |
 | Decider | Project owner |
 | Drafted by | Claude Code agent |
@@ -39,7 +39,31 @@ ADR-001 D5 already makes the conformance corpus language-neutral data with norma
 
 We will treat the contracts and the corpus as the interface to truss, and accept **a second implementation in another language when it passes the corpus**, as a response to T1 alongside the Rust-core route of ADR-001 D7. The first such implementation is a Python implementation for that consumer. It need not wait for, or become, a Rust core.
 
-**Key Points**: A conforming implementation reads and writes the tables of CONTRACT-001 and follows CONTRACT-002 to CONTRACT-004 | It passes the corpus on each engine version it claims, and the interchange check against the TypeScript engine (CONTRACT-004) | It declares the layout version it was built against and refuses a different major version | It may add host-owned objects in its own schema and may add triggers on truss tables, under the extension rules of CONTRACT-001, and may not change truss's columns or constraints | It reads UMF through its own reader or an adapter, which must pass the corpus's UMF validity cases so it agrees with the reference validator, so ADR-001 D4's "UMF through its TypeScript library" applies to the TypeScript core only | The Rust route of ADR-001 D7 stays open and, when taken, is one more conforming implementation
+**Key Points**: A conforming implementation reads and writes the tables of CONTRACT-001 and follows CONTRACT-002 to CONTRACT-004 | It passes the corpus on each engine version it claims, and the interchange check against the TypeScript engine (CONTRACT-004) | It declares the layout version it was built against and refuses a different major version | It may add host-owned objects in its own schema and may add triggers on truss tables, under the extension rules of CONTRACT-001, and may not change truss's columns or constraints | It consumes pinned UMF owner APIs or a qualified shared callable interpretation boundary; Python orchestration does not define a competing UMF validator, key codec or SQL generator. The corpus checks owner interpretation correspondence, so ADR-001 D4's "UMF through its TypeScript library" applies to the TypeScript core only | The Rust route of ADR-001 D7 stays open and, when taken, is one more conforming implementation
+
+## Selected first Python implementation boundary
+
+The owner requested Python promptly and indicated that pure Python is suitable
+if Weft and authorization supply the heavy computation. The proposed response
+is Python host orchestration over shared protected PostgreSQL protocols, with
+Weft's Rust compiler consumed through its Python bridge. It does not require a
+Rust port of Truss and does not create a second ACL resolver or SQL compiler.
+The active security workstream owns authorization semantics and its shared
+invocation boundary. See [the Python integration design](../python-integration.proposal.md)
+for PY-01–07, exact transport and consumer R1–R10.
+
+“Second implementation” here means an independently packaged host API and
+adapter conforming to the same behavior. It does not require independently
+reimplementing shared database enforcement. Interchange must still exercise
+Python-write/TypeScript-read and the reverse with independent expected values
+and native observations; sharing SQL routines does not by itself prove host
+protocol or codec correctness.
+
+Truss owns, maintains and ships the tested embeddable Python implementation in
+the Truss repository. Python 3.11 is the initial consumer target. The owner
+accepted this route on 2026-10-09; it amends ADR-001's Python restriction.
+Driver/version qualification and published package names are engineering outputs.
+Experimental imports alone still do not qualify complete runtime support.
 
 ## Alternatives
 
@@ -48,7 +72,7 @@ We will treat the contracts and the corpus as the interface to truss, and accept
 | Port the core to Rust with Python bindings (ADR-001 D7) | One engine; memory-safe | Not built; per-platform binary builds; waits on a measured need beyond T1's wording | Kept open, not required for T1 |
 | Run the TypeScript engine as a service for Python callers | Reuses code | A second runtime and service; the trigger text already excludes it where it does not meet the consumer's needs | Rejected for this consumer |
 | A Python implementation with its own table design | Fast to start | Not interchangeable with truss; a second storage design | Rejected |
-| **A Python implementation conforming to the shared contracts and corpus** | Interchangeable over one database; verified by data; no Rust dependency | Two implementations to keep in step; the contracts and corpus must exist first | **Proposed** |
+| **A Python implementation conforming to the shared contracts and corpus** | Interchangeable over one database; verified by data; no Rust dependency | Two implementations to keep in step; the contracts and corpus must exist first | **Accepted** |
 
 ## Consequences
 
@@ -77,7 +101,7 @@ We will treat the contracts and the corpus as the interface to truss, and accept
 
 - **Concern selection**: none changes. `typescript-bun` still governs the TypeScript core; a conforming implementation in another language follows its own language concerns.
 - **Practice override**: ADR-001 D4 applies to the TypeScript core only.
-- **Amendment**: this ADR amends ADR-001's consequence that there is no in-process Python use until a Rust core exists. If accepted, ADR-001 is updated to point here.
+- **Amendment**: this ADR amends ADR-001's consequence that there is no in-process Python use until a Rust core exists. ADR-001 now points here.
 
 ## References
 

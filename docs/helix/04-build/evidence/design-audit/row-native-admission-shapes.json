@@ -1,0 +1,76 @@
+{
+  "scope": "Decoded closed shape only; no artifact/alias allocation/order/complete scope/native authority proof",
+  "bunVersion": "1.4.2",
+  "sourcePin": {
+    "path": "truss-row-native-admission-v0.1.proposal.schema.json",
+    "sha256": "1fc4291432e83d042dc76869e37dfe60d52a702adc1328cdcbae18e10d67054a"
+  },
+  "observations": [
+    {
+      "name": "request-free no-row shape",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "creation alias before allocation",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "existing native owner",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "mixed alias and persistent ID",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "missing original alias definition",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "empty alias identity",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "request-free with receipt admission",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "request present without admission",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "request present with admission",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "empty command list",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "future seal field",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "foreign alias requires semantic refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "duplicate scope requires semantic refusal",
+      "expected": true,
+      "actual": true
+    }
+  ],
+  "failures": []
+}

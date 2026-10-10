@@ -1,0 +1,43 @@
+{
+  "schema": "truss-pg8000-read-phase-alias/0.1",
+  "python": "3.11.17 (main, Oct  3 2026, 00:54:14) [Clang 22.1.3 ]",
+  "coreSource": "/private/tmp/truss-pg8000-runtime-env/lib/python3.11/site-packages/pg8000/core.py",
+  "coreSha256": "cac1e50502901bcea3ddab588e0350149dd8fd771156ae1c531a2a04b3925e26",
+  "sources": [
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/check_pg8000_read_phase_alias.py",
+      "sha256": "068a644d3f0625282d252d081cfa69370a166f8b0c1280d135b111214075612c"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/pg8000_accounted_instance_candidate.py",
+      "sha256": "ad4415635d2643dbd8cb48b34c85621444f9240334d9b5f020b726a0b226ee68"
+    },
+    {
+      "path": "/private/tmp/truss-pgserver-corrected-test-env/lib/python3.11/site-packages/truss/_resource_account.py",
+      "sha256": "640d37b2f517339b2a0ff0a7438ff17dd717644d5464f1af1cce732370b99a2a"
+    }
+  ],
+  "inputHex": "440000000961626364655a0000000554",
+  "requestedLengths": [
+    5,
+    5,
+    5
+  ],
+  "returnedHex": [
+    "4400000009",
+    "6162636465",
+    "5a00000005"
+  ],
+  "ingressCallsBeforeThirdRead": 2,
+  "ingressCallsAfterThirdRead": 4,
+  "accountAfterClose": [
+    90,
+    0,
+    90,
+    true
+  ],
+  "observation": "Length alone cannot distinguish repeated five-byte body from next header",
+  "scope": "Actual pinned core _read with synthetic transport and manually scheduled calls; no CoreConnection/native cycle",
+  "driverQualified": false,
+  "nativeSequenceFailureProven": false
+}

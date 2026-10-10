@@ -1,0 +1,228 @@
+{
+  "scope": "Closed JSON schema shape only. No identity uniqueness, artifact byte/hash correspondence, settlement, native domains, authority, complete dependency/absence, deletion/capacity or native qualification.",
+  "bunVersion": "1.4.2",
+  "sourcePins": [
+    {
+      "path": "docs/helix/02-design/contracts/private-custody-cleanup-selection-v0.1.proposal.schema.json",
+      "sha256": "f89fd37ed70e1a66659870a9be22319d79e135db4d4ea3958ae692893f02b169"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/private-custody-cleanup-result-v0.1.proposal.schema.json",
+      "sha256": "d890a6e2ebd41b9f002c5d9d351ed4c53fb780c018168b057dbeeb4a2fd60855"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/private-custody-snapshot-v0.1.proposal.schema.json",
+      "sha256": "b5db25c905bbbad5449e1f8cbcaba2dd185b9de8bfe6d4a5fa9f719c5ce428b0"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/acceptance-input-v0.1.schema.json",
+      "sha256": "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd"
+    }
+  ],
+  "observations": [
+    {
+      "name": "operation-only",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "touch-only",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "mixed",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "512 combined rows shape",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "513 combined rows",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "empty selection",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "missing settlement",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "fake property on operation",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "missing touch identity",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "numeric ordinal",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "noncanonical ordinal",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "invalid dependency disposition",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "missing closure",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "caller permit",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "duplicate membership needs semantic refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "overflow needs native-domain refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "wrong snapshot bytes need semantic refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "empty dependencies need absence proof",
+      "expected": true,
+      "actual": true
+    }
+  ],
+  "resultObservations": [
+    {
+      "name": "pending complete result",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "committed result",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "missing removed membership",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "missing dependency evidence",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "missing capacity transition",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "missing attempt custody",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "reusable deletion permit",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "implicit horizon advance",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "substituted original artifacts need semantic refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "count-shaped artifact needs semantic refusal",
+      "expected": true,
+      "actual": true
+    }
+  ],
+  "snapshotObservations": [
+    {
+      "name": "operation complete",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "touch signed identity",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "native NULL proof preserved",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "NULL result preserved for semantic phase review",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "missing field",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "numeric identity coercion",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "odd hex byte",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "uppercase hex",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "empty required bytes need semantic refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "unknown phase retained for semantic refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "stale proof retained for semantic refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "native overflow retained for semantic refusal",
+      "expected": true,
+      "actual": true
+    }
+  ]
+}

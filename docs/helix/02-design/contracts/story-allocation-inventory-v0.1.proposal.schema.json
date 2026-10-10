@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:story-allocation-inventory:0.1.0",
+  "title": "Proposed independently governed expected story allocation inventory",
+  "description": "Shape only. Original authority/profile custody, unique full identity membership and matching story/criterion/TD/STP ownership require separate admission. No approved flag is accepted.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-story-allocation-inventory/0.1.0"
+    },
+    "inventoryProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "sourceAuthority": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "stories": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "storyId": {
+            "type": "string",
+            "pattern": "^US-[0-9]{3}$"
+          },
+          "criteria": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "pattern": "^US-[0-9]{3}-AC[1-9][0-9]*$"
+            }
+          },
+          "technicalDesignId": {
+            "type": "string",
+            "pattern": "^TD-[0-9]{3}$"
+          },
+          "testPlanId": {
+            "type": "string",
+            "pattern": "^STP-[0-9]{3}$"
+          }
+        },
+        "required": [
+          "storyId",
+          "criteria",
+          "technicalDesignId",
+          "testPlanId"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "inventoryProfile",
+    "sourceAuthority",
+    "stories"
+  ],
+  "additionalProperties": false
+}

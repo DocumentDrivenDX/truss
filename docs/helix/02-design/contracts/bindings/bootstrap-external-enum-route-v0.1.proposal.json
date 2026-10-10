@@ -1,0 +1,76 @@
+{
+  "interfaceVersion": "truss-bootstrap-route-entry/0.1.0",
+  "routeIdentity": "pg17.enum.type-fanout/0.1.0",
+  "status": "unadopted; source pins only verified; native class/cut/transport/semantic producers unqualified",
+  "nativeClass": {
+    "namespace": "pg_catalog",
+    "relation": "pg_enum",
+    "classOid": "resolve from original target; never constant",
+    "storageScope": "database",
+    "subobjectNumber": "0"
+  },
+  "selector": "complete original pg_type parent fanout",
+  "artifacts": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-external-enum-observation-pg17.proposal.sql",
+      "sha256": "da7f3f649886c9a6edc1fe39efc72723e70f7f8a238735af9d2c32ef0e8db49d"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-external-enum-observation-pg17.proposal.umf.json",
+      "sha256": "ed45a633257e39ddccb5665d15ad3b0140cbef4f75a7a4f605668dd51aaf6875"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/bootstrap-external-enum-observation.owner-export.sql",
+      "sha256": "a40e93f504bb497151c0348f5510302aa40722ac94c335c63db7feb4ad556e29"
+    }
+  ],
+  "parameterGrammar": {
+    "slot": "1",
+    "nativeType": "pg_catalog.oid[]",
+    "dimensions": "exactly one",
+    "lowerBound": "1",
+    "nullAllowed": false,
+    "nullItemsAllowed": false,
+    "uniqueItems": true,
+    "countInclusive": [
+      "1",
+      "256"
+    ],
+    "itemDomain": "canonical nonzero uint32 decimal text; independently admitted enum pg_type parent OID, never pg_enum row OID",
+    "encoder": "selected original canonical PostgreSQL array encoder; no JS numeric round trip"
+  },
+  "orderedColumns": [
+    "catalog_class_oid",
+    "object_oid",
+    "enum_type_oid",
+    "sort_order_native_text",
+    "sort_order_float4_send_hex",
+    "original_catalog_row_json"
+  ],
+  "coverage": "Complete unique original member-row fanout for every independently admitted enum parent; no input/output row-count bijection. Empty membership needs independent complete scope/type-kind proof. Every specifically required pg_enum child must appear.",
+  "requiredKnownFields": [
+    "oid",
+    "enumtypid",
+    "enumsortorder",
+    "enumlabel"
+  ],
+  "preservation": "Retain full exact returned row JSON text and every unknown extension member; lossless bounded selected native JSON decoder; no parse/stringify reconstruction",
+  "dependencyExtraction": {
+    "enumtypid": "required nonzero actual pg_type parent at subobject 0; complete original type definition/kind required",
+    "rowOid": "actual pg_enum row identity distinct from pg_type parent; required child resolution uses selected pg17.enum.child-direct/0.1.0 with independently admitted native decoder/cut",
+    "order": "Exact binary32 send-hex decoder and finite comparator; original full row/text retained. SQL ORDER BY e.oid is transport order only, never enum semantic order. Per-parent sort values/labels validated under selected native grammar.",
+    "definitionSpecification": {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-enum-definition-v0.1.proposal.json",
+      "sha256": "036901f6462dff60a1cd0214819e3ff6c0c93422d9ab1b9064750d01c9f63f85",
+      "admission": "Unadopted enclosing/per-field specification; not native producer or complete basis qualification"
+    }
+  },
+  "adjuncts": [
+    "complete original parent type definition and namespace authority closure",
+    "local dependency closure for actual required enum/type addresses",
+    "selected binary32 decoder/native semantic comparator"
+  ],
+  "resourceProfile": "truss-bootstrap-collector-resource/0.1.0",
+  "refusal": "Unknown parent kind, child-to-parent resolver or native sort meaning is unsupported; missing specifically required child is absent even if parent fanout has other rows. Never use enum row OID as type parameter or infer ordering from OID/text.",
+  "resourceObligations": "Shared enclosing totals, complete original cut/authority and explicit pre-materialization/native-work permits; no independent per-route allowance"
+}

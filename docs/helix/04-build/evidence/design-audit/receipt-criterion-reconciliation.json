@@ -1,0 +1,35 @@
+{
+  "scope": "US-043 four-criterion semantic and planned-scenario reconciliation only; no runtime or complete profile qualification",
+  "sourcePins": {
+    "docs/helix/01-frame/prd.md": "52d80083dbf761512aa879eec8e8ed8fbb952ef640c693520b69d01be3d33075",
+    "docs/helix/01-frame/features/FEAT-003-mutation-and-concurrency.md": "4de84d839a5d5260326dfae950fc8cb0856e16ab562f50b6d959134179bd3fbb",
+    "docs/helix/01-frame/user-stories/US-043-make-a-group-safe-to-repeat.md": "38429945a17d36a38e12087158068f0b52176cf2ab9ba0e614239e3ba3ca3269",
+    "docs/helix/02-design/technical-designs/TD-043-make-a-group-safe-to-repeat.md": "98fe69a5fddf9b42ac49824e9be44e65d27c7be150d92509b7a6a17917b5c6e6",
+    "docs/helix/03-test/test-plans/STP-043-make-a-group-safe-to-repeat.md": "7fadd7f4f630dbb9a48042a0e5161a72901c1bb7801203a9635cf74d31797474",
+    "docs/helix/02-design/contracts/reference-network-batch-host.proposal.md": "bde984cd048af82b16d96f28d907ac1207ed8a6686e149561bc8e8ec8256b840"
+  },
+  "criteria": [
+    {
+      "id": "US-043-AC1",
+      "finding": "Full verified semantic input and immutable ordered mixed/no-op results govern replay after later changes; transport timeout does not authorize new application.",
+      "remaining": "Registered canonical/result/configuration/owner codecs and actual receipt/commit admission."
+    },
+    {
+      "id": "US-043-AC2",
+      "finding": "Winner commit permits original replay, winner rollback permits later application, snapshot invisibility requires retry rather than absence.",
+      "remaining": "Native namespace/request arbitration and independently observed winner/waiter settlement under each selected isolation mode."
+    },
+    {
+      "id": "US-043-AC3",
+      "finding": "Complete input mismatch conflicts even with matching claimed digest; current disclosure authority precedes receipt exposure.",
+      "remaining": "Native full comparison, forced route collision, integrity and current-authority qualification."
+    },
+    {
+      "id": "US-043-AC4",
+      "finding": "At-least-24-hour qualified protection and longer required retained-event protection are independent of short/zero local journal retention and no-op batches.",
+      "remaining": "Selected trusted clock/first-confirmation/protection/expiry profile and complete event dependency inventory."
+    }
+  ],
+  "designComplete": false,
+  "nextAction": "Select one coherent original replay/native/authority/clock/resource/driver tuple and freeze independent populated expected fixtures before execution; do not add another persistence strategy."
+}

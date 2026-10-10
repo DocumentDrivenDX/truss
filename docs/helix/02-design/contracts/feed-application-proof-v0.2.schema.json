@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:feed-application-proof:0.2.0",
+  "description": "Submitted evidence only; never serialized VerifiedApplication custody.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-feed-application-proof/0.2.0"
+    },
+    "worker": {
+      "$ref": "urn:truss:draft:feed-progress:0.2.0#/$defs/worker"
+    },
+    "downstreamIdentity": {
+      "type": "string",
+      "minLength": 1
+    },
+    "prior": {
+      "$ref": "urn:truss:draft:feed-progress:0.2.0"
+    },
+    "applied": {
+      "$ref": "urn:truss:draft:feed-progress:0.2.0#/$defs/progressBoundary"
+    },
+    "intervalEvidence": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "committedApplicationEvidence": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "worker",
+    "downstreamIdentity",
+    "prior",
+    "applied",
+    "intervalEvidence",
+    "committedApplicationEvidence"
+  ],
+  "additionalProperties": false
+}

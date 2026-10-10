@@ -1,0 +1,47 @@
+{
+  "interfaceVersion": "truss-bootstrap-enum-definition-profile/0.1.0",
+  "status": "unadopted ordered-label semantic projection; native producer qualification pending",
+  "nativeVersion": "PostgreSQL 17; exact build/send/transport/profile separately admitted",
+  "requiredRawFieldInventory": [
+    "oid",
+    "enumtypid",
+    "enumsortorder",
+    "enumlabel"
+  ],
+  "fields": [
+    {
+      "nativeField": "oid",
+      "domain": "nonzero canonical uint32 OID token",
+      "classification": "original member identity/correlation evidence",
+      "projection": "No raw member OID in cross-install ordered-label semantics"
+    },
+    {
+      "nativeField": "enumtypid",
+      "domain": "nonzero canonical uint32 OID token",
+      "classification": "resolved parent identity",
+      "projection": "Require complete original enum pg_type parent definition and full sibling fanout"
+    },
+    {
+      "nativeField": "enumsortorder",
+      "domain": "original binary32 float4send bytes plus preserved raw field",
+      "classification": "semantic ordering producer and original representation evidence",
+      "projection": "Admitted finite distinct native numeric order determines label sequence; positions/bits archived, not canonical sequence labels"
+    },
+    {
+      "nativeField": "enumlabel",
+      "domain": "exact native name text under admitted server encoding",
+      "classification": "stable label meaning",
+      "projection": "Unique exact label bytes within parent; no normalization/folding/locale sort"
+    }
+  ],
+  "stableMeaning": "Resolved parent enum type identity plus exact ordered label sequence",
+  "ordering": "Existing bounded binary32 interpretation; neither OID nor raw hex nor label lexical order",
+  "emptyMembership": "Valid only after original enum parent kind and complete same-cut fanout proof",
+  "unknownFields": "Preserve unsupported; complete admission blocked until classification",
+  "additionalRequiredDefinitions": [
+    "complete original pg_type/namespace/owner/policy definition",
+    "complete member/parent raw correspondence and child-to-parent resolution",
+    "required comment/dependency/extension associations"
+  ],
+  "scope": "Only ordered-label definition comparison; excludes native value binary/OID compatibility, storage transport, comparator implementation/build provenance and complete parent basis qualification"
+}

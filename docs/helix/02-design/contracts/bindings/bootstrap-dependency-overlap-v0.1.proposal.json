@@ -1,0 +1,62 @@
+{
+  "interfaceVersion": "truss-bootstrap-dependency-overlap-expectations/0.1.0",
+  "scope": "Independent arithmetic/coverage design fragments; not executable collector/native evidence",
+  "cases": [
+    {
+      "case": "one edge observed through both endpoints",
+      "sameCut": true,
+      "applicableCompleteQueryCounts": [
+        "1",
+        "1"
+      ],
+      "expectedNativeMultiplicity": "1",
+      "retainedObservationOccurrences": "2"
+    },
+    {
+      "case": "two indistinguishable native edges observed twice",
+      "sameCut": true,
+      "applicableCompleteQueryCounts": [
+        "2",
+        "2"
+      ],
+      "expectedNativeMultiplicity": "2",
+      "retainedObservationOccurrences": "4"
+    },
+    {
+      "case": "incompatible complete counts",
+      "sameCut": true,
+      "applicableCompleteQueryCounts": [
+        "1",
+        "2"
+      ],
+      "expected": "refuse coherent collection; no max/sum"
+    },
+    {
+      "case": "applicable complete query omitted edge",
+      "sameCut": true,
+      "applicableCompleteQueryCounts": [
+        "1",
+        "0"
+      ],
+      "expected": "refuse coherent collection"
+    },
+    {
+      "case": "nonapplicable selector returned zero",
+      "sameCut": true,
+      "applicableCompleteQueryCounts": [
+        "1"
+      ],
+      "nonapplicableQueryCount": "0",
+      "expectedNativeMultiplicity": "1"
+    },
+    {
+      "case": "equal counts in different cuts",
+      "sameCut": false,
+      "queryCounts": [
+        "1",
+        "1"
+      ],
+      "expected": "no combined admission or cross-cut coverage"
+    }
+  ]
+}

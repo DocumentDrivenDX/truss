@@ -1,0 +1,5 @@
+{
+  "scope": "Four independent WebCrypto/BigInt byte mappings; no native locking/current namespace/identity qualification",
+  "cases": 4,
+  "failures": []
+}

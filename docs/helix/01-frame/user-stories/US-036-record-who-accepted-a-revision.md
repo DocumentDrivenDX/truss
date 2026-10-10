@@ -29,7 +29,7 @@ ddx:
 
 ## Context
 
-A revision can retire types and re-bind or transform stored data. Journal rows already record an actor and a role; revisions did not.
+A revision can retire types and re-bind or transform stored data. Acceptance retains the original asserted actor/reason/extension facts separately from database-observed caller attribution and the qualified mapping to journal origin. Asserted actor text and host keys do not authenticate a principal or grant authority. A verified current-head exact repeat returns the original accepted report/origin unchanged, while independently checking current authority; the new attempt’s actor cannot rewrite historical attribution. Accepted origin is pending inside an adopted transaction until the host’s actual settlement, and rejected or confirmed rolled-back acceptance leaves no committed origin row.
 
 ## Walkthrough
 

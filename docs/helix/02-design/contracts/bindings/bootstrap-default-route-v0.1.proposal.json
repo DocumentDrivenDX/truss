@@ -1,0 +1,79 @@
+{
+  "interfaceVersion": "truss-bootstrap-route-entry/0.1.0",
+  "routeIdentity": "pg17.default.direct/0.1.0",
+  "status": "unadopted; source pins only verified; native class/cut/transport/semantic producers unqualified",
+  "nativeClass": {
+    "namespace": "pg_catalog",
+    "relation": "pg_attrdef",
+    "classOid": "resolve from original target; never constant",
+    "storageScope": "database",
+    "subobjectNumber": "0"
+  },
+  "selector": "direct original pg_attrdef OIDs",
+  "artifacts": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-default-observation-pg17.proposal.sql",
+      "sha256": "897584fc4190555dd379984d7f6f6a3c1a7d16cb2e4c759df94c334a676bb6c6"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-default-observation-pg17.proposal.umf.json",
+      "sha256": "710ee0569ab003ec9804e90ee8b785f7a0cefe11478ca248bea16502bdd24f6a"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/bootstrap-default-observation.owner-export.sql",
+      "sha256": "4815662de048904f6f45837faced83183e05a7618f0948344cba1e250af0e1bf"
+    }
+  ],
+  "parameterGrammar": {
+    "slot": "1",
+    "nativeType": "pg_catalog.oid[]",
+    "dimensions": "exactly one",
+    "lowerBound": "1",
+    "nullAllowed": false,
+    "nullItemsAllowed": false,
+    "uniqueItems": true,
+    "countInclusive": [
+      "1",
+      "256"
+    ],
+    "itemDomain": "canonical nonzero uint32 decimal text; actual pg_attrdef object OID",
+    "encoder": "selected original canonical PostgreSQL array encoder; no JS numeric round trip"
+  },
+  "orderedColumns": [
+    "catalog_class_oid",
+    "object_oid",
+    "relation_oid",
+    "ordinal",
+    "expression_native_tree",
+    "expression_sql",
+    "original_default_row_json"
+  ],
+  "coverage": "Exact unique requested-default address bijection; missing absent, extra/duplicate/wrong-class refuses. Original parent/ordinal/tree must agree with complete column/default fanout.",
+  "requiredKnownFields": [
+    "oid",
+    "adrelid",
+    "adnum",
+    "adbin"
+  ],
+  "preservation": "Retain full exact returned row JSON text and every unknown extension member; lossless bounded selected native JSON decoder; no parse/stringify reconstruction",
+  "dependencyExtraction": {
+    "relation": "nonzero original adrelid actual pg_class",
+    "attribute": "original signed adnum identifies same pg_class subobject under independently admitted native/default grammar; no invented attribute oid",
+    "expression": "exact original adbin/raw/projection and selected native expression dependency interpretation; pg_get_expr output is evidence, not definition equality or executable input",
+    "fieldClassification": {
+      "oid": "original pg_attrdef correlation; not portable default identity",
+      "adrelid": "resolved original parent relation definition",
+      "adnum": "exact native signed int2 original attribute association; resolve complete admitted original column identity",
+      "adbin": "complete exact native node-tree carrier with original same-row deparse; selected expression interpretation/dependency proof required, no deparse-only equality"
+    },
+    "canonicalProcedure": "CONTRACT-008 Column expression projection: resolved original column plus selected default/generated/identity state and fully admitted expression meaning/reference closure; raw node tree and deparse remain original evidence"
+  },
+  "adjuncts": [
+    "complete original pg_class parent and pg17.column.relation-fanout/0.1.0",
+    "all original expression/type/routine/operator/collation/sequence/local dependency definitions",
+    "current column/relation/namespace owner and authority facts"
+  ],
+  "resourceProfile": "truss-bootstrap-collector-resource/0.1.0",
+  "refusal": "Unsupported native expression/parent/attribute meaning or mismatch with original joined default refuses completeness; no expression evaluation or deparse-only equality",
+  "resourceObligations": "Shared enclosing totals, complete original cut/authority and explicit pre-materialization/native-work permits; no independent per-route allowance"
+}

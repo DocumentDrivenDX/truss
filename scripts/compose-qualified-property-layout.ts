@@ -1,0 +1,24 @@
+/** Candidate source composition through the existing UMF owner adapter. */
+import {backend} from '/Users/erik/Projects/umf/native/postgresql/runtime';
+import {readDocument} from '/Users/erik/Projects/umf/src/model/document';
+import {getPostgresqlNode,proposePostgresqlNodeEdit,importPostgresqlSql,exportPostgresqlSql} from '/Users/erik/Projects/umf/src/adapters/postgresql';
+import {renderTree} from '/Users/erik/Projects/umf/src/model/native-json';
+const source='docs/helix/02-design/models/truss-layout-field-module-0.14.proposal.umf.json';
+const original=readDocument(await Bun.file(source).text(),'json');
+const nodes=JSON.parse(renderTree(getPostgresqlNode(original,'/stmts')));
+const fragment=await importPostgresqlSql(`ALTER TABLE truss.prop_def DROP CONSTRAINT prop_def_type_id_element_key; ALTER TABLE truss.prop_def ADD CONSTRAINT prop_def_qualified_field UNIQUE (type_id,declaration_module,element);`,backend,{id:'field-declaration-module-source'});
+nodes.push(...JSON.parse(renderTree(getPostgresqlNode(fragment,'/stmts'))));
+const comment=nodes.find((n:any)=>n.stmt?.CommentStmt?.objtype==='OBJECT_SCHEMA');
+if(!comment)throw Error('Missing review-only label');
+comment.stmt.CommentStmt.comment='truss-layout qualified-property-0.15 REVIEW ONLY - unqualified';
+const result=proposePostgresqlNodeEdit(original,'/stmts',JSON.stringify(nodes)).document;
+result.id='truss-layout-qualified-property-0.15-review';
+const modelPath='docs/helix/02-design/models/truss-layout-qualified-property-0.15.proposal.umf.json';
+const ddlPath='docs/helix/04-build/evidence/qualified-property-layout-0.15.owner-export.sql';
+const serialized=JSON.stringify(result)+'\n';const ddl=await exportPostgresqlSql(result,backend);
+if(await exportPostgresqlSql(readDocument(serialized,'json'),backend)!==ddl)throw Error('Reload/export mismatch');
+await Bun.write(modelPath,serialized);await Bun.write(ddlPath,ddl);
+console.log(JSON.stringify({modelPath,ddlPath,reloadedExportExact:true,qualified:false}));
+const ownerRoot='/Users/erik/Projects/umf';const observed=Bun.spawnSync(['git','-C',ownerRoot,'rev-parse','HEAD']);if(observed.exitCode)throw Error('Owner revision unavailable');
+const hash=(s:string)=>new Bun.CryptoHasher('sha256').update(s).digest('hex');
+await Bun.write('docs/helix/04-build/evidence/design-audit/qualified-property-layout-source.json',JSON.stringify({scope:'UMF owner AST composition and saved reload/export only; no conversion or installed runtime qualification',ownerRoot,ownerCommit:new TextDecoder().decode(observed.stdout).trim(),source,sourceSha256:hash(await Bun.file(source).text()),modelPath,modelSha256:hash(serialized),ddlPath,ddlSha256:hash(ddl),reloadedExportExact:true},null,2)+'\n');

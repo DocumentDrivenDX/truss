@@ -1,0 +1,12 @@
+{
+  "scope": "Seventeen authored stable allocation labels bound to exact captured tagged source nodes/bases; implicit primary index shares primary-constraint basis, not independent emission/native proof",
+  "entries": 17,
+  "sourceHashExact": true,
+  "modelHashExact": true,
+  "sourceNodesResolved": 17,
+  "nativeNameTypeCorrespondenceChecked": true,
+  "completePhysicalInventory": false,
+  "completeExporterCorrespondence": false,
+  "nativeQualified": false,
+  "reproduce": "python3 docs/helix/04-build/evidence/design-audit/check-relationship-lineage-bindings.py"
+}

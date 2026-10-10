@@ -1,0 +1,31 @@
+{
+  "scope": "Locally executed selected UMF consistency/source-preservation behavior only; original-artifact comparison is fixture expectation, not production Truss admission or native support",
+  "bunVersion": "1.4.2",
+  "sourcePins": [
+    {
+      "path": "src/model/selection.ts",
+      "sha256": "101d15bea9c048316aa557b82d6a8edab31573cd976bf30f1e50ceba11b65dda"
+    },
+    {
+      "path": "src/model/selection-verification.ts",
+      "sha256": "365c662ace1c348a87ebbd749c229041bb7caae64d64116e235afd84f4bc8988"
+    },
+    {
+      "path": "src/model/json.ts",
+      "sha256": "b2c3f48bb779972af5beadfb22ec1db48c793dcdaf572293afa62904016465e7"
+    }
+  ],
+  "fixtureSha256": "6b392360bd5015886c8d5774b3eee51d137b41e852630f1d0ee5b0842c756bc7",
+  "cases": [
+    "valid_incomplete_preserved",
+    "core_cycle_closes_without_native_link",
+    "full_original_source_retained",
+    "original_receipt_consistency_verified",
+    "repeated_boundary_annotations_retained",
+    "consistent_replacement_is_not_original_source",
+    "result_only_tamper_refused",
+    "input_not_mutated"
+  ],
+  "trussExecutionQualified": false,
+  "nativeExecution": false
+}

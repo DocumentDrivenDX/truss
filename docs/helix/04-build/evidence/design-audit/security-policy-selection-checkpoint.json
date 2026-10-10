@@ -1,0 +1,20 @@
+{
+  "schema": "truss-security-policy-selection-checkpoint/0.1",
+  "ownerThread": "01a11b8b-06bb-7091-a11a-b7eba0a432eb",
+  "completedOwnerTurn": "01a12443-6373-7933-a61a-18d3138ae5a6",
+  "reviewPath": "/Users/erik/.codex/worktrees/1598/umf/docs/helix/04-build/evidence/security/owner-result-selection-astra-review.json",
+  "reviewSha256": "f2ef020e85d7cf59b8b81eb02600f41dbe459d147f1a9158bb1a834d6c62df2c",
+  "reviewStatus": "clean-within-scope",
+  "reviewScope": "Conditional supplied-truth selection for the existing direct-field model-domain result subset. Does not establish evaluated facts, authenticated truth, original-value row correspondence, actual correlation, native completeness/current cuts, query-wide authorization, compiler lowering or release.",
+  "nativeImplementationQualified": false,
+  "trussInterfaceAdopted": false,
+  "evidenceScope": "Attributed completed owner review, not independent replay or current moving-source qualification",
+  "trussRequiredCorrespondence": [
+    "exact ordered output and scan occurrence",
+    "owner-selected Original/Mask/Withheld disposition",
+    "authenticated source facts and complete row population",
+    "original returned value correspondence",
+    "current held-cut/authority/resource/cleanup custody",
+    "guarded final result release"
+  ]
+}

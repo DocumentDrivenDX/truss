@@ -1,0 +1,1573 @@
+{
+  "scope": "Four actual issued native admission families consume original confirmed controls through one-use shared custody; exact fixture artifacts/actor/epoch/configuration and real native rejection containment, not a protected engine",
+  "serverVersion": "16.15",
+  "driverCoreSha256": "cac1e50502901bcea3ddab588e0350149dd8fd771156ae1c531a2a04b3925e26",
+  "observations": [
+    {
+      "family": "base",
+      "id": "original-native-result-0",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "family": "base",
+      "id": "native-issued-identity-0",
+      "expected": [
+        "858",
+        "0"
+      ],
+      "observed": [
+        "858",
+        "0"
+      ]
+    },
+    {
+      "family": "base",
+      "id": "complete-original-context-0",
+      "expected": {
+        "interfaceVersion": "truss-native-operation-context/0.2",
+        "xid": "858",
+        "ordinal": "0",
+        "sessionUser": "postgres",
+        "actingUser": "postgres",
+        "actorRoleOid": "10",
+        "sessionRoleOid": "10",
+        "database": "postgres",
+        "backendPid": "4518"
+      },
+      "observed": {
+        "xid": "858",
+        "ordinal": "0",
+        "database": "postgres",
+        "actingUser": "postgres",
+        "backendPid": "4518",
+        "sessionUser": "postgres",
+        "actorRoleOid": "10",
+        "sessionRoleOid": "10",
+        "interfaceVersion": "truss-native-operation-context/0.2"
+      }
+    },
+    {
+      "family": "base",
+      "id": "complete-registry-0",
+      "expected": [
+        [
+          "858",
+          "0",
+          "mutation",
+          "admitted",
+          "0",
+          null,
+          null,
+          null,
+          "7b22786964223a2022383538222c20226f7264696e616c223a202230222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a202234353138222c202273657373696f6e55736572223a2022706f737467726573222c20226163746f72526f6c654f6964223a20223130222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e32227d",
+          "01",
+          "02",
+          "03",
+          "04",
+          "05",
+          "06",
+          null
+        ]
+      ],
+      "observed": [
+        [
+          "858",
+          "0",
+          "mutation",
+          "admitted",
+          "0",
+          null,
+          null,
+          null,
+          "7b22786964223a2022383538222c20226f7264696e616c223a202230222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a202234353138222c202273657373696f6e55736572223a2022706f737467726573222c20226163746f72526f6c654f6964223a20223130222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e32227d",
+          "01",
+          "02",
+          "03",
+          "04",
+          "05",
+          "06",
+          null
+        ]
+      ]
+    },
+    {
+      "family": "base",
+      "id": "complete-configuration-0",
+      "expected": [],
+      "observed": []
+    },
+    {
+      "family": "base",
+      "id": "one-use-no-second-submission",
+      "expected": 27,
+      "observed": 27
+    },
+    {
+      "family": "base",
+      "id": "complete-registry-empty",
+      "expected": [],
+      "observed": []
+    },
+    {
+      "family": "base",
+      "id": "complete-configuration-empty",
+      "expected": [],
+      "observed": []
+    },
+    {
+      "family": "base",
+      "id": "actual-native-rejection-contained",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "family": "base",
+      "id": "original-rejection-code",
+      "expected": "22023",
+      "observed": "22023"
+    },
+    {
+      "family": "base",
+      "id": "restored-native-ready",
+      "expected": "54",
+      "observed": "54"
+    },
+    {
+      "family": "base",
+      "id": "complete-registry-empty",
+      "expected": [],
+      "observed": []
+    },
+    {
+      "family": "base",
+      "id": "complete-configuration-empty",
+      "expected": [],
+      "observed": []
+    },
+    {
+      "family": "base",
+      "id": "original-native-result-2",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "family": "base",
+      "id": "native-issued-identity-2",
+      "expected": [
+        "858",
+        "2"
+      ],
+      "observed": [
+        "858",
+        "2"
+      ]
+    },
+    {
+      "family": "base",
+      "id": "complete-original-context-2",
+      "expected": {
+        "interfaceVersion": "truss-native-operation-context/0.2",
+        "xid": "858",
+        "ordinal": "2",
+        "sessionUser": "postgres",
+        "actingUser": "postgres",
+        "actorRoleOid": "10",
+        "sessionRoleOid": "10",
+        "database": "postgres",
+        "backendPid": "4518"
+      },
+      "observed": {
+        "xid": "858",
+        "ordinal": "2",
+        "database": "postgres",
+        "actingUser": "postgres",
+        "backendPid": "4518",
+        "sessionUser": "postgres",
+        "actorRoleOid": "10",
+        "sessionRoleOid": "10",
+        "interfaceVersion": "truss-native-operation-context/0.2"
+      }
+    },
+    {
+      "family": "base",
+      "id": "complete-registry-2",
+      "expected": [
+        [
+          "858",
+          "2",
+          "mutation",
+          "admitted",
+          "0",
+          null,
+          null,
+          null,
+          "7b22786964223a2022383538222c20226f7264696e616c223a202232222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a202234353138222c202273657373696f6e55736572223a2022706f737467726573222c20226163746f72526f6c654f6964223a20223130222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e32227d",
+          "01",
+          "02",
+          "03",
+          "04",
+          "05",
+          "06",
+          null
+        ]
+      ],
+      "observed": [
+        [
+          "858",
+          "2",
+          "mutation",
+          "admitted",
+          "0",
+          null,
+          null,
+          null,
+          "7b22786964223a2022383538222c20226f7264696e616c223a202232222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a202234353138222c202273657373696f6e55736572223a2022706f737467726573222c20226163746f72526f6c654f6964223a20223130222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e32227d",
+          "01",
+          "02",
+          "03",
+          "04",
+          "05",
+          "06",
+          null
+        ]
+      ]
+    },
+    {
+      "family": "base",
+      "id": "complete-configuration-2",
+      "expected": [],
+      "observed": []
+    },
+    {
+      "family": "base",
+      "id": "complete-registry-empty",
+      "expected": [],
+      "observed": []
+    },
+    {
+      "family": "base",
+      "id": "complete-configuration-empty",
+      "expected": [],
+      "observed": []
+    },
+    {
+      "family": "base",
+      "id": "caller-work-preserved",
+      "expected": [
+        [
+          "7"
+        ]
+      ],
+      "observed": [
+        [
+          "7"
+        ]
+      ]
+    },
+    {
+      "family": "base",
+      "id": "three-original-attempts-retained",
+      "expected": [
+        "0",
+        "1",
+        "2"
+      ],
+      "observed": [
+        "0",
+        "1",
+        "2"
+      ]
+    },
+    {
+      "family": "base",
+      "id": "three-local-boundaries-settled",
+      "expected": [
+        "rolled_back",
+        "rolled_back",
+        "rolled_back"
+      ],
+      "observed": [
+        "rolled_back",
+        "rolled_back",
+        "rolled_back"
+      ]
+    },
+    {
+      "family": "asserted",
+      "id": "original-native-result-0",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "family": "asserted",
+      "id": "native-issued-identity-0",
+      "expected": [
+        "861",
+        "0"
+      ],
+      "observed": [
+        "861",
+        "0"
+      ]
+    },
+    {
+      "family": "asserted",
+      "id": "complete-original-context-0",
+      "expected": {
+        "interfaceVersion": "truss-native-operation-context/0.3",
+        "xid": "861",
+        "ordinal": "0",
+        "sessionUser": "postgres",
+        "actingUser": "postgres",
+        "actorRoleOid": "10",
+        "sessionRoleOid": "10",
+        "database": "postgres",
+        "backendPid": "4519",
+        "assertedOriginUtf8Hex": "6f726967696e616c2061737365727465642066697874757265",
+        "assertedOriginCaptureProfileHex": "6f726967696e616c20636170747572652070726f66696c652066697874757265"
+      },
+      "observed": {
+        "xid": "861",
+        "ordinal": "0",
+        "database": "postgres",
+        "actingUser": "postgres",
+        "backendPid": "4519",
+        "sessionUser": "postgres",
+        "actorRoleOid": "10",
+        "sessionRoleOid": "10",
+        "interfaceVersion": "truss-native-operation-context/0.3",
+        "assertedOriginUtf8Hex": "6f726967696e616c2061737365727465642066697874757265",
+        "assertedOriginCaptureProfileHex": "6f726967696e616c20636170747572652070726f66696c652066697874757265"
+      }
+    },
+    {
+      "family": "asserted",
+      "id": "complete-registry-0",
+      "expected": [
+        [
+          "861",
+          "0",
+          "mutation",
+          "admitted",
+          "0",
+          null,
+          null,
+          null,
+          "7b22786964223a2022383631222c20226f7264696e616c223a202230222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a202234353139222c202273657373696f6e55736572223a2022706f737467726573222c20226163746f72526f6c654f6964223a20223130222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e33222c202261737365727465644f726967696e55746638486578223a20223666373236393637363936653631366332303631373337333635373237343635363432303636363937383734373537323635222c202261737365727465644f726967696e4361707475726550726f66696c65486578223a202236663732363936373639366536313663323036333631373037343735373236353230373037323666363636393663363532303636363937383734373537323635227d",
+          "01",
+          "02",
+          "03",
+          "04",
+          "05",
+          "06",
+          null
+        ]
+      ],
+      "observed": [
+        [
+          "861",
+          "0",
+          "mutation",
+          "admitted",
+          "0",
+          null,
+          null,
+          null,
+          "7b22786964223a2022383631222c20226f7264696e616c223a202230222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a202234353139222c202273657373696f6e55736572223a2022706f737467726573222c20226163746f72526f6c654f6964223a20223130222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e33222c202261737365727465644f726967696e55746638486578223a20223666373236393637363936653631366332303631373337333635373237343635363432303636363937383734373537323635222c202261737365727465644f726967696e4361707475726550726f66696c65486578223a202236663732363936373639366536313663323036333631373037343735373236353230373037323666363636393663363532303636363937383734373537323635227d",
+          "01",
+          "02",
+          "03",
+          "04",
+          "05",
+          "06",
+          null
+        ]
+      ]
+    },
+    {
+      "family": "asserted",
+      "id": "complete-configuration-0",
+      "expected": [],
+      "observed": []
+    },
+    {
+      "family": "asserted",
+      "id": "one-use-no-second-submission",
+      "expected": 27,
+      "observed": 27
+    },
+    {
+      "family": "asserted",
+      "id": "complete-registry-empty",
+      "expected": [],
+      "observed": []
+    },
+    {
+      "family": "asserted",
+      "id": "complete-configuration-empty",
+      "expected": [],
+      "observed": []
+    },
+    {
+      "family": "asserted",
+      "id": "actual-native-rejection-contained",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "family": "asserted",
+      "id": "original-rejection-code",
+      "expected": "22023",
+      "observed": "22023"
+    },
+    {
+      "family": "asserted",
+      "id": "restored-native-ready",
+      "expected": "54",
+      "observed": "54"
+    },
+    {
+      "family": "asserted",
+      "id": "complete-registry-empty",
+      "expected": [],
+      "observed": []
+    },
+    {
+      "family": "asserted",
+      "id": "complete-configuration-empty",
+      "expected": [],
+      "observed": []
+    },
+    {
+      "family": "asserted",
+      "id": "original-native-result-2",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "family": "asserted",
+      "id": "native-issued-identity-2",
+      "expected": [
+        "861",
+        "2"
+      ],
+      "observed": [
+        "861",
+        "2"
+      ]
+    },
+    {
+      "family": "asserted",
+      "id": "complete-original-context-2",
+      "expected": {
+        "interfaceVersion": "truss-native-operation-context/0.3",
+        "xid": "861",
+        "ordinal": "2",
+        "sessionUser": "postgres",
+        "actingUser": "postgres",
+        "actorRoleOid": "10",
+        "sessionRoleOid": "10",
+        "database": "postgres",
+        "backendPid": "4519",
+        "assertedOriginUtf8Hex": "6f726967696e616c2061737365727465642066697874757265",
+        "assertedOriginCaptureProfileHex": "6f726967696e616c20636170747572652070726f66696c652066697874757265"
+      },
+      "observed": {
+        "xid": "861",
+        "ordinal": "2",
+        "database": "postgres",
+        "actingUser": "postgres",
+        "backendPid": "4519",
+        "sessionUser": "postgres",
+        "actorRoleOid": "10",
+        "sessionRoleOid": "10",
+        "interfaceVersion": "truss-native-operation-context/0.3",
+        "assertedOriginUtf8Hex": "6f726967696e616c2061737365727465642066697874757265",
+        "assertedOriginCaptureProfileHex": "6f726967696e616c20636170747572652070726f66696c652066697874757265"
+      }
+    },
+    {
+      "family": "asserted",
+      "id": "complete-registry-2",
+      "expected": [
+        [
+          "861",
+          "2",
+          "mutation",
+          "admitted",
+          "0",
+          null,
+          null,
+          null,
+          "7b22786964223a2022383631222c20226f7264696e616c223a202232222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a202234353139222c202273657373696f6e55736572223a2022706f737467726573222c20226163746f72526f6c654f6964223a20223130222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e33222c202261737365727465644f726967696e55746638486578223a20223666373236393637363936653631366332303631373337333635373237343635363432303636363937383734373537323635222c202261737365727465644f726967696e4361707475726550726f66696c65486578223a202236663732363936373639366536313663323036333631373037343735373236353230373037323666363636393663363532303636363937383734373537323635227d",
+          "01",
+          "02",
+          "03",
+          "04",
+          "05",
+          "06",
+          null
+        ]
+      ],
+      "observed": [
+        [
+          "861",
+          "2",
+          "mutation",
+          "admitted",
+          "0",
+          null,
+          null,
+          null,
+          "7b22786964223a2022383631222c20226f7264696e616c223a202232222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a202234353139222c202273657373696f6e55736572223a2022706f737467726573222c20226163746f72526f6c654f6964223a20223130222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e33222c202261737365727465644f726967696e55746638486578223a20223666373236393637363936653631366332303631373337333635373237343635363432303636363937383734373537323635222c202261737365727465644f726967696e4361707475726550726f66696c65486578223a202236663732363936373639366536313663323036333631373037343735373236353230373037323666363636393663363532303636363937383734373537323635227d",
+          "01",
+          "02",
+          "03",
+          "04",
+          "05",
+          "06",
+          null
+        ]
+      ]
+    },
+    {
+      "family": "asserted",
+      "id": "complete-configuration-2",
+      "expected": [],
+      "observed": []
+    },
+    {
+      "family": "asserted",
+      "id": "complete-registry-empty",
+      "expected": [],
+      "observed": []
+    },
+    {
+      "family": "asserted",
+      "id": "complete-configuration-empty",
+      "expected": [],
+      "observed": []
+    },
+    {
+      "family": "asserted",
+      "id": "caller-work-preserved",
+      "expected": [
+        [
+          "7"
+        ]
+      ],
+      "observed": [
+        [
+          "7"
+        ]
+      ]
+    },
+    {
+      "family": "asserted",
+      "id": "three-original-attempts-retained",
+      "expected": [
+        "0",
+        "1",
+        "2"
+      ],
+      "observed": [
+        "0",
+        "1",
+        "2"
+      ]
+    },
+    {
+      "family": "asserted",
+      "id": "three-local-boundaries-settled",
+      "expected": [
+        "rolled_back",
+        "rolled_back",
+        "rolled_back"
+      ],
+      "observed": [
+        "rolled_back",
+        "rolled_back",
+        "rolled_back"
+      ]
+    },
+    {
+      "family": "epoch",
+      "id": "original-native-result-0",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "family": "epoch",
+      "id": "native-issued-identity-0",
+      "expected": [
+        "864",
+        "0"
+      ],
+      "observed": [
+        "864",
+        "0"
+      ]
+    },
+    {
+      "family": "epoch",
+      "id": "complete-original-context-0",
+      "expected": {
+        "interfaceVersion": "truss-native-operation-context/0.4",
+        "xid": "864",
+        "ordinal": "0",
+        "sessionUser": "postgres",
+        "actingUser": "postgres",
+        "actorRoleOid": "10",
+        "sessionRoleOid": "10",
+        "database": "postgres",
+        "backendPid": "4520",
+        "assertedOriginUtf8Hex": "6f726967696e616c2061737365727465642066697874757265",
+        "assertedOriginCaptureProfileHex": "6f726967696e616c20636170747572652070726f66696c652066697874757265",
+        "installationId": "guard-fixture",
+        "sourceEpoch": "guard-fixture-epoch",
+        "targetIncarnation": "guard-fixture-incarnation",
+        "sourceEpochProfileHex": "666978747572652d70726f66696c65",
+        "sourceEpochEvidenceHex": "666978747572652d65766964656e6365"
+      },
+      "observed": {
+        "xid": "864",
+        "ordinal": "0",
+        "database": "postgres",
+        "actingUser": "postgres",
+        "backendPid": "4520",
+        "sessionUser": "postgres",
+        "sourceEpoch": "guard-fixture-epoch",
+        "actorRoleOid": "10",
+        "installationId": "guard-fixture",
+        "sessionRoleOid": "10",
+        "interfaceVersion": "truss-native-operation-context/0.4",
+        "targetIncarnation": "guard-fixture-incarnation",
+        "assertedOriginUtf8Hex": "6f726967696e616c2061737365727465642066697874757265",
+        "sourceEpochProfileHex": "666978747572652d70726f66696c65",
+        "sourceEpochEvidenceHex": "666978747572652d65766964656e6365",
+        "assertedOriginCaptureProfileHex": "6f726967696e616c20636170747572652070726f66696c652066697874757265"
+      }
+    },
+    {
+      "family": "epoch",
+      "id": "complete-registry-0",
+      "expected": [
+        [
+          "864",
+          "0",
+          "mutation",
+          "admitted",
+          "0",
+          null,
+          null,
+          null,
+          "7b22786964223a2022383634222c20226f7264696e616c223a202230222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a202234353230222c202273657373696f6e55736572223a2022706f737467726573222c2022736f7572636545706f6368223a202267756172642d666978747572652d65706f6368222c20226163746f72526f6c654f6964223a20223130222c2022696e7374616c6c6174696f6e4964223a202267756172642d66697874757265222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e34222c2022746172676574496e6361726e6174696f6e223a202267756172642d666978747572652d696e6361726e6174696f6e222c202261737365727465644f726967696e55746638486578223a20223666373236393637363936653631366332303631373337333635373237343635363432303636363937383734373537323635222c2022736f7572636545706f636850726f66696c65486578223a2022363636393738373437353732363532643730373236663636363936633635222c2022736f7572636545706f636845766964656e6365486578223a20223636363937383734373537323635326436353736363936343635366536333635222c202261737365727465644f726967696e4361707475726550726f66696c65486578223a202236663732363936373639366536313663323036333631373037343735373236353230373037323666363636393663363532303636363937383734373537323635227d",
+          "01",
+          "02",
+          "03",
+          "04",
+          "05",
+          "06",
+          null
+        ]
+      ],
+      "observed": [
+        [
+          "864",
+          "0",
+          "mutation",
+          "admitted",
+          "0",
+          null,
+          null,
+          null,
+          "7b22786964223a2022383634222c20226f7264696e616c223a202230222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a202234353230222c202273657373696f6e55736572223a2022706f737467726573222c2022736f7572636545706f6368223a202267756172642d666978747572652d65706f6368222c20226163746f72526f6c654f6964223a20223130222c2022696e7374616c6c6174696f6e4964223a202267756172642d66697874757265222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e34222c2022746172676574496e6361726e6174696f6e223a202267756172642d666978747572652d696e6361726e6174696f6e222c202261737365727465644f726967696e55746638486578223a20223666373236393637363936653631366332303631373337333635373237343635363432303636363937383734373537323635222c2022736f7572636545706f636850726f66696c65486578223a2022363636393738373437353732363532643730373236663636363936633635222c2022736f7572636545706f636845766964656e6365486578223a20223636363937383734373537323635326436353736363936343635366536333635222c202261737365727465644f726967696e4361707475726550726f66696c65486578223a202236663732363936373639366536313663323036333631373037343735373236353230373037323666363636393663363532303636363937383734373537323635227d",
+          "01",
+          "02",
+          "03",
+          "04",
+          "05",
+          "06",
+          null
+        ]
+      ]
+    },
+    {
+      "family": "epoch",
+      "id": "complete-configuration-0",
+      "expected": [],
+      "observed": []
+    },
+    {
+      "family": "epoch",
+      "id": "one-use-no-second-submission",
+      "expected": 27,
+      "observed": 27
+    },
+    {
+      "family": "epoch",
+      "id": "complete-registry-empty",
+      "expected": [],
+      "observed": []
+    },
+    {
+      "family": "epoch",
+      "id": "complete-configuration-empty",
+      "expected": [],
+      "observed": []
+    },
+    {
+      "family": "epoch",
+      "id": "actual-native-rejection-contained",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "family": "epoch",
+      "id": "original-rejection-code",
+      "expected": "22023",
+      "observed": "22023"
+    },
+    {
+      "family": "epoch",
+      "id": "restored-native-ready",
+      "expected": "54",
+      "observed": "54"
+    },
+    {
+      "family": "epoch",
+      "id": "complete-registry-empty",
+      "expected": [],
+      "observed": []
+    },
+    {
+      "family": "epoch",
+      "id": "complete-configuration-empty",
+      "expected": [],
+      "observed": []
+    },
+    {
+      "family": "epoch",
+      "id": "original-native-result-2",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "family": "epoch",
+      "id": "native-issued-identity-2",
+      "expected": [
+        "864",
+        "2"
+      ],
+      "observed": [
+        "864",
+        "2"
+      ]
+    },
+    {
+      "family": "epoch",
+      "id": "complete-original-context-2",
+      "expected": {
+        "interfaceVersion": "truss-native-operation-context/0.4",
+        "xid": "864",
+        "ordinal": "2",
+        "sessionUser": "postgres",
+        "actingUser": "postgres",
+        "actorRoleOid": "10",
+        "sessionRoleOid": "10",
+        "database": "postgres",
+        "backendPid": "4520",
+        "assertedOriginUtf8Hex": "6f726967696e616c2061737365727465642066697874757265",
+        "assertedOriginCaptureProfileHex": "6f726967696e616c20636170747572652070726f66696c652066697874757265",
+        "installationId": "guard-fixture",
+        "sourceEpoch": "guard-fixture-epoch",
+        "targetIncarnation": "guard-fixture-incarnation",
+        "sourceEpochProfileHex": "666978747572652d70726f66696c65",
+        "sourceEpochEvidenceHex": "666978747572652d65766964656e6365"
+      },
+      "observed": {
+        "xid": "864",
+        "ordinal": "2",
+        "database": "postgres",
+        "actingUser": "postgres",
+        "backendPid": "4520",
+        "sessionUser": "postgres",
+        "sourceEpoch": "guard-fixture-epoch",
+        "actorRoleOid": "10",
+        "installationId": "guard-fixture",
+        "sessionRoleOid": "10",
+        "interfaceVersion": "truss-native-operation-context/0.4",
+        "targetIncarnation": "guard-fixture-incarnation",
+        "assertedOriginUtf8Hex": "6f726967696e616c2061737365727465642066697874757265",
+        "sourceEpochProfileHex": "666978747572652d70726f66696c65",
+        "sourceEpochEvidenceHex": "666978747572652d65766964656e6365",
+        "assertedOriginCaptureProfileHex": "6f726967696e616c20636170747572652070726f66696c652066697874757265"
+      }
+    },
+    {
+      "family": "epoch",
+      "id": "complete-registry-2",
+      "expected": [
+        [
+          "864",
+          "2",
+          "mutation",
+          "admitted",
+          "0",
+          null,
+          null,
+          null,
+          "7b22786964223a2022383634222c20226f7264696e616c223a202232222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a202234353230222c202273657373696f6e55736572223a2022706f737467726573222c2022736f7572636545706f6368223a202267756172642d666978747572652d65706f6368222c20226163746f72526f6c654f6964223a20223130222c2022696e7374616c6c6174696f6e4964223a202267756172642d66697874757265222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e34222c2022746172676574496e6361726e6174696f6e223a202267756172642d666978747572652d696e6361726e6174696f6e222c202261737365727465644f726967696e55746638486578223a20223666373236393637363936653631366332303631373337333635373237343635363432303636363937383734373537323635222c2022736f7572636545706f636850726f66696c65486578223a2022363636393738373437353732363532643730373236663636363936633635222c2022736f7572636545706f636845766964656e6365486578223a20223636363937383734373537323635326436353736363936343635366536333635222c202261737365727465644f726967696e4361707475726550726f66696c65486578223a202236663732363936373639366536313663323036333631373037343735373236353230373037323666363636393663363532303636363937383734373537323635227d",
+          "01",
+          "02",
+          "03",
+          "04",
+          "05",
+          "06",
+          null
+        ]
+      ],
+      "observed": [
+        [
+          "864",
+          "2",
+          "mutation",
+          "admitted",
+          "0",
+          null,
+          null,
+          null,
+          "7b22786964223a2022383634222c20226f7264696e616c223a202232222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a202234353230222c202273657373696f6e55736572223a2022706f737467726573222c2022736f7572636545706f6368223a202267756172642d666978747572652d65706f6368222c20226163746f72526f6c654f6964223a20223130222c2022696e7374616c6c6174696f6e4964223a202267756172642d66697874757265222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e34222c2022746172676574496e6361726e6174696f6e223a202267756172642d666978747572652d696e6361726e6174696f6e222c202261737365727465644f726967696e55746638486578223a20223666373236393637363936653631366332303631373337333635373237343635363432303636363937383734373537323635222c2022736f7572636545706f636850726f66696c65486578223a2022363636393738373437353732363532643730373236663636363936633635222c2022736f7572636545706f636845766964656e6365486578223a20223636363937383734373537323635326436353736363936343635366536333635222c202261737365727465644f726967696e4361707475726550726f66696c65486578223a202236663732363936373639366536313663323036333631373037343735373236353230373037323666363636393663363532303636363937383734373537323635227d",
+          "01",
+          "02",
+          "03",
+          "04",
+          "05",
+          "06",
+          null
+        ]
+      ]
+    },
+    {
+      "family": "epoch",
+      "id": "complete-configuration-2",
+      "expected": [],
+      "observed": []
+    },
+    {
+      "family": "epoch",
+      "id": "complete-registry-empty",
+      "expected": [],
+      "observed": []
+    },
+    {
+      "family": "epoch",
+      "id": "complete-configuration-empty",
+      "expected": [],
+      "observed": []
+    },
+    {
+      "family": "epoch",
+      "id": "caller-work-preserved",
+      "expected": [
+        [
+          "7"
+        ]
+      ],
+      "observed": [
+        [
+          "7"
+        ]
+      ]
+    },
+    {
+      "family": "epoch",
+      "id": "three-original-attempts-retained",
+      "expected": [
+        "0",
+        "1",
+        "2"
+      ],
+      "observed": [
+        "0",
+        "1",
+        "2"
+      ]
+    },
+    {
+      "family": "epoch",
+      "id": "three-local-boundaries-settled",
+      "expected": [
+        "rolled_back",
+        "rolled_back",
+        "rolled_back"
+      ],
+      "observed": [
+        "rolled_back",
+        "rolled_back",
+        "rolled_back"
+      ]
+    },
+    {
+      "family": "configuration",
+      "id": "original-native-result-0",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "family": "configuration",
+      "id": "native-issued-identity-0",
+      "expected": [
+        "867",
+        "0"
+      ],
+      "observed": [
+        "867",
+        "0"
+      ]
+    },
+    {
+      "family": "configuration",
+      "id": "complete-original-context-0",
+      "expected": {
+        "interfaceVersion": "truss-native-operation-context/0.4",
+        "xid": "867",
+        "ordinal": "0",
+        "sessionUser": "postgres",
+        "actingUser": "postgres",
+        "actorRoleOid": "10",
+        "sessionRoleOid": "10",
+        "database": "postgres",
+        "backendPid": "4521",
+        "assertedOriginUtf8Hex": "6f726967696e616c2061737365727465642066697874757265",
+        "assertedOriginCaptureProfileHex": "6f726967696e616c20636170747572652070726f66696c652066697874757265",
+        "installationId": "guard-fixture",
+        "sourceEpoch": "guard-fixture-epoch",
+        "targetIncarnation": "guard-fixture-incarnation",
+        "sourceEpochProfileHex": "666978747572652d70726f66696c65",
+        "sourceEpochEvidenceHex": "666978747572652d65766964656e6365"
+      },
+      "observed": {
+        "xid": "867",
+        "ordinal": "0",
+        "database": "postgres",
+        "actingUser": "postgres",
+        "backendPid": "4521",
+        "sessionUser": "postgres",
+        "sourceEpoch": "guard-fixture-epoch",
+        "actorRoleOid": "10",
+        "installationId": "guard-fixture",
+        "sessionRoleOid": "10",
+        "interfaceVersion": "truss-native-operation-context/0.4",
+        "targetIncarnation": "guard-fixture-incarnation",
+        "assertedOriginUtf8Hex": "6f726967696e616c2061737365727465642066697874757265",
+        "sourceEpochProfileHex": "666978747572652d70726f66696c65",
+        "sourceEpochEvidenceHex": "666978747572652d65766964656e6365",
+        "assertedOriginCaptureProfileHex": "6f726967696e616c20636170747572652070726f66696c652066697874757265"
+      }
+    },
+    {
+      "family": "configuration",
+      "id": "complete-registry-0",
+      "expected": [
+        [
+          "867",
+          "0",
+          "mutation",
+          "admitted",
+          "0",
+          null,
+          null,
+          null,
+          "7b22786964223a2022383637222c20226f7264696e616c223a202230222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a202234353231222c202273657373696f6e55736572223a2022706f737467726573222c2022736f7572636545706f6368223a202267756172642d666978747572652d65706f6368222c20226163746f72526f6c654f6964223a20223130222c2022696e7374616c6c6174696f6e4964223a202267756172642d66697874757265222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e34222c2022746172676574496e6361726e6174696f6e223a202267756172642d666978747572652d696e6361726e6174696f6e222c202261737365727465644f726967696e55746638486578223a20223666373236393637363936653631366332303631373337333635373237343635363432303636363937383734373537323635222c2022736f7572636545706f636850726f66696c65486578223a2022363636393738373437353732363532643730373236663636363936633635222c2022736f7572636545706f636845766964656e6365486578223a20223636363937383734373537323635326436353736363936343635366536333635222c202261737365727465644f726967696e4361707475726550726f66696c65486578223a202236663732363936373639366536313663323036333631373037343735373236353230373037323666363636393663363532303636363937383734373537323635227d",
+          "01",
+          "02",
+          "03",
+          "04",
+          "05",
+          "06",
+          null
+        ]
+      ],
+      "observed": [
+        [
+          "867",
+          "0",
+          "mutation",
+          "admitted",
+          "0",
+          null,
+          null,
+          null,
+          "7b22786964223a2022383637222c20226f7264696e616c223a202230222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a202234353231222c202273657373696f6e55736572223a2022706f737467726573222c2022736f7572636545706f6368223a202267756172642d666978747572652d65706f6368222c20226163746f72526f6c654f6964223a20223130222c2022696e7374616c6c6174696f6e4964223a202267756172642d66697874757265222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e34222c2022746172676574496e6361726e6174696f6e223a202267756172642d666978747572652d696e6361726e6174696f6e222c202261737365727465644f726967696e55746638486578223a20223666373236393637363936653631366332303631373337333635373237343635363432303636363937383734373537323635222c2022736f7572636545706f636850726f66696c65486578223a2022363636393738373437353732363532643730373236663636363936633635222c2022736f7572636545706f636845766964656e6365486578223a20223636363937383734373537323635326436353736363936343635366536333635222c202261737365727465644f726967696e4361707475726550726f66696c65486578223a202236663732363936373639366536313663323036333631373037343735373236353230373037323666363636393663363532303636363937383734373537323635227d",
+          "01",
+          "02",
+          "03",
+          "04",
+          "05",
+          "06",
+          null
+        ]
+      ]
+    },
+    {
+      "family": "configuration",
+      "id": "complete-configuration-0",
+      "expected": [
+        [
+          "867",
+          "0",
+          "guard-fixture",
+          "guard-fixture-epoch",
+          "guard-fixture-incarnation",
+          "7",
+          "forbid",
+          "engine",
+          "1ba65324a64e7d1ccc136ea7ca8ce77c319d4334fb562931ce0e851eea7687b6",
+          "636f6e66696775726174696f6e2061646d697373696f6e2066697874757265",
+          "0001ff",
+          "62696e64696e672066697874757265",
+          "696e76656e746f72792066697874757265"
+        ]
+      ],
+      "observed": [
+        [
+          "867",
+          "0",
+          "guard-fixture",
+          "guard-fixture-epoch",
+          "guard-fixture-incarnation",
+          "7",
+          "forbid",
+          "engine",
+          "1ba65324a64e7d1ccc136ea7ca8ce77c319d4334fb562931ce0e851eea7687b6",
+          "636f6e66696775726174696f6e2061646d697373696f6e2066697874757265",
+          "0001ff",
+          "62696e64696e672066697874757265",
+          "696e76656e746f72792066697874757265"
+        ]
+      ]
+    },
+    {
+      "family": "configuration",
+      "id": "one-use-no-second-submission",
+      "expected": 27,
+      "observed": 27
+    },
+    {
+      "family": "configuration",
+      "id": "complete-registry-empty",
+      "expected": [],
+      "observed": []
+    },
+    {
+      "family": "configuration",
+      "id": "complete-configuration-empty",
+      "expected": [],
+      "observed": []
+    },
+    {
+      "family": "configuration",
+      "id": "actual-native-rejection-contained",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "family": "configuration",
+      "id": "original-rejection-code",
+      "expected": "22023",
+      "observed": "22023"
+    },
+    {
+      "family": "configuration",
+      "id": "restored-native-ready",
+      "expected": "54",
+      "observed": "54"
+    },
+    {
+      "family": "configuration",
+      "id": "complete-registry-empty",
+      "expected": [],
+      "observed": []
+    },
+    {
+      "family": "configuration",
+      "id": "complete-configuration-empty",
+      "expected": [],
+      "observed": []
+    },
+    {
+      "family": "configuration",
+      "id": "original-native-result-2",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "family": "configuration",
+      "id": "native-issued-identity-2",
+      "expected": [
+        "867",
+        "2"
+      ],
+      "observed": [
+        "867",
+        "2"
+      ]
+    },
+    {
+      "family": "configuration",
+      "id": "complete-original-context-2",
+      "expected": {
+        "interfaceVersion": "truss-native-operation-context/0.4",
+        "xid": "867",
+        "ordinal": "2",
+        "sessionUser": "postgres",
+        "actingUser": "postgres",
+        "actorRoleOid": "10",
+        "sessionRoleOid": "10",
+        "database": "postgres",
+        "backendPid": "4521",
+        "assertedOriginUtf8Hex": "6f726967696e616c2061737365727465642066697874757265",
+        "assertedOriginCaptureProfileHex": "6f726967696e616c20636170747572652070726f66696c652066697874757265",
+        "installationId": "guard-fixture",
+        "sourceEpoch": "guard-fixture-epoch",
+        "targetIncarnation": "guard-fixture-incarnation",
+        "sourceEpochProfileHex": "666978747572652d70726f66696c65",
+        "sourceEpochEvidenceHex": "666978747572652d65766964656e6365"
+      },
+      "observed": {
+        "xid": "867",
+        "ordinal": "2",
+        "database": "postgres",
+        "actingUser": "postgres",
+        "backendPid": "4521",
+        "sessionUser": "postgres",
+        "sourceEpoch": "guard-fixture-epoch",
+        "actorRoleOid": "10",
+        "installationId": "guard-fixture",
+        "sessionRoleOid": "10",
+        "interfaceVersion": "truss-native-operation-context/0.4",
+        "targetIncarnation": "guard-fixture-incarnation",
+        "assertedOriginUtf8Hex": "6f726967696e616c2061737365727465642066697874757265",
+        "sourceEpochProfileHex": "666978747572652d70726f66696c65",
+        "sourceEpochEvidenceHex": "666978747572652d65766964656e6365",
+        "assertedOriginCaptureProfileHex": "6f726967696e616c20636170747572652070726f66696c652066697874757265"
+      }
+    },
+    {
+      "family": "configuration",
+      "id": "complete-registry-2",
+      "expected": [
+        [
+          "867",
+          "2",
+          "mutation",
+          "admitted",
+          "0",
+          null,
+          null,
+          null,
+          "7b22786964223a2022383637222c20226f7264696e616c223a202232222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a202234353231222c202273657373696f6e55736572223a2022706f737467726573222c2022736f7572636545706f6368223a202267756172642d666978747572652d65706f6368222c20226163746f72526f6c654f6964223a20223130222c2022696e7374616c6c6174696f6e4964223a202267756172642d66697874757265222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e34222c2022746172676574496e6361726e6174696f6e223a202267756172642d666978747572652d696e6361726e6174696f6e222c202261737365727465644f726967696e55746638486578223a20223666373236393637363936653631366332303631373337333635373237343635363432303636363937383734373537323635222c2022736f7572636545706f636850726f66696c65486578223a2022363636393738373437353732363532643730373236663636363936633635222c2022736f7572636545706f636845766964656e6365486578223a20223636363937383734373537323635326436353736363936343635366536333635222c202261737365727465644f726967696e4361707475726550726f66696c65486578223a202236663732363936373639366536313663323036333631373037343735373236353230373037323666363636393663363532303636363937383734373537323635227d",
+          "01",
+          "02",
+          "03",
+          "04",
+          "05",
+          "06",
+          null
+        ]
+      ],
+      "observed": [
+        [
+          "867",
+          "2",
+          "mutation",
+          "admitted",
+          "0",
+          null,
+          null,
+          null,
+          "7b22786964223a2022383637222c20226f7264696e616c223a202232222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a202234353231222c202273657373696f6e55736572223a2022706f737467726573222c2022736f7572636545706f6368223a202267756172642d666978747572652d65706f6368222c20226163746f72526f6c654f6964223a20223130222c2022696e7374616c6c6174696f6e4964223a202267756172642d66697874757265222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e34222c2022746172676574496e6361726e6174696f6e223a202267756172642d666978747572652d696e6361726e6174696f6e222c202261737365727465644f726967696e55746638486578223a20223666373236393637363936653631366332303631373337333635373237343635363432303636363937383734373537323635222c2022736f7572636545706f636850726f66696c65486578223a2022363636393738373437353732363532643730373236663636363936633635222c2022736f7572636545706f636845766964656e6365486578223a20223636363937383734373537323635326436353736363936343635366536333635222c202261737365727465644f726967696e4361707475726550726f66696c65486578223a202236663732363936373639366536313663323036333631373037343735373236353230373037323666363636393663363532303636363937383734373537323635227d",
+          "01",
+          "02",
+          "03",
+          "04",
+          "05",
+          "06",
+          null
+        ]
+      ]
+    },
+    {
+      "family": "configuration",
+      "id": "complete-configuration-2",
+      "expected": [
+        [
+          "867",
+          "2",
+          "guard-fixture",
+          "guard-fixture-epoch",
+          "guard-fixture-incarnation",
+          "7",
+          "forbid",
+          "engine",
+          "63124454be393614ef944dc7b4accfbb6ab6193d3eed9395477a6c8640db54fe",
+          "636f6e66696775726174696f6e2061646d697373696f6e2066697874757265",
+          "0001ff",
+          "62696e64696e672066697874757265",
+          "696e76656e746f72792066697874757265"
+        ]
+      ],
+      "observed": [
+        [
+          "867",
+          "2",
+          "guard-fixture",
+          "guard-fixture-epoch",
+          "guard-fixture-incarnation",
+          "7",
+          "forbid",
+          "engine",
+          "63124454be393614ef944dc7b4accfbb6ab6193d3eed9395477a6c8640db54fe",
+          "636f6e66696775726174696f6e2061646d697373696f6e2066697874757265",
+          "0001ff",
+          "62696e64696e672066697874757265",
+          "696e76656e746f72792066697874757265"
+        ]
+      ]
+    },
+    {
+      "family": "configuration",
+      "id": "complete-registry-empty",
+      "expected": [],
+      "observed": []
+    },
+    {
+      "family": "configuration",
+      "id": "complete-configuration-empty",
+      "expected": [],
+      "observed": []
+    },
+    {
+      "family": "configuration",
+      "id": "caller-work-preserved",
+      "expected": [
+        [
+          "7"
+        ]
+      ],
+      "observed": [
+        [
+          "7"
+        ]
+      ]
+    },
+    {
+      "family": "configuration",
+      "id": "three-original-attempts-retained",
+      "expected": [
+        "0",
+        "1",
+        "2"
+      ],
+      "observed": [
+        "0",
+        "1",
+        "2"
+      ]
+    },
+    {
+      "family": "configuration",
+      "id": "three-local-boundaries-settled",
+      "expected": [
+        "rolled_back",
+        "rolled_back",
+        "rolled_back"
+      ],
+      "observed": [
+        "rolled_back",
+        "rolled_back",
+        "rolled_back"
+      ]
+    }
+  ],
+  "families": [
+    {
+      "family": "base",
+      "actualNativeFacts": [
+        "858",
+        "postgres",
+        "postgres",
+        "postgres",
+        "4518",
+        "10",
+        "10"
+      ],
+      "originalContextCaptures": [
+        {
+          "ordinal": "0",
+          "originalContextHex": "7b22786964223a2022383538222c20226f7264696e616c223a202230222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a202234353138222c202273657373696f6e55736572223a2022706f737467726573222c20226163746f72526f6c654f6964223a20223130222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e32227d",
+          "context": {
+            "xid": "858",
+            "ordinal": "0",
+            "database": "postgres",
+            "actingUser": "postgres",
+            "backendPid": "4518",
+            "sessionUser": "postgres",
+            "actorRoleOid": "10",
+            "sessionRoleOid": "10",
+            "interfaceVersion": "truss-native-operation-context/0.2"
+          }
+        },
+        {
+          "ordinal": "2",
+          "originalContextHex": "7b22786964223a2022383538222c20226f7264696e616c223a202232222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a202234353138222c202273657373696f6e55736572223a2022706f737467726573222c20226163746f72526f6c654f6964223a20223130222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e32227d",
+          "context": {
+            "xid": "858",
+            "ordinal": "2",
+            "database": "postgres",
+            "actingUser": "postgres",
+            "backendPid": "4518",
+            "sessionUser": "postgres",
+            "actorRoleOid": "10",
+            "sessionRoleOid": "10",
+            "interfaceVersion": "truss-native-operation-context/0.2"
+          }
+        }
+      ],
+      "payloadAccountBeforeOwnedFixtureCleanup": [
+        62336,
+        0,
+        62336,
+        false
+      ]
+    },
+    {
+      "family": "asserted",
+      "actualNativeFacts": [
+        "861",
+        "postgres",
+        "postgres",
+        "postgres",
+        "4519",
+        "10",
+        "10"
+      ],
+      "originalContextCaptures": [
+        {
+          "ordinal": "0",
+          "originalContextHex": "7b22786964223a2022383631222c20226f7264696e616c223a202230222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a202234353139222c202273657373696f6e55736572223a2022706f737467726573222c20226163746f72526f6c654f6964223a20223130222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e33222c202261737365727465644f726967696e55746638486578223a20223666373236393637363936653631366332303631373337333635373237343635363432303636363937383734373537323635222c202261737365727465644f726967696e4361707475726550726f66696c65486578223a202236663732363936373639366536313663323036333631373037343735373236353230373037323666363636393663363532303636363937383734373537323635227d",
+          "context": {
+            "xid": "861",
+            "ordinal": "0",
+            "database": "postgres",
+            "actingUser": "postgres",
+            "backendPid": "4519",
+            "sessionUser": "postgres",
+            "actorRoleOid": "10",
+            "sessionRoleOid": "10",
+            "interfaceVersion": "truss-native-operation-context/0.3",
+            "assertedOriginUtf8Hex": "6f726967696e616c2061737365727465642066697874757265",
+            "assertedOriginCaptureProfileHex": "6f726967696e616c20636170747572652070726f66696c652066697874757265"
+          }
+        },
+        {
+          "ordinal": "2",
+          "originalContextHex": "7b22786964223a2022383631222c20226f7264696e616c223a202232222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a202234353139222c202273657373696f6e55736572223a2022706f737467726573222c20226163746f72526f6c654f6964223a20223130222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e33222c202261737365727465644f726967696e55746638486578223a20223666373236393637363936653631366332303631373337333635373237343635363432303636363937383734373537323635222c202261737365727465644f726967696e4361707475726550726f66696c65486578223a202236663732363936373639366536313663323036333631373037343735373236353230373037323666363636393663363532303636363937383734373537323635227d",
+          "context": {
+            "xid": "861",
+            "ordinal": "2",
+            "database": "postgres",
+            "actingUser": "postgres",
+            "backendPid": "4519",
+            "sessionUser": "postgres",
+            "actorRoleOid": "10",
+            "sessionRoleOid": "10",
+            "interfaceVersion": "truss-native-operation-context/0.3",
+            "assertedOriginUtf8Hex": "6f726967696e616c2061737365727465642066697874757265",
+            "assertedOriginCaptureProfileHex": "6f726967696e616c20636170747572652070726f66696c652066697874757265"
+          }
+        }
+      ],
+      "payloadAccountBeforeOwnedFixtureCleanup": [
+        71038,
+        0,
+        71038,
+        false
+      ]
+    },
+    {
+      "family": "epoch",
+      "actualNativeFacts": [
+        "864",
+        "postgres",
+        "postgres",
+        "postgres",
+        "4520",
+        "10",
+        "10"
+      ],
+      "originalContextCaptures": [
+        {
+          "ordinal": "0",
+          "originalContextHex": "7b22786964223a2022383634222c20226f7264696e616c223a202230222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a202234353230222c202273657373696f6e55736572223a2022706f737467726573222c2022736f7572636545706f6368223a202267756172642d666978747572652d65706f6368222c20226163746f72526f6c654f6964223a20223130222c2022696e7374616c6c6174696f6e4964223a202267756172642d66697874757265222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e34222c2022746172676574496e6361726e6174696f6e223a202267756172642d666978747572652d696e6361726e6174696f6e222c202261737365727465644f726967696e55746638486578223a20223666373236393637363936653631366332303631373337333635373237343635363432303636363937383734373537323635222c2022736f7572636545706f636850726f66696c65486578223a2022363636393738373437353732363532643730373236663636363936633635222c2022736f7572636545706f636845766964656e6365486578223a20223636363937383734373537323635326436353736363936343635366536333635222c202261737365727465644f726967696e4361707475726550726f66696c65486578223a202236663732363936373639366536313663323036333631373037343735373236353230373037323666363636393663363532303636363937383734373537323635227d",
+          "context": {
+            "xid": "864",
+            "ordinal": "0",
+            "database": "postgres",
+            "actingUser": "postgres",
+            "backendPid": "4520",
+            "sessionUser": "postgres",
+            "sourceEpoch": "guard-fixture-epoch",
+            "actorRoleOid": "10",
+            "installationId": "guard-fixture",
+            "sessionRoleOid": "10",
+            "interfaceVersion": "truss-native-operation-context/0.4",
+            "targetIncarnation": "guard-fixture-incarnation",
+            "assertedOriginUtf8Hex": "6f726967696e616c2061737365727465642066697874757265",
+            "sourceEpochProfileHex": "666978747572652d70726f66696c65",
+            "sourceEpochEvidenceHex": "666978747572652d65766964656e6365",
+            "assertedOriginCaptureProfileHex": "6f726967696e616c20636170747572652070726f66696c652066697874757265"
+          }
+        },
+        {
+          "ordinal": "2",
+          "originalContextHex": "7b22786964223a2022383634222c20226f7264696e616c223a202232222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a202234353230222c202273657373696f6e55736572223a2022706f737467726573222c2022736f7572636545706f6368223a202267756172642d666978747572652d65706f6368222c20226163746f72526f6c654f6964223a20223130222c2022696e7374616c6c6174696f6e4964223a202267756172642d66697874757265222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e34222c2022746172676574496e6361726e6174696f6e223a202267756172642d666978747572652d696e6361726e6174696f6e222c202261737365727465644f726967696e55746638486578223a20223666373236393637363936653631366332303631373337333635373237343635363432303636363937383734373537323635222c2022736f7572636545706f636850726f66696c65486578223a2022363636393738373437353732363532643730373236663636363936633635222c2022736f7572636545706f636845766964656e6365486578223a20223636363937383734373537323635326436353736363936343635366536333635222c202261737365727465644f726967696e4361707475726550726f66696c65486578223a202236663732363936373639366536313663323036333631373037343735373236353230373037323666363636393663363532303636363937383734373537323635227d",
+          "context": {
+            "xid": "864",
+            "ordinal": "2",
+            "database": "postgres",
+            "actingUser": "postgres",
+            "backendPid": "4520",
+            "sessionUser": "postgres",
+            "sourceEpoch": "guard-fixture-epoch",
+            "actorRoleOid": "10",
+            "installationId": "guard-fixture",
+            "sessionRoleOid": "10",
+            "interfaceVersion": "truss-native-operation-context/0.4",
+            "targetIncarnation": "guard-fixture-incarnation",
+            "assertedOriginUtf8Hex": "6f726967696e616c2061737365727465642066697874757265",
+            "sourceEpochProfileHex": "666978747572652d70726f66696c65",
+            "sourceEpochEvidenceHex": "666978747572652d65766964656e6365",
+            "assertedOriginCaptureProfileHex": "6f726967696e616c20636170747572652070726f66696c652066697874757265"
+          }
+        }
+      ],
+      "payloadAccountBeforeOwnedFixtureCleanup": [
+        84475,
+        0,
+        84475,
+        false
+      ]
+    },
+    {
+      "family": "configuration",
+      "actualNativeFacts": [
+        "867",
+        "postgres",
+        "postgres",
+        "postgres",
+        "4521",
+        "10",
+        "10"
+      ],
+      "originalContextCaptures": [
+        {
+          "ordinal": "0",
+          "originalContextHex": "7b22786964223a2022383637222c20226f7264696e616c223a202230222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a202234353231222c202273657373696f6e55736572223a2022706f737467726573222c2022736f7572636545706f6368223a202267756172642d666978747572652d65706f6368222c20226163746f72526f6c654f6964223a20223130222c2022696e7374616c6c6174696f6e4964223a202267756172642d66697874757265222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e34222c2022746172676574496e6361726e6174696f6e223a202267756172642d666978747572652d696e6361726e6174696f6e222c202261737365727465644f726967696e55746638486578223a20223666373236393637363936653631366332303631373337333635373237343635363432303636363937383734373537323635222c2022736f7572636545706f636850726f66696c65486578223a2022363636393738373437353732363532643730373236663636363936633635222c2022736f7572636545706f636845766964656e6365486578223a20223636363937383734373537323635326436353736363936343635366536333635222c202261737365727465644f726967696e4361707475726550726f66696c65486578223a202236663732363936373639366536313663323036333631373037343735373236353230373037323666363636393663363532303636363937383734373537323635227d",
+          "context": {
+            "xid": "867",
+            "ordinal": "0",
+            "database": "postgres",
+            "actingUser": "postgres",
+            "backendPid": "4521",
+            "sessionUser": "postgres",
+            "sourceEpoch": "guard-fixture-epoch",
+            "actorRoleOid": "10",
+            "installationId": "guard-fixture",
+            "sessionRoleOid": "10",
+            "interfaceVersion": "truss-native-operation-context/0.4",
+            "targetIncarnation": "guard-fixture-incarnation",
+            "assertedOriginUtf8Hex": "6f726967696e616c2061737365727465642066697874757265",
+            "sourceEpochProfileHex": "666978747572652d70726f66696c65",
+            "sourceEpochEvidenceHex": "666978747572652d65766964656e6365",
+            "assertedOriginCaptureProfileHex": "6f726967696e616c20636170747572652070726f66696c652066697874757265"
+          }
+        },
+        {
+          "ordinal": "2",
+          "originalContextHex": "7b22786964223a2022383637222c20226f7264696e616c223a202232222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a202234353231222c202273657373696f6e55736572223a2022706f737467726573222c2022736f7572636545706f6368223a202267756172642d666978747572652d65706f6368222c20226163746f72526f6c654f6964223a20223130222c2022696e7374616c6c6174696f6e4964223a202267756172642d66697874757265222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e34222c2022746172676574496e6361726e6174696f6e223a202267756172642d666978747572652d696e6361726e6174696f6e222c202261737365727465644f726967696e55746638486578223a20223666373236393637363936653631366332303631373337333635373237343635363432303636363937383734373537323635222c2022736f7572636545706f636850726f66696c65486578223a2022363636393738373437353732363532643730373236663636363936633635222c2022736f7572636545706f636845766964656e6365486578223a20223636363937383734373537323635326436353736363936343635366536333635222c202261737365727465644f726967696e4361707475726550726f66696c65486578223a202236663732363936373639366536313663323036333631373037343735373236353230373037323666363636393663363532303636363937383734373537323635227d",
+          "context": {
+            "xid": "867",
+            "ordinal": "2",
+            "database": "postgres",
+            "actingUser": "postgres",
+            "backendPid": "4521",
+            "sessionUser": "postgres",
+            "sourceEpoch": "guard-fixture-epoch",
+            "actorRoleOid": "10",
+            "installationId": "guard-fixture",
+            "sessionRoleOid": "10",
+            "interfaceVersion": "truss-native-operation-context/0.4",
+            "targetIncarnation": "guard-fixture-incarnation",
+            "assertedOriginUtf8Hex": "6f726967696e616c2061737365727465642066697874757265",
+            "sourceEpochProfileHex": "666978747572652d70726f66696c65",
+            "sourceEpochEvidenceHex": "666978747572652d65766964656e6365",
+            "assertedOriginCaptureProfileHex": "6f726967696e616c20636170747572652070726f66696c652066697874757265"
+          }
+        }
+      ],
+      "payloadAccountBeforeOwnedFixtureCleanup": [
+        88511,
+        0,
+        88511,
+        false
+      ]
+    }
+  ],
+  "nativeSourcePins": {
+    "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f",
+    "docs/helix/04-build/evidence/operation-configuration-storage.owner-export.sql": "55448d0e9b979ab62f48099e6c317e19ebe40ce5ff9c90472209deff8a618e3a",
+    "packages/postgresql/native/source-epoch-lock.sql": "e811a3656a45e941d588ca21b97ab524b789948d08585288e44b158b060d73cc",
+    "docs/helix/04-build/evidence/design-audit/pgserver-populated-guard-fixture.sql": "1221666a5d6b77bfb9f5c31280a95ef453140f4740f54b22fd232822447ef089",
+    "docs/helix/02-design/contracts/row-operation-registry-observation-v0.1.proposal.sql": "29d1a6647aedae69bda2276d6a0f6173b50a5a9e89a79b3cc4076f504b5125ca",
+    "packages/postgresql/native/issued-operation-admission/operation-admission.sql": "4b72ebf3727b9c887befce0280256f73587857fcae5fb363af0917b816b1e335",
+    "packages/postgresql/native/issued-operation-admission/operation-asserted-origin-admission.sql": "4eb696139c90da5aae36d889f7bb46964f6ecb7b883f250cea1d7f90038cea8c",
+    "packages/postgresql/native/issued-operation-admission/operation-epoch-context-admission.sql": "7cd28926d2dc34a81ef1ed35b44031e70f0e2bc9c2446e2fd7c52930cb6ccd95",
+    "packages/postgresql/native/issued-operation-admission/operation-configuration-context-admission.sql": "aed1fde52b149f6e973c289d0917d1442dd4059d2a0a6e1031bcc06de050c529"
+  },
+  "sourceSha256": {
+    "check_pg8000_four_family_admission_native.py": "5bbe128c3a9f1f3c4adb8c7e38c3e2f2d4917f94f1cae360def09aa8548beacc",
+    "pg8000_original_admission_candidate.py": "960f5e88234dbb5c35f426d4a99bc2f9db638882123324d418645a2b682a41ef",
+    "pg8000_original_control_candidate.py": "d89c80a6ef94a77f4349368f68352ed6de94a2c7605a8cd9b74e754c27df27f2",
+    "pg8000_instance_candidate.py": "0e3a6fb3860e9f2315711cc44957e841f54640c18214955f57c87a3c6fd437de",
+    "pg8000_accounted_instance_candidate.py": "ad4415635d2643dbd8cb48b34c85621444f9240334d9b5f020b726a0b226ee68"
+  },
+  "installedModuleSha256": {
+    "_operation_admission.py": "f96462208c14230670370d0b12f9b5d38ef1c20861175bcab8777c2c687dbb30",
+    "_operation_ordinal.py": "10d4717462ff14c7524ed793db0ac7b94f56e1d6b88158081a4f300981193977",
+    "_resource_account.py": "6a10966e502c16a3ab8972bba34a999ca675fdb7a59e5c3ac93a7c713b6468f1",
+    "_accounted_receive.py": "f1f6bc7d84d3cbdc4ba93ddb514d68898f60c99358c7cb2a719701139d674e78",
+    "_operation_registry.py": "7e74c34c9b0a874af8e7c0c743357aff2c848cc4c8ae3ed2404542ce18ec667d"
+  },
+  "instanceLimits": {
+    "frameBytes": 1048576,
+    "totalIngressBytes": 33554432,
+    "messages": 512,
+    "reads": 50000,
+    "writes": 512,
+    "outgoingBytes": 16777216
+  },
+  "driverPortQualified": false,
+  "installerReady": false,
+  "acceptanceCasesPromoted": [],
+  "limitations": [
+    "Administrative local trust; no ordinary-person R4/R5/security readiness",
+    "Six synthetic artifact bytes do not establish artifact meaning, acceptance or mutations",
+    "No seven bodies, finalization, commit cohort, journal/feed/receipt or ready publication",
+    "No complete allocator/native work or pre-reserved cleanup/containment profile",
+    "One original epoch per candidate connection; full reusable driver unqualified",
+    "No network loss/cancellation/commit_unknown/reconciliation evidence"
+  ]
+}

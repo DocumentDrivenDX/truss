@@ -1,0 +1,23 @@
+{
+  "profile": "truss-native-layout-capture/0.1.0",
+  "status": "unadopted_candidate",
+  "source": "docs/helix/02-design/contracts/request-receipt-layout-v0.1.draft.sql",
+  "sourceSha256": "84344d87881fb784c6093919ffae88325837bcea6f7193075797d8ee56128ff4",
+  "model": "docs/helix/02-design/models/truss-receipt-candidate.umf.json",
+  "modelSha256": "42a4a26cadc03c2df821d2457c5d88d15b0f3fb68f38c58fc92ac380a49cf6db",
+  "backend": "@libpg-query/parser@17.6.10",
+  "checks": {
+    "sourceArchiveExact": true,
+    "jsonReload": true,
+    "reloadedExportExact": true
+  },
+  "physicalIdentityAllocationComplete": false,
+  "completeExporterCorrespondence": false,
+  "installed": false,
+  "adoptionPrerequisites": [
+    "ADR-005 and governing layout reconciliation",
+    "complete authored physical identities and native definitions",
+    "complete UMF exporter statement/source correspondence",
+    "native functions/privileges/clock/namespace profiles"
+  ]
+}

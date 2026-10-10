@@ -1,0 +1,113 @@
+{
+  "scope": "Independent Python Fraction oracle for seven finite binary64 domain examples; no TypeScript adapter, UMF validation, browser, storage or native qualification",
+  "cases": [
+    {
+      "case": "exact_half",
+      "precision": 3,
+      "scale": 1,
+      "binaryNumerator": "25",
+      "binaryDenominator": "2",
+      "expectedAdmitted": true,
+      "observedAdmitted": true
+    },
+    {
+      "case": "inexact_tenth",
+      "precision": 3,
+      "scale": 1,
+      "binaryNumerator": "3602879701896397",
+      "binaryDenominator": "36028797018963968",
+      "expectedAdmitted": false,
+      "observedAdmitted": false
+    },
+    {
+      "case": "exact_binary_tenth_wide_domain",
+      "precision": 55,
+      "scale": 55,
+      "binaryNumerator": "3602879701896397",
+      "binaryDenominator": "36028797018963968",
+      "expectedAdmitted": true,
+      "observedAdmitted": true
+    },
+    {
+      "case": "precision_overflow",
+      "precision": 2,
+      "scale": 1,
+      "binaryNumerator": "25",
+      "binaryDenominator": "2",
+      "expectedAdmitted": false,
+      "observedAdmitted": false
+    },
+    {
+      "case": "exact_negative",
+      "precision": 3,
+      "scale": 1,
+      "binaryNumerator": "-25",
+      "binaryDenominator": "2",
+      "expectedAdmitted": true,
+      "observedAdmitted": true
+    },
+    {
+      "case": "exact_eighth_insufficient_scale",
+      "precision": 3,
+      "scale": 2,
+      "binaryNumerator": "1",
+      "binaryDenominator": "8",
+      "expectedAdmitted": false,
+      "observedAdmitted": false
+    },
+    {
+      "case": "exact_eighth",
+      "precision": 3,
+      "scale": 3,
+      "binaryNumerator": "1",
+      "binaryDenominator": "8",
+      "expectedAdmitted": true,
+      "observedAdmitted": true
+    }
+  ],
+  "readCases": [
+    {
+      "case": "safe_integer",
+      "originalToken": "9007199254740991",
+      "expectedLossless": true,
+      "observedLossless": true
+    },
+    {
+      "case": "unsafe_integer",
+      "originalToken": "9007199254740993",
+      "expectedLossless": false,
+      "observedLossless": false
+    },
+    {
+      "case": "exact_half",
+      "originalToken": "12.5",
+      "expectedLossless": true,
+      "observedLossless": true
+    },
+    {
+      "case": "decimal_tenth",
+      "originalToken": "0.1",
+      "expectedLossless": false,
+      "observedLossless": false
+    },
+    {
+      "case": "trailing_zero",
+      "originalToken": "1.00",
+      "expectedLossless": true,
+      "observedLossless": true
+    },
+    {
+      "case": "exponent",
+      "originalToken": "1e2",
+      "expectedLossless": true,
+      "observedLossless": true
+    },
+    {
+      "case": "tiny_underflow",
+      "originalToken": "1e-400",
+      "expectedLossless": false,
+      "observedLossless": false
+    }
+  ],
+  "nativeQualified": false
+}

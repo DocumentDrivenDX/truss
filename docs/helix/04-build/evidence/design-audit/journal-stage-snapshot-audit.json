@@ -1,0 +1,78 @@
+{
+  "scope": "closed raw snapshot shape only",
+  "bunVersion": "1.4.2",
+  "sourceHashes": [
+    {
+      "path": "docs/helix/02-design/contracts/journal-stage-snapshot-v0.2.proposal.schema.json",
+      "sha256": "9220ad8661438b9c9de0aad4f2371135460c55aa1d6dbac15b40e408c11ef050"
+    },
+    {
+      "path": "/private/tmp/claude-501/truss-spec-wt/docs/helix/04-build/evidence/design-audit/check-journal-stage-snapshot.ts",
+      "sha256": "2529659246c4e42281f27d41868b2c7e1619f4d74f7d422fe1ad05b3f5f485ab"
+    }
+  ],
+  "results": [
+    {
+      "name": "complete raw snapshot",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "missing body",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "extra commit claim",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "numeric generation",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "wrong kind",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "odd hex",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "uppercase hex",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "noncanonical ordinal",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "unknown phase remains integrity counterexample",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "empty bytes remain integrity counterexample",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "native range overflow requires semantic refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "future generation requires native refusal",
+      "expected": true,
+      "actual": true
+    }
+  ],
+  "nativeExecuted": false,
+  "adopted": false
+}

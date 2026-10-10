@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:conformance-assessment:0.1.0",
+  "title": "Draft conformance assessment",
+  "description": "Closed existing tooling result shape only. Original run/receipt/manifest/assessor custody, complete evidence, current disclosure and native observation are independently admitted.",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "state": {
+          "const": "qualified"
+        },
+        "receipt": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "requiredManifest": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "qualificationProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "assessmentEvidence": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        }
+      },
+      "required": [
+        "state",
+        "receipt",
+        "requiredManifest",
+        "qualificationProfile",
+        "assessmentEvidence"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "state": {
+          "const": "unqualified"
+        },
+        "diagnostics": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        }
+      },
+      "required": [
+        "state",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "state": {
+          "const": "unavailable"
+        },
+        "reason": {
+          "enum": [
+            "authorization",
+            "profile",
+            "custody",
+            "integrity",
+            "resource"
+          ]
+        }
+      },
+      "required": [
+        "state",
+        "reason"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

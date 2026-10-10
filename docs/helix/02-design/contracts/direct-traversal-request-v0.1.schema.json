@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:direct-traversal-request:0.1.0",
+  "title": "Draft direct-traversal-request",
+  "description": "Closed shape only. Original host registry, exact full query/context, cumulative work, snapshot/authority and native resources require independent semantic admission.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-direct-traversal/0.1.0"
+    },
+    "context": {
+      "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/context"
+    },
+    "start": {
+      "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/identity"
+    },
+    "hops": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "properties": {
+          "relationship": {
+            "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/relationship"
+          },
+          "direction": {
+            "enum": [
+              "outgoing",
+              "incoming",
+              "both"
+            ]
+          }
+        },
+        "required": [
+          "relationship",
+          "direction"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "resultLimit": {
+      "type": "string",
+      "pattern": "^[1-9][0-9]*$"
+    },
+    "workLimits": {
+      "$ref": "#/$defs/workLimits"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "context",
+    "start",
+    "hops",
+    "resultLimit",
+    "workLimits"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "handle": {
+      "type": "object",
+      "properties": {
+        "stageIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "generation": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        },
+        "querySha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "context": {
+          "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/context"
+        }
+      },
+      "required": [
+        "stageIdentity",
+        "generation",
+        "querySha256",
+        "context"
+      ],
+      "additionalProperties": false
+    },
+    "cursor": {
+      "type": "object",
+      "properties": {
+        "handle": {
+          "$ref": "#/$defs/handle"
+        },
+        "after": {
+          "type": "object",
+          "properties": {
+            "typeId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "id": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "typeId",
+            "id"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "handle",
+        "after"
+      ],
+      "additionalProperties": false
+    },
+    "workLimits": {
+      "type": "object",
+      "properties": {
+        "examinedEdges": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "pathStates": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "retainedBytes": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        }
+      },
+      "required": [
+        "examinedEdges",
+        "pathStates",
+        "retainedBytes"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

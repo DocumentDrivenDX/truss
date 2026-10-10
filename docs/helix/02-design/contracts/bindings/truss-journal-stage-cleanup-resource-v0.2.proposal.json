@@ -1,0 +1,41 @@
+{
+  "interfaceVersion": "truss-journal-stage-cleanup-resource/0.2.0-proposal",
+  "status": "unadopted; native accounting/cleanup/settlement unqualified",
+  "integerCarrier": "canonical positive decimal text",
+  "scope": "Unadopted stage-aware RT01\u2013RT06 attempt and per-installation aggregate operation/touch/journal-stage custody; preserves prior profiles unchanged.",
+  "limits": {
+    "observedDependencyOccurrences": "65536",
+    "allSelectedAndDecodedEvidenceBytes": "16777216",
+    "peakOwnedBytes": "134217728",
+    "cumulativeAllocationBytes": "536870912",
+    "abstractWorkUnits": "32000000",
+    "wallDeadlineMilliseconds": "30000",
+    "diagnosticCount": "64",
+    "diagnosticBytesTotal": "65536",
+    "oneCustodyRowOriginalBytes": "8388608",
+    "retainedCustodyRowsPerInstallation": "65536",
+    "retainedOriginalCustodyBytesPerInstallation": "536870912",
+    "selectedCustodyRows": "512"
+  },
+  "accounting": {
+    "custodyAdmission": "Reserve complete worst-case bounded original custody before first canonical writer submission; preserve aggregate reservation through generation/appended-operation updates. A late growth failure rolls back the governing operation under its original containment, never drops earlier obligations.",
+    "rowBytes": "Count every original carrier occurrence in operation and touch rows, decoded snapshots, wire artifacts, transfer/disposition/closure/capacity evidence, and result/archive copies. Shared identity/hash does not eliminate actual copies. The 8-MiB per-row original cap does not exempt that row from 16-MiB aggregate selected/decoded evidence or 128-MiB peak ownership; envelope/base64/native transport expansion has separate pre-materialization admission.",
+    "persistentCapacity": "Account actual retained rows/bytes and in-flight reservations under qualified native exclusion; concurrent writers cannot spend the same remaining capacity. Full native storage/index/WAL overhead needs its separately selected deployment budget.",
+    "collection": "Count repeated original source/artifact/dependency decode, collision comparisons, RT04 recollection, transfer/receipt buffers and complete deleted-identity inventory. Field transport is bounded before full host allocation.",
+    "work": "Charge every observed row/reference/allocation plus every byte hashed/decoded/copied/compared; exact settlement/archive codecs have additionally selected weights.",
+    "saturation": "Refuse new reservation without eviction; existing unsettled original recovery and already admitted obligations remain retained. Cleanup does not infer expiration from age or storage pressure.",
+    "capacityRelease": "Release persistent source custody only after actual cleanup commit or exact original reconciliation plus discharged archive/recovery dependencies; release working reservations only after actual native/worker containment.",
+    "deadline": "Minimum of 30-second stage and governing administrative deadline, monotonically measured from admission; lock/native/worker limits separately pinned.",
+    "maxima": "Individual bounds are not a simultaneous-fit or successful-throughput guarantee; exceeding any bound refuses the whole attempt.",
+    "operationRegistry": "Operation, touch and journal-stage rows share aggregate retained row/byte and in-flight reservation caps under one selected native ledger. Stage bodies and duplicated parent/prestate/candidate/event/origin bytes count every actual occurrence; distinct registries or hashes do not create separate allowances.",
+    "rowMembership": "The existing 512 selected-row cap counts every parent, touch and stage row in complete original dependency closure. A selected operation and all its stages form one indivisible cohort; no truncation, partial-prefix selection or child-only eviction to fit. Reobserved and returned copies charge work/evidence/allocation ledgers independently.",
+    "stageBytes": "Count exact body_bytes plus original xid/ordinal/phase/generation transport and snapshot/cohort/result/archive/evidence occurrences. For N body bytes, lowercase hex alone occupies 2*N transport bytes before JSON envelope; charge raw native bytes, hex, decoded bytes, parser tree and canonical regeneration as actual simultaneous/cumulative copies. Nested base64 components retain their own separately admitted expansion; no double-count exemption by shared artifact identity.",
+    "wholeOperationFit": "Before stage admission or growth, prove at least one complete selected parent/stage/dependency cleanup cohort fits every selected cleanup/canonical/transport/work/peak bound. The 8-MiB per-row upper bound is not a promise of 16-MiB selected-evidence fit. If no complete one-operation cohort fits, refuse the governing operation before effects or contain its growth failure; preserve prior obligations and unknown settlement.",
+    "stageCapacityRelease": "Pending child/parent DELETE does not release persistent occupancy. Retain unresolved original reservations until actual complete cleanup settlement or qualified original reconciliation; rollback restores all stage/parent/capacity/evidence effects together. Spent processing and allocator consumption are never refunded as occupancy."
+  },
+  "adoption": "Select coherent original writer/staging/cleanup/phase/cohort/result codecs, native shared ledger/exclusion/descriptor/transport and archive/settlement profiles; independently qualify whole-operation fit, concurrent reservation, exact/one-over bounds, large fields, rollback and unknown outcomes. Numeric maxima are review proposals, not installed accounting.",
+  "derivedFrom": {
+    "path": "truss-private-custody-cleanup-resource-v0.1.proposal.json",
+    "sha256": "d12eedf9e80e4c837d7d90521846ff13c69185a3683095de411cbdaf9307d324"
+  }
+}

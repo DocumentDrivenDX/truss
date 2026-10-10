@@ -1,0 +1,13 @@
+{
+  "sources": {
+    "packages/umf-bun/src/catalog-original-execution-basis.ts": "ed757b84f2cf424965567c394c1f57457ae3f8b5047bc0b194896442ae07f6fd",
+    "tests/catalog-report-preparation.test.ts": "dd11b7bc6bb6e852a3b33bfb5871016cc6756c2f954fe60acb1591821e13b1d5"
+  },
+  "tests": 12,
+  "assertions": 119,
+  "strictTypeCheck": "passed",
+  "nativeEvidence": "catalog-new-cohort.json",
+  "nativeChecks": 85,
+  "scope": "Original native actor/context bytes and exact host result correspondence only. No complete originalExecution, installation/source epoch, asserted origin/profile authority or accepted publication.",
+  "contextVersion": "truss-native-operation-context/0.2"
+}

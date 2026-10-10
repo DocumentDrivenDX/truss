@@ -1,0 +1,1 @@
+SELECT d.tableoid::pg_catalog.oid::pg_catalog.text AS catalog_class_oid, pg_catalog.to_jsonb(d)::pg_catalog.text AS original_catalog_row_json FROM pg_catalog.pg_depend d WHERE d.refclassid = 'pg_catalog.pg_extension'::pg_catalog.regclass AND d.refobjid = ANY($1::pg_catalog.oid[]) ORDER BY d.refobjid, d.classid, d.objid, d.objsubid, d.refobjsubid, d.deptype

@@ -1,0 +1,53 @@
+{
+  "scope": "Observed selected UMF copyJson boundary/input behavior only; not selector full-receipt feasibility, Truss admission, heap/preallocation accounting or native support",
+  "bunVersion": "1.4.2",
+  "source": {
+    "path": "/Users/erik/Projects/umf/src/model/json.ts",
+    "sha256": "b2c3f48bb779972af5beadfb22ec1db48c793dcdaf572293afa62904016465e7"
+  },
+  "cases": [
+    {
+      "id": "100000_values_including_array_root",
+      "expected": "accepted",
+      "observed": "accepted"
+    },
+    {
+      "id": "100001_values_including_array_root",
+      "expected": "LIMIT",
+      "observed": "LIMIT"
+    },
+    {
+      "id": "depth_128",
+      "expected": "accepted",
+      "observed": "accepted"
+    },
+    {
+      "id": "depth_129",
+      "expected": "LIMIT",
+      "observed": "LIMIT"
+    },
+    {
+      "id": "getter_refused_without_execution",
+      "expected": "NON_JSON",
+      "observed": "NON_JSON"
+    },
+    {
+      "id": "custom_prototype_refused",
+      "expected": "NON_JSON",
+      "observed": "NON_JSON"
+    },
+    {
+      "id": "unsafe_numeric_identity_refused",
+      "expected": "NUMBER",
+      "observed": "NUMBER"
+    },
+    {
+      "id": "exact_numeric_identity_text_retained",
+      "expected": "accepted",
+      "observed": "accepted"
+    }
+  ],
+  "getterCalls": 0,
+  "trussExecutionQualified": false,
+  "nativeExecution": false
+}

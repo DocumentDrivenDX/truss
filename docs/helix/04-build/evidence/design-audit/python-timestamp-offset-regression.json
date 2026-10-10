@@ -1,0 +1,27 @@
+{
+  "checkedAt": "2026-10-09T17:18:31.477594+00:00",
+  "status": "passed_private_exact_value_convenience_regression",
+  "command": [
+    "/Users/erik/.local/bin/python3.11",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "docs/helix/04-build/evidence/design-audit",
+    "-p",
+    "test_python_exact_*_candidate.py"
+  ],
+  "python": "3.11.17 (main, Oct  3 2026, 00:54:14) [Clang 22.1.3 ]",
+  "observedOutput": ".........\n----------------------------------------------------------------------\nRan 9 tests in 0.001s\n\nOK\n",
+  "sourceSha256": {
+    "docs/helix/04-build/evidence/design-audit/python_exact_timestamp_candidate.py": "a99fbb9765a7d5360881dd3c1b3b55029e9ed39ddeed918e9495f47731988a32",
+    "docs/helix/04-build/evidence/design-audit/test_python_exact_timestamp_candidate.py": "7667b0c764569d89b5b7bdadce03870b04b4033200349bc9462ce647d80a84e1",
+    "docs/helix/03-test/python-exact-value-vectors.proposal.json": "5700c64bfaf5fe11becd539fa926960d1e82de569e0f5ee815beaa2e881101de",
+    "docs/helix/04-build/evidence/design-audit/python_exact_numeric_candidate.py": "dbf942b9633d3079e4bb008b678f863db5f322d192d8c24e2509a63d39e38d4f",
+    "docs/helix/04-build/evidence/design-audit/python_exact_tree_candidate.py": "6075664925204ebfe202a773c8bb86d6e495e878c33f9c5ab2e1996052de6851",
+    "docs/helix/04-build/evidence/design-audit/test_python_exact_numeric_candidate.py": "780a2c09ac1bb5db8d301c5788af158f56fb7c13a2bbea035735465095120a75",
+    "docs/helix/04-build/evidence/design-audit/test_python_exact_tree_candidate.py": "e278fafb2434837ebec8067afd5db5ec936202030ff542b878446c386177f966"
+  },
+  "scope": "Already-admitted token convenience conversion only; no upstream grammar/facet admission, native temporal meaning, driver/account or public package qualification",
+  "regression": "Offsets with minute overflow remain original text and have no datetime convenience view; realizable boundary offsets retain exact offset seconds"
+}

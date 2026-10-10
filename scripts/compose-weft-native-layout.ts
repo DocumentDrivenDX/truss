@@ -1,0 +1,24 @@
+/** Source repair experiment: ordinary digest plus complete CHECK, never mislabeled IMMUTABLE code. */
+import {backend} from '/Users/erik/Projects/umf/native/postgresql/runtime';
+import {readDocument} from '/Users/erik/Projects/umf/src/model/document';
+import {getPostgresqlNode,proposePostgresqlNodeEdit,importPostgresqlSql,exportPostgresqlSql} from '/Users/erik/Projects/umf/src/adapters/postgresql';
+import {renderTree} from '/Users/erik/Projects/umf/src/model/native-json';
+const source='docs/helix/02-design/models/truss-layout-reference-history-0.12.proposal.umf.json';
+const original=readDocument(await Bun.file(source).text(),'json');
+const nodes=JSON.parse(renderTree(getPostgresqlNode(original,'/stmts')));
+const table=nodes.find((n:any)=>n.stmt?.CreateStmt?.relation.relname==='installation_archive')?.stmt.CreateStmt;
+const column=table?.tableElts.find((e:any)=>e.ColumnDef?.colname==='artifact_identity_sha256');
+if(!column||column.ColumnDef.constraints.length!==1||column.ColumnDef.constraints[0].Constraint.contype!=='CONSTR_GENERATED')throw Error('Unexpected source digest definition');
+const replacement=await importPostgresqlSql(`CREATE TABLE truss.repair_source (artifact_identity_sha256 bytea NOT NULL CONSTRAINT installation_archive_identity_digest_exact CHECK (artifact_identity_sha256 = pg_catalog.sha256(pg_catalog.convert_to(artifact_identity, 'UTF8'))));`,backend,{id:'identity-digest-repair-source'});
+const parsed=JSON.parse(renderTree(getPostgresqlNode(replacement,'/stmts')));
+const at=table.tableElts.indexOf(column);table.tableElts[at]=parsed[0].stmt.CreateStmt.tableElts[0];
+const comment=nodes.find((n:any)=>n.stmt?.CommentStmt?.objtype==='OBJECT_SCHEMA');
+if(!comment)throw Error('Missing review-only namespace label');
+comment.stmt.CommentStmt.comment='truss-layout weft-integration-0.13 REVIEW ONLY - unqualified';
+const result=proposePostgresqlNodeEdit(original,'/stmts',JSON.stringify(nodes)).document;
+result.id='truss-layout-weft-integration-0.13-review';
+const ddl=await exportPostgresqlSql(result,backend);
+const modelPath='docs/helix/02-design/models/truss-layout-weft-integration-0.13.proposal.umf.json';
+const ddlPath='docs/helix/04-build/evidence/weft-integration-layout-0.13.owner-export.sql';
+await Bun.write(modelPath,JSON.stringify(result)+'\n');await Bun.write(ddlPath,ddl);
+console.log(JSON.stringify({source,modelPath,ddlPath,change:'artifact_identity_sha256 ordinary NOT NULL with exact native digest CHECK; writers must supply original digest',qualified:false}));

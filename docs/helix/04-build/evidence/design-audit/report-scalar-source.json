@@ -1,0 +1,649 @@
+{
+  "owner": {
+    "revision": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+    "status": "",
+    "files": [
+      {
+        "path": "native/postgresql/runtime.ts",
+        "sha256": "a88fea4cf15c9c3c3f0ad1f0a36d8f5de42a42ce8ea9712499f609beee3ea751"
+      },
+      {
+        "path": "src/adapters/postgresql/index.ts",
+        "sha256": "7baa071d95e5f9863a4ce2bf892d87fb27cab9d8605ba4cf8887016d14ca17b4"
+      },
+      {
+        "path": "src/adapters/postgresql/declarations.ts",
+        "sha256": "e47ebd6366fee86fb8ccaf1270555bcd338957bff511f30cdcae22a088c6d8d9"
+      },
+      {
+        "path": "src/model/document.ts",
+        "sha256": "a0422042659defdea425dff8bb0618eaa4bbf125f68da16aa5ad21af0b6c282f"
+      },
+      {
+        "path": "spec/extensions/postgresql/native-ast.schema.json",
+        "sha256": "aa3d3b50bc04edbc3ab3430e113ee8710edb1c10ff5cee15d4bcc7b16d9a9039"
+      },
+      {
+        "path": "bun.lock",
+        "sha256": "98a99f7d306f7269db103bdbfafe5f9ad9ed34b02024276ad0cce45df27f5cc3"
+      }
+    ]
+  },
+  "currentOwnerRevision": "1f7b5f5d2a355c4b476e3a96b289b9048f03f567",
+  "currentListedSourceSubsetMatches": true,
+  "backend": "@libpg-query/parser@17.6.10",
+  "path": "docs/helix/02-design/contracts/report-scalar-bytes-v0.2.proposal.sql",
+  "sourceSha256": "5b99f2f05920a77c7617239acc9f183bc321248831acecc8e4fef7884c25de63",
+  "artifactPath": "docs/helix/02-design/contracts/report-scalar-bytes-v0.2.proposal.umf.json",
+  "artifactSha256": "4c4d12f858d48b1a6b76b723a48c39a04fb9c87211d83fbc60614b7bba960afd",
+  "exportPath": "docs/helix/04-build/evidence/design-audit/report-scalar-bytes.owner-export.sql",
+  "exportSha256": "0aedaf920054b7b408a5cb59e982a6ec4d7c20b5e6b4fa25d87ff5ae2833566c",
+  "sourceArchiveExact": true,
+  "reloadedExportExact": true,
+  "declarations": {
+    "status": "observed",
+    "complete": false,
+    "declarations": [],
+    "unhandled": [
+      {
+        "path": "/stmts/0/stmt",
+        "nativeStatement": {
+          "kind": "object",
+          "members": {
+            "CreateFunctionStmt": {
+              "kind": "object",
+              "members": {
+                "funcname": {
+                  "kind": "array",
+                  "items": [
+                    {
+                      "kind": "object",
+                      "members": {
+                        "String": {
+                          "kind": "object",
+                          "members": {
+                            "sval": {
+                              "kind": "string",
+                              "value": "truss"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "kind": "object",
+                      "members": {
+                        "String": {
+                          "kind": "object",
+                          "members": {
+                            "sval": {
+                              "kind": "string",
+                              "value": "runtime_report_scalar_bytes_v0_2"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "parameters": {
+                  "kind": "array",
+                  "items": [
+                    {
+                      "kind": "object",
+                      "members": {
+                        "FunctionParameter": {
+                          "kind": "object",
+                          "members": {
+                            "name": {
+                              "kind": "string",
+                              "value": "original"
+                            },
+                            "argType": {
+                              "kind": "object",
+                              "members": {
+                                "names": {
+                                  "kind": "array",
+                                  "items": [
+                                    {
+                                      "kind": "object",
+                                      "members": {
+                                        "String": {
+                                          "kind": "object",
+                                          "members": {
+                                            "sval": {
+                                              "kind": "string",
+                                              "value": "bytea"
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  ]
+                                },
+                                "typemod": {
+                                  "kind": "number",
+                                  "value": "-1"
+                                },
+                                "location": {
+                                  "kind": "number",
+                                  "value": "146"
+                                }
+                              }
+                            },
+                            "mode": {
+                              "kind": "string",
+                              "value": "FUNC_PARAM_DEFAULT"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "returnType": {
+                  "kind": "object",
+                  "members": {
+                    "names": {
+                      "kind": "array",
+                      "items": [
+                        {
+                          "kind": "object",
+                          "members": {
+                            "String": {
+                              "kind": "object",
+                              "members": {
+                                "sval": {
+                                  "kind": "string",
+                                  "value": "bytea"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "typemod": {
+                      "kind": "number",
+                      "value": "-1"
+                    },
+                    "location": {
+                      "kind": "number",
+                      "value": "161"
+                    }
+                  }
+                },
+                "options": {
+                  "kind": "array",
+                  "items": [
+                    {
+                      "kind": "object",
+                      "members": {
+                        "DefElem": {
+                          "kind": "object",
+                          "members": {
+                            "defname": {
+                              "kind": "string",
+                              "value": "language"
+                            },
+                            "arg": {
+                              "kind": "object",
+                              "members": {
+                                "String": {
+                                  "kind": "object",
+                                  "members": {
+                                    "sval": {
+                                      "kind": "string",
+                                      "value": "plpgsql"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "defaction": {
+                              "kind": "string",
+                              "value": "DEFELEM_UNSPEC"
+                            },
+                            "location": {
+                              "kind": "number",
+                              "value": "167"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "kind": "object",
+                      "members": {
+                        "DefElem": {
+                          "kind": "object",
+                          "members": {
+                            "defname": {
+                              "kind": "string",
+                              "value": "volatility"
+                            },
+                            "arg": {
+                              "kind": "object",
+                              "members": {
+                                "String": {
+                                  "kind": "object",
+                                  "members": {
+                                    "sval": {
+                                      "kind": "string",
+                                      "value": "immutable"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "defaction": {
+                              "kind": "string",
+                              "value": "DEFELEM_UNSPEC"
+                            },
+                            "location": {
+                              "kind": "number",
+                              "value": "184"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "kind": "object",
+                      "members": {
+                        "DefElem": {
+                          "kind": "object",
+                          "members": {
+                            "defname": {
+                              "kind": "string",
+                              "value": "security"
+                            },
+                            "arg": {
+                              "kind": "object",
+                              "members": {
+                                "Boolean": {
+                                  "kind": "object",
+                                  "members": {
+                                    "boolval": {
+                                      "kind": "boolean",
+                                      "value": false
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "defaction": {
+                              "kind": "string",
+                              "value": "DEFELEM_UNSPEC"
+                            },
+                            "location": {
+                              "kind": "number",
+                              "value": "194"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "kind": "object",
+                      "members": {
+                        "DefElem": {
+                          "kind": "object",
+                          "members": {
+                            "defname": {
+                              "kind": "string",
+                              "value": "set"
+                            },
+                            "arg": {
+                              "kind": "object",
+                              "members": {
+                                "VariableSetStmt": {
+                                  "kind": "object",
+                                  "members": {
+                                    "kind": {
+                                      "kind": "string",
+                                      "value": "VAR_SET_VALUE"
+                                    },
+                                    "name": {
+                                      "kind": "string",
+                                      "value": "search_path"
+                                    },
+                                    "args": {
+                                      "kind": "array",
+                                      "items": [
+                                        {
+                                          "kind": "object",
+                                          "members": {
+                                            "A_Const": {
+                                              "kind": "object",
+                                              "members": {
+                                                "sval": {
+                                                  "kind": "object",
+                                                  "members": {
+                                                    "sval": {
+                                                      "kind": "string",
+                                                      "value": "pg_catalog"
+                                                    }
+                                                  }
+                                                },
+                                                "location": {
+                                                  "kind": "number",
+                                                  "value": "227"
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
+                                        {
+                                          "kind": "object",
+                                          "members": {
+                                            "A_Const": {
+                                              "kind": "object",
+                                              "members": {
+                                                "sval": {
+                                                  "kind": "object",
+                                                  "members": {
+                                                    "sval": {
+                                                      "kind": "string",
+                                                      "value": "pg_temp"
+                                                    }
+                                                  }
+                                                },
+                                                "location": {
+                                                  "kind": "number",
+                                                  "value": "238"
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      ]
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "defaction": {
+                              "kind": "string",
+                              "value": "DEFELEM_UNSPEC"
+                            },
+                            "location": {
+                              "kind": "number",
+                              "value": "211"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "kind": "object",
+                      "members": {
+                        "DefElem": {
+                          "kind": "object",
+                          "members": {
+                            "defname": {
+                              "kind": "string",
+                              "value": "as"
+                            },
+                            "arg": {
+                              "kind": "object",
+                              "members": {
+                                "List": {
+                                  "kind": "object",
+                                  "members": {
+                                    "items": {
+                                      "kind": "array",
+                                      "items": [
+                                        {
+                                          "kind": "object",
+                                          "members": {
+                                            "String": {
+                                              "kind": "object",
+                                              "members": {
+                                                "sval": {
+                                                  "kind": "string",
+                                                  "value": "\nDECLARE n integer; i integer:=0; b integer; c integer; width integer; j integer;\n expected bigint:=2; chunk bytea:=decode('22','hex'); chunks bytea[]:=ARRAY[]::bytea[];\n piece bytea; output bytea;\nBEGIN\n IF original IS NULL THEN RAISE EXCEPTION 'original scalar bytes required' USING ERRCODE='22023'; END IF;\n n:=octet_length(original);\n IF n>1048576 THEN RAISE EXCEPTION 'scalar source capacity' USING ERRCODE='54000'; END IF;\n -- Validate complete UTF-8 and check the candidate output ceiling before emission.\n WHILE i<n LOOP\n  b:=get_byte(original,i);\n  IF b<128 THEN width:=1;\n  ELSIF b BETWEEN 194 AND 223 THEN width:=2;\n  ELSIF b BETWEEN 224 AND 239 THEN width:=3;\n  ELSIF b BETWEEN 240 AND 244 THEN width:=4;\n  ELSE RAISE EXCEPTION 'invalid scalar UTF8' USING ERRCODE='22021'; END IF;\n  IF i+width>n THEN RAISE EXCEPTION 'unfinished scalar UTF8' USING ERRCODE='22021'; END IF;\n  IF width>1 THEN\n   FOR j IN 1..width-1 LOOP\n    c:=get_byte(original,i+j);\n    IF c NOT BETWEEN 128 AND 191 OR\n     (j=1 AND ((b=224 AND c<160) OR (b=237 AND c>159) OR\n                (b=240 AND c<144) OR (b=244 AND c>143))) THEN\n     RAISE EXCEPTION 'invalid scalar UTF8 continuation' USING ERRCODE='22021';\n    END IF;\n   END LOOP;\n  END IF;\n  expected:=expected+CASE WHEN b<32 THEN 6 WHEN b IN (34,92) THEN 2 ELSE width END;\n  IF expected>4194304 THEN RAISE EXCEPTION 'scalar output capacity' USING ERRCODE='54000'; END IF;\n  i:=i+width;\n END LOOP;\n i:=0;\n WHILE i<n LOOP\n  b:=get_byte(original,i);\n  width:=CASE WHEN b<128 THEN 1 WHEN b<224 THEN 2 WHEN b<240 THEN 3 ELSE 4 END;\n  IF b<32 THEN piece:=convert_to(chr(92)||'u00'||lpad(to_hex(b),2,'0'),'UTF8');\n  ELSIF b IN (34,92) THEN piece:=decode('5c','hex')||substr(original,i+1,1);\n  ELSE piece:=substr(original,i+1,width); END IF;\n  IF octet_length(chunk)+octet_length(piece)>65536 THEN\n   chunks:=array_append(chunks,chunk);chunk:=decode('','hex');\n  END IF;\n  chunk:=chunk||piece;i:=i+width;\n END LOOP;\n IF octet_length(chunk)+1>65536 THEN chunks:=array_append(chunks,chunk);chunk:=decode('','hex'); END IF;\n chunks:=array_append(chunks,chunk||decode('22','hex'));\n SELECT string_agg(value,decode('','hex') ORDER BY ordinal) INTO output\n  FROM unnest(chunks) WITH ORDINALITY AS c(value,ordinal);\n IF octet_length(output)<>expected THEN RAISE EXCEPTION 'complete scalar byte parity required' USING ERRCODE='55000'; END IF;\n RETURN output;\nEND;\n"
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      ]
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "defaction": {
+                              "kind": "string",
+                              "value": "DEFELEM_UNSPEC"
+                            },
+                            "location": {
+                              "kind": "number",
+                              "value": "246"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "path": "/stmts/1/stmt",
+        "nativeStatement": {
+          "kind": "object",
+          "members": {
+            "GrantStmt": {
+              "kind": "object",
+              "members": {
+                "targtype": {
+                  "kind": "string",
+                  "value": "ACL_TARGET_OBJECT"
+                },
+                "objtype": {
+                  "kind": "string",
+                  "value": "OBJECT_FUNCTION"
+                },
+                "objects": {
+                  "kind": "array",
+                  "items": [
+                    {
+                      "kind": "object",
+                      "members": {
+                        "ObjectWithArgs": {
+                          "kind": "object",
+                          "members": {
+                            "objname": {
+                              "kind": "array",
+                              "items": [
+                                {
+                                  "kind": "object",
+                                  "members": {
+                                    "String": {
+                                      "kind": "object",
+                                      "members": {
+                                        "sval": {
+                                          "kind": "string",
+                                          "value": "truss"
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                {
+                                  "kind": "object",
+                                  "members": {
+                                    "String": {
+                                      "kind": "object",
+                                      "members": {
+                                        "sval": {
+                                          "kind": "string",
+                                          "value": "runtime_report_scalar_bytes_v0_2"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              ]
+                            },
+                            "objargs": {
+                              "kind": "array",
+                              "items": [
+                                {
+                                  "kind": "object",
+                                  "members": {
+                                    "TypeName": {
+                                      "kind": "object",
+                                      "members": {
+                                        "names": {
+                                          "kind": "array",
+                                          "items": [
+                                            {
+                                              "kind": "object",
+                                              "members": {
+                                                "String": {
+                                                  "kind": "object",
+                                                  "members": {
+                                                    "sval": {
+                                                      "kind": "string",
+                                                      "value": "bytea"
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          ]
+                                        },
+                                        "typemod": {
+                                          "kind": "number",
+                                          "value": "-1"
+                                        },
+                                        "location": {
+                                          "kind": "number",
+                                          "value": "2707"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              ]
+                            },
+                            "objfuncargs": {
+                              "kind": "array",
+                              "items": [
+                                {
+                                  "kind": "object",
+                                  "members": {
+                                    "FunctionParameter": {
+                                      "kind": "object",
+                                      "members": {
+                                        "argType": {
+                                          "kind": "object",
+                                          "members": {
+                                            "names": {
+                                              "kind": "array",
+                                              "items": [
+                                                {
+                                                  "kind": "object",
+                                                  "members": {
+                                                    "String": {
+                                                      "kind": "object",
+                                                      "members": {
+                                                        "sval": {
+                                                          "kind": "string",
+                                                          "value": "bytea"
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              ]
+                                            },
+                                            "typemod": {
+                                              "kind": "number",
+                                              "value": "-1"
+                                            },
+                                            "location": {
+                                              "kind": "number",
+                                              "value": "2707"
+                                            }
+                                          }
+                                        },
+                                        "mode": {
+                                          "kind": "string",
+                                          "value": "FUNC_PARAM_DEFAULT"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "grantees": {
+                  "kind": "array",
+                  "items": [
+                    {
+                      "kind": "object",
+                      "members": {
+                        "RoleSpec": {
+                          "kind": "object",
+                          "members": {
+                            "roletype": {
+                              "kind": "string",
+                              "value": "ROLESPEC_PUBLIC"
+                            },
+                            "location": {
+                              "kind": "number",
+                              "value": "2719"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "behavior": {
+                  "kind": "string",
+                  "value": "DROP_RESTRICT"
+                }
+              }
+            }
+          }
+        }
+      }
+    ],
+    "diagnostics": [
+      {
+        "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+        "path": "",
+        "severity": "warning",
+        "message": "Raw syntax is not catalog resolution, SQL execution, permissions or server-state validation"
+      },
+      {
+        "code": "POSTGRESQL_DDL_UNRESOLVED",
+        "path": "/stmts/0/stmt",
+        "severity": "warning",
+        "message": "Statement is retained without declaration extraction or execution"
+      },
+      {
+        "code": "POSTGRESQL_DDL_UNRESOLVED",
+        "path": "/stmts/1/stmt",
+        "severity": "warning",
+        "message": "Statement is retained without declaration extraction or execution"
+      }
+    ]
+  },
+  "checkerSha256": "a3237e21214825671c73a879faa66c3fa22e739879e9603df4f0498e34bc0f30",
+  "scope": "Existing owner parser/native source archive, JSON reload and stable export only. Native scalar receipt remains separate; no complete required inventory, resource profile, routine grants or report installation qualification."
+}

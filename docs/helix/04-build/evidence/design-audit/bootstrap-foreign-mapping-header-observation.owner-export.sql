@@ -1,0 +1,1 @@
+SELECT c.tableoid::pg_catalog.text AS catalog_class_oid, c.oid::pg_catalog.text AS mapping_oid, c.umuser::pg_catalog.text AS local_role_oid, c.umserver::pg_catalog.text AS server_oid FROM pg_catalog.pg_user_mapping c WHERE c.umserver = ANY($1::pg_catalog.oid[]) ORDER BY c.umserver, c.oid

@@ -1,0 +1,47 @@
+{
+  "scope": "read-only consumer/Truss contract mismatch; proposed owner correction only",
+  "sources": [
+    {
+      "path": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/corpus.json",
+      "sha256": "8997812ea8f73d5e7ebe873809f2e812e3815206282f6d807b5ade1a21e93a09"
+    },
+    {
+      "path": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/fakes.py",
+      "sha256": "098e139891d2d817909ed396159895089b90451ed69f6c23d0a3f19ccf01590a"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/receipt-position-and-reached.proposal.md",
+      "sha256": "248ce94dca38b14cafdfbfd5dc23abbfb0b731a8d85b02a7da923d52152638e3"
+    }
+  ],
+  "originalCase": {
+    "id": "freshness.unissued-token-is-not-reached-by-a-replica",
+    "tags": [
+      "replica"
+    ],
+    "covers": [
+      "at-least"
+    ],
+    "description": "a replica has not reached a token it never saw issued",
+    "fixture": "basic",
+    "steps": [
+      {
+        "op": "reached",
+        "token": "$foreign",
+        "expect": {
+          "value": false
+        }
+      },
+      {
+        "op": "reached",
+        "token": "garbage",
+        "expect": {
+          "value": false
+        }
+      }
+    ]
+  },
+  "originalForeignToken": "fake:999999",
+  "mismatch": "Original consumer expects false without valid issued receipt and qualified exclusion; Truss cannot map unavailable or malformed input to available false.",
+  "adoption": "unresolved; no consumer change or native/public result qualification"
+}

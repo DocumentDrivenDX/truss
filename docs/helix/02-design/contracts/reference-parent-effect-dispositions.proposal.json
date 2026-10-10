@@ -1,0 +1,412 @@
+{
+  "scope": "Proposed explicit constraint/creator-index dispositions for seven reviewed original parent units; no automatic source/native identity adoption",
+  "sourcePins": [
+    {
+      "path": "04-build/evidence/design-audit/parent-constraint-source-comparisons.json",
+      "sha256": "3f27c283d1774ec379bb521b74da734d0542d7fe55aeecf05b17ff86ad06b499"
+    },
+    {
+      "path": "02-design/contracts/reference-key-parent-effect-dispositions.proposal.json",
+      "sha256": "2503040f757a1afe9d1672501e89b661723a541a49030a63bd1c08c58dddb5b5"
+    }
+  ],
+  "entries": [
+    {
+      "originalParentId": "truss.layout.table.type_def",
+      "originalEffectId": "truss.constraint.fe9f3a11-85a6-4669-9d5e-fc39eb86859c",
+      "objectKind": "constraint",
+      "proposedDisposition": "retain_candidate_after_same_parent_context_and_full_native_effect_admission",
+      "reason": "One equal declared node with the same declaring-column context; referenced owner/type/operator/collation and native identity remain required",
+      "sourceCandidateLocators": [
+        "12:/tableElts/1/ColumnDef/constraints/0/Constraint"
+      ],
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.type_def",
+      "originalEffectId": "truss.constraint.59f14ba3-7b20-4e8f-9836-f0a1741b99ea",
+      "objectKind": "constraint",
+      "proposedDisposition": "retain_candidate_after_same_parent_context_and_full_native_effect_admission",
+      "reason": "One equal declared node with the same declaring-column context; referenced owner/type/operator/collation and native identity remain required",
+      "sourceCandidateLocators": [
+        "12:/tableElts/6/ColumnDef/constraints/1/Constraint"
+      ],
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.type_def",
+      "originalEffectId": "truss.constraint.f7835db6-3e7a-479c-9cd9-c86c5b0c1081",
+      "objectKind": "constraint",
+      "proposedDisposition": "retain_candidate_after_same_parent_context_and_full_native_effect_admission",
+      "reason": "One equal declared node with the same declaring-column context; referenced owner/type/operator/collation and native identity remain required",
+      "sourceCandidateLocators": [
+        "12:/tableElts/8/ColumnDef/constraints/0/Constraint"
+      ],
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.type_def",
+      "originalEffectId": "truss.constraint.f1b9b1ca-c6b3-405a-8142-3461059828bf",
+      "objectKind": "constraint",
+      "proposedDisposition": "retire_after_qualified_lineage_enforcement_and_conversion",
+      "reason": "Original module/element uniqueness is removed; route indexes cannot inherit unique constraint identity or guarantee",
+      "sourceCandidateLocators": [],
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.type_def",
+      "originalEffectId": "truss.constraint.70a30731-a4a1-4ef6-8e40-6fed3c15830e",
+      "objectKind": "constraint",
+      "proposedDisposition": "retain_candidate_after_same_parent_context_and_full_native_effect_admission",
+      "reason": "One equal declared node with the same declaring-column context; referenced owner/type/operator/collation and native identity remain required",
+      "sourceCandidateLocators": [
+        "12:/tableElts/14/Constraint"
+      ],
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.rel_def",
+      "originalEffectId": "truss.constraint.cf210b68-0b81-4977-bd36-03e60c8a727a",
+      "objectKind": "constraint",
+      "proposedDisposition": "retain_candidate_after_same_parent_context_and_full_native_effect_admission",
+      "reason": "One equal declared node with the same declaring-column context; referenced owner/type/operator/collation and native identity remain required",
+      "sourceCandidateLocators": [
+        "15:/tableElts/1/ColumnDef/constraints/0/Constraint"
+      ],
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.rel_def",
+      "originalEffectId": "truss.constraint.6ea802fb-38d9-4589-baef-0e0edaa48eb9",
+      "objectKind": "constraint",
+      "proposedDisposition": "retain_candidate_after_same_parent_context_and_full_native_effect_admission",
+      "reason": "One equal declared node with the same declaring-column context; referenced owner/type/operator/collation and native identity remain required",
+      "sourceCandidateLocators": [
+        "15:/tableElts/13/ColumnDef/constraints/0/Constraint"
+      ],
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.rel_def",
+      "originalEffectId": "truss.constraint.9b59076c-9fdf-45ab-8dbc-222c8bda5961",
+      "objectKind": "constraint",
+      "proposedDisposition": "retain_candidate_after_same_parent_context_and_full_native_effect_admission",
+      "reason": "One equal declared node with the same declaring-column context; referenced owner/type/operator/collation and native identity remain required",
+      "sourceCandidateLocators": [
+        "15:/tableElts/15/ColumnDef/constraints/1/Constraint"
+      ],
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.rel_def",
+      "originalEffectId": "truss.constraint.6c5c5591-4726-4cd3-8451-7040a054de94",
+      "objectKind": "constraint",
+      "proposedDisposition": "retain_candidate_after_same_parent_context_and_full_native_effect_admission",
+      "reason": "One equal declared node with the same declaring-column context; referenced owner/type/operator/collation and native identity remain required",
+      "sourceCandidateLocators": [
+        "15:/tableElts/17/ColumnDef/constraints/0/Constraint"
+      ],
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.rel_def",
+      "originalEffectId": "truss.constraint.a291e953-d30f-4494-8e24-ea75abc41561",
+      "objectKind": "constraint",
+      "proposedDisposition": "retire_after_qualified_lineage_enforcement_and_conversion",
+      "reason": "Original module/element uniqueness is removed; route indexes cannot inherit unique constraint identity or guarantee",
+      "sourceCandidateLocators": [],
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.rel_def",
+      "originalEffectId": "truss.constraint.7372458d-3d38-4ee5-87ca-ba0030304c9a",
+      "objectKind": "constraint",
+      "proposedDisposition": "retain_candidate_after_same_parent_context_and_full_native_effect_admission",
+      "reason": "One equal declared node with the same declaring-column context; referenced owner/type/operator/collation and native identity remain required",
+      "sourceCandidateLocators": [
+        "15:/tableElts/18/Constraint"
+      ],
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.module_access",
+      "originalEffectId": "truss.constraint.5a000bee-cacf-4262-8a50-ca421324220a",
+      "objectKind": "constraint",
+      "proposedDisposition": "retire_and_replace_after_document_qualified_policy_conversion",
+      "reason": "Inline module-only primary key becomes qualified document/module key; ambiguous legacy grants refuse conversion",
+      "sourceCandidateLocators": [],
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.module_access",
+      "originalEffectId": "truss.constraint.43653790-13f4-43d9-86ac-f5181f2e654e",
+      "objectKind": "constraint",
+      "proposedDisposition": "retain_candidate_after_same_parent_context_and_full_native_effect_admission",
+      "reason": "One equal declared node with the same declaring-column context; referenced owner/type/operator/collation and native identity remain required",
+      "sourceCandidateLocators": [
+        "5:/tableElts/5/Constraint"
+      ],
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.schema_rev",
+      "originalEffectId": "truss.constraint.183fbc5a-dc2f-4e2b-89b3-343448c55a41",
+      "objectKind": "constraint",
+      "proposedDisposition": "retain_candidate_after_same_parent_context_and_full_native_effect_admission",
+      "reason": "One equal declared node with the same declaring-column context; referenced owner/type/operator/collation and native identity remain required",
+      "sourceCandidateLocators": [
+        "6:/tableElts/0/ColumnDef/constraints/0/Constraint"
+      ],
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.schema_rev",
+      "originalEffectId": "truss.constraint.1134f9d2-cb67-4539-bd71-f840abb7217a",
+      "objectKind": "constraint",
+      "proposedDisposition": "retain_candidate_after_same_parent_context_and_full_native_effect_admission",
+      "reason": "One equal declared node with the same declaring-column context; referenced owner/type/operator/collation and native identity remain required",
+      "sourceCandidateLocators": [
+        "6:/tableElts/3/Constraint"
+      ],
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.journal",
+      "originalEffectId": "truss.constraint.3d962ae6-8209-4ce6-b18f-1b1a62a48ed7",
+      "objectKind": "constraint",
+      "proposedDisposition": "retain_candidate_after_same_parent_context_and_full_native_effect_admission",
+      "reason": "One equal declared node with the same declaring-column context; referenced owner/type/operator/collation and native identity remain required",
+      "sourceCandidateLocators": [
+        "30:/tableElts/3/ColumnDef/constraints/1/Constraint"
+      ],
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.journal",
+      "originalEffectId": "truss.constraint.9270d7e4-e524-40f8-b53e-f123908a4178",
+      "objectKind": "constraint",
+      "proposedDisposition": "retire_and_replace_after_complete_history_profile_conversion",
+      "reason": "Journal op check adds metadata; old rows cannot gain fabricated complete metadata/history meaning",
+      "sourceCandidateLocators": [],
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.journal",
+      "originalEffectId": "truss.constraint.669e2768-29e0-4972-a313-69d016b7114e",
+      "objectKind": "constraint",
+      "proposedDisposition": "retain_candidate_after_same_parent_context_and_full_native_effect_admission",
+      "reason": "One equal declared node with the same declaring-column context; referenced owner/type/operator/collation and native identity remain required",
+      "sourceCandidateLocators": [
+        "30:/tableElts/13/Constraint"
+      ],
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.journal",
+      "originalEffectId": "truss.constraint.7f1455ac-cc95-49f4-b9a8-03097bda102c",
+      "objectKind": "constraint",
+      "proposedDisposition": "retain_candidate_after_same_parent_context_and_full_native_effect_admission",
+      "reason": "One equal declared node with the same declaring-column context; referenced owner/type/operator/collation and native identity remain required",
+      "sourceCandidateLocators": [
+        "30:/tableElts/14/Constraint"
+      ],
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.key_tombstone",
+      "originalEffectId": "truss.constraint.3a6e8755-efd2-46b6-8f1f-b5523be3648b",
+      "objectKind": "constraint",
+      "proposedDisposition": "retire_and_replace_after_object_reservation_conversion",
+      "reason": "Original o/e check is narrowed to e; changed effect cannot retain the old definition by name",
+      "sourceCandidateLocators": [],
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.key_tombstone",
+      "originalEffectId": "truss.constraint.716d5d24-d8d3-46cd-80e6-f1db6e0101e9",
+      "objectKind": "constraint",
+      "proposedDisposition": "retain_candidate_only_after_same_parent_and_full_effect_admission",
+      "reason": "Unchanged source effect remains a candidate; original parent, creator and complete native dependency correspondence must be admitted",
+      "sourceCandidateLocators": [
+        "25:/tableElts/7/Constraint"
+      ],
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.key_tombstone",
+      "originalEffectId": "truss.constraint.55e67395-d3e3-4be4-a767-556cb67371a8",
+      "objectKind": "constraint",
+      "proposedDisposition": "retain_candidate_only_after_same_parent_and_full_effect_admission",
+      "reason": "Unchanged source effect remains a candidate; original parent, creator and complete native dependency correspondence must be admitted",
+      "sourceCandidateLocators": [
+        "25:/tableElts/8/Constraint"
+      ],
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.object_key",
+      "originalEffectId": "truss.constraint.a558a095-efdd-4914-83f5-8ae9cbba2fde",
+      "objectKind": "constraint",
+      "proposedDisposition": "retire_after_lossless_conversion",
+      "reason": "Original parent is removed and replacement stores have distinct identities",
+      "sourceCandidateLocators": [],
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.object_key",
+      "originalEffectId": "truss.constraint.9ac70487-ba0a-4381-90e2-dd35f4d35107",
+      "objectKind": "constraint",
+      "proposedDisposition": "retire_after_lossless_conversion",
+      "reason": "Original parent is removed and replacement stores have distinct identities",
+      "sourceCandidateLocators": [],
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.object_key",
+      "originalEffectId": "truss.constraint.196c2f8e-7a6d-4554-9525-d865916c8bbe",
+      "objectKind": "constraint",
+      "proposedDisposition": "retire_after_lossless_conversion",
+      "reason": "Original parent is removed and replacement stores have distinct identities",
+      "sourceCandidateLocators": [],
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.object_key",
+      "originalEffectId": "truss.constraint.bddd1293-fe8b-467f-ace1-242de802d14b",
+      "objectKind": "constraint",
+      "proposedDisposition": "retire_after_lossless_conversion",
+      "reason": "Original parent is removed and replacement stores have distinct identities",
+      "sourceCandidateLocators": [],
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.type_def",
+      "originalEffectId": "truss.supporting-index.887ebc8c-2ef8-4dee-8475-eef6a223885c",
+      "objectKind": "supporting-index",
+      "creatingConstraintId": "truss.constraint.fe9f3a11-85a6-4669-9d5e-fc39eb86859c",
+      "proposedDisposition": "retain_candidate_only_after_original_creator_and_actual_index_admission",
+      "reason": "Original creator provenance is retained; constraint comparison supplies no observed index definition or target physical identity",
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.type_def",
+      "originalEffectId": "truss.supporting-index.f190859a-372a-4f71-b640-ca2b1505a599",
+      "objectKind": "supporting-index",
+      "creatingConstraintId": "truss.constraint.f1b9b1ca-c6b3-405a-8142-3461059828bf",
+      "proposedDisposition": "retire_with_original_creator_after_complete_conversion",
+      "reason": "Original creator provenance is retained; constraint comparison supplies no observed index definition or target physical identity",
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.rel_def",
+      "originalEffectId": "truss.supporting-index.4c672d95-f65b-4a5b-a85d-046e53f9441b",
+      "objectKind": "supporting-index",
+      "creatingConstraintId": "truss.constraint.cf210b68-0b81-4977-bd36-03e60c8a727a",
+      "proposedDisposition": "retain_candidate_only_after_original_creator_and_actual_index_admission",
+      "reason": "Original creator provenance is retained; constraint comparison supplies no observed index definition or target physical identity",
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.rel_def",
+      "originalEffectId": "truss.supporting-index.b0c92a70-b276-423b-a7a7-6b879b45fdcb",
+      "objectKind": "supporting-index",
+      "creatingConstraintId": "truss.constraint.a291e953-d30f-4494-8e24-ea75abc41561",
+      "proposedDisposition": "retire_with_original_creator_after_complete_conversion",
+      "reason": "Original creator provenance is retained; constraint comparison supplies no observed index definition or target physical identity",
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.module_access",
+      "originalEffectId": "truss.supporting-index.105ff4d6-0d2c-4fea-a0aa-721981564dc5",
+      "objectKind": "supporting-index",
+      "creatingConstraintId": "truss.constraint.5a000bee-cacf-4262-8a50-ca421324220a",
+      "proposedDisposition": "retire_with_original_creator_after_complete_conversion",
+      "reason": "Original creator provenance is retained; constraint comparison supplies no observed index definition or target physical identity",
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.schema_rev",
+      "originalEffectId": "truss.supporting-index.fd2fb8ce-5438-4d45-9fec-420cd0c07cb9",
+      "objectKind": "supporting-index",
+      "creatingConstraintId": "truss.constraint.183fbc5a-dc2f-4e2b-89b3-343448c55a41",
+      "proposedDisposition": "retain_candidate_only_after_original_creator_and_actual_index_admission",
+      "reason": "Original creator provenance is retained; constraint comparison supplies no observed index definition or target physical identity",
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.journal",
+      "originalEffectId": "truss.supporting-index.2aacd34e-db49-4799-be13-7a82609a56dd",
+      "objectKind": "supporting-index",
+      "creatingConstraintId": "truss.constraint.669e2768-29e0-4972-a313-69d016b7114e",
+      "proposedDisposition": "retain_candidate_only_after_original_creator_and_actual_index_admission",
+      "reason": "Original creator provenance is retained; constraint comparison supplies no observed index definition or target physical identity",
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.key_tombstone",
+      "originalEffectId": "truss.supporting-index.6c08e1b7-5c7c-4a00-b144-7912eb165096",
+      "objectKind": "supporting-index",
+      "creatingConstraintId": "truss.constraint.716d5d24-d8d3-46cd-80e6-f1db6e0101e9",
+      "proposedDisposition": "retain_candidate_only_after_same_parent_and_full_effect_admission",
+      "reason": "Original creator provenance is retained; constraint comparison supplies no observed index definition or target physical identity",
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.object_key",
+      "originalEffectId": "truss.supporting-index.9e411ef2-f7e9-4129-bf1f-809f907988ac",
+      "objectKind": "supporting-index",
+      "creatingConstraintId": "truss.constraint.a558a095-efdd-4914-83f5-8ae9cbba2fde",
+      "proposedDisposition": "retire_after_lossless_conversion",
+      "reason": "Original creator provenance is retained; constraint comparison supplies no observed index definition or target physical identity",
+      "selectedIdentity": null,
+      "adopted": false
+    },
+    {
+      "originalParentId": "truss.layout.table.object_key",
+      "originalEffectId": "truss.supporting-index.8343d5ee-d65d-47d1-9162-4f1e324b1078",
+      "objectKind": "supporting-index",
+      "creatingConstraintId": "truss.constraint.9ac70487-ba0a-4381-90e2-dd35f4d35107",
+      "proposedDisposition": "retire_after_lossless_conversion",
+      "reason": "Original creator provenance is retained; constraint comparison supplies no observed index definition or target physical identity",
+      "selectedIdentity": null,
+      "adopted": false
+    }
+  ],
+  "nativeQualified": false,
+  "installerReady": false,
+  "requiredReview": "Complete original parent/creator/reference/native source/dependency/security and populated data/history/authority conversion correspondence before applying any disposition. New target identities are separately authored."
+}

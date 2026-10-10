@@ -1,0 +1,58 @@
+-- CONTRACT-008: PostgreSQL 17 raw column observation proposal, not qualification.
+-- $1 is the admitted exact namespace name; bind it as text, never interpolate SQL.
+-- Caller owns the protected observation cut and bounded transport/row/byte budgets.
+-- OIDs are raw local addresses, not stable physical identities or canonical meaning.
+SELECT n.nspname AS schema_name,
+       c.relname AS relation_name,
+       c.relkind::text AS relation_kind,
+       c.oid::text AS relation_oid,
+       a.attnum::text AS ordinal,
+       a.attname AS column_name,
+       a.attisdropped AS is_dropped,
+       a.atttypid::text AS type_oid,
+       tn.nspname AS type_schema,
+       t.typname AS type_name,
+       a.atttypmod::text AS type_modifier,
+       a.attndims::text AS declared_dimensions,
+       a.attnotnull AS not_null,
+       a.atthasdef AS has_expression,
+       a.attidentity::text AS identity_mode,
+       a.attgenerated::text AS generation_mode,
+       a.attcollation::text AS collation_oid,
+       cn.nspname AS collation_schema,
+       co.collname AS collation_name,
+       a.attislocal AS is_local,
+       a.attinhcount::text AS inheritance_count,
+       a.attstorage::text AS storage_mode,
+       a.attcompression::text AS compression_mode,
+       a.atthasmissing AS has_missing_value,
+       a.attmissingval::text AS missing_value_display,
+       pg_catalog.array_dims(a.attmissingval) AS missing_value_native_dimensions,
+       a.attacl::text AS column_acl_display,
+       pg_catalog.array_dims(a.attacl) AS column_acl_native_dimensions,
+       a.attoptions AS attribute_options,
+       a.attoptions::pg_catalog.text AS attribute_options_native_text,
+       pg_catalog.array_dims(a.attoptions) AS attribute_options_native_dimensions,
+       a.attfdwoptions AS foreign_options,
+       a.attfdwoptions::pg_catalog.text AS foreign_options_native_text,
+       pg_catalog.array_dims(a.attfdwoptions) AS foreign_options_native_dimensions,
+       d.oid::text AS expression_oid,
+       d.adbin::text AS expression_native_tree,
+       pg_catalog.pg_get_expr(d.adbin, d.adrelid, false) AS expression_sql,
+       pg_catalog.to_jsonb(a)::pg_catalog.text AS original_attribute_row_json,
+       pg_catalog.to_jsonb(d)::pg_catalog.text AS original_default_row_json
+FROM pg_catalog.pg_namespace AS n
+JOIN pg_catalog.pg_class AS c ON c.relnamespace = n.oid
+JOIN pg_catalog.pg_attribute AS a ON a.attrelid = c.oid
+LEFT JOIN pg_catalog.pg_type AS t ON t.oid = a.atttypid
+LEFT JOIN pg_catalog.pg_namespace AS tn ON tn.oid = t.typnamespace
+LEFT JOIN pg_catalog.pg_collation AS co ON co.oid = a.attcollation
+LEFT JOIN pg_catalog.pg_namespace AS cn ON cn.oid = co.collnamespace
+LEFT JOIN pg_catalog.pg_attrdef AS d
+       ON d.adrelid = a.attrelid AND d.adnum = a.attnum
+WHERE n.nspname = $1::pg_catalog.text
+ORDER BY c.oid, a.attnum;
+-- No expected-manifest join, kind filter, attnum > 0 or dropped-column exclusion.
+-- Preserve rows before classifying table/index/system/internal/dropped attributes.
+-- Display forms above are evidence only: ACL and missing values need native codecs.
+-- Source this file unchanged in the admitted collector procedure artifact.

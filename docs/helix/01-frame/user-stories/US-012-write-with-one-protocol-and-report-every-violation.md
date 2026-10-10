@@ -29,7 +29,7 @@ ddx:
 
 ## Context
 
-The protocol: check the catalog head, lock the target, check the expected version, validate, apply, journal, commit.
+The protocol: admit the original catalog/configuration/authority context, lock the target and required invariant scopes, check the expected version, validate, apply and journal, then finalize the operation. Only an engine-owned outer transaction commits here; an embedded caller-owned operation returns pending under its original live transaction and never commits the host transaction. Complete validation reports every applicable violation under the admitted profile. A resource limit or incomplete validator/native observation cannot turn a partial diagnostic prefix into a complete invalid result; the original failure/containment contract applies.
 
 ## Walkthrough
 
@@ -49,7 +49,7 @@ The protocol: check the catalog head, lock the target, check the expected versio
 ## Edge Cases
 
 - **Unknown values**: retained and reported, not an error.
-- **Deadlock**: reported as retry; nothing changed.
+- **Deadlock**: retry advice follows confirmed containment and transaction usability. In a caller-owned transaction, a contained operation failure preserves earlier host work; unresolved termination cannot claim nothing changed, expose a reusable handle or automatically rerun the host callback.
 
 ## Test Scenarios
 

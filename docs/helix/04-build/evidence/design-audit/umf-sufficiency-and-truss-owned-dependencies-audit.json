@@ -1,0 +1,40 @@
+{
+  "scope": "Current architecture, implementation sequence and decision queue only; historical notes are not erased or treated as current upstream prerequisites",
+  "ownerDirection": "Existing UMF is sufficient; no additional UMF capability by default",
+  "inputs": [
+    {
+      "path": "docs/helix/02-design/architecture.md",
+      "sha256": "5ae2694d75c60415a7ce51856a66c488e31350066b5e3c5c809edf29347ce1c7"
+    },
+    {
+      "path": "docs/helix/04-build/implementation-plan.md",
+      "sha256": "e2c9714229b52af675a666bc90addb48b1d6305c9e85934f25709b5415c35025"
+    },
+    {
+      "path": "docs/helix/04-build/design-decision-queue.md",
+      "sha256": "f0aba6e79701b2309f308a6680cab69f50398232e0b29412cc013dde9e574ffc"
+    }
+  ],
+  "currentResolutionEvidence": [
+    {
+      "path": "docs/helix/04-build/design-decision-queue.md",
+      "heading": "Current owner direction: UMF is sufficient"
+    },
+    {
+      "path": "docs/helix/04-build/design-decision-queue.md",
+      "heading": "Design closure versus build qualification"
+    },
+    {
+      "path": "docs/helix/04-build/design-decision-queue.md",
+      "heading": "Pending allocation durability interpretation"
+    }
+  ],
+  "remainingResponsibility": {
+    "truss": "Select existing API/source tuple; compose layout; specify and qualify native inventory, lifecycle, persistence, codecs, authority and recovery",
+    "weft": "Compiler/backend/decoder semantics and joint adoption of the exact Truss mapping bridge"
+  },
+  "pendingLifecycleDecision": "Same authored identity after retirement: reactivation with old ID versus terminal retirement and distinct authored incarnation; neither accepted",
+  "pendingAllocationDecision": "FR-15 pending ID durability: separately registered durable allocator versus governing requirement clarification; neither accepted",
+  "nativeSupportClaim": false,
+  "wholeGoalComplete": false
+}

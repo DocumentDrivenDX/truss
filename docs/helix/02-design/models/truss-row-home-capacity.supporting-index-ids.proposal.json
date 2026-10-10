@@ -1,0 +1,26 @@
+{
+  "profile": "truss-row-home-supporting-index-allocation/0.1.0",
+  "status": "unadopted_candidate",
+  "complete": false,
+  "sourceAllocationPath": "docs/helix/02-design/models/truss-row-home-capacity.physical-ids.proposal.json",
+  "sourceAllocationSha256": "76703263ed025c8b895e608068f525562e33468c9c3a4d19d4345048ad01d9e4",
+  "scope": "Capacity-ledger original primary-key index effect only; native name/definition/dependency unresolved.",
+  "entries": [
+    {
+      "entryId": "truss.row-home.supporting-index.row_home_capacity.singleton_id.constr_primary",
+      "objectKind": "supporting-index",
+      "parentId": "truss.row-home.table.row_home_capacity",
+      "creatingConstraintId": "truss.row-home.constraint.row_home_capacity.singleton_id.constr_primary",
+      "nativeBinding": {
+        "state": "unresolved"
+      },
+      "nativeName": null,
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/row-home-capacity-v0.1.proposal.umf.json",
+        "modelSha256": "98066d3397e138e1e4e2e86ffde784bd536f4c433053b90aa99d5b01e55d751d",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef/members/constraints/items/0/members/Constraint"
+      },
+      "sourceDisposition": "implicit-native-effect-of-original-primary-or-unique-constraint"
+    }
+  ]
+}

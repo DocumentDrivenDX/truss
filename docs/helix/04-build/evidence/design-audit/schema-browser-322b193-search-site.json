@@ -1,0 +1,20 @@
+{
+  "browser": "153.0.8010.12",
+  "ownerRevision": "322b193cef7c940d07b741860cf0170272628868",
+  "definitions": 532,
+  "checks": [
+    "Hugo Model page embeds working owner browser",
+    "current structural model validates",
+    "prop_def deep link and declaration_module field navigation",
+    "download is byte-identical UTF-8 source",
+    "epoch registry and predecessor columns browse correctly",
+    "retained native source download is byte-exact",
+    "configuration capture columns browse and adjunct download is byte-exact",
+    "migration receipt columns browse and adjunct download is byte-exact",
+    "migration core parent and both ordered FK field references navigate to exact qualified definitions",
+    "390px mobile browser has no horizontal page overflow",
+    "readable-label search resolves to exact source_epoch_registry definition",
+    "no browser errors"
+  ],
+  "scope": "Actual generated site under /truss/ in Chromium; structural inspection only, no deployment or native runtime qualification."
+}

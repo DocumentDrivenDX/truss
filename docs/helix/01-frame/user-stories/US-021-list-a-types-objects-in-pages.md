@@ -29,7 +29,7 @@ ddx:
 
 ## Context
 
-Without an index on `(type_id, id)` a small type took 1.2 to 1.6 ms to page (SPIKE-003).
+Without an index on `(type_id, id)` a small type took 1.2 to 1.6 ms to page (SPIKE-003). The 120-object acceptance fixture has stable authorized membership. Complete stable multi-page enumeration requires one caller-held repeatable-read snapshot or a stronger qualified profile; a continuation marker cannot recreate or extend a transaction. Each page is admitted under its declared consistency mode and current authorization before publication.
 
 ## Walkthrough
 
@@ -47,7 +47,7 @@ Without an index on `(type_id, id)` a small type took 1.2 to 1.6 ms to page (SPI
 
 ## Edge Cases
 
-- **Objects created during paging**: keyset paging neither repeats nor skips an object that existed throughout.
+- **Objects created during paging**: live READ COMMITTED continuation follows immutable ID boundaries. A continuously eligible object above the boundary is not skipped, but a late commit with a previously allocated lower ID can be missed. Stable membership requires the held-snapshot profile; expired snapshot custody refuses continuation.
 - **A type with no objects**: an empty page and no marker.
 
 ## Test Scenarios

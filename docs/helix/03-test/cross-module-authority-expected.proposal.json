@@ -1,0 +1,206 @@
+{
+  "scope": "Independent logical authority oracle for supported in-document relationship; no model/catalog/native role registration or execution evidence.",
+  "owners": {
+    "document": "cross-module-authority-fixture",
+    "relationshipModule": "links",
+    "sourceTypeModule": "sales",
+    "targetTypeModule": "billing"
+  },
+  "grantInterpretation": "Effective read authority includes an admitted writer grant; booleans represent effective authority after role and current-policy interpretation, not arbitrary module_access row flags. A relationship writer therefore has relationshipRead true; rows with write true/read false are inconsistent admission controls, not realizable ordinary role fixtures.",
+  "cases": [
+    {
+      "case": "XA-000-0",
+      "relationshipRead": false,
+      "sourceRead": false,
+      "targetRead": false,
+      "relationshipWrite": false,
+      "edgeVisible": false,
+      "creationPermitted": false,
+      "sourceObjectVisible": false,
+      "targetObjectVisible": false
+    },
+    {
+      "case": "XA-000-1",
+      "relationshipRead": false,
+      "sourceRead": false,
+      "targetRead": false,
+      "relationshipWrite": true,
+      "edgeVisible": false,
+      "creationPermitted": false,
+      "sourceObjectVisible": false,
+      "targetObjectVisible": false
+    },
+    {
+      "case": "XA-001-0",
+      "relationshipRead": true,
+      "sourceRead": false,
+      "targetRead": false,
+      "relationshipWrite": false,
+      "edgeVisible": false,
+      "creationPermitted": false,
+      "sourceObjectVisible": false,
+      "targetObjectVisible": false
+    },
+    {
+      "case": "XA-001-1",
+      "relationshipRead": true,
+      "sourceRead": false,
+      "targetRead": false,
+      "relationshipWrite": true,
+      "edgeVisible": false,
+      "creationPermitted": false,
+      "sourceObjectVisible": false,
+      "targetObjectVisible": false
+    },
+    {
+      "case": "XA-010-0",
+      "relationshipRead": false,
+      "sourceRead": true,
+      "targetRead": false,
+      "relationshipWrite": false,
+      "edgeVisible": false,
+      "creationPermitted": false,
+      "sourceObjectVisible": true,
+      "targetObjectVisible": false
+    },
+    {
+      "case": "XA-010-1",
+      "relationshipRead": false,
+      "sourceRead": true,
+      "targetRead": false,
+      "relationshipWrite": true,
+      "edgeVisible": false,
+      "creationPermitted": false,
+      "sourceObjectVisible": true,
+      "targetObjectVisible": false
+    },
+    {
+      "case": "XA-011-0",
+      "relationshipRead": true,
+      "sourceRead": true,
+      "targetRead": false,
+      "relationshipWrite": false,
+      "edgeVisible": false,
+      "creationPermitted": false,
+      "sourceObjectVisible": true,
+      "targetObjectVisible": false
+    },
+    {
+      "case": "XA-011-1",
+      "relationshipRead": true,
+      "sourceRead": true,
+      "targetRead": false,
+      "relationshipWrite": true,
+      "edgeVisible": false,
+      "creationPermitted": false,
+      "sourceObjectVisible": true,
+      "targetObjectVisible": false
+    },
+    {
+      "case": "XA-100-0",
+      "relationshipRead": false,
+      "sourceRead": false,
+      "targetRead": true,
+      "relationshipWrite": false,
+      "edgeVisible": false,
+      "creationPermitted": false,
+      "sourceObjectVisible": false,
+      "targetObjectVisible": true
+    },
+    {
+      "case": "XA-100-1",
+      "relationshipRead": false,
+      "sourceRead": false,
+      "targetRead": true,
+      "relationshipWrite": true,
+      "edgeVisible": false,
+      "creationPermitted": false,
+      "sourceObjectVisible": false,
+      "targetObjectVisible": true
+    },
+    {
+      "case": "XA-101-0",
+      "relationshipRead": true,
+      "sourceRead": false,
+      "targetRead": true,
+      "relationshipWrite": false,
+      "edgeVisible": false,
+      "creationPermitted": false,
+      "sourceObjectVisible": false,
+      "targetObjectVisible": true
+    },
+    {
+      "case": "XA-101-1",
+      "relationshipRead": true,
+      "sourceRead": false,
+      "targetRead": true,
+      "relationshipWrite": true,
+      "edgeVisible": false,
+      "creationPermitted": false,
+      "sourceObjectVisible": false,
+      "targetObjectVisible": true
+    },
+    {
+      "case": "XA-110-0",
+      "relationshipRead": false,
+      "sourceRead": true,
+      "targetRead": true,
+      "relationshipWrite": false,
+      "edgeVisible": false,
+      "creationPermitted": false,
+      "sourceObjectVisible": true,
+      "targetObjectVisible": true
+    },
+    {
+      "case": "XA-110-1",
+      "relationshipRead": false,
+      "sourceRead": true,
+      "targetRead": true,
+      "relationshipWrite": true,
+      "edgeVisible": false,
+      "creationPermitted": false,
+      "sourceObjectVisible": true,
+      "targetObjectVisible": true
+    },
+    {
+      "case": "XA-111-0",
+      "relationshipRead": true,
+      "sourceRead": true,
+      "targetRead": true,
+      "relationshipWrite": false,
+      "edgeVisible": true,
+      "creationPermitted": false,
+      "sourceObjectVisible": true,
+      "targetObjectVisible": true
+    },
+    {
+      "case": "XA-111-1",
+      "relationshipRead": true,
+      "sourceRead": true,
+      "targetRead": true,
+      "relationshipWrite": true,
+      "edgeVisible": true,
+      "creationPermitted": true,
+      "sourceObjectVisible": true,
+      "targetObjectVisible": true
+    }
+  ],
+  "inconsistentAdmissionCases": [
+    "XA-000-1",
+    "XA-010-1",
+    "XA-100-1",
+    "XA-110-1"
+  ],
+  "expectedInconsistentOutcome": "Refuse inconsistent authority evidence before native execution; do not materialize such a role configuration as valid.",
+  "requiredReadPaths": [
+    "direct declared SQL",
+    "lookup by edge ID",
+    "outgoing list",
+    "incoming list",
+    "Weft HAS_RELATED",
+    "Weft RELATED_KEYS"
+  ],
+  "hiddenEdgeMeaning": "No edge/target disclosure through the edge surface; independently authorized object reads retain their own visibility. Counts and traversal results must exclude hidden links according to their declared query semantics.",
+  "mutationRefusal": "No canonical edge, derived marker, source or journal effects after confirmed containment; unknown cleanup/outcome retains original recovery custody.",
+  "nativeQualified": false
+}

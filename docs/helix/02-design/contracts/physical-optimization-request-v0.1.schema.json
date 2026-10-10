@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:physical-optimization-request:0.1.0",
+  "title": "Draft supplied-scope physical optimization request",
+  "description": "Exact declaration/inventory/budget carrier; original administrative authority, native plan/ownership and unavoidable complete budget inventory require admission.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-physical-optimization/0.1.0"
+    },
+    "kind": {
+      "enum": [
+        "index",
+        "extended_statistics",
+        "typed_view"
+      ]
+    },
+    "declaration": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "declarationProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "expectedInstalledInventory": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "budget": {
+      "type": "object",
+      "properties": {
+        "profile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "maxIndexCount": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        },
+        "maxIndexBytes": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        }
+      },
+      "required": [
+        "profile",
+        "maxIndexCount",
+        "maxIndexBytes"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "kind",
+    "declaration",
+    "declarationProfile",
+    "expectedInstalledInventory",
+    "budget"
+  ],
+  "additionalProperties": false
+}

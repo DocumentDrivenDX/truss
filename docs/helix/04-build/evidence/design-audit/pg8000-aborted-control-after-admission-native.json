@@ -1,0 +1,88 @@
+{
+  "mode": "recovery",
+  "scope": "Actual completed native ErrorResponse/ReadyForQuery E followed by original local savepoint recovery or retained pre-fix counterexample; administrative fixture only",
+  "serverVersion": "16.15",
+  "driverCoreSha256": "cac1e50502901bcea3ddab588e0350149dd8fd771156ae1c531a2a04b3925e26",
+  "observations": [
+    {
+      "id": "original-native-error",
+      "expected": "22012",
+      "observed": "22012"
+    },
+    {
+      "id": "original-ready-aborted",
+      "expected": "5a0000000545",
+      "observed": "5a0000000545"
+    },
+    {
+      "id": "payload-account-closed-after-complete-native-error",
+      "expected": false,
+      "observed": false
+    },
+    {
+      "id": "rollback-is-first-native-submission",
+      "expected": "430000000d524f4c4c4241434b00",
+      "observed": "430000000d524f4c4c4241434b00"
+    },
+    {
+      "id": "ready-restored-before-release",
+      "expected": "5a0000000554",
+      "observed": "5a0000000554"
+    },
+    {
+      "id": "caller-work-preserved",
+      "expected": [
+        [
+          "37"
+        ]
+      ],
+      "observed": [
+        [
+          "37"
+        ]
+      ]
+    },
+    {
+      "id": "original-attempt-settled",
+      "expected": "rolled_back",
+      "observed": "rolled_back"
+    },
+    {
+      "id": "failed-attempt-ordinal-not-reused",
+      "expected": "1",
+      "observed": "1"
+    },
+    {
+      "id": "actual-xid-preserved",
+      "expected": true,
+      "observed": true
+    }
+  ],
+  "retainedAttempts": [
+    [
+      "0",
+      "730",
+      "SAVEPOINT truss_sp_00000000000000000000000000000000_1",
+      "rolled_back"
+    ],
+    [
+      "1",
+      "730",
+      "SAVEPOINT truss_sp_00000000000000000000000000000000_2",
+      "rolled_back"
+    ]
+  ],
+  "sourceSha256": {
+    "check_pg8000_aborted_control_native.py": "f9073a214df6ca06280c286fd1fb7c20bbbbfbaae053646049287193ff401cf0",
+    "pg8000_original_control_candidate.py": "d89c80a6ef94a77f4349368f68352ed6de94a2c7605a8cd9b74e754c27df27f2",
+    "pg8000_instance_candidate.py": "0e3a6fb3860e9f2315711cc44957e841f54640c18214955f57c87a3c6fd437de",
+    "pg8000_accounted_instance_candidate.py": "ad4415635d2643dbd8cb48b34c85621444f9240334d9b5f020b726a0b226ee68"
+  },
+  "driverPortQualified": false,
+  "limitations": [
+    "No original security admission or operation artifacts",
+    "No complete resource/cleanup reservation or native containment profile",
+    "No transport loss or cancellation qualification",
+    "Host exclusivity remains a premise; no installed/public API"
+  ]
+}

@@ -1,0 +1,122 @@
+{
+  "interfaceVersion": "truss-bootstrap-route-entry/0.1.0",
+  "routeIdentity": "pg17.aggregate.routine-adjunct/0.1.0",
+  "status": "unadopted; source pins only verified; native class/cut/transport/semantic producers unqualified",
+  "nativeClass": {
+    "namespace": "pg_catalog",
+    "relation": "pg_aggregate",
+    "classOid": "resolve from original target; never constant",
+    "storageScope": "database",
+    "subobjectNumber": "0",
+    "addressability": "No invented pg_aggregate object OID; task input and original identity use pg_proc aggfnoid parent"
+  },
+  "selector": "original pg_proc aggregate adjunct",
+  "artifacts": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-aggregate-observation-pg17.proposal.sql",
+      "sha256": "163a787fe9694b4b830f2b4aa5bae1a853928df064c9946ef55ce6ad8ce36cef"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-aggregate-observation-pg17.proposal.umf.json",
+      "sha256": "e20f904ba255d91fec1396cc6e4184e2e136b97ba1d0104133c96336099ad9d2"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/bootstrap-aggregate-observation.owner-export.sql",
+      "sha256": "03611b501c353fba1fd9e855b24b1f082a1caa312dae3cd305a695ec63a0044e"
+    }
+  ],
+  "parameterGrammar": {
+    "slot": "1",
+    "nativeType": "pg_catalog.oid[]",
+    "dimensions": "exactly one",
+    "lowerBound": "1",
+    "nullAllowed": false,
+    "nullItemsAllowed": false,
+    "uniqueItems": true,
+    "countInclusive": [
+      "1",
+      "256"
+    ],
+    "itemDomain": "canonical nonzero uint32 decimal text; actual pg_proc aggregate parent OID",
+    "encoder": "selected original canonical PostgreSQL array encoder; no JS numeric round trip"
+  },
+  "orderedColumns": [
+    "catalog_class_oid",
+    "aggfnoid_oid",
+    "aggtransfn_oid",
+    "aggfinalfn_oid",
+    "aggcombinefn_oid",
+    "aggserialfn_oid",
+    "aggdeserialfn_oid",
+    "aggmtransfn_oid",
+    "aggminvtransfn_oid",
+    "aggmfinalfn_oid",
+    "original_catalog_row_json"
+  ],
+  "coverage": "Exactly one original adjunct for each independently admitted aggregate-kind pg_proc parent; aggfnoid/projected/raw correspondence mandatory; missing/extra/duplicate refuses complete definition",
+  "requiredKnownFields": [
+    "aggfnoid",
+    "aggkind",
+    "aggnumdirectargs",
+    "aggtransfn",
+    "aggfinalfn",
+    "aggcombinefn",
+    "aggserialfn",
+    "aggdeserialfn",
+    "aggmtransfn",
+    "aggminvtransfn",
+    "aggmfinalfn",
+    "aggfinalextra",
+    "aggmfinalextra",
+    "aggfinalmodify",
+    "aggmfinalmodify",
+    "aggsortop",
+    "aggtranstype",
+    "aggtransspace",
+    "aggmtranstype",
+    "aggmtransspace",
+    "agginitval",
+    "aggminitval"
+  ],
+  "preservation": "Retain full exact returned row JSON text and every unknown extension member; lossless bounded selected native JSON decoder; no parse/stringify reconstruction",
+  "dependencyExtraction": {
+    "routines": "nonzero transition/final/combine/serialization/moving routines reach actual pg_proc; preserve optional zero facts and exact projected native OID correspondence",
+    "types": "aggtranstype and nonzero aggmtranstype actual pg_type under selected transition/moving meaning",
+    "operator": "nonzero aggsortop actual pg_operator; zero sentinel retained",
+    "parent": "aggfnoid actual pg_proc aggregate parent, not a fabricated pg_aggregate oid",
+    "semantics": "aggkind/direct-args/extra/finalmodify/moving/space/initval text/null facts retained; initializer text is not parsed/coerced through generic JSON or executed during observation",
+    "fieldClassification": {
+      "aggfnoid": "original projected aggregate parent routine OID; exact regproc/raw correspondence; no invented adjunct OID",
+      "aggkind": "exact n/o/h normal/ordered-set/hypothetical-set native kind",
+      "aggnumdirectargs": "exact native int2 count with parent input/variadic/kind correspondence",
+      "aggtransfn": "resolved original required transition routine with state/input/result meaning",
+      "aggfinalfn": "resolved original optional final routine or zero no-final meaning",
+      "aggcombinefn": "resolved original optional combine routine or zero no-combine meaning",
+      "aggserialfn": "resolved original optional state serializer or zero no-serializer meaning",
+      "aggdeserialfn": "resolved original optional state deserializer or zero no-deserializer meaning",
+      "aggmtransfn": "resolved original optional moving forward routine or zero no-moving meaning",
+      "aggminvtransfn": "resolved original optional moving inverse routine or zero no-inverse meaning",
+      "aggmfinalfn": "resolved original optional moving final routine or zero no-final meaning",
+      "aggfinalextra": "actual extra-dummy-argument invocation fact for normal final routine",
+      "aggmfinalextra": "actual extra-dummy-argument invocation fact for moving final routine",
+      "aggfinalmodify": "exact r/s/w final-state usage/mutation declaration; not behavior verification",
+      "aggmfinalmodify": "exact r/s/w moving-final state usage/mutation declaration",
+      "aggsortop": "resolved original optional sort operator or zero none",
+      "aggtranstype": "resolved original required transition-state type",
+      "aggtransspace": "exact native int32 estimated state bytes or zero native default estimate; not resource permit/bound",
+      "aggmtranstype": "resolved original moving state type or zero no-moving state",
+      "aggmtransspace": "exact native int32 moving state estimate or zero default; not resource bound",
+      "agginitval": "exact nullable external state initializer text; null initial state distinct from empty/text NULL",
+      "aggminitval": "exact nullable moving-state initializer text under moving-mode admission"
+    },
+    "canonicalProcedure": "CONTRACT-008 Aggregate semantic projection: original parent plus kind/direct inputs, complete normal/moving state/routine/sort definitions, final invocation/mutation flags and exact initializer/estimate declarations; behavior independently qualified"
+  },
+  "adjuncts": [
+    "complete original pg_proc parent signature/security/language/authority definition",
+    "all reached routine/type/operator and local dependency definitions",
+    "selected normal/ordered/hypothetical/moving aggregate native semantics"
+  ],
+  "resourceProfile": "truss-bootstrap-collector-resource/0.1.0",
+  "refusal": "Unsupported native language/body/aggregate/handler meaning or incomplete reached definition/authority refuses semantic completeness; observation invokes no routine, handler or initializer",
+  "resourceObligations": "Shared enclosing totals, complete original cut/authority and explicit pre-materialization/native-work permits; no independent per-route allowance"
+}

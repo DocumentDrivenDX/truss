@@ -1,0 +1,259 @@
+{
+  "scope": "Actual original invoker admission refusal under distinct definer owner and preservation of invoker context across read-only elevation; administrative grant/wrapper fixture only",
+  "serverVersion": "16.15",
+  "observations": [
+    {
+      "id": "original-actor-boundary",
+      "expected": [
+        "actor_probe",
+        "actor_probe",
+        "none"
+      ],
+      "observed": [
+        "actor_probe",
+        "actor_probe",
+        "none"
+      ]
+    },
+    {
+      "id": "nested-definer-admission-refusal",
+      "expected": "55000",
+      "observed": "55000"
+    },
+    {
+      "id": "refused-elevation-has-no-registry-effect",
+      "expected": [
+        [
+          0
+        ]
+      ],
+      "observed": [
+        [
+          0
+        ]
+      ]
+    },
+    {
+      "id": "invoker-original-actor-fields",
+      "expected": [
+        "actor_probe",
+        "actor_probe"
+      ],
+      "observed": [
+        "actor_probe",
+        "actor_probe"
+      ]
+    },
+    {
+      "id": "invoker-native-oid-correspondence",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "definer-person-owner-separation",
+      "expected": [
+        "actor_probe",
+        "integrity_probe",
+        "none"
+      ],
+      "observed": [
+        "actor_probe",
+        "integrity_probe",
+        "none"
+      ]
+    },
+    {
+      "id": "original-context-preserved-across-elevation",
+      "expected": "7b22786964223a2022373337222c20226f7264696e616c223a202231222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a20226163746f725f70726f6265222c20226261636b656e64506964223a20223930373034222c202273657373696f6e55736572223a20226163746f725f70726f6265222c20226163746f72526f6c654f6964223a20223137333530222c202273657373696f6e526f6c654f6964223a20223137333530222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e32227d",
+      "observed": "7b22786964223a2022373337222c20226f7264696e616c223a202231222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a20226163746f725f70726f6265222c20226261636b656e64506964223a20223930373034222c202273657373696f6e55736572223a20226163746f725f70726f6265222c20226163746f72526f6c654f6964223a20223137333530222c202273657373696f6e526f6c654f6964223a20223137333530222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e32227d"
+    },
+    {
+      "id": "acting-role-restored-after-wrapper",
+      "expected": [
+        "actor_probe",
+        "actor_probe",
+        "none"
+      ],
+      "observed": [
+        "actor_probe",
+        "actor_probe",
+        "none"
+      ]
+    },
+    {
+      "id": "actual-original-xid-preserved",
+      "expected": "737",
+      "observed": "737"
+    },
+    {
+      "id": "original-host-rollback-removes-registry",
+      "expected": [
+        [
+          0
+        ]
+      ],
+      "observed": [
+        [
+          0
+        ]
+      ]
+    },
+    {
+      "id": "asserted_origin-original-invoker-attributes",
+      "expected": [
+        false,
+        [
+          "search_path=pg_catalog, pg_temp"
+        ]
+      ],
+      "observed": [
+        false,
+        [
+          "search_path=pg_catalog, pg_temp"
+        ]
+      ]
+    },
+    {
+      "id": "asserted_origin-nested-definer-refusal",
+      "expected": "55000",
+      "observed": "55000"
+    },
+    {
+      "id": "asserted_origin-no-surviving-registry-effects",
+      "expected": [
+        [
+          0
+        ]
+      ],
+      "observed": [
+        [
+          0
+        ]
+      ]
+    },
+    {
+      "id": "asserted_origin-original-actor-restored",
+      "expected": [
+        "actor_probe",
+        "actor_probe",
+        "none"
+      ],
+      "observed": [
+        "actor_probe",
+        "actor_probe",
+        "none"
+      ]
+    },
+    {
+      "id": "epoch_context-original-invoker-attributes",
+      "expected": [
+        false,
+        [
+          "search_path=pg_catalog, pg_temp"
+        ]
+      ],
+      "observed": [
+        false,
+        [
+          "search_path=pg_catalog, pg_temp"
+        ]
+      ]
+    },
+    {
+      "id": "epoch_context-nested-definer-refusal",
+      "expected": "55000",
+      "observed": "55000"
+    },
+    {
+      "id": "epoch_context-no-surviving-registry-effects",
+      "expected": [
+        [
+          0
+        ]
+      ],
+      "observed": [
+        [
+          0
+        ]
+      ]
+    },
+    {
+      "id": "epoch_context-original-actor-restored",
+      "expected": [
+        "actor_probe",
+        "actor_probe",
+        "none"
+      ],
+      "observed": [
+        "actor_probe",
+        "actor_probe",
+        "none"
+      ]
+    },
+    {
+      "id": "configuration_context-original-invoker-attributes",
+      "expected": [
+        false,
+        [
+          "search_path=pg_catalog, pg_temp"
+        ]
+      ],
+      "observed": [
+        false,
+        [
+          "search_path=pg_catalog, pg_temp"
+        ]
+      ]
+    },
+    {
+      "id": "configuration_context-nested-definer-refusal",
+      "expected": "55000",
+      "observed": "55000"
+    },
+    {
+      "id": "configuration_context-no-surviving-registry-effects",
+      "expected": [
+        [
+          0
+        ]
+      ],
+      "observed": [
+        [
+          0
+        ]
+      ]
+    },
+    {
+      "id": "configuration_context-original-actor-restored",
+      "expected": [
+        "actor_probe",
+        "actor_probe",
+        "none"
+      ],
+      "observed": [
+        "actor_probe",
+        "actor_probe",
+        "none"
+      ]
+    }
+  ],
+  "sourceSha256": {
+    "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f",
+    "packages/postgresql/native/issued-operation-admission/operation-admission.sql": "4b72ebf3727b9c887befce0280256f73587857fcae5fb363af0917b816b1e335",
+    "docs/helix/02-design/contracts/reference-routine-design-v0.1.proposal.json": "4366feb35f049360764276c20dcb97c119dd6e9f84cefbc2d7d01326b9ae31d0",
+    "packages/postgresql/native/issued-operation-admission/operation-asserted-origin-admission.sql": "4eb696139c90da5aae36d889f7bb46964f6ecb7b883f250cea1d7f90038cea8c",
+    "packages/postgresql/native/issued-operation-admission/operation-epoch-context-admission.sql": "7cd28926d2dc34a81ef1ed35b44031e70f0e2bc9c2446e2fd7c52930cb6ccd95",
+    "packages/postgresql/native/issued-operation-admission/operation-configuration-context-admission.sql": "aed1fde52b149f6e973c289d0917d1442dd4059d2a0a6e1031bcc06de050c529"
+  },
+  "producerSha256": "e23387f38abe9e26799a5986a2b885970661dd23e839a0f4e921cfcc7ddabc95",
+  "installerReady": false,
+  "nativeOrdinaryProtectedAdmissionQualified": false,
+  "acceptanceCasesPromoted": [],
+  "limitations": [
+    "Broad fixture INSERT/SELECT/UPDATE grants are not an adopted ordinary-role plan",
+    "Read-only owner wrapper is not any of the seven semantic bodies or current authorization proof",
+    "Manual burned ordinal schedule is not original host issuer/account qualification",
+    "Current0.2 invoker context is not silently reinterpreted as definer owner context",
+    "Owner-aware original private admission/role/DDL/dependency profile remains unfinished"
+  ]
+}

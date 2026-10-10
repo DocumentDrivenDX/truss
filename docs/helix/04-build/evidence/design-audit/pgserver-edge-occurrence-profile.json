@@ -1,0 +1,69 @@
+{
+  "scope": "Original source-epoch0.16 edge tuple uniqueness on local PostgreSQL16.2; synthetic administrative fixtures, no protected writer, catalog or security adoption",
+  "pgserver": "0.1.4",
+  "serverVersion": "16.2",
+  "parallelTupleRefusal": {
+    "sqlState": "23505",
+    "nativeIndex": "edge_out"
+  },
+  "expectedEdges": [
+    {
+      "id": "100",
+      "relationship": "1",
+      "source": "10",
+      "target": "20",
+      "occurrence": "first"
+    },
+    {
+      "id": "102",
+      "relationship": "2",
+      "source": "10",
+      "target": "20",
+      "occurrence": "other-relationship"
+    },
+    {
+      "id": "103",
+      "relationship": "1",
+      "source": "10",
+      "target": "30",
+      "occurrence": "other-target"
+    }
+  ],
+  "observed": {
+    "edges": [
+      {
+        "id": "100",
+        "relationship": "1",
+        "source": "10",
+        "target": "20",
+        "occurrence": "first"
+      },
+      {
+        "id": "102",
+        "relationship": "2",
+        "source": "10",
+        "target": "20",
+        "occurrence": "other-relationship"
+      },
+      {
+        "id": "103",
+        "relationship": "1",
+        "source": "10",
+        "target": "30",
+        "occurrence": "other-target"
+      }
+    ],
+    "indexDefinition": "CREATE UNIQUE INDEX edge_out ON truss.edge USING btree (source_id, rel_type_id, target_id) INCLUDE (target_type)"
+  },
+  "sameTupleParallelOccurrencesSupported": false,
+  "differentRelationshipAndDifferentTargetStored": true,
+  "protectedInstallationQualified": false,
+  "participationQueryQualified": false,
+  "rollbackRemovedNamespace": true,
+  "source": {
+    "path": "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql",
+    "sha256": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f"
+  },
+  "fixtureSha256": "edf570c5509bf51b4cd85f3b194fbf1b1da1e1e1c51b07b6e783844b7a88342e",
+  "producerSha256": "4f322f40d295b61ccb455881e5870df83f8516d050f5b093692083663190d629"
+}

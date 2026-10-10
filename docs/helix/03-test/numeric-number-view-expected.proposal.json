@@ -1,0 +1,387 @@
+{
+  "scope": "Independently authored standalone-helper expectations; no converter execution, resource qualification, UMF Field or native admission.",
+  "originalPreservation": "Every lossless view retains the exact original wrapper/spelling; numberMeaning is an oracle label, not a transport number or shortest-text equality proof.",
+  "admissionPrecondition": "Apply semantic expected outcomes only under the exact admitted lexical/profile and complete resource/producer preflight. Resource or unsupported-profile refusal is separately observed; do not turn missing prerequisite evidence into a semantic pass.",
+  "integerSafety": "Unsafe integer convenience refuses even when the mathematical integer is exactly representable by binary64.",
+  "cases": [
+    {
+      "case": "integer-zero",
+      "input": {
+        "integerToken": "0"
+      },
+      "expected": {
+        "status": "lossless",
+        "original": {
+          "integerToken": "0"
+        },
+        "numberMeaning": "0",
+        "negativeZero": false
+      }
+    },
+    {
+      "case": "integer-42",
+      "input": {
+        "integerToken": "42"
+      },
+      "expected": {
+        "status": "lossless",
+        "original": {
+          "integerToken": "42"
+        },
+        "numberMeaning": "42",
+        "negativeZero": false
+      }
+    },
+    {
+      "case": "integer-safe-max",
+      "input": {
+        "integerToken": "9007199254740991"
+      },
+      "expected": {
+        "status": "lossless",
+        "original": {
+          "integerToken": "9007199254740991"
+        },
+        "numberMeaning": "9007199254740991",
+        "negativeZero": false
+      }
+    },
+    {
+      "case": "decimal-half",
+      "input": {
+        "decimalToken": "0.5"
+      },
+      "expected": {
+        "status": "lossless",
+        "original": {
+          "decimalToken": "0.5"
+        },
+        "numberMeaning": "0.5",
+        "negativeZero": false
+      }
+    },
+    {
+      "case": "decimal-quarter",
+      "input": {
+        "decimalToken": "0.2500"
+      },
+      "expected": {
+        "status": "lossless",
+        "original": {
+          "decimalToken": "0.2500"
+        },
+        "numberMeaning": "0.25",
+        "negativeZero": false
+      }
+    },
+    {
+      "case": "decimal-exponent-half",
+      "input": {
+        "decimalToken": "5e-1"
+      },
+      "expected": {
+        "status": "lossless",
+        "original": {
+          "decimalToken": "5e-1"
+        },
+        "numberMeaning": "0.5",
+        "negativeZero": false
+      }
+    },
+    {
+      "case": "decimal-negative-zero",
+      "input": {
+        "decimalToken": "-0.00"
+      },
+      "expected": {
+        "status": "lossless",
+        "original": {
+          "decimalToken": "-0.00"
+        },
+        "numberMeaning": "-0",
+        "negativeZero": true
+      }
+    },
+    {
+      "case": "integer-unsafe-exact",
+      "input": {
+        "integerToken": "9007199254740992"
+      },
+      "expected": {
+        "status": "refused",
+        "reason": "lossy_number"
+      }
+    },
+    {
+      "case": "integer-rounded",
+      "input": {
+        "integerToken": "9007199254740993"
+      },
+      "expected": {
+        "status": "refused",
+        "reason": "lossy_number"
+      }
+    },
+    {
+      "case": "decimal-tenth",
+      "input": {
+        "decimalToken": "0.1"
+      },
+      "expected": {
+        "status": "refused",
+        "reason": "lossy_number"
+      }
+    },
+    {
+      "case": "decimal-hundredth",
+      "input": {
+        "decimalToken": "0.01"
+      },
+      "expected": {
+        "status": "refused",
+        "reason": "lossy_number"
+      }
+    },
+    {
+      "case": "decimal-overflow",
+      "input": {
+        "decimalToken": "1e309"
+      },
+      "expected": {
+        "status": "refused",
+        "reason": "nonfinite_number"
+      }
+    },
+    {
+      "case": "decimal-underflow",
+      "input": {
+        "decimalToken": "1e-400"
+      },
+      "expected": {
+        "status": "refused",
+        "reason": "lossy_number"
+      }
+    },
+    {
+      "case": "empty",
+      "input": {
+        "decimalToken": ""
+      },
+      "expected": {
+        "status": "refused",
+        "reason": "invalid_token"
+      }
+    },
+    {
+      "case": "leading-whitespace",
+      "input": {
+        "decimalToken": " 1"
+      },
+      "expected": {
+        "status": "refused",
+        "reason": "invalid_token"
+      }
+    },
+    {
+      "case": "nonfinite-spelling",
+      "input": {
+        "decimalToken": "NaN"
+      },
+      "expected": {
+        "status": "refused",
+        "reason": "invalid_token"
+      }
+    },
+    {
+      "case": "decimal-min-subnormal",
+      "input": {
+        "decimalToken": "0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004940656458412465441765687928682213723650598026143247644255856825006755072702087518652998363616359923797965646954457177309266567103559397963987747960107818781263007131903114045278458171678489821036887186360569987307230500063874091535649843873124733972731696151400317153853980741262385655911710266585566867681870395603106249319452715914924553293054565444011274801297099995419319894090804165633245247571478690147267801593552386115501348035264934720193790268107107491703332226844753335720832431936092382893458368060106011506169809753078342277318329247904982524730776375927247874656084778203734469699533647017972677717585125660551199131504891101451037862738167250955837389733598993664809941164205702637090279242767544565229087538682506419718265533447265625"
+      },
+      "independentConstruction": "2^-1074",
+      "expected": {
+        "status": "lossless",
+        "original": {
+          "decimalToken": "0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004940656458412465441765687928682213723650598026143247644255856825006755072702087518652998363616359923797965646954457177309266567103559397963987747960107818781263007131903114045278458171678489821036887186360569987307230500063874091535649843873124733972731696151400317153853980741262385655911710266585566867681870395603106249319452715914924553293054565444011274801297099995419319894090804165633245247571478690147267801593552386115501348035264934720193790268107107491703332226844753335720832431936092382893458368060106011506169809753078342277318329247904982524730776375927247874656084778203734469699533647017972677717585125660551199131504891101451037862738167250955837389733598993664809941164205702637090279242767544565229087538682506419718265533447265625"
+        },
+        "numberMeaning": "2^-1074",
+        "negativeZero": false
+      }
+    },
+    {
+      "case": "decimal-half-min-subnormal",
+      "input": {
+        "decimalToken": "0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000024703282292062327208828439643411068618252990130716238221279284125033775363510437593264991818081799618989828234772285886546332835517796989819938739800539093906315035659515570226392290858392449105184435931802849936536152500319370457678249219365623669863658480757001585769269903706311928279558551332927834338409351978015531246597263579574622766465272827220056374006485499977096599470454020828166226237857393450736339007967761930577506740176324673600968951340535537458516661134223766678604162159680461914467291840300530057530849048765391711386591646239524912623653881879636239373280423891018672348497668235089863388587925628302755995657524455507255189313690836254779186948667994968324049705821028513185451396213837722826145437693412532098591327667236328125"
+      },
+      "independentConstruction": "2^-1075",
+      "expected": {
+        "status": "refused",
+        "reason": "lossy_number"
+      }
+    },
+    {
+      "case": "decimal-min-normal",
+      "input": {
+        "decimalToken": "0.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002225073858507201383090232717332404064219215980462331830553327416887204434813918195854283159012511020564067339731035811005152434161553460108856012385377718821130777993532002330479610147442583636071921565046942503734208375250806650616658158948720491179968591639648500635908770118304874799780887753749949451580451605050915399856582470818645113537935804992115981085766051992433352114352390148795699609591288891602992641511063466313393663477586513029371762047325631781485664350872122828637642044846811407613911477062801689853244110024161447421618567166150540154285084716752901903161322778896729707373123334086988983175067838846926092773977972858659654941091369095406136467568702398678315290680984617210924625396728515625"
+      },
+      "independentConstruction": "2^-1022",
+      "expected": {
+        "status": "lossless",
+        "original": {
+          "decimalToken": "0.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002225073858507201383090232717332404064219215980462331830553327416887204434813918195854283159012511020564067339731035811005152434161553460108856012385377718821130777993532002330479610147442583636071921565046942503734208375250806650616658158948720491179968591639648500635908770118304874799780887753749949451580451605050915399856582470818645113537935804992115981085766051992433352114352390148795699609591288891602992641511063466313393663477586513029371762047325631781485664350872122828637642044846811407613911477062801689853244110024161447421618567166150540154285084716752901903161322778896729707373123334086988983175067838846926092773977972858659654941091369095406136467568702398678315290680984617210924625396728515625"
+        },
+        "numberMeaning": "2^-1022",
+        "negativeZero": false
+      }
+    },
+    {
+      "case": "decimal-max-finite",
+      "input": {
+        "decimalToken": "179769313486231570814527423731704356798070567525844996598917476803157260780028538760589558632766878171540458953514382464234321326889464182768467546703537516986049910576551282076245490090389328944075868508455133942304583236903222948165808559332123348274797826204144723168738177180919299881250404026184124858368"
+      },
+      "independentConstruction": "(2^53-1)*2^971",
+      "expected": {
+        "status": "lossless",
+        "original": {
+          "decimalToken": "179769313486231570814527423731704356798070567525844996598917476803157260780028538760589558632766878171540458953514382464234321326889464182768467546703537516986049910576551282076245490090389328944075868508455133942304583236903222948165808559332123348274797826204144723168738177180919299881250404026184124858368"
+        },
+        "numberMeaning": "(2^53-1)*2^971",
+        "negativeZero": false
+      }
+    },
+    {
+      "case": "decimal-above-max-finite",
+      "input": {
+        "decimalToken": "179769313486231570814527423731704356798070567525844996598917476803157260780028538760589558632766878171540458953514382464234321326889464182768467546703537516986049910576551282076245490090389328944075868508455133942304583236903222948165808559332123348274797826204144723168738177180919299881250404026184124858369"
+      },
+      "independentConstruction": "(2^53-1)*2^971+1",
+      "expected": {
+        "status": "refused",
+        "reason": "lossy_number"
+      }
+    },
+    {
+      "case": "integer-fraction-spelling",
+      "input": {
+        "integerToken": "1.0"
+      },
+      "expected": {
+        "status": "lossless",
+        "original": {
+          "integerToken": "1.0"
+        },
+        "numberMeaning": "1",
+        "negativeZero": false
+      }
+    },
+    {
+      "case": "integer-exponent-spelling",
+      "input": {
+        "integerToken": "1e3"
+      },
+      "expected": {
+        "status": "lossless",
+        "original": {
+          "integerToken": "1e3"
+        },
+        "numberMeaning": "1000",
+        "negativeZero": false
+      }
+    },
+    {
+      "case": "integer-nonintegral",
+      "input": {
+        "integerToken": "1e-1"
+      },
+      "expected": {
+        "status": "refused",
+        "reason": "invalid_token"
+      }
+    },
+    {
+      "case": "decimal-exact-beyond-integer-safe",
+      "input": {
+        "decimalToken": "9007199254740992"
+      },
+      "expected": {
+        "status": "lossless",
+        "original": {
+          "decimalToken": "9007199254740992"
+        },
+        "numberMeaning": "2^53",
+        "negativeZero": false
+      }
+    },
+    {
+      "case": "leading-plus",
+      "input": {
+        "decimalToken": "+1"
+      },
+      "expected": {
+        "status": "refused",
+        "reason": "invalid_token"
+      }
+    },
+    {
+      "case": "leading-zero",
+      "input": {
+        "decimalToken": "01"
+      },
+      "expected": {
+        "status": "refused",
+        "reason": "invalid_token"
+      }
+    },
+    {
+      "case": "missing-fraction-digits",
+      "input": {
+        "decimalToken": "1."
+      },
+      "expected": {
+        "status": "refused",
+        "reason": "invalid_token"
+      }
+    }
+  ],
+  "requiredAdditionalCases": [
+    "combined token/work/peak limits",
+    "large-exponent zero grammar and bounded shortcut",
+    "repeated enclosing-account failures",
+    "packed Chromium and selected server runtime parity"
+  ],
+  "execution": "not_run",
+  "boundaryOracleMethod": "Exact integer arithmetic constructs 2^-n as 5^n / 10^n and maximum finite as (2^53-1)*2^971. No converter or floating-point formatter supplies expected outcomes. Half the minimum subnormal is nonzero and cannot be represented; maximum finite plus one differs from the rounded finite candidate.",
+  "independentBinaryStageWitnesses": [
+    {
+      "bitsHex": "0000000000000000",
+      "expected": "positive-zero"
+    },
+    {
+      "bitsHex": "8000000000000000",
+      "expected": "negative-zero"
+    },
+    {
+      "bitsHex": "3fe0000000000000",
+      "expected": "2^-1"
+    },
+    {
+      "bitsHex": "0000000000000001",
+      "expected": "2^-1074"
+    },
+    {
+      "bitsHex": "0010000000000000",
+      "expected": "2^-1022"
+    },
+    {
+      "bitsHex": "7fefffffffffffff",
+      "expected": "(2^53-1)*2^971"
+    },
+    {
+      "bitsHex": "7ff0000000000000",
+      "expected": "nonfinite_number"
+    },
+    {
+      "bitsHex": "7ff8000000000000",
+      "expected": "nonfinite_number"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "scope": "Exact declaration and AST transition only; no native adoption or compiler registration.",
+  "sourcePins": [
+    {
+      "path": "docs/helix/02-design/contracts/weft-review-columns-v0.11.proposal.json",
+      "sha256": "73a8bb36bd827f348ac8a465fb9aa6578b2411f4d3416eedbf1f32d381ac2e13"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/weft-review-columns-v0.12.proposal.json",
+      "sha256": "10f9bb7a6a0d96ce0567aaa6c3a6dc41325096d4634edd78d690e89c263b32c4"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/request-receipt-layout-profile.native-ast.json",
+      "sha256": "b07ac6be875f7d11237fc4bc179f1f8efbd91e564c8d2602e88ee2c382a37bf4"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/reference-history-layout-native-ast.json",
+      "sha256": "cb20f840e8d4ab9a3b45e6bb95d24db61defa958d98c73b99374d57d5add9e43"
+    }
+  ],
+  "producerSha256": "718b23b84da992a2061f1ed58cd2db25695370c10f701fc3f231fb2d33ff1abb",
+  "statements": 106,
+  "tablesColumnsConstraintsAndIndexesExact": true,
+  "changedStatements": [
+    {
+      "statementIndex": 1,
+      "change": "review marker changed"
+    },
+    {
+      "statementIndex": 29,
+      "change": "original journal sequence options added"
+    }
+  ],
+  "nativeQualified": false,
+  "weftRegistered": false
+}

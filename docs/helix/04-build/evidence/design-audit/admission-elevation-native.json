@@ -1,0 +1,118 @@
+{
+  "scope": "Actual original invoker admission refusal under distinct definer owner and preservation of invoker context across read-only elevation; administrative grant/wrapper fixture only",
+  "serverVersion": "16.15",
+  "observations": [
+    {
+      "id": "original-actor-boundary",
+      "expected": [
+        "actor_probe",
+        "actor_probe",
+        "none"
+      ],
+      "observed": [
+        "actor_probe",
+        "actor_probe",
+        "none"
+      ]
+    },
+    {
+      "id": "nested-definer-admission-refusal",
+      "expected": "55000",
+      "observed": "55000"
+    },
+    {
+      "id": "refused-elevation-has-no-registry-effect",
+      "expected": [
+        [
+          0
+        ]
+      ],
+      "observed": [
+        [
+          0
+        ]
+      ]
+    },
+    {
+      "id": "invoker-original-actor-fields",
+      "expected": [
+        "actor_probe",
+        "actor_probe"
+      ],
+      "observed": [
+        "actor_probe",
+        "actor_probe"
+      ]
+    },
+    {
+      "id": "invoker-native-oid-correspondence",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "definer-person-owner-separation",
+      "expected": [
+        "actor_probe",
+        "integrity_probe",
+        "none"
+      ],
+      "observed": [
+        "actor_probe",
+        "integrity_probe",
+        "none"
+      ]
+    },
+    {
+      "id": "original-context-preserved-across-elevation",
+      "expected": "7b22786964223a2022373334222c20226f7264696e616c223a202231222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a20226163746f725f70726f6265222c20226261636b656e64506964223a20223434313632222c202273657373696f6e55736572223a20226163746f725f70726f6265222c20226163746f72526f6c654f6964223a20223137333431222c202273657373696f6e526f6c654f6964223a20223137333431222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e32227d",
+      "observed": "7b22786964223a2022373334222c20226f7264696e616c223a202231222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a20226163746f725f70726f6265222c20226261636b656e64506964223a20223434313632222c202273657373696f6e55736572223a20226163746f725f70726f6265222c20226163746f72526f6c654f6964223a20223137333431222c202273657373696f6e526f6c654f6964223a20223137333431222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e32227d"
+    },
+    {
+      "id": "acting-role-restored-after-wrapper",
+      "expected": [
+        "actor_probe",
+        "actor_probe",
+        "none"
+      ],
+      "observed": [
+        "actor_probe",
+        "actor_probe",
+        "none"
+      ]
+    },
+    {
+      "id": "actual-original-xid-preserved",
+      "expected": "734",
+      "observed": "734"
+    },
+    {
+      "id": "original-host-rollback-removes-registry",
+      "expected": [
+        [
+          0
+        ]
+      ],
+      "observed": [
+        [
+          0
+        ]
+      ]
+    }
+  ],
+  "sourceSha256": {
+    "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f",
+    "packages/postgresql/native/issued-operation-admission/operation-admission.sql": "4b72ebf3727b9c887befce0280256f73587857fcae5fb363af0917b816b1e335",
+    "docs/helix/02-design/contracts/reference-routine-design-v0.1.proposal.json": "4366feb35f049360764276c20dcb97c119dd6e9f84cefbc2d7d01326b9ae31d0"
+  },
+  "producerSha256": "99ae50a18392cdd4271eee1ba1db35b0c442e5e679f1dbf00245955336180830",
+  "installerReady": false,
+  "nativeOrdinaryProtectedAdmissionQualified": false,
+  "acceptanceCasesPromoted": [],
+  "limitations": [
+    "Broad fixture INSERT/SELECT/UPDATE grants are not an adopted ordinary-role plan",
+    "Read-only owner wrapper is not any of the seven semantic bodies or current authorization proof",
+    "Manual burned ordinal schedule is not original host issuer/account qualification",
+    "Current0.2 invoker context is not silently reinterpreted as definer owner context",
+    "Owner-aware original private admission/role/DDL/dependency profile remains unfinished"
+  ]
+}

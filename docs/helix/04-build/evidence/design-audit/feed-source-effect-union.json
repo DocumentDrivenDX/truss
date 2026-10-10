@@ -1,0 +1,54 @@
+{
+  "scope": "Explicit union of three authored source allocations, per-kind quantities and parent/creator identity closure only; not native object counts, semantic node equivalence, source regeneration, installation or enforcement",
+  "allocationPins": [
+    {
+      "path": "docs/helix/02-design/models/truss-feed-native-layout.physical-ids.proposal.json",
+      "sha256": "5163f1a5dcf4420ac164bbcea2288a38bd3a8dfa003a8f2166fffbfc9645613c"
+    },
+    {
+      "path": "docs/helix/02-design/models/truss-feed-native-layout.derived-effects.proposal.json",
+      "sha256": "76e1b905f4e186817dd0ea747e4e00d990245164d4ac80b7effd61d821b87095"
+    },
+    {
+      "path": "docs/helix/02-design/models/truss-feed-current-union-trigger-effects.proposal.json",
+      "sha256": "e4d9528c5da89c7536b45687d50217d8450a8aabd1c7366b9f20b29b6f40eb46"
+    }
+  ],
+  "authoredOrExpectedPhysicalIdentities": 81,
+  "sourceReferenceEdges": 3,
+  "totalIdentities": 84,
+  "counts": {
+    "table": 4,
+    "column": 47,
+    "constraint": 17,
+    "expected_supporting_index": 5,
+    "source_foreign_key_reference": 3,
+    "trigger": 4,
+    "expected_trigger_constraint": 4
+  },
+  "controls": [
+    {
+      "case": "missing allocation family",
+      "refused": true
+    },
+    {
+      "case": "reference promoted to physical constraint",
+      "refused": true
+    },
+    {
+      "case": "reused trigger identity",
+      "refused": true
+    },
+    {
+      "case": "outside creator",
+      "refused": true
+    },
+    {
+      "case": "unqualified complete inflation",
+      "refused": true
+    }
+  ],
+  "nativeExecution": false,
+  "installable": false,
+  "complete": false
+}

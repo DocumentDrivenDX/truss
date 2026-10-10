@@ -1,0 +1,449 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:catalog-view:0.1.0",
+  "title": "Draft Truss catalog view",
+  "description": "Shape only; ownership, native ranges, uniqueness, ordering, dependency closure, archive fidelity, inventory completeness and authorization require semantic admission.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-catalog-view/0.1.0"
+    },
+    "catalogRevision": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$"
+    },
+    "layoutProfile": {
+      "$ref": "#/$defs/profilePin"
+    },
+    "viewProfile": {
+      "$ref": "#/$defs/profilePin"
+    },
+    "consistencyEvidenceSha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "scope": {
+      "$ref": "#/$defs/scope"
+    },
+    "definitions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/entry"
+      }
+    },
+    "inventorySha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "catalogRevision",
+    "layoutProfile",
+    "viewProfile",
+    "consistencyEvidenceSha256",
+    "scope",
+    "definitions",
+    "inventorySha256"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "profilePin": {
+      "type": "object",
+      "properties": {
+        "identity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "identity",
+        "version",
+        "sha256"
+      ],
+      "additionalProperties": false
+    },
+    "exactArtifact": {
+      "type": "object",
+      "properties": {
+        "identity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "bytesBase64": {
+          "type": "string",
+          "pattern": "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "identity",
+        "bytesBase64",
+        "sha256"
+      ],
+      "additionalProperties": false
+    },
+    "owner": {
+      "type": "object",
+      "properties": {
+        "documentId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "moduleId": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "documentId",
+        "moduleId"
+      ],
+      "additionalProperties": false
+    },
+    "reference": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "definitionPin": {
+              "type": "string",
+              "minLength": 1
+            },
+            "owner": {
+              "$ref": "#/$defs/owner"
+            },
+            "authoredIdentity": {
+              "type": "string",
+              "minLength": 1
+            },
+            "kind": {
+              "const": "type"
+            },
+            "typeId": {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]*)$"
+            }
+          },
+          "required": [
+            "definitionPin",
+            "owner",
+            "authoredIdentity",
+            "kind",
+            "typeId"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "definitionPin": {
+              "type": "string",
+              "minLength": 1
+            },
+            "owner": {
+              "$ref": "#/$defs/owner"
+            },
+            "authoredIdentity": {
+              "type": "string",
+              "minLength": 1
+            },
+            "kind": {
+              "const": "property"
+            },
+            "propertyId": {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]*)$"
+            },
+            "typeId": {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]*)$"
+            }
+          },
+          "required": [
+            "definitionPin",
+            "owner",
+            "authoredIdentity",
+            "kind",
+            "propertyId",
+            "typeId"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "definitionPin": {
+              "type": "string",
+              "minLength": 1
+            },
+            "owner": {
+              "$ref": "#/$defs/owner"
+            },
+            "authoredIdentity": {
+              "type": "string",
+              "minLength": 1
+            },
+            "kind": {
+              "const": "key"
+            },
+            "typeId": {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]*)$"
+            },
+            "keyNumber": {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]*)$"
+            }
+          },
+          "required": [
+            "definitionPin",
+            "owner",
+            "authoredIdentity",
+            "kind",
+            "typeId",
+            "keyNumber"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "definitionPin": {
+              "type": "string",
+              "minLength": 1
+            },
+            "owner": {
+              "$ref": "#/$defs/owner"
+            },
+            "authoredIdentity": {
+              "type": "string",
+              "minLength": 1
+            },
+            "kind": {
+              "const": "relationship"
+            },
+            "relationshipId": {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]*)$"
+            }
+          },
+          "required": [
+            "definitionPin",
+            "owner",
+            "authoredIdentity",
+            "kind",
+            "relationshipId"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "entry": {
+      "type": "object",
+      "properties": {
+        "reference": {
+          "$ref": "#/$defs/reference"
+        },
+        "lifecycle": {
+          "enum": [
+            "active",
+            "retired"
+          ]
+        },
+        "resolution": {
+          "enum": [
+            "defined",
+            "provisional"
+          ]
+        },
+        "definition": {
+          "$ref": "#/$defs/exactArtifact"
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/reference"
+          }
+        },
+        "provenance": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "acceptedCatalogRevision": {
+                  "type": "string",
+                  "pattern": "^(0|[1-9][0-9]*)$"
+                },
+                "documentOrdinal": {
+                  "type": "string",
+                  "pattern": "^(0|[1-9][0-9]*)$"
+                },
+                "documentRevision": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "acceptedDocumentSha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "authoredPointer": {
+                  "type": "string"
+                },
+                "extractionProfile": {
+                  "$ref": "#/$defs/profilePin"
+                },
+                "kind": {
+                  "const": "accepted_document"
+                }
+              },
+              "required": [
+                "acceptedCatalogRevision",
+                "documentOrdinal",
+                "documentRevision",
+                "acceptedDocumentSha256",
+                "authoredPointer",
+                "extractionProfile",
+                "kind"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "accepted_binding"
+                },
+                "acceptedCatalogRevision": {
+                  "type": "string",
+                  "pattern": "^(0|[1-9][0-9]*)$"
+                },
+                "acceptedBindingSha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "bindingVocabulary": {
+                  "$ref": "#/$defs/profilePin"
+                },
+                "authoredPointer": {
+                  "type": "string"
+                },
+                "extractionProfile": {
+                  "$ref": "#/$defs/profilePin"
+                },
+                "owningRecordDefinitionPin": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "owningRecordProvenance": {
+                  "type": "object",
+                  "properties": {
+                    "acceptedCatalogRevision": {
+                      "type": "string",
+                      "pattern": "^(0|[1-9][0-9]*)$"
+                    },
+                    "documentOrdinal": {
+                      "type": "string",
+                      "pattern": "^(0|[1-9][0-9]*)$"
+                    },
+                    "documentRevision": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "acceptedDocumentSha256": {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{64}$"
+                    },
+                    "authoredPointer": {
+                      "type": "string"
+                    },
+                    "extractionProfile": {
+                      "$ref": "#/$defs/profilePin"
+                    }
+                  },
+                  "required": [
+                    "acceptedCatalogRevision",
+                    "documentOrdinal",
+                    "documentRevision",
+                    "acceptedDocumentSha256",
+                    "authoredPointer",
+                    "extractionProfile"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "acceptedCatalogRevision",
+                "acceptedBindingSha256",
+                "bindingVocabulary",
+                "authoredPointer",
+                "extractionProfile",
+                "owningRecordDefinitionPin",
+                "owningRecordProvenance"
+              ]
+            }
+          ]
+        }
+      },
+      "required": [
+        "reference",
+        "lifecycle",
+        "resolution",
+        "definition",
+        "dependencies",
+        "provenance"
+      ],
+      "additionalProperties": false
+    },
+    "scope": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "complete"
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "authorized_projection"
+            },
+            "authorizedScopeIdentity": {
+              "type": "string",
+              "minLength": 1
+            },
+            "closure": {
+              "const": "complete_within_projection"
+            }
+          },
+          "required": [
+            "kind",
+            "authorizedScopeIdentity",
+            "closure"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

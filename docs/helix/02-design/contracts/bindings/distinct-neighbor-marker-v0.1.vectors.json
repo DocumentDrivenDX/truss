@@ -1,0 +1,242 @@
+{
+  "scope": "Independently authored synthetic marker expectations, checked by mathematical grouping; no native IDs, producer or installation authority",
+  "profileStatus": "unadopted engineering candidate",
+  "fixtureMeaning": "Single relationship9; endpoint integer IDs stand for already-proved distinct typed Records. Cases do not establish that mapping. Edge occurrence IDs remain distinct.",
+  "cases": [
+    {
+      "id": "parallel",
+      "edges": [
+        [
+          101,
+          1,
+          7
+        ],
+        [
+          102,
+          1,
+          7
+        ]
+      ],
+      "sides": [
+        "s"
+      ],
+      "expectedMarkers": [
+        [
+          9,
+          "s",
+          1,
+          101
+        ]
+      ],
+      "pkConflict": false
+    },
+    {
+      "id": "different-neighbors",
+      "edges": [
+        [
+          101,
+          1,
+          7
+        ],
+        [
+          102,
+          1,
+          8
+        ]
+      ],
+      "sides": [
+        "s"
+      ],
+      "expectedMarkers": [
+        [
+          9,
+          "s",
+          1,
+          101
+        ],
+        [
+          9,
+          "s",
+          1,
+          102
+        ]
+      ],
+      "pkConflict": true
+    },
+    {
+      "id": "delete-representative",
+      "edges": [
+        [
+          102,
+          1,
+          7
+        ]
+      ],
+      "sides": [
+        "s"
+      ],
+      "expectedMarkers": [
+        [
+          9,
+          "s",
+          1,
+          102
+        ]
+      ],
+      "pkConflict": false
+    },
+    {
+      "id": "delete-last",
+      "edges": [],
+      "sides": [
+        "s"
+      ],
+      "expectedMarkers": [],
+      "pkConflict": false
+    },
+    {
+      "id": "lower-imported-id",
+      "edges": [
+        [
+          101,
+          1,
+          7
+        ],
+        [
+          90,
+          1,
+          7
+        ]
+      ],
+      "sides": [
+        "s"
+      ],
+      "expectedMarkers": [
+        [
+          9,
+          "s",
+          1,
+          90
+        ]
+      ],
+      "pkConflict": false
+    },
+    {
+      "id": "self-two-sided",
+      "edges": [
+        [
+          101,
+          7,
+          7
+        ],
+        [
+          102,
+          7,
+          7
+        ]
+      ],
+      "sides": [
+        "s",
+        "t"
+      ],
+      "expectedMarkers": [
+        [
+          9,
+          "s",
+          7,
+          101
+        ],
+        [
+          9,
+          "t",
+          7,
+          101
+        ]
+      ],
+      "pkConflict": false
+    },
+    {
+      "id": "incoming-two-sources",
+      "edges": [
+        [
+          101,
+          1,
+          7
+        ],
+        [
+          102,
+          2,
+          7
+        ]
+      ],
+      "sides": [
+        "t"
+      ],
+      "expectedMarkers": [
+        [
+          9,
+          "t",
+          7,
+          101
+        ],
+        [
+          9,
+          "t",
+          7,
+          102
+        ]
+      ],
+      "pkConflict": true
+    },
+    {
+      "id": "two-independent-owners",
+      "edges": [
+        [
+          101,
+          1,
+          7
+        ],
+        [
+          102,
+          2,
+          8
+        ]
+      ],
+      "sides": [
+        "s",
+        "t"
+      ],
+      "expectedMarkers": [
+        [
+          9,
+          "s",
+          1,
+          101
+        ],
+        [
+          9,
+          "s",
+          2,
+          102
+        ],
+        [
+          9,
+          "t",
+          7,
+          101
+        ],
+        [
+          9,
+          "t",
+          8,
+          102
+        ]
+      ],
+      "pkConflict": false
+    }
+  ],
+  "checksPassed": 8,
+  "nativeStatus": "not_run",
+  "qualified": false,
+  "productionWriterUsed": false
+}

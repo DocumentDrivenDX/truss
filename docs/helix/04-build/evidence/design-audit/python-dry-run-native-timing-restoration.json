@@ -1,0 +1,29 @@
+{
+  "schema": "truss-dry-run-native-savepoint-witness/0.1",
+  "serverVersion": "16.15",
+  "runtimeVersion": "0.1.4+truss.pg16.15",
+  "command": [
+    "/private/tmp/truss-resolved-local-consumer-env/lib/python3.11/site-packages/pgserver/pginstall/bin/psql",
+    "postgresql://postgres:@/postgres?host=/private/tmp/truss-dry-run-savepoint-timing-v3",
+    "-X",
+    "-q",
+    "-A",
+    "-t"
+  ],
+  "sql": "\\set ON_ERROR_STOP off\nCREATE TABLE dry_run_probe(id integer, label text, CONSTRAINT dry_run_unique UNIQUE(id) DEFERRABLE INITIALLY DEFERRED);\nINSERT INTO dry_run_probe VALUES(0,'committed-before-preview');\nBEGIN;\nUPDATE dry_run_probe SET label='caller-pending-before-preview' WHERE id=0;\nSAVEPOINT preview;\nINSERT INTO dry_run_probe VALUES(1,'first'),(1,'second');\nSET CONSTRAINTS dry_run_unique IMMEDIATE;\n\\echo validator_sqlstate :SQLSTATE\nSELECT label FROM dry_run_probe WHERE id=0;\n\\echo aborted_read_sqlstate :SQLSTATE\nROLLBACK TO SAVEPOINT preview;\nSELECT json_build_object('label',(SELECT label FROM dry_run_probe WHERE id=0),'previewRows',(SELECT count(*) FROM dry_run_probe WHERE id=1))::text;\nSAVEPOINT timing_check;\nINSERT INTO dry_run_probe VALUES(2,'mode-first'),(2,'mode-second');\n\\echo restored_mode_insert_sqlstate :SQLSTATE\nSET CONSTRAINTS dry_run_unique IMMEDIATE;\n\\echo restored_mode_validator_sqlstate :SQLSTATE\nROLLBACK TO SAVEPOINT timing_check;\nROLLBACK;\nSELECT json_build_object('label',(SELECT label FROM dry_run_probe WHERE id=0),'previewRows',(SELECT count(*) FROM dry_run_probe WHERE id=1))::text;\n",
+  "exitCode": 0,
+  "stdout": "validator_sqlstate 23505\naborted_read_sqlstate 25P02\n{\"label\" : \"caller-pending-before-preview\", \"previewRows\" : 0}\nrestored_mode_insert_sqlstate 00000\nrestored_mode_validator_sqlstate 23505\n{\"label\" : \"committed-before-preview\", \"previewRows\" : 0}\n",
+  "stderr": "ERROR:  duplicate key value violates unique constraint \"dry_run_unique\"\nDETAIL:  Key (id)=(1) already exists.\nERROR:  current transaction is aborted, commands ignored until end of transaction block\nERROR:  duplicate key value violates unique constraint \"dry_run_unique\"\nDETAIL:  Key (id)=(2) already exists.\n",
+  "independentExpectedLines": [
+    "validator_sqlstate 23505",
+    "aborted_read_sqlstate 25P02",
+    "{\"label\" : \"caller-pending-before-preview\", \"previewRows\" : 0}",
+    "restored_mode_insert_sqlstate 00000",
+    "restored_mode_validator_sqlstate 23505",
+    "{\"label\" : \"committed-before-preview\", \"previewRows\" : 0}"
+  ],
+  "scriptSha256": "a027f15d667e906d767bc87c0fd4bd8592c196370fa06e8b792b1baf4d02c1a2",
+  "scope": "Native PostgreSQL deferred unique validation and savepoint/outer rollback only; administrative fixture, not Truss guard, ordinary-role security, driver containment or dry-run API qualification",
+  "dataDirectory": "/private/tmp/truss-dry-run-savepoint-timing-v3",
+  "preflight": "Data directory and receipt absent before native startup; not a hostile filesystem race guarantee"
+}

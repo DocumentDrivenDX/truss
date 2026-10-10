@@ -1,0 +1,75 @@
+{
+  "interfaceVersion": "truss-bootstrap-route-entry/0.1.0",
+  "routeIdentity": "pg17.namespace.direct/0.1.0",
+  "status": "unadopted; source pins only verified; native class/cut/transport/semantic producers unqualified",
+  "nativeClass": {
+    "namespace": "pg_catalog",
+    "relation": "pg_namespace",
+    "classOid": "resolve from original target; never constant",
+    "storageScope": "database",
+    "subobjectNumber": "0"
+  },
+  "selector": "direct original pg_namespace OIDs",
+  "artifacts": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-namespace-observation-pg17.proposal.sql",
+      "sha256": "8ca1a65f784970eb8aa3bc80cf87f16396335b3f150dfdce988042fac7a3ba6e"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-namespace-observation-pg17.proposal.umf.json",
+      "sha256": "46e4197312fbe7132fad94d0f8a544e70b0f4abe9e8ff949555f8ff23e4fd3ca"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/bootstrap-namespace-observation.owner-export.sql",
+      "sha256": "71a9900f94221b63091877ce2e80a0b7a49abc27f73813c95a3516012abbfc57"
+    }
+  ],
+  "parameterGrammar": {
+    "slot": "1",
+    "nativeType": "pg_catalog.oid[]",
+    "dimensions": "exactly one",
+    "lowerBound": "1",
+    "nullAllowed": false,
+    "nullItemsAllowed": false,
+    "uniqueItems": true,
+    "countInclusive": [
+      "1",
+      "256"
+    ],
+    "itemDomain": "canonical nonzero uint32 decimal text; actual pg_namespace OID",
+    "encoder": "selected original canonical PostgreSQL array encoder; no JS numeric round trip"
+  },
+  "orderedColumns": [
+    "catalog_class_oid",
+    "object_oid",
+    "owner_oid",
+    "nspacl_native_text",
+    "nspacl_native_dimensions",
+    "original_catalog_row_json"
+  ],
+  "coverage": "Exact unique requested namespace bijection; missing absent, extra/duplicate/wrong-class refuses; bind raw name/OID/owner to original target",
+  "requiredKnownFields": [
+    "oid",
+    "nspname",
+    "nspowner",
+    "nspacl"
+  ],
+  "preservation": "Retain full exact returned row JSON text and every unknown extension member; lossless bounded selected native JSON decoder; no parse/stringify reconstruction",
+  "dependencyExtraction": {
+    "owner": "nonzero nspowner actual shared pg_authid",
+    "acl": "original nspacl text/null/dimensions/raw expansion and effective role inquiries under same original cut",
+    "identity": "name/OID/target correspondence retained; name/search_path alone cannot establish original namespace",
+    "definitionSpecification": {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-namespace-definition-v0.1.proposal.json",
+      "sha256": "e195d31329eff7227cb566f2e132b32488ce7d8f8ad89d12c8627fdcb16928b0",
+      "admission": "Unadopted enclosing/per-field specification; not native producer or complete basis qualification"
+    }
+  },
+  "adjuncts": [
+    "complete original shared-owner/role/namespace ACL/effective CREATE-USAGE facts",
+    "all required local/shared dependencies and original target/cut authority"
+  ],
+  "resourceProfile": "truss-bootstrap-collector-resource/0.1.0",
+  "refusal": "Unsupported namespace/ACL/owner/cut identity or missing required namespace refuses; no empty object fanout proves namespace presence",
+  "resourceObligations": "Shared enclosing totals, complete original cut/authority and explicit pre-materialization/native-work permits; no independent per-route allowance"
+}

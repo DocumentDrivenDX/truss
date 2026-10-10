@@ -1,0 +1,204 @@
+{
+  "scope": "Fresh separately installed wheel complete existing Python component suite; not protected engine release",
+  "stage": "/private/tmp/truss-fresh-wheel-wrj80xui",
+  "wheel": "/private/tmp/truss-fresh-wheel-wrj80xui/wheel/truss_toolkit-0.0.1.dev0-py3-none-any.whl",
+  "installed": "/private/tmp/truss-fresh-wheel-wrj80xui/installed",
+  "wheelSha256": "11aca554f5c9c697198bc0da0c0ab194e648760fe7f38381d5b95fe283b4aaaf",
+  "python": "3.11.17 (main, Oct  3 2026, 00:54:14) [Clang 22.1.3 ]",
+  "testsPassed": 114,
+  "loadedPackage": "/private/tmp/truss-fresh-wheel-wrj80xui/installed/truss/__init__.py",
+  "exports": [
+    "LocalPostgres",
+    "LocalRuntimeError",
+    "RuntimeInfo"
+  ],
+  "modules": [
+    {
+      "path": "truss/__init__.py",
+      "sha256": "e9d7aacb2f5a5da077ffc24500422876892c3f68a7f595f059fd4189f25a83b5"
+    },
+    {
+      "path": "truss/_acceptance_json.py",
+      "sha256": "303638af137138a796542aa5425985d147e510a23639fca9b2d6221966337a01"
+    },
+    {
+      "path": "truss/_accounted_receive.py",
+      "sha256": "f1f6bc7d84d3cbdc4ba93ddb514d68898f60c99358c7cb2a719701139d674e78"
+    },
+    {
+      "path": "truss/_directory_resources.py",
+      "sha256": "1c3bff1ec23e9d241b710188223539adfdf896a31601c6ce5d46f46d2bc0ab48"
+    },
+    {
+      "path": "truss/_installation_resources.py",
+      "sha256": "abaab39777891125da2f522cd2a0f3a6702896a05464cf344eddbc2acff08759"
+    },
+    {
+      "path": "truss/_operation_admission.py",
+      "sha256": "f96462208c14230670370d0b12f9b5d38ef1c20861175bcab8777c2c687dbb30"
+    },
+    {
+      "path": "truss/_operation_ordinal.py",
+      "sha256": "10d4717462ff14c7524ed793db0ac7b94f56e1d6b88158081a4f300981193977"
+    },
+    {
+      "path": "truss/_operation_registry.py",
+      "sha256": "7e74c34c9b0a874af8e7c0c743357aff2c848cc4c8ae3ed2404542ce18ec667d"
+    },
+    {
+      "path": "truss/_query_execution.py",
+      "sha256": "9cf9d08a45f0b31ef1621c9bed47eb879715771583dd467ecb57b8278115b0aa"
+    },
+    {
+      "path": "truss/_receipt_position.py",
+      "sha256": "e7c42049947c4bda44c0ac9e62e23b73143c6129f07f9ee889ef186364f19eba"
+    },
+    {
+      "path": "truss/_resource_account.py",
+      "sha256": "6a10966e502c16a3ab8972bba34a999ca675fdb7a59e5c3ac93a7c713b6468f1"
+    },
+    {
+      "path": "truss/_row_event_attribution.py",
+      "sha256": "5ef265df339899cde5fba9e3f229d0709671f29ecb15ebf54bbeced7e8b9181b"
+    },
+    {
+      "path": "truss/_row_group_custody.py",
+      "sha256": "b39f7f4e17243d846fc60b3fff02807d168a93c23adf793a8be4fcd2abf3dcdd"
+    },
+    {
+      "path": "truss/_row_image.py",
+      "sha256": "0c793edbd8c45e440511ffbd2ac7e344c47be80f85ee28bf0164ce6e1f073df9"
+    },
+    {
+      "path": "truss/_row_operation_address.py",
+      "sha256": "51af38dbda5c94f8a3ca8c92af3abef1f9919d1d44f6ae1c872c609b747eaf08"
+    },
+    {
+      "path": "truss/_row_operation_context.py",
+      "sha256": "aeaa86163233a597c554f977d3c82badcbf8290a336e47b5e1ff8c64c66794ca"
+    },
+    {
+      "path": "truss/_row_operation_custody.py",
+      "sha256": "1783d3bccfae06526f3be9149622e7f4ae9afd0cd833a7905e7a8b27300a0445"
+    },
+    {
+      "path": "truss/_row_registry_correspondence.py",
+      "sha256": "f0229b5032aa1801dba1cf85ddf0d6be84a087baf1f51c9482475a5b1e6c2282"
+    },
+    {
+      "path": "truss/_row_touch_registry.py",
+      "sha256": "332c37d656bbf825ab119422714330277d9988eef280fc6f72fff26e2d5e778b"
+    },
+    {
+      "path": "truss/cli.py",
+      "sha256": "6a6b3fb751a73b7d338f531d514ec3e4b94c7fb58d4fe80351ff630a7cc7df37"
+    },
+    {
+      "path": "truss/local_runtime.py",
+      "sha256": "1a837b5575c2f8b08e2b699256a90d971ed7e2112d40bccc7c197b92ad6023a9"
+    },
+    {
+      "path": "truss/migration_planning.py",
+      "sha256": "1523a466555ab7b4075f501edd0570f9465c67a67558d2733b5c06984571c3a6"
+    },
+    {
+      "path": "truss/numeric.py",
+      "sha256": "4833d54fda887fa70171511761d28ea75a0dc22aa89a50c3eae2a88f2b972d18"
+    },
+    {
+      "path": "truss/timestamp.py",
+      "sha256": "b08dbf2a9c48754282f05429a58b66515c75a815f6e1282d3c485248f762120c"
+    },
+    {
+      "path": "truss/weft.py",
+      "sha256": "331af0ce6b2f974f7d8ba69c1da90825dfa92c7e57a06cec5aed90a3ec4cd3be"
+    }
+  ],
+  "sourceTestSha256": {
+    "packages/python/tests/test_acceptance_json.py": "fdef3f104a89070ac6377a08af3970f351b4c8994916758db5469f3542c90eb2",
+    "packages/python/tests/test_accounted_receive.py": "076cd45bae4ed12fd594aabad9674bbb5a2663cffcf865d76ff56c19954289f5",
+    "packages/python/tests/test_directory_resources.py": "928878bb47c12c90ee9f98033dda36e9838cce80c0de83c5e3ee25140494f7d4",
+    "packages/python/tests/test_exact_numeric.py": "1b7753e6692cd19575e401612056159dae06df6c2769589800ce0429a165c458",
+    "packages/python/tests/test_exact_timestamp.py": "8d9d1c2364d474d98f1ab63ad586a8c3c11148ff12950e94bef424f1e997379f",
+    "packages/python/tests/test_installation_resources.py": "24a7baca8b7034360a01982dd09c6b88818f9518ac922ef73e5000f93f3703ee",
+    "packages/python/tests/test_local_runtime.py": "9c690fa7be8839eca9d95663e3af2dae1289ba01909adbdf693e5a5dc7a176f5",
+    "packages/python/tests/test_migration_planning.py": "f967bffffefc22e62378e8410f19c5f5ddd6b84895c53c0a9fccb0c65388e8d6",
+    "packages/python/tests/test_operation_admission.py": "50ed2a3ebbd82e02f7e1a055ba66d38db347ec8c27965052d3cecfe68b1f98b7",
+    "packages/python/tests/test_operation_ordinal.py": "a5fa4ede8f756767c7916e9e4cfba35496c43114247d82ebea914f186af3293a",
+    "packages/python/tests/test_operation_registry.py": "bb210a0e1ca1428ece5b63fbdae0a02ff09ad9807e0f6400c04da73e8e995db3",
+    "packages/python/tests/test_query_execution.py": "403759cc37ae7c1b5b0bdf025bed23e4eaa84fc0715ce362c605ffe4edc30ed0",
+    "packages/python/tests/test_receipt_position.py": "deb2f95c0dc04bb6f615f680aadcf88bc7d707e0dabebb407f2d4212af4068a7",
+    "packages/python/tests/test_resource_account.py": "c74ad5271cca163249e65dad15cfdbfb3ba2ff75bf42462f6fbf72aa5eba09b2",
+    "packages/python/tests/test_resource_registration_preflight.py": "5f7ca57e291ba76645c37a7405005db81a0b30b2f3f034c6d6bd18706ded7ba1",
+    "packages/python/tests/test_row_event_attribution.py": "3b1492a678b12f182c546511c455ed1df951c92fd23473e1b5cb8582f50b45ac",
+    "packages/python/tests/test_row_group_custody.py": "91c9ff5078d4f6e18414227487f6991db44785433c3761d481727c08d06aa0a3",
+    "packages/python/tests/test_row_image.py": "306a88711bcd722d8fb5777aaa6e6f3e59c554ad6803d5a320ac9eb60e256c05",
+    "packages/python/tests/test_row_operation_address.py": "71a468e516a3c3bdd257b9e1abc7cd18ffee114e1af889a425780aad61bd43ec",
+    "packages/python/tests/test_row_operation_context.py": "f59a659d5afa1d543060c0ef4653ab946249c183f67e258c11ae18257615b35a",
+    "packages/python/tests/test_row_operation_custody.py": "10384de66272d5dcfe296aa5387b463995cf4a8f3036ec7e116636076bece853",
+    "packages/python/tests/test_row_operation_json.py": "c99efd63b0a78b35bc8c7d9de0565bb2b5bd30244e1babf88550ecb5cceb910f",
+    "packages/python/tests/test_row_registry_correspondence.py": "842dca68f100f06ea000075258ea4bb1652029bdfa5dc62b599ceba42dfd6c22",
+    "packages/python/tests/test_row_touch_registry.py": "9d46552a61b1dd3426be78152b410f575b7d272b086334074fa9afda8389cc83",
+    "packages/python/tests/test_touch_operation_correspondence.py": "fad338c7887d88294a4668b5d6e25612d993df1c7b1fd27d730df76626846031",
+    "packages/python/tests/test_weft.py": "7ff2541d371c16c8d8d84b573f20a7961c4cbb2f5d434db3ce45d207e83d7591"
+  },
+  "sourcePackagingSha256": "e9d7bc6f562394cde73f0508c0157704fd102c421c0b4477fa2924a4f61d9067",
+  "commands": [
+    [
+      "/private/tmp/truss-pgserver-corrected-test-env/bin/python",
+      "-m",
+      "pip",
+      "wheel",
+      "--no-deps",
+      "--no-build-isolation",
+      "--wheel-dir",
+      "/private/tmp/truss-fresh-wheel-wrj80xui/wheel",
+      "/private/tmp/truss-fresh-wheel-wrj80xui/source"
+    ],
+    [
+      "/private/tmp/truss-pgserver-corrected-test-env/bin/python",
+      "-m",
+      "pip",
+      "install",
+      "--no-deps",
+      "--no-compile",
+      "--target",
+      "/private/tmp/truss-fresh-wheel-wrj80xui/installed",
+      "/private/tmp/truss-fresh-wheel-wrj80xui/wheel/truss_toolkit-0.0.1.dev0-py3-none-any.whl"
+    ],
+    [
+      "/private/tmp/truss-pgserver-corrected-test-env/bin/python",
+      "-c",
+      "import json,truss;print(json.dumps({\"loaded\":truss.__file__,\"exports\":truss.__all__}))"
+    ],
+    [
+      "/private/tmp/truss-pgserver-corrected-test-env/bin/python",
+      "-W",
+      "error",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "/Users/erik/Projects/truss/packages/python/tests",
+      "-v"
+    ]
+  ],
+  "logs": {
+    "build.log": "493a99642d53b530a30cb5a96a7d0c41fa548128f9dbb6457fa983f656430b63",
+    "install.log": "0e570614d99816e0f2f0c6e70c1bcc7861e0f168c7d69b7a742f967976c7273c",
+    "import.log": "c295460d80026884548ef744c688789e35a626f57a1faec0d465596b2abdc10e",
+    "tests.log": "1f680b55c6b20979eb4edd4c23e850d4e7a34660dd96e260c9bcf725ac126669"
+  },
+  "producerSha256": "57ec98da32b3fa90d36cafcfd81a002eb7c48b3c01d2c2f42460584c4ba94c07",
+  "sourceWheelInstalledBytesExact": true,
+  "published": false,
+  "completeEngineQualified": false,
+  "installationQualified": false,
+  "migrationExecutionQualified": false,
+  "limitations": [
+    "Local corrected pgserver environment, not published default or managed profile",
+    "Source tests use checked-in external fixture files; not hermetic dependency closure",
+    "Public exports remain local runtime lifecycle only",
+    "Private component checks do not prove protected mutation/query/journal/feed or installation APIs"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "scope": "audit rejection behavior only",
+  "checks": [
+    {
+      "case": "valid inventory",
+      "exitCode": 0,
+      "errors": []
+    },
+    {
+      "case": "duplicate primary allocation",
+      "exitCode": 1,
+      "errors": [
+        "US-009: US-009-AC1 needs exactly one primary allocation row"
+      ]
+    },
+    {
+      "case": "missing allocation",
+      "exitCode": 1,
+      "errors": [
+        "US-009: US-009-AC1 needs exactly one primary allocation row"
+      ]
+    },
+    {
+      "case": "missing citation",
+      "exitCode": 1,
+      "errors": [
+        "US-009: incomplete allocation row for US-009-AC1"
+      ]
+    },
+    {
+      "case": "undeclared criterion",
+      "exitCode": 1,
+      "errors": [
+        "US-009: US-009-AC1 needs exactly one primary allocation row",
+        "US-009: undeclared allocation criteria ['US-009-AC99']"
+      ]
+    }
+  ]
+}

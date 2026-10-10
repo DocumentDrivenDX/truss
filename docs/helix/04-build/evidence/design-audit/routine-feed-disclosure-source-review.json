@@ -1,0 +1,16 @@
+{
+  "schema": "truss-routine-source-reconciliation/0.1",
+  "archivedManifestPath": "docs/helix/04-build/evidence/design-audit/reference-routine-design-before-feed-disclosure.original.json",
+  "archivedManifestSha256": "0e3c0747f17b9f7df2c5902f91e7f8c773b857ee740be16a2aac31105f7c340c",
+  "changedGoverningSources": [
+    {
+      "path": "02-design/contracts/CONTRACT-006-change-feed.md",
+      "previousSha256": "0dc99c5e076bd95b44241c9ace6481a0a3e5609c056959010ae24ec3713f125d",
+      "currentSha256": "7bfa39f0a58de1da2d0e914a4929e646bed1ae86483f6d4f272c94d5d47ed788"
+    }
+  ],
+  "semanticReview": "CONTRACT-006 adds original-payload disclosure and per-fragment current authority refusal. These are reader/publication obligations, not changes to seven trigger/validator signatures, current producer membership, counting meaning or native attributes. Complete security/authority composition remains required.",
+  "nativeQualified": false,
+  "installerReady": false,
+  "physicalBodyRoleDependencyFieldsChanged": false
+}

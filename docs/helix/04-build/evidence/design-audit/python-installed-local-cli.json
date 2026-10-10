@@ -1,0 +1,32 @@
+{
+  "scope": "Installed distribution console entrypoint starts, probes, stops and restarts retained local PostgreSQL; no Truss installation or migration",
+  "wheelSha256": "43ef23897b831ad637eb5502997a7b8cfa86df1eeabfc56a4f9f1d977296445b",
+  "loadedCli": "/private/tmp/truss-python-coordinator-env/lib/python3.11/site-packages/truss/cli.py",
+  "cliSha256": "6a6b3fb751a73b7d338f531d514ec3e4b94c7fb58d4fe80351ff630a7cc7df37",
+  "entryPoint": "truss.cli:main",
+  "runs": [
+    {
+      "runtime": "pgserver",
+      "runtimeVersion": "0.1.4",
+      "serverVersion": "16.2",
+      "dataDirectory": "/private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-installed-cli-z06j4bzt/retained data",
+      "connectionUri": "postgresql://postgres:@/postgres?host=/Users/erik/Library/Caches/TemporaryItems/python_PostgresServer/9199d5670d",
+      "trussInstallation": "not_checked",
+      "scope": "local_postgresql_only"
+    },
+    {
+      "runtime": "pgserver",
+      "runtimeVersion": "0.1.4",
+      "serverVersion": "16.2",
+      "dataDirectory": "/private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-installed-cli-z06j4bzt/retained data",
+      "connectionUri": "postgresql://postgres:@/postgres?host=/Users/erik/Library/Caches/TemporaryItems/python_PostgresServer/9199d5670d",
+      "trussInstallation": "not_checked",
+      "scope": "local_postgresql_only"
+    }
+  ],
+  "retainedVersionFile": true,
+  "postmasterMarkerAbsentAfterEachExit": true,
+  "environmentReused": true,
+  "signalTerminationQualified": false,
+  "completeEngineQualified": false
+}

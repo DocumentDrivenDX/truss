@@ -1,0 +1,53 @@
+{
+  "scope": "Original source-pin hashes and full JSON bundle rewrite correspondence only. No Rust rerun, semantic admission, registered native profiles, lowering, owner adoption or native qualification.",
+  "observedAt": "2026-10-06T21:26:30.905428+00:00",
+  "weftHead": "4227b9f7c6adc8c560c76980ce8663068592e066",
+  "profiles": [
+    {
+      "profile": "native-comparator",
+      "sourcePinsPath": "/Users/erik/Projects/weft/tests/truss-postgresql/upstream/native-comparator-source-pins.json",
+      "sourcePinsSha256": "18577cf8a46636286a8a1085a57389d74b4bcd1d5cc261101ea3edd5e5ebd970",
+      "originalResources": 2,
+      "bundlePath": "/Users/erik/Projects/weft/tests/truss-postgresql/upstream/native-comparator-schema-bundle.json",
+      "bundleSha256": "ee19828f84ada9063474e632860f70617f87696ac8fa2294631954a7545f0177",
+      "originalPinsMatch": true,
+      "completeRewrittenBundleMatch": true
+    },
+    {
+      "profile": "leaf-codec",
+      "sourcePinsPath": "/Users/erik/Projects/weft/tests/truss-postgresql/upstream/leaf-codec-source-pins.json",
+      "sourcePinsSha256": "3df9673dde5a50c34178565d3b58d5374737ea0c359a028d0141c316b9aa1256",
+      "originalResources": 2,
+      "bundlePath": "/Users/erik/Projects/weft/tests/truss-postgresql/upstream/leaf-codec-schema-bundle.json",
+      "bundleSha256": "262f1257f34f57c2b1040ef18d1323a8f1cb31f518096b58ba227a582cdcbb49",
+      "originalPinsMatch": true,
+      "completeRewrittenBundleMatch": true
+    },
+    {
+      "profile": "value-definition",
+      "sourcePinsPath": "/Users/erik/Projects/weft/tests/truss-postgresql/upstream/value-definition-source-pins.json",
+      "sourcePinsSha256": "7380d6fe3745ab00c518ee1ad0e21b414d0de0abe5dedb56f224e85715d9c30e",
+      "originalResources": 2,
+      "bundlePath": "/Users/erik/Projects/weft/tests/truss-postgresql/upstream/value-definition-schema-bundle.json",
+      "bundleSha256": "5d590e77d826d8228c1227dcaf66656a4600e902218a49d74f0e6dec3d28bb4f",
+      "originalPinsMatch": true,
+      "completeRewrittenBundleMatch": true
+    },
+    {
+      "profile": "read-context",
+      "sourcePinsPath": "/Users/erik/Projects/weft/tests/truss-postgresql/upstream/read-context-source-pins.json",
+      "sourcePinsSha256": "97cf5ff7c6636d31737e1bb45ef9e5e9432ab6bebf72a5b23fb5dca740b553e6",
+      "originalResources": 2,
+      "bundlePath": "/Users/erik/Projects/weft/tests/truss-postgresql/upstream/read-context-schema-bundle.json",
+      "bundleSha256": "a7a09ba34e23a521d25d6c9e171aa85d3c66b12638d6455e0ba8c65168657c9f",
+      "originalPinsMatch": true,
+      "completeRewrittenBundleMatch": true
+    }
+  ],
+  "presence": {
+    "originalPath": "docs/helix/02-design/contracts/truss-presence-definition-v0.1.proposal.schema.json",
+    "frozenPath": "/Users/erik/Projects/weft/tests/truss-postgresql/upstream/presence-definition.schema.json",
+    "sha256": "08270a400dceb28e855ead142e31cfad1a30fd116d84b5380022fa3de4542f11",
+    "bytesEqual": true
+  }
+}

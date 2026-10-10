@@ -1,0 +1,40 @@
+{
+  "scope": "read-only consumer source inspection; no semantic validation, tests, binding or runtime adoption",
+  "sources": [
+    {
+      "path": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/docs/helix/02-design/truss-requirements.md",
+      "sha256": "c8d93d8df7f37f004061fee06552238857f234e073dd75418e8eea94e3ef6d09"
+    },
+    {
+      "path": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "sha256": "e194117a8de436d1479804c59b0e2cc76470814a3c0723cd732797635442a3e5"
+    },
+    {
+      "path": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "sha256": "5ff02aa14d0d5a64b85b6fe75ffe99ec7a3d8caf93c19b79187506a86c45162e"
+    },
+    {
+      "path": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/tests/test_dialect.py",
+      "sha256": "c37a36bf5774d5ac21d5144bb521de6302332906761467892a68599df1edd014"
+    }
+  ],
+  "observedInputs": {
+    "umfVersion": "0.7.0",
+    "conformanceDocument": "sandbox",
+    "exampleDocument": "praxis-catalog",
+    "module": "catalog",
+    "keyId": "identity",
+    "keyName": "Identity",
+    "queries": [
+      "SELECT s.* FROM catalog.Solution s WHERE s.code = 'sol-lease-01'",
+      "SELECT u.practiceArea, COUNT(*) FROM catalog.UseCase u GROUP BY u.practiceArea"
+    ]
+  },
+  "remaining": [
+    "original UMF validity and extension meaning",
+    "exact key ID/name and native storage binding",
+    "parsed-input owner ABI and paging input correspondence",
+    "complete independently expected native/public consumer outcomes"
+  ],
+  "nativeImplementationQualified": false
+}

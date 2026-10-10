@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:direct-page-request:0.1.0",
+  "title": "Draft direct page request",
+  "description": "Shape only; exact request/cursor equality, deployment maximum, native identity grammar, authority, snapshot liveness and resources require semantic admission.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-direct-page-request/0.1.0"
+    },
+    "context": {
+      "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/context"
+    },
+    "selection": {
+      "oneOf": [
+        {
+          "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/objects"
+        },
+        {
+          "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/edges"
+        }
+      ]
+    },
+    "limit": {
+      "type": "string",
+      "pattern": "^[1-9][0-9]*$"
+    },
+    "continuation": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "state": {
+              "const": "first"
+            }
+          },
+          "required": [
+            "state"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "state": {
+              "const": "after"
+            },
+            "cursor": {
+              "$ref": "urn:truss:draft:direct-cursor:0.1.0"
+            }
+          },
+          "required": [
+            "state",
+            "cursor"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "context",
+    "selection",
+    "limit",
+    "continuation"
+  ],
+  "additionalProperties": false
+}

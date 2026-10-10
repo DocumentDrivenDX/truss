@@ -1,0 +1,62 @@
+{
+  "scope": "Selected proposal replacing canonical legacy object-key/report homes, retaining edge-only tombstones and adding bucket/report/high-water declarations; no installed enforcement or binding adoption",
+  "inputs": [
+    {
+      "path": "docs/helix/02-design/models/truss-layout-weft-review-0.3.proposal.umf.yaml",
+      "sha256": "a1c3790f55701f06275bcc5995941419f45c3a3f52b72e2c90d7f88dbee0eec5"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/key-bucket-layout-v0.1.draft.umf.json",
+      "sha256": "011ff87b7a9406627bb11b7dbd7884624240d89596e6d3bfc8d688afa3981cb2"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/catalog-acceptance-report-v0.1.proposal.umf.json",
+      "sha256": "b02369dc1e4d27d3c108b859ad86288bed1a18ff0340e92c4a4fbf8333a1d1ac"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/catalog-id-high-water-v0.1.draft.umf.json",
+      "sha256": "683cf3f5f5415a50befa0317907de96c1bb7ee15747c38616cc68d8e98835c58"
+    }
+  ],
+  "modelPath": "docs/helix/02-design/models/truss-layout-weft-review-0.4.proposal.umf.yaml",
+  "modelSha256": "99ca0d22e0c8eb9f8fc360688f135d9a63a314614fa2224049296d56861086f8",
+  "sqlPath": "docs/helix/02-design/models/truss-layout-weft-review-0.4.proposal.sql",
+  "sqlSha256": "cb49048be9b1429ec7a3f5f563a69e9704d002c6288ddb248555b244a793c9d7",
+  "astPath": "docs/helix/04-build/evidence/design-audit/weft-key-profile.native-ast.json",
+  "astSha256": "c3921d74bfd11987438a17b4ebb1f80eb3ac3416f8a101437d5bc63b0d89e70f",
+  "statements": 74,
+  "tables": [
+    "setting",
+    "module_access",
+    "schema_rev",
+    "schema_head",
+    "schema_doc",
+    "schema_change",
+    "type_def",
+    "prop_def",
+    "key_def",
+    "rel_def",
+    "rel_endpoint",
+    "object",
+    "edge",
+    "edge_limit",
+    "key_tombstone",
+    "record_source",
+    "feed_consumer",
+    "journal",
+    "row_home_operation",
+    "row_home_journal_stage",
+    "row_home_state",
+    "row_home_node",
+    "row_home_scalar",
+    "relationship_lineage",
+    "row_home_touch",
+    "row_home_capacity",
+    "key_bucket_guard",
+    "object_key_bucket",
+    "object_key_reservation_bucket",
+    "catalog_acceptance_report"
+  ],
+  "installationReady": false,
+  "reloadedExportExact": true
+}

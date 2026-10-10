@@ -29,14 +29,14 @@ ddx:
 
 ## Context
 
-A deployment chooses between the engine writing the journal and the database doing it by trigger.
+A deployment chooses between the engine writing the journal and the database doing it by trigger. Exactly one admitted producer owns journal rows, versions and update timestamps. Trigger-mode support applies to the qualified native writer/privilege/operation profile; arbitrary owner-level trigger disabling or unsupported native mutation paths are not silently advertised as audited. Changing mode is an explicit administrative transition with verified target readiness and writer exclusion, rather than a caller-set flag.
 
 ## Walkthrough
 
-1. Auditor sets the journal mode to trigger.
+1. An authorized administrator confirms the explicit transition to the installed trigger profile.
 2. A user updates an Order with plain SQL.
 3. System writes journal rows.
-4. Auditor sets the mode to engine and repeats.
+4. After the original writer transaction ends, the administrator confirms the transition to the installed engine profile and the user repeats through its declared raw-SQL profile.
 
 ## Acceptance Criteria
 
@@ -46,7 +46,7 @@ A deployment chooses between the engine writing the journal and the database doi
 
 ## Edge Cases
 
-- **Mode changed mid-transaction**: not allowed; the mode is read before the write begins.
+- **Mode changed mid-transaction**: the original admitted mode/profile is protected through the writer transaction’s actual end. An administrator waits for that exclusion to end before confirming a switch. Savepoint rollback that releases native admission invalidates its cached pin; later work re-admits rather than silently changing producers.
 - **Origin in trigger mode**: passed with a transaction-local setting; any role in it is ignored.
 
 ## Test Scenarios

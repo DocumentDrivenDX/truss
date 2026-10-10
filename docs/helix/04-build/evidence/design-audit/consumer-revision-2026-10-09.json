@@ -1,0 +1,229 @@
+{
+  "observedAt": "2026-10-10T01:47:33.326063+00:00",
+  "scope": "Frozen consumer-authored revision; input correspondence only",
+  "producerSha256": "0cec315a8da06228934d2e719333427c25d1072bf494313a9d7288e7f30a8613",
+  "previousInputsSha256": "8c4b80baddcdba4e60e343a43d41d3d88797117ff72c711d9026cf6eb4ef97f2",
+  "sources": {
+    "README.md": "b8566441f5f8bf24b3002f2aa6fdff2cb897ddda130b0f934339ca839b3d42a9",
+    "corpus.json": "e2229d554f3e9e7aa64a60e1a03d06e6a4d5ae4540d8b50e9ddfe92d3e6473bc",
+    "example.umf.json": "f11abe2d097a916a00a160b8ae2008181729cc41b6a1c03a052bc7e8292b5995",
+    "module.umf.json": "849a4fc0ec421110f08ffa24ff366e2b6d9b69d221373357f1bea926c9a25696",
+    "requirements.md": "0ae5489ed879fbbf4d144829af1f8a2f39f77f5515d65731806e61d8d6ec121b"
+  },
+  "models": [
+    {
+      "snapshot": "module.umf.json",
+      "sha256": "849a4fc0ec421110f08ffa24ff366e2b6d9b69d221373357f1bea926c9a25696",
+      "authoredNameChanges": [
+        {
+          "module": "catalog",
+          "element": "UseCase",
+          "name": "UseCase"
+        },
+        {
+          "module": "catalog",
+          "element": "UseCase.code",
+          "name": "code"
+        },
+        {
+          "module": "catalog",
+          "element": "UseCase.name",
+          "name": "name"
+        },
+        {
+          "module": "catalog",
+          "element": "UseCase.practiceArea",
+          "name": "practiceArea"
+        },
+        {
+          "module": "catalog",
+          "element": "Solution",
+          "name": "Solution"
+        },
+        {
+          "module": "catalog",
+          "element": "Solution.code",
+          "name": "code"
+        },
+        {
+          "module": "catalog",
+          "element": "Solution.name",
+          "name": "name"
+        },
+        {
+          "module": "catalog",
+          "element": "Solution.coverageLevel",
+          "name": "coverageLevel"
+        }
+      ],
+      "equalsPriorNamedProposalSemantically": true,
+      "limitation": "Semantic comparison, not byte identity with prior proposal or compiler/native execution"
+    },
+    {
+      "snapshot": "example.umf.json",
+      "sha256": "f11abe2d097a916a00a160b8ae2008181729cc41b6a1c03a052bc7e8292b5995",
+      "authoredNameChanges": [
+        {
+          "module": "catalog",
+          "element": "UseCase",
+          "name": "UseCase"
+        },
+        {
+          "module": "catalog",
+          "element": "UseCase.code",
+          "name": "code"
+        },
+        {
+          "module": "catalog",
+          "element": "UseCase.name",
+          "name": "name"
+        },
+        {
+          "module": "catalog",
+          "element": "UseCase.practiceArea",
+          "name": "practiceArea"
+        },
+        {
+          "module": "catalog",
+          "element": "UseCase.description",
+          "name": "description"
+        },
+        {
+          "module": "catalog",
+          "element": "UseCase.problem",
+          "name": "problem"
+        },
+        {
+          "module": "catalog",
+          "element": "Solution",
+          "name": "Solution"
+        },
+        {
+          "module": "catalog",
+          "element": "Solution.code",
+          "name": "code"
+        },
+        {
+          "module": "catalog",
+          "element": "Solution.name",
+          "name": "name"
+        },
+        {
+          "module": "catalog",
+          "element": "Solution.deliveryMode",
+          "name": "deliveryMode"
+        },
+        {
+          "module": "catalog",
+          "element": "Solution.summary",
+          "name": "summary"
+        },
+        {
+          "module": "catalog",
+          "element": "Solution.workflow",
+          "name": "workflow"
+        },
+        {
+          "module": "catalog",
+          "element": "Solution.prompt",
+          "name": "prompt"
+        },
+        {
+          "module": "catalog",
+          "element": "Solution.audience",
+          "name": "audience"
+        },
+        {
+          "module": "catalog",
+          "element": "Product",
+          "name": "Product"
+        },
+        {
+          "module": "catalog",
+          "element": "Product.code",
+          "name": "code"
+        },
+        {
+          "module": "catalog",
+          "element": "Product.name",
+          "name": "name"
+        },
+        {
+          "module": "catalog",
+          "element": "Product.vendor",
+          "name": "vendor"
+        },
+        {
+          "module": "catalog",
+          "element": "Product.category",
+          "name": "category"
+        },
+        {
+          "module": "catalog",
+          "element": "Product.summary",
+          "name": "summary"
+        },
+        {
+          "module": "catalog",
+          "element": "Product.lifecycleStatus",
+          "name": "lifecycleStatus"
+        },
+        {
+          "module": "catalog",
+          "element": "Product.availability",
+          "name": "availability"
+        },
+        {
+          "module": "catalog",
+          "element": "Product.caveat",
+          "name": "caveat"
+        },
+        {
+          "module": "catalog",
+          "element": "CoverageAssertion",
+          "name": "CoverageAssertion"
+        },
+        {
+          "module": "catalog",
+          "element": "CoverageAssertion.code",
+          "name": "code"
+        },
+        {
+          "module": "catalog",
+          "element": "CoverageAssertion.level",
+          "name": "level"
+        },
+        {
+          "module": "catalog",
+          "element": "CoverageAssertion.notes",
+          "name": "notes"
+        }
+      ],
+      "equalsPriorNamedProposalSemantically": true,
+      "limitation": "Semantic comparison, not byte identity with prior proposal or compiler/native execution"
+    }
+  ],
+  "consumerCorpusVersion": 1,
+  "caseCount": 41,
+  "operationCounts": {
+    "apply": 19,
+    "apply_batch": 10,
+    "attach": 2,
+    "authority_write": 1,
+    "describe": 1,
+    "expire": 1,
+    "import": 11,
+    "outage": 8,
+    "query": 45,
+    "reached": 6,
+    "register": 3,
+    "seed": 2,
+    "seed_many": 1,
+    "status": 4,
+    "sync": 4
+  },
+  "unissuedMalformedReachedExpectsInvalid": true,
+  "compilerExecuted": false,
+  "nativeExecuted": false,
+  "consumerReady": false
+}

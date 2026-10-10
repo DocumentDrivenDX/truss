@@ -1,0 +1,36 @@
+{
+  "interfaceVersion": "truss-row-finalization-resource/0.1.0",
+  "status": "unadopted proposal; no native collector/codec/guard qualification",
+  "integerCarrier": "canonical positive decimal text",
+  "scope": "One complete RF01\u2013RF06 invocation including old, candidate and resulting states, all touched properties, repeated observation/decoding and independent parity. Governing operation/group/transaction aggregate limits additionally apply.",
+  "limits": {
+    "touchedPropertyStates": "1024",
+    "oneValueNodes": "65536",
+    "allObservedAndCandidateNodeOccurrences": "262144",
+    "allPayloadRowOccurrences": "262144",
+    "oneValueDepth": "128",
+    "oneValueSourceBytes": "4194304",
+    "allSourceAndDecodedArtifactBytes": "33554432",
+    "oneSlotIdentityUtf8OrRawBytes": "1048576",
+    "oneDiagnosticUtf8Bytes": "4096",
+    "diagnosticCount": "64",
+    "diagnosticBytesTotal": "65536",
+    "peakOwnedBytes": "134217728",
+    "cumulativeAllocationBytes": "536870912",
+    "abstractWorkUnits": "64000000",
+    "wallDeadlineMilliseconds": "30000"
+  },
+  "accounting": {
+    "states": "Count each complete touched property state once for admission, including absent/deleted states; charge every repeated native state-row observation separately as work and buffer bytes.",
+    "nodes": "Charge each native, candidate, reconstruction and repeated node occurrence, including orphan/cycle/duplicate observations. Identity caching cannot erase performed work.",
+    "payloads": "Charge all scalar rows in scope including extra null/container/orphan payloads; collect independently of root reachability.",
+    "bytes": "Charge original transport/native fields before retention, every artifact decode occurrence, full map/record slot identity and original source/token bytes. Shared immutable buffers reduce peak only with proven retained custody.",
+    "work": "One unit per observed row, visited node, reference/slot check and allocation operation, plus one per byte hashed, decoded, encoded, copied or compared; sorting and collision scans charge all compared bytes. Charge more expensive codec operations under their selected profile as well.",
+    "memory": "Reserve simultaneous old/candidate/new values, raw collection, exact lookup, traversal stacks, decoder scratch, output and diagnostics. The individual maxima do not promise simultaneous fit.",
+    "nativeTransport": "Bound incremental collection and field decoding before full host allocation. Requesting N+1 rows detects overflow only when each returned field is independently bounded; a LIMIT alone does not bound bytes or prove complete scope.",
+    "aggregate": "Retain governing operation/group/transaction charges across per-property calls, retries and internal finalization passes. Splitting a tree or resetting local counters cannot evade the enclosing bound.",
+    "deadline": "Use minimum of stage and governing deadline, measured monotonically from invocation admission; native statements and codec work must be cancelable or contained.",
+    "failure": "Refuse whole invocation with bounded diagnostics; roll back replacement and dependent key/history/group effects. Retain resource reservations until actual native/codec termination and transaction containment."
+  },
+  "adoption": "Select exact collector, bounded transport decoder, native statement/lock caps, codec work weights and memory-accounting adapter. Verify exact-limit/one-over, forced collision, concurrent peak and cancellation schedules before any support claim."
+}

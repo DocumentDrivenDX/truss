@@ -1,0 +1,749 @@
+---
+ddx:
+  id: truss.current-design-closure
+  type: status-report
+  activity: build
+  status: draft
+  authoring:
+    home: repo
+  links:
+    - id: truss.design-decision-queue
+      kind: informed_by
+    - id: truss.implementation-plan
+      kind: informed_by
+    - id: CONTRACT-012
+      kind: informed_by
+---
+
+# Current design closure
+
+## Updated composition checkpoint — 2026-10-10
+
+The [bounded custody analysis](evidence/design-audit/python-custody-bounded-model-controls.json)
+now completes906 abstract states/6224 transitions with six detected broken
+variants and the expected local-close/native-fence counterexample. STP-044 maps
+that trace to original native barrier, effect and recovery schedules with an
+independent observer; they remain not_run. The component result supersedes only
+the earlier no-executable-analysis checkpoint, not native authority, refinement,
+liveness or independent-review gaps. The [current full allocation check](evidence/design-audit/current-story-allocation-after-writer-deadlines.json)
+retains all45 stories/167 criteria with zero structural errors.
+
+Fresh fetch now identifies UMF main322b193 and Weft mainb8867c9, superseding the
+older locally retained Weft refs below. The [committed participation review](evidence/design-audit/weft-b8867c9-participation-review.json)
+records Databricks distinct-neighbor degree guards with occurrence-preserving
+read bags. TD/STP-011 distinguish these from Truss's existing occurrence caps;
+their equivalent native UMF mapping remains unqualified. The review separately
+records workspace and committed UMF contract bytes, which differ; normative
+comparison uses the committed source. No published package, Truss PostgreSQL
+lowering or adopted f05f2df compiler changes from this upstream review.
+
+The [distinct-neighbor engineering candidate](../02-design/contracts/distinct-neighbor-participation.proposal.md)
+now specifies grouped representative markers in the existing fixed table,
+complete final-state ordering, parallel/representative deletion, incoming bounds,
+minimum-zero-root checks and explicit populated conversion. Eight independent
+synthetic marker expectations pass their mathematical checks. CONTRACT-001 now
+corrects its earlier equivalent-UMF claim: the existing per-edge EL03 multiset
+is an occurrence cap. The candidate needs versioned writer/observer/verifier and
+complete native qualification before adoption; existing guards and US-011
+behavior are unchanged. No new table, extension or per-relationship index is
+selected by this design.
+
+The [installed Python wheel](evidence/design-audit/python-accounted-core-installed-suite.json)
+now passes70 tests with17 exact source/wheel/installed module payloads. This
+supersedes the61/16 package checkpoint below. The private receive path now shares
+the original byte account across header/frame/slice payloads and conservative
+pinned-core copy charges before ingress/driver return. The [native seam](evidence/design-audit/pg8000-core-accounted-control-native.json)
+matches ten independently expected control frames on16.15. Complete actual
+allocation/work/containment, original adoption/actor/control authority and ready
+publication remain unqualified; none of the seven composition boundaries closes.
+The Python source boundary gate now passes64 imports; broader TypeScript/native
+boundary gates remain open.
+
+The installation tests now specify a separately registered [complete inventory
+observer](../03-test/migration-inspection-contract-walkthrough.proposal.md#independent-complete-installation-observer-schedule)
+with original coherent-cut/freshness custody, bidirectional membership,
+routine/trigger/effective-right/initializer coverage and unavailable-observation
+rules. Its concrete release inventory, implementation and rights remain P0/P1
+outputs. Installation cannot publish ready from a marker or known-selector count.
+
+The [Weft requirements review](evidence/design-audit/weft-security-requirements-working-review.json)
+records uncommitted owner-derived scan/action/operator/output requirements and
+continued physical/result/dependency refusal. It supplies no stable backend ABI
+or current native security handoff. Truss retains its frozen f05f2df compiler and
+lets the owner finish its requirements/correspondence work. The broader45-story/
+167-criterion, migration, consumer, feed, interchange and managed-target scope
+remains required.
+
+## Owner decisions — 2026-10-09 (supersedes pending language below)
+
+Truss ships and maintains a tested embeddable Python implementation in this
+repository (ADR-003 accepted). Catalog identity is document-qualified (ADR-004
+accepted). Stale pre-effect admission returns a refusal without automatic retries.
+Pool provisioning/operation is the host's responsibility; Truss takes a PostgreSQL
+connection, retains transaction affinity and does not require a pooler performance
+statistic to close product design. Installation and shipped migration profile
+selection are Truss engineering responsibilities. The default local development
+and test runtime is pgserver; see the [installation/runtime plan](local-runtime-installation-migration-plan.md).
+
+The prior traversal question was not explained adequately. No unique-terminal or
+path-valued output choice is inferred from the owner's response. First establish
+whether a separate direct traversal API is required; this does not block Python,
+installation or migration work. Historical pending-choice lists below are
+superseded by this decision record, not renewed approval requests.
+
+## Current delivery checkpoint — 2026-10-09
+
+This checkpoint supersedes the older source/status summaries below only where
+explicitly stated. The full45-story scope and seven incomplete reference
+composition boundaries remain intact. Public catalog installation, apply/import,
+key/edge reads and feed are not qualified by component evidence; candidate layout0.16
+has not become a stable admitted release.
+
+The [accelerated installation/Python queue](local-runtime-installation-migration-plan.md#accelerated-capability-queue--owner-direction-2026-10-09)
+is the current sequencing authority. Its first usable slice includes document
+qualification, R4 isolation and R5 origin. Actual original native issuer/account/
+arbitration and the seven observer/validator/finalizer bodies still precede atomic
+complete inventory/ready publication. Accepted
+[ADR-008](../02-design/adr/ADR-008-trusted-embedding-host.md) settles the embedding
+host and registered adapter as trusted. Original connection/adoption tokens,
+exclusive dispatch and shared issuer/account custody are their obligations;
+PostgreSQL checks actual transaction, current authority and protected effects.
+Local Python object custody does not independently authenticate a native issuer
+or fence effects after a separate close check. No further trust-boundary product
+vote is pending. Driver/account/native composition and the accepted minimum
+security-owner handoff remain implementation gates. Do not substitute caller
+ordinal strings, seal flags, dummy guards or profile-shaped metadata for them.
+
+HELIX0.15.4 adoption now has linked scope and qualification work: Architecture's
+Python AST gate now passes61 current imports after explicit private account,
+resource capture/index and directory-resolver module mapping; the earlier51-import receipt retains nine real-checker controls;
+TypeScript5.9.3 inventory observes12 cross-adapter private imports needing ownership
+remediation, not an enforced dependency pass. The process configuration contract
+and CFG-01–12 plan distinguish host injection from native configuration admission.
+Diagnostic/OBS-01–09 contracts specify safe events, OTel projection and bounded
+capture/export, without qualifying an actual bridge/receiver. Python ordinal/
+admission formal specification maps stable properties to ten passing component
+methods, with precise author review only; executable formal analysis and native
+correspondence remain open. Entry links are in the HELIX README and runtime plan. The
+[latest installed suite](evidence/design-audit/python-registry-current-installed-suite.json)
+passes61 tests with16 module payloads matched against source/wheel/installation,
+including the new private registry decoder. The environment is reused and the
+corrected pgserver binary remains a private candidate, not the published default.
+The separate17-vector Python/TypeScript registry replay proves structural decoding
+parity only. Earlier58-test/15-module,48-test/13-module and44-test/12-module receipts
+remain historical. The
+preceding full-suite run timed out at180 seconds without retained partial output;
+its cause and cleanup remain unverified. The new diagnostic run passed without
+extending that deadline. Future failure/timeout receipts preserve original output.
+The private host byte account and composed directory reader have scoped evidence;
+actual allocator/native/work/deadline accounting and complete installation remain
+unqualified.
+The [issuer handoff](operation-ordinal-issuer-handoff.md#shared-registry-across-four-native-families)
+now retains all four administrative native shared-registry rollback/refusal
+schedules. These receipts qualify those components only; they do not close the
+seven composition boundaries or admit public install/apply/read/feed operations.
+
+The corrected private pgserver16.15 tuple passes caller-reset, historical isolation,
+origin captures and the current UMF structural/populated immutable-guard probes
+within their separate exact scopes. Current structure matches50 tables/481columns/
+67FKs, with12 populated mutation refusals. This is compatibility/component evidence,
+not an installed authorized engine, managed-target qualification, public default
+binary distribution or migration readiness. Preserve the original16.2 receipts as
+historical; do not relabel them.16.15 still lacks transaction_timeout.
+
+Current locally retained origin/main refs identify UMF at
+`322b193cef7c940d07b741860cf0170272628868` and Weft at
+`ee90571a5aa67b6d2e6069220f6e1cc0eec3822c`; this is not a fresh remote fetch.
+The [UMF browser replay](evidence/design-audit/schema-browser-322b193-search-site.json)
+qualifies the selected original assets and readable-label navigation on the
+generated site, without deployment or native qualification. The
+[Weft original consumer replay](evidence/design-audit/consumer-revised-frontend-ee90571.json)
+retains all90 inputs with80 logical resolutions and10 relationship-predicate
+refusals. Its independently registered distribution work is reviewed in the
+[source handoff](evidence/design-audit/weft-ee90571-distribution-source-review.json),
+not adopted as a Truss Python release. Truss retains f05f2df compile/SQL0.2.
+
+The [security graph-stage review](evidence/design-audit/security-resumed-graph-stage-review.json)
+records88 scoped native candidate observations and nativeImplementationQualified=false.
+It observed an in-progress owner turn at that checkpoint; it does not assert
+current process status. The owner tuple includes qualified-property0.15 and legacy
+ordinal admission, unlike Truss's current source-epoch0.16/host-issued candidates.
+Keep ownership with the security resolver and require the exact minimum current
+installation/authority/publication packet before integration. Neither old acceptance
+counts nor this candidate receipt qualifies ordinary R4/R5 enforcement.
+
+## Current closure classification — 2026-10-09
+
+Historical upstream review (superseded by the current checkpoint above): fetched UMF was
+`72996e58d2a9291ae191127b4f55e548c2105569`; Weft is
+`1a8a3445302aa44a93167ef340dbcfb306805254`. Truss's adopted compiler component
+remains frozen at `f05f2df09e9c2494ac8c6d703dfe38413dbc4181` with compile/SQL0.2.
+The [loader/native-null review](evidence/design-audit/upstream-loader-null-source-review.json)
+records exact committed inputs. UMF adds portable loader contract primitives;
+its exact JavaScript numeric adapter remains unchanged. Weft adds opt-in
+Ashlar/Spark optional Scalar null semantics, not PostgreSQL support. Its selected
+native-null home requires present properties and refuses source-valid absence;
+that subset cannot replace Truss's complete absence/null/value contract.
+PostgreSQL native/qualified17.9 profile sources are unchanged and do not qualify
+the default local16.2 engine. The original UMF browser assets are byte-identical;
+Truss browser provenance now advances to the reviewed UMF commit.
+
+Earlier UMF dashboard and repository portability review is retained in
+[its source receipt](evidence/design-audit/umf-dashboard-source-sync.json). UMF's experimental
+Record/dataset value operations are available owner inputs for A2, with finite
+supplied-only scope and core0.8 requirements. The
+[updated acceptance handoff](acceptance-runtime-handoff.md#a2-remaining-dynamic-producer-integration)
+retains explicit old-source transition, complete native coverage and unsupported
+association/lifecycle obligations. These operations do not select a complete
+acceptance or security tuple. Selected schema-browser asset bytes are unchanged.
+
+The [complete consumer SQL review](evidence/design-audit/consumer-corpus-frontend.json)
+now accounts for all 45 query steps on both explicitly named model proposals:
+80 unprofiled logical resolutions and ten relationship-equality refusals. The
+separate bounded frontend packet confirms grouped-count and key-page review
+alternatives, not automatic consumer query rewriting. Source naming adoption,
+parsed input, presence/enrichment, reached-result compatibility and full native
+consumer qualification remain open. Keep these exact scopes when allocating
+implementation; neither a logical frontend pass nor the host corpus's passing
+report proves the original consumer integration complete.
+
+The [original composition review record](evidence/design-audit/reference-composition-incomplete.json)
+is the current concrete starting inventory: seven required boundaries, complete
+captured candidate source bytes and selected local schema dependencies. Every
+boundary remains incomplete; neither source capture nor schema compilation
+adopts a release profile. Its reproducible checkers refuse changed original
+membership and unsupported schema reference scopes.
+
+The current capture has now been refreshed for two inspected changes:
+CONTRACT-008's confirmed-commit/unverified-readiness branch, and the consumer read
+handoff's traversal necessity and committed Weft0.3 reviews. Nine review-shape
+controls, twenty-eight membership controls, complete captured-source byte
+comparison and the same local schema closures (11/8/2/1) pass again. Python
+package ownership is recorded as settled in this inventory; complete language,
+driver, security, resource and committed consumer interchange remain incomplete.
+All seven authoring/review/native dispositions retain their original incomplete
+states. This is current inventory fidelity, not complete transitive composition
+or successful native installation.
+
+The inventory's remaining-work wording now separates authored semantic/profile
+selection from implementation and native qualification. Existing A2 and M2–M5
+procedures are not missing designs merely because their producers/executors are
+unimplemented. Conversely, an authored procedure does not select M1's source/target
+pair, a complete authority/account tuple or the compiler/consumer interface.
+All seven authored dispositions remain incomplete and independent/native review
+remains not_reviewed; candidate bytes and membership are unchanged. Native producer,
+deployment and committed interchange exits now reside in nativeQualification
+rather than being described as absent authoring.
+
+The recorded verification after the related-list handoff refresh passes all nine
+review-shape and twenty-eight candidate-root membership controls, compares every
+captured root with its source bytes at that checkpoint, and verifies local schema
+closure (11 acceptance, 8 history, 2 migration and 1 Python schema). The storage
+compiler root capture now includes the bounded-list/lookahead admission rules.
+All authored/review/native dispositions retain their original incomplete states.
+The structural scope check also still covers 45 stories, 167 criteria and 90
+primary TD/STP pins. These checks verify current inventory fidelity; they do not
+prove complete semantic agreement or qualify an implemented capability.
+
+Recent handoffs now include Python/TypeScript complete synthetic report-to-native
+encoding parity (including integer-like key order), portable migration inspection
+schemas and LM-V01–06, fresh-process archive recovery AH-R01–03, and conformance
+interruption/evidence-store settlement controls. Current combined strict schema
+compilation covers [161 contracts](evidence/design-audit/schema-inventory-receipt-visibility.json),
+including the separate mandatory-performance expectation 0.2 envelope. These are component/design outputs, distinct
+from genuine full report production, protected publication, deployed migration
+execution, provider durability and committed database interchange.
+
+The security owner's private Key-agreement interpretation now has source-pinned
+logical/browser evidence with nativeImplementationQualified=false. Default source
+qualifier refusal remains; public authenticated interpretation and compiler/native
+refinement still belong to that owner. Weft f05f2df adds original owning-core0.8 admission under its existing transport
+shapes. Truss has built that exact committed source in isolation and advanced its
+TypeScript compiler pin after twenty-one compiler/host/protocol tests, fifty-one
+assertions and strict TypeScript checking; the
+[regression receipt](evidence/design-audit/weft-f05f2df-truss-regression.json)
+retains the narrow qualification scope. Its public model type remains core0.7.
+Python and browser artifacts retain their separate historical pins; no native
+execution, consumer projection or security capability is qualified by this update.
+Keep dirty owner work outside Truss release adoption.
+
+
+This index separates authored design from capability qualification. Its older
+chronological receipts below retain their recorded scope. The current
+[coordination queue](design-coordination.md#design-queue) and
+[consumer closure order](../02-design/python-integration.proposal.md#consumer-closure-order-and-accountable-outputs)
+are the actionable cross-project handoffs.
+
+| Remaining work | Classification and owner | Evidence needed to close it |
+| --- | --- | --- |
+| Python route/home and ADR-001/003 reconciliation | Human product decision; proposal now uses Python orchestration, shared PostgreSQL, Rust Weft and security-owned authorization | Explicit owner route decision followed by consistent ADR/package updates; future Python execution is separate |
+| Cross-document dependency acceptance / US-002 | Existing UMF registry candidate verified; full carrier, exact supplied-source/Record/key resolution and SCC ordering have private evidence. Truss owns adoption/composition | Admit the complete original registration/resource tuple, prior-accepted-source custody and whole-set native derivation/report publication. The retained registry/source/graph component receipts do not establish accepted catalog meaning. |
+| Unknown endpoint policies / US-003 | Valid pending-intent representation is experimentally available through current UMF; Truss owns complete policy/storage/report composition | Admit full qualified provisional relationship/key-state mapping, explicit whole-relationship losses and same-ID promotion/lifecycle effects with the security owner. Nullable native key cells do not distinguish absent versus unresolved key meaning. CONTRACT-045 and core relationships remain unchanged. |
+| Exact compiler projection/input contract | Weft-owned interface dependency; affected Item.note three-state meaning and parsed-input ABI remain explicit | Committed owner contract/profile, original mapping adoption and independent affected scenarios; no local compiler substitute |
+| Original consumer source and result compatibility | Consumer/source-owner adoption plus Truss/Weft integration; explicit Record/Field naming, parser/profile, projection and reached-result gaps remain | Adopt reviewed core names without runtime source mutation; module ID/namespace already suffice at inspected source scope. Resolve grouped-count paging and relationship predicate input with Weft, same-cut whole-entity enrichment, and the consumer's invalid/unissued-token false expectation. The [consumer handoff](conformance-runtime-handoff.md#consumer-reached-result-compatibility-gap) requires refusal/unavailable rather than manufacturing false |
+| Direct traversal result meaning | Human product selection pending; current recommendation is unique typed terminals with path-local cycle exclusion | Select unique destinations versus path-valued results, then reconcile US-023/CONTRACT-004 and the [independent oracle](../03-test/reference-traversal-path-cycle.proposal.json). Weft SQL bag semantics remain separate; no silent adoption from proposed test expectations. |
+| Coherent release profiles | Truss design/engineering selection consuming UMF/Weft/security owner outputs | Exact compatible installation, interpretation, encoding, transport, resource, authority, archive and corpus tuple; no fixture or hash-only authority |
+| Stable layout and migrations | Truss composition/implementation; migration receipt body, UMF storage, immutable guards, read-only status/verification and recovery semantics are authored | Complete initializer/installer and registered route producer, native source/target/preservation/fault evidence, published DDL/check/manifest; no implicit migration |
+| Core metadata/browser | Authored and locally verified: core 0.6, 50 Records/481 Fields, 532 browser definitions, exact native downloads | Complete native interpretation/installed parity and any requested production publication; these do not reopen the chosen hybrid representation |
+| Entry/caller and transaction boundaries | Authored closure algorithms and ownership/savepoint/containment interfaces; security composition is independently owned | Actual callable bodies/dependencies, effective ordinary-role grants, original-driver outcome and bypass/fault evidence |
+| Accepted catalog/report/head | Truss implementation with available owner producers; complete public acceptance remains unavailable | Complete selected report: nineteen original fields for the combined 0.3 lifecycle/history reference, including lifecycleProfile/reactivations; the seventeen-field 0.1 codec remains baseline-only. Admit current installation/authority/resource context, immutable report insert and atomic head finalization; staged IDs remain provisional |
+| Groups, receipts, imports and history/feed | Truss implementation under selected durable retry/reconstructible-history decisions | Protected complete effects, original/no-op replay, native preconditions, complete membership/prerequisites/application/ACK and lifecycle protection evidence |
+| Shared corpus and release consumer | Truss implementation/test delivery across all 45 stories/167 criteria and both consumer inputs | Versioned data fixtures with independent expected results, complete native/host/bypass/interchange runs and clean packed consumers; 90 structural pins cannot establish this |
+
+The original consumer runner's passing report is also weaker than required
+capability qualification: seven read steps can expect Unsupported when the
+backend descriptor omits support, and an `only` filter can omit applicable cases.
+The [independent assessment handoff](conformance-runtime-handoff.md#consumer-runner-pass-versus-required-capability-qualification)
+now requires a frozen required-capability/case matrix, both backend-kind sets and
+complete fresh-fixture isolation. This is a concrete adapter/test design gap,
+not a sixth pending product selection or permission to weaken shared requirements.
+
+Missing execution alone is not a missing design decision. Conversely, a
+complete method declaration cannot replace an unselected producer meaning or
+incompatible shared profile. The design goal remains open because the profile,
+compiler and Python decision rows are not closed and the full-scope handoff
+audit has not proved semantic completeness. Runtime release remains separately
+unqualified. Continue shared PostgreSQL work independently of Python ownership
+and compiler gaps that affect only their named surfaces.
+
+A subsequent [endpoint-intent representation probe](../02-design/contracts/truss-endpoint-intent-representation.proposal.md)
+now executes the existing committed UMF extension registry against a Truss-owned
+pending-intent language, with five validity/completeness/refusal controls. It
+provides a concrete candidate path for the US-002/003 representation rows, while
+leaving E1–E5 full endpoint/dependency/policy/lifecycle correspondence unresolved.
+It does not adopt a vocabulary, repair invalid core references or qualify native
+acceptance. Prefer reviewing this existing-owner mechanism over waiting for
+generic CONTRACT-045 feature work.
+
+The full endpoint-intent carrier is now authored and passes 31 structural controls;
+strict registration/reference compilation of all 156 current contract schemas
+passes. A subsequent full document-language registration experiment passes 17 original
+owner controls; exact supplied-source/Record/key and deterministic graph composition
+passes 30 tests/609 assertions. E1 still requires adopted bounded original runtime
+registration and complete package/definition/policy correspondence. Neither the
+full experiment nor the earlier minimal probe establishes catalog acceptance.
+
+The current carrier uses opaque original source-inventory references instead of
+embedded source bytes/digests, avoiding self-reference and reciprocal hash cycles
+for local and mutual dependencies. Private preparation now verifies exact supplied-source correspondence without
+substituting transition bytes. Previously accepted source custody and native
+publication remain open; a reference string cannot authorize resolution.
+
+Historical physical design source is the reconciled 0.12 history review over the separately pinned 0.11 compiler foundation: 106 statements, 46 tables, 442 columns and 24 explicit indexes. These counts describe preserved declarations, not a full installer or supported deployment. The [current column inventory](../02-design/contracts/weft-review-columns-v0.12.proposal.md) covers the 0.12 review declarations. The separately versioned [0.12 source review packet](evidence/weft-source-binding012/README.md) maps the current review declarations and exact owner-export SQL; the [0.11 packet](evidence/weft-source-binding011/README.md) retains its original bytes and scope; earlier packets remain separately pinned. Source mapping does not qualify receipt replay or native/compiler adoption. Older 0.8/0.4 packets remain preserved and none is adopted. No complete design or native qualification claim is made.
+
+Source reconciliation: the [0.12 history review](../02-design/models/truss-layout-reference-history-0.12.proposal.umf.json) retains the 106-statement foundation, with no new tables, columns or carrier constraints. Exact source comparison confirms that 0.11 already contains the stage child, four carrier ALTERs and metadata operation. Only the journal sequence settings and review marker/identity change. The [receipt](evidence/design-audit/reference-history-layout-model-source.json) verifies this delta and exact export/reload equality; the existing 0.11 compiler packet remains separately pinned and cannot establish 0.12 adoption.
+
+The [remaining handoff audit](remaining-design-handoff-audit.md) separates missing authored composition/interfaces from future native identity and qualification evidence. It is the current integrated next-work boundary; source checks alone cannot close it.
+
+## Current implementation and dependency boundary — 2026-10-08
+
+The 0.12 declaration packet above remains historical source custody. Actual native use found its nonimmutable generated identity digest; the UMF-authored [0.13 repair](../02-design/models/truss-layout-weft-integration-0.13.proposal.umf.json) supplies the native digest CHECK. The current private native suite installs the UMF-generated [0.15 qualified-property candidate](../02-design/models/truss-layout-qualified-property-0.15.proposal.umf.json), composed through 0.14 declaring-Field module and 0.15 owner/module/element property uniqueness. Its [source receipt](evidence/design-audit/qualified-property-layout-source.json) and [240-check native component receipt](evidence/runtime-operation-admission.json) preserve exact model/DDL/body pins. Current components cover operation admission/generation, original lineage and four identity classifiers/new staging, canonical scalar/tree/transport spelling, immutable source/report archives, source digest verification and ordered report document collection. They publish no accepted report and cannot commit positive acceptance. Complete installation-marker/security/authority/resource/finalizer composition and populated conversion remain unfinished. The original complete-input preparation now feeds the native five-field document archive carrier through the pinned UMF Record producer. The 240-check run verifies exact original input bytes, ordered source correspondence, actual provisional native revision allocation and rollback. Synthetic root installation/profile pins remain unadmitted; this proves document preparation/staging composition, not complete acceptance. Converted ingress explicitly refuses until its original adapter registration exists. Source declaration collection now supplies original qualified Record/member/Field/key/relationship inventories to the native suite; equal Field IDs retain distinct declaring modules, and original key order and unknown content remain unchanged. It allocates no IDs, chooses no storage homes and supplies no acceptance authority. The host startup profile resolver now snapshots exact original registered bytes and resolves every root/document/converted-adapter/binding/transform pin by identity, version, direct hash and role. Duplicate registrations, role borrowing and changed hashes refuse. Catalog preparation can apply this resolver before interpreting documents; absent resolver custody remains explicitly null and does not authorize acceptance. Fourteen focused tests (49 assertions) cover this composition and source declaration custody. This closes pin-to-byte lookup implementation only; original profile semantic composition, actual installation correspondence and protected caller authority remain required. The [full new-cohort staging receipt](evidence/catalog-new-cohort.json) exercises one original UMF document through native revision, all declared Record/property/key allocations and relationship endpoint resolution. The private host composition requires complete unique explicit property-home choices and wraps its ordered native statements in a savepoint on the caller transaction. Sixty native checks cover actual correspondence, exact archive bytes, late-failure rollback, existing-ID refusal and the unchanged unfinished-acceptance commit barrier. The private native collector independently reads surviving new type/property/key/relationship identities and endpoint tuples, verifies original source lineage/matching and compares the full authored endpoint cross-product with actual storage. Equal-count substitution, missing endpoint and retirement refuse rather than producing misleading additions. Stored Field semantics, ordered Key property IDs/primary flags, relationship name/bounds/lifecycle/direction/target key and original definition source coordinates are now checked against exact archived declarations. Source-to-storage completeness requires every original Record member, Key and relationship in this new-cohort profile; deleted Field/Key rows cannot disappear from collection. Eight added native corruption controls exercise missing declarations and altered definitions.  Its inventory is an input to later full before/after effect/report validation; it is not the six report counts, lifecycle proof, qualified visibility or finalization authority. Absent binding now produces the complete default `json` home inventory from original qualified members under ADR-002 D4 and retains the original input digest; the native cohort test consumes this derived inventory. Present binding explicitly refuses default preparation. CONTRACT-003 distinguishes pre-allocation logical home intent from the downstream actual-ID PostgreSQL/Weft binding, avoiding guessed IDs and circular placeholder acceptance custody. The present-binding interpreter and actual-ID definition producer remain unfinished. Report document preparation now directly invokes the native archive collector and verifies complete original input/document revision/order/digest bijection before constructing its document members. Original immutable UMF producer observations and reversible transition evidence are retained inside direct-hashed byte artifacts; partial producer evidence receives no invented complete interpretation status. Four focused tests (fifteen assertions) cover omitted/extra observations, identity/revision/hash/order substitutions and preserved partial status, with two actual native composition checks. Report profile/context/coverage/enforcement/lifecycle/effect admission and finalization remain separate required producers. Eleven catalog/archive/lineage/report/head stores now have private ALWAYS row-generation observers: each original surviving event increments the operation generation and clears readiness/seal/application state. Savepoint rollback removes non-surviving contributions; replica dispatch still observes events. ALWAYS statement guards refuse catalog TRUNCATE until an admitted complete effect procedure exists. Report document capture records the actual native writer xid/operation ordinal/effect generation with its archive observations, and refuses missing/noncanonical tuple values. This establishes component invalidation/capture behavior, not original issuer rights, complete touch/effect accounting, qualified observation liveness or final report/commit authority. The native original-observation recheck now requires the same live writer xid, unfinished catalog-acceptance ordinal, surviving generation, admitted phase and held original head exclusion before document evidence can be reused. Eight native controls cover successful recheck, stale catalog work, rolled-back work, foreign transaction/ordinal/noncanonical or changed generation and ended transaction. This closes that private liveness comparison body; it does not make a caller-provided tuple an issuer capability or replace complete report/effect/profile/authority validation and finalizer custody. The native cohort now admits the exact complete original input bytes rather than a one-byte input fixture. Before archive persistence, full-byte input custody and ordered document ID/revision/source-byte correspondence are independently checked against that native admission. Same interpreted JSON with changed original whitespace refuses. ALWAYS operation-original guards preserve original identity/kind/context/definition/input/prestate/candidate/obligation/group bytes and refuse deletion/truncation pending a qualified retention procedure; generation/readiness updates remain allowed. Six native controls cover different-input admission borrowing, source-byte substitution and original tuple/input/removal mutations. Definition/candidate/obligation/group and root installation/profile/actor issuance remain component fixtures, not accepted authority. Original prestate is now an actual native byte artifact captured before operation admission under head exclusion, containing the observed head and ordered full-row catalog/archive/key-history/lineage/endpoint/report inventories. Its bytes replace the prestate placeholder and are retained immutably by the operation. Four native controls verify the original empty start cut, exact byte retention, refusal of late recapture and refusal to upgrade earlier shared head admission. The candidate native JSONB-text artifact format, complete before/after interpretation, original profile/security/source visibility and precharged resource accounting remain unqualified; capturing a real start cut alone does not authorize lifecycle/report conclusions. The private new-only effect collector now compares the complete retained catalog/archive/history/lineage/endpoint/report cut with immutable original prestate, excluding only this acceptance’s genuinely-new definitions and source revision. It also rechecks actual document archive bytes against the admitted full input. Changed retained genesis metadata, an unplanned revision and source-byte substitution with a recomputed native digest refuse collection. The six canonical text count fields are now produced from the verified actual identity families; zero retirement follows the unchanged retained cut and explicit refusal of lifecycle/edit profiles. Counts remain a component basis, not complete report, qualified visibility, full lifecycle support or head/finalizer authority. This supports genuinely-new staging only; retained identity/reactivation/conversion and complete report/authority/finalizer remain required for full acceptance. Root profile/authority admission, full catalog effects, the complete report and commit finalizer remain the next runtime composition work.
+
+Weft integration is now implemented experimentally, with six real native query scenarios and original Parse/Bind frames. The compiler remains pinned to 27445317; [current source synchronization](evidence/design-audit/weft-qualified-registration-source-sync.json) verifies unchanged committed compiler sources through 94b2de5 and the original qualified registration evidence references. Rebuilding unchanged compiler code is unnecessary. Keep uncommitted security/core0.8 work outside the admitted baseline; when committed, review request/response/profile changes before upgrading and rerun the existing exact-value, integrity, context and refusal scenarios.
+
+The next complete runtime handoff remains accepted native catalog identity plus original binding/profile/authority custody, followed by the protected acceptance/mutation/journal/feed chain. Component query fixtures cannot replace that work. Core physical key semantics remain a scoped dependency for complete core-generated DDL interpretation; the located microsite now embeds the pinned UMF browser and has actual Chromium evidence. Production publication remains separate; they do not block independent executor or protected producer design. Native-null compiler interpretation remains a gate for affected complete logical projections. Preserve these separate scopes when sequencing work.
+
+Canonical entry design: use the [public native route map](../02-design/contracts/reference-public-native-route-map.proposal.md) and its exact administrative inventory, with store/private responsibility and PAC-01–06 controls in the protected access composition. The [accepted-catalog producer](../02-design/contracts/weft-accepted-catalog-producer.proposal.md) specifies original binding production and WCB-01–10. Do not treat missing native body/OID evidence as an undecided caller interface or duplicate these inventories. The [current handoff audit](remaining-design-handoff-audit.md#current-authored-closure-versus-outstanding-choices) distinguishes actual remaining design selections from implementation outputs.
+
+## Assertion-source owner API checkpoint — 2026-10-08
+
+Fresh upstream fetch observes UMF `30e489aab5762dcbf36363e48f8fa36b5712b779` and Weft `5856c73` on their respective remote defaults. The [declaration producer receipt](evidence/umf-declaration-producer.json) records exact committed source comparisons: no changes in UMF model/validation/numeric adapter sources from the previous remote checkpoint, and no changes in Weft crates/spec/Cargo inputs from the reviewed compiler checkpoint. New domain packs/site work does not upgrade the admitted runtime profiles.
+
+A separate immutable c45c72a2 metadata bundle now exposes the existing UMF-owned schema-property, authored-key and authored-relationship inspection APIs. Five actual Bun tests (twenty-three assertions) preserve original pointers, diagnostics, unverified provenance and input immutability. Key inspection reports the exact `/keys` pointer. Relationship inspection succeeds on the original 0.7 envelope and refuses the explicit upgraded 0.8 target; schema-property inspection requires that 0.8 target. Preserve original-source versus transition-target correspondence when assembling assertion evidence. Successful envelope validation or a source walker cannot erase this version-specific interpretation gap.
+
+The prepared-source adapter now visits original document/module/element schema-property targets, Record key sources and module relationship sources through those captured owner APIs. It retains each observation or exact owner failure name/code/path/message in an immutable direct-hashed artifact with original document digest, operation/identity and original-versus-reversible-target basis. No failure becomes an empty successful inventory. Its 4,096-call/four-MiB retained-output component controls are not precharged dependency/heap/termination qualification; complete disclosure, original source-pointer/owner coverage and assertion identity extraction remain required.
+
+The next enforcement producer must combine these scoped owner observations with original unknown core/extension content, complete source/owner identities and exact selected native/engine evidence. No complete assertion inventory or enforcement classification follows from these getter checks. Truss owns report membership/custody and qualification; UMF owns meanings and logical checks, and Weft owns lowering. This separate bundle leaves existing Record/value/numeric producer bytes and native/compiler registration pins intact.
+
+## Closure by product area
+
+| Area / existing gate | Specified and reviewed source evidence | Remaining design output | Implementation/evidence after selection |
+| --- | --- | --- | --- |
+| Catalog identity / D-04 | Qualified owner/lineage homes, source custody, owner-selected same-identity reactivation, key history composed in 0.9 | Original interpretation/extraction and full native matching/profile tuple; selected separate-report direction with exact native/profile composition | Protected acceptance/reactivation/conversion, CP-01–06 and original history/report parity |
+| Exact values / D-05 | Tree/scalar algorithms and accepted ADR-006; original four-field inventory; row-home, presence and decimal domain proposals; fixture lexical grammar and bounded native projection; complete decoder/header/batch/failure procedure and six-cut shape expectations; separate row-value/presence/scalar definition formats and original full-source custody | Produce original registered home/value/codec artifacts and exact native parser/producer/security/dependency/resource profiles; exact code-equality observation form is selected; native comparator/key realization and broader corpus remain; admit exact compiler nullable/domain registration | Native transport/readback/RD-01–04/LC-01–04/complete-tree/browser evidence; source compatibility and proposed algorithms do not qualify installed support |
+| Executor / D-03 | Transaction ownership, issuer/savepoint/parameter/descriptor/termination algorithms and draft bindings | Concrete pre-parser integration cut is specified; exact hook/build, ingress/backing-allocation instrumentation, mediated command paths and coherent observation/resource tuple still require composition | Adapter implementation plus actual cancellation, rollback and unknown-outcome schedules |
+| Group replay / D-06 | Request-free independence and conditional receipt design | accepted fixed receipt direction; exact native/retention composition, canonical input/result and retention composition | Complete durable original receipt producer/reader and retry/recovery tests |
+| History/feed / D-07 | Four feed stores, complete consumer, recovery homes, seed/admin algorithms; two property deltas plus complete metadata witness, prepublication position reservation and explicit-start journal child-store selected | accepted full-history direction; exact encoding/native/archive profile adoption; original five-fact/two-closure extractors and native clock/codec composition | Shared union validator, source/downstream lifecycle, RS-01–07 and complete native feed/history cases |
+| Enforcement | Operation registry/generation, unfinished unique index, touch/capacity and five trigger-body interfaces; selected reference protected maximum-two final-state count alongside maximum-one marker correspondence | SQL/PLpgSQL languages, seven routine attributes and protected security-mode/responsibility map selected; private reference saturated-count query and actor-custody handoff are specified; exact bodies/native role/dependency/operation/codec/resource composition and complete entrypoint inventory remain | Protected bodies, bypass/deferred/immediate/savepoint tests and full transaction collection |
+| Catalog evolution | Retained candidate/transform/key algorithms; explicit retained-report and populated type_def conversion order; seven complete parent review units, including explicit object_key split replacement, original constraint/creator-index custody and proposed effect dispositions | Resolve original parent/creator evolution and complete transitive effects; exact extraction/decoder/native body/security/profile composition | Atomic conversion/rebinding and independent RC-01–04/TC-01–04/AQ-01–03 schedules |
+| Import | Ordered batches, original index/result custody and rollback/unknown semantics | Exact import/native adapter/resource profile matching catalog/value selection | Mixed object/edge batch fault and public result tests |
+| Reads/compiler | Direct readers/source packets; merged Weft B-007 qualified compiler registration and explicit Truss host-obligation integration order | Exact Truss layout/definition/codec/executor adoption; complete note-null projection registration; broader required capability reconciliation | Truss native mapping/authority/guard/publication evidence; Weft retains lowering/parameters/decoders and released registration |
+| Policy | Qualified grant home, current owner union, original actor and three-argument helper algorithm | Declared 46-store responsibility worklist exists; current review has no policy/RLS declarations. Complete current role/routine/policy/grant/dependency composition and controlled administrative paths remain open | Helper/collector/guards, QG-01–06 and original effective-authority/bypass evidence |
+| Qualification/delivery | Story/STP allocation, installer/marker protocol, package boundaries and public reference scenarios | Exact corpus/runner/assessor/deployment tuple and adopted support-profile scope | Native/browser/packed-consumer/fault/resource/performance receipts covering all requested stories |
+
+## Owner and shared-owner decisions
+
+The owner resolved the six product choices in the decision walkthrough: bounds for Truss-controlled work; transaction-scoped provisional precommit IDs; durable complete-result request receipts; exact numeric carriers with lossless JavaScript convenience; complete reconstructable history with short/zero local retention; and separate immutable acceptance reports. ADR-005/006/007 record accepted direction. Current authority, graph integrity, pooling, finite controlled-work admission and cleanup/recovery remain mandatory.
+
+The independent precommit allocation service and universal rollback-resistant native account remain optional unadopted proposals. Selected native resource profiles must satisfy [FR-43 reconciliation](../02-design/contracts/resource-account-requirement-reconciliation.md); no session affinity or unqualified extension is inferred. Zero local retention cannot bypass required durable archive/consumer handoff or request-receipt protection.
+
+Remaining design output is exact coherent codec/comparator/source/native/driver/security/deployment/corpus composition and accepted Weft mapping, followed by implementation qualification. Pinned UMF numeric/value producers are consumed with scoped native/browser evidence; original Record validation retains its separately pinned source/subset. Core meanings are reused rather than replaced. Existing selected reactivation and property-delta/witness behavior remain fixed.
+
+UMF is sufficient for the current scope. Select/pin its existing source/APIs and preserve unknown semantics; no generic new UMF capability request blocks Truss. Weft’s scalar SUM/named equality and selected signed64/decimal(28,2) sequence evidence are compiler-owned. B-005 acceptance was reviewed at 2399e30; later 3facc649 source adds Ashlar work, reviewed separately below, without changing the Truss PostgreSQL backend in the retained change range. The owner records US-003-AC1–AC4 passed within its pinned synthetic candidate scope, including 224 actual driver cases; release/production qualification remains separate. These do not qualify installed Truss paths or wider domains. Exact Truss binding review/adoption remains separate from local source checks; current packet versions do not imply current-layout compatibility. Cross-chat delivery authorization is still pending and does not block independent Truss design work.
+
+## Execution-ready work and next closure order
+
+The [managed extension source review](../02-design/contracts/managed-extension-source-review.md) supplies current primary availability sources. Common pg_stat_statements telemetry is not evidence for the proposed native account; no complete shipped account module has been identified/qualified. Exact deployment/profile selection remains open.
+
+1. Finish the native operation/codec/security/driver composition selections for one coherent installation tuple. The [installer matrix](../02-design/contracts/weft-review-installation-gap-matrix.proposal.md) identifies concrete store/routine dependencies; use existing algorithms rather than restarting them as missing design.
+2. Compose exact remaining deployment/driver/security/value/binding profiles under the recorded owner decisions; select and review those profiles before exercising their capabilities. Request-free groups and inert packaging remain independent.
+3. Produce one complete versioned physical/effect/routine/grant bundle with initialization and conversion. Compare independent native inventory before ready-marker publication. Source SQL count alone cannot close this step.
+4. Review/adopt the matching exact Weft binding/codec/execution scope. Preserve older packets and explicit refusal for unsupported capability combinations.
+5. Implement the reference-host milestone through public packages and independent expected state, then execute the full story, failure/concurrency/resource and deployment qualification plan. Those runs are future implementation evidence, not prerequisites for every design-only document.
+
+Build/export/inert-construction work in [package delivery](../02-design/package-delivery.proposal.md), source composition checks and independent fixture/runner design can proceed now. The user separately authorized runtime implementation and regular main-checkout commits/pushes. Production deployment remains a separate action; that distinction does not block authorized native source and isolated component testing. The goal remains incomplete because exact native/profile composition and shared-owner adoption remain unresolved, rather than solely because planned native tests have not run.
+
+
+The architecture selects SQL/PLpgSQL for reference PostgreSQL observations and protected orchestration. CH-02 no longer waits on that general language choice. Exact bodies, codec/resource dependencies, driver/provider tuples and native admission remain unresolved; the selected language cannot substitute for their evidence.
+
+
+The seven required routines now have selected optimizer/null/disclosure attributes and SECURITY DEFINER responsibility ownership with private invocation and trusted resolution. Their actual native roles, rights and bodies remain unqualified. The [current allocation receipt](evidence/design-audit/coverage-current-design.json) pins these revised test plans and the separately authored scope expectation; its reproducible check refuses stale receipts. It proves structural allocation only and cannot close the remaining semantic/profile gates.
+
+
+The full reference installation must explicitly select and version its complete source/bodies/trigger/constraint/security/dependency/initialization/conversion tuple. The current private 0.15 component installation is a candidate input, not a full adopted bundle; historical 0.12/0.11 packets retain their original compiler/conversion scope. Historical fragments cannot substitute for that bundle. The integration milestone now applies settled lexical/receipt/report choices and makes packed assembly delivery independent of any unqualified Node adapter; actual Bun/Node/native support remains separately evidenced.
+
+
+### Journal reference decisions and concrete remaining composition
+
+The reference now selects protected prepublication reservation and the explicit-start row_home_journal_stage child-store. CONTRACT-002’s complete frozen semantic inventory determines allocation once, followed by digest construction, immutable append and independently checked native parity. The original operation parent owns the phase custody. Uncertain phase responses require original observation; only confirmed rollback and a new authorized operation permit fresh allocation. STP-018 JS-01–04 explicitly allocates incompatible-cleanup, full returned-cohort, atomic child/parent rollback and unknown outer-settlement controls. These choices are no longer pending design alternatives.
+
+The remaining implementation-ready composition must bind actual allocator identity/domain/privileges and insert behavior; the complete stage table’s original physical and implicit dependencies; phase codec/schema and bounded native producer/parser/encoder definitions; private insertion/observation/frozen-generation call paths; and the stage-aware cleanup/settlement/dependency profile. Review each against the original parent registry and selected installation tuple. A baseline two-kind cleanup profile or source 0.11 alone cannot realize this selection. Full bodies and native qualification remain absent; no installed support is inferred from the authored staging SQL or planned schedules.
+
+## Current history and executor handoff checkpoint
+
+The [five-phase manifest](../02-design/contracts/reference-journal-phase-design-v0.1.proposal.json) now captures exact private signatures separately from the seven handler/validator routines, including original effect bytes for transition observation. Its source admission verifies governing pins and fifteen damaged-design refusals; native bodies, identities, complete privileges and dependency closure remain unresolved. The [H1–H7 worklist](../02-design/contracts/weft-review-installation-gap-matrix.proposal.md#executable-history-design-handoff) orders full history installation and its acceptance evidence.
+
+The [driver handoff](../02-design/contracts/reference-driver-hook-review.proposal.md) now specifies the incremental predecode gate, original protocol capture and account-composition algorithm. It reconciles frozen node-postgres findings and pinned Bun declaration observations rather than treating raw/array results as sufficient. STP-044 DH-01–05 allocate malformed framing/UTF-8, preallocation, exact completion metadata, cancellation and build/hook substitution cases. Exact native integration hooks, transport-plan producers and installed runtime dependency tuples remain open.
+
+Current verification passes strict TypeScript binding-consumer checking, read-only 0.12 model/export/receipt reproduction, expected structural coverage for 45 stories/167 criteria/90 artifacts, thirteen original trigger references and five-phase source admission. These checks cover declarations, byte provenance and allocation structure only. They do not execute the planned native schedules, establish installed semantics, adopt a Weft binding or close the overall design goal. Implementation may use these concrete handoffs without reopening the selected history and transaction algorithms; complete coherent value/security/deployment/binding profiles are still required.
+
+
+### Compiler owner acceptance synchronization — 2026-10-08
+
+Weft accepted its B-005 Truss candidate compiler component at 3ad557b; current source 2399e30 adds Ashlar preparation work. The [committed-source review](evidence/design-audit/weft-candidate-acceptance-source-review.json) checks four acceptance source pins, all driver harness dependency pins and receipt aggregation: 224 cases, 32 publications, 96 pre-query refusals and 96 prepublication refusals. The owner uses PostgreSQL 17.9, psycopg 3.2.10/libpq 17.5 and synthetic selected storage definitions with injected authority views. Truss did not rerun these tests, verify binaries or verify temporary logs.
+
+Truss no longer treats unfinished owner candidate-compiler acceptance as a dependency. Its remaining work is adopting the exact original definition/layout/codec mapping and executing every emitted host prerequisite under actual Truss visibility, authority, driver and resource profiles. Qualified compiler registration exists for its exact evidence-backed domains; distribution ownership/license/final release artifacts remain separate owner gates. Production Truss storage/authorization/execution remains Truss qualification work. Ashlar/Databricks preparation changes neither Truss storage ownership nor compiler responsibility. No production Truss authorization or 0.12 layout adoption follows from this owner acceptance.
+
+
+## Current concrete reference design boundary
+
+The [four-field inventory](../02-design/contracts/reference-account-items-field-inventory.proposal.json) recovers the existing M00–M07 candidate's original identities/definitions. The [note presence proposal](../02-design/contracts/reference-note-presence-binding.proposal.md) and [amount domain proposal](../02-design/contracts/reference-amount-domain-binding.proposal.md) supply intended meanings and independent expectations, with the separately proposed four-field row-home realization and scalar codec procedure; exact registered artifacts and native qualification remain open. These source/domain tasks no longer wait on a new milestone schema. Complete consumer/release schema reconciliation remains separate; the consumer discovery source is confirmed as PR #6; its acceptance requirements remain to be demonstrated by the reference implementation.
+
+The [Weft note review packet](../02-design/contracts/weft-reference-note-presence-review.proposal.md) is prepared but not delivered. Sending it awaits explicit cross-chat authorization. Native-null projection remains excluded from the merged qualified registration; this new concrete integration gap does not reopen accepted candidate compiler work. The optional first reference deployment question remains unanswered; the [local deployment proposal](../02-design/contracts/reference-local-deployment.proposal.md) now supplies a revisable PostgreSQL 17.11 planning target. These questions do not prevent independent source/body/dependency design, but no answer or support-profile adoption is inferred from elapsed time.
+
+Physical parent work now has original tagged/decoded before-state, complete direct CREATE/index/ALTER source effects and original constraint/creator-index custody for type_def, rel_def, module_access, schema_rev, journal, key_tombstone and object_key’s explicit split replacement. The [installer matrix](../02-design/contracts/weft-review-installation-gap-matrix.proposal.md) orders conversion and records coupled enforcement. All 87 prior unmatched identities remain unadopted: seventy lack a unique original parent/creator anchor, and seventeen have no parent-bounded candidate. Next closure requires explicit parent/effect evolution and complete transitive native/body/security/source correspondence; additional subnode counts alone cannot resolve these identities.
+
+
+## Verified source checkpoint after current handoff updates
+
+Retained source checkpoints from their respective runs cover: structural allocation for 45 stories/167 criteria/90 artifacts; five-phase original source/schema admission and fifteen damaged-design refusals; sixteen known routine signatures; read-only UMF 0.12 composition/export/reload reproduction; and fourteen composed report v0.3 wrapper controls. The separate current-layout compiler packet passes full artifact/profile/declaration custody and thirteen damaged-copy refusals, including unknown/mixed version isolation. Existing 0.11 packet bytes/hash remain unchanged. These findings establish current source consistency only.
+
+Concrete next design units are exact native home/value/codec artifacts for the proposed [reference mapping](../02-design/contracts/reference-row-home-binding.proposal.md), trusted [Weft registration selections](../02-design/contracts/reference-weft-registration-handoff.proposal.md), complete original parent/effect/security/body correspondence, and selection/completion of an exact durable archive provider profile under the [handoff procedure](../02-design/contracts/reference-history-archive-handoff.proposal.md). The [S3 candidate](../02-design/contracts/reference-history-s3-profile.proposal.md) specifies version custody, conditional submission and retention/recovery obligations; exact SDK/resource/security mechanisms and actual qualification remain open. The independent logical state oracle and RD/RC/TC/AH scenarios supply planned observations, not native verdicts. No source check closes these units or the broader deployment/release corpus.
+
+### Latest upstream optional-presence source review
+
+Weft source 3facc649 now includes Ashlar optional-scalar presence and native Python/browser candidate evidence. The [source review receipt](evidence/design-audit/weft-optional-presence-source-review.json) verifies all six owner-listed source hashes and retains the full change inventory since a16591d; no Truss PostgreSQL backend source changed in that range. The owner reports 36 native cases and 224 embedding parity cases, with B006 acceptance and B007 release still open. Truss did not rerun those executions. This is relevant compiler-owned work to reuse through owner review, not evidence that Truss row-home absent/null/string registration is supported. The prepared Item.note packet remains undelivered after automatic approval review rejected ambiguous authorization. UMF remains unchanged at 16c35e8.
+
+## Design composition versus future implementation evidence
+
+The [reference definition handoff](../02-design/contracts/reference-definition-handoff.proposal.json) now pins original full UMF source/field locations and the distinct row-value/presence/scalar/join definition formats. Cross-artifact atomic admission, exact key lookup, source-token/zero-exponent resource handling and three-state note requirements are specified. Remaining design composition is populated original definition/native/authority/resource registrations and trusted owner interpretation, not another choice of fixture or a replacement encoder. The four-field milestone cannot close the broader consumer/release corpus.
+
+The [store security worklist](../02-design/contracts/reference-store-security-worklist.proposal.json) and [declared security observation](evidence/design-audit/reference-layout-security-declarations.json) distinguish responsibilities from installed protection. Source 0.12 has two high-water PUBLIC revokes and no policy/RLS declarations; legacy layout 0.2 isolation is separately scoped. Compose current document-qualified policies and complete native roles/callable/grant/dependency paths, then implement the STP-045 incomplete/legacy/bypass readiness refusals. Policy names and declared-store coverage do not prove effective privileges.
+
+The [driver handoff](../02-design/contracts/reference-driver-hook-review.proposal.md) specifies selected complete-frame forwarding before Parser.parse with mandatory versioned no-residual assertions, original preconversion capture and distinct backing-allocation custody. Exact installed integration and ingress/runtime producer bounds remain selection outputs. STP-044 now names geometric-boundary, aliased-view, independent-backing, copy-overlap and late-hook qualification controls. Writing those hooks and running native fault schedules are future implementation/evidence work; their absence must not be relabeled a passing profile.
+
+Design completion still requires coherent selected registrations/body/security/dependency/driver/provider/corpus composition and compiler-owned explicit-null interpretation. Full native/browser/fault/concurrency/deployment qualification follows implementation under the existing plan; source schema/checker results neither satisfy those later gates nor justify reopening settled product choices.
+
+Weft’s subsequent relationship checkpoint at 5050d49 is reviewed in the [separate source receipt](evidence/design-audit/weft-relationship-source-review.json): eight exact source hashes agree, and the change range leaves Truss PostgreSQL backend sources unchanged. Authored relationship/typed-key/bounded traversal behavior is compiler-owned candidate work; its excluded batched-guard form and fixture-only guard reuse cannot qualify Truss execution. Truss continues separate original prerequisite execution and actual current-authority rechecks. This adds alignment evidence without adopting a Databricks profile or closing Truss’s explicit-null registration.
+
+
+### Upstream recursive compound candidate checkpoint
+
+Weft f44ff82 adds Ashlar recursive sequence/map/structured candidate encoding, reviewed in the [committed source receipt](evidence/design-audit/weft-compound-source-review.json). Its initial owner receipt reports 133 cases (56 exact results, 77 pre-query refusals) against a synthetic immutable publication; Truss did not rerun them. The revised exact binary member lookup still has separate verification pending in the owner checkpoint. Depth/node boundaries, compound embeddings and host enforcement remain unfinished. Explicit native null remains refused, and no Truss PostgreSQL backend changed in the reviewed range.
+
+Reuse the compiler-owned descriptor graph, capability and prerequisite machinery through an explicitly adopted backend profile. Do not copy Databricks recursive SQL or its JSON encoding into Truss row-home collectors. Original whole-owner integrity and duplicate-ID checks precede user predicates; finite result-domain checks are not a proof of pre-materialization resource bounds. Truss must retain its complete native producer/account/authority obligations, original definition/home/codec correspondence and three-state note integration gate. This checkpoint closes no Truss storage, null or runtime capability. UMF primary remains 16c35e8d943769ccfa7bb57d16785aa7159abe65.
+
+
+The reference property lifecycle now explicitly preserves retired values in their original qualified home/definition custody, validates them before same-ID reactivation and prevents same-name fresh identities from inheriting them. CONTRACT-003 integrates this selected disposition with complete private collection versus active projection, revoked-grant preservation and fresh binding admission after reactivation. Concrete lifecycle UMF sources and original validation evidence are retained under STP-004; complete=false experimental warnings remain explicit. Exact native lifecycle/decoder/security composition and broad type/key/relationship cases remain unfinished.
+
+
+### Subsequent compound boundary and embedding evidence
+
+Weft dc9b709 supersedes the pending owner test observations at f44ff82 for its Ashlar candidate, recorded in the [separate boundary source review](evidence/design-audit/weft-compound-boundary-source-review.json). The owner reports the revised dictionary codec's 133 native cases pass, plus six member-name/unknown-member/depth/node-boundary controls and 415 full-artifact parity cases in native Python and Chromium/WASM. Its test-only buffered host passes 49 phase/transport/unknown-meaning controls; actual native host transport enforcement and compound entity/keyset combinations remain in progress. Truss did not rerun those executions or verify binaries. No Truss PostgreSQL backend changes occur in the reviewed range.
+
+Do not continue describing those owner boundary/embedding tests as missing, and do not treat their completion as Truss host or original row-home qualification. The older source review retains its historical scope. Explicit native null remains excluded; compiler-owned registration and exact original Truss definition/driver/security/resource admission remain required. Native result depth/node refusal is separately scoped from pre-materialization transport bounds. UMF primary remains unchanged at 16c35e8d.
+
+
+Reference relationship enforcement now selects parent-excluded complete native final-state counting for the original maximum-two target bound, with complete target-side maximum-one counts/marker parity. The [installer handoff](../02-design/contracts/weft-review-installation-gap-matrix.proposal.md#reference-maximum-two-participation-producer-handoff) requires original mutation/group/catalog and current-union commit coverage, exact count source/domain, private visibility, native/security/dependency and resource composition. This resolves the reference procedure choice; it does not widen the seven-routine marker-only manifest or qualify broader multiplicities. STP-040 separately allocates outgoing last-slot and incoming marker replacement schedules, hidden/parallel-edge and stale-snapshot controls. Body/dependency registration and native evidence remain unfinished.
+
+
+### Merged B-006 candidate acceptance checkpoint
+
+Weft main is now 1ed1c24, merging PR #8 and accepting B-006 for its owner-authorized Ashlar candidate compiler scope. The [merge source review](evidence/design-audit/weft-b006-merge-source-review.json) records eight exact committed source pins and the complete change inventory since dc9b709; no Truss backend source changes occur in that range. The owner now reports 30 actual native host cases plus 49 independent host controls, 48 compound entity/keyset combinations and 463 full-artifact Python/Chromium/CLI parity cases. The previously pending host and compound application work is no longer an owner compiler-slice blocker. Truss did not rerun native executions or independently verify the reported binaries.
+
+The parity procedure explicitly amends the value.presence declaration in 172 historical artifacts from scalar-only to scalar-or-compound envelopes while requiring all other artifact fields to agree. Preserve that qualified amendment rather than claiming unamended historical-byte parity. Explicit native null remains unsupported. B-007 release/conformance, production authority and installed storage adoption remain separate; the complete Truss Item.note absent/null/string registration and its undelivered owner-review packet remain open. UMF main is unchanged at 16c35e8d943769ccfa7bb57d16785aa7159abe65.
+
+
+The two concrete reference participation/equality observations now pass the pinned UMF PostgreSQL parser, original JSON/YAML source/tree preservation and guarded native export/reparse AST comparison. The [source review receipt](evidence/design-audit/reference-observation-sql-source-review.json) retains both exact SQL inputs, original parameter inventories and four dependency hashes; the [reproducer](evidence/design-audit/check-reference-observation-sql.ts) refuses changed/dirty UMF source or a stale receipt. Run with `bun docs/helix/04-build/evidence/design-audit/check-reference-observation-sql.ts /path/to/pinned/umf`. Its parser tree version is 170004, separate from the PostgreSQL 17.11 planning target. This proves source/AST correspondence, not installed type/operator/collation resolution, native query execution, complete visibility or resource qualification.
+
+
+### Weft release-conformance work started
+
+Weft 22d3d8c starts B-007 with a trusted local support-evidence auditor. The [source checkpoint](evidence/design-audit/weft-b007-preparation-source-review.json) verifies four committed files and the complete eight-file change range from B-006 merge; no compiler backend changes occur. The owner reports 41 synthetic consistency/profile/digest/bag/order/refusal controls. Truss did not rerun them. B-007 is now in progress, superseding earlier not-started observations; its full criterion, expanded/property/mutation/fuzz, native support inventory and packaging/license gates remain open.
+
+Truss's assessor must preserve the same distinction between trusted report consistency and independently established producer/oracle provenance. A complete per-layer report and exact context agreement cannot by themselves prove native execution or oracle independence. Do not copy Weft's test auditor into the compiler or substitute it for Truss's original state/authority/driver/native evidence. The explicit-null and exact Truss mapping adoption gaps remain unchanged.
+
+### Embedded source JSON admission checkpoint — 2026-10-08
+
+Catalog preparation now runs the shared iterative byte scanner over each original UTF-8 UMF source before calling the pinned owner parser. It refuses duplicate decoded object names, invalid Unicode/JSON grammar, and the existing byte, depth, node, container and logical-work limits. Source-mode numeric lexemes follow strict JSON grammar without conversion to JavaScript numbers; its discarded scan tree supplies no semantic interpretation. The outer acceptance decoder remains numeric-free. Original source archival bytes remain authoritative.
+
+The targeted decoder, source preflight and actual-owner preparation suites pass 36 tests / 114 assertions; strict TypeScript compilation passes. The Chromium corpus now passes 28 cases: the existing 19 outer-wire/custody cases plus nine independently specified source-preflight cases, including large integer/decimal/exponent lexemes, duplicate names, invalid Unicode, numeric grammar and structural limits. The receipt pins both expected corpora and the browser bundle. These checks qualify structural preflight, not a shared operation budget, heap containment, owner parsing precision, complete profile/actor admission or accepted commit. The pinned owner uses JavaScript numbers only within its interoperable numeric profile; the owner checkpoint below qualifies the observed refusal boundary. Complete assertion and selected numeric-carrier admission remains required before a public acceptance claim.
+
+
+### Original UMF source numeric interpretation checkpoint — 2026-10-08
+
+The actual pinned Record producer at c45c72a2 delegates document reading to `readJsonValue`. Its JSON.parse call checks syntax; the returned tree comes from the owner YAML-core parser with integer-as-bigint capture, decimal spelling comparison, negative-zero refusal and bounded JSON copying. Truss therefore must not duplicate a numeric semantics parser or claim the owner merely rounds source JSON into its semantic tree.
+
+The [owner receipt](evidence/umf-source-numeric-admission.json) pins the producer manifest, three governing source files and the nine-case test source. Actual Bun checks pass nine tests / 31 assertions: unsafe integer, changed decimal spelling, underflow, overflow and negative zero refuse with owner NUMBER errors; 0.1, the maximum safe integer and an equivalent exponent spelling preserve their decimal interpretation and original source text through the verified 0.7→0.8 envelope transition. This decimal-spelling contract does not assert exact binary floating-point representation of 0.1. A declared unknown extension carrying an exact decimal string survives unchanged but validation remains incomplete, so preservation cannot masquerade as supported core numeric semantics or database enforcement. Browser owner-parser parity for these exact cases, selected core carrier enforcement, full assertion inventory and accepted commit remain separate qualification work.
+
+
+### Original Field assertion observation checkpoint — 2026-10-08
+
+A separate c45c72a2 pinned owner bundle now supplies actual kind, nullability, cardinality and facet inspection. Catalog observation collection optionally includes those operations for every original element and retains the separate bundle profile in each exact evidence artifact. Existing declaration bundle APIs remain unchanged. Known facet meanings, unknown members and the owner's uninterpreted source paths remain separate; no nearby known assertion grants enforcement to an opaque member. The original 0.7 inspections cannot be transferred to the upgraded 0.8 envelope: actual owner result-schema refusals remain explicit unavailable observations.
+
+The [Field assertion producer receipt](evidence/umf-field-assertion-producer.json) retains source/bundle/test pins. Nine actual-owner tests / 42 assertions and strict TypeScript checks pass, including original paths, partial facet meaning, unknown-content preservation, version refusal and observation evidence-profile correspondence. This advances source observation collection but does not complete assertion identity enumeration, root/module owner representation, exact source/report inventory comparison, selected native or engine qualification, resource containment, or accepted report publication. Optional bundle omission remains visible as fieldProfile null and cannot support a complete report.
+
+
+### Assertion owner scope checkpoint — 2026-10-08
+
+The enforcement report draft and CONTRACT-004 now represent original document assertions explicitly as `{scope:"document", documentId}`, while preserving existing module-qualified owners for module/element assertions and leaving graph/history identity bindings unchanged. This closes the representational gap for document-level schema properties and opaque extension assertions without inventing a module. Twenty-one structural schema probes and strict positive/negative TypeScript owner examples pass. A document scope with moduleId, bare document identity, empty IDs and unknown scopes refuse structurally. Acceptance reports reference this enforcement schema by its original draft ID and must register the updated exact bytes under a fresh report-profile pin; existing historical profile bytes are not overwritten. Actual source ownership, document disclosure, exact assertion inventory and native/engine evidence remain required semantic admission work.
+
+
+### Original extension occurrence inventory checkpoint — 2026-10-08
+
+The private catalog adapter now enumerates the owner-defined document, module and element `extensions` maps from each original validated source. Entries retain exact assertion-owner scope, escaped source pointer, vocabulary declaration, frozen interpreted payload reference and the complete original source artifact. Repeated extension IDs remain distinct by source location. No reserialized payload fragment is labeled original authored bytes, and retention does not claim semantic understanding or native enforcement. Arbitrary nested objects with a member named extensions are not silently interpreted as an owner-defined scope; their content remains in the complete original archive. Classification of extension assertions still requires the exact registered vocabulary interpretation.
+
+The [occurrence receipt](evidence/catalog-extension-inventory.json) pins the actual owner producer and adapter/test sources. Two actual-owner preparation tests / 20 assertions and strict TypeScript checks pass, covering document/module/element locations, pointer escaping, repeated IDs, original whitespace/bytes, exact string payloads, vocabulary identity and incomplete unknown meaning. The component refuses beyond 4,096 occurrences rather than producing a truncated inventory. That cap is not a shared operation ledger or heap qualification. This supports retained extension accounting; complete assertion extraction, definition/source identity pins, source/report membership, document disclosure and qualified enforcement remain separate acceptance work.
+
+
+### Owner observation coverage admission checkpoint — 2026-10-08
+
+Report preparation now has a private explicit coverage assessor. It independently derives the ordered document/module/element owner-call inventory from the original prepared sources, requires the Field bundle, compares exact source identity/version basis and profile tuples, and verifies original evidence serialization, direct digest and artifact identity for every occurrence. Missing, duplicate, reordered, substituted or changed-evidence occurrences refuse. Required/available counts are canonical integer text. A fully enumerated call set with unavailable owner APIs stays incomplete; unavailable results retain their original codes and paths.
+
+The [coverage receipt](evidence/catalog-observation-coverage.json) pins all three actual owner bundles and the assessor/test sources. Eight actual-owner tests / 40 assertions and strict TypeScript checks pass; combined Field/observation suites pass 11 tests / 54 assertions. This is an internal correspondence check, not an issuer capability, registered interpretation authority, complete assertion identity inventory or qualified database/engine evidence. Self-consistent caller-forged observation artifacts do not acquire trusted provenance through this check. Available owner observations remain distinct from complete accepted assertion reporting. Existing postmaterialization component limits do not qualify the shared resource ledger or host heap; acceptance publication remains unavailable pending full composition.
+
+
+### Original owner observation instance custody checkpoint — 2026-10-08
+
+The observation collector now accepts only the frozen declaration and Field owner instances issued by the pinned host loader. Copied owner objects or substituted inspection callbacks cannot issue a collection. A private WeakMap binds each actual frozen collection to its exact original prepared input object. Coverage assessment checks that binding before inspecting supplied payloads or serializing evidence. Clones, reconstructed self-consistent evidence and a separately prepared byte-identical input cannot borrow the original collection. Unavailable owner results remain explicit rather than repaired through substituted callbacks.
+
+The [instance custody receipt](evidence/catalog-observation-custody.json) pins the three original producer manifests and current host/collector/assessor/test sources. Thirteen actual-owner tests / 61 assertions and strict TypeScript checks pass, including recomputed forged evidence and original-instance controls. This supersedes the previous assessor's lack of private issuance recognition. It establishes only private in-process collection correspondence under trusted loader configuration; a source-revision/hash manifest is not external producer attestation, a process WeakMap is not native transaction custody, and serialized historical reports need their independent durable provenance procedure. Complete assertion inventory, registered interpretation/authority, selected native or engine enforcement, operation resources and final acceptance publication remain open.
+
+
+### Validated original preparation custody checkpoint — 2026-10-08
+
+The catalog input factory now privately recognizes each frozen preparation it actually issues after outer wire/artifact/source checks and actual owner interpretation. Default home, extension, owner observation, report document and genuinely-new native staging helpers require that original instance before downstream work or native effects. Reconstructed or edited lookalikes cannot substitute their declaration/archive/observation arrays. A new preparation from independently admitted identical bytes remains a new instance; original operation-input native custody still compares exact bytes separately. Instance recognition does not turn optional/missing root-profile registration into complete profile or actor admission.
+
+The [preparation custody receipt](evidence/catalog-preparation-custody.json) pins host source/test bytes and references the refreshed native cohort receipt. Twenty-eight host tests / 117 assertions and strict TypeScript checks pass. Report document unit tests now use real pinned-owner source preparation while native result rows remain explicitly synthetic. The disposable PostgreSQL17.9 cohort harness passes all 60 checks with original preparations. The altered-Field lookalike refuses before native staging; source-byte substitution is still independently attempted against the native document-carrier guard, isolated in a savepoint. The first revised direct-SQL negative case left its transaction aborted; adding that savepoint corrected the harness, and the successful rerun started from a fresh owned schema. The test container was removed afterward. Complete report authority, lifecycle/conversion, enforcement/resource qualification and final accepted commit remain open; private preparation recognition is neither a durable report attestation nor an authorization grant.
+
+
+### Composed original new-catalog report preparation checkpoint — 2026-10-08
+
+The private report preparation function now composes actual original owner observations and their coverage, retained scoped extensions, source/archive document correspondence and all six native new-only count fields. It checks the count result's complete fixed columns and bounded canonical integer text, compares its writer/ordinal/generation with the original document observation, and rechecks native liveness before returning. Missing/extra rows, substituted cut or invalid count carriers refuse. A fully available owner call set remains distinct from producer interpretation completeness and full accepted assertion inventory. The output has only an explicit preparation scope and provisional revision, with no accepted disposition or publication grant.
+
+The [composition receipt](evidence/catalog-report-preparation.json) pins source/test/harness bytes. Four host tests / 17 assertions and strict TypeScript checks pass, including original partial interpretation/opaque extension preservation, malformed count carriers and no native calls for a reconstructed preparation. The refreshed disposable PostgreSQL17.9 [cohort receipt](evidence/catalog-new-cohort.json) passes 64 checks: actual original documents/counts and owner bundle observations compose, and an actual catalog event injected between document/count queries refuses the mixed preparation. Rollback restores the original cut; the existing unfinished-acceptance commit barrier remains tested. The test container was removed. Native driver framing/privilege visibility/resources, full assertion membership and qualified enforcement, remaining report fields and immutable report/head finalization remain open.
+
+The cohort harness now requires all three owner directories. Build each with `bun scripts/build-umf-runtime.ts /path/to/umf record`, `declarations`, and `assertion-fields`; pass their returned directories through TRUSS_UMF_PRODUCER, TRUSS_UMF_DECLARATION_PRODUCER and TRUSS_UMF_FIELD_ASSERTION_PRODUCER alongside the dedicated TRUSS_OPERATION_TEST_URL. Each bundle retains its exact source pin; a document cannot select a loader or substitute its own callbacks.
+
+
+### Original producer diagnostic/interpretation evidence checkpoint — 2026-10-08
+
+Composed preparation now retains all actual source-validation diagnostics and, only when a reversible transition occurred, all target-validation diagnostics. Each wrapper preserves the native diagnostic object unchanged with its exact original/target basis, producer pin and original document digest. Its source carrier points to the whole original artifact; a target pointer stays inside the target-basis evidence rather than masquerading as an authored source node. Equal warnings at different stages are not deduplicated. A direct-hash manifest identifies this Truss evidence encoding and actual owner pin; independent registry admission is still required before that wrapper profile can appear in accepted reports.
+
+Each document also receives one exact original interpretation observation and complete/partial summary. Complete requires both actual source and target producer validations to be complete. It remains independent from observation-call availability, assertion inventory completeness and native enforcement. Original 0.8 sources have no fabricated transition or second target-basis diagnostic scan. Evidence bytes agree with the original document-basis observation artifact.
+
+The [validation evidence receipt](evidence/catalog-validation-evidence.json) pins source/test/harness bytes. Six actual-owner host tests / 80 assertions and strict TypeScript checks pass. The disposable PostgreSQL17.9 cohort harness now passes 66 checks, including exact interpretation evidence and both complete diagnostic-stage inventories alongside the original coherent native cut. The container was removed. Component diagnostic/output limits are not shared ledger or heap qualification; original warning retention cannot qualify unavailable semantic interpretation or authorize acceptance. Registered wrapper/profile authority, full assertion identities/enforcement, remaining report fields and immutable report/head finalization remain open.
+
+
+### Native empty provisional inventory checkpoint — 2026-10-08
+
+Private composed report preparation now emits an empty provisional inventory only after the native helper verifies the original unfinished catalog/source/head admission and absence of every visible provisional type row, including retained rows. The helper returns canonical zero; the count result retains that proof under the same original writer/ordinal/generation comparison. Nonempty provisional catalogs explicitly require a complete nonempty producer and refuse this empty path. This is not permanent removal of provisional endpoint support: exact owner/type/relationship/via/source/lifecycle and authorized full-inventory qualification still needs its own implementation. A new-type-only query cannot prove all retained provisionals absent.
+
+The [empty-inventory receipt](evidence/catalog-provisional-empty.json) pins native/host/test/harness bytes. Six host tests / 81 assertions and strict TypeScript checks pass. The disposable PostgreSQL17.9 harness passes 68 checks, including actual empty-list evidence and a nonempty provisional row satisfying the native provenance shape. The first negative fixture changed only its provisional flag and hit the existing source-completeness constraint; clearing its source-provenance columns made the row structurally provisional, then the dedicated empty-inventory helper refused as intended. The rerun used a fresh schema and the container was removed. Full native role/RLS visibility and resource qualification remain separate. Rebind and pending-index lists are not fabricated empty: complete original effect/event and registered declaration inventories are still required before those report fields can be assembled. Full assertion/enforcement and report/head finalization remain open.
+
+
+### Refreshed UMF/Weft assertion-owner checkpoint — 2026-10-08
+
+Fresh owner fetches resolve UMF origin/master to a917e1b41361d67031851fd7f5baca77934faf08 and Weft origin/main to the unchanged 5856c73db0342363e64802905a94abb96209d757. UMF's newer remote commits add domain-pack consumer/catalog evidence; model, validation and core schema paths are unchanged since the reviewed 30e489aab5762dcbf36363e48f8fa36b5712b779 checkpoint. Weft's compiler/spec/Cargo paths have no newer changes. Existing qualified Truss Record/value/compiler pins remain unchanged.
+
+The [actual current-owner probe](evidence/umf-current-assertion-inspection.json) retains the immutable current-source bundle manifest and fourteen source-qualified exact evidence artifacts. Current owner reading succeeds for the original 0.7 document and the explicitly reversible 0.8 probe envelope. On original 0.7, Key, relationship, kind, nullability and cardinality inspections are known; facets remain partial with their opaque member. Schema-property inspection correctly requires 0.8. On the 0.8 envelope, schema-property inspection succeeds but Key, relationship and the four legacy Field inspections still refuse their result schemas with original owner error codes. A newer remote head therefore does not close that observed API gap or justify changing report availability.
+
+Reproduce with a fresh `assertions-current` mode bundle from the immutable current revision, then `TRUSS_UMF_PRODUCER=<original-record-directory> TRUSS_UMF_CURRENT_ASSERTION_PROBE=<current-probe-directory> bun scripts/check-umf-current-assertion-inspection.ts`. Strict TypeScript checks pass. This mode is an owner checkpoint only and is not recognized by runtime assertion loaders. Keep source-version basis explicit; do not relabel upgraded meaning as original or duplicate the owner's general schema semantics in Truss. Full 0.8 assertion admission needs the owner's compatible inspection result support or a separately selected/qualified owner interpretation API. That dependency remains recorded while Truss proceeds with original-source report composition and its own authority/effect/publication work.
+
+
+### Full accepted-report field audit and transform preflight checkpoint — 2026-10-08
+
+The [handoff audit](remaining-design-handoff-audit.md#accepted-report-composition-audit--2026-10-08) now maps every one of the accepted-report schema's seventeen required fields to its actual source/producer and remaining admission/qualification. It orders original profile/actor installation admission, complete assertion identities/enforcement, original transform/rebind/index/loss inventories and immutable report/effect/head finalization. Structural field coverage does not prove any unfinished semantics or shrink the B-001–B-015/story objective.
+
+The audit found that private new-only staging and preparation could receive declared transforms while not executing them. Both now refuse those requests before native work with an explicit complete-transform-producer requirement; original source preparation still retains the declaration for later full execution. This is an unfinished implementation gate, not permanent removal of transformation capability. Nineteen host tests / 119 assertions and strict TypeScript checks pass, including zero native calls on declared-transform refusal. The [host receipt](evidence/catalog-transform-preflight.json) pins these sources and the field audit.
+
+The native harness has an added transform-refusal control but its rerun is not yet passing evidence. Its initial connection failed while Docker's original launch and cleanup processes remained live; process-name/status inspection confirmed those processes were still running. No timeout or failed connection established terminal container state, and no duplicate start or service restart was issued. The existing 68-check receipt retains its earlier exact source pins. Complete the original Docker operations and rerun from a confirmed fresh owned schema before replacing that native receipt or claiming the additional check passed. Full accepted report and publication remain unavailable.
+
+## Complete-report codec handoff — 2026-10-08
+
+The private [host handoff](../../../packages/umf-bun/src/canonical-report-handoff.ts) verifies all eight closed-schema byte pins, strictly decodes original numeric-free wire, and validates all seventeen required acceptance-report fields before preparing the existing native tagged-tree codec carrier. The [portable bridge](../../../packages/postgresql/src/canonical-wire-tree.ts) preserves original bytes separately, carries strings and names as exact UTF-8 hex, preserves array order, and preflights the native task ceiling before carrier construction. Native unsigned-byte object sorting remains owned by the existing SQL codec.
+
+Nine Bun tests with thirty-eight assertions and strict type checking pass. [Actual Chromium evidence](evidence/design-audit/canonical-wire-browser.json) covers an independently written tagged-tree oracle, original-byte custody after caller mutation, numeric-node/duplicate-name/Unicode refusal and task overflow. The [handoff receipt](evidence/canonical-report-handoff.json) pins exact tested sources. The complete-report fixture is explicitly untrusted: invented digests and actors, altered document inventories and empty effect inventories do not acquire acceptance authority by passing shape validation.
+
+Native bridge-to-encoder parity remains unverified while the original Docker inspection is live without output. No duplicate launch or shared-daemon restart is performed. Remaining work includes original source/actor/profile admission, complete assertion and effect producers, shared operation resource accounting, independently verified report-to-native effects, retained canonical bytes and atomic publication. The unconditional commit barrier remains in place.
+
+The [native codec parity schedule](../../../scripts/check-canonical-report-native.ts) now compares complete untrusted report wire, unsigned UTF-8 key order, NUL/C0 escaping, exact integer strings and original spelling against an independent byte oracle. Codec functions are installed only in a session-temporary schema, not the installed Truss schema. Three host-preparation cases and strict type checking pass. The [pending-run record](evidence/canonical-report-native-pending.json) records a PostgreSQL startup-response timeout on the explicitly owned test port; it does not claim native success. The original Docker inspection remains live. Run the schedule against the recovered owned test endpoint before claiming bridge-to-native parity.
+
+## Recovered native verification — 2026-10-08
+
+The original Docker inspection completed with the owned PostgreSQL17.9 container running on port15434. No duplicate launch or OrbStack restart occurred. The [exact-source native codec receipt](evidence/canonical-report-native.json) now proves all three independent original-wire byte-oracle cases, including the complete seventeen-field untrusted report. This supersedes the earlier timeout for codec parity only; it does not confer report source/effect authority.
+
+The [new-catalog cohort receipt](evidence/catalog-new-cohort.json) now records sixty-nine actual native checks against the current stage and report-preparation source hashes. It includes the formerly pending declared-transform preflight refusal and the coherent original report cut, validation diagnostics and native empty-provisional proof. These are staged-component observations with the unconditional commit barrier retained. Root profile/actor authority, retained lifecycle, complete accepted report, head publication and public entrypoint remain unqualified.
+
+## Original root-profile resolver custody — 2026-10-08
+
+Configured profile resolution now requires the original factory-issued startup resolver before loading dependencies or interpreting source. Structural copies and substituted callbacks cannot claim the byte/hash/role checks performed by the original resolver. Seventeen profile/preparation tests with fifty-nine assertions and strict type checking pass; the [receipt](evidence/acceptance-profile-resolver-custody.json) pins current sources and the actual owner preparation tests.
+
+The unconfigured source-inspection path remains explicitly without root profile resolution, and neither path admits profile meanings or acting authority. Complete root policy/layout/acceptance/validator/support interpretation, installed composition and accepted publication still require their original registered producers and independent evidence. Private object recognition establishes local custody only.
+
+## Committed owner browser refresh — 2026-10-08
+
+Fresh owner fetch finds UMF `44bbd8922ba4a3c7be2afa1a5ec2e6fecd473e64`, adding the ontology-aware explorer, and unchanged Weft `5856c73db0342363e64802905a94abb96209d757`. The [exact committed comparison](evidence/design-audit/owner-browser-refresh.json) finds no changes in UMF src/spec or Weft crates/spec/Cargo from the prior owner checkpoint. Uncommitted owner security work is not adopted.
+
+Truss now embeds the new unmodified owner JS/CSS with the same exact structural source catalog. Hugo builds and all six [Chromium site checks](evidence/design-audit/schema-browser-site.json) pass, including 491 definitions, reference navigation, exact source download and mobile layout. Runtime Record/value/compiler registration pins remain separate; explorer improvements do not resolve the observed assertion-version or compiled explicit-null dependencies.
+
+## Immutable report-byte home implementation — 2026-10-08
+
+The [private native report guard](../../../packages/postgresql/native/catalog-report-immutability.sql) refuses UPDATE/DELETE/TRUNCATE on the separate byte home, validates its exact trigger relation/event and uses ENABLE ALWAYS dispatch. Its [temporary-fixture schedule](../../../scripts/check-catalog-report-immutability.ts) independently compares retained original bytes after origin/replica mutation refusals and verifies both installed trigger modes. Strict type checking passes; two attempts timed out before PostgreSQL startup completed, so [native verification is pending](evidence/catalog-report-immutability-pending.json). No native success is claimed.
+
+This closes an authored guard-body gap, not the accepted-report persistence chain. Inserts still require complete original report admission, independent native effect parity and atomic report/head publication; the unconditional commit barrier remains. Authorized archive/offload/retention must use a separately admitted lifecycle path rather than weakening immutability for ordinary writers. Full installed privilege/dependency closure is not established by a temporary guard fixture.
+
+## Installed report guard verification — 2026-10-08
+
+The [native immutable-byte receipt](evidence/catalog-report-immutability.json) now proves eight PostgreSQL17.9 observations: origin/replica UPDATE, DELETE and TRUNCATE refuse, original bytes remain unchanged, and both guards use ALWAYS dispatch. The earlier connection failures are historical, not current verification status. The component installer now includes the original guard source; after resetting only the owned disposable Truss test schema, the [complete catalog harness](evidence/catalog-new-cohort.json) passes seventy checks, including both actual installed guard modes. Strict type checking passes for both schedules.
+
+No accepted report is inserted by these observations, and no accepted head is published. Immutable storage is now a verified component; complete report provenance/effect admission, protected insertion, lifecycle authority, ordinary-role security closure and atomic finalization remain required. The unconditional commit barrier remains.
+
+## Original producer-to-report correspondence — 2026-10-08
+
+The [private correspondence verifier](../../../packages/umf-bun/src/catalog-report-correspondence.ts) validates complete original report shape, requires the original composed preparation bound to its exact source preparation, and compares seven fields: revision, accepted input, ordered document inventory, counts, provisional inventory, diagnostics and document interpretations. Complete key sets and array order are preserved; object member serialization order does not cause false mismatch. It then rechecks the original native writer/ordinal/generation cut before returning codec input with an explicitly limited scope.
+
+Ten host tests with 101 assertions and strict type checking pass, including exact owner outputs, changed source/effect/diagnostic refusal before native access, copied-basis refusal and stale-cut refusal. The [receipt](evidence/catalog-report-correspondence.json) distinguishes synthetic native results from actual owner interpretation; native end-to-end correspondence remains unexecuted. Remaining ten report fields, complete root/actor/meaning/effect authority, shared resource qualification and atomic publication still require original producers and independent evidence. Passing this verifier cannot turn the untrusted remainder of a report fixture into accepted state.
+
+## Native producer-to-report correspondence — 2026-10-08
+
+The [current cohort receipt](evidence/catalog-new-cohort.json) now passes seventy-five PostgreSQL17.9 checks with the exact correspondence and preparation producer hashes. Its added five cases compare all seven already-produced report fields with actual staged native data, refuse a schema-valid count forgery and copied composed basis, reject a later catalog event, and restore original correspondence after savepoint rollback. The [correspondence receipt](evidence/catalog-report-correspondence.json) now links this actual native evidence, superseding its earlier host-only native status.
+
+The complete report fixture still supplies untrusted values for the remaining ten fields. No accepted report is persisted or head published; the unconditional commit barrier is retained. This verifies original staged producer correspondence and liveness, not full report membership/semantic/actor admission, ordinary-role visibility or shared resource qualification. Strict type checking passes for the integrated native harness.
+
+## Original ingress report inventories — 2026-10-08
+
+The [ingress basis producer](../../../packages/umf-bun/src/catalog-ingress-report-basis.ts) requires original preparation, native ingress for every ordered document, absent binding and no declared transforms before deriving empty loss and transform-registration inventories. It retains the original document IDs/digests and ingress pointers; reversible inspection does not replace archival input. Present binding or declared transforms refuse instead of becoming an empty report inventory. General conversion, binding and transform execution remain required elsewhere in the full product scope.
+
+The correspondence verifier now checks nine original producer fields, including these two inventories. Eleven host tests with 108 assertions and strict type checking pass; schema-valid injected loss/transform entries refuse. The refreshed [native cohort](evidence/catalog-new-cohort.json) passes all seventy-five checks with the current nine-field verifier/preparation hashes. [Correspondence evidence](evidence/catalog-report-correspondence.json) records the exact current source scope. Eight report fields and full root/actor/enforcement/effect admission remain unfinished; no report/head publication or accepted commit is claimed.
+
+## Original extension retention artifacts — 2026-10-08
+
+The [artifact producer](../../../packages/umf-bun/src/catalog-extension-artifacts.ts) now wraps each original document/module/element extension occurrence in a versioned retained-uninterpreted artifact, preserving its complete source document, owner/scope, escaped original pointer, declared vocabulary and payload. Repeated extension identities remain distinct by occurrence. Wrapper bytes have direct hashes and explicit per-artifact/aggregate component output limits; these post-encoding limits are not shared preallocation/heap qualification.
+
+Three actual-owner tests with forty-one assertions and strict type checking pass. The [receipt](evidence/catalog-extension-artifacts.json) pins exact sources. The wrappers are not fragments substituted for original authored bytes and do not claim understood meaning. Complete unselected core/extension disclosure, selected vocabulary/profile admission and report correspondence remain required before adopting the accepted report extensions field. The existing nine-field correspondence scope is unchanged.
+
+## Original native actor/context collector — 2026-10-08
+
+The [private context collector](../../../packages/postgresql/native/catalog-original-context.sql) rechecks the exact original writer/ordinal/generation and validates the complete seven-field native admission context against actual current acting/login role, database and backend. It returns the original retained bytes and native facts without constructing asserted origin, installation/source epoch or authority-profile evidence. PUBLIC execution is revoked; full protected installation/ordinary-role closure remains separate.
+
+The [native cohort receipt](evidence/catalog-new-cohort.json) now passes seventy-eight PostgreSQL17.9 checks with the exact collector source hash. Added observations prove exact archived-context bytes, current issuer fact correspondence and borrowed-transaction refusal. Strict type checking passes. The collector is a building block for originalExecution, not a complete producer of that report field or proof of installed actor authorization. Complete installation/origin mapping/capture profile registration and disclosure evidence remain unfinished.
+
+## Native-to-host original execution basis — 2026-10-08
+
+The [host context adapter](../../../packages/umf-bun/src/catalog-original-execution-basis.ts) requires an original composed basis bound to the exact prepared input before native reads, enforces one complete exact-column result, decodes strict original numeric-free context, compares every retained context field with the native result/cut, and rechecks liveness. It returns a direct-hashed artifact containing the original bytes, with an explicitly limited native-actor-context scope.
+
+Twelve host tests with 118 assertions and strict type checking pass; the actual native [cohort receipt](evidence/catalog-new-cohort.json) now passes eighty checks, including exact bytes and acting-role custody through this adapter. [Source evidence](evidence/catalog-original-execution-basis.json) records both scopes. The adapter does not construct installation/source epoch, asserted/journal origins or mapping/capture authority profiles, so originalExecution and complete report admission remain unfinished. No accepted head or report publication occurs.
+
+## Invoker versus nested-definer actor repair — 2026-10-08
+
+Review against the reference actor contract found that an invoker helper reached from a SECURITY DEFINER wrapper could otherwise archive the wrapper owner's current_user as actor. Admission and original-context collection now refuse unless current_user corresponds to the native selected role setting, or session_user under the native NONE sentinel. They do not accept an actor name from request input or use helper-owner fallback.
+
+The [native cohort receipt](evidence/catalog-new-cohort.json) now passes eighty-two PostgreSQL17.9 checks. A real nested-definer wrapper under selected pg_read_all_data refuses with55000 before operation insertion; independently observed registry count remains zero. Existing direct admission/context/component checks still pass. Strict harness type checking passes. This tested boundary is not full role-setting grammar/OID custody, deletion/recreation protection, ordinary-role installed authority or original public-entry qualification; those remain required. Complete originalExecution and accepted report/head publication are still unfinished.
+
+## Native role identity and context version — 2026-10-08
+
+The private context is explicitly versioned to `truss-native-operation-context/0.2` and now retains acting/login role OIDs as exact text alongside original names. Native collection compares both original identities with current trusted pg_roles facts; the host validates canonical uint32 OID text and complete nine-field context correspondence. Old 0.1 contexts are not silently upgraded or treated as this selected component profile. Historical receipts preserve their original versions.
+
+Twelve host tests with 119 assertions and strict type checking pass. The [current native cohort](evidence/catalog-new-cohort.json) passes eighty-five PostgreSQL17.9 checks, including quoted role names with spaces/slashes, native rejection of reserved role name none, exact original role OIDs and nested-definer refusal before effects. Probe role creation is transactionally rolled back. The [execution basis receipt](evidence/catalog-original-execution-basis.json) pins current sources. These observations do not qualify all managed builds, role lifecycle/policy exclusion or full original public-entry authority, and do not supply the missing installation/origin profiles.
+
+## Original core assertion source identities — 2026-10-08
+
+The [subset identity producer](../../../packages/umf-bun/src/catalog-core-assertion-identities.ts) consumes only factory-issued observation collections bound to the original prepared source. It uses the pinned owner's original kind/nullability/cardinality/facets pointers, verifies source correspondence and node existence, and retains qualified owner, original document digest, full source artifact and exact owner evidence. It generates a versioned source-identity manifest; this candidate profile is not automatically registered for accepted reports.
+
+Missing observations remain separate, unknown/unavailable and other-operation/target-basis observations remain deferred, and every generated entry is none/unqualified with complete=false. The producer does not rewrite a partial facet result as complete or infer a checker from successful inspection. Two actual-owner tests with forty-one assertions and strict type checking pass; [source evidence](evidence/catalog-core-assertion-identities.json) records the subset. Full keys/relationships/schema-property identity correspondence, complete core/extension coverage, registered definition/profile meanings and database/engine qualification remain required before constructing the full enforcement report. Owner evidence is retained as separate candidate metadata, not silently added to the closed accepted EnforcementEntry wire.
+
+## Authored key/relationship assertion occurrences — 2026-10-08
+
+The core identity candidate is explicitly versioned to0.2.0 and includes both immutable owner declaration and Field profiles. It now derives authored key/relationship assertion identities by complete ordered original-node/owner-result occurrence correspondence, preserving exact authored IDs and original indexed pointers. Equal IDs in different declaration occurrences remain distinct; no declaration name or generated allocator identity supplies source authority.
+
+Three actual-owner tests with forty-seven assertions and strict type checking pass; [current evidence](evidence/catalog-core-assertion-identities.json) pins the source and profile version. Original missing relationship/facet observations remain separate. Target-basis schema properties and unavailable interpretation remain deferred, complete=false remains explicit, and every produced entry remains none/unqualified. Candidate profile adoption, complete source/report membership, disclosure and actual native/engine qualification are still required.
+
+## Original 0.8 schema-property identities — 2026-10-08
+
+The source-identity candidate is version0.3.0. It now consumes the owner's property-map result for original0.8 source, preserving exact allowedValues/default/facets nodes and document/module-qualified owners with full source bytes. Selected property values must correspond to the original authored node; annotations remain separately deferred rather than constraint entries. Properties observed only on a reversible0.7 transition target remain deferred, so target locations never become invented authored0.7 pointers.
+
+Four actual-owner tests with fifty-three assertions and strict type checking pass; [current evidence](evidence/catalog-core-assertion-identities.json) pins the exact sources. Tests retain original0.8 property pointers, original document annotations and unavailable legacy owner calls. Complete=false and none/unqualified remain explicit; complete core/extension membership, registered source/report profiles and actual database/engine enforcement remain required. This does not adopt a new UMF runtime bundle or reinterpret the existing source-version gap.
+
+## Core assertion identities in original report preparation — 2026-10-08
+
+The composed report preparation now consumes the original issued owner observation collection through the core identity producer and retains its candidate profile/manifest, exact entries, absence/deferred observations and explicit incomplete status. Sixteen host tests with174 assertions and strict type checking pass. The [native cohort](evidence/catalog-new-cohort.json) passes eighty-seven PostgreSQL17.9 checks, including eleven original reference identities with both Record keys and the relationship, full original source digests and none/unqualified status. [Composition evidence](evidence/catalog-core-assertion-composition.json) pins current sources.
+
+This integration does not fill the full assertions report field: source/report membership, transition-target correspondence, complete core/extension inventory and independently qualified database/engine procedures still remain. Report correspondence remains nine fields. Public acceptance, immutable report insertion/head transition and the unconditional commit barrier are unchanged.
+
+The [focused integration checkpoint](evidence/design-audit/focused-integration-checkpoint.json)
+records fresh combined checks: 28 TypeScript tests/135 assertions, 24 Python
+candidate tests, three schema-reference tests, 16 inspection and nine review
+shape controls, complete retained-source checks, selected strict TypeScript and
+all 158 contract schemas. Structural coverage remains 45 stories/167 criteria/
+90 primary pins. Native probes were not rerun. This verifies current component
+integration; the complete original composition, pending selections and full
+independent native/public/corpus exits remain explicitly incomplete.
+
+
+## Installation-path checkpoint — 2026-10-09
+
+The [issuer handoff](operation-ordinal-issuer-handoff.md) now has actual local
+PostgreSQL16.2 rollback reproductions for all four admission families: base,
+asserted-origin, epoch-context and configuration-context. Each reissues ordinal0
+in the same top-level transaction after savepoint rollback. Advanced probes verify
+original epoch/profile and separate configuration bytes/digest correspondence.
+These are passing bug reproductions with contractConformant=false, not corrected
+admission. The producer design now explicitly consumes confirmed-control native
+admission permission once; rollback, failure or unknown completion cannot restore it.
+
+Python delivery has a ten-module installed wheel. The historical clean local-extra
+[receipt](evidence/design-audit/python-current-wheel-local-extra.json) records all34
+then-current tests, including four actual16.2 lifecycle tests. The later
+[rebuilt-wheel receipt](evidence/design-audit/python-async-fixed-wheel.json) covers
+the synchronous compiler correction with six compiler and eleven coordinator
+tests against installed payloads. These scopes cannot be combined into a claimed
+fresh35-test whole-engine pass. The compiler callback fix adds no SQL compiler,
+native authority or migration execution.
+
+The [migration handoff](python-migration-installation-handoff.md) now defines M1's
+complete populated preservation matrix and late-failure/lost-ack/committed-unverified
+reconciliation requirements. Exact M1 source/target artifacts remain unselected;
+the defective review-only layout cannot be treated as an admitted source merely
+to get a successful upgrade. The complete installer still needs original issuer
+verification, five mandatory guard bodies, two scope validators, full grants,
+initializer/archive/inventory composition and atomic readiness publication.
+
+The UMF schema browser is updated to committedb51c300d with eleven actual Chromium
+checks and532 browsable definitions. UMF document preservation and Weft9fbbbab's
+Spark DISTINCT additions have an [exact source review](evidence/design-audit/upstream-preservation-distinct-review.json).
+They do not replace Truss recovery or qualify PostgreSQL DISTINCT; the adopted
+compiler remainsf05f2df and PostgreSQL profile source bytes are unchanged. All
+seven reference composition boundaries remain incomplete. The live security-owner
+work is still component qualification; it supplies no adopted complete native
+admission/publication tuple yet.

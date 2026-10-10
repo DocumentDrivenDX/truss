@@ -1,0 +1,236 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:traversal-private-state:0.1.0",
+  "title": "Draft private traversal frontier or sealed membership",
+  "description": "Host-private only. Complete path/cursor/query/version/counter/membership correspondence and original issuer custody require semantic checks. Canonical integer spelling alone does not establish native range or physical accounting.",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-traversal-private-state/0.1.0"
+        },
+        "stageIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "generation": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        },
+        "workVersion": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        },
+        "query": {
+          "$ref": "urn:truss:draft:traversal-query:0.1.0"
+        },
+        "resourceProfile": {
+          "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/profilePin"
+        },
+        "counters": {
+          "type": "object",
+          "properties": {
+            "examinedEdges": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$"
+            },
+            "pathStates": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$"
+            },
+            "retainedBytes": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$"
+            },
+            "activeWorkMilliseconds": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$"
+            }
+          },
+          "required": [
+            "examinedEdges",
+            "pathStates",
+            "retainedBytes",
+            "activeWorkMilliseconds"
+          ],
+          "additionalProperties": false
+        },
+        "terminalIdentities": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/identity"
+          }
+        },
+        "phase": {
+          "const": "working"
+        },
+        "frontier": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 3,
+                "items": {
+                  "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/identity"
+                }
+              },
+              "nextHop": {
+                "enum": [
+                  "0",
+                  "1",
+                  "2"
+                ]
+              },
+              "scan": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "const": "first"
+                      }
+                    },
+                    "required": [
+                      "state"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "const": "after"
+                      },
+                      "id": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "orderKey": {
+                        "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/orderKey"
+                      }
+                    },
+                    "required": [
+                      "state",
+                      "id",
+                      "orderKey"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "required": [
+              "path",
+              "nextHop",
+              "scan"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "accountingVersion": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "stageIdentity",
+        "generation",
+        "workVersion",
+        "query",
+        "resourceProfile",
+        "counters",
+        "terminalIdentities",
+        "phase",
+        "frontier",
+        "accountingVersion"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-traversal-private-state/0.1.0"
+        },
+        "stageIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "generation": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        },
+        "workVersion": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        },
+        "query": {
+          "$ref": "urn:truss:draft:traversal-query:0.1.0"
+        },
+        "resourceProfile": {
+          "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/profilePin"
+        },
+        "counters": {
+          "type": "object",
+          "properties": {
+            "examinedEdges": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$"
+            },
+            "pathStates": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$"
+            },
+            "retainedBytes": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$"
+            },
+            "activeWorkMilliseconds": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$"
+            }
+          },
+          "required": [
+            "examinedEdges",
+            "pathStates",
+            "retainedBytes",
+            "activeWorkMilliseconds"
+          ],
+          "additionalProperties": false
+        },
+        "terminalIdentities": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:truss:draft:direct-cursor:0.1.0#/$defs/identity"
+          }
+        },
+        "phase": {
+          "const": "sealed"
+        },
+        "accountingVersion": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "stageIdentity",
+        "generation",
+        "workVersion",
+        "query",
+        "resourceProfile",
+        "counters",
+        "terminalIdentities",
+        "phase",
+        "accountingVersion"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

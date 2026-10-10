@@ -1,0 +1,79 @@
+{
+  "scope": "Native reproduction of private epoch-context admission ordinal conflict and administrative fixture byte capture only; no supported executor/issuer, original artifact admission or protected mutation qualification",
+  "pgserver": "0.1.4",
+  "serverVersion": "16.2",
+  "observations": [
+    {
+      "writerXid": "730",
+      "ordinal": "0",
+      "context": {
+        "xid": "730",
+        "ordinal": "0",
+        "database": "postgres",
+        "actingUser": "postgres",
+        "backendPid": "56303",
+        "sessionUser": "postgres",
+        "sourceEpoch": "guard-fixture-epoch",
+        "actorRoleOid": "10",
+        "installationId": "guard-fixture",
+        "sessionRoleOid": "10",
+        "interfaceVersion": "truss-native-operation-context/0.4",
+        "targetIncarnation": "guard-fixture-incarnation",
+        "assertedOriginUtf8Hex": "6f726967696e616c2061737365727465642066697874757265",
+        "sourceEpochProfileHex": "666978747572652d70726f66696c65",
+        "sourceEpochEvidenceHex": "666978747572652d65766964656e6365",
+        "assertedOriginCaptureProfileHex": "6f726967696e616c20636170747572652070726f66696c652066697874757265"
+      }
+    },
+    {
+      "writerXid": "730",
+      "ordinal": "0",
+      "context": {
+        "xid": "730",
+        "ordinal": "0",
+        "database": "postgres",
+        "actingUser": "postgres",
+        "backendPid": "56303",
+        "sessionUser": "postgres",
+        "sourceEpoch": "guard-fixture-epoch",
+        "actorRoleOid": "10",
+        "installationId": "guard-fixture",
+        "sessionRoleOid": "10",
+        "interfaceVersion": "truss-native-operation-context/0.4",
+        "targetIncarnation": "guard-fixture-incarnation",
+        "assertedOriginUtf8Hex": "6f726967696e616c2061737365727465642066697874757265",
+        "sourceEpochProfileHex": "666978747572652d70726f66696c65",
+        "sourceEpochEvidenceHex": "666978747572652d65766964656e6365",
+        "assertedOriginCaptureProfileHex": "6f726967696e616c20636170747572652070726f66696c652066697874757265"
+      }
+    }
+  ],
+  "sameNativeTopLevelTransaction": true,
+  "fixtureAssertedBytesPreserved": true,
+  "originalOriginAdmissionQualified": false,
+  "installedEpochAuthorityQualified": false,
+  "fixtureEpochBytesPreserved": true,
+  "savepointRollbackReissuedOrdinal": true,
+  "contractConformant": false,
+  "requiredBehavior": "Consume the original executor issuer ordinal, preserve issuer nonrewind across savepoint rollback and verify original custody; never allocate from surviving registry rows",
+  "rollbackRemovedNamespace": true,
+  "sources": [
+    {
+      "path": "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql",
+      "sha256": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f"
+    },
+    {
+      "path": "packages/postgresql/native/source-epoch-lock.sql",
+      "sha256": "e811a3656a45e941d588ca21b97ab524b789948d08585288e44b158b060d73cc"
+    },
+    {
+      "path": "packages/postgresql/native/operation-epoch-context-admission.sql",
+      "sha256": "7c3af5774c63c34e78e1d623ae203b6f70a3e511c4663d3d397d01927a530619"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/pgserver-populated-guard-fixture.sql",
+      "sha256": "1221666a5d6b77bfb9f5c31280a95ef453140f4740f54b22fd232822447ef089"
+    }
+  ],
+  "producerSha256": "a8fa1fd61d4825b4c8b071e5fdf6aa842e8f4e4bbde1b308edb3b0c4adfa6780"
+}

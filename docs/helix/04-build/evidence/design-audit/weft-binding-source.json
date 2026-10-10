@@ -1,0 +1,46 @@
+{
+  "scope": "Source identity and generic binding envelope inspection only; dirty PostgreSQL emission primitives are not an accepted backend mapping",
+  "ownerRoot": "/Users/erik/Projects/weft",
+  "ownerCommit": "a95da1f82baf9148ec5235a0f2002d059a8ca3b5",
+  "ownerStatus": " M Cargo.lock\n M Cargo.toml\n M docs/helix/02-design/technical-designs/TD-003-truss-postgresql.md\n M docs/helix/03-test/test-plans/STP-003-truss-postgresql.md\n M docs/helix/04-build/implementation-plan.md\n M docs/helix/README.md\n?? crates/weft-postgresql/\n?? docs/helix/04-build/evidence/B-005-native-preparation.md\n?? tests/truss-postgresql/\n",
+  "files": [
+    {
+      "path": "crates/weft-core/src/backend.rs",
+      "sha256": "d638e0d8b4e85c41848a750b89db463578721746595aa0f2e704fb22628956eb"
+    },
+    {
+      "path": "crates/weft-core/src/ir.rs",
+      "sha256": "ec75a449cd52b95930c1aed95e201cd3317e4171f482d8d17be111e28f559f9f"
+    },
+    {
+      "path": "crates/weft-core/src/application_model.rs",
+      "sha256": "b0892492f540dd34bc6381b37aa86af2aa23a912dc3967775ebb699c899d7c97"
+    },
+    {
+      "path": "crates/weft-postgresql/src/lib.rs",
+      "sha256": "5cd0752e29f2236fcac19e47e314fa28a087962808e2ec70d469208ea2260861"
+    }
+  ],
+  "findings": {
+    "bindingInput": [
+      "profile",
+      "json",
+      "sha256"
+    ],
+    "backendMapping": "Backend associated type; no concrete Truss grammar",
+    "identity": [
+      "documentId",
+      "revision",
+      "module",
+      "element"
+    ],
+    "relationshipIdentity": [
+      "documentId",
+      "revision",
+      "module",
+      "relationship"
+    ],
+    "relationshipRead": "Contains source_key and target_key selected per direction; authored source key selection rejects ambiguity",
+    "authoredKey": "id, ordered fields Identity, ordered types LogicalType; endpoint components need not have equal arity"
+  }
+}

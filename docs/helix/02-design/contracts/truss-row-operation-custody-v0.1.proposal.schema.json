@@ -1,0 +1,106 @@
+{
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-row-operation-custody/0.1.0"
+    },
+    "profile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "originalLayout": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "originalHome": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "originalOwnerProperty": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "operations": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1024,
+      "items": {
+        "type": "object",
+        "properties": {
+          "ordinal": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]*)$",
+            "maxLength": 20,
+            "description": "Zero-based contiguous position in this touch-local manifest, not the executor-issued native operation ordinal. Original native ordinal may contain burned gaps and must resolve through protected original operation/group identity custody."
+          },
+          "operationIdentity": {
+            "type": "string",
+            "minLength": 1
+          },
+          "operationKind": {
+            "enum": [
+              "mutation",
+              "import",
+              "catalog-transform",
+              "catalog-acceptance",
+              "home-migration",
+              "administrative-repair"
+            ]
+          },
+          "originalOperationDefinition": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          },
+          "originalInput": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          },
+          "originalPrestate": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          },
+          "admittedCandidate": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          },
+          "nativeGroupCustodyIdentity": {
+            "type": "string",
+            "minLength": 1
+          },
+          "effectObligationDefinition": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          }
+        },
+        "required": [
+          "ordinal",
+          "operationIdentity",
+          "operationKind",
+          "originalOperationDefinition",
+          "originalInput",
+          "originalPrestate",
+          "admittedCandidate",
+          "nativeGroupCustodyIdentity",
+          "effectObligationDefinition"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "groupResolution": {
+      "const": "original-native-effects-readiness-before-seal"
+    },
+    "completionEvidence": {
+      "const": "resolved-independently-not-embedded-future-digest"
+    },
+    "transactionAuthority": {
+      "const": "actual-native-touch-context-not-caller-manifest"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "profile",
+    "originalLayout",
+    "originalHome",
+    "originalOwnerProperty",
+    "operations",
+    "groupResolution",
+    "completionEvidence",
+    "transactionAuthority"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:row-operation-custody:0.1.0",
+  "title": "Proposed row-home contributing operation custody",
+  "description": "Closed decoded original_operation_bytes body; original byte/profile/native registry provenance and complete ordered operation coverage require semantic admission. Not a reusable commit receipt."
+}

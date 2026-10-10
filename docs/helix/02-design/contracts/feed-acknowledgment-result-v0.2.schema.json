@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:feed-acknowledgment-result:0.2.0",
+  "description": "Source acknowledgment result shape only; effects remain pending in the supplied transaction.",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "enum": [
+            "advanced",
+            "equal"
+          ]
+        },
+        "applied": {
+          "$ref": "urn:truss:draft:feed-progress:0.2.0"
+        },
+        "durability": {
+          "const": "pending"
+        }
+      },
+      "required": [
+        "outcome",
+        "applied",
+        "durability"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "const": "conflict"
+        },
+        "current": {
+          "$ref": "urn:truss:draft:feed-progress:0.2.0"
+        }
+      },
+      "required": [
+        "outcome",
+        "current"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "const": "unavailable"
+        },
+        "reason": {
+          "enum": [
+            "authorization",
+            "context",
+            "generation",
+            "integrity",
+            "durability",
+            "profile",
+            "retention",
+            "observation"
+          ]
+        }
+      },
+      "required": [
+        "outcome",
+        "reason"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

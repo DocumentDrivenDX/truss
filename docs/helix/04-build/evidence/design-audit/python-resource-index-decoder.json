@@ -1,0 +1,35 @@
+{
+  "scope": "Private closed resource-index and capture components; independently authored test inventory, no registered real release",
+  "command": [
+    "/private/tmp/truss-pgserver-corrected-test-env/bin/python",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "packages/python/tests",
+    "-p",
+    "test_installation_resources.py",
+    "-v"
+  ],
+  "output": "test_missing_changed_truncated_appended_resources_quarantine_once (test_installation_resources.ResourceCaptureTests.test_missing_changed_truncated_appended_resources_quarantine_once) ... ok\ntest_real_file_capture_retains_verified_bytes_after_change (test_installation_resources.ResourceCaptureTests.test_real_file_capture_retains_verified_bytes_after_change) ... ok\ntest_reservation_refusal_precedes_open_and_invalid_pin_is_inert (test_installation_resources.ResourceCaptureTests.test_reservation_refusal_precedes_open_and_invalid_pin_is_inert) ... ok\ntest_duplicate_and_unsafe_closed_entries (test_installation_resources.ResourceIndexTests.test_duplicate_and_unsafe_closed_entries) ... ok\ntest_original_bounds_and_duplicate_membership (test_installation_resources.ResourceIndexTests.test_original_bounds_and_duplicate_membership) ... ok\ntest_original_closed_membership_and_independent_pin (test_installation_resources.ResourceIndexTests.test_original_closed_membership_and_independent_pin) ... ok\n\n----------------------------------------------------------------------\nRan 6 tests in 0.101s\n\nOK\n",
+  "tests": 6,
+  "sources": [
+    {
+      "path": "packages/python/src/truss/_installation_resources.py",
+      "sha256": "26b49cb70878d2114380250a4d8dd8d013dec9127a6e08f850adc6143b08e6a2"
+    },
+    {
+      "path": "packages/python/tests/test_installation_resources.py",
+      "sha256": "15f909bba0eda20c51652526a820d031329fffbcb8826bcbc6bae68927db2359"
+    },
+    {
+      "path": "scripts/check-module-boundaries.py",
+      "sha256": "e1d9ae6c945db63cb8a8e68f728611e16b23290d862fb7523112ad090756ac0d"
+    }
+  ],
+  "completeInstalledReaderQualified": false,
+  "pathContainmentQualified": false,
+  "decoderHeapWorkQualified": false,
+  "nativeInstallationQualified": false,
+  "wheelRebuilt": false
+}

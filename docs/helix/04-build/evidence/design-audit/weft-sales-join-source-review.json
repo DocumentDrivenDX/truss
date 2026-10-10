@@ -1,0 +1,77 @@
+{
+  "scope": "read-only committed compiler/source and owner receipt review; no Truss rerun or binary qualification",
+  "ownerCommit": "2c4afcf0af5faf920591d6fca7b9f5dd10983b5f",
+  "sourcePins": [
+    {
+      "path": "crates/weft-postgresql/src/select_definition.rs",
+      "sha256": "978baab8919bdca2f90c97add4e7bea0cff158cabef81b17d04bec18b3307346"
+    },
+    {
+      "path": "crates/weft-postgresql/src/conformance_original.rs",
+      "sha256": "a1af5a643730da98d76c110b85e0baeab5a587f4bcbe056490a22922c4f7bc63"
+    },
+    {
+      "path": "tests/truss-postgresql/build-original-sales-join-fixtures.py",
+      "sha256": "5106134fc2479dd3b4e6d4cc8e2de844a871b20782adbb0bee2c376221dd7bc1"
+    },
+    {
+      "path": "tests/truss-postgresql/original-sales-join-native.py",
+      "sha256": "5de40872703d2d2ea000345660b354352b64c689943352f9793ac19721af2446"
+    },
+    {
+      "path": "tests/truss-postgresql/sales-join-embedding-check.py",
+      "sha256": "a739446ad2cba611d1ce53dd80ca4ff3fd5feef61648b76bda5aa1c2bd8fc612"
+    },
+    {
+      "path": "tests/truss-postgresql/fixtures/original-sales-join-public.json",
+      "sha256": "a7b66f4d03f41d356a3292f5ed7d44ae2c87d9f1da808e98343f929b7c184e13"
+    },
+    {
+      "path": "tests/truss-postgresql/fixtures/original-sales-join-inputs.json",
+      "sha256": "58486ad549a652cefe438cf726bd5a39b0750d7ba7fb8fad9fb1615ce137c143"
+    },
+    {
+      "path": "tests/truss-postgresql/fixtures/original-sales-join-rust-public.json",
+      "sha256": "a7b66f4d03f41d356a3292f5ed7d44ae2c87d9f1da808e98343f929b7c184e13"
+    },
+    {
+      "path": "tests/truss-postgresql/fixtures/original-sales-decimal-templates.json",
+      "sha256": "ef08df9bd3a7ffa25e5ff9b14e9a011e038ebaea2b7438c1d0469c6f22a1b0eb"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/B-005-original-sales-join.json",
+      "sha256": "978bf8762eeba139d1b8489e090de678390e5be02560083bbc1f72c31ea29b12"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/B-005-original-sales-join-native.json",
+      "sha256": "2fcf872b3e803eb246a888222317f1a4913ee6748e9c71afe3fc77a35a9d1b17"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/B-005-native-preparation.md",
+      "sha256": "33011c120f227eccd56bcf29958b379434103b96954cde30a4ece17459846154"
+    }
+  ],
+  "ownerReported": {
+    "scope": "Original sales join, all 16 homes for customer id/name and order customer_id/total, selected UInt64 / Unicode C / decimal(28,2)",
+    "change": "Require owner-wide numeric domain prerequisites for every selected numeric comparison operation",
+    "nativeCases": 128,
+    "embeddingCasesPerRuntime": 80,
+    "positiveFullResponses": 16,
+    "embeddingRefusals": 64,
+    "pythonDeterministicRepeats": 16,
+    "rustRegressionsPassed": 160,
+    "legacyEmbeddingCasesPerRuntime": 342,
+    "browser": "148.0.7778.96",
+    "wasmSha256": "c8d72e088a15302d1b48fc93e94415a2086a25134317dba90fc72ab612244061",
+    "extensionSha256": "8871e297d7d691e6f9b6a0499931c09399907f5ef4ab8c5a8e40ba259576154c",
+    "wheelSha256": "56e2c2ee8db78f49e58a35c7e349c7506032cf155133ccf8960868652fc4b339",
+    "limitations": [
+      "Synthetic pinned candidate realization; no installed or production Truss qualification",
+      "Conformance configuration embedding API remains test-original instrumentation",
+      "Policy/context enforcement uses injected host evidence, not a production authority service",
+      "Final B-005 story acceptance audit remains open"
+    ],
+    "sourceFormattingNote": "Final select_definition.rs indentation was corrected after native binary verification; no token or semantic change."
+  },
+  "trussNativeQualified": false
+}

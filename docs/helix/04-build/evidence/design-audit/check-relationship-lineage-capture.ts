@@ -1,0 +1,21 @@
+/** Owner-provided source/model capture only; no native installation/qualification. */
+import {backend} from '/Users/erik/Projects/umf/native/postgresql/runtime';
+import {importPostgresqlSql,exportPostgresqlSql,getPostgresqlSource} from '/Users/erik/Projects/umf/src/adapters/postgresql';
+import {getPostgresqlDdlDeclarations} from '/Users/erik/Projects/umf/src/adapters/postgresql/declarations';
+import {writeDocument,readDocument} from '/Users/erik/Projects/umf/src/model/document';
+const sourcePath='docs/helix/02-design/contracts/relationship-lineage-layout-v0.1.draft.sql';
+const modelPath='docs/helix/02-design/models/truss-relationship-lineage-candidate.umf.json';
+const source=await Bun.file(sourcePath).text();
+const document=await importPostgresqlSql(source,backend,{id:'truss-relationship-lineage-candidate'});
+const model=writeDocument(document,'json'),reloaded=readDocument(model,'json');
+const output=await exportPostgresqlSql(document,backend),reloadedOutput=await exportPostgresqlSql(reloaded,backend);
+if(getPostgresqlSource(document)!==source||getPostgresqlSource(reloaded)!==source||output!==reloadedOutput)throw Error('owner source/model preservation failure');
+const inventory=getPostgresqlDdlDeclarations(reloaded);
+const columns=inventory.declarations.flatMap(d=>d.columns.map(c=>c.element.name));
+const expected=['rel_type_id','lineage_category','identity_profile','original_identity_bytes','identity_sha256'];
+if(inventory.complete!==false||inventory.declarations.length!==1||JSON.stringify(columns)!==JSON.stringify(expected))throw Error('unexpected partial declaration/column inventory');
+const hash=(text:string)=>new Bun.CryptoHasher('sha256').update(text).digest('hex');
+await Bun.write(modelPath,model);
+const receipt={profile:'truss-native-layout-capture/0.1.0',status:'unadopted_candidate',source:sourcePath,sourceSha256:hash(source),model:modelPath,modelSha256:hash(model),backend:backend.identity,checks:{sourceArchiveExact:true,jsonReload:true,reloadedExportExact:true,columnOrderExact:true},declarationInventory:{complete:false,declaredTables:inventory.declarations.length,columns,unhandled:inventory.unhandled.length,diagnostics:inventory.diagnostics.map(d=>({code:d.code,path:d.path,severity:d.severity}))},physicalIdentityAllocationComplete:false,completeExporterCorrespondence:false,installed:false,adoptionPrerequisites:['ADR-004 and complete document-qualified new layout','legacy uniqueness/category/provenance conversion','native full-identity/total mapping/finalizer/role/resource profiles','complete authored physical identity/source-node/exporter correspondence','independent native parity on selected target']};
+await Bun.write('docs/helix/02-design/models/truss-relationship-lineage-candidate.capture.json',JSON.stringify(receipt,null,2)+'\n');
+console.log(JSON.stringify({checks:receipt.checks,declarationInventory:receipt.declarationInventory,installed:false}));

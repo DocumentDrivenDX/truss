@@ -1,0 +1,118 @@
+# Core relational layout candidate and UMF gaps
+
+The owner selected core Record/Field/Key/Relationship definitions as the ER source and UMF-owned reusable DDL generation. The first [candidate](../models/truss-layout-core-relational-0.1.proposal.umf.json) contains 46 Records, 442 Fields, 59 declared primary/unique Keys and 61 Relationships with ordered core Field correspondence. It retains the original native PostgreSQL archive and pinned source inventory. It is a new authored core 0.7.0 document, not an upgrade/adoption of original native identity.
+
+The candidate is **blocked**, not a valid generator/diagram contract. [UMF validation](../../04-build/evidence/design-audit/core-relational-layout-validation.json) reports valid=false, complete=false: nine KEY_EQUALITY errors (eight xid8 and one timestamp) and five KEY_FIELD_REQUIRED errors. Required Fields follow explicit NOT NULL or primary-key semantics; nullable unique components remain unspecified instead of being falsely declared required. JSONB and xid8 retain unknown scalar families and native definitions. FK actions/match/deferral remain native correspondence; broad diagram multiplicities do not assert complete enforcement equivalence.
+
+## Concrete reusable UMF work
+
+1. Distinguish physical native key/equality correspondence from portable core tuple equality. The Truss journal, operation and feed keys include xid8, whose family/equality cannot be fabricated as integer or text. The journal also has a timestamp key component; current core tuple equality excludes timestamp even though timestamp is a known scalar family. Determine an explicit supported native identity/comparator binding, or a core physical-key representation that preserves unknown portable equality. Do not change Truss key columns to pass validation.
+2. Represent PostgreSQL nullable unique constraints without equating SQL NULL with missing core values. Existing core Keys require supplied components; five candidate components violate that requirement. Preserve native NULL-distinct/equality and constraint behavior, including any original compound/context semantics. Decide whether this belongs in a core Key capability or a physical binding linked to core Fields; no semantics are silently weakened.
+3. Compose existing UMF Record/Field/Key/Relationship projection APIs into a whole-schema operation with native residuals and full original correspondence. Preserve composite field order, target key identity, namespace and unknown native refinements. SQL generation stays in UMF; Truss authors/consumes its layout model and installation policy.
+
+ER rendering can consume core Records/Fields and relationship endpoints structurally, but must report the blocked key interpretation rather than claim fully understood relational metadata. Do not ship the candidate as a complete core model or generate replacement installation DDL from it before the gaps are resolved. Retain the existing qualified source-export path independently.
+
+## Reproduction and boundaries
+
+Run `python3 docs/helix/04-build/evidence/design-audit/build-core-relational-layout.py --check`, then `bun docs/helix/04-build/evidence/design-audit/check-core-relational-layout.ts` from Truss. The builder consumes the pinned declaration inventory derived from the original UMF source; it is a Truss layout-authoring experiment, not a general SQL parser/generator. The checker uses existing UMF validation and retains actual errors rather than converting them to success. Neither tool connects to a database or qualifies native behavior.
+
+The prototype builder and validator currently reference the local pinned UMF checkout. Packaging, browser evidence, reusable native→core correspondence, original lifecycle IDs and whole-schema lowering remain unfinished. The portable model retains complete native content while admitting only the described core structural interpretation; no unsupported type or extension is dropped.
+
+## Exact owner review cases and compatibility constraints
+
+The [fourteen-component gap inventory](../../04-build/evidence/design-audit/core-relational-key-gaps.json) retains each core Field/Key identity, exact diagnostic path and original native definition. It distinguishes eight xid8 components, journal.at timestamp, four nullable alternative object/edge owner components in row_home_state and feed_member.delivery_ordinal. Review each full original compound key and its native constraints; these are component occurrences, not fourteen distinct keys or missing tables.
+
+UMF’s current validateKeyCandidate requires singular required components and limits equality to boolean/integer/decimal/string/binary. The portable encoder accepts only their existing typed value wrappers and rejects absence. Preserve those old semantics and byte encoding. A future structural/native-key description must not silently make the old encoder accept xid8, timestamp, SQL NULL or unknown equality. Consumers may inspect diagram membership/ordered key linkage while portable tuple generation and native enforcement claims remain separately unavailable.
+
+Proposed owner acceptance cases: inspect complete original key/component ordering despite an unsupported portable equality domain; reject tuple encoding without a selected supported equality/codec profile; preserve nullable UNIQUE native semantics without marking SQL NULL as core absence or forcing required; preserve primary-key requiredness; refuse duplicate/missing/foreign Field/target-key correspondence; round-trip unknown native refinements without loss; verify older core documents and tuple receipts remain unchanged. These cases are proposed requirements, not an adopted new core format or implementation.
+
+## Core-driven draft diagram
+
+The [review diagram](../models/truss-layout-core-relational-0.1.review.mmd) and its [source inventory](../../04-build/evidence/design-audit/core-layout-er-source.json) are generated from core Records, Field membership/types, Keys and Relationship endpoints. The renderer never traverses the PostgreSQL native extension. It retains 46 Records, 442 Fields, 59 Keys and 61 FK associations with their original ordered core field correspondence in the inventory. Association arrows deliberately make no inferred nullable/deferred cardinality claim. The diagram is explicitly draft and the validation/model digest must agree before regeneration.
+
+Reproduce with `python3 docs/helix/04-build/evidence/design-audit/render-core-layout-er.py --check`. Mermaid rendering and actual microsite embedding remain unverified; this is the model-powered diagram source, not a deployed microsite. Resolve the existing key validation failures before presenting it as fully interpreted UMF metadata.
+
+## Valid structural projection using existing UMF — 2026-10-08
+
+The original blocked 0.1 candidate and its fourteen errors remain historical evidence. A separate [0.2 structural projection](../models/truss-layout-core-structural-0.2.proposal.umf.json) now validates with zero errors under existing pinned UMF 16c35e8d, with complete=false retained. The [validation receipt](../../04-build/evidence/design-audit/core-structural-layout-validation.json) pins the model. This selects existing core plus preserved native metadata rather than requiring an upstream portable-key semantic change.
+
+All 46 Records and 442 Fields of the historical 0.12 source remain core. Forty-eight keys and 57 relationships retain their valid portable declarations. Eleven keys containing unsupported equality or nullable native components move into explicitly uninterpreted physical descriptors; the four FKs targeting those keys retain complete original descriptors and gain core Record/Field references tagged by original FK identity. Generic core references describe endpoints only; their private role labels do not create portable tuple/equality/enforcement semantics. Ordered native correspondence remains in the original descriptors. No xid8/timestamp is relabeled, nullable component made required, native key removed or FK weakened in the actual storage source.
+
+`project-core-relational-structure.py` reproduces/checks the projection, verifies every residual key descriptor equals the complete original key, and checks all 61 original relationship definitions survive either unchanged in core or unchanged as physical descriptors with explicit core endpoint links. The first projection attempt retained empty core key arrays and omitted required target keys; existing UMF correctly refused twelve structure errors. The revised projection omits absent portable key arrays and preserves affected physical FKs separately rather than fabricating portable target keys. That failed intermediate attempt is not passing evidence.
+
+This is a usable validated structural metadata input with explicit native interpretation gaps. It does not resolve generic whole-schema DDL, physical-key equality, native nullable UNIQUE semantics or complete ER claims. Its source is historical 0.12, not the current private 0.15 layout; current-layout refresh and renderer support for linked physical descriptors are required before microsite publication. UMF still owns reusable SQL generation; this Truss authoring projection emits no SQL and does not adopt native installation identities.
+
+### Rendered structural ER source
+
+The [scalable diagram](../models/truss-layout-core-structural-0.2.review.svg) and [DOT source](../models/truss-layout-core-structural-0.2.review.dot) now render the validated 0.2 projection. `render-core-structural-er.py` reads core Records/Fields/relationships and explicit physical-FK core references, not the native AST or extension descriptor tree. It independently compares all 61 original association endpoints and ordered field pairs against the preserved 0.1 original inventory. Four physical references use dashed edges and explicit native labels; arrows do not claim full nullable/deferred/cardinality behavior. Forty-eight portable keys label their participating columns; eleven residual native keys remain preserved in the model and are not mislabeled portable keys.
+
+The [render receipt](../../04-build/evidence/design-audit/core-structural-er-source.json) pins model, complete association inventory, DOT, SVG and Graphviz version. Reproduce with `python3 docs/helix/04-build/evidence/design-audit/render-core-structural-er.py`; `--check` verifies exact source/receipt/output pins without rewriting. SVG XML contains all 46 node and 61 edge groups. A raster render was visually inspected, and disconnected components were packed to reduce unused space. The scalable source supports inspection at full size; microsite embedding and current 0.15 refresh remain unfinished. This is historical structural diagram evidence, not complete native interpretation or DDL parity.
+
+## Current 0.15 source mirrored in core — 2026-10-08
+
+A separate [0.3 structural model](../models/truss-layout-core-structural-0.3.proposal.umf.json) now mirrors the current private 0.15 native source: 46 Records, 443 Fields, 48 portable Keys, 57 core Relationships and four explicit physical-FK reference paths. Existing pinned UMF validates zero errors, complete=false; the [validation receipt](../../04-build/evidence/design-audit/core-current-layout-validation.json) retains all diagnostics rather than upgrading unknown native interpretation.
+
+The [refresh source receipt](../../04-build/evidence/design-audit/core-current-refresh-source.json) pins original 0.12/0.15 UMF-extracted native statement arrays and the historical structural input. Exact comparison admits only review-label change, installation_archive.artifact_identity_sha256's NOT NULL/exact-digest CHECK replacement, and three appended prop_def ALTER statements: declaring-module column, old constraint removal and new qualified-field UNIQUE. The core mirror updates the digest Field's requiredness, adds the native source-backed declaring-module Field and replaces the old two-component portable key with the exact three-component declaration. All other original statements must remain equal. The complete native 0.15 archive is copied unchanged into the authored core model. This is explicit bounded Truss layout authoring, not a reusable SQL parser, catalog reconciler or DDL generator.
+
+Reproduce native extraction with `bun docs/helix/04-build/evidence/design-audit/capture-current-layout-ast.ts`, then author/check with `python3 docs/helix/04-build/evidence/design-audit/refresh-current-core-structure.py` (or `--check`). The extraction refuses an unreviewed local UMF revision. Original core IDs remain authored structural IDs and do not confer native installation identity. Current diagram refresh, complete native key interpretation and independently qualified core-to-DDL generation remain separate work.
+
+### Current diagram output
+
+The [current 0.15 structural SVG](../models/truss-layout-core-structural-0.3.review.svg) and [DOT source](../models/truss-layout-core-structural-0.3.review.dot) now consume the validated current 0.3 core model. Reproduce with `render-core-structural-er.py --current`; add `--check` for exact read-only source/receipt/output verification. The historical renderer default remains byte-identical and passes its original check. The [current receipt](../../04-build/evidence/design-audit/core-current-er-source.json) records 46 tables, 443 fields, 48 portable keys and all 61 original associations. Exact complete endpoint/ordered-field comparison, SVG node/edge inventory and declaring-module/current-version label checks pass. The new raster was visually inspected. Microsite embedding remains separate; arrows and dashed physical references retain the structural/native interpretation boundary.
+
+## Selected reference hybrid layout generation route
+
+Use the current 0.15 native UMF layout as original physical source custody,
+with the source-correlated 0.3 core structural projection for portable
+Record/Field/Key/Relationship inspection. The reference DDL route uses UMF's
+pinned PostgreSQL source export, preserving original native constraints,
+xid8/timestamp and nullable UNIQUE descriptors. Core association references
+remain endpoint metadata, not portable equality or enforcement declarations.
+No new portable-core key meaning is required for this selected route.
+
+Before adopting either output, independently compare every original relation,
+column, ordered key/FK descriptor and residual source artifact against the
+corresponding core/native inventories under exact source hashes. A changed
+core projection or native archive invalidates the paired output; neither
+artifact may silently become an independently edited layout authority. Truss
+owns this correspondence and installer policy, while UMF owns SQL export.
+The source-preserved native DDL must then pass complete installed effect and
+security/initialization/conversion parity before readiness.
+
+This closes the reference choice of a usable core-plus-native representation
+and generation route. It does not claim a generic whole-schema generator from
+portable core alone, full interpretation of unknown native descriptors or
+installed enforcement. Those separate capabilities must retain their own
+explicit limits and evidence. The Model-page owner browser presents the
+validated current structural projection and its retained native payloads;
+its complete=false notice is part of the truthful supported contract.
+
+
+## Reservation structural/browser projection — 2026-10-10
+
+[Core0.7](../models/truss-layout-core-structural-0.7.proposal.umf.json) adds six
+original reservation Fields to the existing row_home_capacity Record. The
+[original-source authoring receipt](../../04-build/evidence/design-audit/capacity-reservation-core-source.json)
+uses UMF's declaration inventory and native-tree rendering, not a second SQL
+parser/generator. It verifies all original core0.6 content can be restored
+exactly after removing this adjunct, with every existing relationship unchanged.
+There are50 Records/487 Fields/60 associations. Core validation is valid but
+interpretation complete=false; xid8 stays an explicit native family and SQL NULL
+is not silently relabeled as core absence. The full original coupled CHECK is
+retained on the Record, with source pointers/model pins on all added Fields.
+
+No operation FK is invented: reservation must precede insertion of the operation
+it reserves. Exact native operation/reservation correspondence belongs to the
+protected producer/observer protocol. This projection is not installed native0.16
+or an accepted new physical layout/version and cannot generate replacement DDL
+from unsupported portable key meanings.
+
+The site's current UMF browser now loads this model and offers the exact original
+reservation native-model download. [Chromium evidence](../../04-build/evidence/design-audit/capacity-reservation-browser.json)
+observes537 definitions, all six ledger members, qualified writer-field fragment/
+xid8 row, exact core/native downloads and no390px overflow or page errors. Scope
+is the current static schema browser; Hugo rebuild and deployment were not run.
+[Fresh owner sync](../../04-build/evidence/design-audit/capacity-reservation-browser-owner-sync.json)
+retains origin/main322b193 and exact byte equality of all four selected owner
+browser JS/CSS/logo assets. No owner browser implementation is forked. Earlier
+core0.6/browser observations retain their historical model/count scope.

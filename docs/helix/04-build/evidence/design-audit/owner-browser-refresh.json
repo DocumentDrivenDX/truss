@@ -1,0 +1,23 @@
+{
+  "umf": {
+    "previous": "a917e1b41361d67031851fd7f5baca77934faf08",
+    "current": "44bbd8922ba4a3c7be2afa1a5ec2e6fecd473e64",
+    "reviewedPaths": [
+      "src",
+      "spec"
+    ],
+    "changedPaths": []
+  },
+  "weft": {
+    "previous": "5856c73db0342363e64802905a94abb96209d757",
+    "current": "5856c73db0342363e64802905a94abb96209d757",
+    "reviewedPaths": [
+      "crates",
+      "spec",
+      "Cargo.toml",
+      "Cargo.lock"
+    ],
+    "changedPaths": []
+  },
+  "scope": "Committed owner comparison and browser-only asset adoption. Dirty owner security work excluded; no runtime profile upgrade or native compiler qualification."
+}

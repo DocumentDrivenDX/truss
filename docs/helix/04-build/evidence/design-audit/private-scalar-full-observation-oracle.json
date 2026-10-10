@@ -1,0 +1,25 @@
+{
+  "scope": "Closed captured source projection/predicate AST and manifest source/order/type/null/parameter correspondence only; no native descriptors, visibility, decoding or PostgreSQL execution",
+  "sourceSha256": "d92a8870ed951ef7ae4b583f6ddf0f5fbd77c996570055bce50fa8685afe26b2",
+  "modelSha256": "fd901c196cb127e817f41573d9bfceb26012497f3d8a3c0310c31ccd1a8fad62",
+  "columns": 15,
+  "corruptionControls": [
+    "reordered_columns",
+    "lost_source_bytes",
+    "wrong_binary_carrier",
+    "missing_node_predicate",
+    "one_row_limit",
+    "hidden_filter",
+    "source_as_codec"
+  ],
+  "manifestCorruptionControls": [
+    "native_bytea_result",
+    "nullable_codec",
+    "nonnull_unused_binary",
+    "missing_parameter",
+    "narrow_identity_cast",
+    "native_claim_inflation"
+  ],
+  "nativeExecution": false,
+  "complete": false
+}

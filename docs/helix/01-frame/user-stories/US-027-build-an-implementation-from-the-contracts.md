@@ -45,7 +45,7 @@ The first implementation is TypeScript; the contracts are independent of it.
 
 ## Edge Cases
 
-- **An unknown case tag**: not applicable, not failure.
+- **An unknown case tag**: an unselected optional case may be outside the declared profile; unknown semantics in a required case refuse full-profile conformance and must not be counted as a pass.
 - **A case contradicting an accepted decision**: a defect in the case.
 
 ## Test Scenarios

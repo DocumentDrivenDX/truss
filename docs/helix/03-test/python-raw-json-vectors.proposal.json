@@ -1,0 +1,41 @@
+{
+  "status": "independently authored raw input/expectation proposal; no supported native JSON profile or parser qualification",
+  "encoding": "UTF-8",
+  "obligations": ["retain exact source bytes before convenience parsing", "record numeric tokens without float conversion", "distinguish numeric tokens from ordinary strings", "admit opaque retention separately from executable meaning"],
+  "vectors": [
+    {
+      "id": "nested-large-integer-and-string",
+      "sourceUtf8Text": "{\"nested\":[{\"n\":9007199254740993,\"s\":\"9007199254740993\"}]}",
+      "expectedNumericTokens": [{"pointer":"/nested/0/n","token":"9007199254740993"}],
+      "expectedStrings": [{"pointer":"/nested/0/s","text":"9007199254740993"}]
+    },
+    {
+      "id": "decimal-spelling-exponent-and-signed-zero",
+      "sourceUtf8Text": "{\"a\":1.00,\"b\":1e0,\"z\":-0.0,\"s\":\"1.00\"}",
+      "expectedNumericTokens": [{"pointer":"/a","token":"1.00"},{"pointer":"/b","token":"1e0"},{"pointer":"/z","token":"-0.0"}],
+      "expectedStrings": [{"pointer":"/s","text":"1.00"}]
+    },
+    {
+      "id": "unknown-extension-retained-bytes",
+      "sourceUtf8Text": "{ \"x-consumer-future\" : { \"opaque\" : [9007199254740993, 1.2300, \"$a\"] } }\n",
+      "expectedNumericTokens": [{"pointer":"/x-consumer-future/opaque/0","token":"9007199254740993"},{"pointer":"/x-consumer-future/opaque/1","token":"1.2300"}],
+      "expectedStrings": [{"pointer":"/x-consumer-future/opaque/2","text":"$a"}],
+      "expectedUnknownMeaning": "retained only until original interpretation is admitted; no executable or enforced claim",
+      "expectedAliasSubstitution": "none; literal source content is not a registered identity slot"
+    },
+    {
+      "id": "escaped-source-and-literal-pointer-name",
+      "sourceUtf8Text": "{\"a/b\":{\"~n\":1.00},\"s\":\"\\u0031.00\"}",
+      "expectedNumericTokens": [{"pointer":"/a~1b/~0n","token":"1.00"}],
+      "expectedStrings": [{"pointer":"/s","text":"1.00"}],
+      "expectedSourceEscapePreservation": true
+    },
+    {
+      "id": "json-null-empty-string-and-sequence",
+      "sourceUtf8Text": "{\"null\":null,\"string\":\"\",\"sequence\":[]}",
+      "expectedNumericTokens": [],
+      "expectedStrings": [{"pointer":"/string","text":""}],
+      "expectedPresence": [{"pointer":"/missing","state":"absent"},{"pointer":"/null","state":"present-null"},{"pointer":"/sequence","state":"present-empty-sequence"}]
+    }
+  ]
+}

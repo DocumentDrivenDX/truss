@@ -1,0 +1,12 @@
+{
+  "scope": "UMF owner AST composition and saved reload/export only; no conversion or installed runtime qualification",
+  "ownerRoot": "/Users/erik/Projects/umf",
+  "ownerCommit": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+  "source": "docs/helix/02-design/models/truss-layout-field-module-0.14.proposal.umf.json",
+  "sourceSha256": "b98192cacef3261f022b73cdad0fad12618f0d1edde0d4c7ec5dafb0fdb3c528",
+  "modelPath": "docs/helix/02-design/models/truss-layout-qualified-property-0.15.proposal.umf.json",
+  "modelSha256": "baed6c2707240261802d9fe87a00448acf37f13dcb33e8215717681dc4542b76",
+  "ddlPath": "docs/helix/04-build/evidence/qualified-property-layout-0.15.owner-export.sql",
+  "ddlSha256": "cc725df53f0d74e13bb51fda29603f8cafe8c0cee237667778566f81b33f5011",
+  "reloadedExportExact": true
+}

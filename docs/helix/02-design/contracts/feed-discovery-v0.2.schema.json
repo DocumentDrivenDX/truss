@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:feed-discovery:0.2.0",
+  "description": "Request/result shape only; original current resume/native lowest-required membership/empty interval evidence require admission.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-feed-discovery/0.2.0"
+    },
+    "worker": {
+      "$ref": "urn:truss:draft:feed-progress:0.2.0#/$defs/worker"
+    },
+    "after": {
+      "$ref": "urn:truss:draft:feed-progress:0.2.0"
+    },
+    "discoveryProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "limits": {
+      "type": "object",
+      "properties": {
+        "encodedBytes": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "scannedTransactions": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        }
+      },
+      "required": [
+        "encodedBytes",
+        "scannedTransactions"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "worker",
+    "after",
+    "discoveryProfile",
+    "limits"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "result": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "next"
+            },
+            "manifest": {
+              "$ref": "urn:truss:draft:feed-transaction:0.2.0"
+            },
+            "safeWatermarkXid": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$"
+            },
+            "observation": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            }
+          },
+          "required": [
+            "outcome",
+            "manifest",
+            "safeWatermarkXid",
+            "observation"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "empty_interval"
+            },
+            "fromInclusiveXid": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$"
+            },
+            "throughExclusiveXid": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$"
+            },
+            "safeWatermarkXid": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$"
+            },
+            "observation": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            }
+          },
+          "required": [
+            "outcome",
+            "fromInclusiveXid",
+            "throughExclusiveXid",
+            "safeWatermarkXid",
+            "observation"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "unavailable"
+            },
+            "reason": {
+              "enum": [
+                "authorization",
+                "context",
+                "generation",
+                "profile",
+                "retention",
+                "integrity",
+                "resource_limit",
+                "observation"
+              ]
+            }
+          },
+          "required": [
+            "outcome",
+            "reason"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

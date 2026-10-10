@@ -1,0 +1,284 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:proposal:import-execution-result:0.1.0",
+  "title": "Existing progress-bearing import execution result compositions",
+  "description": "Definitions only for the existing ImportExecutionResult declaration. Select engineOwned for runBatches or inTransaction for applyInTransaction. Report custody/count/durability and null only before writer submission require original semantic admission. No generic Outcome or automatic replay.",
+  "not": {},
+  "$defs": {
+    "engineOwned": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "reported"
+            },
+            "report": {
+              "allOf": [
+                {
+                  "$ref": "urn:truss:draft:import-report:0.1.0"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "execution": {
+                      "enum": [
+                        "engine_owned"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "execution"
+                  ]
+                }
+              ]
+            }
+          },
+          "required": [
+            "outcome",
+            "report"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "urn:truss:draft:import-resource-result:0.1.0"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "report": {
+                  "allOf": [
+                    {
+                      "$ref": "urn:truss:draft:import-report:0.1.0"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "execution": {
+                          "enum": [
+                            "engine_owned"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "execution"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "report"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "execution_failed"
+            },
+            "error": {
+              "$ref": "urn:truss:draft:execution-failure:0.1.0"
+            },
+            "report": {
+              "anyOf": [
+                {
+                  "allOf": [
+                    {
+                      "$ref": "urn:truss:draft:import-report:0.1.0"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "execution": {
+                          "enum": [
+                            "engine_owned"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "execution"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "outcome",
+            "error",
+            "report"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "invalid"
+            },
+            "diagnosticProfile": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+            },
+            "diagnostic": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            }
+          },
+          "required": [
+            "outcome",
+            "diagnosticProfile",
+            "diagnostic"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "inTransaction": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "reported"
+            },
+            "report": {
+              "allOf": [
+                {
+                  "$ref": "urn:truss:draft:import-report:0.1.0"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "execution": {
+                      "enum": [
+                        "host_adopted",
+                        "outer_engine_scope"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "execution"
+                  ]
+                }
+              ]
+            }
+          },
+          "required": [
+            "outcome",
+            "report"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "urn:truss:draft:import-resource-result:0.1.0"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "report": {
+                  "allOf": [
+                    {
+                      "$ref": "urn:truss:draft:import-report:0.1.0"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "execution": {
+                          "enum": [
+                            "host_adopted",
+                            "outer_engine_scope"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "execution"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "report"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "execution_failed"
+            },
+            "error": {
+              "$ref": "urn:truss:draft:execution-failure:0.1.0"
+            },
+            "report": {
+              "anyOf": [
+                {
+                  "allOf": [
+                    {
+                      "$ref": "urn:truss:draft:import-report:0.1.0"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "execution": {
+                          "enum": [
+                            "host_adopted",
+                            "outer_engine_scope"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "execution"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "outcome",
+            "error",
+            "report"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "invalid"
+            },
+            "diagnosticProfile": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+            },
+            "diagnostic": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            }
+          },
+          "required": [
+            "outcome",
+            "diagnosticProfile",
+            "diagnostic"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "interfaceVersion": "truss-bootstrap-transform-definition-profile/0.1.0",
+  "status": "unadopted field specification; native language/default/signature/canonical producers unqualified",
+  "nativeVersion": "PostgreSQL 17; exact build separately admitted",
+  "requiredRawFieldInventory": [
+    "oid",
+    "trftype",
+    "trflang",
+    "trffromsql",
+    "trftosql"
+  ],
+  "fields": [
+    {
+      "nativeField": "oid",
+      "domain": "nonzero canonical uint32; original transform association",
+      "classification": "original correlation only",
+      "rawPreservation": "Complete original raw row and projected routine OIDs; no regproc name re-resolution"
+    },
+    {
+      "nativeField": "trftype",
+      "domain": "nonzero canonical uint32; original resolved pg_type endpoint",
+      "classification": "resolved original endpoint or direction-specific routine/default meaning",
+      "rawPreservation": "Complete original raw row and projected routine OIDs; no regproc name re-resolution"
+    },
+    {
+      "nativeField": "trflang",
+      "domain": "nonzero canonical uint32; original resolved pg_language endpoint",
+      "classification": "resolved original endpoint or direction-specific routine/default meaning",
+      "rawPreservation": "Complete original raw row and projected routine OIDs; no regproc name re-resolution"
+    },
+    {
+      "nativeField": "trffromsql",
+      "domain": "native regproc plus original projected uint32 OID; zero language-specific default or resolved pg_proc",
+      "classification": "resolved original endpoint or direction-specific routine/default meaning",
+      "rawPreservation": "Complete original raw row and projected routine OIDs; no regproc name re-resolution"
+    },
+    {
+      "nativeField": "trftosql",
+      "domain": "native regproc plus original projected uint32 OID; zero language-specific default or resolved pg_proc",
+      "classification": "resolved original endpoint or direction-specific routine/default meaning",
+      "rawPreservation": "Complete original raw row and projected routine OIDs; no regproc name re-resolution"
+    }
+  ],
+  "unknownFields": "Preserved unsupported pending complete governing classification",
+  "association": "Original type-language pair resolves exactly one declared transform. Direct OID and pair observations agree on original row/pair/functions under one cut. Missing pair differs from a declared direction using zero/default.",
+  "signatureAdmission": "Nonzero from-SQL function takes one native internal argument and returns native internal; nonzero to-SQL function takes one native internal argument and returns the original transformed type. Resolve actual native type identities, complete routine modes/kind and executable provenance; no name or hardcoded OID substitution.",
+  "defaultAdmission": "Zero is language-specific default behavior, not identity conversion, denial, absent declaration or portable codec. Original language implementation/default meaning must be admitted for relevant supported direction. Unknown meaning is preserved unsupported.",
+  "additionalRequiredDefinitions": [
+    "complete original type/language and routine definitions",
+    "original language implementation/build and direction-specific default/executable provenance",
+    "current actor type/language/routine authority distinct from original definition ownership",
+    "original dependency/extension/comment associations and complete cyclic closure"
+  ],
+  "canonicalProducer": "Resolved type-language pair, directional resolved routine or admitted default identities and full governing definition/policy. Raw OIDs never cross-install semantic identities. Signature compatibility and immutable/trusted flags never establish behavior or authority.",
+  "observationPolicy": "No transform, language handler, type I/O or internal datum construction during discovery. These server procedural-language transforms do not become client Python/TypeScript adapters or UMF portable codecs.",
+  "sources": [
+    "https://www.postgresql.org/docs/17/catalog-pg-transform.html",
+    "https://www.postgresql.org/docs/17/sql-createtransform.html"
+  ]
+}

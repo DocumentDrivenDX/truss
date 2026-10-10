@@ -1,0 +1,149 @@
+{
+  "scope": "Planned independent expected readback/refusal cases. No codec execution/native qualification or numeric profile adoption.",
+  "cases": [
+    {
+      "id": "numeric-looking-string",
+      "family": "string",
+      "storedJson": "\"001.00\"",
+      "expected": {
+        "present": true,
+        "value": {
+          "kind": "string",
+          "text": "001.00"
+        }
+      }
+    },
+    {
+      "id": "whitespace-and-empty",
+      "family": "string",
+      "storedJson": "\"  \"",
+      "expected": {
+        "present": true,
+        "value": {
+          "kind": "string",
+          "text": "  "
+        }
+      }
+    },
+    {
+      "id": "empty-string",
+      "family": "string",
+      "storedJson": "\"\"",
+      "expected": {
+        "present": true,
+        "value": {
+          "kind": "string",
+          "text": ""
+        }
+      }
+    },
+    {
+      "id": "unicode-spelling",
+      "family": "string",
+      "storedJson": "\"e\\u0301\"",
+      "expected": {
+        "present": true,
+        "value": {
+          "kind": "string",
+          "text": "é"
+        }
+      }
+    },
+    {
+      "id": "boolean-false",
+      "family": "boolean",
+      "storedJson": "false",
+      "expected": {
+        "present": true,
+        "value": {
+          "kind": "boolean",
+          "value": false
+        }
+      }
+    },
+    {
+      "id": "boolean-string-refusal",
+      "family": "boolean",
+      "storedJson": "\"false\"",
+      "expectedRefusal": "wrong-stored-json-kind"
+    },
+    {
+      "id": "numeric-json-string-refusal",
+      "family": "string",
+      "storedJson": "1",
+      "expectedRefusal": "wrong-stored-json-kind"
+    },
+    {
+      "id": "integer-token",
+      "family": "integer",
+      "requires": "selected numeric adoption/source grammar/facets/native domain",
+      "storedJson": "\"9007199254740993\"",
+      "expected": {
+        "present": true,
+        "value": {
+          "kind": "integer",
+          "text": "9007199254740993"
+        }
+      }
+    },
+    {
+      "id": "decimal-scale",
+      "family": "decimal",
+      "requires": "selected numeric adoption/source grammar/facets/native domain",
+      "storedJson": "\"1.00\"",
+      "expected": {
+        "present": true,
+        "value": {
+          "kind": "decimal",
+          "text": "1.00"
+        }
+      }
+    },
+    {
+      "id": "decimal-negative-zero",
+      "family": "decimal",
+      "requires": "selected numeric adoption/source grammar/facets/native domain",
+      "storedJson": "\"-0.00\"",
+      "expected": {
+        "present": true,
+        "value": {
+          "kind": "decimal",
+          "text": "-0.00"
+        }
+      }
+    },
+    {
+      "id": "legacy-json-number-not-token",
+      "family": "decimal",
+      "storedJson": "1.00",
+      "expectedRefusal": "wrong-stored-json-kind-under-token-profile"
+    },
+    {
+      "id": "token-without-adoption",
+      "family": "decimal",
+      "storedJson": "\"1.00\"",
+      "missing": "numeric adoption evidence",
+      "expectedRefusal": "unsupported-profile-before-sql"
+    },
+    {
+      "id": "invalid-token",
+      "family": "integer",
+      "storedJson": "\"NaN\"",
+      "requires": "selected finite integer grammar",
+      "expectedRefusal": "invalid-source-token"
+    },
+    {
+      "id": "null-not-a-leaf-coercion",
+      "family": "string",
+      "storedJson": "null",
+      "expectedRefusal": "requires-separate-authored-nullability-and-presence-assessment"
+    },
+    {
+      "id": "native-text-nul-refusal",
+      "family": "string",
+      "storedJson": "\"\\u0000\"",
+      "requires": "PostgreSQL JSONB/text domain admission",
+      "expectedRefusal": "unsupported-native-text-before-effects"
+    }
+  ]
+}

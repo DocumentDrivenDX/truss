@@ -1,0 +1,38 @@
+{
+  "commit": "5ae231bc0f475ba4887a3d1896c3ad9fbcae9695",
+  "files": [
+    {
+      "path": "crates/weft-postgresql/src/structured.rs",
+      "sha256": "a12a4794a4ce81c2fc1c8dd396a2e366615bcbadb3da6cb425f8dd33404bdce6"
+    },
+    {
+      "path": "crates/weft-postgresql/src/row_codec.rs",
+      "sha256": "26553ad206c4813f309c3ececcae73fe861638967f1b41d80229d9d67ee34931"
+    },
+    {
+      "path": "crates/weft-postgresql/src/value_definition.rs",
+      "sha256": "e2f9b3671f6659aecef602e7b7c50b2d3f743d45e60ca5d2b42d912904d042e9"
+    },
+    {
+      "path": "Cargo.toml",
+      "sha256": "9f245ac65d757f33524a64482c5ecfb73baa30d93400302ecd032eeb830164a1"
+    },
+    {
+      "path": "Cargo.lock",
+      "sha256": "b45182ab10fefbeab4e43a292350c86e735f6f9139acba1d54b1223421f47c40"
+    },
+    {
+      "path": "crates/weft-postgresql/src/json_codec.rs",
+      "sha256": "04771c4bd7b750e26d4f3e8368b8379904eeec58ba3bc84de4fe3ae08ae9cbb8"
+    },
+    {
+      "path": "crates/weft-core/src/ir.rs",
+      "sha256": "ec75a449cd52b95930c1aed95e201cd3317e4171f482d8d17be111e28f559f9f"
+    }
+  ],
+  "observation": "structured.rs serializes original member identity via serde_json json!(member.identity).to_string(), binds text and compares convert_to(text,UTF8) against record_field_identity_bytes; row_codec.rs also compares against UTF8 graph member identity text",
+  "scope": "Committed source inspection only; no cross-language canonical encoding agreement, Truss adoption, native execution or public ABI qualification",
+  "nativeExecutionQualified": false,
+  "recursiveGraphObservation": "json_codec::pack serializes member identity with json!(m.identity).to_string(); row_codec orders traversal by depth and sort, with record sort derived from member name, then folds with jsonb_set into JSONB objects. This projection does not establish authored field-entry order or original exact source-token retention.",
+  "identityDeclaration": "Original Identity has camelCase documentId, revision, module and element string members; byte encoding additionally depends on selected serializer procedure/build, not the declaration alone."
+}

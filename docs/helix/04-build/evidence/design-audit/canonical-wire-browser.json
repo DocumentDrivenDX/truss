@@ -1,0 +1,16 @@
+{
+  "browser": "153.0.8010.12",
+  "sourceSha256": "2fcb2ff72ce7faad682800be3a4deba1f7147f814e08319179cea4ed93cc4bf6",
+  "decoderSha256": "14a65dc9fd67b3ab53fb080a4a05422b991af63feac52fc6e0655eb03a47ed17",
+  "bundleSha256": "24d60a6da08028ec16e99954af8bdd2e9e0a1a480945d6bec46d3c5e89ca580a",
+  "observations": [
+    "independent UTF-8 tagged-tree oracle",
+    "original whitespace and exact integer string custody",
+    "snapshot survives caller mutation",
+    "numeric-node refusal",
+    "decoded duplicate refusal",
+    "unpaired surrogate refusal",
+    "native task ceiling refusal"
+  ],
+  "scope": "Actual Chromium original-wire to tagged native codec carrier only. No native encoding, semantic report admission, shared resource accounting or accepted publication."
+}

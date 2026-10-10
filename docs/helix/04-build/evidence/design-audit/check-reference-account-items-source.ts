@@ -1,0 +1,23 @@
+/** Existing UMF metadata/roundtrip evidence only; no Truss support or native installation. */
+import {validateDocument} from '/Users/erik/Projects/umf/src/validation/document';
+import {readDocument,writeDocument} from '/Users/erik/Projects/umf/src/model/document';
+const root='/Users/erik/Projects/umf';
+const git=(args:string[])=>{const r=Bun.spawnSync(['git','-C',root,...args]);if(r.exitCode)throw Error('owner observation failed');return new TextDecoder().decode(r.stdout).trim();};
+const before={head:git(['rev-parse','HEAD']),status:git(['status','--porcelain'])};
+const path='docs/helix/02-design/contracts/bindings/reference-account-items-v0.1.proposal.umf.json';
+const raw=await Bun.file(path).text();const source=readDocument(raw,'json');const result=validateDocument(source);
+if(!result.valid)throw Error(JSON.stringify(result));
+const reloaded=readDocument(writeDocument(source,'json'),'json');
+if(JSON.stringify(source)!==JSON.stringify(reloaded))throw Error('metadata roundtrip mismatch');
+const missingEndpoint=structuredClone(source) as any;missingEndpoint.modules[0].relationships[0].target[0].element='missing';
+const invalidEndpoint=validateDocument(missingEndpoint);if(invalidEndpoint.valid)throw Error('missing relationship endpoint accepted');
+const missingKey=structuredClone(source) as any;missingKey.modules[0].relationships[0].target[0].key='missing';
+const invalidKey=validateDocument(missingKey);if(invalidKey.valid)throw Error('missing relationship key accepted');
+const badBounds=structuredClone(source) as any;badBounds.modules[0].relationships[0].targetMultiplicity.min=3;
+const invalidBounds=validateDocument(badBounds);if(invalidBounds.valid)throw Error('inverted multiplicity accepted');
+const after={head:git(['rev-parse','HEAD']),status:git(['status','--porcelain'])};if(JSON.stringify(before)!==JSON.stringify(after)||await Bun.file(path).text()!==raw)throw Error('source changed');
+const hash=(s:string)=>new Bun.CryptoHasher('sha256').update(s).digest('hex');
+const ownerFiles=['src/validation/document.ts','src/validation/relationships.ts','src/validation/keys.ts','src/model/document.ts','spec/core/relationship-document.schema.json'];
+const pins=await Promise.all(ownerFiles.map(async path=>({path,sha256:hash(await Bun.file(root+'/'+path).text())})));
+await Bun.write('docs/helix/04-build/evidence/design-audit/reference-account-items-source.json',JSON.stringify({scope:'UMF 0.7 metadata validation and serialization; three independently malformed endpoint/key/bound variants refused. No Truss codec/presence/enforcement/Weft binding/native support.',source:{path,sha256:hash(raw)},owner:{root,...before,files:pins},bunVersion:Bun.version,validation:result,roundtripExactTree:true,controls:[{name:'missing_endpoint',validation:invalidEndpoint},{name:'missing_key',validation:invalidKey},{name:'inverted_multiplicity',validation:invalidBounds}]},null,2)+'\n');
+console.log(JSON.stringify({valid:result.valid,complete:result.complete,controls:3,roundtripExactTree:true}));

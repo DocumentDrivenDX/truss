@@ -1,0 +1,6 @@
+{
+  "scope": "closed cursor and request shapes only",
+  "cursorCases": 12,
+  "requestCases": 9,
+  "failures": []
+}

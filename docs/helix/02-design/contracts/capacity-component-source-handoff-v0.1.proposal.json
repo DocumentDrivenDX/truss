@@ -1,0 +1,481 @@
+{
+  "interfaceVersion": "truss-capacity-component-source-handoff/0.1.0",
+  "scope": "Seventeen source-defined private capacity helpers and manually reviewed direct Truss calls only; not a complete native callable/dependency inventory or installer authority",
+  "sources": [
+    {
+      "source": {
+        "path": "packages/postgresql/native/capacity-reservation/accounting.sql",
+        "sha256": "99f2dfc4eaf0a57eeebab375698a265d2d22f092983e2aeb0f01bda6e7c06ada"
+      },
+      "ownerExport": {
+        "path": "docs/helix/04-build/evidence/design-audit/capacity-accounting-source.owner-export.sql",
+        "sha256": "b50d3d2b12baeabf07d285895f6d9bef37f5d5aecfdefce2cff0bcb1840a3f9b"
+      },
+      "ownerCapture": {
+        "path": "docs/helix/04-build/evidence/design-audit/capacity-accounting-source.json",
+        "sha256": "b38bb6dce5eddde40e029d344b0e632445ca32f0560e1aa9ccbb1e9401dfe7f7"
+      }
+    },
+    {
+      "source": {
+        "path": "packages/postgresql/native/capacity-reservation/custody-codec.sql",
+        "sha256": "7e998e2f3d5213503143b4b61af4a92e1e0a2d37912f9516bf2f14cdb98b5daa"
+      },
+      "ownerExport": {
+        "path": "docs/helix/04-build/evidence/design-audit/custody-codec-source.owner-export.sql",
+        "sha256": "5e40bdee7ec68277b34266cd60cfd3fca4ada24b417cccf5c041dd44dd56aa1d"
+      },
+      "ownerCapture": {
+        "path": "docs/helix/04-build/evidence/design-audit/custody-codec-source.json",
+        "sha256": "6e4ff651563840f865bf07047eb2e01f223dbf0b25e8501f4c9f54928f51a7e4"
+      }
+    },
+    {
+      "source": {
+        "path": "packages/postgresql/native/capacity-reservation/custody-size.sql",
+        "sha256": "956fd70051216d9c05ec8c8e13a961979ea85618b44fea39d5d5ea1d99996fa8"
+      },
+      "ownerExport": {
+        "path": "docs/helix/04-build/evidence/design-audit/custody-size-source.owner-export.sql",
+        "sha256": "9e053ca758888ce7b37ee2f460346c32a97a9386ab88297cd4486c70dea711d5"
+      },
+      "ownerCapture": {
+        "path": "docs/helix/04-build/evidence/design-audit/custody-size-source.json",
+        "sha256": "c7a8d1c84b408f0622c3ec2d82af9384a9b3167a0e419d501b3a9f139eb80736"
+      }
+    },
+    {
+      "source": {
+        "path": "packages/postgresql/native/capacity-reservation/observation.sql",
+        "sha256": "164c7bda8407840b9886a5f3eef2f859e4b45d7c534da7a0942af7e01e55d72e"
+      },
+      "ownerExport": {
+        "path": "docs/helix/04-build/evidence/design-audit/capacity-observation-source.owner-export.sql",
+        "sha256": "4c7662dc4a8baed7813465dc28b253908748bd8191b7d8b96f3d625d51281827"
+      },
+      "ownerCapture": {
+        "path": "docs/helix/04-build/evidence/design-audit/capacity-observation-source.json",
+        "sha256": "bf3ca7726d4a48033eb9bb5e351b24471b78a335cd9f5cace0d0e3c49b583f70"
+      }
+    },
+    {
+      "source": {
+        "path": "packages/postgresql/native/capacity-reservation/inventory.sql",
+        "sha256": "5434543bf157633469e5dd41d68126934667c912df64f915131ce1bc617847fe"
+      },
+      "ownerExport": {
+        "path": "docs/helix/04-build/evidence/design-audit/capacity-inventory-source.owner-export.sql",
+        "sha256": "7e76e9309f3923574259190613551352930abbe7efb991662ae9a25672c8836b"
+      },
+      "ownerCapture": {
+        "path": "docs/helix/04-build/evidence/design-audit/capacity-inventory-source.json",
+        "sha256": "947bb642ac72b6d42684201ec6a6bab66faad424d1f09245e9a604e0fd31208d"
+      }
+    },
+    {
+      "source": {
+        "path": "packages/postgresql/native/capacity-reservation/commit-check.sql",
+        "sha256": "aabd34475c87136d0862129efd39c50bfa166da3cc4641ab9a6ac9f7cad65dd0"
+      },
+      "ownerExport": {
+        "path": "docs/helix/04-build/evidence/design-audit/capacity-commit-source.owner-export.sql",
+        "sha256": "335cbdacb324835f42c9b6668b52ba253207efd45c68f47011ae314499595957"
+      },
+      "ownerCapture": {
+        "path": "docs/helix/04-build/evidence/design-audit/capacity-commit-source.json",
+        "sha256": "880664150c5e23092a6cdfb709c69c5072d3167372e3cddbfef04a4d00ae40ec"
+      }
+    },
+    {
+      "source": {
+        "path": "packages/postgresql/native/capacity-reservation/commit-cache.sql",
+        "sha256": "416ecbfa46b0949a334c154b653c3a266732ba61bce257332f917db1dfc43cea"
+      },
+      "ownerExport": {
+        "path": "docs/helix/04-build/evidence/design-audit/capacity-cache-source.owner-export.sql",
+        "sha256": "16498f71ab1774630c3261400de4b7763009189c56b759c6d89b43c2495b6051"
+      },
+      "ownerCapture": {
+        "path": "docs/helix/04-build/evidence/design-audit/capacity-cache-source.json",
+        "sha256": "126a9883672b9a1bf14080c60bcd1c2aba9bee80793e9d67c53d1d4915e35ed0"
+      }
+    },
+    {
+      "source": {
+        "path": "packages/postgresql/native/capacity-reservation/defer-check.sql",
+        "sha256": "6cca1d76518bab1c1e0da43e81fa05704db0bb73df34a7f20e96b54e68976ddd"
+      },
+      "ownerExport": {
+        "path": "docs/helix/04-build/evidence/design-audit/capacity-defer-source.owner-export.sql",
+        "sha256": "cb7bffc142e02117158dba02a155512753d4ccd3e7337ab4ba6f20eb0c1d97bb"
+      },
+      "ownerCapture": {
+        "path": "docs/helix/04-build/evidence/design-audit/capacity-defer-source.json",
+        "sha256": "cfdb37f3dd94b2b25d6d8676f171f9910229f8968e7a80077b08eb9595173e91"
+      }
+    }
+  ],
+  "routines": [
+    {
+      "selector": "truss.capacity_reserve_original",
+      "sqlArgumentTypes": [
+        "bigint",
+        "bytea",
+        "bytea",
+        "bigint",
+        "bigint",
+        "bytea",
+        "bytea"
+      ],
+      "sqlResultType": "void",
+      "bodySource": {
+        "path": "packages/postgresql/native/capacity-reservation/accounting.sql",
+        "sha256": "99f2dfc4eaf0a57eeebab375698a265d2d22f092983e2aeb0f01bda6e7c06ada"
+      },
+      "directReviewedTrussCallSelectors": [],
+      "installedPhysicalIdentity": null,
+      "nativeOwnerRole": null,
+      "completeTransitiveDependencyInventory": null,
+      "exactPrivateCallerAcl": null
+    },
+    {
+      "selector": "truss.capacity_transfer_original",
+      "sqlArgumentTypes": [
+        "bytea",
+        "bytea",
+        "bigint",
+        "bigint",
+        "bigint"
+      ],
+      "sqlResultType": "void",
+      "bodySource": {
+        "path": "packages/postgresql/native/capacity-reservation/accounting.sql",
+        "sha256": "99f2dfc4eaf0a57eeebab375698a265d2d22f092983e2aeb0f01bda6e7c06ada"
+      },
+      "directReviewedTrussCallSelectors": [],
+      "installedPhysicalIdentity": null,
+      "nativeOwnerRole": null,
+      "completeTransitiveDependencyInventory": null,
+      "exactPrivateCallerAcl": null
+    },
+    {
+      "selector": "truss.capacity_release_original",
+      "sqlArgumentTypes": [
+        "bytea",
+        "bytea"
+      ],
+      "sqlResultType": "void",
+      "bodySource": {
+        "path": "packages/postgresql/native/capacity-reservation/accounting.sql",
+        "sha256": "99f2dfc4eaf0a57eeebab375698a265d2d22f092983e2aeb0f01bda6e7c06ada"
+      },
+      "directReviewedTrussCallSelectors": [],
+      "installedPhysicalIdentity": null,
+      "nativeOwnerRole": null,
+      "completeTransitiveDependencyInventory": null,
+      "exactPrivateCallerAcl": null
+    },
+    {
+      "selector": "truss.custody_codec_columns_original",
+      "sqlArgumentTypes": [
+        "text"
+      ],
+      "sqlResultType": "void",
+      "bodySource": {
+        "path": "packages/postgresql/native/capacity-reservation/custody-codec.sql",
+        "sha256": "7e998e2f3d5213503143b4b61af4a92e1e0a2d37912f9516bf2f14cdb98b5daa"
+      },
+      "directReviewedTrussCallSelectors": [],
+      "installedPhysicalIdentity": null,
+      "nativeOwnerRole": null,
+      "completeTransitiveDependencyInventory": null,
+      "exactPrivateCallerAcl": null
+    },
+    {
+      "selector": "truss.custody_frame_original",
+      "sqlArgumentTypes": [
+        "text",
+        "bytea[]"
+      ],
+      "sqlResultType": "bytea",
+      "bodySource": {
+        "path": "packages/postgresql/native/capacity-reservation/custody-codec.sql",
+        "sha256": "7e998e2f3d5213503143b4b61af4a92e1e0a2d37912f9516bf2f14cdb98b5daa"
+      },
+      "directReviewedTrussCallSelectors": [],
+      "installedPhysicalIdentity": null,
+      "nativeOwnerRole": null,
+      "completeTransitiveDependencyInventory": null,
+      "exactPrivateCallerAcl": null
+    },
+    {
+      "selector": "truss.custody_operation_original",
+      "sqlArgumentTypes": [
+        "truss.row_home_operation"
+      ],
+      "sqlResultType": "bytea",
+      "bodySource": {
+        "path": "packages/postgresql/native/capacity-reservation/custody-codec.sql",
+        "sha256": "7e998e2f3d5213503143b4b61af4a92e1e0a2d37912f9516bf2f14cdb98b5daa"
+      },
+      "directReviewedTrussCallSelectors": [
+        "truss.custody_codec_columns_original",
+        "truss.custody_frame_original"
+      ],
+      "installedPhysicalIdentity": null,
+      "nativeOwnerRole": null,
+      "completeTransitiveDependencyInventory": null,
+      "exactPrivateCallerAcl": null
+    },
+    {
+      "selector": "truss.custody_touch_original",
+      "sqlArgumentTypes": [
+        "truss.row_home_touch"
+      ],
+      "sqlResultType": "bytea",
+      "bodySource": {
+        "path": "packages/postgresql/native/capacity-reservation/custody-codec.sql",
+        "sha256": "7e998e2f3d5213503143b4b61af4a92e1e0a2d37912f9516bf2f14cdb98b5daa"
+      },
+      "directReviewedTrussCallSelectors": [
+        "truss.custody_codec_columns_original",
+        "truss.custody_frame_original"
+      ],
+      "installedPhysicalIdentity": null,
+      "nativeOwnerRole": null,
+      "completeTransitiveDependencyInventory": null,
+      "exactPrivateCallerAcl": null
+    },
+    {
+      "selector": "truss.custody_size_original",
+      "sqlArgumentTypes": [
+        "text",
+        "integer[]"
+      ],
+      "sqlResultType": "bigint",
+      "bodySource": {
+        "path": "packages/postgresql/native/capacity-reservation/custody-size.sql",
+        "sha256": "956fd70051216d9c05ec8c8e13a961979ea85618b44fea39d5d5ea1d99996fa8"
+      },
+      "directReviewedTrussCallSelectors": [],
+      "installedPhysicalIdentity": null,
+      "nativeOwnerRole": null,
+      "completeTransitiveDependencyInventory": null,
+      "exactPrivateCallerAcl": null
+    },
+    {
+      "selector": "truss.custody_operation_size_original",
+      "sqlArgumentTypes": [
+        "truss.row_home_operation"
+      ],
+      "sqlResultType": "bigint",
+      "bodySource": {
+        "path": "packages/postgresql/native/capacity-reservation/custody-size.sql",
+        "sha256": "956fd70051216d9c05ec8c8e13a961979ea85618b44fea39d5d5ea1d99996fa8"
+      },
+      "directReviewedTrussCallSelectors": [
+        "truss.custody_codec_columns_original",
+        "truss.custody_size_original"
+      ],
+      "installedPhysicalIdentity": null,
+      "nativeOwnerRole": null,
+      "completeTransitiveDependencyInventory": null,
+      "exactPrivateCallerAcl": null
+    },
+    {
+      "selector": "truss.custody_touch_size_original",
+      "sqlArgumentTypes": [
+        "truss.row_home_touch"
+      ],
+      "sqlResultType": "bigint",
+      "bodySource": {
+        "path": "packages/postgresql/native/capacity-reservation/custody-size.sql",
+        "sha256": "956fd70051216d9c05ec8c8e13a961979ea85618b44fea39d5d5ea1d99996fa8"
+      },
+      "directReviewedTrussCallSelectors": [
+        "truss.custody_codec_columns_original",
+        "truss.custody_size_original"
+      ],
+      "installedPhysicalIdentity": null,
+      "nativeOwnerRole": null,
+      "completeTransitiveDependencyInventory": null,
+      "exactPrivateCallerAcl": null
+    },
+    {
+      "selector": "truss.capacity_operation_observe_original",
+      "sqlArgumentTypes": [],
+      "sqlResultType": "trigger",
+      "bodySource": {
+        "path": "packages/postgresql/native/capacity-reservation/observation.sql",
+        "sha256": "164c7bda8407840b9886a5f3eef2f859e4b45d7c534da7a0942af7e01e55d72e"
+      },
+      "directReviewedTrussCallSelectors": [
+        "truss.custody_operation_size_original",
+        "truss.capacity_transfer_original"
+      ],
+      "installedPhysicalIdentity": null,
+      "nativeOwnerRole": null,
+      "completeTransitiveDependencyInventory": null,
+      "exactPrivateCallerAcl": null
+    },
+    {
+      "selector": "truss.capacity_touch_observe_original",
+      "sqlArgumentTypes": [],
+      "sqlResultType": "trigger",
+      "bodySource": {
+        "path": "packages/postgresql/native/capacity-reservation/observation.sql",
+        "sha256": "164c7bda8407840b9886a5f3eef2f859e4b45d7c534da7a0942af7e01e55d72e"
+      },
+      "directReviewedTrussCallSelectors": [
+        "truss.custody_touch_size_original",
+        "truss.capacity_transfer_original"
+      ],
+      "installedPhysicalIdentity": null,
+      "nativeOwnerRole": null,
+      "completeTransitiveDependencyInventory": null,
+      "exactPrivateCallerAcl": null
+    },
+    {
+      "selector": "truss.capacity_verify_inventory_original",
+      "sqlArgumentTypes": [
+        "bytea",
+        "bytea"
+      ],
+      "sqlResultType": "TABLE(observed_rows bigint, observed_custody_bytes bigint)",
+      "bodySource": {
+        "path": "packages/postgresql/native/capacity-reservation/inventory.sql",
+        "sha256": "5434543bf157633469e5dd41d68126934667c912df64f915131ce1bc617847fe"
+      },
+      "directReviewedTrussCallSelectors": [
+        "truss.custody_codec_columns_original",
+        "truss.custody_operation_size_original",
+        "truss.custody_touch_size_original"
+      ],
+      "installedPhysicalIdentity": null,
+      "nativeOwnerRole": null,
+      "completeTransitiveDependencyInventory": null,
+      "exactPrivateCallerAcl": null
+    },
+    {
+      "selector": "truss.capacity_commit_check_original",
+      "sqlArgumentTypes": [
+        "bytea",
+        "bytea"
+      ],
+      "sqlResultType": "void",
+      "bodySource": {
+        "path": "packages/postgresql/native/capacity-reservation/commit-check.sql",
+        "sha256": "aabd34475c87136d0862129efd39c50bfa166da3cc4641ab9a6ac9f7cad65dd0"
+      },
+      "directReviewedTrussCallSelectors": [
+        "truss.capacity_verify_inventory_original"
+      ],
+      "installedPhysicalIdentity": null,
+      "nativeOwnerRole": null,
+      "completeTransitiveDependencyInventory": null,
+      "exactPrivateCallerAcl": null
+    },
+    {
+      "selector": "truss.capacity_cache_invalidate_original",
+      "sqlArgumentTypes": [],
+      "sqlResultType": "trigger",
+      "bodySource": {
+        "path": "packages/postgresql/native/capacity-reservation/commit-cache.sql",
+        "sha256": "416ecbfa46b0949a334c154b653c3a266732ba61bce257332f917db1dfc43cea"
+      },
+      "directReviewedTrussCallSelectors": [],
+      "installedPhysicalIdentity": null,
+      "nativeOwnerRole": null,
+      "completeTransitiveDependencyInventory": null,
+      "exactPrivateCallerAcl": null
+    },
+    {
+      "selector": "truss.capacity_cache_check_original",
+      "sqlArgumentTypes": [],
+      "sqlResultType": "trigger",
+      "bodySource": {
+        "path": "packages/postgresql/native/capacity-reservation/commit-cache.sql",
+        "sha256": "416ecbfa46b0949a334c154b653c3a266732ba61bce257332f917db1dfc43cea"
+      },
+      "directReviewedTrussCallSelectors": [
+        "truss.capacity_commit_check_original"
+      ],
+      "installedPhysicalIdentity": null,
+      "nativeOwnerRole": null,
+      "completeTransitiveDependencyInventory": null,
+      "exactPrivateCallerAcl": null
+    },
+    {
+      "selector": "truss.capacity_defer_check_original",
+      "sqlArgumentTypes": [
+        "oid",
+        "oid",
+        "oid",
+        "oid",
+        "bytea"
+      ],
+      "sqlResultType": "void",
+      "bodySource": {
+        "path": "packages/postgresql/native/capacity-reservation/defer-check.sql",
+        "sha256": "6cca1d76518bab1c1e0da43e81fa05704db0bb73df34a7f20e96b54e68976ddd"
+      },
+      "directReviewedTrussCallSelectors": [],
+      "installedPhysicalIdentity": null,
+      "nativeOwnerRole": null,
+      "completeTransitiveDependencyInventory": null,
+      "exactPrivateCallerAcl": null
+    }
+  ],
+  "sourceCallDependencyOrder": [
+    "truss.capacity_reserve_original",
+    "truss.capacity_transfer_original",
+    "truss.capacity_release_original",
+    "truss.custody_codec_columns_original",
+    "truss.custody_frame_original",
+    "truss.custody_operation_original",
+    "truss.custody_touch_original",
+    "truss.custody_size_original",
+    "truss.custody_operation_size_original",
+    "truss.custody_touch_size_original",
+    "truss.capacity_operation_observe_original",
+    "truss.capacity_touch_observe_original",
+    "truss.capacity_verify_inventory_original",
+    "truss.capacity_commit_check_original",
+    "truss.capacity_cache_invalidate_original",
+    "truss.capacity_cache_check_original",
+    "truss.capacity_defer_check_original"
+  ],
+  "sharedSourceAttributes": {
+    "language": "plpgsql",
+    "security": "INVOKER",
+    "volatility": "VOLATILE",
+    "searchPath": [
+      "pg_catalog",
+      "pg_temp"
+    ],
+    "publicExecute": false
+  },
+  "nativeObjectsOutsideRoutineList": [
+    "capacity_check_memo table/PK/FK/CHECK/seed",
+    "eight operation/touch event triggers",
+    "three capacity-ledger invalidation/refusal triggers",
+    "one deferred memo constraint trigger"
+  ],
+  "unresolvedClosure": [
+    "all tables/types/operators/casts/indexes/constraints/sequences/implicit effects and built-in/transitive calls",
+    "body-specific owner/private caller grants, current original profile and namespace/DDL exclusion",
+    "original issuer/control/account/current security, cleanup, callback/copy/native work",
+    "all seven mandatory semantic bodies and complete journal/feed/receipt publication"
+  ],
+  "mandatorySemanticRoutineManifest": {
+    "path": "docs/helix/02-design/contracts/reference-routine-design-v0.1.proposal.json",
+    "sha256": "4366feb35f049360764276c20dcb97c119dd6e9f84cefbc2d7d01326b9ae31d0"
+  },
+  "mandatorySemanticRoutineCount": 7,
+  "mandatoryNativeBindingFieldsStillMissing": 49,
+  "routineCount": 17,
+  "sourceDefinedDirectCallGraphAcyclic": true,
+  "nativeQualified": false,
+  "installerReady": false,
+  "acceptanceCasesPromoted": []
+}

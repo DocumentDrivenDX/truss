@@ -1,0 +1,38 @@
+{
+  "scope": "Private pinned byte capture with actual temporary files and host ledger; not complete package index or native installer",
+  "command": [
+    "/private/tmp/truss-pgserver-corrected-test-env/bin/python",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "packages/python/tests",
+    "-p",
+    "test_installation_resources.py",
+    "-v"
+  ],
+  "output": "test_missing_changed_truncated_appended_resources_quarantine_once (test_installation_resources.ResourceCaptureTests.test_missing_changed_truncated_appended_resources_quarantine_once) ... ok\ntest_real_file_capture_retains_verified_bytes_after_change (test_installation_resources.ResourceCaptureTests.test_real_file_capture_retains_verified_bytes_after_change) ... ok\ntest_reservation_refusal_precedes_open_and_invalid_pin_is_inert (test_installation_resources.ResourceCaptureTests.test_reservation_refusal_precedes_open_and_invalid_pin_is_inert) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.023s\n\nOK\n",
+  "tests": 3,
+  "sources": [
+    {
+      "path": "packages/python/src/truss/_installation_resources.py",
+      "sha256": "fddddfde9761719d28c327b3ccbb78367162278f7d465924cb28de62774551e6"
+    },
+    {
+      "path": "packages/python/src/truss/_resource_account.py",
+      "sha256": "640d37b2f517339b2a0ff0a7438ff17dd717644d5464f1af1cce732370b99a2a"
+    },
+    {
+      "path": "packages/python/tests/test_installation_resources.py",
+      "sha256": "3d6f6834bf8a0c436c3ed260c8ac4bf28f05dd470d24f8ea9907b6c8be8b7e43"
+    },
+    {
+      "path": "scripts/check-module-boundaries.py",
+      "sha256": "0edb0782d15d0887a0ec3f979fb35ac164cea0eb378fb445de8a9af7a355a32c"
+    }
+  ],
+  "completeIndexReader": false,
+  "actualHeapWorkMeteringQualified": false,
+  "installationQualified": false,
+  "wheelRebuilt": false
+}

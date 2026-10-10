@@ -1,0 +1,8 @@
+{
+  "revision": "2744531735c2a771fbe7ed24a7f67e3afc851b25",
+  "feature": "truss-postgresql-qualified",
+  "archiveSha256": "da80918fc6b2758c2b6647cfe988eb14f9a386bfb51355e696a725a98a04d0d8",
+  "cargoLockSha256": "08d3d30468be6bbde701be72c4e070f60c0706b54898e8e3a0432ea0cfbe0e9e",
+  "executableSha256": "e715254324af8dedad29b7fdeef881e4cd9a8a9a2c8cde95cce386d92840b26a",
+  "qualification": "Pinned compiler build; not installed Truss/native host qualification"
+}

@@ -1,0 +1,39 @@
+{
+  "scope": "Original statement-timeout ErrorResponse and live aborted outer transaction on PostgreSQL16.2 local trust transport; no whole-transaction deadline or complete issuer/account/recovery qualification",
+  "pgserver": "0.1.4",
+  "serverVersion": "16.2",
+  "driver": "pg8000 1.31.5",
+  "driverCoreSha256": "cac1e50502901bcea3ddab588e0350149dd8fd771156ae1c531a2a04b3925e26",
+  "faultFrames": [
+    {
+      "cycle": "timed-out-statement",
+      "kind": "E",
+      "hex": "450000006d534552524f5200564552524f5200433537303134004d63616e63656c696e672073746174656d656e742064756520746f2073746174656d656e742074696d656f75740046706f7374677265732e63004c33333638005250726f63657373496e74657272757074730000"
+    },
+    {
+      "cycle": "timed-out-statement",
+      "kind": "Z",
+      "hex": "5a0000000545"
+    }
+  ],
+  "backendStateBeforeExplicitSocketClose": "idle in transaction (aborted)",
+  "newSubmissionRefusedWithoutSend": true,
+  "backendTerminationAfterExplicitCloseObserved": true,
+  "originalPendingWriteAbsentAfterTermination": true,
+  "driverPortQualified": false,
+  "wholeTransactionDeadlineQualified": false,
+  "statementTimeoutMilliseconds": "50",
+  "nativeSqlState": "57014",
+  "sourceSha256": {
+    "check_pg8000_local_statement_timeout_native.py": "43fb62fba0cd9cbe3516d1fe10941f92331b42b5644fdf5058c530642836acba",
+    "pg8000_instance_candidate.py": "0e3a6fb3860e9f2315711cc44957e841f54640c18214955f57c87a3c6fd437de",
+    "python_pg_receive_candidate.py": "fd9c23e3da2358cf56abc6b561c893e5d56dd9c95756fe18ec7510f52a55f4bb",
+    "python_pg_frame_candidate.py": "ed92bfc5240f17f3447f868fb88e3647cc4bd9583e21ed18ad88eb7de1eb9968"
+  },
+  "limitations": [
+    "Fixed pg_sleep statement with session statement_timeout50ms; no complete invocation/transaction deadline",
+    "No original issuer/account/control permit admission",
+    "No ordinary-person/TLS qualification",
+    "No unknown COMMIT settlement or durable recovery registry qualification"
+  ]
+}

@@ -1,0 +1,340 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:feed-committed-application:0.1.0",
+  "description": "Shape only; exact bytes, source completeness, fence, native commit and custody require independent semantic admission.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-feed-committed-application/0.1.0"
+    },
+    "applicationIdentity": {
+      "type": "string",
+      "minLength": 1
+    },
+    "worker": {
+      "type": "object",
+      "properties": {
+        "context": {
+          "type": "object",
+          "properties": {
+            "sourceEpoch": {
+              "type": "string",
+              "minLength": 1
+            },
+            "feedProfile": {
+              "type": "string",
+              "minLength": 1
+            },
+            "scopeIdentity": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "sourceEpoch",
+            "feedProfile",
+            "scopeIdentity"
+          ],
+          "additionalProperties": false
+        },
+        "consumerId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "registrationId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "generation": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$",
+          "maxLength": 20
+        }
+      },
+      "required": [
+        "context",
+        "consumerId",
+        "registrationId",
+        "generation"
+      ],
+      "additionalProperties": false
+    },
+    "downstreamIdentity": {
+      "type": "string",
+      "minLength": 1
+    },
+    "downstreamProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "applicationProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "evidenceProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "prior": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "state": {
+              "const": "seed"
+            },
+            "context": {
+              "type": "object",
+              "properties": {
+                "sourceEpoch": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "feedProfile": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "scopeIdentity": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "sourceEpoch",
+                "feedProfile",
+                "scopeIdentity"
+              ],
+              "additionalProperties": false
+            },
+            "seedId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "activationEvidenceSha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "state",
+            "context",
+            "seedId",
+            "activationEvidenceSha256"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "state": {
+              "const": "transaction"
+            },
+            "boundary": {
+              "$ref": "#/$defs/transactionBoundary"
+            }
+          },
+          "required": [
+            "state",
+            "boundary"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "state": {
+              "const": "coverage"
+            },
+            "boundary": {
+              "$ref": "#/$defs/coverageBoundary"
+            }
+          },
+          "required": [
+            "state",
+            "boundary"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "applied": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/transactionBoundary"
+        },
+        {
+          "$ref": "#/$defs/coverageBoundary"
+        }
+      ]
+    },
+    "operation": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "transaction"
+            },
+            "manifest": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            }
+          },
+          "required": [
+            "kind",
+            "manifest"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "coverage"
+            },
+            "coverage": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            }
+          },
+          "required": [
+            "kind",
+            "coverage"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "intervalEvidence": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "admissionEvidence": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "durableTransitionInventory": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "commitObservation": {
+      "type": "object",
+      "properties": {
+        "profile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "evidence": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        }
+      },
+      "required": [
+        "profile",
+        "evidence"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "applicationIdentity",
+    "worker",
+    "downstreamIdentity",
+    "downstreamProfile",
+    "applicationProfile",
+    "evidenceProfile",
+    "prior",
+    "applied",
+    "operation",
+    "intervalEvidence",
+    "admissionEvidence",
+    "durableTransitionInventory",
+    "commitObservation"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "transactionBoundary": {
+      "type": "object",
+      "properties": {
+        "domain": {
+          "const": "complete-feed-transaction/0.1.0"
+        },
+        "context": {
+          "type": "object",
+          "properties": {
+            "sourceEpoch": {
+              "type": "string",
+              "minLength": 1
+            },
+            "feedProfile": {
+              "type": "string",
+              "minLength": 1
+            },
+            "scopeIdentity": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "sourceEpoch",
+            "feedProfile",
+            "scopeIdentity"
+          ],
+          "additionalProperties": false
+        },
+        "xid": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        },
+        "manifestSha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "domain",
+        "context",
+        "xid",
+        "manifestSha256"
+      ],
+      "additionalProperties": false
+    },
+    "coverageBoundary": {
+      "type": "object",
+      "properties": {
+        "domain": {
+          "const": "complete-feed-coverage/0.1.0"
+        },
+        "context": {
+          "type": "object",
+          "properties": {
+            "sourceEpoch": {
+              "type": "string",
+              "minLength": 1
+            },
+            "feedProfile": {
+              "type": "string",
+              "minLength": 1
+            },
+            "scopeIdentity": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "sourceEpoch",
+            "feedProfile",
+            "scopeIdentity"
+          ],
+          "additionalProperties": false
+        },
+        "throughExclusiveXid": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        },
+        "coverageEvidenceSha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "domain",
+        "context",
+        "throughExclusiveXid",
+        "coverageEvidenceSha256"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

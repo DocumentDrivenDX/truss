@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:proposal:journal-start-capture:0.2.0",
+  "title": "Unadopted row-operation journal start-capture body",
+  "description": "Private pre-effect phase proposal for a qualified original row-operation-context composition only. Complete affected inventory, original record/context/owner/cut/source/native/resource correspondence require semantic admission. Empty entities requires independently proven empty scope. No group digest, allocated journal position, seal or commit authority.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-journal-start-capture/0.2.0-proposal"
+    },
+    "producerProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "collectorProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "originalOperationContext": {
+      "$ref": "urn:truss:draft:row-operation-context:0.1.0"
+    },
+    "affectedInventory": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "entities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "identity": {
+            "$ref": "urn:truss:draft:history-record:0.1.0#/$defs/identity"
+          },
+          "kind": {
+            "enum": [
+              "object",
+              "relationship"
+            ]
+          },
+          "originalDefinitionContext": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          },
+          "originalHomeInventory": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          },
+          "start": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "state": {
+                    "const": "absent"
+                  },
+                  "absenceEvidence": {
+                    "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+                  }
+                },
+                "required": [
+                  "state",
+                  "absenceEvidence"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "state": {
+                    "const": "present"
+                  },
+                  "record": {
+                    "$ref": "urn:truss:draft:history-record:0.1.0"
+                  }
+                },
+                "required": [
+                  "state",
+                  "record"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          }
+        },
+        "required": [
+          "identity",
+          "kind",
+          "originalDefinitionContext",
+          "originalHomeInventory",
+          "start"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "producerProfile",
+    "collectorProfile",
+    "originalOperationContext",
+    "affectedInventory",
+    "entities"
+  ],
+  "additionalProperties": false
+}

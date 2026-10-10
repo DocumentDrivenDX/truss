@@ -1,0 +1,12 @@
+{
+  "revision": "e3555b9aac9e4c3caa952203958c4b0c33cdf519",
+  "remote": "https://github.com/DocumentDrivenDX/umf.git",
+  "review": "Fetched origin; committed source inspection only, not owner test replay or runtime API adoption",
+  "files": {
+    "src/adapters/javascript-numeric.ts": "3d38e52cc878910509e8e277f671ff304707db37633f4f7c39082eb943618fdc",
+    "docs/helix/02-design/contracts/CONTRACT-049-schema-properties.md": "341e25da9a4a311855be9b09fff14dec55a95c1432f82da020dde745da53453f",
+    "docs/helix/05-deploy/microsite/explorer-model.ts": "e96484c6f0965316614d3a2e89ea0b8f36d63c6df1db8943b04277a7d8a2645b"
+  },
+  "weftHead": "94b2de5e303fe53f0c9432458119b6fe1eef187c",
+  "weftDirtyWorkExcluded": true
+}

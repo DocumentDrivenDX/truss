@@ -30,11 +30,17 @@ ddx:
 ## Context
 
 A revision may have changed a property's definition after the row was written.
+Reconstruction uses complete original event groups, historical definitions and
+qualified local/archive evidence, preserving presence, retained values and edge
+endpoints/order where applicable. Today's canonical row or configuration cannot
+replace that evidence. A genuinely unwritten version has the empty outcome;
+missing retained history, incomplete archive coverage or unavailable historical
+meaning is explicit history-unavailable, not evidence that nothing was written.
 
 ## Walkthrough
 
 1. Auditor asks for an Order at version 2.
-2. System starts from the create row and applies versions 2 and below.
+2. System admits a complete retained/archived baseline and all required original groups through version 2, then reconstructs under their historical definitions.
 3. A property whose definition changed is read with the definition recorded for that revision.
 
 ## Acceptance Criteria
@@ -46,7 +52,7 @@ A revision may have changed a property's definition after the row was written.
 ## Edge Cases
 
 - **As-of by wall-clock time**: not defined; time is not a commit time.
-- **Rebind and transform rows**: applied in order.
+- **Rebind and transform rows**: applied in original complete-group order, preserving exact old/new meaning and required definition/configuration custody.
 
 ## Test Scenarios
 

@@ -1,0 +1,83 @@
+{
+  "interfaceVersion": "truss-bootstrap-route-entry/0.1.0",
+  "routeIdentity": "pg17.sequence.namespace-adjunct/0.1.0",
+  "status": "unadopted; source pins only verified; native class/cut/transport/semantic producers unqualified",
+  "nativeClass": {
+    "namespace": "pg_catalog",
+    "relation": "pg_sequence",
+    "classOid": "actual catalog relation identity; dependency address uses actual pg_class sequence",
+    "storageScope": "database",
+    "addressability": "No invented pg_sequence OID; seqrelid is original pg_class sequence parent",
+    "subobjectNumber": "0 on original sequence parent"
+  },
+  "selector": "complete sequence-kind namespace adjunct with separate unfiltered relation coverage",
+  "artifacts": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-sequence-observation-pg17.proposal.sql",
+      "sha256": "1e003c83f49f5ed04d89f10779409289acfd1697621b090fb516cfe341c2b82e"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-sequence-observation-pg17.proposal.umf.json",
+      "sha256": "47596c80f552d27de5702bcf8d4cd94dbf3aec711186bd01ae6b15a8a03276a7"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/bootstrap-sequence-observation.owner-export.sql",
+      "sha256": "ec91ec500838e5a0dc30896cac289fb0cda2357b7dac7fe0466c314cb4f43529"
+    }
+  ],
+  "parameterGrammar": {
+    "slot": "1",
+    "nativeType": "pg_catalog.text",
+    "nullAllowed": false,
+    "itemDomain": "exact original admitted namespace name under protected cut, paired with independently proven original pg_namespace OID",
+    "encoder": "exact original text; no name folding or search_path resolution"
+  },
+  "orderedColumns": [
+    "sequence_oid",
+    "sequence_schema",
+    "sequence_name",
+    "persistence",
+    "configuration_oid",
+    "type_oid",
+    "start_value",
+    "increment",
+    "minimum",
+    "maximum",
+    "cache_size",
+    "cycles",
+    "original_configuration_row_json",
+    "original_relation_row_json"
+  ],
+  "coverage": "Complete namespace S-kind configuration membership checked against separately complete unfiltered relation inventory/namespace OID; wrong kinds cannot disappear from overall inventory",
+  "requiredKnownFields": [
+    "seqrelid",
+    "seqtypid",
+    "seqstart",
+    "seqincrement",
+    "seqmin",
+    "seqmax",
+    "seqcache",
+    "seqcycle"
+  ],
+  "preservation": "Retain full exact returned row JSON text and every unknown extension member; lossless bounded selected native JSON decoder; no parse/stringify reconstruction",
+  "dependencyExtraction": {
+    "relation": "sequence_oid/raw class oid and configuration_oid/raw seqrelid must agree under original S-kind/native persistence meaning",
+    "type": "nonzero seqtypid actual pg_type with independently admitted sequence native signed integer domain",
+    "configuration": "exact signed decimal text start/increment/min/max/cache and raw native correspondence; validate selected range/increment/cache/cycle semantics without host numeric rounding",
+    "scope": "complete original relation namespace/shared-owner/ACL and local/shared ownership dependencies, including owned-by relation/attribute where present",
+    "liveState": "no nextval/setval/currval/live counter observation, reset or precommit-durability inference; configuration is not allocation/nonreuse proof",
+    "definitionSpecification": {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-sequence-definition-v0.1.proposal.json",
+      "sha256": "de523572c59cb98a3f083a06e0efbaea7ea5685bdb2d841a01765d4b0f12d03f",
+      "admission": "Unadopted enclosing/per-field specification; not native producer or complete basis qualification"
+    }
+  },
+  "adjuncts": [
+    "complete original pg_class/pg_type and namespace/owner/dependency definitions",
+    "sequence ACL/effective USAGE/SELECT/UPDATE observations under actual roles",
+    "selected installation/native configuration parity independent of live allocator"
+  ],
+  "resourceProfile": "truss-bootstrap-collector-resource/0.1.0",
+  "refusal": "Wrong kind, missing configuration, unsupported signed native configuration/domain/persistence or incomplete dependencies refuses definition; no repair/reset/allocation or inferred FR-15 durability",
+  "resourceObligations": "Shared enclosing totals, complete original cut/authority and explicit pre-materialization/native-work permits; no independent per-route allowance"
+}

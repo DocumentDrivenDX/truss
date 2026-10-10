@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:feed-interval-coverage:0.1.0",
+  "description": "Shape only; exact interval membership, source protection, seed classification and committed effects require independent admission.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-feed-coverage/0.1.0"
+    },
+    "context": {
+      "type": "object",
+      "properties": {
+        "sourceEpoch": {
+          "type": "string",
+          "minLength": 1
+        },
+        "feedProfile": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scopeIdentity": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "sourceEpoch",
+        "feedProfile",
+        "scopeIdentity"
+      ],
+      "additionalProperties": false
+    },
+    "fromInclusiveXid": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$"
+    },
+    "throughExclusiveXid": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$"
+    },
+    "observedSafeWatermarkXid": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$"
+    },
+    "sourceEnumerationEvidence": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "retentionProtectionEvidence": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "transactions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "xid": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]*)$"
+          },
+          "manifestSha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "disposition": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "represented"
+                  },
+                  "visibilityManifestSha256": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$"
+                  }
+                },
+                "required": [
+                  "kind",
+                  "visibilityManifestSha256"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "applied"
+                  },
+                  "committedApplicationEvidenceSha256": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$"
+                  }
+                },
+                "required": [
+                  "kind",
+                  "committedApplicationEvidenceSha256"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          }
+        },
+        "required": [
+          "xid",
+          "manifestSha256",
+          "disposition"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "coverageProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "context",
+    "fromInclusiveXid",
+    "throughExclusiveXid",
+    "observedSafeWatermarkXid",
+    "sourceEnumerationEvidence",
+    "retentionProtectionEvidence",
+    "transactions",
+    "coverageProfile"
+  ],
+  "additionalProperties": false
+}

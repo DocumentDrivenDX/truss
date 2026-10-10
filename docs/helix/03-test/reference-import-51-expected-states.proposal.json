@@ -1,0 +1,4401 @@
+{
+  "scope": "Independent complete logical record/key membership for the 51-record import scenario; not complete native metadata or HistoricalRecord replacement",
+  "source": {
+    "path": "03-test/reference-import-51-records.proposal.json",
+    "sha256": "5d1d25836ca74aa5e48516202d872aa2c6108f7980d68231a04027ca642d260e"
+  },
+  "cuts": [
+    {
+      "cut": "before-import",
+      "liveRecords": [],
+      "liveKeys": [],
+      "requiredAccountInstances": [],
+      "requiredEdges": []
+    },
+    {
+      "cut": "first-import-committed",
+      "liveRecords": [
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-b"
+          },
+          "amount": {
+            "decimalToken": "9007199254740993.000"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-c"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": true,
+            "value": null
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-d"
+          },
+          "amount": {
+            "decimalToken": "-0.01"
+          },
+          "note": {
+            "present": true,
+            "value": {
+              "string": ""
+            }
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-001"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-002"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-003"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-004"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-005"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-006"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-007"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-008"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-009"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-010"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-011"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-012"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-013"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-014"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-015"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-016"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-017"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-018"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-019"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-020"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-021"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-022"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-023"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-024"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-025"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-026"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-027"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-028"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-029"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-030"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-031"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-032"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-033"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-034"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-035"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-036"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-037"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-038"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-039"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-040"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-041"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-042"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-043"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-044"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-045"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-046"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-047"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-048"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        }
+      ],
+      "liveKeys": [
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-b"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-c"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-d"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-001"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-002"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-003"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-004"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-005"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-006"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-007"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-008"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-009"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-010"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-011"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-012"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-013"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-014"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-015"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-016"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-017"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-018"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-019"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-020"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-021"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-022"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-023"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-024"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-025"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-026"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-027"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-028"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-029"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-030"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-031"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-032"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-033"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-034"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-035"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-036"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-037"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-038"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-039"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-040"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-041"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-042"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-043"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-044"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-045"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-046"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-047"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-048"
+            }
+          ]
+        }
+      ],
+      "requiredAccountInstances": [],
+      "requiredEdges": []
+    },
+    {
+      "cut": "correction-committed",
+      "liveRecords": [
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-b"
+          },
+          "amount": {
+            "decimalToken": "12.340"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-c"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": true,
+            "value": null
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-d"
+          },
+          "amount": {
+            "decimalToken": "-0.01"
+          },
+          "note": {
+            "present": true,
+            "value": {
+              "string": ""
+            }
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-001"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-002"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-003"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-004"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-005"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-006"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-007"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-008"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-009"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-010"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-011"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-012"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-013"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-014"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-015"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-016"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-017"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-018"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-019"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-020"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-021"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-022"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-023"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-024"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-025"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-026"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-027"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-028"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-029"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-030"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-031"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-032"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-033"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-034"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-035"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-036"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-037"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-038"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-039"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-040"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-041"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-042"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-043"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-044"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-045"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-046"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-047"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-048"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        }
+      ],
+      "liveKeys": [
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-b"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-c"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-d"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-001"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-002"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-003"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-004"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-005"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-006"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-007"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-008"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-009"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-010"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-011"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-012"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-013"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-014"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-015"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-016"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-017"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-018"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-019"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-020"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-021"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-022"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-023"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-024"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-025"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-026"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-027"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-028"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-029"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-030"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-031"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-032"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-033"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-034"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-035"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-036"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-037"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-038"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-039"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-040"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-041"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-042"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-043"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-044"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-045"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-046"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-047"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-048"
+            }
+          ]
+        }
+      ],
+      "requiredAccountInstances": [],
+      "requiredEdges": []
+    },
+    {
+      "cut": "deletion-committed",
+      "liveRecords": [
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-b"
+          },
+          "amount": {
+            "decimalToken": "12.340"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-d"
+          },
+          "amount": {
+            "decimalToken": "-0.01"
+          },
+          "note": {
+            "present": true,
+            "value": {
+              "string": ""
+            }
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-001"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-002"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-003"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-004"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-005"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-006"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-007"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-008"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-009"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-010"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-011"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-012"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-013"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-014"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-015"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-016"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-017"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-018"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-019"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-020"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-021"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-022"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-023"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-024"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-025"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-026"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-027"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-028"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-029"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-030"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-031"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-032"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-033"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-034"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-035"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-036"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-037"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-038"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-039"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-040"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-041"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-042"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-043"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-044"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-045"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-046"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-047"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-048"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        }
+      ],
+      "liveKeys": [
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-b"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-d"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-001"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-002"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-003"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-004"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-005"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-006"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-007"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-008"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-009"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-010"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-011"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-012"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-013"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-014"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-015"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-016"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-017"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-018"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-019"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-020"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-021"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-022"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-023"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-024"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-025"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-026"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-027"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-028"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-029"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-030"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-031"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-032"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-033"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-034"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-035"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-036"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-037"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-038"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-039"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-040"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-041"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-042"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-043"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-044"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-045"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-046"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-047"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-048"
+            }
+          ]
+        }
+      ],
+      "requiredAccountInstances": [],
+      "requiredEdges": []
+    },
+    {
+      "cut": "repeat-import-committed",
+      "liveRecords": [
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-b"
+          },
+          "amount": {
+            "decimalToken": "12.340"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-d"
+          },
+          "amount": {
+            "decimalToken": "-0.01"
+          },
+          "note": {
+            "present": true,
+            "value": {
+              "string": ""
+            }
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-001"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-002"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-003"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-004"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-005"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-006"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-007"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-008"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-009"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-010"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-011"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-012"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-013"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-014"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-015"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-016"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-017"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-018"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-019"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-020"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-021"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-022"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-023"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-024"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-025"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-026"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-027"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-028"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-029"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-030"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-031"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-032"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-033"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-034"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-035"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-036"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-037"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-038"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-039"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-040"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-041"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-042"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-043"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-044"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-045"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-046"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-047"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        },
+        {
+          "record": "Item",
+          "code": {
+            "string": "item-extra-048"
+          },
+          "amount": {
+            "decimalToken": "0.00"
+          },
+          "note": {
+            "present": false
+          }
+        }
+      ],
+      "liveKeys": [
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-b"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-d"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-001"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-002"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-003"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-004"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-005"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-006"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-007"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-008"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-009"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-010"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-011"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-012"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-013"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-014"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-015"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-016"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-017"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-018"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-019"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-020"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-021"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-022"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-023"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-024"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-025"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-026"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-027"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-028"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-029"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-030"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-031"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-032"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-033"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-034"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-035"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-036"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-037"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-038"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-039"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-040"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-041"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-042"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-043"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-044"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-045"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-046"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-047"
+            }
+          ]
+        },
+        {
+          "record": "Item",
+          "key": "by-code",
+          "components": [
+            {
+              "string": "item-extra-048"
+            }
+          ]
+        }
+      ],
+      "requiredAccountInstances": [],
+      "requiredEdges": []
+    }
+  ],
+  "deletedRecord": {
+    "record": "Item",
+    "code": {
+      "string": "item-c"
+    },
+    "amount": {
+      "decimalToken": "0.00"
+    },
+    "note": {
+      "present": true,
+      "value": null
+    }
+  },
+  "retainedImportSource": {
+    "loadId": "reference-import-original",
+    "facts": {
+      "author": "source-author-original",
+      "at": "2026-10-08T00:00:00Z",
+      "system": "reference-source"
+    },
+    "originalRecordCodes": [
+      "item-b",
+      "item-c",
+      "item-d",
+      "item-extra-001",
+      "item-extra-002",
+      "item-extra-003",
+      "item-extra-004",
+      "item-extra-005",
+      "item-extra-006",
+      "item-extra-007",
+      "item-extra-008",
+      "item-extra-009",
+      "item-extra-010",
+      "item-extra-011",
+      "item-extra-012",
+      "item-extra-013",
+      "item-extra-014",
+      "item-extra-015",
+      "item-extra-016",
+      "item-extra-017",
+      "item-extra-018",
+      "item-extra-019",
+      "item-extra-020",
+      "item-extra-021",
+      "item-extra-022",
+      "item-extra-023",
+      "item-extra-024",
+      "item-extra-025",
+      "item-extra-026",
+      "item-extra-027",
+      "item-extra-028",
+      "item-extra-029",
+      "item-extra-030",
+      "item-extra-031",
+      "item-extra-032",
+      "item-extra-033",
+      "item-extra-034",
+      "item-extra-035",
+      "item-extra-036",
+      "item-extra-037",
+      "item-extra-038",
+      "item-extra-039",
+      "item-extra-040",
+      "item-extra-041",
+      "item-extra-042",
+      "item-extra-043",
+      "item-extra-044",
+      "item-extra-045",
+      "item-extra-046",
+      "item-extra-047",
+      "item-extra-048"
+    ]
+  },
+  "protectedDeletedKey": {
+    "record": "Item",
+    "key": "by-code",
+    "components": [
+      {
+        "string": "item-c"
+      }
+    ],
+    "liveRecordAbsent": true,
+    "recreationUnderForbid": "skip"
+  },
+  "repeatEffects": {
+    "canonicalRecords": "unchanged-from-deletion-cut",
+    "liveKeys": "unchanged-from-deletion-cut",
+    "importSource": "original-for-all-retained-live-and-deleted-records",
+    "versions": "unchanged-from-deletion-cut",
+    "committedJournalContribution": "none"
+  },
+  "nativeEvidenceRequired": "Independently admitted original storage identities/versions/source/clock/complete before-after history and key reservation bytes, plus original source/native authority and outer settlement. Logical key components cannot allocate native identity or prove reservation storage."
+}

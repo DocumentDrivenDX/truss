@@ -1,0 +1,32 @@
+{
+  "scope": "Read-only owner receipt/source correspondence; no owner tests or native probes rerun; historical receipt mismatch is not adoption",
+  "receipts": [
+    {
+      "receipt": "/Users/erik/.codex/worktrees/1598/umf/docs/helix/04-build/evidence/security/relationship-candidate-browser.json",
+      "sha256": "c25177ecc518cd3bda841044d201678d88887f9b256df687c2c2e55b39204843",
+      "ownerStatus": "draft-candidate-browser-passed",
+      "nativeImplementationQualified": false,
+      "sourceCount": 5,
+      "changedSources": [],
+      "missingSources": []
+    },
+    {
+      "receipt": "/Users/erik/.codex/worktrees/1598/umf/docs/helix/04-build/evidence/security/relationship-selector-spike.json",
+      "sha256": "660a8007c68b454fdc3dd183e5452029749de634883be7e7f869e4ff81b0723e",
+      "ownerStatus": "draft-selector-analysis-passed",
+      "nativeImplementationQualified": false,
+      "sourceCount": 772,
+      "changedSources": [],
+      "missingSources": []
+    },
+    {
+      "receipt": "/Users/erik/.codex/worktrees/1598/umf/docs/helix/04-build/evidence/security/association-candidate-browser.json",
+      "sha256": "be5ef4210486a91909424599ee81260064cfdea33c952b9781adbc8ae3e61ce4",
+      "ownerStatus": "draft-association-browser-passed",
+      "nativeImplementationQualified": false,
+      "sourceCount": 762,
+      "changedSources": [],
+      "missingSources": []
+    }
+  ]
+}

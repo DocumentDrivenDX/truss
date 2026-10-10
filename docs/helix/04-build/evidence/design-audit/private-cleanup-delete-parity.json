@@ -1,0 +1,108 @@
+{
+  "scope": "Original source/archive/export hashes and full native AST relation, identity predicate and RETURNING/SELECT projection parity after removing parser locations only. No native binding/authority, containment, settlement, deletion execution, capacity or atomicity qualification.",
+  "originalObservation": {
+    "path": "docs/helix/02-design/contracts/private-custody-cleanup-selected-row-observation-v0.1.proposal.sql",
+    "sourceSha256": "d2f746a2dc1590036ebedcb2fe7ced62f8ed3b0a623d9825fa326c970cca3f40",
+    "artifactPath": "docs/helix/02-design/contracts/private-custody-cleanup-selected-row-observation-v0.1.proposal.umf.json",
+    "artifactSha256": "b53403e8f0d132a3b8aa1069a88f69a16a6d192de27b5042e06b35f614adf8ad",
+    "exportPath": "docs/helix/04-build/evidence/design-audit/private-custody-cleanup-selected-row-observation.owner-export.sql",
+    "exportSha256": "de9f47bb05e8501a0d8049d14bf0cb705cd79a7267cd8029c9a164f4365193c7",
+    "sourceArchiveExact": true,
+    "reloadedExportExact": true,
+    "complete": false,
+    "unhandled": [
+      {
+        "path": "/stmts/0/stmt"
+      },
+      {
+        "path": "/stmts/1/stmt"
+      }
+    ],
+    "diagnostics": [
+      {
+        "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+        "path": "",
+        "severity": "warning",
+        "message": "Raw syntax is not catalog resolution, SQL execution, permissions or server-state validation"
+      },
+      {
+        "code": "POSTGRESQL_DDL_UNRESOLVED",
+        "path": "/stmts/0/stmt",
+        "severity": "warning",
+        "message": "Statement is retained without declaration extraction or execution"
+      },
+      {
+        "code": "POSTGRESQL_DDL_UNRESOLVED",
+        "path": "/stmts/1/stmt",
+        "severity": "warning",
+        "message": "Statement is retained without declaration extraction or execution"
+      }
+    ]
+  },
+  "originalDeletion": {
+    "path": "docs/helix/02-design/contracts/private-custody-cleanup-delete-v0.1.proposal.sql",
+    "sourceSha256": "73b598e2123c984aa197b25dde3acaf16101d5d901ddd27cce6671df0f22020a",
+    "artifactPath": "docs/helix/02-design/contracts/private-custody-cleanup-delete-v0.1.proposal.umf.json",
+    "artifactSha256": "cb1158820e6ff2348741939a70f2a24c2e228afc2fe882666dd03f06ff72ae46",
+    "exportPath": "docs/helix/04-build/evidence/design-audit/private-custody-cleanup-delete.owner-export.sql",
+    "exportSha256": "991ece39f0ffc0edcb2c205379e9864d4512e44bd77afd3eb1cdf8a244b3b101",
+    "sourceArchiveExact": true,
+    "reloadedExportExact": true,
+    "complete": false,
+    "unhandled": [
+      {
+        "path": "/stmts/0/stmt"
+      },
+      {
+        "path": "/stmts/1/stmt"
+      }
+    ],
+    "diagnostics": [
+      {
+        "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+        "path": "",
+        "severity": "warning",
+        "message": "Raw syntax is not catalog resolution, SQL execution, permissions or server-state validation"
+      },
+      {
+        "code": "POSTGRESQL_DDL_UNRESOLVED",
+        "path": "/stmts/0/stmt",
+        "severity": "warning",
+        "message": "Statement is retained without declaration extraction or execution"
+      },
+      {
+        "code": "POSTGRESQL_DDL_UNRESOLVED",
+        "path": "/stmts/1/stmt",
+        "severity": "warning",
+        "message": "Statement is retained without declaration extraction or execution"
+      }
+    ]
+  },
+  "statementPairs": 2,
+  "returnedFields": [
+    16,
+    12
+  ],
+  "expectedRefusals": [
+    {
+      "name": "wrong relation",
+      "expectedRefusal": true
+    },
+    {
+      "name": "lost predicate",
+      "expectedRefusal": true
+    },
+    {
+      "name": "missing returned field",
+      "expectedRefusal": true
+    },
+    {
+      "name": "reordered fields",
+      "expectedRefusal": true
+    },
+    {
+      "name": "extra modifier",
+      "expectedRefusal": true
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "scope": "Read-only owner chat execution status, not source/API or diagnostic qualification",
+  "tool": "mcp__codex_app__read_thread",
+  "threadId": "01a11b8b-06bb-7091-a11a-b7eba0a432eb",
+  "title": "Assess security control support",
+  "threadStatus": "systemError",
+  "turnId": "01a125c2-6d4f-7433-a13c-5e6ab446e420",
+  "turnStatus": "failed",
+  "startedAt": 1791634861,
+  "completedAt": 1791634922,
+  "errorCategory": "platform content risk flag",
+  "lastAnnouncedWork": "Prepared calls across diagnostic guard changes",
+  "liveHandleConfirmed": false,
+  "ownerInterfaceAdopted": false,
+  "crossChatMessageSent": false,
+  "trussGoalBlocked": false
+}

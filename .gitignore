@@ -1,3 +1,6 @@
+packages/*/dist/
+node_modules/
+.cache/
 
 # Microsite generated files
 website/public/

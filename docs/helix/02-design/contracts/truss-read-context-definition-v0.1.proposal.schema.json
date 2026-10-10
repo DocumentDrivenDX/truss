@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:read-context-definition:0.1.0",
+  "title": "Proposed compiled-read host context requirements",
+  "description": "Static obligations only, never serialized authority, snapshot or transaction handles. Actual host admission and native profile evidence remain required.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {"const": "truss-read-context-definition/0.1.0"},
+    "profile": {"$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"},
+    "contextSchema": {"const": "urn:truss:draft:direct-cursor:0.1.0#/$defs/context"},
+    "allowedConsistency": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["live", "held_snapshot"]}},
+    "catalogAdmission": {"const": "original-binding-matches-admitted-view"},
+    "layoutAdmission": {"const": "original-physical-and-encoding-profiles-match"},
+    "authorityAdmission": {"const": "actual-current-role-and-effective-policy"},
+    "transactionAdmission": {"const": "executor-issued-live-affine-context"},
+    "snapshotAdmission": {"const": "original-registry-custody-and-retained-stores"},
+    "publicationAdmission": {"const": "complete-result-current-disclosure-and-resource-check"},
+    "onMismatch": {"const": "refuse-before-sql"},
+    "resourceProfile": {"$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"},
+    "resourceDefinition": {"$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"},
+    "requiredHostObligations": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+  },
+  "required": ["interfaceVersion", "profile", "contextSchema", "allowedConsistency", "catalogAdmission", "layoutAdmission", "authorityAdmission", "transactionAdmission", "snapshotAdmission", "publicationAdmission", "onMismatch", "resourceProfile", "resourceDefinition", "requiredHostObligations"],
+  "additionalProperties": false
+}

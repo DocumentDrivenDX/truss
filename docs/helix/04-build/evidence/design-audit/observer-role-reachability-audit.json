@@ -1,0 +1,8 @@
+{
+  "status": "pass",
+  "cases": 9,
+  "fixtureSha256": "b5e25a6750344dd76c44ad27d2e02c3d2fdea7a875b2b1fd72ce4ba237ff5cdd",
+  "scope": "static SET and INHERIT closure only; no native identities/grants/options/delegation/ACL/wrapper/RLS/resource qualification",
+  "nativeExecuted": false,
+  "profileAdopted": false
+}

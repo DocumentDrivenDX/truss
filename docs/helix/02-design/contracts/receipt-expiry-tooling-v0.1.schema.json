@@ -1,0 +1,243 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:receipt-expiry-tooling:0.1.0",
+  "description": "Administrative operation shapes only; no original artifact/caller/native clock/effect/commit proof from schema.",
+  "allOf": [
+    {
+      "$ref": "#/$defs/purgeResult"
+    }
+  ],
+  "$defs": {
+    "scopeRequest": {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-receipt-expiry-scope/0.1.0"
+        },
+        "authorizedScopeIdentity": {
+          "type": "string"
+        },
+        "requestId": {
+          "type": "string"
+        },
+        "procedureProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "authorizedScopeIdentity",
+        "requestId",
+        "procedureProfile"
+      ],
+      "additionalProperties": false
+    },
+    "purgeRequest": {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-receipt-expiry-scope/0.1.0"
+        },
+        "authorizedScopeIdentity": {
+          "type": "string"
+        },
+        "requestId": {
+          "type": "string"
+        },
+        "procedureProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "expectedReceipt": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "expectedProtection": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "expectedLifecycleGeneration": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "authorizedScopeIdentity",
+        "requestId",
+        "procedureProfile",
+        "expectedReceipt",
+        "expectedProtection",
+        "expectedLifecycleGeneration"
+      ],
+      "additionalProperties": false
+    },
+    "purgeResult": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "purged"
+            },
+            "durability": {
+              "const": "pending"
+            },
+            "identity": {
+              "$ref": "urn:truss:draft:request-receipt-lifecycle:0.1.0#/$defs/expired"
+            },
+            "expiryEvidence": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            }
+          },
+          "required": [
+            "outcome",
+            "durability",
+            "identity",
+            "expiryEvidence"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "protected"
+            },
+            "reason": {
+              "enum": [
+                "minimum_window",
+                "declared_window",
+                "original_event_retained"
+              ]
+            }
+          },
+          "required": [
+            "outcome",
+            "reason"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "conflict"
+            }
+          },
+          "required": [
+            "outcome"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "unavailable"
+            },
+            "reason": {
+              "enum": [
+                "authority",
+                "context",
+                "profile",
+                "clock",
+                "commit",
+                "inventory",
+                "observation",
+                "resource"
+              ]
+            }
+          },
+          "required": [
+            "outcome",
+            "reason"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "observationRequest": {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-receipt-expiry-scope/0.1.0"
+        },
+        "authorizedScopeIdentity": {
+          "type": "string"
+        },
+        "requestId": {
+          "type": "string"
+        },
+        "procedureProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "expectedExpiredIdentity": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "originalExpiryEvidence": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "authorizedScopeIdentity",
+        "requestId",
+        "procedureProfile",
+        "expectedExpiredIdentity",
+        "originalExpiryEvidence"
+      ],
+      "additionalProperties": false
+    },
+    "observation": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "current_committed"
+            },
+            "identity": {
+              "$ref": "urn:truss:draft:request-receipt-lifecycle:0.1.0#/$defs/expired"
+            },
+            "originalCommitObservation": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            },
+            "currentObservation": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            }
+          },
+          "required": [
+            "outcome",
+            "identity",
+            "originalCommitObservation",
+            "currentObservation"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "unavailable"
+            },
+            "reason": {
+              "enum": [
+                "authority",
+                "context",
+                "profile",
+                "uncommitted",
+                "superseded",
+                "integrity",
+                "observation",
+                "resource"
+              ]
+            }
+          },
+          "required": [
+            "outcome",
+            "reason"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

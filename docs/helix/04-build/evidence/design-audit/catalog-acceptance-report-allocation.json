@@ -1,0 +1,8 @@
+{
+  "status": "pass",
+  "scope": "complete selected table/column/catalog-constraint/PK-index source-node coverage for eight conditional identities; baseline revision table/column reference source correspondence; native naming/dependency/guard/grant/adoption/installation incomplete",
+  "entries": 8,
+  "allocationSha256": "e35574057f93a9998c75d3ea316fe6c9927587ded3a91ed3c372808338008a24",
+  "installable": false,
+  "nativeExecution": false
+}

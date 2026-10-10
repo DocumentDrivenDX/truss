@@ -1,0 +1,83 @@
+{
+  "interfaceVersion": "truss-bootstrap-route-entry/0.1.0",
+  "routeIdentity": "pg17.range.type-adjunct/0.1.0",
+  "status": "unadopted; source pins only verified; native class/cut/transport/semantic producers unqualified",
+  "nativeClass": {
+    "namespace": "pg_catalog",
+    "relation": "pg_range",
+    "classOid": "resolve actual catalog relation on original target",
+    "storageScope": "database",
+    "addressability": "No invented pg_range object OID; task input/coverage uses original pg_type parents",
+    "subobjectNumber": "0 on original pg_type parent"
+  },
+  "selector": "range-or-multirange original pg_type adjunct",
+  "artifacts": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-external-range-observation-pg17.proposal.sql",
+      "sha256": "8547427598b36806efdd394349382ef88354f437dc65d459b4745e81ab777b9d"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-external-range-observation-pg17.proposal.umf.json",
+      "sha256": "2e0dd9b05a827867da7bd5818396b3e27bca9b086a0687c4fa92d42804347a08"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/bootstrap-external-range-observation.owner-export.sql",
+      "sha256": "3dccaec2dcbb70ae27ecfed48fea5dfcea452799407027faa8be7949c73d5641"
+    }
+  ],
+  "parameterGrammar": {
+    "slot": "1",
+    "nativeType": "pg_catalog.oid[]",
+    "dimensions": "exactly one",
+    "lowerBound": "1",
+    "nullAllowed": false,
+    "nullItemsAllowed": false,
+    "uniqueItems": true,
+    "countInclusive": [
+      "1",
+      "256"
+    ],
+    "itemDomain": "canonical nonzero uint32 decimal text; independently admitted pg_type range or multirange parent",
+    "encoder": "selected original canonical native array encoder"
+  },
+  "orderedColumns": [
+    "catalog_class_oid",
+    "range_type_oid",
+    "multirange_type_oid",
+    "rngcanonical_oid",
+    "rngsubdiff_oid",
+    "original_catalog_row_json"
+  ],
+  "coverage": "For every admitted range/multirange parent require one corresponding complete adjunct; a single row can cover both requested parents. Preserve each input-to-row coverage edge; no input/output count bijection.",
+  "requiredKnownFields": [
+    "rngtypid",
+    "rngsubtype",
+    "rngmultitypid",
+    "rngcollation",
+    "rngsubopc",
+    "rngcanonical",
+    "rngsubdiff"
+  ],
+  "preservation": "Retain full exact returned row JSON text and every unknown extension member; lossless bounded selected native JSON decoder; no parse/stringify reconstruction",
+  "dependencyExtraction": {
+    "types": "rngtypid/rngmultitypid/rngsubtype are actual nonzero pg_type identities; independently admit exact range/multirange/subtype correspondence",
+    "collation": "rngcollation nonzero reaches actual pg_collation; zero remains native no-collation sentinel, not address",
+    "operatorClass": "rngsubopc reaches actual pg_opclass definition/family/access-method/member closure, not a routine",
+    "routines": "nonzero rngcanonical/rngsubdiff reach actual pg_proc; zero retained as optional sentinel. Exact projected OID text must agree with original native definition under selected decoder, not regproc display-name guessing",
+    "rowIdentity": "retain shared original adjunct tuple keyed by its range type, never invent pg_range oid or duplicate semantic object per input parent",
+    "definitionSpecification": {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-range-definition-v0.1.proposal.json",
+      "sha256": "2c1a5b69617b1cec90274fe59797f9003ebb2ce86ed1ff643a5d938a65c89b80",
+      "admission": "Original shared-adjunct/endpoint/signature closure; comparison and executable behavior separately qualified"
+    }
+  },
+  "adjuncts": [
+    "complete original range/multirange/subtype type definitions",
+    "operator-class/family/member and selected native comparator closure",
+    "collation provider/environment and optional routine definition/authority closure",
+    "original local dependency and namespace scope closure"
+  ],
+  "resourceProfile": "truss-bootstrap-collector-resource/0.1.0",
+  "refusal": "Wrong/missing parent kind, conflicting duplicate adjunct/endpoint coverage or unsupported native routine/comparator meaning refuses; raw original fields never execute canonical/subdiff routines or qualify range comparison",
+  "resourceObligations": "Shared enclosing totals, complete original cut/authority and explicit pre-materialization/native-work permits; no independent per-route allowance"
+}

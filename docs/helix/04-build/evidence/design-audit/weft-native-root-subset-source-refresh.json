@@ -1,0 +1,24 @@
+{
+  "scope": "Read-only owner source/evidence refresh; Truss has not rerun owner native/component cases",
+  "commit": "c6708d98d2c81facb1fac1f4f90a7d3a75267a9a",
+  "ownerClaim": {
+    "nativeRootScenarios": 20,
+    "server": "PostgreSQL 17.9",
+    "crateTests": 54
+  },
+  "files": [
+    {
+      "path": "crates/weft-postgresql/src/row_join_definition.rs",
+      "sha256": "a1b273eb69312cc9c73f7d6ebb2afcf87cb987acf5835ce0f1712ab0aeeda0f3"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/B-005-native-preparation.md",
+      "sha256": "e7bc18832dd2560bcd1d03860931f119fe2bf4c36932890ea38d688ec9d8588b"
+    },
+    {
+      "path": "tests/truss-postgresql/fixtures/row-location-emission.json",
+      "sha256": "6abbef82fecdf8c03a008fa8ccbd4414556076c47c8a9dcaf15d510ea3e5a541"
+    }
+  ],
+  "trussNativeQualification": false
+}

@@ -1,0 +1,29 @@
+{
+  "identity": "truss-story-allocation-parser",
+  "version": "0.1.0",
+  "status": "proposal",
+  "scope": "Restricted document allocation only; not YAML/Markdown rendering or semantic/runtime qualification",
+  "limits": {
+    "expectedInventoryBytes": 1048576,
+    "documents": 768,
+    "stories": 256,
+    "criteria": 8192,
+    "documentBytes": 1048576,
+    "frontmatterBytes": 65536,
+    "lineBytes": 16384,
+    "pathBytes": 4096,
+    "totalSourceBytes": 33554432,
+    "peakAccountedBytes": 134217728,
+    "cumulativeAllocatedBytes": 536870912,
+    "inspectionWorkUnits": 64000000,
+    "operationMilliseconds": 30000
+  },
+  "limitSemantics": "Inclusive maxima; refuse before exceeding. Account original bytes, decoded strings, parser state, indexes, sorting, diagnostics and output concurrently; no truncated success.",
+  "grammar": "TP-001 E-01 bounded parsing profile",
+  "implementation": "TypeScript host tooling; bounded UTF-8 line-state machine, no execution of frontmatter or Markdown",
+  "claims": {
+    "adopted": false,
+    "implemented": false,
+    "nativeQualified": false
+  }
+}

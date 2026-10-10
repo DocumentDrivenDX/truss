@@ -1,0 +1,76 @@
+{
+  "candidateRevision": "8af84f71621abf654415f2317f36d823346b33bb",
+  "umfSourceRevision": "c45c72a2a8a3c4fba61c40c5927dd9091acf8cc3",
+  "umfBranch": "codex/core-record-value-check (separate/unmerged producer candidate)",
+  "reviewKind": "committed source and report inspection; no runtime rerun",
+  "files": [
+    {
+      "path": "scripts/check-umf-record-values.ts",
+      "sha256": "5d634f912a5c3fed4941f11c06cf7f3d13421e51300f144d43c34a8f7a80957a"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/inert-assembly/umf-record-values.json",
+      "sha256": "335032b37d781232670f1203d9b2d19662fa0a1466a0f2d1c5cdab8c5a9d11bf"
+    }
+  ],
+  "reportedRuntimes": {
+    "bun": "bun/1.4.2",
+    "chromium": "153.0.8010.12"
+  },
+  "completeSelectedRecordChecks": 3,
+  "probeResults": [
+    {
+      "identity": "schema-v1.umf.json",
+      "validation": {
+        "valid": true,
+        "complete": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "identity": "schema-v2.umf.json",
+      "validation": {
+        "valid": true,
+        "complete": false,
+        "diagnostics": [
+          {
+            "code": "UNKNOWN_NULLABILITY",
+            "path": "/modules/0/elements/2/nullability",
+            "message": "Availability label retained without interpretation",
+            "severity": "warning"
+          },
+          {
+            "code": "RECORD_AVAILABILITY_UNKNOWN",
+            "path": "/members/fixture/caption",
+            "message": "Complete availability requires explicit required or absent-allowed",
+            "severity": "warning"
+          }
+        ]
+      }
+    },
+    {
+      "identity": "schema-v3.umf.json",
+      "validation": {
+        "valid": true,
+        "complete": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "identity": "schema-unknown.umf.json",
+      "validation": {
+        "valid": true,
+        "complete": false,
+        "diagnostics": [
+          {
+            "code": "UNKNOWN_CORE_FIELD",
+            "path": "/x-future-assertion",
+            "message": "Field retained without interpretation",
+            "severity": "warning"
+          }
+        ]
+      }
+    }
+  ],
+  "qualification": "Scoped logical membership/presence/value evidence; no native binding, dataset key/relationship, writable acceptance or ACK authority. Report qualification retains legacy whole-record wording; exact original retained, interpreted only at the selected result scope."
+}

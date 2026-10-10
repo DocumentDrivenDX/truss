@@ -1,0 +1,73 @@
+{
+  "interfaceVersion": "truss-bootstrap-route-entry/0.1.0",
+  "routeIdentity": "pg17.extension-reference.original-scope/0.1.0",
+  "status": "unadopted; source pins only verified; native class/cut/transport/semantic producers unqualified",
+  "nativeClass": {
+    "namespace": "pg_catalog",
+    "relation": "pg_depend",
+    "classOid": "actual original database pg_depend catalog identity",
+    "storageScope": "database",
+    "subobjectNumber": "native association key; no invented row address"
+  },
+  "selector": "Complete incoming references for original pg_extension OIDs; preserve all dependency kinds and exact endpoints. Membership versus automatic-extension dependency remains distinct; no invented dependency-edge OID.",
+  "artifacts": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-extension-reference-observation-pg17.proposal.sql",
+      "sha256": "60de40316836ae4b5f81c46866c8c9f732a69a5646dcabd171153bea6e04efa6"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-extension-reference-observation-pg17.proposal.umf.json",
+      "sha256": "561d2cb37eeb0ee0e718546a45690fa61b25389164323eac0a735b77f1b7d2e1"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/bootstrap-extension-reference-observation.owner-export.sql",
+      "sha256": "9bbdfa22cbeed4d7eded55db49152a3374b7f667308a61df823b36e1f1f47061"
+    }
+  ],
+  "parameterGrammar": {
+    "slots": [
+      1
+    ],
+    "nativeTypes": [
+      "pg_catalog.oid[]"
+    ],
+    "nativeInput": "Slot 1 nonnull one-dimensional lower-bound-one array of 1..256 unique canonical nonzero original extension OID tokens; no null items. Every parent extension admitted independently before fanout."
+  },
+  "orderedColumns": [
+    "catalog_class_oid",
+    "original_catalog_row_json"
+  ],
+  "coverage": "Complete original selector union/fanout under same cut, including unexpected rows; absence optional only after original parent/input scope proof",
+  "requiredKnownFields": [
+    "classid",
+    "objid",
+    "objsubid",
+    "refclassid",
+    "refobjid",
+    "refobjsubid",
+    "deptype"
+  ],
+  "preservation": "Retain full exact returned row JSON text and every unknown extension member; lossless bounded selected native JSON decoder; no parse/stringify reconstruction",
+  "dependencyExtraction": {
+    "associations": "Complete incoming references for original pg_extension OIDs; preserve all dependency kinds and exact endpoints. Membership versus automatic-extension dependency remains distinct; no invented dependency-edge OID.",
+    "metadata": "Exact comment text and extension names/versions are facts, never authority, installation readiness or executable provenance. Preserve full original rows/unknown members; unresolved native meaning refuses complete comparison.",
+    "fieldClassification": {
+      "classid": "original native class/object correlation; resolve complete same-cut definition identity and exact scope; numeric coincidence never merges",
+      "objid": "original native class/object correlation; resolve complete same-cut definition identity and exact scope; numeric coincidence never merges",
+      "objsubid": "original signed class-specific subobject association; resolve complete original child identity, zero object-level not wildcard",
+      "refclassid": "original native class/object correlation; resolve complete same-cut definition identity and exact scope; numeric coincidence never merges",
+      "refobjid": "original native class/object correlation; resolve complete same-cut definition identity and exact scope; numeric coincidence never merges",
+      "refobjsubid": "original signed class-specific subobject association; resolve complete original child identity, zero object-level not wildcard",
+      "deptype": "exact catalog-specific registered native dependency kind; stable edge meaning, local/shared codes never interchangeable"
+    },
+    "canonicalProcedure": "CONTRACT-008 Extension semantic projection and dependency overlap reconciliation: all original incoming kinds retained, e membership distinct from x auto-extension dependency, resolved endpoint multigraph with original provenance/count agreement",
+    "overlapReconciliation": "Reconcile counts against same-cut applicable complete local dependency observations under fixed selector predicates; extension-specific incoming fanout does not create additional native edge multiplicity"
+  },
+  "adjuncts": [
+    "complete original owner/address/dependency and class-specific scope",
+    "selected metadata classification/canonical bytes and original authority"
+  ],
+  "resourceProfile": "truss-bootstrap-collector-resource/0.1.0",
+  "refusal": "Incomplete association, unknown dependency/native array meaning or unresolved prerequisite refuses complete admission; never execute comment/condition text or install/update/drop extensions to force a match",
+  "resourceObligations": "Shared enclosing totals, complete original cut/authority and explicit pre-materialization/native-work permits; no independent per-route allowance"
+}

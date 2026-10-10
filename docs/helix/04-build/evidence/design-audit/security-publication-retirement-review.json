@@ -1,0 +1,16 @@
+{
+  "ownerWorktree": "/Users/erik/.codex/worktrees/1598/umf",
+  "sourceSha256": {
+    "original-publication-actor-cleanup-counterexample.json": "447dd96ae9c7330f638a296c8690c52ac5560cefb68340d2f26553e4f6432554",
+    "original-publication-stale-retirement-counterexample.json": "0a885bc578da2e5af6ab353ef4d6583f82c5bda7f8a17763f5ba6a12ebd31214",
+    "publication-retirement-formal.json": "87790034ee183b27cb201886ae665ed3ed019f5132f37b8807567d980e717ee9"
+  },
+  "archiveCorrespondence": true,
+  "integrationConsequences": [
+    "Cleanup must retire only the original publication identity/generation, preserving sibling publishers for the same actor.",
+    "Snapshot-visible pending registration cannot authorize reuse after authoritative terminal retirement; consume the security-owned freshness/fencing protocol.",
+    "Conditional solver results require stated premises and do not establish native or multi-publisher qualification."
+  ],
+  "scope": "Read-only current uncommitted security-workstream source/evidence review; no upstream rerun or complete profile adoption",
+  "qualified": false
+}

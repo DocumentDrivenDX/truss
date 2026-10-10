@@ -1,0 +1,248 @@
+{
+  "scope": "UMF parser/source archive/JSON reload/guarded export only; no PostgreSQL execution, query result grammar, complete native scope, privileges, dependencies or installed parity",
+  "bunVersion": "1.4.2",
+  "ownerSource": {
+    "root": "/Users/erik/Projects/umf",
+    "commit": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+    "status": "",
+    "files": [
+      {
+        "path": "native/postgresql/runtime.ts",
+        "sha256": "a88fea4cf15c9c3c3f0ad1f0a36d8f5de42a42ce8ea9712499f609beee3ea751"
+      },
+      {
+        "path": "src/adapters/postgresql/index.ts",
+        "sha256": "7baa071d95e5f9863a4ce2bf892d87fb27cab9d8605ba4cf8887016d14ca17b4"
+      },
+      {
+        "path": "src/adapters/postgresql/declarations.ts",
+        "sha256": "e47ebd6366fee86fb8ccaf1270555bcd338957bff511f30cdcae22a088c6d8d9"
+      },
+      {
+        "path": "src/model/document.ts",
+        "sha256": "a0422042659defdea425dff8bb0618eaa4bbf125f68da16aa5ad21af0b6c282f"
+      },
+      {
+        "path": "spec/extensions/postgresql/native-ast.schema.json",
+        "sha256": "aa3d3b50bc04edbc3ab3430e113ee8710edb1c10ff5cee15d4bcc7b16d9a9039"
+      },
+      {
+        "path": "bun.lock",
+        "sha256": "98a99f7d306f7269db103bdbfafe5f9ad9ed34b02024276ad0cce45df27f5cc3"
+      }
+    ]
+  },
+  "backend": "@libpg-query/parser@17.6.10",
+  "observations": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-relation-observation-pg17.proposal.sql",
+      "sourceSha256": "ec4f16366933ff997abf67195bbca6b483488e6cba8365987649a1d5ccf726d9",
+      "artifactPath": "docs/helix/02-design/contracts/bindings/bootstrap-relation-observation-pg17.proposal.umf.json",
+      "artifactSha256": "9496978ac0b161fa6d25f19c6bcaa1910d3a9d452bebe4f22f393fbc051404cd",
+      "exportPath": "docs/helix/04-build/evidence/design-audit/bootstrap-relation-observation.owner-export.sql",
+      "exportSha256": "459195cae3e81c20bdcf17544544105b53d6bcc05494034a9e2c8d703831fc80",
+      "sourceArchiveExact": true,
+      "reloadedExportExact": true,
+      "complete": false,
+      "unhandled": [
+        {
+          "path": "/stmts/0/stmt"
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning",
+          "message": "Raw syntax is not catalog resolution, SQL execution, permissions or server-state validation"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt",
+          "severity": "warning",
+          "message": "Statement is retained without declaration extraction or execution"
+        }
+      ]
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-column-observation-pg17.proposal.sql",
+      "sourceSha256": "9f793d791ea4209363dbb6394e0953b3089fdc93e79ecb5d4ea93c84909dc1e6",
+      "artifactPath": "docs/helix/02-design/contracts/bindings/bootstrap-column-observation-pg17.proposal.umf.json",
+      "artifactSha256": "b4ddf321374c30403b17913172470e467cc1b1f9ae6273199754f1c51541bd20",
+      "exportPath": "docs/helix/04-build/evidence/design-audit/bootstrap-column-observation.owner-export.sql",
+      "exportSha256": "2d81393f368c5b4cd33d0de73912b4c66065f5e27fcfa01f81d9a865f0c71473",
+      "sourceArchiveExact": true,
+      "reloadedExportExact": true,
+      "complete": false,
+      "unhandled": [
+        {
+          "path": "/stmts/0/stmt"
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning",
+          "message": "Raw syntax is not catalog resolution, SQL execution, permissions or server-state validation"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt",
+          "severity": "warning",
+          "message": "Statement is retained without declaration extraction or execution"
+        }
+      ]
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-constraint-observation-pg17.proposal.sql",
+      "sourceSha256": "e048fc85fc5e9e97dbc13e9a25b14fe90aa80915f3b407ad565b782ef3ecc625",
+      "artifactPath": "docs/helix/02-design/contracts/bindings/bootstrap-constraint-observation-pg17.proposal.umf.json",
+      "artifactSha256": "632b1e58058cd51303868449c0b91bf2fdcc6cff3cb522cd6362b911a25be301",
+      "exportPath": "docs/helix/04-build/evidence/design-audit/bootstrap-constraint-observation.owner-export.sql",
+      "exportSha256": "c4ca6a2c1de00b68475be9d7d772b8dbd1264cdcc8c6fd17311e14705abc3e11",
+      "sourceArchiveExact": true,
+      "reloadedExportExact": true,
+      "complete": false,
+      "unhandled": [
+        {
+          "path": "/stmts/0/stmt"
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning",
+          "message": "Raw syntax is not catalog resolution, SQL execution, permissions or server-state validation"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt",
+          "severity": "warning",
+          "message": "Statement is retained without declaration extraction or execution"
+        }
+      ]
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-index-observation-pg17.proposal.sql",
+      "sourceSha256": "8ac27f974ac6c421f9522ad7d78ee57a2b6e05ae1333c38f854a79fa1c260de0",
+      "artifactPath": "docs/helix/02-design/contracts/bindings/bootstrap-index-observation-pg17.proposal.umf.json",
+      "artifactSha256": "7d2875fce252bbd72238512f4d7947db3c98ce27b6e63cb1e8904039ef0c3395",
+      "exportPath": "docs/helix/04-build/evidence/design-audit/bootstrap-index-observation.owner-export.sql",
+      "exportSha256": "73af62cbbd691a65f60a7ad590d691edd4b9c29f53b0fb9cb8d63bc3af0d54df",
+      "sourceArchiveExact": true,
+      "reloadedExportExact": true,
+      "complete": false,
+      "unhandled": [
+        {
+          "path": "/stmts/0/stmt"
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning",
+          "message": "Raw syntax is not catalog resolution, SQL execution, permissions or server-state validation"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt",
+          "severity": "warning",
+          "message": "Statement is retained without declaration extraction or execution"
+        }
+      ]
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-sequence-observation-pg17.proposal.sql",
+      "sourceSha256": "1e003c83f49f5ed04d89f10779409289acfd1697621b090fb516cfe341c2b82e",
+      "artifactPath": "docs/helix/02-design/contracts/bindings/bootstrap-sequence-observation-pg17.proposal.umf.json",
+      "artifactSha256": "47596c80f552d27de5702bcf8d4cd94dbf3aec711186bd01ae6b15a8a03276a7",
+      "exportPath": "docs/helix/04-build/evidence/design-audit/bootstrap-sequence-observation.owner-export.sql",
+      "exportSha256": "ec91ec500838e5a0dc30896cac289fb0cda2357b7dac7fe0466c314cb4f43529",
+      "sourceArchiveExact": true,
+      "reloadedExportExact": true,
+      "complete": false,
+      "unhandled": [
+        {
+          "path": "/stmts/0/stmt"
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning",
+          "message": "Raw syntax is not catalog resolution, SQL execution, permissions or server-state validation"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt",
+          "severity": "warning",
+          "message": "Statement is retained without declaration extraction or execution"
+        }
+      ]
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-dependency-observation-pg17.proposal.sql",
+      "sourceSha256": "3241d952ca65d834f4d67df702c3957594a7c7a3c40bc152d35a1ffd9a9acb21",
+      "artifactPath": "docs/helix/02-design/contracts/bindings/bootstrap-dependency-observation-pg17.proposal.umf.json",
+      "artifactSha256": "e727b8ebab4d8c9dae1655bf498ba0e1e61cb5693d5f6fa13c814009ba506d53",
+      "exportPath": "docs/helix/04-build/evidence/design-audit/bootstrap-dependency-observation.owner-export.sql",
+      "exportSha256": "b6d3b3eb4fe10d817a57c0e2d1ab723fc630233b4d15985bc5e6aaa366a3ba74",
+      "sourceArchiveExact": true,
+      "reloadedExportExact": true,
+      "complete": false,
+      "unhandled": [
+        {
+          "path": "/stmts/0/stmt"
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning",
+          "message": "Raw syntax is not catalog resolution, SQL execution, permissions or server-state validation"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt",
+          "severity": "warning",
+          "message": "Statement is retained without declaration extraction or execution"
+        }
+      ]
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-shared-dependency-observation-pg17.proposal.sql",
+      "sourceSha256": "d8b3211263ccad6661c25d138fbef9f7bf6aa468204dbc008b6d2a605543715b",
+      "artifactPath": "docs/helix/02-design/contracts/bindings/bootstrap-shared-dependency-observation-pg17.proposal.umf.json",
+      "artifactSha256": "80ada89628e46eb299a4719e1e9e7e5d6a91ad0acfbcabd2178756e5753a5813",
+      "exportPath": "docs/helix/04-build/evidence/design-audit/bootstrap-shared-dependency-observation.owner-export.sql",
+      "exportSha256": "7f7e06e1e2a0c87026e767716372cf5656fc6548aaba0c34655bb7a0f818eb0f",
+      "sourceArchiveExact": true,
+      "reloadedExportExact": true,
+      "complete": false,
+      "unhandled": [
+        {
+          "path": "/stmts/0/stmt"
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning",
+          "message": "Raw syntax is not catalog resolution, SQL execution, permissions or server-state validation"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt",
+          "severity": "warning",
+          "message": "Statement is retained without declaration extraction or execution"
+        }
+      ]
+    }
+  ]
+}

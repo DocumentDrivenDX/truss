@@ -1,0 +1,58 @@
+{
+  "scope": "Installed Python local PostgreSQL lifecycle component only; no complete Truss engine, installer, migration or managed-service qualification",
+  "platform": "macOS arm64",
+  "python": "3.11",
+  "pgserver": "0.1.4",
+  "postgresql": "16.2",
+  "wheel": {
+    "name": "truss_toolkit-0.0.1.dev0-py3-none-any.whl",
+    "sha256": "b5e5ca09e10093bddcbb1139adc3589bc4a8fb8c9d25a285de98e685b5f4e573"
+  },
+  "sources": [
+    {
+      "path": "packages/python/pyproject.toml",
+      "sha256": "44c4146d1dabbcb38c977628a95e2ce45d940608c5f1c57f23d47e50d0ccf8f5"
+    },
+    {
+      "path": "packages/python/src/truss/__init__.py",
+      "sha256": "e9d7aacb2f5a5da077ffc24500422876892c3f68a7f595f059fd4189f25a83b5"
+    },
+    {
+      "path": "packages/python/src/truss/local_runtime.py",
+      "sha256": "e0f983625af50cf61a6bea8f79134723de97263e5f553581cf0b15892f001ea5"
+    },
+    {
+      "path": "packages/python/tests/test_local_runtime.py",
+      "sha256": "6a6128f5380aeb9ba8646edd7e1b6339cf71cdf3c72590d3367ab2e9879563a0"
+    },
+    {
+      "path": "scripts/local-postgres.py",
+      "sha256": "64e1967e6d479964284b16f413e8545f5cfb5b765ea91f1ab37d80ba4e116759"
+    }
+  ],
+  "nativeTests": {
+    "command": "PYTHONPATH=/private/tmp/truss-python-runtime-installed python -m unittest discover -s /Users/erik/Projects/truss/packages/python/tests -v",
+    "workingDirectory": "/private/tmp",
+    "tests": 4,
+    "result": "pass",
+    "scenarios": [
+      "retained exact-text commit after exception cleanup and restart",
+      "simultaneous independent servers",
+      "same-process overlap refusal preserves active owner",
+      "cross-process overlap refusal",
+      "foreign nonempty and wrong-major directories unchanged on refusal",
+      "injected raised cleanup retains custody and invalidates URI without retry",
+      "injected cleanup returning without stopping retains custody",
+      "explicit cleanup after fault removal permits native restart"
+    ]
+  },
+  "dependencies": "Existing pinned local-runtime environment reused; wheel installed with --no-deps into a separate target. Not a clean dependency-resolution qualification.",
+  "launcherProbe": {
+    "installedWheel": true,
+    "version": "16.2",
+    "stopped": true,
+    "trussInstallation": "not_checked",
+    "historicalWheelSha256": "63645b60de1e825d72cebfdb09475ffe95c33f5aab4415ffec7e459cc8faea18",
+    "scope": "Prior wheel launcher smoke; not repeated for the cleanup-correction wheel"
+  }
+}

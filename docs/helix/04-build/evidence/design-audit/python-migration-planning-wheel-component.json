@@ -1,0 +1,35 @@
+{
+  "scope": "built-wheel metadata decoder and declared-route planner components only",
+  "sourceCommit": "888b17f",
+  "wheel": {
+    "distribution": "truss-toolkit",
+    "version": "0.0.1.dev0",
+    "sha256": "e7883779b4465429e48eeb1a0955c36d6dc2436c4bf09dec8625e845e6557141",
+    "build": "pip wheel --no-deps --no-build-isolation",
+    "installation": "pip install --no-deps --target /private/tmp/truss-migration-planner-installed"
+  },
+  "checks": {
+    "pythonUnittestMethods": 5,
+    "migrationSharedCases": 16,
+    "originalWireSharedCases": 18,
+    "resourceBoundaries": true,
+    "frozenResults": true,
+    "cwd": "/private/tmp",
+    "moduleOrigin": "/private/tmp/truss-migration-planner-installed/truss",
+    "result": "passed"
+  },
+  "inputs": {
+    "packages/python/pyproject.toml": "44c4146d1dabbcb38c977628a95e2ce45d940608c5f1c57f23d47e50d0ccf8f5",
+    "packages/python/src/truss/migration_planning.py": "12fabf2bd14a6af133f70488e704ff7a7fe8aded3158695655ba26acfb69fcce",
+    "packages/python/src/truss/_acceptance_json.py": "fba890deb660bf461e6bcf4eeef0c0704962f0c1814d879c9509e2f994842f77",
+    "packages/python/tests/test_migration_planning.py": "f967bffffefc22e62378e8410f19c5f5ddd6b84895c53c0a9fccb0c65388e8d6",
+    "packages/python/tests/test_acceptance_json.py": "fdef3f104a89070ac6377a08af3970f351b4c8994916758db5469f3542c90eb2",
+    "tests/fixtures/layout-migration-planning.json": "d27c5717f14b01d8f6d15f4e641c8709fddd1ce451116aca6bd5862d7a9fce1e",
+    "docs/helix/03-test/acceptance-outer-json-expected.proposal.json": "0c406d54651202cc3bede7aeb600c86d1a35ed2ea7db8c22a017341319325b2a"
+  },
+  "limitations": [
+    "Existing private Python3.11 environment; no clean dependency-resolution qualification",
+    "Independent expected corpora read from checkout, not delivered original migration recipes or installed observations",
+    "No SQL execution, original administrative authority, settlement, M1 route, migration API or installation readiness qualification"
+  ]
+}

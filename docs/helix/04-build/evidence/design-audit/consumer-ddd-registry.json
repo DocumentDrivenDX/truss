@@ -1,0 +1,126 @@
+{
+  "scope": "actual existing UMF DDD registry on original consumer models; no complete semantics/compiler/native adoption",
+  "sources": [
+    {
+      "path": "/Users/erik/Projects/umf/src/extensions/ddd/index.ts",
+      "sha256": "f0b39227867483d247aeb4552355ccf47396e39061305ee13c53ff81b062d209"
+    },
+    {
+      "path": "/Users/erik/Projects/umf/spec/extensions/ddd/package.json",
+      "sha256": "c759a3327c8da311a42e170fbfc36bd40ac9d3b841759e70a64be8f3140bf527"
+    },
+    {
+      "path": "/Users/erik/Projects/umf/src/registry/registry.ts",
+      "sha256": "5903ba9f257957b90ada07fbff43b58d54eabe8c8f7400ddd9ce83b4237d50e6"
+    }
+  ],
+  "observations": [
+    {
+      "sourcePath": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "sourceSha256": "e194117a8de436d1479804c59b0e2cc76470814a3c0723cd732797635442a3e5",
+      "validation": {
+        "valid": true,
+        "complete": false,
+        "diagnostics": [
+          {
+            "code": "EXPERIMENTAL_CORE_NULLABILITY",
+            "path": "/umf",
+            "message": "Nullability envelope is experimental; no native absence encoding or default execution is implied",
+            "severity": "warning"
+          },
+          {
+            "code": "EXPERIMENTAL_CORE_CARDINALITY",
+            "path": "/umf",
+            "message": "Cardinality envelope is experimental; native shape and item semantics require explicit bindings",
+            "severity": "warning"
+          },
+          {
+            "code": "EXPERIMENTAL_CORE_FACETS",
+            "path": "/umf",
+            "message": "Facet envelope is experimental; bounds do not establish native enforcement or value conversion",
+            "severity": "warning"
+          },
+          {
+            "code": "UNKNOWN_EXTENSION",
+            "path": "/vocabularies/hohfeld.placement",
+            "message": "Exact extension version unavailable; content retained",
+            "severity": "warning"
+          },
+          {
+            "code": "UNKNOWN_CORE_FIELD",
+            "path": "/modules/0/actions",
+            "message": "Field retained without interpretation",
+            "severity": "warning"
+          },
+          {
+            "code": "EXPERIMENTAL_CORE_KEYS",
+            "path": "/umf",
+            "message": "Candidate key profile; native uniqueness and author provenance are not inferred",
+            "severity": "warning"
+          },
+          {
+            "code": "EXPERIMENTAL_CORE_RELATIONSHIPS",
+            "path": "/umf",
+            "message": "Candidate authored relationship profile; native enforcement and storage are not inferred",
+            "severity": "warning"
+          }
+        ]
+      },
+      "invalidIdentityRefused": true
+    },
+    {
+      "sourcePath": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "sourceSha256": "5ff02aa14d0d5a64b85b6fe75ffe99ec7a3d8caf93c19b79187506a86c45162e",
+      "validation": {
+        "valid": true,
+        "complete": false,
+        "diagnostics": [
+          {
+            "code": "EXPERIMENTAL_CORE_NULLABILITY",
+            "path": "/umf",
+            "message": "Nullability envelope is experimental; no native absence encoding or default execution is implied",
+            "severity": "warning"
+          },
+          {
+            "code": "EXPERIMENTAL_CORE_CARDINALITY",
+            "path": "/umf",
+            "message": "Cardinality envelope is experimental; native shape and item semantics require explicit bindings",
+            "severity": "warning"
+          },
+          {
+            "code": "EXPERIMENTAL_CORE_FACETS",
+            "path": "/umf",
+            "message": "Facet envelope is experimental; bounds do not establish native enforcement or value conversion",
+            "severity": "warning"
+          },
+          {
+            "code": "UNKNOWN_EXTENSION",
+            "path": "/vocabularies/hohfeld.placement",
+            "message": "Exact extension version unavailable; content retained",
+            "severity": "warning"
+          },
+          {
+            "code": "UNKNOWN_CORE_FIELD",
+            "path": "/modules/0/actions",
+            "message": "Field retained without interpretation",
+            "severity": "warning"
+          },
+          {
+            "code": "EXPERIMENTAL_CORE_KEYS",
+            "path": "/umf",
+            "message": "Candidate key profile; native uniqueness and author provenance are not inferred",
+            "severity": "warning"
+          },
+          {
+            "code": "EXPERIMENTAL_CORE_RELATIONSHIPS",
+            "path": "/umf",
+            "message": "Candidate authored relationship profile; native enforcement and storage are not inferred",
+            "severity": "warning"
+          }
+        ]
+      },
+      "invalidIdentityRefused": true
+    }
+  ],
+  "nativeImplementationQualified": false
+}

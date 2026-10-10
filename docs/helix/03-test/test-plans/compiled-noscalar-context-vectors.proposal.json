@@ -1,0 +1,197 @@
+{
+  "profile": "truss-compiled-noscalar-context-vectors/0.1.0",
+  "status": "planned_unadopted",
+  "scope": "Independent symbolic contextual outcomes for the same eight native scalar cells; not a context credential, public ABI, nullable/tree support or logical decoder execution",
+  "nativeCells": [
+    "false",
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "rawPhysicalStage": "NoScalar retains no observed native state/root/kind or source facts",
+  "prerequisites": "Positive contextual outcomes require selected original definition/source/presence semantics, complete per-occurrence native visibility/cut/termination and complete logical bridge; counts and labels below are oracle facts, not authority",
+  "nativeExecution": false,
+  "cases": [
+    {
+      "id": "NP01",
+      "originalPresence": {
+        "optional": true,
+        "nullable": false,
+        "shape": "scalar"
+      },
+      "originalOccurrence": "scan-A/record-1/field-original",
+      "contextObservation": {
+        "stateCount": 0,
+        "rootCount": 0,
+        "rootKind": null,
+        "scalarPayloadCount": 0,
+        "producer": "selected_original_native_context"
+      },
+      "expectedBridge": {
+        "outcome": "qualified_absence",
+        "reason": "Optional absence needs complete original state visibility and its selected logical bridge"
+      },
+      "selectedPropertyHelper": "physical_NoScalar_only",
+      "publicationPermittedByPhysicalResult": false
+    },
+    {
+      "id": "NP02",
+      "originalPresence": {
+        "optional": false,
+        "nullable": true,
+        "shape": "scalar"
+      },
+      "originalOccurrence": "scan-A/record-1/field-original",
+      "contextObservation": {
+        "stateCount": 1,
+        "rootCount": 1,
+        "rootKind": "null",
+        "scalarPayloadCount": 0,
+        "producer": "selected_original_native_context"
+      },
+      "expectedBridge": {
+        "outcome": "qualified_present_null",
+        "reason": "Present null requires original nullable definition/source and actual root evidence"
+      },
+      "selectedPropertyHelper": "physical_NoScalar_only",
+      "publicationPermittedByPhysicalResult": false
+    },
+    {
+      "id": "NP03",
+      "originalPresence": {
+        "optional": false,
+        "nullable": false,
+        "shape": "scalar"
+      },
+      "originalOccurrence": "scan-A/record-1/field-original",
+      "contextObservation": {
+        "stateCount": 1,
+        "rootCount": 1,
+        "rootKind": "scalar",
+        "scalarPayloadCount": 0,
+        "producer": "selected_original_native_context"
+      },
+      "expectedBridge": {
+        "outcome": "refuse_integrity",
+        "reason": "Present scalar root lacks its required scalar payload"
+      },
+      "selectedPropertyHelper": "physical_NoScalar_only",
+      "publicationPermittedByPhysicalResult": false
+    },
+    {
+      "id": "NP04",
+      "originalPresence": {
+        "optional": true,
+        "nullable": true,
+        "shape": "scalar"
+      },
+      "originalOccurrence": "scan-A/record-1/field-original",
+      "contextObservation": {
+        "stateCount": 1,
+        "rootCount": 0,
+        "rootKind": null,
+        "scalarPayloadCount": 0,
+        "producer": "selected_original_native_context"
+      },
+      "expectedBridge": {
+        "outcome": "refuse_integrity",
+        "reason": "Present state lacks its actual root even though absence and null are permitted"
+      },
+      "selectedPropertyHelper": "physical_NoScalar_only",
+      "publicationPermittedByPhysicalResult": false
+    },
+    {
+      "id": "NP05",
+      "originalPresence": {
+        "optional": false,
+        "nullable": false,
+        "shape": "compound"
+      },
+      "originalOccurrence": "scan-A/record-1/field-original",
+      "contextObservation": {
+        "stateCount": 1,
+        "rootCount": 1,
+        "rootKind": "sequence",
+        "scalarPayloadCount": 0,
+        "producer": "selected_original_native_context"
+      },
+      "expectedBridge": {
+        "outcome": "requires_complete_tree_bridge",
+        "reason": "Container is not scalar SQL NULL; current property helper refuses compound scalar dispatch"
+      },
+      "selectedPropertyHelper": "requires_tree_bridge",
+      "publicationPermittedByPhysicalResult": false
+    },
+    {
+      "id": "NP06",
+      "originalPresence": {
+        "optional": false,
+        "nullable": false,
+        "shape": "scalar"
+      },
+      "originalOccurrence": "scan-A/record-1/field-original",
+      "contextObservation": {
+        "stateCount": 0,
+        "rootCount": 0,
+        "rootKind": null,
+        "scalarPayloadCount": 0,
+        "producer": "selected_original_native_context"
+      },
+      "expectedBridge": {
+        "outcome": "refuse_integrity",
+        "reason": "Required property state is absent"
+      },
+      "selectedPropertyHelper": "physical_NoScalar_only",
+      "publicationPermittedByPhysicalResult": false
+    },
+    {
+      "id": "NP07",
+      "originalPresence": {
+        "optional": true,
+        "nullable": false,
+        "shape": "scalar"
+      },
+      "originalOccurrence": "scan-A/record-1/field-original",
+      "contextObservation": {
+        "stateCount": 0,
+        "rootCount": 0,
+        "rootKind": null,
+        "scalarPayloadCount": 0,
+        "producer": "caller_supplied_flags"
+      },
+      "expectedBridge": {
+        "outcome": "refuse_unavailable_context",
+        "reason": "Caller booleans cannot create native presence evidence"
+      },
+      "selectedPropertyHelper": "physical_NoScalar_only",
+      "publicationPermittedByPhysicalResult": false
+    },
+    {
+      "id": "NP08",
+      "originalPresence": {
+        "optional": true,
+        "nullable": false,
+        "shape": "scalar"
+      },
+      "originalOccurrence": "scan-A/record-1/field-original",
+      "contextObservation": {
+        "stateCount": 0,
+        "rootCount": 0,
+        "rootKind": null,
+        "scalarPayloadCount": 0,
+        "producer": "selected_original_native_context",
+        "originalOccurrence": "scan-B/record-2/field-original"
+      },
+      "expectedBridge": {
+        "outcome": "refuse_foreign_context",
+        "reason": "Equal shape/count facts from another occurrence cannot establish this row presence"
+      },
+      "selectedPropertyHelper": "physical_NoScalar_only",
+      "publicationPermittedByPhysicalResult": false
+    }
+  ]
+}

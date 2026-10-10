@@ -1,0 +1,16 @@
+{
+  "sourceHashes": {
+    "packages/umf-bun/src/catalog-new-stage.ts": "9f40d1b03b4887e906847ab3597f92244791333ec57966f954096a5d8c6f185a",
+    "packages/umf-bun/src/catalog-report-preparation.ts": "8da357fac30b9c24df296f5e64a4dab34b7b2b4d0cd5c4bfc2c1ebad0d34a433",
+    "tests/catalog-input-preparation.test.ts": "bfa2a11c7ecbc91422bb2a7acac575e9b81b9cf30dbd0ecc7d0c66f077cb3c1a",
+    "tests/catalog-report-preparation.test.ts": "c8926c03b119ef5bb490e2f61e02c5a0d7c98109bb060750e456865b499d7166",
+    "scripts/check-catalog-new-cohort.ts": "a1db549a7c694a138beddd8799bcd695a6e4cc5cde8ae0d6993fc5489b9338e6",
+    "docs/helix/04-build/remaining-design-handoff-audit.md": "df71f96589764b50ea51ae3d7e0c18bc6dfb91300a00b0db899e6e7a7df264b2"
+  },
+  "runtime": "Bun 1.4.2",
+  "hostTests": 19,
+  "hostAssertions": 119,
+  "reportRequiredFieldsAudited": 17,
+  "nativeRerun": "not passed: initial connection refused while original Docker launch and cleanup operations remained live; last successful cohort receipt has 68 checks on its separately pinned sources",
+  "scope": "Host transform preflight refusal and structural report-field planning coverage only. No new native acceptance, complete report or publication qualification."
+}

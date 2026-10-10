@@ -1,0 +1,56 @@
+{
+  "scope": "Published UTF-8/digest integrity and domain separation only; no canonical encoder or semantic qualification",
+  "cases": 10,
+  "outcomes": [
+    {
+      "artifact": "canonical-byte-v0.1.vectors.json",
+      "vector": "null",
+      "digestMatches": true
+    },
+    {
+      "artifact": "canonical-byte-v0.1.vectors.json",
+      "vector": "empty array",
+      "digestMatches": true
+    },
+    {
+      "artifact": "canonical-byte-v0.1.vectors.json",
+      "vector": "empty object",
+      "digestMatches": true
+    },
+    {
+      "artifact": "canonical-byte-v0.1.vectors.json",
+      "vector": "sorted members",
+      "digestMatches": true
+    },
+    {
+      "artifact": "canonical-byte-v0.1.vectors.json",
+      "vector": "control spelling",
+      "digestMatches": true
+    },
+    {
+      "artifact": "canonical-byte-v0.1.vectors.json",
+      "vector": "unicode direct",
+      "digestMatches": true
+    },
+    {
+      "artifact": "canonical-input-v0.1.vectors.json",
+      "vector": "native acceptance shape",
+      "digestMatches": true
+    },
+    {
+      "artifact": "canonical-input-v0.1.vectors.json",
+      "vector": "rootless group shape",
+      "digestMatches": true
+    },
+    {
+      "artifact": "canonical-input-v0.1.vectors.json",
+      "vector": "group asserted origin differs",
+      "digestMatches": true
+    },
+    {
+      "artifact": "canonical-input-v0.1.vectors.json",
+      "vector": "same group bytes different domain",
+      "digestMatches": true
+    }
+  ]
+}

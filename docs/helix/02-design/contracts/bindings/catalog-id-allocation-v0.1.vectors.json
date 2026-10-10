@@ -1,0 +1,157 @@
+{
+  "profile": "truss-catalog-id-allocation/0.1.0",
+  "status": "unadopted_candidate",
+  "scope": "Authored expected boundary examples; no allocator implementation or native acceptance evidence",
+  "cases": [
+    {
+      "name": "component-boundary",
+      "inputTriples": [
+        [
+          "a",
+          "bc",
+          "d"
+        ],
+        [
+          "ab",
+          "c",
+          "d"
+        ]
+      ],
+      "expectedOrder": [
+        0,
+        1
+      ],
+      "reason": "Compare document first; never concatenate components"
+    },
+    {
+      "name": "prefix-and-unicode",
+      "inputStrings": [
+        "é",
+        "é",
+        "aa",
+        "a"
+      ],
+      "expectedOrder": [
+        3,
+        2,
+        1,
+        0
+      ],
+      "reason": "Unsigned complete UTF-8; no normalization or locale ordering"
+    },
+    {
+      "name": "global-last-slot",
+      "maximum": "2147483646",
+      "newCount": "1",
+      "upperBound": "2147483647",
+      "expectedNewIds": [
+        "2147483647"
+      ]
+    },
+    {
+      "name": "global-exhaustion",
+      "maximum": "2147483646",
+      "newCount": "2",
+      "upperBound": "2147483647",
+      "expected": "refuse_entire_acceptance"
+    },
+    {
+      "name": "key-last-slot",
+      "maximum": "32766",
+      "newCount": "1",
+      "upperBound": "32767",
+      "expectedNewIds": [
+        "32767"
+      ]
+    },
+    {
+      "name": "key-exhaustion",
+      "maximum": "32767",
+      "newCount": "1",
+      "upperBound": "32767",
+      "expected": "refuse_entire_acceptance"
+    },
+    {
+      "name": "nonpositive-legacy-floor",
+      "retainedIds": [
+        "-2147483648",
+        "0"
+      ],
+      "newCount": "2",
+      "expectedNewIds": [
+        "1",
+        "2"
+      ],
+      "preservedRetainedIds": [
+        "-2147483648",
+        "0"
+      ]
+    },
+    {
+      "name": "retired-high-water",
+      "activeIds": [
+        "4"
+      ],
+      "retiredIds": [
+        "2147483647"
+      ],
+      "newCount": "1",
+      "expected": "refuse_entire_acceptance"
+    },
+    {
+      "name": "incomplete-visibility",
+      "visibleMaximum": "4",
+      "historyObservation": "incomplete",
+      "newCount": "1",
+      "expected": "refuse_capacity_admission"
+    },
+    {
+      "name": "independent-key-domains",
+      "owners": [
+        {
+          "typeId": "7",
+          "maximum": "32767",
+          "newCount": "0"
+        },
+        {
+          "typeId": "8",
+          "maximum": "0",
+          "newCount": "1"
+        }
+      ],
+      "expectedAllocations": [
+        {
+          "typeId": "8",
+          "keyNum": "1"
+        }
+      ]
+    },
+    {
+      "name": "duplicate-lineage",
+      "candidateTriples": [
+        [
+          "d",
+          "m",
+          "x"
+        ],
+        [
+          "d",
+          "m",
+          "x"
+        ]
+      ],
+      "expected": "refuse_before_allocation"
+    },
+    {
+      "name": "retired-reintroduction",
+      "candidateTriple": [
+        "d",
+        "m",
+        "x"
+      ],
+      "retainedState": "retired",
+      "expected": "preserve_original_id_only_after_complete_reactivation_validation",
+      "reason": "Owner selected same-qualified-identity reactivation on 2026-10-07; allocation matching alone cannot authorize lifecycle activation. Missing or failed validation leaves the lineage retired and refuses the acceptance atomically."
+    }
+  ]
+}

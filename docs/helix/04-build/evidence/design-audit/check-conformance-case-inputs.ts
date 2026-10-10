@@ -1,0 +1,22 @@
+import {readFileSync} from 'node:fs';
+import {createRequire} from 'node:module';
+const require=createRequire(import.meta.url);
+if(!process.argv[2])throw new Error('Provide the installed Ajv Draft 2020-12 module path.');
+const Ajv=require(process.argv[2]).default;
+const root='docs/helix/02-design/contracts/';
+const ajv=new Ajv({strict:true});
+ajv.addSchema(JSON.parse(readFileSync(root+'acceptance-input-v0.1.schema.json','utf8')));
+const validate=ajv.compile(JSON.parse(readFileSync(root+'conformance-case-inputs-v0.1.proposal.schema.json','utf8')));
+const profile={identity:'shape-only',version:'0.1',sha256:'0'.repeat(64)};
+const artifact={identity:'shape-only',bytesBase64:'',sha256:'0'.repeat(64)};
+const base={interfaceVersion:'truss-conformance-case-inputs/0.1.0',caseId:'shape',registry:artifact,grammarProfile:profile,steps:[{label:'step',operation:'lookup',operationProfile:profile,input:artifact,scope:{kind:'adopted',label:'host'},observationProfile:profile}]};
+function check(name:string,expected:boolean,change:(x:any)=>void){const x=structuredClone(base);change(x);if(Boolean(validate(x))!==expected)throw new Error(name+': '+JSON.stringify(validate.errors));}
+check('closed candidate',true,()=>{});
+check('missing steps',false,x=>delete x.steps);
+check('empty steps',false,x=>x.steps=[]);
+check('unknown executable member',false,x=>x.steps[0].command='SELECT 1');
+check('missing original input',false,x=>delete x.steps[0].input);
+check('none scope has no handle',false,x=>x.steps[0].scope={kind:'none',label:'host'});
+check('duplicate labels need semantic refusal',true,x=>x.steps.push(structuredClone(x.steps[0])));
+check('unknown operation needs registry refusal',true,x=>x.steps[0].operation='unregistered');
+console.log('8 shape controls passed; duplicate labels and unknown operations still require semantic refusal. No native execution.');

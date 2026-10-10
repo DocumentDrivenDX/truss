@@ -1,0 +1,106 @@
+{
+  "scope": "Independent mathematical degree oracle; no SQL execution or scope/authority/resource qualification",
+  "cases": [
+    {
+      "case": "outgoing-0",
+      "side": "outgoing",
+      "canonicalEdgeOccurrences": 0,
+      "independentExpected": {
+        "saturatedCountText": "0",
+        "withinMaximum": true
+      },
+      "precondition": "complete original typed scope/private visibility and terminated native result"
+    },
+    {
+      "case": "outgoing-1",
+      "side": "outgoing",
+      "canonicalEdgeOccurrences": 1,
+      "independentExpected": {
+        "saturatedCountText": "1",
+        "withinMaximum": true
+      },
+      "precondition": "complete original typed scope/private visibility and terminated native result"
+    },
+    {
+      "case": "outgoing-2",
+      "side": "outgoing",
+      "canonicalEdgeOccurrences": 2,
+      "independentExpected": {
+        "saturatedCountText": "2",
+        "withinMaximum": true
+      },
+      "precondition": "complete original typed scope/private visibility and terminated native result"
+    },
+    {
+      "case": "outgoing-3",
+      "side": "outgoing",
+      "canonicalEdgeOccurrences": 3,
+      "independentExpected": {
+        "saturatedCountText": "3",
+        "withinMaximum": false
+      },
+      "precondition": "complete original typed scope/private visibility and terminated native result"
+    },
+    {
+      "case": "outgoing-5",
+      "side": "outgoing",
+      "canonicalEdgeOccurrences": 5,
+      "independentExpected": {
+        "saturatedCountText": "3",
+        "withinMaximum": false
+      },
+      "precondition": "complete original typed scope/private visibility and terminated native result"
+    },
+    {
+      "case": "incoming-0",
+      "side": "incoming",
+      "canonicalEdgeOccurrences": 0,
+      "independentExpected": {
+        "saturatedCountText": "0",
+        "withinMaximum": true
+      },
+      "precondition": "complete original typed scope/private visibility and terminated native result"
+    },
+    {
+      "case": "incoming-1",
+      "side": "incoming",
+      "canonicalEdgeOccurrences": 1,
+      "independentExpected": {
+        "saturatedCountText": "1",
+        "withinMaximum": true
+      },
+      "precondition": "complete original typed scope/private visibility and terminated native result"
+    },
+    {
+      "case": "incoming-2",
+      "side": "incoming",
+      "canonicalEdgeOccurrences": 2,
+      "independentExpected": {
+        "saturatedCountText": "2",
+        "withinMaximum": false
+      },
+      "precondition": "complete original typed scope/private visibility and terminated native result"
+    },
+    {
+      "case": "incoming-3",
+      "side": "incoming",
+      "canonicalEdgeOccurrences": 3,
+      "independentExpected": {
+        "saturatedCountText": "2",
+        "withinMaximum": false
+      },
+      "precondition": "complete original typed scope/private visibility and terminated native result"
+    },
+    {
+      "case": "incoming-5",
+      "side": "incoming",
+      "canonicalEdgeOccurrences": 5,
+      "independentExpected": {
+        "saturatedCountText": "2",
+        "withinMaximum": false
+      },
+      "precondition": "complete original typed scope/private visibility and terminated native result"
+    }
+  ],
+  "execution": "not_run"
+}

@@ -1,0 +1,89 @@
+{
+  "scope": "Selected design manifest/source correspondence and seven corruption refusals only; no native bodies, privileges, effects or support qualification",
+  "checkerSha256": "dea7b750d37f124c9e70718467d7361571a467bfb978b4dc88bc28ae3158cb29",
+  "manifestSha256": "0e3c0747f17b9f7df2c5902f91e7f8c773b857ee740be16a2aac31105f7c340c",
+  "controls": 16,
+  "failures": [],
+  "results": [
+    {
+      "control": "original",
+      "optimized": false,
+      "passed": true
+    },
+    {
+      "control": "original",
+      "optimized": true,
+      "passed": true
+    },
+    {
+      "control": "wrong attribute",
+      "optimized": false,
+      "passed": true
+    },
+    {
+      "control": "wrong attribute",
+      "optimized": true,
+      "passed": true
+    },
+    {
+      "control": "wrong signature",
+      "optimized": false,
+      "passed": true
+    },
+    {
+      "control": "wrong signature",
+      "optimized": true,
+      "passed": true
+    },
+    {
+      "control": "wrong owner",
+      "optimized": false,
+      "passed": true
+    },
+    {
+      "control": "wrong owner",
+      "optimized": true,
+      "passed": true
+    },
+    {
+      "control": "missing dependency",
+      "optimized": false,
+      "passed": true
+    },
+    {
+      "control": "missing dependency",
+      "optimized": true,
+      "passed": true
+    },
+    {
+      "control": "governing pin substitution",
+      "optimized": false,
+      "passed": true
+    },
+    {
+      "control": "governing pin substitution",
+      "optimized": true,
+      "passed": true
+    },
+    {
+      "control": "duplicate routine",
+      "optimized": false,
+      "passed": true
+    },
+    {
+      "control": "duplicate routine",
+      "optimized": true,
+      "passed": true
+    },
+    {
+      "control": "false qualification",
+      "optimized": false,
+      "passed": true
+    },
+    {
+      "control": "false qualification",
+      "optimized": true,
+      "passed": true
+    }
+  ]
+}

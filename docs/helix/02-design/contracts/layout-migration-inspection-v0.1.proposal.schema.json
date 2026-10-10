@@ -1,0 +1,210 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:layout-migration-inspection:0.1.0-proposal",
+  "title": "Draft read-only layout migration inspection carriers",
+  "description": "Definitions-only registration. Shape validation does not admit original installation, artifacts, native cut, registered procedures/resources, authority or historical settlement. Version grammar follows the LM-01 candidate manifest.",
+  "not": {},
+  "$defs": {
+    "layoutPin": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,19})\\.(0|[1-9][0-9]{0,19})\\.(0|[1-9][0-9]{0,19})$"
+        },
+        "bundleSha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "inventorySha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "version",
+        "bundleSha256",
+        "inventorySha256"
+      ],
+      "additionalProperties": false
+    },
+    "inspectionRequest": {
+      "type": "object",
+      "properties": {
+        "procedure": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "resource": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        }
+      },
+      "required": [
+        "procedure",
+        "resource"
+      ],
+      "additionalProperties": false
+    },
+    "verificationRequest": {
+      "type": "object",
+      "properties": {
+        "procedure": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "resource": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "expected": {
+          "$ref": "#/$defs/layoutPin"
+        }
+      },
+      "required": [
+        "procedure",
+        "resource",
+        "expected"
+      ],
+      "additionalProperties": false
+    },
+    "status": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "observed"
+            },
+            "layout": {
+              "$ref": "#/$defs/layoutPin"
+            },
+            "installation": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            },
+            "nativeObservation": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            },
+            "scope": {
+              "const": "current_installation_observation_only"
+            }
+          },
+          "required": [
+            "outcome",
+            "layout",
+            "installation",
+            "nativeObservation",
+            "scope"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "observation_unavailable"
+            },
+            "reason": {
+              "enum": [
+                "authorization",
+                "custody",
+                "profile",
+                "resource",
+                "integrity",
+                "unsupported_installation"
+              ]
+            }
+          },
+          "required": [
+            "outcome",
+            "reason"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "verification": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "matches"
+            },
+            "expected": {
+              "$ref": "#/$defs/layoutPin"
+            },
+            "installation": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            },
+            "nativeObservation": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            },
+            "correspondence": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            },
+            "scope": {
+              "const": "current_installation_verification_only"
+            }
+          },
+          "required": [
+            "outcome",
+            "expected",
+            "installation",
+            "nativeObservation",
+            "correspondence",
+            "scope"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "drift"
+            },
+            "expected": {
+              "$ref": "#/$defs/layoutPin"
+            },
+            "nativeObservation": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            },
+            "differences": {
+              "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+            },
+            "scope": {
+              "const": "current_installation_verification_only"
+            }
+          },
+          "required": [
+            "outcome",
+            "expected",
+            "nativeObservation",
+            "differences",
+            "scope"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "observation_unavailable"
+            },
+            "reason": {
+              "enum": [
+                "authorization",
+                "custody",
+                "profile",
+                "resource",
+                "integrity",
+                "unsupported_installation"
+              ]
+            }
+          },
+          "required": [
+            "outcome",
+            "reason"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

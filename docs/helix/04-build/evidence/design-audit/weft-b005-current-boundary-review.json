@@ -1,0 +1,44 @@
+{
+  "scope": "Read-only current Weft B-005 source/evidence boundary review; previously recorded observations are not rerun tests or joint adoption",
+  "ownerHead": "5ae231bc0f475ba4887a3d1896c3ad9fbcae9695",
+  "sources": [
+    {
+      "path": "/Users/erik/Projects/weft/docs/helix/04-build/implementation-plan.md",
+      "sha256": "0c3a17658b5e26059438a20f060fab2bebc7379c8302cb91b0ceb479ac500398"
+    },
+    {
+      "path": "/Users/erik/Projects/weft/docs/helix/04-build/evidence/B-005-native-preparation.md",
+      "sha256": "53f6f2a51269ec5f12d78c6283320996fe058001d41ad9a43ffba87be9eee212"
+    },
+    {
+      "path": "/Users/erik/Projects/weft/docs/helix/04-build/evidence/B-005-owner-source.json",
+      "sha256": "dc05a37f80d99eb7279644e2b03e8f0b69dc814a97119a8613e82de2580cb71c"
+    },
+    {
+      "path": "/Users/erik/Projects/weft/docs/helix/04-build/evidence/B-005-row-custody-native.json",
+      "sha256": "c9a02209a194554f01d87b3489853faab88a87a8a71d85f7b025def071b3f648"
+    },
+    {
+      "path": "/Users/erik/Projects/weft/docs/helix/04-build/evidence/B-005-select-assembly-native.json",
+      "sha256": "29e9b4a13d000c262dde995286c0dfdab876f765cf7343dc3bf87a22b0264b1a"
+    }
+  ],
+  "authoritativeGate": "B-005 remains incomplete: no approved Truss binding or registered storage adapter exists; compiler/native preparation does not close US-003 or production qualification.",
+  "boundedReceipts": [
+    {
+      "name": "docs/helix/04-build/evidence/B-005-owner-source.json",
+      "scope": "Admitted original-profile owner source preparation component; not native/profile/public backend qualification"
+    },
+    {
+      "name": "docs/helix/04-build/evidence/B-005-row-custody-native.json",
+      "scope": "Private scalar custody projection over synthetic native values, preserving NULL/empty, native numeric versus original token and exact binary bytes; not codec/domain correspondence, logical result decoding, installed layout or host qualification"
+    },
+    {
+      "name": "docs/helix/04-build/evidence/B-005-select-assembly-native.json",
+      "scope": "Captured original-profile SELECT self-join and physical preflight over synthetic string JSONB rows; callback fixture only, no adopted codecs, native rows, recursive results or host qualification"
+    }
+  ],
+  "trussNextOwnedOutput": "Exact approved binding/physical codec/profile authority and driver/policy/revision/obligation enforcement; reuse Weft compiler ownership and its source evidence without inheriting native qualification.",
+  "nativeRerun": false,
+  "externalMessageSent": false
+}

@@ -1,0 +1,108 @@
+{
+  "status": "unadopted independently authored public binary carrier examples",
+  "scope": "base64 spelling/bytes/length only; no native source custody, production bounds or binary comparison/key support",
+  "vectors": [
+    {
+      "id": "BC01",
+      "text": "",
+      "admitted": true,
+      "expectedHex": ""
+    },
+    {
+      "id": "BC02",
+      "text": "Zg==",
+      "admitted": true,
+      "expectedHex": "66"
+    },
+    {
+      "id": "BC03",
+      "text": "Zm8=",
+      "admitted": true,
+      "expectedHex": "666f"
+    },
+    {
+      "id": "BC04",
+      "text": "Zm9v",
+      "admitted": true,
+      "expectedHex": "666f6f"
+    },
+    {
+      "id": "BC05",
+      "text": "AA==",
+      "admitted": true,
+      "expectedHex": "00"
+    },
+    {
+      "id": "BC06",
+      "text": "/w==",
+      "admitted": true,
+      "expectedHex": "ff"
+    },
+    {
+      "id": "BC07",
+      "text": "AP8A",
+      "admitted": true,
+      "expectedHex": "00ff00"
+    },
+    {
+      "id": "BC08",
+      "text": "Zh==",
+      "admitted": false,
+      "expectedHex": null
+    },
+    {
+      "id": "BC09",
+      "text": "Zm9=",
+      "admitted": false,
+      "expectedHex": null
+    },
+    {
+      "id": "BC10",
+      "text": "Zg",
+      "admitted": false,
+      "expectedHex": null
+    },
+    {
+      "id": "BC11",
+      "text": "Zg=",
+      "admitted": false,
+      "expectedHex": null
+    },
+    {
+      "id": "BC12",
+      "text": "Zg===",
+      "admitted": false,
+      "expectedHex": null
+    },
+    {
+      "id": "BC13",
+      "text": "Z=g=",
+      "admitted": false,
+      "expectedHex": null
+    },
+    {
+      "id": "BC14",
+      "text": "Zg==\n",
+      "admitted": false,
+      "expectedHex": null
+    },
+    {
+      "id": "BC15",
+      "text": "_w==",
+      "admitted": false,
+      "expectedHex": null
+    },
+    {
+      "id": "BC16",
+      "text": " Zg==",
+      "admitted": false,
+      "expectedHex": null
+    },
+    {
+      "id": "BC17",
+      "text": "\u00e9AAA",
+      "admitted": false,
+      "expectedHex": null
+    }
+  ]
+}

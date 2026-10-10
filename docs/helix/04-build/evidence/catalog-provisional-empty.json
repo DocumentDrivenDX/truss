@@ -1,0 +1,14 @@
+{
+  "sourceHashes": {
+    "packages/postgresql/native/catalog-provisional-empty.sql": "754c3c53534a5a30d935a1942da903692c488aab3cd7fed3c0c5231c835f65c8",
+    "packages/umf-bun/src/catalog-report-preparation.ts": "15fd010fac1b8dcfc3de13d0a40f268c299eef45e914c0fc671de7b8816f1fa8",
+    "tests/catalog-report-preparation.test.ts": "1ecc589917315aad9d1790cc316e15ae244e37cc2dea57cfbe4edb9c0b0c3b97",
+    "scripts/check-catalog-new-cohort.ts": "e18c3441c3b1e9e9755c1881158e6872bc7e98b23ff32882c6fce875e252a765"
+  },
+  "runtime": "Bun 1.4.2",
+  "hostTests": 6,
+  "hostAssertions": 81,
+  "nativeReceipt": "catalog-new-cohort.json",
+  "nativeChecks": 68,
+  "scope": "Empty provisional catalog inventory evidence only in private new-only composition. Complete nonempty/provisional lifecycle, role visibility, rebind/index inventories and accepted report publication remain unqualified."
+}

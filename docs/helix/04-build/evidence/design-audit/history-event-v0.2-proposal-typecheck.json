@@ -1,0 +1,36 @@
+{
+  "scope": "proposal TypeScript binding version isolation, operation narrowing and seven negative controls only",
+  "compiler": "/Users/erik/Projects/umf/node_modules/.bin/tsc",
+  "version": "Version 7.0.2",
+  "options": [
+    "--noEmit",
+    "--strict",
+    "--target",
+    "ES2022",
+    "--module",
+    "ESNext",
+    "--moduleResolution",
+    "bundler"
+  ],
+  "sources": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-history-v0.2.proposal.typecheck.ts",
+      "sha256": "87d52a1daaebf60c908ce2444f902ba1aee4a993d8a43a06bf8f1ae5a389dfd0"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-history-v0.2.proposal.d.ts",
+      "sha256": "a1e8ca2fc79de245861172ecb510f3a9c81aafd1ea3a99d80d8b4f23f037db5b"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-history-v0.1.d.ts",
+      "sha256": "c9514718cb22ad0645ab32b81666de95fd952ca40396f762ea2529ba33bb7549"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/truss-history-retain-payload-v0.1.proposal.d.ts",
+      "sha256": "9b79c10193f4d0ac050e9a5cc870d39b94b9584c04860fea567348da03890b33"
+    }
+  ],
+  "exitCode": 0,
+  "nativeExecuted": false,
+  "adopted": false
+}

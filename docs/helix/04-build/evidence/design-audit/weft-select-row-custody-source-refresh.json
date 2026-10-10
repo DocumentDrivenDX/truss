@@ -1,0 +1,20 @@
+{
+  "scope": "Committed SELECT assembly and private scalar custody source review; owner native evidence not rerun by Truss",
+  "head": "67995d24be5fd50c8056fab4c42060876424ce2e",
+  "sourceSha256": {
+    "crates/weft-postgresql/src/select_definition.rs": "77f8ca4a52c08cf579f1cda5c11a52e5589d16df40b26f14a35c94268747280c",
+    "crates/weft-postgresql/src/result_definition.rs": "fd8d3e5ec385a3bc14b216f7fb661d56d87824f9a60edbbd2dc2ece3d8c0b414",
+    "crates/weft-postgresql/src/row_join_definition.rs": "5405ce1086f205fed55ceed5ba249b2c779fd81d0d34ecfc89d01059a7cf19fc",
+    "docs/helix/04-build/evidence/B-005-native-preparation.md": "4e7d22099f6f258c5a008f8fb7c78c7b5a315cd62f4a608ecd0266063e37434b",
+    "docs/helix/04-build/evidence/B-005-select-assembly-native.json": "29e9b4a13d000c262dde995286c0dfdab876f765cf7343dc3bf87a22b0264b1a",
+    "docs/helix/04-build/evidence/B-005-row-custody-native.json": "c9a02209a194554f01d87b3489853faab88a87a8a71d85f7b025def071b3f648",
+    "tests/truss-postgresql/fixtures/select-assembly-emission.json": "4419d65e6411b50a144330f04ba4ca08cb69812c035143588909b06fa90c305d",
+    "tests/truss-postgresql/fixtures/row-custody-emission.json": "33d210784dc73eff235046c1a99dd02ee55c4c9e7a275b10e0ce1a6f0fe2abc8",
+    "tests/truss-postgresql/row-custody-native.py": "0f7567c6371f210b73cf384a6d319904bccf518df29fc0fa09fe2238f6620404"
+  },
+  "rowCaptureHarnessCorrespondence": true,
+  "ownerRowCustodyCases": 16,
+  "nativeExecutionByTruss": false,
+  "publicBackendAdopted": false,
+  "complete": false
+}

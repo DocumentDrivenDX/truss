@@ -1,0 +1,27 @@
+-- Protected initial transaction custody only; unadopted source proposal.
+-- Complete original context/profile admission, absence proof, native exclusion
+-- and resource/containment reservations precede this statement.
+-- The producing transaction must already have an actual assigned native xid.
+INSERT INTO truss.feed_tx AS t (
+  source_epoch, feed_profile, original_writer_xid, registration_counter,
+  prerequisite_registration_counter, configuration_registration_counter,
+  membership_generation, finalized_generation, original_context_bytes,
+  manifest_profile_bytes, manifest_bytes, manifest_sha256)
+SELECT $1::pg_catalog.text, $2::pg_catalog.text,
+  pg_catalog.pg_current_xact_id_if_assigned(),
+  0::pg_catalog.int8, 0::pg_catalog.int8, 0::pg_catalog.int8,
+  0::pg_catalog.int8, NULL::pg_catalog.int8,
+  $3::pg_catalog.bytea, $4::pg_catalog.bytea,
+  NULL::pg_catalog.bytea, NULL::pg_catalog.bytea
+WHERE pg_catalog.pg_current_xact_id_if_assigned() IS NOT NULL
+RETURNING t.source_epoch, t.feed_profile,
+  t.original_writer_xid::pg_catalog.text AS original_writer_xid,
+  t.registration_counter::pg_catalog.text AS registration_counter,
+  t.prerequisite_registration_counter::pg_catalog.text AS prerequisite_registration_counter,
+  t.configuration_registration_counter::pg_catalog.text AS configuration_registration_counter,
+  t.membership_generation::pg_catalog.text AS membership_generation,
+  t.finalized_generation::pg_catalog.text AS finalized_generation,
+  pg_catalog.encode(t.original_context_bytes, 'hex') AS original_context_bytes_hex,
+  pg_catalog.encode(t.manifest_profile_bytes, 'hex') AS manifest_profile_bytes_hex,
+  pg_catalog.encode(t.manifest_bytes, 'hex') AS manifest_bytes_hex,
+  pg_catalog.encode(t.manifest_sha256, 'hex') AS manifest_sha256_hex;

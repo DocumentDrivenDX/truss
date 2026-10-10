@@ -1,0 +1,109 @@
+{
+  "scope": "proposed STP-015 native supplement allocation; not a complete or selected product runtime corpus",
+  "testPlan": "docs/helix/03-test/test-plans/STP-015-journal-every-change-atomically-with-its-origin.md",
+  "testPlanSha256": "591b13724e9f49c0b20e3610605907b1cf7e3e5ea328e55571739eff04d05b7d",
+  "plannedTestFile": "tests/journal/atomic.test.ts",
+  "profileSelection": "reference algorithm/storage/codec/resource/security selected; exact native producer/account/driver/installation tuple unqualified",
+  "cases": [
+    {
+      "id": "JP-01",
+      "function": "capture_complete_original_scope_before_effects",
+      "criteria": [
+        "US-015-AC1",
+        "US-015-AC4"
+      ],
+      "schema": "docs/helix/02-design/contracts/journal-start-capture-v0.2.proposal.schema.json",
+      "shapeReceipt": "docs/helix/04-build/evidence/design-audit/journal-start-capture-audit.json",
+      "shapeReceiptSha256": "578f5280e07ab968a83b2b9a02d0c7dbdc7f7d71f1a560138af29788b2eacaa9",
+      "shapeCases": 16,
+      "nativeStatus": "not_run"
+    },
+    {
+      "id": "JP-02",
+      "function": "observe_original_ordered_semantic_transitions",
+      "criteria": [
+        "US-015-AC1",
+        "US-015-AC4"
+      ],
+      "schema": "docs/helix/02-design/contracts/journal-ordered-transition-v0.2.proposal.schema.json",
+      "shapeReceipt": "docs/helix/04-build/evidence/design-audit/journal-ordered-transition-audit.json",
+      "shapeReceiptSha256": "ac2fa0c87044d2e18dc7ce25bc302420a85fbf878ce0d1eff2650638e9d4a0ba",
+      "shapeCases": 15,
+      "nativeStatus": "not_run"
+    },
+    {
+      "id": "JP-03",
+      "function": "prepare_independent_complete_final_boundaries",
+      "criteria": [
+        "US-015-AC1",
+        "US-015-AC3",
+        "US-015-AC4"
+      ],
+      "schema": "docs/helix/02-design/contracts/journal-final-preparation-v0.2.proposal.schema.json",
+      "shapeReceipt": "docs/helix/04-build/evidence/design-audit/journal-final-preparation-audit.json",
+      "shapeReceiptSha256": "953bc1c1fd3cc0a59193b45c102840102b4046fcf1928ba953c844711a08ea1c",
+      "shapeCases": 17,
+      "nativeStatus": "not_run"
+    },
+    {
+      "id": "JP-04",
+      "function": "reserve_original_complete_sibling_positions",
+      "criteria": [
+        "US-015-AC1",
+        "US-015-AC3"
+      ],
+      "schema": "docs/helix/02-design/contracts/journal-reserved-positions-v0.2.proposal.schema.json",
+      "shapeReceipt": "docs/helix/04-build/evidence/design-audit/journal-reserved-positions-audit.json",
+      "shapeReceiptSha256": "76be39576bf9bc68db10903bbce0b062ef629ab41e0500df035044bf25f64dca",
+      "shapeCases": 15,
+      "nativeStatus": "not_run"
+    },
+    {
+      "id": "JP-05",
+      "function": "append_complete_native_semantic_origin_correspondence",
+      "criteria": [
+        "US-015-AC1",
+        "US-015-AC2",
+        "US-015-AC3",
+        "US-015-AC4"
+      ],
+      "schema": "docs/helix/02-design/contracts/journal-pending-publication-v0.2.proposal.schema.json",
+      "shapeReceipt": "docs/helix/04-build/evidence/design-audit/journal-pending-publication-audit.json",
+      "shapeReceiptSha256": "cf6d38ce3deb52d085019aee2a14c987583e2beb7ea6121647c5e48c7e540153",
+      "shapeCases": 19,
+      "nativeStatus": "not_run"
+    }
+  ],
+  "nativeExecuted": false,
+  "adopted": false,
+  "supplementSchedules": [
+    "exact_phase_bytes",
+    "resource_admission",
+    "complete_empty_operation",
+    "frozen_final_generation",
+    "lost_response_at_each_phase",
+    "private_rights_closure",
+    "recovery_retention_crossover"
+  ],
+  "phaseResourceProposal": {
+    "path": "docs/helix/02-design/contracts/bindings/truss-journal-phase-resource-v0.2.proposal.json",
+    "sha256": "a5831813b443f0d970e2ea9904637cb420929ae4a969bb2ef264996e9378ff4e"
+  },
+  "referenceSelections": {
+    "allocation": "original journal_seq; protected one-time reservation; explicit seq append",
+    "staging": "row_home_journal_stage explicit-start branch under original row_home_operation",
+    "codec": "truss-journal-phase-json/0.2.0-proposal",
+    "resources": "truss-journal-phase-resource/0.2.0-proposal shared cumulative account",
+    "security": "private PL/pgSQL SECURITY DEFINER journal-phase owner; no sealing/canonical mutation/cleanup/reset authority"
+  },
+  "governingSelectionSources": [
+    {
+      "path": "docs/helix/02-design/contracts/CONTRACT-002-journal.md",
+      "sha256": "87f4130ad1954cf2f6804c6ba9cac5e9177859072457310fb77f69fb41774ecc"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/CONTRACT-005-module-isolation.md",
+      "sha256": "ff03ebd23c91cdedfa5e5cacb115c9673bc612a16661f4dadf5eada423337be3"
+    }
+  ]
+}

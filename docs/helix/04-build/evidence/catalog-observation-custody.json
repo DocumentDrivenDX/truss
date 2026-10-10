@@ -1,0 +1,74 @@
+{
+  "producerManifests": [
+    {
+      "revision": "c45c72a2a8a3c4fba61c40c5927dd9091acf8cc3",
+      "archiveSha256": "aa3ff171f8adbdbb6a0ad729dbcb2825dd2299b98e6d90a4e8e1e84835247838",
+      "bundleSha256": "ff990a3f9847a1bc0844fc6e637365462979efc3dcbec27383d4002943d64d83",
+      "operations": [
+        "readDocument",
+        "validateDocument",
+        "validateCoreRecordValues",
+        "upgradeSchemaPropertiesEnvelope",
+        "verifySchemaPropertiesUpgrade",
+        "rollbackSchemaPropertiesEnvelope"
+      ],
+      "scope": "Original logical UMF producers only; no native acceptance/containment qualification."
+    },
+    {
+      "revision": "c45c72a2a8a3c4fba61c40c5927dd9091acf8cc3",
+      "producerMode": "declarations",
+      "buildDependencies": {
+        "yaml": {
+          "version": "2.9.1",
+          "packageSha256": "1c6441703d8204a23ded0d37ddf57c3b69d821dc392f20852d1f605bb9b8861c"
+        },
+        "ajv": {
+          "version": "8.20.0",
+          "packageSha256": "1f9033ee5a6515e7d76938b7072941862d1ed228a6879cc7fe10cdeb75107989"
+        }
+      },
+      "archiveSha256": "aa3ff171f8adbdbb6a0ad729dbcb2825dd2299b98e6d90a4e8e1e84835247838",
+      "bundleSha256": "074cf378afb702ffd84d6924ae4b37817cad5324a4adc587fa30c541e1cfb216",
+      "operations": [
+        "inspectCoreSchemaProperties",
+        "inspectCoreKeys",
+        "inspectCoreRelationships"
+      ],
+      "scope": "Original logical UMF producers only; no native acceptance/containment qualification."
+    },
+    {
+      "revision": "c45c72a2a8a3c4fba61c40c5927dd9091acf8cc3",
+      "producerMode": "assertion-fields",
+      "buildDependencies": {
+        "yaml": {
+          "version": "2.9.1",
+          "packageSha256": "1c6441703d8204a23ded0d37ddf57c3b69d821dc392f20852d1f605bb9b8861c"
+        },
+        "ajv": {
+          "version": "8.20.0",
+          "packageSha256": "1f9033ee5a6515e7d76938b7072941862d1ed228a6879cc7fe10cdeb75107989"
+        }
+      },
+      "archiveSha256": "aa3ff171f8adbdbb6a0ad729dbcb2825dd2299b98e6d90a4e8e1e84835247838",
+      "bundleSha256": "860e70082df1706132fe6389e5274bb45c70783ddc547f4c4950c1a94fea5f67",
+      "operations": [
+        "inspectCoreElementKind",
+        "inspectCoreNullability",
+        "inspectCoreCardinality",
+        "inspectCoreFacets"
+      ],
+      "scope": "Original logical UMF producers only; no native acceptance/containment qualification."
+    }
+  ],
+  "sourceHashes": {
+    "packages/umf-bun/src/index.ts": "e4a835e02edd994c7577c6b0b3137c6aca9904f4860df7027b5187b722342ffe",
+    "packages/umf-bun/src/catalog-assertion-observations.ts": "9690fcc2c057cc667e4355e9a45f182cec3a757f8fb17e6fd6646b0c479e666e",
+    "packages/umf-bun/src/catalog-observation-coverage.ts": "dd582c349239ca135451c66d2ed6f89b076396fa7da48adeeb53150f0fbdbd50",
+    "tests/umf-declaration-producer.test.ts": "5596d725b6a0fa23eb64b48aabaca7d23b25f470e85c17a514c1eee41cbc2bb8",
+    "tests/umf-field-assertion-producer.test.ts": "5affaca55e0ef9d76969d6b1e2552048c372cac235563c81fb1fd88cf44a37d1"
+  },
+  "runtime": "Bun 1.4.2",
+  "tests": 13,
+  "assertions": 61,
+  "scope": "Private loaded owner instance and original collection/prepared-input in-process correspondence. No external issuer attestation, driver/native custody, durable provenance, enforcement or accepted publication."
+}

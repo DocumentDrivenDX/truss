@@ -1,0 +1,32 @@
+{
+  "candidateCommit": "65d6106",
+  "status": "committed-source-review-only",
+  "nativeTestsRerun": false,
+  "sources": [
+    {
+      "path": "packages/postgresql/src/index.ts",
+      "bytes": 37031,
+      "sha256": "eac91350fc11ab4ddc774b19de7594c7a7fe68ef188c7e50e254565e34141ef4"
+    },
+    {
+      "path": "packages/pg-runtime/src/index.ts",
+      "bytes": 4122,
+      "sha256": "2788e19627563d5ef7e426c30ead7837b006c41003e0b4e6ce326687cfd01ea8"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/inert-assembly/README.md",
+      "bytes": 20684,
+      "sha256": "5e8f193eab13202973471888d74dac08cd885f2e847baedb38e63e5cc5508b9e"
+    },
+    {
+      "path": "tests/operation-registry.test.ts",
+      "bytes": 1593,
+      "sha256": "896796a5d9a15408a3b93d7ff2a8ed1fc6ec0446f43b156b0a8f2f5b56fef13b"
+    },
+    {
+      "path": "scripts/check-pg-executor.ts",
+      "bytes": 10128,
+      "sha256": "d44f73729bfb88be05c3aa6f1d000ef8b39e3e324afcae70ea3e07ccb231e44b"
+    }
+  ]
+}

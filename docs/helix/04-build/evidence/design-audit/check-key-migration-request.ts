@@ -1,0 +1,26 @@
+/** Shape probes; invented profile/artifact fixtures are never admitted native evidence. */
+const {default:Ajv}=await import(process.argv[2]);
+const root='docs/helix/02-design/contracts/';
+const validate=new Ajv({strict:true}).addSchema(await Bun.file(root+'acceptance-input-v0.1.schema.json').json()).compile(await Bun.file(root+'key-profile-migration-v0.1.schema.json').json());
+const pin={identity:'unqualified-fixture',version:'0.1.0',sha256:'0'.repeat(64)};
+const artifact={identity:'fixture',bytesBase64:'eA==',sha256:'0'.repeat(64)};
+const basis={layout:pin,catalog:artifact,encoding:pin,bucket:pin,installedPolicy:artifact};
+const request={interfaceVersion:'truss-key-profile-migration/0.1.0',sourceEpoch:'epoch',installationId:'installed',source:basis,target:basis,procedure:pin,resource:pin,conversion:{state:'none'},targetPhysicalInventory:artifact,transitionProfile:pin,limits:{inventoryRows:'100',inventoryBytes:'1000',reportBytes:'1000',workUnits:'100'}};
+const failures:string[]=[];let cases=0;
+const probe=(name:string,expected:boolean,mutate:(x:any)=>void)=>{const v=structuredClone(request);mutate(v);cases++;if(Boolean(validate(v))!==expected)failures.push(name);};
+probe('complete unqualified shape',true,()=>{});
+probe('explicit conversion',true,v=>v.conversion={state:'selected',profile:pin});
+probe('missing source bytes',false,v=>delete v.source.catalog.bytesBase64);
+probe('missing target policy',false,v=>delete v.target.installedPolicy);
+probe('missing conversion pin',false,v=>v.conversion={state:'selected'});
+probe('implicit conversion pin',false,v=>v.conversion.profile=pin);
+probe('leading zero bound',false,v=>v.limits.inventoryRows='010');
+probe('zero bound',false,v=>v.limits.workUnits='0');
+probe('host numeric bound',false,v=>v.limits.reportBytes=1000);
+probe('stale assessment permit',false,v=>v.assessment={state:'complete'});
+probe('unknown request field',false,v=>v.rawSql='caller DDL');
+probe('missing transition profile',false,v=>delete v.transitionProfile);
+probe('forged content digest remains structural',true,v=>v.target.catalog.sha256='f'.repeat(64));
+probe('unsupported profile remains structural',true,v=>v.procedure.identity='unsupported-fixture');
+const receipt={scope:'14 structural request probes only; forged bytes/profile controls need semantic admission, no native qualification',cases,failures};
+await Bun.write('docs/helix/04-build/evidence/design-audit/key-migration-request.json',JSON.stringify(receipt,null,2)+'\n');console.log(JSON.stringify(receipt));if(failures.length)process.exit(1);

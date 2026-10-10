@@ -1,0 +1,41 @@
+{
+  "scope": "Read-only branch source/API inspection; no package/native/consumer qualification",
+  "checkout": "/Users/erik/.codex/worktrees/7eb8/umf",
+  "revision": "88be379f399e9f2a376fdd71a0c73420cd504357",
+  "keyTuple": {
+    "operationVersion": "3.0.0",
+    "profile": "umf-key-tuple-v1",
+    "acceptedCoreEnvelopes": [
+      "0.8.0"
+    ],
+    "noAutomaticCompatibility": [
+      "0.6.0",
+      "0.7.0",
+      "0.9.0"
+    ]
+  },
+  "semanticTypes": {
+    "coreEnvelope": "0.9.0",
+    "inspectionDeclarationOperationVersion": "1.0.0",
+    "olderEnvelopeMeaning": "legacy opaque",
+    "nativeProjection": "outside profile"
+  },
+  "sources": [
+    {
+      "path": "src/model/key-tuple.ts",
+      "sha256": "a59ca480ffa394d30228660bbecf485c736a62111d97a99f01ff8598174bb1e2"
+    },
+    {
+      "path": "src/model/semantic-types.ts",
+      "sha256": "b8f2c1be5beff68ffa633ec7278abcb464e5fc98b5caadf85220c1d52d286737"
+    },
+    {
+      "path": "src/index.ts",
+      "sha256": "b36cb7e8d12ad86509e50970c7819798a2b00a6068c28fc1930f484c1c9506c0"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/CONTRACT-051-semantic-types.md",
+      "sha256": "ae4d7381758c59fc06b4b62b846f4301b8e55f0f0c49e7e40c005d3a285db5c0"
+    }
+  ]
+}

@@ -1,0 +1,128 @@
+import {test,expect} from 'bun:test';
+import {createQueryEngine,serializeStorageBinding,WEFT_SOURCE,type Compiler,type Host,type BindingInput} from '../../packages/weft/src/index';
+import {loadCompiler} from '../../packages/weft-bun/src/index';
+import request from './fixtures/qualified-count.request.json';
+const directory=process.env.TRUSS_WEFT_BUILD ?? '/private/tmp/truss-weft-f05f2df';
+const compiler=await loadCompiler(directory);
+const input:BindingInput={...request.target,modules:request.modules as BindingInput['modules']};
+test('actual pinned Rust compiler compiles count and retains original artifact',async()=>{
+ const engine=await createQueryEngine(compiler,input);const plan=await engine.compile('SELECT COUNT(*) AS total FROM Customer c');
+ expect(WEFT_SOURCE).toBe('f05f2df09e9c2494ac8c6d703dfe38413dbc4181');
+ expect(plan.artifact.backend.backendVersion).toBe('0.1.0-qualified');
+ expect(plan.artifact.sql).toContain('count(*)::text');expect(Object.isFrozen(plan.artifact)).toBe(true);
+ await expect(engine.execute(plan)).rejects.toThrow('Original native query host not installed');
+});
+test('binding and model byte substitution refuse before compiler invocation',async()=>{
+ let called=false;const never:Compiler={compileJson(){called=true;throw Error('unexpected')}};
+ await expect(createQueryEngine(never,{...input,bindingJson:input.bindingJson+' '})).rejects.toThrow('Binding bytes/hash mismatch');
+ await expect(createQueryEngine(never,{...input,modules:[{...input.modules[0],documentJson:'{}'}]})).rejects.toThrow('Original module bytes/hash mismatch');expect(called).toBe(false);
+});
+test('actual compiler rejects unavailable layout/profile without executing SQL',async()=>{
+ const engine=await createQueryEngine(compiler,{...input,targetProfile:'truss-reference-history/0.12'});
+ await expect(engine.compile('SELECT COUNT(*) AS total FROM Customer c')).rejects.toThrow('WFT-');
+});
+test('unknown obligations refuse before any native acquisition',async()=>{
+ let acquired=false;const host:Host={handlers:{},async withReadContext(){acquired=true;throw Error('unexpected')},async decode(){throw Error('unexpected')}};
+ const engine=await createQueryEngine(compiler,input,host);const plan=await engine.compile('SELECT COUNT(*) AS total FROM Customer c');
+ await expect(engine.execute(plan)).rejects.toThrow('Unknown obligation meaning');expect(acquired).toBe(false);
+});
+test('foreign plan and source parameter injection fail without SQL',async()=>{
+ const engine=await createQueryEngine(compiler,input),other=await createQueryEngine(compiler,input);const plan=await engine.compile('SELECT COUNT(*) AS total FROM Customer c');
+ await expect(other.execute(plan)).rejects.toThrow('Foreign or substituted');
+ await expect(engine.compile('SELECT c.id FROM Customer c WHERE c.id > :cursor ORDER BY c.id LIMIT 2',{cursor:{family:'integer',value:'0; DROP TABLE object'}})).rejects.toThrow();
+});
+test('host checks precede SQL; publication recheck failure releases no result',async()=>{
+ const events:string[]=[];let verifies=0;const seed=await createQueryEngine(compiler,input);const original=await seed.compile('SELECT COUNT(*) AS total FROM Customer c');
+ // Unit host: this models ordering only, never claims native authorization/evidence.
+ const handlers=Object.fromEntries(original.artifact.obligations.map(o=>[o.id,{accepts:(x:any)=>JSON.stringify(x)===JSON.stringify(o),async check(){events.push('check:'+o.id)}}]));
+ const host:Host={handlers,async withReadContext(body){return body({async verifyContext(){events.push('context');if(++verifies===2)throw Error('context drift')},async query(){events.push('sql');return [['9007199254740993']]}})},async decode(_a,rows){events.push('decode');return rows.map(r=>({integerToken:r[0]}))}};
+ const engine=await createQueryEngine(compiler,input,host);const plan=await engine.compile('SELECT COUNT(*) AS total FROM Customer c');
+ await expect(engine.execute(plan)).rejects.toThrow('context drift');
+ expect(events[0]).toBe('context');expect(events.indexOf('sql')).toBe(original.artifact.obligations.length+1);expect(events.at(-1)).toBe('context');
+});
+
+test('real queries exercise exact numeric, whole record, presence and logical-key parameters',async()=>{
+ const engine=await createQueryEngine(compiler,input);
+ const queries=[
+  'SELECT c.* FROM Customer c ORDER BY c.id LIMIT 10',
+  'SELECT c.id,c.nickname,c.tags,c.address FROM Customer c ORDER BY c.id LIMIT 10',
+  'SELECT SUM(o.total) AS total FROM Orders o',
+  'SELECT c.name,COUNT(*) AS total FROM Customer c GROUP BY c.name ORDER BY c.name LIMIT 1000'
+ ];
+ for(const sql of queries){const plan=await engine.compile(sql);expect(plan.artifact.sql.length).toBeGreaterThan(0)}
+ const paged=await engine.compile('SELECT c.id FROM Customer c WHERE c.id > :cursor ORDER BY c.id LIMIT 2',{cursor:{family:'integer',value:'9007199254740993'}});
+ expect(paged.artifact.parameters.some(p=>p.value==='9007199254740993')).toBe(true);
+ const quoted=await engine.compile('SELECT c.id FROM Customer c WHERE c.name = :name ORDER BY c.id LIMIT 20',{name:{family:'string',value:"x'; DROP TABLE object; --"}});
+ expect(quoted.artifact.sql).not.toContain('DROP TABLE');expect(quoted.artifact.parameters.some(p=>p.value.includes('DROP TABLE'))).toBe(true);
+});
+
+test('owner binding serializer refuses fixture catalog and altered embedded artifact',async()=>{
+ const binding=JSON.parse(input.bindingJson);
+ const source={binding,modules:input.modules,backendVersion:input.backendVersion,targetProfile:input.targetProfile};
+ await expect(serializeStorageBinding(source)).rejects.toThrow('Positive original accepted catalog revision');
+ binding.basis.catalogRevision='1';binding.basis.acceptedCatalog.bytesBase64='W10=';
+ await expect(serializeStorageBinding(source)).rejects.toThrow('Original artifact hash mismatch');
+});
+
+test('unsupported aggregate filter is an explicit compiler refusal, never host rewrite',async()=>{
+ const engine=await createQueryEngine(compiler,input);
+ await expect(engine.compile('SELECT SUM(o.total) AS total FROM Orders o WHERE o.id < :cursor',{cursor:{family:'integer',value:'0'}})).rejects.toThrow('WFT-UNSUPPORTED');
+});
+
+test('dispose refuses retained plans and new compiler calls',async()=>{
+ const engine=await createQueryEngine(compiler,input);const plan=await engine.compile('SELECT COUNT(*) AS total FROM Customer c');engine.dispose();engine.dispose();
+ await expect(engine.compile('SELECT COUNT(*) AS total FROM Customer c')).rejects.toThrow('Query engine disposed');
+ await expect(engine.execute(plan)).rejects.toThrow('Query engine disposed');
+});
+test('dispose during compilation prevents plan publication',async()=>{
+ let finish!:(value:string)=>void;
+ const delayed:Compiler={compileJson(){return new Promise(resolve=>{finish=resolve})}};
+ const engine=await createQueryEngine(delayed,input);const pending=engine.compile('SELECT COUNT(*) AS total FROM Customer c');engine.dispose();
+ finish('{}');await expect(pending).rejects.toThrow('Query engine disposed');
+});
+test('registered compiler and host functions cannot be replaced after construction',async()=>{
+ const original=await createQueryEngine(compiler,input);const plan=await original.compile('SELECT COUNT(*) AS total FROM Customer c');
+ const mutable={compileJson:compiler.compileJson};
+ const handlers=Object.fromEntries(plan.artifact.obligations.map(o=>[o.id,{accepts:()=>true,async check(){}}]));
+ const host:Host={handlers,async withReadContext(body){return body({async verifyContext(){},async query(){return [['2']]}})},async decode(){return [{integerToken:'2'}]}};
+ const engine=await createQueryEngine(mutable,input,host);
+ mutable.compileJson=()=>{throw Error('replaced compiler')};host.withReadContext=async()=>{throw Error('replaced host')};host.decode=async()=>{throw Error('replaced decoder')};host.handlers={};
+ const admitted=await engine.compile('SELECT COUNT(*) AS total FROM Customer c');expect(await engine.execute(admitted)).toEqual([{integerToken:'2'}]);
+});
+
+test('disposal during a native check stops data SQL without settling host transaction',async()=>{
+ const seed=await createQueryEngine(compiler,input);const plan=await seed.compile('SELECT COUNT(*) AS total FROM Customer c');let queried=false,settled=false;
+ let engine:Awaited<ReturnType<typeof createQueryEngine>>;
+ const handlers=Object.fromEntries(plan.artifact.obligations.map(o=>[o.id,{accepts:()=>true,async check(){engine.dispose()}}]));
+ const host:Host={handlers,async withReadContext(body){try{return await body({async verifyContext(){},async query(){queried=true;return [['2']]}})}finally{settled=true}},async decode(){throw Error('unexpected decoder')}};
+ engine=await createQueryEngine(compiler,input,host);const admitted=await engine.compile('SELECT COUNT(*) AS total FROM Customer c');
+ await expect(engine.execute(admitted)).rejects.toThrow('Query engine disposed');expect(queried).toBe(false);expect(settled).toBe(true);
+});
+test('disposal during host settlement withholds its buffered result',async()=>{
+ const seed=await createQueryEngine(compiler,input);const plan=await seed.compile('SELECT COUNT(*) AS total FROM Customer c');
+ let engine:Awaited<ReturnType<typeof createQueryEngine>>;
+ const handlers=Object.fromEntries(plan.artifact.obligations.map(o=>[o.id,{accepts:()=>true,async check(){}}]));
+ const host:Host={handlers,async withReadContext(body){const result=await body({async verifyContext(){},async query(){return [['2']]}});engine.dispose();return result},async decode(){return [{integerToken:'2'}]}};
+ engine=await createQueryEngine(compiler,input,host);const admitted=await engine.compile('SELECT COUNT(*) AS total FROM Customer c');
+ await expect(engine.execute(admitted)).rejects.toThrow('Query engine disposed');
+});
+
+test('new positional metadata cannot enter an old-profile plan or acquire native context',async()=>{
+ let acquired=0;
+ const host:Host={handlers:{'weft.output.positioned':{accepts:()=>true,async check(){}}},
+  async withReadContext(){acquired++;throw Error('unexpected native acquisition')},async decode(){throw Error('unexpected decode')}};
+ for(const mutation of ['carrier','null-carrier','obligation','version']){
+  const changed:Compiler={async compileJson(raw){
+   const artifact=JSON.parse(await compiler.compileJson(raw));
+   expect(artifact.status).toBe('compiled');
+   if(mutation==='carrier')artifact.columns[0].carrierName='_weft_output_1';
+   else if(mutation==='null-carrier')artifact.columns[0].carrierName=null;
+   else if(mutation==='obligation')artifact.obligations.push({id:'weft.output.positioned',owner:'host',failureCode:'WFT-OBLIGATION',parameters:{profile:'weft-positioned-output/0.3.0'}});
+   else {artifact.interfaceVersion='weft-compile/0.3.0';artifact.dialect='weft-sql/0.3.0'}
+   return JSON.stringify(artifact);
+  }};
+  const engine=await createQueryEngine(changed,input,host);
+  await expect(engine.compile('SELECT COUNT(*) AS total FROM Customer c')).rejects.toThrow(mutation==='version'?'Compiler artifact context drift':'Positional output metadata');
+ }
+ expect(acquired).toBe(0);
+});

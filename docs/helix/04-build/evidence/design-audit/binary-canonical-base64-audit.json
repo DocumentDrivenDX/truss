@@ -1,0 +1,14 @@
+{
+  "status": "pass",
+  "cases": 17,
+  "admitted": 7,
+  "refused": 10,
+  "libraryAcceptedRefusedSpellings": [
+    "BC08",
+    "BC09"
+  ],
+  "fixtureSha256": "b06ef9131c667dbef28bf65de4dd8f1cfb9ad4537b42f7874b74bf85aff44191",
+  "scope": "base64 spelling/bytes/length only; no native source custody, production bounds or binary comparison/key support",
+  "nativeExecuted": false,
+  "profileAdopted": false
+}

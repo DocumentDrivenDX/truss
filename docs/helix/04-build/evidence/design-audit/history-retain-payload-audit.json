@@ -1,0 +1,81 @@
+{
+  "validator": {
+    "name": "ajv",
+    "version": "8.17.1"
+  },
+  "runtime": {
+    "bun": "1.4.2",
+    "nodeCompatibility": "26.3.0"
+  },
+  "sourceSha256": {
+    "history-retain-payload-v0.1.proposal.schema.json": "fc08e07a4b09636ac234737be9bb2cf3a9a3c26120baad612176574c17659605",
+    "exact-value-v0.1.schema.json": "0c804796bfbf68339c299f0c55d24db58fcfcc929bffe2d5ffaf4a2f27e24880"
+  },
+  "helperSha256": "ccac304befb58e54886b2a7a0e22802431381b215d0f3247c6822d3839bbe46b",
+  "scope": "Proposed retained-addition payload shape only; no complete event/identity/context/prestate/native/profile qualification",
+  "cases": 12,
+  "outcomes": [
+    {
+      "name": "addition",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "two names one payload",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "empty literal name needs selected carrier",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "empty inventory",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "replacement",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "removal",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "missing after value",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "absent with stray value",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "empty source context",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "unknown field",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "duplicate names need semantic refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "forged context needs original admission",
+      "expected": true,
+      "actual": true
+    }
+  ],
+  "nativeEvidence": false,
+  "profileAdopted": false
+}

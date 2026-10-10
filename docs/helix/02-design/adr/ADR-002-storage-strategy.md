@@ -39,7 +39,7 @@ Terminology: UMF is DocumentDrivenDX's machine-readable metamodel and schema
 interchange fabric. SQL is Structured Query Language; PostgreSQL JSONB is its
 binary JSON storage type. DDL means data definition language, FK means foreign
 key, and p95 is the 95th percentile. PRD means product requirements document;
-the project PRD has not yet been authored.
+the project PRD is [01-frame/prd.md](../../01-frame/prd.md) (draft).
 HOT means PostgreSQL heap-only tuple updates; WAL is PostgreSQL's write-ahead
 log. RFC 3339 is the IETF date and time format used by D3. DDD means
 domain-driven design; `umf.ddd` is UMF's semantic projection.
@@ -335,6 +335,26 @@ projection of the journal.
   is visible only to a role that can read the relationship's module and both
   endpoint types' modules.
 - truss does not authenticate people or choose which role a person gets.
+
+### D15. Change feed and grouped operations
+
+*(choice; layout 0.2)*
+
+- The journal is the feed to any downstream copy. CONTRACT-006 states what a
+  publisher must preserve: every committed change once in `(xid, seq)` order below
+  the safe watermark, deletes carrying the old record, catalog revisions before
+  the first change that uses them, at-least-once delivery applied idempotently,
+  and an observable lag. It chooses no transport.
+- Consumers register a position in `feed_consumer`, and retention does not drop a
+  journal partition that holds rows past the lowest position.
+- A caller may apply several operations as one atomic group (`apply_group`,
+  CONTRACT-004): one catalog check, one origin, ordered locks, all or nothing. A
+  request id in the origin makes a group idempotent with no table of its own: a
+  partial index finds the rows of an earlier group, and an advisory lock serializes
+  concurrent duplicates *(evidence: SPIKE-003 F10)*.
+- Any operation or group may run inside a transaction the caller controls and
+  leaves nothing if the caller rolls it back, so a caller can inspect the effects of
+  a change before deciding to keep it.
 
 ### D12. UMF boundary
 

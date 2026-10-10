@@ -1,0 +1,17 @@
+{
+  "owner": "DocumentDrivenDX/weft",
+  "revision": "5856c73db0342363e64802905a94abb96209d757",
+  "sources": {
+    "README.md": "f242ac7a999d9bf7d34e6968cc6e4dd3f5cc37ffb41680ab1710b332365841a8",
+    "docs/helix/02-design/contracts/CONTRACT-004-application-reads.md": "02274cde86dd042c47035200297f329316d807b49b606da8327734ef32c552cf",
+    "crates/weft-core/src/lib.rs": "14bfafe7cb203db53fd4ed2637498a3ebce3d428849d86d17a1d98b5c5ca0c33",
+    "crates/weft-core/src/compile.rs": "e69168d9223f474ded1173df04a8fc33e3cf39dd93bcdf267ecfcb74216660a8",
+    "crates/weft-python/src/lib.rs": "4a348481922988a364ab280b6f3fb4fae1a9940afa447e4282f4a704b6905366"
+  },
+  "observations": [
+    "Explicit 0.2 application read semantics include complete entity/keyset/count/relationship/typed parameters",
+    "Committed Python compile_json invokes SQL-text compilation; no public parsed-statement Python input observed",
+    "Compiler fixture qualification remains separate from installed Truss mapping/security/index/transaction support"
+  ],
+  "scope": "Committed owner-source review only, no native Truss read/performance qualification."
+}

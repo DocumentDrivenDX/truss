@@ -1,0 +1,37 @@
+{
+  "interfaceVersion": "truss-journal-phase-resource/0.2.0-proposal",
+  "status": "selected_reference_policy; native phase parser/encoder/account/staging unqualified",
+  "scope": "One private journal phase parse/encode occurrence and its actual staging/copies within the original operation/group/transaction/retention account; never an independent budget",
+  "derivedConstraints": [
+    {
+      "path": "truss-native-custody-parser-resource-v0.1.proposal.json",
+      "sha256": "e19b654af2e2e3529d559584d133ff269af889f12684e60db67007beac4607c1"
+    }
+  ],
+  "limits": {
+    "oneOriginalEnvelopeBytes": "8388608",
+    "containerDepth": "64",
+    "tokenOccurrences": "262144",
+    "objectMemberOccurrences": "65536",
+    "oneStringSourceBytes": "8388608",
+    "peakOwnedBytes": "134217728",
+    "cumulativeAllocationBytes": "536870912",
+    "abstractWorkUnits": "32000000",
+    "wallDeadlineMilliseconds": "30000"
+  },
+  "counting": {
+    "depth": "Root object depth one; increment only object/array container nesting outside strings. Embedded artifact bytes are not JSON nesting.",
+    "tokens": "Reuse original custody token counting; raw JSON number nodes are additionally unsupported for the phase grammar and refuse after their bounded lexical observation. Refused tokens and duplicate members still charge actual work.",
+    "members": "Every object name/value member occurrence, including duplicates that later refuse.",
+    "strings": "Source bytes inside quotes including escape spellings; decoded text/UTF-8 and copied substring representations charged separately.",
+    "work": "Every scanned/decoded/hashed/copied/compared byte, member/token/lookup/allocation operation and uniqueness comparison; repeated parser passes and envelopes charge again.",
+    "preflight": "Read original source length and reserve complete selected materialization before allocation; bounded byte lexical scan precedes recursive native JSON parse. Unknown native detoast/parser scratch upper bound refuses this profile.",
+    "aggregate": "Minimum of applicable original row/operation/group/transaction/retention/phase caps and their remaining shared budget. Repeated calls or new phase names cannot reset work/allocation/deadline; unresolved custody remains reserved, spent work remains spent.",
+    "deadline": "Minimum stage/enclosing deadline from original invocation admission; preflight does not reset the clock. Native parsing must have selected actual cancellation/containment.",
+    "maxima": "Independent maxima do not promise simultaneous fit. A row total bound covers all original carriers, not a new 8 MiB entitlement for every carrier.",
+    "sortRegeneration": "Charge every member-name UTF-8 validation/sort comparison and byte visit, canonical output byte/allocation, original/regenerated equality comparison, full schema and native semantic traversal. Preserve domain-array order. Unknown sorting/parser/native copy upper bounds refuse before materialization.",
+    "staging": "Every start/transition/final/reserved/publication occurrence, original request/result, component wrapper/decoded byte and native/host/stage/cleanup copy charges its actual retained/working ledger. Identical hashes or bytes do not eliminate actual copies. The original parent carriers and separate immutable stages share capacity.",
+    "phaseLifetime": "Before capture and each growth/transition, prove complete original phase/stage obligations and at least one whole-operation cleanup cohort fit every enclosing selected limit. Never drop earlier transitions or split a group to fit the per-envelope ceiling. Unsupported maximum combinations remain explicit profile refusal, not a narrowed product support claim."
+  },
+  "adoption": "Select exact original phase codec/schema/native body/driver/staging/cleanup/account/build tuple; independently qualify original pre-materialization bounds, repeated phase passes, exact/one-over limits, cancellation/containment and whole-operation cleanup fit."
+}

@@ -1,0 +1,501 @@
+{
+  "scope": "Existing UMF capture/reload/export of complete-feed consumer state, its allocator and nonunique identity route only; no owner adoption, native installation, complete lineage uniqueness, policy/grant conversion or compiler binding qualification",
+  "ownerSource": {
+    "root": "/Users/erik/Projects/umf",
+    "commit": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+    "status": "",
+    "files": [
+      {
+        "path": "native/postgresql/runtime.ts",
+        "sha256": "a88fea4cf15c9c3c3f0ad1f0a36d8f5de42a42ce8ea9712499f609beee3ea751"
+      },
+      {
+        "path": "src/adapters/postgresql/index.ts",
+        "sha256": "7baa071d95e5f9863a4ce2bf892d87fb27cab9d8605ba4cf8887016d14ca17b4"
+      },
+      {
+        "path": "src/adapters/postgresql/declarations.ts",
+        "sha256": "e47ebd6366fee86fb8ccaf1270555bcd338957bff511f30cdcae22a088c6d8d9"
+      },
+      {
+        "path": "src/model/document.ts",
+        "sha256": "a0422042659defdea425dff8bb0618eaa4bbf125f68da16aa5ad21af0b6c282f"
+      },
+      {
+        "path": "spec/extensions/postgresql/native-ast.schema.json",
+        "sha256": "aa3d3b50bc04edbc3ab3430e113ee8710edb1c10ff5cee15d4bcc7b16d9a9039"
+      },
+      {
+        "path": "bun.lock",
+        "sha256": "98a99f7d306f7269db103bdbfafe5f9ad9ed34b02024276ad0cce45df27f5cc3"
+      }
+    ]
+  },
+  "backend": "@libpg-query/parser@17.6.10",
+  "path": "docs/helix/02-design/contracts/feed-recovery-layout-v0.1.proposal.sql",
+  "sourceSha256": "0a4c426b2716ed4aa04c453a9096a45fb0d9a679d9be133400295bbe4d1d9022",
+  "artifactPath": "docs/helix/02-design/contracts/feed-recovery-layout-v0.1.proposal.umf.json",
+  "artifactSha256": "ba1f791bcb80cc8d2b8fbdd09841d2f0dd3767c68e59d8dac4db3894e7b90d88",
+  "exportSha256": "3a8fb7b8c3e0a5e2fffbb32656afbea9b716b1e61224133204bd22ac77ee16e8",
+  "sourceArchiveExact": true,
+  "reloadedExportExact": true,
+  "complete": false,
+  "declarations": [
+    {
+      "kind": "create-table",
+      "path": "/stmts/1/stmt/CreateStmt",
+      "requiresCatalogExpansion": false,
+      "columns": [
+        {
+          "path": "/stmts/1/stmt/CreateStmt/tableElts/0/ColumnDef",
+          "name": "storage_row_id",
+          "typeResolution": "builtin-syntax",
+          "syntacticScalarFamily": "integer"
+        },
+        {
+          "path": "/stmts/1/stmt/CreateStmt/tableElts/1/ColumnDef",
+          "name": "source_epoch",
+          "typeResolution": "unresolved"
+        },
+        {
+          "path": "/stmts/1/stmt/CreateStmt/tableElts/2/ColumnDef",
+          "name": "administrative_namespace",
+          "typeResolution": "unresolved"
+        },
+        {
+          "path": "/stmts/1/stmt/CreateStmt/tableElts/3/ColumnDef",
+          "name": "request_id",
+          "typeResolution": "unresolved"
+        },
+        {
+          "path": "/stmts/1/stmt/CreateStmt/tableElts/4/ColumnDef",
+          "name": "identity_bytes",
+          "typeResolution": "unresolved"
+        },
+        {
+          "path": "/stmts/1/stmt/CreateStmt/tableElts/5/ColumnDef",
+          "name": "identity_sha256",
+          "typeResolution": "unresolved"
+        },
+        {
+          "path": "/stmts/1/stmt/CreateStmt/tableElts/6/ColumnDef",
+          "name": "canonical_input_bytes",
+          "typeResolution": "unresolved"
+        },
+        {
+          "path": "/stmts/1/stmt/CreateStmt/tableElts/7/ColumnDef",
+          "name": "input_profile_bytes",
+          "typeResolution": "unresolved"
+        },
+        {
+          "path": "/stmts/1/stmt/CreateStmt/tableElts/8/ColumnDef",
+          "name": "receipt_bytes",
+          "typeResolution": "unresolved"
+        },
+        {
+          "path": "/stmts/1/stmt/CreateStmt/tableElts/9/ColumnDef",
+          "name": "receipt_profile_bytes",
+          "typeResolution": "unresolved"
+        },
+        {
+          "path": "/stmts/1/stmt/CreateStmt/tableElts/10/ColumnDef",
+          "name": "actual_database_role",
+          "typeResolution": "unresolved"
+        },
+        {
+          "path": "/stmts/1/stmt/CreateStmt/tableElts/11/ColumnDef",
+          "name": "authorization_evidence_bytes",
+          "typeResolution": "unresolved"
+        },
+        {
+          "path": "/stmts/1/stmt/CreateStmt/tableElts/12/ColumnDef",
+          "name": "producing_xid",
+          "typeResolution": "unresolved"
+        },
+        {
+          "path": "/stmts/1/stmt/CreateStmt/tableElts/13/ColumnDef",
+          "name": "original_production_evidence_bytes",
+          "typeResolution": "unresolved"
+        }
+      ]
+    },
+    {
+      "kind": "create-table",
+      "path": "/stmts/4/stmt/CreateStmt",
+      "requiresCatalogExpansion": false,
+      "columns": [
+        {
+          "path": "/stmts/4/stmt/CreateStmt/tableElts/0/ColumnDef",
+          "name": "storage_row_id",
+          "typeResolution": "builtin-syntax",
+          "syntacticScalarFamily": "integer"
+        },
+        {
+          "path": "/stmts/4/stmt/CreateStmt/tableElts/1/ColumnDef",
+          "name": "attempt_identity_bytes",
+          "typeResolution": "unresolved"
+        },
+        {
+          "path": "/stmts/4/stmt/CreateStmt/tableElts/2/ColumnDef",
+          "name": "attempt_identity_sha256",
+          "typeResolution": "unresolved"
+        },
+        {
+          "path": "/stmts/4/stmt/CreateStmt/tableElts/3/ColumnDef",
+          "name": "activation_profile_bytes",
+          "typeResolution": "unresolved"
+        },
+        {
+          "path": "/stmts/4/stmt/CreateStmt/tableElts/4/ColumnDef",
+          "name": "source_context_bytes",
+          "typeResolution": "unresolved"
+        },
+        {
+          "path": "/stmts/4/stmt/CreateStmt/tableElts/5/ColumnDef",
+          "name": "original_worker_bytes",
+          "typeResolution": "unresolved"
+        },
+        {
+          "path": "/stmts/4/stmt/CreateStmt/tableElts/6/ColumnDef",
+          "name": "state_kind",
+          "typeResolution": "unresolved"
+        },
+        {
+          "path": "/stmts/4/stmt/CreateStmt/tableElts/7/ColumnDef",
+          "name": "current_state_bytes",
+          "typeResolution": "unresolved"
+        },
+        {
+          "path": "/stmts/4/stmt/CreateStmt/tableElts/8/ColumnDef",
+          "name": "inclusive_replay_xmin",
+          "typeResolution": "unresolved"
+        },
+        {
+          "path": "/stmts/4/stmt/CreateStmt/tableElts/9/ColumnDef",
+          "name": "protection_evidence_bytes",
+          "typeResolution": "unresolved"
+        },
+        {
+          "path": "/stmts/4/stmt/CreateStmt/tableElts/10/ColumnDef",
+          "name": "invalidation_evidence_bytes",
+          "typeResolution": "unresolved"
+        },
+        {
+          "path": "/stmts/4/stmt/CreateStmt/tableElts/11/ColumnDef",
+          "name": "classifier_retirement_evidence_bytes",
+          "typeResolution": "unresolved"
+        }
+      ]
+    },
+    {
+      "kind": "create-table",
+      "path": "/stmts/7/stmt/CreateStmt",
+      "requiresCatalogExpansion": false,
+      "columns": [
+        {
+          "path": "/stmts/7/stmt/CreateStmt/tableElts/0/ColumnDef",
+          "name": "storage_row_id",
+          "typeResolution": "builtin-syntax",
+          "syntacticScalarFamily": "integer"
+        },
+        {
+          "path": "/stmts/7/stmt/CreateStmt/tableElts/1/ColumnDef",
+          "name": "attempt_row_id",
+          "typeResolution": "builtin-syntax",
+          "syntacticScalarFamily": "integer"
+        },
+        {
+          "path": "/stmts/7/stmt/CreateStmt/tableElts/2/ColumnDef",
+          "name": "artifact_role",
+          "typeResolution": "unresolved"
+        },
+        {
+          "path": "/stmts/7/stmt/CreateStmt/tableElts/3/ColumnDef",
+          "name": "artifact_ordinal",
+          "typeResolution": "builtin-syntax",
+          "syntacticScalarFamily": "integer"
+        },
+        {
+          "path": "/stmts/7/stmt/CreateStmt/tableElts/4/ColumnDef",
+          "name": "artifact_identity_bytes",
+          "typeResolution": "unresolved"
+        },
+        {
+          "path": "/stmts/7/stmt/CreateStmt/tableElts/5/ColumnDef",
+          "name": "artifact_identity_sha256",
+          "typeResolution": "unresolved"
+        },
+        {
+          "path": "/stmts/7/stmt/CreateStmt/tableElts/6/ColumnDef",
+          "name": "artifact_profile_bytes",
+          "typeResolution": "unresolved"
+        },
+        {
+          "path": "/stmts/7/stmt/CreateStmt/tableElts/7/ColumnDef",
+          "name": "payload_bytes",
+          "typeResolution": "unresolved"
+        },
+        {
+          "path": "/stmts/7/stmt/CreateStmt/tableElts/8/ColumnDef",
+          "name": "payload_sha256",
+          "typeResolution": "unresolved"
+        },
+        {
+          "path": "/stmts/7/stmt/CreateStmt/tableElts/9/ColumnDef",
+          "name": "production_custody_evidence_bytes",
+          "typeResolution": "unresolved"
+        }
+      ]
+    }
+  ],
+  "unhandled": [
+    {
+      "path": "/stmts/0/stmt"
+    },
+    {
+      "path": "/stmts/2/stmt"
+    },
+    {
+      "path": "/stmts/3/stmt"
+    },
+    {
+      "path": "/stmts/5/stmt"
+    },
+    {
+      "path": "/stmts/6/stmt"
+    },
+    {
+      "path": "/stmts/8/stmt"
+    }
+  ],
+  "diagnostics": [
+    {
+      "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+      "path": "",
+      "severity": "warning",
+      "message": "Raw syntax is not catalog resolution, SQL execution, permissions or server-state validation"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/0/stmt",
+      "severity": "warning",
+      "message": "Statement is retained without declaration extraction or execution"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/1/stmt/CreateStmt/tableElts/1/ColumnDef/typeName",
+      "severity": "warning",
+      "message": "Type remains unresolved, structured, array-valued or outside the known qualified builtin families"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/1/stmt/CreateStmt/tableElts/2/ColumnDef/typeName",
+      "severity": "warning",
+      "message": "Type remains unresolved, structured, array-valued or outside the known qualified builtin families"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/1/stmt/CreateStmt/tableElts/3/ColumnDef/typeName",
+      "severity": "warning",
+      "message": "Type remains unresolved, structured, array-valued or outside the known qualified builtin families"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/1/stmt/CreateStmt/tableElts/4/ColumnDef/typeName",
+      "severity": "warning",
+      "message": "Type remains unresolved, structured, array-valued or outside the known qualified builtin families"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/1/stmt/CreateStmt/tableElts/5/ColumnDef/typeName",
+      "severity": "warning",
+      "message": "Type remains unresolved, structured, array-valued or outside the known qualified builtin families"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/1/stmt/CreateStmt/tableElts/6/ColumnDef/typeName",
+      "severity": "warning",
+      "message": "Type remains unresolved, structured, array-valued or outside the known qualified builtin families"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/1/stmt/CreateStmt/tableElts/7/ColumnDef/typeName",
+      "severity": "warning",
+      "message": "Type remains unresolved, structured, array-valued or outside the known qualified builtin families"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/1/stmt/CreateStmt/tableElts/8/ColumnDef/typeName",
+      "severity": "warning",
+      "message": "Type remains unresolved, structured, array-valued or outside the known qualified builtin families"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/1/stmt/CreateStmt/tableElts/9/ColumnDef/typeName",
+      "severity": "warning",
+      "message": "Type remains unresolved, structured, array-valued or outside the known qualified builtin families"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/1/stmt/CreateStmt/tableElts/10/ColumnDef/typeName",
+      "severity": "warning",
+      "message": "Type remains unresolved, structured, array-valued or outside the known qualified builtin families"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/1/stmt/CreateStmt/tableElts/11/ColumnDef/typeName",
+      "severity": "warning",
+      "message": "Type remains unresolved, structured, array-valued or outside the known qualified builtin families"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/1/stmt/CreateStmt/tableElts/12/ColumnDef/typeName",
+      "severity": "warning",
+      "message": "Type remains unresolved, structured, array-valued or outside the known qualified builtin families"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/1/stmt/CreateStmt/tableElts/13/ColumnDef/typeName",
+      "severity": "warning",
+      "message": "Type remains unresolved, structured, array-valued or outside the known qualified builtin families"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/2/stmt",
+      "severity": "warning",
+      "message": "Statement is retained without declaration extraction or execution"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/3/stmt",
+      "severity": "warning",
+      "message": "Statement is retained without declaration extraction or execution"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/4/stmt/CreateStmt/tableElts/1/ColumnDef/typeName",
+      "severity": "warning",
+      "message": "Type remains unresolved, structured, array-valued or outside the known qualified builtin families"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/4/stmt/CreateStmt/tableElts/2/ColumnDef/typeName",
+      "severity": "warning",
+      "message": "Type remains unresolved, structured, array-valued or outside the known qualified builtin families"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/4/stmt/CreateStmt/tableElts/3/ColumnDef/typeName",
+      "severity": "warning",
+      "message": "Type remains unresolved, structured, array-valued or outside the known qualified builtin families"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/4/stmt/CreateStmt/tableElts/4/ColumnDef/typeName",
+      "severity": "warning",
+      "message": "Type remains unresolved, structured, array-valued or outside the known qualified builtin families"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/4/stmt/CreateStmt/tableElts/5/ColumnDef/typeName",
+      "severity": "warning",
+      "message": "Type remains unresolved, structured, array-valued or outside the known qualified builtin families"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/4/stmt/CreateStmt/tableElts/6/ColumnDef/typeName",
+      "severity": "warning",
+      "message": "Type remains unresolved, structured, array-valued or outside the known qualified builtin families"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/4/stmt/CreateStmt/tableElts/7/ColumnDef/typeName",
+      "severity": "warning",
+      "message": "Type remains unresolved, structured, array-valued or outside the known qualified builtin families"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/4/stmt/CreateStmt/tableElts/8/ColumnDef/typeName",
+      "severity": "warning",
+      "message": "Type remains unresolved, structured, array-valued or outside the known qualified builtin families"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/4/stmt/CreateStmt/tableElts/9/ColumnDef/typeName",
+      "severity": "warning",
+      "message": "Type remains unresolved, structured, array-valued or outside the known qualified builtin families"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/4/stmt/CreateStmt/tableElts/10/ColumnDef/typeName",
+      "severity": "warning",
+      "message": "Type remains unresolved, structured, array-valued or outside the known qualified builtin families"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/4/stmt/CreateStmt/tableElts/11/ColumnDef/typeName",
+      "severity": "warning",
+      "message": "Type remains unresolved, structured, array-valued or outside the known qualified builtin families"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/5/stmt",
+      "severity": "warning",
+      "message": "Statement is retained without declaration extraction or execution"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/6/stmt",
+      "severity": "warning",
+      "message": "Statement is retained without declaration extraction or execution"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/7/stmt/CreateStmt/tableElts/2/ColumnDef/typeName",
+      "severity": "warning",
+      "message": "Type remains unresolved, structured, array-valued or outside the known qualified builtin families"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/7/stmt/CreateStmt/tableElts/4/ColumnDef/typeName",
+      "severity": "warning",
+      "message": "Type remains unresolved, structured, array-valued or outside the known qualified builtin families"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/7/stmt/CreateStmt/tableElts/5/ColumnDef/typeName",
+      "severity": "warning",
+      "message": "Type remains unresolved, structured, array-valued or outside the known qualified builtin families"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/7/stmt/CreateStmt/tableElts/6/ColumnDef/typeName",
+      "severity": "warning",
+      "message": "Type remains unresolved, structured, array-valued or outside the known qualified builtin families"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/7/stmt/CreateStmt/tableElts/7/ColumnDef/typeName",
+      "severity": "warning",
+      "message": "Type remains unresolved, structured, array-valued or outside the known qualified builtin families"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/7/stmt/CreateStmt/tableElts/8/ColumnDef/typeName",
+      "severity": "warning",
+      "message": "Type remains unresolved, structured, array-valued or outside the known qualified builtin families"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/7/stmt/CreateStmt/tableElts/9/ColumnDef/typeName",
+      "severity": "warning",
+      "message": "Type remains unresolved, structured, array-valued or outside the known qualified builtin families"
+    },
+    {
+      "code": "POSTGRESQL_DDL_UNRESOLVED",
+      "path": "/stmts/8/stmt",
+      "severity": "warning",
+      "message": "Statement is retained without declaration extraction or execution"
+    }
+  ]
+}

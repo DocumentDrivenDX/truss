@@ -1,0 +1,42 @@
+{
+  "scope": "read-only owner source/receipt review; Truss did not rerun Python or PostgreSQL",
+  "ownerCommit": "27d6b907b87d9b5336a4c432929e85128fdc9267",
+  "sourcePins": [
+    {
+      "path": "docs/helix/04-build/evidence/B-005-native-preparation.md",
+      "sha256": "fcc650d486f09d10b0452412872153d33f17c577e50d9045c7f1b2bb82d88f73"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/B-005-original-grouped-join-native.json",
+      "sha256": "ecceb38720b3da32781098bae969d182c07cdda88dab05c0065a5572c376a823"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/B-005-original-grouped-cross-record-join-native.json",
+      "sha256": "c99c7af5cb90a16057f239e8a0f3047c58b0bcd842b348006e84316a1f41169c"
+    },
+    {
+      "path": "tests/truss-postgresql/original-grouped-join-native.py",
+      "sha256": "a51b7507d935a4e0d50c11791df52e40ffdde7e268cc0e243ced8ffa0b40a5cb"
+    },
+    {
+      "path": "tests/truss-postgresql/fixtures/original-multi-recursive-entity-inputs.json",
+      "sha256": "56c999c2a467973e6fa1368f564d0f48b218f9641046b118c830de3216c58c87"
+    }
+  ],
+  "ownerReported": {
+    "selfJoinCases": 6,
+    "crossRecordCases": 8,
+    "nativeServer": "PostgreSQL 17.9",
+    "binary": "existing numeric-sequence extension reused",
+    "freshBrowserProof": false,
+    "deterministicPythonRepeat": true
+  },
+  "remaining": [
+    "original name/customer_id/total query",
+    "mixed-home grouped joins",
+    "final US-003 acceptance",
+    "Truss layout binding admission and actual native execution",
+    "released host registration"
+  ],
+  "trussNativeQualification": false
+}

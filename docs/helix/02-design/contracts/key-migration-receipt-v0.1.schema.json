@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:key-migration-receipt:0.1.0",
+  "description": "Atomic immutable receipt row shape only; pending row visibility is not independent commit evidence.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-key-migration-receipt/0.1.0"
+    },
+    "receiptProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "originalAttempt": {
+      "$ref": "urn:truss:draft:key-migration-result:0.1.0#/$defs/attempt"
+    },
+    "source": {
+      "$ref": "urn:truss:draft:key-profile-migration:0.1.0#/$defs/basis"
+    },
+    "target": {
+      "$ref": "urn:truss:draft:key-profile-migration:0.1.0#/$defs/basis"
+    },
+    "sourceInventory": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "targetCorrespondence": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "priorSelectedBinding": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "resultingSelectedBinding": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "installedInventory": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "transition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "nativeSwitchEvidence": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "receiptProfile",
+    "originalAttempt",
+    "source",
+    "target",
+    "sourceInventory",
+    "targetCorrespondence",
+    "priorSelectedBinding",
+    "resultingSelectedBinding",
+    "installedInventory",
+    "transition",
+    "nativeSwitchEvidence"
+  ],
+  "additionalProperties": false
+}

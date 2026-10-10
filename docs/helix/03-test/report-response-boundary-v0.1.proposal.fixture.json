@@ -1,0 +1,21 @@
+{
+  "scope": "Synthetic complete schema-valid nineteen-field byte fixtures, not original producer/diagnostic authority or report completeness",
+  "baseSha256": "b817b1610e86cfa956427dbbc84b9ef7485ccd0e66d1e2c7939b861e9a715368",
+  "recipe": {
+    "diagnosticCount": 8,
+    "firstSevenRawBytesEach": 380000,
+    "rawFillHex": "61",
+    "lastRawBytes": "three times floor of remaining encoded bytes divided by four",
+    "identityPadding": "0..3 ASCII x bytes to exact target"
+  },
+  "cases": [
+    {
+      "sourceBytes": 4194304,
+      "sourceSha256": "fb0b4fc677d060bc52473e8f6562ba46834ee9704e5e740c5ef759baeed7995c"
+    },
+    {
+      "sourceBytes": 4194305,
+      "sourceSha256": "e0610604eb22c6a29786fa5e2b514b781252f75a3cfbd6d1ab5514a3759c269b"
+    }
+  ]
+}

@@ -1,0 +1,1303 @@
+{
+  "ownerSource": {
+    "root": "/Users/erik/Projects/umf",
+    "commit": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+    "workingTreeClean": true,
+    "workingTreeStatus": "",
+    "observedFiles": [
+      {
+        "path": "native/postgresql/runtime.ts",
+        "sha256": "a88fea4cf15c9c3c3f0ad1f0a36d8f5de42a42ce8ea9712499f609beee3ea751"
+      },
+      {
+        "path": "src/adapters/postgresql/index.ts",
+        "sha256": "7baa071d95e5f9863a4ce2bf892d87fb27cab9d8605ba4cf8887016d14ca17b4"
+      },
+      {
+        "path": "src/adapters/postgresql/declarations.ts",
+        "sha256": "e47ebd6366fee86fb8ccaf1270555bcd338957bff511f30cdcae22a088c6d8d9"
+      },
+      {
+        "path": "src/model/document.ts",
+        "sha256": "a0422042659defdea425dff8bb0618eaa4bbf125f68da16aa5ad21af0b6c282f"
+      },
+      {
+        "path": "spec/extensions/postgresql/native-ast.schema.json",
+        "sha256": "aa3d3b50bc04edbc3ab3430e113ee8710edb1c10ff5cee15d4bcc7b16d9a9039"
+      },
+      {
+        "path": "bun.lock",
+        "sha256": "98a99f7d306f7269db103bdbfafe5f9ad9ed34b02024276ad0cce45df27f5cc3"
+      }
+    ],
+    "stableThroughRun": true,
+    "scope": "selected source entrypoints/schema/lock hashes and git observations; not full dependency/build attestation or native qualification"
+  },
+  "scope": "Seventeen native candidate drafts: existing pinned UMF parser/codec/AST reparse/source archive/JSON reload only; no PLpgSQL body compilation, native database/catalog/privilege or complete exporter correspondence",
+  "backend": "@libpg-query/parser@17.6.10",
+  "results": [
+    {
+      "path": "docs/helix/02-design/contracts/key-bucket-layout-v0.1.draft.sql",
+      "sourceSha256": "96740784b8f6ccc25c334eca80740eb6f83cd11073587667f1f80ef65906333b",
+      "exportSha256": "e94a40e316da3c84edd51a347791e65bd8f0c9cbece8b3b375e7904340a30aba",
+      "sourceArchiveExact": true,
+      "jsonReload": true,
+      "reloadedExportExact": true,
+      "declarationStatus": "observed",
+      "complete": false,
+      "declarations": 3,
+      "unhandled": 3,
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/1/stmt/CreateStmt/tableElts/0/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/1/stmt/CreateStmt/tableElts/1/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/2/stmt/CreateStmt/tableElts/4/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/2/stmt/CreateStmt/tableElts/5/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/2/stmt/CreateStmt/tableElts/6/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/2/stmt/CreateStmt/tableElts/7/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/2/stmt/CreateStmt/tableElts/8/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/3/stmt",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/4/stmt/CreateStmt/tableElts/1/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/4/stmt/CreateStmt/tableElts/2/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/4/stmt/CreateStmt/tableElts/3/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/4/stmt/CreateStmt/tableElts/4/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/4/stmt/CreateStmt/tableElts/5/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/5/stmt",
+          "severity": "warning"
+        }
+      ]
+    },
+    {
+      "path": "docs/helix/02-design/contracts/key-bucket-observation-v0.1.draft.sql",
+      "sourceSha256": "e1061a7860d395fcaeb336c45a27397c8e0e423fb5597652a1b098d002d11e1b",
+      "exportSha256": "c6f090e4ad34be1e4106af2d27da7f22d579ad80ba0a70e0bf8f5a0aa6b7aab7",
+      "sourceArchiveExact": true,
+      "jsonReload": true,
+      "reloadedExportExact": true,
+      "declarationStatus": "observed",
+      "complete": false,
+      "declarations": 0,
+      "unhandled": 7,
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/1/stmt",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/2/stmt",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/3/stmt",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/4/stmt",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/5/stmt",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/6/stmt",
+          "severity": "warning"
+        }
+      ]
+    },
+    {
+      "path": "docs/helix/02-design/contracts/migration-admission-layout-v0.1.draft.sql",
+      "sourceSha256": "5120f2d91c4af29a15567b511fe742d3145e3f67c27e49dd53ee166571a032ed",
+      "exportSha256": "05055762111579b1e910344c62f4a93d51c0840f7c9e513b9dd1f425cfa8a0f4",
+      "sourceArchiveExact": true,
+      "jsonReload": true,
+      "reloadedExportExact": true,
+      "declarationStatus": "observed",
+      "complete": false,
+      "declarations": 1,
+      "unhandled": 0,
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt/CreateStmt/tableElts/1/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt/CreateStmt/tableElts/2/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt/CreateStmt/tableElts/4/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt/CreateStmt/tableElts/5/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt/CreateStmt/tableElts/6/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt/CreateStmt/tableElts/7/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt/CreateStmt/tableElts/8/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt/CreateStmt/tableElts/9/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt/CreateStmt/tableElts/10/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt/CreateStmt/tableElts/11/ColumnDef/typeName",
+          "severity": "warning"
+        }
+      ]
+    },
+    {
+      "path": "docs/helix/02-design/contracts/migration-admission-statements-v0.1.draft.sql",
+      "sourceSha256": "3460b28c1006ee049e2866fe110ebf9b015a5e696df1759cf99c65f70123a8b2",
+      "exportSha256": "2f7455e7d4e8a8119d5db09367755e773dc19bf167e69b13931794b23b9223f5",
+      "sourceArchiveExact": true,
+      "jsonReload": true,
+      "reloadedExportExact": true,
+      "declarationStatus": "observed",
+      "complete": false,
+      "declarations": 0,
+      "unhandled": 3,
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/1/stmt",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/2/stmt",
+          "severity": "warning"
+        }
+      ]
+    },
+    {
+      "path": "docs/helix/02-design/contracts/migration-receipt-layout-v0.1.draft.sql",
+      "sourceSha256": "09c584a88d4e5989ceab5be16eefa88c680bfa753d4fb1cd11d99661077c3289",
+      "exportSha256": "dada43c145f2e8e1b9072794aa19082c6f9bc40e0cb0db2038003c9a60e0d59d",
+      "sourceArchiveExact": true,
+      "jsonReload": true,
+      "reloadedExportExact": true,
+      "declarationStatus": "observed",
+      "complete": false,
+      "declarations": 1,
+      "unhandled": 2,
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/1/stmt/CreateStmt/tableElts/1/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/1/stmt/CreateStmt/tableElts/2/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/1/stmt/CreateStmt/tableElts/3/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/1/stmt/CreateStmt/tableElts/4/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/1/stmt/CreateStmt/tableElts/5/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/1/stmt/CreateStmt/tableElts/6/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/1/stmt/CreateStmt/tableElts/9/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/1/stmt/CreateStmt/tableElts/10/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/1/stmt/CreateStmt/tableElts/11/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/1/stmt/CreateStmt/tableElts/12/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/2/stmt",
+          "severity": "warning"
+        }
+      ]
+    },
+    {
+      "path": "docs/helix/02-design/contracts/migration-receipt-statements-v0.1.draft.sql",
+      "sourceSha256": "8d3df150d9d9d287ce407f8e56d515ecced2d30efb23495b7a19804ef89a1dc8",
+      "exportSha256": "b4618ded43f8a6333a95ea323ef3528726a2fb6bdf0250cb32a458586c7a1750",
+      "sourceArchiveExact": true,
+      "jsonReload": true,
+      "reloadedExportExact": true,
+      "declarationStatus": "observed",
+      "complete": false,
+      "declarations": 0,
+      "unhandled": 2,
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/1/stmt",
+          "severity": "warning"
+        }
+      ]
+    },
+    {
+      "path": "docs/helix/02-design/contracts/write-head-admission-v0.1.draft.sql",
+      "sourceSha256": "a69cdaacb8894008d136f068c6296bacf34cb52fbaafc4f3617bca8779e96937",
+      "exportSha256": "c76bc3991be112607567597210d78a63031ee7187ac022ef816ff42497d3b7ab",
+      "sourceArchiveExact": true,
+      "jsonReload": true,
+      "reloadedExportExact": true,
+      "declarationStatus": "observed",
+      "complete": false,
+      "declarations": 0,
+      "unhandled": 2,
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/1/stmt",
+          "severity": "warning"
+        }
+      ]
+    },
+    {
+      "path": "docs/helix/02-design/contracts/key-bucket-integrity-metadata-v0.1.draft.sql",
+      "sourceSha256": "c689bf0434ed3bf4360da840a319b6777e4a218003f7d9b85fdccad2afa377bd",
+      "exportSha256": "4c4aace27f62c9787e738a99d8c2e3ad4b5ebbbeb164486d62437adf5fbacf74",
+      "sourceArchiveExact": true,
+      "jsonReload": true,
+      "reloadedExportExact": true,
+      "declarationStatus": "observed",
+      "complete": false,
+      "declarations": 0,
+      "unhandled": 2,
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/1/stmt",
+          "severity": "warning"
+        }
+      ]
+    },
+    {
+      "path": "docs/helix/02-design/contracts/key-bucket-integrity-chunk-v0.1.draft.sql",
+      "sourceSha256": "cd15417f32485b7d5903db6b02dd23034b77286afffecdc7dcc2a1a4515996cd",
+      "exportSha256": "fa38d4b874a590878d2128be4033be10a21b8bf360c342e1f65d0b318a80bad8",
+      "sourceArchiveExact": true,
+      "jsonReload": true,
+      "reloadedExportExact": true,
+      "declarationStatus": "observed",
+      "complete": false,
+      "declarations": 0,
+      "unhandled": 2,
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/1/stmt",
+          "severity": "warning"
+        }
+      ]
+    },
+    {
+      "path": "docs/helix/02-design/contracts/key-bucket-integrity-locator-v0.1.draft.sql",
+      "sourceSha256": "5bb625730cfe5e18846b9bd3fd818b0f6b0e077fe51333ee3d629bbe82d2b99a",
+      "exportSha256": "6c12dda1c0f728e8b93dd0ee75b0a6965493c14a52566518795a75964708fcb8",
+      "sourceArchiveExact": true,
+      "jsonReload": true,
+      "reloadedExportExact": true,
+      "declarationStatus": "observed",
+      "complete": false,
+      "declarations": 0,
+      "unhandled": 2,
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/1/stmt",
+          "severity": "warning"
+        }
+      ]
+    },
+    {
+      "path": "docs/helix/02-design/contracts/relationship-lineage-layout-v0.1.draft.sql",
+      "sourceSha256": "266773369bb070e3be626c919ba33df482ff0d415bce023e55f9e26bc5611dbf",
+      "exportSha256": "cdfc9f22c201a41eb624b0560769e912eac447533c7062babd450bb119c6c8f1",
+      "sourceArchiveExact": true,
+      "jsonReload": true,
+      "reloadedExportExact": true,
+      "declarationStatus": "observed",
+      "complete": false,
+      "declarations": 1,
+      "unhandled": 1,
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt/CreateStmt/tableElts/1/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt/CreateStmt/tableElts/2/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt/CreateStmt/tableElts/3/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt/CreateStmt/tableElts/4/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/1/stmt",
+          "severity": "warning"
+        }
+      ]
+    },
+    {
+      "path": "docs/helix/02-design/contracts/migration-head-admission-v0.1.draft.sql",
+      "sourceSha256": "65b51908966af0b41ecab4c700d699529ddad63dd2340ba7ad427200cf95e25e",
+      "exportSha256": "2acca97dcd52461dc60089ca79a8859142f1ec9c08619c84a3a525079bb97ef5",
+      "sourceArchiveExact": true,
+      "jsonReload": true,
+      "reloadedExportExact": true,
+      "declarationStatus": "observed",
+      "complete": false,
+      "declarations": 0,
+      "unhandled": 2,
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/1/stmt",
+          "severity": "warning"
+        }
+      ]
+    },
+    {
+      "path": "docs/helix/02-design/contracts/catalog-admission-prelude-v0.1.draft.sql",
+      "sourceSha256": "71955b8b5bfcfc1fd608e70994919ca709e4da78258a2248d2b44f9277b49530",
+      "exportSha256": "dd9c03c98aa53c0fb1e0bd547d8e5847119945f9b4f816860636613b5a3ca221",
+      "sourceArchiveExact": true,
+      "jsonReload": true,
+      "reloadedExportExact": true,
+      "declarationStatus": "observed",
+      "complete": false,
+      "declarations": 0,
+      "unhandled": 4,
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/1/stmt",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/2/stmt",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/3/stmt",
+          "severity": "warning"
+        }
+      ]
+    },
+    {
+      "path": "docs/helix/02-design/contracts/catalog-id-high-water-v0.1.draft.sql",
+      "sourceSha256": "9d8538d39951d9d74dac73d741a298cbda21cbe3839b2f212b12b6545b794931",
+      "exportSha256": "1b14169dd217fb793d9d73aa5a3aa6da193d93518079278c3df6e3c4c463b2fe",
+      "sourceArchiveExact": true,
+      "jsonReload": true,
+      "reloadedExportExact": true,
+      "declarationStatus": "observed",
+      "complete": false,
+      "declarations": 0,
+      "unhandled": 4,
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/1/stmt",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/2/stmt",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/3/stmt",
+          "severity": "warning"
+        }
+      ]
+    },
+    {
+      "path": "docs/helix/02-design/contracts/direct-page-observation-v0.1.proposal.sql",
+      "sourceSha256": "34dfe73b7987483025546b724b4542152f5dae3b56a430d784d50a34a26d48e7",
+      "exportSha256": "39a5255d9b39b412c0db5176e60d44bf0ba0f025400dc93e2695f7aa67b11823",
+      "sourceArchiveExact": true,
+      "jsonReload": true,
+      "reloadedExportExact": true,
+      "declarationStatus": "observed",
+      "complete": false,
+      "declarations": 0,
+      "unhandled": 2,
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/1/stmt",
+          "severity": "warning"
+        }
+      ]
+    },
+    {
+      "path": "docs/helix/02-design/contracts/direct-lookup-observation-v0.1.proposal.sql",
+      "sourceSha256": "184b775ba362b54e85a8146149c52e366b75e2952dba92efac25889fc4737577",
+      "exportSha256": "81137dc88a647bb02be2ee0ffbb2ccca4694d740a4d44bc1d39e12b23998c174",
+      "sourceArchiveExact": true,
+      "jsonReload": true,
+      "reloadedExportExact": true,
+      "declarationStatus": "observed",
+      "complete": false,
+      "declarations": 0,
+      "unhandled": 4,
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/1/stmt",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/2/stmt",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/3/stmt",
+          "severity": "warning"
+        }
+      ]
+    },
+    {
+      "path": "docs/helix/02-design/contracts/catalog-definition-source-v0.1.proposal.sql",
+      "savedUmfArtifact": {
+        "path": "docs/helix/02-design/contracts/catalog-definition-source-v0.1.proposal.umf.json",
+        "sha256": "cacded023cc8214f7c9f3cce959556c5119574902b08335b8bc121969d0dd67f",
+        "sourceArchiveExact": true,
+        "exportExact": true
+      },
+      "declarationInventory": [
+        {
+          "path": "/stmts/0/stmt/AlterTableStmt",
+          "statementIndex": 0,
+          "kind": "alter-table",
+          "requiresCatalogExpansion": true,
+          "relation": {
+            "schemaname": "truss",
+            "relname": "schema_doc",
+            "inh": true,
+            "relpersistence": "p",
+            "location": 651
+          },
+          "commands": [
+            {
+              "path": "/stmts/0/stmt/AlterTableStmt/cmds/0/AlterTableCmd",
+              "subtype": "AT_AlterColumnType"
+            }
+          ],
+          "columns": [
+            {
+              "path": "/stmts/0/stmt/AlterTableStmt/cmds/0/AlterTableCmd/def/ColumnDef",
+              "name": "doc_id",
+              "typeResolution": "unresolved"
+            }
+          ]
+        },
+        {
+          "path": "/stmts/1/stmt/AlterTableStmt",
+          "statementIndex": 1,
+          "kind": "alter-table",
+          "requiresCatalogExpansion": true,
+          "relation": {
+            "schemaname": "truss",
+            "relname": "schema_doc",
+            "inh": true,
+            "relpersistence": "p",
+            "location": 737
+          },
+          "commands": [
+            {
+              "path": "/stmts/1/stmt/AlterTableStmt/cmds/0/AlterTableCmd",
+              "subtype": "AT_AddConstraint"
+            }
+          ],
+          "columns": []
+        },
+        {
+          "path": "/stmts/2/stmt/AlterTableStmt",
+          "statementIndex": 2,
+          "kind": "alter-table",
+          "requiresCatalogExpansion": true,
+          "relation": {
+            "schemaname": "truss",
+            "relname": "type_def",
+            "inh": true,
+            "relpersistence": "p",
+            "location": 847
+          },
+          "commands": [
+            {
+              "path": "/stmts/2/stmt/AlterTableStmt/cmds/0/AlterTableCmd",
+              "subtype": "AT_AddColumn"
+            },
+            {
+              "path": "/stmts/2/stmt/AlterTableStmt/cmds/1/AlterTableCmd",
+              "subtype": "AT_AddColumn"
+            },
+            {
+              "path": "/stmts/2/stmt/AlterTableStmt/cmds/2/AlterTableCmd",
+              "subtype": "AT_AddColumn"
+            },
+            {
+              "path": "/stmts/2/stmt/AlterTableStmt/cmds/3/AlterTableCmd",
+              "subtype": "AT_AddColumn"
+            },
+            {
+              "path": "/stmts/2/stmt/AlterTableStmt/cmds/4/AlterTableCmd",
+              "subtype": "AT_AddColumn"
+            },
+            {
+              "path": "/stmts/2/stmt/AlterTableStmt/cmds/5/AlterTableCmd",
+              "subtype": "AT_AddColumn"
+            },
+            {
+              "path": "/stmts/2/stmt/AlterTableStmt/cmds/6/AlterTableCmd",
+              "subtype": "AT_AddColumn"
+            },
+            {
+              "path": "/stmts/2/stmt/AlterTableStmt/cmds/7/AlterTableCmd",
+              "subtype": "AT_AddConstraint"
+            },
+            {
+              "path": "/stmts/2/stmt/AlterTableStmt/cmds/8/AlterTableCmd",
+              "subtype": "AT_AddConstraint"
+            },
+            {
+              "path": "/stmts/2/stmt/AlterTableStmt/cmds/9/AlterTableCmd",
+              "subtype": "AT_AddConstraint"
+            }
+          ],
+          "columns": [
+            {
+              "path": "/stmts/2/stmt/AlterTableStmt/cmds/0/AlterTableCmd/def/ColumnDef",
+              "name": "definition_source_kind",
+              "typeResolution": "unresolved"
+            },
+            {
+              "path": "/stmts/2/stmt/AlterTableStmt/cmds/1/AlterTableCmd/def/ColumnDef",
+              "name": "definition_rev",
+              "typeResolution": "builtin-syntax",
+              "syntacticScalarFamily": "integer"
+            },
+            {
+              "path": "/stmts/2/stmt/AlterTableStmt/cmds/2/AlterTableCmd/def/ColumnDef",
+              "name": "definition_doc_ord",
+              "typeResolution": "builtin-syntax",
+              "syntacticScalarFamily": "integer"
+            },
+            {
+              "path": "/stmts/2/stmt/AlterTableStmt/cmds/3/AlterTableCmd/def/ColumnDef",
+              "name": "definition_document_id",
+              "typeResolution": "unresolved"
+            },
+            {
+              "path": "/stmts/2/stmt/AlterTableStmt/cmds/4/AlterTableCmd/def/ColumnDef",
+              "name": "binding_source_rev",
+              "typeResolution": "builtin-syntax",
+              "syntacticScalarFamily": "integer"
+            },
+            {
+              "path": "/stmts/2/stmt/AlterTableStmt/cmds/5/AlterTableCmd/def/ColumnDef",
+              "name": "binding_source_pointer",
+              "typeResolution": "unresolved"
+            },
+            {
+              "path": "/stmts/2/stmt/AlterTableStmt/cmds/6/AlterTableCmd/def/ColumnDef",
+              "name": "binding_source_bytes",
+              "typeResolution": "unresolved"
+            }
+          ]
+        },
+        {
+          "path": "/stmts/3/stmt/AlterTableStmt",
+          "statementIndex": 3,
+          "kind": "alter-table",
+          "requiresCatalogExpansion": true,
+          "relation": {
+            "schemaname": "truss",
+            "relname": "prop_def",
+            "inh": true,
+            "relpersistence": "p",
+            "location": 2546
+          },
+          "commands": [
+            {
+              "path": "/stmts/3/stmt/AlterTableStmt/cmds/0/AlterTableCmd",
+              "subtype": "AT_AddColumn"
+            },
+            {
+              "path": "/stmts/3/stmt/AlterTableStmt/cmds/1/AlterTableCmd",
+              "subtype": "AT_AddColumn"
+            },
+            {
+              "path": "/stmts/3/stmt/AlterTableStmt/cmds/2/AlterTableCmd",
+              "subtype": "AT_AddColumn"
+            },
+            {
+              "path": "/stmts/3/stmt/AlterTableStmt/cmds/3/AlterTableCmd",
+              "subtype": "AT_AddColumn"
+            },
+            {
+              "path": "/stmts/3/stmt/AlterTableStmt/cmds/4/AlterTableCmd",
+              "subtype": "AT_AddColumn"
+            },
+            {
+              "path": "/stmts/3/stmt/AlterTableStmt/cmds/5/AlterTableCmd",
+              "subtype": "AT_AddColumn"
+            },
+            {
+              "path": "/stmts/3/stmt/AlterTableStmt/cmds/6/AlterTableCmd",
+              "subtype": "AT_AddColumn"
+            },
+            {
+              "path": "/stmts/3/stmt/AlterTableStmt/cmds/7/AlterTableCmd",
+              "subtype": "AT_AddConstraint"
+            },
+            {
+              "path": "/stmts/3/stmt/AlterTableStmt/cmds/8/AlterTableCmd",
+              "subtype": "AT_AddConstraint"
+            },
+            {
+              "path": "/stmts/3/stmt/AlterTableStmt/cmds/9/AlterTableCmd",
+              "subtype": "AT_AddConstraint"
+            }
+          ],
+          "columns": [
+            {
+              "path": "/stmts/3/stmt/AlterTableStmt/cmds/0/AlterTableCmd/def/ColumnDef",
+              "name": "definition_source_kind",
+              "typeResolution": "unresolved"
+            },
+            {
+              "path": "/stmts/3/stmt/AlterTableStmt/cmds/1/AlterTableCmd/def/ColumnDef",
+              "name": "definition_rev",
+              "typeResolution": "builtin-syntax",
+              "syntacticScalarFamily": "integer"
+            },
+            {
+              "path": "/stmts/3/stmt/AlterTableStmt/cmds/2/AlterTableCmd/def/ColumnDef",
+              "name": "definition_doc_ord",
+              "typeResolution": "builtin-syntax",
+              "syntacticScalarFamily": "integer"
+            },
+            {
+              "path": "/stmts/3/stmt/AlterTableStmt/cmds/3/AlterTableCmd/def/ColumnDef",
+              "name": "definition_document_id",
+              "typeResolution": "unresolved"
+            },
+            {
+              "path": "/stmts/3/stmt/AlterTableStmt/cmds/4/AlterTableCmd/def/ColumnDef",
+              "name": "binding_source_rev",
+              "typeResolution": "builtin-syntax",
+              "syntacticScalarFamily": "integer"
+            },
+            {
+              "path": "/stmts/3/stmt/AlterTableStmt/cmds/5/AlterTableCmd/def/ColumnDef",
+              "name": "binding_source_pointer",
+              "typeResolution": "unresolved"
+            },
+            {
+              "path": "/stmts/3/stmt/AlterTableStmt/cmds/6/AlterTableCmd/def/ColumnDef",
+              "name": "binding_source_bytes",
+              "typeResolution": "unresolved"
+            }
+          ]
+        },
+        {
+          "path": "/stmts/4/stmt/AlterTableStmt",
+          "statementIndex": 4,
+          "kind": "alter-table",
+          "requiresCatalogExpansion": true,
+          "relation": {
+            "schemaname": "truss",
+            "relname": "key_def",
+            "inh": true,
+            "relpersistence": "p",
+            "location": 3955
+          },
+          "commands": [
+            {
+              "path": "/stmts/4/stmt/AlterTableStmt/cmds/0/AlterTableCmd",
+              "subtype": "AT_AddColumn"
+            },
+            {
+              "path": "/stmts/4/stmt/AlterTableStmt/cmds/1/AlterTableCmd",
+              "subtype": "AT_AddColumn"
+            },
+            {
+              "path": "/stmts/4/stmt/AlterTableStmt/cmds/2/AlterTableCmd",
+              "subtype": "AT_AddColumn"
+            },
+            {
+              "path": "/stmts/4/stmt/AlterTableStmt/cmds/3/AlterTableCmd",
+              "subtype": "AT_AddColumn"
+            },
+            {
+              "path": "/stmts/4/stmt/AlterTableStmt/cmds/4/AlterTableCmd",
+              "subtype": "AT_AddColumn"
+            },
+            {
+              "path": "/stmts/4/stmt/AlterTableStmt/cmds/5/AlterTableCmd",
+              "subtype": "AT_AddColumn"
+            },
+            {
+              "path": "/stmts/4/stmt/AlterTableStmt/cmds/6/AlterTableCmd",
+              "subtype": "AT_AddColumn"
+            },
+            {
+              "path": "/stmts/4/stmt/AlterTableStmt/cmds/7/AlterTableCmd",
+              "subtype": "AT_AddConstraint"
+            },
+            {
+              "path": "/stmts/4/stmt/AlterTableStmt/cmds/8/AlterTableCmd",
+              "subtype": "AT_AddConstraint"
+            },
+            {
+              "path": "/stmts/4/stmt/AlterTableStmt/cmds/9/AlterTableCmd",
+              "subtype": "AT_AddConstraint"
+            }
+          ],
+          "columns": [
+            {
+              "path": "/stmts/4/stmt/AlterTableStmt/cmds/0/AlterTableCmd/def/ColumnDef",
+              "name": "definition_source_kind",
+              "typeResolution": "unresolved"
+            },
+            {
+              "path": "/stmts/4/stmt/AlterTableStmt/cmds/1/AlterTableCmd/def/ColumnDef",
+              "name": "definition_rev",
+              "typeResolution": "builtin-syntax",
+              "syntacticScalarFamily": "integer"
+            },
+            {
+              "path": "/stmts/4/stmt/AlterTableStmt/cmds/2/AlterTableCmd/def/ColumnDef",
+              "name": "definition_doc_ord",
+              "typeResolution": "builtin-syntax",
+              "syntacticScalarFamily": "integer"
+            },
+            {
+              "path": "/stmts/4/stmt/AlterTableStmt/cmds/3/AlterTableCmd/def/ColumnDef",
+              "name": "definition_document_id",
+              "typeResolution": "unresolved"
+            },
+            {
+              "path": "/stmts/4/stmt/AlterTableStmt/cmds/4/AlterTableCmd/def/ColumnDef",
+              "name": "binding_source_rev",
+              "typeResolution": "builtin-syntax",
+              "syntacticScalarFamily": "integer"
+            },
+            {
+              "path": "/stmts/4/stmt/AlterTableStmt/cmds/5/AlterTableCmd/def/ColumnDef",
+              "name": "binding_source_pointer",
+              "typeResolution": "unresolved"
+            },
+            {
+              "path": "/stmts/4/stmt/AlterTableStmt/cmds/6/AlterTableCmd/def/ColumnDef",
+              "name": "binding_source_bytes",
+              "typeResolution": "unresolved"
+            }
+          ]
+        },
+        {
+          "path": "/stmts/5/stmt/AlterTableStmt",
+          "statementIndex": 5,
+          "kind": "alter-table",
+          "requiresCatalogExpansion": true,
+          "relation": {
+            "schemaname": "truss",
+            "relname": "rel_def",
+            "inh": true,
+            "relpersistence": "p",
+            "location": 5360
+          },
+          "commands": [
+            {
+              "path": "/stmts/5/stmt/AlterTableStmt/cmds/0/AlterTableCmd",
+              "subtype": "AT_AddColumn"
+            },
+            {
+              "path": "/stmts/5/stmt/AlterTableStmt/cmds/1/AlterTableCmd",
+              "subtype": "AT_AddColumn"
+            },
+            {
+              "path": "/stmts/5/stmt/AlterTableStmt/cmds/2/AlterTableCmd",
+              "subtype": "AT_AddColumn"
+            },
+            {
+              "path": "/stmts/5/stmt/AlterTableStmt/cmds/3/AlterTableCmd",
+              "subtype": "AT_AddColumn"
+            },
+            {
+              "path": "/stmts/5/stmt/AlterTableStmt/cmds/4/AlterTableCmd",
+              "subtype": "AT_AddColumn"
+            },
+            {
+              "path": "/stmts/5/stmt/AlterTableStmt/cmds/5/AlterTableCmd",
+              "subtype": "AT_AddColumn"
+            },
+            {
+              "path": "/stmts/5/stmt/AlterTableStmt/cmds/6/AlterTableCmd",
+              "subtype": "AT_AddColumn"
+            },
+            {
+              "path": "/stmts/5/stmt/AlterTableStmt/cmds/7/AlterTableCmd",
+              "subtype": "AT_AddConstraint"
+            },
+            {
+              "path": "/stmts/5/stmt/AlterTableStmt/cmds/8/AlterTableCmd",
+              "subtype": "AT_AddConstraint"
+            },
+            {
+              "path": "/stmts/5/stmt/AlterTableStmt/cmds/9/AlterTableCmd",
+              "subtype": "AT_AddConstraint"
+            }
+          ],
+          "columns": [
+            {
+              "path": "/stmts/5/stmt/AlterTableStmt/cmds/0/AlterTableCmd/def/ColumnDef",
+              "name": "definition_source_kind",
+              "typeResolution": "unresolved"
+            },
+            {
+              "path": "/stmts/5/stmt/AlterTableStmt/cmds/1/AlterTableCmd/def/ColumnDef",
+              "name": "definition_rev",
+              "typeResolution": "builtin-syntax",
+              "syntacticScalarFamily": "integer"
+            },
+            {
+              "path": "/stmts/5/stmt/AlterTableStmt/cmds/2/AlterTableCmd/def/ColumnDef",
+              "name": "definition_doc_ord",
+              "typeResolution": "builtin-syntax",
+              "syntacticScalarFamily": "integer"
+            },
+            {
+              "path": "/stmts/5/stmt/AlterTableStmt/cmds/3/AlterTableCmd/def/ColumnDef",
+              "name": "definition_document_id",
+              "typeResolution": "unresolved"
+            },
+            {
+              "path": "/stmts/5/stmt/AlterTableStmt/cmds/4/AlterTableCmd/def/ColumnDef",
+              "name": "binding_source_rev",
+              "typeResolution": "builtin-syntax",
+              "syntacticScalarFamily": "integer"
+            },
+            {
+              "path": "/stmts/5/stmt/AlterTableStmt/cmds/5/AlterTableCmd/def/ColumnDef",
+              "name": "binding_source_pointer",
+              "typeResolution": "unresolved"
+            },
+            {
+              "path": "/stmts/5/stmt/AlterTableStmt/cmds/6/AlterTableCmd/def/ColumnDef",
+              "name": "binding_source_bytes",
+              "typeResolution": "unresolved"
+            }
+          ]
+        }
+      ],
+      "sourceSha256": "5b38f1f4def948963c331d436440d282861260afd16f9698dfc1ed248fbfecdb",
+      "exportSha256": "4a57c1c7999ae22e578a86068c09794c8d3f12eb774d839fccc5e91d313c8ca3",
+      "sourceArchiveExact": true,
+      "jsonReload": true,
+      "reloadedExportExact": true,
+      "declarationStatus": "observed",
+      "complete": false,
+      "declarations": 6,
+      "unhandled": 0,
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt/AlterTableStmt/cmds/0/AlterTableCmd/def/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt/AlterTableStmt",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/1/stmt/AlterTableStmt",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/2/stmt/AlterTableStmt/cmds/0/AlterTableCmd/def/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/2/stmt/AlterTableStmt/cmds/3/AlterTableCmd/def/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/2/stmt/AlterTableStmt/cmds/5/AlterTableCmd/def/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/2/stmt/AlterTableStmt/cmds/6/AlterTableCmd/def/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/2/stmt/AlterTableStmt",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/3/stmt/AlterTableStmt/cmds/0/AlterTableCmd/def/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/3/stmt/AlterTableStmt/cmds/3/AlterTableCmd/def/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/3/stmt/AlterTableStmt/cmds/5/AlterTableCmd/def/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/3/stmt/AlterTableStmt/cmds/6/AlterTableCmd/def/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/3/stmt/AlterTableStmt",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/4/stmt/AlterTableStmt/cmds/0/AlterTableCmd/def/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/4/stmt/AlterTableStmt/cmds/3/AlterTableCmd/def/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/4/stmt/AlterTableStmt/cmds/5/AlterTableCmd/def/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/4/stmt/AlterTableStmt/cmds/6/AlterTableCmd/def/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/4/stmt/AlterTableStmt",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/5/stmt/AlterTableStmt/cmds/0/AlterTableCmd/def/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/5/stmt/AlterTableStmt/cmds/3/AlterTableCmd/def/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/5/stmt/AlterTableStmt/cmds/5/AlterTableCmd/def/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/5/stmt/AlterTableStmt/cmds/6/AlterTableCmd/def/ColumnDef/typeName",
+          "severity": "warning"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/5/stmt/AlterTableStmt",
+          "severity": "warning"
+        }
+      ]
+    }
+  ],
+  "failures": []
+}

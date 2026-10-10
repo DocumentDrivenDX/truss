@@ -1,0 +1,288 @@
+{
+  "scope": "Role/session reset observations on disposable pgserver; no installed isolation or origin profile",
+  "pgserver": "0.1.4",
+  "serverVersion": "16.2",
+  "advisory": "https://www.postgresql.org/support/security/CVE-2024-10978/",
+  "binaryHashes": {
+    "psql": "345b6849a45f93c5f2fafb2b555a0100c8c75cc5901ffb547ba2ac9ace41dc99",
+    "postgres": "3b104e694edc503952d34d799a9623ba79f37b5e7f4687343628b898c119478d"
+  },
+  "expectedSource": "https://www.postgresql.org/docs/16/release-16-5.html",
+  "comparisons": [
+    {
+      "expected": {
+        "case": "role_a",
+        "session": "postgres",
+        "current": "truss_probe_a",
+        "role": "truss_probe_a"
+      },
+      "actual": {
+        "case": "role_a",
+        "session": "postgres",
+        "current": "truss_probe_a",
+        "role": "truss_probe_a"
+      },
+      "matches": true
+    },
+    {
+      "expected": {
+        "case": "session_b",
+        "session": "truss_probe_b",
+        "current": "truss_probe_b",
+        "role": "none"
+      },
+      "actual": {
+        "case": "session_b",
+        "session": "truss_probe_b",
+        "current": "truss_probe_b",
+        "role": "none"
+      },
+      "matches": true
+    },
+    {
+      "expected": {
+        "case": "reset_session",
+        "session": "postgres",
+        "current": "postgres",
+        "role": "none"
+      },
+      "actual": {
+        "case": "reset_session",
+        "session": "postgres",
+        "current": "postgres",
+        "role": "none"
+      },
+      "matches": true
+    },
+    {
+      "expected": {
+        "case": "reset_role",
+        "session": "postgres",
+        "current": "postgres",
+        "role": "none"
+      },
+      "actual": {
+        "case": "reset_role",
+        "session": "postgres",
+        "current": "postgres",
+        "role": "none"
+      },
+      "matches": true
+    },
+    {
+      "expected": {
+        "case": "role_a_again",
+        "session": "postgres",
+        "current": "truss_probe_a",
+        "role": "truss_probe_a"
+      },
+      "actual": {
+        "case": "role_a_again",
+        "session": "postgres",
+        "current": "truss_probe_a",
+        "role": "truss_probe_a"
+      },
+      "matches": true
+    },
+    {
+      "expected": {
+        "case": "session_b_again",
+        "session": "truss_probe_b",
+        "current": "truss_probe_b",
+        "role": "none"
+      },
+      "actual": {
+        "case": "session_b_again",
+        "session": "truss_probe_b",
+        "current": "truss_probe_b",
+        "role": "none"
+      },
+      "matches": true
+    },
+    {
+      "expected": {
+        "case": "reset_all",
+        "session": "truss_probe_b",
+        "current": "truss_probe_b",
+        "role": "none"
+      },
+      "actual": {
+        "case": "reset_all",
+        "session": "truss_probe_b",
+        "current": "truss_probe_b",
+        "role": "none"
+      },
+      "matches": true
+    },
+    {
+      "expected": {
+        "case": "reset_session_again",
+        "session": "postgres",
+        "current": "postgres",
+        "role": "none"
+      },
+      "actual": {
+        "case": "reset_session_again",
+        "session": "postgres",
+        "current": "postgres",
+        "role": "none"
+      },
+      "matches": true
+    },
+    {
+      "expected": {
+        "case": "reset_role_again",
+        "session": "postgres",
+        "current": "postgres",
+        "role": "none"
+      },
+      "actual": {
+        "case": "reset_role_again",
+        "session": "postgres",
+        "current": "postgres",
+        "role": "none"
+      },
+      "matches": true
+    },
+    {
+      "expected": {
+        "case": "role_before_rollback",
+        "session": "postgres",
+        "current": "truss_probe_a",
+        "role": "truss_probe_a"
+      },
+      "actual": {
+        "case": "role_before_rollback",
+        "session": "postgres",
+        "current": "truss_probe_a",
+        "role": "truss_probe_a"
+      },
+      "matches": true
+    },
+    {
+      "expected": {
+        "case": "session_in_transaction",
+        "session": "truss_probe_b",
+        "current": "truss_probe_b",
+        "role": "none"
+      },
+      "actual": {
+        "case": "session_in_transaction",
+        "session": "truss_probe_b",
+        "current": "truss_probe_b",
+        "role": "none"
+      },
+      "matches": true
+    },
+    {
+      "expected": {
+        "case": "after_transaction_rollback",
+        "session": "postgres",
+        "current": "truss_probe_a",
+        "role": "truss_probe_a"
+      },
+      "actual": {
+        "case": "after_transaction_rollback",
+        "session": "postgres",
+        "current": "postgres",
+        "role": "none"
+      },
+      "matches": false
+    },
+    {
+      "expected": {
+        "case": "reset_after_rollback",
+        "session": "postgres",
+        "current": "postgres",
+        "role": "none"
+      },
+      "actual": {
+        "case": "reset_after_rollback",
+        "session": "postgres",
+        "current": "postgres",
+        "role": "none"
+      },
+      "matches": true
+    },
+    {
+      "expected": {
+        "case": "role_before_savepoint",
+        "session": "postgres",
+        "current": "truss_probe_a",
+        "role": "truss_probe_a"
+      },
+      "actual": {
+        "case": "role_before_savepoint",
+        "session": "postgres",
+        "current": "truss_probe_a",
+        "role": "truss_probe_a"
+      },
+      "matches": true
+    },
+    {
+      "expected": {
+        "case": "session_in_savepoint",
+        "session": "truss_probe_b",
+        "current": "truss_probe_b",
+        "role": "none"
+      },
+      "actual": {
+        "case": "session_in_savepoint",
+        "session": "truss_probe_b",
+        "current": "truss_probe_b",
+        "role": "none"
+      },
+      "matches": true
+    },
+    {
+      "expected": {
+        "case": "after_savepoint_rollback",
+        "session": "postgres",
+        "current": "truss_probe_a",
+        "role": "truss_probe_a"
+      },
+      "actual": {
+        "case": "after_savepoint_rollback",
+        "session": "postgres",
+        "current": "postgres",
+        "role": "none"
+      },
+      "matches": false
+    },
+    {
+      "expected": {
+        "case": "after_outer_rollback",
+        "session": "postgres",
+        "current": "truss_probe_a",
+        "role": "truss_probe_a"
+      },
+      "actual": {
+        "case": "after_outer_rollback",
+        "session": "postgres",
+        "current": "truss_probe_a",
+        "role": "none"
+      },
+      "matches": false
+    },
+    {
+      "expected": {
+        "case": "final_reset",
+        "session": "postgres",
+        "current": "postgres",
+        "role": "none"
+      },
+      "actual": {
+        "case": "final_reset",
+        "session": "postgres",
+        "current": "postgres",
+        "role": "none"
+      },
+      "matches": true
+    }
+  ],
+  "mismatches": 3,
+  "correctedBuildProvenanceVerified": false,
+  "r4Qualified": false,
+  "r5Qualified": false,
+  "producerSha256": "6df86ef84cb4134914aa4e4d28da72134e9e76d520929eebc612b2a1a797a91a"
+}

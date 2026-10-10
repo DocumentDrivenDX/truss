@@ -1,0 +1,1691 @@
+{
+  "scope": "All retained ColumnDef fields, exact local constraint/default/type/collation source and source references only. Explicit NOT NULL source is separate from effective PK nullability; native type/collation/default/function/regclass/sequence dependencies remain unresolved.",
+  "inputPins": [
+    {
+      "path": "docs/helix/02-design/models/truss-row-home-touch.physical-ids.proposal.json",
+      "sha256": "6b982bdcb5e09dc77662da4c441138861d27ba8932a9cbb70c9248784907ffed"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/row-home-touch-v0.1.proposal.sql",
+      "sha256": "98c9b2422581eefa43d9412a9f57930ed261ec55518efee4b79686d17ac7b99f"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/row-home-touch-v0.1.proposal.umf.json",
+      "sha256": "6aa8f0ee9f1c7d411977590f3cd23758fa148121ff359fb08a25677945dda6f2"
+    }
+  ],
+  "columns": [
+    {
+      "columnId": "truss.row-home.column.row_home_touch.transaction_id",
+      "parentId": "truss.row-home.table.row_home_touch",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/row-home-touch-v0.1.proposal.umf.json",
+        "modelSha256": "6aa8f0ee9f1c7d411977590f3cd23758fa148121ff359fb08a25677945dda6f2",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef"
+      },
+      "nativeFieldNames": [
+        "colname",
+        "constraints",
+        "is_local",
+        "location",
+        "typeName"
+      ],
+      "originalNativeDefinition": {
+        "kind": "object",
+        "members": {
+          "colname": {
+            "kind": "string",
+            "value": "transaction_id"
+          },
+          "typeName": {
+            "kind": "object",
+            "members": {
+              "names": {
+                "kind": "array",
+                "items": [
+                  {
+                    "kind": "object",
+                    "members": {
+                      "String": {
+                        "kind": "object",
+                        "members": {
+                          "sval": {
+                            "kind": "string",
+                            "value": "xid8"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "typemod": {
+                "kind": "number",
+                "value": "-1"
+              },
+              "location": {
+                "kind": "number",
+                "value": "206"
+              }
+            }
+          },
+          "is_local": {
+            "kind": "boolean",
+            "value": true
+          },
+          "constraints": {
+            "kind": "array",
+            "items": [
+              {
+                "kind": "object",
+                "members": {
+                  "Constraint": {
+                    "kind": "object",
+                    "members": {
+                      "contype": {
+                        "kind": "string",
+                        "value": "CONSTR_NOTNULL"
+                      },
+                      "location": {
+                        "kind": "number",
+                        "value": "211"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "kind": "object",
+                "members": {
+                  "Constraint": {
+                    "kind": "object",
+                    "members": {
+                      "contype": {
+                        "kind": "string",
+                        "value": "CONSTR_DEFAULT"
+                      },
+                      "raw_expr": {
+                        "kind": "object",
+                        "members": {
+                          "FuncCall": {
+                            "kind": "object",
+                            "members": {
+                              "funcname": {
+                                "kind": "array",
+                                "items": [
+                                  {
+                                    "kind": "object",
+                                    "members": {
+                                      "String": {
+                                        "kind": "object",
+                                        "members": {
+                                          "sval": {
+                                            "kind": "string",
+                                            "value": "pg_catalog"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "kind": "object",
+                                    "members": {
+                                      "String": {
+                                        "kind": "object",
+                                        "members": {
+                                          "sval": {
+                                            "kind": "string",
+                                            "value": "pg_current_xact_id"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                ]
+                              },
+                              "funcformat": {
+                                "kind": "string",
+                                "value": "COERCE_EXPLICIT_CALL"
+                              },
+                              "location": {
+                                "kind": "number",
+                                "value": "228"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "location": {
+                        "kind": "number",
+                        "value": "220"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "location": {
+            "kind": "number",
+            "value": "191"
+          }
+        }
+      },
+      "constraints": [
+        {
+          "sourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef/members/constraints/items/0/members/Constraint",
+          "nativeKind": "CONSTR_NOTNULL",
+          "originalNativeNode": {
+            "kind": "object",
+            "members": {
+              "contype": {
+                "kind": "string",
+                "value": "CONSTR_NOTNULL"
+              },
+              "location": {
+                "kind": "number",
+                "value": "211"
+              }
+            }
+          }
+        },
+        {
+          "sourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef/members/constraints/items/1/members/Constraint",
+          "nativeKind": "CONSTR_DEFAULT",
+          "originalNativeNode": {
+            "kind": "object",
+            "members": {
+              "contype": {
+                "kind": "string",
+                "value": "CONSTR_DEFAULT"
+              },
+              "raw_expr": {
+                "kind": "object",
+                "members": {
+                  "FuncCall": {
+                    "kind": "object",
+                    "members": {
+                      "funcname": {
+                        "kind": "array",
+                        "items": [
+                          {
+                            "kind": "object",
+                            "members": {
+                              "String": {
+                                "kind": "object",
+                                "members": {
+                                  "sval": {
+                                    "kind": "string",
+                                    "value": "pg_catalog"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "kind": "object",
+                            "members": {
+                              "String": {
+                                "kind": "object",
+                                "members": {
+                                  "sval": {
+                                    "kind": "string",
+                                    "value": "pg_current_xact_id"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "funcformat": {
+                        "kind": "string",
+                        "value": "COERCE_EXPLICIT_CALL"
+                      },
+                      "location": {
+                        "kind": "number",
+                        "value": "228"
+                      }
+                    }
+                  }
+                }
+              },
+              "location": {
+                "kind": "number",
+                "value": "220"
+              }
+            }
+          }
+        }
+      ],
+      "nativeBinding": {
+        "state": "unresolved"
+      }
+    },
+    {
+      "columnId": "truss.row-home.column.row_home_touch.owner_kind",
+      "parentId": "truss.row-home.table.row_home_touch",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/row-home-touch-v0.1.proposal.umf.json",
+        "modelSha256": "6aa8f0ee9f1c7d411977590f3cd23758fa148121ff359fb08a25677945dda6f2",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/1/members/ColumnDef"
+      },
+      "nativeFieldNames": [
+        "collClause",
+        "colname",
+        "constraints",
+        "is_local",
+        "location",
+        "typeName"
+      ],
+      "originalNativeDefinition": {
+        "kind": "object",
+        "members": {
+          "colname": {
+            "kind": "string",
+            "value": "owner_kind"
+          },
+          "typeName": {
+            "kind": "object",
+            "members": {
+              "names": {
+                "kind": "array",
+                "items": [
+                  {
+                    "kind": "object",
+                    "members": {
+                      "String": {
+                        "kind": "object",
+                        "members": {
+                          "sval": {
+                            "kind": "string",
+                            "value": "text"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "typemod": {
+                "kind": "number",
+                "value": "-1"
+              },
+              "location": {
+                "kind": "number",
+                "value": "274"
+              }
+            }
+          },
+          "is_local": {
+            "kind": "boolean",
+            "value": true
+          },
+          "collClause": {
+            "kind": "object",
+            "members": {
+              "collname": {
+                "kind": "array",
+                "items": [
+                  {
+                    "kind": "object",
+                    "members": {
+                      "String": {
+                        "kind": "object",
+                        "members": {
+                          "sval": {
+                            "kind": "string",
+                            "value": "pg_catalog"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "kind": "object",
+                    "members": {
+                      "String": {
+                        "kind": "object",
+                        "members": {
+                          "sval": {
+                            "kind": "string",
+                            "value": "C"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "location": {
+                "kind": "number",
+                "value": "279"
+              }
+            }
+          },
+          "constraints": {
+            "kind": "array",
+            "items": [
+              {
+                "kind": "object",
+                "members": {
+                  "Constraint": {
+                    "kind": "object",
+                    "members": {
+                      "contype": {
+                        "kind": "string",
+                        "value": "CONSTR_NOTNULL"
+                      },
+                      "location": {
+                        "kind": "number",
+                        "value": "302"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "location": {
+            "kind": "number",
+            "value": "263"
+          }
+        }
+      },
+      "constraints": [
+        {
+          "sourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/1/members/ColumnDef/members/constraints/items/0/members/Constraint",
+          "nativeKind": "CONSTR_NOTNULL",
+          "originalNativeNode": {
+            "kind": "object",
+            "members": {
+              "contype": {
+                "kind": "string",
+                "value": "CONSTR_NOTNULL"
+              },
+              "location": {
+                "kind": "number",
+                "value": "302"
+              }
+            }
+          }
+        }
+      ],
+      "nativeBinding": {
+        "state": "unresolved"
+      }
+    },
+    {
+      "columnId": "truss.row-home.column.row_home_touch.owner_id",
+      "parentId": "truss.row-home.table.row_home_touch",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/row-home-touch-v0.1.proposal.umf.json",
+        "modelSha256": "6aa8f0ee9f1c7d411977590f3cd23758fa148121ff359fb08a25677945dda6f2",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/2/members/ColumnDef"
+      },
+      "nativeFieldNames": [
+        "colname",
+        "constraints",
+        "is_local",
+        "location",
+        "typeName"
+      ],
+      "originalNativeDefinition": {
+        "kind": "object",
+        "members": {
+          "colname": {
+            "kind": "string",
+            "value": "owner_id"
+          },
+          "typeName": {
+            "kind": "object",
+            "members": {
+              "names": {
+                "kind": "array",
+                "items": [
+                  {
+                    "kind": "object",
+                    "members": {
+                      "String": {
+                        "kind": "object",
+                        "members": {
+                          "sval": {
+                            "kind": "string",
+                            "value": "pg_catalog"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "kind": "object",
+                    "members": {
+                      "String": {
+                        "kind": "object",
+                        "members": {
+                          "sval": {
+                            "kind": "string",
+                            "value": "int8"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "typemod": {
+                "kind": "number",
+                "value": "-1"
+              },
+              "location": {
+                "kind": "number",
+                "value": "323"
+              }
+            }
+          },
+          "is_local": {
+            "kind": "boolean",
+            "value": true
+          },
+          "constraints": {
+            "kind": "array",
+            "items": [
+              {
+                "kind": "object",
+                "members": {
+                  "Constraint": {
+                    "kind": "object",
+                    "members": {
+                      "contype": {
+                        "kind": "string",
+                        "value": "CONSTR_NOTNULL"
+                      },
+                      "location": {
+                        "kind": "number",
+                        "value": "330"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "location": {
+            "kind": "number",
+            "value": "314"
+          }
+        }
+      },
+      "constraints": [
+        {
+          "sourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/2/members/ColumnDef/members/constraints/items/0/members/Constraint",
+          "nativeKind": "CONSTR_NOTNULL",
+          "originalNativeNode": {
+            "kind": "object",
+            "members": {
+              "contype": {
+                "kind": "string",
+                "value": "CONSTR_NOTNULL"
+              },
+              "location": {
+                "kind": "number",
+                "value": "330"
+              }
+            }
+          }
+        }
+      ],
+      "nativeBinding": {
+        "state": "unresolved"
+      }
+    },
+    {
+      "columnId": "truss.row-home.column.row_home_touch.owner_discriminator_id",
+      "parentId": "truss.row-home.table.row_home_touch",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/row-home-touch-v0.1.proposal.umf.json",
+        "modelSha256": "6aa8f0ee9f1c7d411977590f3cd23758fa148121ff359fb08a25677945dda6f2",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/3/members/ColumnDef"
+      },
+      "nativeFieldNames": [
+        "colname",
+        "constraints",
+        "is_local",
+        "location",
+        "typeName"
+      ],
+      "originalNativeDefinition": {
+        "kind": "object",
+        "members": {
+          "colname": {
+            "kind": "string",
+            "value": "owner_discriminator_id"
+          },
+          "typeName": {
+            "kind": "object",
+            "members": {
+              "names": {
+                "kind": "array",
+                "items": [
+                  {
+                    "kind": "object",
+                    "members": {
+                      "String": {
+                        "kind": "object",
+                        "members": {
+                          "sval": {
+                            "kind": "string",
+                            "value": "pg_catalog"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "kind": "object",
+                    "members": {
+                      "String": {
+                        "kind": "object",
+                        "members": {
+                          "sval": {
+                            "kind": "string",
+                            "value": "int4"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "typemod": {
+                "kind": "number",
+                "value": "-1"
+              },
+              "location": {
+                "kind": "number",
+                "value": "365"
+              }
+            }
+          },
+          "is_local": {
+            "kind": "boolean",
+            "value": true
+          },
+          "constraints": {
+            "kind": "array",
+            "items": [
+              {
+                "kind": "object",
+                "members": {
+                  "Constraint": {
+                    "kind": "object",
+                    "members": {
+                      "contype": {
+                        "kind": "string",
+                        "value": "CONSTR_NOTNULL"
+                      },
+                      "location": {
+                        "kind": "number",
+                        "value": "369"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "location": {
+            "kind": "number",
+            "value": "342"
+          }
+        }
+      },
+      "constraints": [
+        {
+          "sourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/3/members/ColumnDef/members/constraints/items/0/members/Constraint",
+          "nativeKind": "CONSTR_NOTNULL",
+          "originalNativeNode": {
+            "kind": "object",
+            "members": {
+              "contype": {
+                "kind": "string",
+                "value": "CONSTR_NOTNULL"
+              },
+              "location": {
+                "kind": "number",
+                "value": "369"
+              }
+            }
+          }
+        }
+      ],
+      "nativeBinding": {
+        "state": "unresolved"
+      }
+    },
+    {
+      "columnId": "truss.row-home.column.row_home_touch.property_owner_type_id",
+      "parentId": "truss.row-home.table.row_home_touch",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/row-home-touch-v0.1.proposal.umf.json",
+        "modelSha256": "6aa8f0ee9f1c7d411977590f3cd23758fa148121ff359fb08a25677945dda6f2",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/4/members/ColumnDef"
+      },
+      "nativeFieldNames": [
+        "colname",
+        "constraints",
+        "is_local",
+        "location",
+        "typeName"
+      ],
+      "originalNativeDefinition": {
+        "kind": "object",
+        "members": {
+          "colname": {
+            "kind": "string",
+            "value": "property_owner_type_id"
+          },
+          "typeName": {
+            "kind": "object",
+            "members": {
+              "names": {
+                "kind": "array",
+                "items": [
+                  {
+                    "kind": "object",
+                    "members": {
+                      "String": {
+                        "kind": "object",
+                        "members": {
+                          "sval": {
+                            "kind": "string",
+                            "value": "pg_catalog"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "kind": "object",
+                    "members": {
+                      "String": {
+                        "kind": "object",
+                        "members": {
+                          "sval": {
+                            "kind": "string",
+                            "value": "int4"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "typemod": {
+                "kind": "number",
+                "value": "-1"
+              },
+              "location": {
+                "kind": "number",
+                "value": "404"
+              }
+            }
+          },
+          "is_local": {
+            "kind": "boolean",
+            "value": true
+          },
+          "constraints": {
+            "kind": "array",
+            "items": [
+              {
+                "kind": "object",
+                "members": {
+                  "Constraint": {
+                    "kind": "object",
+                    "members": {
+                      "contype": {
+                        "kind": "string",
+                        "value": "CONSTR_NOTNULL"
+                      },
+                      "location": {
+                        "kind": "number",
+                        "value": "408"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "location": {
+            "kind": "number",
+            "value": "381"
+          }
+        }
+      },
+      "constraints": [
+        {
+          "sourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/4/members/ColumnDef/members/constraints/items/0/members/Constraint",
+          "nativeKind": "CONSTR_NOTNULL",
+          "originalNativeNode": {
+            "kind": "object",
+            "members": {
+              "contype": {
+                "kind": "string",
+                "value": "CONSTR_NOTNULL"
+              },
+              "location": {
+                "kind": "number",
+                "value": "408"
+              }
+            }
+          }
+        }
+      ],
+      "nativeBinding": {
+        "state": "unresolved"
+      }
+    },
+    {
+      "columnId": "truss.row-home.column.row_home_touch.property_id",
+      "parentId": "truss.row-home.table.row_home_touch",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/row-home-touch-v0.1.proposal.umf.json",
+        "modelSha256": "6aa8f0ee9f1c7d411977590f3cd23758fa148121ff359fb08a25677945dda6f2",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/5/members/ColumnDef"
+      },
+      "nativeFieldNames": [
+        "colname",
+        "constraints",
+        "is_local",
+        "location",
+        "typeName"
+      ],
+      "originalNativeDefinition": {
+        "kind": "object",
+        "members": {
+          "colname": {
+            "kind": "string",
+            "value": "property_id"
+          },
+          "typeName": {
+            "kind": "object",
+            "members": {
+              "names": {
+                "kind": "array",
+                "items": [
+                  {
+                    "kind": "object",
+                    "members": {
+                      "String": {
+                        "kind": "object",
+                        "members": {
+                          "sval": {
+                            "kind": "string",
+                            "value": "pg_catalog"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "kind": "object",
+                    "members": {
+                      "String": {
+                        "kind": "object",
+                        "members": {
+                          "sval": {
+                            "kind": "string",
+                            "value": "int4"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "typemod": {
+                "kind": "number",
+                "value": "-1"
+              },
+              "location": {
+                "kind": "number",
+                "value": "432"
+              }
+            }
+          },
+          "is_local": {
+            "kind": "boolean",
+            "value": true
+          },
+          "constraints": {
+            "kind": "array",
+            "items": [
+              {
+                "kind": "object",
+                "members": {
+                  "Constraint": {
+                    "kind": "object",
+                    "members": {
+                      "contype": {
+                        "kind": "string",
+                        "value": "CONSTR_NOTNULL"
+                      },
+                      "location": {
+                        "kind": "number",
+                        "value": "436"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "location": {
+            "kind": "number",
+            "value": "420"
+          }
+        }
+      },
+      "constraints": [
+        {
+          "sourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/5/members/ColumnDef/members/constraints/items/0/members/Constraint",
+          "nativeKind": "CONSTR_NOTNULL",
+          "originalNativeNode": {
+            "kind": "object",
+            "members": {
+              "contype": {
+                "kind": "string",
+                "value": "CONSTR_NOTNULL"
+              },
+              "location": {
+                "kind": "number",
+                "value": "436"
+              }
+            }
+          }
+        }
+      ],
+      "nativeBinding": {
+        "state": "unresolved"
+      }
+    },
+    {
+      "columnId": "truss.row-home.column.row_home_touch.dirty_generation",
+      "parentId": "truss.row-home.table.row_home_touch",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/row-home-touch-v0.1.proposal.umf.json",
+        "modelSha256": "6aa8f0ee9f1c7d411977590f3cd23758fa148121ff359fb08a25677945dda6f2",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/6/members/ColumnDef"
+      },
+      "nativeFieldNames": [
+        "colname",
+        "constraints",
+        "is_local",
+        "location",
+        "typeName"
+      ],
+      "originalNativeDefinition": {
+        "kind": "object",
+        "members": {
+          "colname": {
+            "kind": "string",
+            "value": "dirty_generation"
+          },
+          "typeName": {
+            "kind": "object",
+            "members": {
+              "names": {
+                "kind": "array",
+                "items": [
+                  {
+                    "kind": "object",
+                    "members": {
+                      "String": {
+                        "kind": "object",
+                        "members": {
+                          "sval": {
+                            "kind": "string",
+                            "value": "pg_catalog"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "kind": "object",
+                    "members": {
+                      "String": {
+                        "kind": "object",
+                        "members": {
+                          "sval": {
+                            "kind": "string",
+                            "value": "int8"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "typemod": {
+                "kind": "number",
+                "value": "-1"
+              },
+              "location": {
+                "kind": "number",
+                "value": "465"
+              }
+            }
+          },
+          "is_local": {
+            "kind": "boolean",
+            "value": true
+          },
+          "constraints": {
+            "kind": "array",
+            "items": [
+              {
+                "kind": "object",
+                "members": {
+                  "Constraint": {
+                    "kind": "object",
+                    "members": {
+                      "contype": {
+                        "kind": "string",
+                        "value": "CONSTR_NOTNULL"
+                      },
+                      "location": {
+                        "kind": "number",
+                        "value": "472"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "location": {
+            "kind": "number",
+            "value": "448"
+          }
+        }
+      },
+      "constraints": [
+        {
+          "sourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/6/members/ColumnDef/members/constraints/items/0/members/Constraint",
+          "nativeKind": "CONSTR_NOTNULL",
+          "originalNativeNode": {
+            "kind": "object",
+            "members": {
+              "contype": {
+                "kind": "string",
+                "value": "CONSTR_NOTNULL"
+              },
+              "location": {
+                "kind": "number",
+                "value": "472"
+              }
+            }
+          }
+        }
+      ],
+      "nativeBinding": {
+        "state": "unresolved"
+      }
+    },
+    {
+      "columnId": "truss.row-home.column.row_home_touch.sealed_generation",
+      "parentId": "truss.row-home.table.row_home_touch",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/row-home-touch-v0.1.proposal.umf.json",
+        "modelSha256": "6aa8f0ee9f1c7d411977590f3cd23758fa148121ff359fb08a25677945dda6f2",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/7/members/ColumnDef"
+      },
+      "nativeFieldNames": [
+        "colname",
+        "is_local",
+        "location",
+        "typeName"
+      ],
+      "originalNativeDefinition": {
+        "kind": "object",
+        "members": {
+          "colname": {
+            "kind": "string",
+            "value": "sealed_generation"
+          },
+          "typeName": {
+            "kind": "object",
+            "members": {
+              "names": {
+                "kind": "array",
+                "items": [
+                  {
+                    "kind": "object",
+                    "members": {
+                      "String": {
+                        "kind": "object",
+                        "members": {
+                          "sval": {
+                            "kind": "string",
+                            "value": "pg_catalog"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "kind": "object",
+                    "members": {
+                      "String": {
+                        "kind": "object",
+                        "members": {
+                          "sval": {
+                            "kind": "string",
+                            "value": "int8"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "typemod": {
+                "kind": "number",
+                "value": "-1"
+              },
+              "location": {
+                "kind": "number",
+                "value": "502"
+              }
+            }
+          },
+          "is_local": {
+            "kind": "boolean",
+            "value": true
+          },
+          "location": {
+            "kind": "number",
+            "value": "484"
+          }
+        }
+      },
+      "constraints": [],
+      "nativeBinding": {
+        "state": "unresolved"
+      }
+    },
+    {
+      "columnId": "truss.row-home.column.row_home_touch.original_layout_bytes",
+      "parentId": "truss.row-home.table.row_home_touch",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/row-home-touch-v0.1.proposal.umf.json",
+        "modelSha256": "6aa8f0ee9f1c7d411977590f3cd23758fa148121ff359fb08a25677945dda6f2",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/8/members/ColumnDef"
+      },
+      "nativeFieldNames": [
+        "colname",
+        "constraints",
+        "is_local",
+        "location",
+        "typeName"
+      ],
+      "originalNativeDefinition": {
+        "kind": "object",
+        "members": {
+          "colname": {
+            "kind": "string",
+            "value": "original_layout_bytes"
+          },
+          "typeName": {
+            "kind": "object",
+            "members": {
+              "names": {
+                "kind": "array",
+                "items": [
+                  {
+                    "kind": "object",
+                    "members": {
+                      "String": {
+                        "kind": "object",
+                        "members": {
+                          "sval": {
+                            "kind": "string",
+                            "value": "bytea"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "typemod": {
+                "kind": "number",
+                "value": "-1"
+              },
+              "location": {
+                "kind": "number",
+                "value": "534"
+              }
+            }
+          },
+          "is_local": {
+            "kind": "boolean",
+            "value": true
+          },
+          "constraints": {
+            "kind": "array",
+            "items": [
+              {
+                "kind": "object",
+                "members": {
+                  "Constraint": {
+                    "kind": "object",
+                    "members": {
+                      "contype": {
+                        "kind": "string",
+                        "value": "CONSTR_NOTNULL"
+                      },
+                      "location": {
+                        "kind": "number",
+                        "value": "540"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "location": {
+            "kind": "number",
+            "value": "512"
+          }
+        }
+      },
+      "constraints": [
+        {
+          "sourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/8/members/ColumnDef/members/constraints/items/0/members/Constraint",
+          "nativeKind": "CONSTR_NOTNULL",
+          "originalNativeNode": {
+            "kind": "object",
+            "members": {
+              "contype": {
+                "kind": "string",
+                "value": "CONSTR_NOTNULL"
+              },
+              "location": {
+                "kind": "number",
+                "value": "540"
+              }
+            }
+          }
+        }
+      ],
+      "nativeBinding": {
+        "state": "unresolved"
+      }
+    },
+    {
+      "columnId": "truss.row-home.column.row_home_touch.original_home_bytes",
+      "parentId": "truss.row-home.table.row_home_touch",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/row-home-touch-v0.1.proposal.umf.json",
+        "modelSha256": "6aa8f0ee9f1c7d411977590f3cd23758fa148121ff359fb08a25677945dda6f2",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/9/members/ColumnDef"
+      },
+      "nativeFieldNames": [
+        "colname",
+        "constraints",
+        "is_local",
+        "location",
+        "typeName"
+      ],
+      "originalNativeDefinition": {
+        "kind": "object",
+        "members": {
+          "colname": {
+            "kind": "string",
+            "value": "original_home_bytes"
+          },
+          "typeName": {
+            "kind": "object",
+            "members": {
+              "names": {
+                "kind": "array",
+                "items": [
+                  {
+                    "kind": "object",
+                    "members": {
+                      "String": {
+                        "kind": "object",
+                        "members": {
+                          "sval": {
+                            "kind": "string",
+                            "value": "bytea"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "typemod": {
+                "kind": "number",
+                "value": "-1"
+              },
+              "location": {
+                "kind": "number",
+                "value": "572"
+              }
+            }
+          },
+          "is_local": {
+            "kind": "boolean",
+            "value": true
+          },
+          "constraints": {
+            "kind": "array",
+            "items": [
+              {
+                "kind": "object",
+                "members": {
+                  "Constraint": {
+                    "kind": "object",
+                    "members": {
+                      "contype": {
+                        "kind": "string",
+                        "value": "CONSTR_NOTNULL"
+                      },
+                      "location": {
+                        "kind": "number",
+                        "value": "578"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "location": {
+            "kind": "number",
+            "value": "552"
+          }
+        }
+      },
+      "constraints": [
+        {
+          "sourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/9/members/ColumnDef/members/constraints/items/0/members/Constraint",
+          "nativeKind": "CONSTR_NOTNULL",
+          "originalNativeNode": {
+            "kind": "object",
+            "members": {
+              "contype": {
+                "kind": "string",
+                "value": "CONSTR_NOTNULL"
+              },
+              "location": {
+                "kind": "number",
+                "value": "578"
+              }
+            }
+          }
+        }
+      ],
+      "nativeBinding": {
+        "state": "unresolved"
+      }
+    },
+    {
+      "columnId": "truss.row-home.column.row_home_touch.original_owner_property_bytes",
+      "parentId": "truss.row-home.table.row_home_touch",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/row-home-touch-v0.1.proposal.umf.json",
+        "modelSha256": "6aa8f0ee9f1c7d411977590f3cd23758fa148121ff359fb08a25677945dda6f2",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/10/members/ColumnDef"
+      },
+      "nativeFieldNames": [
+        "colname",
+        "constraints",
+        "is_local",
+        "location",
+        "typeName"
+      ],
+      "originalNativeDefinition": {
+        "kind": "object",
+        "members": {
+          "colname": {
+            "kind": "string",
+            "value": "original_owner_property_bytes"
+          },
+          "typeName": {
+            "kind": "object",
+            "members": {
+              "names": {
+                "kind": "array",
+                "items": [
+                  {
+                    "kind": "object",
+                    "members": {
+                      "String": {
+                        "kind": "object",
+                        "members": {
+                          "sval": {
+                            "kind": "string",
+                            "value": "bytea"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "typemod": {
+                "kind": "number",
+                "value": "-1"
+              },
+              "location": {
+                "kind": "number",
+                "value": "620"
+              }
+            }
+          },
+          "is_local": {
+            "kind": "boolean",
+            "value": true
+          },
+          "constraints": {
+            "kind": "array",
+            "items": [
+              {
+                "kind": "object",
+                "members": {
+                  "Constraint": {
+                    "kind": "object",
+                    "members": {
+                      "contype": {
+                        "kind": "string",
+                        "value": "CONSTR_NOTNULL"
+                      },
+                      "location": {
+                        "kind": "number",
+                        "value": "626"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "location": {
+            "kind": "number",
+            "value": "590"
+          }
+        }
+      },
+      "constraints": [
+        {
+          "sourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/10/members/ColumnDef/members/constraints/items/0/members/Constraint",
+          "nativeKind": "CONSTR_NOTNULL",
+          "originalNativeNode": {
+            "kind": "object",
+            "members": {
+              "contype": {
+                "kind": "string",
+                "value": "CONSTR_NOTNULL"
+              },
+              "location": {
+                "kind": "number",
+                "value": "626"
+              }
+            }
+          }
+        }
+      ],
+      "nativeBinding": {
+        "state": "unresolved"
+      }
+    },
+    {
+      "columnId": "truss.row-home.column.row_home_touch.original_operation_bytes",
+      "parentId": "truss.row-home.table.row_home_touch",
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/row-home-touch-v0.1.proposal.umf.json",
+        "modelSha256": "6aa8f0ee9f1c7d411977590f3cd23758fa148121ff359fb08a25677945dda6f2",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/11/members/ColumnDef"
+      },
+      "nativeFieldNames": [
+        "colname",
+        "constraints",
+        "is_local",
+        "location",
+        "typeName"
+      ],
+      "originalNativeDefinition": {
+        "kind": "object",
+        "members": {
+          "colname": {
+            "kind": "string",
+            "value": "original_operation_bytes"
+          },
+          "typeName": {
+            "kind": "object",
+            "members": {
+              "names": {
+                "kind": "array",
+                "items": [
+                  {
+                    "kind": "object",
+                    "members": {
+                      "String": {
+                        "kind": "object",
+                        "members": {
+                          "sval": {
+                            "kind": "string",
+                            "value": "bytea"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "typemod": {
+                "kind": "number",
+                "value": "-1"
+              },
+              "location": {
+                "kind": "number",
+                "value": "663"
+              }
+            }
+          },
+          "is_local": {
+            "kind": "boolean",
+            "value": true
+          },
+          "constraints": {
+            "kind": "array",
+            "items": [
+              {
+                "kind": "object",
+                "members": {
+                  "Constraint": {
+                    "kind": "object",
+                    "members": {
+                      "contype": {
+                        "kind": "string",
+                        "value": "CONSTR_NOTNULL"
+                      },
+                      "location": {
+                        "kind": "number",
+                        "value": "669"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "location": {
+            "kind": "number",
+            "value": "638"
+          }
+        }
+      },
+      "constraints": [
+        {
+          "sourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/11/members/ColumnDef/members/constraints/items/0/members/Constraint",
+          "nativeKind": "CONSTR_NOTNULL",
+          "originalNativeNode": {
+            "kind": "object",
+            "members": {
+              "contype": {
+                "kind": "string",
+                "value": "CONSTR_NOTNULL"
+              },
+              "location": {
+                "kind": "number",
+                "value": "669"
+              }
+            }
+          }
+        }
+      ],
+      "nativeBinding": {
+        "state": "unresolved"
+      }
+    }
+  ],
+  "columnConstraintCounts": {
+    "CONSTR_DEFAULT": 1,
+    "CONSTR_NOTNULL": 11
+  },
+  "defaults": [
+    {
+      "columnId": "truss.row-home.column.row_home_touch.transaction_id",
+      "sourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef/members/constraints/items/1/members/Constraint",
+      "originalDefaultNode": {
+        "kind": "object",
+        "members": {
+          "contype": {
+            "kind": "string",
+            "value": "CONSTR_DEFAULT"
+          },
+          "raw_expr": {
+            "kind": "object",
+            "members": {
+              "FuncCall": {
+                "kind": "object",
+                "members": {
+                  "funcname": {
+                    "kind": "array",
+                    "items": [
+                      {
+                        "kind": "object",
+                        "members": {
+                          "String": {
+                            "kind": "object",
+                            "members": {
+                              "sval": {
+                                "kind": "string",
+                                "value": "pg_catalog"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "kind": "object",
+                        "members": {
+                          "String": {
+                            "kind": "object",
+                            "members": {
+                              "sval": {
+                                "kind": "string",
+                                "value": "pg_current_xact_id"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "funcformat": {
+                    "kind": "string",
+                    "value": "COERCE_EXPLICIT_CALL"
+                  },
+                  "location": {
+                    "kind": "number",
+                    "value": "228"
+                  }
+                }
+              }
+            }
+          },
+          "location": {
+            "kind": "number",
+            "value": "220"
+          }
+        }
+      },
+      "references": [
+        {
+          "sourcePath": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateStmt/members/tableElts/items/0/members/ColumnDef/members/constraints/items/1/members/Constraint/members/raw_expr/members/FuncCall",
+          "nativeNodeKind": "FuncCall",
+          "originalNativeNode": {
+            "kind": "object",
+            "members": {
+              "funcname": {
+                "kind": "array",
+                "items": [
+                  {
+                    "kind": "object",
+                    "members": {
+                      "String": {
+                        "kind": "object",
+                        "members": {
+                          "sval": {
+                            "kind": "string",
+                            "value": "pg_catalog"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "kind": "object",
+                    "members": {
+                      "String": {
+                        "kind": "object",
+                        "members": {
+                          "sval": {
+                            "kind": "string",
+                            "value": "pg_current_xact_id"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "funcformat": {
+                "kind": "string",
+                "value": "COERCE_EXPLICIT_CALL"
+              },
+              "location": {
+                "kind": "number",
+                "value": "228"
+              }
+            }
+          },
+          "nativeBinding": {
+            "state": "unresolved"
+          }
+        }
+      ]
+    }
+  ],
+  "physicalCoverageComplete": false
+}

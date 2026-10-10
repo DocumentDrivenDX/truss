@@ -1,0 +1,64 @@
+{
+  "reviewVersion": "truss-weft-source-sync/0.1",
+  "sourceRevision": "a3a31e0ce2e29663edb37fd0b2cb932f02ea17d1",
+  "integrationRevision": "2744531735c2a771fbe7ed24a7f67e3afc851b25",
+  "compilerSourceDelta": [],
+  "sourceFiles": [
+    {
+      "path": "docs/helix/04-build/evidence/B-007-support-inventory.json",
+      "sha256": "8492c9a846abbecb4e4e0791d7439ebe88c029d5c385334dd477f3f8c7d579fb"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/B-007-final-acceptance-checks/summary.json",
+      "sha256": "5f7377ad8025cedaac4eb58c2a0ab55e1787572cf07a4b44c26eafc6643e8af6"
+    }
+  ],
+  "verifiedTrussProfileReferences": [
+    {
+      "role": "qualification",
+      "path": "docs/helix/04-build/evidence/B-007-qualified-truss.json",
+      "sha256": "3fd7596bc0ab8da092bedd6dc8f12c4973a166fd5c01d11118413cddb4166dbe",
+      "hashVerified": true
+    },
+    {
+      "role": "registrationEvidence",
+      "path": "docs/helix/04-build/evidence/B-007-qualified-registration/summary.json",
+      "sha256": "5c5c18d3254b918d7ab6ddb363b1c60d8e14361473ff0c6c11c302f8c5eddf46",
+      "hashVerified": true
+    },
+    {
+      "role": "implementation",
+      "path": "crates/weft-postgresql/src/qualified_profile.rs",
+      "sha256": "ee93032d4e787330ba41b0a72b5ed3686c26c8d9326bda868bf0b2e670c75993",
+      "hashVerified": true
+    },
+    {
+      "role": "hostEvidence",
+      "path": "docs/helix/04-build/evidence/B-007-qualified-hosts/summary.json",
+      "sha256": "dc3c02f0b50e70e969326e9f932d78cd04606b406cb884ae389022e577740d48",
+      "hashVerified": true
+    }
+  ],
+  "ownerReportedAcceptance": {
+    "status": "passed",
+    "replayComponents": 45,
+    "verifiedEvidenceReferences": 136,
+    "governedArtifacts": 43,
+    "schemas": 10,
+    "plannedCriteria": 30,
+    "initialFixtureScenarios": 636,
+    "logs": {
+      "replay": {
+        "uncompressedSha256": "cf49c83b108c5d94dc0682dc1bfe99f8ac1ec8534190850a81c5f815ecb11d6d",
+        "exitCode": 0
+      },
+      "specifications": {
+        "uncompressedSha256": "82925ebb4d9409ebd9400b4ba5e8525f59f10f51a186c33cd149a010d55b7466",
+        "exitCode": 0
+      }
+    },
+    "checkerSha256": "2f8974ddaa28b6a8fd8e41b17833e3a45ab9fb7c6beb1b7516817332818d93a1",
+    "scope": "Final local saved-evidence/source/criterion custody and specification integrity. Actual native/Python/browser/workspace executions remain separate records. Final remote CI and PR merge remain required."
+  },
+  "scope": "Committed source and retained hash custody only. No upstream checks rerun; unchanged compiler source permits retaining existing integration pin. Uncommitted core0.8/security work excluded. Production installed Truss qualification remains open."
+}

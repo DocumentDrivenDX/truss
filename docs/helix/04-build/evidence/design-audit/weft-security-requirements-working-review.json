@@ -1,0 +1,31 @@
+{
+  "scope": "Read-only uncommitted owner source review; no API adoption or executed owner tests",
+  "observedAt": "2026-10-10T04:40:23.215626+00:00",
+  "ownerHead": "94b2de5e303fe53f0c9432458119b6fe1eef187c",
+  "sourceSha256": {
+    "crates/weft-core/src/security_requirements.rs": "937f259ae5cdca5afbee653d89f7882e6f0bb2a454a6703256d14625e8fe2711",
+    "crates/weft-core/src/security_backend.rs": "ca5a76498807f3632493640203c5f74859b40736451b7b72b7e15cdae9a1c9eb",
+    "crates/weft-core/src/compile.rs": "6f23265ac68dbbf5240d05285e3128c460ae50053140a880eb058d7272b72585"
+  },
+  "workingStatus": [
+    " M crates/weft-core/src/compile.rs",
+    "?? crates/weft-core/src/security_backend.rs",
+    "?? crates/weft-core/src/security_requirements.rs"
+  ],
+  "observations": [
+    "SecurityRequirements constructors/fields are compiler-private and derive from admitted profiled query and logical plan",
+    "Inventory retains scan actions and complete borrowed rule references, operator disclosure/original-authorized modes, and ordered original output expressions",
+    "Derivation charges comparisons and selected text under a private work/text budget; this is not Truss original-account correspondence",
+    "Backend context exposes borrowed requirements; declarations do not replace compiler inventory",
+    "Current compile path refuses with WFT-SECURITY-LOWERING-UNSUPPORTED at physical/result/dependency coverage validation"
+  ],
+  "ownerTestsExecutedHere": false,
+  "adoptedByTruss": false,
+  "securityHandoffQualified": false,
+  "compilerRuntimePinChanged": false,
+  "limitations": [
+    "Uncommitted working source may change after observation",
+    "No native current-person/isolation/origin or publication-fence evidence",
+    "No stable Python/TypeScript backend ABI or complete security lowering qualification"
+  ]
+}

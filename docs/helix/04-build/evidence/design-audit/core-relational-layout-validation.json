@@ -1,0 +1,105 @@
+{
+  "scope": "UMF core relational candidate validation only; no DDL lowering/native adoption",
+  "modelPath": "docs/helix/02-design/models/truss-layout-core-relational-0.1.proposal.umf.json",
+  "modelSha256": "47ab32af5ceb18559c1341b5a22d85f69f787c4872d7bd187e821d37a88cd9eb",
+  "valid": false,
+  "complete": false,
+  "errors": [
+    {
+      "code": "KEY_EQUALITY",
+      "path": "/modules/1/elements/166/keys/0/fields/0",
+      "message": "Key equality is undefined for this component",
+      "severity": "error"
+    },
+    {
+      "code": "KEY_EQUALITY",
+      "path": "/modules/1/elements/180/keys/0/fields/0",
+      "message": "Key equality is undefined for this component",
+      "severity": "error"
+    },
+    {
+      "code": "KEY_EQUALITY",
+      "path": "/modules/1/elements/197/keys/0/fields/0",
+      "message": "Key equality is undefined for this component",
+      "severity": "error"
+    },
+    {
+      "code": "KEY_FIELD_REQUIRED",
+      "path": "/modules/1/elements/204/keys/1/fields/0",
+      "message": "Key component must explicitly supply a value",
+      "severity": "error"
+    },
+    {
+      "code": "KEY_FIELD_REQUIRED",
+      "path": "/modules/1/elements/204/keys/1/fields/1",
+      "message": "Key component must explicitly supply a value",
+      "severity": "error"
+    },
+    {
+      "code": "KEY_FIELD_REQUIRED",
+      "path": "/modules/1/elements/204/keys/2/fields/0",
+      "message": "Key component must explicitly supply a value",
+      "severity": "error"
+    },
+    {
+      "code": "KEY_FIELD_REQUIRED",
+      "path": "/modules/1/elements/204/keys/2/fields/1",
+      "message": "Key component must explicitly supply a value",
+      "severity": "error"
+    },
+    {
+      "code": "KEY_EQUALITY",
+      "path": "/modules/1/elements/249/keys/0/fields/0",
+      "message": "Key equality is undefined for this component",
+      "severity": "error"
+    },
+    {
+      "code": "KEY_EQUALITY",
+      "path": "/modules/1/elements/314/keys/0/fields/2",
+      "message": "Key equality is undefined for this component",
+      "severity": "error"
+    },
+    {
+      "code": "KEY_EQUALITY",
+      "path": "/modules/1/elements/327/keys/0/fields/2",
+      "message": "Key equality is undefined for this component",
+      "severity": "error"
+    },
+    {
+      "code": "KEY_EQUALITY",
+      "path": "/modules/1/elements/327/keys/1/fields/2",
+      "message": "Key equality is undefined for this component",
+      "severity": "error"
+    },
+    {
+      "code": "KEY_FIELD_REQUIRED",
+      "path": "/modules/1/elements/327/keys/1/fields/3",
+      "message": "Key component must explicitly supply a value",
+      "severity": "error"
+    },
+    {
+      "code": "KEY_EQUALITY",
+      "path": "/modules/1/elements/342/keys/0/fields/2",
+      "message": "Key equality is undefined for this component",
+      "severity": "error"
+    },
+    {
+      "code": "KEY_EQUALITY",
+      "path": "/modules/1/elements/353/keys/0/fields/2",
+      "message": "Key equality is undefined for this component",
+      "severity": "error"
+    }
+  ],
+  "diagnosticCodes": [
+    "EXPERIMENTAL_CORE_NULLABILITY",
+    "EXPERIMENTAL_CORE_CARDINALITY",
+    "EXPERIMENTAL_CORE_FACETS",
+    "UNKNOWN_EXTENSION",
+    "UNKNOWN_SCALAR_TYPE",
+    "EXPERIMENTAL_CORE_KEYS",
+    "KEY_EQUALITY",
+    "KEY_FIELD_REQUIRED",
+    "EXPERIMENTAL_CORE_RELATIONSHIPS",
+    "UNKNOWN_RELATIONSHIP_QUALIFIER"
+  ]
+}

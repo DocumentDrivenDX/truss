@@ -1,0 +1,101 @@
+{
+  "interfaceVersion": "truss-bootstrap-sequence-definition-profile/0.1.0",
+  "status": "unadopted producer specification; no native or canonical implementation qualification",
+  "nativeVersion": "PostgreSQL 17; exact build and target profile still selected separately",
+  "requiredRawFieldInventory": [
+    "seqrelid",
+    "seqtypid",
+    "seqstart",
+    "seqincrement",
+    "seqmax",
+    "seqmin",
+    "seqcache",
+    "seqcycle"
+  ],
+  "fields": [
+    {
+      "nativeField": "seqrelid",
+      "domain": "nonzero canonical uint32 OID token",
+      "projection": null,
+      "meaning": "Original pg_class association; archived native identity, resolved sequence correspondence required, never standalone adjunct OID",
+      "rawPreservation": "complete original raw row plus same-row projected carrier where present; mismatch refuses"
+    },
+    {
+      "nativeField": "seqtypid",
+      "domain": "nonzero canonical uint32 OID token",
+      "projection": "resolvedTypeIdentity",
+      "meaning": "Resolve original type meaning before cross-install comparison; raw OID retained as evidence",
+      "rawPreservation": "complete original raw row plus same-row projected carrier where present; mismatch refuses"
+    },
+    {
+      "nativeField": "seqstart",
+      "domain": "canonical signed int64 decimal token",
+      "projection": "start",
+      "meaning": "stable configuration",
+      "rawPreservation": "complete original raw row plus same-row projected carrier where present; mismatch refuses"
+    },
+    {
+      "nativeField": "seqincrement",
+      "domain": "canonical signed int64 decimal token",
+      "projection": "increment",
+      "meaning": "stable configuration",
+      "rawPreservation": "complete original raw row plus same-row projected carrier where present; mismatch refuses"
+    },
+    {
+      "nativeField": "seqmax",
+      "domain": "canonical signed int64 decimal token",
+      "projection": "maximum",
+      "meaning": "stable configuration",
+      "rawPreservation": "complete original raw row plus same-row projected carrier where present; mismatch refuses"
+    },
+    {
+      "nativeField": "seqmin",
+      "domain": "canonical signed int64 decimal token",
+      "projection": "minimum",
+      "meaning": "stable configuration",
+      "rawPreservation": "complete original raw row plus same-row projected carrier where present; mismatch refuses"
+    },
+    {
+      "nativeField": "seqcache",
+      "domain": "canonical signed int64 decimal token",
+      "projection": "cache",
+      "meaning": "stable configuration",
+      "rawPreservation": "complete original raw row plus same-row projected carrier where present; mismatch refuses"
+    },
+    {
+      "nativeField": "seqcycle",
+      "domain": "actual nonnull native boolean",
+      "projection": "cycle",
+      "meaning": "stable configuration",
+      "rawPreservation": "complete original raw row plus same-row projected carrier where present; mismatch refuses"
+    }
+  ],
+  "unknownFields": "Retain original bytes and mark preserved unsupported; complete definition admission refuses until governing interpretation/classification is selected",
+  "crossFieldAdmission": [
+    "Exactly one original S-kind pg_class relation and pg_sequence adjunct with equal seqrelid",
+    "Full raw/projected correspondence; no SQL NULL configuration fields",
+    "Actual seqtypid resolves selected built-in smallint/integer/bigint meaning",
+    "minimum < maximum; minimum <= start <= maximum; declared bounds fit selected value type",
+    "increment != 0; cache >= 1; do not narrow increment/cache to sequence value type"
+  ],
+  "stableConfigurationFields": [
+    "resolvedTypeIdentity",
+    "start",
+    "increment",
+    "minimum",
+    "maximum",
+    "cache",
+    "cycle"
+  ],
+  "additionalRequiredDefinitions": [
+    "complete relation namespace/name/persistence and selected stable relation classification",
+    "owner/ACL/effective authority policy projection",
+    "complete owned-by/dependency original reference closure"
+  ],
+  "excludedFromThisConfiguration": [
+    "live last_value/is_called",
+    "commit/crash allocator durability",
+    "native row storage identity or invented pg_sequence OID"
+  ],
+  "canonicalProducer": "Selected stable tree fields use CONTRACT-009 canonical bytes only after exact definition/reference admission; complete sequence basis also requires the additional definitions; this profile alone cannot mint inventorySha256"
+}

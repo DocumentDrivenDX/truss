@@ -1,0 +1,124 @@
+{
+  "scope": "Review checklist derived from first complete PostgreSQL milestone; not a selected profile manifest or native capability token",
+  "observedSiblingHeads": {
+    "umf": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+    "weft": "c6708d98d2c81facb1fac1f4f90a7d3a75267a9a"
+  },
+  "authorityFacts": [
+    "ADR-001 accepted TypeScript portable core and Bun development direction",
+    "ADR-002 accepted generic fixed storage direction",
+    "Owner states existing UMF capabilities are sufficient"
+  ],
+  "rows": [
+    {
+      "selection": "language-packaging",
+      "status": "unresolved",
+      "governingArtifacts": [
+        "ADR-001"
+      ],
+      "missingOutput": "Exact package exports/browser dependencies and runtime versions",
+      "responsibleOwner": "Truss"
+    },
+    {
+      "selection": "umf-composition",
+      "status": "unresolved",
+      "governingArtifacts": [
+        "CONTRACT-008",
+        "CONTRACT-010"
+      ],
+      "missingOutput": "Consumable API/envelope/key versions and complete authored/source/generated correspondence using existing APIs",
+      "responsibleOwner": "Truss"
+    },
+    {
+      "selection": "postgresql-target",
+      "status": "unresolved",
+      "governingArtifacts": [
+        "CONTRACT-008",
+        "CONTRACT-011"
+      ],
+      "missingOutput": "Exact server/build/extensions/locale/roles and isolated deployment identity",
+      "responsibleOwner": "Truss"
+    },
+    {
+      "selection": "driver-transactions",
+      "status": "unresolved",
+      "governingArtifacts": [
+        "CONTRACT-007"
+      ],
+      "missingOutput": "Original descriptor/completion/control/cancellation/termination/resource producers and qualified pooling profile",
+      "responsibleOwner": "Truss"
+    },
+    {
+      "selection": "layout-values",
+      "status": "unresolved",
+      "governingArtifacts": [
+        "ADR-002",
+        "CONTRACT-001",
+        "CONTRACT-010"
+      ],
+      "missingOutput": "Reconciled installation with full routine/trigger/privilege bodies and exact value/key/comparator scope",
+      "responsibleOwner": "Truss"
+    },
+    {
+      "selection": "identity-report",
+      "status": "unresolved",
+      "governingArtifacts": [
+        "CONTRACT-003",
+        "ADR-004"
+      ],
+      "missingOutput": "Retirement decision, report-home decision and complete persistence/finalization procedures",
+      "responsibleOwner": "Truss owner"
+    },
+    {
+      "selection": "allocation-durability",
+      "status": "unresolved",
+      "governingArtifacts": [
+        "CONTRACT-009"
+      ],
+      "missingOutput": "FR-15 precommit exposure interpretation and exact allocator crash/recovery semantics",
+      "responsibleOwner": "Truss owner"
+    },
+    {
+      "selection": "weft-reads",
+      "status": "unresolved",
+      "governingArtifacts": [
+        "CONTRACT-007",
+        "CONTRACT-010"
+      ],
+      "missingOutput": "Original owner-reviewed mapping/ABI/prerequisite execution and independently expected direct/compiled parity corpus",
+      "responsibleOwner": "Truss + Weft"
+    },
+    {
+      "selection": "resources-host",
+      "status": "unresolved",
+      "governingArtifacts": [
+        "CONTRACT-007",
+        "CONTRACT-008",
+        "CONTRACT-011"
+      ],
+      "missingOutput": "Complete pre-work/accounting/clock/cancellation/retention/recovery composition and exact ceilings",
+      "responsibleOwner": "Truss"
+    }
+  ],
+  "sourcePins": [
+    {
+      "path": "docs/helix/04-build/implementation-plan.md",
+      "sha256": "2af4967c11fa8e97f4f36c8282a9d42d3af7e84f35f4c1d878396d84c80f3429"
+    },
+    {
+      "path": "docs/helix/04-build/design-decision-queue.md",
+      "sha256": "db7b3d49b02210d938d68bf1c0d41f30efba0e9c24ee623242e4672e4128e0f1"
+    },
+    {
+      "path": "docs/helix/02-design/adr/ADR-001-language-and-portable-core.md",
+      "sha256": "5373a7307f1703ec9ac99927917e847ccc324314d89bd7ebe95d995275359fea"
+    },
+    {
+      "path": "docs/helix/02-design/adr/ADR-002-storage-strategy.md",
+      "sha256": "680c032e963fb6210828816e688781aded59d5715948e2707638554bfbff8d70"
+    }
+  ],
+  "integrationReady": false,
+  "nativeExecution": false,
+  "remainingProductScope": "Catalog evolution/import/groups/feed/history/retention/policy/conformance remain required beyond this milestone"
+}

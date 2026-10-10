@@ -1,0 +1,5 @@
+# Private development candidate; select a separately verified artifact wheelhouse.
+pgserver==0.1.4+truss.pg16.15
+fasteners==0.20
+platformdirs==4.12.4
+psutil==7.2.2

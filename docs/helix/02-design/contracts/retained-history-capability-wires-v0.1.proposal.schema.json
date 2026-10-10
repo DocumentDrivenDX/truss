@@ -1,0 +1,403 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:proposal:retained-history-capability-wires:0.1.0",
+  "title": "Existing retained reconstruction and historical source facade wires",
+  "description": "Definitions only. Retains original historical interpretation and current authority evidence. Reuses the existing FeedSourceFact carrier from seed baseline without qualifying seed, feed or history execution. Original horizon, native/source correspondence and evidence custody remain semantic admission.",
+  "not": {},
+  "$defs": {
+    "reconstructionRequest": {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-history-reconstruction/0.1.0"
+        },
+        "sourceEpoch": {
+          "type": "string",
+          "minLength": 1
+        },
+        "historyProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "identity": {
+          "$ref": "urn:truss:draft:history-record:0.1.0#/$defs/identity"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "sourceEpoch",
+        "historyProfile",
+        "identity",
+        "version"
+      ],
+      "additionalProperties": false
+    },
+    "reconstructionEvidence": {
+      "type": "object",
+      "properties": {
+        "baselineSha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "eventInventorySha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "definitionInventorySha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "procedureProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "observationEvidenceSha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "baselineSha256",
+        "eventInventorySha256",
+        "definitionInventorySha256",
+        "procedureProfile",
+        "observationEvidenceSha256"
+      ],
+      "additionalProperties": false
+    },
+    "reconstructionResult": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "reconstructed"
+            },
+            "request": {
+              "$ref": "urn:truss:proposal:retained-history-capability-wires:0.1.0#/$defs/reconstructionRequest"
+            },
+            "record": {
+              "$ref": "urn:truss:draft:history-record:0.1.0"
+            },
+            "evidence": {
+              "$ref": "urn:truss:proposal:retained-history-capability-wires:0.1.0#/$defs/reconstructionEvidence"
+            }
+          },
+          "required": [
+            "outcome",
+            "request",
+            "record",
+            "evidence"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "deleted"
+            },
+            "request": {
+              "$ref": "urn:truss:proposal:retained-history-capability-wires:0.1.0#/$defs/reconstructionRequest"
+            },
+            "deletionVersion": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$"
+            },
+            "evidence": {
+              "$ref": "urn:truss:proposal:retained-history-capability-wires:0.1.0#/$defs/reconstructionEvidence"
+            }
+          },
+          "required": [
+            "outcome",
+            "request",
+            "deletionVersion",
+            "evidence"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "unwritten"
+            },
+            "request": {
+              "$ref": "urn:truss:proposal:retained-history-capability-wires:0.1.0#/$defs/reconstructionRequest"
+            },
+            "nonexistenceEvidenceSha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "outcome",
+            "request",
+            "nonexistenceEvidenceSha256"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "not_found"
+            }
+          },
+          "required": [
+            "outcome"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "history_unavailable"
+            },
+            "reason": {
+              "enum": [
+                "baseline",
+                "events",
+                "definitions",
+                "retention",
+                "profile",
+                "observation"
+              ]
+            }
+          },
+          "required": [
+            "outcome",
+            "reason"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "unsupported"
+            },
+            "requiredMeaning": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "outcome",
+            "requiredMeaning"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "reconstructionOutcome": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "status": {
+              "const": "ok"
+            },
+            "value": {
+              "$ref": "urn:truss:proposal:retained-history-capability-wires:0.1.0#/$defs/reconstructionResult"
+            }
+          },
+          "required": [
+            "status",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "status": {
+              "const": "error"
+            },
+            "error": {
+              "$ref": "urn:truss:draft:execution-failure:0.1.0"
+            }
+          },
+          "required": [
+            "status",
+            "error"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "sourceRequest": {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-historical-source/0.1.0"
+        },
+        "sourceEpoch": {
+          "type": "string",
+          "minLength": 1
+        },
+        "identity": {
+          "$ref": "urn:truss:draft:history-record:0.1.0#/$defs/identity"
+        },
+        "sourceProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "sourceEpoch",
+        "identity",
+        "sourceProfile"
+      ],
+      "additionalProperties": false
+    },
+    "sourceEvidence": {
+      "type": "object",
+      "properties": {
+        "creationInventorySha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "retainedOwnerInventorySha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "currentAuthorityObservationSha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "observationProcedure": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        }
+      },
+      "required": [
+        "creationInventorySha256",
+        "retainedOwnerInventorySha256",
+        "currentAuthorityObservationSha256",
+        "observationProcedure"
+      ],
+      "additionalProperties": false
+    },
+    "sourceResult": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "found"
+            },
+            "request": {
+              "$ref": "urn:truss:proposal:retained-history-capability-wires:0.1.0#/$defs/sourceRequest"
+            },
+            "fact": {
+              "$ref": "urn:truss:draft:seed-baseline:0.1.0#/$defs/source"
+            },
+            "evidence": {
+              "$ref": "urn:truss:proposal:retained-history-capability-wires:0.1.0#/$defs/sourceEvidence"
+            }
+          },
+          "required": [
+            "outcome",
+            "request",
+            "fact",
+            "evidence"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "absent"
+            },
+            "request": {
+              "$ref": "urn:truss:proposal:retained-history-capability-wires:0.1.0#/$defs/sourceRequest"
+            },
+            "evidence": {
+              "$ref": "urn:truss:proposal:retained-history-capability-wires:0.1.0#/$defs/sourceEvidence"
+            }
+          },
+          "required": [
+            "outcome",
+            "request",
+            "evidence"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "not_found"
+            }
+          },
+          "required": [
+            "outcome"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "unavailable"
+            },
+            "reason": {
+              "enum": [
+                "creation_inventory",
+                "ownership",
+                "retention",
+                "profile",
+                "observation"
+              ]
+            }
+          },
+          "required": [
+            "outcome",
+            "reason"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "sourceOutcome": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "status": {
+              "const": "ok"
+            },
+            "value": {
+              "$ref": "urn:truss:proposal:retained-history-capability-wires:0.1.0#/$defs/sourceResult"
+            }
+          },
+          "required": [
+            "status",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "status": {
+              "const": "error"
+            },
+            "error": {
+              "$ref": "urn:truss:draft:execution-failure:0.1.0"
+            }
+          },
+          "required": [
+            "status",
+            "error"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

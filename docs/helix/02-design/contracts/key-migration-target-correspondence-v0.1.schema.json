@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:key-migration-target-correspondence:0.1.0",
+  "description": "Shape only; one-to-one source coverage, reservation preservation and derivation require semantic admission.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-key-migration-target-correspondence/0.1.0"
+    },
+    "originalAttempt": {
+      "$ref": "urn:truss:draft:key-migration-result:0.1.0#/$defs/attempt"
+    },
+    "sourceInventory": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "target": {
+      "$ref": "urn:truss:draft:key-profile-migration:0.1.0#/$defs/basis"
+    },
+    "correspondenceProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "entries": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "sourceEntryId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "state": {
+                "const": "held"
+              },
+              "fullKey": {
+                "$ref": "urn:truss:draft:key-migration-source-inventory:0.1.0#/$defs/fullKey"
+              },
+              "derivation": {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "enum": [
+                      "owner_encoder",
+                      "exact_conversion",
+                      "unchanged_bytes"
+                    ]
+                  },
+                  "profile": {
+                    "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+                  },
+                  "evidence": {
+                    "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+                  }
+                },
+                "required": [
+                  "kind",
+                  "profile",
+                  "evidence"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "sourceEntryId",
+              "state",
+              "fullKey",
+              "derivation"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "sourceEntryId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "state": {
+                "const": "omitted"
+              },
+              "missingComponentReport": {
+                "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+              }
+            },
+            "required": [
+              "sourceEntryId",
+              "state",
+              "missingComponentReport"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "sourceEntryId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "state": {
+                "const": "unrepresentable"
+              },
+              "reason": {
+                "enum": [
+                  "missing_components",
+                  "unsupported_conversion",
+                  "resource",
+                  "invalid_target"
+                ]
+              },
+              "diagnostics": {
+                "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+              }
+            },
+            "required": [
+              "sourceEntryId",
+              "state",
+              "reason",
+              "diagnostics"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    "completeCoverageEvidence": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "originalAttempt",
+    "sourceInventory",
+    "target",
+    "correspondenceProfile",
+    "entries",
+    "completeCoverageEvidence"
+  ],
+  "additionalProperties": false
+}

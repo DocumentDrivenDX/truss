@@ -1,0 +1,32 @@
+{
+  "scope": "Committed source comparison only; observed local origin/main reference, not a remote freshness or runtime qualification claim",
+  "previousOwnerRevision": "e3555b9aac9e4c3caa952203958c4b0c33cdf519",
+  "observedOwnerRevision": "953aa38c4be0748664d79633596be08cb47d2b41",
+  "files": [
+    {
+      "path": "src/adapters/javascript-numeric.ts",
+      "previousSha256": "3d38e52cc878910509e8e277f671ff304707db37633f4f7c39082eb943618fdc",
+      "observedSha256": "3d38e52cc878910509e8e277f671ff304707db37633f4f7c39082eb943618fdc",
+      "unchanged": true
+    },
+    {
+      "path": "src/model/schema-literals.ts",
+      "previousSha256": "6c28d92fe726fdf6ead0d29c78bd87fa9396667cb23d61ce2758b9f4707228b1",
+      "observedSha256": "ade564372bfd387bfe6d3d4a7c20a6517562f0a9d235743a5622bcbba54fe89d",
+      "unchanged": false
+    },
+    {
+      "path": "src/model/schema-properties.ts",
+      "previousSha256": "0d5e1a3ada65d5eddf08720714d2f396fad1376340882e9863c78aa0680461f7",
+      "observedSha256": "1bb9c41b8a904b09d679e6231a2af7b3c425e9d4d93e97a0700d296eed4773e2",
+      "unchanged": false
+    }
+  ],
+  "findings": [
+    "Numeric adapter bytes unchanged",
+    "Literal validation now shares a tracked evaluator",
+    "Field validation delegates to internal field-body evaluator"
+  ],
+  "runtimeAdopted": false,
+  "testsExecuted": false
+}

@@ -1,0 +1,33 @@
+{
+  "interfaceVersion": "truss-binding-admission-resource/0.1.0",
+  "status": "unadopted; no native or implementation qualification",
+  "integerCarrier": "canonical positive decimal text",
+  "limits": {
+    "bindingSourceBytes": "4194304",
+    "oneArtifactDecodedBytes": "4194304",
+    "allArtifactDecodedBytes": "33554432",
+    "originalJsonDepth": "128",
+    "originalJsonNodes": "262144",
+    "mappingEntriesTotal": "65536",
+    "valueDefinitionNodesTotal": "65536",
+    "valueDefinitionEdgesTotal": "262144",
+    "oneIdentifierUtf8Bytes": "4096",
+    "oneDiagnosticUtf8Bytes": "4096",
+    "diagnosticCount": "64",
+    "diagnosticBytesTotal": "65536",
+    "peakOwnedBytes": "134217728",
+    "cumulativeAllocationBytes": "536870912",
+    "abstractWorkUnits": "64000000",
+    "wallDeadlineMilliseconds": "30000"
+  },
+  "accounting": {
+    "originalSource": "charge transport before buffering; reject length overflow before full allocation",
+    "artifacts": "charge every reference decoding occurrence including repeated identical artifacts; retained originals and shared immutable storage may share peak reservation only with proven custody",
+    "graph": "charge every visited node, reference edge and repeated occurrence; visited caching cannot erase performed work",
+    "sorting": "charge comparisons and compared UTF-8 bytes; no uncharged quadratic uniqueness scans",
+    "hashing": "charge actual input bytes for every hash and custody comparison",
+    "failures": "retain bounded diagnostics; no accepted partial binding or incomplete coverage",
+    "deadline": "minimum of this stage cap and enclosing operation deadline; active work containment required before capacity release"
+  },
+  "scope": "Pure original binding/artifact parsing and semantic correspondence. PostgreSQL catalog collection and Weft compile/emission limits remain separately enforced; neither receives an unlimited allowance through this profile."
+}

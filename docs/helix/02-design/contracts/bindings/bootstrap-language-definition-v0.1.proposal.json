@@ -1,0 +1,81 @@
+{
+  "interfaceVersion": "truss-bootstrap-language-definition-profile/0.1.0",
+  "status": "unadopted field specification; native executable/authority/canonical producers unqualified",
+  "nativeVersion": "PostgreSQL 17; exact build separately admitted",
+  "requiredRawFieldInventory": [
+    "oid",
+    "lanname",
+    "lanowner",
+    "lanispl",
+    "lanpltrusted",
+    "lanplcallfoid",
+    "laninline",
+    "lanvalidator",
+    "lanacl"
+  ],
+  "fields": [
+    {
+      "nativeField": "oid",
+      "domain": "nonzero canonical uint32",
+      "classification": "original correlation only",
+      "rawPreservation": "Complete original row and selected native carriers retained; unknown members not dropped"
+    },
+    {
+      "nativeField": "lanname",
+      "domain": "exact native name text",
+      "classification": "stable name",
+      "rawPreservation": "Complete original row and selected native carriers retained; unknown members not dropped"
+    },
+    {
+      "nativeField": "lanowner",
+      "domain": "nonzero canonical uint32",
+      "classification": "resolved original owner policy",
+      "rawPreservation": "Complete original row and selected native carriers retained; unknown members not dropped"
+    },
+    {
+      "nativeField": "lanispl",
+      "domain": "actual native boolean",
+      "classification": "stable native language-kind fact; not implementation provenance",
+      "rawPreservation": "Complete original row and selected native carriers retained; unknown members not dropped"
+    },
+    {
+      "nativeField": "lanpltrusted",
+      "domain": "actual native boolean",
+      "classification": "stable trust fact; not sandbox/authority certificate",
+      "rawPreservation": "Complete original row and selected native carriers retained; unknown members not dropped"
+    },
+    {
+      "nativeField": "lanplcallfoid",
+      "domain": "canonical uint32 including field-specific zero",
+      "classification": "zero internal-handler sentinel or resolved original pg_proc handler",
+      "rawPreservation": "Complete original row and selected native carriers retained; unknown members not dropped"
+    },
+    {
+      "nativeField": "laninline",
+      "domain": "canonical uint32 including field-specific zero",
+      "classification": "zero no-inline sentinel or resolved original pg_proc routine",
+      "rawPreservation": "Complete original row and selected native carriers retained; unknown members not dropped"
+    },
+    {
+      "nativeField": "lanvalidator",
+      "domain": "canonical uint32 including field-specific zero",
+      "classification": "zero no-validator sentinel or resolved original pg_proc routine",
+      "rawPreservation": "Complete original row and selected native carriers retained; unknown members not dropped"
+    },
+    {
+      "nativeField": "lanacl",
+      "domain": "native ACL or SQL NULL with exact text/dimensions",
+      "classification": "complete lower-case l default/explicit grants and independent USAGE policy",
+      "rawPreservation": "Complete original row and selected native carriers retained; unknown members not dropped"
+    }
+  ],
+  "unknownFields": "Preserved unsupported pending complete governing classification",
+  "additionalRequiredDefinitions": [
+    "resolved full owner/grant/effective policy",
+    "complete original handler/inline/validator routine and executable implementation provenance",
+    "same-cut routine/language cycles with complete fixed-point closure",
+    "required extension/comment/dependency associations"
+  ],
+  "zeroReferenceAdmission": "Zero cannot become an invented pg_proc address; actual native language-kind/handler consistency separately admitted",
+  "canonicalProducer": "Selected stable name/kind/trust and resolved optional handler identities plus policy; raw OIDs never cross-install semantic identities; no handler invocation during collection"
+}

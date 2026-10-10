@@ -1,0 +1,32 @@
+{
+  "scope": "Rollback-only PostgreSQL generated storage/immutability component checks; renamed disposable namespace and synthetic parent, superuser probe, no protected INSERT, full layout or migration qualification",
+  "command": "docker exec -i truss-runtime-admission psql -U postgres -v ON_ERROR_STOP=1 -X -q < docs/helix/04-build/evidence/layout-migration-storage.rollback-probe.sql",
+  "columns": 11,
+  "foreignKeys": 1,
+  "generatedHashes": 3,
+  "publicInsert": false,
+  "transaction": "rolled_back",
+  "qualified": false,
+  "ddlSha256": "dd7e24b38fd09194d67d4f0a55f5b72696bd83b7f87d108ccb001fbab6892d33",
+  "alwaysUserTriggers": 2,
+  "cases": [
+    "complete eleven-column inventory",
+    "one source-epoch FK",
+    "three generated hashes",
+    "no PUBLIC INSERT",
+    "exact generated hashes from original bytes",
+    "two ENABLE ALWAYS user triggers",
+    "receipt UPDATE refused in origin and replica modes",
+    "request UPDATE refused in origin and replica modes",
+    "attempt identity UPDATE refused in origin and replica modes",
+    "DELETE refused in origin and replica modes",
+    "TRUNCATE refused in origin and replica modes",
+    "original row and bytes unchanged after refusals",
+    "source epoch deletion refused while receipt retained",
+    "nonunique route retains equal attempt hashes without authorizing repeat",
+    "savepoint rollback removes pending receipt without invoking cleanup",
+    "outer rollback removes the disposable receipt home"
+  ],
+  "guardDdlSha256": "64f5631c7b06c20f14d5dca78111a42a24ddd46a37f2ce0032d0dea8c47c4b4a",
+  "probeSha256": "f2ce77a99af9e172068b7cd132fd02a98589f40c77d72ea3d6fca0a876140a83"
+}

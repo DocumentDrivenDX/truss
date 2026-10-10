@@ -1,0 +1,39 @@
+{
+  "scope": "Read-only source correspondence and original shared row-join schema pins; owner test claims not rerun, no Truss native qualification/ABI adoption",
+  "weftHead": "675263663048d6b3e0668ee7096d608b89ee4f36",
+  "cleanBefore": true,
+  "sourcePins": [
+    {
+      "path": "crates/weft-postgresql/src/registered_access.rs",
+      "sha256": "acd12823521cc7d0d0ead0b66ae2d8a21db00c1a33febe958ff364cbcfc8966b"
+    },
+    {
+      "path": "crates/weft-postgresql/src/numeric_correspondence.rs",
+      "sha256": "45adadb6ab68f8c0cff909285f7998fa76c6373332a0395d6208cbd38a5d4440"
+    },
+    {
+      "path": "crates/weft-postgresql/src/property_definition.rs",
+      "sha256": "8bf613cea4676c94c54d6444494cbeb2ef8b77b5611f4728905438317c9220e6"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/B-005-native-preparation.md",
+      "sha256": "655f888a5e74540e614b2a34a9ae214bacf7341a98237379dacbb56d9266d17d"
+    }
+  ],
+  "originalSharedPins": [
+    {
+      "path": "docs/helix/02-design/contracts/acceptance-input-v0.1.schema.json",
+      "id": "urn:truss:acceptance-input:0.1.0",
+      "sha256": "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd",
+      "matchesOriginalWeftPin": true
+    },
+    {
+      "path": "docs/helix/02-design/contracts/truss-row-join-definition-v0.1.proposal.schema.json",
+      "id": "urn:truss:draft:row-join-definition:0.1.0",
+      "sha256": "ddc7528dd546dfc76092076613fa612caee55a45ed51f46a553675b6f4e9d2b1",
+      "matchesOriginalWeftPin": true
+    }
+  ],
+  "nativeExecution": false,
+  "ownerTestsRerun": false
+}

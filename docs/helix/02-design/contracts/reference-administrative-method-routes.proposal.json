@@ -1,0 +1,448 @@
+{
+  "interfaceVersion": "truss-administrative-native-route-design/0.1.0",
+  "status": "authored-method-route-design-not-native-inventory",
+  "scope": "Exact methods of fourteen selected existing administrative interfaces; constructors, bootstrap collector and transitive service/export closure remain separately governed",
+  "nativeQualified": false,
+  "installerReady": false,
+  "sourcePins": [
+    {
+      "path": "02-design/contracts/bindings/truss-receipt-protection-tooling-v0.1.d.ts",
+      "sha256": "6f0a93a268d2b7a147dfd661cfaf50427da1e5a279f9fd5bd0647b32905abd4f"
+    },
+    {
+      "path": "02-design/contracts/bindings/truss-receipt-expiry-tooling-v0.1.d.ts",
+      "sha256": "9d373f2ba6ead8bc6e2ba3c743b2ce7a2efd1527445d18c46d56930e9c9460f1"
+    },
+    {
+      "path": "02-design/contracts/bindings/truss-feed-administration-v0.1.d.ts",
+      "sha256": "966895298e6794a337853bbed955894c7be396090d1b3d1bbe0e873236e3cca1"
+    },
+    {
+      "path": "02-design/contracts/bindings/truss-feed-registration-v0.1.d.ts",
+      "sha256": "0f23c10f2b943262c8bae396360d7da077c45e18a62d3489e34b5051a50aed7b"
+    },
+    {
+      "path": "02-design/contracts/bindings/truss-feed-worker-administration-v0.1.d.ts",
+      "sha256": "195f62217ca1d4b653ca9ecaae28daaf8d8d328f199727bd7d782b2fd335f289"
+    },
+    {
+      "path": "02-design/contracts/bindings/truss-seed-extraction-v0.1.d.ts",
+      "sha256": "5bacfdbaad7fe96bdcf4609d7f77164fa2175cd638339325810358e58e9b52ba"
+    },
+    {
+      "path": "02-design/contracts/bindings/truss-seed-confirmation-v0.1.d.ts",
+      "sha256": "2ddc59479b3fa935a765f1605df664951779bb0f0e82317647c9808b9a7618ee"
+    },
+    {
+      "path": "02-design/contracts/bindings/truss-seed-abandonment-v0.1.d.ts",
+      "sha256": "71de1cded183966544b6517b3c7975f05754dde11fcc71e703fe84e6402277be"
+    },
+    {
+      "path": "02-design/contracts/bindings/truss-seed-restart-v0.1.d.ts",
+      "sha256": "2703b9fa9a02998788dba39e4699111f35ee27bcd342c257b864596ca1b72af3"
+    },
+    {
+      "path": "02-design/contracts/bindings/truss-key-profile-migration-v0.1.d.ts",
+      "sha256": "97d04375ea5b24b9303b0ffc3396a5a8922470dca64bccb5d17f8bb9f725046a"
+    },
+    {
+      "path": "02-design/contracts/bindings/truss-retention-tooling-v0.1.d.ts",
+      "sha256": "95ec756898e9aaac17311e5e2eed5e8dcf2202b4b3ce901cedd39f9c6fdf3478"
+    },
+    {
+      "path": "02-design/contracts/bindings/truss-physical-job-tooling-v0.1.d.ts",
+      "sha256": "ea864fc6be5ac01cf9bb1f8e6093a76b1a305209375d9c1fa2d283bab5c36249"
+    },
+    {
+      "path": "02-design/contracts/bindings/truss-conformance-tooling-v0.1.d.ts",
+      "sha256": "66f533f026f46198f49a08cebb84d708d4dd82b41f0c5d3a06a7731f0dc74883"
+    }
+  ],
+  "entries": [
+    {
+      "publicSelector": "ReceiptProtectionTooling.extendInTransaction",
+      "sourcePath": "02-design/contracts/bindings/truss-receipt-protection-tooling-v0.1.d.ts",
+      "exactDeclaration": "extendInTransaction(transaction:TransactionHandle,request:ReceiptProtectionUpdateRequest):Promise<Outcome<ReceiptProtectionUpdateResult>>;",
+      "responsibility": "receipt protection coordinator",
+      "transactionBoundary": "original supplied TransactionHandle; never independently settle it",
+      "nativeCallableIdentity": null,
+      "completeNativeDependencyInventory": null,
+      "authorityRule": "fresh original administrative/current authority; selector/source bytes never grant privilege",
+      "settlementRule": "retain declared pending/committed/unknown distinctions; a promise or source receipt is not native settlement"
+    },
+    {
+      "publicSelector": "ReceiptProtectionTooling.observeProtection",
+      "sourcePath": "02-design/contracts/bindings/truss-receipt-protection-tooling-v0.1.d.ts",
+      "exactDeclaration": "observeProtection(transaction:TransactionHandle,request:ReceiptProtectionObservationRequest):Promise<Outcome<ReceiptProtectionObservation>>;",
+      "responsibility": "receipt protection coordinator",
+      "transactionBoundary": "original supplied TransactionHandle; never independently settle it",
+      "nativeCallableIdentity": null,
+      "completeNativeDependencyInventory": null,
+      "authorityRule": "fresh original administrative/current authority; selector/source bytes never grant privilege",
+      "settlementRule": "retain declared pending/committed/unknown distinctions; a promise or source receipt is not native settlement"
+    },
+    {
+      "publicSelector": "ReceiptExpiryTooling.assessPurge",
+      "sourcePath": "02-design/contracts/bindings/truss-receipt-expiry-tooling-v0.1.d.ts",
+      "exactDeclaration": "assessPurge(transaction:TransactionHandle,request:ReceiptExpiryScopeRequest):Promise<Outcome<ReceiptPurgeAssessment>>;",
+      "responsibility": "receipt expiry coordinator",
+      "transactionBoundary": "original supplied TransactionHandle; never independently settle it",
+      "nativeCallableIdentity": null,
+      "completeNativeDependencyInventory": null,
+      "authorityRule": "fresh original administrative/current authority; selector/source bytes never grant privilege",
+      "settlementRule": "retain declared pending/committed/unknown distinctions; a promise or source receipt is not native settlement"
+    },
+    {
+      "publicSelector": "ReceiptExpiryTooling.purgePayloadInTransaction",
+      "sourcePath": "02-design/contracts/bindings/truss-receipt-expiry-tooling-v0.1.d.ts",
+      "exactDeclaration": "purgePayloadInTransaction(transaction:TransactionHandle,request:ReceiptPayloadPurgeRequest):Promise<Outcome<ReceiptPayloadPurgeResult>>;",
+      "responsibility": "receipt expiry coordinator",
+      "transactionBoundary": "original supplied TransactionHandle; never independently settle it",
+      "nativeCallableIdentity": null,
+      "completeNativeDependencyInventory": null,
+      "authorityRule": "fresh original administrative/current authority; selector/source bytes never grant privilege",
+      "settlementRule": "retain declared pending/committed/unknown distinctions; a promise or source receipt is not native settlement"
+    },
+    {
+      "publicSelector": "ReceiptExpiryTooling.observeExpiry",
+      "sourcePath": "02-design/contracts/bindings/truss-receipt-expiry-tooling-v0.1.d.ts",
+      "exactDeclaration": "observeExpiry(transaction:TransactionHandle,request:ReceiptExpiryObservationRequest):Promise<Outcome<ReceiptExpiryObservation>>;",
+      "responsibility": "receipt expiry coordinator",
+      "transactionBoundary": "original supplied TransactionHandle; never independently settle it",
+      "nativeCallableIdentity": null,
+      "completeNativeDependencyInventory": null,
+      "authorityRule": "fresh original administrative/current authority; selector/source bytes never grant privilege",
+      "settlementRule": "retain declared pending/committed/unknown distinctions; a promise or source receipt is not native settlement"
+    },
+    {
+      "publicSelector": "FeedAdministrativeTooling.applyInTransaction",
+      "sourcePath": "02-design/contracts/bindings/truss-feed-administration-v0.1.d.ts",
+      "exactDeclaration": "applyInTransaction(transaction:import('./truss-execution-v0.1').TransactionHandle,\n  request:FeedAdministrationRequest):Promise<import('./truss-execution-v0.1').Outcome<FeedPendingAdministrationResult>>;",
+      "responsibility": "feed administration coordinator",
+      "transactionBoundary": "original supplied TransactionHandle; never independently settle it",
+      "nativeCallableIdentity": null,
+      "completeNativeDependencyInventory": null,
+      "authorityRule": "fresh original administrative/current authority; selector/source bytes never grant privilege",
+      "settlementRule": "retain declared pending/committed/unknown distinctions; a promise or source receipt is not native settlement"
+    },
+    {
+      "publicSelector": "FeedAdministrativeTooling.observeReceipt",
+      "sourcePath": "02-design/contracts/bindings/truss-feed-administration-v0.1.d.ts",
+      "exactDeclaration": "observeReceipt(transaction:import('./truss-execution-v0.1').TransactionHandle,\n  receipt:FeedAdministrationReceipt):Promise<import('./truss-execution-v0.1').Outcome<FeedAdministrationObservation>>;",
+      "responsibility": "feed administration coordinator",
+      "transactionBoundary": "original supplied TransactionHandle; never independently settle it",
+      "nativeCallableIdentity": null,
+      "completeNativeDependencyInventory": null,
+      "authorityRule": "fresh original administrative/current authority; selector/source bytes never grant privilege",
+      "settlementRule": "retain declared pending/committed/unknown distinctions; a promise or source receipt is not native settlement"
+    },
+    {
+      "publicSelector": "FeedConsumerRegistration.registerInTransaction",
+      "sourcePath": "02-design/contracts/bindings/truss-feed-registration-v0.1.d.ts",
+      "exactDeclaration": "registerInTransaction(transaction:TransactionHandle,request:FeedRegistrationRequest):Promise<Outcome<FeedRegistrationResult>>;",
+      "responsibility": "feed registration coordinator",
+      "transactionBoundary": "original supplied TransactionHandle; never independently settle it",
+      "nativeCallableIdentity": null,
+      "completeNativeDependencyInventory": null,
+      "authorityRule": "fresh original administrative/current authority; selector/source bytes never grant privilege",
+      "settlementRule": "retain declared pending/committed/unknown distinctions; a promise or source receipt is not native settlement"
+    },
+    {
+      "publicSelector": "FeedConsumerRegistration.observeRegistration",
+      "sourcePath": "02-design/contracts/bindings/truss-feed-registration-v0.1.d.ts",
+      "exactDeclaration": "observeRegistration(transaction:TransactionHandle,consumer:Extract<FeedConsumerState,{readonly state:'awaiting_seed'}>):Promise<Outcome<FeedRegistrationObservation>>;",
+      "responsibility": "feed registration coordinator",
+      "transactionBoundary": "original supplied TransactionHandle; never independently settle it",
+      "nativeCallableIdentity": null,
+      "completeNativeDependencyInventory": null,
+      "authorityRule": "fresh original administrative/current authority; selector/source bytes never grant privilege",
+      "settlementRule": "retain declared pending/committed/unknown distinctions; a promise or source receipt is not native settlement"
+    },
+    {
+      "publicSelector": "FeedWorkerAdministration.acquireInTransaction",
+      "sourcePath": "02-design/contracts/bindings/truss-feed-worker-administration-v0.1.d.ts",
+      "exactDeclaration": "acquireInTransaction(transaction:TransactionHandle,request:WorkerClaimRequest):Promise<Outcome<PendingWorkerClaimResult>>;",
+      "responsibility": "feed worker coordinator",
+      "transactionBoundary": "original supplied TransactionHandle; never independently settle it",
+      "nativeCallableIdentity": null,
+      "completeNativeDependencyInventory": null,
+      "authorityRule": "fresh original administrative/current authority; selector/source bytes never grant privilege",
+      "settlementRule": "retain declared pending/committed/unknown distinctions; a promise or source receipt is not native settlement"
+    },
+    {
+      "publicSelector": "FeedWorkerAdministration.observeClaim",
+      "sourcePath": "02-design/contracts/bindings/truss-feed-worker-administration-v0.1.d.ts",
+      "exactDeclaration": "observeClaim(transaction:TransactionHandle,claim:WorkerClaim):Promise<Outcome<WorkerClaimObservation>>;",
+      "responsibility": "feed worker coordinator",
+      "transactionBoundary": "original supplied TransactionHandle; never independently settle it",
+      "nativeCallableIdentity": null,
+      "completeNativeDependencyInventory": null,
+      "authorityRule": "fresh original administrative/current authority; selector/source bytes never grant privilege",
+      "settlementRule": "retain declared pending/committed/unknown distinctions; a promise or source receipt is not native settlement"
+    },
+    {
+      "publicSelector": "SeedExtractionTooling.extract",
+      "sourcePath": "02-design/contracts/bindings/truss-seed-extraction-v0.1.d.ts",
+      "exactDeclaration": "extract(request:SeedExtractionRequest):Promise<SeedExtractionResult>;",
+      "responsibility": "original seed extraction producer",
+      "transactionBoundary": "original service-owned boundary from declaration and governing contract; no fabricated supplied transaction",
+      "nativeCallableIdentity": null,
+      "completeNativeDependencyInventory": null,
+      "authorityRule": "fresh original administrative/current authority; selector/source bytes never grant privilege",
+      "settlementRule": "retain declared pending/committed/unknown distinctions; a promise or source receipt is not native settlement"
+    },
+    {
+      "publicSelector": "SeedExtractionTooling.extractReplacement",
+      "sourcePath": "02-design/contracts/bindings/truss-seed-extraction-v0.1.d.ts",
+      "exactDeclaration": "extractReplacement(request:ReplacementSeedExtractionRequest):Promise<SeedExtractionResult>;",
+      "responsibility": "original seed extraction producer",
+      "transactionBoundary": "original service-owned boundary from declaration and governing contract; no fabricated supplied transaction",
+      "nativeCallableIdentity": null,
+      "completeNativeDependencyInventory": null,
+      "authorityRule": "fresh original administrative/current authority; selector/source bytes never grant privilege",
+      "settlementRule": "retain declared pending/committed/unknown distinctions; a promise or source receipt is not native settlement"
+    },
+    {
+      "publicSelector": "SeedExtractionTooling.extractRestarted",
+      "sourcePath": "02-design/contracts/bindings/truss-seed-extraction-v0.1.d.ts",
+      "exactDeclaration": "extractRestarted(request:RestartedSeedExtractionRequest):Promise<SeedExtractionResult>;",
+      "responsibility": "original seed extraction producer",
+      "transactionBoundary": "original service-owned boundary from declaration and governing contract; no fabricated supplied transaction",
+      "nativeCallableIdentity": null,
+      "completeNativeDependencyInventory": null,
+      "authorityRule": "fresh original administrative/current authority; selector/source bytes never grant privilege",
+      "settlementRule": "retain declared pending/committed/unknown distinctions; a promise or source receipt is not native settlement"
+    },
+    {
+      "publicSelector": "SeedSourceConfirmation.confirmInTransaction",
+      "sourcePath": "02-design/contracts/bindings/truss-seed-confirmation-v0.1.d.ts",
+      "exactDeclaration": "confirmInTransaction(transaction:TransactionHandle,request:SeedConfirmationRequest):Promise<Outcome<SeedConfirmationResult>>;",
+      "responsibility": "source seed confirmation coordinator",
+      "transactionBoundary": "original supplied TransactionHandle; never independently settle it",
+      "nativeCallableIdentity": null,
+      "completeNativeDependencyInventory": null,
+      "authorityRule": "fresh original administrative/current authority; selector/source bytes never grant privilege",
+      "settlementRule": "retain declared pending/committed/unknown distinctions; a promise or source receipt is not native settlement"
+    },
+    {
+      "publicSelector": "SeedAbandonmentTooling.invalidateInTransaction",
+      "sourcePath": "02-design/contracts/bindings/truss-seed-abandonment-v0.1.d.ts",
+      "exactDeclaration": "invalidateInTransaction(transaction:TransactionHandle,request:SeedInvalidationRequest):Promise<Outcome<SeedInvalidationResult>>;",
+      "responsibility": "original seed containment/abandonment coordinator",
+      "transactionBoundary": "original supplied TransactionHandle; never independently settle it",
+      "nativeCallableIdentity": null,
+      "completeNativeDependencyInventory": null,
+      "authorityRule": "fresh original administrative/current authority; selector/source bytes never grant privilege",
+      "settlementRule": "retain declared pending/committed/unknown distinctions; a promise or source receipt is not native settlement"
+    },
+    {
+      "publicSelector": "SeedAbandonmentTooling.finishInTransaction",
+      "sourcePath": "02-design/contracts/bindings/truss-seed-abandonment-v0.1.d.ts",
+      "exactDeclaration": "finishInTransaction(transaction:TransactionHandle,request:SeedAbandonmentRequest):Promise<Outcome<SeedAbandonmentResult>>;",
+      "responsibility": "original seed containment/abandonment coordinator",
+      "transactionBoundary": "original supplied TransactionHandle; never independently settle it",
+      "nativeCallableIdentity": null,
+      "completeNativeDependencyInventory": null,
+      "authorityRule": "fresh original administrative/current authority; selector/source bytes never grant privilege",
+      "settlementRule": "retain declared pending/committed/unknown distinctions; a promise or source receipt is not native settlement"
+    },
+    {
+      "publicSelector": "SeedRestartTooling.restartInTransaction",
+      "sourcePath": "02-design/contracts/bindings/truss-seed-restart-v0.1.d.ts",
+      "exactDeclaration": "restartInTransaction(transaction:TransactionHandle,request:SeedRestartRequest):Promise<Outcome<SeedRestartResult>>;",
+      "responsibility": "original seed restart coordinator",
+      "transactionBoundary": "original supplied TransactionHandle; never independently settle it",
+      "nativeCallableIdentity": null,
+      "completeNativeDependencyInventory": null,
+      "authorityRule": "fresh original administrative/current authority; selector/source bytes never grant privilege",
+      "settlementRule": "retain declared pending/committed/unknown distinctions; a promise or source receipt is not native settlement"
+    },
+    {
+      "publicSelector": "SeedRestartTooling.observeRestart",
+      "sourcePath": "02-design/contracts/bindings/truss-seed-restart-v0.1.d.ts",
+      "exactDeclaration": "observeRestart(transaction:TransactionHandle,admission:Extract<SeedRestartResult,{readonly outcome:'registered'}>):Promise<Outcome<SeedRestartObservation>>;",
+      "responsibility": "original seed restart coordinator",
+      "transactionBoundary": "original supplied TransactionHandle; never independently settle it",
+      "nativeCallableIdentity": null,
+      "completeNativeDependencyInventory": null,
+      "authorityRule": "fresh original administrative/current authority; selector/source bytes never grant privilege",
+      "settlementRule": "retain declared pending/committed/unknown distinctions; a promise or source receipt is not native settlement"
+    },
+    {
+      "publicSelector": "KeyProfileMigrationTooling.migrate",
+      "sourcePath": "02-design/contracts/bindings/truss-key-profile-migration-v0.1.d.ts",
+      "exactDeclaration": "migrate(request:KeyProfileMigrationRequest):Promise<KeyProfileMigrationResult>;",
+      "responsibility": "key migration administrator",
+      "transactionBoundary": "original service-owned boundary from declaration and governing contract; no fabricated supplied transaction",
+      "nativeCallableIdentity": null,
+      "completeNativeDependencyInventory": null,
+      "authorityRule": "fresh original administrative/current authority; selector/source bytes never grant privilege",
+      "settlementRule": "retain declared pending/committed/unknown distinctions; a promise or source receipt is not native settlement"
+    },
+    {
+      "publicSelector": "KeyProfileMigrationTooling.reconcile",
+      "sourcePath": "02-design/contracts/bindings/truss-key-profile-migration-v0.1.d.ts",
+      "exactDeclaration": "reconcile(recoveryReference:string):Promise<KeyMigrationReconciliationResult>;",
+      "responsibility": "key migration administrator",
+      "transactionBoundary": "original service-owned boundary from declaration and governing contract; no fabricated supplied transaction",
+      "nativeCallableIdentity": null,
+      "completeNativeDependencyInventory": null,
+      "authorityRule": "fresh original administrative/current authority; selector/source bytes never grant privilege",
+      "settlementRule": "retain declared pending/committed/unknown distinctions; a promise or source receipt is not native settlement"
+    },
+    {
+      "publicSelector": "RetentionTooling.dropInTransaction",
+      "sourcePath": "02-design/contracts/bindings/truss-retention-tooling-v0.1.d.ts",
+      "exactDeclaration": "dropInTransaction(transaction:TransactionHandle,request:RetentionDropRequest):Promise<Outcome<RetentionDropResult>>;",
+      "responsibility": "retention administrator",
+      "transactionBoundary": "original supplied TransactionHandle; never independently settle it",
+      "nativeCallableIdentity": null,
+      "completeNativeDependencyInventory": null,
+      "authorityRule": "fresh original administrative/current authority; selector/source bytes never grant privilege",
+      "settlementRule": "retain declared pending/committed/unknown distinctions; a promise or source receipt is not native settlement"
+    },
+    {
+      "publicSelector": "PhysicalJobTooling.admitIndexInTransaction",
+      "sourcePath": "02-design/contracts/bindings/truss-physical-job-tooling-v0.1.d.ts",
+      "exactDeclaration": "admitIndexInTransaction(transaction:TransactionHandle,request:IndexDispatchRequest):Promise<Outcome<JobAdmission<PendingIndexAdmission>>>;",
+      "responsibility": "physical optimization administrator",
+      "transactionBoundary": "original supplied TransactionHandle; never independently settle it",
+      "nativeCallableIdentity": null,
+      "completeNativeDependencyInventory": null,
+      "authorityRule": "fresh original administrative/current authority; selector/source bytes never grant privilege",
+      "settlementRule": "retain declared pending/committed/unknown distinctions; a promise or source receipt is not native settlement"
+    },
+    {
+      "publicSelector": "PhysicalJobTooling.observeIndexAdmission",
+      "sourcePath": "02-design/contracts/bindings/truss-physical-job-tooling-v0.1.d.ts",
+      "exactDeclaration": "observeIndexAdmission(transaction:TransactionHandle,original:PendingIndexAdmission):Promise<Outcome<JobAdmission<CommittedIndexAdmission>>>;",
+      "responsibility": "physical optimization administrator",
+      "transactionBoundary": "original supplied TransactionHandle; never independently settle it",
+      "nativeCallableIdentity": null,
+      "completeNativeDependencyInventory": null,
+      "authorityRule": "fresh original administrative/current authority; selector/source bytes never grant privilege",
+      "settlementRule": "retain declared pending/committed/unknown distinctions; a promise or source receipt is not native settlement"
+    },
+    {
+      "publicSelector": "PhysicalJobTooling.runIndexAttempt",
+      "sourcePath": "02-design/contracts/bindings/truss-physical-job-tooling-v0.1.d.ts",
+      "exactDeclaration": "runIndexAttempt(original:CommittedIndexAdmission):Promise<Outcome<JobObservation<IndexReadiness>>>;",
+      "responsibility": "physical optimization administrator",
+      "transactionBoundary": "original service-owned boundary from declaration and governing contract; no fabricated supplied transaction",
+      "nativeCallableIdentity": null,
+      "completeNativeDependencyInventory": null,
+      "authorityRule": "fresh original administrative/current authority; selector/source bytes never grant privilege",
+      "settlementRule": "retain declared pending/committed/unknown distinctions; a promise or source receipt is not native settlement"
+    },
+    {
+      "publicSelector": "PhysicalJobTooling.observeIndex",
+      "sourcePath": "02-design/contracts/bindings/truss-physical-job-tooling-v0.1.d.ts",
+      "exactDeclaration": "observeIndex(transaction:TransactionHandle,job:IndexJobIdentity):Promise<Outcome<JobObservation<IndexReadiness>>>;",
+      "responsibility": "physical optimization administrator",
+      "transactionBoundary": "original supplied TransactionHandle; never independently settle it",
+      "nativeCallableIdentity": null,
+      "completeNativeDependencyInventory": null,
+      "authorityRule": "fresh original administrative/current authority; selector/source bytes never grant privilege",
+      "settlementRule": "retain declared pending/committed/unknown distinctions; a promise or source receipt is not native settlement"
+    },
+    {
+      "publicSelector": "PhysicalJobTooling.admitStatisticsInTransaction",
+      "sourcePath": "02-design/contracts/bindings/truss-physical-job-tooling-v0.1.d.ts",
+      "exactDeclaration": "admitStatisticsInTransaction(transaction:TransactionHandle,request:StatisticsDispatchRequest):Promise<Outcome<JobAdmission<PendingStatisticsAdmission>>>;",
+      "responsibility": "physical optimization administrator",
+      "transactionBoundary": "original supplied TransactionHandle; never independently settle it",
+      "nativeCallableIdentity": null,
+      "completeNativeDependencyInventory": null,
+      "authorityRule": "fresh original administrative/current authority; selector/source bytes never grant privilege",
+      "settlementRule": "retain declared pending/committed/unknown distinctions; a promise or source receipt is not native settlement"
+    },
+    {
+      "publicSelector": "PhysicalJobTooling.observeStatisticsAdmission",
+      "sourcePath": "02-design/contracts/bindings/truss-physical-job-tooling-v0.1.d.ts",
+      "exactDeclaration": "observeStatisticsAdmission(transaction:TransactionHandle,original:PendingStatisticsAdmission):Promise<Outcome<JobAdmission<CommittedStatisticsAdmission>>>;",
+      "responsibility": "physical optimization administrator",
+      "transactionBoundary": "original supplied TransactionHandle; never independently settle it",
+      "nativeCallableIdentity": null,
+      "completeNativeDependencyInventory": null,
+      "authorityRule": "fresh original administrative/current authority; selector/source bytes never grant privilege",
+      "settlementRule": "retain declared pending/committed/unknown distinctions; a promise or source receipt is not native settlement"
+    },
+    {
+      "publicSelector": "PhysicalJobTooling.runStatisticsAttempt",
+      "sourcePath": "02-design/contracts/bindings/truss-physical-job-tooling-v0.1.d.ts",
+      "exactDeclaration": "runStatisticsAttempt(original:CommittedStatisticsAdmission):Promise<Outcome<JobObservation<StatisticsReadiness>>>;",
+      "responsibility": "physical optimization administrator",
+      "transactionBoundary": "original service-owned boundary from declaration and governing contract; no fabricated supplied transaction",
+      "nativeCallableIdentity": null,
+      "completeNativeDependencyInventory": null,
+      "authorityRule": "fresh original administrative/current authority; selector/source bytes never grant privilege",
+      "settlementRule": "retain declared pending/committed/unknown distinctions; a promise or source receipt is not native settlement"
+    },
+    {
+      "publicSelector": "PhysicalJobTooling.observeStatistics",
+      "sourcePath": "02-design/contracts/bindings/truss-physical-job-tooling-v0.1.d.ts",
+      "exactDeclaration": "observeStatistics(transaction:TransactionHandle,job:StatisticsJobIdentity):Promise<Outcome<JobObservation<StatisticsReadiness>>>;",
+      "responsibility": "physical optimization administrator",
+      "transactionBoundary": "original supplied TransactionHandle; never independently settle it",
+      "nativeCallableIdentity": null,
+      "completeNativeDependencyInventory": null,
+      "authorityRule": "fresh original administrative/current authority; selector/source bytes never grant privilege",
+      "settlementRule": "retain declared pending/committed/unknown distinctions; a promise or source receipt is not native settlement"
+    },
+    {
+      "publicSelector": "HostConformanceRunner.prepareRun",
+      "sourcePath": "02-design/contracts/bindings/truss-conformance-tooling-v0.1.d.ts",
+      "exactDeclaration": "prepareRun(request:ConformanceRunRequest):Promise<ConformancePreparationResult>;",
+      "responsibility": "registered host conformance runner",
+      "transactionBoundary": "original service-owned boundary from declaration and governing contract; no fabricated supplied transaction",
+      "nativeCallableIdentity": null,
+      "completeNativeDependencyInventory": null,
+      "authorityRule": "fresh original administrative/current authority; selector/source bytes never grant privilege",
+      "settlementRule": "retain declared pending/committed/unknown distinctions; a promise or source receipt is not native settlement"
+    },
+    {
+      "publicSelector": "HostConformanceRunner.run",
+      "sourcePath": "02-design/contracts/bindings/truss-conformance-tooling-v0.1.d.ts",
+      "exactDeclaration": "run(prepared:PreparedConformanceRun):Promise<ConformanceRunResult>;",
+      "responsibility": "registered host conformance runner",
+      "transactionBoundary": "original service-owned boundary from declaration and governing contract; no fabricated supplied transaction",
+      "nativeCallableIdentity": null,
+      "completeNativeDependencyInventory": null,
+      "authorityRule": "fresh original administrative/current authority; selector/source bytes never grant privilege",
+      "settlementRule": "retain declared pending/committed/unknown distinctions; a promise or source receipt is not native settlement"
+    },
+    {
+      "publicSelector": "HostConformanceRunner.abandonPreparedRun",
+      "sourcePath": "02-design/contracts/bindings/truss-conformance-tooling-v0.1.d.ts",
+      "exactDeclaration": "abandonPreparedRun(prepared:PreparedConformanceRun):Promise<ConformancePreparedCleanupResult>;",
+      "responsibility": "registered host conformance runner",
+      "transactionBoundary": "original service-owned boundary from declaration and governing contract; no fabricated supplied transaction",
+      "nativeCallableIdentity": null,
+      "completeNativeDependencyInventory": null,
+      "authorityRule": "fresh original administrative/current authority; selector/source bytes never grant privilege",
+      "settlementRule": "retain declared pending/committed/unknown distinctions; a promise or source receipt is not native settlement"
+    },
+    {
+      "publicSelector": "HostConformanceRunner.reconcileRun",
+      "sourcePath": "02-design/contracts/bindings/truss-conformance-tooling-v0.1.d.ts",
+      "exactDeclaration": "reconcileRun(recoveryReference:string):Promise<ConformanceReconciliationResult>;",
+      "responsibility": "registered host conformance runner",
+      "transactionBoundary": "original service-owned boundary from declaration and governing contract; no fabricated supplied transaction",
+      "nativeCallableIdentity": null,
+      "completeNativeDependencyInventory": null,
+      "authorityRule": "fresh original administrative/current authority; selector/source bytes never grant privilege",
+      "settlementRule": "retain declared pending/committed/unknown distinctions; a promise or source receipt is not native settlement"
+    },
+    {
+      "publicSelector": "ConformanceEvidenceTooling.assess",
+      "sourcePath": "02-design/contracts/bindings/truss-conformance-tooling-v0.1.d.ts",
+      "exactDeclaration": "assess(receipt:ExactArtifact,requiredManifest:ExactArtifact,qualificationProfile:ProfilePin):Promise<ConformanceAssessment>;",
+      "responsibility": "registered host conformance assessor",
+      "transactionBoundary": "original service-owned boundary from declaration and governing contract; no fabricated supplied transaction",
+      "nativeCallableIdentity": null,
+      "completeNativeDependencyInventory": null,
+      "authorityRule": "fresh original administrative/current authority; selector/source bytes never grant privilege",
+      "settlementRule": "retain declared pending/committed/unknown distinctions; a promise or source receipt is not native settlement"
+    }
+  ]
+}

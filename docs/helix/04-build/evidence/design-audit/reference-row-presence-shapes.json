@@ -1,0 +1,36 @@
+{
+  "scope": "Serialization shape only; placeholder artifacts deliberately do not prove custody, hash integrity, native support or Weft adoption",
+  "schemaSha256": "3f80f9cdb7029a9adc293bc3b91cbd3bd0f844e883cab4422d8601c816573edb",
+  "cases": [
+    {
+      "name": "required-null-refusal",
+      "expected": true,
+      "passed": true
+    },
+    {
+      "name": "explicit-null-candidate",
+      "expected": true,
+      "passed": true
+    },
+    {
+      "name": "props-root-substitution",
+      "expected": false,
+      "passed": true
+    },
+    {
+      "name": "missing-authority",
+      "expected": false,
+      "passed": true
+    },
+    {
+      "name": "sql-null-is-null-substitution",
+      "expected": false,
+      "passed": true
+    },
+    {
+      "name": "unknown-rule",
+      "expected": false,
+      "passed": true
+    }
+  ]
+}

@@ -1,0 +1,212 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:proposal:journal-pending-publication:0.2.0",
+  "title": "Unadopted pending complete journal publication body",
+  "description": "Private physical/semantic append observation only. Exact original prepared/reserved/actual inventory, component byte hashes/canonicalization, native domain/kind/role/clock, group manifest and protected phase authority require semantic admission. Not committed, ready/sealed or downstream application evidence.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-journal-pending-publication/0.2.0-proposal"
+    },
+    "producerProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "observationProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "originalOperationContext": {
+      "$ref": "urn:truss:draft:row-operation-context:0.1.0"
+    },
+    "originalPrepared": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "originalReservedMapping": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "completeGroupInventory": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "pendingPublicationEvidence": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "rows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "ordinal": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]*)$",
+            "maxLength": 20
+          },
+          "event": {
+            "$ref": "urn:truss:proposal:history-event:0.2.0"
+          },
+          "physical": {
+            "type": "object",
+            "properties": {
+              "entityKind": {
+                "enum": [
+                  "o",
+                  "e"
+                ]
+              },
+              "entityId": {
+                "type": "string",
+                "pattern": "^[1-9][0-9]*$",
+                "maxLength": 20
+              },
+              "entityType": {
+                "type": "string",
+                "pattern": "^(0|-?[1-9][0-9]*)$",
+                "maxLength": 20
+              },
+              "recordVersion": {
+                "type": "string",
+                "pattern": "^[1-9][0-9]*$",
+                "maxLength": 20
+              },
+              "catalogRevision": {
+                "type": "string",
+                "pattern": "^(0|-?[1-9][0-9]*)$",
+                "maxLength": 20
+              },
+              "xid": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]*)$",
+                "maxLength": 20
+              },
+              "seq": {
+                "type": "string",
+                "pattern": "^[1-9][0-9]*$",
+                "maxLength": 20
+              },
+              "op": {
+                "enum": [
+                  "create",
+                  "update",
+                  "delete",
+                  "retain",
+                  "rebind",
+                  "transform",
+                  "metadata"
+                ]
+              },
+              "propertyId": {
+                "oneOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^(0|-?[1-9][0-9]*)$",
+                    "maxLength": 20
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "atText": {
+                "type": "string",
+                "minLength": 1
+              },
+              "dateStyle": {
+                "type": "string",
+                "minLength": 1
+              },
+              "timeZone": {
+                "type": "string",
+                "minLength": 1
+              },
+              "oldValue": {
+                "type": "null"
+              },
+              "newValue": {
+                "allOf": [
+                  {
+                    "$ref": "urn:truss:proposal:journal-exact-bytes:0.2.0"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "component": {
+                        "const": "event"
+                      }
+                    },
+                    "required": [
+                      "component"
+                    ]
+                  }
+                ]
+              },
+              "origin": {
+                "allOf": [
+                  {
+                    "$ref": "urn:truss:proposal:journal-exact-bytes:0.2.0"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "component": {
+                        "const": "origin"
+                      }
+                    },
+                    "required": [
+                      "component"
+                    ]
+                  }
+                ]
+              }
+            },
+            "required": [
+              "entityKind",
+              "entityId",
+              "entityType",
+              "recordVersion",
+              "catalogRevision",
+              "xid",
+              "seq",
+              "op",
+              "propertyId",
+              "atText",
+              "dateStyle",
+              "timeZone",
+              "oldValue",
+              "newValue",
+              "origin"
+            ],
+            "additionalProperties": false
+          },
+          "nativeDescriptorEvidence": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          },
+          "actualAppendEvidence": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          }
+        },
+        "required": [
+          "ordinal",
+          "event",
+          "physical",
+          "nativeDescriptorEvidence",
+          "actualAppendEvidence"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "durability": {
+      "const": "pending-original-host-settlement"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "producerProfile",
+    "observationProfile",
+    "originalOperationContext",
+    "originalPrepared",
+    "originalReservedMapping",
+    "completeGroupInventory",
+    "pendingPublicationEvidence",
+    "rows",
+    "durability"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,283 @@
+{
+  "scope": "actual pinned Rust test frontend, dialect weft-sql/0.1.0; single-field key equality lookup only; no public compile API, application read profile, storage binding or SQL/native execution",
+  "revision": "5856c73db0342363e64802905a94abb96209d757",
+  "sourceArchiveSha256": "2affd857c0159de20096f55425ee43adbcfd6557958640f776a27c346ff322d1",
+  "cargoLockSha256": "08d3d30468be6bbde701be72c4e070f60c0706b54898e8e3a0432ea0cfbe0e9e",
+  "rust": "1.90.0",
+  "command": "cargo test --offline --release -p weft-core --test truss_consumer_review",
+  "inputsSha256": "8c4b80baddcdba4e60e343a43d41d3d88797117ff72c711d9026cf6eb4ef97f2",
+  "harnessSha256": "1137cdefa7261f48392c3c7f915fa1fe315574e3a2ccc54e8a3ff187d4e6cf8e",
+  "originalInputsUnchanged": true,
+  "observations": [
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "variant": "original",
+      "status": "blocked",
+      "diagnostics": [
+        {
+          "code": "WFT-NAME-MISSING",
+          "message": "No queryable record matches source",
+          "phase": "resolve",
+          "severity": "error",
+          "sourceSpan": {
+            "end": 34,
+            "start": 27
+          }
+        }
+      ],
+      "responseSha256": "2c5e80979f5fc68dcda329194946e8686e1fa450f3671ce73309f30e7396a50c",
+      "logicalPlan": null
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "variant": "proposed",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "948e014edfacd606b35c40f91be5da737f7836297197f3dfe749abfdeaffcbfc",
+      "logicalPlan": {
+        "irVersion": "weft-ir/0.1.0",
+        "modulePins": [
+          {
+            "documentId": "sandbox",
+            "revision": "consumer-review-only",
+            "sha256": "327a98ce1a20e630776239ffe8c7dde0e784f4392fe834ff1c1f78c4f158c704",
+            "umfVersion": "0.7.0"
+          }
+        ],
+        "requiredCapabilities": [
+          "equal",
+          "filter",
+          "project",
+          "scan",
+          "type.string"
+        ],
+        "root": {
+          "input": {
+            "input": {
+              "occurrence": "s0",
+              "op": "scan",
+              "pin": {
+                "documentId": "sandbox",
+                "revision": "consumer-review-only",
+                "sha256": "327a98ce1a20e630776239ffe8c7dde0e784f4392fe834ff1c1f78c4f158c704",
+                "umfVersion": "0.7.0"
+              },
+              "record": {
+                "documentId": "sandbox",
+                "element": "UseCase",
+                "module": "catalog",
+                "revision": "consumer-review-only"
+              }
+            },
+            "op": "filter",
+            "predicate": {
+              "left": {
+                "identity": {
+                  "documentId": "sandbox",
+                  "element": "UseCase.code",
+                  "module": "catalog",
+                  "revision": "consumer-review-only"
+                },
+                "op": "field",
+                "scan": "s0",
+                "span": {
+                  "end": 49,
+                  "start": 43
+                },
+                "type": {
+                  "facets": {},
+                  "family": "string",
+                  "nullable": false
+                }
+              },
+              "op": "equal",
+              "right": {
+                "op": "literal",
+                "span": {
+                  "end": 58,
+                  "start": 52
+                },
+                "type": {
+                  "facets": {},
+                  "family": "string",
+                  "nullable": false
+                },
+                "value": "uc-1"
+              },
+              "span": {
+                "end": 58,
+                "start": 43
+              },
+              "type": {
+                "facets": {},
+                "family": "boolean",
+                "nullable": false
+              }
+            }
+          },
+          "op": "project",
+          "outputs": [
+            {
+              "expression": {
+                "identity": {
+                  "documentId": "sandbox",
+                  "element": "UseCase.code",
+                  "module": "catalog",
+                  "revision": "consumer-review-only"
+                },
+                "op": "field",
+                "scan": "s0",
+                "span": {
+                  "end": 13,
+                  "start": 7
+                },
+                "type": {
+                  "facets": {},
+                  "family": "string",
+                  "nullable": false
+                }
+              },
+              "name": "code"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "variant": "original",
+      "status": "blocked",
+      "diagnostics": [
+        {
+          "code": "WFT-NAME-MISSING",
+          "message": "No queryable record matches source",
+          "phase": "resolve",
+          "severity": "error",
+          "sourceSpan": {
+            "end": 34,
+            "start": 27
+          }
+        }
+      ],
+      "responseSha256": "2c5e80979f5fc68dcda329194946e8686e1fa450f3671ce73309f30e7396a50c",
+      "logicalPlan": null
+    },
+    {
+      "source": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "variant": "proposed",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "7bff6c6e95d4a9bc18fc858dfadc6a01042698d294030e1e241ec6208f49bf29",
+      "logicalPlan": {
+        "irVersion": "weft-ir/0.1.0",
+        "modulePins": [
+          {
+            "documentId": "praxis-catalog",
+            "revision": "consumer-review-only",
+            "sha256": "3572cdb5c50b7224e8e5e860622ed2caac7635b70a13c6864cee2855fe0b6288",
+            "umfVersion": "0.7.0"
+          }
+        ],
+        "requiredCapabilities": [
+          "equal",
+          "filter",
+          "project",
+          "scan",
+          "type.string"
+        ],
+        "root": {
+          "input": {
+            "input": {
+              "occurrence": "s0",
+              "op": "scan",
+              "pin": {
+                "documentId": "praxis-catalog",
+                "revision": "consumer-review-only",
+                "sha256": "3572cdb5c50b7224e8e5e860622ed2caac7635b70a13c6864cee2855fe0b6288",
+                "umfVersion": "0.7.0"
+              },
+              "record": {
+                "documentId": "praxis-catalog",
+                "element": "UseCase",
+                "module": "catalog",
+                "revision": "consumer-review-only"
+              }
+            },
+            "op": "filter",
+            "predicate": {
+              "left": {
+                "identity": {
+                  "documentId": "praxis-catalog",
+                  "element": "UseCase.code",
+                  "module": "catalog",
+                  "revision": "consumer-review-only"
+                },
+                "op": "field",
+                "scan": "s0",
+                "span": {
+                  "end": 49,
+                  "start": 43
+                },
+                "type": {
+                  "facets": {},
+                  "family": "string",
+                  "nullable": false
+                }
+              },
+              "op": "equal",
+              "right": {
+                "op": "literal",
+                "span": {
+                  "end": 58,
+                  "start": 52
+                },
+                "type": {
+                  "facets": {},
+                  "family": "string",
+                  "nullable": false
+                },
+                "value": "uc-1"
+              },
+              "span": {
+                "end": 58,
+                "start": 43
+              },
+              "type": {
+                "facets": {},
+                "family": "boolean",
+                "nullable": false
+              }
+            }
+          },
+          "op": "project",
+          "outputs": [
+            {
+              "expression": {
+                "identity": {
+                  "documentId": "praxis-catalog",
+                  "element": "UseCase.code",
+                  "module": "catalog",
+                  "revision": "consumer-review-only"
+                },
+                "op": "field",
+                "scan": "s0",
+                "span": {
+                  "end": 13,
+                  "start": 7
+                },
+                "type": {
+                  "facets": {},
+                  "family": "string",
+                  "nullable": false
+                }
+              },
+              "name": "code"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "proposedDocumentsAdopted": false,
+  "nativeImplementationQualified": false
+}

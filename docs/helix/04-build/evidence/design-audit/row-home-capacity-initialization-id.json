@@ -1,0 +1,7 @@
+{
+  "scope": "Authored initializer identity/original retained INSERT node/target allocation only; native parameter/default/empty-scope/privilege/counter admission unresolved",
+  "allocationSha256": "39cebfb9df110a0c327d094878685f7638d91c9a191fb40a536b3961cbcb9ec1",
+  "initializationEntries": 1,
+  "exactOriginalTargetCorrespondence": true,
+  "physicalCoverageComplete": false
+}

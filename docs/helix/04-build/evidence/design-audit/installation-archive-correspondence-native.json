@@ -1,0 +1,759 @@
+{
+  "scope": "Native original UMF-exported installation archive table and opaque administrative fixture membership; not installer/status/verifier or release qualification",
+  "serverVersion": "16.15",
+  "observations": [
+    {
+      "id": "native-python-archive-correspondence-0",
+      "rows": 5,
+      "originalCompletionHex": "53454c454354203500",
+      "descriptor": [
+        {
+          "table_oid": 0,
+          "column_attrnum": 0,
+          "type_oid": 25,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "archive_row_id"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 2,
+          "type_oid": 25,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "installation_id"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 3,
+          "type_oid": 25,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_role"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 4,
+          "type_oid": 25,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_identity"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 5,
+          "type_oid": 17,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_bytes"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 6,
+          "type_oid": 17,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_sha256"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 7,
+          "type_oid": 17,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_identity_sha256"
+        }
+      ],
+      "matches": true,
+      "originalCellsRetained": true
+    },
+    {
+      "id": "complete-fixture-archive-original-bytes",
+      "members": [
+        [
+          "bundle",
+          "fixture:bundle",
+          "6f70617175652061646d696e69737472617469766520666978747572652062756e646c65"
+        ],
+        [
+          "expected_inventory",
+          "fixture:expected_inventory",
+          "6f70617175652061646d696e69737472617469766520666978747572652065787065637465645f696e76656e746f7279"
+        ],
+        [
+          "installed_inventory",
+          "fixture:installed_inventory",
+          "6f70617175652061646d696e697374726174697665206669787475726520696e7374616c6c65645f696e76656e746f7279"
+        ],
+        [
+          "input",
+          "fixture:input",
+          "6f70617175652061646d696e697374726174697665206669787475726520696e707574"
+        ],
+        [
+          "marker",
+          "fixture:marker",
+          "6f70617175652061646d696e6973747261746976652066697874757265206d61726b6572"
+        ]
+      ],
+      "completeReleaseQualified": false
+    },
+    {
+      "id": "native-python-archive-correspondence-2",
+      "rows": 4,
+      "originalCompletionHex": "53454c454354203400",
+      "descriptor": [
+        {
+          "table_oid": 0,
+          "column_attrnum": 0,
+          "type_oid": 25,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "archive_row_id"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 2,
+          "type_oid": 25,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "installation_id"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 3,
+          "type_oid": 25,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_role"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 4,
+          "type_oid": 25,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_identity"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 5,
+          "type_oid": 17,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_bytes"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 6,
+          "type_oid": 17,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_sha256"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 7,
+          "type_oid": 17,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_identity_sha256"
+        }
+      ],
+      "matches": false,
+      "originalCellsRetained": true
+    },
+    {
+      "id": "native-archive-missing-with-marker",
+      "rows": 4,
+      "markerPresent": true,
+      "fixtureMembershipMatches": false,
+      "constraintsCheckedImmediately": true
+    },
+    {
+      "id": "native-python-archive-correspondence-4",
+      "rows": 5,
+      "originalCompletionHex": "53454c454354203500",
+      "descriptor": [
+        {
+          "table_oid": 0,
+          "column_attrnum": 0,
+          "type_oid": 25,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "archive_row_id"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 2,
+          "type_oid": 25,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "installation_id"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 3,
+          "type_oid": 25,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_role"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 4,
+          "type_oid": 25,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_identity"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 5,
+          "type_oid": 17,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_bytes"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 6,
+          "type_oid": 17,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_sha256"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 7,
+          "type_oid": 17,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_identity_sha256"
+        }
+      ],
+      "matches": true,
+      "originalCellsRetained": true
+    },
+    {
+      "id": "archive-missing-rollback",
+      "originalBytesExact": true
+    },
+    {
+      "id": "native-python-archive-correspondence-6",
+      "rows": 6,
+      "originalCompletionHex": "53454c454354203600",
+      "descriptor": [
+        {
+          "table_oid": 0,
+          "column_attrnum": 0,
+          "type_oid": 25,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "archive_row_id"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 2,
+          "type_oid": 25,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "installation_id"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 3,
+          "type_oid": 25,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_role"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 4,
+          "type_oid": 25,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_identity"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 5,
+          "type_oid": 17,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_bytes"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 6,
+          "type_oid": 17,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_sha256"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 7,
+          "type_oid": 17,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_identity_sha256"
+        }
+      ],
+      "matches": false,
+      "originalCellsRetained": true
+    },
+    {
+      "id": "native-archive-duplicate-with-marker",
+      "rows": 6,
+      "markerPresent": true,
+      "fixtureMembershipMatches": false,
+      "constraintsCheckedImmediately": true
+    },
+    {
+      "id": "native-python-archive-correspondence-8",
+      "rows": 5,
+      "originalCompletionHex": "53454c454354203500",
+      "descriptor": [
+        {
+          "table_oid": 0,
+          "column_attrnum": 0,
+          "type_oid": 25,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "archive_row_id"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 2,
+          "type_oid": 25,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "installation_id"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 3,
+          "type_oid": 25,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_role"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 4,
+          "type_oid": 25,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_identity"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 5,
+          "type_oid": 17,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_bytes"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 6,
+          "type_oid": 17,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_sha256"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 7,
+          "type_oid": 17,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_identity_sha256"
+        }
+      ],
+      "matches": true,
+      "originalCellsRetained": true
+    },
+    {
+      "id": "archive-duplicate-rollback",
+      "originalBytesExact": true
+    },
+    {
+      "id": "native-python-archive-correspondence-10",
+      "rows": 5,
+      "originalCompletionHex": "53454c454354203500",
+      "descriptor": [
+        {
+          "table_oid": 0,
+          "column_attrnum": 0,
+          "type_oid": 25,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "archive_row_id"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 2,
+          "type_oid": 25,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "installation_id"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 3,
+          "type_oid": 25,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_role"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 4,
+          "type_oid": 25,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_identity"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 5,
+          "type_oid": 17,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_bytes"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 6,
+          "type_oid": 17,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_sha256"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 7,
+          "type_oid": 17,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_identity_sha256"
+        }
+      ],
+      "matches": false,
+      "originalCellsRetained": true
+    },
+    {
+      "id": "native-archive-changed-with-marker",
+      "rows": 5,
+      "markerPresent": true,
+      "fixtureMembershipMatches": false,
+      "constraintsCheckedImmediately": true
+    },
+    {
+      "id": "native-python-archive-correspondence-12",
+      "rows": 5,
+      "originalCompletionHex": "53454c454354203500",
+      "descriptor": [
+        {
+          "table_oid": 0,
+          "column_attrnum": 0,
+          "type_oid": 25,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "archive_row_id"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 2,
+          "type_oid": 25,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "installation_id"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 3,
+          "type_oid": 25,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_role"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 4,
+          "type_oid": 25,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_identity"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 5,
+          "type_oid": 17,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_bytes"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 6,
+          "type_oid": 17,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_sha256"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 7,
+          "type_oid": 17,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_identity_sha256"
+        }
+      ],
+      "matches": true,
+      "originalCellsRetained": true
+    },
+    {
+      "id": "archive-changed-rollback",
+      "originalBytesExact": true
+    },
+    {
+      "id": "native-python-archive-correspondence-14",
+      "rows": 6,
+      "originalCompletionHex": "53454c454354203600",
+      "descriptor": [
+        {
+          "table_oid": 0,
+          "column_attrnum": 0,
+          "type_oid": 25,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "archive_row_id"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 2,
+          "type_oid": 25,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "installation_id"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 3,
+          "type_oid": 25,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_role"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 4,
+          "type_oid": 25,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_identity"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 5,
+          "type_oid": 17,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_bytes"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 6,
+          "type_oid": 17,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_sha256"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 7,
+          "type_oid": 17,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_identity_sha256"
+        }
+      ],
+      "matches": false,
+      "originalCellsRetained": true
+    },
+    {
+      "id": "native-archive-extra-with-marker",
+      "rows": 6,
+      "markerPresent": true,
+      "fixtureMembershipMatches": false,
+      "constraintsCheckedImmediately": true
+    },
+    {
+      "id": "native-python-archive-correspondence-16",
+      "rows": 5,
+      "originalCompletionHex": "53454c454354203500",
+      "descriptor": [
+        {
+          "table_oid": 0,
+          "column_attrnum": 0,
+          "type_oid": 25,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "archive_row_id"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 2,
+          "type_oid": 25,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "installation_id"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 3,
+          "type_oid": 25,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_role"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 4,
+          "type_oid": 25,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_identity"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 5,
+          "type_oid": 17,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_bytes"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 6,
+          "type_oid": 17,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_sha256"
+        },
+        {
+          "table_oid": 17002,
+          "column_attrnum": 7,
+          "type_oid": 17,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "artifact_identity_sha256"
+        }
+      ],
+      "matches": true,
+      "originalCellsRetained": true
+    },
+    {
+      "id": "archive-extra-rollback",
+      "originalBytesExact": true
+    },
+    {
+      "id": "ordinary-fixture-observer-full-archive",
+      "rows": 5,
+      "originalBytesExact": true,
+      "observerAuthorityQualified": false
+    },
+    {
+      "id": "revoked-archive-select-unavailable-with-readable-marker",
+      "sqlstate": "42501",
+      "markerPresent": true,
+      "archiveObservation": "unavailable",
+      "archiveAbsentProven": false,
+      "automaticRetry": false
+    },
+    {
+      "id": "separate-explicit-read-after-right-restoration",
+      "originalBytesExact": true,
+      "initializerReplay": false
+    }
+  ],
+  "sourceSha256": {
+    "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f",
+    "packages/python/src/truss/_installation_archive.py": "d1674fb5f8537873e3b41ce46618fd3aac1c73db7c8b34a90fe741cba6918f72"
+  },
+  "producerSha256": "a73277c771b99d1abe30d8a778f5f5cd19169465593229b0c70f2e42bf637c22",
+  "installationQualified": false,
+  "limitations": [
+    "Five opaque fixture artifacts do not represent a registered complete release or actual inventory/receipt",
+    "Administrative DML counterexamples, not ordinary-writer bypass or security qualification",
+    "Complete release membership, native observer authority/cut/account and public APIs remain missing"
+  ]
+}

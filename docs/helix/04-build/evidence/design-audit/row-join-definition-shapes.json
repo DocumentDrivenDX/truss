@@ -1,0 +1,81 @@
+{
+  "scope": "Closed join body shape only; original physical/profile/association and native integrity admission untested",
+  "bunVersion": "1.4.2",
+  "source": {
+    "path": "truss-row-join-definition-v0.1.proposal.schema.json",
+    "sha256": "ddc7528dd546dfc76092076613fa612caee55a45ed51f46a553675b6f4e9d2b1"
+  },
+  "observations": [
+    {
+      "name": "object join",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "edge independent association",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "edge association missing",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "object association forbidden",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "owner join mismatched",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "owner relation mismatched",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "raw SQL forbidden",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "column missing",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "optional absence collapsed",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "null payload demanded",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "multiplicity changed",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "evidence empty",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "foreign column IDs require semantic refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "unknown stored domain requires semantic refusal",
+      "expected": true,
+      "actual": true
+    }
+  ],
+  "failures": []
+}

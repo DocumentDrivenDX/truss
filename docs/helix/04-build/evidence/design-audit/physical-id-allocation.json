@@ -1,0 +1,9 @@
+{
+  "scope": "Authored baseline IDs/column source locators/order only; no native catalog/type/default/complete coverage qualification",
+  "entries": 162,
+  "columns": 132,
+  "tables": 19,
+  "sourceSha256": "8b6978ae29e22c0f961b586a2a9b312a0e9d20bf3c7ef920159f7946902d7145",
+  "duplicateIds": [],
+  "missingOrAmbiguousLocators": []
+}

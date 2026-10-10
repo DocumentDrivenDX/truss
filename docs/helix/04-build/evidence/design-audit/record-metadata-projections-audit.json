@@ -1,0 +1,70 @@
+{
+  "scope": "archived source AST projection/domain/limit/home and receipt-hash checks only",
+  "nativeExecuted": false,
+  "results": [
+    {
+      "family": "private-record-metadata-observation",
+      "objectColumns": 12,
+      "edgeColumns": 14,
+      "passed": true
+    },
+    {
+      "family": "private-record-metadata-retained-observation",
+      "objectColumns": 12,
+      "edgeColumns": 15,
+      "passed": true
+    }
+  ],
+  "negativeControls": [
+    {
+      "family": "private-record-metadata-observation",
+      "case": "wrong_identity_column",
+      "refused": true
+    },
+    {
+      "family": "private-record-metadata-observation",
+      "case": "reversed_parameter",
+      "refused": true
+    },
+    {
+      "family": "private-record-metadata-observation",
+      "case": "wrong_operator",
+      "refused": true
+    },
+    {
+      "family": "private-record-metadata-observation",
+      "case": "extra_predicate",
+      "refused": true
+    },
+    {
+      "family": "private-record-metadata-observation",
+      "case": "missing_retained_projection",
+      "refused": true
+    },
+    {
+      "family": "private-record-metadata-retained-observation",
+      "case": "wrong_identity_column",
+      "refused": true
+    },
+    {
+      "family": "private-record-metadata-retained-observation",
+      "case": "reversed_parameter",
+      "refused": true
+    },
+    {
+      "family": "private-record-metadata-retained-observation",
+      "case": "wrong_operator",
+      "refused": true
+    },
+    {
+      "family": "private-record-metadata-retained-observation",
+      "case": "extra_predicate",
+      "refused": true
+    },
+    {
+      "family": "private-record-metadata-retained-observation",
+      "case": "missing_retained_projection",
+      "refused": true
+    }
+  ]
+}

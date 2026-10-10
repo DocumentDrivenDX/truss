@@ -1,0 +1,7 @@
+{
+  "scope": "Four ASCII artifact byte/digest graph witnesses only; no canonicalizer, native completeness, authority or snapshot qualification",
+  "artifacts": 4,
+  "contentLinks": 4,
+  "identityDigestSubstitutionRejected": true,
+  "failures": []
+}

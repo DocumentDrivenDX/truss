@@ -1,0 +1,109 @@
+{
+  "scope": "Trusted original physical connection, assigned xid and confirmed fixed control frames with permanent host ordinal custody; administrative local fixture only",
+  "serverVersion": "16.15",
+  "driverCoreSha256": "cac1e50502901bcea3ddab588e0350149dd8fd771156ae1c531a2a04b3925e26",
+  "observations": [
+    {
+      "id": "caller-work-preserved",
+      "expected": [
+        [
+          {
+            "bytesHex": "37"
+          }
+        ]
+      ],
+      "observed": [
+        [
+          {
+            "bytesHex": "37"
+          }
+        ]
+      ]
+    },
+    {
+      "id": "nonrewinding-original-ordinals",
+      "expected": [
+        "0",
+        "1"
+      ],
+      "observed": [
+        "0",
+        "1"
+      ]
+    },
+    {
+      "id": "same-actual-transaction",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "copied-confirmation-no-submission",
+      "expected": 35,
+      "observed": 35
+    },
+    {
+      "id": "copied-confirmation-closes-account",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "closed-port-no-submission",
+      "expected": 35,
+      "observed": 35
+    },
+    {
+      "id": "exhaustion-no-new-savepoint",
+      "expected": 1,
+      "observed": 1
+    },
+    {
+      "id": "exhaustion-closes-account",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "changed-transaction-only-identity-observation",
+      "expected": 2,
+      "observed": 2
+    },
+    {
+      "id": "changed-transaction-closes-account",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "uncertain-control-no-retry",
+      "expected": 11,
+      "observed": 11
+    },
+    {
+      "id": "uncertain-control-closes-account",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "quarantine-is-not-native-termination",
+      "expected": "idle in transaction",
+      "observed": "idle in transaction"
+    }
+  ],
+  "sourceSha256": {
+    "check_pg8000_original_control_native.py": "83c1c73bc2923cdde4ada1a707c20e07781d1fe40c5d52797090b957b7a87fc4",
+    "pg8000_original_control_candidate.py": "7fba08da6614136b42276eb653da5254413c1293a1f2c6879a18d36ccbe47f1e",
+    "pg8000_instance_candidate.py": "0e3a6fb3860e9f2315711cc44957e841f54640c18214955f57c87a3c6fd437de",
+    "pg8000_accounted_instance_candidate.py": "ad4415635d2643dbd8cb48b34c85621444f9240334d9b5f020b726a0b226ee68"
+  },
+  "installedModuleSha256": {
+    "_operation_ordinal.py": "10d4717462ff14c7524ed793db0ac7b94f56e1d6b88158081a4f300981193977",
+    "_resource_account.py": "6a10966e502c16a3ab8972bba34a999ca675fdb7a59e5c3ac93a7c713b6468f1",
+    "_accounted_receive.py": "f1f6bc7d84d3cbdc4ba93ddb514d68898f60c99358c7cb2a719701139d674e78"
+  },
+  "driverPortQualified": false,
+  "limitations": [
+    "Exclusive trusted host custody is a premise, no malicious-host sandbox",
+    "No actual operation admission/artifact/security or ready installer",
+    "No complete native work/object/parser/containment account",
+    "Post-execution response handoff injection is not arbitrary network loss",
+    "No cancellation, commit_unknown or reconciliation qualification"
+  ]
+}

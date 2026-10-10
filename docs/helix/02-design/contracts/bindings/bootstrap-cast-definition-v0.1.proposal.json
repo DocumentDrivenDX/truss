@@ -1,0 +1,65 @@
+{
+  "interfaceVersion": "truss-bootstrap-cast-definition-profile/0.1.0",
+  "status": "unadopted field specification; native conversion/authority/canonical producers unqualified",
+  "nativeVersion": "PostgreSQL 17; exact build separately admitted",
+  "requiredRawFieldInventory": [
+    "oid",
+    "castsource",
+    "casttarget",
+    "castfunc",
+    "castcontext",
+    "castmethod"
+  ],
+  "fields": [
+    {
+      "nativeField": "oid",
+      "domain": "nonzero canonical uint32; original cast association",
+      "classification": "original correlation only",
+      "rawPreservation": "Complete original row and unknown fields retained"
+    },
+    {
+      "nativeField": "castsource",
+      "domain": "nonzero canonical uint32; resolved original source pg_type",
+      "classification": "resolved original reference or exact native method/context fact",
+      "rawPreservation": "Complete original row and unknown fields retained"
+    },
+    {
+      "nativeField": "casttarget",
+      "domain": "nonzero canonical uint32; resolved original target pg_type",
+      "classification": "resolved original reference or exact native method/context fact",
+      "rawPreservation": "Complete original row and unknown fields retained"
+    },
+    {
+      "nativeField": "castfunc",
+      "domain": "canonical uint32; f requires nonzero resolved pg_proc, i/b require zero sentinel",
+      "classification": "resolved original reference or exact native method/context fact",
+      "rawPreservation": "Complete original row and unknown fields retained"
+    },
+    {
+      "nativeField": "castcontext",
+      "domain": "exact e/a/i; explicit-only/assignment/implicit-expression permission meaning",
+      "classification": "resolved original reference or exact native method/context fact",
+      "rawPreservation": "Complete original row and unknown fields retained"
+    },
+    {
+      "nativeField": "castmethod",
+      "domain": "exact f/i/b; function/I-O/binary native method, never inferred from context",
+      "classification": "resolved original reference or exact native method/context fact",
+      "rawPreservation": "Complete original row and unknown fields retained"
+    }
+  ],
+  "unknownFields": "Preserved unsupported pending complete governing classification",
+  "functionAdmission": "Original function has one to three input arguments: first source type, optional second native integer typmod, optional third native boolean explicitness; result target type. Resolve actual argument modes/kind and native type identities, not hardcoded OIDs or names. Same source/target type is legitimate for multiargument length coercion; no universal inequality rule.",
+  "methodAdmission": "f resolves full routine/signature/executable/authority closure; i resolves source output and target input routine definitions and relevant type/typmod context despite zero castfunc; b preserves native binary coercion direction and separately admits physical/type representation meaning. Zero castfunc never means no dependency or universal identity conversion.",
+  "additionalRequiredDefinitions": [
+    "complete source/target type and typmod meaning",
+    "method-specific routine/executable/authority closure",
+    "original local dependency/comment/extension associations"
+  ],
+  "canonicalProducer": "Resolved source/target definition identities plus exact context/method and method-specific routine/representation definition. Preserve direction and self-type length coercion. Raw object IDs never cross-install semantics; compatible signatures do not establish losslessness.",
+  "absencePolicy": "No pg_cast row is not proof a conversion is impossible; domain/base and generic automatic I/O paths require separately admitted native rules. This collector does not enumerate generic rules or select SQL coercion paths. Weft owns compiler lowering.",
+  "observationPolicy": "No conversion, cast-function or I/O invocation during discovery; no inference of codec, key equality, losslessness or execution permission from castcontext.",
+  "sources": [
+    "https://www.postgresql.org/docs/17/catalog-pg-cast.html"
+  ]
+}

@@ -1,0 +1,224 @@
+---
+ddx:
+  id: STP-043
+  type: story-test-plan
+  activity: test
+  status: draft
+  authoring:
+    home: repo
+  links:
+    - id: US-043
+      kind: informed_by
+    - id: TD-043
+      kind: informed_by
+    - id: SD-003
+      kind: informed_by
+---
+
+# STP-043: Idempotent group replay
+
+## Selected decision handoff — 2026-10-07
+
+Planned receipt controls RSEL-01–04: all-no-op and mixed batches return identical original ordered results on retry; drop network acknowledgment after actual commit and retry the complete same-ID batch without new effects; concurrent equal batches have one effect/receipt winner while unequal input conflicts; purge eligible payload under short/zero journal retention and require retained expiry/conflict identity to prevent reapplication. Receipt/effects rollback and unknown-commit observation retain their existing schedules. Cases are not_run.
+
+
+## Network acknowledgment failure schedules (planned)
+
+NET-01–04 apply CONTRACT-007's committed-only network projection: (01) block before native commit and require no pending/same-transaction result or ID in successful response bytes; (02) commit then disconnect before acknowledgment, retry the same ID/full input and return original ordered results with no new graph/journal effects; (03) fail response encoding after confirmed commit and preserve the committed receipt for authorized retry, without rollback classification or partial semantic output; (04) disconnect during commit/containment and retain original unknown-outcome recovery until qualified observation settles it, with no blind callback rerun or connection release. Repeat request-free uncertainty and require no fabricated receipt recovery. All cases are not_run.
+
+The draft committed response type has three negative compile controls excluding pending application, same-transaction replay and commit_unknown-as-success. These controls qualify declaration narrowing only; actual native observation, cancellation, byte disclosure and transport behavior require the selected public host harness.
+
+## Story Reference and Scope
+
+US-043, TD-043, SD-003, TP-001 and CONTRACT-004/007/009. Tests are planned and receipt persistence remains D-06-gated.
+
+## Acceptance Criteria Test Mapping
+
+| AC ID | Planned failing test | Asserted behavior | Citation | Primary layer | Setup |
+| --- | --- | --- | --- | --- | --- |
+| US-043-AC1 | `replay_returns_every_original_ordered_result` | Same verified inputs return exact original mixed changed/no-op results without new effects, despite later record changes | `@covers US-043-AC1` | Native integration | `tests/mutation/replay.test.ts`; complete selected receipt protocol |
+| US-043-AC2 | `concurrent_duplicate_applies_once_and_waiter_replays` | Both requests return same original results; native effects occur once after winner commit | `@covers US-043-AC2` | Native concurrency | Same file; separate connections and lock/commit barriers |
+| US-043-AC3 | `changed_inputs_or_forged_hash_conflict_without_effects` | Changed canonical inputs cannot reuse identity by sending same claimed hash; conflict has no graph/receipt mutation | `@covers US-043-AC3` | Native integration | Same file; effect-relevant input changes |
+| US-043-AC4 | `retained_receipt_replays_after_24_hours` | Complete original results replay after at least 24 hours across partition/retention boundaries | `@covers US-043-AC4` | Native integration | Same file; controlled receipt age and retention fixtures |
+
+## Additional Probes
+
+Commit a request under forbid, change the deployment to allow, and retry identical caller input. Under compatible retained-profile/current-authorization admission, return the original saved semantic result and execution configuration, with no new writes or recanonicalization using today's setting. Changing an explicit caller semantic pin still conflicts. Remove required original configuration interpretation evidence and require unavailable rather than new execution. For an absent receipt, validate current configuration before mutation. Administrative transitions attempted after lower-level locks refuse/restart instead of upgrading out of hierarchy.
+
+Input-equality vectors force a test-only digest collision across different validated canonical trees and require request_conflict from complete-input comparison, with no original receipt replacement or graph effects. Corrupt retained input bytes while leaving its digest metadata unchanged and require integrity refusal rather than replay. The test-only hasher is fault injection, not an assertion that a real SHA-256 collision was produced. Original creation time before a long adopted commit cannot start lifecycle protection; verify the separate trusted committed-observation deadline and all longer journal protections.
+
+Purge inventory vectors derive the exact distinct union across every original operation result, including cascaded delete effects and mixed changed/no-op groups. Remove a result member, omit a retained sibling event, or supply a caller's shortened inventory and require unavailable/refusal. Duplicate references cannot hide a missing event. An all-no-op classification requires every operation result unchanged with an empty event union. Hold an eligible observation, extend receipt protection before purge, then require serialized revalidation to refuse purge; an assessment digest alone grants no authority. Preserve scope/profile evidence in the administrative outcome without disclosing unauthorized receipt existence.
+
+Longer-window retention vectors keep one original event partition beyond 24 hours and require the full receipt still replayable; dropping only some sibling event partitions cannot make payload purge eligible while any original reference remains. After all original events are gone, minimum/declared protection still applies. Missing event-inventory observation blocks purge. Journal trim can proceed independently when its own feed/history obligations permit, without breaking self-contained receipts. All-no-op retention uses the explicitly reviewed request window and no fake property events.
+
+Expiry-profile proposal probes serialize lookup with payload purge, retain expired identity rather than reapply, and reject stale workers after authorized namespace rotation. Hold an adopted transaction longer than the nominal window before commit; a precommit createdAt cannot authorize immediate purge. Require conservative protection through first qualified committed observation plus the full minimum window. Missing observation/invalid clock cannot make a receipt eligible. Accepted ADR-005 selects complete durable receipts; the journal-only spike is historical evidence. These expectations qualify the selected receipt strategy's still-open native storage/lifecycle/clock composition, rather than reopening its persistence decision. Preserve AC4's additional while-journal-retained protection and the independent minimum window for short/zero local retention and all-no-op groups.
+
+ADR-005 origin-profile review vectors: same complete asserted actor/reason/extension input with changed transport attempt metadata replays; changing actor, reason or retained semantic extension conflicts. A supplied db_role never becomes trusted scope or digest authority. A current authorized database role may retrieve an original receipt only under the reviewed scope policy, and replay preserves the original execution role/origin without emitting a new mutation audit. These proposed expectations require canonical input/schema and authority review before native implementation qualification.
+
+Replay precedence vectors under CONTRACT-009: apply a request with an explicit caller catalog pin, advance the catalog, edit/delete its records, then repeat identical caller input; an authorized compatible receipt returns original results without new expected-version/endpoint checks. Change the explicit pin or an effect-relevant option and require conflict. Revoke replay permission and require refusal without result or cross-scope existence disclosure. Make the receipt profile incompatible and require unsupported failure rather than reapplication. Use a fixed-snapshot waiter that cannot yet observe a committed winner and require host-transaction retry, with no second graph mutation. Record actual execution pins separately from caller inputs; a changed observed head alone cannot change the canonical input. These are planned cases, not a qualification of an unpublished digest or receipt profile.
+
+Independent expected results include alias ids, no-op versions and exact values. Winner rollback permits later application; lost connection around commit invokes lookup without blind duplicate writes. Caller rollback removes pending evidence; replay after committed caller transaction reports qualified committed durability. Test isolation levels and authorization of an existing receipt. All-no-op exception must follow the reconciled story/decision rather than accidentally returning incomplete results.
+
+Inject missing receipt member and split journal evidence at retention boundary; incomplete evidence cannot pass by rebuilding from current rows. Test canonicalization changes only declared semantic fields and never rounds values.
+
+## Executable Proof and Handoff
+
+Future command `bun test tests/mutation/replay.test.ts` requires selected persistence, canonical digest/scope and native harness. Retain original/replayed envelopes, raw effects and barrier traces. All four criteria block closeout. No receipt table or new journal kind is implicitly authorized by this draft; governing persistence decision must be reconciled first.
+
+## Same-transaction repeat supplements
+
+Apply a request in an open adopted transaction, repeat the identical complete input there and independently expect one effect/event inventory plus replayed/pending with verified same-native-transaction evidence. Roll back the host and require both result effects/receipt absent. A second connection cannot see the cached pending result; it waits/reconciles under the request protocol. After confirmed commit, a fresh authorized replay uses committed_receipt evidence and reports committed. Forged transaction labels, ended handles and ambiguous native identity cannot authorize replay or reapplication. Repeat inside an outer engine scope before its commit to detect premature durability claims.
+
+Complete result wire checks use `check-group-result.ts` and independently authored operation/replay fixtures. Twenty structural expectations cover create/change/no-op/delete and same-transaction versus committed-receipt replay, including empty group/event and false replay durability rejection. Wrong input order, duplicate native event and forged committed disposition intentionally remain shape-valid semantic/native controls. Verify original complete input/result/alias/deletion/event correspondence and actual original commit/authority separately; schema pass never authorizes replay.
+
+Original input/receipt corpus now covers nonempty input, explicit pinned/current catalog, alias references and immutable complete receipt payload. Missing full input/configuration/owner closure, response-envelope substitution and invented committed flags reject by shape. Forged input digest, wrong output identity/owner closure, undefined alias/duplicate property and unqualified clocks remain semantic/native refusal controls. Current authority and full-input equality are independently checked before disclosure/replay; fixed receipt persistence is selected; exact native/profile composition remains unqualified.
+
+Receipt lifecycle wire controls cover complete/expired states, payload-free compact identities, event-bearing/all-no-op purge variants and missing/invalid event inventory. Nine additional structural expectations pass. Duplicate original event union remains a shape-valid semantic refusal; current clock/commit/window/event absence and namespace authorization must be independently observed under retention exclusion. Assessment replay cannot bypass a later newly protected dependency.
+
+Expired outcome controls submit equal and changed original semantic input against the same compact retired request identity: both return authorized receipt_expired with no mutation/result; digest alone cannot recreate full-input equality. Unauthorized namespace lookup cannot distinguish expired/absent and caller-changed scope text cannot mint a trusted namespace. Request-free selection never consults receipt state. Native full original receipt replay still requires complete owner/current grant admission.
+
+Request-selection controls add explicit none/present/required identity/input-domain/optional digest checks and a deliberately shape-valid forged scope requiring native refusal. Expired unavailable cannot expose a replay response, and invalid empty group cannot enter typed application input. Shared group wire corpus now has fifty-two structural expectations; strict expiry/input negative assignments pass. An unchanged upstream review cursor does not resolve canonical/persistence/authority prerequisites.
+
+Group canonical fixtures publish seven complete input/tree/domain-preimage/digest vectors. Object-member permutation is equal; operation order, decimal lexical text, tagged family, expected-version omission and asserted origin are different identities. Driver role/current head/configuration/transport/request selection cannot rewrite the input tree. Independent byte/hash/schema correspondence checks are separate from production canonicalizer, source validity, full original equality and native replay.
+
+Namespace authority controls distinguish lookup/replay/new permission, caller connection/transaction/role affinity, retired generation and issuer custody. A deserialized or mutated grant, caller-supplied scope text, wrong original installation or old grant after rotation refuses before new effects/disclosure. Denied lookup cannot probe receipt existence; denied replay cannot return full original results and denied new execution cannot treat absence as permission. Original uncertain work retains original namespace/recovery identity under current authorized observation. Cross-connection namespace observation must not reenter a held head or reverse policy/request ordering.
+
+Assembly namespace setup controls count callbacks/native SQL: matching explicit config/service construction invokes neither; missing/mismatched/unselected authority refuses inertly. Absence of replay setup preserves request-free group operation and makes request-present unavailable before receipt/native effects. Dispose after retaining group facade: new namespace admission stops while host authority and original recovery custody remain intact. Three negative types reject retired new permission, failed admission carrying grant and fabricated issuer custody.
+
+Namespace exclusion schedules hold admitted request guard while retiring/rotating/revoking: admin waits, then old grant fails after commit. Namespace administration requiring catalog/policy must not reverse those levels. Expire/change the provisional receipt between private owner planning and request serialization: reobserve actual state and refuse/restart without stale disclosure or earlier-lock growth. Missing trusted namespace cannot be created by ordinary request text. An externally revocable authority without coherent selected exclusion cannot qualify this native profile.
+
+Canonical evidence audit must fail even when an incorrectly spelled tree has a recomputed matching digest. Independent audit-only spelling reference checks UTF-8 object member order, exact control/quote/backslash escapes and no host-number/surrogate admission. Five negative spelling/domain controls pass alongside seven published group fixtures. Production encoder/browser/resource qualification remains separate.
+
+Receipt clock boundary schedules check original confirmed observation plus 86,400,000,000 microseconds, one microsecond before/at the deadline, delayed first confirmation, a longer declared window and original retained event protection. Parse UTC leap-year/calendar precision independently; reject offsets, shortened fractions, invalid calendar/infinity/BC/leap-second forms for this administrative profile while preserving separate authored timestamp semantics. Forward/backward clock discontinuity and restart without continuity evidence keep payload protected/clock_invalid; conservative later extension cannot overwrite original first confirmation or shorten deadline. Repeated protection observations are identity-equal monotonic updates.
+
+Clock-profile wire controls require explicit creation/protection pins and original clock/commit artifacts. Six added expectations cover admitted UTC spelling, missing pin, short fraction/offset/trailing-newline rejection and a shape-valid invalid calendar date requiring semantic refusal. Original commit/clock evidence must precede protection without a reverse artifact dependency. Full duration/monotonic deadline/native continuity are checked independently.
+
+Protection CAS controls race two extensions and expiry using explicit expected original protection bytes: one changed expectation conflicts; no shorter deadline or replaced first evidence commits. Repeat equal input preserves original artifact and pending durability. Absent protection without original confirmed commit refuses. Caller-supplied extension is an authorized request, never trusted current clock. Savepoint failure rolls back protection/evidence together; uncertain cleanup stays outer recovery. Purge reobserves latest extension under the same identity/lifecycle serialization.
+
+Protection observation controls query from the original uncommitted transaction, a fresh scope after confirmed commit, and a scope after a concurrent longer extension. Require uncommitted/current_committed/superseded respectively only with actual original commit/current exact artifact evidence. Missing/forged original update evidence or namespace permission cannot disclose protection. Six compile-only controls reject missing expected/deadline, false committed update, conflict/observation payload leakage and pending-to-commit substitution.
+
+Protection tooling wire controls now cover absent/present expected artifacts, requested deadlines, pending updated/equal results, prohibited committed update wrappers, payload-free conflicts/unavailability, original update evidence, and pending-versus-committed observations. The independent group wire corpus passes 76 expectations, including a deliberately shape-valid forged-commit counterexample requiring native refusal. Six negative TypeScript controls also pass. This is structural evidence only; authority, admitted complete bytes, actual original commit, clock continuity, monotonic deadlines and fresh serialized purge observation remain native qualification cases.
+
+Unified ordering probe: instrument native lock admission for request-bearing group, request-free group, replay, namespace rotation, policy-only administration and protection/expiry. Independently expect head -> complete policy -> namespace -> request -> complete old/new business keys -> roots -> other objects -> edges -> derived effects, omitting only inapplicable selected levels. Pause after each level and inject newly discovered earlier owners/key buckets: contain/restart without acquiring them out of order. Verify no callback coordinator reacquires a head blocked by its original data connection. Different advisory and native bucket profiles require separate schedules; an advisory digest lock cannot pass bucket generation/full-byte observation controls. These are planned native cases, not executed lock evidence.
+
+Resource replay probes preserve complete original input/result/configuration/owner provenance. An exact-bound result replays; a larger retained result under a smaller current resource profile refuses without trimming, new effects, replacement receipt or expired/absent classification. Exhaust canonical encoding before lookup and verify no receipt existence probe; exhaust authorized full receipt decoding and verify no partial disclosure. Receipt serialization exhaustion after pending effects requires full local rollback. Administrative recovery remains under original custody and separately selected resources.
+
+Fixed receipt candidate storage probes: exact identity/artifact byte bounds and one-over; independent forced route collision with different original identities; duplicate same full identity must fail under native guard regardless of route; all-no-op receipt insertion atomic with request identity; complete/expired payload null parity; expired-to-complete/reuse denied; protected expiry concurrent with extension; FK storage locator never supplies namespace authority. Inspect ordinary role INSERT/UPDATE/DELETE/TRUNCATE/sequence bypass attempts. DDL shape alone cannot pass any logical uniqueness/immutability/authorization schedule. The stores are composed in layout 0.11 under accepted ADR-005. Native producer/privilege/clock qualification remains outstanding; no new UMF capability or receipt-direction decision is a prerequisite.
+
+Route guard schedules independently exercise: two absent same-identity requests; different full identities with injected equal routes; winner rollback and same-transaction repeat; old fixed snapshot after winner insertion/protection/expiry; route generation exhaustion; savepoint rollback of generation+payload+protection; unchanged repeat not refreshing clock/generation; duplicate exact identities as integrity failure; 10,000 metadata rows versus sentinel 10,001 and 16 MiB identity bytes versus one-over. Withhold post-lock fresh observation and ensure no absence/new application conclusion. Bypass generation mutation through an ordinary writer must be denied or detected by the qualified unavoidable procedure profile. No native execution evidence exists from authored DDL alone.
+
+Receipt statement handoff probes retain each separate SQL/result boundary. Reject guard touch returning zero/multiple rows or malformed generation; sentinel metadata and any incomplete identity list cannot prove absence. NULL complete/expired/protection length semantics, joined generation drift and missing/mismatched full-state fetch refuse rather than return partial result. After pending payload effects, force checked guard advancement to return zero and verify full local rollback, including graph/journal/receipt/protection and generation. Qualified old-snapshot conflict requires host transaction retry and never blind callback rerun. Actual native function/permissions/work remain unimplemented.
+
+Private receipt discovery schedules: retained owner exists only inside original artifact; decode under private lookup custody, then revoke that owner before final policy admission. Require no result/existence/owner-name/log/trace/cache disclosure. Expire or replace a provisional candidate before route acquisition and verify final reobservation or contained restart, never stale absence/new execution. Inject a previously absent owner in final artifact and require restart without adding earlier guards. Corrupt original owner closure or remove archive pins: refuse rather than infer from live rows. Instrument all host callbacks and public outputs to ensure no private payload or partial prefix escapes; a successful decoder/SELECT shape alone is insufficient.
+
+Profile rollout/rollback probes follow G07: partial installed receipt/namespace/clock composition refuses new request admission; request-free mode remains independent. Downgrade an incompatible binary with retained complete/expired requests and require refusal rather than repeated application. Close new admission but preserve original observation/recovery; held native scopes drain before destructive change. Restore without proven namespace/generation/clock continuity and require explicit replacement epoch plus original evidence custody, never regenerated authority from copied IDs. Historical journal-only mixed/no-op results remain missing rather than fabricated.
+
+Original writer observation probes: same top-level transaction through savepoints remains pending; distinct fresh qualified transaction after actual commit admits original committed visibility; original rollback leaves no complete receipt. Expiry/protection later writes preserve original writer/context. Native status NULL/old history, prepared/in-progress status, wrong installation/epoch, forged caller XID or missing original context cannot authorize new execution or committed protection. Read-only observer uses no ID-assigning function just to inspect context. Restore copied row bytes with unqualified provenance and require refusal. Native primitive semantics are documentation-backed, not executed qualification.
+
+Read-only protection observation controls record actual native access mode/snapshot/transaction identity before and after. Reject apply/extend in read_only before guard writes; observe uses only separately qualified original coordinator lease plus data SELECT. Count guard writes/ID assignments on the data connection: zero. Hold old repeatable-read protection, extend concurrently, then require fresh coordinated correspondence/refusal rather than old current_committed. Drop coordinator affinity/exclusion during private buffering: no successful result or pool release without confirmed cleanup. Detect self-blocked head reacquisition and unauthorized elevated service role substitution. These cases retain required read-only observation; no write-route unit result qualifies its separate profile.
+
+Existing-route observer tests distinguish F from A: remove the original guard under an invalid fixture and require unavailable with no INSERT/guard recreation or request-absence outcome. Verify logical generation unchanged by lease touch and zero write/ID assignment on supplied data connection. Native G returns explicit NULL for unassigned observer; malformed row/mode/isolation/connection mismatch refuses without coercing NULL into rollback. Release/cancel coordinator while data read succeeds and require withholding success until selected exclusion/disclosure/cleanup obligations are actually satisfied. Planned independent native commands remain gated on the registered service/adapter profile.
+
+Receipt privilege inventory probes inspect effective inherited role membership, PUBLIC/default EXECUTE, schema CREATE, function owner/search_path/dependencies, table SELECT/mutation/TRUNCATE/REFERENCES/TRIGGER and sequence privileges. Attempt raw blob insert, forged commit/clock/deadline setter, owner impersonation and restore bypass using the ordinary caller. Engine semantic validation and native guard/lifecycle assertions receive separate independent support evidence; definer success without actual caller/custody validation fails the database-integrity claim. Exact function/role installation remains unimplemented, so draft checks cannot certify bypass resistance.
+
+Receipt dependency inventory cases independently inspect all three implicit primary backing indexes, original ordered columns, FK original target/RESTRICT, sequence default regclass and separate ownership policy, generated SHA-256 original columns/builtin, and check native operator/type dependencies. Swap an index/sequence/function with a same-name wrong-owner object, add a conflicting implicit object or omit an expected dependency: reject complete inventory. Storage sequence reset/drop/recreation cannot pass restoration while retained receipt/recovery custody exists. AST creation provenance is not native catalog qualification.
+
+Native xid8 binding probes preserve exact text/null raw cells through driver/result artifacts with original actual native procedure/context. Reject Number/signed-bigint rounding or conversion, numeric-zero substitution for NULL, caller label and xmin replacement. Existing UMF owner-preserved type/source content qualifies no native equality/transaction operation; adapter profile evidence must independently establish those semantics. No new UMF preservation feature is a prerequisite.
+
+Compact expiry provenance controls require original clock/retention/procedure pins and minimal evidence identity/digest. Missing procedure/custody and selected malformed timestamp reject by shape; forged custody deliberately remains shape-valid and must fail native/archive admission. Eighty shared wire expectations pass. Purge payload without copying full input/result into minimal evidence/log/cache; stale/current substituted profile, missing original archive or uncommitted expiry cannot establish verified expired state or new execution. Observe actual committed expiry separately; no circular future commit proof inside compact bytes.
+
+Minimal expiry wire adds seven controls: complete event-bearing/all-no-op metadata basis; prohibited full input/result/committed flag; required absence proof; wrong generation intentionally shape-valid for native refusal. Eighty-seven shared shape expectations pass. Native schedules construct proof before compact bytes, corrupt actual resulting generation/state/archive before finalization and require contained failure/commit abort. Unknown referenced metadata cannot establish absence/classification. Rollback restores complete receipt and removes pending proof/compact state; fresh actual expiry commit observation remains separate. No retained proof may hide full purged input/result.
+
+Expiry tooling boundary controls separate eligible assessment, pending purge and committed observation. Six strict negative types reject full-result/committed proof contamination, missing expected protection, committed purge wrapper, pending-as-observation and unavailable identity disclosure. Native schedules change protection after assessment; repeat against already expired state; lose purge reply/commit; observe own pending expiry; use wrong original proof/compact; revoke owner/namespace during read-only staging. Require exact conflict/protected/unavailable/outer cleanup outcomes and no blind duplicate purge or partial metadata disclosure. Constructor/native service/wire qualification remains unimplemented.
+
+Expiry operation wire adds twelve request/result controls: required complete expected artifacts, no eligible permit, canonical generation text, pending-only purge, payload-free conflict/protected/unavailable, and separate fresh committed observation. Ninety-nine shared shape expectations pass. Original artifact hashes/custody, bigint domain/generation transition, clock/dependency/current authority/native effect and actual original commit still need independent qualification. Constructor/service native admission remains open; request/result wire is now authored.
+
+Inert lifecycle construction probes count native SQL, clocks, callbacks and scheduler starts: zero for matching original configuration; missing/mismatched group/namespace/native/observation registration returns constructor failure without partial tooling. Names/serialized composition cannot fabricate custody. Dispose with retained protection/expiry methods: refuse new admission, preserve host services/protection and original uncertain recovery; no hidden host commit/rollback or scheduled purge. Select writable observation profile then call read_only: profile refusal, with complete required read-only support still blocked until its separately qualified coordinator/service ABI exists. Packed runtime/procedure registration remains planned.
+
+Original receipt coordinator registration controls: inert registration/factory invokes no service callbacks/native SQL; read-only config requires original assembly-bound registration. Three negative type cases reject missing registration, failed admission carrying lease and fabricated brand. Runtime planned cases substitute matching-profile service/foreign registration/cloned lease, alter callback fields, lose admission reply after native exclusion, release incompletely or change intent/native caller/owner/cut. Require original issuer/registry recovery and no successful observation/partial disclosure, with data transaction/mode untouched. Unavailable is permitted only after confirmed no acquired exclusion/containment.
+
+Protection writer separation race: commit the original receipt, extend protection in a still-open second transaction, then observe from that same transaction. Expect uncommitted despite original receipt committed evidence. After actual extension commit, fresh qualified observation may admit it; rollback restores prior protection/writer/evidence/generation. Equal unchanged invocation retains prior writer/evidence and never resets first-confirmation clock. Substitute receipt writer for protection writer, corrupt writer context or offer old native status: no committed protection observation. Native metadata nulls cannot hide malformed present protection.
+
+Expiry writer separation schedule: commit creation and protection, purge in a third open transaction, then observe from that same transaction. Require uncommitted even though both earlier writers committed. Only a fresh qualified observation after the actual purge commit may report committed expiry. Rollback restores complete bytes, NULL expiry writer/context and prior lifecycle/guard generations. Substitute creation/protection writer, mismatch the minimal evidence's original expiry context, omit either expiry field, or attach expiry provenance to a complete row: native integrity refusal, with no committed expiry disclosure. These are planned native schedules; AST preservation and physical-ID checks do not execute them.
+
+
+### Numeric convenience retry boundary
+
+Plan NR-01–03: convert a safe integer/decimal convenience input under its original field definition, freeze its exact semantic request and lose the commit acknowledgment; change the catalog/domain afterward and retry the original retained bytes, observing the original full result under current authority without reconversion. Change only token spelling or numeric family under the same request ID and require conflict under complete semantic input equality. After losing the original frozen request, prohibit an adapter from reconstructing/reexecuting a guessed equivalent through a new domain or request ID; expose the governing unavailable/recovery outcome. Include larger bigint and nested exact tokens, finite pre-conversion limits and host retry-storage outage. These are planned public/native scenarios; compile-only carrier witnesses cannot pass them.
+
+
+## Concrete original mixed-result retry scenario
+
+Use the original Account/Item reference's committed item-b (note absent, amount token 9007199254740993.000), with independently observed initial native identity and version. Submit one request-present group with exactly these ordered operations: (0) set note to exact string `retry-α`; (1) set note to the same exact string; (2) set amount to exact token `12.340`. For this primary fixture omit the optional expectedVersion member from all three operations, retaining that omission in the complete canonical input. Independently observe the locked starting version and each ordered result; do not guess native IDs, versions or journal sequences. A retry preserves those exact original omissions rather than adding today’s versions. Author the logical outcome sequence before execution: changed, unchanged, changed. Operation 1 has the same identity and version as operation 0, and an empty event list. Operations 0 and 2 each retain their complete actual property-delta and metadata-sibling event references under the selected history profile; do not reduce them to one event or infer adjacency from arithmetic.
+
+After confirmed original outer commit, retain the complete independent semantic-result observation: original catalog/layout/mutation pins, all three ordered results, exact native identities/versions, full event memberships and empty alias inventory. Drop the original network acknowledgment after commit. Separately change item-b note to `later-β` and amount to `-0.01` through new qualified request-free operations, with separately observed commit and history. A retry of the original request identity and complete original input must return the original three semantic results, including operation 1's original version, while the current record stays at the later values. Original and retry response disposition/observation evidence may differ; compare the complete semantic result, not identical transport bytes or a current-record reconstruction.
+
+Retain independent before/after native snapshots around retry for canonical values/versions, source, keys, receipts and journal. The retry adds no mutation or journal events and does not rewrite original execution provenance. Its qualified receipt observation may establish/extend lifecycle protection through the existing protocol; that administrative observation must not be mislabeled a new semantic mutation or overwrite the immutable semantic result. Compare exact original receipt input/result artifacts as well as derived logical outputs, and run complete current authorization before disclosure.
+
+Run a distinct all-no-op request against the independently committed later state: set note to `later-β`, then amount to `-0.01`. Expected results are unchanged/unchanged with complete original identity/version and empty event lists. Commit its complete receipt, lose acknowledgment, change the current record again, then retry; both original no-op results remain replayable without restoring the earlier record. A journal-only receipt cannot pass this case. Corrupt or omit either saved result and require integrity/unavailable refusal with no reexecution. Same request identity with either changed token spelling, note text, expected-version semantics or operation order follows the existing complete canonical-input equality/conflict rules; never decide equivalence solely from current values or claimed digest.
+
+These concrete schedules support US-043-AC1 and NET-02/RSEL-01, without replacing concurrent, minimum-retention, expiry, authority or unknown-commit cases. Exact native/runtime/profile observations remain harness inputs; both scenarios are not_run.
+
+
+### Version-precondition separation for the mixed fixture
+
+Keep optional-version controls separate from the primary lost-ack scenario. Use independently observed original versions and the admitted ordered simulation rule to author a fresh group's preconditions, including the changed first result and subsequent unchanged result. A deliberately stale precondition on a later operation must produce the original indexed group failure and confirmed complete rollback, with no semantic receipt/effect publication; unknown containment retains execution recovery. No later operation may reuse the initial version merely because it targets the same record. Retain the complete supplied precondition bytes in request equality: adding, removing or changing expectedVersion under the original request identity is a different semantic input even if today's record would satisfy it. Receipt replay follows original input/authority admission before fresh mutation planning and must not retest the original preconditions against later current versions or rewrite them from saved results.
+
+## Retained client intent and retry disposition schedules
+
+CLIENT-01–05 extend NET-01–04 / RSEL-01–04 using the
+[network host's client decision table](../../02-design/contracts/reference-network-batch-host.proposal.md#client-retry-decision-and-original-request-custody).
+Use the packed public reference host/client with original qualified namespace
+and immutable complete request bytes. Independently authored expected graph,
+version, journal and receipt results precede dispatch; observed current state
+cannot generate the expected replay. These cases remain `not_run`.
+
+| Case | Original failure/restart schedule | Required outcome |
+| --- | --- | --- |
+| CLIENT-01 | Persist original intent; commit mixed changed/no-op group; lose response; terminate client; perform unrelated later edits; restart client from retained intent and retry | Exactly the original complete ordered committed result, with aliases/no-op versions/events intact. No second mutation or receipt; later state cannot replace replay content. |
+| CLIENT-02 | Deliver only an original response prefix, then interrupt; separately return malformed/truncated response after actual commit | No semantic success callback from partial bytes. Client retains unknown intent and retries unchanged; independently inspect host commit/receipt and single effect. |
+| CLIENT-03 | Hold original commit outcome unresolved while client backoff/deadline budget expires; resume original recovery later | Budget expiry leaves outcome unknown. No replacement identity, callback rerun or uncertain connection reuse. Qualified original recovery determines final disposition. |
+| CLIENT-04 | Retry after changing operation order, exact numeric spelling, expected-version presence or request identity; separately expire original identity | Same-ID semantic changes conflict; new identity is a distinct application intent, never automatic recovery. Expiry cannot reapply the original effect. Host disclosure and native settlement remain independently admitted. |
+| CLIENT-05 | Revoke receipt owner-union authority between original commit and restart; restore valid authentication without restoring that authority | No original receipt payload in body, callback, log or cache; refreshed authentication cannot waive current disclosure. Restored authority, if explicitly admitted later, permits original receipt observation only. |
+
+Capture actual native commit/rollback/recovery independently of client transport
+status. Inspect complete before/after graph, journal, receipt and protection
+inventories, plus callback/body/log disclosure and connection disposition.
+
+CLIENT-05 additionally changes the admitted disclosure policy while preserving
+ordinary membership: the new profile permits only a mask/withheld view, not full
+original receipt bytes. Independently confirm the first application committed,
+then retry the identical request. Require disclosure refusal, no payload in any
+callback/body/log/cache, unchanged original receipt/input/protection and zero new
+mutation/journal effects. A domain-valid masked response must not be accepted as
+byte-identical replay. Unknown receipt-policy interpretation refuses separately;
+query-field selection alone supplies no receipt authority.
+
+Restore full receipt disclosure through an explicitly admitted later policy cut.
+Retry unchanged and require the exact original ordered bytes, including no-op
+members, despite intervening record edits. The refusal must not expire identity,
+refund protection or reinterpret the original commit as rollback. Observe actual
+current-authority exclusion and final release/cleanup, including a change after
+receipt lookup but before delivery. These schedules remain `not_run` and consume
+the security owner's eventual original disclosure capability, not supplied truth
+fixtures or a Truss-owned mask implementation.
+Request-free operations receive no invented idempotent recovery. Client intent
+persistence is an explicitly selected host/application producer; a restart
+with missing original request custody must not reconstruct intent from current
+records. These scenarios qualify that integration, not a new Truss retry wire.
+
+## AC4 accepted-receipt and local-history controls
+
+Qualify AC4 under an explicitly selected replay window of at least 24 hours,
+without changing its original while-journal-retained promise. Retain original
+required events longer than that window and attempt result expiry: the complete
+receipt remains protected and exact repeat returns original results. Separately
+trim/offload local history after full qualified handoff: protected receipt repeat
+still succeeds within its declared window. An all-no-op group has no fabricated
+journal event and must pass the same independently observed replay-window test.
+
+Use real original first-confirmed commit/clock/protection evidence, including
+the one-microsecond boundary schedules above. A timestamp label, journal index
+lookup or current-state reconstruction cannot pass. Expired result identity
+never silently applies again. These cases qualify a named deployment profile;
+they do not imply that every deployment defaults to a 24-hour promise.

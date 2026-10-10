@@ -1,0 +1,15 @@
+{
+  "modelPath": "docs/helix/02-design/models/truss-layout-core-structural-0.4.proposal.umf.json",
+  "modelSha256": "c1fcba470666e96ec9c8af0cd26ed578b650b0ec944631512cbd78bbe30204b9",
+  "records": 48,
+  "fields": 454,
+  "epochColumns": 11,
+  "epochRelationships": 3,
+  "checks": [
+    "Both retained source files match exact declared hashes",
+    "Core record/member inventory matches observed native table/column counts",
+    "Every epoch column matches original AST type/constraints and observed nullability",
+    "Every epoch FK resolves original AST, target key and ordered field correspondence"
+  ],
+  "scope": "Structural source/native count and epoch declaration correspondence only; full baseline semantics, installed authority and DDL equivalence remain unqualified"
+}

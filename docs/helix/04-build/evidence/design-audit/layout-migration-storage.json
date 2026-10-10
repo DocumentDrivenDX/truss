@@ -1,0 +1,22 @@
+{
+  "guardSourcePath": "packages/postgresql/native/layout-migration-receipt-immutability.sql",
+  "guardSourceSha256": "1b13a84f5bfd4f706d8b5a3f01837f3cdd0a450a849a7fd6ca48eda8885af309",
+  "guardModelPath": "docs/helix/02-design/contracts/layout-migration-immutability-v0.1.proposal.umf.json",
+  "guardModelSha256": "8e21db09e3e8f1986a40cbdc596092e1cf15879427f1e6e312fffea47a88118f",
+  "guardDdlPath": "docs/helix/04-build/evidence/layout-migration-immutability.owner-export.sql",
+  "guardDdlSha256": "64f5631c7b06c20f14d5dca78111a42a24ddd46a37f2ce0032d0dea8c47c4b4a",
+  "ownerSourcePins": {
+    "src/adapters/postgresql/index.ts": "7baa071d95e5f9863a4ce2bf892d87fb27cab9d8605ba4cf8887016d14ca17b4",
+    "src/model/document.ts": "a0422042659defdea425dff8bb0618eaa4bbf125f68da16aa5ad21af0b6c282f",
+    "src/model/native-json.ts": "1459a3e030419c3ae09b300972e27aed8b8ee1f7e41972b3cc00627dff7d7882",
+    "native/postgresql/runtime.ts": "a88fea4cf15c9c3c3f0ad1f0a36d8f5de42a42ce8ea9712499f609beee3ea751"
+  },
+  "modelPath": "docs/helix/02-design/contracts/layout-migration-storage-v0.1.proposal.umf.json",
+  "modelSha256": "45e1f57588c21e6b107031732cd6c135d759e4c8f7221e19642d053437e9bf79",
+  "ddlPath": "docs/helix/04-build/evidence/layout-migration-storage.owner-export.sql",
+  "ddlSha256": "dd7e24b38fd09194d67d4f0a55f5b72696bd83b7f87d108ccb001fbab6892d33",
+  "producerSha256": "b45e58df3be437be0fa56f5d36ee1381f15caa72790cfe99e652ef2076026ce1",
+  "reloadedExportExact": true,
+  "qualified": false,
+  "scope": "UMF owner import and saved reload/export only; uncomposed storage/immutability adjuncts, no protected receipt producer, core projection, installation or migration qualification"
+}

@@ -1,0 +1,5 @@
+{
+  "scope": "Synthetic native-column projection only; xid8 original bytes retained without core family; no native SQL/DDL/exporter/full-layout support",
+  "cases": 7,
+  "failures": []
+}

@@ -1,0 +1,15 @@
+{
+  "scope": "full source AST correspondence and coarse constraint inventory/NULL-safe syntax only",
+  "helperSha256": "c6671c094cceffd42387ea9df24367a4a5935ad58444dfaaab9c075b6eb9ba59",
+  "originalStatements": 37,
+  "candidateStatements": 41,
+  "addedConstraintNames": [
+    "journal_complete_payload",
+    "journal_complete_origin",
+    "journal_complete_property_mapping",
+    "journal_complete_positive_identity"
+  ],
+  "onlyExpectedChanges": true,
+  "nativeExecuted": false,
+  "installationReady": false
+}

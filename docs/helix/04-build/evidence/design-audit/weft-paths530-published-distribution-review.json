@@ -1,0 +1,50 @@
+{
+  "checkedAt": "2026-10-10T12:18:09.473282+00:00",
+  "scope": "fresh fetched published owner tree, exact index-to-artifact byte verification; no compiler execution or Truss adoption",
+  "ownerCommit": "c8d825808a27e15517c1fc93c3fba0faffc2406e",
+  "indexSha256": "a7571d2bd141bf182ce171acc16f64f1276cca29a855dbf4b49a92283fc71864",
+  "realizationId": "weft-530ae35-paths-aarch64-apple-darwin-candidate",
+  "target": "aarch64-apple-darwin",
+  "verifiedIndexedArtifacts": {
+    "manifest": {
+      "path": "distributions/realizations/weft-530ae35-paths-aarch64-apple-darwin-candidate/manifest.json",
+      "bytes": 7044,
+      "sha256": "fa801113d214078f5bbccf6aee2d9acdf184ccd7be352b7fd55e84b794d5ac4e"
+    },
+    "executable": {
+      "path": "distributions/realizations/weft-530ae35-paths-aarch64-apple-darwin-candidate/bin/weft-paths",
+      "bytes": 8273840,
+      "sha256": "71ba88a07c27661413830d5a42e2ea5c4a8b071df965bb98dbbe8f3615a6c911"
+    },
+    "assemblyCustody": {
+      "path": "distributions/realizations/weft-530ae35-paths-aarch64-apple-darwin-candidate/assembly-custody.json",
+      "bytes": 15284,
+      "sha256": "1cdbf9690a902c021f8450488e8b11d20903276efeec9c241502e1fe179edc95"
+    }
+  },
+  "ownerConformanceReview": {
+    "path": "docs/helix/04-build/evidence/paths530-package-conformance-reviewed-20261010.json",
+    "sha256": "b812b2a3a8b81f53a7972fda5a204e0019123c58a0cc24778516aeeae48f79d7",
+    "caseCorrespondence": {
+      "blocked": 483,
+      "compiled": 29,
+      "controls": 19,
+      "legacyNamespace": 463,
+      "migrationEntries": 0,
+      "paths": 30,
+      "rawBytesUnchanged": true,
+      "responseSchemasValidated": 512,
+      "total": 512
+    },
+    "coverage": {
+      "declaredCapabilities": 47,
+      "exactOriginalMap": true,
+      "nativeSupportInference": false,
+      "selectedAcceptedEdges": 189
+    }
+  },
+  "nativeTrussSupportInferred": false,
+  "adoptedTrussCompilerChanged": false,
+  "umfRemoteMain": "322b193cef7c940d07b741860cf0170272628868",
+  "acceptanceCasesPromoted": []
+}

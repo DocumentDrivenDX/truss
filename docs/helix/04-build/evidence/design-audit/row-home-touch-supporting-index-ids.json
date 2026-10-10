@@ -1,0 +1,7 @@
+{
+  "scope": "One authored index effect for each original PK/UNIQUE constraint; no FK-created index or native definition/name/installation qualification",
+  "allocationSha256": "a4ae582e7a171c952fb78030ca10c3d5dd0aa8e49db577eec9002eb79046a474",
+  "supportingIndexEffects": 1,
+  "complete": false,
+  "exactCreatorCorrespondence": true
+}

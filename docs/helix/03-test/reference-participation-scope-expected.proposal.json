@@ -1,0 +1,172 @@
+{
+  "scope": "Independent logical scope oracle for the original final-state replacement; native IDs/operations/evidence are separately observed, not guessed from labels",
+  "originalSource": {
+    "path": "docs/helix/02-design/contracts/bindings/reference-account-items-v0.1.proposal.umf.json",
+    "sha256": "94f8367c3dd2462fb3f32a624f053bf56f023ddd3bf86bf5219bbc1e24b6fcc1"
+  },
+  "originalTransactionBaseline": {
+    "committedEdges": [
+      "AB",
+      "AC"
+    ],
+    "groupOperations": [
+      {
+        "index": 0,
+        "operation": "create_edge",
+        "fixtureEdge": "AD"
+      },
+      {
+        "index": 1,
+        "operation": "delete_edge",
+        "fixtureEdge": "AB"
+      }
+    ]
+  },
+  "expectedOriginalOccurrences": [
+    {
+      "operationIndex": 0,
+      "provenance": "new_effect",
+      "scope": {
+        "relationship": {
+          "documentId": "truss.integration.account-items.v1",
+          "module": "integration",
+          "relationship": "account-items"
+        },
+        "side": "source",
+        "endpoint": {
+          "originalFixtureLabel": "A",
+          "record": "Account"
+        },
+        "finalMaximum": "2"
+      }
+    },
+    {
+      "operationIndex": 0,
+      "provenance": "new_effect",
+      "scope": {
+        "relationship": {
+          "documentId": "truss.integration.account-items.v1",
+          "module": "integration",
+          "relationship": "account-items"
+        },
+        "side": "target",
+        "endpoint": {
+          "originalFixtureLabel": "D",
+          "record": "Item"
+        },
+        "finalMaximum": "1"
+      }
+    },
+    {
+      "operationIndex": 1,
+      "provenance": "old_effect",
+      "scope": {
+        "relationship": {
+          "documentId": "truss.integration.account-items.v1",
+          "module": "integration",
+          "relationship": "account-items"
+        },
+        "side": "source",
+        "endpoint": {
+          "originalFixtureLabel": "A",
+          "record": "Account"
+        },
+        "finalMaximum": "2"
+      }
+    },
+    {
+      "operationIndex": 1,
+      "provenance": "old_effect",
+      "scope": {
+        "relationship": {
+          "documentId": "truss.integration.account-items.v1",
+          "module": "integration",
+          "relationship": "account-items"
+        },
+        "side": "target",
+        "endpoint": {
+          "originalFixtureLabel": "B",
+          "record": "Item"
+        },
+        "finalMaximum": "1"
+      }
+    }
+  ],
+  "expectedDistinctInvocations": [
+    {
+      "scope": {
+        "relationship": {
+          "documentId": "truss.integration.account-items.v1",
+          "module": "integration",
+          "relationship": "account-items"
+        },
+        "side": "source",
+        "endpoint": {
+          "originalFixtureLabel": "A",
+          "record": "Account"
+        },
+        "finalMaximum": "2"
+      },
+      "expectedSaturatedCountText": "2",
+      "withinMaximum": true,
+      "originalOccurrenceIndices": [
+        0,
+        2
+      ]
+    },
+    {
+      "scope": {
+        "relationship": {
+          "documentId": "truss.integration.account-items.v1",
+          "module": "integration",
+          "relationship": "account-items"
+        },
+        "side": "target",
+        "endpoint": {
+          "originalFixtureLabel": "D",
+          "record": "Item"
+        },
+        "finalMaximum": "1"
+      },
+      "expectedSaturatedCountText": "1",
+      "withinMaximum": true,
+      "originalOccurrenceIndices": [
+        1
+      ]
+    },
+    {
+      "scope": {
+        "relationship": {
+          "documentId": "truss.integration.account-items.v1",
+          "module": "integration",
+          "relationship": "account-items"
+        },
+        "side": "target",
+        "endpoint": {
+          "originalFixtureLabel": "B",
+          "record": "Item"
+        },
+        "finalMaximum": "1"
+      },
+      "expectedSaturatedCountText": "0",
+      "withinMaximum": true,
+      "originalOccurrenceIndices": [
+        3
+      ]
+    }
+  ],
+  "finalGraph": [
+    "AC",
+    "AD"
+  ],
+  "unaffectedScopeBoundary": "C is an unchanged endpoint from the separately committed baseline; this group extractor does not invent a C effect. Whole canonical/marker/current-union obligations still independently cover their required scope.",
+  "requiredNegativeControls": [
+    "drop old B scope",
+    "drop new D scope",
+    "merge source A with a target sharing its numeric ID",
+    "lose one original A provenance occurrence during deduplication",
+    "claim a target pass settles source A",
+    "omit a finalized surviving operation in commit union"
+  ],
+  "execution": "not_run"
+}

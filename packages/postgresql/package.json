@@ -1,0 +1,10 @@
+{
+  "name": "@documentdrivendx/truss-postgresql",
+  "version": "0.0.0-experimental.1",
+  "private": true,
+  "type": "module",
+  "files": ["dist"],
+  "exports": {".": {"types": "./dist/index.d.ts", "import": "./dist/index.js"}},
+  "types": "./dist/index.d.ts",
+  "description": "Experimental inert Truss assembly; native capabilities remain unimplemented."
+}

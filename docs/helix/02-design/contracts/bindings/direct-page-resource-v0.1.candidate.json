@@ -1,0 +1,20 @@
+{
+  "profile": "truss-direct-page-resource/0.1.0",
+  "status": "unadopted-design-candidate",
+  "limits": {
+    "requestCanonicalBytes": "1048576",
+    "relationshipFilterEntries": "1000",
+    "pageRecords": "1000",
+    "observedRowsIncludingLookahead": "1001",
+    "nativeEncodedRowBytes": "1048576",
+    "nativeEncodedResultBytes": "16777216",
+    "publicResultCanonicalBytes": "8388608",
+    "qualifiedOwnerEntries": "10000",
+    "ownedPeakBytes": "67108864",
+    "cumulativeChargedBytes": "268435456",
+    "operationMilliseconds": "5000",
+    "containmentMilliseconds": "1000"
+  },
+  "units": "Exact nonnegative integers encoded as decimal text; byte limits count admitted UTF-8/native-wire carriers under their registered codecs, not host string length.",
+  "qualification": "No native/driver/policy/clock/allocation guarantee; exact producers, transport preallocation bounds and deployed admission remain required. Containment is separate from operation time."
+}

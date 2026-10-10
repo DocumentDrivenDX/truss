@@ -29,13 +29,25 @@ ddx:
 
 ## Context
 
-A default partition would trap rows that later cannot be moved into a partition (verified), so there is none.
+A default partition would trap rows that later cannot be moved into a partition
+(verified), so there is none. Accepted ADR-007 allows very short or zero local
+retention after complete qualified handoff and protection release. Zero selects
+no additional age window; it does not omit journal production or guarantee that
+an active/protected whole partition is immediately absent. Removal follows the
+selected partition granularity, writer exclusion and complete eligibility.
+
+Before dropping a whole eligible partition, recheck every original consumer,
+receipt, recovery, history/definition/configuration and archive dependency.
+Upload success, elapsed age or a cursor alone cannot establish durable complete
+handoff. Required local protections remain until the selected independent archive
+and lifecycle evidence admits their release. New writes still require a covering
+partition; a zero retention setting cannot create an accepted clock-range hole.
 
 ## Walkthrough
 
 1. Engineer creates monthly partitions ahead.
 2. A write lands in the current month.
-3. Engineer drops a partition past retention.
+3. Engineer verifies complete handoff and all protections under the selected exclusions, then drops an eligible whole partition and records original settlement.
 4. A write is attempted at a time no partition covers.
 
 ## Acceptance Criteria
@@ -47,7 +59,7 @@ A default partition would trap rows that later cannot be moved into a partition 
 
 ## Edge Cases
 
-- **A role that can drop the append-only trigger**: the owner can; it is visible DDL.
+- **Privileged DDL altering a guard**: native ownership alone is not an admitted runtime action. The selected security/installation profile must account for that path; drift makes the affected capability unavailable until independently qualified reconciliation.
 - **Partition created for a range with rows in a default**: not applicable; there is no default.
 
 ## Test Scenarios

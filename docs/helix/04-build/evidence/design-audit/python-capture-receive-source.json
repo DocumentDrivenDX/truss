@@ -1,0 +1,538 @@
+{
+  "scope": "Full source suite observed119; source/fixture hashes observed after run, not hermetic or original before/after capture",
+  "testsPassed": 119,
+  "command": "PYTHONPATH=packages/python/src /private/tmp/truss-pgserver-corrected-test-env/bin/python -W error -m unittest discover -s packages/python/tests -v",
+  "testLogSha256": "bfdd45b5abdbdbad77dd54a554c81f02768b45fa4c26b1e0ce65596f00e68c54",
+  "files": {
+    "packages/python/src/truss/_row_image_capture.py": "377bb631b3dd939436dc89c50b6ca4f188a99e5352e8a18d8f6a30037f593125",
+    "packages/python/tests/test_row_image_capture.py": "625cd53420fe2540a31fd4a9ffa662d341497a970bbbae04187abfdb26511d9a",
+    "packages/python/src/truss/_row_image.py": "0c793edbd8c45e440511ffbd2ac7e344c47be80f85ee28bf0164ce6e1f073df9",
+    "packages/python/src/truss/_row_event_attribution.py": "5ef265df339899cde5fba9e3f229d0709671f29ecb15ebf54bbeced7e8b9181b",
+    "docs/helix/04-build/evidence/design-audit/row-image-preflight-native.json": "5118667bb2999d80b1cfc85c155a210ef60c330b61f778f7a38bda2134161486"
+  },
+  "boundaries": {
+    "edgeCount": 102,
+    "edges": [
+      {
+        "line": 2,
+        "source": "__init__",
+        "target": "truss.local_runtime"
+      },
+      {
+        "line": 6,
+        "source": "_acceptance_json",
+        "target": "json"
+      },
+      {
+        "line": 8,
+        "source": "_accounted_receive",
+        "target": "struct"
+      },
+      {
+        "line": 9,
+        "source": "_accounted_receive",
+        "target": "threading"
+      },
+      {
+        "line": 10,
+        "source": "_accounted_receive",
+        "target": "truss._resource_account"
+      },
+      {
+        "line": 2,
+        "source": "_directory_resources",
+        "target": "os"
+      },
+      {
+        "line": 3,
+        "source": "_directory_resources",
+        "target": "stat"
+      },
+      {
+        "line": 4,
+        "source": "_directory_resources",
+        "target": "threading"
+      },
+      {
+        "line": 5,
+        "source": "_directory_resources",
+        "target": "truss._installation_resources"
+      },
+      {
+        "line": 6,
+        "source": "_installation_resources",
+        "target": "dataclasses"
+      },
+      {
+        "line": 7,
+        "source": "_installation_resources",
+        "target": "hashlib"
+      },
+      {
+        "line": 8,
+        "source": "_installation_resources",
+        "target": "truss._resource_account"
+      },
+      {
+        "line": 69,
+        "source": "_installation_resources",
+        "target": "json"
+      },
+      {
+        "line": 7,
+        "source": "_operation_admission",
+        "target": "dataclasses"
+      },
+      {
+        "line": 8,
+        "source": "_operation_admission",
+        "target": "inspect"
+      },
+      {
+        "line": 9,
+        "source": "_operation_admission",
+        "target": "threading"
+      },
+      {
+        "line": 6,
+        "source": "_operation_ordinal",
+        "target": "dataclasses"
+      },
+      {
+        "line": 7,
+        "source": "_operation_ordinal",
+        "target": "threading"
+      },
+      {
+        "line": 6,
+        "source": "_query_execution",
+        "target": "dataclasses"
+      },
+      {
+        "line": 7,
+        "source": "_query_execution",
+        "target": "inspect"
+      },
+      {
+        "line": 8,
+        "source": "_query_execution",
+        "target": "threading"
+      },
+      {
+        "line": 9,
+        "source": "_query_execution",
+        "target": "types"
+      },
+      {
+        "line": 10,
+        "source": "_query_execution",
+        "target": "weakref"
+      },
+      {
+        "line": 11,
+        "source": "_query_execution",
+        "target": "truss.weft"
+      },
+      {
+        "line": 2,
+        "source": "_receipt_position",
+        "target": "base64"
+      },
+      {
+        "line": 3,
+        "source": "_receipt_position",
+        "target": "binascii"
+      },
+      {
+        "line": 4,
+        "source": "_receipt_position",
+        "target": "dataclasses"
+      },
+      {
+        "line": 5,
+        "source": "_receipt_position",
+        "target": "json"
+      },
+      {
+        "line": 6,
+        "source": "_receipt_position",
+        "target": "re"
+      },
+      {
+        "line": 7,
+        "source": "_receipt_position",
+        "target": "truss._acceptance_json"
+      },
+      {
+        "line": 6,
+        "source": "_resource_account",
+        "target": "dataclasses"
+      },
+      {
+        "line": 7,
+        "source": "_resource_account",
+        "target": "threading"
+      },
+      {
+        "line": 2,
+        "source": "_row_event_attribution",
+        "target": "dataclasses"
+      },
+      {
+        "line": 3,
+        "source": "_row_event_attribution",
+        "target": "struct"
+      },
+      {
+        "line": 4,
+        "source": "_row_event_attribution",
+        "target": "truss._row_image"
+      },
+      {
+        "line": 2,
+        "source": "_row_group_custody",
+        "target": "dataclasses"
+      },
+      {
+        "line": 3,
+        "source": "_row_group_custody",
+        "target": "truss._acceptance_json"
+      },
+      {
+        "line": 4,
+        "source": "_row_group_custody",
+        "target": "truss._row_operation_address"
+      },
+      {
+        "line": 5,
+        "source": "_row_group_custody",
+        "target": "truss._row_operation_custody"
+      },
+      {
+        "line": 2,
+        "source": "_row_image",
+        "target": "dataclasses"
+      },
+      {
+        "line": 3,
+        "source": "_row_image",
+        "target": "struct"
+      },
+      {
+        "line": 2,
+        "source": "_row_image_capture",
+        "target": "dataclasses"
+      },
+      {
+        "line": 3,
+        "source": "_row_image_capture",
+        "target": "truss._row_image"
+      },
+      {
+        "line": 4,
+        "source": "_row_image_capture",
+        "target": "truss._row_event_attribution"
+      },
+      {
+        "line": 2,
+        "source": "_row_operation_address",
+        "target": "dataclasses"
+      },
+      {
+        "line": 3,
+        "source": "_row_operation_address",
+        "target": "json"
+      },
+      {
+        "line": 4,
+        "source": "_row_operation_address",
+        "target": "truss._acceptance_json"
+      },
+      {
+        "line": 5,
+        "source": "_row_operation_address",
+        "target": "truss._row_operation_custody"
+      },
+      {
+        "line": 2,
+        "source": "_row_operation_context",
+        "target": "dataclasses"
+      },
+      {
+        "line": 3,
+        "source": "_row_operation_context",
+        "target": "truss._acceptance_json"
+      },
+      {
+        "line": 4,
+        "source": "_row_operation_context",
+        "target": "truss._row_operation_address"
+      },
+      {
+        "line": 5,
+        "source": "_row_operation_context",
+        "target": "truss._row_operation_custody"
+      },
+      {
+        "line": 6,
+        "source": "_row_operation_context",
+        "target": "truss._row_group_custody"
+      },
+      {
+        "line": 2,
+        "source": "_row_operation_custody",
+        "target": "base64"
+      },
+      {
+        "line": 3,
+        "source": "_row_operation_custody",
+        "target": "dataclasses"
+      },
+      {
+        "line": 4,
+        "source": "_row_operation_custody",
+        "target": "hashlib"
+      },
+      {
+        "line": 5,
+        "source": "_row_operation_custody",
+        "target": "re"
+      },
+      {
+        "line": 6,
+        "source": "_row_operation_custody",
+        "target": "truss._acceptance_json"
+      },
+      {
+        "line": 2,
+        "source": "_row_registry_correspondence",
+        "target": "dataclasses"
+      },
+      {
+        "line": 3,
+        "source": "_row_registry_correspondence",
+        "target": "truss._operation_registry"
+      },
+      {
+        "line": 4,
+        "source": "_row_registry_correspondence",
+        "target": "truss._row_operation_address"
+      },
+      {
+        "line": 5,
+        "source": "_row_registry_correspondence",
+        "target": "truss._row_operation_context"
+      },
+      {
+        "line": 6,
+        "source": "_row_registry_correspondence",
+        "target": "truss._row_group_custody"
+      },
+      {
+        "line": 7,
+        "source": "_row_registry_correspondence",
+        "target": "truss._row_operation_custody"
+      },
+      {
+        "line": 99,
+        "source": "_row_registry_correspondence",
+        "target": "truss._row_touch_registry"
+      },
+      {
+        "line": 100,
+        "source": "_row_registry_correspondence",
+        "target": "truss._row_operation_custody"
+      },
+      {
+        "line": 2,
+        "source": "_row_touch_registry",
+        "target": "dataclasses"
+      },
+      {
+        "line": 3,
+        "source": "_row_touch_registry",
+        "target": "truss._operation_registry"
+      },
+      {
+        "line": 4,
+        "source": "_row_touch_registry",
+        "target": "truss._row_operation_address"
+      },
+      {
+        "line": 5,
+        "source": "_row_touch_registry",
+        "target": "truss._row_operation_custody"
+      },
+      {
+        "line": 2,
+        "source": "cli",
+        "target": "argparse"
+      },
+      {
+        "line": 3,
+        "source": "cli",
+        "target": "json"
+      },
+      {
+        "line": 4,
+        "source": "cli",
+        "target": "pathlib"
+      },
+      {
+        "line": 5,
+        "source": "cli",
+        "target": "signal"
+      },
+      {
+        "line": 6,
+        "source": "cli",
+        "target": "threading"
+      },
+      {
+        "line": 20,
+        "source": "cli",
+        "target": "truss"
+      },
+      {
+        "line": 2,
+        "source": "local_runtime",
+        "target": "dataclasses"
+      },
+      {
+        "line": 3,
+        "source": "local_runtime",
+        "target": "importlib.metadata"
+      },
+      {
+        "line": 4,
+        "source": "local_runtime",
+        "target": "importlib.resources"
+      },
+      {
+        "line": 5,
+        "source": "local_runtime",
+        "target": "pathlib"
+      },
+      {
+        "line": 6,
+        "source": "local_runtime",
+        "target": "subprocess"
+      },
+      {
+        "line": 7,
+        "source": "local_runtime",
+        "target": "threading"
+      },
+      {
+        "line": 58,
+        "source": "local_runtime",
+        "target": "pgserver"
+      },
+      {
+        "line": 59,
+        "source": "local_runtime",
+        "target": "fasteners"
+      },
+      {
+        "line": 2,
+        "source": "migration_planning",
+        "target": "dataclasses"
+      },
+      {
+        "line": 3,
+        "source": "migration_planning",
+        "target": "re"
+      },
+      {
+        "line": 4,
+        "source": "migration_planning",
+        "target": "typing"
+      },
+      {
+        "line": 5,
+        "source": "migration_planning",
+        "target": "truss._acceptance_json"
+      },
+      {
+        "line": 8,
+        "source": "numeric",
+        "target": "dataclasses"
+      },
+      {
+        "line": 9,
+        "source": "numeric",
+        "target": "decimal"
+      },
+      {
+        "line": 6,
+        "source": "timestamp",
+        "target": "dataclasses"
+      },
+      {
+        "line": 7,
+        "source": "timestamp",
+        "target": "datetime"
+      },
+      {
+        "line": 8,
+        "source": "timestamp",
+        "target": "re"
+      },
+      {
+        "line": 10,
+        "source": "timestamp",
+        "target": "truss.numeric"
+      },
+      {
+        "line": 6,
+        "source": "weft",
+        "target": "dataclasses"
+      },
+      {
+        "line": 7,
+        "source": "weft",
+        "target": "decimal"
+      },
+      {
+        "line": 8,
+        "source": "weft",
+        "target": "hashlib"
+      },
+      {
+        "line": 9,
+        "source": "weft",
+        "target": "inspect"
+      },
+      {
+        "line": 10,
+        "source": "weft",
+        "target": "json"
+      },
+      {
+        "line": 11,
+        "source": "weft",
+        "target": "threading"
+      },
+      {
+        "line": 12,
+        "source": "weft",
+        "target": "types"
+      },
+      {
+        "line": 13,
+        "source": "weft",
+        "target": "typing"
+      }
+    ],
+    "errors": [],
+    "passed": true,
+    "scope": "python-only",
+    "unqualified": [
+      "TypeScript imports",
+      "native SQL dependencies",
+      "reflection/indirect dynamic execution",
+      "runtime private-object visibility"
+    ]
+  },
+  "completeEngineQualified": false
+}

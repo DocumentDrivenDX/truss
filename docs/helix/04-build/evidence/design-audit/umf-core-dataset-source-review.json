@@ -1,0 +1,41 @@
+{
+  "scope": "committed UMF source/contract and owner evidence review only; no Truss adoption or upstream test rerun",
+  "revision": "c7c95e1c4ea5b72541f47fa0350ca467ff02f395",
+  "previousRevision": "1f7b5f5d2a355c4b476e3a96b289b9048f03f567",
+  "sources": [
+    {
+      "path": "src/model/record-values.ts",
+      "sha256": "00725c9bcaea5f17cb8f7e827299d385255898ff1217aef183a90ecbc9bc86eb"
+    },
+    {
+      "path": "src/model/dataset-values.ts",
+      "sha256": "e919c1456c99c5b9bbc2fa4f57119f08d3ecbf58bbafae2e595530f05d0f9122"
+    },
+    {
+      "path": "spec/core/dataset-value-operation.schema.json",
+      "sha256": "913b25afb079d6952e31006ee4a772e77b67461d9029f8cccda24dd4ce017b7a"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/CONTRACT-049-schema-properties.md",
+      "sha256": "10fb006f15f6d5efba53ae5fe9401b3291afbadac4ffd67ad0ce3f7105233d29"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/core-dataset-values-20261009.md",
+      "sha256": "7ae89967234387c7887aeac3b380b5606ff4f975d3a2324d055a69a32a9fb29b"
+    }
+  ],
+  "operationVersion": "1.0.0",
+  "requiredCoreVersion": "0.8.0",
+  "limits": {
+    "records": 1000,
+    "relationshipOccurrences": 10000,
+    "receiptBytes": 4000000,
+    "sourceValueVisits": 1000000
+  },
+  "relationshipSubset": "directed monomorphic independent lifecycle without association Record",
+  "provenance": "unverified supplied-dataset-only; copied source/input are JSON data, not original-wire attestation",
+  "trussIntegration": "Consume owner Record/Key/dataset receipts under explicit original support composition; full native coverage, policy, transaction and publication remain Truss/security obligations",
+  "consumer07Disposition": "Explicit admitted transition required; never relabel source or claim these APIs accept original 0.7",
+  "browserAssetsChanged": false,
+  "nativeImplementationQualified": false
+}

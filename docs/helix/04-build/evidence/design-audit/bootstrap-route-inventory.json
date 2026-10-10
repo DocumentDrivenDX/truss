@@ -1,0 +1,377 @@
+{
+  "scope": "Seventy-three draft route entry identities/required-field/list inventories, original top-level SELECT target aliases and 219 source/model/export pins against scoped receipts and current bytes, with exact path-set coverage of the original aggregate source query inventory; no query parsing, exact semantic decoder/extractor, mandatory closure, registry adoption or native support proof",
+  "status": "pass",
+  "routes": [
+    {
+      "path": "02-design/contracts/bindings/bootstrap-cast-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.cast.direct/0.1.0",
+      "sha256": "c5f969672093a4819d69d5f39850c040cb00bebf6384f8bf274704feb7578226"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-collation-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.collation.namespace-fanout/0.1.0",
+      "sha256": "e79f00bb17c84169ce64d27bb412d627aa98039b233507b4f71104d4bb6a2345"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-external-collation-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.collation.direct/0.1.0",
+      "sha256": "f0c7eef69d8e6ccca8a2b4dd05805a59eedf5bdf9058168138dda11b299dbc5c"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-enum-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.enum.namespace-fanout/0.1.0",
+      "sha256": "ba67282e9432f81760839c300371a85143ba3b1d16a63b4f3ed6e672654d2d0f"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-external-enum-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.enum.type-fanout/0.1.0",
+      "sha256": "1924916b905b285be9e6aa67deffb0950ec98ef155563b7236e917fffe48a66a"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-enum-child-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.enum.child-direct/0.1.0",
+      "sha256": "7840ddf91c8b5a0f3e186e1427598a84d8e007f2bf4a429300c58bbca238b2a4"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-range-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.range.namespace-adjunct/0.1.0",
+      "sha256": "036bf49be996555d101625b2b1ce273ab30d6b77bade75809d7cf8195de6d98b"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-external-range-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.range.type-adjunct/0.1.0",
+      "sha256": "84bba89f9b01cc58abb93e0cac1580fbcc751ee42347dd2e8aa806044f7b09fb"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-operator-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.operator.direct/0.1.0",
+      "sha256": "55e01a2632e847ca7f655107f1b68a9ade060e69599464bf80fa8122b96f3b3b"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-opclass-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.opclass.direct/0.1.0",
+      "sha256": "5421adaad14c061ae2dc82518a98d21af6291dede4f588c81fe5d7b989f745e1"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-opfamily-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.opfamily.direct/0.1.0",
+      "sha256": "46267a6ec3d43dfd7586203f7cd9d7519ff13faf3ecee2775814482376297bc4"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-access-method-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.access-method.direct/0.1.0",
+      "sha256": "30728e8e0607677f9d5a2e3dfd29d646ee26e78536315a4324eaa40159f7f6a7"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-opfamily-operators-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.opfamily-operators.family-fanout/0.1.0",
+      "sha256": "9bd7c71345034ee47177c1a33ff0dda31daaa8cbd42a2841832a7f203fd56fa6"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-opfamily-support-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.opfamily-support.family-fanout/0.1.0",
+      "sha256": "a76418b6511073e01cb0170706c380778254467753947ce1567fa502732d7f2e"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-opfamily-operators-child-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.opfamily-operators.child-direct/0.1.0",
+      "sha256": "6130d32e1df6e8f03f234200a5fc4b4020f541b1cc6a3c19f9d55c1a48a93ad4"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-opfamily-support-child-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.opfamily-support.child-direct/0.1.0",
+      "sha256": "e92d821160bb73c563bee82325bf3022ddd93b719ef289c8d4c2d2e8a3fdb424"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-type-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.type.namespace-fanout/0.1.0",
+      "sha256": "73e57dc7aad83782e7c0b492b40cd65bdb1e49786af5da5159d29d8f8a8df06e"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-external-type-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.type.direct/0.1.0",
+      "sha256": "813bc474a8ce4dba2722ec75514445f5c496349d0d9df8b754861085fa6e9bbd"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-routine-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.routine.namespace-fanout/0.1.0",
+      "sha256": "84d18a5964dcef8b245b46acfd9403004e7513f5c6cc545b11f557682f2c5eb5"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-external-routine-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.routine.direct/0.1.0",
+      "sha256": "ddfaed6e4d279fcf0e0bacaf00abffb2990ecea07630d3d5d786ac1d8209ef10"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-language-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.language.direct/0.1.0",
+      "sha256": "497af00c47ff01f51a79f4811c95488cf8f1cb16e2fdc46039b79cff4cefb2df"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-aggregate-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.aggregate.routine-adjunct/0.1.0",
+      "sha256": "8ee4dbd32203c3265eada8696e2a2e041a58775c7e35d3fb845f7560db4d5c4d"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-transform-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.transform.direct/0.1.0",
+      "sha256": "f592fb1dadaeffe677145a825fcaf35050996b6e27bf79eda65e539b9d86fdc9"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-transform-pairs-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.transform.type-language-pairs/0.1.0",
+      "sha256": "e8f621c12e7dfb11b03ead75112f0065c7819ca4654df9a1bd5bd24941016b4d"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-relation-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.relation.namespace-fanout/0.1.0",
+      "sha256": "4e820bf2cdc3c29fb67e579d2940c591dee6014b3ecb9459d8bdf0ed2b08cb76"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-external-relation-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.relation.direct/0.1.0",
+      "sha256": "10263db2d8d65eb91e9406bd431f9549ee6ec6963e75dc4301c3a1518464bade"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-column-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.column.namespace-fanout/0.1.0",
+      "sha256": "eeb42cfbf01abb836e54121649bd1c228922a83ffd87a51deba33ff0dc7ea759"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-external-column-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.column.relation-fanout/0.1.0",
+      "sha256": "46fb2a39098fe282a29267752d5844d3c21cd1aaa76b61c76d7c4f9df3756eed"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-default-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.default.direct/0.1.0",
+      "sha256": "1133282053abf39621f4d6c7fce3e8b56f3fe1d69d1b95059149602f500bf44d"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-index-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.index.namespace-fanout/0.1.0",
+      "sha256": "f5de8b03eef27bdead1f91e7d3e80acbec23dce173001ac7ae55f068296d3334"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-external-index-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.index.relation-scope/0.1.0",
+      "sha256": "48f575961c1e2aebd7e17ba102d7025454c4520480467334675b8223e00e327a"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-sequence-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.sequence.namespace-adjunct/0.1.0",
+      "sha256": "942708586ad80e635025c026f44e5d54dfd2b2c68fb8175f80f91e70a30110e0"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-external-sequence-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.sequence.relation-adjunct/0.1.0",
+      "sha256": "cca491fc05c90264e0ec127d42021163f237419955419695b025300a75971769"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-constraint-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.constraint.namespace-scope/0.1.0",
+      "sha256": "925c70fb60f61f0eb49b4fc9072c5efd272c0a85aed781042633133dcabae383"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-external-constraint-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.constraint.address-parent-domain-scope/0.1.0",
+      "sha256": "faf52b4659892e3245bb13d9c59b5db38bc2bbeb641d02303e27c8b48c48e0b1"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-trigger-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.trigger.namespace-fanout/0.1.0",
+      "sha256": "8001cf39759985b2c22c2ec2a80c26e754da0bc9ce56d52c4297ddfb9b65bb0b"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-external-trigger-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.trigger.relation-fanout/0.1.0",
+      "sha256": "2b891de68facccd3d3a28804fb6cd67644467ffad63dfc63c69fbdcc4ea20f28"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-policy-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.policy.namespace-fanout/0.1.0",
+      "sha256": "df98b868fdbc135bd745b2ecdce60c0712a971472f800262cbd554b2d6898756"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-external-policy-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.policy.relation-fanout/0.1.0",
+      "sha256": "7b6e669f3f4cc9533068a323b74e2200c4442d1cfefb611ea219f7c7c33bafb2"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-rewrite-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.rewrite.namespace-fanout/0.1.0",
+      "sha256": "633ca8ba0b7fc73ba7b6c25cd08e2f8505eada151c8aea08b4e1c950dc974967"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-external-rewrite-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.rewrite.relation-fanout/0.1.0",
+      "sha256": "c6055205beedc69cdc2fdd1c78bf5623e76eb65d2654625c492174184952c2bf"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-trigger-child-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.trigger.child-direct/0.1.0",
+      "sha256": "f3820c6baa5cf0740ecde486aa8b3de9802651cdf63efb16513c0394aa87a9ed"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-policy-child-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.policy.child-direct/0.1.0",
+      "sha256": "6ae3562d18daf05759e861bd4efdc5333dba54226e9541c98378aa71671a3369"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-rewrite-child-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.rewrite.child-direct/0.1.0",
+      "sha256": "c09ed9c8dfc515ff44da3523bff0269ddc49c082c44eac8f184880eb8670d248"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-inheritance-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.inheritance.namespace-scope/0.1.0",
+      "sha256": "bb2f901696281181485d10238bf58c034c24b49b82f91e9e5e2ed85b6923ad1c"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-external-inheritance-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.inheritance.relation-scope/0.1.0",
+      "sha256": "36aad3266adf17f9d09ec0f63ca46d5781cef22827319e0accb67daf12c1da33"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-partition-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.partition.namespace-scope/0.1.0",
+      "sha256": "2084ffc5b860717a0df50f7d63d2a17e57bf699928aa1708ddf30a70c968c551"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-external-partition-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.partition.relation-scope/0.1.0",
+      "sha256": "c153f7306946c5176868736f1fa1a0f92ba1a79d1fc72cdddabc8928f2d04500"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-dependency-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.dependency.address-frontier/0.1.0",
+      "sha256": "94e023ba4f15a786e5ee4a5e153c920e0e326c3b876d5c0bb02513943c7c1167"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-shared-dependency-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.shared-dependency.address-frontier/0.1.0",
+      "sha256": "4079b8cb52ac4c20deb7dd7f4793ed4be2190b2a115364e4a1cad19ad4d37dcb"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-namespace-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.namespace.direct/0.1.0",
+      "sha256": "05e0afb29c3171159d34b6a540fef20d0d3aff07b42d4a811b90aa55ea4acf3d"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-target-database-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.target-database.original-context/0.1.0",
+      "sha256": "2d8b2360f8289c5eefa5e2b96ac3a1fbd177504dbb061a07918c2d88b9e75c99"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-session-settings-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.session-settings.original-context/0.1.0",
+      "sha256": "de039f7d263b62882dd55b995687cdb3f27fa232634c4cf9f304fe9ca2ba1cdf"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-tablespace-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.tablespace.direct-address/0.1.0",
+      "sha256": "0d2a2310d94fc7f8d4463dfddcbcd3e2456adf5e35e7b5909660842e7eaf831e"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-description-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.description.original-scope/0.1.0",
+      "sha256": "4da8162a76ea80ab297c0a82c428ffa8e7c5bf242c465021709a24f7ba0a4e26"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-shared-description-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.shared-description.original-scope/0.1.0",
+      "sha256": "22a4dda2d9c1eebcfc581e52da61539f842f89d6a5f576a8cdfeabcef2bf464d"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-extension-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.extension.original-scope/0.1.0",
+      "sha256": "f123ca032c15e72e4ee39b37a15a6ece688433857c2fa239c801f4ebde519bc4"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-extension-reference-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.extension-reference.original-scope/0.1.0",
+      "sha256": "e489a48cbdfd9abfcd748956b36d84e86329642702727ea6670a0aa4f3423143"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-default-acl-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.default-acl.creation-scope/0.1.0",
+      "sha256": "683712ed47bb1dcd8e0740daf8440cd83c0a9a8c4b4f25371785fa31e105e1e8"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-namespace-acl-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.namespace-acl.expanded-grants/0.1.0",
+      "sha256": "81b2b69da53996d97aaaba7c7b9d146bf515c4974a206af5172d8252ae850bb3"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-routine-acl-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.routine-acl.expanded-grants/0.1.0",
+      "sha256": "d2a47d5f75d63d014f1fde2dd7f1b7469fd7e55bdb05b257b18b61538eed5c11"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-relation-acl-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.relation-acl.expanded-grants/0.1.0",
+      "sha256": "10ffcca9afde5d20fb8cd62141d22b6a0ac4d40f8a0ea96bc61c657262b318b9"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-column-acl-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.column-acl.expanded-grants/0.1.0",
+      "sha256": "7c83029bdf1c16f9eb1b0c3d7c6d31e284d4e98e46e8bfc3d643f0c78a86c504"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-type-acl-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.type-acl.expanded-grants/0.1.0",
+      "sha256": "012c1d1589b22b694243b38de32f0cdc5bb8587de1123b1e4e067969e00df268"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-language-acl-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.language-acl.expanded-grants/0.1.0",
+      "sha256": "83b5fc1fcf49204d86239653145ca6db95ade6f626ff9491eaccb7a1e7fa3742"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-namespace-rights-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.namespace-rights.complete-inquiry/0.1.0",
+      "sha256": "96b5f8ee662f3ea3ed3df8c2e5561cc54518e54c59c0dde82168049f2e30d076"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-routine-rights-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.routine-rights.complete-inquiry/0.1.0",
+      "sha256": "0ac4de244a991ea44614781161cbe3a0c49ec47b311295b282a7e59c79cb6e1a"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-sequence-rights-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.sequence-rights.complete-inquiry/0.1.0",
+      "sha256": "8bf4d32e7d8d8fd8966bce06a0dba9c1585d84b971066cdf7cfedf36557203bb"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-relation-rights-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.relation-rights.complete-inquiry/0.1.0",
+      "sha256": "895275a0e0c2b9cba65d66b9c936890d2f2a8f1c5b27da9f6a7f8425673d60bf"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-column-rights-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.column-rights.complete-inquiry/0.1.0",
+      "sha256": "f898b848a7fb04e48e01f8b06477f26eee05a21a6aea1186149fe9312bac3254"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-type-rights-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.type-rights.complete-inquiry/0.1.0",
+      "sha256": "608c6b39801b884591602aa9e2acb930b2cc665ae33cf92c769d377539fbac11"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-language-rights-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.language-rights.complete-inquiry/0.1.0",
+      "sha256": "93b363b52b27a6db0bdf233e6caf74ae135c27f34012216a1dffa9327c0f2a21"
+    },
+    {
+      "path": "02-design/contracts/bindings/bootstrap-role-path-route-v0.1.proposal.json",
+      "routeIdentity": "pg17.role-path.complete-inquiry/0.1.0",
+      "sha256": "8fccc383dae126b2729fb4befa6a9423776fcc1300e6b77aa01d9c271df00112"
+    }
+  ],
+  "artifactPins": 219,
+  "sourceQueriesCovered": 73,
+  "definitionSpecificationPins": 15,
+  "sourceInventorySha256": "7b86e09dbfc598691658107df5ca130e568b604a7693e77f06692beb56990e65",
+  "checkerSha256": "d792ea85c1c85aee10f14398c716e47afe7b062a0ed7f3d956a9cbac4df103a7",
+  "pythonVersion": "3.9.6"
+}

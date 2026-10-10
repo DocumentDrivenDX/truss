@@ -1,0 +1,15 @@
+{
+  "scope": "independent exact child source/address binding, clause and full original projection expectations only; no native absence proof",
+  "helperSha256": "0257d685e45dac006a3f7e8b275c4c86c35f5918fb2c4b0b9bb749068c81be67",
+  "sourceReceiptSha256": "ceee6aa125d0b9e113171202040198cc4163b2cd83dc6a2d07013019b55e5abf",
+  "negativeControls": [
+    "wrong_child",
+    "added_parent_join",
+    "missing_ordinal",
+    "wrong_operator",
+    "reversed_binding",
+    "missing_body",
+    "limit"
+  ],
+  "nativeExecuted": false
+}

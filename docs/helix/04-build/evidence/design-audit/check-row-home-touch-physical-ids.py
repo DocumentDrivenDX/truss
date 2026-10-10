@@ -1,0 +1,36 @@
+"""Original source identity correspondence only; no native/generation qualification."""
+import json, hashlib
+from pathlib import Path
+root=Path(__file__).resolve().parents[5]
+path='docs/helix/02-design/models/truss-row-home-touch.physical-ids.proposal.json'
+d=json.loads((root/path).read_text());assert d['complete'] is False
+sha=lambda p:hashlib.sha256((root/p).read_bytes()).hexdigest()
+models={};expected=set()
+for source in d['sources']:
+ assert sha(source['source'])==source['sourceSha256']
+ assert sha(source['model'])==source['modelSha256']
+ model=json.loads((root/source['model']).read_text());models[source['model']]=model
+ def walk(n,p=''):
+  if isinstance(n,dict):
+   for k,v in n.items():
+    target=p+'/'+k
+    if k in {'CreateStmt','CreateSeqStmt','IndexStmt','ColumnDef'} or (k=='Constraint' and v['members']['contype']['value'] in {'CONSTR_PRIMARY','CONSTR_UNIQUE','CONSTR_FOREIGN','CONSTR_CHECK'}):expected.add((source['model'],target))
+    walk(v,target)
+  elif isinstance(n,list):
+   for i,v in enumerate(n):walk(v,p+'/'+str(i))
+ walk(model)
+seen=set();observed=set();counts={}
+baseline=json.loads((root/'docs/helix/02-design/models/truss-layout-0.2.physical-ids.draft.json').read_text())
+parents={e['entryId'] for e in baseline['entries'] if e['objectKind']=='table'}|{e['entryId'] for e in d['entries'] if e['objectKind']=='table'}
+for e in d['entries']:
+ assert e['entryId'] not in seen;seen.add(e['entryId'])
+ assert e['nativeBinding']=={'state':'unresolved'}
+ if 'parentId' in e:assert e['parentId'] in parents
+ loc=e['capturedModelLocator'];assert sha(loc['modelPath'])==loc['modelSha256'];n=models[loc['modelPath']]
+ for c in loc['jsonPointer'].strip('/').split('/'):n=n[int(c)] if isinstance(n,list) else n[c]
+ assert n==e['originalNativeNode']
+ key=(loc['modelPath'],loc['jsonPointer']);assert key not in observed;observed.add(key)
+ counts[e['objectKind']]=counts.get(e['objectKind'],0)+1
+assert observed==expected, (expected-observed,observed-expected)
+receipt={'scope':d['scope'],'allocationSha256':sha(path),'entries':len(seen),'counts':counts,'complete':False,'exactCapturedNodes':True,'selectedSourceCoverage':True}
+(root/'docs/helix/04-build/evidence/design-audit/row-home-touch-physical-ids.json').write_text(json.dumps(receipt,indent=2)+'\n');print(json.dumps(receipt))

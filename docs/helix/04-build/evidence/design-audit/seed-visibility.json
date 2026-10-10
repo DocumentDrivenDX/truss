@@ -1,0 +1,89 @@
+{
+  "scope": "draft structure and abstract top-level committed-xid vectors only; no server observation, authority, digest, complete-envelope, snapshot or native qualification",
+  "shapes": [
+    {
+      "name": "complete fixture",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "numeric xid",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "duplicate in-progress xid",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "leading-zero xid",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "missing baseline",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "well-shaped reversed range",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "well-shaped out-of-range member",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "well-shaped overflowing xid8",
+      "expected": true,
+      "actual": true
+    }
+  ],
+  "classification": [
+    {
+      "xid": "9",
+      "represented": true,
+      "actual": true,
+      "requiresReplayRange": false
+    },
+    {
+      "xid": "10",
+      "represented": false,
+      "actual": false,
+      "requiresReplayRange": true
+    },
+    {
+      "xid": "12",
+      "represented": true,
+      "actual": true,
+      "requiresReplayRange": true
+    },
+    {
+      "xid": "14",
+      "represented": false,
+      "actual": false,
+      "requiresReplayRange": true
+    },
+    {
+      "xid": "19",
+      "represented": true,
+      "actual": true,
+      "requiresReplayRange": true
+    },
+    {
+      "xid": "20",
+      "represented": false,
+      "actual": false,
+      "requiresReplayRange": true
+    },
+    {
+      "xid": "21",
+      "represented": false,
+      "actual": false,
+      "requiresReplayRange": true
+    }
+  ]
+}

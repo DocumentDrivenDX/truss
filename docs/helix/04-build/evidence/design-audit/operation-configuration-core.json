@@ -1,0 +1,15 @@
+{
+  "source": "docs/helix/02-design/contracts/operation-configuration-storage-v0.1.proposal.umf.json",
+  "prior": "docs/helix/02-design/models/truss-layout-core-structural-0.4.proposal.umf.json",
+  "output": "docs/helix/02-design/models/truss-layout-core-structural-0.5.proposal.umf.json",
+  "outputSha256": "a025e6fe745832b9b59ee4d68cfe65b6bf50f29bc68f87b5fae36782dd1c16ab",
+  "producerSha256": "037a36bb6befa1398d964f3e8b75d517875b425c4892075ed2ec95e6b27fc81a",
+  "records": 49,
+  "fields": 470,
+  "addedRelationships": 0,
+  "addedPhysicalReferenceAssociations": 2,
+  "valid": true,
+  "complete": false,
+  "errors": [],
+  "scope": "Structural projection of baseline0.16 plus uncomposed configuration adjunct. Native semantics, installation and protected capture remain unqualified."
+}

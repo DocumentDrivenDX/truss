@@ -1,0 +1,27 @@
+{
+  "profile": "truss-direct-lookup-resource/0.1.0",
+  "status": "unadopted-design-candidate",
+  "limits": {
+    "requestCanonicalBytes": "16777216",
+    "lookupRows": "2",
+    "namespaceAndKeyBytes": "16777216",
+    "privateContextArtifactBytes": "8388608",
+    "nativeEncodedRowBytes": "67108864",
+    "nativeEncodedResultBytes": "134217728",
+    "publicRecordCanonicalBytes": "4194304",
+    "qualifiedOwnerEntries": "10000",
+    "nativeSubmissions": "64",
+    "ownedPeakBytes": "268435456",
+    "cumulativeChargedBytes": "536870912",
+    "operationMilliseconds": "5000",
+    "containmentMilliseconds": "1000"
+  },
+  "units": {
+    "namespaceAndKeyBytes": "Complete admitted lookup namespace/key carrier bytes and privately observed match bytes, including repeated comparisons; does not enlarge the selected key codec ceiling.",
+    "privateContextArtifactBytes": "Each complete original match/context artifact; original custody and containing archive limits also apply.",
+    "nativeEncodedRowBytes": "Actual selected native transport framing/encoding, including private match/context columns; public projection is charged independently.",
+    "nativeSubmissions": "All actual original data, context, authority and containment submissions; a retry is not free.",
+    "ownedPeakBytes": "All request, key/context, adapter/decoder, catalog/owner and serialization buffers/copies still owned by the original call."
+  },
+  "qualification": "Finite unadopted proposals only. Exact native/transport/allocator/clock/cancellation producers and deployed feasibility remain required; independent dimensions apply together."
+}

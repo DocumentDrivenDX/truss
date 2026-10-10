@@ -1,0 +1,95 @@
+{
+  "scope": "Exact original source-symbolic occurrence inventory; not native OID/overload/privilege or installation qualification",
+  "model": {
+    "path": "docs/helix/02-design/contracts/private-custody-settlement-observation-pg17.proposal.umf.json",
+    "sha256": "f24e6081f0244753cfb4caa2d509ce8c94fcf8cd8fd53664eb452085662f476e"
+  },
+  "entries": [
+    {
+      "kind": "type",
+      "sourcePointer": "/stmts/0/stmt/SelectStmt/targetList/0/ResTarget/val/TypeCast/typeName",
+      "nameParts": [
+        "pg_catalog",
+        "text"
+      ],
+      "typemod": -1,
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "type",
+      "sourcePointer": "/stmts/0/stmt/SelectStmt/targetList/0/ResTarget/val/TypeCast/arg/TypeCast/typeName",
+      "nameParts": [
+        "pg_catalog",
+        "xid8"
+      ],
+      "typemod": -1,
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "type",
+      "sourcePointer": "/stmts/0/stmt/SelectStmt/targetList/1/ResTarget/val/TypeCast/typeName",
+      "nameParts": [
+        "pg_catalog",
+        "text"
+      ],
+      "typemod": -1,
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "function",
+      "sourcePointer": "/stmts/0/stmt/SelectStmt/targetList/1/ResTarget/val/TypeCast/arg/FuncCall",
+      "nameParts": [
+        "pg_catalog",
+        "pg_xact_status"
+      ],
+      "argumentCount": 1,
+      "originalArguments": [
+        {
+          "TypeCast": {
+            "arg": {
+              "ParamRef": {
+                "number": 1,
+                "location": 414
+              }
+            },
+            "typeName": {
+              "names": [
+                {
+                  "String": {
+                    "sval": "pg_catalog"
+                  }
+                },
+                {
+                  "String": {
+                    "sval": "xid8"
+                  }
+                }
+              ],
+              "typemod": -1,
+              "location": 418
+            },
+            "location": 416
+          }
+        }
+      ],
+      "nativeResolution": "unresolved"
+    },
+    {
+      "kind": "type",
+      "sourcePointer": "/stmts/0/stmt/SelectStmt/targetList/1/ResTarget/val/TypeCast/arg/FuncCall/args/0/TypeCast/typeName",
+      "nameParts": [
+        "pg_catalog",
+        "xid8"
+      ],
+      "typemod": -1,
+      "nativeResolution": "unresolved"
+    }
+  ],
+  "unresolvedNativeRequirements": [
+    "actual pg_catalog type/function OIDs and exact xid8 input/text result signatures",
+    "original effective native EXECUTE/type/schema and observer authority",
+    "original installation/source epoch/connection/retention and resource tuple",
+    "dependency identity and qualified function dispatch under original deployment"
+  ],
+  "nativeExecuted": false
+}

@@ -1,0 +1,73 @@
+{
+  "scope": "Independent exact string equality expectations; no native operator/encoding/resource qualification, ordering or UMF key identity claim",
+  "cases": [
+    {
+      "case": "empty",
+      "left": "",
+      "right": "",
+      "expectedEqualText": "true"
+    },
+    {
+      "case": "empty-space",
+      "left": "",
+      "right": " ",
+      "expectedEqualText": "false"
+    },
+    {
+      "case": "case",
+      "left": "a",
+      "right": "A",
+      "expectedEqualText": "false"
+    },
+    {
+      "case": "trailing-space",
+      "left": "a",
+      "right": "a ",
+      "expectedEqualText": "false"
+    },
+    {
+      "case": "same-accent",
+      "left": "é",
+      "right": "é",
+      "expectedEqualText": "true"
+    },
+    {
+      "case": "normalization-distinct",
+      "left": "é",
+      "right": "é",
+      "expectedEqualText": "false"
+    },
+    {
+      "case": "same-supplementary",
+      "left": "😀",
+      "right": "😀",
+      "expectedEqualText": "true"
+    },
+    {
+      "case": "supplementary-distinct",
+      "left": "😀",
+      "right": "😁",
+      "expectedEqualText": "false"
+    },
+    {
+      "case": "same-reference-code",
+      "left": "account-α",
+      "right": "account-α",
+      "expectedEqualText": "true"
+    },
+    {
+      "case": "greek-case",
+      "left": "α",
+      "right": "Α",
+      "expectedEqualText": "false"
+    }
+  ],
+  "preNativeRefusals": [
+    "NULL or missing required code",
+    "U+0000 unsupported native realization",
+    "unpaired surrogate before UTF-8 encoding",
+    "unadmitted source/home/Field/codec",
+    "missing producer or resource reservation"
+  ],
+  "execution": "not_run"
+}

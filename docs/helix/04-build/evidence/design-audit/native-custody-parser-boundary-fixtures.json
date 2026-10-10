@@ -1,0 +1,94 @@
+{
+  "scope": "Six original independently constructed component fixtures for proposed native custody parser preflight boundaries. Generic member a/kN is not a conforming Truss envelope. Python JSON grammar sanity only; native preflight/parser memory/work/deadline outcomes not executed.",
+  "countingBasis": "Root object start counts one token/depth one; each object name and scalar counts one token; array start counts one token/depth increment. Formulas independently derive each fixture count.",
+  "cases": [
+    {
+      "caseId": "depth-64",
+      "sourcePath": "docs/helix/04-build/evidence/design-audit/native-custody-parser-fixtures/depth-64.json",
+      "sourceSha256": "9b6abb4ff04d2d9f023dc278ce9a30cc05efbba86a68393a4ff9de0923364bca",
+      "sourceByteLength": 133,
+      "independentConstructionCounts": {
+        "depth": 64,
+        "tokens": 66,
+        "members": 1,
+        "bytes": 133
+      },
+      "targetBound": "depth",
+      "expectedPreflight": "pass"
+    },
+    {
+      "caseId": "depth-65",
+      "sourcePath": "docs/helix/04-build/evidence/design-audit/native-custody-parser-fixtures/depth-65.json",
+      "sourceSha256": "2b96d94437e73e6e9b0f366b1d05f3222d4c6f50b2b090e40f862a4c3c124d06",
+      "sourceByteLength": 135,
+      "independentConstructionCounts": {
+        "depth": 65,
+        "tokens": 67,
+        "members": 1,
+        "bytes": 135
+      },
+      "targetBound": "depth",
+      "expectedPreflight": "refuse"
+    },
+    {
+      "caseId": "tokens-262144",
+      "sourcePath": "docs/helix/04-build/evidence/design-audit/native-custody-parser-fixtures/tokens-262144.json",
+      "sourceSha256": "930bd0c89ef4ffbedc4d756cca123ae5168a75c995994acaddc0c5b554a86bf4",
+      "sourceByteLength": 524289,
+      "independentConstructionCounts": {
+        "depth": 2,
+        "tokens": 262144,
+        "members": 1,
+        "bytes": 524289
+      },
+      "targetBound": "tokens",
+      "expectedPreflight": "pass"
+    },
+    {
+      "caseId": "tokens-262145",
+      "sourcePath": "docs/helix/04-build/evidence/design-audit/native-custody-parser-fixtures/tokens-262145.json",
+      "sourceSha256": "500aac0daede2b0c6f96ac3ee6c415426bbe9f2e9d269d7da3b3208c433ecef1",
+      "sourceByteLength": 524291,
+      "independentConstructionCounts": {
+        "depth": 2,
+        "tokens": 262145,
+        "members": 1,
+        "bytes": 524291
+      },
+      "targetBound": "tokens",
+      "expectedPreflight": "refuse"
+    },
+    {
+      "caseId": "members-65536",
+      "sourcePath": "docs/helix/04-build/evidence/design-audit/native-custody-parser-fixtures/members-65536.json",
+      "sourceSha256": "a36d93c06eb8ec7f30e2e7f2ef181e259499086c95cbfcdae1e564b1a522f000",
+      "sourceByteLength": 709787,
+      "independentConstructionCounts": {
+        "depth": 1,
+        "tokens": 131073,
+        "members": 65536,
+        "bytes": 709787
+      },
+      "targetBound": "members",
+      "expectedPreflight": "pass"
+    },
+    {
+      "caseId": "members-65537",
+      "sourcePath": "docs/helix/04-build/evidence/design-audit/native-custody-parser-fixtures/members-65537.json",
+      "sourceSha256": "8e4a04393b6ff3fdd29cff11ddb7cdea8fb6be05f98538eb9927e3f697f741c5",
+      "sourceByteLength": 709798,
+      "independentConstructionCounts": {
+        "depth": 1,
+        "tokens": 131075,
+        "members": 65537,
+        "bytes": 709798
+      },
+      "targetBound": "members",
+      "expectedPreflight": "refuse"
+    }
+  ],
+  "nativeExecution": false,
+  "independentDecodedTreeCountChecks": 6,
+  "resourceProfilePath": "docs/helix/02-design/contracts/bindings/truss-native-custody-parser-resource-v0.1.proposal.json",
+  "resourceProfileSha256": "e19b654af2e2e3529d559584d133ff269af889f12684e60db67007beac4607c1"
+}

@@ -1,0 +1,110 @@
+{
+  "scope": "All 47 source columns project once with exact source-driven direct/text/hex carrier and alias correspondence. Exact three context predicates and private address collection order checked; native descriptor/null/clock/authority/resources not qualified.",
+  "lookupModelSha256": "43a648252106f53170e561400dbb416509aebf96e935811c2f7632e70313724e",
+  "layoutModelSha256": "f59fa94c5eb1580835df22058959f45457709cd4980a6d68e47c1748d1a79b3c",
+  "tables": [
+    {
+      "table": "feed_tx",
+      "columnCount": 12,
+      "orderedAliases": [
+        "source_epoch",
+        "feed_profile",
+        "original_writer_xid",
+        "registration_counter",
+        "prerequisite_registration_counter",
+        "configuration_registration_counter",
+        "membership_generation",
+        "finalized_generation",
+        "original_context_bytes_hex",
+        "manifest_profile_bytes_hex",
+        "manifest_bytes_hex",
+        "manifest_sha256_hex"
+      ]
+    },
+    {
+      "table": "feed_member",
+      "columnCount": 14,
+      "orderedAliases": [
+        "source_epoch",
+        "feed_profile",
+        "original_writer_xid",
+        "registration_address",
+        "delivery_ordinal",
+        "fact_kind",
+        "original_write_at",
+        "original_fact_key_bytes_hex",
+        "original_fact_key_profile_bytes_hex",
+        "original_payload_bytes_hex",
+        "original_payload_profile_bytes_hex",
+        "original_payload_sha256_hex",
+        "original_owner_context_bytes_hex",
+        "original_fact_clock_bytes_hex"
+      ]
+    },
+    {
+      "table": "feed_prerequisite",
+      "columnCount": 10,
+      "orderedAliases": [
+        "source_epoch",
+        "feed_profile",
+        "original_writer_xid",
+        "prerequisite_address",
+        "original_revision",
+        "original_artifact_identity_bytes_hex",
+        "original_definition_bytes_hex",
+        "original_definition_profile_bytes_hex",
+        "original_definition_sha256_hex",
+        "original_owner_context_bytes_hex"
+      ]
+    },
+    {
+      "table": "feed_configuration_prerequisite",
+      "columnCount": 11,
+      "orderedAliases": [
+        "source_epoch",
+        "feed_profile",
+        "original_writer_xid",
+        "configuration_address",
+        "original_configuration_generation",
+        "original_installation_identity_bytes_hex",
+        "original_configuration_profile_bytes_hex",
+        "original_configuration_bytes_hex",
+        "original_producer_inventory_bytes_hex",
+        "original_configuration_sha256_hex",
+        "original_owner_context_bytes_hex"
+      ]
+    }
+  ],
+  "controls": [
+    {
+      "case": "missing column",
+      "refused": true
+    },
+    {
+      "case": "duplicate column",
+      "refused": true
+    },
+    {
+      "case": "substituted alias",
+      "refused": true
+    },
+    {
+      "case": "extra narrowing predicate",
+      "refused": true
+    },
+    {
+      "case": "wrong context parameter",
+      "refused": true
+    },
+    {
+      "case": "transaction assigning observation substituted",
+      "refused": true
+    },
+    {
+      "case": "invented LIMIT modifier",
+      "refused": true
+    }
+  ],
+  "nativeExecution": false,
+  "complete": false
+}

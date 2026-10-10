@@ -29,12 +29,12 @@ ddx:
 
 ## Context
 
-The TypeScript engine validates with UMF's library. An implementation in another language needs its own reader, and its disagreement with the reference would silently change what a catalog revision accepts.
+UMF owns document interpretation and validation. TypeScript consumes the pinned owner library; another-language implementation may consume the same qualified owner producer through an explicitly versioned integration rather than implement a competing checker. The host language does not waive validity, diagnostic, original-byte custody or subset conformance. Any independent reader still must match the pinned normative corpus, and shared producer use alone does not qualify its transport, losslessness, resource or Truss acceptance integration. Source-valid UMF and admissible Truss storage/execution support are separate verdicts: Truss can refuse an unsupported dependent profile without inventing UMF validation errors or silently dropping preserved unknown content.
 
 ## Walkthrough
 
 1. Implementer loads the corpus's UMF cases: documents with their expected validity and diagnostics.
-2. Implementer runs their reader over each document.
+2. Implementer runs the selected pinned UMF reader/producer integration over each original document.
 3. System compares validity and each diagnostic's severity, code and path.
 4. Implementer reruns after fixing a difference.
 

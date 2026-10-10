@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:key-migration-components:0.1.0",
+  "description": "Exact original component carrier; source envelope/definition/ordered binding and custody admission remain mandatory.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-key-migration-components/0.1.0"
+    },
+    "captureProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "identity": {
+      "$ref": "urn:truss:draft:history-record:0.1.0#/$defs/identity"
+    },
+    "recordVersion": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$",
+      "maxLength": 20
+    },
+    "binding": {
+      "$ref": "urn:truss:draft:key-bindings:0.1.0#/properties/bindings/items"
+    },
+    "originalDefinition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "originalRecordEnvelope": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "components": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "property": {
+            "$ref": "urn:truss:draft:key-bindings:0.1.0#/$defs/property"
+          },
+          "presence": {
+            "$ref": "urn:truss:draft:exact-value:0.1.0#/$defs/presence"
+          }
+        },
+        "required": [
+          "property",
+          "presence"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "captureProfile",
+    "identity",
+    "recordVersion",
+    "binding",
+    "originalDefinition",
+    "originalRecordEnvelope",
+    "components"
+  ],
+  "additionalProperties": false
+}

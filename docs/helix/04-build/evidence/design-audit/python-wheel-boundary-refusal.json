@@ -1,0 +1,23 @@
+{
+  "scope": "Actual fresh-wheel verifier rejects unmapped nested source before staging/build/install/test; disposable source fixture",
+  "python": "3.9.6 (default, Aug 25 2026, 21:26:21) \n[Clang 21.0.0 (clang-2100.3.34.2)]",
+  "result": {
+    "error": "Module boundary refused before build: ['__init__.py: unmapped module unreviewed.__init__']",
+    "events": [
+      [
+        "subprocess.Popen",
+        "('/Library/Developer/CommandLineTools/usr/bin/python3', ['/Library/Developer/CommandLineTools/usr/bin/python3', '/private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-wheel-boundary-control-7of0e_ne/scripts/check-module-boundaries.py', '--json'], PosixPath('/private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-wheel-boundary-control-7of0e_ne'), None)"
+      ]
+    ]
+  },
+  "stageCreated": false,
+  "wheelBuildSubmitted": false,
+  "installedTestSubmitted": false,
+  "completedReceiptCreated": false,
+  "producerPins": {
+    "check-python-fresh-wheel.py": "85e912e3f78897748eafa41d06f47967a0e80471047fcb89e8b11c65b1571b31",
+    "check-module-boundaries.py": "b13edc5c59a3b7d51e653f25808c69e125881940217a503d4b201eccc492a4ee"
+  },
+  "fixtureChange": "Added unreviewed/__init__.py containing pgserver import; copied original sources were not executed",
+  "completeEngineQualified": false
+}

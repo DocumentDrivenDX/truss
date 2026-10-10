@@ -1,0 +1,177 @@
+{
+  "status": "passed",
+  "ownerRevision": "1f7b5f5d2a355c4b476e3a96b289b9048f03f567",
+  "ownerTreeSha256": "299c8309fab01ca8e1675ff74d99e235ae0acb28bbfaad392200e2122fa60d9e",
+  "ownerSourceMembers": 1342,
+  "sourceSha256": {
+    "src/registry/registry.ts": "5903ba9f257957b90ada07fbff43b58d54eabe8c8f7400ddd9ce83b4237d50e6",
+    "src/validation/document.ts": "f7f35d07c0246f4548b4bda6926cdaea7d651a3a5f2d91d389a50f8a4fe6b454",
+    "src/validation/relationships.ts": "6e2d48d4978361cf78b9535958f3f6ac85008c3707b051021255e6bf36d5aba3",
+    "src/model/types.ts": "54f4e6df10f7f358e81fbb637fe39869df077f82751aa6221b3532e3c9167785",
+    "spec/core/extension-package.schema.json": "fe26a341e31ee0ef9433411122dbb43c5c809037bc96e277ec046b145221e794"
+  },
+  "manifest": {
+    "id": "truss-endpoint-intent-probe",
+    "version": "0.1.0",
+    "coreVersion": "0.1.0",
+    "description": "Unadopted Truss endpoint-intent representation probe",
+    "schema": {
+      "type": "object",
+      "properties": {
+        "intents": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "source": {
+                "type": "object",
+                "properties": {
+                  "module": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "element": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "module",
+                  "element"
+                ],
+                "additionalProperties": false
+              },
+              "target": {
+                "type": "object",
+                "properties": {
+                  "document": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "revision": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "module": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "element": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "document",
+                  "revision",
+                  "module",
+                  "element"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "id",
+              "source",
+              "target"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "intents"
+      ],
+      "additionalProperties": false
+    },
+    "semantics": "Probe local source ownership; external target is declared intent, not a core relationship or resolved endpoint.",
+    "scopes": [
+      "document"
+    ],
+    "capabilities": {
+      "validation": "semantic",
+      "directions": [],
+      "evidence": []
+    }
+  },
+  "results": [
+    {
+      "name": "registered-pending-external-intent",
+      "result": {
+        "valid": true,
+        "complete": true,
+        "diagnostics": []
+      },
+      "sourceSha256": "637d03fe680b00d211ce3f835ce6e8e1074589d8009617d2306b8cf7109057e2"
+    },
+    {
+      "name": "unregistered-content-is-retained-only",
+      "result": {
+        "valid": true,
+        "complete": false,
+        "diagnostics": [
+          {
+            "code": "UNKNOWN_EXTENSION",
+            "path": "/vocabularies/truss-endpoint-intent-probe",
+            "message": "Exact extension version unavailable; content retained",
+            "severity": "warning"
+          }
+        ]
+      },
+      "sourceSha256": "637d03fe680b00d211ce3f835ce6e8e1074589d8009617d2306b8cf7109057e2"
+    },
+    {
+      "name": "wrong-local-source-refuses",
+      "result": {
+        "valid": false,
+        "complete": false,
+        "diagnostics": [
+          {
+            "code": "TRUSS_PROBE_SOURCE",
+            "path": "/extensions/truss-endpoint-intent-probe/intents/0/source",
+            "message": "Local Record source required",
+            "severity": "error"
+          }
+        ]
+      },
+      "sourceSha256": "ad1e6061e557a8cb2b1ba5596e6f34c0f92d1d7729be426368bb8b9620c753db"
+    },
+    {
+      "name": "duplicate-intent-refuses",
+      "result": {
+        "valid": false,
+        "complete": false,
+        "diagnostics": [
+          {
+            "code": "TRUSS_PROBE_DUPLICATE",
+            "path": "/extensions/truss-endpoint-intent-probe/intents/1/id",
+            "message": "Duplicate intent",
+            "severity": "error"
+          }
+        ]
+      },
+      "sourceSha256": "5487a72951715ce28198e6a87c778476da27b6a36520d75903e6e1fa3559532a"
+    },
+    {
+      "name": "extension-does-not-repair-invalid-core-endpoint",
+      "result": {
+        "valid": false,
+        "complete": false,
+        "diagnostics": [
+          {
+            "code": "RELATIONSHIP_ENDPOINT_MISSING",
+            "path": "/modules/0/relationships/0/target/0",
+            "message": "Endpoint does not resolve by exact module and element IDs",
+            "severity": "error"
+          }
+        ]
+      },
+      "sourceSha256": "5eb0478141be1ecc2a7022e14ba2cfa0d494a2b0ecf3b6695b9ef58c31b9d4ac"
+    }
+  ],
+  "scope": "Existing Registry/validateDocument representability only. Truss-owned probe semantics; not core cross-document support, resolved relationship meaning, provisional/skip/promotion policy, native acceptance or adopted extension."
+}

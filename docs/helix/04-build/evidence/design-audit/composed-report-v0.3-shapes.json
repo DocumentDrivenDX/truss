@@ -1,0 +1,132 @@
+{
+  "scope": "complete composed report v0.3 schema shape controls; fixtures are synthetic and hashes are placeholders; no digest, identity range, transition completeness, actual effects or native qualification",
+  "bunVersion": "1.4.2",
+  "sourcePins": [
+    {
+      "path": "docs/helix/02-design/contracts/acceptance-report-v0.3.proposal.schema.json",
+      "sha256": "c54196f8b4324aec768a33eeeab89bc2615a954af0e45559ed2038ccad7f14bf"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/acceptance-report-v0.1.schema.json",
+      "sha256": "ccdc9976de3c158fae0a14d6cc41685d5f5a289d67daeb86b5e998b4a611e902"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/acceptance-input-v0.1.schema.json",
+      "sha256": "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/history-event-v0.1.schema.json",
+      "sha256": "e42f9b48642528cabbb646ccb758eb12b7f030029b712cf5d6f5174cbd90bfa6"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/history-record-v0.1.schema.json",
+      "sha256": "c35c1258028cc4c8c95dcd16b561caed4f2a347c086f72ebfc7bfc4f2dfcf2fe"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/exact-value-v0.1.schema.json",
+      "sha256": "0c804796bfbf68339c299f0c55d24db58fcfcc929bffe2d5ffaf4a2f27e24880"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/acceptance-rejection-v0.1.schema.json",
+      "sha256": "98262b8d99fe0f87f752140a418a4e4f8751c4d28986457302586fee622258cf"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/direct-cursor-v0.1.schema.json",
+      "sha256": "bff79ad2e5ccc1047b43bdbe6eeb51b597f098c881313fd980de01c1685b4942"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/enforcement-report-v0.1.schema.json",
+      "sha256": "452b7562d6e7959d940d5596a52a2221529482ea29853c3e021431885faa4351"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/history-event-v0.2.proposal.schema.json",
+      "sha256": "714923be0f86bd3508a097cabfee63a180e03b19651ebbfa38844bb3e637b425"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/history-retain-payload-v0.1.proposal.schema.json",
+      "sha256": "fc08e07a4b09636ac234737be9bb2cf3a9a3c26120baad612176574c17659605"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/acceptance-report-v0.2.proposal.schema.json",
+      "sha256": "d2ecde4e040e1bd0267765fc8df2257095152de74b9c5545320856c5771f942f"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/check-composed-report-v0.3.ts",
+      "sha256": "9672cc9df77985a5c77beacd6fac21707d8f395fd6114c0fc726406329218e99"
+    }
+  ],
+  "outcomes": [
+    {
+      "name": "combined complete wrapper",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "empty lifecycle inventory remains a shape-valid non-reactivation report",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "missing explicit lifecycle inventory",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "missing lifecycle profile",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "missing original execution",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "missing before definition",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "unowned key identity",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "old event discriminator",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "mixed event versions",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "retain cannot substitute for report rebind",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "opaque lifecycle substitution",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "old report discriminator with new fields",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "unknown root field",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "v0.2 refuses implicit composed upgrade",
+      "expected": false,
+      "actual": false
+    }
+  ],
+  "nativeExecuted": false,
+  "adopted": false
+}

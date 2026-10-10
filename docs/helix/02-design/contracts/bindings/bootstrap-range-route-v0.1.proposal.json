@@ -1,0 +1,75 @@
+{
+  "interfaceVersion": "truss-bootstrap-route-entry/0.1.0",
+  "routeIdentity": "pg17.range.namespace-adjunct/0.1.0",
+  "status": "unadopted; source pins only verified; native class/cut/transport/semantic producers unqualified",
+  "nativeClass": {
+    "namespace": "pg_catalog",
+    "relation": "pg_range",
+    "classOid": "resolve actual catalog relation on original target",
+    "storageScope": "database",
+    "addressability": "No invented pg_range object OID; task input/coverage uses original pg_type parents",
+    "subobjectNumber": "0 on original pg_type parent"
+  },
+  "selector": "complete namespace range/multirange adjunct membership",
+  "artifacts": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-range-observation-pg17.proposal.sql",
+      "sha256": "ec6ab120ed3127443f5344b7320a5b0741508906f1bcf9dcbabde0bfaeec5e1d"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-range-observation-pg17.proposal.umf.json",
+      "sha256": "7d35e6f465e4d5321ecaf733118e0d90413c478e7b8315b72f0eeec4b4ed39f7"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/bootstrap-range-observation.owner-export.sql",
+      "sha256": "641e20ad7959f3a1505104371bfa067606e3937813bb4209ca00818043fb71f2"
+    }
+  ],
+  "parameterGrammar": {
+    "slot": "1",
+    "nativeType": "pg_catalog.oid",
+    "nullAllowed": false,
+    "itemDomain": "canonical nonzero uint32 decimal text; original admitted pg_namespace",
+    "encoder": "exact original text parameter"
+  },
+  "orderedColumns": [
+    "catalog_class_oid",
+    "range_type_oid",
+    "multirange_type_oid",
+    "rngcanonical_oid",
+    "rngsubdiff_oid",
+    "original_catalog_row_json"
+  ],
+  "coverage": "Complete range/multirange adjunct membership for namespace types; a shared row appears once when either/both parent types match, with complete original endpoint scope proof.",
+  "requiredKnownFields": [
+    "rngtypid",
+    "rngsubtype",
+    "rngmultitypid",
+    "rngcollation",
+    "rngsubopc",
+    "rngcanonical",
+    "rngsubdiff"
+  ],
+  "preservation": "Retain full exact returned row JSON text and every unknown extension member; lossless bounded selected native JSON decoder; no parse/stringify reconstruction",
+  "dependencyExtraction": {
+    "types": "rngtypid/rngmultitypid/rngsubtype are actual nonzero pg_type identities; independently admit exact range/multirange/subtype correspondence",
+    "collation": "rngcollation nonzero reaches actual pg_collation; zero remains native no-collation sentinel, not address",
+    "operatorClass": "rngsubopc reaches actual pg_opclass definition/family/access-method/member closure, not a routine",
+    "routines": "nonzero rngcanonical/rngsubdiff reach actual pg_proc; zero retained as optional sentinel. Exact projected OID text must agree with original native definition under selected decoder, not regproc display-name guessing",
+    "rowIdentity": "retain shared original adjunct tuple keyed by its range type, never invent pg_range oid or duplicate semantic object per input parent",
+    "definitionSpecification": {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-range-definition-v0.1.proposal.json",
+      "sha256": "2c1a5b69617b1cec90274fe59797f9003ebb2ce86ed1ff643a5d938a65c89b80",
+      "admission": "Original shared-adjunct/endpoint/signature closure; comparison and executable behavior separately qualified"
+    }
+  },
+  "adjuncts": [
+    "complete original range/multirange/subtype type definitions",
+    "operator-class/family/member and selected native comparator closure",
+    "collation provider/environment and optional routine definition/authority closure",
+    "original local dependency and namespace scope closure"
+  ],
+  "resourceProfile": "truss-bootstrap-collector-resource/0.1.0",
+  "refusal": "Wrong/missing parent kind, conflicting duplicate adjunct/endpoint coverage or unsupported native routine/comparator meaning refuses; raw original fields never execute canonical/subdiff routines or qualify range comparison",
+  "resourceObligations": "Shared enclosing totals, complete original cut/authority and explicit pre-materialization/native-work permits; no independent per-route allowance"
+}

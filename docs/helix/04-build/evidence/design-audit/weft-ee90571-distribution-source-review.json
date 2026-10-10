@@ -1,0 +1,31 @@
+{
+  "scope": "Committed owner source review only; no compiler build, distribution admission or native execution",
+  "weftRevision": "ee90571a5aa67b6d2e6069220f6e1cc0eec3822c",
+  "sources": [
+    {
+      "path": "crates/weft-python/src/lib.rs",
+      "sha256": "4a348481922988a364ab280b6f3fb4fae1a9940afa447e4282f4a704b6905366",
+      "bytes": 687
+    },
+    {
+      "path": "crates/weft-runtime/src/main.rs",
+      "sha256": "3c4a2232a0b23af6fa4cbc611d7a9c5452a81a3e2e66c7ea7aaa83b0d39d67ab",
+      "bytes": 3396
+    },
+    {
+      "path": "docs/helix/02-design/contracts/CONTRACT-003-compile-and-host-boundary.md",
+      "sha256": "8597ae047d411ab8118db081eabe31aec3f0d1bd78ec52098650acb00c7011d9",
+      "bytes": 17192
+    },
+    {
+      "path": "docs/helix/02-design/contracts/distribution-manifest.schema.json",
+      "sha256": "856d5103161b965db3eb1dc0198d08c13a65a2cd7367aab5caf345ba69722d66",
+      "bytes": 9259
+    }
+  ],
+  "pythonBridgeUnchangedFromAdoptedF05": true,
+  "distributionFormat": "weft-distribution/0.1",
+  "firstOwnerComposition": "release CLI ashlar-databricks-candidate Rust1.90.0; not Truss Python",
+  "trussCompilerPinChanged": false,
+  "distributionAdopted": false
+}

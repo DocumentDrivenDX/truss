@@ -1,0 +1,25 @@
+{
+  "schema": "truss-dry-run-native-savepoint-witness/0.1",
+  "serverVersion": "16.15",
+  "runtimeVersion": "0.1.4+truss.pg16.15",
+  "command": [
+    "/private/tmp/truss-resolved-local-consumer-env/lib/python3.11/site-packages/pgserver/pginstall/bin/psql",
+    "postgresql://postgres:@/postgres?host=/private/tmp/truss-dry-run-savepoint-native-data",
+    "-X",
+    "-q",
+    "-A",
+    "-t"
+  ],
+  "sql": "\\set ON_ERROR_STOP off\nCREATE TABLE dry_run_probe(id integer, label text, CONSTRAINT dry_run_unique UNIQUE(id) DEFERRABLE INITIALLY DEFERRED);\nINSERT INTO dry_run_probe VALUES(0,'committed-before-preview');\nBEGIN;\nUPDATE dry_run_probe SET label='caller-pending-before-preview' WHERE id=0;\nSAVEPOINT preview;\nINSERT INTO dry_run_probe VALUES(1,'first'),(1,'second');\nSET CONSTRAINTS dry_run_unique IMMEDIATE;\n\\echo validator_sqlstate :SQLSTATE\nSELECT label FROM dry_run_probe WHERE id=0;\n\\echo aborted_read_sqlstate :SQLSTATE\nROLLBACK TO SAVEPOINT preview;\nSELECT json_build_object('label',(SELECT label FROM dry_run_probe WHERE id=0),'previewRows',(SELECT count(*) FROM dry_run_probe WHERE id=1))::text;\nROLLBACK;\nSELECT json_build_object('label',(SELECT label FROM dry_run_probe WHERE id=0),'previewRows',(SELECT count(*) FROM dry_run_probe WHERE id=1))::text;\n",
+  "exitCode": 0,
+  "stdout": "validator_sqlstate 23505\naborted_read_sqlstate 25P02\n{\"label\" : \"caller-pending-before-preview\", \"previewRows\" : 0}\n{\"label\" : \"committed-before-preview\", \"previewRows\" : 0}\n",
+  "stderr": "ERROR:  duplicate key value violates unique constraint \"dry_run_unique\"\nDETAIL:  Key (id)=(1) already exists.\nERROR:  current transaction is aborted, commands ignored until end of transaction block\n",
+  "independentExpectedLines": [
+    "validator_sqlstate 23505",
+    "aborted_read_sqlstate 25P02",
+    "{\"label\" : \"caller-pending-before-preview\", \"previewRows\" : 0}",
+    "{\"label\" : \"committed-before-preview\", \"previewRows\" : 0}"
+  ],
+  "scriptSha256": "b9ad90c3fb71bfb1b52246032004fab0f24454f1116ab847ef6d92d5f7f8c809",
+  "scope": "Native PostgreSQL deferred unique validation and savepoint/outer rollback only; administrative fixture, not Truss guard, ordinary-role security, driver containment or dry-run API qualification"
+}

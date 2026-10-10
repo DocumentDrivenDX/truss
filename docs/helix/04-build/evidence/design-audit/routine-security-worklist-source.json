@@ -1,0 +1,25 @@
+{
+  "scope": "Selected source worklist consistency only, not complete callable or native closure.",
+  "worklistSha256": "01d35e172874e4ddc59d7479d7c7a27aeb14d78f8805ff9f5126751e7f7eb89a",
+  "producerSha256": "a5a939e5afed81bdffd95333d99de9a03fe5f08a9e2eddd3c6844d01f2d36ca7",
+  "sourcePins": [
+    {
+      "path": "02-design/contracts/reference-routine-design-v0.1.proposal.json",
+      "sha256": "579841502e06cdfd91c8d50716780d461fd01bf2df6ef841eb2c2d5169481c4d"
+    },
+    {
+      "path": "02-design/contracts/reference-journal-phase-design-v0.1.proposal.json",
+      "sha256": "978eb6a4e0cd9d6060a10c2601123a49188c6394aecb0b7a4c6fbf40718321d2"
+    },
+    {
+      "path": "02-design/contracts/CONTRACT-001-storage-layout.md",
+      "sha256": "a50d804123d549fc6dd02679b6b97b5c23ef36f10d93eb6c8c32a31e319a0aae"
+    }
+  ],
+  "knownMembership": 16,
+  "originalManifestEntries": 12,
+  "originalCustodySignatures": 4,
+  "sourceCorrespondence": true,
+  "nativeQualified": false,
+  "completeCallableClosure": false
+}

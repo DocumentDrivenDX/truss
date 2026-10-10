@@ -1,0 +1,49 @@
+{
+  "checkedDate": "2026-10-07",
+  "scope": "Public documented managed-service extension catalog review; no instance installation/native behavior qualification",
+  "ownerConstraint": "Any required extension must ship with RDS PostgreSQL, Aurora PostgreSQL and Lakebase under selected supported profiles.",
+  "sources": [
+    {
+      "provider": "RDS PostgreSQL",
+      "url": "https://docs.aws.amazon.com/AmazonRDS/latest/PostgreSQLReleaseNotes/postgresql-extensions.html"
+    },
+    {
+      "provider": "Aurora PostgreSQL",
+      "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraPostgreSQLReleaseNotes/AuroraPostgreSQL.Extensions.html"
+    },
+    {
+      "provider": "Lakebase projects",
+      "url": "https://docs.databricks.com/aws/en/oltp/projects/extensions"
+    }
+  ],
+  "findings": [
+    {
+      "candidate": "pg_tle",
+      "lakebaseListed": false,
+      "eligibleAcrossAllTargets": "not established"
+    },
+    {
+      "candidate": "plrust",
+      "lakebaseListed": false,
+      "eligibleAcrossAllTargets": "not established"
+    },
+    {
+      "candidate": "custom Truss compiled module",
+      "eligibleAcrossAllTargets": "not established; not authorized by common-bundled-extension condition"
+    },
+    {
+      "candidate": "pgcrypto",
+      "lakebasePg17ListedVersion": "1.3",
+      "role": "potential cryptographic utility only; does not establish protected account/command/resource implementation",
+      "selected": false
+    }
+  ],
+  "conclusion": "No verified common extension identified for the proposed custom native account/command/resource hosting need. Continue SQL/PLpgSQL design against exact supported service capabilities; record concrete impossible guarantees rather than silently weakening them.",
+  "remainingEvidence": [
+    "exact RDS/Aurora engine versions and Lakebase product/version",
+    "required installation/preload/role privileges",
+    "actual semantic/resource/dependency behavior of any selected extension",
+    "provider restrictions for custom native functions and protected accounting"
+  ],
+  "nativeSupportClaim": false
+}

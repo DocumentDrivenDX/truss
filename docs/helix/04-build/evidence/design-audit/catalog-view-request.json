@@ -1,0 +1,36 @@
+{
+  "scope": "Draft request shape only; no ownership, profile, budget maximum or revision qualification",
+  "cases": 6,
+  "outcomes": [
+    {
+      "name": "current",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "historical",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "missing historical revision",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "zero budget",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "empty projection",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "duplicate owners require semantic rejection",
+      "expected": true,
+      "actual": true
+    }
+  ]
+}

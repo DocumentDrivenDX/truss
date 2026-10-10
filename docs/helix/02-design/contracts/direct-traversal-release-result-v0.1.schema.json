@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:direct-traversal-release-result:0.1.0",
+  "title": "Draft direct-traversal-release-result",
+  "description": "Shape only. Original registry ownership, invalidation, cleanup confirmation and recovery-reference custody require semantic host profile admission. No graph or host transaction control.",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "const": "released"
+        }
+      },
+      "required": [
+        "outcome"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "const": "unresolved"
+        },
+        "recoveryReferences": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "required": [
+        "outcome",
+        "recoveryReferences"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "const": "unavailable"
+        },
+        "reason": {
+          "enum": [
+            "ownership",
+            "profile"
+          ]
+        }
+      },
+      "required": [
+        "outcome",
+        "reason"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

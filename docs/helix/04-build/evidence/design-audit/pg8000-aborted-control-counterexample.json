@@ -1,0 +1,59 @@
+{
+  "mode": "counterexample",
+  "scope": "Actual completed native ErrorResponse/ReadyForQuery E followed by original local savepoint recovery or retained pre-fix counterexample; administrative fixture only",
+  "serverVersion": "16.15",
+  "driverCoreSha256": "cac1e50502901bcea3ddab588e0350149dd8fd771156ae1c531a2a04b3925e26",
+  "observations": [
+    {
+      "id": "original-native-error",
+      "expected": "22012",
+      "observed": "22012"
+    },
+    {
+      "id": "original-ready-aborted",
+      "expected": "5a0000000545",
+      "observed": "5a0000000545"
+    },
+    {
+      "id": "payload-account-closed-after-complete-native-error",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "local-rollback-unavailable",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "failed-rollback-submits-no-control",
+      "expected": 88,
+      "observed": 88
+    },
+    {
+      "id": "backend-still-aborted",
+      "expected": "idle in transaction (aborted)",
+      "observed": "idle in transaction (aborted)"
+    }
+  ],
+  "retainedAttempts": [
+    [
+      "0",
+      "730",
+      "SAVEPOINT truss_original_0",
+      "confirmed"
+    ]
+  ],
+  "sourceSha256": {
+    "check_pg8000_aborted_control_native.py": "f9073a214df6ca06280c286fd1fb7c20bbbbfbaae053646049287193ff401cf0",
+    "pg8000_original_control_candidate.py": "ee4d364c28eb04bbaf1e473c3c3c228adbf4c438a06b1c3639d96f91a7b84a2a",
+    "pg8000_instance_candidate.py": "0e3a6fb3860e9f2315711cc44957e841f54640c18214955f57c87a3c6fd437de",
+    "pg8000_accounted_instance_candidate.py": "ad4415635d2643dbd8cb48b34c85621444f9240334d9b5f020b726a0b226ee68"
+  },
+  "driverPortQualified": false,
+  "limitations": [
+    "No original security admission or operation artifacts",
+    "No complete resource/cleanup reservation or native containment profile",
+    "No transport loss or cancellation qualification",
+    "Host exclusivity remains a premise; no installed/public API"
+  ]
+}

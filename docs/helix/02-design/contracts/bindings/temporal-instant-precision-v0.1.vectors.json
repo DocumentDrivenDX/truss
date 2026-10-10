@@ -1,0 +1,166 @@
+{
+  "status": "unadopted independently authored parsed-parts temporal fixtures",
+  "scope": "Gregorian finite parts/offset/precision arithmetic only; no source token grammar, native renderer/domain or resource producer qualification",
+  "cases": [
+    {
+      "id": "TI01",
+      "name": "epoch zero",
+      "calendar": [
+        1970,
+        1,
+        1,
+        0,
+        0,
+        0
+      ],
+      "fractionDigits": "",
+      "offsetMinutes": 0,
+      "nativePrecision": 6,
+      "expectedMicroseconds": "0"
+    },
+    {
+      "id": "TI02",
+      "name": "retained trailing zero",
+      "calendar": [
+        1970,
+        1,
+        1,
+        0,
+        0,
+        0
+      ],
+      "fractionDigits": "1234560",
+      "offsetMinutes": 0,
+      "nativePrecision": 6,
+      "expectedMicroseconds": "123456"
+    },
+    {
+      "id": "TI03",
+      "name": "nonrepresentable submicrosecond",
+      "calendar": [
+        1970,
+        1,
+        1,
+        0,
+        0,
+        0
+      ],
+      "fractionDigits": "1234567",
+      "offsetMinutes": 0,
+      "nativePrecision": 6,
+      "expectedMicroseconds": null
+    },
+    {
+      "id": "TI04",
+      "name": "offset equivalent epoch",
+      "calendar": [
+        1970,
+        1,
+        1,
+        2,
+        0,
+        0
+      ],
+      "fractionDigits": "1200",
+      "offsetMinutes": 120,
+      "nativePrecision": 6,
+      "expectedMicroseconds": "120000"
+    },
+    {
+      "id": "TI05",
+      "name": "negative epoch fraction",
+      "calendar": [
+        1969,
+        12,
+        31,
+        23,
+        59,
+        59
+      ],
+      "fractionDigits": "5",
+      "offsetMinutes": 0,
+      "nativePrecision": 6,
+      "expectedMicroseconds": "-500000"
+    },
+    {
+      "id": "TI06",
+      "name": "day rollover offset",
+      "calendar": [
+        1970,
+        1,
+        1,
+        0,
+        30,
+        0
+      ],
+      "fractionDigits": "",
+      "offsetMinutes": 60,
+      "nativePrecision": 6,
+      "expectedMicroseconds": "-1800000000"
+    },
+    {
+      "id": "TI07",
+      "name": "coarser exact projection",
+      "calendar": [
+        1970,
+        1,
+        1,
+        0,
+        0,
+        0
+      ],
+      "fractionDigits": "1200",
+      "offsetMinutes": 0,
+      "nativePrecision": 2,
+      "expectedMicroseconds": "120000"
+    },
+    {
+      "id": "TI08",
+      "name": "coarser nonrepresentable",
+      "calendar": [
+        1970,
+        1,
+        1,
+        0,
+        0,
+        0
+      ],
+      "fractionDigits": "1200",
+      "offsetMinutes": 0,
+      "nativePrecision": 1,
+      "expectedMicroseconds": null
+    },
+    {
+      "id": "TI09",
+      "name": "zero fraction whole seconds",
+      "calendar": [
+        1970,
+        1,
+        1,
+        0,
+        0,
+        0
+      ],
+      "fractionDigits": "0000000",
+      "offsetMinutes": 0,
+      "nativePrecision": 0,
+      "expectedMicroseconds": "0"
+    },
+    {
+      "id": "TI10",
+      "name": "rounding would cross second",
+      "calendar": [
+        1970,
+        1,
+        1,
+        0,
+        0,
+        0
+      ],
+      "fractionDigits": "9999999",
+      "offsetMinutes": 0,
+      "nativePrecision": 6,
+      "expectedMicroseconds": null
+    }
+  ]
+}

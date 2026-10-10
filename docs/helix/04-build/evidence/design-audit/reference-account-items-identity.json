@@ -1,0 +1,2542 @@
+{
+  "scope": "Existing UMF authored members/key/relationship receipts and exact metadata selection/source paths; no native identity, catalog ID allocation, codec, enforcement or Weft binding adoption",
+  "owner": {
+    "root": "/Users/erik/Projects/umf",
+    "head": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+    "status": "",
+    "files": [
+      {
+        "path": "src/model/keys.ts",
+        "sha256": "083c779dc5b22415c85075b46132604b312243eeae818a48b9c89c5486c2183b"
+      },
+      {
+        "path": "src/model/relationships.ts",
+        "sha256": "d1f9e30202a7c8af1a8b7fc47d113f933775df25596f69a84d1f6a69947081eb"
+      },
+      {
+        "path": "src/model/selection.ts",
+        "sha256": "101d15bea9c048316aa557b82d6a8edab31573cd976bf30f1e50ceba11b65dda"
+      },
+      {
+        "path": "src/model/relationship-selection.ts",
+        "sha256": "9062f11467e671363af1d7d903961787a0e9cfc3c9a5ebd483b0e0a9af7f7293"
+      }
+    ]
+  },
+  "source": {
+    "path": "docs/helix/02-design/contracts/bindings/reference-account-items-v0.1.proposal.umf.json",
+    "sha256": "94f8367c3dd2462fb3f32a624f053bf56f023ddd3bf86bf5219bbc1e24b6fcc1"
+  },
+  "operations": [
+    {
+      "operation": "declare-core-record-members",
+      "version": "2.0.0",
+      "source": {
+        "umf": "0.7.0",
+        "id": "truss.integration.account-items.v1",
+        "vocabularies": {},
+        "modules": [
+          {
+            "id": "integration",
+            "namespace": "truss.integration",
+            "elements": [
+              {
+                "id": "Account.code",
+                "name": "code",
+                "kind": "field",
+                "scalarType": "string",
+                "nullability": "required",
+                "cardinality": "one",
+                "extensions": {}
+              },
+              {
+                "id": "Item.code",
+                "name": "code",
+                "kind": "field",
+                "scalarType": "string",
+                "nullability": "required",
+                "cardinality": "one",
+                "extensions": {}
+              },
+              {
+                "id": "Item.amount",
+                "name": "amount",
+                "kind": "field",
+                "scalarType": "decimal",
+                "nullability": "required",
+                "cardinality": "one",
+                "extensions": {},
+                "facets": {
+                  "precision": 21,
+                  "scale": 3
+                }
+              },
+              {
+                "id": "Item.note",
+                "name": "note",
+                "kind": "field",
+                "scalarType": "string",
+                "nullability": "absent-allowed",
+                "cardinality": "one",
+                "extensions": {}
+              },
+              {
+                "id": "Account",
+                "name": "Account",
+                "kind": "record",
+                "members": [
+                  {
+                    "module": "integration",
+                    "element": "Account.code"
+                  }
+                ],
+                "keys": [
+                  {
+                    "id": "by-code",
+                    "name": "by-code",
+                    "fields": [
+                      {
+                        "module": "integration",
+                        "element": "Account.code"
+                      }
+                    ],
+                    "primary": true
+                  }
+                ],
+                "extensions": {}
+              },
+              {
+                "id": "Item",
+                "name": "Item",
+                "kind": "record",
+                "members": [
+                  {
+                    "module": "integration",
+                    "element": "Item.code"
+                  },
+                  {
+                    "module": "integration",
+                    "element": "Item.amount"
+                  },
+                  {
+                    "module": "integration",
+                    "element": "Item.note"
+                  }
+                ],
+                "keys": [
+                  {
+                    "id": "by-code",
+                    "name": "by-code",
+                    "fields": [
+                      {
+                        "module": "integration",
+                        "element": "Item.code"
+                      }
+                    ],
+                    "primary": true
+                  }
+                ],
+                "extensions": {}
+              }
+            ],
+            "relationships": [
+              {
+                "id": "account-items",
+                "name": "items",
+                "source": [
+                  {
+                    "module": "integration",
+                    "element": "Account"
+                  }
+                ],
+                "target": [
+                  {
+                    "module": "integration",
+                    "element": "Item",
+                    "key": "by-code"
+                  }
+                ],
+                "sourceMultiplicity": {
+                  "min": 0,
+                  "max": 1
+                },
+                "targetMultiplicity": {
+                  "min": 0,
+                  "max": 2
+                },
+                "targetLifecycle": "independent",
+                "directed": true
+              }
+            ]
+          }
+        ]
+      },
+      "target": {
+        "umf": "0.7.0",
+        "id": "truss.integration.account-items.v1",
+        "vocabularies": {},
+        "modules": [
+          {
+            "id": "integration",
+            "namespace": "truss.integration",
+            "elements": [
+              {
+                "id": "Account.code",
+                "name": "code",
+                "kind": "field",
+                "scalarType": "string",
+                "nullability": "required",
+                "cardinality": "one",
+                "extensions": {}
+              },
+              {
+                "id": "Item.code",
+                "name": "code",
+                "kind": "field",
+                "scalarType": "string",
+                "nullability": "required",
+                "cardinality": "one",
+                "extensions": {}
+              },
+              {
+                "id": "Item.amount",
+                "name": "amount",
+                "kind": "field",
+                "scalarType": "decimal",
+                "nullability": "required",
+                "cardinality": "one",
+                "extensions": {},
+                "facets": {
+                  "precision": 21,
+                  "scale": 3
+                }
+              },
+              {
+                "id": "Item.note",
+                "name": "note",
+                "kind": "field",
+                "scalarType": "string",
+                "nullability": "absent-allowed",
+                "cardinality": "one",
+                "extensions": {}
+              },
+              {
+                "id": "Account",
+                "name": "Account",
+                "kind": "record",
+                "members": [
+                  {
+                    "module": "integration",
+                    "element": "Account.code"
+                  }
+                ],
+                "keys": [
+                  {
+                    "id": "by-code",
+                    "name": "by-code",
+                    "fields": [
+                      {
+                        "module": "integration",
+                        "element": "Account.code"
+                      }
+                    ],
+                    "primary": true
+                  }
+                ],
+                "extensions": {}
+              },
+              {
+                "id": "Item",
+                "name": "Item",
+                "kind": "record",
+                "members": [
+                  {
+                    "module": "integration",
+                    "element": "Item.code"
+                  },
+                  {
+                    "module": "integration",
+                    "element": "Item.amount"
+                  },
+                  {
+                    "module": "integration",
+                    "element": "Item.note"
+                  }
+                ],
+                "keys": [
+                  {
+                    "id": "by-code",
+                    "name": "by-code",
+                    "fields": [
+                      {
+                        "module": "integration",
+                        "element": "Item.code"
+                      }
+                    ],
+                    "primary": true
+                  }
+                ],
+                "extensions": {}
+              }
+            ],
+            "relationships": [
+              {
+                "id": "account-items",
+                "name": "items",
+                "source": [
+                  {
+                    "module": "integration",
+                    "element": "Account"
+                  }
+                ],
+                "target": [
+                  {
+                    "module": "integration",
+                    "element": "Item",
+                    "key": "by-code"
+                  }
+                ],
+                "sourceMultiplicity": {
+                  "min": 0,
+                  "max": 1
+                },
+                "targetMultiplicity": {
+                  "min": 0,
+                  "max": 2
+                },
+                "targetLifecycle": "independent",
+                "directed": true
+              }
+            ]
+          }
+        ]
+      },
+      "identity": {
+        "module": "integration",
+        "element": "Account"
+      },
+      "request": [
+        {
+          "module": "integration",
+          "element": "Account.code"
+        }
+      ],
+      "provenance": {
+        "origin": "authored",
+        "idealPath": "/modules/0/elements/4/members",
+        "basis": "explicit-author-declaration",
+        "nativePath": null,
+        "binding": {
+          "id": "umf.core.members.authoring",
+          "version": "2.0.0"
+        }
+      }
+    },
+    {
+      "operation": "declare-core-key",
+      "version": "2.0.0",
+      "source": {
+        "umf": "0.7.0",
+        "id": "truss.integration.account-items.v1",
+        "vocabularies": {},
+        "modules": [
+          {
+            "id": "integration",
+            "namespace": "truss.integration",
+            "elements": [
+              {
+                "id": "Account.code",
+                "name": "code",
+                "kind": "field",
+                "scalarType": "string",
+                "nullability": "required",
+                "cardinality": "one",
+                "extensions": {}
+              },
+              {
+                "id": "Item.code",
+                "name": "code",
+                "kind": "field",
+                "scalarType": "string",
+                "nullability": "required",
+                "cardinality": "one",
+                "extensions": {}
+              },
+              {
+                "id": "Item.amount",
+                "name": "amount",
+                "kind": "field",
+                "scalarType": "decimal",
+                "nullability": "required",
+                "cardinality": "one",
+                "extensions": {},
+                "facets": {
+                  "precision": 21,
+                  "scale": 3
+                }
+              },
+              {
+                "id": "Item.note",
+                "name": "note",
+                "kind": "field",
+                "scalarType": "string",
+                "nullability": "absent-allowed",
+                "cardinality": "one",
+                "extensions": {}
+              },
+              {
+                "id": "Account",
+                "name": "Account",
+                "kind": "record",
+                "members": [
+                  {
+                    "module": "integration",
+                    "element": "Account.code"
+                  }
+                ],
+                "keys": [
+                  {
+                    "id": "by-code",
+                    "name": "by-code",
+                    "fields": [
+                      {
+                        "module": "integration",
+                        "element": "Account.code"
+                      }
+                    ],
+                    "primary": true
+                  }
+                ],
+                "extensions": {}
+              },
+              {
+                "id": "Item",
+                "name": "Item",
+                "kind": "record",
+                "members": [
+                  {
+                    "module": "integration",
+                    "element": "Item.code"
+                  },
+                  {
+                    "module": "integration",
+                    "element": "Item.amount"
+                  },
+                  {
+                    "module": "integration",
+                    "element": "Item.note"
+                  }
+                ],
+                "keys": [
+                  {
+                    "id": "by-code",
+                    "name": "by-code",
+                    "fields": [
+                      {
+                        "module": "integration",
+                        "element": "Item.code"
+                      }
+                    ],
+                    "primary": true
+                  }
+                ],
+                "extensions": {}
+              }
+            ],
+            "relationships": [
+              {
+                "id": "account-items",
+                "name": "items",
+                "source": [
+                  {
+                    "module": "integration",
+                    "element": "Account"
+                  }
+                ],
+                "target": [
+                  {
+                    "module": "integration",
+                    "element": "Item",
+                    "key": "by-code"
+                  }
+                ],
+                "sourceMultiplicity": {
+                  "min": 0,
+                  "max": 1
+                },
+                "targetMultiplicity": {
+                  "min": 0,
+                  "max": 2
+                },
+                "targetLifecycle": "independent",
+                "directed": true
+              }
+            ]
+          }
+        ]
+      },
+      "target": {
+        "umf": "0.7.0",
+        "id": "truss.integration.account-items.v1",
+        "vocabularies": {},
+        "modules": [
+          {
+            "id": "integration",
+            "namespace": "truss.integration",
+            "elements": [
+              {
+                "id": "Account.code",
+                "name": "code",
+                "kind": "field",
+                "scalarType": "string",
+                "nullability": "required",
+                "cardinality": "one",
+                "extensions": {}
+              },
+              {
+                "id": "Item.code",
+                "name": "code",
+                "kind": "field",
+                "scalarType": "string",
+                "nullability": "required",
+                "cardinality": "one",
+                "extensions": {}
+              },
+              {
+                "id": "Item.amount",
+                "name": "amount",
+                "kind": "field",
+                "scalarType": "decimal",
+                "nullability": "required",
+                "cardinality": "one",
+                "extensions": {},
+                "facets": {
+                  "precision": 21,
+                  "scale": 3
+                }
+              },
+              {
+                "id": "Item.note",
+                "name": "note",
+                "kind": "field",
+                "scalarType": "string",
+                "nullability": "absent-allowed",
+                "cardinality": "one",
+                "extensions": {}
+              },
+              {
+                "id": "Account",
+                "name": "Account",
+                "kind": "record",
+                "members": [
+                  {
+                    "module": "integration",
+                    "element": "Account.code"
+                  }
+                ],
+                "keys": [
+                  {
+                    "id": "by-code",
+                    "name": "by-code",
+                    "fields": [
+                      {
+                        "module": "integration",
+                        "element": "Account.code"
+                      }
+                    ],
+                    "primary": true
+                  }
+                ],
+                "extensions": {}
+              },
+              {
+                "id": "Item",
+                "name": "Item",
+                "kind": "record",
+                "members": [
+                  {
+                    "module": "integration",
+                    "element": "Item.code"
+                  },
+                  {
+                    "module": "integration",
+                    "element": "Item.amount"
+                  },
+                  {
+                    "module": "integration",
+                    "element": "Item.note"
+                  }
+                ],
+                "keys": [
+                  {
+                    "id": "by-code",
+                    "name": "by-code",
+                    "fields": [
+                      {
+                        "module": "integration",
+                        "element": "Item.code"
+                      }
+                    ],
+                    "primary": true
+                  }
+                ],
+                "extensions": {}
+              }
+            ],
+            "relationships": [
+              {
+                "id": "account-items",
+                "name": "items",
+                "source": [
+                  {
+                    "module": "integration",
+                    "element": "Account"
+                  }
+                ],
+                "target": [
+                  {
+                    "module": "integration",
+                    "element": "Item",
+                    "key": "by-code"
+                  }
+                ],
+                "sourceMultiplicity": {
+                  "min": 0,
+                  "max": 1
+                },
+                "targetMultiplicity": {
+                  "min": 0,
+                  "max": 2
+                },
+                "targetLifecycle": "independent",
+                "directed": true
+              }
+            ]
+          }
+        ]
+      },
+      "identity": {
+        "module": "integration",
+        "element": "Account"
+      },
+      "request": {
+        "id": "by-code",
+        "name": "by-code",
+        "fields": [
+          {
+            "module": "integration",
+            "element": "Account.code"
+          }
+        ],
+        "primary": true
+      },
+      "provenance": {
+        "origin": "authored",
+        "idealPath": "/modules/0/elements/4/keys/0",
+        "basis": "explicit-author-declaration",
+        "nativePath": null,
+        "binding": {
+          "id": "umf.core.key.authoring",
+          "version": "2.0.0"
+        }
+      }
+    },
+    {
+      "operation": "declare-core-record-members",
+      "version": "2.0.0",
+      "source": {
+        "umf": "0.7.0",
+        "id": "truss.integration.account-items.v1",
+        "vocabularies": {},
+        "modules": [
+          {
+            "id": "integration",
+            "namespace": "truss.integration",
+            "elements": [
+              {
+                "id": "Account.code",
+                "name": "code",
+                "kind": "field",
+                "scalarType": "string",
+                "nullability": "required",
+                "cardinality": "one",
+                "extensions": {}
+              },
+              {
+                "id": "Item.code",
+                "name": "code",
+                "kind": "field",
+                "scalarType": "string",
+                "nullability": "required",
+                "cardinality": "one",
+                "extensions": {}
+              },
+              {
+                "id": "Item.amount",
+                "name": "amount",
+                "kind": "field",
+                "scalarType": "decimal",
+                "nullability": "required",
+                "cardinality": "one",
+                "extensions": {},
+                "facets": {
+                  "precision": 21,
+                  "scale": 3
+                }
+              },
+              {
+                "id": "Item.note",
+                "name": "note",
+                "kind": "field",
+                "scalarType": "string",
+                "nullability": "absent-allowed",
+                "cardinality": "one",
+                "extensions": {}
+              },
+              {
+                "id": "Account",
+                "name": "Account",
+                "kind": "record",
+                "members": [
+                  {
+                    "module": "integration",
+                    "element": "Account.code"
+                  }
+                ],
+                "keys": [
+                  {
+                    "id": "by-code",
+                    "name": "by-code",
+                    "fields": [
+                      {
+                        "module": "integration",
+                        "element": "Account.code"
+                      }
+                    ],
+                    "primary": true
+                  }
+                ],
+                "extensions": {}
+              },
+              {
+                "id": "Item",
+                "name": "Item",
+                "kind": "record",
+                "members": [
+                  {
+                    "module": "integration",
+                    "element": "Item.code"
+                  },
+                  {
+                    "module": "integration",
+                    "element": "Item.amount"
+                  },
+                  {
+                    "module": "integration",
+                    "element": "Item.note"
+                  }
+                ],
+                "keys": [
+                  {
+                    "id": "by-code",
+                    "name": "by-code",
+                    "fields": [
+                      {
+                        "module": "integration",
+                        "element": "Item.code"
+                      }
+                    ],
+                    "primary": true
+                  }
+                ],
+                "extensions": {}
+              }
+            ],
+            "relationships": [
+              {
+                "id": "account-items",
+                "name": "items",
+                "source": [
+                  {
+                    "module": "integration",
+                    "element": "Account"
+                  }
+                ],
+                "target": [
+                  {
+                    "module": "integration",
+                    "element": "Item",
+                    "key": "by-code"
+                  }
+                ],
+                "sourceMultiplicity": {
+                  "min": 0,
+                  "max": 1
+                },
+                "targetMultiplicity": {
+                  "min": 0,
+                  "max": 2
+                },
+                "targetLifecycle": "independent",
+                "directed": true
+              }
+            ]
+          }
+        ]
+      },
+      "target": {
+        "umf": "0.7.0",
+        "id": "truss.integration.account-items.v1",
+        "vocabularies": {},
+        "modules": [
+          {
+            "id": "integration",
+            "namespace": "truss.integration",
+            "elements": [
+              {
+                "id": "Account.code",
+                "name": "code",
+                "kind": "field",
+                "scalarType": "string",
+                "nullability": "required",
+                "cardinality": "one",
+                "extensions": {}
+              },
+              {
+                "id": "Item.code",
+                "name": "code",
+                "kind": "field",
+                "scalarType": "string",
+                "nullability": "required",
+                "cardinality": "one",
+                "extensions": {}
+              },
+              {
+                "id": "Item.amount",
+                "name": "amount",
+                "kind": "field",
+                "scalarType": "decimal",
+                "nullability": "required",
+                "cardinality": "one",
+                "extensions": {},
+                "facets": {
+                  "precision": 21,
+                  "scale": 3
+                }
+              },
+              {
+                "id": "Item.note",
+                "name": "note",
+                "kind": "field",
+                "scalarType": "string",
+                "nullability": "absent-allowed",
+                "cardinality": "one",
+                "extensions": {}
+              },
+              {
+                "id": "Account",
+                "name": "Account",
+                "kind": "record",
+                "members": [
+                  {
+                    "module": "integration",
+                    "element": "Account.code"
+                  }
+                ],
+                "keys": [
+                  {
+                    "id": "by-code",
+                    "name": "by-code",
+                    "fields": [
+                      {
+                        "module": "integration",
+                        "element": "Account.code"
+                      }
+                    ],
+                    "primary": true
+                  }
+                ],
+                "extensions": {}
+              },
+              {
+                "id": "Item",
+                "name": "Item",
+                "kind": "record",
+                "members": [
+                  {
+                    "module": "integration",
+                    "element": "Item.code"
+                  },
+                  {
+                    "module": "integration",
+                    "element": "Item.amount"
+                  },
+                  {
+                    "module": "integration",
+                    "element": "Item.note"
+                  }
+                ],
+                "keys": [
+                  {
+                    "id": "by-code",
+                    "name": "by-code",
+                    "fields": [
+                      {
+                        "module": "integration",
+                        "element": "Item.code"
+                      }
+                    ],
+                    "primary": true
+                  }
+                ],
+                "extensions": {}
+              }
+            ],
+            "relationships": [
+              {
+                "id": "account-items",
+                "name": "items",
+                "source": [
+                  {
+                    "module": "integration",
+                    "element": "Account"
+                  }
+                ],
+                "target": [
+                  {
+                    "module": "integration",
+                    "element": "Item",
+                    "key": "by-code"
+                  }
+                ],
+                "sourceMultiplicity": {
+                  "min": 0,
+                  "max": 1
+                },
+                "targetMultiplicity": {
+                  "min": 0,
+                  "max": 2
+                },
+                "targetLifecycle": "independent",
+                "directed": true
+              }
+            ]
+          }
+        ]
+      },
+      "identity": {
+        "module": "integration",
+        "element": "Item"
+      },
+      "request": [
+        {
+          "module": "integration",
+          "element": "Item.code"
+        },
+        {
+          "module": "integration",
+          "element": "Item.amount"
+        },
+        {
+          "module": "integration",
+          "element": "Item.note"
+        }
+      ],
+      "provenance": {
+        "origin": "authored",
+        "idealPath": "/modules/0/elements/5/members",
+        "basis": "explicit-author-declaration",
+        "nativePath": null,
+        "binding": {
+          "id": "umf.core.members.authoring",
+          "version": "2.0.0"
+        }
+      }
+    },
+    {
+      "operation": "declare-core-key",
+      "version": "2.0.0",
+      "source": {
+        "umf": "0.7.0",
+        "id": "truss.integration.account-items.v1",
+        "vocabularies": {},
+        "modules": [
+          {
+            "id": "integration",
+            "namespace": "truss.integration",
+            "elements": [
+              {
+                "id": "Account.code",
+                "name": "code",
+                "kind": "field",
+                "scalarType": "string",
+                "nullability": "required",
+                "cardinality": "one",
+                "extensions": {}
+              },
+              {
+                "id": "Item.code",
+                "name": "code",
+                "kind": "field",
+                "scalarType": "string",
+                "nullability": "required",
+                "cardinality": "one",
+                "extensions": {}
+              },
+              {
+                "id": "Item.amount",
+                "name": "amount",
+                "kind": "field",
+                "scalarType": "decimal",
+                "nullability": "required",
+                "cardinality": "one",
+                "extensions": {},
+                "facets": {
+                  "precision": 21,
+                  "scale": 3
+                }
+              },
+              {
+                "id": "Item.note",
+                "name": "note",
+                "kind": "field",
+                "scalarType": "string",
+                "nullability": "absent-allowed",
+                "cardinality": "one",
+                "extensions": {}
+              },
+              {
+                "id": "Account",
+                "name": "Account",
+                "kind": "record",
+                "members": [
+                  {
+                    "module": "integration",
+                    "element": "Account.code"
+                  }
+                ],
+                "keys": [
+                  {
+                    "id": "by-code",
+                    "name": "by-code",
+                    "fields": [
+                      {
+                        "module": "integration",
+                        "element": "Account.code"
+                      }
+                    ],
+                    "primary": true
+                  }
+                ],
+                "extensions": {}
+              },
+              {
+                "id": "Item",
+                "name": "Item",
+                "kind": "record",
+                "members": [
+                  {
+                    "module": "integration",
+                    "element": "Item.code"
+                  },
+                  {
+                    "module": "integration",
+                    "element": "Item.amount"
+                  },
+                  {
+                    "module": "integration",
+                    "element": "Item.note"
+                  }
+                ],
+                "keys": [
+                  {
+                    "id": "by-code",
+                    "name": "by-code",
+                    "fields": [
+                      {
+                        "module": "integration",
+                        "element": "Item.code"
+                      }
+                    ],
+                    "primary": true
+                  }
+                ],
+                "extensions": {}
+              }
+            ],
+            "relationships": [
+              {
+                "id": "account-items",
+                "name": "items",
+                "source": [
+                  {
+                    "module": "integration",
+                    "element": "Account"
+                  }
+                ],
+                "target": [
+                  {
+                    "module": "integration",
+                    "element": "Item",
+                    "key": "by-code"
+                  }
+                ],
+                "sourceMultiplicity": {
+                  "min": 0,
+                  "max": 1
+                },
+                "targetMultiplicity": {
+                  "min": 0,
+                  "max": 2
+                },
+                "targetLifecycle": "independent",
+                "directed": true
+              }
+            ]
+          }
+        ]
+      },
+      "target": {
+        "umf": "0.7.0",
+        "id": "truss.integration.account-items.v1",
+        "vocabularies": {},
+        "modules": [
+          {
+            "id": "integration",
+            "namespace": "truss.integration",
+            "elements": [
+              {
+                "id": "Account.code",
+                "name": "code",
+                "kind": "field",
+                "scalarType": "string",
+                "nullability": "required",
+                "cardinality": "one",
+                "extensions": {}
+              },
+              {
+                "id": "Item.code",
+                "name": "code",
+                "kind": "field",
+                "scalarType": "string",
+                "nullability": "required",
+                "cardinality": "one",
+                "extensions": {}
+              },
+              {
+                "id": "Item.amount",
+                "name": "amount",
+                "kind": "field",
+                "scalarType": "decimal",
+                "nullability": "required",
+                "cardinality": "one",
+                "extensions": {},
+                "facets": {
+                  "precision": 21,
+                  "scale": 3
+                }
+              },
+              {
+                "id": "Item.note",
+                "name": "note",
+                "kind": "field",
+                "scalarType": "string",
+                "nullability": "absent-allowed",
+                "cardinality": "one",
+                "extensions": {}
+              },
+              {
+                "id": "Account",
+                "name": "Account",
+                "kind": "record",
+                "members": [
+                  {
+                    "module": "integration",
+                    "element": "Account.code"
+                  }
+                ],
+                "keys": [
+                  {
+                    "id": "by-code",
+                    "name": "by-code",
+                    "fields": [
+                      {
+                        "module": "integration",
+                        "element": "Account.code"
+                      }
+                    ],
+                    "primary": true
+                  }
+                ],
+                "extensions": {}
+              },
+              {
+                "id": "Item",
+                "name": "Item",
+                "kind": "record",
+                "members": [
+                  {
+                    "module": "integration",
+                    "element": "Item.code"
+                  },
+                  {
+                    "module": "integration",
+                    "element": "Item.amount"
+                  },
+                  {
+                    "module": "integration",
+                    "element": "Item.note"
+                  }
+                ],
+                "keys": [
+                  {
+                    "id": "by-code",
+                    "name": "by-code",
+                    "fields": [
+                      {
+                        "module": "integration",
+                        "element": "Item.code"
+                      }
+                    ],
+                    "primary": true
+                  }
+                ],
+                "extensions": {}
+              }
+            ],
+            "relationships": [
+              {
+                "id": "account-items",
+                "name": "items",
+                "source": [
+                  {
+                    "module": "integration",
+                    "element": "Account"
+                  }
+                ],
+                "target": [
+                  {
+                    "module": "integration",
+                    "element": "Item",
+                    "key": "by-code"
+                  }
+                ],
+                "sourceMultiplicity": {
+                  "min": 0,
+                  "max": 1
+                },
+                "targetMultiplicity": {
+                  "min": 0,
+                  "max": 2
+                },
+                "targetLifecycle": "independent",
+                "directed": true
+              }
+            ]
+          }
+        ]
+      },
+      "identity": {
+        "module": "integration",
+        "element": "Item"
+      },
+      "request": {
+        "id": "by-code",
+        "name": "by-code",
+        "fields": [
+          {
+            "module": "integration",
+            "element": "Item.code"
+          }
+        ],
+        "primary": true
+      },
+      "provenance": {
+        "origin": "authored",
+        "idealPath": "/modules/0/elements/5/keys/0",
+        "basis": "explicit-author-declaration",
+        "nativePath": null,
+        "binding": {
+          "id": "umf.core.key.authoring",
+          "version": "2.0.0"
+        }
+      }
+    },
+    {
+      "operation": "declare-core-relationship",
+      "version": "1.0.0",
+      "source": {
+        "umf": "0.7.0",
+        "id": "truss.integration.account-items.v1",
+        "vocabularies": {},
+        "modules": [
+          {
+            "id": "integration",
+            "namespace": "truss.integration",
+            "elements": [
+              {
+                "id": "Account.code",
+                "name": "code",
+                "kind": "field",
+                "scalarType": "string",
+                "nullability": "required",
+                "cardinality": "one",
+                "extensions": {}
+              },
+              {
+                "id": "Item.code",
+                "name": "code",
+                "kind": "field",
+                "scalarType": "string",
+                "nullability": "required",
+                "cardinality": "one",
+                "extensions": {}
+              },
+              {
+                "id": "Item.amount",
+                "name": "amount",
+                "kind": "field",
+                "scalarType": "decimal",
+                "nullability": "required",
+                "cardinality": "one",
+                "extensions": {},
+                "facets": {
+                  "precision": 21,
+                  "scale": 3
+                }
+              },
+              {
+                "id": "Item.note",
+                "name": "note",
+                "kind": "field",
+                "scalarType": "string",
+                "nullability": "absent-allowed",
+                "cardinality": "one",
+                "extensions": {}
+              },
+              {
+                "id": "Account",
+                "name": "Account",
+                "kind": "record",
+                "members": [
+                  {
+                    "module": "integration",
+                    "element": "Account.code"
+                  }
+                ],
+                "keys": [
+                  {
+                    "id": "by-code",
+                    "name": "by-code",
+                    "fields": [
+                      {
+                        "module": "integration",
+                        "element": "Account.code"
+                      }
+                    ],
+                    "primary": true
+                  }
+                ],
+                "extensions": {}
+              },
+              {
+                "id": "Item",
+                "name": "Item",
+                "kind": "record",
+                "members": [
+                  {
+                    "module": "integration",
+                    "element": "Item.code"
+                  },
+                  {
+                    "module": "integration",
+                    "element": "Item.amount"
+                  },
+                  {
+                    "module": "integration",
+                    "element": "Item.note"
+                  }
+                ],
+                "keys": [
+                  {
+                    "id": "by-code",
+                    "name": "by-code",
+                    "fields": [
+                      {
+                        "module": "integration",
+                        "element": "Item.code"
+                      }
+                    ],
+                    "primary": true
+                  }
+                ],
+                "extensions": {}
+              }
+            ],
+            "relationships": [
+              {
+                "id": "account-items",
+                "name": "items",
+                "source": [
+                  {
+                    "module": "integration",
+                    "element": "Account"
+                  }
+                ],
+                "target": [
+                  {
+                    "module": "integration",
+                    "element": "Item",
+                    "key": "by-code"
+                  }
+                ],
+                "sourceMultiplicity": {
+                  "min": 0,
+                  "max": 1
+                },
+                "targetMultiplicity": {
+                  "min": 0,
+                  "max": 2
+                },
+                "targetLifecycle": "independent",
+                "directed": true
+              }
+            ]
+          }
+        ]
+      },
+      "target": {
+        "umf": "0.7.0",
+        "id": "truss.integration.account-items.v1",
+        "vocabularies": {},
+        "modules": [
+          {
+            "id": "integration",
+            "namespace": "truss.integration",
+            "elements": [
+              {
+                "id": "Account.code",
+                "name": "code",
+                "kind": "field",
+                "scalarType": "string",
+                "nullability": "required",
+                "cardinality": "one",
+                "extensions": {}
+              },
+              {
+                "id": "Item.code",
+                "name": "code",
+                "kind": "field",
+                "scalarType": "string",
+                "nullability": "required",
+                "cardinality": "one",
+                "extensions": {}
+              },
+              {
+                "id": "Item.amount",
+                "name": "amount",
+                "kind": "field",
+                "scalarType": "decimal",
+                "nullability": "required",
+                "cardinality": "one",
+                "extensions": {},
+                "facets": {
+                  "precision": 21,
+                  "scale": 3
+                }
+              },
+              {
+                "id": "Item.note",
+                "name": "note",
+                "kind": "field",
+                "scalarType": "string",
+                "nullability": "absent-allowed",
+                "cardinality": "one",
+                "extensions": {}
+              },
+              {
+                "id": "Account",
+                "name": "Account",
+                "kind": "record",
+                "members": [
+                  {
+                    "module": "integration",
+                    "element": "Account.code"
+                  }
+                ],
+                "keys": [
+                  {
+                    "id": "by-code",
+                    "name": "by-code",
+                    "fields": [
+                      {
+                        "module": "integration",
+                        "element": "Account.code"
+                      }
+                    ],
+                    "primary": true
+                  }
+                ],
+                "extensions": {}
+              },
+              {
+                "id": "Item",
+                "name": "Item",
+                "kind": "record",
+                "members": [
+                  {
+                    "module": "integration",
+                    "element": "Item.code"
+                  },
+                  {
+                    "module": "integration",
+                    "element": "Item.amount"
+                  },
+                  {
+                    "module": "integration",
+                    "element": "Item.note"
+                  }
+                ],
+                "keys": [
+                  {
+                    "id": "by-code",
+                    "name": "by-code",
+                    "fields": [
+                      {
+                        "module": "integration",
+                        "element": "Item.code"
+                      }
+                    ],
+                    "primary": true
+                  }
+                ],
+                "extensions": {}
+              }
+            ],
+            "relationships": [
+              {
+                "id": "account-items",
+                "name": "items",
+                "source": [
+                  {
+                    "module": "integration",
+                    "element": "Account"
+                  }
+                ],
+                "target": [
+                  {
+                    "module": "integration",
+                    "element": "Item",
+                    "key": "by-code"
+                  }
+                ],
+                "sourceMultiplicity": {
+                  "min": 0,
+                  "max": 1
+                },
+                "targetMultiplicity": {
+                  "min": 0,
+                  "max": 2
+                },
+                "targetLifecycle": "independent",
+                "directed": true
+              }
+            ]
+          }
+        ]
+      },
+      "identity": {
+        "module": "integration"
+      },
+      "request": {
+        "id": "account-items",
+        "name": "items",
+        "source": [
+          {
+            "module": "integration",
+            "element": "Account"
+          }
+        ],
+        "target": [
+          {
+            "module": "integration",
+            "element": "Item",
+            "key": "by-code"
+          }
+        ],
+        "sourceMultiplicity": {
+          "min": 0,
+          "max": 1
+        },
+        "targetMultiplicity": {
+          "min": 0,
+          "max": 2
+        },
+        "targetLifecycle": "independent",
+        "directed": true
+      },
+      "provenance": {
+        "origin": "authored",
+        "idealPath": "/modules/0/relationships/0",
+        "basis": "explicit-author-declaration",
+        "nativePath": null
+      },
+      "diagnostics": [
+        {
+          "code": "EXPERIMENTAL_CORE_NULLABILITY",
+          "path": "/umf",
+          "message": "Nullability envelope is experimental; no native absence encoding or default execution is implied",
+          "severity": "warning"
+        },
+        {
+          "code": "EXPERIMENTAL_CORE_CARDINALITY",
+          "path": "/umf",
+          "message": "Cardinality envelope is experimental; native shape and item semantics require explicit bindings",
+          "severity": "warning"
+        },
+        {
+          "code": "EXPERIMENTAL_CORE_FACETS",
+          "path": "/umf",
+          "message": "Facet envelope is experimental; bounds do not establish native enforcement or value conversion",
+          "severity": "warning"
+        },
+        {
+          "code": "EXPERIMENTAL_CORE_KEYS",
+          "path": "/umf",
+          "message": "Candidate key profile; native uniqueness and author provenance are not inferred",
+          "severity": "warning"
+        },
+        {
+          "code": "EXPERIMENTAL_CORE_RELATIONSHIPS",
+          "path": "/umf",
+          "message": "Candidate authored relationship profile; native enforcement and storage are not inferred",
+          "severity": "warning"
+        }
+      ],
+      "residuals": []
+    }
+  ],
+  "lookups": [
+    {
+      "operation": "lookup-core-key",
+      "version": "2.0.0",
+      "source": {
+        "umf": "0.7.0",
+        "id": "truss.integration.account-items.v1",
+        "vocabularies": {},
+        "modules": [
+          {
+            "id": "integration",
+            "namespace": "truss.integration",
+            "elements": [
+              {
+                "id": "Account.code",
+                "name": "code",
+                "kind": "field",
+                "scalarType": "string",
+                "nullability": "required",
+                "cardinality": "one",
+                "extensions": {}
+              },
+              {
+                "id": "Item.code",
+                "name": "code",
+                "kind": "field",
+                "scalarType": "string",
+                "nullability": "required",
+                "cardinality": "one",
+                "extensions": {}
+              },
+              {
+                "id": "Item.amount",
+                "name": "amount",
+                "kind": "field",
+                "scalarType": "decimal",
+                "nullability": "required",
+                "cardinality": "one",
+                "extensions": {},
+                "facets": {
+                  "precision": 21,
+                  "scale": 3
+                }
+              },
+              {
+                "id": "Item.note",
+                "name": "note",
+                "kind": "field",
+                "scalarType": "string",
+                "nullability": "absent-allowed",
+                "cardinality": "one",
+                "extensions": {}
+              },
+              {
+                "id": "Account",
+                "name": "Account",
+                "kind": "record",
+                "members": [
+                  {
+                    "module": "integration",
+                    "element": "Account.code"
+                  }
+                ],
+                "keys": [
+                  {
+                    "id": "by-code",
+                    "name": "by-code",
+                    "fields": [
+                      {
+                        "module": "integration",
+                        "element": "Account.code"
+                      }
+                    ],
+                    "primary": true
+                  }
+                ],
+                "extensions": {}
+              },
+              {
+                "id": "Item",
+                "name": "Item",
+                "kind": "record",
+                "members": [
+                  {
+                    "module": "integration",
+                    "element": "Item.code"
+                  },
+                  {
+                    "module": "integration",
+                    "element": "Item.amount"
+                  },
+                  {
+                    "module": "integration",
+                    "element": "Item.note"
+                  }
+                ],
+                "keys": [
+                  {
+                    "id": "by-code",
+                    "name": "by-code",
+                    "fields": [
+                      {
+                        "module": "integration",
+                        "element": "Item.code"
+                      }
+                    ],
+                    "primary": true
+                  }
+                ],
+                "extensions": {}
+              }
+            ],
+            "relationships": [
+              {
+                "id": "account-items",
+                "name": "items",
+                "source": [
+                  {
+                    "module": "integration",
+                    "element": "Account"
+                  }
+                ],
+                "target": [
+                  {
+                    "module": "integration",
+                    "element": "Item",
+                    "key": "by-code"
+                  }
+                ],
+                "sourceMultiplicity": {
+                  "min": 0,
+                  "max": 1
+                },
+                "targetMultiplicity": {
+                  "min": 0,
+                  "max": 2
+                },
+                "targetLifecycle": "independent",
+                "directed": true
+              }
+            ]
+          }
+        ]
+      },
+      "identity": {
+        "module": "integration",
+        "element": "Account",
+        "key": "by-code"
+      },
+      "path": "/modules/0/elements/4/keys/0",
+      "key": {
+        "id": "by-code",
+        "name": "by-code",
+        "fields": [
+          {
+            "module": "integration",
+            "element": "Account.code"
+          }
+        ],
+        "primary": true
+      },
+      "uninterpretedPaths": [],
+      "provenance": "unverified"
+    },
+    {
+      "operation": "lookup-core-key",
+      "version": "2.0.0",
+      "source": {
+        "umf": "0.7.0",
+        "id": "truss.integration.account-items.v1",
+        "vocabularies": {},
+        "modules": [
+          {
+            "id": "integration",
+            "namespace": "truss.integration",
+            "elements": [
+              {
+                "id": "Account.code",
+                "name": "code",
+                "kind": "field",
+                "scalarType": "string",
+                "nullability": "required",
+                "cardinality": "one",
+                "extensions": {}
+              },
+              {
+                "id": "Item.code",
+                "name": "code",
+                "kind": "field",
+                "scalarType": "string",
+                "nullability": "required",
+                "cardinality": "one",
+                "extensions": {}
+              },
+              {
+                "id": "Item.amount",
+                "name": "amount",
+                "kind": "field",
+                "scalarType": "decimal",
+                "nullability": "required",
+                "cardinality": "one",
+                "extensions": {},
+                "facets": {
+                  "precision": 21,
+                  "scale": 3
+                }
+              },
+              {
+                "id": "Item.note",
+                "name": "note",
+                "kind": "field",
+                "scalarType": "string",
+                "nullability": "absent-allowed",
+                "cardinality": "one",
+                "extensions": {}
+              },
+              {
+                "id": "Account",
+                "name": "Account",
+                "kind": "record",
+                "members": [
+                  {
+                    "module": "integration",
+                    "element": "Account.code"
+                  }
+                ],
+                "keys": [
+                  {
+                    "id": "by-code",
+                    "name": "by-code",
+                    "fields": [
+                      {
+                        "module": "integration",
+                        "element": "Account.code"
+                      }
+                    ],
+                    "primary": true
+                  }
+                ],
+                "extensions": {}
+              },
+              {
+                "id": "Item",
+                "name": "Item",
+                "kind": "record",
+                "members": [
+                  {
+                    "module": "integration",
+                    "element": "Item.code"
+                  },
+                  {
+                    "module": "integration",
+                    "element": "Item.amount"
+                  },
+                  {
+                    "module": "integration",
+                    "element": "Item.note"
+                  }
+                ],
+                "keys": [
+                  {
+                    "id": "by-code",
+                    "name": "by-code",
+                    "fields": [
+                      {
+                        "module": "integration",
+                        "element": "Item.code"
+                      }
+                    ],
+                    "primary": true
+                  }
+                ],
+                "extensions": {}
+              }
+            ],
+            "relationships": [
+              {
+                "id": "account-items",
+                "name": "items",
+                "source": [
+                  {
+                    "module": "integration",
+                    "element": "Account"
+                  }
+                ],
+                "target": [
+                  {
+                    "module": "integration",
+                    "element": "Item",
+                    "key": "by-code"
+                  }
+                ],
+                "sourceMultiplicity": {
+                  "min": 0,
+                  "max": 1
+                },
+                "targetMultiplicity": {
+                  "min": 0,
+                  "max": 2
+                },
+                "targetLifecycle": "independent",
+                "directed": true
+              }
+            ]
+          }
+        ]
+      },
+      "identity": {
+        "module": "integration",
+        "element": "Item",
+        "key": "by-code"
+      },
+      "path": "/modules/0/elements/5/keys/0",
+      "key": {
+        "id": "by-code",
+        "name": "by-code",
+        "fields": [
+          {
+            "module": "integration",
+            "element": "Item.code"
+          }
+        ],
+        "primary": true
+      },
+      "uninterpretedPaths": [],
+      "provenance": "unverified"
+    }
+  ],
+  "selected": {
+    "scope": "core-elements",
+    "referenceScope": "explicit-core-references-item-types-members-and-keys",
+    "source": {
+      "umf": "0.7.0",
+      "id": "truss.integration.account-items.v1",
+      "vocabularies": {},
+      "modules": [
+        {
+          "id": "integration",
+          "namespace": "truss.integration",
+          "elements": [
+            {
+              "id": "Account.code",
+              "name": "code",
+              "kind": "field",
+              "scalarType": "string",
+              "nullability": "required",
+              "cardinality": "one",
+              "extensions": {}
+            },
+            {
+              "id": "Item.code",
+              "name": "code",
+              "kind": "field",
+              "scalarType": "string",
+              "nullability": "required",
+              "cardinality": "one",
+              "extensions": {}
+            },
+            {
+              "id": "Item.amount",
+              "name": "amount",
+              "kind": "field",
+              "scalarType": "decimal",
+              "nullability": "required",
+              "cardinality": "one",
+              "extensions": {},
+              "facets": {
+                "precision": 21,
+                "scale": 3
+              }
+            },
+            {
+              "id": "Item.note",
+              "name": "note",
+              "kind": "field",
+              "scalarType": "string",
+              "nullability": "absent-allowed",
+              "cardinality": "one",
+              "extensions": {}
+            },
+            {
+              "id": "Account",
+              "name": "Account",
+              "kind": "record",
+              "members": [
+                {
+                  "module": "integration",
+                  "element": "Account.code"
+                }
+              ],
+              "keys": [
+                {
+                  "id": "by-code",
+                  "name": "by-code",
+                  "fields": [
+                    {
+                      "module": "integration",
+                      "element": "Account.code"
+                    }
+                  ],
+                  "primary": true
+                }
+              ],
+              "extensions": {}
+            },
+            {
+              "id": "Item",
+              "name": "Item",
+              "kind": "record",
+              "members": [
+                {
+                  "module": "integration",
+                  "element": "Item.code"
+                },
+                {
+                  "module": "integration",
+                  "element": "Item.amount"
+                },
+                {
+                  "module": "integration",
+                  "element": "Item.note"
+                }
+              ],
+              "keys": [
+                {
+                  "id": "by-code",
+                  "name": "by-code",
+                  "fields": [
+                    {
+                      "module": "integration",
+                      "element": "Item.code"
+                    }
+                  ],
+                  "primary": true
+                }
+              ],
+              "extensions": {}
+            }
+          ],
+          "relationships": [
+            {
+              "id": "account-items",
+              "name": "items",
+              "source": [
+                {
+                  "module": "integration",
+                  "element": "Account"
+                }
+              ],
+              "target": [
+                {
+                  "module": "integration",
+                  "element": "Item",
+                  "key": "by-code"
+                }
+              ],
+              "sourceMultiplicity": {
+                "min": 0,
+                "max": 1
+              },
+              "targetMultiplicity": {
+                "min": 0,
+                "max": 2
+              },
+              "targetLifecycle": "independent",
+              "directed": true
+            }
+          ]
+        }
+      ]
+    },
+    "query": {
+      "references": "transitive",
+      "identities": [
+        {
+          "module": "integration",
+          "element": "Account"
+        },
+        {
+          "module": "integration",
+          "element": "Item"
+        }
+      ]
+    },
+    "sourceValidation": {
+      "valid": true,
+      "complete": false,
+      "diagnostics": [
+        {
+          "code": "EXPERIMENTAL_CORE_NULLABILITY",
+          "path": "/umf",
+          "message": "Nullability envelope is experimental; no native absence encoding or default execution is implied",
+          "severity": "warning"
+        },
+        {
+          "code": "EXPERIMENTAL_CORE_CARDINALITY",
+          "path": "/umf",
+          "message": "Cardinality envelope is experimental; native shape and item semantics require explicit bindings",
+          "severity": "warning"
+        },
+        {
+          "code": "EXPERIMENTAL_CORE_FACETS",
+          "path": "/umf",
+          "message": "Facet envelope is experimental; bounds do not establish native enforcement or value conversion",
+          "severity": "warning"
+        },
+        {
+          "code": "EXPERIMENTAL_CORE_KEYS",
+          "path": "/umf",
+          "message": "Candidate key profile; native uniqueness and author provenance are not inferred",
+          "severity": "warning"
+        },
+        {
+          "code": "EXPERIMENTAL_CORE_RELATIONSHIPS",
+          "path": "/umf",
+          "message": "Candidate authored relationship profile; native enforcement and storage are not inferred",
+          "severity": "warning"
+        }
+      ]
+    },
+    "selection": [
+      {
+        "module": "integration",
+        "namespace": "truss.integration",
+        "path": "/modules/0/elements/0",
+        "element": {
+          "id": "Account.code",
+          "name": "code",
+          "kind": "field",
+          "scalarType": "string",
+          "nullability": "required",
+          "cardinality": "one",
+          "extensions": {}
+        },
+        "includedBy": "reference"
+      },
+      {
+        "module": "integration",
+        "namespace": "truss.integration",
+        "path": "/modules/0/elements/1",
+        "element": {
+          "id": "Item.code",
+          "name": "code",
+          "kind": "field",
+          "scalarType": "string",
+          "nullability": "required",
+          "cardinality": "one",
+          "extensions": {}
+        },
+        "includedBy": "reference"
+      },
+      {
+        "module": "integration",
+        "namespace": "truss.integration",
+        "path": "/modules/0/elements/2",
+        "element": {
+          "id": "Item.amount",
+          "name": "amount",
+          "kind": "field",
+          "scalarType": "decimal",
+          "nullability": "required",
+          "cardinality": "one",
+          "extensions": {},
+          "facets": {
+            "precision": 21,
+            "scale": 3
+          }
+        },
+        "includedBy": "reference"
+      },
+      {
+        "module": "integration",
+        "namespace": "truss.integration",
+        "path": "/modules/0/elements/3",
+        "element": {
+          "id": "Item.note",
+          "name": "note",
+          "kind": "field",
+          "scalarType": "string",
+          "nullability": "absent-allowed",
+          "cardinality": "one",
+          "extensions": {}
+        },
+        "includedBy": "reference"
+      },
+      {
+        "module": "integration",
+        "namespace": "truss.integration",
+        "path": "/modules/0/elements/4",
+        "element": {
+          "id": "Account",
+          "name": "Account",
+          "kind": "record",
+          "members": [
+            {
+              "module": "integration",
+              "element": "Account.code"
+            }
+          ],
+          "keys": [
+            {
+              "id": "by-code",
+              "name": "by-code",
+              "fields": [
+                {
+                  "module": "integration",
+                  "element": "Account.code"
+                }
+              ],
+              "primary": true
+            }
+          ],
+          "extensions": {}
+        },
+        "includedBy": "match"
+      },
+      {
+        "module": "integration",
+        "namespace": "truss.integration",
+        "path": "/modules/0/elements/5",
+        "element": {
+          "id": "Item",
+          "name": "Item",
+          "kind": "record",
+          "members": [
+            {
+              "module": "integration",
+              "element": "Item.code"
+            },
+            {
+              "module": "integration",
+              "element": "Item.amount"
+            },
+            {
+              "module": "integration",
+              "element": "Item.note"
+            }
+          ],
+          "keys": [
+            {
+              "id": "by-code",
+              "name": "by-code",
+              "fields": [
+                {
+                  "module": "integration",
+                  "element": "Item.code"
+                }
+              ],
+              "primary": true
+            }
+          ],
+          "extensions": {}
+        },
+        "includedBy": "match"
+      }
+    ],
+    "boundaryReferences": [],
+    "boundaryItemTypes": [],
+    "boundaryMembers": [],
+    "boundaryKeyFields": []
+  },
+  "relations": {
+    "operation": "select-core-relationships",
+    "version": "1.0.0",
+    "source": {
+      "umf": "0.7.0",
+      "id": "truss.integration.account-items.v1",
+      "vocabularies": {},
+      "modules": [
+        {
+          "id": "integration",
+          "namespace": "truss.integration",
+          "elements": [
+            {
+              "id": "Account.code",
+              "name": "code",
+              "kind": "field",
+              "scalarType": "string",
+              "nullability": "required",
+              "cardinality": "one",
+              "extensions": {}
+            },
+            {
+              "id": "Item.code",
+              "name": "code",
+              "kind": "field",
+              "scalarType": "string",
+              "nullability": "required",
+              "cardinality": "one",
+              "extensions": {}
+            },
+            {
+              "id": "Item.amount",
+              "name": "amount",
+              "kind": "field",
+              "scalarType": "decimal",
+              "nullability": "required",
+              "cardinality": "one",
+              "extensions": {},
+              "facets": {
+                "precision": 21,
+                "scale": 3
+              }
+            },
+            {
+              "id": "Item.note",
+              "name": "note",
+              "kind": "field",
+              "scalarType": "string",
+              "nullability": "absent-allowed",
+              "cardinality": "one",
+              "extensions": {}
+            },
+            {
+              "id": "Account",
+              "name": "Account",
+              "kind": "record",
+              "members": [
+                {
+                  "module": "integration",
+                  "element": "Account.code"
+                }
+              ],
+              "keys": [
+                {
+                  "id": "by-code",
+                  "name": "by-code",
+                  "fields": [
+                    {
+                      "module": "integration",
+                      "element": "Account.code"
+                    }
+                  ],
+                  "primary": true
+                }
+              ],
+              "extensions": {}
+            },
+            {
+              "id": "Item",
+              "name": "Item",
+              "kind": "record",
+              "members": [
+                {
+                  "module": "integration",
+                  "element": "Item.code"
+                },
+                {
+                  "module": "integration",
+                  "element": "Item.amount"
+                },
+                {
+                  "module": "integration",
+                  "element": "Item.note"
+                }
+              ],
+              "keys": [
+                {
+                  "id": "by-code",
+                  "name": "by-code",
+                  "fields": [
+                    {
+                      "module": "integration",
+                      "element": "Item.code"
+                    }
+                  ],
+                  "primary": true
+                }
+              ],
+              "extensions": {}
+            }
+          ],
+          "relationships": [
+            {
+              "id": "account-items",
+              "name": "items",
+              "source": [
+                {
+                  "module": "integration",
+                  "element": "Account"
+                }
+              ],
+              "target": [
+                {
+                  "module": "integration",
+                  "element": "Item",
+                  "key": "by-code"
+                }
+              ],
+              "sourceMultiplicity": {
+                "min": 0,
+                "max": 1
+              },
+              "targetMultiplicity": {
+                "min": 0,
+                "max": 2
+              },
+              "targetLifecycle": "independent",
+              "directed": true
+            }
+          ]
+        }
+      ]
+    },
+    "query": {
+      "identities": [
+        {
+          "module": "integration",
+          "id": "account-items"
+        }
+      ]
+    },
+    "selection": [
+      {
+        "identity": {
+          "module": "integration",
+          "id": "account-items"
+        },
+        "path": "/modules/0/relationships/0",
+        "relationship": {
+          "id": "account-items",
+          "name": "items",
+          "source": [
+            {
+              "module": "integration",
+              "element": "Account"
+            }
+          ],
+          "target": [
+            {
+              "module": "integration",
+              "element": "Item",
+              "key": "by-code"
+            }
+          ],
+          "sourceMultiplicity": {
+            "min": 0,
+            "max": 1
+          },
+          "targetMultiplicity": {
+            "min": 0,
+            "max": 2
+          },
+          "targetLifecycle": "independent",
+          "directed": true
+        },
+        "sources": [
+          {
+            "reference": {
+              "module": "integration",
+              "element": "Account"
+            },
+            "recordPath": "/modules/0/elements/4"
+          }
+        ],
+        "targets": [
+          {
+            "reference": {
+              "module": "integration",
+              "element": "Item",
+              "key": "by-code"
+            },
+            "recordPath": "/modules/0/elements/5",
+            "keyPath": "/modules/0/elements/5/keys/0"
+          }
+        ],
+        "navigation": {
+          "forward": {
+            "name": "items",
+            "from": [
+              {
+                "module": "integration",
+                "element": "Account"
+              }
+            ],
+            "to": [
+              {
+                "module": "integration",
+                "element": "Item"
+              }
+            ]
+          }
+        },
+        "uninterpretedPaths": []
+      }
+    ],
+    "diagnostics": [
+      {
+        "code": "EXPERIMENTAL_CORE_NULLABILITY",
+        "path": "/umf",
+        "message": "Nullability envelope is experimental; no native absence encoding or default execution is implied",
+        "severity": "warning"
+      },
+      {
+        "code": "EXPERIMENTAL_CORE_CARDINALITY",
+        "path": "/umf",
+        "message": "Cardinality envelope is experimental; native shape and item semantics require explicit bindings",
+        "severity": "warning"
+      },
+      {
+        "code": "EXPERIMENTAL_CORE_FACETS",
+        "path": "/umf",
+        "message": "Facet envelope is experimental; bounds do not establish native enforcement or value conversion",
+        "severity": "warning"
+      },
+      {
+        "code": "EXPERIMENTAL_CORE_KEYS",
+        "path": "/umf",
+        "message": "Candidate key profile; native uniqueness and author provenance are not inferred",
+        "severity": "warning"
+      },
+      {
+        "code": "EXPERIMENTAL_CORE_RELATIONSHIPS",
+        "path": "/umf",
+        "message": "Candidate authored relationship profile; native enforcement and storage are not inferred",
+        "severity": "warning"
+      }
+    ],
+    "residuals": [],
+    "provenance": "unverified",
+    "navigationScope": "authored-presentation-only"
+  },
+  "corruptedReceiptRefusals": 2
+}

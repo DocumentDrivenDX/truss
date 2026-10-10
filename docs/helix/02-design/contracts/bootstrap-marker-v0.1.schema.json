@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:bootstrap-marker:0.1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["interfaceVersion", "installationId", "layoutVersion", "bundleSha256", "inventoryProfile", "inventorySha256", "namespace", "installedAt"],
+  "properties": {
+    "interfaceVersion": {"const": "truss-bootstrap-marker/0.1.0"},
+    "installationId": {"type": "string", "minLength": 1, "maxLength": 256},
+    "layoutVersion": {"type": "string", "minLength": 1, "maxLength": 256},
+    "bundleSha256": {"$ref": "#/$defs/digest"},
+    "inventoryProfile": {"type": "string", "minLength": 1, "maxLength": 256},
+    "inventorySha256": {"$ref": "#/$defs/digest"},
+    "namespace": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["databaseIdentity", "schemaName"],
+      "properties": {
+        "databaseIdentity": {"type": "string", "minLength": 1, "maxLength": 1024},
+        "schemaName": {"type": "string", "minLength": 1, "maxLength": 256}
+      }
+    },
+    "installedAt": {"type": "string", "minLength": 1, "maxLength": 128}
+  },
+  "$defs": {"digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+}

@@ -1,0 +1,230 @@
+{
+  "umf": "0.1.0",
+  "id": "truss-row-operation-unfinished-unique-proposal",
+  "vocabularies": {
+    "umf.postgresql": {
+      "version": "0.1.0"
+    }
+  },
+  "modules": [
+    {
+      "id": "schema",
+      "namespace": "",
+      "elements": [
+        {
+          "id": "schema",
+          "extensions": {
+            "umf.postgresql": {
+              "profile": "postgresql-raw-parse-tree",
+              "source": "-- Unadopted OC01/OC02 at-most-one unfinished operation candidate.\n-- Existing protected registry phase/identity checks and native producers remain required.\nCREATE UNIQUE INDEX row_home_operation_unfinished_xid\n  ON truss.row_home_operation (original_writer_xid)\n  WHERE phase OPERATOR(pg_catalog.<>) 'application_finalized';\n-- This does not prove existence, authentic xid/context, phase transitions or commit closure.\n",
+              "root": {
+                "kind": "object",
+                "members": {
+                  "version": {
+                    "kind": "number",
+                    "value": "170004"
+                  },
+                  "stmts": {
+                    "kind": "array",
+                    "items": [
+                      {
+                        "kind": "object",
+                        "members": {
+                          "stmt": {
+                            "kind": "object",
+                            "members": {
+                              "IndexStmt": {
+                                "kind": "object",
+                                "members": {
+                                  "idxname": {
+                                    "kind": "string",
+                                    "value": "row_home_operation_unfinished_xid"
+                                  },
+                                  "relation": {
+                                    "kind": "object",
+                                    "members": {
+                                      "schemaname": {
+                                        "kind": "string",
+                                        "value": "truss"
+                                      },
+                                      "relname": {
+                                        "kind": "string",
+                                        "value": "row_home_operation"
+                                      },
+                                      "inh": {
+                                        "kind": "boolean",
+                                        "value": true
+                                      },
+                                      "relpersistence": {
+                                        "kind": "string",
+                                        "value": "p"
+                                      },
+                                      "location": {
+                                        "kind": "number",
+                                        "value": "217"
+                                      }
+                                    }
+                                  },
+                                  "accessMethod": {
+                                    "kind": "string",
+                                    "value": "btree"
+                                  },
+                                  "indexParams": {
+                                    "kind": "array",
+                                    "items": [
+                                      {
+                                        "kind": "object",
+                                        "members": {
+                                          "IndexElem": {
+                                            "kind": "object",
+                                            "members": {
+                                              "name": {
+                                                "kind": "string",
+                                                "value": "original_writer_xid"
+                                              },
+                                              "ordering": {
+                                                "kind": "string",
+                                                "value": "SORTBY_DEFAULT"
+                                              },
+                                              "nulls_ordering": {
+                                                "kind": "string",
+                                                "value": "SORTBY_NULLS_DEFAULT"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "whereClause": {
+                                    "kind": "object",
+                                    "members": {
+                                      "A_Expr": {
+                                        "kind": "object",
+                                        "members": {
+                                          "kind": {
+                                            "kind": "string",
+                                            "value": "AEXPR_OP"
+                                          },
+                                          "name": {
+                                            "kind": "array",
+                                            "items": [
+                                              {
+                                                "kind": "object",
+                                                "members": {
+                                                  "String": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "sval": {
+                                                        "kind": "string",
+                                                        "value": "pg_catalog"
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              {
+                                                "kind": "object",
+                                                "members": {
+                                                  "String": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "sval": {
+                                                        "kind": "string",
+                                                        "value": "<>"
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            ]
+                                          },
+                                          "lexpr": {
+                                            "kind": "object",
+                                            "members": {
+                                              "ColumnRef": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "fields": {
+                                                    "kind": "array",
+                                                    "items": [
+                                                      {
+                                                        "kind": "object",
+                                                        "members": {
+                                                          "String": {
+                                                            "kind": "object",
+                                                            "members": {
+                                                              "sval": {
+                                                                "kind": "string",
+                                                                "value": "phase"
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    ]
+                                                  },
+                                                  "location": {
+                                                    "kind": "number",
+                                                    "value": "272"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "rexpr": {
+                                            "kind": "object",
+                                            "members": {
+                                              "A_Const": {
+                                                "kind": "object",
+                                                "members": {
+                                                  "sval": {
+                                                    "kind": "object",
+                                                    "members": {
+                                                      "sval": {
+                                                        "kind": "string",
+                                                        "value": "application_finalized"
+                                                      }
+                                                    }
+                                                  },
+                                                  "location": {
+                                                    "kind": "number",
+                                                    "value": "302"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "location": {
+                                            "kind": "number",
+                                            "value": "278"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "unique": {
+                                    "kind": "boolean",
+                                    "value": true
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "stmt_len": {
+                            "kind": "number",
+                            "value": "325"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,700 @@
+{
+  "scope": "all declared inline/table FK columns and referenced nondeferrable declared PK/unique targets; no native type/collation/operator/dependency or hidden-effect qualification",
+  "inventorySha256": "73a8bb36bd827f348ac8a465fb9aa6578b2411f4d3416eedbf1f32d381ac2e13",
+  "references": [
+    {
+      "from": "schema_head",
+      "columns": [
+        "rev"
+      ],
+      "to": "schema_rev",
+      "targetColumns": [
+        "rev"
+      ]
+    },
+    {
+      "from": "schema_doc",
+      "columns": [
+        "rev"
+      ],
+      "to": "schema_rev",
+      "targetColumns": [
+        "rev"
+      ]
+    },
+    {
+      "from": "schema_change",
+      "columns": [
+        "rev"
+      ],
+      "to": "schema_rev",
+      "targetColumns": [
+        "rev"
+      ]
+    },
+    {
+      "from": "type_def",
+      "columns": [
+        "since_rev",
+        "doc_ord"
+      ],
+      "to": "schema_doc",
+      "targetColumns": [
+        "rev",
+        "ord"
+      ]
+    },
+    {
+      "from": "type_def",
+      "columns": [
+        "definition_rev",
+        "definition_doc_ord",
+        "definition_document_id"
+      ],
+      "to": "schema_doc",
+      "targetColumns": [
+        "rev",
+        "ord",
+        "doc_id"
+      ]
+    },
+    {
+      "from": "type_def",
+      "columns": [
+        "binding_source_rev"
+      ],
+      "to": "schema_rev",
+      "targetColumns": [
+        "rev"
+      ]
+    },
+    {
+      "from": "type_def",
+      "columns": [
+        "since_rev"
+      ],
+      "to": "schema_rev",
+      "targetColumns": [
+        "rev"
+      ]
+    },
+    {
+      "from": "type_def",
+      "columns": [
+        "retired_rev"
+      ],
+      "to": "schema_rev",
+      "targetColumns": [
+        "rev"
+      ]
+    },
+    {
+      "from": "prop_def",
+      "columns": [
+        "since_rev",
+        "doc_ord"
+      ],
+      "to": "schema_doc",
+      "targetColumns": [
+        "rev",
+        "ord"
+      ]
+    },
+    {
+      "from": "prop_def",
+      "columns": [
+        "definition_rev",
+        "definition_doc_ord",
+        "definition_document_id"
+      ],
+      "to": "schema_doc",
+      "targetColumns": [
+        "rev",
+        "ord",
+        "doc_id"
+      ]
+    },
+    {
+      "from": "prop_def",
+      "columns": [
+        "binding_source_rev"
+      ],
+      "to": "schema_rev",
+      "targetColumns": [
+        "rev"
+      ]
+    },
+    {
+      "from": "prop_def",
+      "columns": [
+        "type_id"
+      ],
+      "to": "type_def",
+      "targetColumns": [
+        "type_id"
+      ]
+    },
+    {
+      "from": "prop_def",
+      "columns": [
+        "since_rev"
+      ],
+      "to": "schema_rev",
+      "targetColumns": [
+        "rev"
+      ]
+    },
+    {
+      "from": "prop_def",
+      "columns": [
+        "retired_rev"
+      ],
+      "to": "schema_rev",
+      "targetColumns": [
+        "rev"
+      ]
+    },
+    {
+      "from": "key_def",
+      "columns": [
+        "definition_rev",
+        "definition_doc_ord",
+        "definition_document_id"
+      ],
+      "to": "schema_doc",
+      "targetColumns": [
+        "rev",
+        "ord",
+        "doc_id"
+      ]
+    },
+    {
+      "from": "key_def",
+      "columns": [
+        "binding_source_rev"
+      ],
+      "to": "schema_rev",
+      "targetColumns": [
+        "rev"
+      ]
+    },
+    {
+      "from": "key_def",
+      "columns": [
+        "type_id"
+      ],
+      "to": "type_def",
+      "targetColumns": [
+        "type_id"
+      ]
+    },
+    {
+      "from": "key_def",
+      "columns": [
+        "since_rev"
+      ],
+      "to": "schema_rev",
+      "targetColumns": [
+        "rev"
+      ]
+    },
+    {
+      "from": "key_def",
+      "columns": [
+        "retired_rev"
+      ],
+      "to": "schema_rev",
+      "targetColumns": [
+        "rev"
+      ]
+    },
+    {
+      "from": "rel_def",
+      "columns": [
+        "since_rev",
+        "doc_ord"
+      ],
+      "to": "schema_doc",
+      "targetColumns": [
+        "rev",
+        "ord"
+      ]
+    },
+    {
+      "from": "rel_def",
+      "columns": [
+        "definition_rev",
+        "definition_doc_ord",
+        "definition_document_id"
+      ],
+      "to": "schema_doc",
+      "targetColumns": [
+        "rev",
+        "ord",
+        "doc_id"
+      ]
+    },
+    {
+      "from": "rel_def",
+      "columns": [
+        "binding_source_rev"
+      ],
+      "to": "schema_rev",
+      "targetColumns": [
+        "rev"
+      ]
+    },
+    {
+      "from": "rel_def",
+      "columns": [
+        "assoc_type_id"
+      ],
+      "to": "type_def",
+      "targetColumns": [
+        "type_id"
+      ]
+    },
+    {
+      "from": "rel_def",
+      "columns": [
+        "since_rev"
+      ],
+      "to": "schema_rev",
+      "targetColumns": [
+        "rev"
+      ]
+    },
+    {
+      "from": "rel_def",
+      "columns": [
+        "retired_rev"
+      ],
+      "to": "schema_rev",
+      "targetColumns": [
+        "rev"
+      ]
+    },
+    {
+      "from": "rel_endpoint",
+      "columns": [
+        "rel_type_id"
+      ],
+      "to": "rel_def",
+      "targetColumns": [
+        "rel_type_id"
+      ]
+    },
+    {
+      "from": "rel_endpoint",
+      "columns": [
+        "source_type"
+      ],
+      "to": "type_def",
+      "targetColumns": [
+        "type_id"
+      ]
+    },
+    {
+      "from": "rel_endpoint",
+      "columns": [
+        "target_type"
+      ],
+      "to": "type_def",
+      "targetColumns": [
+        "type_id"
+      ]
+    },
+    {
+      "from": "object",
+      "columns": [
+        "root_id",
+        "root_type"
+      ],
+      "to": "object",
+      "targetColumns": [
+        "id",
+        "type_id"
+      ]
+    },
+    {
+      "from": "object",
+      "columns": [
+        "type_id"
+      ],
+      "to": "type_def",
+      "targetColumns": [
+        "type_id"
+      ]
+    },
+    {
+      "from": "object",
+      "columns": [
+        "rev"
+      ],
+      "to": "schema_rev",
+      "targetColumns": [
+        "rev"
+      ]
+    },
+    {
+      "from": "edge",
+      "columns": [
+        "source_id",
+        "source_type"
+      ],
+      "to": "object",
+      "targetColumns": [
+        "id",
+        "type_id"
+      ]
+    },
+    {
+      "from": "edge",
+      "columns": [
+        "target_id",
+        "target_type"
+      ],
+      "to": "object",
+      "targetColumns": [
+        "id",
+        "type_id"
+      ]
+    },
+    {
+      "from": "edge",
+      "columns": [
+        "rel_type_id",
+        "source_type",
+        "target_type"
+      ],
+      "to": "rel_endpoint",
+      "targetColumns": [
+        "rel_type_id",
+        "source_type",
+        "target_type"
+      ]
+    },
+    {
+      "from": "edge",
+      "columns": [
+        "rev"
+      ],
+      "to": "schema_rev",
+      "targetColumns": [
+        "rev"
+      ]
+    },
+    {
+      "from": "edge_limit",
+      "columns": [
+        "edge_id"
+      ],
+      "to": "edge",
+      "targetColumns": [
+        "id"
+      ]
+    },
+    {
+      "from": "row_home_journal_stage",
+      "columns": [
+        "original_writer_xid",
+        "operation_ordinal"
+      ],
+      "to": "row_home_operation",
+      "targetColumns": [
+        "original_writer_xid",
+        "operation_ordinal"
+      ]
+    },
+    {
+      "from": "row_home_state",
+      "columns": [
+        "property_owner_type_id",
+        "property_id"
+      ],
+      "to": "prop_def",
+      "targetColumns": [
+        "type_id",
+        "prop_id"
+      ]
+    },
+    {
+      "from": "row_home_state",
+      "columns": [
+        "object_id",
+        "object_type_id"
+      ],
+      "to": "object",
+      "targetColumns": [
+        "id",
+        "type_id"
+      ]
+    },
+    {
+      "from": "row_home_state",
+      "columns": [
+        "edge_id",
+        "relationship_type_id"
+      ],
+      "to": "edge",
+      "targetColumns": [
+        "id",
+        "rel_type_id"
+      ]
+    },
+    {
+      "from": "row_home_state",
+      "columns": [
+        "state_id",
+        "root_node_id"
+      ],
+      "to": "row_home_node",
+      "targetColumns": [
+        "state_id",
+        "node_id"
+      ]
+    },
+    {
+      "from": "row_home_node",
+      "columns": [
+        "state_id",
+        "parent_node_id"
+      ],
+      "to": "row_home_node",
+      "targetColumns": [
+        "state_id",
+        "node_id"
+      ]
+    },
+    {
+      "from": "row_home_node",
+      "columns": [
+        "state_id"
+      ],
+      "to": "row_home_state",
+      "targetColumns": [
+        "state_id"
+      ]
+    },
+    {
+      "from": "row_home_scalar",
+      "columns": [
+        "state_id",
+        "node_id"
+      ],
+      "to": "row_home_node",
+      "targetColumns": [
+        "state_id",
+        "node_id"
+      ]
+    },
+    {
+      "from": "relationship_lineage",
+      "columns": [
+        "rel_type_id"
+      ],
+      "to": "rel_def",
+      "targetColumns": [
+        "rel_type_id"
+      ]
+    },
+    {
+      "from": "object_key_bucket",
+      "columns": [
+        "type_id",
+        "key_num"
+      ],
+      "to": "key_def",
+      "targetColumns": [
+        "type_id",
+        "key_num"
+      ]
+    },
+    {
+      "from": "object_key_bucket",
+      "columns": [
+        "object_id",
+        "type_id"
+      ],
+      "to": "object",
+      "targetColumns": [
+        "id",
+        "type_id"
+      ]
+    },
+    {
+      "from": "object_key_bucket",
+      "columns": [
+        "namespace_sha256",
+        "key_sha256"
+      ],
+      "to": "key_bucket_guard",
+      "targetColumns": [
+        "namespace_sha256",
+        "key_sha256"
+      ]
+    },
+    {
+      "from": "object_key_reservation_bucket",
+      "columns": [
+        "namespace_sha256",
+        "key_sha256"
+      ],
+      "to": "key_bucket_guard",
+      "targetColumns": [
+        "namespace_sha256",
+        "key_sha256"
+      ]
+    },
+    {
+      "from": "catalog_acceptance_report",
+      "columns": [
+        "rev"
+      ],
+      "to": "schema_rev",
+      "targetColumns": [
+        "rev"
+      ]
+    },
+    {
+      "from": "installation_archive",
+      "columns": [
+        "installation_id"
+      ],
+      "to": "installation_marker",
+      "targetColumns": [
+        "installation_id"
+      ]
+    },
+    {
+      "from": "feed_member",
+      "columns": [
+        "source_epoch",
+        "feed_profile",
+        "original_writer_xid"
+      ],
+      "to": "feed_tx",
+      "targetColumns": [
+        "source_epoch",
+        "feed_profile",
+        "original_writer_xid"
+      ]
+    },
+    {
+      "from": "feed_prerequisite",
+      "columns": [
+        "source_epoch",
+        "feed_profile",
+        "original_writer_xid"
+      ],
+      "to": "feed_tx",
+      "targetColumns": [
+        "source_epoch",
+        "feed_profile",
+        "original_writer_xid"
+      ]
+    },
+    {
+      "from": "feed_configuration_prerequisite",
+      "columns": [
+        "source_epoch",
+        "feed_profile",
+        "original_writer_xid"
+      ],
+      "to": "feed_tx",
+      "targetColumns": [
+        "source_epoch",
+        "feed_profile",
+        "original_writer_xid"
+      ]
+    },
+    {
+      "from": "complete_feed_seed_artifact",
+      "columns": [
+        "attempt_row_id"
+      ],
+      "to": "complete_feed_seed_attempt",
+      "targetColumns": [
+        "storage_row_id"
+      ]
+    },
+    {
+      "from": "key_lifecycle_history",
+      "columns": [
+        "type_id",
+        "key_num"
+      ],
+      "to": "key_def",
+      "targetColumns": [
+        "type_id",
+        "key_num"
+      ]
+    },
+    {
+      "from": "key_lifecycle_history",
+      "columns": [
+        "rev"
+      ],
+      "to": "schema_rev",
+      "targetColumns": [
+        "rev"
+      ]
+    },
+    {
+      "from": "key_lifecycle_history",
+      "columns": [
+        "before_retired_rev"
+      ],
+      "to": "schema_rev",
+      "targetColumns": [
+        "rev"
+      ]
+    },
+    {
+      "from": "key_lifecycle_history",
+      "columns": [
+        "after_retired_rev"
+      ],
+      "to": "schema_rev",
+      "targetColumns": [
+        "rev"
+      ]
+    },
+    {
+      "from": "installation_admission",
+      "columns": [
+        "head_id"
+      ],
+      "to": "schema_head",
+      "targetColumns": [
+        "id"
+      ]
+    },
+    {
+      "from": "request_receipt_protection",
+      "columns": [
+        "receipt_storage_row_id"
+      ],
+      "to": "request_receipt",
+      "targetColumns": [
+        "storage_row_id"
+      ]
+    }
+  ],
+  "missingTargetControlRejected": true,
+  "receiptControls": [
+    {
+      "case": "missing_receipt_target",
+      "rejected": true
+    },
+    {
+      "case": "missing_receipt_unique_key",
+      "rejected": true
+    },
+    {
+      "case": "wrong_receipt_column",
+      "rejected": true
+    }
+  ],
+  "nativeQualified": false
+}

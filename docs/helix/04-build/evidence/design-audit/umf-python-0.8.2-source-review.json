@@ -1,0 +1,77 @@
+{
+  "scope": "Original committed tagged Python support source review; no wheel installation/publication or Python/browser tests rerun",
+  "tag": "python-v0.8.2",
+  "commit": "953aa38c4be0748664d79633596be08cb47d2b41",
+  "observedMain": "322b193cef7c940d07b741860cf0170272628868",
+  "sourcePins": {
+    "python/README.md": {
+      "byteLength": 2519,
+      "sha256": "efa69362ff1fa2f587a558dec2c7f565e2b5f3be5450f54c85a0122b53a90627"
+    },
+    "python/pyproject.toml": {
+      "byteLength": 950,
+      "sha256": "20f4017c3af38a0f819f3708c4f95dc76287b9281a1857ac62698d59ff8fbe4b"
+    },
+    "python/hatch_build.py": {
+      "byteLength": 1268,
+      "sha256": "2a1d42b97492f66aa24c0d7e3cb4cba0e33281fae623811ae6591acf5bee17e3"
+    },
+    "python/src/umf/__init__.py": {
+      "byteLength": 883,
+      "sha256": "671d9fd9fc38e145a7a6663d733b090009a31ac129568e705f585d12fb44bdd8"
+    },
+    "python/src/umf/json.py": {
+      "byteLength": 1704,
+      "sha256": "8ce0f0d261f507a51d4dfd28859f2e5a8d3f1e8a309f834c55852cf46f658678"
+    },
+    "python/src/umf/models.py": {
+      "byteLength": 2695,
+      "sha256": "36fc40f3d03f0066f97077d03917069a6305deaa437e676eda8a25b121ee578d"
+    },
+    "python/src/umf/schemas.py": {
+      "byteLength": 4219,
+      "sha256": "1642d04af1ddfc322194568cb85d36e8f61c1c942973008ac6bcb2143133e6dc"
+    },
+    "python/src/umf/serialization.py": {
+      "byteLength": 5344,
+      "sha256": "6c002e3b637e622321b9eb74d5106ac223f6de9de22e2656264beff73d404ead"
+    },
+    "python/src/umf/validation.py": {
+      "byteLength": 8574,
+      "sha256": "05256dc8a7a66288827b4b02588132943256faa14817d97c27b62cab8070527d"
+    },
+    "python/src/umf/registry.py": {
+      "byteLength": 1887,
+      "sha256": "79c4e701debcd664477b5fb3a41b25fbd4ed35be03d4b228445cabfc224b2d99"
+    },
+    "docs/helix/02-design/contracts/CONTRACT-051-python-consumers.md": {
+      "byteLength": 4282,
+      "sha256": "9965b61fcb23d46883116dd642bb567c4efc3791ef16de2fad558967aeb3bab3"
+    },
+    "docs/helix/04-build/evidence/python-consumers.md": {
+      "byteLength": 2288,
+      "sha256": "3debd493aea45af0edf74a0ba56ece16a74ca1dd343427fbc744552a449fc1d1"
+    }
+  },
+  "distribution": "umf-core",
+  "declaredDistributionVersion": "0.8.2",
+  "importNamespace": "umf",
+  "sourceVersionAttribute": "0.8.0",
+  "identityRule": "Use actual distribution metadata and pinned artifact/resource bytes for package identity; document umf version selects core schema; do not substitute the source __version__ attribute for either",
+  "candidateReuse": [
+    "Canonical core schema resources",
+    "Document/read_document/validate_document with retained originals",
+    "Explicit Registry/Extension local schemas and copied semantic callbacks",
+    "Preserved presence and unknown content; exact string numeric carriers"
+  ],
+  "uncheckedSemantics": [
+    "facets",
+    "keys",
+    "relationships",
+    "typed literal constraints"
+  ],
+  "trussReadiness": "No valid/complete flag substitutes full per-assertion original producer inventory or native enforcement/report/commit",
+  "pypiAvailabilityVerified": false,
+  "installedTrussAdoption": false,
+  "integrationExit": "Pin actual wheel/resources/dependencies and verify original source/model/presence/numeric/unknown preservation, bounded complete diagnostics and honest unchecked semantics; reuse this owner API rather than a competing Python core validator"
+}

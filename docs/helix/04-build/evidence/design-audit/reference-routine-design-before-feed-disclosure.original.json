@@ -1,0 +1,397 @@
+{
+  "interfaceVersion": "truss-reference-routine-design/0.1.0",
+  "status": "selected_design_fields_incomplete_native_binding",
+  "nativeQualified": false,
+  "installerReady": false,
+  "scope": "Seven required orchestration routine design selections only. Names are original contract selectors, not adopted physical identity/OID or qualified namespace. No body, role, complete dependency or ACL realization is supplied.",
+  "governingSources": [
+    {
+      "path": "02-design/contracts/CONTRACT-001-storage-layout.md",
+      "sha256": "00c48513196eeb357ea27d36d45d7944662f2d9be3d6441ef09868cac72b2d57"
+    },
+    {
+      "path": "02-design/contracts/CONTRACT-005-module-isolation.md",
+      "sha256": "5f5236cd9306ee5f717b301d2600832f18ace02ec613faadd2f4fb622c879720"
+    },
+    {
+      "path": "02-design/contracts/CONTRACT-006-change-feed.md",
+      "sha256": "0dc99c5e076bd95b44241c9ace6481a0a3e5609c056959010ae24ec3713f125d"
+    },
+    {
+      "path": "02-design/architecture.md",
+      "sha256": "f363d24471cb32c470d5c3a6ddb488e5ca88b55cc6202dd826d68d1697f691a0"
+    }
+  ],
+  "sharedSelectedAttributes": {
+    "language": "plpgsql",
+    "volatility": "VOLATILE",
+    "parallel": "UNSAFE",
+    "nullInput": "CALLED ON NULL INPUT",
+    "leakproof": false,
+    "security": "DEFINER",
+    "searchPathRecipe": [
+      "pg_catalog",
+      {
+        "trustedInstallationNamespace": true
+      },
+      "pg_temp"
+    ],
+    "publicExecute": false,
+    "ordinaryApplicationExecute": false
+  },
+  "routines": [
+    {
+      "originalContractName": "row_touch_observe",
+      "sqlArgumentTypes": [],
+      "resultType": "trigger",
+      "ownerResponsibility": "Touch observation owner",
+      "invocationKind": "installed_trigger_only",
+      "selectedValidatorDependencies": [],
+      "unresolvedNativeBinding": {
+        "physicalIdentity": null,
+        "namespace": null,
+        "bodyArtifact": null,
+        "nativeOwnerRole": null,
+        "completeDependencyInventory": null,
+        "exactPrivateCallerAcl": null,
+        "nativeQualificationReceipt": null
+      },
+      "originalTriggerReferences": [
+        {
+          "entryId": "truss.row-home.trigger.row_home_state_touch_observe",
+          "parentId": "truss.row-home.table.row_home_state",
+          "catalogPath": "02-design/models/truss-row-home-triggers.physical-ids.proposal.json",
+          "catalogSha256": "93099ce6c3cce4f9eaa0d8bea7f43da25f3c7e6c33f00669439b82da407d8e70",
+          "catalogEntryIndex": 0,
+          "originalModelLocator": {
+            "modelPath": "docs/helix/02-design/contracts/row-home-triggers-v0.1.proposal.umf.json",
+            "modelSha256": "9ea38425b17611e209c75f599273f7d8b3814cb1d6e0cd121ed41c4f221e7fa7",
+            "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateTrigStmt"
+          },
+          "originalCallableParts": [
+            "truss",
+            "row_touch_observe"
+          ]
+        },
+        {
+          "entryId": "truss.row-home.trigger.row_home_node_touch_observe",
+          "parentId": "truss.row-home.table.row_home_node",
+          "catalogPath": "02-design/models/truss-row-home-triggers.physical-ids.proposal.json",
+          "catalogSha256": "93099ce6c3cce4f9eaa0d8bea7f43da25f3c7e6c33f00669439b82da407d8e70",
+          "catalogEntryIndex": 1,
+          "originalModelLocator": {
+            "modelPath": "docs/helix/02-design/contracts/row-home-triggers-v0.1.proposal.umf.json",
+            "modelSha256": "9ea38425b17611e209c75f599273f7d8b3814cb1d6e0cd121ed41c4f221e7fa7",
+            "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/1/members/stmt/members/CreateTrigStmt"
+          },
+          "originalCallableParts": [
+            "truss",
+            "row_touch_observe"
+          ]
+        },
+        {
+          "entryId": "truss.row-home.trigger.row_home_scalar_touch_observe",
+          "parentId": "truss.row-home.table.row_home_scalar",
+          "catalogPath": "02-design/models/truss-row-home-triggers.physical-ids.proposal.json",
+          "catalogSha256": "93099ce6c3cce4f9eaa0d8bea7f43da25f3c7e6c33f00669439b82da407d8e70",
+          "catalogEntryIndex": 2,
+          "originalModelLocator": {
+            "modelPath": "docs/helix/02-design/contracts/row-home-triggers-v0.1.proposal.umf.json",
+            "modelSha256": "9ea38425b17611e209c75f599273f7d8b3814cb1d6e0cd121ed41c4f221e7fa7",
+            "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/2/members/stmt/members/CreateTrigStmt"
+          },
+          "originalCallableParts": [
+            "truss",
+            "row_touch_observe"
+          ]
+        }
+      ]
+    },
+    {
+      "originalContractName": "row_touch_commit_check",
+      "sqlArgumentTypes": [],
+      "resultType": "trigger",
+      "ownerResponsibility": "Commit-check owner",
+      "invocationKind": "installed_trigger_only",
+      "selectedValidatorDependencies": [
+        {
+          "originalContractName": "edge_limit_verify_current_scope",
+          "when": "edge_limit_scope_selected"
+        },
+        {
+          "originalContractName": "feed_union_validate_current_scope",
+          "when": "complete_feed_selected"
+        }
+      ],
+      "unresolvedNativeBinding": {
+        "physicalIdentity": null,
+        "namespace": null,
+        "bodyArtifact": null,
+        "nativeOwnerRole": null,
+        "completeDependencyInventory": null,
+        "exactPrivateCallerAcl": null,
+        "nativeQualificationReceipt": null
+      },
+      "originalTriggerReferences": [
+        {
+          "entryId": "truss.row-home.trigger.row_home_touch_commit_guard",
+          "parentId": "truss.row-home.table.row_home_touch",
+          "catalogPath": "02-design/models/truss-row-home-triggers.physical-ids.proposal.json",
+          "catalogSha256": "93099ce6c3cce4f9eaa0d8bea7f43da25f3c7e6c33f00669439b82da407d8e70",
+          "catalogEntryIndex": 3,
+          "originalModelLocator": {
+            "modelPath": "docs/helix/02-design/contracts/row-home-triggers-v0.1.proposal.umf.json",
+            "modelSha256": "9ea38425b17611e209c75f599273f7d8b3814cb1d6e0cd121ed41c4f221e7fa7",
+            "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/3/members/stmt/members/CreateTrigStmt"
+          },
+          "originalCallableParts": [
+            "truss",
+            "row_touch_commit_check"
+          ]
+        },
+        {
+          "entryId": "truss.row-home.trigger.row_home_capacity_commit_guard",
+          "parentId": "truss.row-home.table.row_home_capacity",
+          "catalogPath": "02-design/models/truss-row-home-triggers.physical-ids.proposal.json",
+          "catalogSha256": "93099ce6c3cce4f9eaa0d8bea7f43da25f3c7e6c33f00669439b82da407d8e70",
+          "catalogEntryIndex": 4,
+          "originalModelLocator": {
+            "modelPath": "docs/helix/02-design/contracts/row-home-triggers-v0.1.proposal.umf.json",
+            "modelSha256": "9ea38425b17611e209c75f599273f7d8b3814cb1d6e0cd121ed41c4f221e7fa7",
+            "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/4/members/stmt/members/CreateTrigStmt"
+          },
+          "originalCallableParts": [
+            "truss",
+            "row_touch_commit_check"
+          ]
+        },
+        {
+          "entryId": "truss.row-home.trigger.row_home_operation_commit_guard",
+          "parentId": "truss.row-home.table.row_home_operation",
+          "catalogPath": "02-design/models/truss-row-home-triggers.physical-ids.proposal.json",
+          "catalogSha256": "93099ce6c3cce4f9eaa0d8bea7f43da25f3c7e6c33f00669439b82da407d8e70",
+          "catalogEntryIndex": 5,
+          "originalModelLocator": {
+            "modelPath": "docs/helix/02-design/contracts/row-home-triggers-v0.1.proposal.umf.json",
+            "modelSha256": "9ea38425b17611e209c75f599273f7d8b3814cb1d6e0cd121ed41c4f221e7fa7",
+            "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/5/members/stmt/members/CreateTrigStmt"
+          },
+          "originalCallableParts": [
+            "truss",
+            "row_touch_commit_check"
+          ]
+        }
+      ]
+    },
+    {
+      "originalContractName": "edge_limit_observe",
+      "sqlArgumentTypes": [],
+      "resultType": "trigger",
+      "ownerResponsibility": "Touch observation owner",
+      "invocationKind": "installed_trigger_only",
+      "selectedValidatorDependencies": [],
+      "unresolvedNativeBinding": {
+        "physicalIdentity": null,
+        "namespace": null,
+        "bodyArtifact": null,
+        "nativeOwnerRole": null,
+        "completeDependencyInventory": null,
+        "exactPrivateCallerAcl": null,
+        "nativeQualificationReceipt": null
+      },
+      "originalTriggerReferences": [
+        {
+          "entryId": "truss.edge-limit.trigger.edge_limit_edge_observe",
+          "parentId": "truss.layout.table.edge",
+          "catalogPath": "02-design/models/truss-edge-limit-triggers.physical-ids.proposal.json",
+          "catalogSha256": "0d66050d437c8300a03f9dcc0ef73fd4d2c05d18103f45093bb9ab1a341d8a5a",
+          "catalogEntryIndex": 0,
+          "originalModelLocator": {
+            "modelPath": "docs/helix/02-design/contracts/edge-limit-triggers-v0.1.proposal.umf.json",
+            "modelSha256": "7a5d6d4741c88abac79396c4e1cfe8c95a793eeb807f89bb7dd30efdc2bff075",
+            "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateTrigStmt"
+          },
+          "originalCallableParts": [
+            "truss",
+            "edge_limit_observe"
+          ]
+        },
+        {
+          "entryId": "truss.edge-limit.trigger.edge_limit_marker_observe",
+          "parentId": "truss.layout.table.edge_limit",
+          "catalogPath": "02-design/models/truss-edge-limit-triggers.physical-ids.proposal.json",
+          "catalogSha256": "0d66050d437c8300a03f9dcc0ef73fd4d2c05d18103f45093bb9ab1a341d8a5a",
+          "catalogEntryIndex": 1,
+          "originalModelLocator": {
+            "modelPath": "docs/helix/02-design/contracts/edge-limit-triggers-v0.1.proposal.umf.json",
+            "modelSha256": "7a5d6d4741c88abac79396c4e1cfe8c95a793eeb807f89bb7dd30efdc2bff075",
+            "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/1/members/stmt/members/CreateTrigStmt"
+          },
+          "originalCallableParts": [
+            "truss",
+            "edge_limit_observe"
+          ]
+        }
+      ]
+    },
+    {
+      "originalContractName": "edge_limit_catalog_observe",
+      "sqlArgumentTypes": [],
+      "resultType": "trigger",
+      "ownerResponsibility": "Touch observation owner",
+      "invocationKind": "installed_trigger_only",
+      "selectedValidatorDependencies": [],
+      "unresolvedNativeBinding": {
+        "physicalIdentity": null,
+        "namespace": null,
+        "bodyArtifact": null,
+        "nativeOwnerRole": null,
+        "completeDependencyInventory": null,
+        "exactPrivateCallerAcl": null,
+        "nativeQualificationReceipt": null
+      },
+      "originalTriggerReferences": [
+        {
+          "entryId": "truss.edge-limit.trigger.edge_limit_catalog_observe",
+          "parentId": "truss.layout.table.rel_def",
+          "catalogPath": "02-design/models/truss-edge-limit-triggers.physical-ids.proposal.json",
+          "catalogSha256": "0d66050d437c8300a03f9dcc0ef73fd4d2c05d18103f45093bb9ab1a341d8a5a",
+          "catalogEntryIndex": 2,
+          "originalModelLocator": {
+            "modelPath": "docs/helix/02-design/contracts/edge-limit-triggers-v0.1.proposal.umf.json",
+            "modelSha256": "7a5d6d4741c88abac79396c4e1cfe8c95a793eeb807f89bb7dd30efdc2bff075",
+            "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/2/members/stmt/members/CreateTrigStmt"
+          },
+          "originalCallableParts": [
+            "truss",
+            "edge_limit_catalog_observe"
+          ]
+        }
+      ]
+    },
+    {
+      "originalContractName": "feed_current_union_check",
+      "sqlArgumentTypes": [],
+      "resultType": "trigger",
+      "ownerResponsibility": "Commit-check owner",
+      "invocationKind": "installed_trigger_only",
+      "selectedValidatorDependencies": [
+        {
+          "originalContractName": "feed_union_validate_current_scope",
+          "when": "complete_feed_selected"
+        }
+      ],
+      "unresolvedNativeBinding": {
+        "physicalIdentity": null,
+        "namespace": null,
+        "bodyArtifact": null,
+        "nativeOwnerRole": null,
+        "completeDependencyInventory": null,
+        "exactPrivateCallerAcl": null,
+        "nativeQualificationReceipt": null
+      },
+      "originalTriggerReferences": [
+        {
+          "entryId": "truss.feed.trigger.feed_tx_current_union_guard",
+          "parentId": "truss.feed.table.feed_tx",
+          "catalogPath": "02-design/models/truss-feed-current-union-trigger-effects.proposal.json",
+          "catalogSha256": "e4d9528c5da89c7536b45687d50217d8450a8aabd1c7366b9f20b29b6f40eb46",
+          "catalogEntryIndex": 0,
+          "originalModelLocator": {
+            "modelPath": "docs/helix/02-design/contracts/feed-current-union-triggers-v0.1.proposal.umf.json",
+            "modelSha256": "c3d790b7b4ecd3c5a100f8c01e71232d0950023b2df046f9a306042fee60d09a",
+            "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateTrigStmt"
+          },
+          "originalCallableParts": [
+            "truss",
+            "feed_current_union_check"
+          ]
+        },
+        {
+          "entryId": "truss.feed.trigger.feed_member_current_union_guard",
+          "parentId": "truss.feed.table.feed_member",
+          "catalogPath": "02-design/models/truss-feed-current-union-trigger-effects.proposal.json",
+          "catalogSha256": "e4d9528c5da89c7536b45687d50217d8450a8aabd1c7366b9f20b29b6f40eb46",
+          "catalogEntryIndex": 2,
+          "originalModelLocator": {
+            "modelPath": "docs/helix/02-design/contracts/feed-current-union-triggers-v0.1.proposal.umf.json",
+            "modelSha256": "c3d790b7b4ecd3c5a100f8c01e71232d0950023b2df046f9a306042fee60d09a",
+            "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/1/members/stmt/members/CreateTrigStmt"
+          },
+          "originalCallableParts": [
+            "truss",
+            "feed_current_union_check"
+          ]
+        },
+        {
+          "entryId": "truss.feed.trigger.feed_prerequisite_current_union_guard",
+          "parentId": "truss.feed.table.feed_prerequisite",
+          "catalogPath": "02-design/models/truss-feed-current-union-trigger-effects.proposal.json",
+          "catalogSha256": "e4d9528c5da89c7536b45687d50217d8450a8aabd1c7366b9f20b29b6f40eb46",
+          "catalogEntryIndex": 4,
+          "originalModelLocator": {
+            "modelPath": "docs/helix/02-design/contracts/feed-current-union-triggers-v0.1.proposal.umf.json",
+            "modelSha256": "c3d790b7b4ecd3c5a100f8c01e71232d0950023b2df046f9a306042fee60d09a",
+            "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/2/members/stmt/members/CreateTrigStmt"
+          },
+          "originalCallableParts": [
+            "truss",
+            "feed_current_union_check"
+          ]
+        },
+        {
+          "entryId": "truss.feed.trigger.feed_configuration_prerequisite_current_union_guard",
+          "parentId": "truss.feed.table.feed_configuration_prerequisite",
+          "catalogPath": "02-design/models/truss-feed-current-union-trigger-effects.proposal.json",
+          "catalogSha256": "e4d9528c5da89c7536b45687d50217d8450a8aabd1c7366b9f20b29b6f40eb46",
+          "catalogEntryIndex": 6,
+          "originalModelLocator": {
+            "modelPath": "docs/helix/02-design/contracts/feed-current-union-triggers-v0.1.proposal.umf.json",
+            "modelSha256": "c3d790b7b4ecd3c5a100f8c01e71232d0950023b2df046f9a306042fee60d09a",
+            "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/3/members/stmt/members/CreateTrigStmt"
+          },
+          "originalCallableParts": [
+            "truss",
+            "feed_current_union_check"
+          ]
+        }
+      ]
+    },
+    {
+      "originalContractName": "feed_union_validate_current_scope",
+      "sqlArgumentTypes": [],
+      "resultType": "void",
+      "ownerResponsibility": "Integrity/finalization owner",
+      "invocationKind": "registered_private_call_only",
+      "selectedValidatorDependencies": [],
+      "unresolvedNativeBinding": {
+        "physicalIdentity": null,
+        "namespace": null,
+        "bodyArtifact": null,
+        "nativeOwnerRole": null,
+        "completeDependencyInventory": null,
+        "exactPrivateCallerAcl": null,
+        "nativeQualificationReceipt": null
+      },
+      "originalTriggerReferences": []
+    },
+    {
+      "originalContractName": "edge_limit_verify_current_scope",
+      "sqlArgumentTypes": [],
+      "resultType": "void",
+      "ownerResponsibility": "Integrity/finalization owner",
+      "invocationKind": "registered_private_call_only",
+      "selectedValidatorDependencies": [],
+      "unresolvedNativeBinding": {
+        "physicalIdentity": null,
+        "namespace": null,
+        "bodyArtifact": null,
+        "nativeOwnerRole": null,
+        "completeDependencyInventory": null,
+        "exactPrivateCallerAcl": null,
+        "nativeQualificationReceipt": null
+      },
+      "originalTriggerReferences": []
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "scope": "Native reproduction of private admission ordinal conflict only; no supported executor/issuer, original artifact admission or protected mutation qualification",
+  "pgserver": "0.1.4",
+  "serverVersion": "16.2",
+  "observations": [
+    {
+      "writerXid": "730",
+      "ordinal": "0"
+    },
+    {
+      "writerXid": "730",
+      "ordinal": "0"
+    }
+  ],
+  "sameNativeTopLevelTransaction": true,
+  "savepointRollbackReissuedOrdinal": true,
+  "contractConformant": false,
+  "requiredBehavior": "Consume the original executor issuer ordinal, preserve issuer nonrewind across savepoint rollback and verify original custody; never allocate from surviving registry rows",
+  "rollbackRemovedNamespace": true,
+  "sources": [
+    {
+      "path": "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql",
+      "sha256": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f"
+    },
+    {
+      "path": "packages/postgresql/native/operation-admission.sql",
+      "sha256": "3d71a92e3a02f568e1edf9fa0b0ca18b8cc35e79a117c6724a4351022375f1bf"
+    }
+  ],
+  "producerSha256": "a78da6d2b66cda904c926833ab5db30def2c464edd342eba7839e0d3b434990f"
+}

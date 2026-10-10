@@ -1,0 +1,94 @@
+{
+  "scope": "read-only consumer corpus inventory; no tests run or Truss corpus/adapter adoption",
+  "sources": [
+    {
+      "path": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/corpus.json",
+      "sha256": "8997812ea8f73d5e7ebe873809f2e812e3815206282f6d807b5ade1a21e93a09"
+    },
+    {
+      "path": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/__init__.py",
+      "sha256": "4ac604d858870c93627d47f5f62b3e92eb5f94e9d19e7997f7f76a6486b63494"
+    },
+    {
+      "path": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/fakes.py",
+      "sha256": "098e139891d2d817909ed396159895089b90451ed69f6c23d0a3f19ccf01590a"
+    },
+    {
+      "path": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/tests/test_conformance.py",
+      "sha256": "eeb02f8bdeb958df7c81e94ad84abfe88fc30a3979359f93323bab6f468eac0a"
+    }
+  ],
+  "consumerCorpusVersion": 1,
+  "caseCount": 41,
+  "caseIds": [
+    "read.key-lookup-whole-entity",
+    "read.relationship-columns-follow-ends",
+    "read.missing-key-is-no-rows",
+    "read.columns-and-filters",
+    "read.relationship-filter-both-directions",
+    "read.repeated-relationship-predicates-mean-both",
+    "read.count-group-by",
+    "read.paging-by-key",
+    "read.relationship-columns-are-capped",
+    "access.no-token-is-refused",
+    "access.anothers-token-is-refused",
+    "access.no-grant-is-refused-not-empty",
+    "access.expired-token-is-refused-not-unavailable",
+    "access.outage-is-unavailable-never-empty",
+    "access.no-token-is-refused-even-when-down",
+    "access.outage-during-a-write-changes-nothing",
+    "freshness.status-states-availability",
+    "freshness.replica-status-states-its-position",
+    "freshness.unissued-token-is-not-reached-by-a-replica",
+    "freshness.replica-catches-up-to-a-token",
+    "freshness.authority-has-reached-its-own-tokens",
+    "describe.capabilities-by-kind",
+    "replica.refuses-every-change",
+    "authority.registers-for-writers-only-and-never-attaches",
+    "action.applies-atomically-and-reads-back",
+    "action.failed-precondition-changes-nothing",
+    "action.conflict-rolls-back-the-unit",
+    "action.update-bumps-the-version-once",
+    "action.read-only-principal-is-refused",
+    "action.anothers-token-cannot-write",
+    "action.idempotent-retry-returns-the-original",
+    "action.key-reused-with-other-inputs-conflicts",
+    "action.dry-run-writes-nothing-and-keeps-the-key",
+    "action.deleted-keys-stay-deleted",
+    "action.atomic-batch-is-all-or-nothing",
+    "action.independent-batch-reports-each-item",
+    "action.batch-shape-and-access",
+    "import.identity-skip-and-provenance",
+    "import.entities-before-relationships",
+    "import.administrative-principals-only",
+    "import.deleted-stays-deleted"
+  ],
+  "fixtureNames": [
+    "basic",
+    "empty"
+  ],
+  "setupOperations": [
+    "grant",
+    "install",
+    "seed",
+    "sync"
+  ],
+  "caseOperations": [
+    "apply",
+    "apply_batch",
+    "attach",
+    "authority_write",
+    "describe",
+    "expire",
+    "import",
+    "outage",
+    "query",
+    "reached",
+    "register",
+    "seed",
+    "seed_many",
+    "status",
+    "sync"
+  ],
+  "nativeImplementationQualified": false
+}

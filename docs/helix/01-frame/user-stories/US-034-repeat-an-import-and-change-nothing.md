@@ -29,7 +29,7 @@ ddx:
 
 ## Context
 
-The deployment's `key_reuse` setting is `forbid`. Customers are keyed by account code; an order line is related to its order by an edge.
+The deployment's `key_reuse` setting is `forbid`. Customers are keyed by account code; an order line is related to its order by an edge. Repeat safety is identity-based create/skip, not exact-result request replay: a new load may report skipped where the original load reported created. A load ID does not authenticate a request or settle a prior transaction. Skipping preserves original payload, source/load facts, version, journal and reservations, even when replacement nonidentity source data differs. Identity and current authorization still require admission before a skip can be disclosed.
 
 ## Walkthrough
 
@@ -50,7 +50,7 @@ The deployment's `key_reuse` setting is `forbid`. Customers are keyed by account
 
 ## Edge Cases
 
-- **An interrupted import**: running it again creates only the missing records.
+- **An interrupted import**: preserve the original per-batch report and pending/unknown outcome. Confirm termination and reconcile original custody before a potentially overlapping new attempt. A later identity-based import creates only eligible missing records under its current admitted profile, but its skips cannot prove which earlier batch committed or reconstruct the earlier report. Adopted imports remain pending until the host settles its transaction.
 - **A direct create of a reserved key under `forbid`**: refused as `key_reserved`.
 - **A change of a key component**: the old value is tombstoned too.
 

@@ -1,0 +1,13 @@
+{
+  "source": "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json",
+  "prior": "docs/helix/02-design/models/truss-layout-core-structural-0.3.proposal.umf.json",
+  "output": "docs/helix/02-design/models/truss-layout-core-structural-0.4.proposal.umf.json",
+  "outputSha256": "c1fcba470666e96ec9c8af0cd26ed578b650b0ec944631512cbd78bbe30204b9",
+  "records": 48,
+  "fields": 454,
+  "relationships": 60,
+  "valid": true,
+  "complete": false,
+  "errors": [],
+  "scope": "Epoch layout0.16 structural mirror and complete retained native source; no installed identity or DDL equivalence claim"
+}

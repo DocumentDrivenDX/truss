@@ -1,0 +1,114 @@
+{
+  "scope": "Synthetic exact-tree metadata boundary correspondence; digest uses experiment JSON, not adopted journal canonical encoding",
+  "vectorSha256": "c843bd88973fc34134e67b83a1c0b83aa81f5e31d4e72b8b774ad46a8183bc52",
+  "helperSha256": "155dcf40b36e1a22f294319ddaedb917830dbd074b9bb746d0dba870803c0137",
+  "passed": 16,
+  "cases": [
+    {
+      "id": "metadata-first",
+      "outcome": "admitted",
+      "syntheticEventCount": 3,
+      "syntheticDigest": "f4248499bf3507d05fce74cc2878ba1a32ea0fbc6b0497214f5085e77ac84c44"
+    },
+    {
+      "id": "metadata-between",
+      "outcome": "admitted",
+      "syntheticEventCount": 3,
+      "syntheticDigest": "4588a9888be8f583dd9c0ca9249238f927f74cfe576b7bf808210850984b0e0c"
+    },
+    {
+      "id": "metadata-last",
+      "outcome": "admitted",
+      "syntheticEventCount": 3,
+      "syntheticDigest": "dd7091aebc61084c98607a07b3b209569ec0df5d76443f77d7df490400e3135a"
+    },
+    {
+      "id": "missing-delta",
+      "outcome": "refused",
+      "syntheticEventCount": 2,
+      "syntheticDigest": "39834be067f6a9024ba1230bae8512248d7c6b895a5f8674081e4b519e711d09"
+    },
+    {
+      "id": "missing-metadata",
+      "outcome": "refused",
+      "syntheticEventCount": 2,
+      "syntheticDigest": "3f569e378de642c8c5bdd0a82337a13fc98d90776ec6c64b3da35917bb87755c"
+    },
+    {
+      "id": "duplicate-metadata",
+      "outcome": "refused",
+      "syntheticEventCount": 4,
+      "syntheticDigest": "95174b991cabc1f5b2727c6600a0abab8f8f89db504841aaab6c916d0dfb7a92"
+    },
+    {
+      "id": "wrong-delta-before",
+      "outcome": "refused",
+      "syntheticEventCount": 3,
+      "syntheticDigest": "b2376a5be31155be351cef88e906f305b914520749a1484686ac5f0240228e9a"
+    },
+    {
+      "id": "dropped-retained",
+      "outcome": "refused",
+      "syntheticEventCount": 3,
+      "syntheticDigest": "1e4bd6337cc06b8cb9fe8f354db8b27493703313b6adfa8026f3d6e7f4da8849"
+    },
+    {
+      "id": "snapshot-token-swap",
+      "outcome": "refused",
+      "syntheticEventCount": 3,
+      "syntheticDigest": "7addc0173fbc998e25dcf811fe28069d08b0e30c28fe04adf0d155b8b498559f"
+    },
+    {
+      "id": "wrong-start",
+      "outcome": "refused",
+      "syntheticEventCount": 3,
+      "syntheticDigest": "ba14fe4d9b0cc64f1bcc53d1ee92801441f8e30f2b824280a4b5b594ae0c2cb0"
+    },
+    {
+      "id": "retain-two-additions",
+      "outcome": "admitted",
+      "syntheticEventCount": 2,
+      "syntheticDigest": "f05701c65916f03ea13fb95e65955bd841cbd6ccfcae3767d62a2dcdf7d8091b"
+    },
+    {
+      "id": "retain-duplicate-name",
+      "outcome": "refused",
+      "syntheticEventCount": 2,
+      "syntheticDigest": "78d76a4109d937d2fbd4c835554a8d7afb47147195074a7f850b12bef015fc9e"
+    },
+    {
+      "id": "retain-existing-replacement",
+      "outcome": "refused",
+      "syntheticEventCount": 2,
+      "syntheticDigest": "070d5960ab15880b141f4337a946196e2393e947cc3ec0be04fcb1189a2e671b"
+    },
+    {
+      "id": "retain-missing-delta",
+      "outcome": "refused",
+      "syntheticEventCount": 2,
+      "syntheticDigest": "9af0b8c54a37c34d42015374c67886b5a51ccb20f78ba0f5fe15c60559fe2c14"
+    },
+    {
+      "id": "retain-not-absent-before",
+      "outcome": "refused",
+      "syntheticEventCount": 2,
+      "syntheticDigest": "fca7917f619a837307beec195e0827ada4ae08da2e5230927fa6560dd6513528"
+    },
+    {
+      "id": "retain-token-swap",
+      "outcome": "refused",
+      "syntheticEventCount": 2,
+      "syntheticDigest": "ed99e28ab2ecbe66433727fb1fc1711f100f3d06d64a01c3b5b77ab3676ed386"
+    }
+  ],
+  "nativeEvidence": false,
+  "profileAdopted": false,
+  "exclusions": [
+    "actual event wire and digest domain",
+    "historical definition interpretation",
+    "original source custody",
+    "native snapshot/staging/sequence/commit",
+    "authority",
+    "production resource accounting"
+  ]
+}

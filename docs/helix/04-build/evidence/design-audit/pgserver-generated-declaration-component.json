@@ -1,0 +1,548 @@
+{
+  "scope": "Original generated expression declaration/storage-mode/native deparse and builtin function-OID correspondence only; no full installer qualification",
+  "serverVersion": "16.2",
+  "generatedColumns": 29,
+  "builtinSignature": "pg_catalog.sha256(bytea)",
+  "builtinOid": "3420",
+  "functionBindings": [
+    {
+      "table": "complete_feed_administration_receipt",
+      "column": "identity_sha256",
+      "functionOid": "3420",
+      "originalNativeExpression": "{FUNCEXPR :funcid 3420 :funcresulttype 17 :funcretset false :funcvariadic false :funcformat 0 :funccollid 0 :inputcollid 0 :args ({VAR :varno 1 :varattno 5 :vartype 17 :vartypmod -1 :varcollid 0 :varnullingrels (b) :varlevelsup 0 :varnosyn 1 :varattnosyn 5 :location 529}) :location 522}"
+    },
+    {
+      "table": "complete_feed_consumer",
+      "column": "consumer_identity_sha256",
+      "functionOid": "3420",
+      "originalNativeExpression": "{FUNCEXPR :funcid 3420 :funcresulttype 17 :funcretset false :funcvariadic false :funcformat 0 :funccollid 0 :inputcollid 0 :args ({VAR :varno 1 :varattno 9 :vartype 17 :vartypmod -1 :varcollid 0 :varnullingrels (b) :varlevelsup 0 :varnosyn 1 :varattnosyn 9 :location 587}) :location 569}"
+    },
+    {
+      "table": "complete_feed_consumer",
+      "column": "current_state_sha256",
+      "functionOid": "3420",
+      "originalNativeExpression": "{FUNCEXPR :funcid 3420 :funcresulttype 17 :funcretset false :funcvariadic false :funcformat 0 :funccollid 0 :inputcollid 0 :args ({VAR :varno 1 :varattno 12 :vartype 17 :vartypmod -1 :varcollid 0 :varnullingrels (b) :varlevelsup 0 :varnosyn 1 :varattnosyn 12 :location 767}) :location 749}"
+    },
+    {
+      "table": "complete_feed_seed_artifact",
+      "column": "artifact_identity_sha256",
+      "functionOid": "3420",
+      "originalNativeExpression": "{FUNCEXPR :funcid 3420 :funcresulttype 17 :funcretset false :funcvariadic false :funcformat 0 :funccollid 0 :inputcollid 0 :args ({VAR :varno 1 :varattno 5 :vartype 17 :vartypmod -1 :varcollid 0 :varnullingrels (b) :varlevelsup 0 :varnosyn 1 :varattnosyn 5 :location 761}) :location 754}"
+    },
+    {
+      "table": "complete_feed_seed_artifact",
+      "column": "payload_sha256",
+      "functionOid": "3420",
+      "originalNativeExpression": "{FUNCEXPR :funcid 3420 :funcresulttype 17 :funcretset false :funcvariadic false :funcformat 0 :funccollid 0 :inputcollid 0 :args ({VAR :varno 1 :varattno 8 :vartype 17 :vartypmod -1 :varcollid 0 :varnullingrels (b) :varlevelsup 0 :varnosyn 1 :varattnosyn 8 :location 1002}) :location 995}"
+    },
+    {
+      "table": "complete_feed_seed_attempt",
+      "column": "attempt_identity_sha256",
+      "functionOid": "3420",
+      "originalNativeExpression": "{FUNCEXPR :funcid 3420 :funcresulttype 17 :funcretset false :funcvariadic false :funcformat 0 :funccollid 0 :inputcollid 0 :args ({VAR :varno 1 :varattno 2 :vartype 17 :vartypmod -1 :varcollid 0 :varnullingrels (b) :varlevelsup 0 :varnosyn 1 :varattnosyn 2 :location 279}) :location 272}"
+    },
+    {
+      "table": "installation_admission",
+      "column": "configuration_sha256",
+      "functionOid": "3420",
+      "originalNativeExpression": "{FUNCEXPR :funcid 3420 :funcresulttype 17 :funcretset false :funcvariadic false :funcformat 0 :funccollid 0 :inputcollid 0 :args ({VAR :varno 1 :varattno 7 :vartype 17 :vartypmod -1 :varcollid 0 :varnullingrels (b) :varlevelsup 0 :varnosyn 1 :varattnosyn 7 :location 853}) :location 835}"
+    },
+    {
+      "table": "installation_admission",
+      "column": "installed_inventory_sha256",
+      "functionOid": "3420",
+      "originalNativeExpression": "{FUNCEXPR :funcid 3420 :funcresulttype 17 :funcretset false :funcvariadic false :funcformat 0 :funccollid 0 :inputcollid 0 :args ({VAR :varno 1 :varattno 9 :vartype 17 :vartypmod -1 :varcollid 0 :varnullingrels (b) :varlevelsup 0 :varnosyn 1 :varattnosyn 9 :location 1057}) :location 1039}"
+    },
+    {
+      "table": "installation_admission",
+      "column": "selected_binding_sha256",
+      "functionOid": "3420",
+      "originalNativeExpression": "{FUNCEXPR :funcid 3420 :funcresulttype 17 :funcretset false :funcvariadic false :funcformat 0 :funccollid 0 :inputcollid 0 :args ({VAR :varno 1 :varattno 8 :vartype 17 :vartypmod -1 :varcollid 0 :varnullingrels (b) :varlevelsup 0 :varnosyn 1 :varattnosyn 8 :location 952}) :location 934}"
+    },
+    {
+      "table": "installation_archive",
+      "column": "artifact_sha256",
+      "functionOid": "3420",
+      "originalNativeExpression": "{FUNCEXPR :funcid 3420 :funcresulttype 17 :funcretset false :funcvariadic false :funcformat 0 :funccollid 0 :inputcollid 0 :args ({VAR :varno 1 :varattno 5 :vartype 17 :vartypmod -1 :varcollid 0 :varnullingrels (b) :varlevelsup 0 :varnosyn 1 :varattnosyn 5 :location 384}) :location 366}"
+    },
+    {
+      "table": "key_migration_receipt",
+      "column": "attempt_sha256",
+      "functionOid": "3420",
+      "originalNativeExpression": "{FUNCEXPR :funcid 3420 :funcresulttype 17 :funcretset false :funcvariadic false :funcformat 0 :funccollid 0 :inputcollid 0 :args ({VAR :varno 1 :varattno 4 :vartype 17 :vartypmod -1 :varcollid 0 :varnullingrels (b) :varlevelsup 0 :varnosyn 1 :varattnosyn 4 :location 1008}) :location 990}"
+    },
+    {
+      "table": "key_migration_receipt",
+      "column": "epoch_sha256",
+      "functionOid": "3420",
+      "originalNativeExpression": "{FUNCEXPR :funcid 3420 :funcresulttype 17 :funcretset false :funcvariadic false :funcformat 0 :funccollid 0 :inputcollid 0 :args ({VAR :varno 1 :varattno 3 :vartype 17 :vartypmod -1 :varcollid 0 :varnullingrels (b) :varlevelsup 0 :varnosyn 1 :varattnosyn 3 :location 920}) :location 902}"
+    },
+    {
+      "table": "key_migration_receipt",
+      "column": "installation_sha256",
+      "functionOid": "3420",
+      "originalNativeExpression": "{FUNCEXPR :funcid 3420 :funcresulttype 17 :funcretset false :funcvariadic false :funcformat 0 :funccollid 0 :inputcollid 0 :args ({VAR :varno 1 :varattno 2 :vartype 17 :vartypmod -1 :varcollid 0 :varnullingrels (b) :varlevelsup 0 :varnosyn 1 :varattnosyn 2 :location 831}) :location 813}"
+    },
+    {
+      "table": "key_migration_receipt",
+      "column": "receipt_sha256",
+      "functionOid": "3420",
+      "originalNativeExpression": "{FUNCEXPR :funcid 3420 :funcresulttype 17 :funcretset false :funcvariadic false :funcformat 0 :funccollid 0 :inputcollid 0 :args ({VAR :varno 1 :varattno 7 :vartype 17 :vartypmod -1 :varcollid 0 :varnullingrels (b) :varlevelsup 0 :varnosyn 1 :varattnosyn 7 :location 1104}) :location 1086}"
+    },
+    {
+      "table": "layout_migration_receipt",
+      "column": "original_attempt_sha256",
+      "functionOid": "3420",
+      "originalNativeExpression": "{FUNCEXPR :funcid 3420 :funcresulttype 17 :funcretset false :funcvariadic false :funcformat 0 :funccollid 0 :inputcollid 0 :args ({VAR :varno 1 :varattno 5 :vartype 17 :vartypmod -1 :varcollid 0 :varnullingrels (b) :varlevelsup 0 :varnosyn 1 :varattnosyn 5 :location 855}) :location 837}"
+    },
+    {
+      "table": "layout_migration_receipt",
+      "column": "original_receipt_sha256",
+      "functionOid": "3420",
+      "originalNativeExpression": "{FUNCEXPR :funcid 3420 :funcresulttype 17 :funcretset false :funcvariadic false :funcformat 0 :funccollid 0 :inputcollid 0 :args ({VAR :varno 1 :varattno 8 :vartype 17 :vartypmod -1 :varcollid 0 :varnullingrels (b) :varlevelsup 0 :varnosyn 1 :varattnosyn 8 :location 1068}) :location 1050}"
+    },
+    {
+      "table": "layout_migration_receipt",
+      "column": "original_request_sha256",
+      "functionOid": "3420",
+      "originalNativeExpression": "{FUNCEXPR :funcid 3420 :funcresulttype 17 :funcretset false :funcvariadic false :funcformat 0 :funccollid 0 :inputcollid 0 :args ({VAR :varno 1 :varattno 7 :vartype 17 :vartypmod -1 :varcollid 0 :varnullingrels (b) :varlevelsup 0 :varnosyn 1 :varattnosyn 7 :location 966}) :location 948}"
+    },
+    {
+      "table": "object_key_bucket",
+      "column": "key_sha256",
+      "functionOid": "3420",
+      "originalNativeExpression": "{FUNCEXPR :funcid 3420 :funcresulttype 17 :funcretset false :funcvariadic false :funcformat 0 :funccollid 0 :inputcollid 0 :args ({VAR :varno 1 :varattno 6 :vartype 17 :vartypmod -1 :varcollid 0 :varnullingrels (b) :varlevelsup 0 :varnosyn 1 :varattnosyn 6 :location 432}) :location 414}"
+    },
+    {
+      "table": "object_key_bucket",
+      "column": "namespace_sha256",
+      "functionOid": "3420",
+      "originalNativeExpression": "{FUNCEXPR :funcid 3420 :funcresulttype 17 :funcretset false :funcvariadic false :funcformat 0 :funccollid 0 :inputcollid 0 :args ({VAR :varno 1 :varattno 5 :vartype 17 :vartypmod -1 :varcollid 0 :varnullingrels (b) :varlevelsup 0 :varnosyn 1 :varattnosyn 5 :location 350}) :location 332}"
+    },
+    {
+      "table": "object_key_reservation_bucket",
+      "column": "key_sha256",
+      "functionOid": "3420",
+      "originalNativeExpression": "{FUNCEXPR :funcid 3420 :funcresulttype 17 :funcretset false :funcvariadic false :funcformat 0 :funccollid 0 :inputcollid 0 :args ({VAR :varno 1 :varattno 3 :vartype 17 :vartypmod -1 :varcollid 0 :varnullingrels (b) :varlevelsup 0 :varnosyn 1 :varattnosyn 3 :location 372}) :location 354}"
+    },
+    {
+      "table": "object_key_reservation_bucket",
+      "column": "namespace_sha256",
+      "functionOid": "3420",
+      "originalNativeExpression": "{FUNCEXPR :funcid 3420 :funcresulttype 17 :funcretset false :funcvariadic false :funcformat 0 :funccollid 0 :inputcollid 0 :args ({VAR :varno 1 :varattno 2 :vartype 17 :vartypmod -1 :varcollid 0 :varnullingrels (b) :varlevelsup 0 :varnosyn 1 :varattnosyn 2 :location 290}) :location 272}"
+    },
+    {
+      "table": "operation_configuration",
+      "column": "configuration_sha256",
+      "functionOid": "3420",
+      "originalNativeExpression": "{FUNCEXPR :funcid 3420 :funcresulttype 17 :funcretset false :funcvariadic false :funcformat 0 :funccollid 0 :inputcollid 0 :args ({VAR :varno 1 :varattno 11 :vartype 17 :vartypmod -1 :varcollid 0 :varnullingrels (b) :varlevelsup 0 :varnosyn 1 :varattnosyn 11 :location 1160}) :location 1142}"
+    },
+    {
+      "table": "operation_configuration",
+      "column": "installed_inventory_sha256",
+      "functionOid": "3420",
+      "originalNativeExpression": "{FUNCEXPR :funcid 3420 :funcresulttype 17 :funcretset false :funcvariadic false :funcformat 0 :funccollid 0 :inputcollid 0 :args ({VAR :varno 1 :varattno 13 :vartype 17 :vartypmod -1 :varcollid 0 :varnullingrels (b) :varlevelsup 0 :varnosyn 1 :varattnosyn 13 :location 1364}) :location 1346}"
+    },
+    {
+      "table": "operation_configuration",
+      "column": "selected_binding_sha256",
+      "functionOid": "3420",
+      "originalNativeExpression": "{FUNCEXPR :funcid 3420 :funcresulttype 17 :funcretset false :funcvariadic false :funcformat 0 :funccollid 0 :inputcollid 0 :args ({VAR :varno 1 :varattno 12 :vartype 17 :vartypmod -1 :varcollid 0 :varnullingrels (b) :varlevelsup 0 :varnosyn 1 :varattnosyn 12 :location 1259}) :location 1241}"
+    },
+    {
+      "table": "relationship_lineage",
+      "column": "identity_sha256",
+      "functionOid": "3420",
+      "originalNativeExpression": "{FUNCEXPR :funcid 3420 :funcresulttype 17 :funcretset false :funcvariadic false :funcformat 0 :funccollid 0 :inputcollid 0 :args ({VAR :varno 1 :varattno 4 :vartype 17 :vartypmod -1 :varcollid 0 :varnullingrels (b) :varlevelsup 0 :varnosyn 1 :varattnosyn 4 :location 293}) :location 275}"
+    },
+    {
+      "table": "request_receipt",
+      "column": "namespace_sha256",
+      "functionOid": "3420",
+      "originalNativeExpression": "{FUNCEXPR :funcid 3420 :funcresulttype 17 :funcretset false :funcvariadic false :funcformat 0 :funccollid 0 :inputcollid 0 :args ({VAR :varno 1 :varattno 2 :vartype 17 :vartypmod -1 :varcollid 0 :varnullingrels (b) :varlevelsup 0 :varnosyn 1 :varattnosyn 2 :location 942}) :location 924}"
+    },
+    {
+      "table": "request_receipt",
+      "column": "request_sha256",
+      "functionOid": "3420",
+      "originalNativeExpression": "{FUNCEXPR :funcid 3420 :funcresulttype 17 :funcretset false :funcvariadic false :funcformat 0 :funccollid 0 :inputcollid 0 :args ({VAR :varno 1 :varattno 3 :vartype 17 :vartypmod -1 :varcollid 0 :varnullingrels (b) :varlevelsup 0 :varnosyn 1 :varattnosyn 3 :location 1036}) :location 1018}"
+    },
+    {
+      "table": "source_epoch_registry",
+      "column": "evidence_sha256",
+      "functionOid": "3420",
+      "originalNativeExpression": "{FUNCEXPR :funcid 3420 :funcresulttype 17 :funcretset false :funcvariadic false :funcformat 0 :funccollid 0 :inputcollid 0 :args ({VAR :varno 1 :varattno 7 :vartype 17 :vartypmod -1 :varcollid 0 :varnullingrels (b) :varlevelsup 0 :varnosyn 1 :varattnosyn 7 :location 429}) :location 411}"
+    },
+    {
+      "table": "type_def",
+      "column": "lineage_sha256",
+      "functionOid": "3420",
+      "originalNativeExpression": "{FUNCEXPR :funcid 3420 :funcresulttype 17 :funcretset false :funcvariadic false :funcformat 0 :funccollid 0 :inputcollid 0 :args ({VAR :varno 1 :varattno 11 :vartype 17 :vartypmod -1 :varcollid 0 :varnullingrels (b) :varlevelsup 0 :varnosyn 1 :varattnosyn 11 :location 525}) :location 507}"
+    }
+  ],
+  "expected": [
+    [
+      "complete_feed_administration_receipt",
+      "identity_sha256",
+      "s",
+      "sha256(identity_bytes)"
+    ],
+    [
+      "complete_feed_consumer",
+      "consumer_identity_sha256",
+      "s",
+      "sha256(consumer_identity_bytes)"
+    ],
+    [
+      "complete_feed_consumer",
+      "current_state_sha256",
+      "s",
+      "sha256(current_state_bytes)"
+    ],
+    [
+      "complete_feed_seed_artifact",
+      "artifact_identity_sha256",
+      "s",
+      "sha256(artifact_identity_bytes)"
+    ],
+    [
+      "complete_feed_seed_artifact",
+      "payload_sha256",
+      "s",
+      "sha256(payload_bytes)"
+    ],
+    [
+      "complete_feed_seed_attempt",
+      "attempt_identity_sha256",
+      "s",
+      "sha256(attempt_identity_bytes)"
+    ],
+    [
+      "installation_admission",
+      "configuration_sha256",
+      "s",
+      "sha256(configuration_bytes)"
+    ],
+    [
+      "installation_admission",
+      "installed_inventory_sha256",
+      "s",
+      "sha256(installed_inventory_bytes)"
+    ],
+    [
+      "installation_admission",
+      "selected_binding_sha256",
+      "s",
+      "sha256(selected_binding_bytes)"
+    ],
+    [
+      "installation_archive",
+      "artifact_sha256",
+      "s",
+      "sha256(artifact_bytes)"
+    ],
+    [
+      "key_migration_receipt",
+      "attempt_sha256",
+      "s",
+      "sha256(migration_attempt_id_utf8)"
+    ],
+    [
+      "key_migration_receipt",
+      "epoch_sha256",
+      "s",
+      "sha256(source_epoch_utf8)"
+    ],
+    [
+      "key_migration_receipt",
+      "installation_sha256",
+      "s",
+      "sha256(installation_id_utf8)"
+    ],
+    [
+      "key_migration_receipt",
+      "receipt_sha256",
+      "s",
+      "sha256(receipt_bytes)"
+    ],
+    [
+      "layout_migration_receipt",
+      "original_attempt_sha256",
+      "s",
+      "sha256(original_attempt_identity_bytes)"
+    ],
+    [
+      "layout_migration_receipt",
+      "original_receipt_sha256",
+      "s",
+      "sha256(original_receipt_bytes)"
+    ],
+    [
+      "layout_migration_receipt",
+      "original_request_sha256",
+      "s",
+      "sha256(original_request_bytes)"
+    ],
+    [
+      "object_key_bucket",
+      "key_sha256",
+      "s",
+      "sha256(key_bytes)"
+    ],
+    [
+      "object_key_bucket",
+      "namespace_sha256",
+      "s",
+      "sha256(namespace_bytes)"
+    ],
+    [
+      "object_key_reservation_bucket",
+      "key_sha256",
+      "s",
+      "sha256(key_bytes)"
+    ],
+    [
+      "object_key_reservation_bucket",
+      "namespace_sha256",
+      "s",
+      "sha256(namespace_bytes)"
+    ],
+    [
+      "operation_configuration",
+      "configuration_sha256",
+      "s",
+      "sha256(configuration_bytes)"
+    ],
+    [
+      "operation_configuration",
+      "installed_inventory_sha256",
+      "s",
+      "sha256(installed_inventory_bytes)"
+    ],
+    [
+      "operation_configuration",
+      "selected_binding_sha256",
+      "s",
+      "sha256(selected_binding_bytes)"
+    ],
+    [
+      "relationship_lineage",
+      "identity_sha256",
+      "s",
+      "sha256(original_identity_bytes)"
+    ],
+    [
+      "request_receipt",
+      "namespace_sha256",
+      "s",
+      "sha256(namespace_identity_utf8)"
+    ],
+    [
+      "request_receipt",
+      "request_sha256",
+      "s",
+      "sha256(request_id_utf8)"
+    ],
+    [
+      "source_epoch_registry",
+      "evidence_sha256",
+      "s",
+      "sha256(evidence_bytes)"
+    ],
+    [
+      "type_def",
+      "lineage_sha256",
+      "s",
+      "sha256(lineage_bytes)"
+    ]
+  ],
+  "observed": [
+    [
+      "complete_feed_administration_receipt",
+      "identity_sha256",
+      "s",
+      "sha256(identity_bytes)"
+    ],
+    [
+      "complete_feed_consumer",
+      "consumer_identity_sha256",
+      "s",
+      "sha256(consumer_identity_bytes)"
+    ],
+    [
+      "complete_feed_consumer",
+      "current_state_sha256",
+      "s",
+      "sha256(current_state_bytes)"
+    ],
+    [
+      "complete_feed_seed_artifact",
+      "artifact_identity_sha256",
+      "s",
+      "sha256(artifact_identity_bytes)"
+    ],
+    [
+      "complete_feed_seed_artifact",
+      "payload_sha256",
+      "s",
+      "sha256(payload_bytes)"
+    ],
+    [
+      "complete_feed_seed_attempt",
+      "attempt_identity_sha256",
+      "s",
+      "sha256(attempt_identity_bytes)"
+    ],
+    [
+      "installation_admission",
+      "configuration_sha256",
+      "s",
+      "sha256(configuration_bytes)"
+    ],
+    [
+      "installation_admission",
+      "installed_inventory_sha256",
+      "s",
+      "sha256(installed_inventory_bytes)"
+    ],
+    [
+      "installation_admission",
+      "selected_binding_sha256",
+      "s",
+      "sha256(selected_binding_bytes)"
+    ],
+    [
+      "installation_archive",
+      "artifact_sha256",
+      "s",
+      "sha256(artifact_bytes)"
+    ],
+    [
+      "key_migration_receipt",
+      "attempt_sha256",
+      "s",
+      "sha256(migration_attempt_id_utf8)"
+    ],
+    [
+      "key_migration_receipt",
+      "epoch_sha256",
+      "s",
+      "sha256(source_epoch_utf8)"
+    ],
+    [
+      "key_migration_receipt",
+      "installation_sha256",
+      "s",
+      "sha256(installation_id_utf8)"
+    ],
+    [
+      "key_migration_receipt",
+      "receipt_sha256",
+      "s",
+      "sha256(receipt_bytes)"
+    ],
+    [
+      "layout_migration_receipt",
+      "original_attempt_sha256",
+      "s",
+      "sha256(original_attempt_identity_bytes)"
+    ],
+    [
+      "layout_migration_receipt",
+      "original_receipt_sha256",
+      "s",
+      "sha256(original_receipt_bytes)"
+    ],
+    [
+      "layout_migration_receipt",
+      "original_request_sha256",
+      "s",
+      "sha256(original_request_bytes)"
+    ],
+    [
+      "object_key_bucket",
+      "key_sha256",
+      "s",
+      "sha256(key_bytes)"
+    ],
+    [
+      "object_key_bucket",
+      "namespace_sha256",
+      "s",
+      "sha256(namespace_bytes)"
+    ],
+    [
+      "object_key_reservation_bucket",
+      "key_sha256",
+      "s",
+      "sha256(key_bytes)"
+    ],
+    [
+      "object_key_reservation_bucket",
+      "namespace_sha256",
+      "s",
+      "sha256(namespace_bytes)"
+    ],
+    [
+      "operation_configuration",
+      "configuration_sha256",
+      "s",
+      "sha256(configuration_bytes)"
+    ],
+    [
+      "operation_configuration",
+      "installed_inventory_sha256",
+      "s",
+      "sha256(installed_inventory_bytes)"
+    ],
+    [
+      "operation_configuration",
+      "selected_binding_sha256",
+      "s",
+      "sha256(selected_binding_bytes)"
+    ],
+    [
+      "relationship_lineage",
+      "identity_sha256",
+      "s",
+      "sha256(original_identity_bytes)"
+    ],
+    [
+      "request_receipt",
+      "namespace_sha256",
+      "s",
+      "sha256(namespace_identity_utf8)"
+    ],
+    [
+      "request_receipt",
+      "request_sha256",
+      "s",
+      "sha256(request_id_utf8)"
+    ],
+    [
+      "source_epoch_registry",
+      "evidence_sha256",
+      "s",
+      "sha256(evidence_bytes)"
+    ],
+    [
+      "type_def",
+      "lineage_sha256",
+      "s",
+      "sha256(lineage_bytes)"
+    ]
+  ],
+  "rollbackRemovedNamespace": true,
+  "sources": {
+    "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f",
+    "docs/helix/04-build/evidence/operation-configuration-storage.owner-export.sql": "55448d0e9b979ab62f48099e6c317e19ebe40ce5ff9c90472209deff8a618e3a",
+    "docs/helix/04-build/evidence/layout-migration-storage.owner-export.sql": "dd7e24b38fd09194d67d4f0a55f5b72696bd83b7f87d108ccb001fbab6892d33"
+  },
+  "declarationCaptureSha256": "f8c47c6c2523eb46f0718b7d8041d4f97fc13e6d03d8c242f00531bb4dcee6e6",
+  "producerSha256": "77cbb942c3b91e21be5be40e4f14595830f87c987047154722762445c193e672",
+  "limitations": [
+    "Populated generated-value evaluation, function permissions/dependencies and write-path enforcement not qualified",
+    "No full routine/grant/initializer or ready marker",
+    "Scoped AST inventory comparison, not another UMF DDL generator"
+  ]
+}

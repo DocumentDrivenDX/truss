@@ -1,0 +1,71 @@
+{
+  "scope": "existing UMF edited native statement-array export and JSON reload only; no complete required physical inventory, catalog resolution, native execution, migration or runtime adoption",
+  "producer": {
+    "path": "docs/helix/04-build/evidence/design-audit/compose-reference-history-layout.ts",
+    "sha256": "00763a36b289a73686df37bc34aaf6c305917fb184db0939a40baa0c49318ae4"
+  },
+  "parentBeforeChild": true,
+  "ownerSource": {
+    "root": "/Users/erik/Projects/umf",
+    "commit": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+    "files": [
+      {
+        "path": "src/adapters/postgresql/index.ts",
+        "sha256": "7baa071d95e5f9863a4ce2bf892d87fb27cab9d8605ba4cf8887016d14ca17b4"
+      },
+      {
+        "path": "src/model/native-json.ts",
+        "sha256": "1459a3e030419c3ae09b300972e27aed8b8ee1f7e41972b3cc00627dff7d7882"
+      },
+      {
+        "path": "src/model/document.ts",
+        "sha256": "a0422042659defdea425dff8bb0618eaa4bbf125f68da16aa5ad21af0b6c282f"
+      },
+      {
+        "path": "native/postgresql/runtime.ts",
+        "sha256": "a88fea4cf15c9c3c3f0ad1f0a36d8f5de42a42ce8ea9712499f609beee3ea751"
+      },
+      {
+        "path": "bun.lock",
+        "sha256": "98a99f7d306f7269db103bdbfafe5f9ad9ed34b02024276ad0cce45df27f5cc3"
+      }
+    ]
+  },
+  "bunVersion": "1.4.2",
+  "backend": "@libpg-query/parser@17.6.10",
+  "recipe": {
+    "path": "docs/helix/02-design/contracts/reference-history-composition-v0.1.proposal.json",
+    "sha256": "c09fbfd375caf0468c81dfd5cc4649b47f622c0df5b1b13d6d6d63841e80f6b6"
+  },
+  "inputs": [
+    {
+      "path": "docs/helix/02-design/contracts/row-home-journal-stage-v0.2.proposal.umf.json",
+      "sha256": "1760e57aafe2a4c567e9f599afe188e7081030a79a0612f3c6b4f01c8cdd7337"
+    },
+    {
+      "path": "docs/helix/02-design/models/truss-layout-weft-review-0.11.proposal.umf.json",
+      "sha256": "34f9f0d26539853ffa5da895fa7d867ed2dece0440f00be3bda389fd89ff1827"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/journal-complete-carrier-v0.2.proposal.umf.json",
+      "sha256": "972d807b3b7989806d619d22a4b47ed1fa54853eeef554fc80999cb548f6e2dd"
+    }
+  ],
+  "modelPath": "docs/helix/02-design/models/truss-layout-reference-history-0.12.proposal.umf.json",
+  "modelSha256": "fda908e28a0e67bacd625348ba9d35a6347a63da6692c01d7625b7773cc17f6d",
+  "exportPath": "docs/helix/04-build/evidence/design-audit/truss-layout-reference-history-0.12.owner-export.sql",
+  "exportSha256": "5e3b87e840bef61ca21ed108666a0e2edf073c5fc4f36b05a76300d26b91672c",
+  "originalStatements": 106,
+  "addedStatements": 0,
+  "actualStatements": 106,
+  "selectedSequenceSettings": true,
+  "existingParentReused": true,
+  "reviewMarker": true,
+  "metadataOpPreserved": true,
+  "baselineArchivePreserved": true,
+  "foundationDeltaVerified": true,
+  "carrierAndStageExactOriginal": true,
+  "editedAstExport": true,
+  "reloadedExportExact": true,
+  "installationReady": false
+}

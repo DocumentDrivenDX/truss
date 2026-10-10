@@ -1,0 +1,22 @@
+{
+  "scope": "Read-only committed source and owner receipt correspondence; no Truss native rerun or public backend adoption",
+  "head": "eed3886d7c76616a0149a63977e11e63b7900247",
+  "sourceSha256": {
+    "crates/weft-postgresql/src/record_definition.rs": "5c15d24779d010c6c90170c336fe3e933c2d3561abd6c355febd3823d54451af",
+    "crates/weft-postgresql/src/registered_access.rs": "d91b17ad242160ecc1602e9c4633213298a07f1e9471457a6264337d28971bc7",
+    "docs/helix/04-build/evidence/B-005-native-preparation.md": "d648f425bf316a62c5ce86022dba577a7ef36408568cd6d73592015b4fc6a14e",
+    "docs/helix/04-build/evidence/B-005-record-count-native.json": "9de5e52449b6822520357e137a3f6a28185089891dee70f31f9ce584995edaa0",
+    "docs/helix/04-build/evidence/B-005-combined-preparation-native.json": "715d505b0fba3d01e4d0df17487b6e4d5a8903c5029755533a37d8a6d976da08",
+    "tests/truss-postgresql/fixtures/combined-preparation-emission.json": "7a14af2d5a76ddef53ce579ca6582965bb1db84346d5e2da6ca4ab7469cd7372",
+    "tests/truss-postgresql/owner-preflight-native.py": "df270498ffd25b778a7d41286f5b59622a36b32f9330a61786d42aea29aad5a0"
+  },
+  "combinedReceiptCorrespondence": true,
+  "ownerCombinedNativeCaseCount": 6,
+  "runtimeQualifiedByTruss": false,
+  "remaining": [
+    "Public original-profile backend/result bridge",
+    "Native value/domain and recursive decoder realization",
+    "Complete authorized visibility and host enforcement",
+    "Adopted Truss profile and package ABI qualification"
+  ]
+}

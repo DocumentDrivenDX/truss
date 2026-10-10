@@ -29,12 +29,12 @@ ddx:
 
 ## Context
 
-A listing assembled from several reads could mix two revisions.
+A listing assembled from several READ COMMITTED statements can mix revisions even inside one transaction. Enumeration uses one qualified coherent snapshot or head-lock context and validates complete definition/member/endpoint correspondence before publication. The 1,000-type criterion assumes authority to the complete fixture. A restricted caller receives an explicitly identified authorized closed projection or refusal; it cannot receive a partial inventory labeled complete, and hidden endpoint references cannot leak through closure diagnostics.
 
 ## Walkthrough
 
 1. Engineer asks for the catalog's types.
-2. System reads the catalog in one transaction.
+2. System admits the caller’s current authority and reads all required definitions under one qualified coherent catalog context.
 3. System returns types, properties, keys, endpoints and the revision.
 
 ## Acceptance Criteria

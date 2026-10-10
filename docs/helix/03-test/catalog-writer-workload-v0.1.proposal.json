@@ -1,0 +1,31 @@
+{
+  "profile": "truss-catalog-writer-experiment/0.1.0",
+  "status": "candidate_not_executed",
+  "story": "US-006",
+  "criteria": [
+    "US-006-AC2"
+  ],
+  "writerStreams": 16,
+  "groupsPerStream": 64,
+  "plannedGroups": 1024,
+  "maximumInFlightGroupsPerStream": 1,
+  "automaticRetries": 0,
+  "deadlineUnit": "milliseconds",
+  "limits": {
+    "completeRunObservation": "300000",
+    "oneBarrierObservation": "10000",
+    "oneNativeStatement": "30000",
+    "oneLockAcquisition": "30000",
+    "containmentObservation": "5000"
+  },
+  "clock": "original qualified monotonic observation clock",
+  "expiry": "Close new dispatch; retain original submitted outcomes, remaining not_submitted inventory and unresolved original recovery; invalidate success run",
+  "nativeSettings": "Exact original administrative fixture connections must admit and observe statement_timeout and lock_timeout before the run; unavailable setting authority/profile refuses the experiment. Do not alter production host connections.",
+  "limitations": [
+    "Observation deadlines do not establish backend termination, transaction rollback or whole-transaction lifetime bounds",
+    "PostgreSQL16.15 has no transaction_timeout",
+    "Bounds do not qualify allocation/work/security/driver containment",
+    "Native settings, timer, original barriers and complete fixture profiles remain unqualified"
+  ],
+  "execution": "not_run"
+}

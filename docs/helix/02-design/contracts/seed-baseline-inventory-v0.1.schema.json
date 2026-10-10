@@ -1,0 +1,353 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:seed-baseline-inventory:0.1.0",
+  "description": "Shape only; exact identities/payloads, per-family ordinals, independent membership and current authority require semantic admission.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-seed-baseline-inventory/0.1.0"
+    },
+    "attempt": {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-seed-activation/0.1.0"
+        },
+        "seedId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "worker": {
+          "type": "object",
+          "properties": {
+            "context": {
+              "type": "object",
+              "properties": {
+                "sourceEpoch": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "feedProfile": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "scopeIdentity": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "sourceEpoch",
+                "feedProfile",
+                "scopeIdentity"
+              ],
+              "additionalProperties": false
+            },
+            "consumerId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "registrationId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "generation": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$",
+              "maxLength": 20
+            }
+          },
+          "required": [
+            "context",
+            "consumerId",
+            "registrationId",
+            "generation"
+          ],
+          "additionalProperties": false
+        },
+        "activationProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "seedId",
+        "worker",
+        "activationProfile"
+      ],
+      "additionalProperties": false
+    },
+    "inventoryProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "baselineSha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "visibilityManifestSha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "ordinal": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]*)$"
+          },
+          "identity": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "record"
+                  },
+                  "entityKind": {
+                    "enum": [
+                      "object",
+                      "edge"
+                    ]
+                  },
+                  "identity": {
+                    "$ref": "urn:truss:draft:history-record:0.1.0#/$defs/identity"
+                  }
+                },
+                "required": [
+                  "kind",
+                  "entityKind",
+                  "identity"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "source"
+                  },
+                  "entityKind": {
+                    "enum": [
+                      "object",
+                      "edge"
+                    ]
+                  },
+                  "identity": {
+                    "$ref": "urn:truss:draft:history-record:0.1.0#/$defs/identity"
+                  }
+                },
+                "required": [
+                  "kind",
+                  "entityKind",
+                  "identity"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "revision"
+                  },
+                  "revision": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]*)$"
+                  }
+                },
+                "required": [
+                  "kind",
+                  "revision"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "reservation"
+                  },
+                  "reservation": {
+                    "$ref": "#/$defs/reservation"
+                  }
+                },
+                "required": [
+                  "kind",
+                  "reservation"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "configuration"
+                  },
+                  "configuration": {
+                    "$ref": "urn:truss:draft:import-report:0.1.0#/properties/selectedConfiguration"
+                  }
+                },
+                "required": [
+                  "kind",
+                  "configuration"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "retained_archive"
+                  },
+                  "archiveProfile": {
+                    "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+                  },
+                  "artifactIdentity": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "kind",
+                  "archiveProfile",
+                  "artifactIdentity"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          },
+          "payloadSha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "retainedOwnerEvidence": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          }
+        },
+        "required": [
+          "ordinal",
+          "identity",
+          "payloadSha256",
+          "retainedOwnerEvidence"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "extractionObservation": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "attempt",
+    "inventoryProfile",
+    "baselineSha256",
+    "visibilityManifestSha256",
+    "entries",
+    "extractionObservation"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "reservation": {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-feed-reservation/0.1.0"
+        },
+        "priorIdentity": {
+          "$ref": "urn:truss:draft:history-record:0.1.0#/$defs/identity"
+        },
+        "priorVersion": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        },
+        "createdCatalogRevision": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        },
+        "reservation": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "object_key"
+                },
+                "keyNumber": {
+                  "type": "string",
+                  "pattern": "^(0|-?[1-9][0-9]*)$"
+                },
+                "keyDefinitionPin": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "keyEncodingProfile": {
+                  "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+                },
+                "encodedKey": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "kind",
+                "keyNumber",
+                "keyDefinitionPin",
+                "keyEncodingProfile",
+                "encodedKey"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "edge_endpoints"
+                },
+                "relationshipDefinitionPin": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "source": {
+                  "$ref": "urn:truss:draft:history-record:0.1.0#/$defs/identity"
+                },
+                "target": {
+                  "$ref": "urn:truss:draft:history-record:0.1.0#/$defs/identity"
+                },
+                "keyNumber": {
+                  "const": "0"
+                },
+                "keyEncodingProfile": {
+                  "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+                },
+                "encodedKey": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "kind",
+                "relationshipDefinitionPin",
+                "source",
+                "target",
+                "keyNumber",
+                "keyEncodingProfile",
+                "encodedKey"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "priorIdentity",
+        "priorVersion",
+        "createdCatalogRevision",
+        "reservation"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "scope": "Strict TypeScript declaration compatibility only; no runtime/semantic/native/profile qualification",
+  "compiler": "Version 7.0.2",
+  "options": [
+    "--noEmit",
+    "--strict",
+    "--target",
+    "ES2022",
+    "--module",
+    "ESNext",
+    "--moduleResolution",
+    "bundler"
+  ],
+  "negativeControls": 6,
+  "passed": true,
+  "sourceSha256": {
+    "truss-history-retain-payload-v0.1.proposal.d.ts": "9b79c10193f4d0ac050e9a5cc870d39b94b9584c04860fea567348da03890b33",
+    "truss-history-retain-payload-v0.1.proposal.typecheck.ts": "43c156067aeb778b77905bd463459015dd1ae1399e8b3c0fd0eea1240b26adfc",
+    "truss-history-v0.1.d.ts": "c9514718cb22ad0645ab32b81666de95fd952ca40396f762ea2529ba33bb7549"
+  },
+  "nativeEvidence": false,
+  "profileAdopted": false
+}

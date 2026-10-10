@@ -1,0 +1,8444 @@
+{
+  "scope": "Original generated base/adjunct DDL and immutable guard composition, UMF core column/type/requiredness and ordered physical FK, sequence configuration and explicit index structure correspondence plus independent adjunct catalog expectations under rollback only; no complete installer, routine/grant inventory, accepted catalog or migration qualification",
+  "pgserverVersion": "0.1.4",
+  "declarationCaptureSha256": "f8c47c6c2523eb46f0718b7d8041d4f97fc13e6d03d8c242f00531bb4dcee6e6",
+  "structuralModel": "docs/helix/02-design/models/truss-layout-core-structural-0.6.proposal.umf.json",
+  "structuralSha256": "8631fecfcc5f07ed7217a4d8d6483e99a705d44f242727d92561948723b37026",
+  "sources": [
+    {
+      "path": "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql",
+      "sha256": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/operation-configuration-storage.owner-export.sql",
+      "sha256": "55448d0e9b979ab62f48099e6c317e19ebe40ce5ff9c90472209deff8a618e3a"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/layout-migration-storage.owner-export.sql",
+      "sha256": "dd7e24b38fd09194d67d4f0a55f5b72696bd83b7f87d108ccb001fbab6892d33"
+    },
+    {
+      "path": "packages/postgresql/native/operation-configuration-immutability.sql",
+      "sha256": "3ae78935297c76e66eb324adb314f4554a7924f7e11b7a1ae7128c9d3cbc8386"
+    },
+    {
+      "path": "packages/postgresql/native/layout-migration-receipt-immutability.sql",
+      "sha256": "1b13a84f5bfd4f706d8b5a3f01837f3cdd0a450a849a7fd6ca48eda8885af309"
+    }
+  ],
+  "observation": {
+    "keyConstraints": [
+      [
+        "setting",
+        "p",
+        [
+          "key"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "key"
+        ]
+      ],
+      [
+        "module_access",
+        "p",
+        [
+          "document_id",
+          "module"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "document_id",
+          "module"
+        ]
+      ],
+      [
+        "schema_rev",
+        "p",
+        [
+          "rev"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "rev"
+        ]
+      ],
+      [
+        "schema_head",
+        "p",
+        [
+          "id"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "id"
+        ]
+      ],
+      [
+        "schema_doc",
+        "p",
+        [
+          "rev",
+          "ord"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "rev",
+          "ord"
+        ]
+      ],
+      [
+        "schema_change",
+        "p",
+        [
+          "rev",
+          "seq"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "rev",
+          "seq"
+        ]
+      ],
+      [
+        "type_def",
+        "p",
+        [
+          "type_id"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "type_id"
+        ]
+      ],
+      [
+        "prop_def",
+        "p",
+        [
+          "prop_id"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "prop_id"
+        ]
+      ],
+      [
+        "prop_def",
+        "u",
+        [
+          "type_id",
+          "name"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "type_id",
+          "name"
+        ]
+      ],
+      [
+        "key_def",
+        "p",
+        [
+          "type_id",
+          "key_id"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "type_id",
+          "key_id"
+        ]
+      ],
+      [
+        "key_def",
+        "u",
+        [
+          "type_id",
+          "key_num"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "type_id",
+          "key_num"
+        ]
+      ],
+      [
+        "rel_def",
+        "p",
+        [
+          "rel_type_id"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "rel_type_id"
+        ]
+      ],
+      [
+        "rel_endpoint",
+        "p",
+        [
+          "rel_type_id",
+          "source_type",
+          "target_type"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "rel_type_id",
+          "source_type",
+          "target_type"
+        ]
+      ],
+      [
+        "object",
+        "p",
+        [
+          "id",
+          "type_id"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "id",
+          "type_id"
+        ]
+      ],
+      [
+        "edge",
+        "p",
+        [
+          "id"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "id"
+        ]
+      ],
+      [
+        "edge_limit",
+        "p",
+        [
+          "rel_type_id",
+          "side",
+          "endpoint_id"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "rel_type_id",
+          "side",
+          "endpoint_id"
+        ]
+      ],
+      [
+        "key_tombstone",
+        "p",
+        [
+          "entity_kind",
+          "type_id",
+          "key_num",
+          "k"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "entity_kind",
+          "type_id",
+          "key_num",
+          "k"
+        ]
+      ],
+      [
+        "record_source",
+        "p",
+        [
+          "entity_kind",
+          "entity_id"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "entity_kind",
+          "entity_id"
+        ]
+      ],
+      [
+        "feed_consumer",
+        "p",
+        [
+          "consumer"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "consumer"
+        ]
+      ],
+      [
+        "journal",
+        "p",
+        [
+          "at",
+          "seq"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "at",
+          "seq"
+        ]
+      ],
+      [
+        "feed_member",
+        "p",
+        [
+          "source_epoch",
+          "feed_profile",
+          "original_writer_xid",
+          "registration_address"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "source_epoch",
+          "feed_profile",
+          "original_writer_xid",
+          "registration_address"
+        ]
+      ],
+      [
+        "feed_member",
+        "u",
+        [
+          "source_epoch",
+          "feed_profile",
+          "original_writer_xid",
+          "delivery_ordinal"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "source_epoch",
+          "feed_profile",
+          "original_writer_xid",
+          "delivery_ordinal"
+        ]
+      ],
+      [
+        "row_home_operation",
+        "p",
+        [
+          "original_writer_xid",
+          "operation_ordinal"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "original_writer_xid",
+          "operation_ordinal"
+        ]
+      ],
+      [
+        "row_home_journal_stage",
+        "p",
+        [
+          "original_writer_xid",
+          "operation_ordinal",
+          "stage_name",
+          "stage_ordinal"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "original_writer_xid",
+          "operation_ordinal",
+          "stage_name",
+          "stage_ordinal"
+        ]
+      ],
+      [
+        "prop_def",
+        "u",
+        [
+          "type_id",
+          "prop_id"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "type_id",
+          "prop_id"
+        ]
+      ],
+      [
+        "edge",
+        "u",
+        [
+          "id",
+          "rel_type_id"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "id",
+          "rel_type_id"
+        ]
+      ],
+      [
+        "row_home_state",
+        "p",
+        [
+          "state_id"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "state_id"
+        ]
+      ],
+      [
+        "row_home_state",
+        "u",
+        [
+          "object_id",
+          "object_type_id",
+          "property_id"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "object_id",
+          "object_type_id",
+          "property_id"
+        ]
+      ],
+      [
+        "row_home_state",
+        "u",
+        [
+          "edge_id",
+          "relationship_type_id",
+          "property_id"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "edge_id",
+          "relationship_type_id",
+          "property_id"
+        ]
+      ],
+      [
+        "row_home_node",
+        "p",
+        [
+          "state_id",
+          "node_id"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "state_id",
+          "node_id"
+        ]
+      ],
+      [
+        "row_home_node",
+        "u",
+        [
+          "node_id"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "node_id"
+        ]
+      ],
+      [
+        "row_home_scalar",
+        "p",
+        [
+          "state_id",
+          "node_id"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "state_id",
+          "node_id"
+        ]
+      ],
+      [
+        "relationship_lineage",
+        "p",
+        [
+          "rel_type_id"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "rel_type_id"
+        ]
+      ],
+      [
+        "schema_doc",
+        "u",
+        [
+          "rev",
+          "doc_id"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "rev",
+          "doc_id"
+        ]
+      ],
+      [
+        "schema_doc",
+        "u",
+        [
+          "rev",
+          "ord",
+          "doc_id"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "rev",
+          "ord",
+          "doc_id"
+        ]
+      ],
+      [
+        "object_key_reservation_bucket",
+        "p",
+        [
+          "storage_row_id"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "storage_row_id"
+        ]
+      ],
+      [
+        "row_home_touch",
+        "p",
+        [
+          "transaction_id",
+          "owner_kind",
+          "owner_id",
+          "owner_discriminator_id",
+          "property_owner_type_id",
+          "property_id"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "transaction_id",
+          "owner_kind",
+          "owner_id",
+          "owner_discriminator_id",
+          "property_owner_type_id",
+          "property_id"
+        ]
+      ],
+      [
+        "row_home_capacity",
+        "p",
+        [
+          "singleton_id"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "singleton_id"
+        ]
+      ],
+      [
+        "key_bucket_guard",
+        "p",
+        [
+          "namespace_sha256",
+          "key_sha256"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "namespace_sha256",
+          "key_sha256"
+        ]
+      ],
+      [
+        "object_key_bucket",
+        "p",
+        [
+          "storage_row_id"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "storage_row_id"
+        ]
+      ],
+      [
+        "object_key_bucket",
+        "u",
+        [
+          "object_id",
+          "type_id",
+          "key_num"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "object_id",
+          "type_id",
+          "key_num"
+        ]
+      ],
+      [
+        "catalog_acceptance_report",
+        "p",
+        [
+          "rev"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "rev"
+        ]
+      ],
+      [
+        "installation_marker",
+        "p",
+        [
+          "singleton_id"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "singleton_id"
+        ]
+      ],
+      [
+        "installation_marker",
+        "u",
+        [
+          "installation_id"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "installation_id"
+        ]
+      ],
+      [
+        "installation_archive",
+        "p",
+        [
+          "archive_row_id"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "archive_row_id"
+        ]
+      ],
+      [
+        "feed_tx",
+        "p",
+        [
+          "source_epoch",
+          "feed_profile",
+          "original_writer_xid"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "source_epoch",
+          "feed_profile",
+          "original_writer_xid"
+        ]
+      ],
+      [
+        "feed_prerequisite",
+        "p",
+        [
+          "source_epoch",
+          "feed_profile",
+          "original_writer_xid",
+          "prerequisite_address"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "source_epoch",
+          "feed_profile",
+          "original_writer_xid",
+          "prerequisite_address"
+        ]
+      ],
+      [
+        "feed_configuration_prerequisite",
+        "p",
+        [
+          "source_epoch",
+          "feed_profile",
+          "original_writer_xid",
+          "configuration_address"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "source_epoch",
+          "feed_profile",
+          "original_writer_xid",
+          "configuration_address"
+        ]
+      ],
+      [
+        "complete_feed_consumer",
+        "p",
+        [
+          "storage_row_id"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "storage_row_id"
+        ]
+      ],
+      [
+        "complete_feed_administration_receipt",
+        "p",
+        [
+          "storage_row_id"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "storage_row_id"
+        ]
+      ],
+      [
+        "complete_feed_seed_attempt",
+        "p",
+        [
+          "storage_row_id"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "storage_row_id"
+        ]
+      ],
+      [
+        "prop_def",
+        "u",
+        [
+          "type_id",
+          "declaration_module",
+          "element"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "type_id",
+          "declaration_module",
+          "element"
+        ]
+      ],
+      [
+        "complete_feed_seed_artifact",
+        "p",
+        [
+          "storage_row_id"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "storage_row_id"
+        ]
+      ],
+      [
+        "key_lifecycle_history",
+        "p",
+        [
+          "rev",
+          "seq"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "rev",
+          "seq"
+        ]
+      ],
+      [
+        "installation_admission",
+        "p",
+        [
+          "head_id"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "head_id"
+        ]
+      ],
+      [
+        "key_migration_receipt",
+        "p",
+        [
+          "storage_row_id"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "storage_row_id"
+        ]
+      ],
+      [
+        "request_receipt_route_guard",
+        "p",
+        [
+          "namespace_sha256",
+          "request_sha256"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "namespace_sha256",
+          "request_sha256"
+        ]
+      ],
+      [
+        "request_receipt",
+        "p",
+        [
+          "storage_row_id"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "storage_row_id"
+        ]
+      ],
+      [
+        "request_receipt_protection",
+        "p",
+        [
+          "receipt_storage_row_id"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "receipt_storage_row_id"
+        ]
+      ],
+      [
+        "source_epoch_registry",
+        "p",
+        [
+          "installation_id",
+          "source_epoch"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "installation_id",
+          "source_epoch"
+        ]
+      ],
+      [
+        "source_epoch_registry",
+        "u",
+        [
+          "source_epoch"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "source_epoch"
+        ]
+      ],
+      [
+        "source_epoch_current",
+        "p",
+        [
+          "singleton_id"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "singleton_id"
+        ]
+      ],
+      [
+        "operation_configuration",
+        "p",
+        [
+          "original_writer_xid",
+          "operation_ordinal"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "original_writer_xid",
+          "operation_ordinal"
+        ]
+      ],
+      [
+        "layout_migration_receipt",
+        "p",
+        [
+          "storage_row_id"
+        ],
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        [
+          "storage_row_id"
+        ]
+      ]
+    ],
+    "indexes": {
+      "setting_pkey": {
+        "table": "setting",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "key"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "module_access_qualified_pk": {
+        "table": "module_access",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "document_id",
+          "module"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "schema_rev_pkey": {
+        "table": "schema_rev",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "rev"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "schema_head_pkey": {
+        "table": "schema_head",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "schema_doc_definition_source_tuple": {
+        "table": "schema_doc",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "rev",
+          "ord",
+          "doc_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0
+        ]
+      },
+      "schema_doc_rev_doc_id_key": {
+        "table": "schema_doc",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "rev",
+          "doc_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "schema_doc_pkey": {
+        "table": "schema_doc",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "rev",
+          "ord"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "schema_change_pkey": {
+        "table": "schema_change",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "rev",
+          "seq"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "rel_endpoint_pkey": {
+        "table": "rel_endpoint",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "rel_type_id",
+          "source_type",
+          "target_type"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0
+        ]
+      },
+      "object_type_id": {
+        "table": "object",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          "type_id",
+          "id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "object_pkey": {
+        "table": "object",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "id",
+          "type_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "edge_limit_edge": {
+        "table": "edge_limit",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          "edge_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "edge_limit_pkey": {
+        "table": "edge_limit",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "rel_type_id",
+          "side",
+          "endpoint_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0
+        ]
+      },
+      "key_tombstone_pkey": {
+        "table": "key_tombstone",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "entity_kind",
+          "type_id",
+          "key_num",
+          "k"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "record_source_load": {
+        "table": "record_source",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          "load_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "record_source_pkey": {
+        "table": "record_source",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "entity_kind",
+          "entity_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "feed_consumer_pkey": {
+        "table": "feed_consumer",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "consumer"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "edge_typed_identity_row_home": {
+        "table": "edge",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "id",
+          "rel_type_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "edge_in": {
+        "table": "edge",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          "target_id",
+          "rel_type_id"
+        ],
+        "included": [
+          "source_id",
+          "source_type"
+        ],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "edge_out": {
+        "table": "edge",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "source_id",
+          "rel_type_id",
+          "target_id"
+        ],
+        "included": [
+          "target_type"
+        ],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0
+        ]
+      },
+      "edge_pkey": {
+        "table": "edge",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "journal_request": {
+        "table": "journal",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          null
+        ],
+        "included": [],
+        "partial": true,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "journal_feed": {
+        "table": "journal",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          "xid",
+          "seq"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "journal_entity": {
+        "table": "journal",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          "entity_kind",
+          "entity_id",
+          "ver"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0
+        ]
+      },
+      "journal_pkey": {
+        "table": "journal",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "at",
+          "seq"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "row_home_operation_unfinished_xid": {
+        "table": "row_home_operation",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "original_writer_xid"
+        ],
+        "included": [],
+        "partial": true,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "row_home_operation_pk": {
+        "table": "row_home_operation",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "original_writer_xid",
+          "operation_ordinal"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "row_home_journal_stage_pk": {
+        "table": "row_home_journal_stage",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "original_writer_xid",
+          "operation_ordinal",
+          "stage_name",
+          "stage_ordinal"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "row_home_state_edge_property": {
+        "table": "row_home_state",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "edge_id",
+          "relationship_type_id",
+          "property_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0
+        ]
+      },
+      "row_home_state_object_property": {
+        "table": "row_home_state",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "object_id",
+          "object_type_id",
+          "property_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0
+        ]
+      },
+      "row_home_state_pkey": {
+        "table": "row_home_state",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "state_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "row_home_map_parent": {
+        "table": "row_home_node",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          "state_id",
+          "parent_node_id"
+        ],
+        "included": [],
+        "partial": true,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "row_home_sequence_slot": {
+        "table": "row_home_node",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "state_id",
+          "parent_node_id",
+          "sequence_ordinal"
+        ],
+        "included": [],
+        "partial": true,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0
+        ]
+      },
+      "row_home_one_root": {
+        "table": "row_home_node",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "state_id"
+        ],
+        "included": [],
+        "partial": true,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "row_home_node_id_unique": {
+        "table": "row_home_node",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "node_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "row_home_node_pk": {
+        "table": "row_home_node",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "state_id",
+          "node_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "row_home_scalar_pk": {
+        "table": "row_home_scalar",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "state_id",
+          "node_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "relationship_lineage_route": {
+        "table": "relationship_lineage",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          "identity_sha256",
+          "rel_type_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "relationship_lineage_pkey": {
+        "table": "relationship_lineage",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "rel_type_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "type_def_lineage_route": {
+        "table": "type_def",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          "lineage_sha256",
+          "type_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "type_def_pkey": {
+        "table": "type_def",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "type_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "key_def_type_id_key_num_key": {
+        "table": "key_def",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "type_id",
+          "key_num"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "key_def_pkey": {
+        "table": "key_def",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "type_id",
+          "key_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "rel_def_pkey": {
+        "table": "rel_def",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "rel_type_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "row_home_touch_pk": {
+        "table": "row_home_touch",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "transaction_id",
+          "owner_kind",
+          "owner_id",
+          "owner_discriminator_id",
+          "property_owner_type_id",
+          "property_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "row_home_capacity_pkey": {
+        "table": "row_home_capacity",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "singleton_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "object_key_bucket_route": {
+        "table": "object_key_bucket",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          "namespace_sha256",
+          "key_sha256",
+          "storage_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0
+        ]
+      },
+      "object_key_bucket_one_per_object": {
+        "table": "object_key_bucket",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "object_id",
+          "type_id",
+          "key_num"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0
+        ]
+      },
+      "object_key_bucket_pkey": {
+        "table": "object_key_bucket",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "storage_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "key_bucket_guard_pkey": {
+        "table": "key_bucket_guard",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "namespace_sha256",
+          "key_sha256"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "object_key_reservation_bucket_route": {
+        "table": "object_key_reservation_bucket",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          "namespace_sha256",
+          "key_sha256",
+          "storage_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0
+        ]
+      },
+      "object_key_reservation_bucket_pkey": {
+        "table": "object_key_reservation_bucket",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "storage_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "catalog_acceptance_report_pkey": {
+        "table": "catalog_acceptance_report",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "rev"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "installation_marker_installation_id_key": {
+        "table": "installation_marker",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "installation_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "installation_marker_pkey": {
+        "table": "installation_marker",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "singleton_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "installation_archive_identity_route": {
+        "table": "installation_archive",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          "installation_id",
+          "artifact_identity_sha256",
+          "archive_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0
+        ]
+      },
+      "installation_archive_pkey": {
+        "table": "installation_archive",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "archive_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "feed_tx_pk": {
+        "table": "feed_tx",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "source_epoch",
+          "feed_profile",
+          "original_writer_xid"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0
+        ]
+      },
+      "feed_member_delivery_unique": {
+        "table": "feed_member",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "source_epoch",
+          "feed_profile",
+          "original_writer_xid",
+          "delivery_ordinal"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "feed_member_pk": {
+        "table": "feed_member",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "source_epoch",
+          "feed_profile",
+          "original_writer_xid",
+          "registration_address"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "feed_prerequisite_pk": {
+        "table": "feed_prerequisite",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "source_epoch",
+          "feed_profile",
+          "original_writer_xid",
+          "prerequisite_address"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "feed_configuration_prerequisite_pk": {
+        "table": "feed_configuration_prerequisite",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "source_epoch",
+          "feed_profile",
+          "original_writer_xid",
+          "configuration_address"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "complete_feed_consumer_identity_route": {
+        "table": "complete_feed_consumer",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          "consumer_identity_sha256",
+          "storage_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "complete_feed_consumer_pkey": {
+        "table": "complete_feed_consumer",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "storage_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "feed_administration_receipt_identity_route": {
+        "table": "complete_feed_administration_receipt",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          "identity_sha256",
+          "storage_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "complete_feed_administration_receipt_pkey": {
+        "table": "complete_feed_administration_receipt",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "storage_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "feed_seed_attempt_identity_route": {
+        "table": "complete_feed_seed_attempt",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          "attempt_identity_sha256",
+          "storage_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "complete_feed_seed_attempt_pkey": {
+        "table": "complete_feed_seed_attempt",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "storage_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "feed_seed_artifact_identity_route": {
+        "table": "complete_feed_seed_artifact",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          "attempt_row_id",
+          "artifact_identity_sha256",
+          "storage_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0
+        ]
+      },
+      "complete_feed_seed_artifact_pkey": {
+        "table": "complete_feed_seed_artifact",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "storage_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "key_lifecycle_history_by_key": {
+        "table": "key_lifecycle_history",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          "type_id",
+          "key_num",
+          "rev",
+          "seq"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "key_lifecycle_history_pkey": {
+        "table": "key_lifecycle_history",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "rev",
+          "seq"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "installation_admission_pkey": {
+        "table": "installation_admission",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "head_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "key_migration_receipt_route": {
+        "table": "key_migration_receipt",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          "installation_sha256",
+          "epoch_sha256",
+          "attempt_sha256",
+          "storage_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "key_migration_receipt_pkey": {
+        "table": "key_migration_receipt",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "storage_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "rr_guard_pk": {
+        "table": "request_receipt_route_guard",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "namespace_sha256",
+          "request_sha256"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "request_receipt_route": {
+        "table": "request_receipt",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          "namespace_sha256",
+          "request_sha256",
+          "storage_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0
+        ]
+      },
+      "rr_receipt_pk": {
+        "table": "request_receipt",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "storage_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "rr_protection_pk": {
+        "table": "request_receipt_protection",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "receipt_storage_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "prop_def_qualified_field": {
+        "table": "prop_def",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "type_id",
+          "declaration_module",
+          "element"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0
+        ]
+      },
+      "prop_def_owner_property_row_home": {
+        "table": "prop_def",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "type_id",
+          "prop_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "prop_def_type_id_name_key": {
+        "table": "prop_def",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "type_id",
+          "name"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "prop_def_pkey": {
+        "table": "prop_def",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "prop_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "source_epoch_registry_source_epoch_key": {
+        "table": "source_epoch_registry",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "source_epoch"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "source_epoch_registry_pkey": {
+        "table": "source_epoch_registry",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "installation_id",
+          "source_epoch"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "source_epoch_current_pkey": {
+        "table": "source_epoch_current",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "singleton_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      },
+      "operation_configuration_pkey": {
+        "table": "operation_configuration",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "original_writer_xid",
+          "operation_ordinal"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0
+        ]
+      },
+      "layout_migration_receipt_attempt_route": {
+        "table": "layout_migration_receipt",
+        "method": "btree",
+        "unique": false,
+        "nullsNotDistinct": false,
+        "keys": [
+          "installation_id",
+          "original_attempt_sha256",
+          "storage_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0,
+          0,
+          0
+        ]
+      },
+      "layout_migration_receipt_pkey": {
+        "table": "layout_migration_receipt",
+        "method": "btree",
+        "unique": true,
+        "nullsNotDistinct": false,
+        "keys": [
+          "storage_row_id"
+        ],
+        "included": [],
+        "partial": false,
+        "valid": true,
+        "ready": true,
+        "options": [
+          0
+        ]
+      }
+    },
+    "sequences": {
+      "layout_migration_receipt_row_seq": {
+        "as": "int8",
+        "increment": "1",
+        "minvalue": "1",
+        "maxvalue": "9223372036854775807",
+        "start": "1",
+        "cache": "1",
+        "cycle": false
+      },
+      "request_receipt_row_seq": {
+        "as": "int8",
+        "increment": "1",
+        "minvalue": "1",
+        "maxvalue": "9223372036854775807",
+        "start": "1",
+        "cache": "1",
+        "cycle": false
+      },
+      "migration_receipt_row_seq": {
+        "as": "int8",
+        "increment": "1",
+        "minvalue": "1",
+        "maxvalue": "9223372036854775807",
+        "start": "1",
+        "cache": "1",
+        "cycle": false
+      },
+      "feed_seed_artifact_row_seq": {
+        "as": "int8",
+        "increment": "1",
+        "minvalue": "1",
+        "maxvalue": "9223372036854775807",
+        "start": "1",
+        "cache": "1",
+        "cycle": false
+      },
+      "feed_seed_attempt_row_seq": {
+        "as": "int8",
+        "increment": "1",
+        "minvalue": "1",
+        "maxvalue": "9223372036854775807",
+        "start": "1",
+        "cache": "1",
+        "cycle": false
+      },
+      "feed_administration_receipt_row_seq": {
+        "as": "int8",
+        "increment": "1",
+        "minvalue": "1",
+        "maxvalue": "9223372036854775807",
+        "start": "1",
+        "cache": "1",
+        "cycle": false
+      },
+      "complete_feed_consumer_row_seq": {
+        "as": "int8",
+        "increment": "1",
+        "minvalue": "1",
+        "maxvalue": "9223372036854775807",
+        "start": "1",
+        "cache": "1",
+        "cycle": false
+      },
+      "installation_archive_row_seq": {
+        "as": "int8",
+        "increment": "1",
+        "minvalue": "1",
+        "maxvalue": "9223372036854775807",
+        "start": "1",
+        "cache": "1",
+        "cycle": false
+      },
+      "key_storage_row_seq": {
+        "as": "int8",
+        "increment": "1",
+        "minvalue": "1",
+        "maxvalue": "9223372036854775807",
+        "start": "1",
+        "cache": "1",
+        "cycle": false
+      },
+      "row_home_id_seq": {
+        "as": "int8",
+        "increment": "1",
+        "minvalue": "1",
+        "maxvalue": "9223372036854775807",
+        "start": "1",
+        "cache": "1",
+        "cycle": false
+      },
+      "journal_seq": {
+        "as": "int8",
+        "increment": "1",
+        "minvalue": "1",
+        "maxvalue": "9223372036854775807",
+        "start": "1",
+        "cache": "1",
+        "cycle": false
+      },
+      "id_seq": {
+        "as": "int8",
+        "increment": "1",
+        "minvalue": "1",
+        "maxvalue": "9223372036854775807",
+        "start": "1",
+        "cache": "1",
+        "cycle": false
+      }
+    },
+    "tables": [
+      "catalog_acceptance_report",
+      "complete_feed_administration_receipt",
+      "complete_feed_consumer",
+      "complete_feed_seed_artifact",
+      "complete_feed_seed_attempt",
+      "edge",
+      "edge_limit",
+      "feed_configuration_prerequisite",
+      "feed_consumer",
+      "feed_member",
+      "feed_prerequisite",
+      "feed_tx",
+      "installation_admission",
+      "installation_archive",
+      "installation_marker",
+      "journal",
+      "key_bucket_guard",
+      "key_def",
+      "key_lifecycle_history",
+      "key_migration_receipt",
+      "key_tombstone",
+      "layout_migration_receipt",
+      "module_access",
+      "object",
+      "object_key_bucket",
+      "object_key_reservation_bucket",
+      "operation_configuration",
+      "prop_def",
+      "record_source",
+      "rel_def",
+      "rel_endpoint",
+      "relationship_lineage",
+      "request_receipt",
+      "request_receipt_protection",
+      "request_receipt_route_guard",
+      "row_home_capacity",
+      "row_home_journal_stage",
+      "row_home_node",
+      "row_home_operation",
+      "row_home_scalar",
+      "row_home_state",
+      "row_home_touch",
+      "schema_change",
+      "schema_doc",
+      "schema_head",
+      "schema_rev",
+      "setting",
+      "source_epoch_current",
+      "source_epoch_registry",
+      "type_def"
+    ],
+    "serverVersion": "16.2",
+    "sha256": true,
+    "xactStatus": true,
+    "currentXid": true,
+    "uuidIssuer": true,
+    "typeNamespaces": [
+      "pg_catalog"
+    ],
+    "fkTargetNamespaces": [
+      "truss"
+    ],
+    "columns": {
+      "catalog_acceptance_report": [
+        [
+          "rev",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "report_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "complete_feed_administration_receipt": [
+        [
+          "storage_row_id",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "source_epoch",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "administrative_namespace",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "request_id",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "identity_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "identity_sha256",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "canonical_input_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "input_profile_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "receipt_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "receipt_profile_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "actual_database_role",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "authorization_evidence_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "producing_xid",
+          "xid8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_production_evidence_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "complete_feed_consumer": [
+        [
+          "storage_row_id",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "source_epoch",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "feed_profile",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "scope_identity",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "consumer_id",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "registration_id",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "worker_generation",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "state_kind",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "consumer_identity_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "consumer_identity_sha256",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_registration_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "current_state_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "current_state_sha256",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "applied_boundary_bytes",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "applied_boundary_profile_bytes",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "inclusive_protection_xid",
+          "xid8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "protection_evidence_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "procedure_profile_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "downstream_profile_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "registered_at",
+          "timestamptz",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "acknowledged_at",
+          "timestamptz",
+          false,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "complete_feed_seed_artifact": [
+        [
+          "storage_row_id",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "attempt_row_id",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "artifact_role",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "artifact_ordinal",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "artifact_identity_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "artifact_identity_sha256",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "artifact_profile_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "payload_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "payload_sha256",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "production_custody_evidence_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "complete_feed_seed_attempt": [
+        [
+          "storage_row_id",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "attempt_identity_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "attempt_identity_sha256",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "activation_profile_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "source_context_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_worker_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "state_kind",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "current_state_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "inclusive_replay_xmin",
+          "xid8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "protection_evidence_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "invalidation_evidence_bytes",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "classifier_retirement_evidence_bytes",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "edge": [
+        [
+          "id",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "rel_type_id",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "source_id",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "source_type",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "target_id",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "target_type",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "props",
+          "jsonb",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "order_key",
+          "text",
+          false,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "rev",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "ver",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "created_at",
+          "timestamptz",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "updated_at",
+          "timestamptz",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "retained",
+          "jsonb",
+          false,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "edge_limit": [
+        [
+          "rel_type_id",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "side",
+          "bpchar",
+          true,
+          0,
+          5,
+          [
+            "pg_catalog",
+            "default"
+          ]
+        ],
+        [
+          "endpoint_id",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "edge_id",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "feed_configuration_prerequisite": [
+        [
+          "source_epoch",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "feed_profile",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "original_writer_xid",
+          "xid8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "configuration_address",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_installation_identity_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_configuration_generation",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_configuration_profile_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_configuration_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_producer_inventory_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_configuration_sha256",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_owner_context_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "feed_consumer": [
+        [
+          "consumer",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
+        ],
+        [
+          "xid",
+          "xid8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "seq",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "updated_at",
+          "timestamptz",
+          true,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "feed_member": [
+        [
+          "source_epoch",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "feed_profile",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "original_writer_xid",
+          "xid8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "registration_address",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "fact_kind",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "original_fact_key_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_fact_key_profile_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_payload_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_payload_profile_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_payload_sha256",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_owner_context_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_write_at",
+          "timestamptz",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_fact_clock_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "delivery_ordinal",
+          "int8",
+          false,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "feed_prerequisite": [
+        [
+          "source_epoch",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "feed_profile",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "original_writer_xid",
+          "xid8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "prerequisite_address",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_revision",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_artifact_identity_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_definition_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_definition_profile_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_definition_sha256",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_owner_context_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "feed_tx": [
+        [
+          "source_epoch",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "feed_profile",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "original_writer_xid",
+          "xid8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "registration_counter",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "prerequisite_registration_counter",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "configuration_registration_counter",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "membership_generation",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "finalized_generation",
+          "int8",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_context_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "manifest_profile_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "manifest_bytes",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "manifest_sha256",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "installation_admission": [
+        [
+          "head_id",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "installation_id_utf8",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "source_epoch_utf8",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "configuration_generation",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "key_reuse",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
+        ],
+        [
+          "journal_mode",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
+        ],
+        [
+          "configuration_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "selected_binding_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "installed_inventory_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "configuration_sha256",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "selected_binding_sha256",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "installed_inventory_sha256",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "installation_archive": [
+        [
+          "archive_row_id",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "installation_id",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "artifact_role",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "artifact_identity",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "artifact_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "artifact_sha256",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "artifact_identity_sha256",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "installation_marker": [
+        [
+          "singleton_id",
+          "int2",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "marker_interface_version",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "installation_id",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "layout_version",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "bundle_sha256",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "inventory_profile",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "inventory_sha256",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "database_identity",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "schema_name",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "installed_at",
+          "timestamptz",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "installed_at_text",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ]
+      ],
+      "journal": [
+        [
+          "seq",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "at",
+          "timestamptz",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "xid",
+          "xid8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "entity_kind",
+          "bpchar",
+          true,
+          0,
+          5,
+          [
+            "pg_catalog",
+            "default"
+          ]
+        ],
+        [
+          "entity_id",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "entity_type",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "ver",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "op",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
+        ],
+        [
+          "prop_id",
+          "int4",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "old_value",
+          "jsonb",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "new_value",
+          "jsonb",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "rev",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "origin",
+          "jsonb",
+          true,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "key_bucket_guard": [
+        [
+          "namespace_sha256",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "key_sha256",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "generation",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "key_def": [
+        [
+          "type_id",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "key_id",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
+        ],
+        [
+          "key_num",
+          "int2",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "prop_ids",
+          "_int4",
+          true,
+          1,
+          -1,
+          null
+        ],
+        [
+          "is_primary",
+          "bool",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "since_rev",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "retired_rev",
+          "int4",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "definition_source_kind",
+          "text",
+          false,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "definition_rev",
+          "int4",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "definition_doc_ord",
+          "int4",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "definition_document_id",
+          "text",
+          false,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "binding_source_rev",
+          "int4",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "binding_source_pointer",
+          "text",
+          false,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "binding_source_bytes",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "key_lifecycle_history": [
+        [
+          "rev",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "seq",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "type_id",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "key_num",
+          "int2",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "transition_kind",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "before_retired_rev",
+          "int4",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "after_retired_rev",
+          "int4",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "before_definition_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "after_definition_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "key_migration_receipt": [
+        [
+          "storage_row_id",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "installation_id_utf8",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "source_epoch_utf8",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "migration_attempt_id_utf8",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_request_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_attempt_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "receipt_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "prior_generation",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "resulting_generation",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "installation_sha256",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "epoch_sha256",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "attempt_sha256",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "receipt_sha256",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "key_tombstone": [
+        [
+          "entity_kind",
+          "bpchar",
+          true,
+          0,
+          5,
+          [
+            "pg_catalog",
+            "default"
+          ]
+        ],
+        [
+          "type_id",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "key_num",
+          "int2",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "k",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "entity_id",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "ver",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "at",
+          "timestamptz",
+          true,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "layout_migration_receipt": [
+        [
+          "storage_row_id",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "installation_id",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "original_source_epoch",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "original_target_incarnation",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "original_attempt_identity_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "receipt_profile_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_request_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_receipt_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_attempt_sha256",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_request_sha256",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_receipt_sha256",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "module_access": [
+        [
+          "document_id",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "module",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "reader_role",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "writer_role",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ]
+      ],
+      "object": [
+        [
+          "id",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "type_id",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "props",
+          "jsonb",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "retained",
+          "jsonb",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "root_id",
+          "int8",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "root_type",
+          "int4",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "rev",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "ver",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "created_at",
+          "timestamptz",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "updated_at",
+          "timestamptz",
+          true,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "object_key_bucket": [
+        [
+          "storage_row_id",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "type_id",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "key_num",
+          "int2",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "object_id",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "namespace_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "key_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_context_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "namespace_sha256",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "key_sha256",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "object_key_reservation_bucket": [
+        [
+          "storage_row_id",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "namespace_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "key_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_reservation_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "namespace_sha256",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "key_sha256",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "operation_configuration": [
+        [
+          "original_writer_xid",
+          "xid8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "operation_ordinal",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "installation_id",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "source_epoch",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "target_incarnation",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "configuration_generation",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "key_reuse",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "journal_mode",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "original_context_sha256",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "admission_profile_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "configuration_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "selected_binding_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "installed_inventory_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "configuration_sha256",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "selected_binding_sha256",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "installed_inventory_sha256",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "prop_def": [
+        [
+          "prop_id",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "type_id",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "element",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
+        ],
+        [
+          "name",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
+        ],
+        [
+          "scalar_type",
+          "text",
+          false,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
+        ],
+        [
+          "nullability",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
+        ],
+        [
+          "cardinality",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
+        ],
+        [
+          "facets",
+          "jsonb",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "item",
+          "jsonb",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "home",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
+        ],
+        [
+          "since_rev",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "doc_ord",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "retired_rev",
+          "int4",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "definition_source_kind",
+          "text",
+          false,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "definition_rev",
+          "int4",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "definition_doc_ord",
+          "int4",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "definition_document_id",
+          "text",
+          false,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "binding_source_rev",
+          "int4",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "binding_source_pointer",
+          "text",
+          false,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "binding_source_bytes",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "declaration_module",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ]
+      ],
+      "record_source": [
+        [
+          "entity_kind",
+          "bpchar",
+          true,
+          0,
+          5,
+          [
+            "pg_catalog",
+            "default"
+          ]
+        ],
+        [
+          "entity_id",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "load_id",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
+        ],
+        [
+          "source",
+          "jsonb",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "imported_at",
+          "timestamptz",
+          true,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "rel_def": [
+        [
+          "document_id",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "rel_type_id",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "module",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "rel_id",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "name",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
+        ],
+        [
+          "source_min",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "source_max",
+          "int4",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "target_min",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "target_max",
+          "int4",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "lifecycle",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
+        ],
+        [
+          "directed",
+          "bool",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "target_key",
+          "text",
+          false,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
+        ],
+        [
+          "composition",
+          "bool",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "assoc_type_id",
+          "int4",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "inverse",
+          "text",
+          false,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
+        ],
+        [
+          "since_rev",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "doc_ord",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "retired_rev",
+          "int4",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "definition_source_kind",
+          "text",
+          false,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "definition_rev",
+          "int4",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "definition_doc_ord",
+          "int4",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "definition_document_id",
+          "text",
+          false,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "binding_source_rev",
+          "int4",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "binding_source_pointer",
+          "text",
+          false,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "binding_source_bytes",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "rel_endpoint": [
+        [
+          "rel_type_id",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "source_type",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "target_type",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "relationship_lineage": [
+        [
+          "rel_type_id",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "lineage_category",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
+        ],
+        [
+          "identity_profile",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
+        ],
+        [
+          "original_identity_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "identity_sha256",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "request_receipt": [
+        [
+          "storage_row_id",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "namespace_identity_utf8",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "request_id_utf8",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_writer_xid",
+          "xid8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_writer_context_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "lifecycle_generation",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "payload_state",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
+        ],
+        [
+          "original_receipt_bytes",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "expired_identity_bytes",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "namespace_sha256",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "request_sha256",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "expiry_writer_xid",
+          "xid8",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "expiry_writer_context_bytes",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "request_receipt_protection": [
+        [
+          "receipt_storage_row_id",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "protection_generation",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_protection_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_update_evidence_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_update_writer_xid",
+          "xid8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_update_writer_context_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "request_receipt_route_guard": [
+        [
+          "namespace_sha256",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "request_sha256",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "generation",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "row_home_capacity": [
+        [
+          "singleton_id",
+          "int2",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "retained_rows",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "retained_custody_bytes",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "reserved_rows",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "reserved_custody_bytes",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_layout_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_resource_profile_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "row_home_journal_stage": [
+        [
+          "original_writer_xid",
+          "xid8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "operation_ordinal",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "stage_name",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "stage_ordinal",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "effect_generation",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "body_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "row_home_node": [
+        [
+          "state_id",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "node_id",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "parent_node_id",
+          "int8",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "slot_kind",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "sequence_ordinal",
+          "int8",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "map_key",
+          "text",
+          false,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "record_field_identity_bytes",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "value_kind",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "definition_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "source_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "row_home_operation": [
+        [
+          "original_writer_xid",
+          "xid8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "operation_ordinal",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "operation_kind",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "phase",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "effect_generation",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "readiness_generation",
+          "int8",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "sealed_generation",
+          "int8",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "application_generation",
+          "int8",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_context_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_definition_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_input_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_prestate_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "admitted_candidate_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "effect_obligation_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_group_custody_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "application_result_bytes",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "row_home_scalar": [
+        [
+          "state_id",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "node_id",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "scalar_kind",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "text_value",
+          "text",
+          false,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "boolean_value",
+          "bool",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "numeric_value",
+          "numeric",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "numeric_token",
+          "text",
+          false,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "binary_value",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "temporal_text",
+          "text",
+          false,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "temporal_instant",
+          "timestamptz",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "opaque_bytes",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "codec_definition_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_source_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "row_home_state": [
+        [
+          "state_id",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "owner_kind",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "object_id",
+          "int8",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "object_type_id",
+          "int4",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "edge_id",
+          "int8",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "relationship_type_id",
+          "int4",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "property_owner_type_id",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "property_id",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "root_node_id",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "definition_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "home_profile_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "value_profile_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "source_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "row_home_touch": [
+        [
+          "transaction_id",
+          "xid8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "owner_kind",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "owner_id",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "owner_discriminator_id",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "property_owner_type_id",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "property_id",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "dirty_generation",
+          "int8",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "sealed_generation",
+          "int8",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_layout_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_home_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_owner_property_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "original_operation_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "schema_change": [
+        [
+          "rev",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "seq",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "kind",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
+        ],
+        [
+          "def_id",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "before",
+          "jsonb",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "after",
+          "jsonb",
+          true,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "schema_doc": [
+        [
+          "rev",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "ord",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "doc_id",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "doc_revision",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
+        ],
+        [
+          "umf_version",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
+        ],
+        [
+          "content_sha256",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
+        ],
+        [
+          "document",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
+        ],
+        [
+          "validation",
+          "jsonb",
+          true,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "schema_head": [
+        [
+          "id",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "rev",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "schema_rev": [
+        [
+          "rev",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "accepted_at",
+          "timestamptz",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "origin",
+          "jsonb",
+          true,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "setting": [
+        [
+          "key",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
+        ],
+        [
+          "value",
+          "jsonb",
+          true,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "source_epoch_current": [
+        [
+          "singleton_id",
+          "int2",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "installation_id",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "source_epoch",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ]
+      ],
+      "source_epoch_registry": [
+        [
+          "installation_id",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "source_epoch",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "target_incarnation",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "predecessor_epoch",
+          "text",
+          false,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "transition_reason",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "profile_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "evidence_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "evidence_sha256",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ]
+      ],
+      "type_def": [
+        [
+          "document_id",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "type_id",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "module",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "element",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "kind",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "default"
+          ]
+        ],
+        [
+          "provisional",
+          "bool",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "since_rev",
+          "int4",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "doc_ord",
+          "int4",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "retired_rev",
+          "int4",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "lineage_profile",
+          "text",
+          true,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "lineage_bytes",
+          "bytea",
+          true,
+          0,
+          -1,
+          null
+        ],
+        [
+          "lineage_sha256",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "definition_source_kind",
+          "text",
+          false,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "definition_rev",
+          "int4",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "definition_doc_ord",
+          "int4",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "definition_document_id",
+          "text",
+          false,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "binding_source_rev",
+          "int4",
+          false,
+          0,
+          -1,
+          null
+        ],
+        [
+          "binding_source_pointer",
+          "text",
+          false,
+          0,
+          -1,
+          [
+            "pg_catalog",
+            "C"
+          ]
+        ],
+        [
+          "binding_source_bytes",
+          "bytea",
+          false,
+          0,
+          -1,
+          null
+        ]
+      ]
+    },
+    "foreignKeys": [
+      [
+        "schema_head",
+        "schema_rev",
+        [
+          "rev"
+        ],
+        [
+          "rev"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "schema_doc",
+        "schema_rev",
+        [
+          "rev"
+        ],
+        [
+          "rev"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "schema_change",
+        "schema_rev",
+        [
+          "rev"
+        ],
+        [
+          "rev"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "type_def",
+        "schema_rev",
+        [
+          "since_rev"
+        ],
+        [
+          "rev"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "type_def",
+        "schema_rev",
+        [
+          "retired_rev"
+        ],
+        [
+          "rev"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "type_def",
+        "schema_doc",
+        [
+          "since_rev",
+          "doc_ord"
+        ],
+        [
+          "rev",
+          "ord"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "prop_def",
+        "type_def",
+        [
+          "type_id"
+        ],
+        [
+          "type_id"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "prop_def",
+        "schema_rev",
+        [
+          "since_rev"
+        ],
+        [
+          "rev"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "prop_def",
+        "schema_rev",
+        [
+          "retired_rev"
+        ],
+        [
+          "rev"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "prop_def",
+        "schema_doc",
+        [
+          "since_rev",
+          "doc_ord"
+        ],
+        [
+          "rev",
+          "ord"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "key_def",
+        "type_def",
+        [
+          "type_id"
+        ],
+        [
+          "type_id"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "key_def",
+        "schema_rev",
+        [
+          "since_rev"
+        ],
+        [
+          "rev"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "key_def",
+        "schema_rev",
+        [
+          "retired_rev"
+        ],
+        [
+          "rev"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "rel_def",
+        "type_def",
+        [
+          "assoc_type_id"
+        ],
+        [
+          "type_id"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "rel_def",
+        "schema_rev",
+        [
+          "since_rev"
+        ],
+        [
+          "rev"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "rel_def",
+        "schema_rev",
+        [
+          "retired_rev"
+        ],
+        [
+          "rev"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "rel_def",
+        "schema_doc",
+        [
+          "since_rev",
+          "doc_ord"
+        ],
+        [
+          "rev",
+          "ord"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "rel_endpoint",
+        "rel_def",
+        [
+          "rel_type_id"
+        ],
+        [
+          "rel_type_id"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "rel_endpoint",
+        "type_def",
+        [
+          "source_type"
+        ],
+        [
+          "type_id"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "rel_endpoint",
+        "type_def",
+        [
+          "target_type"
+        ],
+        [
+          "type_id"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "object",
+        "type_def",
+        [
+          "type_id"
+        ],
+        [
+          "type_id"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "object",
+        "schema_rev",
+        [
+          "rev"
+        ],
+        [
+          "rev"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "object",
+        "object",
+        [
+          "root_id",
+          "root_type"
+        ],
+        [
+          "id",
+          "type_id"
+        ],
+        "s",
+        "a",
+        "r",
+        false,
+        false,
+        true
+      ],
+      [
+        "edge",
+        "schema_rev",
+        [
+          "rev"
+        ],
+        [
+          "rev"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "edge",
+        "object",
+        [
+          "source_id",
+          "source_type"
+        ],
+        [
+          "id",
+          "type_id"
+        ],
+        "s",
+        "a",
+        "r",
+        false,
+        false,
+        true
+      ],
+      [
+        "edge",
+        "object",
+        [
+          "target_id",
+          "target_type"
+        ],
+        [
+          "id",
+          "type_id"
+        ],
+        "s",
+        "a",
+        "r",
+        false,
+        false,
+        true
+      ],
+      [
+        "edge",
+        "rel_endpoint",
+        [
+          "rel_type_id",
+          "source_type",
+          "target_type"
+        ],
+        [
+          "rel_type_id",
+          "source_type",
+          "target_type"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "edge_limit",
+        "edge",
+        [
+          "edge_id"
+        ],
+        [
+          "id"
+        ],
+        "s",
+        "a",
+        "c",
+        false,
+        false,
+        true
+      ],
+      [
+        "row_home_state",
+        "edge",
+        [
+          "edge_id",
+          "relationship_type_id"
+        ],
+        [
+          "id",
+          "rel_type_id"
+        ],
+        "s",
+        "a",
+        "c",
+        false,
+        false,
+        true
+      ],
+      [
+        "row_home_journal_stage",
+        "row_home_operation",
+        [
+          "original_writer_xid",
+          "operation_ordinal"
+        ],
+        [
+          "original_writer_xid",
+          "operation_ordinal"
+        ],
+        "s",
+        "a",
+        "r",
+        false,
+        false,
+        true
+      ],
+      [
+        "row_home_state",
+        "prop_def",
+        [
+          "property_owner_type_id",
+          "property_id"
+        ],
+        [
+          "type_id",
+          "prop_id"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "row_home_state",
+        "object",
+        [
+          "object_id",
+          "object_type_id"
+        ],
+        [
+          "id",
+          "type_id"
+        ],
+        "s",
+        "a",
+        "c",
+        false,
+        false,
+        true
+      ],
+      [
+        "row_home_node",
+        "row_home_state",
+        [
+          "state_id"
+        ],
+        [
+          "state_id"
+        ],
+        "s",
+        "a",
+        "c",
+        false,
+        false,
+        true
+      ],
+      [
+        "row_home_node",
+        "row_home_node",
+        [
+          "state_id",
+          "parent_node_id"
+        ],
+        [
+          "state_id",
+          "node_id"
+        ],
+        "s",
+        "a",
+        "c",
+        true,
+        true,
+        true
+      ],
+      [
+        "row_home_state",
+        "row_home_node",
+        [
+          "state_id",
+          "root_node_id"
+        ],
+        [
+          "state_id",
+          "node_id"
+        ],
+        "s",
+        "a",
+        "a",
+        true,
+        true,
+        true
+      ],
+      [
+        "row_home_scalar",
+        "row_home_node",
+        [
+          "state_id",
+          "node_id"
+        ],
+        [
+          "state_id",
+          "node_id"
+        ],
+        "s",
+        "a",
+        "c",
+        false,
+        false,
+        true
+      ],
+      [
+        "relationship_lineage",
+        "rel_def",
+        [
+          "rel_type_id"
+        ],
+        [
+          "rel_type_id"
+        ],
+        "s",
+        "a",
+        "r",
+        false,
+        false,
+        true
+      ],
+      [
+        "type_def",
+        "schema_doc",
+        [
+          "definition_rev",
+          "definition_doc_ord",
+          "definition_document_id"
+        ],
+        [
+          "rev",
+          "ord",
+          "doc_id"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "type_def",
+        "schema_rev",
+        [
+          "binding_source_rev"
+        ],
+        [
+          "rev"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "prop_def",
+        "schema_doc",
+        [
+          "definition_rev",
+          "definition_doc_ord",
+          "definition_document_id"
+        ],
+        [
+          "rev",
+          "ord",
+          "doc_id"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "prop_def",
+        "schema_rev",
+        [
+          "binding_source_rev"
+        ],
+        [
+          "rev"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "object_key_reservation_bucket",
+        "key_bucket_guard",
+        [
+          "namespace_sha256",
+          "key_sha256"
+        ],
+        [
+          "namespace_sha256",
+          "key_sha256"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "feed_member",
+        "feed_tx",
+        [
+          "source_epoch",
+          "feed_profile",
+          "original_writer_xid"
+        ],
+        [
+          "source_epoch",
+          "feed_profile",
+          "original_writer_xid"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "key_def",
+        "schema_doc",
+        [
+          "definition_rev",
+          "definition_doc_ord",
+          "definition_document_id"
+        ],
+        [
+          "rev",
+          "ord",
+          "doc_id"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "key_def",
+        "schema_rev",
+        [
+          "binding_source_rev"
+        ],
+        [
+          "rev"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "rel_def",
+        "schema_doc",
+        [
+          "definition_rev",
+          "definition_doc_ord",
+          "definition_document_id"
+        ],
+        [
+          "rev",
+          "ord",
+          "doc_id"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "rel_def",
+        "schema_rev",
+        [
+          "binding_source_rev"
+        ],
+        [
+          "rev"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "object_key_bucket",
+        "key_def",
+        [
+          "type_id",
+          "key_num"
+        ],
+        [
+          "type_id",
+          "key_num"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "object_key_bucket",
+        "object",
+        [
+          "object_id",
+          "type_id"
+        ],
+        [
+          "id",
+          "type_id"
+        ],
+        "s",
+        "a",
+        "c",
+        false,
+        false,
+        true
+      ],
+      [
+        "object_key_bucket",
+        "key_bucket_guard",
+        [
+          "namespace_sha256",
+          "key_sha256"
+        ],
+        [
+          "namespace_sha256",
+          "key_sha256"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "catalog_acceptance_report",
+        "schema_rev",
+        [
+          "rev"
+        ],
+        [
+          "rev"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "installation_archive",
+        "installation_marker",
+        [
+          "installation_id"
+        ],
+        [
+          "installation_id"
+        ],
+        "s",
+        "a",
+        "r",
+        true,
+        true,
+        true
+      ],
+      [
+        "feed_prerequisite",
+        "feed_tx",
+        [
+          "source_epoch",
+          "feed_profile",
+          "original_writer_xid"
+        ],
+        [
+          "source_epoch",
+          "feed_profile",
+          "original_writer_xid"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "feed_configuration_prerequisite",
+        "feed_tx",
+        [
+          "source_epoch",
+          "feed_profile",
+          "original_writer_xid"
+        ],
+        [
+          "source_epoch",
+          "feed_profile",
+          "original_writer_xid"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "complete_feed_seed_artifact",
+        "complete_feed_seed_attempt",
+        [
+          "attempt_row_id"
+        ],
+        [
+          "storage_row_id"
+        ],
+        "s",
+        "a",
+        "r",
+        true,
+        true,
+        true
+      ],
+      [
+        "key_lifecycle_history",
+        "schema_rev",
+        [
+          "rev"
+        ],
+        [
+          "rev"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "key_lifecycle_history",
+        "schema_rev",
+        [
+          "before_retired_rev"
+        ],
+        [
+          "rev"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "key_lifecycle_history",
+        "schema_rev",
+        [
+          "after_retired_rev"
+        ],
+        [
+          "rev"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "key_lifecycle_history",
+        "key_def",
+        [
+          "type_id",
+          "key_num"
+        ],
+        [
+          "type_id",
+          "key_num"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "installation_admission",
+        "schema_head",
+        [
+          "head_id"
+        ],
+        [
+          "id"
+        ],
+        "s",
+        "a",
+        "r",
+        false,
+        false,
+        true
+      ],
+      [
+        "request_receipt_protection",
+        "request_receipt",
+        [
+          "receipt_storage_row_id"
+        ],
+        [
+          "storage_row_id"
+        ],
+        "s",
+        "a",
+        "r",
+        false,
+        false,
+        true
+      ],
+      [
+        "source_epoch_registry",
+        "installation_marker",
+        [
+          "installation_id"
+        ],
+        [
+          "installation_id"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "source_epoch_registry",
+        "source_epoch_registry",
+        [
+          "installation_id",
+          "predecessor_epoch"
+        ],
+        [
+          "installation_id",
+          "source_epoch"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "source_epoch_current",
+        "source_epoch_registry",
+        [
+          "installation_id",
+          "source_epoch"
+        ],
+        [
+          "installation_id",
+          "source_epoch"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "operation_configuration",
+        "row_home_operation",
+        [
+          "original_writer_xid",
+          "operation_ordinal"
+        ],
+        [
+          "original_writer_xid",
+          "operation_ordinal"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "operation_configuration",
+        "source_epoch_registry",
+        [
+          "installation_id",
+          "source_epoch"
+        ],
+        [
+          "installation_id",
+          "source_epoch"
+        ],
+        "s",
+        "a",
+        "a",
+        false,
+        false,
+        true
+      ],
+      [
+        "layout_migration_receipt",
+        "source_epoch_registry",
+        [
+          "installation_id",
+          "original_source_epoch"
+        ],
+        [
+          "installation_id",
+          "source_epoch"
+        ],
+        "s",
+        "a",
+        "r",
+        false,
+        false,
+        true
+      ]
+    ],
+    "adjuncts": {
+      "layout_migration_receipt": {
+        "columns": 11,
+        "foreignKeys": 1,
+        "generatedHashes": 3,
+        "alwaysGuards": 2,
+        "publicInsert": false
+      },
+      "operation_configuration": {
+        "columns": 16,
+        "foreignKeys": 2,
+        "generatedHashes": 3,
+        "alwaysGuards": 2,
+        "publicInsert": false
+      }
+    },
+    "transactionTimeout": null
+  },
+  "rollbackRemovedNamespace": true,
+  "truncateRefusals": 4,
+  "truncateModes": [
+    "origin",
+    "replica"
+  ],
+  "unverifiedStructure": [
+    "collation implementation/version semantics",
+    "default and check expression meaning",
+    "index expression/predicate meaning and implicit constraint indexes",
+    "complete routines/grants"
+  ],
+  "limitation": "PostgreSQL16.2 lacks transaction_timeout; any selected profile requiring that setting must refuse or use a separately admitted bounded alternative",
+  "producerSha256": "e32296c5275bc91042e637f786e47927fd8d4995a7aeca39354cc9d261c07d3c"
+}

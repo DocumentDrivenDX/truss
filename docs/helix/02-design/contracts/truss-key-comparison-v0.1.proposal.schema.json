@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:key-comparison:0.1.0",
+  "title": "Proposed ordered typed business-key comparison definition",
+  "description": "No lexical canonical-key comparison or inferred native support. Each component comparator needs registered native interpretation and evidence.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-key-comparison/0.1.0"
+    },
+    "profile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "ownerTypeId": {
+      "$ref": "#/$defs/id"
+    },
+    "keyId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "acceptedKeyDefinition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "nullParticipation": {
+      "const": "forbidden"
+    },
+    "absentParticipation": {
+      "const": "forbidden"
+    },
+    "tupleComparison": {
+      "const": "authored-component-lexicographic"
+    },
+    "components": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "propertyId": {
+            "$ref": "#/$defs/id"
+          },
+          "valueDefinition": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          },
+          "comparatorProfile": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+          },
+          "comparatorDefinition": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          },
+          "equalityQualification": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          },
+          "orderingQualification": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          }
+        },
+        "required": [
+          "propertyId",
+          "valueDefinition",
+          "comparatorProfile",
+          "comparatorDefinition",
+          "equalityQualification"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "profile",
+    "ownerTypeId",
+    "keyId",
+    "acceptedKeyDefinition",
+    "nullParticipation",
+    "absentParticipation",
+    "tupleComparison",
+    "components"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^(0|-?[1-9][0-9]*)$",
+      "maxLength": 11
+    }
+  }
+}

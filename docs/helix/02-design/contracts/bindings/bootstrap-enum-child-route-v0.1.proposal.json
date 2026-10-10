@@ -1,0 +1,77 @@
+{
+  "interfaceVersion": "truss-bootstrap-route-entry/0.1.0",
+  "routeIdentity": "pg17.enum.child-direct/0.1.0",
+  "status": "unadopted; source pins only verified; native class/cut/transport/semantic producers unqualified",
+  "nativeClass": {
+    "namespace": "pg_catalog",
+    "relation": "pg_enum",
+    "classOid": "resolve from original target; never constant",
+    "storageScope": "database",
+    "subobjectNumber": "0"
+  },
+  "selector": "direct original pg_enum child OIDs",
+  "artifacts": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-enum-child-observation-pg17.proposal.sql",
+      "sha256": "8adc50f351413fbe1470cb9fd223eb28c66f76dfb79d5860d7268b9ea9c925d6"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-enum-child-observation-pg17.proposal.umf.json",
+      "sha256": "803b3d49179a8ddb41124b195818f677204b128358734c2b517b017c99099cd6"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/bootstrap-enum-child-observation.owner-export.sql",
+      "sha256": "bd64ad45e1635ccd7174446cb44b6f82f12da3f2dee819ff9e4123fe81ba23b4"
+    }
+  ],
+  "parameterGrammar": {
+    "slot": "1",
+    "nativeType": "pg_catalog.oid[]",
+    "dimensions": "exactly one",
+    "lowerBound": "1",
+    "nullAllowed": false,
+    "nullItemsAllowed": false,
+    "uniqueItems": true,
+    "countInclusive": [
+      "1",
+      "256"
+    ],
+    "itemDomain": "canonical nonzero uint32 decimal text; actual pg_enum child OID",
+    "encoder": "selected original canonical PostgreSQL array encoder; no JS numeric round trip"
+  },
+  "orderedColumns": [
+    "catalog_class_oid",
+    "object_oid",
+    "enum_type_oid",
+    "sort_order_native_text",
+    "sort_order_float4_send_hex",
+    "original_catalog_row_json"
+  ],
+  "coverage": "Exact unique requested child-address bijection; missing is absent; duplicate/extra/wrong-class refuses. Every admitted returned enum_type_oid schedules complete parent fanout.",
+  "requiredKnownFields": [
+    "oid",
+    "enumtypid",
+    "enumsortorder",
+    "enumlabel"
+  ],
+  "preservation": "Retain full exact returned row JSON text and every unknown extension member; lossless bounded selected native JSON decoder; no parse/stringify reconstruction",
+  "dependencyExtraction": {
+    "enumtypid": "required nonzero actual pg_type parent at subobject 0; complete original type definition/kind required",
+    "rowOid": "actual pg_enum child identity; original row oid must equal direct requested address",
+    "order": "Exact binary32 send-hex decoder and finite comparator; original full row/text retained. SQL ORDER BY e.oid is transport order only, never enum semantic order. Per-parent sort values/labels validated under selected native grammar.",
+    "definitionSpecification": {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-enum-definition-v0.1.proposal.json",
+      "sha256": "036901f6462dff60a1cd0214819e3ff6c0c93422d9ab1b9064750d01c9f63f85",
+      "admission": "Unadopted enclosing/per-field specification; not native producer or complete basis qualification"
+    }
+  },
+  "adjuncts": [
+    "complete original parent type definition and namespace authority closure",
+    "local dependency closure for actual required enum/type addresses",
+    "selected binary32 decoder/native semantic comparator",
+    "pg17.enum.type-fanout/0.1.0 for every original resolved enum_type_oid"
+  ],
+  "resourceProfile": "truss-bootstrap-collector-resource/0.1.0",
+  "refusal": "Original enum_type_oid/raw enumtypid mismatch or unsupported native meaning refuses; unavailable source/authority/cut/transport/resource cannot publish a resolved parent",
+  "resourceObligations": "Shared enclosing totals, complete original cut/authority and explicit pre-materialization/native-work permits; no independent per-route allowance"
+}

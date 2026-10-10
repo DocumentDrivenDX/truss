@@ -1,0 +1,22 @@
+{
+  "scope": "Pinned owner coefficient behavior only; no native or resource qualification",
+  "umfCommit": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+  "scale": 3,
+  "precision": 21,
+  "rows": [
+    {
+      "token": "0e999999999999999999999999999999999",
+      "coefficient": "0"
+    },
+    {
+      "token": "-0e999999999999999999999999999999999",
+      "coefficient": "0"
+    },
+    {
+      "token": "1e999999999999999999999999999999999",
+      "refused": true
+    }
+  ],
+  "ownerSourceSha256": "e7b79989a4fed35c518d1817953d4ecff99615b49634982a74501a1d014a1164",
+  "method": "Bun direct import of pinned owner schemaCoefficient; independently expected coefficients zero/zero and nonzero refusal. No Truss encoder used."
+}

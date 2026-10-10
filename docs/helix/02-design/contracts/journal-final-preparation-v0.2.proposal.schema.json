@@ -1,0 +1,199 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:proposal:journal-final-preparation:0.2.0",
+  "title": "Unadopted pre-reservation complete final preparation",
+  "description": "Private candidate/observed-final and ordered semantic sibling proposal. Original full capture/native effect/resource/owner/context correspondence remains semantic. Changed flags are observations, not authority. No allocated seq, manifest, seal or commit claim.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-journal-final-preparation/0.2.0-proposal"
+    },
+    "producerProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "originalOperationContext": {
+      "$ref": "urn:truss:draft:row-operation-context:0.1.0"
+    },
+    "originalStartCapture": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "completeEffectInventory": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "origin": {
+      "$ref": "urn:truss:proposal:history-event:0.2.0#/$defs/common/properties/origin"
+    },
+    "entities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "identity": {
+            "$ref": "urn:truss:draft:history-record:0.1.0#/$defs/identity"
+          },
+          "kind": {
+            "enum": [
+              "object",
+              "relationship"
+            ]
+          },
+          "changed": {
+            "type": "boolean"
+          },
+          "recordVersion": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$",
+            "maxLength": 20
+          },
+          "start": {
+            "$ref": "urn:truss:proposal:journal-start-capture:0.2.0#/properties/entities/items/properties/start"
+          },
+          "candidateFinal": {
+            "$ref": "urn:truss:proposal:journal-start-capture:0.2.0#/properties/entities/items/properties/start"
+          },
+          "observedFinal": {
+            "$ref": "urn:truss:proposal:journal-start-capture:0.2.0#/properties/entities/items/properties/start"
+          },
+          "originalDefinitionContext": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          },
+          "completeNativeFinalEvidence": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          },
+          "siblingOrdinals": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$",
+              "maxLength": 20
+            }
+          }
+        },
+        "required": [
+          "identity",
+          "kind",
+          "changed",
+          "recordVersion",
+          "start",
+          "candidateFinal",
+          "observedFinal",
+          "originalDefinitionContext",
+          "completeNativeFinalEvidence",
+          "siblingOrdinals"
+        ],
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "changed": {
+                  "const": true
+                }
+              },
+              "required": [
+                "changed"
+              ]
+            },
+            "then": {
+              "properties": {
+                "siblingOrdinals": {
+                  "type": "array",
+                  "minItems": 1
+                }
+              }
+            },
+            "else": {
+              "properties": {
+                "siblingOrdinals": {
+                  "type": "array",
+                  "maxItems": 0
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "siblings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "ordinal": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]*)$",
+            "maxLength": 20
+          },
+          "identity": {
+            "$ref": "urn:truss:draft:history-record:0.1.0#/$defs/identity"
+          },
+          "kind": {
+            "enum": [
+              "object",
+              "relationship"
+            ]
+          },
+          "recordVersion": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$",
+            "maxLength": 20
+          },
+          "catalogRevision": {
+            "$ref": "urn:truss:proposal:history-event:0.2.0#/$defs/common/properties/eventCatalogRevision"
+          },
+          "originalSemanticEvidence": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          },
+          "payload": {
+            "type": "object",
+            "oneOf": [
+              {
+                "$ref": "urn:truss:proposal:history-event:0.2.0#/allOf/1/oneOf/0"
+              },
+              {
+                "$ref": "urn:truss:proposal:history-event:0.2.0#/allOf/1/oneOf/1"
+              },
+              {
+                "$ref": "urn:truss:proposal:history-event:0.2.0#/allOf/1/oneOf/2"
+              },
+              {
+                "$ref": "urn:truss:proposal:history-event:0.2.0#/allOf/1/oneOf/3"
+              },
+              {
+                "$ref": "urn:truss:proposal:history-event:0.2.0#/allOf/1/oneOf/4"
+              },
+              {
+                "$ref": "urn:truss:proposal:history-event:0.2.0#/allOf/1/oneOf/5"
+              },
+              {
+                "$ref": "urn:truss:proposal:history-event:0.2.0#/allOf/1/oneOf/6"
+              }
+            ],
+            "unevaluatedProperties": false
+          }
+        },
+        "required": [
+          "ordinal",
+          "identity",
+          "kind",
+          "recordVersion",
+          "catalogRevision",
+          "originalSemanticEvidence",
+          "payload"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "producerProfile",
+    "originalOperationContext",
+    "originalStartCapture",
+    "completeEffectInventory",
+    "origin",
+    "entities",
+    "siblings"
+  ],
+  "additionalProperties": false
+}

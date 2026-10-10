@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:catalog-transform-result:0.1.0",
+  "title": "Draft catalog-transform-result",
+  "description": "Closed callback wire only; original registration, declared dependency inventory, same prior snapshot, supported definition pair and complete candidate admission require semantic/host qualification. No executable code or authority is carried.",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "const": "candidate"
+        },
+        "after": {
+          "$ref": "urn:truss:draft:exact-value:0.1.0#/$defs/presence"
+        }
+      },
+      "required": [
+        "outcome",
+        "after"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "const": "rejected"
+        },
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "path": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "outcome",
+        "code",
+        "path"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:reference-row-value:0.1.0",
+  "title": "Reference original scalar row-home value definition",
+  "description": "Closed reference scalar-field artifact composition. Not the JSON storage graph and not recursive/mixed-home support, a Weft ABI, actual catalog identity or installed registration. Original field/native/codec correspondence requires semantic admission.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-reference-row-value/0.1.0"
+    },
+    "profile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "fieldIdentity": {
+      "$ref": "urn:truss:draft:value-definition:0.1.0#/$defs/identity"
+    },
+    "rootInterpretation": {
+      "const": "original-owned-scalar-or-null-under-presence-definition"
+    },
+    "scalarFamily": {
+      "enum": [
+        "string",
+        "decimal"
+      ]
+    },
+    "definitionScope": {
+      "const": "original-account-item-four-scalar-fields-only"
+    },
+    "acceptedDefinition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "authoredDefinition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "rowJoinDefinition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "presenceDefinition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "scalarCodecDefinition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "physicalDefinition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "profile",
+    "fieldIdentity",
+    "rootInterpretation",
+    "scalarFamily",
+    "definitionScope",
+    "acceptedDefinition",
+    "authoredDefinition",
+    "rowJoinDefinition",
+    "presenceDefinition",
+    "scalarCodecDefinition",
+    "physicalDefinition"
+  ],
+  "additionalProperties": false
+}

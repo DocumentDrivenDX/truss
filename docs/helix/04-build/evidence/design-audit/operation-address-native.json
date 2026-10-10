@@ -1,0 +1,86 @@
+{
+  "scope": "Native builtin JSON scalar spelling and current-xid correspondence against private Python candidate address codec; administrative isolated fixture, no installed address routine",
+  "serverVersion": "16.15",
+  "sql": "SELECT convert_to('[' || array_to_string(ARRAY[\n  to_json(CAST(:domain AS text))::text,to_json(CAST(:installation AS text))::text,\n  to_json(pg_current_xact_id()::text)::text,to_json(CAST(:ordinal AS text))::text], ',') || ']', 'UTF8')",
+  "observations": [
+    {
+      "id": "scalar-0",
+      "installationUtf8Hex": "696e7374616c6c6174696f6e",
+      "originalAddressHex": "5b2274727573732d726f772d6f7065726174696f6e2d616464726573732f302e312e30222c22696e7374616c6c6174696f6e222c22373330222c2237225d",
+      "writerXid": "730",
+      "operationOrdinal": "7"
+    },
+    {
+      "id": "scalar-1",
+      "installationUtf8Hex": "71756f7465732220616e64206261636b736c6173685c",
+      "originalAddressHex": "5b2274727573732d726f772d6f7065726174696f6e2d616464726573732f302e312e30222c2271756f7465735c2220616e64206261636b736c6173685c5c222c22373330222c223131225d",
+      "writerXid": "730",
+      "operationOrdinal": "11"
+    },
+    {
+      "id": "scalar-2",
+      "installationUtf8Hex": "080c0a0d09",
+      "originalAddressHex": "5b2274727573732d726f772d6f7065726174696f6e2d616464726573732f302e312e30222c225c625c665c6e5c725c74222c22373330222c223135225d",
+      "writerXid": "730",
+      "operationOrdinal": "15"
+    },
+    {
+      "id": "scalar-3",
+      "installationUtf8Hex": "0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+      "originalAddressHex": "5b2274727573732d726f772d6f7065726174696f6e2d616464726573732f302e312e30222c225c75303030315c75303030325c75303030335c75303030345c75303030355c75303030365c75303030375c625c745c6e5c75303030625c665c725c75303030655c75303030665c75303031305c75303031315c75303031325c75303031335c75303031345c75303031355c75303031365c75303031375c75303031385c75303031395c75303031615c75303031625c75303031635c75303031645c75303031655c7530303166222c22373330222c223139225d",
+      "writerXid": "730",
+      "operationOrdinal": "19"
+    },
+    {
+      "id": "scalar-4",
+      "installationUtf8Hex": "7f",
+      "originalAddressHex": "5b2274727573732d726f772d6f7065726174696f6e2d616464726573732f302e312e30222c227f222c22373330222c223233225d",
+      "writerXid": "730",
+      "operationOrdinal": "23"
+    },
+    {
+      "id": "scalar-5",
+      "installationUtf8Hex": "c3a9",
+      "originalAddressHex": "5b2274727573732d726f772d6f7065726174696f6e2d616464726573732f302e312e30222c22c3a9222c22373330222c223237225d",
+      "writerXid": "730",
+      "operationOrdinal": "27"
+    },
+    {
+      "id": "scalar-6",
+      "installationUtf8Hex": "e280a8e280a9",
+      "originalAddressHex": "5b2274727573732d726f772d6f7065726174696f6e2d616464726573732f302e312e30222c22e280a8e280a9222c22373330222c223331225d",
+      "writerXid": "730",
+      "operationOrdinal": "31"
+    },
+    {
+      "id": "scalar-7",
+      "installationUtf8Hex": "c280dfbfe0a080ed9fbfee8080efbfbff0908080f48fbfbf",
+      "originalAddressHex": "5b2274727573732d726f772d6f7065726174696f6e2d616464726573732f302e312e30222c22c280dfbfe0a080ed9fbfee8080efbfbff0908080f48fbfbf222c22373330222c223335225d",
+      "writerXid": "730",
+      "operationOrdinal": "35"
+    },
+    {
+      "id": "native-text-nul-refusal",
+      "sqlstate": "22021"
+    },
+    {
+      "id": "same-native-xid-after-confirmed-refusal",
+      "writerXid": "730"
+    }
+  ],
+  "sourceSha256": {
+    "packages/python/src/truss/_row_operation_address.py": "51af38dbda5c94f8a3ca8c92af3abef1f9919d1d44f6ae1c872c609b747eaf08",
+    "packages/python/src/truss/_acceptance_json.py": "303638af137138a796542aa5425985d147e510a23639fca9b2d6221966337a01"
+  },
+  "producerSha256": "0a17e6730a949bda1b5d79a5eaa9e6a02d604c9422053c86add2f07e76cdadde",
+  "nativeAddressProfileQualified": false,
+  "installerReady": false,
+  "acceptanceCasesPromoted": [],
+  "limitations": [
+    "Eight finite scalar samples are not all native scalar/domain/encoding profiles",
+    "PostgreSQL text rejects NUL even though a host JSON string can represent it; original native installation identity admission must reject unsupported text",
+    "Ordinals are manually selected fixtures, not original host issuer custody",
+    "No installed encoder identity/owner/ACL/dependency qualification",
+    "No original installation/context/group registry resolution, semantic body, resource or authority qualification"
+  ]
+}

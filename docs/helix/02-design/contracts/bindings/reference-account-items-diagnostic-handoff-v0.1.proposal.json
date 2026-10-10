@@ -1,0 +1,125 @@
+{
+  "interfaceVersion": "truss-reference-fixture-diagnostic-handoff/0.1.0",
+  "sourceReceipt": "docs/helix/04-build/evidence/design-audit/reference-account-items-source.json",
+  "sourceReceiptSha256": "288cb0fa894d88e30df38b959930db3ae44f83695c08eeb20285bb5dceabccab",
+  "fixture": {
+    "path": "docs/helix/02-design/contracts/bindings/reference-account-items-v0.1.proposal.umf.json",
+    "sha256": "94f8367c3dd2462fb3f32a624f053bf56f023ddd3bf86bf5219bbc1e24b6fcc1"
+  },
+  "originalValidation": {
+    "valid": true,
+    "complete": false,
+    "diagnostics": [
+      {
+        "code": "EXPERIMENTAL_CORE_NULLABILITY",
+        "path": "/umf",
+        "message": "Nullability envelope is experimental; no native absence encoding or default execution is implied",
+        "severity": "warning"
+      },
+      {
+        "code": "EXPERIMENTAL_CORE_CARDINALITY",
+        "path": "/umf",
+        "message": "Cardinality envelope is experimental; native shape and item semantics require explicit bindings",
+        "severity": "warning"
+      },
+      {
+        "code": "EXPERIMENTAL_CORE_FACETS",
+        "path": "/umf",
+        "message": "Facet envelope is experimental; bounds do not establish native enforcement or value conversion",
+        "severity": "warning"
+      },
+      {
+        "code": "EXPERIMENTAL_CORE_KEYS",
+        "path": "/umf",
+        "message": "Candidate key profile; native uniqueness and author provenance are not inferred",
+        "severity": "warning"
+      },
+      {
+        "code": "EXPERIMENTAL_CORE_RELATIONSHIPS",
+        "path": "/umf",
+        "message": "Candidate authored relationship profile; native enforcement and storage are not inferred",
+        "severity": "warning"
+      }
+    ]
+  },
+  "handoffs": [
+    {
+      "originalDiagnostic": {
+        "code": "EXPERIMENTAL_CORE_NULLABILITY",
+        "path": "/umf",
+        "message": "Nullability envelope is experimental; no native absence encoding or default execution is implied",
+        "severity": "warning"
+      },
+      "area": "presence/null",
+      "governingContracts": [
+        "CONTRACT-004",
+        "CONTRACT-010"
+      ],
+      "trussObligation": "Bind required/absent-allowed metadata to exact native absent, explicit null and nonnull carriers; note absent/null/empty remain distinct. No default execution follows.",
+      "status": "unresolved; no native support or adoption inferred"
+    },
+    {
+      "originalDiagnostic": {
+        "code": "EXPERIMENTAL_CORE_CARDINALITY",
+        "path": "/umf",
+        "message": "Cardinality envelope is experimental; native shape and item semantics require explicit bindings",
+        "severity": "warning"
+      },
+      "area": "container shape",
+      "governingContracts": [
+        "CONTRACT-001",
+        "CONTRACT-010"
+      ],
+      "trussObligation": "Bind every cardinality=one Field to one complete scalar root and no implicit array/map; full companion recursive/map/array capabilities remain separately required.",
+      "status": "unresolved; no native support or adoption inferred"
+    },
+    {
+      "originalDiagnostic": {
+        "code": "EXPERIMENTAL_CORE_FACETS",
+        "path": "/umf",
+        "message": "Facet envelope is experimental; bounds do not establish native enforcement or value conversion",
+        "severity": "warning"
+      },
+      "area": "numeric refinement",
+      "governingContracts": [
+        "CONTRACT-010"
+      ],
+      "trussObligation": "Qualify decimal precision21/scale3 admission, overflow/no-rounding, exact lexical token retention and storage versus comparison/key capabilities independently.",
+      "status": "unresolved; no native support or adoption inferred"
+    },
+    {
+      "originalDiagnostic": {
+        "code": "EXPERIMENTAL_CORE_KEYS",
+        "path": "/umf",
+        "message": "Candidate key profile; native uniqueness and author provenance are not inferred",
+        "severity": "warning"
+      },
+      "area": "key identity",
+      "governingContracts": [
+        "CONTRACT-001",
+        "CONTRACT-003",
+        "CONTRACT-004"
+      ],
+      "trussObligation": "Admit original authored Record/member/code key provenance, UMF key operation/profile, full record-local uniqueness and native concurrency/bypass enforcement.",
+      "status": "unresolved; no native support or adoption inferred"
+    },
+    {
+      "originalDiagnostic": {
+        "code": "EXPERIMENTAL_CORE_RELATIONSHIPS",
+        "path": "/umf",
+        "message": "Candidate authored relationship profile; native enforcement and storage are not inferred",
+        "severity": "warning"
+      },
+      "area": "relationship semantics",
+      "governingContracts": [
+        "CONTRACT-001",
+        "CONTRACT-004",
+        "CONTRACT-009"
+      ],
+      "trussObligation": "Admit exact Account/Item and target by-code key lineage, independent lifecycle, direction and both multiplicities; native atomic target/source bounds and endpoint/type/key/ownership enforcement required.",
+      "status": "unresolved; no native support or adoption inferred"
+    }
+  ],
+  "unknownDiagnosticPolicy": "refuse selected fixture handoff completeness; retain original diagnostic, never severity/code suppression",
+  "admission": "not an admission permit; upstream valid/complete axes unchanged and every required registered semantic/value check must independently satisfy its original completeness protocol"
+}

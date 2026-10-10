@@ -1,0 +1,91 @@
+{
+  "scope": "Committed-source review only; owner executions and binary hashes not independently rerun or verified by Truss",
+  "sourceCommit": "1ed1c24dce356e1dfe34ae049959f4af52ea0bc5",
+  "previousCheckpoint": "dc9b709f1d70ae52998f9538babc122eb4a83516",
+  "sourcePins": [
+    {
+      "path": "docs/helix/04-build/evidence/B-006-acceptance.md",
+      "sha256": "1b3d887f9b7d2900749befba25c615333424da77723c2e01cd32ecca2ed4843d",
+      "bytes": 8013
+    },
+    {
+      "path": "docs/helix/04-build/evidence/B-006-host-native/summary.json",
+      "sha256": "c77243c3e06c3c5a2cad4b10f2cb0511059d644d64d07220bbbebcdb4c6f92ff",
+      "bytes": 11015
+    },
+    {
+      "path": "docs/helix/04-build/evidence/B-006-compound-application-native/summary.json",
+      "sha256": "151ffbc8df2e62b63fbddbacd43630d09771c6b1466bdffd5a346e0bebbfecf7",
+      "bytes": 15481
+    },
+    {
+      "path": "docs/helix/04-build/evidence/B-006-final-browser-summary.json",
+      "sha256": "d037b868af541f4a17c1d756cf966a25cd3e0c8fd11f804b234664b77acbb41e",
+      "bytes": 797
+    },
+    {
+      "path": "docs/helix/04-build/evidence/B-006-final-python-summary.json",
+      "sha256": "c778807685e495fa5cca0ca697d29195e4e642a2c86fb6ea661426cc4557fc08",
+      "bytes": 393
+    },
+    {
+      "path": "docs/helix/04-build/evidence/B-006-presence-metadata-corrections.json",
+      "sha256": "a0aa46a0162b618efabb50da0a89361cc9b3b6b7defa5818afd9965cee54c9ef",
+      "bytes": 40844
+    },
+    {
+      "path": "crates/weft-databricks/src/candidate.rs",
+      "sha256": "1f4094fc5b64b7b342290f4626c084d95882d02a8acd7c180830ecac3030d57c",
+      "bytes": 27293
+    },
+    {
+      "path": "tests/ashlar-databricks/python-check.py",
+      "sha256": "fe34e32cc7021e8fe76a6bb3f1c5fd2d230db03e1e46fea629f89f8ac3432ad3",
+      "bytes": 3941
+    }
+  ],
+  "completeChangedPathInventory": [
+    "crates/weft-databricks/src/candidate.rs",
+    "docs/helix/02-design/technical-designs/TD-004-ashlar-databricks.md",
+    "docs/helix/03-test/TP-001-compiler-conformance.md",
+    "docs/helix/03-test/test-plans/STP-004-ashlar-databricks.md",
+    "docs/helix/04-build/evidence/B-006-acceptance.md",
+    "docs/helix/04-build/evidence/B-006-compound-application-binary-custody-control.log",
+    "docs/helix/04-build/evidence/B-006-compound-application-native/accepted-statements.jsonl",
+    "docs/helix/04-build/evidence/B-006-compound-application-native/compile-artifacts.jsonl",
+    "docs/helix/04-build/evidence/B-006-compound-application-native/custody.json",
+    "docs/helix/04-build/evidence/B-006-compound-application-native/statements.jsonl",
+    "docs/helix/04-build/evidence/B-006-compound-application-native/summary.json",
+    "docs/helix/04-build/evidence/B-006-compound-preparation.md",
+    "docs/helix/04-build/evidence/B-006-final-ashlar-regression.log",
+    "docs/helix/04-build/evidence/B-006-final-browser-summary.json",
+    "docs/helix/04-build/evidence/B-006-final-cli-parity.json",
+    "docs/helix/04-build/evidence/B-006-final-python-summary.json",
+    "docs/helix/04-build/evidence/B-006-host-binary-custody-control.log",
+    "docs/helix/04-build/evidence/B-006-host-native/accepted-statements.jsonl",
+    "docs/helix/04-build/evidence/B-006-host-native/compile-artifacts.jsonl",
+    "docs/helix/04-build/evidence/B-006-host-native/custody.json",
+    "docs/helix/04-build/evidence/B-006-host-native/statements.jsonl",
+    "docs/helix/04-build/evidence/B-006-host-native/summary.json",
+    "docs/helix/04-build/evidence/B-006-presence-domain-before.log",
+    "docs/helix/04-build/evidence/B-006-presence-metadata-corrections.json",
+    "docs/helix/04-build/evidence/B-006-property-id-probes/statements.jsonl",
+    "docs/helix/04-build/evidence/B-006-property-id-probes/summary.json",
+    "docs/helix/04-build/evidence/B-006-workspace-regression.log",
+    "docs/helix/04-build/implementation-plan.md",
+    "docs/helix/README.md",
+    "tests/ashlar-databricks/compiler.rs",
+    "tests/ashlar-databricks/python-check.py"
+  ],
+  "trussBackendChanged": false,
+  "ownerAcceptance": "B-006 accepted for candidate compiler slice; B-007 release/conformance remains open",
+  "ownerReportedEvidence": {
+    "nativeHostCases": 30,
+    "independentHostControls": 49,
+    "compoundEntityKeysetCases": 48,
+    "fullArtifactParityCases": 463,
+    "presenceDeclarationAmendedCases": 172
+  },
+  "compatibilityBoundary": "Optional scalar or compound absence/value support still explicitly refuses native null. Databricks storage, authority attestations and transport do not qualify Truss row-home registration or production authority.",
+  "execution": "not_run"
+}

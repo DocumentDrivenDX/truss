@@ -1,0 +1,15 @@
+{
+  "scope": "independent complete source AST composition parity, parent/child order and columns only; no native execution or installation",
+  "helperSha256": "675a19bc82df09b5a17850fa8b83e48c47d65a14d36d488e9b78514743639ac7",
+  "candidateStatements": 43,
+  "parentColumns": 16,
+  "stageColumns": 6,
+  "onlyExpectedChanges": true,
+  "negativeControls": [
+    "reversed_parent_child",
+    "missing_parent",
+    "changed_stage_body_column"
+  ],
+  "nativeExecuted": false,
+  "installationReady": false
+}

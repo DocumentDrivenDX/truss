@@ -1,0 +1,428 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:postgresql-binding:0.1.0",
+  "title": "Proposed Truss PostgreSQL storage binding envelope",
+  "description": "Unadopted structural envelope for Weft BindingInput.json. Nested profile-owned artifact grammars, complete model coverage, identity compatibility, signed native range admission and selected layout/value/key/context consistency remain required; shape does not approve row homes or qualification.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-postgresql-binding/0.1.0"
+    },
+    "bindingProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "basis": {
+      "type": "object",
+      "properties": {
+        "modelBundle": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "catalogRevision": {
+          "type": "string",
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "maxLength": 11
+        },
+        "acceptedCatalog": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "layoutProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "layoutInventory": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "layoutSql": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "exporterProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "namespace": {
+          "type": "string",
+          "minLength": 1
+        },
+        "identityProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "valueProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "keyProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "readContextProfile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "readContextDefinition": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        }
+      },
+      "required": [
+        "modelBundle",
+        "catalogRevision",
+        "acceptedCatalog",
+        "layoutProfile",
+        "layoutInventory",
+        "layoutSql",
+        "exporterProfile",
+        "namespace",
+        "identityProfile",
+        "valueProfile",
+        "keyProfile",
+        "readContextProfile",
+        "readContextDefinition"
+      ],
+      "additionalProperties": false
+    },
+    "entities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "logical": {
+            "type": "object",
+            "properties": {
+              "documentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "revision": {
+                "type": "string",
+                "minLength": 1
+              },
+              "module": {
+                "type": "string",
+                "minLength": 1
+              },
+              "element": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "documentId",
+              "revision",
+              "module",
+              "element"
+            ],
+            "additionalProperties": false
+          },
+          "typeId": {
+            "type": "string",
+            "pattern": "^(0|-?[1-9][0-9]*)$",
+            "maxLength": 11
+          },
+          "acceptedDefinition": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          },
+          "source": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          }
+        },
+        "required": [
+          "logical",
+          "typeId",
+          "acceptedDefinition",
+          "source"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "properties": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "logical": {
+            "type": "object",
+            "properties": {
+              "documentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "revision": {
+                "type": "string",
+                "minLength": 1
+              },
+              "module": {
+                "type": "string",
+                "minLength": 1
+              },
+              "element": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "documentId",
+              "revision",
+              "module",
+              "element"
+            ],
+            "additionalProperties": false
+          },
+          "ownerTypeId": {
+            "type": "string",
+            "pattern": "^(0|-?[1-9][0-9]*)$",
+            "maxLength": 11
+          },
+          "propertyId": {
+            "type": "string",
+            "pattern": "^(0|-?[1-9][0-9]*)$",
+            "maxLength": 11
+          },
+          "home": {
+            "enum": [
+              "props",
+              "row"
+            ]
+          },
+          "homeProfile": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+          },
+          "homeDefinition": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          },
+          "valueProfile": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+          },
+          "valueDefinition": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          },
+          "presenceProfile": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+          },
+          "acceptedDefinition": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          },
+          "source": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          },
+          "presenceDefinition": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          }
+        },
+        "required": [
+          "logical",
+          "ownerTypeId",
+          "propertyId",
+          "home",
+          "homeProfile",
+          "homeDefinition",
+          "valueProfile",
+          "valueDefinition",
+          "presenceProfile",
+          "acceptedDefinition",
+          "source",
+          "presenceDefinition"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "keys": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "ownerTypeId": {
+            "type": "string",
+            "pattern": "^(0|-?[1-9][0-9]*)$",
+            "maxLength": 11
+          },
+          "keyId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "keyNumber": {
+            "type": "string",
+            "pattern": "^(0|-?[1-9][0-9]*)$",
+            "maxLength": 6
+          },
+          "orderedPropertyIds": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]*)$",
+              "maxLength": 11
+            }
+          },
+          "comparisonProfile": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+          },
+          "encodingProfile": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+          },
+          "acceptedDefinition": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          },
+          "comparisonDefinition": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          },
+          "encodingDefinition": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          }
+        },
+        "required": [
+          "ownerTypeId",
+          "keyId",
+          "keyNumber",
+          "orderedPropertyIds",
+          "comparisonProfile",
+          "encodingProfile",
+          "acceptedDefinition",
+          "comparisonDefinition",
+          "encodingDefinition"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "relationships": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "logical": {
+            "type": "object",
+            "properties": {
+              "documentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "revision": {
+                "type": "string",
+                "minLength": 1
+              },
+              "module": {
+                "type": "string",
+                "minLength": 1
+              },
+              "relationship": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "documentId",
+              "revision",
+              "module",
+              "relationship"
+            ],
+            "additionalProperties": false
+          },
+          "relationshipId": {
+            "type": "string",
+            "pattern": "^(0|-?[1-9][0-9]*)$",
+            "maxLength": 11
+          },
+          "sourceTypeId": {
+            "type": "string",
+            "pattern": "^(0|-?[1-9][0-9]*)$",
+            "maxLength": 11
+          },
+          "targetTypeId": {
+            "type": "string",
+            "pattern": "^(0|-?[1-9][0-9]*)$",
+            "maxLength": 11
+          },
+          "sourceKeyId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "targetKeyId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "relationshipProfile": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+          },
+          "acceptedDefinition": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          },
+          "source": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          },
+          "sourceOrderedPropertyIds": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]*)$",
+              "maxLength": 11
+            }
+          },
+          "targetOrderedPropertyIds": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]*)$",
+              "maxLength": 11
+            }
+          }
+        },
+        "required": [
+          "logical",
+          "relationshipId",
+          "sourceTypeId",
+          "targetTypeId",
+          "sourceKeyId",
+          "targetKeyId",
+          "relationshipProfile",
+          "acceptedDefinition",
+          "source",
+          "sourceOrderedPropertyIds",
+          "targetOrderedPropertyIds"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "executionObligations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "profile": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+          },
+          "definition": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          }
+        },
+        "required": [
+          "id",
+          "profile",
+          "definition"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "qualification": {
+      "type": "array",
+      "items": {
+        "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+      }
+    },
+    "bindingProfileId": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "bindingProfile",
+    "basis",
+    "entities",
+    "properties",
+    "keys",
+    "relationships",
+    "executionObligations",
+    "qualification",
+    "bindingProfileId"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,14 @@
+{
+  "scope": "full original update AST plus independently authored admitted/frozen-prefix guards only; no native timing, visibility, authority or effect proof",
+  "helperSha256": "3c4ccccc7855071b4aeda4ad7f1396476b78658e76adf643581f71340a0da8cc",
+  "returnedFields": 16,
+  "negativeControls": [
+    "missing_frozen_guard",
+    "wrong_stage_relation",
+    "missing_operation_association",
+    "allowed_ready_phase",
+    "changed_increment",
+    "missing_returned_field"
+  ],
+  "nativeExecuted": false
+}

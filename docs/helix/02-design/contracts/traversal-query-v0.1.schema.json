@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:traversal-query:0.1.0",
+  "title": "Draft normalized traversal semantic query",
+  "description": "Private semantic query, excluding page/work controls. Exact byte normalization and original definition/context admission required.",
+  "type": "object",
+  "properties": {
+    "domain": {
+      "const": "truss-direct-traversal-query/0.1.0"
+    },
+    "context": {
+      "$ref": "urn:truss:draft:direct-traversal-request:0.1.0#/properties/context"
+    },
+    "start": {
+      "$ref": "urn:truss:draft:direct-traversal-request:0.1.0#/properties/start"
+    },
+    "hops": {
+      "$ref": "urn:truss:draft:direct-traversal-request:0.1.0#/properties/hops"
+    }
+  },
+  "required": [
+    "domain",
+    "context",
+    "start",
+    "hops"
+  ],
+  "additionalProperties": false
+}

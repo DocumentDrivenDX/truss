@@ -1,0 +1,396 @@
+{
+  "profile": "truss-owner-preflight-result-vectors/0.1.0",
+  "status": "unadopted_planned_vectors",
+  "scope": "Original StatementResult carrier fixtures and independently specified test-environment dispositions only. testSetup labels are harness arrangements, never native authority/proof flags or public request fields. PF01 admits only a structural obligation, not query publication. Exact artifact/descriptor/visibility/resource/native completion producers remain selected prerequisites.",
+  "nativeExecution": false,
+  "cases": [
+    {
+      "id": "PF01",
+      "testSetup": {
+        "originalCheckMembership": "complete",
+        "observationScope": "qualified_complete",
+        "nativeDescriptor": "selected_int8_text",
+        "completion": "confirmed",
+        "remainingResources": "available"
+      },
+      "rawResult": {
+        "columns": [
+          "violations"
+        ],
+        "rows": [
+          [
+            {
+              "state": "text",
+              "text": "0"
+            }
+          ]
+        ],
+        "affectedRows": "1",
+        "command": "SELECT"
+      },
+      "expectedDisposition": "structural_obligation_only_admitted"
+    },
+    {
+      "id": "PF02",
+      "testSetup": {
+        "originalCheckMembership": "complete",
+        "observationScope": "qualified_complete",
+        "nativeDescriptor": "selected_int8_text",
+        "completion": "confirmed",
+        "remainingResources": "available"
+      },
+      "rawResult": {
+        "columns": [
+          "violations"
+        ],
+        "rows": [
+          [
+            {
+              "state": "text",
+              "text": "1"
+            }
+          ]
+        ],
+        "affectedRows": "1",
+        "command": "SELECT"
+      },
+      "expectedDisposition": "refuse_structural_violation"
+    },
+    {
+      "id": "PF03",
+      "testSetup": {
+        "originalCheckMembership": "complete",
+        "observationScope": "qualified_complete",
+        "nativeDescriptor": "selected_int8_text",
+        "completion": "confirmed",
+        "remainingResources": "available"
+      },
+      "rawResult": {
+        "columns": [
+          "violations"
+        ],
+        "rows": [
+          [
+            {
+              "state": "text",
+              "text": "9223372036854775807"
+            }
+          ]
+        ],
+        "affectedRows": "1",
+        "command": "SELECT"
+      },
+      "expectedDisposition": "refuse_structural_violation"
+    },
+    {
+      "id": "PF04",
+      "testSetup": {
+        "originalCheckMembership": "complete",
+        "observationScope": "qualified_complete",
+        "nativeDescriptor": "selected_int8_text",
+        "completion": "confirmed",
+        "remainingResources": "available"
+      },
+      "rawResult": {
+        "columns": [
+          "violations"
+        ],
+        "rows": [],
+        "affectedRows": "1",
+        "command": "SELECT"
+      },
+      "expectedDisposition": "refuse_original_result_admission"
+    },
+    {
+      "id": "PF05",
+      "testSetup": {
+        "originalCheckMembership": "complete",
+        "observationScope": "qualified_complete",
+        "nativeDescriptor": "selected_int8_text",
+        "completion": "confirmed",
+        "remainingResources": "available"
+      },
+      "rawResult": {
+        "columns": [
+          "violations"
+        ],
+        "rows": [
+          [
+            {
+              "state": "text",
+              "text": "0"
+            }
+          ],
+          [
+            {
+              "state": "text",
+              "text": "0"
+            }
+          ]
+        ],
+        "affectedRows": "1",
+        "command": "SELECT"
+      },
+      "expectedDisposition": "refuse_original_result_admission"
+    },
+    {
+      "id": "PF06",
+      "testSetup": {
+        "originalCheckMembership": "complete",
+        "observationScope": "qualified_complete",
+        "nativeDescriptor": "selected_int8_text",
+        "completion": "confirmed",
+        "remainingResources": "available"
+      },
+      "rawResult": {
+        "columns": [
+          "other_count"
+        ],
+        "rows": [
+          [
+            {
+              "state": "text",
+              "text": "0"
+            }
+          ]
+        ],
+        "affectedRows": "1",
+        "command": "SELECT"
+      },
+      "expectedDisposition": "refuse_original_result_admission"
+    },
+    {
+      "id": "PF07",
+      "testSetup": {
+        "originalCheckMembership": "complete",
+        "observationScope": "qualified_complete",
+        "nativeDescriptor": "selected_int8_text",
+        "completion": "confirmed",
+        "remainingResources": "available"
+      },
+      "rawResult": {
+        "columns": [
+          "violations"
+        ],
+        "rows": [
+          [
+            {
+              "state": "null"
+            }
+          ]
+        ],
+        "affectedRows": "1",
+        "command": "SELECT"
+      },
+      "expectedDisposition": "refuse_original_result_admission"
+    },
+    {
+      "id": "PF08",
+      "testSetup": {
+        "originalCheckMembership": "complete",
+        "observationScope": "qualified_complete",
+        "nativeDescriptor": "selected_int8_text",
+        "completion": "confirmed",
+        "remainingResources": "available"
+      },
+      "rawResult": {
+        "columns": [
+          "violations"
+        ],
+        "rows": [
+          [
+            {
+              "state": "text",
+              "text": "00"
+            }
+          ]
+        ],
+        "affectedRows": "1",
+        "command": "SELECT"
+      },
+      "expectedDisposition": "refuse_original_result_admission"
+    },
+    {
+      "id": "PF09",
+      "testSetup": {
+        "originalCheckMembership": "complete",
+        "observationScope": "qualified_complete",
+        "nativeDescriptor": "selected_int8_text",
+        "completion": "confirmed",
+        "remainingResources": "available"
+      },
+      "rawResult": {
+        "columns": [
+          "violations"
+        ],
+        "rows": [
+          [
+            {
+              "state": "text",
+              "text": "-1"
+            }
+          ]
+        ],
+        "affectedRows": "1",
+        "command": "SELECT"
+      },
+      "expectedDisposition": "refuse_original_result_admission"
+    },
+    {
+      "id": "PF10",
+      "testSetup": {
+        "originalCheckMembership": "complete",
+        "observationScope": "qualified_complete",
+        "nativeDescriptor": "selected_int8_text",
+        "completion": "confirmed",
+        "remainingResources": "available"
+      },
+      "rawResult": {
+        "columns": [
+          "violations"
+        ],
+        "rows": [
+          [
+            {
+              "state": "text",
+              "text": "0.0"
+            }
+          ]
+        ],
+        "affectedRows": "1",
+        "command": "SELECT"
+      },
+      "expectedDisposition": "refuse_original_result_admission"
+    },
+    {
+      "id": "PF11",
+      "testSetup": {
+        "originalCheckMembership": "complete",
+        "observationScope": "qualified_complete",
+        "nativeDescriptor": "selected_int8_text",
+        "completion": "confirmed",
+        "remainingResources": "available"
+      },
+      "rawResult": {
+        "columns": [
+          "violations"
+        ],
+        "rows": [
+          [
+            {
+              "state": "text",
+              "text": "0"
+            }
+          ]
+        ],
+        "affectedRows": "0",
+        "command": "SELECT"
+      },
+      "expectedDisposition": "refuse_original_result_admission"
+    },
+    {
+      "id": "PF12",
+      "testSetup": {
+        "originalCheckMembership": "complete",
+        "observationScope": "incomplete_rls_view",
+        "nativeDescriptor": "selected_int8_text",
+        "completion": "confirmed",
+        "remainingResources": "available"
+      },
+      "rawResult": {
+        "columns": [
+          "violations"
+        ],
+        "rows": [
+          [
+            {
+              "state": "text",
+              "text": "0"
+            }
+          ]
+        ],
+        "affectedRows": "1",
+        "command": "SELECT"
+      },
+      "expectedDisposition": "refuse_incomplete_visibility"
+    },
+    {
+      "id": "PF13",
+      "testSetup": {
+        "originalCheckMembership": "complete",
+        "observationScope": "qualified_complete",
+        "nativeDescriptor": "selected_int8_text",
+        "completion": "unknown",
+        "remainingResources": "available"
+      },
+      "rawResult": {
+        "columns": [
+          "violations"
+        ],
+        "rows": [
+          [
+            {
+              "state": "text",
+              "text": "0"
+            }
+          ]
+        ],
+        "affectedRows": "1",
+        "command": "SELECT"
+      },
+      "expectedDisposition": "unresolved_original_recovery"
+    },
+    {
+      "id": "PF14",
+      "testSetup": {
+        "originalCheckMembership": "missing_required_check",
+        "observationScope": "qualified_complete",
+        "nativeDescriptor": "selected_int8_text",
+        "completion": "confirmed",
+        "remainingResources": "available"
+      },
+      "rawResult": {
+        "columns": [
+          "violations"
+        ],
+        "rows": [
+          [
+            {
+              "state": "text",
+              "text": "0"
+            }
+          ]
+        ],
+        "affectedRows": "1",
+        "command": "SELECT"
+      },
+      "expectedDisposition": "refuse_missing_original_check"
+    },
+    {
+      "id": "PF15",
+      "testSetup": {
+        "originalCheckMembership": "complete",
+        "observationScope": "qualified_complete",
+        "nativeDescriptor": "selected_int8_text",
+        "completion": "confirmed",
+        "remainingResources": "exhausted"
+      },
+      "rawResult": {
+        "columns": [
+          "violations"
+        ],
+        "rows": [
+          [
+            {
+              "state": "text",
+              "text": "0"
+            }
+          ]
+        ],
+        "affectedRows": "1",
+        "command": "SELECT"
+      },
+      "expectedDisposition": "refuse_resource_admission"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "checkedAt": "2026-10-10T12:10:04.732461+00:00",
+  "scope": "read-only owner source and retained evidence review; no owner test rerun, native replay or API adoption",
+  "ownerHead": "94b2de5e303fe53f0c9432458119b6fe1eef187c",
+  "ownerThread": "01a11b8b-06bb-7091-a11a-b7eba0a432eb",
+  "ownerCurrentTurn": "01a125b3-9ec8-79d1-a7b0-d5aa90086da1",
+  "sourceSha256": {
+    "/Users/erik/Projects/weft/crates/weft-core/src/security_rule_occurrences.rs": "30c472269532e2f90a9bfa5ab3fc4b5a6e548a86500bc46262c43461f92f83f9",
+    "/Users/erik/.codex/worktrees/1598/umf/docs/helix/04-build/evidence/security/rule-occurrences.json": "20023be611ca8ebaafefa22ea41bfd29e2bffd47637f27b485ac0c6f1b2cba39",
+    "/Users/erik/.codex/worktrees/1598/umf/docs/helix/04-build/evidence/security/rule-occurrences-astra-review.json": "d65273ca90b032d661d6beeabf91e86370d6756ca1293b56988282f4f7aee92b",
+    "/Users/erik/.codex/worktrees/1598/umf/docs/helix/04-build/evidence/security/pg-private-diagnostics.json": "dbd883333322c5b259ff8885048ca36fb7fadf0ed9a870b218a9cf1bf98dd151"
+  },
+  "ownerReportedRustTests": 131,
+  "ownerReportedIndependentFormalReplays": 33,
+  "diagnosticEvidenceStatus": "counterexample-reproduced",
+  "diagnosticEvidenceScope": "PostgreSQL 17.9 ordinary SCRAM connections with default catalog privileges. A private Assignment change leaves authorized data unchanged but changes visible pg_class.reltuples. Direct-table-only catalog restriction remains bypassable through public views/functions. The three-family restriction remains bypassable through the cumulative insert-counter getter; revoking that additional function preserves authorized reads. A separate deny-first routine candidate preserves authorized rows and refuses six known direct/catalog/statistics/size/EXPLAIN surfaces. Neither scoped restrictions nor that candidate establish complete diagnostic closure. Not a passing B10 receipt or complete backend qualification.",
+  "nativeTrussProfileQualified": false,
+  "publicOwnerInterfaceAdopted": false,
+  "acceptanceCasesPromoted": [],
+  "remaining": [
+    "Published closed typed occurrence/requirement mapping interface",
+    "Authenticated complete original native Truss profile assignments",
+    "Private authorization-fact diagnostic closure under exact native/service/version/role/configuration",
+    "Protected same-cut observation/freshness and publication lifetime"
+  ]
+}

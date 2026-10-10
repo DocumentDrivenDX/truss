@@ -1,0 +1,66 @@
+{
+  "scope": "Draft input shape only; not digest, ordering, provenance, upstream validity, resource or authority validation",
+  "cases": 12,
+  "outcomes": [
+    {
+      "name": "native fixture",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "complete conversion",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "conversion missing source and losses",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "empty import set",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "missing present binding artifact",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "attempt origin excluded",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "exact text transform parameter",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "host number transform parameter",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "unsupported policy",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "forged digest remains structurally valid",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "duplicate document identity requires semantic rejection",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "noncanonical base64 pad bits require semantic rejection",
+      "expected": true,
+      "actual": true
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "scope": "Interval coverage shape only; no native complete membership/protection/effects proof",
+  "cases": 15,
+  "failures": []
+}

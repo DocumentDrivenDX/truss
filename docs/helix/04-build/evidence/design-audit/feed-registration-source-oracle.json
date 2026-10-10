@@ -1,0 +1,178 @@
+{
+  "scope": "Three complete authored registration statement masks/predicates/slot-carriers/ordered descriptors and original source pins; no native authority, completion, privileges, clocks, resource or atomic registration qualification",
+  "sourcePins": [
+    {
+      "path": "docs/helix/02-design/contracts/feed-member-counter-reservation-v0.1.proposal.sql",
+      "sourceSha256": "7b9040f135f4d9a68f4af6235f91959b852f0e57c8c243930b8d450cbb21a3a2",
+      "artifactPath": "docs/helix/02-design/contracts/feed-member-counter-reservation-v0.1.proposal.umf.json",
+      "artifactSha256": "9e5198305687fa598c1dc70e142b8813c6b4120b4c2ead4ca695555b0f86eebd",
+      "exportPath": "docs/helix/04-build/evidence/design-audit/feed-member-counter-reservation.owner-export.sql",
+      "exportSha256": "213e936ced1bd774b73d7c382f296a02e140bb6b462835c6134d2f470b6ade77",
+      "sourceArchiveExact": true,
+      "reloadedExportExact": true,
+      "complete": false,
+      "declarationCount": 0,
+      "unhandled": [
+        {
+          "path": "/stmts/0/stmt"
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning",
+          "message": "Raw syntax is not catalog resolution, SQL execution, permissions or server-state validation"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt",
+          "severity": "warning",
+          "message": "Statement is retained without declaration extraction or execution"
+        }
+      ]
+    },
+    {
+      "path": "docs/helix/02-design/contracts/feed-member-insert-v0.1.proposal.sql",
+      "sourceSha256": "29d4948c87185d1480bb32aaceb079ad8762191e3c31f86ec3b40ac051ba87b4",
+      "artifactPath": "docs/helix/02-design/contracts/feed-member-insert-v0.1.proposal.umf.json",
+      "artifactSha256": "979681daf4e8301c572618fef536e3db0600202a514af8985c6f1e4c6e0ddfd4",
+      "exportPath": "docs/helix/04-build/evidence/design-audit/feed-member-insert.owner-export.sql",
+      "exportSha256": "4c91dd0261a76767de4cd84b4987b9aab449964378bad98e1fcd96c0a5ad4370",
+      "sourceArchiveExact": true,
+      "reloadedExportExact": true,
+      "complete": false,
+      "declarationCount": 0,
+      "unhandled": [
+        {
+          "path": "/stmts/0/stmt"
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning",
+          "message": "Raw syntax is not catalog resolution, SQL execution, permissions or server-state validation"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt",
+          "severity": "warning",
+          "message": "Statement is retained without declaration extraction or execution"
+        }
+      ]
+    },
+    {
+      "path": "docs/helix/02-design/contracts/feed-transaction-create-v0.1.proposal.sql",
+      "sourceSha256": "4c99efac297db762c7c95a82626cb6cd0c0e610d11feda3b2ea31cb9803192d7",
+      "artifactPath": "docs/helix/02-design/contracts/feed-transaction-create-v0.1.proposal.umf.json",
+      "artifactSha256": "977e5338a835b3930a1dd60ebe25ae10e130ef16a5f022451374b5e3329984bf",
+      "exportPath": "docs/helix/04-build/evidence/design-audit/feed-transaction-create.owner-export.sql",
+      "exportSha256": "bbde69b129fc23a4bf13f1fbbd5f526625f77498ae4afbcc9bbd2fde969bf8f6",
+      "sourceArchiveExact": true,
+      "reloadedExportExact": true,
+      "complete": false,
+      "declarationCount": 0,
+      "unhandled": [
+        {
+          "path": "/stmts/0/stmt"
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning",
+          "message": "Raw syntax is not catalog resolution, SQL execution, permissions or server-state validation"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt",
+          "severity": "warning",
+          "message": "Statement is retained without declaration extraction or execution"
+        }
+      ]
+    }
+  ],
+  "controls": [
+    {
+      "case": "counter target indirection",
+      "refused": true
+    },
+    {
+      "case": "extra initial source alias",
+      "refused": true
+    },
+    {
+      "case": "omitted initial counter",
+      "refused": true
+    },
+    {
+      "case": "reordered initial carriers",
+      "refused": true
+    },
+    {
+      "case": "initial conflict suppression",
+      "refused": true
+    },
+    {
+      "case": "omitted assigned-xid condition",
+      "refused": true
+    },
+    {
+      "case": "initial result omission",
+      "refused": true
+    },
+    {
+      "case": "hidden function filter",
+      "refused": true
+    },
+    {
+      "case": "type precision modifier",
+      "refused": true
+    },
+    {
+      "case": "result indirection",
+      "refused": true
+    },
+    {
+      "case": "relation inheritance substitution",
+      "refused": true
+    },
+    {
+      "case": "extra counter target",
+      "refused": true
+    },
+    {
+      "case": "missing overflow guard",
+      "refused": true
+    },
+    {
+      "case": "missing original parent check",
+      "refused": true
+    },
+    {
+      "case": "omitted insert column",
+      "refused": true
+    },
+    {
+      "case": "reordered original values",
+      "refused": true
+    },
+    {
+      "case": "added conflict suppression",
+      "refused": true
+    },
+    {
+      "case": "omitted returned clock",
+      "refused": true
+    },
+    {
+      "case": "reordered parent result",
+      "refused": true
+    }
+  ],
+  "nativeExecution": false,
+  "complete": false
+}

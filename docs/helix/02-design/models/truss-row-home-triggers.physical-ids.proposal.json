@@ -1,0 +1,604 @@
+{
+  "profile": "truss-row-home-physical-allocation/0.1.0",
+  "status": "unadopted_candidate",
+  "complete": false,
+  "scope": "Six exact trigger source/target identities only; routine/type/security/grant/event/native behavior qualification incomplete.",
+  "sources": [
+    {
+      "source": "docs/helix/02-design/contracts/row-home-triggers-v0.1.proposal.sql",
+      "sourceSha256": "bd967f09586b160468056ffdd0809697173978a421e8d049ffe4824483dde19e",
+      "model": "docs/helix/02-design/contracts/row-home-triggers-v0.1.proposal.umf.json",
+      "modelSha256": "9ea38425b17611e209c75f599273f7d8b3814cb1d6e0cd121ed41c4f221e7fa7"
+    }
+  ],
+  "parentAllocationPins": [
+    {
+      "path": "docs/helix/02-design/models/truss-row-home-candidate.physical-ids.proposal.json",
+      "sha256": "249ea91409e127148b48ef872811af221b1fe6c54de344b3789016a1003b7b75"
+    },
+    {
+      "path": "docs/helix/02-design/models/truss-row-home-touch.physical-ids.proposal.json",
+      "sha256": "6b982bdcb5e09dc77662da4c441138861d27ba8932a9cbb70c9248784907ffed"
+    },
+    {
+      "path": "docs/helix/02-design/models/truss-row-home-capacity.physical-ids.proposal.json",
+      "sha256": "76703263ed025c8b895e608068f525562e33468c9c3a4d19d4345048ad01d9e4"
+    },
+    {
+      "path": "docs/helix/02-design/models/truss-row-home-operation.physical-ids.proposal.json",
+      "sha256": "b9423159f24285911aedefd5926adcd4915d08bb230ab316f996921ceb3082a0"
+    }
+  ],
+  "entries": [
+    {
+      "entryId": "truss.row-home.trigger.row_home_state_touch_observe",
+      "objectKind": "trigger",
+      "nativeName": "row_home_state_touch_observe",
+      "parentId": "truss.row-home.table.row_home_state",
+      "nativeBinding": {
+        "state": "unresolved"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/row-home-triggers-v0.1.proposal.umf.json",
+        "modelSha256": "9ea38425b17611e209c75f599273f7d8b3814cb1d6e0cd121ed41c4f221e7fa7",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/0/members/stmt/members/CreateTrigStmt"
+      },
+      "originalNativeNode": {
+        "kind": "object",
+        "members": {
+          "trigname": {
+            "kind": "string",
+            "value": "row_home_state_touch_observe"
+          },
+          "relation": {
+            "kind": "object",
+            "members": {
+              "schemaname": {
+                "kind": "string",
+                "value": "truss"
+              },
+              "relname": {
+                "kind": "string",
+                "value": "row_home_state"
+              },
+              "inh": {
+                "kind": "boolean",
+                "value": true
+              },
+              "relpersistence": {
+                "kind": "string",
+                "value": "p"
+              },
+              "location": {
+                "kind": "number",
+                "value": "240"
+              }
+            }
+          },
+          "funcname": {
+            "kind": "array",
+            "items": [
+              {
+                "kind": "object",
+                "members": {
+                  "String": {
+                    "kind": "object",
+                    "members": {
+                      "sval": {
+                        "kind": "string",
+                        "value": "truss"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "kind": "object",
+                "members": {
+                  "String": {
+                    "kind": "object",
+                    "members": {
+                      "sval": {
+                        "kind": "string",
+                        "value": "row_touch_observe"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "row": {
+            "kind": "boolean",
+            "value": true
+          },
+          "events": {
+            "kind": "number",
+            "value": "28"
+          }
+        }
+      }
+    },
+    {
+      "entryId": "truss.row-home.trigger.row_home_node_touch_observe",
+      "objectKind": "trigger",
+      "nativeName": "row_home_node_touch_observe",
+      "parentId": "truss.row-home.table.row_home_node",
+      "nativeBinding": {
+        "state": "unresolved"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/row-home-triggers-v0.1.proposal.umf.json",
+        "modelSha256": "9ea38425b17611e209c75f599273f7d8b3814cb1d6e0cd121ed41c4f221e7fa7",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/1/members/stmt/members/CreateTrigStmt"
+      },
+      "originalNativeNode": {
+        "kind": "object",
+        "members": {
+          "trigname": {
+            "kind": "string",
+            "value": "row_home_node_touch_observe"
+          },
+          "relation": {
+            "kind": "object",
+            "members": {
+              "schemaname": {
+                "kind": "string",
+                "value": "truss"
+              },
+              "relname": {
+                "kind": "string",
+                "value": "row_home_node"
+              },
+              "inh": {
+                "kind": "boolean",
+                "value": true
+              },
+              "relpersistence": {
+                "kind": "string",
+                "value": "p"
+              },
+              "location": {
+                "kind": "number",
+                "value": "401"
+              }
+            }
+          },
+          "funcname": {
+            "kind": "array",
+            "items": [
+              {
+                "kind": "object",
+                "members": {
+                  "String": {
+                    "kind": "object",
+                    "members": {
+                      "sval": {
+                        "kind": "string",
+                        "value": "truss"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "kind": "object",
+                "members": {
+                  "String": {
+                    "kind": "object",
+                    "members": {
+                      "sval": {
+                        "kind": "string",
+                        "value": "row_touch_observe"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "row": {
+            "kind": "boolean",
+            "value": true
+          },
+          "events": {
+            "kind": "number",
+            "value": "28"
+          }
+        }
+      }
+    },
+    {
+      "entryId": "truss.row-home.trigger.row_home_scalar_touch_observe",
+      "objectKind": "trigger",
+      "nativeName": "row_home_scalar_touch_observe",
+      "parentId": "truss.row-home.table.row_home_scalar",
+      "nativeBinding": {
+        "state": "unresolved"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/row-home-triggers-v0.1.proposal.umf.json",
+        "modelSha256": "9ea38425b17611e209c75f599273f7d8b3814cb1d6e0cd121ed41c4f221e7fa7",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/2/members/stmt/members/CreateTrigStmt"
+      },
+      "originalNativeNode": {
+        "kind": "object",
+        "members": {
+          "trigname": {
+            "kind": "string",
+            "value": "row_home_scalar_touch_observe"
+          },
+          "relation": {
+            "kind": "object",
+            "members": {
+              "schemaname": {
+                "kind": "string",
+                "value": "truss"
+              },
+              "relname": {
+                "kind": "string",
+                "value": "row_home_scalar"
+              },
+              "inh": {
+                "kind": "boolean",
+                "value": true
+              },
+              "relpersistence": {
+                "kind": "string",
+                "value": "p"
+              },
+              "location": {
+                "kind": "number",
+                "value": "563"
+              }
+            }
+          },
+          "funcname": {
+            "kind": "array",
+            "items": [
+              {
+                "kind": "object",
+                "members": {
+                  "String": {
+                    "kind": "object",
+                    "members": {
+                      "sval": {
+                        "kind": "string",
+                        "value": "truss"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "kind": "object",
+                "members": {
+                  "String": {
+                    "kind": "object",
+                    "members": {
+                      "sval": {
+                        "kind": "string",
+                        "value": "row_touch_observe"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "row": {
+            "kind": "boolean",
+            "value": true
+          },
+          "events": {
+            "kind": "number",
+            "value": "28"
+          }
+        }
+      }
+    },
+    {
+      "entryId": "truss.row-home.trigger.row_home_touch_commit_guard",
+      "objectKind": "trigger",
+      "nativeName": "row_home_touch_commit_guard",
+      "parentId": "truss.row-home.table.row_home_touch",
+      "nativeBinding": {
+        "state": "unresolved"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/row-home-triggers-v0.1.proposal.umf.json",
+        "modelSha256": "9ea38425b17611e209c75f599273f7d8b3814cb1d6e0cd121ed41c4f221e7fa7",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/3/members/stmt/members/CreateTrigStmt"
+      },
+      "originalNativeNode": {
+        "kind": "object",
+        "members": {
+          "isconstraint": {
+            "kind": "boolean",
+            "value": true
+          },
+          "trigname": {
+            "kind": "string",
+            "value": "row_home_touch_commit_guard"
+          },
+          "relation": {
+            "kind": "object",
+            "members": {
+              "schemaname": {
+                "kind": "string",
+                "value": "truss"
+              },
+              "relname": {
+                "kind": "string",
+                "value": "row_home_touch"
+              },
+              "inh": {
+                "kind": "boolean",
+                "value": true
+              },
+              "relpersistence": {
+                "kind": "string",
+                "value": "p"
+              },
+              "location": {
+                "kind": "number",
+                "value": "726"
+              }
+            }
+          },
+          "funcname": {
+            "kind": "array",
+            "items": [
+              {
+                "kind": "object",
+                "members": {
+                  "String": {
+                    "kind": "object",
+                    "members": {
+                      "sval": {
+                        "kind": "string",
+                        "value": "truss"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "kind": "object",
+                "members": {
+                  "String": {
+                    "kind": "object",
+                    "members": {
+                      "sval": {
+                        "kind": "string",
+                        "value": "row_touch_commit_check"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "row": {
+            "kind": "boolean",
+            "value": true
+          },
+          "events": {
+            "kind": "number",
+            "value": "20"
+          },
+          "deferrable": {
+            "kind": "boolean",
+            "value": true
+          },
+          "initdeferred": {
+            "kind": "boolean",
+            "value": true
+          }
+        }
+      }
+    },
+    {
+      "entryId": "truss.row-home.trigger.row_home_capacity_commit_guard",
+      "objectKind": "trigger",
+      "nativeName": "row_home_capacity_commit_guard",
+      "parentId": "truss.row-home.table.row_home_capacity",
+      "nativeBinding": {
+        "state": "unresolved"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/row-home-triggers-v0.1.proposal.umf.json",
+        "modelSha256": "9ea38425b17611e209c75f599273f7d8b3814cb1d6e0cd121ed41c4f221e7fa7",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/4/members/stmt/members/CreateTrigStmt"
+      },
+      "originalNativeNode": {
+        "kind": "object",
+        "members": {
+          "isconstraint": {
+            "kind": "boolean",
+            "value": true
+          },
+          "trigname": {
+            "kind": "string",
+            "value": "row_home_capacity_commit_guard"
+          },
+          "relation": {
+            "kind": "object",
+            "members": {
+              "schemaname": {
+                "kind": "string",
+                "value": "truss"
+              },
+              "relname": {
+                "kind": "string",
+                "value": "row_home_capacity"
+              },
+              "inh": {
+                "kind": "boolean",
+                "value": true
+              },
+              "relpersistence": {
+                "kind": "string",
+                "value": "p"
+              },
+              "location": {
+                "kind": "number",
+                "value": "928"
+              }
+            }
+          },
+          "funcname": {
+            "kind": "array",
+            "items": [
+              {
+                "kind": "object",
+                "members": {
+                  "String": {
+                    "kind": "object",
+                    "members": {
+                      "sval": {
+                        "kind": "string",
+                        "value": "truss"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "kind": "object",
+                "members": {
+                  "String": {
+                    "kind": "object",
+                    "members": {
+                      "sval": {
+                        "kind": "string",
+                        "value": "row_touch_commit_check"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "row": {
+            "kind": "boolean",
+            "value": true
+          },
+          "events": {
+            "kind": "number",
+            "value": "20"
+          },
+          "deferrable": {
+            "kind": "boolean",
+            "value": true
+          },
+          "initdeferred": {
+            "kind": "boolean",
+            "value": true
+          }
+        }
+      }
+    },
+    {
+      "entryId": "truss.row-home.trigger.row_home_operation_commit_guard",
+      "objectKind": "trigger",
+      "nativeName": "row_home_operation_commit_guard",
+      "parentId": "truss.row-home.table.row_home_operation",
+      "nativeBinding": {
+        "state": "unresolved"
+      },
+      "capturedModelLocator": {
+        "modelPath": "docs/helix/02-design/contracts/row-home-triggers-v0.1.proposal.umf.json",
+        "modelSha256": "9ea38425b17611e209c75f599273f7d8b3814cb1d6e0cd121ed41c4f221e7fa7",
+        "jsonPointer": "/modules/0/elements/0/extensions/umf.postgresql/root/members/stmts/items/5/members/stmt/members/CreateTrigStmt"
+      },
+      "originalNativeNode": {
+        "kind": "object",
+        "members": {
+          "isconstraint": {
+            "kind": "boolean",
+            "value": true
+          },
+          "trigname": {
+            "kind": "string",
+            "value": "row_home_operation_commit_guard"
+          },
+          "relation": {
+            "kind": "object",
+            "members": {
+              "schemaname": {
+                "kind": "string",
+                "value": "truss"
+              },
+              "relname": {
+                "kind": "string",
+                "value": "row_home_operation"
+              },
+              "inh": {
+                "kind": "boolean",
+                "value": true
+              },
+              "relpersistence": {
+                "kind": "string",
+                "value": "p"
+              },
+              "location": {
+                "kind": "number",
+                "value": "1134"
+              }
+            }
+          },
+          "funcname": {
+            "kind": "array",
+            "items": [
+              {
+                "kind": "object",
+                "members": {
+                  "String": {
+                    "kind": "object",
+                    "members": {
+                      "sval": {
+                        "kind": "string",
+                        "value": "truss"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "kind": "object",
+                "members": {
+                  "String": {
+                    "kind": "object",
+                    "members": {
+                      "sval": {
+                        "kind": "string",
+                        "value": "row_touch_commit_check"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "row": {
+            "kind": "boolean",
+            "value": true
+          },
+          "events": {
+            "kind": "number",
+            "value": "20"
+          },
+          "deferrable": {
+            "kind": "boolean",
+            "value": true
+          },
+          "initdeferred": {
+            "kind": "boolean",
+            "value": true
+          }
+        }
+      }
+    }
+  ]
+}

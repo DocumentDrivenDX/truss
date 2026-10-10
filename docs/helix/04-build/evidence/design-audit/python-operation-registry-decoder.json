@@ -1,0 +1,38 @@
+{
+  "scope": "Python structural original-row decoding and projection alias correspondence; no native submission or context authority",
+  "command": [
+    "/private/tmp/truss-pgserver-corrected-test-env/bin/python",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "packages/python/tests",
+    "-p",
+    "test_operation_registry.py",
+    "-v"
+  ],
+  "output": "test_all_phases_and_full_unordered_surviving_multiset (test_operation_registry.OperationRegistryTests.test_all_phases_and_full_unordered_surviving_multiset) ... ok\ntest_independent_numeric_null_phase_and_carrier_refusals (test_operation_registry.OperationRegistryTests.test_independent_numeric_null_phase_and_carrier_refusals) ... ok\ntest_original_descriptor_completion_and_exact_byte_bounds (test_operation_registry.OperationRegistryTests.test_original_descriptor_completion_and_exact_byte_bounds) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n",
+  "tests": 3,
+  "sources": [
+    {
+      "path": "packages/python/src/truss/_operation_registry.py",
+      "sha256": "8326492d51ea8506ca2832e45d65ec41d7a5dcae12788ff8cbd1e416f5351cfc"
+    },
+    {
+      "path": "packages/python/tests/test_operation_registry.py",
+      "sha256": "279edf3b546953656704c74e7d7bd4a088010a074f52f1a19424afcad4f151f6"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/row-operation-registry-observation-v0.1.proposal.sql",
+      "sha256": "29d1a6647aedae69bda2276d6a0f6173b50a5a9e89a79b3cc4076f504b5125ca"
+    },
+    {
+      "path": "packages/postgresql/src/index.ts",
+      "sha256": "39879cd1ea524d5a68f7bfd72c121d1bafb4083b811eb9d9e0dc244ee0bc20c6"
+    }
+  ],
+  "nativeCompletenessQualified": false,
+  "currentOperationAuthorityQualified": false,
+  "completeResourceAccountingQualified": false,
+  "wheelRebuilt": false
+}

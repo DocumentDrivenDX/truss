@@ -1,0 +1,84 @@
+{
+  "interfaceVersion": "truss-bootstrap-route-entry/0.1.0",
+  "routeIdentity": "pg17.rewrite.child-direct/0.1.0",
+  "status": "unadopted; source pins only verified; native class/cut/transport/semantic producers unqualified",
+  "nativeClass": {
+    "namespace": "pg_catalog",
+    "relation": "pg_rewrite",
+    "classOid": "resolve from original target; never constant",
+    "storageScope": "database",
+    "subobjectNumber": "0"
+  },
+  "selector": "direct actual pg_rewrite object OIDs",
+  "artifacts": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-rewrite-child-observation-pg17.proposal.sql",
+      "sha256": "b6b3bf596f6e097977a99cea10836ade44bd29a96bd502b0305cbadaa3a26490"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-rewrite-child-observation-pg17.proposal.umf.json",
+      "sha256": "6b2a6101a564a9f456424312c4bfa334bd7a2e56181723ad1a065f739214eb0f"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/bootstrap-rewrite-child-observation.owner-export.sql",
+      "sha256": "2dfcfdffba1576cb611a8c73d77eb9bb6825914c14898d707b11cc4f91e2e703"
+    }
+  ],
+  "parameterGrammar": {
+    "slot": "1",
+    "nativeType": "pg_catalog.oid[]",
+    "dimensions": "exactly one",
+    "lowerBound": "1",
+    "nullAllowed": false,
+    "nullItemsAllowed": false,
+    "uniqueItems": true,
+    "countInclusive": [
+      "1",
+      "256"
+    ],
+    "itemDomain": "canonical nonzero uint32 decimal text; actual pg_rewrite child OID, not pg_class parent",
+    "encoder": "selected original canonical PostgreSQL array encoder; no JS numeric round trip"
+  },
+  "orderedColumns": [
+    "catalog_class_oid",
+    "object_oid",
+    "relation_oid",
+    "original_catalog_row_json"
+  ],
+  "coverage": "Exact unique requested child-address bijection; missing absent, duplicate/extra/wrong-class refuses. Compare projected relation_oid to raw ev_class and independently admit actual pg_class parent before complete fanout.",
+  "requiredKnownFields": [
+    "oid",
+    "rulename",
+    "ev_class",
+    "ev_type",
+    "ev_enabled",
+    "is_instead",
+    "ev_qual",
+    "ev_action"
+  ],
+  "preservation": "Retain full exact returned row JSON text and every unknown extension member; lossless bounded selected native JSON decoder; no parse/stringify reconstruction",
+  "dependencyExtraction": {
+    "parent": "ev_class actual pg_class with original view/rule/relation context",
+    "expressions": "full original ev_qual/ev_action native trees and dependency definition preserved; actual multiple-action ordering/context interpreted under selected native grammar",
+    "state": "ev_type/ev_enabled/is_instead and view return-rule/native relation semantics separately admitted; no name/enablement filtering or action execution",
+    "fieldClassification": {
+      "oid": "original rule correlation only",
+      "rulename": "exact native rule name under resolved original parent relation",
+      "ev_class": "resolved original parent relation/view definition",
+      "ev_type": "exact native event character 1/2/3/4; not host integer enum or invented command",
+      "ev_enabled": "exact O/D/R/A replication firing declaration; disabled remains present definition",
+      "is_instead": "actual INSTEAD declaration distinct from action/qualification",
+      "ev_qual": "complete original qualifying native tree and selected native context/dependency interpretation",
+      "ev_action": "complete original ordered action query tree and selected native context/dependency interpretation"
+    },
+    "canonicalProcedure": "CONTRACT-008 Rewrite semantic projection: resolved parent/exact rule name plus event/firing/INSTEAD and full native qualifying/ordered-action meaning with original dependencies; direct child requires complete parent fanout"
+  },
+  "adjuncts": [
+    "complete original parent/child-kind/type/routine/operator/collation/role/native expression dependencies",
+    "original current parent/owner/module authority and actual installed policy/enforcement context",
+    "pg17.rewrite.relation-fanout/0.1.0 under same original parent/cut"
+  ],
+  "resourceProfile": "truss-bootstrap-collector-resource/0.1.0",
+  "refusal": "Unsupported child/native expression/parent meaning or unresolved original class/cut/authority/resources refuses; finding one child cannot prove complete parent membership",
+  "resourceObligations": "Shared enclosing totals, complete original cut/authority and explicit pre-materialization/native-work permits; no independent per-route allowance"
+}

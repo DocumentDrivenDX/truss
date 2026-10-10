@@ -1,0 +1,113 @@
+{
+  "scope": "four delta variant and eleven custody/phase shape controls only; native effects/ordinal/source/context/version completeness untested",
+  "bunVersion": "1.4.2",
+  "sourcePins": [
+    {
+      "path": "docs/helix/02-design/contracts/journal-ordered-transition-v0.2.proposal.schema.json",
+      "sha256": "cde879b15cfefb282da03d8d253b39ff506e1c2b11ca1e7834a9d51ad34c4cd2"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/history-event-v0.2.proposal.schema.json",
+      "sha256": "714923be0f86bd3508a097cabfee63a180e03b19651ebbfa38844bb3e637b425"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/history-retain-payload-v0.1.proposal.schema.json",
+      "sha256": "fc08e07a4b09636ac234737be9bb2cf3a9a3c26120baad612176574c17659605"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/truss-row-operation-context-v0.1.proposal.schema.json",
+      "sha256": "e5b906ada259af29afe28f6cf29b7f5b980ec84af6eaf6a96ab6c879e0b6be50"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/history-record-v0.1.schema.json",
+      "sha256": "c35c1258028cc4c8c95dcd16b561caed4f2a347c086f72ebfc7bfc4f2dfcf2fe"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/exact-value-v0.1.schema.json",
+      "sha256": "0c804796bfbf68339c299f0c55d24db58fcfcc929bffe2d5ffaf4a2f27e24880"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/acceptance-input-v0.1.schema.json",
+      "sha256": "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/check-journal-ordered-transition.ts",
+      "sha256": "7bfacf0d538c11d704d9f035fece6e0699592f00a6f1668d1df58f33961b5f5b"
+    }
+  ],
+  "outcomes": [
+    {
+      "name": "property",
+      "passed": true
+    },
+    {
+      "name": "transform",
+      "passed": true
+    },
+    {
+      "name": "rebind",
+      "passed": true
+    },
+    {
+      "name": "retain",
+      "passed": true
+    },
+    {
+      "name": "missing original evidence",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "missing native transition",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "numeric effect ordinal",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "noncanonical effect ordinal",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "future journal seq",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "future seq inside delta",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "future manifest inside delta",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "metadata is a later boundary witness",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "caller origin override",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "name": "substituted effect evidence needs semantic refusal",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "unknown target identity needs semantic refusal",
+      "expected": true,
+      "actual": true
+    }
+  ],
+  "nativeExecuted": false,
+  "adopted": false
+}

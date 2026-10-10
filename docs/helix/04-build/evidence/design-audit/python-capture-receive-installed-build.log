@@ -1,0 +1,12 @@
+Processing ./source
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: truss-toolkit
+  Building wheel for truss-toolkit (pyproject.toml): started
+  Building wheel for truss-toolkit (pyproject.toml): finished with status 'done'
+  Created wheel for truss-toolkit: filename=truss_toolkit-0.0.1.dev0-py3-none-any.whl size=43880 sha256=03cd96fa92c60512a0ea156b0366a1c482ba5d2bd8c2f9217a70a4c29dd8f66d
+  Stored in directory: /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/pip-ephem-wheel-cache-ft5ceq03/wheels/c1/b1/dc/f85b392e415fd72b746171c37d42069b75a0e2bc6d29f2de69
+Successfully built truss-toolkit
+
+[notice] A new release of pip is available: 24.0 -> 26.2.1
+[notice] To update, run: /private/tmp/truss-pgserver-corrected-test-env/bin/python -m pip install --upgrade pip

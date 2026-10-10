@@ -29,7 +29,7 @@ ddx:
 
 ## Context
 
-The layout comment carries its version; the check script exercises constraints and behavior.
+The installed schema marker carries the normative layout version; SQL comments document it. The check script and independent native probes exercise constraints and behavior. Version compatibility also requires the implementation’s declared supported layout/runtime/profile range and independently verified installed inventory. A marker or matching major alone cannot establish complete routines, grants, codecs or data conversion. Physical upgrades use the explicit Truss migration system; connecting or inspecting status never performs an upgrade. The listed PostgreSQL versions are qualification targets inherited from the spikes, not evidence that the complete release installer already passes.
 
 ## Walkthrough
 
@@ -47,14 +47,14 @@ The layout comment carries its version; the check script exercises constraints a
 ## Edge Cases
 
 - **An unsupported PostgreSQL version**: reported unverified.
-- **A minor version difference**: accepted.
+- **A minor version difference**: accepted only within the declared compatible range and after complete required installed correspondence. Unknown or drifted same-major state refuses admission; it is never automatically repaired or migrated.
 
 ## Test Scenarios
 
 | Scenario | AC ID | Input / State | Action | Expected Result |
 |----------|-------|---------------|--------|-----------------|
 | Refuse | US-029-AC1 | Major 2 | Start | Refused |
-| Versions | US-029-AC2 | 16.2, 17.9 | Run DDL and check | Pass |
+| Versions | US-029-AC2 | Exact release qualification targets; next local candidate is corrected16.15, separate native target17.9 | Run complete generated/native DDL and independent behavioral check | Pass only for each completely qualified advertised tuple;16.2 remains historical and cannot qualify selected R4/R5 |
 | Coverage | US-029-AC3 | Check | Review | Covers listed behaviors |
 
 ## Dependencies

@@ -1,0 +1,65 @@
+{
+  "interfaceVersion": "truss-bootstrap-permit-arithmetic-witnesses/0.1.0",
+  "scope": "Independently authored scalar ledger arithmetic fragments; not actual allocator/native metering or complete multi-dimension resource proof",
+  "unit": "bytes; all numbers exact decimal text",
+  "cases": [
+    {
+      "id": "reserve-at-cap",
+      "ceiling": "100",
+      "ownedBefore": "40",
+      "unconsumedReservedBefore": "20",
+      "reserveAdditional": "40",
+      "expectedCommittedCapacity": "100",
+      "expected": "admit"
+    },
+    {
+      "id": "reserve-one-over",
+      "ceiling": "100",
+      "ownedBefore": "40",
+      "unconsumedReservedBefore": "20",
+      "reserveAdditional": "41",
+      "expectedCommittedCapacity": "101",
+      "expected": "refuse"
+    },
+    {
+      "id": "allocate-from-reservation",
+      "ceiling": "100",
+      "ownedBefore": "40",
+      "unconsumedReservedBefore": "60",
+      "allocation": "25",
+      "ownedAfter": "65",
+      "unconsumedReservedAfter": "35",
+      "expectedCommittedCapacity": "100",
+      "expected": "admit without double charge"
+    },
+    {
+      "id": "release-owned-before-termination",
+      "ceiling": "100",
+      "ownedBefore": "65",
+      "unconsumedReservedBefore": "35",
+      "qualifiedOwnedRelease": "25",
+      "ownedAfter": "40",
+      "unconsumedReservedAfter": "35",
+      "expectedCommittedCapacity": "75",
+      "expected": "owned capacity released; unused permit capacity remains reserved"
+    },
+    {
+      "id": "unknown-work-keeps-unused",
+      "ceiling": "100",
+      "ownedBefore": "40",
+      "unconsumedReservedBefore": "35",
+      "qualifiedTermination": false,
+      "unconsumedReservedAfter": "35",
+      "expectedCommittedCapacity": "75",
+      "expected": "no unused-reservation rebate"
+    },
+    {
+      "id": "actual-beyond-reservation",
+      "ceiling": "100",
+      "ownedBefore": "40",
+      "unconsumedReservedBefore": "20",
+      "allocation": "21",
+      "expected": "resource failure; original allocation/work custody retained, no retroactive reserve"
+    }
+  ]
+}

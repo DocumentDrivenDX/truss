@@ -1,0 +1,99 @@
+{
+  "status": "passed_temporary_complete_wire_encoding",
+  "carrierHost": "TypeScript private candidate",
+  "serverVersionNum": "170009",
+  "schemaPins": {
+    "exact-value-v0.1.schema.json": "0c804796bfbf68339c299f0c55d24db58fcfcc929bffe2d5ffaf4a2f27e24880",
+    "history-record-v0.1.schema.json": "c35c1258028cc4c8c95dcd16b561caed4f2a347c086f72ebfc7bfc4f2dfcf2fe",
+    "history-event-v0.1.schema.json": "e42f9b48642528cabbb646ccb758eb12b7f030029b712cf5d6f5174cbd90bfa6",
+    "acceptance-input-v0.1.schema.json": "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd",
+    "acceptance-rejection-v0.1.schema.json": "98262b8d99fe0f87f752140a418a4e4f8751c4d28986457302586fee622258cf",
+    "enforcement-report-v0.1.schema.json": "7af9c786a297583d6eb5489d85f33fb0a04b2c1d0b6551e6d107528cc15c4137",
+    "direct-cursor-v0.1.schema.json": "bff79ad2e5ccc1047b43bdbe6eeb51b597f098c881313fd980de01c1685b4942",
+    "acceptance-report-v0.1.schema.json": "ccdc9976de3c158fae0a14d6cc41685d5f5a289d67daeb86b5e998b4a611e902",
+    "history-retain-payload-v0.1.proposal.schema.json": "fc08e07a4b09636ac234737be9bb2cf3a9a3c26120baad612176574c17659605",
+    "history-event-v0.2.proposal.schema.json": "714923be0f86bd3508a097cabfee63a180e03b19651ebbfa38844bb3e637b425",
+    "acceptance-report-v0.3.proposal.schema.json": "c54196f8b4324aec768a33eeeab89bc2615a954af0e45559ed2038ccad7f14bf"
+  },
+  "sourcePins": {
+    "/Users/erik/Projects/truss/docs/helix/04-build/evidence/design-audit/check-report-tree-native.ts": "fc9bb11b23e77f576ec8158c86e6507966a50098dfa2c51d2042b81ae05baaff",
+    "docs/helix/03-test/report-wire-untrusted.fixture.json": "b817b1610e86cfa956427dbbc84b9ef7485ccd0e66d1e2c7939b861e9a715368",
+    "docs/helix/02-design/contracts/report-scalar-bytes-v0.2.proposal.sql": "5b99f2f05920a77c7617239acc9f183bc321248831acecc8e4fef7884c25de63",
+    "docs/helix/02-design/contracts/report-tree-bytes-v0.2.proposal.sql": "0961dd8209fabe26c499b0240a3a7655ff370d9536ce293df12fe52ab1ab5e98",
+    "packages/umf-bun/src/canonical-report-handoff.ts": "1cf292afdd8c7ebf970963fdc26bde18cf2d5b38dd94588966f9d1460e358366",
+    "packages/postgresql/src/canonical-wire-tree.ts": "bc9c8f56866a85d7f3803fe70491dd4e32daa961393d26f02195fcf14707d1d0",
+    "packages/postgresql/src/acceptance-json.ts": "14a65dc9fd67b3ab53fb080a4a05422b991af63feac52fc6e0655eb03a47ed17"
+  },
+  "results": [
+    {
+      "name": "complete-wire-original-integer-key-order",
+      "originalFields": 19,
+      "sourceBytes": 3839,
+      "originalSourceSha256": "189053e1de416ad2b36fbff0829ae617c975360e17b4ba63e84f71818db85b2b",
+      "canonicalBytes": 3839,
+      "canonicalSha256": "258468b119e78200667528b8131307ad7bd3ed9eeeeb05f205aceed2e231fa09",
+      "completeOriginalBytesEqual": true
+    },
+    {
+      "name": "complete-nineteen-field-wire",
+      "originalFields": 19,
+      "sourceBytes": 3813,
+      "originalSourceSha256": "d5d9ffc28fd7eaeb69cb1feceaa81b4212f601b1fdb039f1f4259fa71ad2af54",
+      "canonicalBytes": 3813,
+      "canonicalSha256": "b2f442dfe0a07878710a3966d02486967ef66676834327774edfcb4aea5d26dc",
+      "completeOriginalBytesEqual": true
+    },
+    {
+      "name": "complete-wire-short-escape-expansion",
+      "originalFields": 19,
+      "sourceBytes": 403814,
+      "originalSourceSha256": "68ba044368809974860e11599a6847b52fba49ea5097e7ce13ebcc4de2e94de7",
+      "canonicalBytes": 1203814,
+      "canonicalSha256": "717d895e6a0bca754338c027b11e02cf259057d8d063b8e0547df42145790abd",
+      "completeOriginalBytesEqual": true
+    },
+    {
+      "name": "complete-wire-large-original-key",
+      "originalFields": 19,
+      "sourceBytes": 83808,
+      "originalSourceSha256": "13bcf66b4594bdba0dbd194c0f99afb8c6f343bdfb09924bb30a07357b00a713",
+      "canonicalBytes": 83808,
+      "canonicalSha256": "c70321b22a6c453a19bf1345bad9cd5d2df82a63548adf467b23ba1427e90d97",
+      "completeOriginalBytesEqual": true
+    },
+    {
+      "name": "complete-wire-UTF8-key-order-and-array-order",
+      "originalFields": 19,
+      "sourceBytes": 3932,
+      "originalSourceSha256": "bab8a8409f1e465deac4a70ce987777803ab37996be88704ac1dec9f5ec7e506",
+      "canonicalBytes": 3936,
+      "canonicalSha256": "59e88e923ba3c7648852b3b12da128921620560cae71e094b847c9cda117b17d",
+      "completeOriginalBytesEqual": true
+    },
+    {
+      "name": "duplicate-original-key",
+      "observedSqlState": "22023"
+    },
+    {
+      "name": "invalid-UTF8-key",
+      "observedSqlState": "22021"
+    },
+    {
+      "name": "invalid-UTF8-value",
+      "observedSqlState": "22021"
+    },
+    {
+      "name": "unknown-node-kind",
+      "observedSqlState": "22023"
+    },
+    {
+      "name": "container-capacity",
+      "observedSqlState": "54000"
+    },
+    {
+      "name": "whole-output-capacity",
+      "observedSqlState": "54000"
+    }
+  ],
+  "scope": "Five complete nineteen-field synthetic report wires (both host carriers separately in Python mode) and six private inert-tree refusal controls in temporary functions, explicitly rolled back. Full-byte encoding parity only; no semantic report provenance, installed native authority/grants, resource account or accepted commit."
+}

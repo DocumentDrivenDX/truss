@@ -1,0 +1,400 @@
+{
+  "scope": "Finite complete transition exploration of reservation transfer and non-refund rules; no implementation refinement/native authority/installation claim",
+  "python": "3.9.6",
+  "bounds": {
+    "rows": 3,
+    "bytes": 5,
+    "attempts": 2,
+    "applicationWork": 12
+  },
+  "baseline": {
+    "states": 2386,
+    "transitions": 4770,
+    "witnesses": {
+      "successful-retained-commit": [
+        "reserve:1:1",
+        "register-operation",
+        "finalize",
+        "host-commit"
+      ],
+      "finalized-A-B-rollback-A-survives": [
+        "reserve:1:1",
+        "register-operation",
+        "finalize",
+        "reserve:1:1",
+        "rollback-confirmed"
+      ],
+      "shrink-regrow-spends-again": [
+        "reserve:1:3",
+        "register-operation",
+        "grow:0",
+        "shrink:0",
+        "grow:0"
+      ]
+    }
+  },
+  "negativeControls": {
+    "consume-without-transfer": {
+      "property": "CR-04-no-spend-refund",
+      "trace": [
+        "reserve:1:1",
+        "register-operation"
+      ],
+      "before": {
+        "inventory": [
+          1
+        ],
+        "rows": 1,
+        "bytes": 1,
+        "phase": "prepared",
+        "remaining_rows": 1,
+        "remaining_bytes": 1,
+        "initial_rows": 1,
+        "initial_bytes": 1,
+        "used_rows": 0,
+        "used_bytes": 0,
+        "snapshot": [
+          1
+        ],
+        "begin_work": 0,
+        "issued": 1,
+        "work": 1,
+        "closed": false
+      },
+      "after": {
+        "inventory": [
+          1,
+          1
+        ],
+        "rows": 2,
+        "bytes": 2,
+        "phase": "active",
+        "remaining_rows": 1,
+        "remaining_bytes": 1,
+        "initial_rows": 1,
+        "initial_bytes": 1,
+        "used_rows": 1,
+        "used_bytes": 1,
+        "snapshot": [
+          1
+        ],
+        "begin_work": 0,
+        "issued": 1,
+        "work": 2,
+        "closed": false
+      }
+    },
+    "subtract-initial": {
+      "property": "CR-01-retained-parity",
+      "trace": [
+        "reserve:1:1",
+        "register-operation",
+        "finalize"
+      ],
+      "before": {
+        "inventory": [
+          1,
+          1
+        ],
+        "rows": 2,
+        "bytes": 2,
+        "phase": "active",
+        "remaining_rows": 0,
+        "remaining_bytes": 0,
+        "initial_rows": 1,
+        "initial_bytes": 1,
+        "used_rows": 1,
+        "used_bytes": 1,
+        "snapshot": [
+          1
+        ],
+        "begin_work": 0,
+        "issued": 1,
+        "work": 2,
+        "closed": false
+      },
+      "after": {
+        "inventory": [
+          1,
+          1
+        ],
+        "rows": 2,
+        "bytes": 1,
+        "phase": "idle",
+        "remaining_rows": 0,
+        "remaining_bytes": 0,
+        "initial_rows": 0,
+        "initial_bytes": 0,
+        "used_rows": 0,
+        "used_bytes": 0,
+        "snapshot": [],
+        "begin_work": 0,
+        "issued": 1,
+        "work": 3,
+        "closed": false
+      }
+    },
+    "refund-work": {
+      "property": "CR-05-work-monotonic",
+      "trace": [
+        "reserve:1:1",
+        "rollback-confirmed"
+      ],
+      "before": {
+        "inventory": [
+          1
+        ],
+        "rows": 1,
+        "bytes": 1,
+        "phase": "prepared",
+        "remaining_rows": 1,
+        "remaining_bytes": 1,
+        "initial_rows": 1,
+        "initial_bytes": 1,
+        "used_rows": 0,
+        "used_bytes": 0,
+        "snapshot": [
+          1
+        ],
+        "begin_work": 0,
+        "issued": 1,
+        "work": 1,
+        "closed": false
+      },
+      "after": {
+        "inventory": [
+          1
+        ],
+        "rows": 1,
+        "bytes": 1,
+        "phase": "idle",
+        "remaining_rows": 0,
+        "remaining_bytes": 0,
+        "initial_rows": 0,
+        "initial_bytes": 0,
+        "used_rows": 0,
+        "used_bytes": 0,
+        "snapshot": [],
+        "begin_work": 0,
+        "issued": 1,
+        "work": 0,
+        "closed": false
+      }
+    },
+    "rewind-ordinal": {
+      "property": "CR-06-ordinal-monotonic",
+      "trace": [
+        "reserve:1:1",
+        "rollback-confirmed"
+      ],
+      "before": {
+        "inventory": [
+          1
+        ],
+        "rows": 1,
+        "bytes": 1,
+        "phase": "prepared",
+        "remaining_rows": 1,
+        "remaining_bytes": 1,
+        "initial_rows": 1,
+        "initial_bytes": 1,
+        "used_rows": 0,
+        "used_bytes": 0,
+        "snapshot": [
+          1
+        ],
+        "begin_work": 0,
+        "issued": 1,
+        "work": 1,
+        "closed": false
+      },
+      "after": {
+        "inventory": [
+          1
+        ],
+        "rows": 1,
+        "bytes": 1,
+        "phase": "idle",
+        "remaining_rows": 0,
+        "remaining_bytes": 0,
+        "initial_rows": 0,
+        "initial_bytes": 0,
+        "used_rows": 0,
+        "used_bytes": 0,
+        "snapshot": [],
+        "begin_work": 0,
+        "issued": 0,
+        "work": 1,
+        "closed": false
+      }
+    },
+    "shrink-refund": {
+      "property": "CR-04-no-spend-refund",
+      "trace": [
+        "reserve:1:2",
+        "register-operation",
+        "grow:0",
+        "shrink:0"
+      ],
+      "before": {
+        "inventory": [
+          2,
+          1
+        ],
+        "rows": 2,
+        "bytes": 3,
+        "phase": "active",
+        "remaining_rows": 0,
+        "remaining_bytes": 0,
+        "initial_rows": 1,
+        "initial_bytes": 2,
+        "used_rows": 1,
+        "used_bytes": 2,
+        "snapshot": [
+          1
+        ],
+        "begin_work": 0,
+        "issued": 1,
+        "work": 3,
+        "closed": false
+      },
+      "after": {
+        "inventory": [
+          1,
+          1
+        ],
+        "rows": 2,
+        "bytes": 2,
+        "phase": "active",
+        "remaining_rows": 0,
+        "remaining_bytes": 1,
+        "initial_rows": 1,
+        "initial_bytes": 2,
+        "used_rows": 1,
+        "used_bytes": 2,
+        "snapshot": [
+          1
+        ],
+        "begin_work": 0,
+        "issued": 1,
+        "work": 4,
+        "closed": false
+      }
+    },
+    "clear-with-remaining": {
+      "property": "CR-03-cleared-slot",
+      "trace": [
+        "reserve:1:2",
+        "register-operation",
+        "finalize"
+      ],
+      "before": {
+        "inventory": [
+          1,
+          1
+        ],
+        "rows": 2,
+        "bytes": 2,
+        "phase": "active",
+        "remaining_rows": 0,
+        "remaining_bytes": 1,
+        "initial_rows": 1,
+        "initial_bytes": 2,
+        "used_rows": 1,
+        "used_bytes": 1,
+        "snapshot": [
+          1
+        ],
+        "begin_work": 0,
+        "issued": 1,
+        "work": 2,
+        "closed": false
+      },
+      "after": {
+        "inventory": [
+          1,
+          1
+        ],
+        "rows": 2,
+        "bytes": 2,
+        "phase": "idle",
+        "remaining_rows": 0,
+        "remaining_bytes": 1,
+        "initial_rows": 0,
+        "initial_bytes": 0,
+        "used_rows": 0,
+        "used_bytes": 0,
+        "snapshot": [],
+        "begin_work": 0,
+        "issued": 1,
+        "work": 3,
+        "closed": false
+      }
+    },
+    "unknown-resume": {
+      "property": "CR-07-unknown-quarantine",
+      "trace": [
+        "reserve:1:1",
+        "containment-unknown",
+        "resume-unknown"
+      ],
+      "before": {
+        "inventory": [
+          1
+        ],
+        "rows": 1,
+        "bytes": 1,
+        "phase": "unknown",
+        "remaining_rows": 1,
+        "remaining_bytes": 1,
+        "initial_rows": 1,
+        "initial_bytes": 1,
+        "used_rows": 0,
+        "used_bytes": 0,
+        "snapshot": [
+          1
+        ],
+        "begin_work": 0,
+        "issued": 1,
+        "work": 1,
+        "closed": true
+      },
+      "after": {
+        "inventory": [
+          1
+        ],
+        "rows": 1,
+        "bytes": 1,
+        "phase": "active",
+        "remaining_rows": 1,
+        "remaining_bytes": 1,
+        "initial_rows": 1,
+        "initial_bytes": 1,
+        "used_rows": 0,
+        "used_bytes": 0,
+        "snapshot": [
+          1
+        ],
+        "begin_work": 0,
+        "issued": 1,
+        "work": 1,
+        "closed": false
+      }
+    }
+  },
+  "producerSha256": "af4799d973d815806bc160fa27e89db3cee92b232ce8e91dc6d38c766c3be629",
+  "sourceSha256": {
+    "docs/helix/02-design/contracts/row-home-capacity-v0.1.proposal.sql": "fc16308d0c1dc19842a59e75b58ed7038dc09c2c43852cdb6b0b43102cabfe33",
+    "docs/helix/02-design/contracts/row-home-capacity-reservation-v0.1.proposal.sql": "711415191eb7af47d2c8b46a3483c296fc6341970662335c8dafec2029d69128",
+    "docs/helix/02-design/contracts/CONTRACT-001-storage-layout.md": "00c48513196eeb357ea27d36d45d7944662f2d9be3d6441ef09868cac72b2d57",
+    "docs/helix/02-design/contracts/CONTRACT-009-group-planning-and-locks.md": "3c7d8c478f531f19b7023b8463b27fb9dc8626190e8163eff5127ef57ddf3e3d"
+  },
+  "nativeCorrespondenceReviewed": false,
+  "installerReady": false,
+  "limitations": [
+    "Units abstract full carrier bytes and one installation/host transaction only",
+    "Atomic original SQL/exclusion/issuer/authority/account assumptions remain unproved",
+    "No database faults/commit_unknown reconciliation/disclosure/delivery/fairness or native resource/cancellation proof",
+    "Bounded graph exploration does not establish unbounded behavior or native enforcement"
+  ]
+}

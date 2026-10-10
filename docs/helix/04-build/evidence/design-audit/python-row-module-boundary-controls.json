@@ -1,0 +1,1001 @@
+{
+  "scope": "Current Python AST boundary map and actual checker mutation controls; not runtime purity, native closure or full architecture qualification",
+  "before": {
+    "checkerSha256": "1cf6ffae402c486711425c416dbbfe7ed7b55b1f373830153966389b6347d5b5",
+    "result": {
+      "edgeCount": 64,
+      "edges": [
+        {
+          "line": 2,
+          "source": "__init__",
+          "target": "truss.local_runtime"
+        },
+        {
+          "line": 6,
+          "source": "_acceptance_json",
+          "target": "json"
+        },
+        {
+          "line": 8,
+          "source": "_accounted_receive",
+          "target": "struct"
+        },
+        {
+          "line": 9,
+          "source": "_accounted_receive",
+          "target": "threading"
+        },
+        {
+          "line": 10,
+          "source": "_accounted_receive",
+          "target": "truss._resource_account"
+        },
+        {
+          "line": 2,
+          "source": "_directory_resources",
+          "target": "os"
+        },
+        {
+          "line": 3,
+          "source": "_directory_resources",
+          "target": "stat"
+        },
+        {
+          "line": 4,
+          "source": "_directory_resources",
+          "target": "threading"
+        },
+        {
+          "line": 5,
+          "source": "_directory_resources",
+          "target": "truss._installation_resources"
+        },
+        {
+          "line": 6,
+          "source": "_installation_resources",
+          "target": "dataclasses"
+        },
+        {
+          "line": 7,
+          "source": "_installation_resources",
+          "target": "hashlib"
+        },
+        {
+          "line": 8,
+          "source": "_installation_resources",
+          "target": "truss._resource_account"
+        },
+        {
+          "line": 69,
+          "source": "_installation_resources",
+          "target": "json"
+        },
+        {
+          "line": 7,
+          "source": "_operation_admission",
+          "target": "dataclasses"
+        },
+        {
+          "line": 8,
+          "source": "_operation_admission",
+          "target": "inspect"
+        },
+        {
+          "line": 9,
+          "source": "_operation_admission",
+          "target": "threading"
+        },
+        {
+          "line": 6,
+          "source": "_operation_ordinal",
+          "target": "dataclasses"
+        },
+        {
+          "line": 7,
+          "source": "_operation_ordinal",
+          "target": "threading"
+        },
+        {
+          "line": 6,
+          "source": "_query_execution",
+          "target": "dataclasses"
+        },
+        {
+          "line": 7,
+          "source": "_query_execution",
+          "target": "inspect"
+        },
+        {
+          "line": 8,
+          "source": "_query_execution",
+          "target": "threading"
+        },
+        {
+          "line": 9,
+          "source": "_query_execution",
+          "target": "types"
+        },
+        {
+          "line": 10,
+          "source": "_query_execution",
+          "target": "weakref"
+        },
+        {
+          "line": 11,
+          "source": "_query_execution",
+          "target": "truss.weft"
+        },
+        {
+          "line": 2,
+          "source": "_receipt_position",
+          "target": "base64"
+        },
+        {
+          "line": 3,
+          "source": "_receipt_position",
+          "target": "binascii"
+        },
+        {
+          "line": 4,
+          "source": "_receipt_position",
+          "target": "dataclasses"
+        },
+        {
+          "line": 5,
+          "source": "_receipt_position",
+          "target": "json"
+        },
+        {
+          "line": 6,
+          "source": "_receipt_position",
+          "target": "re"
+        },
+        {
+          "line": 7,
+          "source": "_receipt_position",
+          "target": "truss._acceptance_json"
+        },
+        {
+          "line": 6,
+          "source": "_resource_account",
+          "target": "dataclasses"
+        },
+        {
+          "line": 7,
+          "source": "_resource_account",
+          "target": "threading"
+        },
+        {
+          "line": 2,
+          "source": "cli",
+          "target": "argparse"
+        },
+        {
+          "line": 3,
+          "source": "cli",
+          "target": "json"
+        },
+        {
+          "line": 4,
+          "source": "cli",
+          "target": "pathlib"
+        },
+        {
+          "line": 5,
+          "source": "cli",
+          "target": "signal"
+        },
+        {
+          "line": 6,
+          "source": "cli",
+          "target": "threading"
+        },
+        {
+          "line": 20,
+          "source": "cli",
+          "target": "truss"
+        },
+        {
+          "line": 2,
+          "source": "local_runtime",
+          "target": "dataclasses"
+        },
+        {
+          "line": 3,
+          "source": "local_runtime",
+          "target": "importlib.metadata"
+        },
+        {
+          "line": 4,
+          "source": "local_runtime",
+          "target": "importlib.resources"
+        },
+        {
+          "line": 5,
+          "source": "local_runtime",
+          "target": "pathlib"
+        },
+        {
+          "line": 6,
+          "source": "local_runtime",
+          "target": "subprocess"
+        },
+        {
+          "line": 7,
+          "source": "local_runtime",
+          "target": "threading"
+        },
+        {
+          "line": 58,
+          "source": "local_runtime",
+          "target": "pgserver"
+        },
+        {
+          "line": 59,
+          "source": "local_runtime",
+          "target": "fasteners"
+        },
+        {
+          "line": 2,
+          "source": "migration_planning",
+          "target": "dataclasses"
+        },
+        {
+          "line": 3,
+          "source": "migration_planning",
+          "target": "re"
+        },
+        {
+          "line": 4,
+          "source": "migration_planning",
+          "target": "typing"
+        },
+        {
+          "line": 5,
+          "source": "migration_planning",
+          "target": "truss._acceptance_json"
+        },
+        {
+          "line": 8,
+          "source": "numeric",
+          "target": "dataclasses"
+        },
+        {
+          "line": 9,
+          "source": "numeric",
+          "target": "decimal"
+        },
+        {
+          "line": 6,
+          "source": "timestamp",
+          "target": "dataclasses"
+        },
+        {
+          "line": 7,
+          "source": "timestamp",
+          "target": "datetime"
+        },
+        {
+          "line": 8,
+          "source": "timestamp",
+          "target": "re"
+        },
+        {
+          "line": 10,
+          "source": "timestamp",
+          "target": "truss.numeric"
+        },
+        {
+          "line": 6,
+          "source": "weft",
+          "target": "dataclasses"
+        },
+        {
+          "line": 7,
+          "source": "weft",
+          "target": "decimal"
+        },
+        {
+          "line": 8,
+          "source": "weft",
+          "target": "hashlib"
+        },
+        {
+          "line": 9,
+          "source": "weft",
+          "target": "inspect"
+        },
+        {
+          "line": 10,
+          "source": "weft",
+          "target": "json"
+        },
+        {
+          "line": 11,
+          "source": "weft",
+          "target": "threading"
+        },
+        {
+          "line": 12,
+          "source": "weft",
+          "target": "types"
+        },
+        {
+          "line": 13,
+          "source": "weft",
+          "target": "typing"
+        }
+      ],
+      "errors": [
+        "_row_event_attribution.py: unmapped module _row_event_attribution",
+        "_row_group_custody.py: unmapped module _row_group_custody",
+        "_row_image.py: unmapped module _row_image",
+        "_row_operation_address.py: unmapped module _row_operation_address",
+        "_row_operation_context.py: unmapped module _row_operation_context",
+        "_row_operation_custody.py: unmapped module _row_operation_custody",
+        "_row_registry_correspondence.py: unmapped module _row_registry_correspondence",
+        "_row_touch_registry.py: unmapped module _row_touch_registry"
+      ],
+      "passed": false,
+      "scope": "python-only",
+      "unqualified": [
+        "TypeScript imports",
+        "native SQL dependencies",
+        "reflection/indirect dynamic execution",
+        "runtime private-object visibility"
+      ]
+    }
+  },
+  "after": {
+    "edgeCount": 99,
+    "edges": [
+      {
+        "line": 2,
+        "source": "__init__",
+        "target": "truss.local_runtime"
+      },
+      {
+        "line": 6,
+        "source": "_acceptance_json",
+        "target": "json"
+      },
+      {
+        "line": 8,
+        "source": "_accounted_receive",
+        "target": "struct"
+      },
+      {
+        "line": 9,
+        "source": "_accounted_receive",
+        "target": "threading"
+      },
+      {
+        "line": 10,
+        "source": "_accounted_receive",
+        "target": "truss._resource_account"
+      },
+      {
+        "line": 2,
+        "source": "_directory_resources",
+        "target": "os"
+      },
+      {
+        "line": 3,
+        "source": "_directory_resources",
+        "target": "stat"
+      },
+      {
+        "line": 4,
+        "source": "_directory_resources",
+        "target": "threading"
+      },
+      {
+        "line": 5,
+        "source": "_directory_resources",
+        "target": "truss._installation_resources"
+      },
+      {
+        "line": 6,
+        "source": "_installation_resources",
+        "target": "dataclasses"
+      },
+      {
+        "line": 7,
+        "source": "_installation_resources",
+        "target": "hashlib"
+      },
+      {
+        "line": 8,
+        "source": "_installation_resources",
+        "target": "truss._resource_account"
+      },
+      {
+        "line": 69,
+        "source": "_installation_resources",
+        "target": "json"
+      },
+      {
+        "line": 7,
+        "source": "_operation_admission",
+        "target": "dataclasses"
+      },
+      {
+        "line": 8,
+        "source": "_operation_admission",
+        "target": "inspect"
+      },
+      {
+        "line": 9,
+        "source": "_operation_admission",
+        "target": "threading"
+      },
+      {
+        "line": 6,
+        "source": "_operation_ordinal",
+        "target": "dataclasses"
+      },
+      {
+        "line": 7,
+        "source": "_operation_ordinal",
+        "target": "threading"
+      },
+      {
+        "line": 6,
+        "source": "_query_execution",
+        "target": "dataclasses"
+      },
+      {
+        "line": 7,
+        "source": "_query_execution",
+        "target": "inspect"
+      },
+      {
+        "line": 8,
+        "source": "_query_execution",
+        "target": "threading"
+      },
+      {
+        "line": 9,
+        "source": "_query_execution",
+        "target": "types"
+      },
+      {
+        "line": 10,
+        "source": "_query_execution",
+        "target": "weakref"
+      },
+      {
+        "line": 11,
+        "source": "_query_execution",
+        "target": "truss.weft"
+      },
+      {
+        "line": 2,
+        "source": "_receipt_position",
+        "target": "base64"
+      },
+      {
+        "line": 3,
+        "source": "_receipt_position",
+        "target": "binascii"
+      },
+      {
+        "line": 4,
+        "source": "_receipt_position",
+        "target": "dataclasses"
+      },
+      {
+        "line": 5,
+        "source": "_receipt_position",
+        "target": "json"
+      },
+      {
+        "line": 6,
+        "source": "_receipt_position",
+        "target": "re"
+      },
+      {
+        "line": 7,
+        "source": "_receipt_position",
+        "target": "truss._acceptance_json"
+      },
+      {
+        "line": 6,
+        "source": "_resource_account",
+        "target": "dataclasses"
+      },
+      {
+        "line": 7,
+        "source": "_resource_account",
+        "target": "threading"
+      },
+      {
+        "line": 2,
+        "source": "_row_event_attribution",
+        "target": "dataclasses"
+      },
+      {
+        "line": 3,
+        "source": "_row_event_attribution",
+        "target": "struct"
+      },
+      {
+        "line": 4,
+        "source": "_row_event_attribution",
+        "target": "truss._row_image"
+      },
+      {
+        "line": 2,
+        "source": "_row_group_custody",
+        "target": "dataclasses"
+      },
+      {
+        "line": 3,
+        "source": "_row_group_custody",
+        "target": "truss._acceptance_json"
+      },
+      {
+        "line": 4,
+        "source": "_row_group_custody",
+        "target": "truss._row_operation_address"
+      },
+      {
+        "line": 5,
+        "source": "_row_group_custody",
+        "target": "truss._row_operation_custody"
+      },
+      {
+        "line": 2,
+        "source": "_row_image",
+        "target": "dataclasses"
+      },
+      {
+        "line": 3,
+        "source": "_row_image",
+        "target": "struct"
+      },
+      {
+        "line": 2,
+        "source": "_row_operation_address",
+        "target": "dataclasses"
+      },
+      {
+        "line": 3,
+        "source": "_row_operation_address",
+        "target": "json"
+      },
+      {
+        "line": 4,
+        "source": "_row_operation_address",
+        "target": "truss._acceptance_json"
+      },
+      {
+        "line": 5,
+        "source": "_row_operation_address",
+        "target": "truss._row_operation_custody"
+      },
+      {
+        "line": 2,
+        "source": "_row_operation_context",
+        "target": "dataclasses"
+      },
+      {
+        "line": 3,
+        "source": "_row_operation_context",
+        "target": "truss._acceptance_json"
+      },
+      {
+        "line": 4,
+        "source": "_row_operation_context",
+        "target": "truss._row_operation_address"
+      },
+      {
+        "line": 5,
+        "source": "_row_operation_context",
+        "target": "truss._row_operation_custody"
+      },
+      {
+        "line": 6,
+        "source": "_row_operation_context",
+        "target": "truss._row_group_custody"
+      },
+      {
+        "line": 2,
+        "source": "_row_operation_custody",
+        "target": "base64"
+      },
+      {
+        "line": 3,
+        "source": "_row_operation_custody",
+        "target": "dataclasses"
+      },
+      {
+        "line": 4,
+        "source": "_row_operation_custody",
+        "target": "hashlib"
+      },
+      {
+        "line": 5,
+        "source": "_row_operation_custody",
+        "target": "re"
+      },
+      {
+        "line": 6,
+        "source": "_row_operation_custody",
+        "target": "truss._acceptance_json"
+      },
+      {
+        "line": 2,
+        "source": "_row_registry_correspondence",
+        "target": "dataclasses"
+      },
+      {
+        "line": 3,
+        "source": "_row_registry_correspondence",
+        "target": "truss._operation_registry"
+      },
+      {
+        "line": 4,
+        "source": "_row_registry_correspondence",
+        "target": "truss._row_operation_address"
+      },
+      {
+        "line": 5,
+        "source": "_row_registry_correspondence",
+        "target": "truss._row_operation_context"
+      },
+      {
+        "line": 6,
+        "source": "_row_registry_correspondence",
+        "target": "truss._row_group_custody"
+      },
+      {
+        "line": 7,
+        "source": "_row_registry_correspondence",
+        "target": "truss._row_operation_custody"
+      },
+      {
+        "line": 99,
+        "source": "_row_registry_correspondence",
+        "target": "truss._row_touch_registry"
+      },
+      {
+        "line": 100,
+        "source": "_row_registry_correspondence",
+        "target": "truss._row_operation_custody"
+      },
+      {
+        "line": 2,
+        "source": "_row_touch_registry",
+        "target": "dataclasses"
+      },
+      {
+        "line": 3,
+        "source": "_row_touch_registry",
+        "target": "truss._operation_registry"
+      },
+      {
+        "line": 4,
+        "source": "_row_touch_registry",
+        "target": "truss._row_operation_address"
+      },
+      {
+        "line": 5,
+        "source": "_row_touch_registry",
+        "target": "truss._row_operation_custody"
+      },
+      {
+        "line": 2,
+        "source": "cli",
+        "target": "argparse"
+      },
+      {
+        "line": 3,
+        "source": "cli",
+        "target": "json"
+      },
+      {
+        "line": 4,
+        "source": "cli",
+        "target": "pathlib"
+      },
+      {
+        "line": 5,
+        "source": "cli",
+        "target": "signal"
+      },
+      {
+        "line": 6,
+        "source": "cli",
+        "target": "threading"
+      },
+      {
+        "line": 20,
+        "source": "cli",
+        "target": "truss"
+      },
+      {
+        "line": 2,
+        "source": "local_runtime",
+        "target": "dataclasses"
+      },
+      {
+        "line": 3,
+        "source": "local_runtime",
+        "target": "importlib.metadata"
+      },
+      {
+        "line": 4,
+        "source": "local_runtime",
+        "target": "importlib.resources"
+      },
+      {
+        "line": 5,
+        "source": "local_runtime",
+        "target": "pathlib"
+      },
+      {
+        "line": 6,
+        "source": "local_runtime",
+        "target": "subprocess"
+      },
+      {
+        "line": 7,
+        "source": "local_runtime",
+        "target": "threading"
+      },
+      {
+        "line": 58,
+        "source": "local_runtime",
+        "target": "pgserver"
+      },
+      {
+        "line": 59,
+        "source": "local_runtime",
+        "target": "fasteners"
+      },
+      {
+        "line": 2,
+        "source": "migration_planning",
+        "target": "dataclasses"
+      },
+      {
+        "line": 3,
+        "source": "migration_planning",
+        "target": "re"
+      },
+      {
+        "line": 4,
+        "source": "migration_planning",
+        "target": "typing"
+      },
+      {
+        "line": 5,
+        "source": "migration_planning",
+        "target": "truss._acceptance_json"
+      },
+      {
+        "line": 8,
+        "source": "numeric",
+        "target": "dataclasses"
+      },
+      {
+        "line": 9,
+        "source": "numeric",
+        "target": "decimal"
+      },
+      {
+        "line": 6,
+        "source": "timestamp",
+        "target": "dataclasses"
+      },
+      {
+        "line": 7,
+        "source": "timestamp",
+        "target": "datetime"
+      },
+      {
+        "line": 8,
+        "source": "timestamp",
+        "target": "re"
+      },
+      {
+        "line": 10,
+        "source": "timestamp",
+        "target": "truss.numeric"
+      },
+      {
+        "line": 6,
+        "source": "weft",
+        "target": "dataclasses"
+      },
+      {
+        "line": 7,
+        "source": "weft",
+        "target": "decimal"
+      },
+      {
+        "line": 8,
+        "source": "weft",
+        "target": "hashlib"
+      },
+      {
+        "line": 9,
+        "source": "weft",
+        "target": "inspect"
+      },
+      {
+        "line": 10,
+        "source": "weft",
+        "target": "json"
+      },
+      {
+        "line": 11,
+        "source": "weft",
+        "target": "threading"
+      },
+      {
+        "line": 12,
+        "source": "weft",
+        "target": "types"
+      },
+      {
+        "line": 13,
+        "source": "weft",
+        "target": "typing"
+      }
+    ],
+    "errors": [],
+    "passed": true,
+    "scope": "python-only",
+    "unqualified": [
+      "TypeScript imports",
+      "native SQL dependencies",
+      "reflection/indirect dynamic execution",
+      "runtime private-object visibility"
+    ]
+  },
+  "controls": {
+    "baselineEdges": 99,
+    "checkerSha256": "b13edc5c59a3b7d51e653f25808c69e125881940217a503d4b201eccc492a4ee",
+    "controlCount": 14,
+    "controls": [
+      {
+        "case": "allowed-nested-import",
+        "errors": [],
+        "passed": true
+      },
+      {
+        "case": "forbidden-driver",
+        "errors": [
+          "numeric.py:67: forbidden import pgserver"
+        ],
+        "passed": false
+      },
+      {
+        "case": "private-custody-access",
+        "errors": [
+          "numeric.py:66: forbidden import truss._operation_admission"
+        ],
+        "passed": false
+      },
+      {
+        "case": "absolute-private-access",
+        "errors": [
+          "cli.py:37: forbidden import truss._operation_admission"
+        ],
+        "passed": false
+      },
+      {
+        "case": "escape-package",
+        "errors": [
+          "numeric.py:66: import escapes package"
+        ],
+        "passed": false
+      },
+      {
+        "case": "dynamic-import",
+        "errors": [
+          "numeric.py:66: dynamic source/import execution requires review"
+        ],
+        "passed": false
+      },
+      {
+        "case": "import-cycle",
+        "errors": [
+          "local_runtime.py:134: forbidden import truss.cli",
+          "Python import cycle: __init__ -> local_runtime -> cli -> __init__"
+        ],
+        "passed": false
+      },
+      {
+        "case": "unmapped-source",
+        "errors": [
+          "new_runtime.py: unmapped module new_runtime"
+        ],
+        "passed": false
+      },
+      {
+        "case": "wildcard",
+        "errors": [
+          "numeric.py:66: wildcard import"
+        ],
+        "passed": false
+      },
+      {
+        "case": "allowed-private-image-dependency",
+        "errors": [],
+        "passed": true
+      },
+      {
+        "case": "row-image-forbidden-driver",
+        "errors": [
+          "_row_image.py:92: forbidden import pgserver"
+        ],
+        "passed": false
+      },
+      {
+        "case": "root-private-image-export",
+        "errors": [
+          "__init__.py:6: forbidden import truss._row_image"
+        ],
+        "passed": false
+      },
+      {
+        "case": "cli-private-touch-access",
+        "errors": [
+          "cli.py:37: forbidden import truss._row_touch_registry"
+        ],
+        "passed": false
+      },
+      {
+        "case": "row-image-reverse-cycle",
+        "errors": [
+          "_row_image.py:92: forbidden import truss._row_event_attribution",
+          "Python import cycle: _row_event_attribution -> _row_image -> _row_event_attribution"
+        ],
+        "passed": false
+      }
+    ],
+    "observedAt": "2026-10-10T12:39:21.733026+00:00",
+    "producerSha256": "2edd3ab836f39a9f3ba7471cb20da9112ec3a3dd2f3a03aba35d0426f74b991e",
+    "pythonVersion": "3.9.6",
+    "scope": "python-only",
+    "sourceSha256": {
+      "packages/python/src/truss/__init__.py": "e9d7aacb2f5a5da077ffc24500422876892c3f68a7f595f059fd4189f25a83b5",
+      "packages/python/src/truss/_acceptance_json.py": "303638af137138a796542aa5425985d147e510a23639fca9b2d6221966337a01",
+      "packages/python/src/truss/_accounted_receive.py": "f1f6bc7d84d3cbdc4ba93ddb514d68898f60c99358c7cb2a719701139d674e78",
+      "packages/python/src/truss/_directory_resources.py": "1c3bff1ec23e9d241b710188223539adfdf896a31601c6ce5d46f46d2bc0ab48",
+      "packages/python/src/truss/_installation_resources.py": "abaab39777891125da2f522cd2a0f3a6702896a05464cf344eddbc2acff08759",
+      "packages/python/src/truss/_operation_admission.py": "f96462208c14230670370d0b12f9b5d38ef1c20861175bcab8777c2c687dbb30",
+      "packages/python/src/truss/_operation_ordinal.py": "10d4717462ff14c7524ed793db0ac7b94f56e1d6b88158081a4f300981193977",
+      "packages/python/src/truss/_operation_registry.py": "7e74c34c9b0a874af8e7c0c743357aff2c848cc4c8ae3ed2404542ce18ec667d",
+      "packages/python/src/truss/_query_execution.py": "9cf9d08a45f0b31ef1621c9bed47eb879715771583dd467ecb57b8278115b0aa",
+      "packages/python/src/truss/_receipt_position.py": "e7c42049947c4bda44c0ac9e62e23b73143c6129f07f9ee889ef186364f19eba",
+      "packages/python/src/truss/_resource_account.py": "6a10966e502c16a3ab8972bba34a999ca675fdb7a59e5c3ac93a7c713b6468f1",
+      "packages/python/src/truss/_row_event_attribution.py": "5ef265df339899cde5fba9e3f229d0709671f29ecb15ebf54bbeced7e8b9181b",
+      "packages/python/src/truss/_row_group_custody.py": "b39f7f4e17243d846fc60b3fff02807d168a93c23adf793a8be4fcd2abf3dcdd",
+      "packages/python/src/truss/_row_image.py": "0c793edbd8c45e440511ffbd2ac7e344c47be80f85ee28bf0164ce6e1f073df9",
+      "packages/python/src/truss/_row_operation_address.py": "51af38dbda5c94f8a3ca8c92af3abef1f9919d1d44f6ae1c872c609b747eaf08",
+      "packages/python/src/truss/_row_operation_context.py": "aeaa86163233a597c554f977d3c82badcbf8290a336e47b5e1ff8c64c66794ca",
+      "packages/python/src/truss/_row_operation_custody.py": "1783d3bccfae06526f3be9149622e7f4ae9afd0cd833a7905e7a8b27300a0445",
+      "packages/python/src/truss/_row_registry_correspondence.py": "f0229b5032aa1801dba1cf85ddf0d6be84a087baf1f51c9482475a5b1e6c2282",
+      "packages/python/src/truss/_row_touch_registry.py": "332c37d656bbf825ab119422714330277d9988eef280fc6f72fff26e2d5e778b",
+      "packages/python/src/truss/cli.py": "6a6b3fb751a73b7d338f531d514ec3e4b94c7fb58d4fe80351ff630a7cc7df37",
+      "packages/python/src/truss/local_runtime.py": "1a837b5575c2f8b08e2b699256a90d971ed7e2112d40bccc7c197b92ad6023a9",
+      "packages/python/src/truss/migration_planning.py": "1523a466555ab7b4075f501edd0570f9465c67a67558d2733b5c06984571c3a6",
+      "packages/python/src/truss/numeric.py": "4833d54fda887fa70171511761d28ea75a0dc22aa89a50c3eae2a88f2b972d18",
+      "packages/python/src/truss/timestamp.py": "b08dbf2a9c48754282f05429a58b66515c75a815f6e1282d3c485248f762120c",
+      "packages/python/src/truss/weft.py": "331af0ce6b2f974f7d8ba69c1da90825dfa92c7e57a06cec5aed90a3ec4cd3be"
+    }
+  },
+  "workflowPath": ".github/workflows/python-boundaries.yml",
+  "workflowSha256": "5ae367eca51d4cb9407e05b1bb4eb909437152f268ebfcd89f440915ff05a403",
+  "remoteCiObserved": false,
+  "limitations": [
+    "Direct AST import edges only; reflection/computed import paths remain semantic review",
+    "TypeScript and native SQL dependency closure remain separate",
+    "Private member-level visibility and original authority cannot be proved by module imports",
+    "No consumer API, installer readiness or semantic body qualification"
+  ]
+}

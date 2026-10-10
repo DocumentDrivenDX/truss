@@ -1,0 +1,357 @@
+{
+  "scope": "Six source/manifest/inventory audits including separate complete-owner observation; not native execution, visibility, decoder, installation or support qualification",
+  "runs": [
+    {
+      "audit": "private-scalar-full-observation",
+      "optimized": false,
+      "scriptSha256": "0224115012c8cd0654e91974c5ac7b651bec717f72a81bc7e02551e9bd092cc5",
+      "exitCode": 0,
+      "stdoutSha256": "70a850b010c73a27b2388ed2ef8c16167ed78ba5b8fa14f0ac8a2849ba764061",
+      "result": {
+        "scope": "Closed captured source projection/predicate AST and manifest source/order/type/null/parameter correspondence only; no native descriptors, visibility, decoding or PostgreSQL execution",
+        "sourceSha256": "d92a8870ed951ef7ae4b583f6ddf0f5fbd77c996570055bce50fa8685afe26b2",
+        "modelSha256": "fd901c196cb127e817f41573d9bfceb26012497f3d8a3c0310c31ccd1a8fad62",
+        "columns": 15,
+        "corruptionControls": [
+          "reordered_columns",
+          "lost_source_bytes",
+          "wrong_binary_carrier",
+          "missing_node_predicate",
+          "one_row_limit",
+          "hidden_filter",
+          "source_as_codec"
+        ],
+        "manifestCorruptionControls": [
+          "native_bytea_result",
+          "nullable_codec",
+          "nonnull_unused_binary",
+          "missing_parameter",
+          "narrow_identity_cast",
+          "native_claim_inflation"
+        ],
+        "nativeExecution": false,
+        "complete": false
+      }
+    },
+    {
+      "audit": "private-scalar-full-observation",
+      "optimized": true,
+      "scriptSha256": "0224115012c8cd0654e91974c5ac7b651bec717f72a81bc7e02551e9bd092cc5",
+      "exitCode": 0,
+      "stdoutSha256": "70a850b010c73a27b2388ed2ef8c16167ed78ba5b8fa14f0ac8a2849ba764061",
+      "result": {
+        "scope": "Closed captured source projection/predicate AST and manifest source/order/type/null/parameter correspondence only; no native descriptors, visibility, decoding or PostgreSQL execution",
+        "sourceSha256": "d92a8870ed951ef7ae4b583f6ddf0f5fbd77c996570055bce50fa8685afe26b2",
+        "modelSha256": "fd901c196cb127e817f41573d9bfceb26012497f3d8a3c0310c31ccd1a8fad62",
+        "columns": 15,
+        "corruptionControls": [
+          "reordered_columns",
+          "lost_source_bytes",
+          "wrong_binary_carrier",
+          "missing_node_predicate",
+          "one_row_limit",
+          "hidden_filter",
+          "source_as_codec"
+        ],
+        "manifestCorruptionControls": [
+          "native_bytea_result",
+          "nullable_codec",
+          "nonnull_unused_binary",
+          "missing_parameter",
+          "narrow_identity_cast",
+          "native_claim_inflation"
+        ],
+        "nativeExecution": false,
+        "complete": false
+      }
+    },
+    {
+      "audit": "private-tree-full-observation",
+      "optimized": false,
+      "scriptSha256": "b241fa4ae001324fef7dc42172c94db43d2d45ad29c15b15b296c5e72378d02c",
+      "exitCode": 0,
+      "stdoutSha256": "721763d57d9f6b795563711eade3f9b5d9554d9ac68ade4572f98d49f39f8748",
+      "result": {
+        "scope": "Two complete fixed source ASTs and manifest source/order/type/NULL/parameter correspondence only; no native visibility, bounds, descriptors or decoding",
+        "sourceSha256": "db1ddad5f6ef8953a2e3dacf91b7c69fc8941c5df4e1ca2fc304d7e6a33df6a8",
+        "modelSha256": "e6a6164f29ce54fbf2dc972d4505fd007b45de610df6717cd3a2bcfa8f13adc2",
+        "statements": 2,
+        "corruptionControls": [
+          "missing_stream",
+          "state_scope_swap",
+          "scalar_node_filter",
+          "truncated_nodes",
+          "lost_orphan_payload"
+        ],
+        "manifestCorruptionControls": [
+          "stream_identity_swap",
+          "nullable_node_definition",
+          "nonnull_parent",
+          "binary_native_carrier",
+          "scalar_node_parameter",
+          "native_claim"
+        ],
+        "nativeExecution": false,
+        "complete": false
+      }
+    },
+    {
+      "audit": "private-tree-full-observation",
+      "optimized": true,
+      "scriptSha256": "b241fa4ae001324fef7dc42172c94db43d2d45ad29c15b15b296c5e72378d02c",
+      "exitCode": 0,
+      "stdoutSha256": "721763d57d9f6b795563711eade3f9b5d9554d9ac68ade4572f98d49f39f8748",
+      "result": {
+        "scope": "Two complete fixed source ASTs and manifest source/order/type/NULL/parameter correspondence only; no native visibility, bounds, descriptors or decoding",
+        "sourceSha256": "db1ddad5f6ef8953a2e3dacf91b7c69fc8941c5df4e1ca2fc304d7e6a33df6a8",
+        "modelSha256": "e6a6164f29ce54fbf2dc972d4505fd007b45de610df6717cd3a2bcfa8f13adc2",
+        "statements": 2,
+        "corruptionControls": [
+          "missing_stream",
+          "state_scope_swap",
+          "scalar_node_filter",
+          "truncated_nodes",
+          "lost_orphan_payload"
+        ],
+        "manifestCorruptionControls": [
+          "stream_identity_swap",
+          "nullable_node_definition",
+          "nonnull_parent",
+          "binary_native_carrier",
+          "scalar_node_parameter",
+          "native_claim"
+        ],
+        "nativeExecution": false,
+        "complete": false
+      }
+    },
+    {
+      "audit": "private-tree-state-observation",
+      "optimized": false,
+      "scriptSha256": "fee892274eac13268916bf50366e99f38794553132753bab2d29b6c20d95e078",
+      "exitCode": 0,
+      "stdoutSha256": "0147055893add7afaf45a6533cc348e9606cae4bc27ac738d3cd0734bf52ea25",
+      "result": {
+        "scope": "Closed state-header source AST and manifest ordered type/NULL/parameter/hash correspondence; no native owner association, authority or decoding",
+        "sourceSha256": "97eefe00fb649cc1f306867ee32e136061c7f658945754beebbe48b89e7e95ea",
+        "modelSha256": "433231853d4d02d4dafa465f8946aaacaa93b2a6066f8a86aeb6067239c42f87",
+        "columns": 13,
+        "corruptionControls": [
+          "swapped_owner_fields",
+          "lost_home_profile",
+          "wrong_definition_carrier",
+          "narrow_state_parameter",
+          "wrong_relation",
+          "one_row_limit"
+        ],
+        "manifestCorruptionControls": [
+          "nullable_root",
+          "nonnull_object_pair",
+          "extra_parameter",
+          "native_claim"
+        ],
+        "nativeExecution": false,
+        "complete": false
+      }
+    },
+    {
+      "audit": "private-tree-state-observation",
+      "optimized": true,
+      "scriptSha256": "fee892274eac13268916bf50366e99f38794553132753bab2d29b6c20d95e078",
+      "exitCode": 0,
+      "stdoutSha256": "0147055893add7afaf45a6533cc348e9606cae4bc27ac738d3cd0734bf52ea25",
+      "result": {
+        "scope": "Closed state-header source AST and manifest ordered type/NULL/parameter/hash correspondence; no native owner association, authority or decoding",
+        "sourceSha256": "97eefe00fb649cc1f306867ee32e136061c7f658945754beebbe48b89e7e95ea",
+        "modelSha256": "433231853d4d02d4dafa465f8946aaacaa93b2a6066f8a86aeb6067239c42f87",
+        "columns": 13,
+        "corruptionControls": [
+          "swapped_owner_fields",
+          "lost_home_profile",
+          "wrong_definition_carrier",
+          "narrow_state_parameter",
+          "wrong_relation",
+          "one_row_limit"
+        ],
+        "manifestCorruptionControls": [
+          "nullable_root",
+          "nonnull_object_pair",
+          "extra_parameter",
+          "native_claim"
+        ],
+        "nativeExecution": false,
+        "complete": false
+      }
+    },
+    {
+      "audit": "private-property-state-observation",
+      "optimized": false,
+      "scriptSha256": "8d950177c7457ec0c50819341361154f13481e180dee3008ed7a8230e118c1ea",
+      "exitCode": 0,
+      "stdoutSha256": "a2d01fab941270ab37e8efe63f3bb66b58e98269511c2b75e153fab426aab937",
+      "result": {
+        "scope": "Closed two-route source AST and manifest source/order/carrier/NULL/parameter correspondence; no native owner association, complete visibility or absence proof",
+        "sourceSha256": "fd6b1e9309bb7af5100b10a4c8d6e4e3198da90a327c4b212da5e10f8f3a1f44",
+        "modelSha256": "e913efbaa4a35c56c826e8c0f132e1b4c1961d7394543800dc35794d5046bc27",
+        "statements": 2,
+        "corruptionControls": [
+          "missing_edge_route",
+          "edge_as_object",
+          "relationship_as_property_owner",
+          "missing_property",
+          "foreign_owner_slot",
+          "one_row_limit"
+        ],
+        "manifestCorruptionControls": [
+          "route_kind_swap",
+          "changed_catalog_cast",
+          "missing_owner_parameter",
+          "nullable_property",
+          "complete_claim"
+        ],
+        "nativeExecution": false,
+        "complete": false
+      }
+    },
+    {
+      "audit": "private-property-state-observation",
+      "optimized": true,
+      "scriptSha256": "8d950177c7457ec0c50819341361154f13481e180dee3008ed7a8230e118c1ea",
+      "exitCode": 0,
+      "stdoutSha256": "a2d01fab941270ab37e8efe63f3bb66b58e98269511c2b75e153fab426aab937",
+      "result": {
+        "scope": "Closed two-route source AST and manifest source/order/carrier/NULL/parameter correspondence; no native owner association, complete visibility or absence proof",
+        "sourceSha256": "fd6b1e9309bb7af5100b10a4c8d6e4e3198da90a327c4b212da5e10f8f3a1f44",
+        "modelSha256": "e913efbaa4a35c56c826e8c0f132e1b4c1961d7394543800dc35794d5046bc27",
+        "statements": 2,
+        "corruptionControls": [
+          "missing_edge_route",
+          "edge_as_object",
+          "relationship_as_property_owner",
+          "missing_property",
+          "foreign_owner_slot",
+          "one_row_limit"
+        ],
+        "manifestCorruptionControls": [
+          "route_kind_swap",
+          "changed_catalog_cast",
+          "missing_owner_parameter",
+          "nullable_property",
+          "complete_claim"
+        ],
+        "nativeExecution": false,
+        "complete": false
+      }
+    },
+    {
+      "audit": "private-tree-read-source-inventory",
+      "optimized": false,
+      "scriptSha256": "c6e176645e6edb5b46df14e6775c39355bd595846e2f3762e230150daa9238ab",
+      "exitCode": 0,
+      "stdoutSha256": "ab88241eae7923ce234dc9eca489b2c62cd6142fc0b34d6c7caac65f5f1dc5ac",
+      "result": {
+        "scope": "Four historical UMF source-capture families/six SELECT statements/sixteen artifact pins only; no source semantic, native descriptor, installation or decoder qualification",
+        "inventorySha256": "ecb2fd217cbcb3d337a64c6625f94d8482163e780382816672a2909e91b94ef5",
+        "families": 4,
+        "statements": 6,
+        "artifactPins": 16,
+        "corruptionControls": [
+          "missing_family",
+          "duplicate_family",
+          "stale_artifact",
+          "changed_owner_tuple",
+          "complete_claim",
+          "narrow_statement_count"
+        ],
+        "nativeExecution": false,
+        "complete": false
+      }
+    },
+    {
+      "audit": "private-tree-read-source-inventory",
+      "optimized": true,
+      "scriptSha256": "c6e176645e6edb5b46df14e6775c39355bd595846e2f3762e230150daa9238ab",
+      "exitCode": 0,
+      "stdoutSha256": "ab88241eae7923ce234dc9eca489b2c62cd6142fc0b34d6c7caac65f5f1dc5ac",
+      "result": {
+        "scope": "Four historical UMF source-capture families/six SELECT statements/sixteen artifact pins only; no source semantic, native descriptor, installation or decoder qualification",
+        "inventorySha256": "ecb2fd217cbcb3d337a64c6625f94d8482163e780382816672a2909e91b94ef5",
+        "families": 4,
+        "statements": 6,
+        "artifactPins": 16,
+        "corruptionControls": [
+          "missing_family",
+          "duplicate_family",
+          "stale_artifact",
+          "changed_owner_tuple",
+          "complete_claim",
+          "narrow_statement_count"
+        ],
+        "nativeExecution": false,
+        "complete": false
+      }
+    },
+    {
+      "audit": "private-owner-states-observation",
+      "optimized": false,
+      "scriptSha256": "6b770313c99295654c414998691fbccc1e39f17f1d6250e36f332fb40dc08109",
+      "exitCode": 0,
+      "stdoutSha256": "60bcc8ddf75c533866f5a5ad69cf45e1caa3352c7dea825584ffa7ae6f3c0d62",
+      "result": {
+        "scope": "Two complete-owner source ASTs and manifest source/order/type/NULL/parameter correspondence only; no native complete visibility, ownership, resource or whole-record decoding qualification",
+        "sourceSha256": "aad6ba4e8d752906af3d27bd500c71f4505dd4a2812294f78755c15feaaa73b1",
+        "modelSha256": "72ffcf4d29cd4fd1fe4d540fd65a3415b726260dc44b7a0957a376ffee516fc2",
+        "statements": 2,
+        "corruptionControls": [
+          "missing_route",
+          "property_filter",
+          "row_limit",
+          "text_collection_sort",
+          "lost_profile_bytes",
+          "owner_discriminator_swap"
+        ],
+        "manifestCorruptionControls": [
+          "route_swap",
+          "extra_property_parameter",
+          "nullable_definition",
+          "missing_order_component",
+          "native_claim"
+        ],
+        "nativeExecution": false,
+        "complete": false
+      }
+    },
+    {
+      "audit": "private-owner-states-observation",
+      "optimized": true,
+      "scriptSha256": "6b770313c99295654c414998691fbccc1e39f17f1d6250e36f332fb40dc08109",
+      "exitCode": 0,
+      "stdoutSha256": "60bcc8ddf75c533866f5a5ad69cf45e1caa3352c7dea825584ffa7ae6f3c0d62",
+      "result": {
+        "scope": "Two complete-owner source ASTs and manifest source/order/type/NULL/parameter correspondence only; no native complete visibility, ownership, resource or whole-record decoding qualification",
+        "sourceSha256": "aad6ba4e8d752906af3d27bd500c71f4505dd4a2812294f78755c15feaaa73b1",
+        "modelSha256": "72ffcf4d29cd4fd1fe4d540fd65a3415b726260dc44b7a0957a376ffee516fc2",
+        "statements": 2,
+        "corruptionControls": [
+          "missing_route",
+          "property_filter",
+          "row_limit",
+          "text_collection_sort",
+          "lost_profile_bytes",
+          "owner_discriminator_swap"
+        ],
+        "manifestCorruptionControls": [
+          "route_swap",
+          "extra_property_parameter",
+          "nullable_definition",
+          "missing_order_component",
+          "native_claim"
+        ],
+        "nativeExecution": false,
+        "complete": false
+      }
+    }
+  ],
+  "nativeExecutionQualified": false,
+  "complete": false
+}

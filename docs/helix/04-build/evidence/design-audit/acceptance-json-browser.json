@@ -1,0 +1,122 @@
+{
+  "browser": "153.0.8010.12",
+  "sourceSha256": "14a65dc9fd67b3ab53fb080a4a05422b991af63feac52fc6e0655eb03a47ed17",
+  "bundleSha256": "a9068413c3b00668d4731ef6376c39708b713bdd7e600bcf67017bb1f886eb68",
+  "corpusSha256": "0c406d54651202cc3bede7aeb600c86d1a35ed2ea7db8c22a017341319325b2a",
+  "sourceCorpusSha256": "02862329b08896f15d5a13885af2839903192f4573eb5461516fc96221fca701",
+  "observations": [
+    {
+      "name": "empty object",
+      "outcome": "decoded"
+    },
+    {
+      "name": "null boolean string array",
+      "outcome": "decoded"
+    },
+    {
+      "name": "legal whitespace",
+      "outcome": "decoded"
+    },
+    {
+      "name": "inert prototype name",
+      "outcome": "decoded"
+    },
+    {
+      "name": "valid escaped surrogate pair",
+      "outcome": "decoded"
+    },
+    {
+      "name": "distinct normalization forms",
+      "outcome": "decoded"
+    },
+    {
+      "name": "escaped equivalent duplicate",
+      "outcome": "refused"
+    },
+    {
+      "name": "unpaired high surrogate",
+      "outcome": "refused"
+    },
+    {
+      "name": "unpaired low surrogate",
+      "outcome": "refused"
+    },
+    {
+      "name": "overlong utf8",
+      "outcome": "refused"
+    },
+    {
+      "name": "surrogate utf8",
+      "outcome": "refused"
+    },
+    {
+      "name": "out of range utf8",
+      "outcome": "refused"
+    },
+    {
+      "name": "outer number",
+      "outcome": "refused"
+    },
+    {
+      "name": "trailing data",
+      "outcome": "refused"
+    },
+    {
+      "name": "trailing comma",
+      "outcome": "refused"
+    },
+    {
+      "name": "bom",
+      "outcome": "refused"
+    },
+    {
+      "name": "comment",
+      "outcome": "refused"
+    },
+    {
+      "name": "opaque numeric artifact base64",
+      "outcome": "decoded"
+    },
+    {
+      "name": "source: exact numeric lexemes",
+      "outcome": "preflighted"
+    },
+    {
+      "name": "source: escaped duplicate member",
+      "outcome": "refused"
+    },
+    {
+      "name": "source: unpaired surrogate",
+      "outcome": "refused"
+    },
+    {
+      "name": "source: leading zero",
+      "outcome": "refused"
+    },
+    {
+      "name": "source: incomplete exponent",
+      "outcome": "refused"
+    },
+    {
+      "name": "source: trailing comma",
+      "outcome": "refused"
+    },
+    {
+      "name": "source: depth overflow",
+      "outcome": "refused"
+    },
+    {
+      "name": "source: container overflow",
+      "outcome": "refused"
+    },
+    {
+      "name": "source: surrogate UTF-8",
+      "outcome": "refused"
+    },
+    {
+      "name": "complete original native/converted input fixture",
+      "outcome": "decoded"
+    }
+  ],
+  "scope": "Actual portable decoder bytes/value/refusal in Chromium, opaque numeric source preflight and complete planning fixture custody. No shared operation-account/heap qualification, schema/artifact/profile/native admission or committed acceptance."
+}

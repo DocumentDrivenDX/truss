@@ -1,0 +1,16 @@
+{
+  "scope": "Read-only original Weft row-root emission and structural prerequisite source inspection; owner test claims not rerun, no native Truss qualification or joint adoption",
+  "commit": "845ab9e8d811d8f78f2e00ffab6588be3ddc7516",
+  "files": [
+    {
+      "path": "crates/weft-postgresql/src/row_join_definition.rs",
+      "sha256": "459f307ec5199db392c61a59eb5359129824b2e76c77988cce01242e612b4e34"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/B-005-native-preparation.md",
+      "sha256": "3b24c5315f9e1577d0e4d7c3b5b07c99e9e714ff2651bc51b5aed33d2cdcc889"
+    }
+  ],
+  "nativeExecution": false,
+  "ownerTestsRerun": false
+}

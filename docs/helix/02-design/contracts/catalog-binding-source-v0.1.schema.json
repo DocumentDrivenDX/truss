@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:catalog-binding-source:0.1.0",
+  "description": "Original binding-source envelope shape; complete bytes/profile/custody/definition parity and dependency closure require semantic admission. No commit or report back-reference.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-catalog-binding-source/0.1.0"
+    },
+    "sourceProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "reference": {
+      "$ref": "urn:truss:draft:catalog-view:0.1.0#/$defs/reference"
+    },
+    "definition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "provenance": {
+      "$ref": "urn:truss:draft:catalog-view:0.1.0#/$defs/entry/properties/provenance/oneOf/1"
+    },
+    "acceptedBinding": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "owningRecordDefinition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "owningRecordDocument": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "derivationDependencies": {
+      "type": "array",
+      "items": {
+        "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+      }
+    },
+    "originalSourceEvidence": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "sourceProfile",
+    "reference",
+    "definition",
+    "provenance",
+    "acceptedBinding",
+    "owningRecordDefinition",
+    "owningRecordDocument",
+    "derivationDependencies",
+    "originalSourceEvidence"
+  ],
+  "additionalProperties": false
+}

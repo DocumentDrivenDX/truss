@@ -1,0 +1,15 @@
+{
+  "producerSha256": {
+    "packages/tooling/src/layout-migration-plan.ts": "cfd60bc293f3e3a0a9f0c3409700b0253869a9e40c6c32a501b80ec5568d4921",
+    "tests/layout-migration-plan.test.ts": "e53cda7ced3613ce8d2f575d53ed21a15749fa79df112e6443ce160cecf82ea1",
+    "packages/postgresql/src/acceptance-json.ts": "14a65dc9fd67b3ab53fb080a4a05422b991af63feac52fc6e0655eb03a47ed17"
+  },
+  "runtime": "Bun 1.4.2",
+  "tests": {
+    "passed": 9,
+    "failed": 0,
+    "expectations": 21
+  },
+  "strictTypeScript": true,
+  "scope": "Pure closed metadata route planning/refusal only; no native observation/installation, original artifact authority, migration apply/recovery or public package qualification."
+}

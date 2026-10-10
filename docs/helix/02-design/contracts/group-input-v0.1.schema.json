@@ -1,0 +1,793 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:group-input:0.1.0",
+  "description": "Original nonempty ordered semantic input shape; alias/ownership/catalog/value/current-authority admission remains semantic.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-group-input/0.1.0"
+    },
+    "layoutProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "mutationProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "valueProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "catalog": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "selection": {
+              "const": "current"
+            }
+          },
+          "required": [
+            "selection"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "selection": {
+              "const": "pinned"
+            },
+            "revision": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$"
+            },
+            "modelBundleSha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "selection",
+            "revision",
+            "modelBundleSha256"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "operations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "operation": {
+                "const": "create_object"
+              },
+              "typeDefinitionPin": {
+                "type": "string"
+              },
+              "alias": {
+                "type": "string"
+              },
+              "values": {
+                "type": "array",
+                "minItems": 0,
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "$ref": "urn:truss:draft:exact-value:0.1.0#/$defs/value"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "value"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "ownership": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "const": "rootless"
+                      }
+                    },
+                    "required": [
+                      "state"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "const": "owned"
+                      },
+                      "root": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "state": {
+                                "const": "stored"
+                              },
+                              "identity": {
+                                "$ref": "urn:truss:draft:history-record:0.1.0#/$defs/identity"
+                              }
+                            },
+                            "required": [
+                              "state",
+                              "identity"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "state": {
+                                "const": "alias"
+                              },
+                              "alias": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "state",
+                              "alias"
+                            ],
+                            "additionalProperties": false
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "state",
+                      "root"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "required": [
+              "operation",
+              "typeDefinitionPin",
+              "values",
+              "ownership"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "operation": {
+                "const": "create_edge"
+              },
+              "relationshipDefinitionPin": {
+                "type": "string"
+              },
+              "alias": {
+                "type": "string"
+              },
+              "source": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "const": "stored"
+                      },
+                      "identity": {
+                        "$ref": "urn:truss:draft:history-record:0.1.0#/$defs/identity"
+                      }
+                    },
+                    "required": [
+                      "state",
+                      "identity"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "const": "alias"
+                      },
+                      "alias": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "state",
+                      "alias"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              "target": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "const": "stored"
+                      },
+                      "identity": {
+                        "$ref": "urn:truss:draft:history-record:0.1.0#/$defs/identity"
+                      }
+                    },
+                    "required": [
+                      "state",
+                      "identity"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "const": "alias"
+                      },
+                      "alias": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "state",
+                      "alias"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              "values": {
+                "type": "array",
+                "minItems": 0,
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "$ref": "urn:truss:draft:exact-value:0.1.0#/$defs/value"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "value"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "orderKey": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "const": "null"
+                      }
+                    },
+                    "required": [
+                      "state"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "const": "text"
+                      },
+                      "text": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "state",
+                      "text"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "required": [
+              "operation",
+              "relationshipDefinitionPin",
+              "source",
+              "target",
+              "values",
+              "orderKey"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "operation": {
+                "const": "update_object"
+              },
+              "target": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "const": "stored"
+                      },
+                      "identity": {
+                        "$ref": "urn:truss:draft:history-record:0.1.0#/$defs/identity"
+                      }
+                    },
+                    "required": [
+                      "state",
+                      "identity"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "const": "alias"
+                      },
+                      "alias": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "state",
+                      "alias"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              "expectedVersion": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]*)$"
+              },
+              "set": {
+                "type": "array",
+                "minItems": 0,
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "$ref": "urn:truss:draft:exact-value:0.1.0#/$defs/value"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "value"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "unset": {
+                "type": "array",
+                "minItems": 0,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "ownershipChange": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "const": "rootless"
+                      }
+                    },
+                    "required": [
+                      "state"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "const": "owned"
+                      },
+                      "root": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "state": {
+                                "const": "stored"
+                              },
+                              "identity": {
+                                "$ref": "urn:truss:draft:history-record:0.1.0#/$defs/identity"
+                              }
+                            },
+                            "required": [
+                              "state",
+                              "identity"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "state": {
+                                "const": "alias"
+                              },
+                              "alias": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "state",
+                              "alias"
+                            ],
+                            "additionalProperties": false
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "state",
+                      "root"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "required": [
+              "operation",
+              "target",
+              "set",
+              "unset"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "operation": {
+                "const": "update_edge"
+              },
+              "target": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "const": "stored"
+                      },
+                      "identity": {
+                        "$ref": "urn:truss:draft:history-record:0.1.0#/$defs/identity"
+                      }
+                    },
+                    "required": [
+                      "state",
+                      "identity"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "const": "alias"
+                      },
+                      "alias": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "state",
+                      "alias"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              "expectedVersion": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]*)$"
+              },
+              "set": {
+                "type": "array",
+                "minItems": 0,
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "$ref": "urn:truss:draft:exact-value:0.1.0#/$defs/value"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "value"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "unset": {
+                "type": "array",
+                "minItems": 0,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "endpointChange": {
+                "type": "object",
+                "properties": {
+                  "source": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "state": {
+                            "const": "stored"
+                          },
+                          "identity": {
+                            "$ref": "urn:truss:draft:history-record:0.1.0#/$defs/identity"
+                          }
+                        },
+                        "required": [
+                          "state",
+                          "identity"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "state": {
+                            "const": "alias"
+                          },
+                          "alias": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "state",
+                          "alias"
+                        ],
+                        "additionalProperties": false
+                      }
+                    ]
+                  },
+                  "target": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "state": {
+                            "const": "stored"
+                          },
+                          "identity": {
+                            "$ref": "urn:truss:draft:history-record:0.1.0#/$defs/identity"
+                          }
+                        },
+                        "required": [
+                          "state",
+                          "identity"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "state": {
+                            "const": "alias"
+                          },
+                          "alias": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "state",
+                          "alias"
+                        ],
+                        "additionalProperties": false
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "source",
+                  "target"
+                ],
+                "additionalProperties": false
+              },
+              "orderKeyChange": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "const": "null"
+                      }
+                    },
+                    "required": [
+                      "state"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "const": "text"
+                      },
+                      "text": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "state",
+                      "text"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "required": [
+              "operation",
+              "target",
+              "set",
+              "unset"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "operation": {
+                "enum": [
+                  "delete_object",
+                  "delete_edge"
+                ]
+              },
+              "target": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "const": "stored"
+                      },
+                      "identity": {
+                        "$ref": "urn:truss:draft:history-record:0.1.0#/$defs/identity"
+                      }
+                    },
+                    "required": [
+                      "state",
+                      "identity"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "const": "alias"
+                      },
+                      "alias": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "state",
+                      "alias"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              "expectedVersion": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]*)$"
+              }
+            },
+            "required": [
+              "operation",
+              "target"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    "assertedOrigin": {
+      "$ref": "urn:truss:draft:exact-value:0.1.0#/$defs/value"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "layoutProfile",
+    "mutationProfile",
+    "valueProfile",
+    "catalog",
+    "operations",
+    "assertedOrigin"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "requestIdentity": {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-request-identity/0.1.0"
+        },
+        "authorizedScopeIdentity": {
+          "type": "string"
+        },
+        "requestId": {
+          "type": "string"
+        },
+        "inputProfile": {
+          "const": "truss-group-input/0.1.0"
+        },
+        "claimedSha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "authorizedScopeIdentity",
+        "requestId",
+        "inputProfile"
+      ],
+      "additionalProperties": false
+    },
+    "requestSelection": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "state": {
+              "const": "none"
+            }
+          },
+          "required": [
+            "state"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "state": {
+              "const": "present"
+            },
+            "identity": {
+              "$ref": "#/$defs/requestIdentity"
+            }
+          },
+          "required": [
+            "state",
+            "identity"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

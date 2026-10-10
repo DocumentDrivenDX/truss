@@ -1,0 +1,194 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:proposal:catalog-capability-wires:0.1.0",
+  "title": "Existing v0.1 catalog capability wire compositions",
+  "description": "Definitions only for the existing catalog facade. Select the exact registered member. Original report producer completeness, profile authority, immutable persistence, head publication and termination remain separate admission obligations. Later report profiles require separately versioned composition.",
+  "not": {},
+  "$defs": {
+    "acceptanceSemantic": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "accepted"
+            },
+            "disposition": {
+              "enum": [
+                "new",
+                "exact_repeat"
+              ]
+            },
+            "report": {
+              "$ref": "urn:truss:draft:acceptance-report:0.1.0"
+            }
+          },
+          "required": [
+            "outcome",
+            "disposition",
+            "report"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "rejected"
+            },
+            "rejection": {
+              "$ref": "urn:truss:draft:acceptance-rejection:0.1.0"
+            }
+          },
+          "required": [
+            "outcome",
+            "rejection"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "acceptanceOutcome": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "status": {
+              "const": "ok"
+            },
+            "value": {
+              "$ref": "urn:truss:proposal:catalog-capability-wires:0.1.0#/$defs/acceptanceSemantic"
+            }
+          },
+          "required": [
+            "status",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "status": {
+              "const": "error"
+            },
+            "error": {
+              "$ref": "urn:truss:draft:execution-failure:0.1.0"
+            }
+          },
+          "required": [
+            "status",
+            "error"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "reportRequest": {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-acceptance-report-request/0.1.0"
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "revision"
+      ],
+      "additionalProperties": false
+    },
+    "reportSemantic": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "available"
+            },
+            "report": {
+              "$ref": "urn:truss:draft:acceptance-report:0.1.0"
+            }
+          },
+          "required": [
+            "outcome",
+            "report"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "not_found"
+            }
+          },
+          "required": [
+            "outcome"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outcome": {
+              "const": "unavailable"
+            },
+            "reason": {
+              "enum": [
+                "profile",
+                "context",
+                "retention",
+                "observation"
+              ]
+            }
+          },
+          "required": [
+            "outcome",
+            "reason"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "reportOutcome": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "status": {
+              "const": "ok"
+            },
+            "value": {
+              "$ref": "urn:truss:proposal:catalog-capability-wires:0.1.0#/$defs/reportSemantic"
+            }
+          },
+          "required": [
+            "status",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "status": {
+              "const": "error"
+            },
+            "error": {
+              "$ref": "urn:truss:draft:execution-failure:0.1.0"
+            }
+          },
+          "required": [
+            "status",
+            "error"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

@@ -29,7 +29,7 @@ ddx:
 
 ## Context
 
-Journal origin already names the load and who initiated it; the source's own author and time are a separate fact.
+Journal origin already names the load and who initiated it; the source's own author and time are a separate fact. Creation stores the record, original source facts and journal atomically under the admitted import transaction. A later identity-based skip cannot replace the original load/source facts with the later attempt's facts. Source author/time are preserved assertions, not authenticated identity or a substitute for native operation attribution. Pending source rows inside a host transaction are not externally committed provenance.
 
 ## Walkthrough
 

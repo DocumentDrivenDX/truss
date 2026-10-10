@@ -1,0 +1,171 @@
+{
+  "scope": "Six independently authored exact bytes and four typed refusals against selected UMF key operation 2.0.0/core 0.7 source. Full owner receipts verified in memory; original fixture/inputs/bytes retained here. No Truss identity/catalog/codec/comparator/key-row/uniqueness, Weft binding or native support.",
+  "source": {
+    "path": "docs/helix/02-design/contracts/bindings/catalog-enumeration-benchmark-v0.1.proposal.umf.json",
+    "sha256": "496ca682008579dce66fbfa5d3096a569785e2b45e6d1e93f2a058b8a8ec77e8"
+  },
+  "owner": {
+    "root": "/Users/erik/Projects/umf",
+    "head": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+    "status": "",
+    "keyTupleSourceSha256": "cc394192441c55844de777413adb2dfdf5dac84b0c6a90e520fb713dc2673d4b"
+  },
+  "outcomes": [
+    {
+      "id": "unicode-code-first-owner",
+      "element": "T0001",
+      "key": "by-code",
+      "values": [
+        {
+          "string": "t-α"
+        }
+      ],
+      "expectedHex": "554d464b31010404742dceb1",
+      "identity": {
+        "module": "catalog-benchmark",
+        "element": "T0001",
+        "key": "by-code"
+      },
+      "operation": "encode-core-key-tuple",
+      "version": "2.0.0",
+      "profile": "umf-key-tuple-v1",
+      "actualHex": "554d464b31010404742dceb1",
+      "receiptVerified": true
+    },
+    {
+      "id": "unicode-code-last-owner",
+      "element": "T1000",
+      "key": "by-code",
+      "values": [
+        {
+          "string": "t-α"
+        }
+      ],
+      "expectedHex": "554d464b31010404742dceb1",
+      "identity": {
+        "module": "catalog-benchmark",
+        "element": "T1000",
+        "key": "by-code"
+      },
+      "operation": "encode-core-key-tuple",
+      "version": "2.0.0",
+      "profile": "umf-key-tuple-v1",
+      "actualHex": "554d464b31010404742dceb1",
+      "receiptVerified": true
+    },
+    {
+      "id": "composite-large-integer",
+      "element": "T0001",
+      "key": "by-label-rank",
+      "values": [
+        {
+          "string": "label"
+        },
+        {
+          "integerToken": "9007199254740993"
+        }
+      ],
+      "expectedHex": "554d464b310204056c6162656c021039303037313939323534373430393933",
+      "identity": {
+        "module": "catalog-benchmark",
+        "element": "T0001",
+        "key": "by-label-rank"
+      },
+      "operation": "encode-core-key-tuple",
+      "version": "2.0.0",
+      "profile": "umf-key-tuple-v1",
+      "actualHex": "554d464b310204056c6162656c021039303037313939323534373430393933",
+      "receiptVerified": true
+    },
+    {
+      "id": "composite-large-integer-exponent",
+      "element": "T0001",
+      "key": "by-label-rank",
+      "values": [
+        {
+          "string": "label"
+        },
+        {
+          "integerToken": "9007199254740993e0"
+        }
+      ],
+      "expectedHex": "554d464b310204056c6162656c021039303037313939323534373430393933",
+      "identity": {
+        "module": "catalog-benchmark",
+        "element": "T0001",
+        "key": "by-label-rank"
+      },
+      "operation": "encode-core-key-tuple",
+      "version": "2.0.0",
+      "profile": "umf-key-tuple-v1",
+      "actualHex": "554d464b310204056c6162656c021039303037313939323534373430393933",
+      "receiptVerified": true
+    },
+    {
+      "id": "composite-zero",
+      "element": "T1000",
+      "key": "by-label-rank",
+      "values": [
+        {
+          "string": "x"
+        },
+        {
+          "integerToken": "0"
+        }
+      ],
+      "expectedHex": "554d464b3102040178020130",
+      "identity": {
+        "module": "catalog-benchmark",
+        "element": "T1000",
+        "key": "by-label-rank"
+      },
+      "operation": "encode-core-key-tuple",
+      "version": "2.0.0",
+      "profile": "umf-key-tuple-v1",
+      "actualHex": "554d464b3102040178020130",
+      "receiptVerified": true
+    },
+    {
+      "id": "composite-unicode-negative",
+      "element": "T1000",
+      "key": "by-label-rank",
+      "values": [
+        {
+          "string": "α"
+        },
+        {
+          "integerToken": "-42"
+        }
+      ],
+      "expectedHex": "554d464b31020402ceb102032d3432",
+      "identity": {
+        "module": "catalog-benchmark",
+        "element": "T1000",
+        "key": "by-label-rank"
+      },
+      "operation": "encode-core-key-tuple",
+      "version": "2.0.0",
+      "profile": "umf-key-tuple-v1",
+      "actualHex": "554d464b31020402ceb102032d3432",
+      "receiptVerified": true
+    }
+  ],
+  "controls": [
+    {
+      "id": "missing-component",
+      "code": "KEY_TUPLE_ARITY"
+    },
+    {
+      "id": "reversed-wrappers",
+      "code": "KEY_TUPLE_VALUE"
+    },
+    {
+      "id": "missing-key",
+      "code": "KEY_TUPLE_MISSING"
+    },
+    {
+      "id": "fractional-integer",
+      "code": "KEY_TUPLE_ROUNDING"
+    }
+  ]
+}

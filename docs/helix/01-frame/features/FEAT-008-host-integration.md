@@ -60,7 +60,7 @@ HST-02. Writes can be governed by role grants: a host assumes a role per transac
 
 #### Pooling
 
-HST-03. truss keeps no session state and works through a transaction-mode pooler, with or without prepared statements (FR-43).
+HST-03. truss uses a host-supplied PostgreSQL connection, preserves caller transaction ownership, keeps no mutable session dependency across completed transactions and supports parameterized unprepared execution. Pool operation is host-owned (FR-43).
 
 #### Embedded
 

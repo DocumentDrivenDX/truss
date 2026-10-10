@@ -1,0 +1,81 @@
+{
+  "scope": "Two closure insertion column/parameter/parent predicate/result source correspondences; no original archive/hash/owner authority or native registration proof",
+  "sourcePins": [
+    {
+      "path": "docs/helix/02-design/contracts/feed-prerequisite-insert-v0.1.proposal.sql",
+      "sourceSha256": "fc6306ae0485edd4d292a20416a628896c53ed4d627e0da777e5de83e9eaa814",
+      "artifactPath": "docs/helix/02-design/contracts/feed-prerequisite-insert-v0.1.proposal.umf.json",
+      "artifactSha256": "cf9b753576f2938a18b61ee78f3eceb6d499ee00498ce7cf6624008ae63c2b81",
+      "exportPath": "docs/helix/04-build/evidence/design-audit/feed-prerequisite-insert.owner-export.sql",
+      "exportSha256": "d020c9a086891a2051176d6f9dff9b04e18ea2ab3004ad83466cefc59da887a8",
+      "sourceArchiveExact": true,
+      "reloadedExportExact": true,
+      "complete": false,
+      "declarationCount": 0,
+      "unhandled": [
+        {
+          "path": "/stmts/0/stmt"
+        },
+        {
+          "path": "/stmts/1/stmt"
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "POSTGRESQL_CATALOG_UNRESOLVED",
+          "path": "",
+          "severity": "warning",
+          "message": "Raw syntax is not catalog resolution, SQL execution, permissions or server-state validation"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/0/stmt",
+          "severity": "warning",
+          "message": "Statement is retained without declaration extraction or execution"
+        },
+        {
+          "code": "POSTGRESQL_DDL_UNRESOLVED",
+          "path": "/stmts/1/stmt",
+          "severity": "warning",
+          "message": "Statement is retained without declaration extraction or execution"
+        }
+      ]
+    }
+  ],
+  "controls": [
+    {
+      "case": "missing complete inventory column",
+      "refused": true
+    },
+    {
+      "case": "reordered original closure values",
+      "refused": true
+    },
+    {
+      "case": "wrong configuration generation slot",
+      "refused": true
+    },
+    {
+      "case": "missing original parent profile",
+      "refused": true
+    },
+    {
+      "case": "conflict suppression",
+      "refused": true
+    },
+    {
+      "case": "omitted returned original owner",
+      "refused": true
+    },
+    {
+      "case": "extra parent LIMIT",
+      "refused": true
+    },
+    {
+      "case": "reordered closure families",
+      "refused": true
+    }
+  ],
+  "nativeExecution": false,
+  "complete": false
+}

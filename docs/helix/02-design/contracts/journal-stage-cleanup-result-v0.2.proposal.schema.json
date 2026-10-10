@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:proposal:journal-stage-cleanup-result:0.2.0",
+  "title": "Unadopted pending whole-operation journal-stage cleanup result",
+  "description": "Complete actual removed snapshots plus original parity/absence/dependency/account evidence. Shape grants no deletion authority, exact cohort parity, native absence or commit acknowledgment.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "interfaceVersion",
+    "durability",
+    "profile",
+    "removedOperationSnapshot",
+    "removedStages",
+    "originalCohort",
+    "originalAdministrativeContext",
+    "originalCleanupAttempt",
+    "originalRecheckObservation",
+    "originalReturnedMembership",
+    "completeChildAbsence",
+    "completeParentAbsence",
+    "preservedDependencyInventory",
+    "capacityTransition",
+    "completeCleanupEffectEvidence"
+  ],
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-journal-stage-cleanup-result/0.2.0-proposal"
+    },
+    "durability": {
+      "const": "pending-original-host-settlement"
+    },
+    "profile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "removedOperationSnapshot": {
+      "$ref": "urn:truss:draft:private-custody-snapshot:0.1.0#/oneOf/0"
+    },
+    "removedStages": {
+      "type": "array",
+      "items": {
+        "$ref": "urn:truss:proposal:journal-stage-snapshot:0.2.0"
+      }
+    },
+    "originalCohort": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "originalAdministrativeContext": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "originalCleanupAttempt": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "originalRecheckObservation": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "originalReturnedMembership": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "completeChildAbsence": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "completeParentAbsence": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "preservedDependencyInventory": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "capacityTransition": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "completeCleanupEffectEvidence": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    }
+  }
+}

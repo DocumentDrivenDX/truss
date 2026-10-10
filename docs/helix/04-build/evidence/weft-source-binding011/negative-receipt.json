@@ -1,0 +1,50 @@
+{
+  "scope": "eleven deliberately corrupted source packet copies rejected by independent integrity/source validator; no compiler/native execution",
+  "cases": [
+    {
+      "case": "payload_corruption",
+      "rejected": true
+    },
+    {
+      "case": "profile_authority",
+      "rejected": true
+    },
+    {
+      "case": "missing_column",
+      "rejected": true
+    },
+    {
+      "case": "wrong_original_model",
+      "rejected": true
+    },
+    {
+      "case": "wrong_layout_sql",
+      "rejected": true
+    },
+    {
+      "case": "duplicate_physical_identity",
+      "rejected": true
+    },
+    {
+      "case": "wrong_table_pointer",
+      "rejected": true
+    },
+    {
+      "case": "wrong_value_family",
+      "rejected": true
+    },
+    {
+      "case": "wrong_value_root",
+      "rejected": true
+    },
+    {
+      "case": "wrong_presence_profile",
+      "rejected": true
+    },
+    {
+      "case": "wrong_codec_family",
+      "rejected": true
+    }
+  ],
+  "nativeQualified": false
+}

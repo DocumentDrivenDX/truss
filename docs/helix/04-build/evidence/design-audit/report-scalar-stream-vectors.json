@@ -1,0 +1,100 @@
+{
+  "status": "passed_independent_fixture_meaning",
+  "vectors": 13,
+  "fixtureSha256": "8d9796d6359b1aec328b0a90ce7fe0c03f17f5b3d322562cff85b33152edc7b6",
+  "checkerSha256": "deb16927689d1526feb35234627809fdf6fb9ad25ed88bf360057db66e279cec",
+  "results": [
+    {
+      "name": "two-byte-scalar-crosses-source-boundary",
+      "sourceSha256": "0e98edc686f385514eef3579539b707bb69bd41919ddd6a3b035e9fbd6a6b8a7",
+      "sourceBytes": 65537,
+      "splitSchedules": 2,
+      "expectedUtf8Valid": true
+    },
+    {
+      "name": "three-byte-scalar-crosses-source-boundary",
+      "sourceSha256": "59f9cdc9b6415debb08ac5b6cfd9d569667c4615d7464552cf965f9a1851e32b",
+      "sourceBytes": 65538,
+      "splitSchedules": 3,
+      "expectedUtf8Valid": true
+    },
+    {
+      "name": "four-byte-scalar-crosses-source-boundary",
+      "sourceSha256": "95db1db6fe6f647a70c5cc6954b718981f42227b2eb84a8a041b958a91d12a40",
+      "sourceBytes": 65539,
+      "splitSchedules": 4,
+      "expectedUtf8Valid": true
+    },
+    {
+      "name": "highest-Unicode-scalar",
+      "sourceSha256": "f461f76e8635141d04a7aafa1ef574b4df0b485f1de53e4fda6aa31df7fff552",
+      "sourceBytes": 65539,
+      "splitSchedules": 4,
+      "expectedUtf8Valid": true
+    },
+    {
+      "name": "byte-document-controls-and-quotes",
+      "sourceSha256": "c4da2c7c90623397d3e29b0946d570564e117c8f3a4838c0f160ac56b5bc29bb",
+      "sourceBytes": 65542,
+      "splitSchedules": 7,
+      "expectedUtf8Valid": true
+    },
+    {
+      "name": "overlong-two-byte",
+      "sourceSha256": "926be54d7f8fddaec1d9b3f4f3c1e2929dd213c5a5442d8a47c4ba0f00e1386e",
+      "sourceBytes": 65537,
+      "splitSchedules": 2,
+      "expectedUtf8Valid": false
+    },
+    {
+      "name": "overlong-three-byte",
+      "sourceSha256": "750e224826859d9989f02f9787409ec2997233a21aa6254e9f29530e4f9666f0",
+      "sourceBytes": 65538,
+      "splitSchedules": 3,
+      "expectedUtf8Valid": false
+    },
+    {
+      "name": "surrogate-encoding",
+      "sourceSha256": "89f6f2aa1de58dd5b871d3fc450bbd5c2c32a95263006ff1282458b795f4a9ba",
+      "sourceBytes": 65538,
+      "splitSchedules": 3,
+      "expectedUtf8Valid": false
+    },
+    {
+      "name": "above-Unicode-maximum",
+      "sourceSha256": "a31a3451df116b7dd82b87b8ea31daa9da06a99b749a3ed6463a891128eb5e13",
+      "sourceBytes": 65539,
+      "splitSchedules": 4,
+      "expectedUtf8Valid": false
+    },
+    {
+      "name": "invalid-five-byte-lead",
+      "sourceSha256": "8cb50971940775e5c9e86f04609a3fccb7af23763276d141e6f90aa24c0c5326",
+      "sourceBytes": 65539,
+      "splitSchedules": 4,
+      "expectedUtf8Valid": false
+    },
+    {
+      "name": "isolated-continuation",
+      "sourceSha256": "3ccdaf5957d22e722c9859ed786e92d973f5afd77caa9175be0bfdaaf18f8a64",
+      "sourceBytes": 65536,
+      "splitSchedules": 1,
+      "expectedUtf8Valid": false
+    },
+    {
+      "name": "unfinished-final-scalar",
+      "sourceSha256": "1f7b83f6f36a8f160cec2bfaa80b821f8e6557c8bbb47c97cca4f9029d4293a2",
+      "sourceBytes": 65538,
+      "splitSchedules": 3,
+      "expectedUtf8Valid": false
+    },
+    {
+      "name": "ASCII-in-continuation",
+      "sourceSha256": "2423db08aef2a81d22dc9d53cd63f199f215d181f611fbbfd09b202ef5892701",
+      "sourceBytes": 65539,
+      "splitSchedules": 4,
+      "expectedUtf8Valid": false
+    }
+  ],
+  "scope": "Python strict incremental UTF-8 and expected JSON literal meaning/hash checks only. No production/native encoder, scalar resource admission, whole report or acceptance qualification."
+}

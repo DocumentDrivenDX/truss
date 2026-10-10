@@ -1,0 +1,110 @@
+{
+  "scope": "Original generated base/adjunct DDL and immutable guard composition, declared table names and independent adjunct catalog expectations under rollback only; no complete installer, routine/grant inventory, accepted catalog or migration qualification",
+  "pgserverVersion": "0.1.4",
+  "sources": [
+    {
+      "path": "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql",
+      "sha256": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/operation-configuration-storage.owner-export.sql",
+      "sha256": "55448d0e9b979ab62f48099e6c317e19ebe40ce5ff9c90472209deff8a618e3a"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/layout-migration-storage.owner-export.sql",
+      "sha256": "dd7e24b38fd09194d67d4f0a55f5b72696bd83b7f87d108ccb001fbab6892d33"
+    },
+    {
+      "path": "packages/postgresql/native/operation-configuration-immutability.sql",
+      "sha256": "3ae78935297c76e66eb324adb314f4554a7924f7e11b7a1ae7128c9d3cbc8386"
+    },
+    {
+      "path": "packages/postgresql/native/layout-migration-receipt-immutability.sql",
+      "sha256": "1b13a84f5bfd4f706d8b5a3f01837f3cdd0a450a849a7fd6ca48eda8885af309"
+    }
+  ],
+  "observation": {
+    "tables": [
+      "catalog_acceptance_report",
+      "complete_feed_administration_receipt",
+      "complete_feed_consumer",
+      "complete_feed_seed_artifact",
+      "complete_feed_seed_attempt",
+      "edge",
+      "edge_limit",
+      "feed_configuration_prerequisite",
+      "feed_consumer",
+      "feed_member",
+      "feed_prerequisite",
+      "feed_tx",
+      "installation_admission",
+      "installation_archive",
+      "installation_marker",
+      "journal",
+      "key_bucket_guard",
+      "key_def",
+      "key_lifecycle_history",
+      "key_migration_receipt",
+      "key_tombstone",
+      "layout_migration_receipt",
+      "module_access",
+      "object",
+      "object_key_bucket",
+      "object_key_reservation_bucket",
+      "operation_configuration",
+      "prop_def",
+      "record_source",
+      "rel_def",
+      "rel_endpoint",
+      "relationship_lineage",
+      "request_receipt",
+      "request_receipt_protection",
+      "request_receipt_route_guard",
+      "row_home_capacity",
+      "row_home_journal_stage",
+      "row_home_node",
+      "row_home_operation",
+      "row_home_scalar",
+      "row_home_state",
+      "row_home_touch",
+      "schema_change",
+      "schema_doc",
+      "schema_head",
+      "schema_rev",
+      "setting",
+      "source_epoch_current",
+      "source_epoch_registry",
+      "type_def"
+    ],
+    "serverVersion": "16.2",
+    "sha256": true,
+    "xactStatus": true,
+    "currentXid": true,
+    "uuidIssuer": true,
+    "adjuncts": {
+      "layout_migration_receipt": {
+        "columns": 11,
+        "foreignKeys": 1,
+        "generatedHashes": 3,
+        "alwaysGuards": 2,
+        "publicInsert": false
+      },
+      "operation_configuration": {
+        "columns": 16,
+        "foreignKeys": 2,
+        "generatedHashes": 3,
+        "alwaysGuards": 2,
+        "publicInsert": false
+      }
+    },
+    "transactionTimeout": null
+  },
+  "rollbackRemovedNamespace": true,
+  "truncateRefusals": 4,
+  "truncateModes": [
+    "origin",
+    "replica"
+  ],
+  "limitation": "PostgreSQL16.2 lacks transaction_timeout; any selected profile requiring that setting must refuse or use a separately admitted bounded alternative",
+  "producerSha256": "e1237ffddfe3b3baab93c82b541d9cbb1afa79c3dba3149a4782c03f4c5d778e"
+}

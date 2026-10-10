@@ -1,0 +1,172 @@
+{
+  "scope": "Thirty-three source receipts/current SQL/model/export artifact digests only; no parser execution, native scope, definition resolution or installed parity",
+  "queries": 73,
+  "checked": [
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/bootstrap-collector-source.json",
+      "receiptSha256": "9b72c5d0e1c12f267558538d7cb82f9609b63ce5e17c56114ed36e7207460f64",
+      "queryCount": 7
+    },
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/bootstrap-routine-source.json",
+      "receiptSha256": "45adb9bcabd4d77c0ef1258532785166c551dd73ad6b9812dde097ae63ff00f0",
+      "queryCount": 1
+    },
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/bootstrap-type-source.json",
+      "receiptSha256": "d0dbdf8815211e8e6482b4128cbadd66dfd2491423fc046c659f18d19d37c0d6",
+      "queryCount": 3
+    },
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/bootstrap-guard-source.json",
+      "receiptSha256": "eb98cd9f29d4522dc5e63dd219d478ba9f33f898b5ca49e575f80b68197174a0",
+      "queryCount": 4
+    },
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/bootstrap-external-source.json",
+      "receiptSha256": "618a6d932f5feab7d77bae255e36e95365c2f87102e4c1759f8f84ffa476bd19",
+      "queryCount": 2
+    },
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/bootstrap-routine-ancillary-source.json",
+      "receiptSha256": "dfd3fc0ec68ffc26c689d4afa66f78cef3620e853c5b677e674dda256afcd4cd",
+      "queryCount": 2
+    },
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/bootstrap-hierarchy-source.json",
+      "receiptSha256": "1f2df0ae8414ce2af6e2fe66558ffa3b2619fa9d176f6e4714d5569f83f29d3e",
+      "queryCount": 2
+    },
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/bootstrap-metadata-source.json",
+      "receiptSha256": "69ed51c1d43c46d816aa290d2501206d41c05cadfbf135b97c95ab7c66290cf6",
+      "queryCount": 3
+    },
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/bootstrap-shared-source.json",
+      "receiptSha256": "d5e0189e9dd7ce247515f80c2b6b1ba9183ad0c3c085cf72c72d5298930ee452",
+      "queryCount": 2
+    },
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/bootstrap-routine-acl-source.json",
+      "receiptSha256": "26a7c96d2df6299c4009c435baac556db5a91c5a9c2edb367b481fe01234a502",
+      "queryCount": 1
+    },
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/bootstrap-namespace-source.json",
+      "receiptSha256": "5cc5231579592d4b18d92eb3c85b5cc66891b57986eecb81f1cac3592889eb60",
+      "queryCount": 1
+    },
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/bootstrap-namespace-acl-source.json",
+      "receiptSha256": "59e5f4a60b3f0618dc946b5701868f8f23808fb9e11a7a331158f54feca30c7e",
+      "queryCount": 1
+    },
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/bootstrap-namespace-rights-source.json",
+      "receiptSha256": "779ecb59e893d2b787e9e211e7eebb01f97ba6a831376f03d3fceb6164af55e6",
+      "queryCount": 1
+    },
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/bootstrap-relation-grants-source.json",
+      "receiptSha256": "03f3cfd33bccbf4fc49c4b7e9101b0fdd2db955789d146ac316c9c1f88b8d637",
+      "queryCount": 2
+    },
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/bootstrap-role-path-source.json",
+      "receiptSha256": "6730040e93b72987585d27ea0be94bd98a9306d13aae654fbd521d7b554e2cea",
+      "queryCount": 1
+    },
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/bootstrap-callable-sequence-rights-source.json",
+      "receiptSha256": "c892bf430eff4b507c47376e6d861cfd2bce015ae1826a1821f5ae6ac5bf5c4e",
+      "queryCount": 2
+    },
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/bootstrap-table-rights-source.json",
+      "receiptSha256": "4a26e1ec323755034bdd4c312f30b209dbedfc5fbf97c18d718df7fff05c7eae",
+      "queryCount": 2
+    },
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/bootstrap-operator-source.json",
+      "receiptSha256": "20810ee7955a79c12ca663922002d1d3579d77c1031a458982ec6ab316088493",
+      "queryCount": 4
+    },
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/bootstrap-opfamily-members-source.json",
+      "receiptSha256": "b9cd6b65943363d61e84e405e56d07b887794d903cfbb86d5c616ee225a1892d",
+      "queryCount": 2
+    },
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/bootstrap-cast-source.json",
+      "receiptSha256": "883c35b5683ca213a0631ea8c089ade4a4c4c185459a418b99a6d45db53d5f67",
+      "queryCount": 1
+    },
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/bootstrap-external-type-adjunct-source.json",
+      "receiptSha256": "ebd68781319c7b4b6e114103173f5816a86921ef56634e68ea29d2ae63c0fca9",
+      "queryCount": 3
+    },
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/bootstrap-external-relation-source.json",
+      "receiptSha256": "b7b25c276e4a653cb89fb668e80f06f8f17312436ee26dcc0b3abd3b28222888",
+      "queryCount": 4
+    },
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/bootstrap-external-relation-guards-source.json",
+      "receiptSha256": "7c5c14c91d87408ad4d27dc2b38d4fe5450965fc279615df08645a19c7df6814",
+      "queryCount": 3
+    },
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/bootstrap-external-constraint-hierarchy-source.json",
+      "receiptSha256": "1066b73a6f20dd3f490733e70e1b8e0324eabf454e84dc9a832900f9a06a7958",
+      "queryCount": 3
+    },
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/bootstrap-type-language-acl-source.json",
+      "receiptSha256": "e54ea739f10650dcb34d60f072dfdf73d6e33fa0f50a9b4388379f990f52bf10",
+      "queryCount": 2
+    },
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/bootstrap-type-language-rights-source.json",
+      "receiptSha256": "1db52c221626fbbb352c1c163bfab26b01c17bfe54deedefb73456b83359b586",
+      "queryCount": 2
+    },
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/bootstrap-target-context-source.json",
+      "receiptSha256": "74d9c319e7abe98e6d4cfc03765e25cec9ff87938f327781b4777e475fad2b46",
+      "queryCount": 2
+    },
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/bootstrap-enum-child-source.json",
+      "receiptSha256": "085a85f2fd0994b15b2e3da72eeb57c8ef093a8e4aa924c5f3d9277b95e2c7a6",
+      "queryCount": 1
+    },
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/bootstrap-opfamily-child-source.json",
+      "receiptSha256": "0db47e251fb69d5e8b2aef9dbd05c00be595628dedd6d465b0112c956a5c397d",
+      "queryCount": 2
+    },
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/bootstrap-transform-source.json",
+      "receiptSha256": "33b8a7a5e45a1ab36b2d1f0f7f8f7018068142e72687e68d9c4d9908730573a7",
+      "queryCount": 2
+    },
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/bootstrap-default-source.json",
+      "receiptSha256": "fea68d622fdee73b584f601d59ccff47d3156072a4c9ff4213c585a5eeabc18b",
+      "queryCount": 1
+    },
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/bootstrap-guard-child-source.json",
+      "receiptSha256": "453ed4bdce55f70e6e851c6693ff03d643ee477c7ba4016bb6bc7befe6b8554c",
+      "queryCount": 3
+    },
+    {
+      "receiptPath": "docs/helix/04-build/evidence/design-audit/bootstrap-tablespace-source.json",
+      "receiptSha256": "f4ba5a163caf744ea367d4239cf5fd6c3e1404ebb6bda18ee5af1c8d0cda568a",
+      "queryCount": 1
+    }
+  ],
+  "failures": []
+}

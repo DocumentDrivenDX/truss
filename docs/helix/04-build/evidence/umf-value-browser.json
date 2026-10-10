@@ -1,0 +1,155 @@
+{
+  "sourceRevision": "9e4bed3efe922c11e4b5a888ba6854de14f1b29f",
+  "bundleSha256": "0a5c81094f4cb153d8d847701e9f73dc96ddd3d03eeb6488251fc696a95ad775",
+  "fixtureSha256": "f7696dcb6e46e158b82e238eb04de3e37609dcf02ed122fc6435b66c6189bafa",
+  "browser": "153.0.8010.12",
+  "observations": {
+    "valid": {
+      "valid": true,
+      "complete": true,
+      "diagnostics": []
+    },
+    "scale": {
+      "valid": false,
+      "complete": false,
+      "diagnostics": [
+        {
+          "code": "CORE_SCHEMA_PROPERTIES",
+          "path": "",
+          "message": "Numeric value would require rounding",
+          "severity": "error"
+        }
+      ]
+    },
+    "width": {
+      "valid": false,
+      "complete": false,
+      "diagnostics": [
+        {
+          "code": "CORE_SCHEMA_PROPERTIES",
+          "path": "",
+          "message": "Integer outside width/signedness",
+          "severity": "error"
+        }
+      ]
+    },
+    "receipt": {
+      "operation": "encode-core-key-tuple",
+      "version": "3.0.0",
+      "profile": "umf-key-tuple-v1",
+      "source": {
+        "umf": "0.8.0",
+        "id": "truss-value-owner",
+        "vocabularies": {},
+        "extensions": {},
+        "modules": [
+          {
+            "id": "m",
+            "namespace": "m",
+            "elements": [
+              {
+                "id": "code",
+                "name": "code",
+                "kind": "field",
+                "scalarType": "string",
+                "nullability": "required",
+                "cardinality": "one",
+                "extensions": {}
+              },
+              {
+                "id": "amount",
+                "name": "amount",
+                "kind": "field",
+                "scalarType": "decimal",
+                "nullability": "required",
+                "cardinality": "one",
+                "extensions": {},
+                "facets": {
+                  "precision": 21,
+                  "scale": 3
+                }
+              },
+              {
+                "id": "count",
+                "name": "count",
+                "kind": "field",
+                "scalarType": "integer",
+                "nullability": "required",
+                "cardinality": "one",
+                "extensions": {},
+                "facets": {
+                  "integerWidth": {
+                    "bits": 64,
+                    "signed": false
+                  }
+                }
+              },
+              {
+                "id": "Invoice",
+                "name": "Invoice",
+                "kind": "record",
+                "members": [
+                  {
+                    "module": "m",
+                    "element": "code"
+                  },
+                  {
+                    "module": "m",
+                    "element": "amount"
+                  },
+                  {
+                    "module": "m",
+                    "element": "count"
+                  }
+                ],
+                "keys": [
+                  {
+                    "id": "identity",
+                    "name": "identity",
+                    "fields": [
+                      {
+                        "module": "m",
+                        "element": "amount"
+                      },
+                      {
+                        "module": "m",
+                        "element": "code"
+                      },
+                      {
+                        "module": "m",
+                        "element": "count"
+                      }
+                    ],
+                    "primary": true
+                  }
+                ],
+                "extensions": {}
+              }
+            ]
+          }
+        ]
+      },
+      "identity": {
+        "module": "m",
+        "element": "Invoice",
+        "key": "identity"
+      },
+      "values": [
+        {
+          "decimalToken": "12.340"
+        },
+        {
+          "string": "雪🙂"
+        },
+        {
+          "integerToken": "9007199254740993"
+        }
+      ],
+      "keyPath": "/modules/0/elements/3/keys/0",
+      "bytesHex": "554d464b310303060331323334300407e99baaf09f9982021039303037313939323534373430393933"
+    },
+    "forgedRefused": true,
+    "staleRefused": true
+  },
+  "qualification": "Actual Chromium original current-core Field validation and ordered UMFK1 v3 tuple encoding/verification. Exact source and value carriers retained; no native uniqueness/comparator/storage/resource/installed runtime qualification."
+}

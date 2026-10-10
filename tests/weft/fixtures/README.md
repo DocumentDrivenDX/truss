@@ -1,0 +1,1 @@
+The request is retained from Weft 2744531735c2a771fbe7ed24a7f67e3afc851b25, B-007-qualified-hosts/cases.jsonl.gz case truss-global-count-props. It is an upstream synthetic binding/ID fixture, not accepted Truss catalog state. Tests establish actual compiler transport integration and host refusal/order only; native Truss qualification remains separate.

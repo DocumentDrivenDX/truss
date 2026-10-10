@@ -1,0 +1,85 @@
+{
+  "scope": "Closed freshness request/result/backlog shape; fabricated timestamps/artifact evidence intentionally require semantic/native refusal. No native observation/clock/authorization/worker/progress qualification.",
+  "cases": [
+    {
+      "case": "request",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "case": "old request version",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "case": "numeric worker generation",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "case": "observed result",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "case": "missing fact clock",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "case": "missing original observation",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "case": "old seed boundary",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "case": "numeric watermark",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "case": "negative age",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "case": "empty has timestamp",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "case": "backlog unavailable",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "case": "unavailable backlog leaks age",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "case": "scope unavailable",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "case": "unavailable leaks progress",
+      "expected": false,
+      "actual": false
+    },
+    {
+      "case": "fabricated coherent timestamp remains shape valid",
+      "expected": true,
+      "actual": true
+    }
+  ],
+  "failures": [],
+  "schema": {
+    "path": "docs/helix/02-design/contracts/complete-feed-freshness-v0.2.schema.json",
+    "sha256": "81d961126f229b74b9253eada382725d6710d8f82ed960885c52478210ad7a87"
+  }
+}

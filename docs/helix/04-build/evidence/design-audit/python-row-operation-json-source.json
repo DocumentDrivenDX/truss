@@ -1,0 +1,44 @@
+{
+  "scope": "Private Python source syntax decoder profile and complete source test regression; not installed-wheel, custody body, native registry or resource-account qualification",
+  "sourceSha256": {
+    "packages/python/src/truss/_acceptance_json.py": "303638af137138a796542aa5425985d147e510a23639fca9b2d6221966337a01",
+    "packages/python/tests/test_row_operation_json.py": "c99efd63b0a78b35bc8c7d9de0565bb2b5bd30244e1babf88550ecb5cceb910f",
+    "packages/python/tests/test_acceptance_json.py": "fdef3f104a89070ac6377a08af3970f351b4c8994916758db5469f3542c90eb2",
+    "docs/helix/02-design/contracts/truss-row-operation-custody-v0.1.proposal.schema.json": "9edd43db8bb48de56bfb28c87bce8d7c51092bab9a6e333b67aeee21ab05fb91"
+  },
+  "profiles": {
+    "acceptance": {
+      "maximumBytes": 1048576,
+      "maximumLogicalWork": 2000000
+    },
+    "proposedRowOperationSyntax": {
+      "maximumBytes": 8388608,
+      "maximumLogicalWork": 40000000
+    },
+    "shared": {
+      "maximumNodes": 100000,
+      "maximumArrayItems": 4096,
+      "maximumDepth": 128,
+      "numericJson": "refused",
+      "duplicateMembers": "refused",
+      "unicode": "strict"
+    }
+  },
+  "tests": {
+    "command": "PYTHONPATH=packages/python/src python3.11 -m unittest discover -s packages/python/tests -v",
+    "passed": 76,
+    "exitCode": 0,
+    "logPath": "docs/helix/04-build/evidence/design-audit/python-row-operation-json-source.tests.log",
+    "logSha256": "338d29635adbbf94c3c13e1716b55854c69d3eeb6a343b5dd674e5d5fbf80fea",
+    "newFocusedTests": 5
+  },
+  "limitations": [
+    "Syntax decoding intentionally does not validate the closed custody-body schema, ordinal continuity, original artifact hashes or registry/authority correspondence",
+    "Logical parser bounds are not interpreter allocation, elapsed-time or original resource-account admission",
+    "Native complete-row frame accounting includes all cells; an 8-MiB syntax input does not guarantee it fits the installed row profile",
+    "Source suite is not a rebuilt/installed-wheel or complete Python/TypeScript engine interchange receipt"
+  ],
+  "installerReady": false,
+  "publicApiAdded": false,
+  "acceptanceCasesPromoted": []
+}

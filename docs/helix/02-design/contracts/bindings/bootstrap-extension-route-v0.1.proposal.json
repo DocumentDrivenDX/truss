@@ -1,0 +1,81 @@
+{
+  "interfaceVersion": "truss-bootstrap-route-entry/0.1.0",
+  "routeIdentity": "pg17.extension.original-scope/0.1.0",
+  "status": "unadopted; source pins only verified; native class/cut/transport/semantic producers unqualified",
+  "nativeClass": {
+    "namespace": "pg_catalog",
+    "relation": "pg_extension",
+    "classOid": "actual original database pg_extension catalog identity",
+    "storageScope": "database",
+    "subobjectNumber": "0"
+  },
+  "selector": "Original namespace seed union explicit extension OIDs; preserve actual union coverage and explicit requested-object completeness. Resolve owner/namespace and every extconfig relation; preserve aligned extconfig/extcondition native arrays and exact conditions without executing them.",
+  "artifacts": [
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-extension-observation-pg17.proposal.sql",
+      "sha256": "fdb91b1092d1baa78b5a42a530136460f4c7f7c57f8626db99dabea0f145dc91"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/bindings/bootstrap-extension-observation-pg17.proposal.umf.json",
+      "sha256": "4774a64762bdd5b7bbdf5af0d5635e48568376cade88dc32f28d76d415d86725"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/bootstrap-extension-observation.owner-export.sql",
+      "sha256": "036be3df17112f9f465cf23527d7e673d1e58fa7d73532d43048651c1d2b84f9"
+    }
+  ],
+  "parameterGrammar": {
+    "slots": [
+      1,
+      2
+    ],
+    "nativeTypes": [
+      "pg_catalog.oid",
+      "pg_catalog.oid[]"
+    ],
+    "nativeInput": "Slot 1 canonical nonzero original namespace OID. Slot 2 nonnull one-dimensional lower-bound-one array of 0..256 unique canonical nonzero extension OID tokens, no null items. Empty explicit frontier permitted only with independently proven namespace seed; selected empty-array native encoding admitted."
+  },
+  "orderedColumns": [
+    "catalog_class_oid",
+    "object_oid",
+    "extconfig_native_text",
+    "extconfig_native_dimensions",
+    "extcondition_native_text",
+    "extcondition_native_dimensions",
+    "original_catalog_row_json"
+  ],
+  "coverage": "Complete original selector union/fanout under same cut, including unexpected rows; absence optional only after original parent/input scope proof",
+  "requiredKnownFields": [
+    "oid",
+    "extname",
+    "extowner",
+    "extnamespace",
+    "extrelocatable",
+    "extversion",
+    "extconfig",
+    "extcondition"
+  ],
+  "preservation": "Retain full exact returned row JSON text and every unknown extension member; lossless bounded selected native JSON decoder; no parse/stringify reconstruction",
+  "dependencyExtraction": {
+    "associations": "Original namespace seed union explicit extension OIDs; preserve actual union coverage and explicit requested-object completeness. Resolve owner/namespace and every extconfig relation; preserve aligned extconfig/extcondition native arrays and exact conditions without executing them.",
+    "metadata": "Exact comment text and extension names/versions are facts, never authority, installation readiness or executable provenance. Preserve full original rows/unknown members; unresolved native meaning refuses complete comparison.",
+    "fieldClassification": {
+      "oid": "original nonzero uint32 correlation; not semantic identity",
+      "extname": "stable exact database-wide unqualified extension name; never schema-qualified extension identity",
+      "extowner": "resolved original shared owner/policy definition",
+      "extnamespace": "resolved original exported-object namespace fact; not extension identity namespace or complete membership proof",
+      "extrelocatable": "stable actual native boolean; separately verify membership/namespace consistency",
+      "extversion": "stable exact version-name text; not compiled implementation/build/compatibility evidence",
+      "extconfig": "original nullable array/dimensions/order; resolve each configuration relation identity without reordering paired conditions",
+      "extcondition": "original nullable exact condition text array/dimensions/order; paired positionally with config, never executed or normalized"
+    },
+    "canonicalProcedure": "CONTRACT-008 Extension semantic projection: database-wide name, resolved owner/export namespace, relocatable/version facts and ordered resolved configuration/filter pairs plus complete member/dependency definitions; executable provenance separately admitted"
+  },
+  "adjuncts": [
+    "complete original owner/address/dependency and class-specific scope",
+    "selected metadata classification/canonical bytes and original authority"
+  ],
+  "resourceProfile": "truss-bootstrap-collector-resource/0.1.0",
+  "refusal": "Incomplete association, unknown dependency/native array meaning or unresolved prerequisite refuses complete admission; never execute comment/condition text or install/update/drop extensions to force a match",
+  "resourceObligations": "Shared enclosing totals, complete original cut/authority and explicit pre-materialization/native-work permits; no independent per-route allowance"
+}

@@ -1,0 +1,113 @@
+{
+  "status": "committed-source-review-not-execution",
+  "ownerCommit": "c0f3852b8367b4b9d3ee16c4a51a9095a312af2c",
+  "previousReviewedCommit": "22d3d8c0682b3c6aa0950d1a05459173cc19597c",
+  "sources": [
+    {
+      "path": "docs/helix/04-build/evidence/B-007-release-readiness.md",
+      "sha256": "68641bf0d3727ce0c933c790a35da9336336c813d5c218e30afa83da8aaffa74",
+      "bytes": 2979
+    },
+    {
+      "path": "docs/helix/04-build/evidence/B-007-support-inventory.json",
+      "sha256": "3156955442ca1b27ebc270f3dce4ef55cdefe389056f6711fa090e704d2e098c",
+      "bytes": 2990
+    },
+    {
+      "path": "docs/helix/04-build/evidence/B-007-public-corpus/summary.json",
+      "sha256": "615d3f4e735a89e96af51b742cb6d80caf495730c8db1b97d18f779026290681",
+      "bytes": 427
+    },
+    {
+      "path": "docs/helix/04-build/evidence/B-007-public-python/summary.json",
+      "sha256": "2e7a535404521cdecc217d7974b00487386574b6924a9dc3e4c6f063b84a967f",
+      "bytes": 336
+    },
+    {
+      "path": "docs/helix/04-build/evidence/B-007-public-browser/summary.json",
+      "sha256": "96068a069113d60bec33432729024198b6e9a28356ff5d589d6e3ee553fcc505",
+      "bytes": 797
+    },
+    {
+      "path": "docs/helix/04-build/evidence/B-007-ashlar-application-reconciliation/summary.json",
+      "sha256": "9ed0d3c473cb1be7bbc5dab800b5018d9f983e36e185271ed3af3b70298a0c7f",
+      "bytes": 34357
+    },
+    {
+      "path": "docs/helix/04-build/evidence/B-007-acceptance-matrix.json",
+      "sha256": "15444c9434892675c78652ed68a8d47136fdfebef8b46bd9132862607b7db561",
+      "bytes": 30693
+    },
+    {
+      "path": "tests/truss-postgresql/compiler.rs",
+      "sha256": "7f4962ffcdf2bd16161c8c81e6c43c448f440bea081d14ff000ba1342f000e1a",
+      "bytes": 28187
+    }
+  ],
+  "completeChangedPaths": [
+    "Cargo.lock",
+    "crates/weft-core/Cargo.toml",
+    "docs/helix/04-build/evidence/B-007-acceptance-matrix.json",
+    "docs/helix/04-build/evidence/B-007-ashlar-application-reconciliation/summary.json",
+    "docs/helix/04-build/evidence/B-007-browser/run.log",
+    "docs/helix/04-build/evidence/B-007-browser/sandbox-launch-failure.log",
+    "docs/helix/04-build/evidence/B-007-browser/summary.json",
+    "docs/helix/04-build/evidence/B-007-initial-oracle/summary.json",
+    "docs/helix/04-build/evidence/B-007-parser/rejected-zero-tests.log",
+    "docs/helix/04-build/evidence/B-007-parser/run.log",
+    "docs/helix/04-build/evidence/B-007-parser/summary.json",
+    "docs/helix/04-build/evidence/B-007-plugin-boundary/run.log",
+    "docs/helix/04-build/evidence/B-007-plugin-boundary/summary.json",
+    "docs/helix/04-build/evidence/B-007-preparation.md",
+    "docs/helix/04-build/evidence/B-007-properties/run.log",
+    "docs/helix/04-build/evidence/B-007-properties/summary.json",
+    "docs/helix/04-build/evidence/B-007-public-browser/artifact-hashes.json",
+    "docs/helix/04-build/evidence/B-007-public-browser/build.log",
+    "docs/helix/04-build/evidence/B-007-public-browser/run.log",
+    "docs/helix/04-build/evidence/B-007-public-browser/schemas.log",
+    "docs/helix/04-build/evidence/B-007-public-browser/summary.json",
+    "docs/helix/04-build/evidence/B-007-public-corpus/build.log",
+    "docs/helix/04-build/evidence/B-007-public-corpus/run.log",
+    "docs/helix/04-build/evidence/B-007-public-corpus/summary.json",
+    "docs/helix/04-build/evidence/B-007-public-python/build.log",
+    "docs/helix/04-build/evidence/B-007-public-python/run.log",
+    "docs/helix/04-build/evidence/B-007-public-python/summary.json",
+    "docs/helix/04-build/evidence/B-007-public-python/wheel.json",
+    "docs/helix/04-build/evidence/B-007-python/run.log",
+    "docs/helix/04-build/evidence/B-007-python/summary.json",
+    "docs/helix/04-build/evidence/B-007-relational/cases.json",
+    "docs/helix/04-build/evidence/B-007-relational/summary.json",
+    "docs/helix/04-build/evidence/B-007-release-readiness.md",
+    "docs/helix/04-build/evidence/B-007-resources/run.log",
+    "docs/helix/04-build/evidence/B-007-resources/summary.json",
+    "docs/helix/04-build/evidence/B-007-source-mutations/decimal-baseline.log",
+    "docs/helix/04-build/evidence/B-007-source-mutations/decimal-through-double.log",
+    "docs/helix/04-build/evidence/B-007-source-mutations/duplicate-key-guard.log",
+    "docs/helix/04-build/evidence/B-007-source-mutations/emission-baseline.log",
+    "docs/helix/04-build/evidence/B-007-source-mutations/module-pin-guard-mutant-regression.txt",
+    "docs/helix/04-build/evidence/B-007-source-mutations/module-pin-guard.log",
+    "docs/helix/04-build/evidence/B-007-source-mutations/module-pin-mutant-regression.txt",
+    "docs/helix/04-build/evidence/B-007-source-mutations/node-limit-guard.log",
+    "docs/helix/04-build/evidence/B-007-source-mutations/presence-baseline.log",
+    "docs/helix/04-build/evidence/B-007-source-mutations/presence-null-to-absence.log",
+    "docs/helix/04-build/evidence/B-007-source-mutations/projection-distinct.log",
+    "docs/helix/04-build/evidence/B-007-source-mutations/scan-type-filter.log",
+    "docs/helix/04-build/evidence/B-007-source-mutations/summary.json",
+    "docs/helix/04-build/evidence/B-007-support-inventory.json",
+    "docs/helix/04-build/evidence/B-007-workspace/run.log",
+    "docs/helix/04-build/evidence/B-007-workspace/summary.json",
+    "tests/compile/envelope.rs",
+    "tests/compile/python-check.py",
+    "tests/compile/reports.py",
+    "tests/compile/schema-check.ts",
+    "tests/frontend/oracle.py",
+    "tests/qualify-and-evolve/properties.rs",
+    "tests/qualify-and-evolve/reconcile-ashlar-application.py",
+    "tests/qualify-and-evolve/relational.py",
+    "tests/qualify-and-evolve/resources.rs",
+    "tests/qualify-and-evolve/source-mutations.py",
+    "tests/truss-postgresql/compiler.rs"
+  ],
+  "trussBackendProductionSourceChanged": false,
+  "reviewScope": "Owner-reported public fixture parity and saved Ashlar receipt reconciliation; no Truss/native rerun, release adoption or explicit-null support inferred."
+}

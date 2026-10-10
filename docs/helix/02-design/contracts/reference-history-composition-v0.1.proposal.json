@@ -1,0 +1,32 @@
+{
+  "interfaceVersion": "truss-reference-history-composition-recipe/0.1.0",
+  "status": "selected_source_composition_recipe_corrected_against_actual_foundation",
+  "inputs": [
+    {
+      "path": "02-design/models/truss-layout-weft-review-0.11.proposal.umf.json",
+      "sha256": "34f9f0d26539853ffa5da895fa7d867ed2dece0440f00be3bda389fd89ff1827"
+    },
+    {
+      "path": "02-design/contracts/journal-complete-carrier-v0.2.proposal.umf.json",
+      "sha256": "972d807b3b7989806d619d22a4b47ed1fa54853eeef554fc80999cb548f6e2dd"
+    },
+    {
+      "path": "02-design/contracts/row-home-journal-stage-v0.2.proposal.umf.json",
+      "sha256": "1760e57aafe2a4c567e9f599afe188e7081030a79a0612f3c6b4f01c8cdd7337"
+    }
+  ],
+  "steps": [
+    "Decode original complete PostgreSQL statement arrays through the pinned existing UMF public adapter; require 106 foundation statements and exactly one journal, row_home_operation and row_home_journal_stage declaration.",
+    "Locate the original journal op CHECK by exact table/column/constraint source correspondence, require its known seven-operation set including metadata, and preserve it unchanged; preserve every other original statement/extension/source archive.",
+    "Verify the four original complete-carrier ALTER statements each already occur exactly once by exact original AST correspondence; preserve them and refuse missing, duplicate or changed names/targets.",
+    "Verify the original six-column row_home_journal_stage declaration already occurs exactly once after its existing row_home_operation parent; preserve both, without appending duplicate declarations.",
+    "Reconcile the existing journal_seq declaration to explicit selected bigint/increment/minimum/maximum/start/no-cycle/cache settings through original identity; retain source-to-target conversion provenance instead of allocating a new sequence identity.",
+    "Give the generated review composition its own exact model/profile and REVIEW ONLY marker; preserve 0.11 and old history/stage sources unchanged. Independently compare original declaration/constraint/dependency deltas and exact exported/reloaded bytes."
+  ],
+  "expectedSourceDelta": "No added statements: the current 0.11 foundation already includes the four carrier ALTERs, stage child and metadata operation. Edit only original journal_seq settings and the review identity/marker; independently observe generated counts.",
+  "excludedQualification": [
+    "Native phase/body/grant/account/cleanup routines and complete dependency inventory are not supplied by these inputs.",
+    "Generated review source is not the complete installer, original physical-ID adoption, populated conversion or Weft binding admission.",
+    "The 0.11 one-string compiler packet cannot be relabeled to cover this new composition."
+  ]
+}

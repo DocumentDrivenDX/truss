@@ -29,13 +29,23 @@ ddx:
 
 ## Context
 
-The running example is a sales model of Customer, Order and OrderLine records and their relationships.
+The running example is a sales model of Customer, Order and OrderLine records
+and their relationships. Acceptance includes a separate complete immutable
+report in the same transaction as catalog/history effects, with active-head
+publication only after report completion. Staged catalog IDs or document rows
+alone are not an accepted revision. In a caller-owned transaction, results remain
+pending until its original outer commit is confirmed.
+
+Every violation is reported only from a complete admitted scan. Controlled-work
+exhaustion reports incomplete/resource and refuses acceptance; it cannot label
+an available diagnostic prefix complete. Uncertain native termination is an
+execution/recovery outcome, not rejected/unchanged.
 
 ## Walkthrough
 
 1. Engineer registers two UMF documents, `sales` and `orders`.
 2. System verifies each document and derives types, properties, keys and relationships.
-3. System persists them as revision 1 and returns a report.
+3. System completes validation and original effects, persists the immutable full report, and publishes revision 1 atomically; durable acceptance is returned after confirmed commit.
 4. Engineer registers a second set in which one document is invalid.
 5. System rejects the whole set, reports every violation, and changes nothing.
 
@@ -48,7 +58,7 @@ The running example is a sales model of Customer, Order and OrderLine records an
 ## Edge Cases
 
 - **Empty set**: rejected as invalid.
-- **A document accepted before with identical bytes**: no new revision (US-004).
+- **A document accepted before with identical bytes**: no new revision only when the complete verified acceptance input also matches the current head (US-004). Historical matches or changed bindings/policies/profiles require current acceptance validation.
 
 ## Test Scenarios
 

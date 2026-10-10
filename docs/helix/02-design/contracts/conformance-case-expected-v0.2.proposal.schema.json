@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:proposal:conformance-case-expected:0.2.0",
+  "title": "Draft conformance expectations with explicit performance surface",
+  "description": "Separate unadopted version. Performance expectations retain original benchmark/comparator artifacts, not observed samples or caller-selected thresholds. All five surfaces are explicit; empty performance requires original nonperformance scope admission. No runner support or qualification follows shape.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-conformance-case-expected/0.2.0"
+    },
+    "caseId": {
+      "$ref": "urn:truss:proposal:conformance-case-expected:0.1.0#/properties/caseId"
+    },
+    "grammarProfile": {
+      "$ref": "urn:truss:proposal:conformance-case-expected:0.1.0#/properties/grammarProfile"
+    },
+    "result": {
+      "$ref": "urn:truss:proposal:conformance-case-expected:0.1.0#/properties/result"
+    },
+    "state": {
+      "$ref": "urn:truss:proposal:conformance-case-expected:0.1.0#/properties/state"
+    },
+    "journal": {
+      "$ref": "urn:truss:proposal:conformance-case-expected:0.1.0#/properties/journal"
+    },
+    "report": {
+      "$ref": "urn:truss:proposal:conformance-case-expected:0.1.0#/properties/report"
+    },
+    "sql": {
+      "$ref": "urn:truss:proposal:conformance-case-expected:0.1.0#/properties/sql"
+    },
+    "performance": {
+      "$ref": "urn:truss:proposal:conformance-case-expected:0.1.0#/properties/result"
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "caseId",
+    "grammarProfile",
+    "result",
+    "state",
+    "journal",
+    "report",
+    "performance"
+  ],
+  "additionalProperties": false
+}

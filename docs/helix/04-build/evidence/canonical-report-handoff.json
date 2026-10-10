@@ -1,0 +1,18 @@
+{
+  "sources": {
+    "packages/postgresql/src/canonical-wire-tree.ts": "2fcb2ff72ce7faad682800be3a4deba1f7147f814e08319179cea4ed93cc4bf6",
+    "packages/umf-bun/src/canonical-report-handoff.ts": "7a35baab3cb20db87ff42424617fe13c4c1b6e56989478897069a86fcc83940a",
+    "tests/canonical-wire-tree.test.ts": "9b08ba09bd0b7f68723cfc0a5ad705f7acb60dd71386c04af26795008ffdf410",
+    "tests/canonical-report-handoff.test.ts": "cd9e3a5ddd58a4bab5af9713d000b552a5381eb24b5a2761ec64087f8dbee3d9",
+    "docs/helix/03-test/report-wire-untrusted.fixture.json": "b817b1610e86cfa956427dbbc84b9ef7485ccd0e66d1e2c7939b861e9a715368",
+    "scripts/check-canonical-wire-browser.ts": "0e8794bba79b659511f7ecf1d1a739322e462a54fac83a242d300b161903f15f"
+  },
+  "host": {
+    "tests": 9,
+    "assertions": 38,
+    "strictTypeCheck": "passed"
+  },
+  "browserReceipt": "design-audit/canonical-wire-browser.json",
+  "nativeVerification": "pending; original docker inspect session 51460 remains live with no output",
+  "scope": "Full closed report shape and original numeric-free wire to existing native codec carrier. Fixture is untrusted. Does not prove native encoding parity, source/effect authority, complete report production, shared resource qualification or accepted publication."
+}

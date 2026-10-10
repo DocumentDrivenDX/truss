@@ -1,0 +1,15 @@
+{
+  "owner": "DocumentDrivenDX/weft",
+  "revision": "5856c73db0342363e64802905a94abb96209d757",
+  "sources": {
+    "crates/weft-python/src/lib.rs": "4a348481922988a364ab280b6f3fb4fae1a9940afa447e4282f4a704b6905366",
+    "crates/weft-python/Cargo.toml": "d5d5286827fd19c3980f6b1028aaff9e4dbb25cf448b8d6d325a287122c42edc",
+    "crates/weft-python/pyproject.toml": "e61c33fdc35b192e848111dc810e5aae8e053d43f14b1f10ea8a9bdeddc86c7a"
+  },
+  "observations": [
+    "PyO3 compile_json delegates directly to weft_runtime::compile_json",
+    "weft-sql requires Python >=3.9 and maturin 1.9.6",
+    "qualified/candidate/test-original build features remain distinct"
+  ],
+  "scope": "Committed source observation only. No wheel publication/install, Python full backend/security or Truss runtime qualification."
+}

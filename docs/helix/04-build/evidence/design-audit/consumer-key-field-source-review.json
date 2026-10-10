@@ -1,0 +1,133 @@
+{
+  "scope": "read-only consumer fake/key representation review; not normative generic Truss semantics or runtime qualification",
+  "sources": [
+    {
+      "path": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/fakes.py",
+      "sha256": "26920c65f27868cc787408acb804a81c4491f7f15f80fc0bd737d5faba1ba28a"
+    }
+  ],
+  "models": [
+    {
+      "path": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/src/hohfeld/conformance/module.umf.json",
+      "sha256": "e194117a8de436d1479804c59b0e2cc76470814a3c0723cd732797635442a3e5",
+      "records": [
+        {
+          "module": "catalog",
+          "record": "UseCase",
+          "keys": [
+            {
+              "id": "identity",
+              "name": "Identity",
+              "fields": [
+                {
+                  "module": "catalog",
+                  "element": "UseCase.code"
+                }
+              ],
+              "primary": true
+            }
+          ]
+        },
+        {
+          "module": "catalog",
+          "record": "Solution",
+          "keys": [
+            {
+              "id": "identity",
+              "name": "Identity",
+              "fields": [
+                {
+                  "module": "catalog",
+                  "element": "Solution.code"
+                }
+              ],
+              "primary": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/Users/erik/Projects/hohfeld/.claude/worktrees/helix-bootstrap-setup-f77e53/examples/catalog/catalog.umf.json",
+      "sha256": "5ff02aa14d0d5a64b85b6fe75ffe99ec7a3d8caf93c19b79187506a86c45162e",
+      "records": [
+        {
+          "module": "catalog",
+          "record": "UseCase",
+          "keys": [
+            {
+              "id": "identity",
+              "name": "Identity",
+              "fields": [
+                {
+                  "module": "catalog",
+                  "element": "UseCase.code"
+                }
+              ],
+              "primary": true
+            }
+          ]
+        },
+        {
+          "module": "catalog",
+          "record": "Solution",
+          "keys": [
+            {
+              "id": "identity",
+              "name": "Identity",
+              "fields": [
+                {
+                  "module": "catalog",
+                  "element": "Solution.code"
+                }
+              ],
+              "primary": true
+            }
+          ]
+        },
+        {
+          "module": "catalog",
+          "record": "Product",
+          "keys": [
+            {
+              "id": "identity",
+              "name": "Identity",
+              "fields": [
+                {
+                  "module": "catalog",
+                  "element": "Product.code"
+                }
+              ],
+              "primary": true
+            }
+          ]
+        },
+        {
+          "module": "catalog",
+          "record": "CoverageAssertion",
+          "keys": [
+            {
+              "id": "identity",
+              "name": "Identity",
+              "fields": [
+                {
+                  "module": "catalog",
+                  "element": "CoverageAssertion.code"
+                }
+              ],
+              "primary": true
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "observations": [
+    "Action create carries Ref.key separately and rejects the identity property in properties.",
+    "Action update refuses setting or unsetting the identity property.",
+    "Create read materialization overlays the declared identity property with Ref.key.",
+    "Import materialization overlays the declared identity property with the outer record key; unlike action validation the inspected import path does not separately reject a same-named supplied property."
+  ],
+  "integration": "Explicitly bind consumer outer key to original authored Key identity and ordered Field tuple; preserve original inputs and native Truss ID separately. Resolve import conflict behavior with the consumer owner rather than silently generalizing fake behavior.",
+  "nativeImplementationQualified": false
+}

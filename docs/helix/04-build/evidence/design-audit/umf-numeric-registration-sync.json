@@ -1,0 +1,13 @@
+{
+  "runtimeRevision": "9e4bed3efe922c11e4b5a888ba6854de14f1b29f",
+  "observedOwnerRevision": "e3555b9aac9e4c3caa952203958c4b0c33cdf519",
+  "unchangedReviewedFiles": {
+    "src/adapters/javascript-numeric.ts": "3d38e52cc878910509e8e277f671ff304707db37633f4f7c39082eb943618fdc",
+    "src/model/schema-literals.ts": "6c28d92fe726fdf6ead0d29c78bd87fa9396667cb23d61ce2758b9f4707228b1",
+    "src/model/schema-properties.ts": "0d5e1a3ada65d5eddf08720714d2f396fad1376340882e9863c78aa0680461f7"
+  },
+  "hostTests": 4,
+  "hostAssertions": 21,
+  "browserCorpusCases": 16,
+  "scope": "Existing original registration replay and selected source equality; not complete resource, native storage or public convenience-wrapper qualification"
+}

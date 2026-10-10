@@ -1,0 +1,37 @@
+{
+  "profile": "truss-key-migration-resource/0.1.0",
+  "status": "unadopted_candidate",
+  "scope": "One original complete owned key-profile migration; containing value/encoding/executor/native profiles also apply",
+  "limits": {
+    "requestBytes": "16777216",
+    "inventoryRows": "10000",
+    "inventoryBytes": "67108864",
+    "targetCorrespondenceBytes": "67108864",
+    "reportBytes": "16777216",
+    "receiptBytes": "67108864",
+    "archiveArtifacts": "10000",
+    "archiveDependencyEdges": "100000",
+    "namespaceAndKeyBytes": "16777216",
+    "metadataBytes": "8388608",
+    "nativeRowsObserved": "100000",
+    "nativeStatements": "100000",
+    "workUnits": "1073741824",
+    "ownedBytes": "268435456",
+    "elapsedMilliseconds": "300000",
+    "containmentMilliseconds": "5000"
+  },
+  "units": {
+    "archiveArtifacts": "Distinct admitted archive dependency identities in the complete migration evidence closure, including roots; equal bytes under distinct identities remain distinct",
+    "archiveDependencyEdges": "Every declared required artifact-reference occurrence enumerated across original admitted archive nodes; repeated references count separately",
+    "inventoryRows": "Complete source live/omitted/reserved entry count across all affected bindings, including hidden integrity entries",
+    "inventoryBytes": "Complete encoded original source inventory plus referenced original source/component artifacts loaded for this attempt; repeated owned copies also charge ownedBytes",
+    "workUnits": "Bytes actually examined/copied by admitted identity conversion/comparison/archive processing; repeated work charges again. Native query/hash/sort/codec workspace has separate selected enforcement obligations",
+    "namespaceAndKeyBytes": "Cumulative complete source/target full namespace/key carriers observed or produced by the attempt, including collisions and repeated real work",
+    "nativeStatements": "Every actual native submission including metadata, chunks, source revalidation, staging, finalization and original containment observations",
+    "ownedBytes": "All original request/source/target/report/receipt/adapter/decoder/private evidence buffers and still-owned uncertainty reservations",
+    "elapsedMilliseconds": "Single original migration deadline from initial invocation through commit submission/outcome observation; no phase/reset timer",
+    "containmentMilliseconds": "Original containment observation allowance; expiry preserves recovery custody and unknown outcome"
+  },
+  "callerLimitRule": "Request inventoryRows/inventoryBytes/reportBytes/workUnits may only tighten exact same-unit registered limits; never establish or enlarge a resource profile",
+  "qualification": "Proposed defaults, not native allocator/deadline/feasibility evidence. Independent dimensions and containing profiles all apply; reaching one ceiling does not fund another."
+}

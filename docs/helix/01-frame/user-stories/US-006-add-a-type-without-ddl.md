@@ -29,13 +29,13 @@ ddx:
 
 ## Context
 
-The adopted layout holds all types in one table set, so a revision is only catalog rows.
+The fixed shared layout avoids per-type physical DDL. Adding the fixture’s type/property/relationship uses catalog rows and complete acceptance/report/head effects; other revisions may also perform validated backfill, rebind or transforms under their separate atomic protocols. DDL-free does not mean lock-free: acceptance intentionally holds catalog exclusion and any required validation/data locks. The continuous-writer criterion concerns the declared add-only workload and admission profile, not arbitrary long host transactions or data-changing revisions. Physical layout/runtime upgrades remain explicit, infrequent Truss migrations.
 
 ## Walkthrough
 
 1. Engineer registers a revision adding `Shipment` and a relationship to `Order`.
 2. System inserts catalog rows.
-3. Writers keep running.
+3. Writers obey catalog admission and resume after the acceptance’s qualified exclusion ends.
 4. Engineer lists the database's tables and indexes before and after.
 
 ## Acceptance Criteria
@@ -46,7 +46,7 @@ The adopted layout holds all types in one table set, so a revision is only catal
 
 ## Edge Cases
 
-- **An index declared by a binding**: built after acceptance and reported pending until built.
+- **An index declared by a binding**: retained as an exact pending declaration in the immutable acceptance report. Separately authorized postcommit tooling may build it after confirmed acceptance; no DDL occurs inside acceptance, and current readiness is reported separately without rewriting the original report. The unchanged physical-inventory fixture uses no index declaration.
 - **A revision that adds a key to a populated type**: builds its key rows in the acceptance and reports the count.
 
 ## Test Scenarios

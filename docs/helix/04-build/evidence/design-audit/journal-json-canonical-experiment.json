@@ -1,0 +1,112 @@
+{
+  "scope": "nine independently specified canonical-byte component cases and fourteen refusals only; generic non-ASCII member-name vector does not qualify closed event/phase schemas; 64-depth/65536-byte experiment guards are not production resource proof",
+  "pythonVersion": "3.9.6",
+  "helperSha256": "5ab8b61f89f0852bf14e5c1da1c4933c3a1a458adde040896a9879d0f0352d3c",
+  "outcomes": [
+    {
+      "name": "structural order",
+      "passed": true,
+      "expectedSha256": "5b4c70ec67c25b831cb2add91271a4c2511ba127fab69b1c882055f099417747"
+    },
+    {
+      "name": "exact token",
+      "passed": true,
+      "expectedSha256": "5d69f6d07c4ae12c0853f8c76fd79f20d199b0a5f8624b95eebbeea3856165ac"
+    },
+    {
+      "name": "control escapes",
+      "passed": true,
+      "expectedSha256": "88206ae2e4a71e46c48154a864e7379d2672673aab0cbdbffa8522790827e4fc"
+    },
+    {
+      "name": "quote and reverse solidus",
+      "passed": true,
+      "expectedSha256": "2151900b5bba79a7546cb68aed03418576acbd5e09998dbd9e502a4ed9e312cd"
+    },
+    {
+      "name": "Unicode scalar",
+      "passed": true,
+      "expectedSha256": "967a848d52bdb7c2061b154ccb7fb344a10d119bb205b740d308e3605444f007"
+    },
+    {
+      "name": "decomposed Unicode",
+      "passed": true,
+      "expectedSha256": "9b53287cd41955684903378d2b1b4a3ddea9d80d67dcd026319a7c5a9a8a8b42"
+    },
+    {
+      "name": "ordered domain members",
+      "passed": true,
+      "expectedSha256": "cfa8e9fa1328edb42591f452a56182b2860c58bef2b7b7e018f389cd7a667169"
+    },
+    {
+      "name": "empty structures",
+      "passed": true,
+      "expectedSha256": "9959f7ea5ff37e0cf81634a894845a335eb6e26fbad0877944e9bc009b4f0644"
+    },
+    {
+      "name": "UTF8 structural order component",
+      "passed": true,
+      "expectedSha256": "24cb5efd2ea2b5b20fb9e31c8ede796d2ea1913b607cb6414a4dfacd843c3ce0"
+    },
+    {
+      "name": "duplicate keys",
+      "refused": true
+    },
+    {
+      "name": "wrong structural order",
+      "refused": true
+    },
+    {
+      "name": "short control escape",
+      "refused": true
+    },
+    {
+      "name": "escaped solidus",
+      "refused": true
+    },
+    {
+      "name": "escaped admitted Unicode",
+      "refused": true
+    },
+    {
+      "name": "integer node",
+      "refused": true
+    },
+    {
+      "name": "floating node",
+      "refused": true
+    },
+    {
+      "name": "nonfinite node",
+      "refused": true
+    },
+    {
+      "name": "trailing data",
+      "refused": true
+    },
+    {
+      "name": "invalid UTF8",
+      "refused": true
+    },
+    {
+      "name": "unpaired surrogate",
+      "refused": true
+    },
+    {
+      "name": "extra whitespace",
+      "refused": true
+    },
+    {
+      "name": "UTF16 structural ordering",
+      "refused": true
+    },
+    {
+      "name": "escaped equivalent duplicate key",
+      "refused": true
+    }
+  ],
+  "profile": "truss-journal-json/0.2.0-proposal",
+  "nativeExecuted": false,
+  "productionParserQualified": false,
+  "adopted": false
+}

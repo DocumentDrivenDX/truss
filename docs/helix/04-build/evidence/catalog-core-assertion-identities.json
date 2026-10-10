@@ -1,0 +1,11 @@
+{
+  "sources": {
+    "packages/umf-bun/src/catalog-core-assertion-identities.ts": "5d0f2d7fb097f3853473c845f81439d7b74791b477b51e47a92add23f9fa6fab",
+    "tests/catalog-core-assertion-identities.test.ts": "8922e447fca73c20952c841618b0dfaf78ad319849ddc1a2a4c20bbfd7df894b"
+  },
+  "tests": 4,
+  "assertions": 53,
+  "strictTypeCheck": "passed",
+  "scope": "Actual pinned owner original source identities including original0.8 allowedValues/default/facets. Annotations separate, reversible target properties deferred, missing/unavailable explicit. No complete report or admitted enforcement.",
+  "identityProfileVersion": "0.3.0"
+}

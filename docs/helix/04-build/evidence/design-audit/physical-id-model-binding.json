@@ -1,0 +1,7 @@
+{
+  "scope": "162 authored baseline identities match exact captured UMF tagged nodes and 132 authored column orders only; no exporter/native qualification",
+  "entries": 162,
+  "columns": 132,
+  "modelSha256": "e5fee4f5c3404dbd88fccc09453b4b0a31e9bc8e43332bda11b282d9e4115381",
+  "missingOrAmbiguousBindings": []
+}
