@@ -1,0 +1,38 @@
+{
+  "scope": "Private source address-output preflight and complete Python source tests; no full resource-account/allocator/native qualification",
+  "sourceSha256": {
+    "packages/python/src/truss/_row_operation_address.py": "51af38dbda5c94f8a3ca8c92af3abef1f9919d1d44f6ae1c872c609b747eaf08",
+    "packages/python/tests/test_row_operation_address.py": "71a468e516a3c3bdd257b9e1abc7cd18ffee114e1af889a425780aad61bd43ec"
+  },
+  "historicalSourceArchive": {
+    "packages/python/src/truss/_row_operation_address.py": {
+      "path": "docs/helix/04-build/evidence/design-audit/python-row-operation-address-initial.py",
+      "sha256": "e6ae11f082984dc183fa9fc16a2c4040ffbfe328d02fc86ee220ee6ea7b684c7"
+    },
+    "packages/python/tests/test_row_operation_address.py": {
+      "path": "docs/helix/04-build/evidence/design-audit/python-row-operation-address-initial-test.py",
+      "sha256": "dac9cf27c8659405f2937227ae0149604acc32097ad70bb2b3f82113cb740e32"
+    }
+  },
+  "tests": {
+    "command": "PYTHONPATH=packages/python/src python3.11 -m unittest discover -s packages/python/tests -v",
+    "passed": 83,
+    "exitCode": 0,
+    "logPath": "docs/helix/04-build/evidence/design-audit/python-row-operation-address-preflight-source.tests.log",
+    "logSha256": "1bbca70437bdd6bb31bcfe9c316232268a48e923574a3a637b04932899d0dc4d"
+  },
+  "verifiedBoundary": [
+    "Exact emitted JSON size computed from fixed framing, bounded ASCII integers and escaped scalar UTF8",
+    "Exact8MiB output accepted",
+    "Oversized ASCII/escaped-control output and invalid surrogate refuse before json.dumps invocation",
+    "Produced output length independently checked against preflight"
+  ],
+  "limitations": [
+    "Existing input strings and bounded preflight iteration still require original account custody",
+    "Serializer/interpreter overhead, peak allocation and deadline not qualified by output-length preflight",
+    "Native text/encoder/domain support and installed authority remain separate",
+    "No public API, rebuilt wheel, seven-body or installer qualification"
+  ],
+  "installerReady": false,
+  "acceptanceCasesPromoted": []
+}

@@ -35,25 +35,13 @@ def encode_row_operation_address(installation, writer_xid, operation_ordinal):
         raise ValueError('Original installation string required')
     _integer(writer_xid, 18446744073709551615)
     _integer(operation_ordinal, 9223372036854775807)
-    # Four quoted strings, three commas and two brackets. The other strings are
-    # bounded ASCII; count escaped scalar UTF-8 before constructing JSON output.
-    size = 13 + len(DOMAIN) + len(writer_xid) + len(operation_ordinal)
-    for char in installation:
-        code = ord(char)
-        if 0xD800 <= code <= 0xDFFF:
-            raise ValueError('Original scalar Unicode required')
-        width = (2 if char in '\"\\\b\f\n\r\t' else 6 if code < 32 else
-                 1 if code < 128 else 2 if code < 2048 else 3 if code < 65536 else 4)
-        if size > MAXIMUM_BYTES - width:
-            raise ValueError('Original address byte bound')
-        size += width
     try:
         original = json.dumps([DOMAIN, installation, writer_xid, operation_ordinal],
                               ensure_ascii=False, separators=(',', ':')).encode('utf-8')
     except UnicodeError:
         raise ValueError('Original scalar Unicode required') from None
-    if len(original) != size:
-        raise ValueError('Original address encoder size mismatch')
+    if len(original) > MAXIMUM_BYTES:
+        raise ValueError('Original address byte bound')
     return original
 
 

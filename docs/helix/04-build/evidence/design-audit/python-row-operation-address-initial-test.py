@@ -1,7 +1,6 @@
 from dataclasses import FrozenInstanceError
 import json
 import unittest
-from unittest.mock import patch
 from truss._row_operation_address import encode_row_operation_address as encode, decode_row_operation_address as decode, check_custody_addresses
 from truss._row_operation_custody import decode_row_operation_custody
 from test_row_operation_custody import fixture
@@ -24,18 +23,6 @@ class RowOperationAddressTests(unittest.TestCase):
                 with self.assertRaises(ValueError): decode(raw)
         for xid, ordinal in [('18446744073709551616','0'),('1','9223372036854775808'),('1','-1'),(True,'0')]:
             with self.assertRaises(ValueError): encode('installation', xid, ordinal)
-
-    def test_exact_output_boundary_and_preallocation_refusal(self):
-        from truss._row_operation_address import DOMAIN, MAXIMUM_BYTES
-        overhead = 13 + len(DOMAIN) + len('1') + len('0')
-        self.assertEqual(len(encode('a' * (MAXIMUM_BYTES - overhead), '1', '0')), MAXIMUM_BYTES)
-        # Serializer must never be reached for an oversized escaped result or
-        # invalid surrogate. This checks the refusal boundary, not all heap work.
-        with patch('truss._row_operation_address.json.dumps', side_effect=AssertionError('serializer reached')):
-            for installation in ('a' * (MAXIMUM_BYTES - overhead + 1),
-                                 '\x01' * (MAXIMUM_BYTES // 6), '\ud800'):
-                with self.subTest(kind=installation[:1]):
-                    with self.assertRaises(ValueError): encode(installation, '1', '0')
 
     def test_complete_manifest_addresses_keep_native_gaps(self):
         value = fixture()

@@ -826,3 +826,20 @@ independent exact Unicode/control/maximum-domain byte expectation. RC01 gains th
 host codec component; native production registration, complete codec/resource
 qualification and RC02–RC06 remain incomplete. No caller-address registry selection,
 installed wheel/public API or semantic body readiness is advertised.
+
+### Address output preflight correction
+
+The candidate Python address encoder now computes complete escaped scalar UTF-8
+and fixed JSON framing size before serialization. It refuses an oversized result
+or unpaired surrogate before invoking the serializer, then checks produced length
+against the original preflight. The
+[source receipt](evidence/design-audit/python-row-operation-address-preflight-source.json)
+records 83 passing source tests, including exact 8-MiB output and negative controls
+whose serializer is replaced with a failure if called. This removes the earlier
+serialize-then-refuse allocation path. Prior codec/test bytes are archived with
+exact correspondence to the unchanged historical 82-test receipt.
+
+Output preflight is not complete peak-heap/work/deadline or original resource-
+account admission. Existing input strings, serializer overhead and native encoder/
+text domain remain independently qualified responsibilities; no installed authority,
+public API or RC02–RC06 completion is inferred.
