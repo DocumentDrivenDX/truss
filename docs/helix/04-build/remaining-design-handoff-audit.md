@@ -1953,3 +1953,13 @@ custody/capacity models retain their stated assumptions and counterexamples;
 new native capture/initializer experiments are not refinement proofs. Complete
 original scope/cut/authority and settlement correspondence remain required before
 promoting assurance or publication claims. No HELIX catalog is copied into Truss.
+
+
+The [fresh Weft Paths-Keys design review](evidence/design-audit/weft-paths-keys-design-review.json)
+confirms origin/main3fcfd37 adds reviewed desired-state documents only, preserving
+all implementation and distribution bytes in that range. Future adoption must
+retain full authorized-source edge identity guards, edge-occurrence multiplicity,
+separate distinct-neighbor degree, whole-bag ordinal capacity and exact carrier
+selection before release. This does not add Truss traversal scope, upgrade the
+adopted compiler or qualify PostgreSQL from Databricks design evidence. UMF's
+published head/browser remain synchronized and unchanged.

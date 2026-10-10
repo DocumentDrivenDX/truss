@@ -1,0 +1,54 @@
+{
+  "scope": "Immutable upstream documentation and original review pin comparison only; no Truss compiler/native execution or API adoption",
+  "upstreamCommit": "3fcfd37c2bd3b408cbed3d784fc9ec79fc22e679",
+  "previousPublishedCommit": "c8d825808a27e15517c1fc93c3fba0faffc2406e",
+  "changedFiles": [
+    {
+      "path": "docs/helix/02-design/architecture.md",
+      "bytes": 9387,
+      "sha256": "d0ee010b138e0b6f2210e8b0aaf857ca605b67f2d746ad9a741d93afacd91443"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/CONTRACT-005-authored-two-hop-paths.md",
+      "bytes": 31067,
+      "sha256": "915294bfff1539e123f9407c84caa3805eef2a050942370f2a7bc29c0a70bc65"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-007-authored-two-hop-paths.md",
+      "bytes": 15317,
+      "sha256": "3bb393c692f58847b8f3b0e747b9df166fd970532616fee14e36b4b4afe76f44"
+    },
+    {
+      "path": "docs/helix/03-test/TP-001-compiler-conformance.md",
+      "bytes": 12575,
+      "sha256": "7b9001dfc7389ad3a4a3bb8db9861f4e5b2f519c9e1081040137bb7ce46e0785"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/paths-keys-governing-review-20261010/astra-weft-review.json",
+      "bytes": 6856,
+      "sha256": "2d1158c8a952bf90db7de8a4a58c583b805915ec8aa482cbdcc39ee9c587fc86"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/paths-keys-governing-review-20261010/weft-freeze-b.json",
+      "bytes": 2680,
+      "sha256": "a743b2168b039e20d7c7a28571d034eb26853ea6630f7a62fb85ab89836160b3"
+    }
+  ],
+  "ownerReviewVerdict": "approved exact four-document B desired-state slice for landing; no implementation or runtime approval",
+  "reviewedDocumentPinsMatch": true,
+  "previousDocumentPinsMatch": true,
+  "implementationOrDistributionChanged": false,
+  "umfPublishedCommit": "322b193cef7c940d07b741860cf0170272628868",
+  "adoptedTrussCompilerPinChanged": false,
+  "trussNativeSupportQualified": false,
+  "crossChatMessageSent": false,
+  "requirementsForFutureAdoption": [
+    "Separately registered exact profile, artifacts, typed obligations and capability inventory",
+    "Full authorized-source original edge identity/non-null/uniqueness checks before bounded prefix, even for empty outer results",
+    "Preserve edge occurrence bag independently of distinct-neighbor degree",
+    "Exact related-key versus path carrier dispatch; no shape fallback",
+    "Whole-population ordinal capacity before filter/limit; separate from aggregate counters",
+    "Independent PostgreSQL and pgserver profile/native qualification; no Databricks inference",
+    "Original subject/current authority, coherent observation and publication closing remain owner integration"
+  ]
+}

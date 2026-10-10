@@ -1291,3 +1291,33 @@ Truss can continue native identity/ACL/dependency qualification, installation
 observation and bounded original-capture composition independently; this is
 not a whole-goal blocker. No cross-chat message or unfinished API adoption was
 performed.
+
+
+### Weft bounded related-key design alignment — 2026-10-10
+
+Fresh authorized fetch advances Weft origin/main fromc8d8258 to3fcfd37.
+[Immutable source/review evidence](evidence/design-audit/weft-paths-keys-design-review.json)
+verifies all six changed documentation artifacts and both before/after pins for
+four independently reviewed governing documents. There are no implementation,
+compiler schema, executable, corpus or distribution changes in this range.
+UMF origin/main remains322b193 and the browser/numeric adoption is unchanged.
+
+Weft selects a separately named Databricks Paths-Keys candidate for required-root
+bounded related keys. It preserves one result occurrence per admitted edge,
+including repeated complete key tuples; participation degree still counts
+distinct neighboring records. Original native edge identity/nullability/uniqueness
+checks cover the entire authorized source before prefix/outer filtering, including
+empty outer results and a malformed edge beyond the returned bound. Whole-bag
+ordinal capacity remains separate from aggregate counters and operational limits.
+Carrier dispatch distinguishes relatedKeys from pathCollection; shape similarity
+cannot select a decoder or permit null/absence fallback.
+
+This is a future compiler-adoption input, not a new Truss product feature or
+PostgreSQL support claim. Keep the adoptedf05f2df/compile-sql0.2 tuple and earlier
+published Paths530 artifact evidence unchanged. Any later PostgreSQL adoption
+requires Weft's original typed profile/obligations, full source/key/edge identity
+and exact native carrier qualification, then Truss host parameter/result custody,
+current authority/coherent cut and publication closing checks. Databricks DECIMAL38
+lowering does not select Truss's native ordinal strategy. Truss must not implement
+its own relationship lowerer, policy walker or result-prefix proof. No cross-chat
+message or unfinished API adoption occurred.
