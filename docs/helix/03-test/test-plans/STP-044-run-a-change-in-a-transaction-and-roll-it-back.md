@@ -23,7 +23,7 @@ US-044, TD-044, SD-003, TP-001 and CONTRACT-007/009. Tests are planned. Native o
 
 ## Acceptance Criteria Test Mapping
 
-Additional outcome-stage probes under CONTRACT-007: cancel before a statement, during a write, after savepoint release and around engine-owned COMMIT. Require confirmed rollback before reporting cancelled/no effects; a sent COMMIT with unknown result yields commit_unknown, while confirmed commit remains committed despite a late cancellation signal. Prove unresolved connections are quarantined before pool reuse. A cancel acknowledgment with unconfirmed rollback is insufficient. Hold the original transaction open while outcome lookup sees no receipt; no reapplication may follow temporary absence. Adopted transactions never receive a Truss-issued whole-transaction end command. These planned fault/barrier cases qualify each adapter independently.
+Additional outcome-stage probes under CONTRACT-007: cancel before a statement, during a write, after savepoint release and around engine-owned COMMIT. Require confirmed rollback before reporting cancelled/no effects; a sent COMMIT with unknown result yields commit_unknown, while confirmed commit remains committed despite a late cancellation signal. Prove unresolved connections are quarantined before host connection reuse. A cancel acknowledgment with unconfirmed rollback is insufficient. Hold the original transaction open while outcome lookup sees no receipt; no reapplication may follow temporary absence. Adopted transactions never receive a Truss-issued whole-transaction end command. These planned fault/barrier cases qualify each adapter independently.
 
 | AC ID | Planned failing test | Asserted behavior | Citation | Primary layer | Setup |
 | --- | --- | --- | --- | --- | --- |
@@ -34,13 +34,13 @@ Additional outcome-stage probes under CONTRACT-007: cancel before a statement, d
 
 ## Data and Failure Probes
 
-Adoption/access-mode matrix: actual READ ONLY with expected read_write refuses; actual read_write with expected read_only refuses rather than SET TRANSACTION; exact read-only adoption permits qualified reads while mutation/import/catalog acceptance refuses before write effects. Verify isolation and the same native connection, including session/transaction pooler paths. End the host transaction during asynchronous verification and require no usable handle; reject a failed native transaction without silently rolling it back. A native observation failure follows transaction_unusable/liveness rules and cannot trigger automatic host cleanup or substitute another connection. Retain statement traces proving no BEGIN/COMMIT/ROLLBACK/SET TRANSACTION and independent host state witnesses; trace-only evidence is insufficient.
+Adoption/access-mode matrix: actual READ ONLY with expected read_write refuses; actual read_write with expected read_only refuses rather than SET TRANSACTION; exact read-only adoption permits qualified reads while mutation/import/catalog acceptance refuses before write effects. Verify isolation and the same original native connection. If the host actually selects an intermediary, qualify its connection/transaction custody for that selected deployment; an intermediary is not required by the direct-connection embedding profile. End the host transaction during asynchronous verification and require no usable handle; reject a failed native transaction without silently rolling it back. A native observation failure follows transaction_unusable/liveness rules and cannot trigger automatic host cleanup or substitute another connection. Retain statement traces proving no BEGIN/COMMIT/ROLLBACK/SET TRANSACTION and independent host state witnesses; trace-only evidence is insufficient.
 
 For repeatable-read hosts, establish a snapshot before adoption and prove it remains the data snapshot afterward. If no snapshot was established yet, ordinary admitted native reads may establish one naturally; this does not license explicit snapshot replacement or a promise to preserve an unobserved prior cut. Current authority remains independently qualified under CONTRACT-005. Caller-declared accessMode is an expectation, never proof of native state.
 
 Use earlier host write, valid group, invalid group and later host write in one transaction. Verify per-call origin restoration and no role broadening. Inject cancellation, failed savepoint cleanup, inactive/cross-adapter handle and concurrent-handle misuse. Statement trace is supporting evidence; native pending visibility/host rollback proves no hidden commit. Confirm id sequence advances may survive rollback without confusing gaps with graph effects.
 
-For lock release use explicit blocked waiter and transaction-end barriers; observe both row/catalog and advisory request/business identity locks when enabled. Caller success followed by whole rollback removes all pending calls; failed call preserves earlier host work. Node/pooler coverage is unverified until actually run.
+For lock release use explicit blocked waiter and transaction-end barriers; observe both row/catalog and advisory request/business identity locks when enabled. Caller success followed by whole rollback removes all pending calls; failed call preserves earlier host work. Actual selected driver/build/deployment coverage is unverified until run; direct PostgreSQL connection qualification does not require a pooler.
 
 ## Executable Proof and Handoff
 
@@ -295,3 +295,27 @@ Source-only identity tickets, fake successful callbacks and typed brands cannot
 qualify these schedules. Status remains not_run pending original producer/native
 verification integration; the four current rollback probes demonstrate the
 row-derived allocator defect rather than this required correction.
+
+
+## Host connection ownership and optional pooling
+
+The owner selects direct host-supplied PostgreSQL connections as the embedding
+contract. Truss neither creates nor operates a pool. Pool-specific OL/LR/SB fixture
+language above describes a selected pool-backed reference adapter only when that
+adapter is actually used; it is not a pooler requirement or a product gate for the
+direct Python/TypeScript connection path. Keep exact original adapter profiles and
+their historical evidence rather than silently relabeling pooled observations as
+direct-connection qualification.
+
+For the direct path, run the same relevant transaction, cancellation, account,
+quarantine, recovery and physical-incarnation schedules with the host's original
+connection custodian. Independently observe zero unauthorized connection reuse or
+replacement, instead of requiring a pool checkout/return callback. Missing original
+termination/settlement remains unresolved even when no pool exists. Truss disposal
+must not close, commit or roll back an adopted caller connection/transaction.
+
+Qualify optional pool/intermediary behavior separately if advertised. A host's
+operational choice cannot waive original physical identity, transaction affinity,
+bounded custody or settlement; it also cannot force unrelated direct consumers to
+install a pooler. This clarification changes no selected reference-profile capacity
+limit and supplies no driver qualification by itself.
