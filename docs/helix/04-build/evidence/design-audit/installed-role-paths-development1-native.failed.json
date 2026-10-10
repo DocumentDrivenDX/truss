@@ -1,0 +1,6 @@
+{
+  "status": "failed",
+  "error": "ValueError",
+  "message": "direct-set-only-restored mismatch",
+  "scope": "Initial fixture left newly granted private-role table ACL outside the original baseline; no passing restoration claim. Exact input preimages match recorded start pins."
+}

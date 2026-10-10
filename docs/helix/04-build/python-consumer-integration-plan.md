@@ -343,3 +343,34 @@ connections verify persisted and discarded rows after the real native tag fault.
 See [iteration 12 evidence](evidence/python-contracts-iteration12.json).
 The public C02/E06 and protected owner gates above remain open; prioritize their
 completion before promoting the facade or declaring the consumer workflow ready.
+
+
+### Private installed inventory: role transition paths
+
+PA01/PA02 now require eleven retained sections, including native PostgreSQL16.15
+MEMBER, USAGE, SET and ADMIN reachability for the ordinary invoker. Direct effective
+ACLs alone miss INHERIT FALSE / SET TRUE authority. The fixed invoker profile
+refuses any distinct SET-capable or ADMIN-capable role even when the supplied
+baseline matches the unsafe observation. Membership without INHERIT, SET or ADMIN
+is observed as drift against the former baseline and may match a fresh scoped
+baseline. Ten-section historical packets refuse instead of silently omitting
+this new authority dimension.
+
+The [reviewed native receipt](evidence/design-audit/installed-role-paths-reviewed-native.json)
+retains63 matching observations and29 inventories. Real ordinary local-socket
+sessions demonstrate direct and indirect SET ROLE registry writes and ADMIN-only
+self-grant escalation, each denied by the observer; revocation restores the
+original scoped match. The exact479-row budget succeeds and478 refuses at the
+last role-reachability read. Twenty original source pins and preimages remain
+unchanged. The independently staged wheel matches50 Python/SQL/JSON source files.
+[Astra ultra review](evidence/design-audit/role-paths-astra-review.md) required
+execution from frozen producer SQL, now applied and rerun; earlier development
+failures and the pre-review passing run remain historical at their own sources.
+
+This component does not provide authenticated production admission, a coherent
+protected cut, arbitrary role-mutator closure or the seven missing semantic
+operation bodies. Native fixture routines are the four admission helpers, epoch
+helper and two catalog high-water helpers; they are not those semantic bodies.
+Installer readiness, PA01/PA02 completion and full backend acceptance remain open.
+
+The original candidate installed wheel passes302 tests; the [suite receipt](evidence/design-audit/role-paths-installed-suite.json) retains test-source pins and terminal output.
