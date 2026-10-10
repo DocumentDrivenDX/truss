@@ -17,7 +17,8 @@ never defines UMF semantics.
 
 **Current state (2026-10-09):** requirements, architecture, contracts and
 implementation/test sequencing are authored drafts for an embeddable toolkit
-and TypeScript reference implementation. UMF owns metadata interpretation and
+and Truss-owned Python/TypeScript implementations, with Python the immediate
+delivery priority under accepted ADR-003. UMF owns metadata interpretation and
 portable key encoding; Weft owns SQL compilation. UMF is sufficient for the current scope; Truss owns composing its existing APIs
 and verifying the generated/native layout. Semantic closure and Weft binding
 adoption remain open.
@@ -30,7 +31,7 @@ interface dependencies and unresolved gates.
 | --- | --- | --- |
 | 00 Discover | Drafts | [Product vision](00-discover/product-vision.md), [competitive analysis](00-discover/competitive-analysis.md), [discovery input](00-discover/vision-input.md), [naming research](00-discover/naming-research.md), 11 [component profiles](00-discover/README.md) |
 | 01 Frame | In progress | [Concerns](01-frame/concerns.md), [research plan](01-frame/research-plan.md) (storage bake-off); [PRD](01-frame/prd.md), [feature registry](01-frame/feature-registry.md) (8 features, 45 stories) draft |
-| 02 Design | ADR-001/002/005/006/007 accepted directions; ADR-003/004 proposed; CONTRACT-001–012 draft | [SPIKE-001](02-design/spikes/SPIKE-001-apache-age.md) (Apache AGE), [SPIKE-002](02-design/spikes/SPIKE-002-storage-bake-off.md) (storage bake-off), [storage layout review](02-design/storage-layout-review.md), [ADR-002](02-design/adr/ADR-002-storage-strategy.md) (storage, accepted 2026-10-03, some points provisional), [ADR-001](02-design/adr/ADR-001-language-and-portable-core.md) (TypeScript first, portable core, Rust triggers; accepted 2026-10-03, Node support provisional) |
+| 02 Design | ADR-001/002/003/004/005/006/007 accepted directions; CONTRACT-001–012 draft | [SPIKE-001](02-design/spikes/SPIKE-001-apache-age.md) (Apache AGE), [SPIKE-002](02-design/spikes/SPIKE-002-storage-bake-off.md) (storage bake-off), [storage layout review](02-design/storage-layout-review.md), [ADR-002](02-design/adr/ADR-002-storage-strategy.md) (storage, accepted 2026-10-03, some points provisional), [ADR-001](02-design/adr/ADR-001-language-and-portable-core.md) (TypeScript first, portable core, Rust triggers; accepted 2026-10-03, Node support provisional) |
 | 03 Test | Draft strategy; all 45 story plans allocated | [TP-001](03-test/test-plan.md), [story coverage](04-build/design-coverage.md) |
 | 04 Build | Experimental Weft integration implemented; protected runtime unfinished | [Implementation plan](04-build/implementation-plan.md), [coordination](04-build/design-coordination.md) |
 | Current closure | Design selections and adoption remain open | [Consolidated design closure](04-build/current-design-closure.md) |
@@ -134,3 +135,28 @@ Current TypeScript compiler integration pins committed Weft f05f2df after an iso
 
 
 Truss must ship explicit migration tooling in its first release, with infrequent use as the intended operating model. Ordinary UMF model evolution remains DDL-free; opening an application connection never upgrades the installation. The [migration deployment handoff](04-build/migration-consumer-deployment-handoff.md) defines source/target selection, transactional apply, original-attempt recovery and clean-package qualification. A complete populated route remains unselected, and the executor/recovery/package stages remain unimplemented; the metadata planner and immutable receipt guards do not establish the shipped system.
+
+
+## Current delivery and HELIX adoption entrypoints
+
+The [accelerated queue](04-build/local-runtime-installation-migration-plan.md#accelerated-capability-queue--owner-direction-2026-10-09)
+prioritizes complete installation and usable Python catalog/apply/import/direct-read
+operations, with R4 isolation and R5 origin in the same first slice. Feed/retry
+receipts and populated migrations follow their explicit exits. The estimates are
+conditional engineering targets, not delivery commitments or released capability.
+
+| Work | Governing entrypoint / current evidence boundary |
+| --- | --- |
+| Python and migration integration | [Python design](02-design/python-integration.proposal.md), [installation/migration handoff](04-build/python-migration-installation-handoff.md); installed public operations remain unfinished. |
+| Module boundaries | [Architecture](02-design/architecture.md#module-boundaries); Python AST gate and nine controls pass. TypeScript inventory identifies12 private cross-adapter imports; enforcement/remediation remains open. |
+| Configuration | [Reference configuration contract](02-design/contracts/reference-configuration.proposal.md), [CFG test plan](03-test/reference-configuration-test-plan.md); twelve cases specified, no reference loader/composition qualification claimed. |
+| Observability | [Diagnostic contract](02-design/contracts/diagnostics.proposal.md), [OBS test plan](03-test/diagnostics-test-plan.md); event/OTel/privacy/bounds defined, actual bridge/receiver/failure evidence remains open. |
+| Formal analysis | [Ordinal/admission specification](02-design/python-integration.proposal.md#formal-specification--original-ordinal-and-admission-custody), [test plan](03-test/test-plan.md#formal-methods-adoption-python-original-ordinaladmission-slice); precise specification and eight component tests, no analyzer/proof or native authority claim. |
+| Corrected local server | [Runtime/install plan](04-build/local-runtime-installation-migration-plan.md#corrected-current-layout-compatibility-checkpoint); private16.15 candidate passes current UMF structure and populated immutable guards. Published default dependency, complete issuer/guard/ready installation remain open. |
+
+[Project Concerns](01-frame/concerns.md#helix-guidance-adoption--2026-10-09)
+records installed HELIX0.15.0 separately from the consulted committed0.15.4
+modularity/configuration/observability/formal guidance. The method catalog remains
+in HELIX. These documents do not add UMF semantics or a Truss SQL compiler.
+See [current closure](04-build/current-design-closure.md) for the remaining native
+integration gates and upstream ownership boundaries.

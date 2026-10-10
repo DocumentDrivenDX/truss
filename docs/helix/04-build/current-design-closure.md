@@ -34,9 +34,55 @@ whether a separate direct traversal API is required; this does not block Python,
 installation or migration work. Historical pending-choice lists below are
 superseded by this decision record, not renewed approval requests.
 
+## Current delivery checkpoint — 2026-10-09
+
+This checkpoint supersedes the older source/status summaries below only where
+explicitly stated. The full45-story scope and seven incomplete reference
+composition boundaries remain intact. Public catalog installation, apply/import,
+key/edge reads and feed are not qualified by component evidence; candidate layout0.16
+has not become a stable admitted release.
+
+The [accelerated installation/Python queue](local-runtime-installation-migration-plan.md#accelerated-capability-queue--owner-direction-2026-10-09)
+is the current sequencing authority. Its first usable slice includes document
+qualification, R4 isolation and R5 origin. Actual original native issuer/account/
+arbitration and the seven observer/validator/finalizer bodies still precede atomic
+complete inventory/ready publication. The embedding-host trust assumption remains
+unresolved; local Python object custody cannot independently authenticate a native
+issuer or fence effects after a separate close check. Do not substitute caller
+ordinal strings, seal flags, dummy guards or profile-shaped metadata for these gates.
+
+HELIX0.15.4 adoption now has linked scope and qualification work: Architecture's
+Python AST gate passes51 current imports with nine real-checker controls;
+TypeScript5.9.3 inventory observes12 cross-adapter private imports needing ownership
+remediation, not an enforced dependency pass. The process configuration contract
+and CFG-01–12 plan distinguish host injection from native configuration admission.
+Diagnostic/OBS-01–09 contracts specify safe events, OTel projection and bounded
+capture/export, without qualifying an actual bridge/receiver. Python ordinal/
+admission formal specification maps stable properties to eight passing component
+methods, with precise author review only; executable formal analysis and native
+correspondence remain open. Entry links are in the HELIX README and runtime plan.
+
+The corrected private pgserver16.15 tuple passes caller-reset, historical isolation,
+origin captures and the current UMF structural/populated immutable-guard probes
+within their separate exact scopes. Current structure matches50 tables/481columns/
+67FKs, with12 populated mutation refusals. This is compatibility/component evidence,
+not an installed authorized engine, managed-target qualification, public default
+binary distribution or migration readiness. Preserve the original16.2 receipts as
+historical; do not relabel them.16.15 still lacks transaction_timeout.
+
+Latest read-only origin checks identify UMF `main` at
+`6a2929d52d23b4587c9913aa87b3a265cf43ed1e` and Weft `main` at
+`764d9fa1c4aef68358a5c77c85b051d6d7bf0495`. Recent Weft changes select separate
+Databricks0.3 candidates; Truss retains its adopted f05f2df compile/SQL0.2 tuple.
+UMF's recent research distribution/default-branch changes do not introduce a
+Truss prerequisite or justify silently replacing adopted pins. The live security
+owner reports scoped routine/profile verification, with full acceptance still26/132,
+and is working on unsupported-policy activation/report-mode weakening. Keep those
+interfaces with their owner and unadopted until the exact Truss subset qualifies.
+
 ## Current closure classification — 2026-10-09
 
-Latest committed upstream review: fetched UMF is
+Historical upstream review (superseded by the current checkpoint above): fetched UMF was
 `72996e58d2a9291ae191127b4f55e548c2105569`; Weft is
 `1a8a3445302aa44a93167ef340dbcfb306805254`. Truss's adopted compiler component
 remains frozen at `f05f2df09e9c2494ac8c6d703dfe38413dbc4181` with compile/SQL0.2.
