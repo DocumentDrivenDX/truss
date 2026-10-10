@@ -1140,3 +1140,16 @@ above: ADR-004 is accepted for document-qualified ownership and Truss owns the
 tested Python implementation. The local runtime and migration handoff carry those
 choices. Pool operations belong to the host, stale pre-effect refusal returns once,
 and the isolated traversal question does not block installation/Python/migrations.
+
+
+## Original consumer frontend on current Weft source
+
+The [ee90571 replay](evidence/design-audit/consumer-revised-frontend-ee90571.json)
+now executes90 original revised consumer inputs from the isolated committed owner
+archive. It retains80 resolved/10 relationship-name refusals, matching the earlier
+f05f2df outcome classes without rewriting original consumer SQL. Weft's newer
+frontend/resolver code therefore does not remove the observed R8 relationship
+integration gap in this scope. Public compiler/parsed ABI, SQL lowering and native
+qualification remain separate; Truss's compiler pin is unchanged. No cross-chat
+message or new owner API adoption was made. The consumer handoff supplies the
+required next original-contract and distribution/native evidence.

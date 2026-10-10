@@ -73,7 +73,17 @@ def verify_owner(workspace, repository):
 
 
 def main():
-    action,workspace,repository,toolchain=sys.argv[1:]
+    global REVISION, ARCHIVE_SHA
+    if len(sys.argv) not in (5,8): raise SystemExit('usage: ACTION WORKSPACE OWNER TOOLCHAIN [COMMIT ARCHIVE_SHA NEW_RECEIPT_NAME]')
+    action,workspace,repository,toolchain=sys.argv[1:5]
+    receipt_name='consumer-revised-frontend.json'
+    if len(sys.argv)==8:
+        REVISION,ARCHIVE_SHA,receipt_name=sys.argv[5:]
+        assert len(REVISION)==40 and all(c in '0123456789abcdef' for c in REVISION)
+        assert len(ARCHIVE_SHA)==64 and all(c in '0123456789abcdef' for c in ARCHIVE_SHA)
+    assert Path(receipt_name).name==receipt_name and receipt_name.endswith('.json')
+    destination=AUDIT/receipt_name
+    if destination.exists(): raise SystemExit('refusing to replace an existing receipt')
     workspace,repository,toolchain=Path(workspace),Path(repository),Path(toolchain)
     environment=dict(os.environ,CARGO_HOME=str(toolchain/'cargo'),RUSTUP_HOME=str(toolchain/'rustup'))
     rust=subprocess.check_output([str(toolchain/'cargo/bin/rustc'),'--version'],env=environment,text=True).strip()
@@ -125,7 +135,7 @@ def main():
              'inputsSha256':sha(wire),'harnessSha256':sha(harness.read_bytes()),'outputSha256':sha(raw),
              'producerSha256':sha(Path(__file__).read_bytes()),'resolved':80,'blocked':10,'observations':observations,
              'nativeQualified':False,'publicCompilerQualified':False}
-    (AUDIT/'consumer-revised-frontend.json').write_text(json.dumps(receipt,indent=2)+'\n')
+    with destination.open('x') as stream: stream.write(json.dumps(receipt,indent=2)+'\n')
     print('90 revised-original query observations:80 resolved,10 original relationship-name refusals')
 
 

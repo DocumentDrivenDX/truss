@@ -1,0 +1,768 @@
+{
+  "scope": "Actual frozen Weft test frontend, revised owner-authored model/corpus inputs; no SQL lowering/native/parsed-input ABI qualification",
+  "revision": "ee90571a5aa67b6d2e6069220f6e1cc0eec3822c",
+  "sourceArchiveSha256": "5ed101371e02c74ac3d1f5aedc6943959bc9059fb668d44f9a4251ded36d8270",
+  "cargoLockSha256": "08d3d30468be6bbde701be72c4e070f60c0706b54898e8e3a0432ea0cfbe0e9e",
+  "rustVersion": "rustc 1.90.0 (1159e78c4 2025-09-14)",
+  "cargoVersion": "cargo 1.90.0 (840b83a10 2025-07-30)",
+  "actualRun": {
+    "exitStatus": 0,
+    "durationMs": 23690,
+    "inputsSha256": "71b4fe8aa91e20db7291bae847c537ccdbe59d5c455abee47e0fa5289d45a168",
+    "harnessSha256": "8e23ba982b977ca4677eef01ce4dd43a6b4ed74f5a119ec917203ef416657b79",
+    "outputSha256": "1778b9191633f7ed64e18430d07f23a7fb3cd21b9bbf66bef918815f45f9187a",
+    "sourceArchiveSha256": "5ed101371e02c74ac3d1f5aedc6943959bc9059fb668d44f9a4251ded36d8270",
+    "rawSubprocessCapture": "disabled; actual process status and structured output checked"
+  },
+  "command": "cargo test --locked --offline -p weft-core --test truss_consumer_revised",
+  "inputsSha256": "71b4fe8aa91e20db7291bae847c537ccdbe59d5c455abee47e0fa5289d45a168",
+  "harnessSha256": "8e23ba982b977ca4677eef01ce4dd43a6b4ed74f5a119ec917203ef416657b79",
+  "outputSha256": "1778b9191633f7ed64e18430d07f23a7fb3cd21b9bbf66bef918815f45f9187a",
+  "producerSha256": "3d25cfdec6799042ee986e008c224df5dd2c7bbf75f976d8db6f719102581017",
+  "resolved": 80,
+  "blocked": 10,
+  "observations": [
+    {
+      "source": "module.umf.json",
+      "caseStep": "read.key-lookup-whole-entity:0",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "95824187432c06fd6ff71de66feb747b48f50b0d083ca4176ef15331fb199227"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "read.relationship-columns-follow-ends:0",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "a2361428dee56711648ed1ff41b53f9a54c3db25876b5b3ec1da6e5d6d556028"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "read.missing-key-is-no-rows:0",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "344881507f86f88d5fd988dddc677b3a5aa5cd9948e35ac174b58b3cba12f5f0"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "read.columns-and-filters:0",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "137088437178bfa7dfe7bbbfbe6022513a75d0111f5e006f80eafd199c841b29"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "read.relationship-filter-both-directions:0",
+      "status": "blocked",
+      "diagnostics": [
+        {
+          "code": "WFT-NAME-MISSING",
+          "message": "Property not found among record members",
+          "phase": "resolve",
+          "severity": "error",
+          "sourceSpan": {
+            "end": 55,
+            "start": 46
+          }
+        }
+      ],
+      "responseSha256": "cb99f630247485b5178d6262c367b94cbc5b773d3f68d7ace5a990e2d49db777"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "read.relationship-filter-both-directions:1",
+      "status": "blocked",
+      "diagnostics": [
+        {
+          "code": "WFT-NAME-MISSING",
+          "message": "Property not found among record members",
+          "phase": "resolve",
+          "severity": "error",
+          "sourceSpan": {
+            "end": 56,
+            "start": 45
+          }
+        }
+      ],
+      "responseSha256": "91c70b76da954828191e7d6f2a9d4ff5ff8266e357661f27a4c842ffca01a9c0"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "read.relationship-filter-both-directions:2",
+      "status": "blocked",
+      "diagnostics": [
+        {
+          "code": "WFT-NAME-MISSING",
+          "message": "Property not found among record members",
+          "phase": "resolve",
+          "severity": "error",
+          "sourceSpan": {
+            "end": 56,
+            "start": 45
+          }
+        }
+      ],
+      "responseSha256": "91c70b76da954828191e7d6f2a9d4ff5ff8266e357661f27a4c842ffca01a9c0"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "read.repeated-relationship-predicates-mean-both:2",
+      "status": "blocked",
+      "diagnostics": [
+        {
+          "code": "WFT-NAME-MISSING",
+          "message": "Property not found among record members",
+          "phase": "resolve",
+          "severity": "error",
+          "sourceSpan": {
+            "end": 55,
+            "start": 46
+          }
+        }
+      ],
+      "responseSha256": "cb99f630247485b5178d6262c367b94cbc5b773d3f68d7ace5a990e2d49db777"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "read.repeated-relationship-predicates-mean-both:3",
+      "status": "blocked",
+      "diagnostics": [
+        {
+          "code": "WFT-NAME-MISSING",
+          "message": "Property not found among record members",
+          "phase": "resolve",
+          "severity": "error",
+          "sourceSpan": {
+            "end": 55,
+            "start": 46
+          }
+        }
+      ],
+      "responseSha256": "cb99f630247485b5178d6262c367b94cbc5b773d3f68d7ace5a990e2d49db777"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "read.count-group-by:2",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "7cf30a9ee506a3ef312d2e23599514a8b9cd3b9f403def9ebd5a1c906beca0e0"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "read.paging-by-key:0",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "6f601aa27028e56e458875f671f2349e45555664ed34afe5ee324ed2b2ae358f"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "read.paging-by-key:1",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "6f601aa27028e56e458875f671f2349e45555664ed34afe5ee324ed2b2ae358f"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "read.relationship-columns-are-capped:2",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "61cfcee0f2922f951b9c6f01a3f134777d1f7da41ea8fcc0bf235eb53e5e8d4c"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "access.no-token-is-refused:0",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "6f601aa27028e56e458875f671f2349e45555664ed34afe5ee324ed2b2ae358f"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "access.anothers-token-is-refused:0",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "6f601aa27028e56e458875f671f2349e45555664ed34afe5ee324ed2b2ae358f"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "access.anothers-token-is-refused:1",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "6f601aa27028e56e458875f671f2349e45555664ed34afe5ee324ed2b2ae358f"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "access.no-grant-is-refused-not-empty:0",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "6f601aa27028e56e458875f671f2349e45555664ed34afe5ee324ed2b2ae358f"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "access.expired-token-is-refused-not-unavailable:1",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "6f601aa27028e56e458875f671f2349e45555664ed34afe5ee324ed2b2ae358f"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "access.outage-is-unavailable-never-empty:1",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "6f601aa27028e56e458875f671f2349e45555664ed34afe5ee324ed2b2ae358f"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "access.outage-is-unavailable-never-empty:3",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "6f601aa27028e56e458875f671f2349e45555664ed34afe5ee324ed2b2ae358f"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "access.outage-is-unavailable-never-empty:5",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "6f601aa27028e56e458875f671f2349e45555664ed34afe5ee324ed2b2ae358f"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "access.no-token-is-refused-even-when-down:1",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "6f601aa27028e56e458875f671f2349e45555664ed34afe5ee324ed2b2ae358f"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "access.outage-during-a-write-changes-nothing:4",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "3f1089a370829d4df753a44f23c5352a55d0805b9c04c02a5df4980107fcb16d"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "freshness.replica-catches-up-to-a-token:2",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "3f1089a370829d4df753a44f23c5352a55d0805b9c04c02a5df4980107fcb16d"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "freshness.replica-catches-up-to-a-token:5",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "3f1089a370829d4df753a44f23c5352a55d0805b9c04c02a5df4980107fcb16d"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "freshness.authority-has-reached-its-own-tokens:2",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "3f1089a370829d4df753a44f23c5352a55d0805b9c04c02a5df4980107fcb16d"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "action.applies-atomically-and-reads-back:2",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "f40f081a5df5d29f38930bf43a63606e14e66f19ef1d34d41bbbf02983958b21"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "action.failed-precondition-changes-nothing:1",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "4355e6f7397232070ac6ee1b598b1a5358129822832cd64c75f2d4ec1c96869d"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "action.conflict-rolls-back-the-unit:1",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "a2361428dee56711648ed1ff41b53f9a54c3db25876b5b3ec1da6e5d6d556028"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "action.update-bumps-the-version-once:1",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "a2361428dee56711648ed1ff41b53f9a54c3db25876b5b3ec1da6e5d6d556028"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "action.read-only-principal-is-refused:1",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "6f601aa27028e56e458875f671f2349e45555664ed34afe5ee324ed2b2ae358f"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "action.anothers-token-cannot-write:1",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "f6987f656bf0c525b10c3af4e53dc5060a1844a24eae65e52eadd2bf95ceae74"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "action.idempotent-retry-returns-the-original:2",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "3f1089a370829d4df753a44f23c5352a55d0805b9c04c02a5df4980107fcb16d"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "action.key-reused-with-other-inputs-conflicts:2",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "b5c6cd9e337c606db38481912ca977764cc94c1e6d5af6d84ce396fd9a95f0ff"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "action.dry-run-writes-nothing-and-keeps-the-key:2",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "4355e6f7397232070ac6ee1b598b1a5358129822832cd64c75f2d4ec1c96869d"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "action.deleted-keys-stay-deleted:1",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "c60e35690b9fc5a27887e6bad4c00d05b8058031f6b7131cab1dfa4d47854589"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "action.deleted-keys-stay-deleted:3",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "c60e35690b9fc5a27887e6bad4c00d05b8058031f6b7131cab1dfa4d47854589"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "action.atomic-batch-is-all-or-nothing:3",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "07c35325f3afbcb8fa7ef966bcc619f815583b7f0bc0f4ada79c2d4710ff2108"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "action.independent-batch-reports-each-item:3",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "468ab4878b33c6a76d18f9fd119dc56160cbbdc9631527d58b6d47da4648c13a"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "action.batch-shape-and-access:3",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "f6987f656bf0c525b10c3af4e53dc5060a1844a24eae65e52eadd2bf95ceae74"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "import.identity-skip-and-provenance:1",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "c7f7e13f88e3be0083543077556e41c96ab459d8dcc7258b7b84b38529ed213f"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "import.identity-skip-and-provenance:2",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "95824187432c06fd6ff71de66feb747b48f50b0d083ca4176ef15331fb199227"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "import.entities-before-relationships:1",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "72900105d4d65bcc6ade5221eb2d60bdbdc5c3346ca0fe71240d44b0d86fdafe"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "import.deleted-stays-deleted:1",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "c60e35690b9fc5a27887e6bad4c00d05b8058031f6b7131cab1dfa4d47854589"
+    },
+    {
+      "source": "module.umf.json",
+      "caseStep": "import.deleted-stays-deleted:3",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "c60e35690b9fc5a27887e6bad4c00d05b8058031f6b7131cab1dfa4d47854589"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "read.key-lookup-whole-entity:0",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "93cfe4735588adb3106b912bd5cb90260a30ebbfdf00b58514f8da1a18f1f1ff"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "read.relationship-columns-follow-ends:0",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "1505a364bdd3c4982025c8a325b536edee26b992e0fb4249eca903617ad57790"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "read.missing-key-is-no-rows:0",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "c75b923256069f0c69df12e8728f6cfa9934208ea176060bf2207f0ec19a9066"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "read.columns-and-filters:0",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "993f361a5a3d83025a1ee07912283261479ceff82b24d5e075a7e99771eb4680"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "read.relationship-filter-both-directions:0",
+      "status": "blocked",
+      "diagnostics": [
+        {
+          "code": "WFT-NAME-MISSING",
+          "message": "Property not found among record members",
+          "phase": "resolve",
+          "severity": "error",
+          "sourceSpan": {
+            "end": 55,
+            "start": 46
+          }
+        }
+      ],
+      "responseSha256": "cb99f630247485b5178d6262c367b94cbc5b773d3f68d7ace5a990e2d49db777"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "read.relationship-filter-both-directions:1",
+      "status": "blocked",
+      "diagnostics": [
+        {
+          "code": "WFT-NAME-MISSING",
+          "message": "Property not found among record members",
+          "phase": "resolve",
+          "severity": "error",
+          "sourceSpan": {
+            "end": 56,
+            "start": 45
+          }
+        }
+      ],
+      "responseSha256": "91c70b76da954828191e7d6f2a9d4ff5ff8266e357661f27a4c842ffca01a9c0"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "read.relationship-filter-both-directions:2",
+      "status": "blocked",
+      "diagnostics": [
+        {
+          "code": "WFT-NAME-MISSING",
+          "message": "Property not found among record members",
+          "phase": "resolve",
+          "severity": "error",
+          "sourceSpan": {
+            "end": 56,
+            "start": 45
+          }
+        }
+      ],
+      "responseSha256": "91c70b76da954828191e7d6f2a9d4ff5ff8266e357661f27a4c842ffca01a9c0"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "read.repeated-relationship-predicates-mean-both:2",
+      "status": "blocked",
+      "diagnostics": [
+        {
+          "code": "WFT-NAME-MISSING",
+          "message": "Property not found among record members",
+          "phase": "resolve",
+          "severity": "error",
+          "sourceSpan": {
+            "end": 55,
+            "start": 46
+          }
+        }
+      ],
+      "responseSha256": "cb99f630247485b5178d6262c367b94cbc5b773d3f68d7ace5a990e2d49db777"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "read.repeated-relationship-predicates-mean-both:3",
+      "status": "blocked",
+      "diagnostics": [
+        {
+          "code": "WFT-NAME-MISSING",
+          "message": "Property not found among record members",
+          "phase": "resolve",
+          "severity": "error",
+          "sourceSpan": {
+            "end": 55,
+            "start": 46
+          }
+        }
+      ],
+      "responseSha256": "cb99f630247485b5178d6262c367b94cbc5b773d3f68d7ace5a990e2d49db777"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "read.count-group-by:2",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "cfcd9a558c5192997aabe9aab87be8c111717cf80fbbda7806d6f895f8a68251"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "read.paging-by-key:0",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "c5cf9f06ae87c7d78a7ca377d6af45e8c6a2aa2c9fb297ba845bab8f24e1181e"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "read.paging-by-key:1",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "c5cf9f06ae87c7d78a7ca377d6af45e8c6a2aa2c9fb297ba845bab8f24e1181e"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "read.relationship-columns-are-capped:2",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "4a034eabb073ef454c7a61a82121022b12dc08b708df797b6a222d78b053ceb8"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "access.no-token-is-refused:0",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "c5cf9f06ae87c7d78a7ca377d6af45e8c6a2aa2c9fb297ba845bab8f24e1181e"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "access.anothers-token-is-refused:0",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "c5cf9f06ae87c7d78a7ca377d6af45e8c6a2aa2c9fb297ba845bab8f24e1181e"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "access.anothers-token-is-refused:1",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "c5cf9f06ae87c7d78a7ca377d6af45e8c6a2aa2c9fb297ba845bab8f24e1181e"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "access.no-grant-is-refused-not-empty:0",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "c5cf9f06ae87c7d78a7ca377d6af45e8c6a2aa2c9fb297ba845bab8f24e1181e"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "access.expired-token-is-refused-not-unavailable:1",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "c5cf9f06ae87c7d78a7ca377d6af45e8c6a2aa2c9fb297ba845bab8f24e1181e"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "access.outage-is-unavailable-never-empty:1",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "c5cf9f06ae87c7d78a7ca377d6af45e8c6a2aa2c9fb297ba845bab8f24e1181e"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "access.outage-is-unavailable-never-empty:3",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "c5cf9f06ae87c7d78a7ca377d6af45e8c6a2aa2c9fb297ba845bab8f24e1181e"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "access.outage-is-unavailable-never-empty:5",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "c5cf9f06ae87c7d78a7ca377d6af45e8c6a2aa2c9fb297ba845bab8f24e1181e"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "access.no-token-is-refused-even-when-down:1",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "c5cf9f06ae87c7d78a7ca377d6af45e8c6a2aa2c9fb297ba845bab8f24e1181e"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "access.outage-during-a-write-changes-nothing:4",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "ef46898b441371e8a68696069e6e2019c5a38208ed9c77d1664f342c01960ea5"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "freshness.replica-catches-up-to-a-token:2",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "ef46898b441371e8a68696069e6e2019c5a38208ed9c77d1664f342c01960ea5"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "freshness.replica-catches-up-to-a-token:5",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "ef46898b441371e8a68696069e6e2019c5a38208ed9c77d1664f342c01960ea5"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "freshness.authority-has-reached-its-own-tokens:2",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "ef46898b441371e8a68696069e6e2019c5a38208ed9c77d1664f342c01960ea5"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "action.applies-atomically-and-reads-back:2",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "0c8e3b69d73960d6b55f4b967fbd48a8845655cce3b5e203ebd5ad062d8413d8"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "action.failed-precondition-changes-nothing:1",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "3cbb5e746a55277dff09cd6bd8a99ba863f02b6862f0d5373f5bffae2da6bd09"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "action.conflict-rolls-back-the-unit:1",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "1505a364bdd3c4982025c8a325b536edee26b992e0fb4249eca903617ad57790"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "action.update-bumps-the-version-once:1",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "1505a364bdd3c4982025c8a325b536edee26b992e0fb4249eca903617ad57790"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "action.read-only-principal-is-refused:1",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "c5cf9f06ae87c7d78a7ca377d6af45e8c6a2aa2c9fb297ba845bab8f24e1181e"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "action.anothers-token-cannot-write:1",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "61fe7c78a4a41c91ec5a5c7378d003f95c272196eb4c415d17113009d171067e"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "action.idempotent-retry-returns-the-original:2",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "ef46898b441371e8a68696069e6e2019c5a38208ed9c77d1664f342c01960ea5"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "action.key-reused-with-other-inputs-conflicts:2",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "63dcc5fe38e5cb6c83fbdf5977b989758dc44555ad9d84658092c46ca21bcd5b"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "action.dry-run-writes-nothing-and-keeps-the-key:2",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "3cbb5e746a55277dff09cd6bd8a99ba863f02b6862f0d5373f5bffae2da6bd09"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "action.deleted-keys-stay-deleted:1",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "f225d923a21df5c58ec6d0330fccd8bd9b0e6f0391887363b8a1835c8a926900"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "action.deleted-keys-stay-deleted:3",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "f225d923a21df5c58ec6d0330fccd8bd9b0e6f0391887363b8a1835c8a926900"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "action.atomic-batch-is-all-or-nothing:3",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "3da490f50e32d79f29582491f108d3f523739ec03689b95a295cc952f19f30f4"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "action.independent-batch-reports-each-item:3",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "e08795132282ab87a28997ee6ee7b0f61b767b5bd1b4f63800833898d3839e01"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "action.batch-shape-and-access:3",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "61fe7c78a4a41c91ec5a5c7378d003f95c272196eb4c415d17113009d171067e"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "import.identity-skip-and-provenance:1",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "67099b26fa36f6351d3e0b7afe744ed041843405f7705530b12f0ce74d61a7ad"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "import.identity-skip-and-provenance:2",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "93cfe4735588adb3106b912bd5cb90260a30ebbfdf00b58514f8da1a18f1f1ff"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "import.entities-before-relationships:1",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "72bfdacbc6d3f7e217af8cebb2833b01aee4bbf58e8dc5648db736f23d7feb09"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "import.deleted-stays-deleted:1",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "f225d923a21df5c58ec6d0330fccd8bd9b0e6f0391887363b8a1835c8a926900"
+    },
+    {
+      "source": "example.umf.json",
+      "caseStep": "import.deleted-stays-deleted:3",
+      "status": "resolved",
+      "diagnostics": [],
+      "responseSha256": "f225d923a21df5c58ec6d0330fccd8bd9b0e6f0391887363b8a1835c8a926900"
+    }
+  ],
+  "nativeQualified": false,
+  "publicCompilerQualified": false
+}

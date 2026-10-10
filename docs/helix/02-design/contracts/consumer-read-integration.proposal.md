@@ -268,3 +268,30 @@ the unchanged original0.2 baseline response. Its original response, bundle and
 source hashes are retained. The probe replays a response from the pinned native
 f05f2df compiler; it does not rebuild Rust/WASM, run user SQL or qualify0.3/native
 publication. Browser dependencies come from the existing private UMF environment.
+
+
+## Current-owner frontend replay: original consumer SQL
+
+The [new isolated source replay](../../04-build/evidence/design-audit/consumer-revised-frontend-ee90571.json)
+uses exact committed Weft `ee90571a5aa67b6d2e6069220f6e1cc0eec3822c`, its
+original lockfile and Rust1.90.0, with the unchanged revised consumer snapshot.
+All90 original queries run through the owner test frontend:80 resolve and10
+refuse with WFT-NAME-MISSING. The same five relationship-predicate steps per
+model remain blocked. No name, SQL, model or expected consumer shape was rewritten.
+Original retained module/pin correspondence is checked for each resolved response.
+The receipt retains every response digest and diagnostic, plus original archive,
+harness/input/output/run identities. The older f05f2df receipt remains historical.
+
+This does not lower SQL, qualify a parsed public ABI, native Truss mapping/plan,
+complete logical value decoder or R8 acceptance. Truss's adopted f05f2df compiler
+pin stays unchanged. Do not treat current-owner frontend resolution as a released
+compiler realization, and do not replace relationship predicates with test-only
+alternate SQL to declare consumer-ready support. The next Weft handoff must
+resolve original relationship access semantics or an explicitly agreed consumer
+contract amendment, then qualify exact produced language distributions and native
+Truss observations under the existing full R8 gates.
+
+The checker now accepts explicit exact commit/archive digest and a fresh receipt
+basename after its existing ACTION/WORKSPACE/OWNER/TOOLCHAIN arguments. It verifies
+all original committed regular-file bytes before harness execution and refuses
+existing receipt destinations; no previous review is overwritten or adopted.
