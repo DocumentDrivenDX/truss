@@ -13,6 +13,50 @@ Shipped migrations are explicit and infrequent; ordinary UMF model revisions are
 DDL-free. Pool provisioning/operation is the host's responsibility. These criteria
 extend, rather than replace, the original 45-story scope and conformance obligations.
 
+## Accelerated capability queue — owner direction 2026-10-09
+
+Prioritize usable Python operations over additional standalone declaration checks,
+site refinement or broad profile exploration. This sequence supersedes the older
+delivery ordering below where that ordering placed a complete populated migration
+before usable application operations. It preserves the full design/corpus scope
+and mandatory native security, atomicity, origin and settlement requirements.
+
+The following are provisional engineering estimates in elapsed weeks of focused
+implementation from this reprioritization, assuming sustained ownership and timely
+UMF/Weft/security integration. They are not measured delivery commitments. Reforecast
+after the first integrated admission/security checkpoint; an unresolved native
+mechanism or incompatible default server invalidates the estimates rather than
+authorizing weaker guarantees. Do not count component tests as milestone completion.
+
+| Priority / planning target | Usable deliverable and exit evidence |
+| --- | --- |
+| P0 / next three focused working days | Resolve the concrete original issuer/native-admission mechanism, required security-owner interface and actual pgserver16.2 compatibility. Produce a coherent implementation decision and an actual integrated control/admission experiment, or identify the precise unavailable prerequisite and revise the forecast. Do not spend this checkpoint producing another interface-only receipt. |
+| P1 / weeks1–3 | Package a complete fresh-install bundle and Python explicit install/verify entrypoints. Install on a disposable pgserver runtime, verify original inventory, initialize and publish readiness atomically; inject late failure and prove no ready installation. Include the mandatory native guard/finalizer bodies and security composition. Server startup remains DDL-free. |
+| P2 / weeks4–6 | Ship a Python preview supporting catalog acceptance/install, atomic apply and import, direct key and edge reads on a declared consumer subset, together with its versioned executable preview corpus/runner. Exercise one installed consumer model through actual accepted IDs/report, persisted values/keys/edges, journal and exact read results. Include R4 per-person isolation, R5 authenticated-versus-asserted origin and document qualification in the same installed path. Test denial/revocation, failure/rollback and large integers/decimals/absence/null. Unsupported shapes explicitly refuse. This is the first usable application milestone, not complete corpus or stable-layout acceptance. |
+| P3 / weeks6–8 | Add complete feed transaction delivery/acknowledgement and durable request receipts with retry/idempotency and reached-position semantics. Exercise commit, lost response, explicit caller retry, no-op groups, restart and isolation on the same installation. Expand the published preview corpus/runner with these installed cases; clearly identify remaining full-corpus cases. |
+| P4 / weeks8–12 | Qualify the complete release corpus and Python/TypeScript interchange; freeze the admitted layout/support tuple, package explicit populated migration/reconciliation and prove preservation plus fresh-process recovery. Qualify Aurora/Lakebase independently before advertising them. Publish stable artifacts only after these exits; candidate0.16 and a preview cannot be relabeled stable. |
+
+P1 and P2 are one integration workstream, not independent packages waiting for a
+general design-completion vote. Implement R4/R5 against the existing security
+owner's exact required subset; do not wait for every unrelated security case or
+fork authorization. Bring the reference consumer and runnable failure cases into
+the first installation work, rather than adding a corpus after the implementation.
+UMF continues to own model/DDL generation and Weft owns logical compilation.
+Direct key/edge reads need not wait for every Weft query shape, but still require
+their complete native authority, decoding and disclosure checks.
+
+Keep migration status/verification and recipe packaging alongside P1; populated
+apply/reconcile depends on a real coherent source/target and remains P4. This
+staging does not omit the shipped migration system. Defer microsite enhancements,
+additional language/platform profiles and performance polish until after P2,
+unless a concrete preview acceptance case requires them. No deferred work is
+removed from the full goal.
+
+The README must continue stating that mutation/query/installation APIs are not
+released until the corresponding installed public exports and preview corpus
+actually pass. Current twelve-module/42-test component evidence provides no
+calendar or capability-completion evidence for these estimates.
+
 ## Ownership and profile selection
 
 Truss owns the Python package in this repository, installation bundles, migration

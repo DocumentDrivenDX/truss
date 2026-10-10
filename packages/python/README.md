@@ -4,6 +4,13 @@ Truss owns the tested embeddable Python implementation. The complete engine
 package is under implementation; current files provide the pinned local runtime
 candidate, not released mutation/query/installation APIs.
 
+The [accelerated capability queue](../../docs/helix/04-build/local-runtime-installation-migration-plan.md#accelerated-capability-queue--owner-direction-2026-10-09)
+prioritizes complete installation, catalog acceptance, apply/import and direct
+key/edge reads, with per-person isolation and origin capture included in the
+first usable Python preview. Its provisional planning target is4–6 focused weeks;
+feed/retry follows at6–8 and stable layout/full qualification at8–12. These are
+estimates with unresolved native integration prerequisites, not release dates.
+
 For local PostgreSQL:
 
 ```sh
@@ -223,8 +230,11 @@ existing qualified local environment; no fresh resolution or complete-engine
 claim is added.
 
 
-A subsequent private one-use admission custody component is source-tested in five
-synthetic test methods. It is not exported as a supported writer or native
-confirmation factory. The package now has twelve source modules and41 component
-test methods; the eleven-module installed-wheel evidence predates this addition.
-Original driver/control/issuer integration and native SQL correction remain open.
+The latest installed wheel contains twelve modules and passes42 component tests
+with warnings treated as errors; every installed payload matches wheel/source in
+the [current installed-suite receipt](../../docs/helix/04-build/evidence/design-audit/python-current-installed-suite.json).
+Six synthetic admission-custody tests include refusal of deferred generator work
+without executing its body. This component is not exported as a supported writer
+or native confirmation factory. The ten/eleven-module checks above are historical
+delivery evidence. Original driver/control/issuer integration and native SQL
+correction remain open;42 component tests do not qualify installed public operations.
