@@ -54,7 +54,7 @@ The installed schema marker carries the normative layout version; SQL comments d
 | Scenario | AC ID | Input / State | Action | Expected Result |
 |----------|-------|---------------|--------|-----------------|
 | Refuse | US-029-AC1 | Major 2 | Start | Refused |
-| Versions | US-029-AC2 | 16.2, 17.9 | Run DDL and check | Pass |
+| Versions | US-029-AC2 | Exact release qualification targets; next local candidate is corrected16.15, separate native target17.9 | Run complete generated/native DDL and independent behavioral check | Pass only for each completely qualified advertised tuple;16.2 remains historical and cannot qualify selected R4/R5 |
 | Coverage | US-029-AC3 | Check | Review | Covers listed behaviors |
 
 ## Dependencies

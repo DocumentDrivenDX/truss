@@ -31,6 +31,7 @@ Inherit the UMF-native physical-model route of SD-007/CONTRACT-008. Keep the che
 | --- | --- | --- |
 | `packages/tooling/src/bootstrap/model.ts` | Verify pins; export current native model; deterministic inventory/statement accounting | US-045-AC1, US-045-AC3, US-045-AC4 |
 | `packages/tooling/src/bootstrap/install.ts` | Inspect namespace, execute declared stages atomically, run installed checks | US-045-AC5 |
+| Planned Python `truss.installation` composition | Consume the same original packaged UMF/generated/native/profile inputs; explicit dedicated administrative install, verify and bootstrap reconciliation on host-supplied connection | US-045-AC1, US-045-AC2, US-045-AC5 |
 | `packages/conformance/src/bootstrap/catalog.ts` | Independently query every declared physical surface; normalize only environment OIDs | US-045-AC2 |
 | `tests/bootstrap/model.test.ts` | Repeat, edited-node and omitted-object fixtures | US-045-AC1, US-045-AC3, US-045-AC4 |
 | `tests/bootstrap/native.test.ts` | Two isolated generated/baseline databases and incompatible existing namespace | US-045-AC2, US-045-AC5 |
@@ -38,6 +39,19 @@ Inherit the UMF-native physical-model route of SD-007/CONTRACT-008. Keep the che
 ## Interfaces and Integration
 
 CONTRACT-008 owns bundle, report, qualification and refusal semantics. UMF CONTRACT-015 owns native import/export fidelity. Use its supplied backend API; no string-replacement schema renaming or hand-patched fallback SQL. The installer is tooling outside the pure core and never runs during application catalog acceptance.
+
+ADR-003's accepted Python route has first implementation priority. The planned
+module above is not a current public export or second SQL generator. It consumes
+the same complete composition and independent verifier as the TypeScript boundary;
+UMF owns generation and the security owner supplies adopted authority/privileges.
+LocalPostgres startup and ordinary library import remain DDL-free. Fresh install,
+status/verify and bootstrap reconciliation precede preview operations; populated
+migration qualification follows a coherent admitted source/target in P4. Include
+configuration, bounded diagnostics and module checks at actual composition, while
+retaining native unknown-outcome, quarantine and readiness evidence independently.
+The [clean-package scenarios](../../03-test/migration-inspection-contract-walkthrough.proposal.md#clean-installed-package-qualification--py-07)
+require installed original resources with the checkout unavailable; a development
+wheel or marker-only verifier cannot realize these criteria.
 
 ## Data Model
 
