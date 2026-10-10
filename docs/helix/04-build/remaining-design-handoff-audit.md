@@ -2,7 +2,7 @@
 
 ## Current execution frontier — 2026-10-10
 
-The current [Python source checkpoint](evidence/design-audit/python-capture-receive-source.json)
+The historical [Python source checkpoint](evidence/design-audit/python-capture-receive-source.json)
 passes119 tests. The current [fresh separately installed wheel](evidence/design-audit/python-scalar-shape-installed-suite.json)
 passes128 tests, including resource registration, native capture receive, physical tree and scalar carrier validation, with all28
 modules matching original source/wheel/installed bytes. Build/install/import/test
@@ -2121,3 +2121,26 @@ separate from consumer disclosure. Visible-row counts and valid framing/shape
 cannot authorize full replacement, journaling or absence. Exact role/RLS/current
 authority/cut qualification remains a joint owner/Truss exit; all seven native
 semantic bodies remain missing. Existing69/67 producers and receipts are unchanged.
+
+
+## Executable row-finalization readiness audit
+
+The [current pin/gate audit](evidence/design-audit/row-finalization-readiness-audit.json)
+checks unchanged original native70 source and producer bytes, all28 Python
+module hashes and the installed128-test receipt's test-source pins against the
+current checkout. This verifies evidence correspondence; it does not rerun
+tests, reopen an installed process or qualify a complete profile.
+
+It independently enumerates all49 unfilled binding fields for the seven original
+semantic routines and records RF01–RF06, deferred closure and settlement gates.
+RF03 has physical component evidence but still lacks protected full-scope native
+resource/depth qualification. RF04 has physical shape only; RF05 has carrier shape
+only; RF06 complete candidate/effect reconstruction is missing. RF02 has the
+actual RLS valid-prefix counterexample, requiring independent complete integrity
+visibility. None can be substituted by the installed component test count.
+
+Use the [execution packet](row-finalization-native-execution-handoff.md) for the
+next native body implementation and its independently expected negative cases.
+The executable audit refuses unexpected gate promotions rather than inferring
+completion from newly populated fields. New bodies/evidence require full scoped
+review and a fresh audit receipt. Complete engine readiness remains false.

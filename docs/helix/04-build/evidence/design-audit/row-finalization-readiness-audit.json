@@ -1,0 +1,144 @@
+{
+  "scope": "Current checked-in evidence pin and remaining-native-gate audit; no test rerun or installed qualification",
+  "sourceSha256": {
+    "docs/helix/02-design/contracts/CONTRACT-001-storage-layout.md": "00c48513196eeb357ea27d36d45d7944662f2d9be3d6441ef09868cac72b2d57",
+    "docs/helix/02-design/contracts/reference-routine-design-v0.1.proposal.json": "4366feb35f049360764276c20dcb97c119dd6e9f84cefbc2d7d01326b9ae31d0",
+    "docs/helix/04-build/evidence/design-audit/row-image-visibility-native.json": "c0aa30738cbda15c0e21d4395388f7bface1d255db46b311551eb97798fc78d0",
+    "docs/helix/04-build/evidence/design-audit/python-scalar-shape-installed-suite.json": "415fc729092492d7728db945d0fbbb4b5c6bf653bd53ed99ed9dff68e00aac31",
+    "docs/helix/04-build/row-finalization-native-execution-handoff.md": "d57715b6d59b2037094deb66803c75ee8f32dea6a6623e88bfb4c42e4722fbda"
+  },
+  "nativeObservations": 70,
+  "installedComponentTests": 128,
+  "sourceModulesMatchingInstalledReceipt": 28,
+  "gates": [
+    {
+      "step": "RF01",
+      "status": "not_qualified",
+      "remaining": "Original authenticated subject, complete authority/cut/owner/property association and version"
+    },
+    {
+      "step": "RF02",
+      "status": "counterexample_verified",
+      "remaining": "Original complete integrity visibility independent of caller RLS disclosure, complete owner/property selection and shared accounting"
+    },
+    {
+      "step": "RF03",
+      "status": "physical_component_verified",
+      "remaining": "Protected native full-scope root/reachability/acyclicity with original custody and resource/depth bounds"
+    },
+    {
+      "step": "RF04",
+      "status": "physical_component_only",
+      "remaining": "Original definition/member order, required fields, child types and full unknown-content correspondence"
+    },
+    {
+      "step": "RF05",
+      "status": "carrier_shape_only",
+      "remaining": "Original numeric token/native value, full facets, temporal profile and admitted native codec correspondence"
+    },
+    {
+      "step": "RF06",
+      "status": "not_qualified",
+      "remaining": "Bidirectional complete candidate/key/journal/report/group parity before seal"
+    },
+    {
+      "step": "deferred_closure",
+      "status": "not_qualified",
+      "remaining": "Complete current transaction touch/contributor/application/reservation closure and selected edge/feed validators"
+    },
+    {
+      "step": "settlement_publication",
+      "status": "not_qualified",
+      "remaining": "Qualified original connection/attempt, commit evidence, unknown-outcome reconciliation and publication drain"
+    }
+  ],
+  "missingRoutines": [
+    {
+      "routine": "row_touch_observe",
+      "missingNativeFields": [
+        "physicalIdentity",
+        "namespace",
+        "bodyArtifact",
+        "nativeOwnerRole",
+        "completeDependencyInventory",
+        "exactPrivateCallerAcl",
+        "nativeQualificationReceipt"
+      ]
+    },
+    {
+      "routine": "row_touch_commit_check",
+      "missingNativeFields": [
+        "physicalIdentity",
+        "namespace",
+        "bodyArtifact",
+        "nativeOwnerRole",
+        "completeDependencyInventory",
+        "exactPrivateCallerAcl",
+        "nativeQualificationReceipt"
+      ]
+    },
+    {
+      "routine": "edge_limit_observe",
+      "missingNativeFields": [
+        "physicalIdentity",
+        "namespace",
+        "bodyArtifact",
+        "nativeOwnerRole",
+        "completeDependencyInventory",
+        "exactPrivateCallerAcl",
+        "nativeQualificationReceipt"
+      ]
+    },
+    {
+      "routine": "edge_limit_catalog_observe",
+      "missingNativeFields": [
+        "physicalIdentity",
+        "namespace",
+        "bodyArtifact",
+        "nativeOwnerRole",
+        "completeDependencyInventory",
+        "exactPrivateCallerAcl",
+        "nativeQualificationReceipt"
+      ]
+    },
+    {
+      "routine": "feed_current_union_check",
+      "missingNativeFields": [
+        "physicalIdentity",
+        "namespace",
+        "bodyArtifact",
+        "nativeOwnerRole",
+        "completeDependencyInventory",
+        "exactPrivateCallerAcl",
+        "nativeQualificationReceipt"
+      ]
+    },
+    {
+      "routine": "feed_union_validate_current_scope",
+      "missingNativeFields": [
+        "physicalIdentity",
+        "namespace",
+        "bodyArtifact",
+        "nativeOwnerRole",
+        "completeDependencyInventory",
+        "exactPrivateCallerAcl",
+        "nativeQualificationReceipt"
+      ]
+    },
+    {
+      "routine": "edge_limit_verify_current_scope",
+      "missingNativeFields": [
+        "physicalIdentity",
+        "namespace",
+        "bodyArtifact",
+        "nativeOwnerRole",
+        "completeDependencyInventory",
+        "exactPrivateCallerAcl",
+        "nativeQualificationReceipt"
+      ]
+    }
+  ],
+  "missingNativeFields": 49,
+  "completeEngineReady": false,
+  "producerSha256": "fd931ad2a20837264edfd54e2782ee2ca31ded84d13b71031a958846fbe3e0b5"
+}
