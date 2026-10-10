@@ -1,5 +1,40 @@
 # Remaining design handoff audit — 2026-10-08
 
+## Current structural and implementation frontier — 2026-10-10
+
+The [fresh full allocation check](evidence/design-audit/current-story-allocation-after-identity-reconciliation.json)
+passes45 stories and167 criteria with zero structural errors against all current
+registered US/TD/STP source hashes. It supersedes older structural source-freshness
+and allocation observations below; it does not establish semantic adequacy,
+complete original profile selection or native execution. The167-row criterion
+audit remains the semantic inventory, with incomplete dispositions intact.
+
+Accepted ADR-004 is reconciled in TD-003/009/020/038 and STP-003. Document identity
+is no longer a product decision; valid endpoint-intent/external representation,
+complete original source/report/authority and native mapping remain separate
+engineering requirements. TD-020 now selects full-byte bucket lookup for the
+Python preview without baseline fallback. Actual codec/account/privilege and
+publication admission remains open.
+
+The installed Python61-test/16-module checkpoint and four native admission-family
+complete-cell/lifetime schedules provide scoped component evidence. They do not
+produce the original driver adoption/framing/account port, current native security
+handoff, seven guard/validator bodies or complete release resources. The executable
+standalone Identity oracle and actual frozen Python compiler feature graph close
+their named source-byte observations only; native writer/reader encoding remains
+unqualified. These observations must not create another round of identical source
+probes in place of completing installation.
+
+Continue the existing P0/P1 composition: original bounded driver/account integration,
+minimum exact current security-owner packet, complete native callable/trigger/grant
+closure and independently registered full release inventory. Then execute atomic
+fresh install/verify and the five PKG-08 settlement boundaries. P2 uses the composed
+installed Python consumer schedule with real accepted IDs/reports, exact operations
+and R4/R5/document qualification; failed required R8 shapes keep consumer acceptance
+incomplete. P3 feed/reached/durable receipts and P4 populated migration/full corpus/
+interchange/managed targets remain required. No stable-layout or public-operation
+claim follows from this refreshed allocation receipt.
+
 ## Current reconciliation — 2026-10-09
 
 The [current local deployment target](../02-design/contracts/reference-local-deployment.proposal.md)
