@@ -13,7 +13,9 @@ destination = Path(sys.argv[1]).resolve()
 if destination.exists():
     raise SystemExit('refusing to replace existing receipt')
 stories = sorted((root / 'docs/helix/01-frame/user-stories').glob('US-*.md'))
-errors, sources, criteria = [], [], []
+errors, sources, criteria, allocations = [], [], [], []
+allowed_layers = {'Native integration', 'Contract', 'Native concurrency',
+                  'Native performance integration', 'Performance integration', 'Contract review'}
 if len(stories) != 45:
     errors.append('expected all 45 stories')
 for story in stories:
@@ -38,10 +40,22 @@ for story in stories:
         rows = re.findall(r'^\| ' + re.escape(identity) + r' \|.*$', tests[0].read_text(), re.M)
         if len(rows) != 1:
             errors.append({'criterion': identity, 'error': 'expected exactly one primary test row', 'rows': len(rows)})
+        else:
+            cells = [cell.strip() for cell in rows[0].strip('|').split('|')]
+            if len(cells) != 6 or any(not cell for cell in cells):
+                errors.append({'criterion': identity, 'error': 'incomplete primary allocation row'})
+            elif cells[4] not in allowed_layers:
+                errors.append({'criterion': identity, 'error': 'unrecognized primary layer', 'layer': cells[4]})
+            elif '@covers ' + identity not in cells[3]:
+                errors.append({'criterion': identity, 'error': 'missing original criterion annotation'})
+            else:
+                allocations.append({'criterion': identity, 'scenario': cells[1],
+                                    'expected': cells[2], 'layer': cells[4], 'testInputs': cells[5]})
 if len(criteria) != 167:
     errors.append('expected all 167 criteria')
 receipt = {'scope': 'Declared story/design/test reference structure only; no semantic adequacy, implementation or native verdict',
            'stories': len(stories), 'criteria': len(criteria), 'errors': errors, 'sources': sources,
+           'allocations': allocations,
            'producerSha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
            'designClosureProven': False, 'nativeExecuted': False}
 with destination.open('x') as stream:

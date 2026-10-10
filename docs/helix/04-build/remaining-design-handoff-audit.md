@@ -24,8 +24,13 @@ rows across all 45 stories. These are design assessments, not completed-story
 or runtime verdicts. The [allocation-receipt freshness check](evidence/design-audit/allocation-receipt-source-freshness.json)
 finds no missing files among135 original registered sources, but 109 source
 hashes differ. The old full-story allocation receipt is historical; current
-allocation and semantic adequacy require a fresh audit of the actual story/design/
-test sources, not merely updated hashes or reuse of its former zero-error verdict. Case grammar, fixture/input/expectation schemas, typed
+allocation and semantic adequacy cannot be inferred merely from updated hashes or
+reuse of its former zero-error verdict. The [current allocation-layer check](evidence/design-audit/current-story-allocation-layers.json)
+now inspects all45 current pairs and167 declared criteria: every primary row has
+a scenario, expected result, original criterion annotation, recognized layer and
+test inputs, with zero structural errors. This supersedes the old structural
+receipt only; it does not establish semantic adequacy or native execution.
+Reproduce with `scripts/check-story-allocation.py NEW_RECEIPT_PATH`. Case grammar, fixture/input/expectation schemas, typed
 identity paths, operation registry and adapter handshake are now authored
 proposals; they are no longer wholly missing interfaces. The
 [runtime handoff](conformance-runtime-handoff.md) identifies C1–C7 implementation
