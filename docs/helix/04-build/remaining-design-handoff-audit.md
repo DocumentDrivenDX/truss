@@ -1,5 +1,44 @@
 # Remaining design handoff audit — 2026-10-08
 
+## Current execution frontier — 2026-10-10
+
+The current [Python source checkpoint](evidence/design-audit/python-touch-contributor-bound-source.json)
+passes112 tests. The71-test installed wheel below is historical; the newer private
+components have not been qualified as a replacement installed wheel. Public
+Python exports remain local-runtime lifecycle only. Catalog install/apply/import,
+key/edge reads, mutation, journal/feed and migration APIs remain unreleased.
+
+| Composition now present | Evidence and remaining boundary |
+| --- | --- |
+| Complete typed state/node/scalar OLD images and owner attribution | Actual cascade images match retained prestate. Protected original event/prestate producer, admitted owner codec and current authority remain missing. |
+| Operation proof invalidation for actual row/key/reservation events | [Cascade21](evidence/design-audit/row-event-generation-native.json), key/reservation10 and [ordered refusal12](evidence/design-audit/key-event-atomic-generation-native.json). Partial generation components do not realize the complete observer or held guard/capacity admission. |
+| Touch create/seal/advance/reset and native point/cohort reads | [Cohort29](evidence/design-audit/touch-cohort-decode-final-native.json) retains27 controls. Full finite administrative rows decode; protected complete visibility/coherent cut/absence authority remain external. |
+| Every touch manifest against one complete operation cohort | Source checks retain noncontributors and validate an empty touch set. Independent original native same-cut capture and semantic owner/current-authority correspondence remain missing. |
+| Combined contributor expansion preflight | Required logical allowance refuses before operation decoding. Whole allocation/copy/work/deadline/shared-account qualification remains open. |
+
+These experiments preserve original UMF source/export ownership and Weft compiler/
+security-owner semantics. The private kind/occurrence matcher observation is not
+a published owner bridge; one capability per scope must cover every independently
+issued requirement instance. Truss must not create a fragment union or parallel
+policy/requirement issuer to bypass that handoff.
+
+The next execution work remains [PA01–PA04](operation-ordinal-issuer-handoff.md#protected-admission-execution-packet--2026-10-10):
+original caller/installed owner capture and native identity/ACL closure, protected
+original attempt/context handoff, exact owner authority/artifact admission and
+one original submission per family. Installed inventory and denial tests can
+proceed independently; owner subject/current-authority publication is a separate
+dependency. Then PA05 composes original event/scope, retained cohorts, held
+guards/head/capacity, full accounting, validation/finalization and journal/feed/
+settlement before ordinary-consumer API publication. No synthetic registry label
+or phase CHECK substitutes for those inputs.
+
+All seven reference routine bodies still have seven missing native binding fields
+each: physical identity, namespace, body artifact, owner role, complete dependency
+inventory, private caller ACL and native qualification receipt. Their manifest
+remains installerReady=false. Full45-story/167-criterion acceptance, migration/
+installation publication, shared corpus/native interchange and managed profiles
+remain open. Component completion does not reduce that scope.
+
 ## Current structural and implementation frontier — 2026-10-10
 
 The [fresh full allocation check](evidence/design-audit/current-story-allocation-after-reservation-formal.json)

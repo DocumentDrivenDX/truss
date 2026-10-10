@@ -5,6 +5,16 @@ executor/transaction issuer. It precedes the missing canonical observer bodies;
 it adds no public transaction ID, database counter, session setting or authority
 issued by a JSON field.
 
+## Current composition entry point — 2026-10-10
+
+Use the [current frontier](remaining-design-handoff-audit.md#current-execution-frontier--2026-10-10)
+for the verified component/dependency matrix. Source Python112 is newer than the
+historical installed wheel71. Actual complete touch/cohort reads and shared
+operation correspondence exist; protected original capture/authority, full
+resource and semantic bodies remain missing. The ordered PA01–PA05 packet below
+remains the release path. Later component sections supply scoped evidence, not
+alternate readiness gates or another public API.
+
 ## Accepted host boundary — ADR-008
 
 The owner accepts the [trusted embedding host and adapter](../02-design/adr/ADR-008-trusted-embedding-host.md).
