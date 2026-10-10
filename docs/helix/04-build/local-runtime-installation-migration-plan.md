@@ -1021,3 +1021,17 @@ embedding-host trust assumption. Preserve separate gate/dispatch/native-effect
 transitions in the later bounded model, with rewind/restored-permission/copied-token
 and unfenced-effect negative controls. This checkpoint does not substitute another
 component receipt for the required P0 integrated native admission experiment.
+
+
+### Configuration contract checkpoint
+
+The reference-configuration candidate assigns ownership, typed embedding versus
+launcher layering, exact refusal/effect boundaries and safe fingerprint rules.
+It distinguishes process options from native original configuration/generation
+admission, preserving the security owner's current-state comparison work.
+CFG-01–12 cover typed original injection, absent/invalid/unsupported inputs,
+precedence, secret-safe representations, inert construction, explicit local
+custody, unchanged receipt meanings, account non-refund and native drift.
+Implement these at the actual composition/launcher boundary during P1; do not
+introduce a generic loader or configuration file merely to make these declarations
+look implemented. No new config API or qualification is claimed.

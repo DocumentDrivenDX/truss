@@ -403,3 +403,14 @@ passes all36 component tests against this wheel. Environment reuse and installed
 local-extra presence are explicit; earlier clean-resolution evidence remains its
 separate historical scope. These refreshed receipts supply no installer/migration
 or native authority qualification.
+
+
+## Process configuration ownership
+
+The [reference configuration candidate](../02-design/contracts/reference-configuration.proposal.md)
+separates typed startup options from native configuration admission. Installation
+and migrations reuse the original captured release/host composition; options do
+not authenticate references, select fallback SQL or initialize native state.
+Embedded callers inject their connection directly. Environment layering belongs
+to the reference launcher, and native current-state/profile checks remain with
+their existing owner. CFG-01–12 are qualification cases, not passed implementation.
