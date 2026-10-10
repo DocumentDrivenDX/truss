@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:proposal:row-group-custody:0.1.0",
+  "title": "Proposed original operation group custody body",
+  "description": "Closed original_group_custody_bytes carrier. Address, profile, original family admission and native scope/current authority require independent original registry resolution; schema validation grants no authority.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-row-group-custody/0.1.0"
+    },
+    "profile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "addressDomain": {
+      "const": "truss-row-operation-address/0.1.0"
+    },
+    "operationIdentity": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Complete compact original four-string address; same address as both contributing-manifest identity fields under the proposed address profile. Canonical spelling and original native scope are independently checked."
+    },
+    "operationKind": {
+      "$ref": "urn:truss:draft:row-operation-custody:0.1.0#/properties/operations/items/properties/operationKind"
+    },
+    "originalGroupAdmission": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+    },
+    "authority": {
+      "const": "actual-original-operation-admission-not-caller-address"
+    },
+    "completionEvidence": {
+      "const": "resolved-independently-not-embedded-future-digest"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "interfaceVersion",
+    "profile",
+    "addressDomain",
+    "operationIdentity",
+    "operationKind",
+    "originalGroupAdmission",
+    "authority",
+    "completionEvidence"
+  ]
+}

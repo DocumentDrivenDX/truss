@@ -928,3 +928,27 @@ address lookup cannot reconstruct that authority. Complete production callable/
 owner/private ACL/dependency/resource and JSON parser workspace/error containment
 qualification remain absent. Native text/NUL and UTF8 limitations remain explicit,
 and no full address profile, semantic body, public operation or installer is ready.
+
+### Closed original group-custody carrier proposal (2026-10-10)
+
+The [group-custody proposal](../02-design/contracts/row-group-custody.proposal.md)
+and its `truss-row-group-custody-v0.1.proposal.schema.json` close the previously
+prose-only `original_group_custody_bytes` carrier. They bind the complete original
+address, operation kind, selected profile and exact original family-admission
+artifact. The context and group wrapper reference the same family artifact; the
+wrapper does not embed future completion evidence or create a context/self-seal
+cycle. This is proposed composition, not adoption into an installed profile.
+
+`evidence/design-audit/schema-inventory-row-group-custody.json` records strict
+registration/reference compilation of all 162 schemas with zero errors.
+`evidence/design-audit/row-group-custody-shape.json` records 12 passing shape
+controls, including explicit examples where shape acceptance cannot establish
+canonical address spelling or semantic admission of empty family bytes. Original
+artifact hash correspondence, native scope, registered family meaning, complete
+contributors and independent completion remain separate obligations.
+
+RC04 now has a closed proposed carrier to target. Its native producer, original
+context/manifest/group comparison and semantic refusal scenarios remain
+unexecuted. Historical synthetic native context and group bytes are not relabeled
+as this carrier; the seven mandatory semantic bodies and their native evidence
+remain outstanding.
