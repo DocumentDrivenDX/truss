@@ -433,3 +433,16 @@ independent-connection visibility subcases. Its 45 modules and six packaged owne
 assets match source exactly. See [iteration 13 evidence](evidence/python-contracts-iteration13.json).
 The planned composed control ledger above remains unfinished; this corrective
 iteration does not promote the public adapter or complete C02.
+
+
+### Combined-main validation of role reachability
+
+Concurrent main iteration13 was integrated without replacing its snapshot-neutral
+adoption correction. A fresh [combined wheel](evidence/design-audit/role-paths-merged-wheel.json)
+matches all45 Python modules, six packaged SQL/JSON owner assets and py.typed.
+Its [full installed suite](evidence/design-audit/role-paths-merged-suite.json)
+passes305 tests. The [fresh native rerun](evidence/design-audit/installed-role-paths-merged-native.json)
+passes63 observations with29 inventories at20 unchanged source pins. The updated
+Python-only boundary checker passes200 edges. These records qualify the combined
+candidate; the earlier302-test wheel remains evidence only for its captured source.
+Complete protected admission and backend acceptance remain open.
