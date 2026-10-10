@@ -1612,3 +1612,14 @@ The [issuer handoff](operation-ordinal-issuer-handoff.md#native-cascade-attribut
 records the concrete implementation consequence: never skip or invent cascade
 attribution when the live parent is gone. No additional parallel observer or
 security/UMF/Weft semantics are selected by the experiment.
+
+The following [row-image codec native receipt](evidence/design-audit/row-image-codec-native.json)
+adds21 observations across complete stored state/node/scalar images, independent
+exact scalar datum/token/instant/text/null-byte expectations, native profile
+corruption/restoration and private-call denial. Its four routines are actual
+private codec components exported through existing UMF APIs, not seven semantic
+body replacements. The exact source archive retains eight unhandled CREATE/REVOKE
+statements with complete=false. Original protected event/prestate/allocation,
+association/family/current authority and complete resource admission remain the
+next composition inputs. The postserialization eight-MiB ceiling cannot qualify
+native pre-materialization/copy/work/heap limits or whole retained-row accounting.

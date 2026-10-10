@@ -1112,3 +1112,40 @@ corroboration: absence cannot produce skipped events, guessed owner identity or
 zero-property attribution. Next native realization is the protected prestate/image
 producer plus complete scope checks; copying this observation probe into the
 semantic wrapper would omit those obligations.
+
+### Complete native row-image codec component (2026-10-10)
+
+`packages/postgresql/native/row-image/codec.sql` supplies four private INVOKER
+routines: original complete column-profile validation and state/node/scalar image
+encoding. The validator checks every ordered user field, native type OID,
+nullability, typmod, collation, dropped status, array dimension and inheritance
+against the existing native0.16 table shapes. The images retain domain-tagged
+PostgreSQL composite binary output, including every field type OID, explicit NULL
+and complete payload. Native numeric datum/token, temporal instant/text and source
+bytes remain separate. Neither generic JSON nor session display text supplies the
+original value image.
+
+Existing UMF owner APIs archive/reload/export the exact source in
+`row-image-codec-v0.1.proposal.umf.json`; `row-image-codec-source.json` records zero
+declarations/eight unhandled CREATE/REVOKE statements and complete=false. The
+actual owner-exported codec is executed against the original UMF-exported tables
+by `check_row_image_codec_native.py`. Its `row-image-codec-native.json` passes21
+PostgreSQL16.15 observations: three complete stored row images; seven constructed
+scalar payload samples with independently authored OID/null/full binary byte
+expectations; three null-image and one unknown-kind refusal; three native structural
+profile corruptions with rollback restoration; and four actual ordinary-role
+42501 private-call denials. All complete image bytes are retained. The exact decimal
+sample exceeds JavaScript safe integer precision and keeps its original leading-zero
+token; temporal instant and original timezone text remain independent. Constructed
+scalar samples establish datum fidelity only, not accepted logical value semantics.
+
+This component supplies native image fidelity for subsequent prestate/OLD/NEW
+composition. It does not authenticate a trigger/candidate/prestate, admit family
+or association meaning, current authority, deployed callable/builtin/dependency
+closure or private native roles. Its eight-MiB output ceiling is postserialization;
+original admission must independently qualify pre-materialization/detoast/record-send/
+copy/work/allocator/deadline bounds. Binary codec support is version-qualified,
+not portable canonical UMF value encoding. The README preserves these limits.
+No touch observer registration or seven semantic body field is filled by these
+codecs. Next composition must bind original event/prestate/native allocation
+custody, full effect scope and actual resource admission before semantic updates.
