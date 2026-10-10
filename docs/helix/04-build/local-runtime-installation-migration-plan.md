@@ -1106,8 +1106,8 @@ languages or invoker/definer is needed.
 
 Read-only inspection previously reported scoped routine-definition guard success
 and altered-definition/signature refusals; full acceptance at that checkpoint was
-26/132. The latest observed security turn, `01a12379-c34d-7a43-b8fa-c568d229a726`,
-is failed and its thread status is systemError: the platform flagged possible
+26/132. The historical security turn, `01a12379-c34d-7a43-b8fa-c568d229a726`,
+failed with thread status systemError: the platform flagged possible
 cybersecurity risk. This is a terminal turn observation, not an active process to
 wait for or permission to restart/message the owner. Its last commentary reported
 197 native bridge observations, but this handoff has not independently inspected
@@ -1308,3 +1308,27 @@ Only after full call/trigger/privilege closure and independent complete inventor
 verification may IM01–IM05 publish ready. The accepted security minimum handoff
 remains required; it does not require unrelated security backends or authorize a
 Truss-owned policy resolver. These schedules are not_run and confer no support.
+
+
+## Security owner resumed: graph-stage compatibility review
+
+The [read-only owner review](evidence/design-audit/security-resumed-graph-stage-review.json)
+observes a new in-progress turn `01a123d9-78b3-7b52-a2bd-eb020c4c6847`, superseding
+the earlier failed-turn status. No restart or cross-chat message was sent. The
+retained graph-stage receipt has88 actual candidate observations but explicitly
+sets nativeImplementationQualified=false and excludes ordinary identity enforcement,
+committed catalog/current binding, authenticated namespace authority, source/cut
+custody and backend acceptance. Original source fingerprints/current correspondence
+are retained in the review; counts or current filenames cannot expand that scope.
+
+Its source tuple includes qualified-property layout0.15 and legacy
+operation-admission.sql with the retained rollback-only commit barrier. Truss's
+current source-epoch0.16 and host-issued admission candidates are different inputs.
+Do not install the legacy allocator alongside the issued-ordinal overload or
+transplant old role/catalog/mapping evidence into the current profile. Require the
+owner's exact adopted subset/interface, current original catalog/layout/principal
+binding and protected publication/freshness packet, then independently qualify
+native ordinary-role allowed/denied paths on the same complete installation.
+Graph source/key/endpoint and supplied-dataset components remain reusable candidates
+under their exact owner meaning; Truss owns composition and does not fork their
+policy resolver. The seven-body/account/ready-publication gates remain open.
