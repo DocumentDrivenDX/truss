@@ -1483,3 +1483,14 @@ decoding, and retains the empty-touch cohort behavior. This is a logical count
 preflight; nested JSON, byte comparisons/hex copies, native/host allocations,
 time/deadline and original shared account still require full qualification.
 It changes a private component signature only, not public APIs or body gates.
+
+### Installed helper definition and membership drift (2026-10-10)
+
+The separate79-check [native drift receipt](evidence/design-audit/private-callable-drift-native.json)
+extends the17-helper attribute/effective-EXECUTE experiment with same-signature/
+same-OID original definition-byte drift and an unexpected routine membership
+control, both followed by exact restoration. PA01's inventory must preserve
+these complete identities/definitions and compare both membership directions;
+matching selector/version labels alone is insufficient. The finite administrative
+helper subset remains separate from complete installed public/private/admin
+closure, dynamic dependency admission and security-owner coherent-cut authority.

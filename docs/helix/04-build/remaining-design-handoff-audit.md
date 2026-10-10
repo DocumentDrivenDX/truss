@@ -1751,3 +1751,24 @@ passes112 source tests and adds a required combined manifest-entry allowance
 checked before operation decoding. This closes the count-expansion gap in the
 private matcher, while whole resource/copy/work/deadline, native cut and authority
 qualification remain open. No full-resource or readiness claim is promoted.
+
+### Installation observer routine drift controls — 2026-10-10
+
+The [native callable drift receipt](evidence/design-audit/private-callable-drift-native.json)
+passes79 observations on the jointly installed17-helper PostgreSQL16.15 fixture.
+A deliberately injected original body comment changes the complete retained
+`pg_get_functiondef` while preserving native OID and signature; exact restoration
+is checked. A separately created unexpected private routine is detected by full
+namespace membership difference, then removal restores exact membership. Existing
+attribute/result/ordinary-call/inherited/public EXECUTE controls remain included.
+The earlier73-observation producer/receipt remain unchanged.
+
+These satisfy finite body-with-stable-signature and unexpected-routine controls
+from the independent installation observer schedule. The comment is definition
+byte drift, not a semantic-behavior proof. Administrative temporary ownership and
+namespace baseline are not independently registered complete release membership.
+The full managed object/trigger/role/data/dependency/configuration/archive/profile
+inventory, denied observation-right behavior, independently protected coherent
+cut and final freshness check remain required. Do not turn this selected helper
+collector into the installer's sole complete observer oracle or a readiness
+certificate. No seven-body/native owner authority/API gate is promoted.
