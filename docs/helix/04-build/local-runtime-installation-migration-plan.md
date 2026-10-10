@@ -1489,3 +1489,20 @@ all four issued context families, then protected attribution/account and the
 seven mandatory bodies. Current authority still comes from the security owner;
 no unfinished capability/binding grammar is adopted. Actual recovery containment,
 full resource composition and complete installed ready publication remain open.
+
+
+### P0 native rejection recovery correction
+
+The original control producer now distinguishes a fully captured native rejection
+from unavailable completion. Its [recovery handoff](operation-ordinal-issuer-handoff.md#completed-native-rejection-versus-unavailable-completion)
+retains the pre-fix six-observation counterexample, nine actual16.15 recovery
+observations and fifteen current regression cases. Qualified rollback-to precedes
+all inquiry/restoration/release SQL in an aborted transaction; confirmed restored
+xid and readiness precede continuation. Caller work and spent ordinal survive.
+This closes that concrete candidate defect, without making SQLSTATE a refusal/
+retry authority or closing the full security/resource/installation gates.
+
+Keep reserved cleanup capacity and complete savepoint handle invalidation in
+CH-02/05's original control/account work. Four-family admission must test actual
+native rejection through the corrected path, not catch an exception inside a
+synthetic DO block that leaves the outer transaction apparently healthy.

@@ -92,7 +92,7 @@ with tempfile.TemporaryDirectory(prefix='truss-original-control-') as directory:
         try: port.confirm_savepoint()
         except ValueError: pass
         else: raise ValueError('Changed native transaction admitted')
-        expect('changed-boundary-no-native-submission', 0, len(connection.original_controls)-before)
+        expect('changed-transaction-only-identity-observation', 2, len(connection.original_controls)-before)
         expect('changed-transaction-closes-account', True, account.snapshot(producer)[3])
         connection.close()
 

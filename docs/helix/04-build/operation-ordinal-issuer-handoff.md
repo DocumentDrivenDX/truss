@@ -500,3 +500,42 @@ containment, registry attribution, security-owned current authority and original
 recovery/settlement before the seven bodies and complete installer can publish
 readiness. Do not install this evidence-directory candidate as a public API or
 replace the owner's security interface with its administrative fixture.
+
+
+### Completed native rejection versus unavailable completion
+
+The original candidate incorrectly closed its receive account for a complete
+native statement rejection, preventing qualified operation-local rollback. The
+[retained counterexample](evidence/design-audit/pg8000-aborted-control-counterexample.json)
+records six independently expected observations: division-by-zero22012, actual
+ReadyForQuery E, closed account, no available local rollback/control submission,
+and an independently observed live aborted backend. Earlier producer/checker
+bytes are archived and still match their original receipt pins.
+
+The corrected private instance invokes the pinned original CoreConnection message
+loop, retaining original ErrorResponse/context/error identity and matching
+ReadyForQuery E from that same invocation. Only this completed native rejection
+keeps the receive account open for original containment. Other failures still
+quarantine the file/account. SQLSTATE alone does not prove completion, classify
+a business refusal, permit retry or grant current authority. Original native
+transaction-end/boundary observations invalidate the adopted control scope; an
+ordinary changed-boundary refusal now emits no native inquiry.
+
+For this confirmed aborted state, rollback-to is the first submission: no xid
+query, restoration or release enters the aborted transaction. Original rollback
+command and ReadyForQuery T must match; then reobserve actual xid before release,
+confirm release and restored xid, and retain the failed original ordinal. The
+[recovery receipt](evidence/design-audit/pg8000-aborted-control-recovery-native.json)
+passes nine observations including caller sentinel7 rather than failed value9,
+settled attempt0 and next ordinal1 in the same actual transaction. The separate
+[current regression](evidence/design-audit/pg8000-original-control-after-abort-native.json)
+passes fifteen original control/custody cases, including uncertain post-execution
+handoff without retry. Those fixture counts are not full driver qualification.
+
+This correction is a prerequisite for native admission-error containment, not
+completion of it. Separate pre-reserved cleanup ingress/outgoing/work/containment
+capacity, complete handle/ancestor invalidation, interrupted error-before-ready
+controls, actual four-family admission, security authority and native recovery
+remain required. The current bookkeeping account cannot manufacture an earmarked
+cleanup lane after normal capacity is exhausted. Preserve that profile gap rather
+than advertising the candidate as a released executor.

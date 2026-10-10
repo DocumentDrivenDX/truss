@@ -756,3 +756,16 @@ Truss-owned P0 implementation advance under ADR-008, not public driver/security
 or installation qualification. Its [handoff](operation-ordinal-issuer-handoff.md#original-connectioncontrol-producer-candidate--2026-10-10)
 assigns one-use confirmation consumption and all four native admission families
 next, retaining complete authority/resource/recovery and seven-body gates.
+
+
+### Actual aborted-transaction recovery checkpoint
+
+The [current issuer recovery handoff](operation-ordinal-issuer-handoff.md#completed-native-rejection-versus-unavailable-completion)
+corrects an actual native defect in the preceding candidate. A fully observed
+ErrorResponse/ReadyForQuery E now permits original local rollback without a prior
+SQL inquiry; restored ReadyForQuery T and actual xid precede release/continuation.
+Nine native recovery observations and fifteen separately scoped regression cases
+pass on16.15; the original six-observation failure and source bytes remain intact.
+Cleanup reservation/containment, ancestor lifetime, interrupted error completion,
+all four admission contexts and current security composition still precede
+installation readiness. No public operation or story criterion is promoted.
