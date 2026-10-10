@@ -1,0 +1,37 @@
+{
+  "scope": "Private Python closed custody-body source decoding and independent controls; not original registry/authority or installed-wheel qualification",
+  "sourceSha256": {
+    "packages/python/src/truss/_row_operation_custody.py": "1783d3bccfae06526f3be9149622e7f4ae9afd0cd833a7905e7a8b27300a0445",
+    "packages/python/tests/test_row_operation_custody.py": "10384de66272d5dcfe296aa5387b463995cf4a8f3036ec7e116636076bece853",
+    "packages/python/src/truss/_acceptance_json.py": "303638af137138a796542aa5425985d147e510a23639fca9b2d6221966337a01",
+    "docs/helix/02-design/contracts/truss-row-operation-custody-v0.1.proposal.schema.json": "9edd43db8bb48de56bfb28c87bce8d7c51092bab9a6e333b67aeee21ab05fb91",
+    "docs/helix/02-design/contracts/acceptance-input-v0.1.schema.json": "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd"
+  },
+  "tests": {
+    "command": "PYTHONPATH=packages/python/src python3.11 -m unittest discover -s packages/python/tests -v",
+    "passed": 79,
+    "exitCode": 0,
+    "logPath": "docs/helix/04-build/evidence/design-audit/python-row-operation-custody-body-source.tests.log",
+    "logSha256": "9748c1d5973cc1be4083f454d5b84a7023e44f63556e668dc8147a56fea39db7",
+    "newFocusedTests": 3,
+    "negativeBodyMutations": 10,
+    "operationCountBoundary": 1024
+  },
+  "verifiedComponentInvariants": [
+    "Exact immutable original byte object retained",
+    "Frozen nested profile/artifact/operation views and ordered tuple",
+    "Closed required body/entry/profile/artifact members and protocol constants",
+    "Complete artifact base64 byte/hash correspondence",
+    "Unique operation identities and contiguous touch-local ordinal strings",
+    "Executor identity gaps are not rewritten into local positions"
+  ],
+  "limitations": [
+    "Profile identities/hashes are parsed data, not admitted owner/native authority",
+    "Actual original registry resolution and complete contributor/effect readiness remain unimplemented",
+    "Artifact bytes are not interpreted for value/prestate/definition or owner semantics",
+    "Logical syntax bounds do not qualify base64/hash/allocator/native work or original account admission",
+    "No installed-wheel, production observer, public API or native corpus/interchange claim"
+  ],
+  "installerReady": false,
+  "acceptanceCasesPromoted": []
+}

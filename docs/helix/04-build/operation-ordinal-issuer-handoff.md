@@ -736,3 +736,29 @@ ceiling after its other cells and framing overhead. Logical scanner work does no
 qualify actual allocator/decoder workspace, deadline or original account admission.
 No public API, installed-wheel result or seven-body readiness follows from this
 private source component.
+
+## Closed Python custody-body projection
+
+Private `_row_operation_custody.decode_row_operation_custody` now composes the
+8-MiB syntax decoder with the existing closed body/artifact/profile grammar.
+It verifies protocol constants, required members, artifact base64 byte/hash
+correspondence, unique operation identities, contiguous touch-local positions and
+one through 1,024 operations. It retains the original immutable byte object and
+frozen nested views; no JSON reserialization or native identity renumbering occurs.
+The [source receipt](evidence/design-audit/python-row-operation-custody-body-source.json)
+records 79 passing Python source tests, including exact immutable projection,
+ten independently mutated body refusals and the operation-count boundary.
+
+This supersedes the prior missing closed-body parser component, not original
+semantic/native admission. A parsed profile/hash/identity is data, not authority.
+The fixture's local 0/1 versus native 7/11 identities remain illustrative strings;
+actual registry resolution and complete original contributor/effect-readiness
+checks must still be wired to the canonical observer. The parser does not interpret
+artifact value/prestate/owner meaning or classify empty bytes as absent state.
+Original parameter/profile/body bytes remain necessary for that later admission.
+
+No native row fit, original resource-account/allocator/hash/work containment,
+installed-wheel interchange or semantic body readiness follows from this source
+suite. Next compose original registry lookup and owner-authority correspondence
+under the protected installed chain, without treating this decoded view as a seal
+or allowing caller-supplied identities to authorize effects.
