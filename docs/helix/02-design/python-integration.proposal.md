@@ -870,6 +870,44 @@ requirements; the fake corpus's unchanged row count cannot substitute for them.
 
 ## Security workstream handoff
 
+### Cell domain versus policy-selected disclosure — 2026-10-10
+
+The [completed owner selection checkpoint](../04-build/evidence/design-audit/security-policy-selection-checkpoint.json)
+is conditional simulation over supplied rule truths for direct-field model-domain
+outputs. It checks Original/Mask/Withheld selection beyond scalar domain validity,
+including separately scoped self-join occurrences. Its review explicitly leaves
+authenticated fact evaluation, original row/value correspondence, complete native
+cuts, query-wide authorization and result release unqualified. No working owner
+API, caller truth vector or acceptance count is adopted as Truss authority.
+
+Truss must consume the eventual exact owner selection/evaluation capability rather
+than implement a second mask resolver. Admission requires correspondence among
+the original ordered output, its scan occurrence, source Field, selected policy
+outcome and actual returned cell. Matching datatype or result-contract digest
+alone cannot authorize Original when policy requires Mask or Withheld. Two scans
+of the same Field cannot share a supplied truth merely because Field identities
+match. Verify source-bound rule facts and complete consumed populations under the
+same original current authority/cut; endpoint membership or a model-domain cell
+check is not that verification.
+
+Preserve selected disclosure disposition separately from source-value presence.
+A mask yielding null is not evidence that the stored field was explicitly null;
+Withheld is not logical absence. A concrete admitted result encoding must carry
+that meaning, or refuse the affected projection before release. The complete
+logical-value contract cannot silently flatten these states into absent/null.
+Unknown selected outcome/domain or unsupported result encoding refuses; no
+client-side masking of already released original values qualifies enforcement.
+
+Required independent integration controls, all `not_run`: a domain-valid Original
+cell under mask-required policy; swapped self-join truth/occurrence scope; Withheld
+versus absent and null-mask versus source-null; denied/unknown/conflicting rule
+outcomes; valid first row followed by invalid later row; and selection/account
+exhaustion after domain checks. Withhold the complete result on every failed
+required check, preserve original unknown/cleanup custody and submit no retry.
+Empty rows still require complete query-use/source authority prerequisites.
+Native output buffers cannot cross the final authority/cleanup gate merely
+because conditional selection succeeds.
+
 Consume the security agent's model and implementation. Do not create an independent Python ACL policy parser, host role map, or alternative predicate compiler. Their current Truss predicate/key/namespace/transport/stored-key/query-use modules are component candidates, and their TypeScript interfaces are not yet a language-neutral public Python ABI.
 
 The shared invocation design must specify: original authenticated subject/session binding; complete original policy/model/key identities; admitted compiler artifact and obligation inventory; native entrypoint, physical parameter/selector order and protected publication rules; current-authority refresh/invalidation; and exact denied/unavailable/error behavior. Artifact hashes identify bytes but do not grant authority. Python can orchestrate resolution through that boundary while native policies enforce the applicable rules.
