@@ -19,6 +19,15 @@ ddx:
 
 ## Updated composition checkpoint — 2026-10-10
 
+The [bounded custody analysis](evidence/design-audit/python-custody-bounded-model-controls.json)
+now completes906 abstract states/6224 transitions with six detected broken
+variants and the expected local-close/native-fence counterexample. STP-044 maps
+that trace to original native barrier, effect and recovery schedules with an
+independent observer; they remain not_run. The component result supersedes only
+the earlier no-executable-analysis checkpoint, not native authority, refinement,
+liveness or independent-review gaps. The [current full allocation check](evidence/design-audit/current-story-allocation-after-formal-replay-mapping.json)
+retains all45 stories/167 criteria with zero structural errors.
+
 Fresh fetch now identifies UMF main322b193 and Weft mainb8867c9, superseding the
 older locally retained Weft refs below. The [committed participation review](evidence/design-audit/weft-b8867c9-participation-review.json)
 records Databricks distinct-neighbor degree guards with occurrence-preserving

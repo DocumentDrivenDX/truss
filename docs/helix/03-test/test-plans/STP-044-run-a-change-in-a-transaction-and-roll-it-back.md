@@ -17,6 +17,50 @@ ddx:
 
 # STP-044: Caller-owned transactions
 
+## Formal close-gate counterexample: original runtime replay
+
+The [bounded model trace](../../04-build/evidence/design-audit/python-custody-bounded-model-controls.json)
+registers, consumes, verifies, checks the open local gate, closes the registry,
+dispatches and reaches a callback effect. It disproves treating local closure
+as a native fence; it does not establish actual native authorization failure or
+require cancellation of every already admitted callback. Replay under the
+existing original driver/adoption/account controls, not a new public API.
+
+Setup requires the exact installed adapter/security/native tuple, a real
+caller-owned transaction with an earlier independently expected sentinel write,
+one original admitted operation/control ticket and reserved forward/containment
+capacity. Register finite harness barriers at the actual local gate, original
+native submission/admission boundary and original result/cleanup observation.
+Pin their source placement and preserve original command/cycle/epoch identity.
+An application callback or synthetic success token cannot supply these barriers
+or native confirmation. Independent observation uses its separately admitted
+connection and complete selected effect/receipt/history/feed inventory.
+
+| Closure placement | Required original observation and result rule |
+| --- | --- |
+| Verification before the local open gate | The consumed ticket stays burned; zero native callback/submission follows the failed gate. Original later calls refuse. Earlier caller effects remain untouched; no whole-transaction end command is issued. |
+| After the local gate, before original native admission | Establish whether the original native attempt was submitted/admitted, including any governing cancellation/authority invalidation. Confirmed zero submission and complete pre-effect refusal may report no effects. Local closed state alone cannot supply that fact or classify an already submitted attempt. |
+| Submitted/admitted callback, before or after a native effect | Close new admission and classify that original in-flight attempt through its existing completion/containment protocol. Native effects may exist. Preserve pending/confirmed/unknown facts exactly; local closure cannot fabricate rollback, commit or replay eligibility. |
+| Lost callback/result/cleanup observation | Retain original attempt/control/account/recovery custody and quarantine reuse. No replacement ticket, counter, connection or resubmitted write settles it. Once independently observable, reconcile the same attempt through its existing read-only protocol. |
+| Completion confirmed before closure | Preserve the original confirmed fact and immutable result. In an adopted transaction it remains subject to actual outer host commit/rollback; diagnostic failure or late close cannot rewrite its outcome or silently commit it. |
+
+For every branch independently count native control/admission/business submissions,
+retained registry/effect membership, burned ordinals and new-call/copy-ticket
+refusals. Confirmed operation-savepoint rollback preserves the earlier sentinel
+and restores the complete expected graph/derived/history/receipt/feed scope under
+the selected protocol. An observer's absent uncommitted row or a status flag is
+not rollback evidence. Only the host ends the outer transaction; later actual
+rollback/commit must agree with the independently expected complete effects.
+Keep required nontransactional identity consumption separate from graph rollback.
+
+Repeat under original cancellation/current-authority change and diagnostic
+export failure, preserving their distinct causes and native settlement precedence.
+No diagnostic flush, callback exception or model state is an authority/cleanup
+oracle. These supplemental runtime schedules are not_run; primary US-044
+criteria and all original DH/adoption controls remain required. The model's
+906-state result cannot qualify this native replay or the full PY-NATIVE-001
+producer/security integration.
+
 ## Story Reference and Scope
 
 US-044, TD-044, SD-003, TP-001 and CONTRACT-007/009. Tests are planned. Native ownership/lifetime proofs qualify each adapter independently.

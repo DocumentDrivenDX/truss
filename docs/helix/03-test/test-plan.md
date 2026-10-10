@@ -397,22 +397,36 @@ The [numeric view oracle](numeric-number-view-expected.proposal.json) now author
 
 The owning [Python technical design](../02-design/python-integration.proposal.md#formal-specification--original-ordinal-and-admission-custody)
 defines PY-ORD-001/002, PY-ADM-001–005 and the unqualified PY-NATIVE-001 obligation.
-Current assurance is author-reviewed precise specification plus component tests;
-there is no executable analyzer/proof claim. Run existing component evidence with:
+Current assurance adds the [bounded abstract component analysis](../04-build/evidence/design-audit/python-custody-bounded-model-controls.json)
+to author-reviewed specification and component tests. It is not an implementation
+refinement or unbounded proof. Run existing component evidence with:
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=packages/python/src python3.11 -W error -m unittest discover -s packages/python/tests -p 'test_operation_*.py' -v
 ```
 
-Expected: two ordinal and six custody test methods; shared six ordinal scenarios,
+The historical two-ordinal/six-custody checkpoint below predates the shared
+connection registry and registry decoder. The command now selects all current
+operation component modules; decoder tests are not temporal-model correspondence.
+Required ordinal/admission behaviors remain shared six ordinal scenarios,
 original successful dispatch, consumed/copied/foreign/refund refusal, failure
 closure, reentrant/verification-time-close refusal and deferred-port refusal.
 The [source-bound checkpoint](../04-build/evidence/design-audit/python-formal-correspondence.json)
 records actual command/version/source hashes and results. Tests are implementation evidence, not machine-checked formal analysis.
 No local method tests the full authenticated/native issuer/account protocol.
 
-Before integrated readiness, the bounded analysis spike must choose the analyzer,
-model/configuration and bounds described by the design. Require reachable success,
+The selected component explorer checks906 states/6224 transitions with six
+detected broken variants and the deliberately false local-close/native-fence
+implication. Preserve its exact bounds, exclusion of full PY-NATIVE-001, initial
+harness-expectation failure and author-only review. Reproduce using a fresh
+receipt basename:
+
+```sh
+python3.11 docs/helix/04-build/evidence/design-audit/python_custody_model.py NEW_ANALYSIS_RECEIPT.json
+```
+
+Before integrated readiness, the full protocol's later analysis must select its
+model/configuration and broader bounds described by the design. Require reachable success,
 external recovery/unknown controls and targeted broken-mechanism counterexamples;
 replay supported traces. Check model/code correspondence at actual lock, callback,
 transaction and native authority boundaries. Specifically inject close/cancel
