@@ -40,7 +40,9 @@ provisional may change when its validation measurements report.
   infrequent migrations. The host supplies the PostgreSQL connection and operates
   any pool. Stale admission returns one refusal without internal retries. Catalog
   identity is document-qualified. Consult the current installation/migration plan
-  for the observed PostgreSQL16.2 component scope and remaining complete-runtime gates.
+  for historical PostgreSQL16.2 evidence, the corrected private PostgreSQL16.15
+  integration candidate and remaining complete-runtime gates. The corrected wheel
+  is not yet a published shipped default.
 
 - [ADR-001](docs/helix/02-design/adr/ADR-001-language-and-portable-core.md):
   TypeScript (strict, ES modules), with Bun for development, tests and tooling.
@@ -79,11 +81,23 @@ provisional may change when its validation measurements report.
     as structured values with `root_id` on composed objects, edge ids, and the
     `target_type` edge-index include.
 
+Current original-driver evidence composes all four issued admission families with
+one-use Python custody and nonrewinding ordinals on PostgreSQL16.15. Its synthetic
+administrative artifacts do not qualify protected ordinary-person admission.
+Follow the protected admission execution packet in
+`docs/helix/04-build/operation-ordinal-issuer-handoff.md`: preserve original caller
+context separately from privileged owner and asserted origin; qualify original
+installed call/role/ACL/dependency closure before exposing mutation APIs. All seven
+semantic routine bodies remain missing. Do not remove the invoker elevation guard
+or grant direct consumer registry writes as a composition shortcut.
+
 CONTRACT-001 through CONTRACT-012 describe the storage, journal, catalog,
 mutation, embedding, bootstrap and Weft handoff boundaries. Start physical
 layout work with CONTRACT-012 and its installation gap matrix. The current
 reviewed source-epoch native component model is 0.16; the separate core structural
-projection is 0.6 and includes uncomposed configuration/migration adjuncts. These
+projection is 0.8 and includes uncomposed configuration/migration, capacity
+reservation and commit-cache adjuncts. Projection versions are Truss artifact
+versions, not new UMF core version claims. These
 are component review inputs, not a complete installed profile. Earlier layout and
 compiler packets remain historical evidence and must
 not be silently combined into an installed profile.

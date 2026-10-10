@@ -5,7 +5,9 @@ Current schema-browser projection: [core 0.8](02-design/models/truss-layout-core
 Historical storage source handoff: [CONTRACT-012](02-design/contracts/CONTRACT-012-weft-storage-handoff.md) supplies the reconciled 0.12 reference-history review, its [column inventory](02-design/contracts/weft-review-columns-v0.12.proposal.md) and separate [0.12 source packet](04-build/evidence/weft-source-binding012/README.md). It retains 46 tables and 442 columns from the separately pinned 0.11 foundation; explicit journal allocator settings and the review marker change. Native installation, replay qualification and Weft mapping adoption are unfinished.
 
 
-Current native component model: [0.15 qualified-property candidate](02-design/models/truss-layout-qualified-property-0.15.proposal.umf.json), generated through UMF's PostgreSQL adapter. It preserves the Field declaration module and qualifies property identity independently of the owning Record. [CONTRACT-012](02-design/contracts/CONTRACT-012-weft-storage-handoff.md) documents the exact transition from historical 0.13/0.14 and separate Weft fixture profiles. The [native component guide](../../packages/postgresql/README.md#private-native-catalog-components) gives pinned-owner build and isolated PostgreSQL reproduction commands. Complete protected installation, matching/validation/report/finalization and populated conversion remain unfinished; the core ER model retains its separate native equality/nullable-unique gaps.
+Current native component model: [source-epoch 0.16 candidate](02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json), retained through UMF's PostgreSQL adapter. The earlier [qualified-property 0.15 candidate](02-design/models/truss-layout-qualified-property-0.15.proposal.umf.json) remains a historical foundation. [CONTRACT-012](02-design/contracts/CONTRACT-012-weft-storage-handoff.md) records source transitions and separate Weft fixture profiles. The browser's Truss projection 0.8 is a separate structural artifact with unadopted adjuncts, not a new UMF core version or an installed layout. Complete protected installation, semantic guards, acceptance and populated conversion remain unfinished.
+
+Current Python integration evidence composes all four issued native admission families on PostgreSQL16.15 with original one-use custody, shared nonrewinding issuer and confirmed savepoint/error containment. See the [92-observation receipt](04-build/evidence/design-audit/pg8000-four-family-original-admission-native.json). The [caller/elevation receipt](04-build/evidence/design-audit/admission-elevation-native.json) passes ten boundary checks, and the [joint helper inventory](04-build/evidence/design-audit/private-callable-inventory-native.json) passes 73 observations across 17 actual native routines. These administrative component receipts do not qualify ordinary protected admission, the seven missing semantic bodies, a public installation/mutation API or a published package. The private corrected pgserver wheel is an integration candidate; published pgserver0.1.4/PostgreSQL16.2 remains separately limited historical evidence.
 
 Experimental runnable query integration lives in `packages/weft` with the pinned Rust compiler adapter in `packages/weft-bun`. Six native PostgreSQL17.9 scenarios use original SQL and native Parse/Bind. The current isolated f05f2df compiler build passes twenty-one compiler/host and loopback protocol tests with fifty-one assertions, plus strict TypeScript checking; native PostgreSQL evidence retains its separately pinned historical scope. See [iteration feedback](02-design/contracts/weft-integration-iteration-feedback.proposal.md) for reproduction scope and the filtered-SUM refusal. Fixtures do not establish accepted catalog identities, protected mutations/feed or a production executor.
 
@@ -15,7 +17,7 @@ It starts as a fixed, portable set of tables with mutation, constraint and
 direct-read tooling. Compiled logical queries use Weft. It consumes UMF and
 never defines UMF semantics.
 
-**Current state (2026-10-09):** requirements, architecture, contracts and
+**Current state (2026-10-10):** requirements, architecture, contracts and
 implementation/test sequencing are authored drafts for an embeddable toolkit
 and Truss-owned Python/TypeScript implementations, with Python the immediate
 delivery priority under accepted ADR-003. UMF owns metadata interpretation and
@@ -50,7 +52,7 @@ after [SPIKE-003](02-design/spikes/SPIKE-003-partitioning-locks-and-prepared-sta
 measured the alternatives. Some points stay provisional until the follow-up
 spike measures them.
 
-**Next action:** prepare the first complete PostgreSQL integration milestone in the
+**Next action:** implement the [protected admission execution packet](04-build/operation-ordinal-issuer-handoff.md#protected-admission-execution-packet--2026-10-10), then complete the semantic bodies and installation composition within the first PostgreSQL integration milestone in the
 [implementation plan](04-build/implementation-plan.md#first-complete-postgresql-integration-milestone),
 while resolving the affected choices in the [current decision queue](04-build/design-decision-queue.md). The PRD, eight feature
 specifications and 45 user stories are drafts. [Architecture](02-design/architecture.md)

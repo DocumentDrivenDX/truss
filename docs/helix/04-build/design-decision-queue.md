@@ -841,24 +841,33 @@ Truss query-use or disclosure authority; a checked logical object is not a nativ
 execution permit. The original mismatch/retirement/owner-cut integration controls
 above remain required, with default refusal preserved.
 
-## Next complete implementation dependency — operation issuer
+## Current implementation dependency — protected admission
 
-The [native ordinal conflict](operation-ordinal-issuer-handoff.md) is now reproduced
-on the local16.2 profile: registry-derived allocation reissues0 after savepoint
-rollback. Private Python/TypeScript counters pass the same independent nonrewind
-scenarios, but native admission has not consumed their original output. Correct
-all four admission context families through the qualified original executor/driver
-issuer before canonical observer or complete installer readiness. Do not equate
-a query-cycle ordinal, a supplied numeric field or a new counter instance with
-original operation authority.
+The historical [native ordinal conflict](operation-ordinal-issuer-handoff.md)
+remains valid evidence for the old registry-derived allocator. The private
+original-driver candidate now composes all four corrected issued admission
+families with shared Python issuer and one-use custody on PostgreSQL16.15.
+[Its 92-observation receipt](evidence/design-audit/pg8000-four-family-original-admission-native.json)
+checks original native contexts, burned gaps, exact rows and confirmed native error
+containment. Do not continue treating original issuer consumption as wholly
+unimplemented; complete driver/resource/authority qualification is still missing.
 
-Implementation order is original transaction/issuer recognition and cumulative
-account/control reservation; permanent ordinal consumption; confirmed operation
-savepoint; native original-issuer verification and registry admission; canonical
-observation; complete deferred transaction cohort; full inventory/init publication.
-Unknown control completion closes admission and retains original recovery custody,
-without automatic replay. These are implementation outputs under existing
-contracts, not another owner decision or a reason to stop independent work.
+The next work is the [protected admission execution packet](operation-ordinal-issuer-handoff.md#protected-admission-execution-packet--2026-10-10).
+The ten-check elevation receipt verifies the existing invoker refusal and original
+context preservation; the 73-check joint inventory verifies seventeen component
+routines and selected effective EXECUTE rights. Neither qualifies the ordinary
+protected capture/writer handoff, original owner authority, complete indirect
+native closure or all seven semantic bodies. Fixture identities and grants are
+not an installed production privilege plan.
+
+Implement PA01–PA04's original caller/owner custody, installed identity/ACL closure,
+owner authority/artifact admission and original four-family submission; then PA05's
+complete observation/finalization/journal/feed/transaction checks and inventory/init
+publication. Keep the twelve native acceptance scenarios unpassed until actual
+full-chain evidence exists. Unknown control completion closes admission and
+retains original recovery custody without replay. This is engineering integration
+under existing decisions, not another product vote. All 45 stories and 167
+criteria remain in scope.
 
 ## Policy-overhead measurement selection
 
