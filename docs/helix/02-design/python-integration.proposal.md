@@ -868,6 +868,13 @@ parameter/value/source and current-person authority through both runs. Native
 transaction/finalizer/account/security and driver evidence remain unimplemented
 requirements; the fake corpus's unchanged row count cannot substitute for them.
 
+The [concrete R6 witness](../03-test/revised-consumer-native-gaps.md#concrete-r6-deferred-final-state-witness)
+now specifies a one-edge valid plan and two-distinct-neighbor violating plan,
+actual deferred-only ordering, prior caller sentinel preservation after local
+rollback, and independent state after explicit outer rollback. Unsupported
+native timing cannot be manufactured by changing all constraints. This fixture
+remains an integration requirement, not proof of installed dry-run support.
+
 ## Security workstream handoff
 
 ### Cell domain versus policy-selected disclosure — 2026-10-10

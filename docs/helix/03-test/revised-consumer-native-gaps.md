@@ -64,3 +64,48 @@ state observations. Run Python and TypeScript against the same committed databas
 for the full interchange gate. Until the complete producers/installation exist,
 these are unexecuted required scenarios; no fake, spy or schema-valid fixture can
 be counted as native conformance.
+
+
+## Concrete R6 deferred-final-state witness
+
+Register an independently authored model with three same-type objects A, B and C
+and one directed relationship whose selected source-side maximum is one. Start
+with zero edges and complete independent identity/key/value observations. The
+positive plan creates A-to-B. The negative plan creates A-to-B and A-to-C in one
+atomic group. Both exceed neither input size nor object/key validity bounds;
+the negative final state violates the maximum. Two distinct neighbors avoid
+conflating the separate occurrence-cap and UMF distinct-neighbor meanings.
+Register the actual selected native count/guard profile before the test.
+
+Use fresh equivalent installations/state for preview and real apply arms. For
+the deferred-only arm, require actual effect submission and a native barrier
+before the selected full final-state validator reports the violation. A profile
+that refuses earlier may qualify its own early validation but cannot pass this
+deferred-only witness. Do not disable guards, force ALL constraints or guess
+prior timing to create the intended ordering. If the selected native mechanism
+cannot produce the required schedule, retain this arm unavailable and select a
+separately authored realizable deferred-only violation; input-precheck failure
+cannot substitute it.
+
+Before preview, the caller updates a separate sentinel object's label from
+`committed-before-preview` to `caller-pending-before-preview` in its original
+transaction. After the invalid group's confirmed operation-local rollback,
+observe through that same admitted caller scope that the sentinel pending change
+survives and no preview edge, journal/request/receipt or reservation survives.
+Do not use an independent connection to infer uncommitted sentinel state. Then
+the caller explicitly rolls back the outer transaction; independent observation
+must show the original committed sentinel and complete original graph/history.
+Lost savepoint or outer rollback observation retains original unknown recovery,
+not an unchanged-state pass.
+
+The valid preview executes complete finalization but publishes only provisional
+results; caller outer rollback leaves no durable edge/request/receipt. A fresh
+real apply of the same admitted logical plan commits one independently observed
+edge with its complete actual history and original actor. The negative real apply
+returns the same selected violation as the preview under equivalent original
+state and preserves complete rollback/no-durable-effects. Independently compare
+original violation identity/path, not just a generic exception or count. Include
+original exact input, pending identities, full surviving operation inventory,
+constraint timing, cumulative resource use and actual native containment in the
+receipt. All composed native/Python cases remain not_run; no public dry-run API
+or installed guard support follows from this fixture.
