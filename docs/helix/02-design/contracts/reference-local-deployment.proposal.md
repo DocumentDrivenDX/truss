@@ -20,6 +20,12 @@ frontier is in the [installation/runtime plan](../../04-build/local-runtime-inst
 | Migration | Shared TypeScript/Python planner selects only declared routes. Select a complete populated M1 source/target route and implement status/verify/apply/reconcile under original artifact, exclusion, recovery and settlement custody. No automatic startup upgrades or retry loops. |
 | Portability | Aurora and Lakebase require independent complete tuple qualification. The managed-extension availability condition remains in force; local success cannot supply managed evidence. |
 
+The [managed PostgreSQL qualification schedule](../../03-test/managed-postgresql-qualification.proposal.md)
+records current provider-documentation constraints and explicit durability,
+ended-session, managed-role, feed, instrumentation and extension controls.
+Those tests remain unexecuted; provider documentation is not a Truss runtime
+receipt, and no new extension dependency or managed support claim follows.
+
 ## Current dependency and test sequence
 
 Correct the original operation issuer integration before canonical observation:
