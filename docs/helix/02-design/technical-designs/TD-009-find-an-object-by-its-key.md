@@ -120,7 +120,7 @@ This is the selected statement-order candidate for the disposable spike, not evi
 
 ## Risks and Gates
 
-CONTRACT-001 defines string, binary, timestamp, integer and decimal key policies but does not fully specify every UMF family, explicit-null components, collation/normalization or size limits. Resolve those shared policies before claiming general key support. AC4 covers absence, not permission to equate null with absence. D-05's stored numeric lexical preservation decision does not change decimal key equality. Catalog document identity D-04 must be resolved before external authored keys are exported to Weft.
+CONTRACT-001 defines string, binary, timestamp, integer and decimal key policies but does not fully specify every UMF family, explicit-null components, collation/normalization or size limits. Resolve those shared policies before claiming general key support. AC4 covers absence, not permission to equate null with absence. D-05's stored numeric lexical preservation decision does not change decimal key equality. Accepted ADR-004 supplies document-qualified catalog identity. Export to Weft still requires original authored key/source correspondence and the complete selected installed mapping; no identity product vote remains pending.
 
 ### Migration design handoff
 

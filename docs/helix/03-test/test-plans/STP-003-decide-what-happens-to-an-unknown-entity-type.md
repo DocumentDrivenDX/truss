@@ -23,7 +23,7 @@ For future fully admitted endpoint-intent US-003-AC4 cases, create a provisional
 
 ## Story Reference and Scope
 
-US-003, TD-003, SD-001, TP-001 and CONTRACT-003. Native policy tests remain planned; the endpoint-intent representation is experimentally available, with full native/profile adoption still D-04-gated.
+US-003, TD-003, SD-001, TP-001 and CONTRACT-003. Native policy tests remain planned; the endpoint-intent representation is experimentally available, with complete original endpoint-intent/source/report/native/profile adoption still unqualified. ADR-004 already settles document qualification; invalid required local endpoints remain upstream-validity refusals and cannot become provisional-policy successes.
 
 ## Acceptance Criteria Test Mapping
 

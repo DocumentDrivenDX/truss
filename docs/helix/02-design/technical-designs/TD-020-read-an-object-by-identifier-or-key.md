@@ -42,7 +42,7 @@ CONTRACT-004 owns get_object/find_by_key and invalid/not-found behavior; CONTRAC
 
 ## Data Model and Integration
 
-No DDL. ID reads include type identity to avoid wrong-type matches. Baseline key lookup joins the fixed canonical key row to its object under one consistent snapshot/role; the selected full-byte bucket candidate uses exact namespace/key bytea plus a typed object join, with no baseline or digest-only fallback. Composite keys preserve declared component order; missing components refuse before database effects. Historical last-written revision identifies the encoding/meaning needed to interpret existing values; current catalog changes cannot silently coerce them. Upcoming document-qualified catalog identity remains D-04.
+No DDL. ID reads include type identity to avoid wrong-type matches. Baseline key lookup joins the fixed canonical key row to its object under one consistent snapshot/role; the selected full-byte bucket candidate uses exact namespace/key bytea plus a typed object join, with no baseline or digest-only fallback. Composite keys preserve declared component order; missing components refuse before database effects. Historical last-written revision identifies the encoding/meaning needed to interpret existing values; current catalog changes cannot silently coerce them. Document-qualified catalog identity is selected by accepted ADR-004; complete installed mapping/authority remains unqualified.
 
 ## Security and Performance
 
