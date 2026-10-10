@@ -2389,3 +2389,13 @@ are included. Cached dependencies were reused; this is not a clean dependency
 resolution, browser/native test or complete resource/account qualification. Initial
 partial-archive setup lacked imported schema resources; the final run adds only
 unchanged required resources from the same commit. Truss's runtime pin is unchanged.
+
+
+Reproduce this selected owner replay with
+`scripts/replay-umf-numeric.py UMF_REPOSITORY NEW_RECEIPT_PATH`. The producer pins
+953aa38c, extracts original committed source/schema resources into a fresh directory,
+records every extracted file and archive hash, runs the unchanged owner tests with
+a 60-second fixture deadline and refuses replacement of an existing receipt. It
+uses explicitly reported cached dependencies, performs no automatic dependency
+installation and removes its owned temporary source directory. Actual replay again
+passed four groups/77 assertions; it does not update Truss's adopted UMF pin.
