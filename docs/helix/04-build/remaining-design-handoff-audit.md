@@ -1634,3 +1634,13 @@ codec component. Numeric length measurement still serializes one cell; full nati
 materialization/detoast/copy/work/account/deadline qualification, original protected
 prestate/event binding and seven semantic body realization remain outstanding.
 Source artifact revision0.2 changes no row-image wire domain or native table layout.
+
+The [touch transition receipt](evidence/design-audit/touch-transition-descriptor-native.json)
+adds18 native observations and16 original wire captures for existing UMF-exported
+first-touch/seal/reset/advance SQL. Complete returned cells/descriptors and native
+completion/status frames match; stale or foreign custody, finalized reset and
+generation exhaustion refuse, and confirmed rollback restores both registries.
+This closes the finite transition experiment, not original event/current authority,
+complete contributor/family/scope proof, held guards/capacity or installed observer
+composition. Administrative fixture phases do not qualify readiness. The full
+45-story/167-criterion scope and seven semantic bodies remain open.

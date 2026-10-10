@@ -1241,3 +1241,30 @@ performs no database lookup/DML, touch or operation generation update, authoriza
 resolution or finalization. Complete native event/routine/role/DDL/cut/codec/scope,
 held guards/capacity and full resource/settlement composition remain outstanding.
 No public API, installed-wheel claim or seven-body readiness field changes.
+
+### Native touch transition composition (2026-10-10)
+
+The retained `touch-transition-descriptor-native.json` passes18 observations and
+retains16 original wire captures on PostgreSQL16.15. Its producer executes the
+existing UMF-exported first-touch, seal, operation-reset and generation-advance
+statements with their original positional parameters. All returned12 touch or16
+operation cells, exact column names/text OIDs/formats, native INSERT/UPDATE
+completion frames and transaction status match the selected expectations.
+
+Checks cover unassigned-xid refusal without assigning a transaction ID; reset
+clearing prior proofs; first touch and sealing; generation advance invalidating
+seal and retaining the complete next contributor manifest; stale generation,
+foreign layout/owner/context/prior manifest, empty next manifest, finalized
+operation and exhausted generation refusals. Confirmed savepoint rollback restores
+both registries to empty under the same original transaction ID. The initial
+15-observation/13-capture producer and receipt remain separate and unchanged.
+Both receipts pin their exact producer and original SQL source digests.
+
+The owner tuple comes from retained historical native images; current event
+provenance and complete protected scope are not supplied by this experiment.
+Operation phase/seal labels and contributor manifests remain administrative
+fixtures. Head/capacity/held guards, native contributor/family/current-authority
+proof, complete callable/role/DDL closure and full resource accounting remain
+required before integrating an installed observer. Zero affected rows require a
+refusal, without retry or success classification. This checkpoint adds no public
+API, installed-wheel evidence or seven-body readiness claim.
