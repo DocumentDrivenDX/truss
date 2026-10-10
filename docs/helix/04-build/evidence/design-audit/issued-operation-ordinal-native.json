@@ -1,0 +1,36 @@
+{
+  "scope": "Base admission with actual source Python counter and native savepoint rollback only; synthetic artifact inputs, administrative local-trust fixture, no original driver/security/resource/finalizer qualification",
+  "pgserver": "0.1.4+truss.pg16.15",
+  "serverVersion": "16.15",
+  "observations": [
+    {
+      "writerXid": "730",
+      "ordinal": "0"
+    },
+    {
+      "writerXid": "730",
+      "ordinal": "1"
+    }
+  ],
+  "rollbackRegistryRows": 0,
+  "rollbackRemovedNamespace": true,
+  "sources": [
+    {
+      "path": "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql",
+      "sha256": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f"
+    },
+    {
+      "path": "packages/postgresql/native/issued-operation-admission/operation-admission.sql",
+      "sha256": "4b72ebf3727b9c887befce0280256f73587857fcae5fb363af0917b816b1e335"
+    },
+    {
+      "path": "packages/python/src/truss/_operation_ordinal.py",
+      "sha256": "9be8b93fbdaa7595e8330b9e8edd3d048fbff25b1b670c1587647ef1908ddcd3"
+    }
+  ],
+  "producerSha256": "037630b682dd28f300968b0d7575e0fc978cbe6e918438199412e26424c75adc",
+  "psqlSha256": "564f8a86c5670d522fbb478393fae48ca3de536d74d1fa5dd6017fc87f5300da",
+  "completeDriverQualified": false,
+  "allFourFamiliesQualified": false,
+  "readyInstallation": false
+}
