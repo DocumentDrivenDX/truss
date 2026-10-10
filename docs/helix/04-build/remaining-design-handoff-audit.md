@@ -1905,3 +1905,10 @@ verifies exact indexed artifact bytes at freshly fetchedc8d8258. A real Paths530
 owner distribution supersedes the earlier mock-only packaging observation, but
 its Databricks profile does not qualify Truss's PostgreSQL adoption or security
 bridge. UMF browser origin322b193 remains synchronized; no dependency pin changes.
+
+The [forecast checkpoint](local-runtime-installation-migration-plan.md#forecast-checkpoint--2026-10-10)
+now marks earlier calendar targets historical pending actual protected admission
+and complete seven-body integration. It names the missing closed security-owner
+subject/attempt/authority/cut/publication interface and the remaining Truss-owned
+realization separately. Reforecast requires full integrated ordinary-role evidence
+on one installed profile; repeated component probes cannot restart the old ETA.

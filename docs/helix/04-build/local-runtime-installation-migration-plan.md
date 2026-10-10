@@ -28,6 +28,35 @@ after the first integrated admission/security checkpoint; an unresolved native
 mechanism or incompatible default server invalidates the estimates rather than
 authorizing weaker guarantees. Do not count component tests as milestone completion.
 
+### Forecast checkpoint — 2026-10-10
+
+The P0 dependency checkpoint now has actual evidence: shared host issuer/native
+family admission, original driver controls, corrected16.15 pgserver lifecycle,
+current Python source114/historical installed112, native registration/ordinary
+denial and original epoch helper composition. These close their named experiments,
+not the integrated protected admission exit. All seven complete semantic bodies
+and their49 native binding fields remain missing. The P1–P3 calendar estimates
+below are therefore historical provisional targets, not a current delivery ETA.
+
+The precise unavailable shared prerequisite is a closed qualified security-owner
+interface binding original caller/subject to attempt and physical connection,
+old/new effect authority, coherent observation/exclusion/freshness and publication
+lifetime, with independently complete requirement-kind/occurrence/site/case
+assignments for the exact Truss native profile. Current private typed occurrence
+work and the17.9 diagnostic privacy counterexample are inputs, not that interface.
+Do not adopt source-level coverage as kind completeness or ordinary result denial
+as private-fact diagnostic closure. No new product approval is required here.
+
+Truss-owned work remains protected capture/writer realization, complete native
+body/guard/capacity/resource composition and independent installation inventory.
+The concrete reforecast gate is PA01–PA04 qualified original submission followed
+by PA05's full ordinary-role effects/denial/rollback/transaction cases on one exact
+installed profile. Then measure complete fresh install/verify before advertising
+a Python preview date. Reforecast using observed integrated task durations and
+remaining body/corpus/profile work; do not roll the earlier three-day target
+forward after each component probe or claim install/API readiness from test counts.
+The default runtime and managed release tuples require separate delivery evidence.
+
 | Priority / planning target | Usable deliverable and exit evidence |
 | --- | --- |
 | P0 / next three focused working days | Resolve the concrete original issuer/native-admission mechanism, required security-owner interface, corrected pgserver candidate compatibility and reproducible default delivery. Produce a coherent implementation decision and an actual integrated control/admission experiment, or identify the precise unavailable prerequisite and revise the forecast. Do not spend this checkpoint producing another interface-only receipt. |
