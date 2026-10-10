@@ -21,7 +21,11 @@ The older checkpoints below are retained as historical findings. Their final
 instruction to begin the 167-criterion audit is superseded: the
 [criterion audit](criterion-design-audit.md) now contains 167 unique criterion
 rows across all 45 stories. These are design assessments, not completed-story
-or runtime verdicts. Case grammar, fixture/input/expectation schemas, typed
+or runtime verdicts. The [allocation-receipt freshness check](evidence/design-audit/allocation-receipt-source-freshness.json)
+finds no missing files among135 original registered sources, but 109 source
+hashes differ. The old full-story allocation receipt is historical; current
+allocation and semantic adequacy require a fresh audit of the actual story/design/
+test sources, not merely updated hashes or reuse of its former zero-error verdict. Case grammar, fixture/input/expectation schemas, typed
 identity paths, operation registry and adapter handshake are now authored
 proposals; they are no longer wholly missing interfaces. The
 [runtime handoff](conformance-runtime-handoff.md) identifies C1–C7 implementation

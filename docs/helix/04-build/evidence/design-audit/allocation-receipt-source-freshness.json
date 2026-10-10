@@ -1,0 +1,822 @@
+{
+  "scope": "Original allocation receipt source freshness only; does not rerun allocation or assess design adequacy",
+  "receipt": "docs/helix/04-build/evidence/design-audit/journal-stage-full-story-allocation-refresh.json",
+  "receiptSha256": "23630385a2ec2f09cd89f1b6262597b0676e59a5821c3a67bf566aa9946e2a63",
+  "registeredSources": 135,
+  "changedSources": 109,
+  "missingSources": 0,
+  "sources": [
+    {
+      "path": "docs/helix/01-frame/user-stories/US-001-accept-a-umf-revision-as-a-whole.md",
+      "recordedSha256": "faa9173cc8ab9cb8c0945c2492b207ffc8ee6953cf5efef16a821a71a7a35b12",
+      "currentSha256": "d42c1e5b76444c5212ff4c0a878263b264ab260577a057968d83b152ab2f604c",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-002-import-documents-that-depend-on-each-other.md",
+      "recordedSha256": "4b1f63bdcf5fa1d3ef5b1ebc973a0dee8262c45f51b086ed41ad39aaf7ba6400",
+      "currentSha256": "71cb3c16c9e595192c0d71f2093affba78852a535d914f636563299bccdf3541",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-003-decide-what-happens-to-an-unknown-entity-type.md",
+      "recordedSha256": "8d3a8c47f4814bcd59e3551fe6dff3bc7524925bc3798612c47e4167bce69fed",
+      "currentSha256": "8d3a8c47f4814bcd59e3551fe6dff3bc7524925bc3798612c47e4167bce69fed",
+      "matches": true
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-004-keep-identifiers-stable-across-revisions.md",
+      "recordedSha256": "40e07e33d56d23c96f46de4b3abf12523f6a920d816473a94377a1b9aedfb72f",
+      "currentSha256": "b1cd8e8e427a3e92f8a8e5bb1f5f24e953759ee871ba41b893d5f6178b82d443",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-005-see-every-violator-before-a-tightening-is-accepted.md",
+      "recordedSha256": "53fe29f88524682500d23cfb4f25ca7e533621fa80888a16817932ccf95dd4ad",
+      "currentSha256": "467bbee17f6bddc79718ffeaabe12ced1720669997fee0c3deb2a9a9b4136bd9",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-006-add-a-type-without-ddl.md",
+      "recordedSha256": "b5c6e3e0cd45f9d51fb46c095960e467a0eb8476c9ebd4682f531ac6e816ee9a",
+      "currentSha256": "f167952340b6d0798488a2bd4beaf5e1622bab9fd2cd368b6574f16de747a8c8",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-007-store-and-read-objects-and-edges-exactly.md",
+      "recordedSha256": "53554256cd7f3e6fb3d4b1a148e5a168c9a81465383647de0f70d6dab12b22bf",
+      "currentSha256": "da51bb2e5b81ea49255ce4b98ce640e3d7322cbf978346889ec18c596c6211f3",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-008-keep-what-the-schema-does-not-define.md",
+      "recordedSha256": "0095bbda4a481e0a3ff58fbebad01e7dd22bb7d3d81513c5ad6e8573c7e100b6",
+      "currentSha256": "ff10b76349b5bae084448b0acea09757ea2794d10b5c3467344c3fedf0623c1c",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-009-find-an-object-by-its-key.md",
+      "recordedSha256": "8644ae0ba5efd9658153e67f7ffe85f72061b00b1be28bfae4d6d938013c28ed",
+      "currentSha256": "8644ae0ba5efd9658153e67f7ffe85f72061b00b1be28bfae4d6d938013c28ed",
+      "matches": true
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-010-refuse-bad-edges-and-protect-connected-objects.md",
+      "recordedSha256": "c4a703a40ca4f8d75a97f57e31e2240b979b5ce9ab6de56e71f184a5a7be6b39",
+      "currentSha256": "c4a703a40ca4f8d75a97f57e31e2240b979b5ce9ab6de56e71f184a5a7be6b39",
+      "matches": true
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-011-limit-an-edges-multiplicity.md",
+      "recordedSha256": "7a4cbb6129408b3ae9c87a640fd788abae507d3d8e713da0abc9ff0dfe59654e",
+      "currentSha256": "7a4cbb6129408b3ae9c87a640fd788abae507d3d8e713da0abc9ff0dfe59654e",
+      "matches": true
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-012-write-with-one-protocol-and-report-every-violation.md",
+      "recordedSha256": "e6ba83d7e216cd8124c3147a92f29389bd6608a7944fda858a39131276fe0e62",
+      "currentSha256": "dacc6367c4d8b10187094a5bf5a8a5af5381fa3d37635a24451e3b30da9849ef",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-013-refuse-a-write-against-a-stale-catalog.md",
+      "recordedSha256": "a0ad9938d3d5b0ad8ce0635d23acba946597d194c7f42a98b7395641a23f1838",
+      "currentSha256": "86e3d4ee32f55310c7ef0ce4a5f7d1338631d539d14bec5020d425fa4ae6fd81",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-014-keep-cross-row-rules-honest.md",
+      "recordedSha256": "8877f279733b9ac9d3502771a5f07271bd7a7034bc86f7c9019b37a49d712f1a",
+      "currentSha256": "8877f279733b9ac9d3502771a5f07271bd7a7034bc86f7c9019b37a49d712f1a",
+      "matches": true
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-015-journal-every-change-atomically.md",
+      "recordedSha256": "3aa218f5d32c274d8d386d5996ebf6ed05cb7605dac063cfc838355e03ddf820",
+      "currentSha256": "ea53eb7ff161f901cc34c304e5832dbfb9ba7a3b2409b14bb9f5d3739ebe59dc",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-016-journal-plain-sql-changes-too.md",
+      "recordedSha256": "92cada475f73339c70a4b5407e66b71d452f3aa26570be7e62656f6d82f7a999",
+      "currentSha256": "5aac46f1d4b0f8b76211b82ae0ab52f4f624871fc38bc58cbd386e906f945e90",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-017-read-the-journal-incrementally-without-missing-a-change.md",
+      "recordedSha256": "b18c41af7e2fb33dd2878804d5907cde5962b66bd984833b6e5dd2a6e6666bec",
+      "currentSha256": "854dd8e82a9c08f817ac0f6fc26e59d2ffc0dec21212e90edb76348aaa2bf885",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-018-reconstruct-a-record-as-of-a-version.md",
+      "recordedSha256": "8486e75442b822208b707afe98635b787073028ca6a4fae4adb4a686b0df3b00",
+      "currentSha256": "32dd185f39c695fd7b6e5732cded3dcd355cc5ef95345e8c88061c18f6be4555",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-019-trim-the-journal-by-dropping-partitions.md",
+      "recordedSha256": "7b0086a5d49d3365c25f5175840ed81ac50e22baf8800868c9428b0295e7dc54",
+      "currentSha256": "cf3670097a6c702eb8fc3aa8047d48d54eb2c99efa14101a3b773888e7c81feb",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-020-read-an-object-by-id-or-key.md",
+      "recordedSha256": "86ed160b149e9b7d5e54d84cabab6cfcb5e154406ede31f5acd72af003717876",
+      "currentSha256": "49feafab1f73270d359482e3d4b0cd3c3050ff898537660246f30a38ce998d44",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-021-list-a-types-objects-in-pages.md",
+      "recordedSha256": "3107ce9dc5508f41f5900131af9458153e7fc82a83859595e19d687ca8462e3f",
+      "currentSha256": "886d8d16a14536254b9d1e689600a3854181df61bcec901ac79e5b9f2be05746",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-022-list-an-objects-edges-bounded.md",
+      "recordedSha256": "1f23400136eef987df15b434340a8fef6783932ec505b38e18cef21ff2b3e844",
+      "currentSha256": "f40b89f5a85bfde15abeb42c2f0476cba168a093b54d1e07ef72aa03ea010aed",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-023-traverse-one-to-three-hops.md",
+      "recordedSha256": "d5faa0e4761daf3127746ab18670acc81dc0738e34534e5c39b5d0a0369451f0",
+      "currentSha256": "d5faa0e4761daf3127746ab18670acc81dc0738e34534e5c39b5d0a0369451f0",
+      "matches": true
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-024-enumerate-the-types-of-the-catalog.md",
+      "recordedSha256": "d30659a04485b2c4bc6a5f8febf04cabcce5a0ba9e7063c16c0c0b2a484bc093",
+      "currentSha256": "43f7f20c73974b9e2ddaf003e728eed3ab6debca4d3e71f694b1977100e12b44",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-025-report-the-enforcement-layer-of-every-assertion.md",
+      "recordedSha256": "ea5b5deaa93f491ee3fd4a0cac68add3ceca53e82110b80aa630b00b44b5fa7f",
+      "currentSha256": "ca5bbc621b10aca1c3ab37dcaa80b230a3411583852cb95ccc9b459f91190605",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-026-back-every-support-claim-with-evidence.md",
+      "recordedSha256": "0e6486710b233e6d738f206396820b047ec9f29fb6cd84ca594dd9a41ce27ccb",
+      "currentSha256": "eb310c86ab445df719dc49fcb3d998a78d8829be5fa7ad6466c967975575af73",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-027-build-an-implementation-from-the-contracts.md",
+      "recordedSha256": "ea7d1cbcac5f029281425f949172b35c67dd8f02877b9288fb06fdeeb28b3a10",
+      "currentSha256": "ea7d1cbcac5f029281425f949172b35c67dd8f02877b9288fb06fdeeb28b3a10",
+      "matches": true
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-028-pass-the-corpus-and-the-interchange-check.md",
+      "recordedSha256": "fcc86c1c9e021fe919380cd8c9c24ed19e7f3a4ebe9eca16fdaf37780b51913e",
+      "currentSha256": "edc5624a729ba2dbabc16db87ec1c47036062e3a7be9a4ea63975ab1f7c12adf",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-029-declare-the-layout-version-and-check-the-ddl.md",
+      "recordedSha256": "94347dd6ea8d486c464a8649d8d713fc38d8adc8c1cc2b8a4609371022b4e5bc",
+      "currentSha256": "ccee91e892019de32f4731456b9c55566fd3cc1f4b49ea0cccc389fdce603327",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-030-extend-the-layout-from-a-host.md",
+      "recordedSha256": "d8b01ef2e561d27cdbd6658499e9bbd86710b491088100cdb4d28141e72fa0c4",
+      "currentSha256": "cede669a73726d07cc174f226b8d87a5998f025d9f25d88615eb2ce5c71add10",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-031-govern-writes-by-role-grants.md",
+      "recordedSha256": "0fed239710947adba4247a4c6506c316e69ea6be55b0cd37a593933a9f19c764",
+      "currentSha256": "0fed239710947adba4247a4c6506c316e69ea6be55b0cd37a593933a9f19c764",
+      "matches": true
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-032-work-behind-a-transaction-mode-pooler.md",
+      "recordedSha256": "835e1092d435c1e12f8a29ca965265eff31b2a82a62447b6b21bbcfa8a4949e9",
+      "currentSha256": "bd58e54a5027816c3d36b4f35512f508e56277088de5269415c220a2e40ea985",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-033-run-the-layout-on-an-embedded-postgres.md",
+      "recordedSha256": "6fd7955c6bfa389771b6d64552d10a86ccc1b12ac66fb1104f89b0e4a4df3083",
+      "currentSha256": "08e565c609fbe81f904acc3cf76aa7cd9f3f14dff79ea1d4a94a637170495a77",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-034-repeat-an-import-and-change-nothing.md",
+      "recordedSha256": "114bb39f6760b6994945d521fb069e983f0a625ff90f9401098752ee5ac0983f",
+      "currentSha256": "432c85621813ce4b3e4c99fd8e8edd17706960998dc7b2b3a221de1f28d4cfe7",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-035-keep-the-source-facts-of-an-imported-record.md",
+      "recordedSha256": "3cc1e3deef8f34d22515a1d63c1f3068f2e91e2231a63455587b51e4608c30cd",
+      "currentSha256": "23289b73273bcbcb8cc2ebd61da5a49d4eb2ef5ee26253ff7db83e8346cfee4e",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-036-record-who-accepted-a-revision.md",
+      "recordedSha256": "b51bc16e8421a4ad89572bdc5be572771d255eba084c66c305c58d997b444660",
+      "currentSha256": "58e16587da1b9050c61033063dc72cb6f21528caec1bc5d03fb0760b4af7c6f7",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-037-give-roles-access-to-modules-only.md",
+      "recordedSha256": "1962bbf6e1df62123c73b0fa034c6e6c732113d89038c8a3aabec3dffaa1348e",
+      "currentSha256": "1962bbf6e1df62123c73b0fa034c6e6c732113d89038c8a3aabec3dffaa1348e",
+      "matches": true
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-038-link-modules-and-see-the-link-only-with-both.md",
+      "recordedSha256": "6cea90e3fd8a2073c35acf3c3f0d109ead413749e8a7a91fcc08fd7bc9b09357",
+      "currentSha256": "6cea90e3fd8a2073c35acf3c3f0d109ead413749e8a7a91fcc08fd7bc9b09357",
+      "matches": true
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-039-read-umf-the-same-way-as-the-reference.md",
+      "recordedSha256": "5f591ef21a4de6c554b02d15898f8c31fe1b3f19397c3591b5c4b43247454992",
+      "currentSha256": "5d335b6945b02779928742b6dbc6cb5a3ae4ae924153e7ed4bc5fb54a9dd6cbe",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-040-apply-operations-as-one-atomic-group.md",
+      "recordedSha256": "41d4a649f98bbb3e8e493753927917b93f485342c74d2ed66c0b96e200f751e8",
+      "currentSha256": "67dd1d82c082dbc810d6a2c8d2680c62a321775d93456eca71a09b34bbc8a9c9",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-041-publish-the-journal-without-losing-or-reordering-a-change.md",
+      "recordedSha256": "beffaf56e890326b973dbdbd04815e2e110240253f8d60f54b93f69d158dd53a",
+      "currentSha256": "ccd8c6b718623d62b1a505a4c9a9afe36643ce829604a69a82ff0d3c812642bb",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-042-read-how-far-behind-a-downstream-copy-is.md",
+      "recordedSha256": "49abb2c987d93c42f7aaa9eabece65498634c37ae8e779c7de53c613b2606c56",
+      "currentSha256": "fd97545af6ceccb25dec1c9aa94505d0fe97ba879c8f95fd7cd7a0ffaa0eb97a",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-043-make-a-group-safe-to-repeat.md",
+      "recordedSha256": "01df6e59e54da8bf39ebf5a89de02dfe32b395194d0107e20c991de259bf36a4",
+      "currentSha256": "38429945a17d36a38e12087158068f0b52176cf2ab9ba0e614239e3ba3ca3269",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-044-run-a-change-in-a-transaction-and-roll-it-back.md",
+      "recordedSha256": "d4b77f4b255eb5d99852e6507da40b14b2de40b6f6748a64e3a09711e53d66a2",
+      "currentSha256": "3d256389d4174f99286ac69ae0ad835b10482ff52c8daa6ae9b5f16a2de488b5",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-045-bootstrap-the-internal-layout-from-umf.md",
+      "recordedSha256": "7c766bfb28b6159dff9d6b8b237a8018d0af69aaf7a7e25e38129158e6209053",
+      "currentSha256": "b271409bf91e0c32ed8bd8dd46f47e68dde7a745e050a3eca331e4eba8747280",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-001-accept-a-umf-revision-as-a-whole.md",
+      "recordedSha256": "fb3975daec2fd411bc4e77a79866058d14ac95f7216fbdb85f3e447ba496f516",
+      "currentSha256": "b4f2c4162c68b1e199f88294fa04014985d941da4e0f44a21b71a5f9475b2877",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-002-import-documents-that-depend-on-each-other.md",
+      "recordedSha256": "1d93cda1f65f88b51851a9d4c32cd1b4bff0758f4556a78708dcd572fe09647d",
+      "currentSha256": "ba1d6795ac224da644e5405e929b3c9912ff05be4cc18c49b8e09a72aded8e3c",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-003-decide-what-happens-to-an-unknown-entity-type.md",
+      "recordedSha256": "37ee82d66c860c439319968d39729cc174136f02f676e847a1a1caabff21c7b6",
+      "currentSha256": "1183aa0d21745b14a7074d84e9a184baaf2fd710637766ad7f57536e8ef8a3cd",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-004-keep-identifiers-stable-across-revisions.md",
+      "recordedSha256": "02e1acf7adb100dffbc00152e71834e196905f32e29b2696c157a20bf2813a14",
+      "currentSha256": "bb4fd6cfafcfb4b680d96ac7f5128307f6af452bfdbdf01e95eb48990d520e56",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-005-see-every-violator-before-a-tightening-is-accepted.md",
+      "recordedSha256": "0dd0079760ab9ac29d433da0696485ea62e86071cefd3e5836ccdb0306185b69",
+      "currentSha256": "635d2912077d8f6ed6044a44829cd814f7c67aaeee2c8dc2cd062dd644bad3da",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-006-add-a-type-without-ddl.md",
+      "recordedSha256": "0e44cfd39f4306b5986e4a5254458c86d8b15b0bde1dfbd031288f8830d71065",
+      "currentSha256": "0e44cfd39f4306b5986e4a5254458c86d8b15b0bde1dfbd031288f8830d71065",
+      "matches": true
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-007-store-and-read-objects-and-edges-exactly.md",
+      "recordedSha256": "6bcc7b2ac62b0b685db911511214dcf26c57f5bc3bc910bee73aaa2881bed057",
+      "currentSha256": "b19f9eb36490f622cfa2c4926c3090d7fb02c3bcec94b6b211220fa470f0382c",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-008-keep-what-the-schema-does-not-define.md",
+      "recordedSha256": "11d0c71fcc8b08f52c57d2f50a679aa4e3d9ac3f8a371de00a2ea16f2854261f",
+      "currentSha256": "6e5bba27d4c38cfdac417435c08d56fad53f590c03567014afb2bc9a322cde41",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-009-find-an-object-by-its-key.md",
+      "recordedSha256": "25ed3ec38b49bd477065d3786ee529f092ddc8b7661e3433fe99a7784890a2d7",
+      "currentSha256": "a551b30285c96d465e77ab12ed84f2b672b4089575cd799f99295f8df6c128c8",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-010-refuse-bad-edges-and-protect-connected-objects.md",
+      "recordedSha256": "e67e3592998f0ec7cc92f5c96835ffb20e81f70c95cb5fafd039efdde9ec7a3d",
+      "currentSha256": "28d7e20d91856deed010edad6650d0c32a1ed16825ca6c2dbf3bed4aba21eefd",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-011-limit-an-edges-multiplicity.md",
+      "recordedSha256": "a6844d5eb289963466833406f77dfc22bdfb4b8c2ef90aa077091d2e1d443b3e",
+      "currentSha256": "c94e6c6633440bc9b7cb58f95c8e7c0ef91b92b6f5797f9a013d52b92ccf010a",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-012-write-with-one-protocol-and-report-every-violation.md",
+      "recordedSha256": "4463200481ccd7103b4540004d9d8ab45517c00810a9751e427357903bcbadfa",
+      "currentSha256": "b69570bfce6a4707a22ee654e81be5a533126a19d6a7ea6222f211f7c9e6ce49",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-013-refuse-a-write-against-a-stale-catalog.md",
+      "recordedSha256": "7547d952d8e4f1970a5ae1de0caab060f9c2fd17e31aecfba7341565fe415613",
+      "currentSha256": "508ed5c6124b0de5df4ec9666de6586c01e8ebe13ca7154733c5fe78ed9bf5e0",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-014-keep-cross-row-rules-honest.md",
+      "recordedSha256": "2e7949c3eaa88999f0c173d0fa4480a24ac64d59be63633bc5dc3cd643e6384d",
+      "currentSha256": "83a7b2b14c104499f83c02cde8ee6999c62c2db27a47408737d1fc01f987801b",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-015-journal-every-change-atomically-with-its-origin.md",
+      "recordedSha256": "6271da88f83231f549a055c1080469ed1815d2ea5f33d220954ad18eb44c6a73",
+      "currentSha256": "6f174b5b4ff9c8c5a5ff1d35ed9a0d82bc346c14e5590a60666549c7e8d9983c",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-016-journal-plain-sql-changes-too.md",
+      "recordedSha256": "fd79a1418a2da99fa1fce9523f77532c11563978602a1283d857b3dbb1737132",
+      "currentSha256": "6545ed719ce0c9d5653cfac7538d14c8415a4f57549cf6baa6a00cbc9abf864c",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-017-read-the-journal-incrementally-without-missing-a-change.md",
+      "recordedSha256": "334989f96e80c4d349109a9dd871fa35b7d0c9d765e7bf887c7f1abb13fbe40a",
+      "currentSha256": "437f9b44d92ac33d21d17e25c15d9c22f1a0e140afc27eafaacc61dcfd2b3269",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-018-reconstruct-a-record-as-of-a-version.md",
+      "recordedSha256": "66c5576385af8325fa36c3a7d5de16338d2e3622359427f387139d5f1a31939b",
+      "currentSha256": "4d9d827fe89d9e2364e4a90c100abd83d11b822c2eca003138630dc6ed997ee3",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-019-trim-the-journal-by-dropping-partitions.md",
+      "recordedSha256": "92476ac50f246f0e5839aa57c5cfc7162a2930f9714c22db93a361f51454e00d",
+      "currentSha256": "69acfcbce5795c9e66aaf870bad883c569542a36e2dc553278db0671f71bc018",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-020-read-an-object-by-identifier-or-key.md",
+      "recordedSha256": "4ec42330c6a243f93435bf31b5de05849ac495dd723ad767a3bc9676809d7908",
+      "currentSha256": "4ec42330c6a243f93435bf31b5de05849ac495dd723ad767a3bc9676809d7908",
+      "matches": true
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-021-list-a-types-objects-in-pages.md",
+      "recordedSha256": "d8715cf23bc1d5fa65d8e58de487f549b1d9339f9cf531f7cda2a09ff9e43bb8",
+      "currentSha256": "d8715cf23bc1d5fa65d8e58de487f549b1d9339f9cf531f7cda2a09ff9e43bb8",
+      "matches": true
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-022-list-an-objects-edges-bounded.md",
+      "recordedSha256": "c89ec2db85c7aabd05329b93f9126da4e728cfc0041b037c59d7735a708052fd",
+      "currentSha256": "c89ec2db85c7aabd05329b93f9126da4e728cfc0041b037c59d7735a708052fd",
+      "matches": true
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-023-traverse-one-to-three-hops.md",
+      "recordedSha256": "482d8195dbc1553a2cb66848b7bf25b1d55fed39e6f04ddff09c2e38beebeae3",
+      "currentSha256": "7dc20334945300e42d0324f6559d5e0796250340a9661edf01daf8b6ef703fcb",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-024-enumerate-the-types-of-the-catalog.md",
+      "recordedSha256": "87e0ba3d9419524eb8250347c0dbd37a9d90d6607e17421b919680c86ab331c1",
+      "currentSha256": "260b71999a476a90e16bb3609639f17fbf9d63a6873fba8f85a1cf6c949fd622",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-025-report-the-enforcement-layer-of-every-assertion.md",
+      "recordedSha256": "f13bc6fee9575dfbd921396a1466a37fd808e47284d5a54c7fafc74a1395aabb",
+      "currentSha256": "f8fc7d64a62988434b79816d89e0d2e48e4ea94473ef94300eca6f94a7949802",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-026-back-every-support-claim-with-evidence.md",
+      "recordedSha256": "35625b85d3a7570cc43a20da26aac085ab35a4a4794af006e4adf3315b1ba165",
+      "currentSha256": "adcd98ceb75f5148085eda414588e6e88db3173cf0ea984f1c17902243eca80f",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-027-build-an-implementation-from-the-contracts.md",
+      "recordedSha256": "4f565c83d7304d1d945896fb3986602580f91cbcf267347a421942a921d43a17",
+      "currentSha256": "0442ac48ad9af14dd6eb8342385536b6b9d60b81bfafddcfdffb82ff5589a29e",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-028-pass-the-corpus-and-the-interchange-check.md",
+      "recordedSha256": "0407f2365d823eda0a1c71e1aa5bcc2d3bb9586832a8834b6cd17acea4d616ed",
+      "currentSha256": "0407f2365d823eda0a1c71e1aa5bcc2d3bb9586832a8834b6cd17acea4d616ed",
+      "matches": true
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-029-declare-the-layout-version-and-check-the-ddl-on-every-version.md",
+      "recordedSha256": "6fca2bba36afaa3f256b9b5749c4131bbb3e4f34de28cc165ef62881d590a90e",
+      "currentSha256": "4be0dc1a16f8f6b306ccabfea375c76f59cacf8163ffb51d2ad2a8ebfad14a37",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-030-extend-the-layout-from-a-host.md",
+      "recordedSha256": "3f4f1edc5a86425a13bb669e52bc3ee4d8942ad796d7b927ea7079858bee414d",
+      "currentSha256": "3f4f1edc5a86425a13bb669e52bc3ee4d8942ad796d7b927ea7079858bee414d",
+      "matches": true
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-031-govern-writes-by-role-grants.md",
+      "recordedSha256": "dd4e1fe3a47a43d808a30b3f548e90e5e460d186adf3c277463777baeb5ce41f",
+      "currentSha256": "565ccddc60a5058f5fd056d9ea601cc29df3d059b85fbcf5f82cf16a3996dba1",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-032-work-behind-a-transaction-mode-pooler.md",
+      "recordedSha256": "392c6085425bbebb88a8782d0dce6f2f474daccdc1963a7a82e922f45a31ff0c",
+      "currentSha256": "24e6d2ef3c9a281c70952e06d4a31426a70b6c892abb2790466e72fdfd00e0c9",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-033-run-the-layout-on-an-embedded-postgres.md",
+      "recordedSha256": "1132e1e6afff98fe861d644470ac28499df99088f14befd8c42b62ce97634d43",
+      "currentSha256": "1132e1e6afff98fe861d644470ac28499df99088f14befd8c42b62ce97634d43",
+      "matches": true
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-034-repeat-an-import-and-change-nothing.md",
+      "recordedSha256": "554395fd03f98b2ba03b2013c1b67c1cfdc60a43cf7b7edd8f06e9ec7b3e34d1",
+      "currentSha256": "404aea2e726bf7cdf4b7e7afcc3f4baf98194a3e31fc6c375648f2b5eb7dc42d",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-035-keep-the-source-facts-of-an-imported-record.md",
+      "recordedSha256": "ce13b80568c8ef0e7cdae4456f9b236ac9536524743042028bab0bd0c83835a7",
+      "currentSha256": "ad5731d685ed1dfa6f074dafc1b18a30e5ed3482920506a43cf0aeaf741c339c",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-036-record-who-accepted-a-revision.md",
+      "recordedSha256": "7104f430928314f81b626297bd7708bb04b74ee063cbe9b8f6bdb055a0d412ff",
+      "currentSha256": "f68b500e3ef3190c6f02264a5fc1acb2c0063435958c2e11cd77111788ea5b58",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-037-give-roles-access-to-modules-only.md",
+      "recordedSha256": "abc0751c5652a9584e3bca932bcf83ffb8bafc79e318e35f48b80feaed5f812e",
+      "currentSha256": "291436fbb7c6048f306277412ca3afd381ab0646fbbf536658ed3dca97ff59f6",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-038-link-modules-and-see-the-link-only-with-both.md",
+      "recordedSha256": "517cdd18365d3c17bfc66ae2fd3bde797c5027ab232f4f024d6d1f1df93d99e7",
+      "currentSha256": "517cdd18365d3c17bfc66ae2fd3bde797c5027ab232f4f024d6d1f1df93d99e7",
+      "matches": true
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-039-read-umf-the-same-way-as-the-reference.md",
+      "recordedSha256": "f51034b3ac86929ba3dfa3cf07b280de7b1bfa19f740f3dc9bf62ac5c9ddbde0",
+      "currentSha256": "ee2793724b42bc71dfc5e5281b297f40864d9ae18aa8cdbac21768c81109e627",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-040-apply-operations-as-one-atomic-group.md",
+      "recordedSha256": "114a5717da520042602d78be26591f1ef2e67f0a2b5eca9b249f5f11e442315e",
+      "currentSha256": "5904cd046c758d2fbfeee7e0c530187f012f7b09b26ce9f2a7c9dc60ca56ae92",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-041-publish-the-journal-without-losing-or-reordering-a-change.md",
+      "recordedSha256": "f514a4c26c62ceba08c880bdc74d55758737436a31ca86d774d8ea96f3cedd27",
+      "currentSha256": "5a977cd0ee2e19a2537601a017317c6f65cb5bfb6b65531510234b0df7155d16",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-042-read-how-far-behind-a-downstream-copy-is.md",
+      "recordedSha256": "bec70e8dc72577e8298915f0a67ee04b3b255460e8f88d540f7e3b63688f9270",
+      "currentSha256": "2b36eb214a7741a71f0d23a7b612e4c147e4f95d72a7bc40784c5ef4c80ab36e",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-043-make-a-group-safe-to-repeat.md",
+      "recordedSha256": "11d11c49a4011894828c7fd552c3946afcd1b4cc1bdf57f99b52bc3752bb25f0",
+      "currentSha256": "98fe69a5fddf9b42ac49824e9be44e65d27c7be150d92509b7a6a17917b5c6e6",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-044-run-a-change-in-a-transaction-and-roll-it-back.md",
+      "recordedSha256": "81d6a4421e2c824f1161a4912afbd758e6824031f37f0469ef4f63f713714f8a",
+      "currentSha256": "539477aee3355ca950c98fb2e9b030d879be1d8c7dee9b1d13fd0400917fb75e",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-045-bootstrap-the-internal-layout-from-umf.md",
+      "recordedSha256": "2dd1376076ac5bb39ef4fdb9bc84389ef15bfb3650379b3041a76f9867fdb415",
+      "currentSha256": "a2e38b2730a8eb273a61a65eaf597cb16da154bc5c07129fa37bbd0213df2310",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-001-accept-a-umf-revision-as-a-whole.md",
+      "recordedSha256": "b7c81dcbc023e522cae0f913f964532b134ce2cc5191de45f73904bc0842f0e6",
+      "currentSha256": "872a678ac038cb23353ab58de77bcef8b19017d208d043ce00a3f894e306faca",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-002-import-documents-that-depend-on-each-other.md",
+      "recordedSha256": "2311d9c7f342ae12aa1bb3868bd593944c0ce420db6562ae448ae4f46f9b38d2",
+      "currentSha256": "41ee80f75ffe31488f735574772958666907dfd54f7440e12471679ba5be5343",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-003-decide-what-happens-to-an-unknown-entity-type.md",
+      "recordedSha256": "a979ebb116d2090d82b5bc080ad1782c7dc4a6654440a809dff36b171d145b30",
+      "currentSha256": "0407a058549a1b94bde3eeb17a21247b5b8345b3d9522794842473f7f0ce6882",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-004-keep-identifiers-stable-across-revisions.md",
+      "recordedSha256": "ee021d00ead045b6f1bd01e46038cc23fbb3bc1803c7fe679262a3dee4c66339",
+      "currentSha256": "72c3a760c004420b66747b92cab50367eb649ff670cf4b6a98261aec4f510271",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-005-see-every-violator-before-a-tightening-is-accepted.md",
+      "recordedSha256": "b16b9a214471012259e53a579bcc9e37bd5f5c857e91648bb35f7bfbfdbb44f5",
+      "currentSha256": "e9180727353c55f5a6b38b22b6c42bebc97585dba7103197fe3048ffe36d3c56",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-006-add-a-type-without-ddl.md",
+      "recordedSha256": "edd9b1b969fca00571080e7945315baa2e913509155d0a3c642680b85ed13ca4",
+      "currentSha256": "863a0e78a22970de96254b3783af57a1c2af40f3e8aca2cff3430230c30e6e96",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-007-store-and-read-objects-and-edges-exactly.md",
+      "recordedSha256": "732ca414ccc5970f8091dc0f34dd2664ea8eac82988ea7769b419f56b7f52962",
+      "currentSha256": "6a0fdc7180ca35facdd13b27a5f1c9b42544b5feb8053f2b2734361743cacfdb",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-008-keep-what-the-schema-does-not-define.md",
+      "recordedSha256": "d5821646c96140848c481c5d2b61392114d212aaebc2fee14450e89440b2f4bf",
+      "currentSha256": "4f6b5e97ed86cd45652636c1e07a55e52980cf3b9498740de0b937bdfa5659a8",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-009-find-an-object-by-its-key.md",
+      "recordedSha256": "7933bcf0457901e193045e17f89269d00938fda9d441da98b3d5ba2887ce5259",
+      "currentSha256": "5c65ad7cbfaa61ae074c146eb21b6e78b2f6139b7abad7477df9472358189428",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-010-refuse-bad-edges-and-protect-connected-objects.md",
+      "recordedSha256": "fa0d3b900abcbd5fb624251998edc217ea9d711abe0970909e33178c3866117b",
+      "currentSha256": "039bc86ea67bd0e4b9a3a598a9316e32eb151d9cd1c003c9577ed45ee121ad88",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-011-limit-an-edges-multiplicity.md",
+      "recordedSha256": "e4f83b67e7f52e0ad3cfd95c2cd4445537723a2c967fc025b05e745f2884a317",
+      "currentSha256": "15e0c656e97702f19a56414e488eaeb65216b85c75d35e1b51929fc730646bb2",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-012-write-with-one-protocol-and-report-every-violation.md",
+      "recordedSha256": "38e181833fe378fb438b7c2f2ac6e554ddf37c57749eebc6c16e15adc938243b",
+      "currentSha256": "2d1600377fcfe8a6d3ce558a23a65c78b03b82c3c96793858f7bb48b62cc0042",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-013-refuse-a-write-against-a-stale-catalog.md",
+      "recordedSha256": "a8881acb61a094be8df694be05fbe15db50d28de0447b8d1e69a0e391a1319cb",
+      "currentSha256": "a8881acb61a094be8df694be05fbe15db50d28de0447b8d1e69a0e391a1319cb",
+      "matches": true
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-014-keep-cross-row-rules-honest.md",
+      "recordedSha256": "a0eea9b4f76ccf995aa15d30366ef37cfd5ae4e0b3f7c1076e780541c2636181",
+      "currentSha256": "73506d5c6de95d2c66250d36f20eb7f16c80d246aa26758af20a8f49ae1eed95",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-015-journal-every-change-atomically-with-its-origin.md",
+      "recordedSha256": "270fcd5a125bad92293af2b16c4e6dc29fb3e348925f8f3fdb5f660d3391729b",
+      "currentSha256": "591b13724e9f49c0b20e3610605907b1cf7e3e5ea328e55571739eff04d05b7d",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-016-journal-plain-sql-changes-too.md",
+      "recordedSha256": "3e5e23c1ac4a9d3006c10134b786ea0a24b47f8a095769142a2fc2ed13eae944",
+      "currentSha256": "eb2db53ebbcac69124b4b144f01ccab71e3c8086a514579b74458d2a63e76ce6",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-017-read-the-journal-incrementally-without-missing-a-change.md",
+      "recordedSha256": "7c3ac7d6cda64ecb1f939228ebe97ba125365976fc525581bee61b83eab06b59",
+      "currentSha256": "dbeab208dd39c6858460d0d69bf4fb742fd7295464ccd6d190387683855c7ece",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-018-reconstruct-a-record-as-of-a-version.md",
+      "recordedSha256": "dcdf4e4b03179f8d8ee102a2327c90b208afe42a06b55c98d76263187d6e042c",
+      "currentSha256": "7233a1ac81c2ff6d64138ec90650385c999ca5ec8b05c7dc36439acf00352721",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-019-trim-the-journal-by-dropping-partitions.md",
+      "recordedSha256": "9e2673ee95429b90335d77268266cacd698c80b73a296712253cd617f29e4e4e",
+      "currentSha256": "8c51e8c340f0b005dff5bdd099ac21699f1ad7124757a52a7a081263c719ecc9",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-020-read-an-object-by-identifier-or-key.md",
+      "recordedSha256": "8bec4cb4d8f59ced92fc9c2ecce9e5d6f828384133a56eea9d345e3bd5e1a847",
+      "currentSha256": "3ffb5727946fbafbd84916c32152705a461d0be57a79411396012c0bab1e8563",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-021-list-a-types-objects-in-pages.md",
+      "recordedSha256": "1b458f26b49d6d2a4673fa910c7f91fe1c56252385398bb2f10b0053d9c3b6c2",
+      "currentSha256": "d92638738dab3e953c206813d74de47b50146769263ea8184f38f81667d25a3c",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-022-list-an-objects-edges-bounded.md",
+      "recordedSha256": "8600dc40d919d726f158cb66f8a9fe96942c3a4c1d1cd0b399f7d9168c504f7e",
+      "currentSha256": "a1b21b25e50842bdb33941c09cc7378dbe9a8c184e38ec75bcc6d5b11b37d132",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-023-traverse-one-to-three-hops.md",
+      "recordedSha256": "cb6a98cf4051ec9a784b34c93eb2e85c9c1ed1e9c877f3ec28585a437504df02",
+      "currentSha256": "c205330104b3e9699a8db0d535202560c4beab97bd5b0158b2c3ca5612d2c78e",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-024-enumerate-the-types-of-the-catalog.md",
+      "recordedSha256": "3797a78c25272e8534fecb07510cf8231f9a0020703e2bc4b870f80eb1320cd0",
+      "currentSha256": "3797a78c25272e8534fecb07510cf8231f9a0020703e2bc4b870f80eb1320cd0",
+      "matches": true
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-025-report-the-enforcement-layer-of-every-assertion.md",
+      "recordedSha256": "d522ed245ea1b4c69cf01c99734851bb9dfc5d7c167013bcce4640cf22b45684",
+      "currentSha256": "d522ed245ea1b4c69cf01c99734851bb9dfc5d7c167013bcce4640cf22b45684",
+      "matches": true
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-026-back-every-support-claim-with-evidence.md",
+      "recordedSha256": "6cc772a1a47465647e7aabaf942e0813317a53b35d4f6af1f2c70a97f7212427",
+      "currentSha256": "6cc772a1a47465647e7aabaf942e0813317a53b35d4f6af1f2c70a97f7212427",
+      "matches": true
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-027-build-an-implementation-from-the-contracts.md",
+      "recordedSha256": "48185a190c2b87be5b0f9e1f3b60cc87460b49d7be6fa18476e6ffac437b2283",
+      "currentSha256": "48185a190c2b87be5b0f9e1f3b60cc87460b49d7be6fa18476e6ffac437b2283",
+      "matches": true
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-028-pass-the-corpus-and-the-interchange-check.md",
+      "recordedSha256": "9a53a514e2e8a9f095888ed3da98586fc439ee220ac025c7fcf0e829b743dc92",
+      "currentSha256": "9a53a514e2e8a9f095888ed3da98586fc439ee220ac025c7fcf0e829b743dc92",
+      "matches": true
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-029-declare-the-layout-version-and-check-the-ddl-on-every-version.md",
+      "recordedSha256": "a43b5fe40adb5dcf850fd1f422d2c7cb110813d6245771bdc403ac0bcfd6d447",
+      "currentSha256": "9dd94c26a2fb39a1a6fb0fbf4c162a555076252f796f6dab048305b32db41b38",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-030-extend-the-layout-from-a-host.md",
+      "recordedSha256": "2132057f4389cc86717483582d36b24e37370fa415ca65b08b8373044652c206",
+      "currentSha256": "3d919e46cf6bd873663973f52744c639c86cc3be443cc0b00fa6af60a5d380a1",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-031-govern-writes-by-role-grants.md",
+      "recordedSha256": "0e706ffc933411a0e4e3a652d770aa8a8f443cff1bc8538fc0417d84a755eb37",
+      "currentSha256": "0e706ffc933411a0e4e3a652d770aa8a8f443cff1bc8538fc0417d84a755eb37",
+      "matches": true
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-032-work-behind-a-transaction-mode-pooler.md",
+      "recordedSha256": "316e5b6493c0aa8cbe264d9dc1faa16718d5bac556a89417b6014aaffa0dbd85",
+      "currentSha256": "9a2ddedfecde969e890fdf90feac3a8aa738c7815a993265652e60f2d90d18a2",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-033-run-the-layout-on-an-embedded-postgres.md",
+      "recordedSha256": "ee11943bb9ee848b38e3d0dbe7f3f472abb80c4a820c4b946586d2a18bdcebd6",
+      "currentSha256": "ee11943bb9ee848b38e3d0dbe7f3f472abb80c4a820c4b946586d2a18bdcebd6",
+      "matches": true
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-034-repeat-an-import-and-change-nothing.md",
+      "recordedSha256": "0852954db6c2458f24918006a1e1fae7e60be277de5930024c518a46c4f49f6a",
+      "currentSha256": "07eed70010ecaa24edcaee61db03f050037afd8780a92ed81d75f067e0e1ae54",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-035-keep-the-source-facts-of-an-imported-record.md",
+      "recordedSha256": "c4abc4b680c0feb446afc672a0c14e45cee07b2e8f5f3ff2d36ff089f551ac10",
+      "currentSha256": "88eb025241d28435a007f411d65debdf4ec6717378ffb214a1d42186ab1c88de",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-036-record-who-accepted-a-revision.md",
+      "recordedSha256": "b209c8c82c5e0709df79baa6f08ddab71386c72b688775603e38caf6dbb2faa5",
+      "currentSha256": "b072bbec1c625ed6acd20a72d0b3101e560d180a60a43d1163a2e73b6b288e6f",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-037-give-roles-access-to-modules-only.md",
+      "recordedSha256": "72d8523dde28aa570e24d9c7963b4bc2253a1309c82442689d45e94e5fb1077c",
+      "currentSha256": "0ac4027219c8ba0483b4130c608f66e0fe63cc11bda7b241fb36dc84d2b9ac92",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-038-link-modules-and-see-the-link-only-with-both.md",
+      "recordedSha256": "3774a2d2751356b55b02921d5c41c9b35cacbca6642fdc9e160fedc13596e326",
+      "currentSha256": "7abffe2b9fb4bd252cfcf17aaf2833104bd3867b8d62f7eab222357169b684e1",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-039-read-umf-the-same-way-as-the-reference.md",
+      "recordedSha256": "be51a7bf53835864f75cb47d17391f34363b7c1b963588c3285f4570bf79b3b3",
+      "currentSha256": "f394458f3613ac763ed776f64d5b9acda2b54b9a1854fd321219d33f53a9e4e8",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-040-apply-operations-as-one-atomic-group.md",
+      "recordedSha256": "31ab6034b193753be070cc0678e2f3f6592542ee7bf06d485ef50b2ee2ebf6bc",
+      "currentSha256": "848db8141b71ee656746d6e2b8e3e07d3bc9a78e6559586c9bbb8ceb8a13293d",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-041-publish-the-journal-without-losing-or-reordering-a-change.md",
+      "recordedSha256": "b6dfa5669ec7cadd734e12bc24ac0f1a05a506bd2b75f9880771fd11c36476e7",
+      "currentSha256": "8d0bb405d8eee2cbd2145a003f42f62d6d41e2a0acf7089e114441eeb8ed395f",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-042-read-how-far-behind-a-downstream-copy-is.md",
+      "recordedSha256": "e1d0b529dd8db841d7e17633540c444c6e631bb93c654d24ba29fc95df8927ce",
+      "currentSha256": "3253d56d85f89a2a32b11a36ab1bb182e1f4cc799bc34661f94628f367521b04",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-043-make-a-group-safe-to-repeat.md",
+      "recordedSha256": "4d573b37574504ae0b1680ebbcd50f0ddb4ee9a1824a1f2eed50882910100418",
+      "currentSha256": "7fadd7f4f630dbb9a48042a0e5161a72901c1bb7801203a9635cf74d31797474",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-044-run-a-change-in-a-transaction-and-roll-it-back.md",
+      "recordedSha256": "6ee64b306a1692ab05e00d25b40b2ea75957e8681bfbcb6ae123a02d140b9423",
+      "currentSha256": "bdcb1e5310a618751a6af4299268f65c3fbb1ed8c5ec894841668c043bb8caff",
+      "matches": false
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-045-bootstrap-the-internal-layout-from-umf.md",
+      "recordedSha256": "309e7c53617dfc8af30269e7be7a3413413af181de29907b223c7d4c18939b69",
+      "currentSha256": "433485a48d7cc1ad2bb46058a7cd923026d94a913ea53cc838f9fe78337ea496",
+      "matches": false
+    }
+  ],
+  "currentAllocationProven": false,
+  "nativeExecuted": false
+}
