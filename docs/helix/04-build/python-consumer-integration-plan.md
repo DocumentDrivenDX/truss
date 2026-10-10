@@ -140,3 +140,30 @@ Finally integrate the original native call/resource ledger with shared operation
 arbitration and adoption. Trusted host SQL and cooperative routing are explicit
 profile assumptions, not arbitrary raw-alias exclusion or malicious-host safety.
 Only qualified supported paths may publish public adoption. C02 remains open.
+
+Native lifecycle progress: the reviewed iteration now implements typed host
+controls and original generation/savepoint history, plus real private
+HostExecutor adoption on pg8000 native/PostgreSQL16.15. Repeated BEGIN preserves
+the generation; confirmed end and chain retire the original generation while
+retaining custody. An ended port reports its original ended lifetime and cannot
+adopt a later transaction. Host release/rollback/shadowing shares authoritative
+native savepoint history with executor admission. Exact quoted identifiers
+refuse truncation and invalid text. Original control descriptors/candidates stay
+retained across native completion and publication failure.
+
+The host holds one original operation token across each complete executor call.
+This explicit outer scope closes observation/control/publication interleaving;
+ports refuse calls without it. pg_catalog-qualified native probes return actual
+profiles and a nonallocating optional xid. Failed-state cached observations are
+limited to original cleanup correspondence. Public adoption still requires
+integration of this native ledger with shared arbitration, containment/recovery
+and the selected full resource profile. No security-owner authority contract is
+inferred from these administrative native component tests. See
+[evidence/python-contracts-iteration5.json](evidence/python-contracts-iteration5.json).
+
+The native issuer reserves canonical positive uint64 epochs monotonically under
+its original boundary lock before fresh BEGIN/chain submission. Failed or
+uncertain reservations never rewind. Repeated BEGIN preserves the existing epoch;
+exhaustion refuses fresh/chain controls before native effects. Cross-executor
+adoption still needs an atomic original-generation claim before observation;
+the current executor-local duplicate check does not qualify that shared gate.

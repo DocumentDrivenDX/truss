@@ -1,0 +1,60 @@
+{
+  "iteration": "Original native lifecycle and private executor adoption",
+  "reviewer": {
+    "model": "gpt-6-astra",
+    "reasoningEffort": "ultra",
+    "task": "/root/astra_plan_review",
+    "disposition": "Approved for scoped private iteration; no remaining source blockers",
+    "independentEvidence": "14 lifecycle cases plus five focused final-fix cases passed on PostgreSQL16.15/pg8000native1.31.5",
+    "fixedFindings": [
+      "Ended ports retain original lifetime and cannot retarget later generation",
+      "Confirmed retirement checks exact original adoption epoch",
+      "Native function and text type resolution qualified by pg_catalog",
+      "Original control and reserved candidate survive post-native publication faults",
+      "Monotone positive uint64 epochs reserve before effects and refuse exhaustion; repeated BEGIN preserves epoch"
+    ]
+  },
+  "sourceSha256": {
+    "packages/python/src/truss/_native_transactions.py": "78a5f244d7d51dce9d3cca52afdbe373bc8361b554c37cb2a2cfc69820c70b94",
+    "packages/python/src/truss/_native_pg8000.py": "643313d09e38256605d7151a22c8329fb1ec9e418662f6b97bde5ed9ab6122ab",
+    "packages/python/src/truss/_host_execution.py": "0ec163b69f3d36527345a703511619f2367bbf0b27b522cec713bc32719696d7",
+    "packages/python/tests/test_native_transactions.py": "113006f757ed2d9b11805b8b59b1b11f06063c2a142e6b45bd6cb2b46e8b07b8",
+    "packages/python/tests/test_native_pg8000.py": "e5ece3a5a2a2dc4e3bb36f92aa6212c64d53e25e679255361f7c67064e9bd3f3"
+  },
+  "nativeProfile": {
+    "driver": "pg8000 1.31.5 native",
+    "python": "3.11.17",
+    "postgresql": "16.15",
+    "runtime": "pgserver 0.1.4+truss.pg16.15 corrected candidate"
+  },
+  "fullSourceSuite": {
+    "tests": 182,
+    "result": "passed",
+    "logSha256": "215ff8db9c543a5f60478664e833806d0b9fa3ccd0f5db3d819196038cad3937",
+    "scope": "Full suite after qualified-cast fix, before final monotone-epoch delta; final delta independently reviewed and tested in final installed wheel below"
+  },
+  "finalInstalledTests": {
+    "tests": 34,
+    "result": "passed",
+    "nativeTests": 26,
+    "hostExecutorComponentTests": 8,
+    "cwd": "/private/tmp",
+    "sourceInstalledByteMatchingModules": 34,
+    "logSha256": "b69d05d34554d224e3eed96a2a00bbfdfa8024a8e4e0aeb2d388bbccbd2e0444",
+    "scope": "Final installed wheel with source test fixtures and existing dependencies, not clean distribution or public consumer workflow"
+  },
+  "wheelSha256": "e08bb772c6b03e5102111220959282c967485eb6b3b99e22527fb032df33cd03",
+  "scope": "Private cooperative typed native lifecycle, original epochs/savepoints and explicit whole-operation-scoped private executor adoption. Administrative native connection tests; no protected ordinary-role authority or public adoption qualification.",
+  "remainingGates": [
+    "Atomic original-generation adoption claim across executor/assembly objects before SQL",
+    "Shared arbitration and original native/resource ledger integration",
+    "Containment/recovery and verified operation completion",
+    "Complete selected resource profile qualification",
+    "Public ReferenceAssembly and capability implementation; complete accepted catalog-to-feed workflow"
+  ],
+  "ownerAlignment": {
+    "umfObservedOriginMain": "b4b8171f",
+    "weftObservedOriginMain": "bf64c8c",
+    "securityOwner": "Active shared field/key declaration custody work; no new protected authority contract adopted"
+  }
+}

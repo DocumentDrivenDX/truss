@@ -357,3 +357,23 @@ cover retained events only, not driver buffers or total resource usage. Operatio
 release here establishes exclusion only, not verified native cleanup. Typed
 lifecycle/generation history, arbitration completion production and public host
 adoption remain required; these components do not yet provide a consumer API.
+
+The private `_native_transactions` component now supplies typed host lifecycle
+controls, original issuer generations, native-ended retirement, exact quoted
+savepoint custody and shadowing, and a port for the private HostExecutor. The
+host must hold one original boundary operation token through the entire executor
+call, including observation/control/post-observation and Python publication;
+ports refuse use outside that scope. Ended ports cannot retarget a later
+transaction. Host rollback/release/shadowing invalidates or hides executor
+savepoints before their next control is submitted. Actual probes use pg_catalog
+functions and nonallocating xid observation. Cached failed-state data supplies
+original cleanup correspondence only, never fresh authority or role evidence.
+Native controls and candidate custody survive post-native publication faults;
+such faults quarantine rather than guess cleanup. This is native component
+composition, not public adoption, protected capability admission or completed
+arbitration/resource verification.
+The original issuer now reserves monotone canonical positive uint64 epochs before
+fresh BEGIN/chain submission, burns uncertain reservations, and refuses exhaustion
+before SQL. Repeated BEGIN preserves its active epoch even at exhaustion. Atomic
+original-generation adoption claims across separate executor objects remain a
+required shared-arbitration integration gate.

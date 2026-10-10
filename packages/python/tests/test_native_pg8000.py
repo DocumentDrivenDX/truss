@@ -9,7 +9,7 @@ from truss._native_pg8000 import NativeBoundary, NativeBoundaryRefusal
 
 
 @unittest.skipUnless(importlib.util.find_spec('pg8000'), 'Optional pinned native driver absent')
-class NativeBoundaryTests(unittest.TestCase):
+class NativeBoundaryFixture:
     @classmethod
     def setUpClass(cls):
         from pg8000.native import Connection
@@ -38,6 +38,8 @@ class NativeBoundaryTests(unittest.TestCase):
         # collection; it is not supported cooperative-wrapper operation.
         self.connection.close()
 
+
+class NativeBoundaryTests(NativeBoundaryFixture, unittest.TestCase):
     def test_extended_call_keeps_all_ready_cycles(self):
         self.assertEqual(self.boundary.run('SELECT :value::text', value='exact'), [['exact']])
         call = self.boundary.last_call

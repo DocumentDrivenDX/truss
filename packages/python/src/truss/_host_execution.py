@@ -58,12 +58,21 @@ class HostExecutor:
                 or observed.isolation != isolation or observed.access_mode != access_mode):
             return self._error('invalid_transaction', 'Actual transaction profile does not match')
         if any(a.observation.connection_identity == observed.connection_identity
-               for a in self._transactions.values()):
+               and not self._confirmed_ended(a) for a in self._transactions.values()):
             return self._error('invalid_transaction', 'Connection already adopted')
         key = uuid4().hex
         handle = TransactionHandle(self._issuer, key, isolation, access_mode)
         self._transactions[key] = _Adoption(port, observed, handle)
         return Ok(handle)
+
+    @staticmethod
+    def _confirmed_ended(adoption):
+        """Native port history only; quarantine/disposal never means ended."""
+        check = getattr(adoption.port, '_original_generation_ended', None)
+        try:
+            return callable(check) and check(adoption.observation.transaction_identity) is True
+        except Exception:
+            return False
 
     def _original_custody(self, handle):
         """Pure issuer lookup for private preparation/recovery, never admission.
@@ -135,6 +144,14 @@ class HostExecutor:
         entry = self._savepoints.get(savepoint._key)
         if savepoint._issuer is not self._issuer or entry is None or entry[0] is not savepoint or entry[1] is not transaction:
             return self._error('invalid_transaction', 'Foreign or released savepoint')
+        native_live = getattr(a.port, '_savepoint_is_live', None)
+        if callable(native_live):
+            try:
+                live = native_live(savepoint._key) is True
+            except Exception:
+                return self._error('transaction_unusable', 'Original savepoint observation unavailable')
+            if not live:
+                return self._error('invalid_transaction', 'Original native savepoint absent or shadowed')
         result = self._command(a, ('ROLLBACK TO SAVEPOINT ' if rollback else 'RELEASE SAVEPOINT ') + savepoint._key)
         if isinstance(result, Ok):
             for key, candidate in list(self._savepoints.items()):

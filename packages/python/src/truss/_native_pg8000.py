@@ -29,6 +29,7 @@ class NativeCall:
     driver_raised: bool
     capture_complete: bool
     final_status: bytes | None
+    original_control: object = None
 
 
 class NativeBoundary:
@@ -49,6 +50,8 @@ class NativeBoundary:
         self._event_bytes, self._event_count = event_bytes, event_count
         self.last_call = None
         self._ready_error = None
+        self._transaction_tracker = None
+        self._active_control = None
         with _attachment_lock:
             if connection._transaction_status != b'I' or hasattr(connection, '_truss_native_boundary'):
                 raise NativeBoundaryRefusal('Requires original idle, unattached connection')
@@ -93,14 +96,17 @@ class NativeBoundary:
                 raise NativeBoundaryRefusal('Original operation cannot be released')
             self._operation = None
 
-    def _call(self, invoke, token=None, *, closing=False, preflight=None):
+    def _call(self, invoke, token=None, *, closing=False, preflight=None, lifecycle=None):
         with self._lock:
             if (self._quarantined or self._calling or
                     (self._operation is not None and token is not self._operation) or
                     (token is not None and token is not self._operation)):
                 raise NativeBoundaryRefusal('Native boundary unavailable or busy')
+            if self._transaction_tracker is not None:
+                self._transaction_tracker._before(lifecycle)
             if preflight is not None:
                 preflight()
+            self._active_control = lifecycle
             self._calling = True
             self._ready_error = None
             self._events, self._bytes, self._complete = [], 0, True
@@ -122,10 +128,17 @@ class NativeBoundary:
                 # only return/raise settles the call, never the first Ready.
                 ready = bool(events) and events[-1].code == b'Z'
                 complete = self._complete and ready and not self._quarantined and (not raised or native_error)
-                self.last_call = NativeCall(events, raised, complete, self._connection._transaction_status)
+                self.last_call = NativeCall(events, raised, complete, self._connection._transaction_status, self._active_control)
                 if closing or not complete:
                     self._quarantined = True
-                self._calling = False
+                try:
+                    if self._transaction_tracker is not None:
+                        self._transaction_tracker._after(lifecycle, self.last_call)
+                except BaseException:
+                    self._quarantined = True
+                    raise
+                finally:
+                    self._calling = False
 
     def run(self, sql, *, token=None, **params):
         """Trusted host SQL; lifecycle classification is not provided here."""
