@@ -39,10 +39,11 @@ def decode_operation_registry(actual_xid, columns, rows, command, affected_rows,
             if value is None:
                 if i not in (5,6,7,15): refuse()
             else:
-                if type(value) is not str: refuse()
-                try: total+=len(value.encode('utf-8',errors='strict'))
-                except UnicodeError: refuse()
-                if total>maximum_bytes: refuse()
+                if type(value) is not str or len(value)>maximum_bytes-total: refuse()
+                # Every supported integer/kind/phase/hex carrier is ASCII.
+                # Check the bound before scanning; never allocate encoded copies.
+                if not value.isascii(): refuse()
+                total+=len(value)
         if values[0]!=actual_xid: refuse()
         _integer(values[1],9223372036854775807)
         if values[1] in identities: refuse()

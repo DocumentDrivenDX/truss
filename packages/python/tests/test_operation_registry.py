@@ -26,7 +26,7 @@ class OperationRegistryTests(unittest.TestCase):
 
     def test_independent_numeric_null_phase_and_carrier_refusals(self):
         mutations=[(0,'1'),(1,'01'),(1,'9223372036854775808'),(1,True),(2,'unknown'),(3,'unknown'),
-                   (4,'-1'),(5,'7'),(8,None),(8,''),(8,'0'),(8,'AA'),(8,'zz'),(15,'00')]
+                   (4,'-1'),(5,'7'),(8,None),(8,''),(8,'0'),(8,'AA'),(8,'zz'),(8,'é'),(8,'🙂'),(8,'\ud800'),(15,'00')]
         for column,value in mutations:
             row=self.row();row[column]=value
             with self.subTest(column=column,value=value):

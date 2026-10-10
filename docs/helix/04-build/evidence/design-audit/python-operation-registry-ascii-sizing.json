@@ -1,0 +1,33 @@
+{
+  "scope": "ASCII registry carrier sizing without temporary UTF-8 encoding; structural source tests only",
+  "command": [
+    "/private/tmp/truss-pgserver-corrected-test-env/bin/python",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "packages/python/tests",
+    "-p",
+    "test_operation_registry.py",
+    "-v"
+  ],
+  "output": "test_all_phases_and_full_unordered_surviving_multiset (test_operation_registry.OperationRegistryTests.test_all_phases_and_full_unordered_surviving_multiset) ... ok\ntest_independent_numeric_null_phase_and_carrier_refusals (test_operation_registry.OperationRegistryTests.test_independent_numeric_null_phase_and_carrier_refusals) ... ok\ntest_original_descriptor_completion_and_exact_byte_bounds (test_operation_registry.OperationRegistryTests.test_original_descriptor_completion_and_exact_byte_bounds) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nOK\n",
+  "tests": 3,
+  "sources": [
+    {
+      "path": "packages/python/src/truss/_operation_registry.py",
+      "sha256": "7e74c34c9b0a874af8e7c0c743357aff2c848cc4c8ae3ed2404542ce18ec667d"
+    },
+    {
+      "path": "packages/python/tests/test_operation_registry.py",
+      "sha256": "bb210a0e1ca1428ece5b63fbdae0a02ff09ad9807e0f6400c04da73e8e995db3"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/row-operation-registry-observation-v0.1.proposal.sql",
+      "sha256": "29d1a6647aedae69bda2276d6a0f6173b50a5a9e89a79b3cc4076f504b5125ca"
+    }
+  ],
+  "completeHeapWorkAccountingQualified": false,
+  "nativeAuthorityQualified": false,
+  "wheelRebuilt": false
+}

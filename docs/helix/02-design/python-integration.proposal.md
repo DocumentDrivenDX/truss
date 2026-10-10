@@ -2735,3 +2735,20 @@ original context/principal/epoch/configuration facts. Observer exactly-one
 unfinished selection and commit all-surviving validation require independent
 native evidence. Decoded rows cannot grant producer/role custody or enable the
 seven missing routine bodies. No UMF/Weft/security-owner semantics are duplicated.
+
+
+### Registry carrier sizing without temporary encoding
+
+The structural decoder now checks each original string length against remaining
+byte capacity before scanning and requires ASCII before adding its exact length.
+All accepted native integer/kind/phase/hex cells are ASCII; non-ASCII/unknown
+vocabulary already cannot satisfy the selected grammar. No UTF-8 encoding copy
+is allocated to measure a possibly oversized cell. Original raw refusal evidence
+remains the caller/driver custodian's obligation; this is not normalization.
+
+The [new source receipt](../04-build/evidence/design-audit/python-operation-registry-ascii-sizing.json)
+retains three passing tests with exact/one-over sizing and non-ASCII/surrogate
+refusals. Earlier registry evidence remains historical for its source hashes.
+This removes a concrete temporary allocation path but does not qualify actual
+upstream string capture, retained tuple/set footprint, complete work/heap/native
+accounting or a new installed wheel. The supported registry meaning is unchanged.
