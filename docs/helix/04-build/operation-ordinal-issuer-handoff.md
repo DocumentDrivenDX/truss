@@ -1018,3 +1018,33 @@ native row framing/work accounting, current subject authority, family semantics,
 complete touch contributor coverage, readiness, native effects and original
 settlement remain outstanding. Public operations and all seven semantic body
 readiness fields remain unchanged.
+
+### Original native registry read and Python correspondence (2026-10-10)
+
+`evidence/design-audit/check_registry_correspondence_native.py` now composes the
+original complete current-xid registry query with the existing pinned pg8000 raw
+text/accounted-control seam and private Python correspondence. The retained
+`registry-correspondence-native.json` records PostgreSQL16.15, nine passing
+observations and seven original captures, each with the sixteen-field descriptor,
+raw text/null cells and original CommandComplete/ReadyForQuery frames. All fields
+have native text OID25/format0. The original SELECT3 completion and transaction
+statusT are checked before correspondence. The native table is created from the
+retained original operation declaration in an isolated administrative fixture.
+
+The fixture manually populates fresh complete proposed context/group carriers for
+native ordinals7/11/20 under the actual assigned xid. The full query returns all
+three with exact original cell correspondence; finalized noncontributor20 remains
+in the cohort, while manifest contributors resolve7/11 in order. A separate foreign
+xid row is excluded by the original native current-xid predicate. Five original
+native definition/input/prestate/candidate/obligation substitutions produce one
+Python refusal each. Confirmed savepoint rollback restores the exact cells under
+the same xid. Confirmed final ROLLBACK returns statusI, and observation preserves
+no-assigned-xid as NULL without assigning another transaction.
+
+This is original native read/decoding correspondence evidence, not protected
+producer qualification: fixture-owner inserts and phase labels establish neither
+family admission nor readiness. Installed marker/current subject/private role ACL/
+callable dependency closure, complete touch contributor coverage, resource/native
+work/deadline, seven semantic bodies and original application settlement remain
+unqualified. No synthetic historical carrier is relabeled, public API released or
+consumer acceptance case promoted.
