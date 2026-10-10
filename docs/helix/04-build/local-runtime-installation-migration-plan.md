@@ -2058,3 +2058,41 @@ profiles. Administrative phase markers in this receipt do not supply those guard
 Native work/cancellation/physical overhead, full bounds, cleanup, counter conversion
 and installer publication remain unfinished. Full reservation/installer
 qualification remain false, and no acceptance criterion is promoted.
+
+## Declared retained-inventory boundaries — 2026-10-10
+
+[The13-check native boundary receipt](evidence/design-audit/capacity-inventory-all-family-boundaries-native.json)
+now executes the original inventory verifier at65536 retained rows and512MiB of
+complete framed custody bytes. Exact65536-operation,65536-touch and32768+32768
+mixed populations pass; one additional retained member in each population refuses
+54000. Independent Python framing totals predict every small row, including the
+varying native identity text lengths, without using native counters as the oracle.
+
+Exact512MiB operation, touch and mixed inventories pass, using64 complete8MiB
+frames built inside PostgreSQL. The exact aggregate one-byte-over controls shrink
+one frame by the additional small row's complete size minus one, then add that
+row, preserving each per-row8MiB ceiling while making the65-row aggregate exactly
+536870913 bytes. Mixed and touch populations refuse54000; rollback restores
+exact512MiB parity. No large carrier/frame is transported to the driver or
+allocated in the Python oracle. The earlier5/9-check receipts retain their exact
+archived producers and separately qualified narrower cases.
+
+All runs execute the unchanged UMF owner-exported original functions on isolated
+PostgreSQL16.15 with45-second statement/5-second lock limits and a60-second socket
+timeout. The latest65536-row successful scans took about1.26–1.38seconds locally;
+64-row framed-byte scans took about0.003–0.004seconds. These are descriptive single
+run timings, not the governed performance benchmark or native work-account proof.
+Large raw carriers use compressible repeated bytes; octet_length and PostgreSQL
+TOAST behavior do not establish512MiB physical storage, detoasting/copy costs,
+index/WAL overhead, cancellation settlement or complete hostile-input budgeting.
+Administrative population/reset and original marker inputs are fixture controls,
+not protected mutation, cleanup or resource-profile adoption.
+
+This supersedes the prior absence of declared operation/touch/mixed inventory
+boundary execution evidence. It does not close ordinary-role graph/security/
+issuer/finalizer/deferred-cohort qualification, original registered dependency
+inventory, exact resource-profile conversion or complete installation. Native full
+reservation and installer readiness remain false; no acceptance criterion is
+promoted. The next composition still needs an unavoidable bounded commit invocation
+and all seven mandatory semantic bodies, without repeated per-row whole-inventory
+scans being presented as a qualified work profile.

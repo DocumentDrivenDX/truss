@@ -92,3 +92,10 @@ connection visibility, counter corruption/orphan refusal and preserved committed
 state after rollback. It is not automatic deferred/commit-hook enforcement and
 does not replace the seven semantic guards. The protected finalizer/installer must
 register and enforce its original invocation under a bounded full-cohort profile.
+
+The13-check boundary receipt now executes65536-row and512MiB complete-frame
+limits for operation, touch and mixed populations, with one-row/exact-one-byte
+aggregate refusals and rollback restoration. Native compressible fixtures and
+single-run timings establish logical framed limits only; physical/native-work,
+security, cleanup, complete deferred invocation and installer qualification remain
+open. Earlier5/9-check boundary receipts retain their original producers.
