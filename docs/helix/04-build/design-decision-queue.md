@@ -1195,3 +1195,10 @@ Weft6a42631 adds separately reviewed Paths-Keys assembly source, not a newly
 adopted Truss PostgreSQL realization. Its next produced-package review remains
 upstream-owned. UMF metadata/DDL semantics and the existing browser/numeric
 adoption remain unchanged. No new traversal or pool product decision is needed.
+
+
+### Weft produced candidate follow-up — 2026-10-10
+
+Weft main now reaches9104e55. Commit6d82b7e registers the original3a2a79c Paths-Keys aarch64-apple-darwin candidate. The [produced-artifact review](evidence/design-audit/weft-paths-keys-produced-review-20261010.json) verifies original manifest/executable/custody/backend lengths and SHA256, plus complete decoded corpus/control evidence hashes and all74 lines. Owner evidence reports55 corpus cases (36 compiled/19 blocked) and19 controls (3 compiled/16 blocked), with successful candidate qualification. This supersedes the earlier statement that produced-package review was still pending; it does not prove native execution, Truss authority or adoption.
+
+The selected feature is Ashlar Databricks Paths-Keys. Truss's PostgreSQL compiler remains f05f2df/compile-sql0.2; adopting this candidate as its replacement would change the selected backend contract. Newer9104e55 grouped COUNT(*) HAVING is source implementation, not part of the registered3a2a79c executable. Keep independent review/realization gates for any future Truss PostgreSQL mapping or newer produced package. No duplicate logical SQL compiler is needed in Truss, and none of these compiler checkpoints closes the security/installation/mutation/feed gates above.

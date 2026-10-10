@@ -1,0 +1,84 @@
+{
+  "owner": "DocumentDrivenDX/weft",
+  "reviewedCommit": "9104e556abe61c13ad1815fbb8b15f0075c8a837",
+  "registeredAt": "6d82b7e",
+  "realization": {
+    "realizationId": "weft-3a2a79c-paths-keys-aarch64-apple-darwin-candidate",
+    "manifest": {
+      "path": "manifest.json",
+      "sha256": "414d343f917bffa5eca34b6d9d87a4fd2234486c6351b95879f1061afb17302d",
+      "bytes": 7066
+    },
+    "executable": {
+      "bytes": 8330656,
+      "path": "bin/weft-paths-keys",
+      "sha256": "471fc5dedc8f8eba3156444d19cc2161fac7a06833672dd5621ed49ead8b522c"
+    },
+    "target": "aarch64-apple-darwin",
+    "assemblyCustody": {
+      "path": "assembly-custody.json",
+      "sha256": "03e897e9d9e0b849e3a480710a9a3cc440537d439e3ba1a25385c48c9fef2f27",
+      "bytes": 34922
+    }
+  },
+  "verifiedArtifacts": [
+    {
+      "path": "manifest.json",
+      "sha256": "414d343f917bffa5eca34b6d9d87a4fd2234486c6351b95879f1061afb17302d",
+      "bytes": 7066
+    },
+    {
+      "bytes": 8330656,
+      "path": "bin/weft-paths-keys",
+      "sha256": "471fc5dedc8f8eba3156444d19cc2161fac7a06833672dd5621ed49ead8b522c"
+    },
+    {
+      "path": "assembly-custody.json",
+      "sha256": "03e897e9d9e0b849e3a480710a9a3cc440537d439e3ba1a25385c48c9fef2f27",
+      "bytes": 34922
+    },
+    {
+      "bytes": 52274,
+      "path": "backend/backend-manifest.json",
+      "sha256": "ead2df8de9927765775ec7267a9a1865b1c02ec21c849255ada85c36a645fb84"
+    }
+  ],
+  "verifiedOriginalDecodedEvidence": {
+    "corpus": {
+      "binarySha256": "471fc5dedc8f8eba3156444d19cc2161fac7a06833672dd5621ed49ead8b522c",
+      "blocked": 19,
+      "cases": 55,
+      "compiled": 36,
+      "decodedBytes": 14139177,
+      "decodedSha256": "46028a09bf272316a9a260f76c536a0a2ab856b54ade83fb1012b1b862e14b95",
+      "profile": "weft-paths-keys-produced-corpus/0.1",
+      "qualification": "Exact compiler/schema/accepted-case correspondence only; no native or host authority.",
+      "sourceCommit": "3a2a79ccc19d636f20d31116662d61365c1b4ff7"
+    },
+    "controls": {
+      "binarySha256": "471fc5dedc8f8eba3156444d19cc2161fac7a06833672dd5621ed49ead8b522c",
+      "blocked": 16,
+      "cases": 19,
+      "compiled": 3,
+      "decodedBytes": 11845558,
+      "decodedSha256": "c0227c3ec70e83cfd5740e1380678ff8744c31a670fd122703428d68cffbceb8",
+      "profile": "weft-paths-keys-produced-corpus/0.1",
+      "qualification": "Exact compiler/schema/accepted-case correspondence only; no native or host authority.",
+      "sourceCommit": "3a2a79ccc19d636f20d31116662d61365c1b4ff7"
+    }
+  },
+  "qualificationOutcome": {
+    "commandSha256": "5be699a29f0fc67d95c9e99222c7981d86b074d615b8344983bb6bd5dba4c0b2",
+    "completed": true,
+    "openingClosingCustody": true,
+    "result": {
+      "exitCode": 0,
+      "stderrBytes": 110,
+      "stdoutBytes": 0
+    },
+    "scope": "Candidate compiler corpus observation; independent acceptance/index/native authority remain separate."
+  },
+  "scope": "Read-only original committed artifact length/SHA256 and complete decoded evidence count/hash verification. No binary execution, rebuild, native SQL, authority or Truss adapter adoption.",
+  "newerSourceFeature": "9104e55 versioned grouped COUNT(*) HAVING is newer than the registered 3a2a79c executable; not covered by that produced realization.",
+  "trussCompilerUnchanged": "f05f2df/compile-sql0.2"
+}
