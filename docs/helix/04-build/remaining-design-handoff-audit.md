@@ -1920,3 +1920,12 @@ original typed image correspondence. The [replacement packet](operation-ordinal-
 selects distinct versioned complete native-image capture, aggregate preflight,
 owner-codec/current authority and actual cascade/rollback controls. Implementation
 and full replacement acceptance remain open; old carriers are not reinterpreted.
+
+
+[Initializer82](evidence/design-audit/installation-initializer-observation-native.json)
+now checks independently expected complete original capacity initializer bytes,
+separate layout/resource corruption/restoration and actual revoked SELECT rights.
+The one-shot harness refuses without a row payload, and a later explicit read
+succeeds after rights restoration without initialization replay. This advances
+two observer controls at component scope; complete PKG02/08 inventory/publication,
+archive removal, owner subject/cut and status/verify/reconcile remain unfinished.

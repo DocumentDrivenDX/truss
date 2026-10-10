@@ -573,3 +573,30 @@ complete the installed native inventory observer or qualify protected ordinary
 consumer APIs. Public exports remain LocalPostgres, LocalRuntimeError and
 RuntimeInfo. Continue PA01–PA05, PKG02/08 and populated migration gates under
 the existing acceptance sequence; no criterion is promoted by wheel parity.
+
+
+## Original initializer observation component — 2026-10-10
+
+[PostgreSQL16.15 evidence](evidence/design-audit/installation-initializer-observation-native.json)
+adds nine controls to the73-check original17-helper inventory experiment. It
+executes the original capacity initialization statement using pinned complete
+layout and resource-profile bytes, independently compares all seven selected
+native fields, corrupts each original-byte column separately and detects the
+mismatch, then confirms exact savepoint/transaction restoration. Its selected
+finite initializer query returns the complete singleton row; no hash-only native
+field substitutes for the retained original bytes.
+
+A separate observation role receives only schema USAGE and SELECT on this
+relation. After one successful observation, native SELECT rights are revoked.
+One explicit query fails with42501; the harness emits observation_unavailable
+and no row payload. Rights are restored and a separate caller invocation reads
+the exact unchanged original initializer. No initializer or recipe is replayed,
+no polling loop runs and no bootstrap marker is published. Original source and
+producer bytes are pinned before/after execution; prior receipts remain intact.
+
+This is a native component schedule, not an implementation of the public
+status/verify/reconcile route. Complete release inventory, archive removal and
+initializer membership, original subject/attempt/current authority/coherent cut,
+whole accounting, termination/recovery custody and publication remain required.
+The existing observer matrix now distinguishes these executed components from
+its still-not_run complete acceptance schedules. installerReady remains false.
