@@ -1268,3 +1268,32 @@ proof, complete callable/role/DDL closure and full resource accounting remain
 required before integrating an installed observer. Zero affected rows require a
 refusal, without retry or success classification. This checkpoint adds no public
 API, installed-wheel evidence or seven-body readiness claim.
+
+### Actual cascade operation-generation composition (2026-10-10)
+
+`row-event-generation-native.json` retains21 observations from the existing
+private `runtime_observe_operation_generation` trigger composed with the original
+UMF-exported native0.16 tables, current row-image codecs and original cascade
+image probe on PostgreSQL16.15. Six real state/node/scalar DELETE events advance
+the surviving operation generation from0 to6 and clear readiness/seal/application
+generations and application result. All six original OLD images still correspond
+to retained prestate and the correct distinct object/edge owner-property tuples.
+Confirmed savepoint rollback restores both canonical rows and prior operation
+phase/generation/proofs, without changing the original transaction ID.
+
+With no unfinished operation, actual cascade writing fails55000. At exhausted
+generation it fails54000 without arithmetic overflow; rollback restores canonical
+rows and the original exhausted generation. The attempted ambiguous operation
+fixture fails23505 at `row_home_operation_unfinished_xid`, before any observer
+event. The checker preserves this actual native invariant rather than dropping
+the index to manufacture an unreachable installed state. The trigger's defensive
+multiple-operation branch is not thereby exercised. An initial failed harness
+attempt revealed that constraint; no completed receipt was overwritten.
+
+Administrative caller/phase/catalog/prestate fixtures do not establish protected
+admission or current authorization. This is the existing partial INVOKER producer,
+not the missing complete `row_touch_observe` body. Key/reservation trigger paths,
+held guards, full touch/contributor/family/scope/capacity composition, callable
+role/DDL closure and whole resource qualification remain independent. Native
+pg8000 calls in this probe do not qualify the accounted original-control seam.
+No public API, installed-wheel claim or seven-body readiness field changes.

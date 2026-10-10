@@ -1644,3 +1644,13 @@ This closes the finite transition experiment, not original event/current authori
 complete contributor/family/scope proof, held guards/capacity or installed observer
 composition. Administrative fixture phases do not qualify readiness. The full
 45-story/167-criterion scope and seven semantic bodies remain open.
+
+The [cascade generation receipt](evidence/design-audit/row-event-generation-native.json)
+adds21 native observations: six actual cascade events advance operation generation
+and clear proofs; missing operation/exhaustion fail before surviving effects; the
+original unique unfinished-operation index rejects ambiguity; confirmed rollback
+restores canonical rows and original operation proofs. This composes the existing
+partial generation producer with complete OLD-image attribution, while preserving
+the protected observer, touch/contributor/current-authority/guard/capacity and
+full installation/resource gaps. The defensive multi-operation trigger branch
+and key/reservation paths are not covered by this fixture.
