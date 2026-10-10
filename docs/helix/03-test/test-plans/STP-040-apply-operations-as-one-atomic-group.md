@@ -122,3 +122,30 @@ PQ-06 compares the [independent replacement-scope oracle](../reference-participa
 Create an earlier host savepoint S, then execute a successful adopted group and release its internal call savepoint. Hold its pending result privately and independently observe catalog share custody. Start catalog acceptance on another connection and prove its actual wait. Roll back the host to S: confirm complete group graph/key/journal/receipt/report effect removal and invalidation of its original capture. Where the selected native profile proves the catalog lock was first acquired after S, acceptance may now proceed even though the outer host transaction remains live. A later host COMMIT cannot settle the removed pending group or publish its provisional identifiers.
 
 Repeat with catalog custody acquired by earlier host work before S: rollback removes the group but does not imply that earlier custody vanished; independently observe acceptance still waiting until that custody ends. Repeat with lost rollback acknowledgment and preserve original unknown/recovery classification rather than declaring lock release from client intent. A new group after confirmed rollback must obtain the current catalog/context and a fresh operation ordinal; no old result or cached lock pin supplies admission. These planned controls consume the existing TD-044/STP-044 lifetime protocol and do not authorize Truss to issue whole-host rollback or restart.
+
+
+## Document-qualified paired group fixture — planned
+
+Extend the original group fixture with two independently authored documents whose
+module, Record, Field, key and relationship names are byte-identical. Their document
+identities and original model pins differ. Admit each through the selected complete
+ADR-004/CONTRACT-003 profile, retaining independently expected distinct storage IDs,
+full accepted source/binding/report artifacts and document-qualified policy owners.
+Document topological-order tests are not evidence for this identity isolation.
+
+Execute a group against document A while document B has independently populated
+objects, key reservations and relationships with equal business-value spellings.
+Compare complete B state before/after, not just row counts. A's key uniqueness,
+cardinality, ownership closure, no-op detection and version checks must not borrow
+B's definitions or data. Grant access to A alone and require no B disclosure or
+write authority; current authorization must qualify that expectation independently.
+A bare matching module/element label cannot select either document implicitly.
+
+Roll back the group and independently recover both full baselines. Then commit
+an explicitly qualified A group and show exactly its intended effects/history
+while B remains unchanged. Retire/reactivate A's definition through the selected
+lifecycle procedure: A retains its own lineage/storage ID after validation, B
+retains its distinct identity, and old grants are not restored implicitly.
+Migration preservation reuses the same paired source fixture and complete original
+artifacts. Every stage remains not_run until the complete catalog/security/group
+and installed profile is qualified; native column/FK projection alone cannot pass.
