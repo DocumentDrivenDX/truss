@@ -262,3 +262,37 @@ without a boolean, while rejecting conflated outcomes, missing profiles, unknown
 fields/reasons, padded tokens and numeric/zero/leading-zero limits. This verifies
 closed shape only; canonical byte/range/resource/current-person/original execution
 admission is still required and cannot be inferred from schema success.
+
+
+## Revised consumer refusal classification — 2026-10-09
+
+The revised consumer R7/corpus accepts this installation/epoch/commit-aware meaning
+and expects `Invalid` for malformed or unissued tokens. Preserve the existing
+visibility result wire: unavailable has no included field; available false is a
+qualified negative inclusion result. The consumer's error name is an adapter
+projection, not a new Truss wire version or permission to collapse execution
+uncertainty into invalid input.
+
+| Original admitted observation | Required classification |
+| --- | --- |
+| Malformed/noncanonical locator | Semantic unavailable(invalid_token), once; no receipt lookup/data statement after syntax refusal. Existing original context/resource admission can precede decoding. |
+| Syntax-valid locator with independently proven never-issued identity | Semantic unavailable(invalid_token), subject to the security-owned safe projection; never available false. A private source receipt lookup needs complete original authority/epoch/profile/cut/retention evidence before this conclusion. |
+| No matching receipt visible in this supplied snapshot | Unavailable(observation_integrity/retention/authorization as actually admitted); absence alone cannot distinguish never-issued, expired, denied or committed-outside-snapshot. No silent second connection or wait loop. |
+| Valid original issued/committed receipt, authorized scope and same-cut inclusion proof | Available true with exact comparison profile; independently complete transaction/application coverage still required on downstream targets. |
+| Valid original issued/committed receipt and qualified same-cut exclusion/not-yet-application proof | Available false with exact comparison profile; valid identity and negative proof both precede publication. Missing evidence is not a false result. |
+| Wrong/unqualified installation/epoch/profile or missing lineage | Existing disclosure-safe unavailable branch; equal xid/storage-row text never repairs it. |
+| Outer execution/cancellation/settlement unknown | Preserve existing execution Outcome and original recovery custody; no fabricated semantic true/false or generic Invalid erasing recovery. |
+
+A schema-valid or Python-decoded locator is not proof of issuance. Even a matching
+private receipt row requires original complete receipt/position/context/commit
+correspondence and current disclosure admission. A forged or rolled-back pending
+row cannot mint a durable consumer position. Denied/expired/missing states keep
+the existing non-oracle policy; this table does not authorize exposing which
+private condition occurred. Only a selected host adapter may project safely
+published invalid_token to its `Invalid` error; other reasons retain their actual
+unavailable semantics, and outer transport outcomes remain separate.
+
+The revised consumer's two Invalid cases are expected results, not current Truss
+native execution evidence. The locator decoder, fourteen wire-shape checks and
+consumer fake runner cannot close this classification. The linked RV-02/06/11–14 schedules
+require original native issuance/commit/cut/coverage/retention and security tests.

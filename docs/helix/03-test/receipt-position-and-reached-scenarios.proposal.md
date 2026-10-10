@@ -118,3 +118,35 @@ Python/TypeScript token interchange through the selected shared resolver.
 Record actual source/target layout, position, clock/protection, security and
 application profiles. These are planned integration controls; existing planner,
 DDL round-trip and rollback-only component evidence does not execute them.
+
+
+## Revised R7 refusal / negative-inclusion controls
+
+Extend RV-11–14 using the new frozen consumer expectations, without changing
+RV-01/02/06's genuine positive/no-op/snapshot requirements. Save issued tokens
+from actual confirmed commits; do not use syntactically valid fixture locators
+as an issued-token setup.
+
+1. Malformed token and independently proven never-issued token both produce a
+   disclosure-safe refusal, never available false. The selected consumer adapter
+   projects published invalid_token to Invalid; no partial record or wait follows.
+2. A forged syntax-valid locator can pass the private decoder but must fail original
+   receipt/context/commit correspondence. Exercise each original row/xid/epoch/
+   installation/profile substitution without granting a private-existence oracle.
+3. In RV-02, an older snapshot's absent receipt cannot establish never-issued or
+   available false. Require qualified valid-identity/negative-inclusion evidence
+   on the supplied cut, otherwise unavailable. No hidden new transaction/connection.
+4. In RV-06, an all-no-op group's issued token resolves through its original receipt
+   despite zero journal rows. Exact replay/token and downstream complete coverage
+   qualify inclusion; a fabricated last journal pair must not replace it.
+5. Denied, expired, missing-lineage, observation-integrity and resource cases retain
+   their safe semantic unavailability. Inject an outer native/transport uncertainty
+   and require preserved original Outcome/recovery, not generic Invalid.
+6. Spy on original resolver/native submission and observe one explicit invocation,
+   no polling/retry or mutation. Repeated calls are separate caller actions under
+   current authority; no cached false/issued bit can bypass revalidation.
+
+Record actual native setup, independent issuance/commit/current-cut evidence,
+result/profile and safe publication observation. Corpus error strings, decoder
+success, row absence or schema validity alone are insufficient. All these extended
+controls remain unexecuted until the complete original resolver is installed.

@@ -1155,3 +1155,15 @@ consumer steps and required key-membership/conjunction semantics; Weft remains
 compiler owner. Do not substitute direct edge enumeration or rewrite consumer SQL
 to close these R8 cases. A failed compiler fixture produces no new success receipt;
 actual run metadata must correspond to its output/input/harness hashes.
+
+
+### R7 refusal versus negative visibility handoff
+
+The existing position/reached contract and RV schedule now explicitly map the
+revised consumer Invalid cases without changing their wire. Available false
+requires independently admitted issued/committed identity and negative same-cut
+inclusion proof. Missing receipt evidence is unavailable, not false or proven
+never-issued. Safe invalid_token projection remains security-owned; outer
+execution uncertainty retains original recovery. Private locator decoding and
+wire-shape tests cannot satisfy these native classifications. P3 implements the
+extended RV controls under the original resolver, with no hidden connection/wait.
