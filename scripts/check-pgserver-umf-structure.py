@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Rollback-only composition probe of original base, adjunct DDL and immutable guards on pgserver."""
+import argparse
 import hashlib
 import importlib.metadata
 import importlib.resources
@@ -12,6 +13,13 @@ import tempfile
 
 import pgserver
 
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--corrected-pgserver', action='store_true')
+args = parser.parse_args()
+selected_package = '0.1.4+truss.pg16.15' if args.corrected_pgserver else '0.1.4'
+selected_server = '16.15' if args.corrected_pgserver else '16.2'
+receipt_name = ('pgserver-corrected-umf-structural-correspondence.json' if args.corrected_pgserver
+                else 'pgserver-umf-structural-correspondence.json')
 root = Path(__file__).resolve().parents[1]
 paths = [
  'docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql',
@@ -211,8 +219,8 @@ for obj in declarations['objects']:
             keys = [v['String']['sval'] for v in c['keys']]
             expected_key_constraints.append([table, 'p' if c['contype']=='CONSTR_PRIMARY' else 'u', keys,
                 c.get('deferrable',False),c.get('initdeferred',False),c.get('nulls_not_distinct',False),True,True,True,keys])
-if importlib.metadata.version('pgserver') != '0.1.4':
-    raise SystemExit('Expected pinned pgserver0.1.4')
+if importlib.metadata.version('pgserver') != selected_package:
+    raise SystemExit('Expected exact selected pgserver package')
 psql = Path(str(importlib.resources.files('pgserver'))) / 'pginstall/bin/psql'
 with tempfile.TemporaryDirectory(prefix='truss-pgserver-layout-') as directory:
     server = pgserver.get_server(Path(directory) / 'data', cleanup_mode='stop')
@@ -221,6 +229,7 @@ with tempfile.TemporaryDirectory(prefix='truss-pgserver-layout-') as directory:
             [str(psql), server.get_uri(), '-X', '-q', '-A', '-t', '-v', 'ON_ERROR_STOP=1'],
             input=sql, text=True, timeout=60).strip()
     try:
+        assert query('SHOW server_version;') == selected_server, 'Wrong selected native version'
         # No schema replacement, substituted SQL or installed publication.
         probe = '''
 DO $$
@@ -329,11 +338,11 @@ ROLLBACK;
     finally:
         server.cleanup()
 receipt = {'scope': 'Original generated base/adjunct DDL and immutable guard composition, UMF core column/type/requiredness and ordered physical FK, sequence configuration and explicit index structure correspondence plus independent adjunct catalog expectations under rollback only; no complete installer, routine/grant inventory, accepted catalog or migration qualification',
-           'pgserverVersion': '0.1.4', 'declarationCaptureSha256': hashlib.sha256(declarations_bytes).hexdigest(), 'structuralModel': str(structural_path.relative_to(root)), 'structuralSha256': hashlib.sha256(structural_bytes).hexdigest(), 'sources': [{'path': path, 'sha256': hashlib.sha256(value).hexdigest()} for path, value in zip(paths, originals)], 'observation': observed,
+           'pgserverVersion': selected_package, 'nativeBinarySha256': {name: hashlib.sha256((psql.parent / name).read_bytes()).hexdigest() for name in ('postgres','psql')}, 'declarationCaptureSha256': hashlib.sha256(declarations_bytes).hexdigest(), 'structuralModel': str(structural_path.relative_to(root)), 'structuralSha256': hashlib.sha256(structural_bytes).hexdigest(), 'sources': [{'path': path, 'sha256': hashlib.sha256(value).hexdigest()} for path, value in zip(paths, originals)], 'observation': observed,
            'rollbackRemovedNamespace': True, 'truncateRefusals': 4, 'truncateModes': ['origin', 'replica'],
            'unverifiedStructure': ['collation implementation/version semantics', 'default and check expression meaning', 'index expression/predicate meaning and implicit constraint indexes', 'complete routines/grants'],
-           'limitation': 'PostgreSQL16.2 lacks transaction_timeout; any selected profile requiring that setting must refuse or use a separately admitted bounded alternative',
+           'limitation': 'The selected PostgreSQL16 profile lacks transaction_timeout; any profile requiring that setting must refuse or use a separately admitted bounded alternative',
            'producerSha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest()}
-(root / 'docs/helix/04-build/evidence/design-audit/pgserver-umf-structural-correspondence.json').write_text(json.dumps(receipt, indent=2) + '\n')
+(root / 'docs/helix/04-build/evidence/design-audit' / receipt_name).write_text(json.dumps(receipt, indent=2) + '\n')
 print(json.dumps({'serverVersion': observed['serverVersion'], 'tables': len(expected), 'columns': sum(map(len, expected_columns.values())), 'foreignKeys': len(expected_fks), 'sequences': len(expected_sequences), 'explicitIndexes': len(expected_indexes), 'keyConstraints': len(expected_key_constraints),
                   'rollbackRemovedNamespace': True, 'truncateRefusals': 4, 'truncateModes': ['origin', 'replica'], 'transactionTimeout': observed['transactionTimeout']}))

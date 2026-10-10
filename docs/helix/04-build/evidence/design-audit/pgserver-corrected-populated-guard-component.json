@@ -1,0 +1,79 @@
+{
+  "scope": "Populated immutable guard component under rollback; administrative fixtures with actual FKs, not protected original producers or a ready installation",
+  "pgserver": "0.1.4+truss.pg16.15",
+  "nativeBinarySha256": {
+    "postgres": "42bf6b5a32f835b83ca228a6c0cbd97c971225263ac4e0c36c964a18480ad79e",
+    "psql": "564f8a86c5670d522fbb478393fae48ca3de536d74d1fa5dd6017fc87f5300da"
+  },
+  "observation": {
+    "serverVersion": "16.15",
+    "configuration": [
+      "0",
+      "0",
+      "forbid",
+      "engine",
+      "fixture-configuration",
+      "fixture-binding",
+      "fixture-inventory",
+      "db7a45820ce9a6b56c77c01ed18b5bd7e91723453d51f56cbe0feae977d9e058",
+      "b77a112196c8b6021ad677b12ac73f84da9446f4343de51c575edaf8ca692507",
+      "1f5df124500cd04d5088abf80eeaa0138b6112ec59e81a316e522b9bd7b59781"
+    ],
+    "receipt": [
+      "1",
+      "fixture-attempt",
+      "fixture-request",
+      "fixture-receipt",
+      "e123031a24cbbfb8f27a40602543c32e5fc3f09b2d1b9da2fdf0e126fff0544b",
+      "df888653ff06b055a0272aec6e0bbd81c42ea82437f237c027932bd679aef6aa",
+      "f6b367f1be07ea0fd1bc3858dd73cb8815e02d8b75ed357dc92717eacd95f1a7"
+    ]
+  },
+  "refusals": 12,
+  "sqlstate": "55000",
+  "modes": [
+    "origin",
+    "replica"
+  ],
+  "operations": [
+    "UPDATE",
+    "DELETE",
+    "TRUNCATE"
+  ],
+  "unchangedCompleteRowsAfterEachRefusal": true,
+  "independentOriginalBytesAndHashesMatch": true,
+  "rollbackRemovedNamespace": true,
+  "sources": [
+    {
+      "path": "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql",
+      "sha256": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/operation-configuration-storage.owner-export.sql",
+      "sha256": "55448d0e9b979ab62f48099e6c317e19ebe40ce5ff9c90472209deff8a618e3a"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/layout-migration-storage.owner-export.sql",
+      "sha256": "dd7e24b38fd09194d67d4f0a55f5b72696bd83b7f87d108ccb001fbab6892d33"
+    },
+    {
+      "path": "packages/postgresql/native/operation-configuration-immutability.sql",
+      "sha256": "3ae78935297c76e66eb324adb314f4554a7924f7e11b7a1ae7128c9d3cbc8386"
+    },
+    {
+      "path": "packages/postgresql/native/layout-migration-receipt-immutability.sql",
+      "sha256": "1b13a84f5bfd4f706d8b5a3f01837f3cdd0a450a849a7fd6ca48eda8885af309"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/pgserver-populated-guard-fixture.sql",
+      "sha256": "1221666a5d6b77bfb9f5c31280a95ef453140f4740f54b22fd232822447ef089"
+    }
+  ],
+  "producerSha256": "f3695b47fb0aeac1d2dc510977c169d1fbd81bc44920df3b91a86c9243e459b4",
+  "limitations": [
+    "No installer/ready-marker publication",
+    "No original capsule/receipt semantic producer admission",
+    "No ordinary-role authorization qualification",
+    "No complete retention/cleanup lifecycle or migration execution"
+  ]
+}

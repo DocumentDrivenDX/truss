@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Rollback-only populated immutable-guard component checks; no installer publication."""
+import argparse
 import hashlib
 import importlib.metadata
 import importlib.resources
@@ -9,6 +10,13 @@ import subprocess
 import tempfile
 import pgserver
 
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--corrected-pgserver', action='store_true')
+args = parser.parse_args()
+selected_package = '0.1.4+truss.pg16.15' if args.corrected_pgserver else '0.1.4'
+selected_server = '16.15' if args.corrected_pgserver else '16.2'
+receipt_name = ('pgserver-corrected-populated-guard-component.json' if args.corrected_pgserver
+                else 'pgserver-populated-guard-component.json')
 root = Path(__file__).resolve().parents[1]
 paths = [
  'docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql',
@@ -19,7 +27,7 @@ paths = [
  'docs/helix/04-build/evidence/design-audit/pgserver-populated-guard-fixture.sql',
 ]
 originals = [(root / p).read_bytes() for p in paths]
-assert importlib.metadata.version('pgserver') == '0.1.4'
+assert importlib.metadata.version('pgserver') == selected_package
 psql = Path(str(importlib.resources.files('pgserver'))) / 'pginstall/bin/psql'
 probe = '''
 DO $$
@@ -71,6 +79,7 @@ with tempfile.TemporaryDirectory(prefix='truss-populated-guards-') as directory:
         return subprocess.check_output([str(psql),server.get_uri(),'-X','-q','-A','-t','-v','ON_ERROR_STOP=1'],
                                        input=sql,text=True,timeout=60).strip()
     try:
+        assert query('SHOW server_version;') == selected_server, 'Wrong selected native version'
         observed = json.loads(query('BEGIN;\n' + b';\n'.join(originals).decode() + ';\n' + probe))
         assert observed['configuration'] == ['0','0','forbid','engine','fixture-configuration','fixture-binding','fixture-inventory',
             hash_text('fixture-configuration'),hash_text('fixture-binding'),hash_text('fixture-inventory')]
@@ -80,12 +89,12 @@ with tempfile.TemporaryDirectory(prefix='truss-populated-guards-') as directory:
     finally:
         server.cleanup()
 receipt = {'scope':'Populated immutable guard component under rollback; administrative fixtures with actual FKs, not protected original producers or a ready installation',
- 'pgserver':'0.1.4','observation':observed,'refusals':12,'sqlstate':'55000','modes':['origin','replica'],
+ 'pgserver':selected_package,'nativeBinarySha256':{name:hashlib.sha256((psql.parent/name).read_bytes()).hexdigest() for name in ('postgres','psql')},'observation':observed,'refusals':12,'sqlstate':'55000','modes':['origin','replica'],
  'operations':['UPDATE','DELETE','TRUNCATE'],'unchangedCompleteRowsAfterEachRefusal':True,
  'independentOriginalBytesAndHashesMatch':True,'rollbackRemovedNamespace':True,
  'sources':[{'path':p,'sha256':hashlib.sha256(b).hexdigest()} for p,b in zip(paths,originals)],
  'producerSha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
  'limitations':['No installer/ready-marker publication','No original capsule/receipt semantic producer admission',
  'No ordinary-role authorization qualification','No complete retention/cleanup lifecycle or migration execution']}
-(root/'docs/helix/04-build/evidence/design-audit/pgserver-populated-guard-component.json').write_text(json.dumps(receipt,indent=2)+'\n')
+(root/'docs/helix/04-build/evidence/design-audit'/receipt_name).write_text(json.dumps(receipt,indent=2)+'\n')
 print(json.dumps({'serverVersion':observed['serverVersion'],'refusals':12,'unchangedRows':True,'rollbackRemovedNamespace':True}))

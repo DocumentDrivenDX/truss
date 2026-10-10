@@ -30,7 +30,7 @@ authorizing weaker guarantees. Do not count component tests as milestone complet
 
 | Priority / planning target | Usable deliverable and exit evidence |
 | --- | --- |
-| P0 / next three focused working days | Resolve the concrete original issuer/native-admission mechanism, required security-owner interface and actual pgserver16.2 compatibility. Produce a coherent implementation decision and an actual integrated control/admission experiment, or identify the precise unavailable prerequisite and revise the forecast. Do not spend this checkpoint producing another interface-only receipt. |
+| P0 / next three focused working days | Resolve the concrete original issuer/native-admission mechanism, required security-owner interface, corrected pgserver candidate compatibility and reproducible default delivery. Produce a coherent implementation decision and an actual integrated control/admission experiment, or identify the precise unavailable prerequisite and revise the forecast. Do not spend this checkpoint producing another interface-only receipt. |
 | P1 / weeks1–3 | Package a complete fresh-install bundle and Python explicit install/verify entrypoints. Install on a disposable pgserver runtime, verify original inventory, initialize and publish readiness atomically; inject late failure and prove no ready installation. Include the mandatory native guard/finalizer bodies and security composition. Server startup remains DDL-free. |
 | P2 / weeks4–6 | Ship a Python preview supporting catalog acceptance/install, atomic apply and import, direct key and edge reads on a declared consumer subset, together with its versioned executable preview corpus/runner. Exercise one installed consumer model through actual accepted IDs/report, persisted values/keys/edges, journal and exact read results. Include R4 per-person isolation, R5 authenticated-versus-asserted origin and document qualification in the same installed path. Test denial/revocation, failure/rollback and large integers/decimals/absence/null. Unsupported shapes explicitly refuse. This is the first usable application milestone, not complete corpus or stable-layout acceptance. |
 | P3 / weeks6–8 | Add complete feed transaction delivery/acknowledgement and durable request receipts with retry/idempotency and reached-position semantics. Exercise commit, lost response, explicit caller retry, no-op groups, restart and isolation on the same installation. Expand the published preview corpus/runner with these installed cases; clearly identify remaining full-corpus cases. |
@@ -1048,3 +1048,58 @@ requirements, not an implemented logger or telemetry adoption. Actual SDK/bridge
 pins, carrier schema, overhead budget and receiver evidence remain open. Keep
 receipt/journal settlement authoritative and independent of diagnostic delivery;
 never ingest local CLI connection results wholesale as safe telemetry.
+
+
+### Corrected current-layout compatibility checkpoint
+
+The original structural and populated-guard probes now accept an explicit
+`--corrected-pgserver` selection. They require the exact
+`pgserver0.1.4+truss.pg16.15` / PostgreSQL16.15 pair before DDL, retain separate
+corrected receipts and record actual postgres/psql binary hashes. The published
+0.1.4/16.2 profile and its historical receipts are not overwritten or relabeled.
+
+The [corrected structural receipt](evidence/design-audit/pgserver-corrected-umf-structural-correspondence.json)
+compares the original0.16 source/adjunct/guard composition against UMF structural0.6:
+50 tables,481 ordered columns,67 ordered physical FKs,12 sequence configurations,
+25 explicit index structures and64 primary/unique constraints match. Four immutable
+TRUNCATE attempts refuse in origin/replica modes. The
+[corrected populated receipt](evidence/design-audit/pgserver-corrected-populated-guard-component.json)
+passes12 UPDATE/DELETE/TRUNCATE refusals across both immutable homes and both modes,
+independently comparing complete original rows, fixture bytes and generated hashes
+after each attempt. Both disposable probes roll back all fixture DDL and confirm
+the namespace is absent before stopping their owned server.
+
+Reproduce in the installed corrected private-wheel environment:
+
+```sh
+python scripts/check-pgserver-umf-structure.py --corrected-pgserver
+python scripts/check-pgserver-populated-guards.py --corrected-pgserver
+```
+
+This removes a specific current-layout compatibility uncertainty on the corrected
+macOS/Python tuple. It is not full expression/collation/privilege qualification,
+an ordinary authorized write path, a native issuer/account, complete guard/finalizer
+installation, initialized readiness or populated migration. PostgreSQL16.15 still
+lacks transaction_timeout: a profile requiring it must refuse or qualify its
+separately admitted bounded alternative. The corrected binary remains a private
+candidate, not a published default dependency. P0's actual original native admission
+integration remains required, with no shortcut through these component probes.
+
+### Native body / security-owner dependency checkpoint
+
+The existing seven-routine manifest/matrix already selects PL/pgSQL attributes,
+protected ownership and full-cohort validator composition. Its missing bodies
+cannot be implemented honestly by trusting seal flags, caller ordinals or dummy
+validators. The next dependency remains original operation attribution/account/
+generation authority, followed by complete observer/validator/finalizer bodies and
+atomic inventory/ready publication. No new product decision between handler
+languages or invoker/definer is needed.
+
+Read-only inspection of the security owner's completed verification turn reports
+scoped routine-definition guard success and altered-definition/signature refusals;
+full acceptance remains26/132. Its next active slice is B09 unsupported-policy
+activation/report-mode weakening. Those observations are coordination evidence,
+not Truss profile adoption. Keep native routine/profile comparison with that owner,
+retain the Truss original issuer/account and seven-body handoff separately, and do
+not wait for unrelated security backends or interpret a routine lock as policy
+activation or complete R4/R5 qualification.
