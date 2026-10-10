@@ -986,3 +986,35 @@ context/group producer or installed-wheel test. Original registry byte matching,
 complete contributor/cohort coverage, native family semantics, current authority,
 readiness, protected effects and original settlement remain independent integration
 exits. No public exports or seven-body readiness claims change.
+
+### Python complete supplied registry correspondence (2026-10-10)
+
+`_row_registry_correspondence.py` consumes the complete supplied sixteen-cell
+registry through its existing structural decoder. It decodes original context and
+group bodies for every retained operation, checks installation/xid/ordinal, kind,
+profile, original layout, definition and family artifact correspondence, and then
+matches manifest contributors' original definition/input/prestate/candidate/
+obligation bytes. Native ordinals resolve explicitly; no MAX/newest selection or
+manifest-only filtering is introduced. The immutable result retains both the
+original supplied cohort and the ordered contributor projections, sharing the
+matched operation objects. Finalized/no-touch operations remain available for
+separate complete-transaction settlement. This candidate composition requires the
+selected manifest profile/layout to match every retained operation context; mixed
+profile/layout cohorts are refused pending an explicitly qualified composition.
+
+`evidence/design-audit/python-registry-correspondence-source.json` and its retained
+log pin 94 passing Python source tests. Four focused methods retain unordered
+native ordinals20/7/11 with ordered contributors7/11 and finalized noncontributor20;
+reject seven contributor carrier substitutions, missing/duplicate contributors,
+foreign xid and three noncontributor context scope substitutions; and check row/
+byte capture bounds and immutability. These registry rows are synthetic unit-test
+inputs, not an original native capture. Existing local-runtime tests in the full
+suite do not upgrade that evidence scope.
+
+The original adapter must independently establish descriptor/cycle/completion,
+complete row visibility and actual transaction/current-cut custody before calling
+this component. Neither the supplied cohort nor labels prove those facts. Full
+native row framing/work accounting, current subject authority, family semantics,
+complete touch contributor coverage, readiness, native effects and original
+settlement remain outstanding. Public operations and all seven semantic body
+readiness fields remain unchanged.
