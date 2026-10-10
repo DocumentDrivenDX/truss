@@ -32,7 +32,7 @@ authorizing weaker guarantees. Do not count component tests as milestone complet
 | --- | --- |
 | P0 / next three focused working days | Resolve the concrete original issuer/native-admission mechanism, required security-owner interface, corrected pgserver candidate compatibility and reproducible default delivery. Produce a coherent implementation decision and an actual integrated control/admission experiment, or identify the precise unavailable prerequisite and revise the forecast. Do not spend this checkpoint producing another interface-only receipt. |
 | P1 / weeks1–3 | Package a complete fresh-install bundle and Python explicit install/verify entrypoints. Install on a disposable pgserver runtime, verify original inventory, initialize and publish readiness atomically; inject late failure and prove no ready installation. Include the mandatory native guard/finalizer bodies and security composition. Server startup remains DDL-free. |
-| P2 / weeks4–6 | Ship a Python preview supporting catalog acceptance/install, atomic apply and import, direct key and edge reads on a declared consumer subset, together with its versioned executable preview corpus/runner. Exercise one installed consumer model through actual accepted IDs/report, persisted values/keys/edges, journal and exact read results. Include R4 per-person isolation, R5 authenticated-versus-asserted origin and document qualification in the same installed path. Test denial/revocation, failure/rollback and large integers/decimals/absence/null. Unsupported shapes explicitly refuse. This is the first usable application milestone, not complete corpus or stable-layout acceptance. |
+| P2 / weeks4–6 | Ship a Python preview supporting catalog acceptance/install, atomic apply with preconditions and same-plan dry-run, atomic/per-item provenance import, direct key/edge reads and the complete consumer R8 read-shape implementation path, together with its versioned executable preview corpus/runner. Exercise one installed consumer model through actual accepted IDs/report, persisted values/keys/edges, journal and exact read results. Include R4 per-person isolation, R5 authenticated-versus-asserted origin and document qualification in the same installed path. Test denial/revocation, failure/rollback and large integers/decimals/absence/null. Unsupported shapes explicitly refuse. Required R8 shapes include indexed equality, relationship predicates, capped alias expansion, business-key paging and one-property grouped counts with exact Weft/native plans and finite bounds. This is a preview integration milestone; unsupported required shapes prevent R8/consumer-ready acceptance. Complete corpus/stable-layout/managed-target release remains separate. |
 | P3 / weeks6–8 | Add complete feed transaction delivery/acknowledgement and durable request receipts with retry/idempotency and reached-position semantics. Exercise commit, lost response, explicit caller retry, no-op groups, restart and isolation on the same installation. Expand the published preview corpus/runner with these installed cases; clearly identify remaining full-corpus cases. |
 | P4 / weeks8–12 | Qualify the complete release corpus and Python/TypeScript interchange; freeze the admitted layout/support tuple, package explicit populated migration/reconciliation and prove preservation plus fresh-process recovery. Qualify Aurora/Lakebase independently before advertising them. Publish stable artifacts only after these exits; candidate0.16 and a preview cannot be relabeled stable. |
 
@@ -1116,3 +1116,30 @@ profile responsibilities, one explicit reconciliation invocation and timeout ver
 pre-effect-refusal distinctions. Actual native contention/cancellation/lost-commit/
 post-commit-cleanup schedules remain implementation gates; no stock driver or
 secondary lock/recovery mechanism is silently adopted.
+
+
+### Consumer-discovery scope reconciliation
+
+The owning Python design now closes R1's stale pending-decision row against actual
+accepted ADR-003/ADR-001, and explicitly keeps every R6/R8/R9 consumer shape on P2's
+implementation path. Partial direct reads cannot satisfy R8. Parsed-input/compiler,
+ready-index and native resource dependencies must be qualified or trigger a
+reforecast, not silent shape removal. Preview corpus appears with installed cases;
+full R2 interchange, R3 stable layout/Lakebase and R10 publication remain release
+gates. P3 retains durable idempotent repeat/reached/feed qualification. The original
+consumer discovery input remains unchanged, and all R1–R10 are required before
+calling the result consumer-ready.
+
+
+### Revised consumer input checkpoint
+
+The original external consumer requirements changed on2026-10-09; a new frozen
+snapshot preserves requirements/corpus/two models separately from the old archive.
+The revised input accepts epoch/commit-aware receipt positions and distinguishes
+Invalid from available false.35 authored core names remove the prior naming
+prerequisite for the new source pins. The revision checker retains input-only
+scope: compiler/native/corpus execution is not adopted from old proposal receipts.
+Next PY-02/PY-05 work consumes these actual authored bytes and reruns original
+compiler/name-resolution controls; P3 reached/replay cases preserve issuance and
+no-op distinctions. The first release still needs all R1–R10, not just this input
+alignment.

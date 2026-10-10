@@ -1,0 +1,1244 @@
+{
+  "umf": "0.7.0",
+  "id": "praxis-catalog",
+  "vocabularies": {
+    "umf.ddd": {
+      "version": "0.1.0"
+    },
+    "hohfeld.placement": {
+      "version": "0.1.0"
+    }
+  },
+  "extensions": {},
+  "modules": [
+    {
+      "id": "catalog",
+      "namespace": "catalog",
+      "extensions": {
+        "umf.ddd": {
+          "kind": "bounded-context",
+          "terms": []
+        },
+        "hohfeld.placement": {
+          "authority": "truss",
+          "replicas": [
+            "ashlar"
+          ]
+        }
+      },
+      "elements": [
+        {
+          "id": "UseCase",
+          "kind": "record",
+          "name": "UseCase",
+          "members": [
+            {
+              "module": "catalog",
+              "element": "UseCase.code"
+            },
+            {
+              "module": "catalog",
+              "element": "UseCase.name"
+            },
+            {
+              "module": "catalog",
+              "element": "UseCase.practiceArea"
+            },
+            {
+              "module": "catalog",
+              "element": "UseCase.description"
+            },
+            {
+              "module": "catalog",
+              "element": "UseCase.problem"
+            }
+          ],
+          "extensions": {
+            "umf.ddd": {
+              "kind": "entity",
+              "fields": {
+                "code": {
+                  "type": {
+                    "kind": "scalar",
+                    "name": "string"
+                  },
+                  "cardinality": "one"
+                },
+                "name": {
+                  "type": {
+                    "kind": "scalar",
+                    "name": "string"
+                  },
+                  "cardinality": "one"
+                },
+                "practiceArea": {
+                  "type": {
+                    "kind": "scalar",
+                    "name": "string"
+                  },
+                  "cardinality": "optional"
+                },
+                "description": {
+                  "type": {
+                    "kind": "scalar",
+                    "name": "string"
+                  },
+                  "cardinality": "optional"
+                },
+                "problem": {
+                  "type": {
+                    "kind": "scalar",
+                    "name": "string"
+                  },
+                  "cardinality": "optional"
+                }
+              },
+              "identity": {
+                "fields": [
+                  "code"
+                ],
+                "scope": "context"
+              }
+            }
+          },
+          "keys": [
+            {
+              "id": "identity",
+              "name": "Identity",
+              "fields": [
+                {
+                  "module": "catalog",
+                  "element": "UseCase.code"
+                }
+              ],
+              "primary": true
+            }
+          ]
+        },
+        {
+          "id": "UseCase.code",
+          "kind": "field",
+          "name": "code",
+          "nullability": "required",
+          "cardinality": "one",
+          "scalarType": "string",
+          "extensions": {}
+        },
+        {
+          "id": "UseCase.name",
+          "kind": "field",
+          "name": "name",
+          "nullability": "required",
+          "cardinality": "one",
+          "scalarType": "string",
+          "extensions": {}
+        },
+        {
+          "id": "UseCase.practiceArea",
+          "kind": "field",
+          "name": "practiceArea",
+          "nullability": "absent-allowed",
+          "cardinality": "one",
+          "scalarType": "string",
+          "extensions": {}
+        },
+        {
+          "id": "UseCase.description",
+          "kind": "field",
+          "name": "description",
+          "nullability": "absent-allowed",
+          "cardinality": "one",
+          "scalarType": "string",
+          "extensions": {}
+        },
+        {
+          "id": "UseCase.problem",
+          "kind": "field",
+          "name": "problem",
+          "nullability": "absent-allowed",
+          "cardinality": "one",
+          "scalarType": "string",
+          "extensions": {}
+        },
+        {
+          "id": "Solution",
+          "kind": "record",
+          "name": "Solution",
+          "members": [
+            {
+              "module": "catalog",
+              "element": "Solution.code"
+            },
+            {
+              "module": "catalog",
+              "element": "Solution.name"
+            },
+            {
+              "module": "catalog",
+              "element": "Solution.deliveryMode"
+            },
+            {
+              "module": "catalog",
+              "element": "Solution.summary"
+            },
+            {
+              "module": "catalog",
+              "element": "Solution.workflow"
+            },
+            {
+              "module": "catalog",
+              "element": "Solution.prompt"
+            },
+            {
+              "module": "catalog",
+              "element": "Solution.audience"
+            }
+          ],
+          "extensions": {
+            "umf.ddd": {
+              "kind": "entity",
+              "fields": {
+                "code": {
+                  "type": {
+                    "kind": "scalar",
+                    "name": "string"
+                  },
+                  "cardinality": "one"
+                },
+                "name": {
+                  "type": {
+                    "kind": "scalar",
+                    "name": "string"
+                  },
+                  "cardinality": "one"
+                },
+                "deliveryMode": {
+                  "type": {
+                    "kind": "scalar",
+                    "name": "string"
+                  },
+                  "cardinality": "one"
+                },
+                "summary": {
+                  "type": {
+                    "kind": "scalar",
+                    "name": "string"
+                  },
+                  "cardinality": "optional"
+                },
+                "workflow": {
+                  "type": {
+                    "kind": "scalar",
+                    "name": "string"
+                  },
+                  "cardinality": "optional"
+                },
+                "prompt": {
+                  "type": {
+                    "kind": "scalar",
+                    "name": "string"
+                  },
+                  "cardinality": "optional"
+                },
+                "audience": {
+                  "type": {
+                    "kind": "scalar",
+                    "name": "string"
+                  },
+                  "cardinality": "optional"
+                }
+              },
+              "identity": {
+                "fields": [
+                  "code"
+                ],
+                "scope": "context"
+              }
+            }
+          },
+          "keys": [
+            {
+              "id": "identity",
+              "name": "Identity",
+              "fields": [
+                {
+                  "module": "catalog",
+                  "element": "Solution.code"
+                }
+              ],
+              "primary": true
+            }
+          ]
+        },
+        {
+          "id": "Solution.code",
+          "kind": "field",
+          "name": "code",
+          "nullability": "required",
+          "cardinality": "one",
+          "scalarType": "string",
+          "extensions": {}
+        },
+        {
+          "id": "Solution.name",
+          "kind": "field",
+          "name": "name",
+          "nullability": "required",
+          "cardinality": "one",
+          "scalarType": "string",
+          "extensions": {}
+        },
+        {
+          "id": "Solution.deliveryMode",
+          "kind": "field",
+          "name": "deliveryMode",
+          "nullability": "required",
+          "cardinality": "one",
+          "scalarType": "string",
+          "extensions": {}
+        },
+        {
+          "id": "Solution.summary",
+          "kind": "field",
+          "name": "summary",
+          "nullability": "absent-allowed",
+          "cardinality": "one",
+          "scalarType": "string",
+          "extensions": {}
+        },
+        {
+          "id": "Solution.workflow",
+          "kind": "field",
+          "name": "workflow",
+          "nullability": "absent-allowed",
+          "cardinality": "one",
+          "scalarType": "string",
+          "extensions": {}
+        },
+        {
+          "id": "Solution.prompt",
+          "kind": "field",
+          "name": "prompt",
+          "nullability": "absent-allowed",
+          "cardinality": "one",
+          "scalarType": "string",
+          "extensions": {}
+        },
+        {
+          "id": "Solution.audience",
+          "kind": "field",
+          "name": "audience",
+          "nullability": "absent-allowed",
+          "cardinality": "one",
+          "scalarType": "string",
+          "extensions": {}
+        },
+        {
+          "id": "Product",
+          "kind": "record",
+          "name": "Product",
+          "members": [
+            {
+              "module": "catalog",
+              "element": "Product.code"
+            },
+            {
+              "module": "catalog",
+              "element": "Product.name"
+            },
+            {
+              "module": "catalog",
+              "element": "Product.vendor"
+            },
+            {
+              "module": "catalog",
+              "element": "Product.category"
+            },
+            {
+              "module": "catalog",
+              "element": "Product.summary"
+            },
+            {
+              "module": "catalog",
+              "element": "Product.lifecycleStatus"
+            },
+            {
+              "module": "catalog",
+              "element": "Product.availability"
+            },
+            {
+              "module": "catalog",
+              "element": "Product.caveat"
+            }
+          ],
+          "extensions": {
+            "umf.ddd": {
+              "kind": "entity",
+              "fields": {
+                "code": {
+                  "type": {
+                    "kind": "scalar",
+                    "name": "string"
+                  },
+                  "cardinality": "one"
+                },
+                "name": {
+                  "type": {
+                    "kind": "scalar",
+                    "name": "string"
+                  },
+                  "cardinality": "one"
+                },
+                "vendor": {
+                  "type": {
+                    "kind": "scalar",
+                    "name": "string"
+                  },
+                  "cardinality": "optional"
+                },
+                "category": {
+                  "type": {
+                    "kind": "scalar",
+                    "name": "string"
+                  },
+                  "cardinality": "optional"
+                },
+                "summary": {
+                  "type": {
+                    "kind": "scalar",
+                    "name": "string"
+                  },
+                  "cardinality": "optional"
+                },
+                "lifecycleStatus": {
+                  "type": {
+                    "kind": "scalar",
+                    "name": "string"
+                  },
+                  "cardinality": "optional"
+                },
+                "availability": {
+                  "type": {
+                    "kind": "scalar",
+                    "name": "string"
+                  },
+                  "cardinality": "optional"
+                },
+                "caveat": {
+                  "type": {
+                    "kind": "scalar",
+                    "name": "string"
+                  },
+                  "cardinality": "optional"
+                }
+              },
+              "identity": {
+                "fields": [
+                  "code"
+                ],
+                "scope": "context"
+              }
+            }
+          },
+          "keys": [
+            {
+              "id": "identity",
+              "name": "Identity",
+              "fields": [
+                {
+                  "module": "catalog",
+                  "element": "Product.code"
+                }
+              ],
+              "primary": true
+            }
+          ]
+        },
+        {
+          "id": "Product.code",
+          "kind": "field",
+          "name": "code",
+          "nullability": "required",
+          "cardinality": "one",
+          "scalarType": "string",
+          "extensions": {}
+        },
+        {
+          "id": "Product.name",
+          "kind": "field",
+          "name": "name",
+          "nullability": "required",
+          "cardinality": "one",
+          "scalarType": "string",
+          "extensions": {}
+        },
+        {
+          "id": "Product.vendor",
+          "kind": "field",
+          "name": "vendor",
+          "nullability": "absent-allowed",
+          "cardinality": "one",
+          "scalarType": "string",
+          "extensions": {}
+        },
+        {
+          "id": "Product.category",
+          "kind": "field",
+          "name": "category",
+          "nullability": "absent-allowed",
+          "cardinality": "one",
+          "scalarType": "string",
+          "extensions": {}
+        },
+        {
+          "id": "Product.summary",
+          "kind": "field",
+          "name": "summary",
+          "nullability": "absent-allowed",
+          "cardinality": "one",
+          "scalarType": "string",
+          "extensions": {}
+        },
+        {
+          "id": "Product.lifecycleStatus",
+          "kind": "field",
+          "name": "lifecycleStatus",
+          "nullability": "absent-allowed",
+          "cardinality": "one",
+          "scalarType": "string",
+          "extensions": {}
+        },
+        {
+          "id": "Product.availability",
+          "kind": "field",
+          "name": "availability",
+          "nullability": "absent-allowed",
+          "cardinality": "one",
+          "scalarType": "string",
+          "extensions": {}
+        },
+        {
+          "id": "Product.caveat",
+          "kind": "field",
+          "name": "caveat",
+          "nullability": "absent-allowed",
+          "cardinality": "one",
+          "scalarType": "string",
+          "extensions": {}
+        },
+        {
+          "id": "CoverageAssertion",
+          "kind": "record",
+          "name": "CoverageAssertion",
+          "members": [
+            {
+              "module": "catalog",
+              "element": "CoverageAssertion.code"
+            },
+            {
+              "module": "catalog",
+              "element": "CoverageAssertion.level"
+            },
+            {
+              "module": "catalog",
+              "element": "CoverageAssertion.notes"
+            }
+          ],
+          "extensions": {
+            "umf.ddd": {
+              "kind": "entity",
+              "fields": {
+                "code": {
+                  "type": {
+                    "kind": "scalar",
+                    "name": "string"
+                  },
+                  "cardinality": "one"
+                },
+                "level": {
+                  "type": {
+                    "kind": "scalar",
+                    "name": "string"
+                  },
+                  "cardinality": "one"
+                },
+                "notes": {
+                  "type": {
+                    "kind": "scalar",
+                    "name": "string"
+                  },
+                  "cardinality": "optional"
+                }
+              },
+              "identity": {
+                "fields": [
+                  "code"
+                ],
+                "scope": "context"
+              }
+            }
+          },
+          "keys": [
+            {
+              "id": "identity",
+              "name": "Identity",
+              "fields": [
+                {
+                  "module": "catalog",
+                  "element": "CoverageAssertion.code"
+                }
+              ],
+              "primary": true
+            }
+          ]
+        },
+        {
+          "id": "CoverageAssertion.code",
+          "kind": "field",
+          "name": "code",
+          "nullability": "required",
+          "cardinality": "one",
+          "scalarType": "string",
+          "extensions": {}
+        },
+        {
+          "id": "CoverageAssertion.level",
+          "kind": "field",
+          "name": "level",
+          "nullability": "required",
+          "cardinality": "one",
+          "scalarType": "string",
+          "extensions": {}
+        },
+        {
+          "id": "CoverageAssertion.notes",
+          "kind": "field",
+          "name": "notes",
+          "nullability": "absent-allowed",
+          "cardinality": "one",
+          "scalarType": "string",
+          "extensions": {}
+        }
+      ],
+      "relationships": [
+        {
+          "id": "solution-addresses",
+          "name": "addresses",
+          "source": [
+            {
+              "module": "catalog",
+              "element": "Solution"
+            }
+          ],
+          "target": [
+            {
+              "module": "catalog",
+              "element": "UseCase",
+              "key": "identity"
+            }
+          ],
+          "sourceMultiplicity": {
+            "min": 0,
+            "max": "*"
+          },
+          "targetMultiplicity": {
+            "min": 0,
+            "max": "*"
+          },
+          "targetLifecycle": "independent",
+          "directed": true,
+          "inverse": "addressedBy"
+        },
+        {
+          "id": "solution-providedby",
+          "name": "providedBy",
+          "source": [
+            {
+              "module": "catalog",
+              "element": "Solution"
+            }
+          ],
+          "target": [
+            {
+              "module": "catalog",
+              "element": "Product",
+              "key": "identity"
+            }
+          ],
+          "sourceMultiplicity": {
+            "min": 0,
+            "max": "*"
+          },
+          "targetMultiplicity": {
+            "min": 0,
+            "max": "*"
+          },
+          "targetLifecycle": "independent",
+          "directed": true,
+          "inverse": "provides"
+        },
+        {
+          "id": "coverageassertion-ofproduct",
+          "name": "ofProduct",
+          "source": [
+            {
+              "module": "catalog",
+              "element": "CoverageAssertion"
+            }
+          ],
+          "target": [
+            {
+              "module": "catalog",
+              "element": "Product",
+              "key": "identity"
+            }
+          ],
+          "sourceMultiplicity": {
+            "min": 0,
+            "max": "*"
+          },
+          "targetMultiplicity": {
+            "min": 0,
+            "max": "*"
+          },
+          "targetLifecycle": "independent",
+          "directed": true,
+          "inverse": "coverage"
+        },
+        {
+          "id": "coverageassertion-ofusecase",
+          "name": "ofUseCase",
+          "source": [
+            {
+              "module": "catalog",
+              "element": "CoverageAssertion"
+            }
+          ],
+          "target": [
+            {
+              "module": "catalog",
+              "element": "UseCase",
+              "key": "identity"
+            }
+          ],
+          "sourceMultiplicity": {
+            "min": 0,
+            "max": "*"
+          },
+          "targetMultiplicity": {
+            "min": 0,
+            "max": "*"
+          },
+          "targetLifecycle": "independent",
+          "directed": true,
+          "inverse": "coveredBy"
+        }
+      ],
+      "actions": [
+        {
+          "id": "AddUseCase",
+          "description": "Add a use case: a kind of work someone at the firm needs done",
+          "inputs": [
+            {
+              "name": "code",
+              "type": {
+                "kind": "scalar",
+                "name": "string"
+              },
+              "cardinality": "one"
+            },
+            {
+              "name": "name",
+              "type": {
+                "kind": "scalar",
+                "name": "string"
+              },
+              "cardinality": "one"
+            },
+            {
+              "name": "practiceArea",
+              "type": {
+                "kind": "scalar",
+                "name": "string"
+              },
+              "cardinality": "optional"
+            },
+            {
+              "name": "description",
+              "type": {
+                "kind": "scalar",
+                "name": "string"
+              },
+              "cardinality": "optional"
+            },
+            {
+              "name": "problem",
+              "type": {
+                "kind": "scalar",
+                "name": "string"
+              },
+              "cardinality": "optional"
+            }
+          ],
+          "preconditions": [
+            {
+              "id": "fresh",
+              "reason": "a use case with that code exists",
+              "predicate": {
+                "op": "absent",
+                "type": "UseCase",
+                "key": {
+                  "input": "code"
+                }
+              }
+            }
+          ],
+          "effects": [
+            {
+              "op": "create",
+              "type": "UseCase",
+              "key": {
+                "input": "code"
+              },
+              "properties": {
+                "name": {
+                  "input": "name"
+                },
+                "practiceArea": {
+                  "input": "practiceArea"
+                },
+                "description": {
+                  "input": "description"
+                },
+                "problem": {
+                  "input": "problem"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "AddSolution",
+          "description": "Add a solution, one way of doing a use case, and say how it is delivered",
+          "inputs": [
+            {
+              "name": "code",
+              "type": {
+                "kind": "scalar",
+                "name": "string"
+              },
+              "cardinality": "one"
+            },
+            {
+              "name": "name",
+              "type": {
+                "kind": "scalar",
+                "name": "string"
+              },
+              "cardinality": "one"
+            },
+            {
+              "name": "deliveryMode",
+              "type": {
+                "kind": "scalar",
+                "name": "string"
+              },
+              "cardinality": "one"
+            },
+            {
+              "name": "summary",
+              "type": {
+                "kind": "scalar",
+                "name": "string"
+              },
+              "cardinality": "optional"
+            },
+            {
+              "name": "workflow",
+              "type": {
+                "kind": "scalar",
+                "name": "string"
+              },
+              "cardinality": "optional"
+            },
+            {
+              "name": "prompt",
+              "type": {
+                "kind": "scalar",
+                "name": "string"
+              },
+              "cardinality": "optional"
+            },
+            {
+              "name": "audience",
+              "type": {
+                "kind": "scalar",
+                "name": "string"
+              },
+              "cardinality": "optional"
+            },
+            {
+              "name": "useCase",
+              "type": {
+                "kind": "ref",
+                "type": "UseCase"
+              },
+              "cardinality": "one"
+            }
+          ],
+          "preconditions": [
+            {
+              "id": "fresh",
+              "reason": "a solution with that code exists",
+              "predicate": {
+                "op": "absent",
+                "type": "Solution",
+                "key": {
+                  "input": "code"
+                }
+              }
+            },
+            {
+              "id": "useCase_exists",
+              "reason": "no such use case",
+              "predicate": {
+                "op": "exists",
+                "ref": {
+                  "input": "useCase"
+                }
+              }
+            }
+          ],
+          "effects": [
+            {
+              "op": "create",
+              "type": "Solution",
+              "key": {
+                "input": "code"
+              },
+              "properties": {
+                "name": {
+                  "input": "name"
+                },
+                "deliveryMode": {
+                  "input": "deliveryMode"
+                },
+                "summary": {
+                  "input": "summary"
+                },
+                "workflow": {
+                  "input": "workflow"
+                },
+                "prompt": {
+                  "input": "prompt"
+                },
+                "audience": {
+                  "input": "audience"
+                }
+              },
+              "as": "s"
+            },
+            {
+              "op": "link",
+              "type": "addresses",
+              "source": {
+                "alias": "s"
+              },
+              "target": {
+                "input": "useCase"
+              }
+            }
+          ]
+        },
+        {
+          "id": "AddProduct",
+          "description": "Add a product: a tool the firm has, is trialling or is looking at",
+          "inputs": [
+            {
+              "name": "code",
+              "type": {
+                "kind": "scalar",
+                "name": "string"
+              },
+              "cardinality": "one"
+            },
+            {
+              "name": "name",
+              "type": {
+                "kind": "scalar",
+                "name": "string"
+              },
+              "cardinality": "one"
+            },
+            {
+              "name": "vendor",
+              "type": {
+                "kind": "scalar",
+                "name": "string"
+              },
+              "cardinality": "optional"
+            },
+            {
+              "name": "category",
+              "type": {
+                "kind": "scalar",
+                "name": "string"
+              },
+              "cardinality": "optional"
+            },
+            {
+              "name": "summary",
+              "type": {
+                "kind": "scalar",
+                "name": "string"
+              },
+              "cardinality": "optional"
+            },
+            {
+              "name": "lifecycleStatus",
+              "type": {
+                "kind": "scalar",
+                "name": "string"
+              },
+              "cardinality": "optional"
+            },
+            {
+              "name": "availability",
+              "type": {
+                "kind": "scalar",
+                "name": "string"
+              },
+              "cardinality": "optional"
+            },
+            {
+              "name": "caveat",
+              "type": {
+                "kind": "scalar",
+                "name": "string"
+              },
+              "cardinality": "optional"
+            }
+          ],
+          "preconditions": [
+            {
+              "id": "fresh",
+              "reason": "a product with that code exists",
+              "predicate": {
+                "op": "absent",
+                "type": "Product",
+                "key": {
+                  "input": "code"
+                }
+              }
+            }
+          ],
+          "effects": [
+            {
+              "op": "create",
+              "type": "Product",
+              "key": {
+                "input": "code"
+              },
+              "properties": {
+                "name": {
+                  "input": "name"
+                },
+                "vendor": {
+                  "input": "vendor"
+                },
+                "category": {
+                  "input": "category"
+                },
+                "summary": {
+                  "input": "summary"
+                },
+                "lifecycleStatus": {
+                  "input": "lifecycleStatus"
+                },
+                "availability": {
+                  "input": "availability"
+                },
+                "caveat": {
+                  "input": "caveat"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "SetSolutionProvider",
+          "description": "Say which product provides a solution",
+          "inputs": [
+            {
+              "name": "solution",
+              "type": {
+                "kind": "ref",
+                "type": "Solution"
+              },
+              "cardinality": "one"
+            },
+            {
+              "name": "product",
+              "type": {
+                "kind": "ref",
+                "type": "Product"
+              },
+              "cardinality": "one"
+            }
+          ],
+          "preconditions": [
+            {
+              "id": "solution_exists",
+              "reason": "no such solution",
+              "predicate": {
+                "op": "exists",
+                "ref": {
+                  "input": "solution"
+                }
+              }
+            },
+            {
+              "id": "product_exists",
+              "reason": "no such product",
+              "predicate": {
+                "op": "exists",
+                "ref": {
+                  "input": "product"
+                }
+              }
+            }
+          ],
+          "effects": [
+            {
+              "op": "link",
+              "type": "providedBy",
+              "source": {
+                "input": "solution"
+              },
+              "target": {
+                "input": "product"
+              }
+            }
+          ]
+        },
+        {
+          "id": "AssertCoverage",
+          "description": "Record how far a product covers a use case",
+          "inputs": [
+            {
+              "name": "code",
+              "type": {
+                "kind": "scalar",
+                "name": "string"
+              },
+              "cardinality": "one"
+            },
+            {
+              "name": "level",
+              "type": {
+                "kind": "scalar",
+                "name": "string"
+              },
+              "cardinality": "one"
+            },
+            {
+              "name": "notes",
+              "type": {
+                "kind": "scalar",
+                "name": "string"
+              },
+              "cardinality": "optional"
+            },
+            {
+              "name": "product",
+              "type": {
+                "kind": "ref",
+                "type": "Product"
+              },
+              "cardinality": "one"
+            },
+            {
+              "name": "useCase",
+              "type": {
+                "kind": "ref",
+                "type": "UseCase"
+              },
+              "cardinality": "one"
+            }
+          ],
+          "preconditions": [
+            {
+              "id": "fresh",
+              "reason": "a coverage assertion with that code exists",
+              "predicate": {
+                "op": "absent",
+                "type": "CoverageAssertion",
+                "key": {
+                  "input": "code"
+                }
+              }
+            },
+            {
+              "id": "product_exists",
+              "reason": "no such product",
+              "predicate": {
+                "op": "exists",
+                "ref": {
+                  "input": "product"
+                }
+              }
+            },
+            {
+              "id": "useCase_exists",
+              "reason": "no such use case",
+              "predicate": {
+                "op": "exists",
+                "ref": {
+                  "input": "useCase"
+                }
+              }
+            }
+          ],
+          "effects": [
+            {
+              "op": "create",
+              "type": "CoverageAssertion",
+              "key": {
+                "input": "code"
+              },
+              "properties": {
+                "level": {
+                  "input": "level"
+                },
+                "notes": {
+                  "input": "notes"
+                }
+              },
+              "as": "c"
+            },
+            {
+              "op": "link",
+              "type": "ofProduct",
+              "source": {
+                "alias": "c"
+              },
+              "target": {
+                "input": "product"
+              }
+            },
+            {
+              "op": "link",
+              "type": "ofUseCase",
+              "source": {
+                "alias": "c"
+              },
+              "target": {
+                "input": "useCase"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

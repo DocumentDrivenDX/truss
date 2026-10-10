@@ -1,6 +1,6 @@
 # Python consumer integration design
 
-This proposal implements the short-term consumer path in the [build plan](../04-build/implementation-plan.md#python-consumer-integration-priority--2026-10-09). ADR-001 remains accepted and ADR-003 remains proposed; the human requested a Python implementation promptly and asked for details before selecting the route. This document supplies those details without recording acceptance. CONTRACT-004/007/010/011/012 and the shared authorization design govern behavior. The [original consumer requirements](../04-build/evidence/consumer-python-requirements-2026-10-08.md) supply R1–R10.
+This design implements the short-term consumer path in the [build plan](../04-build/implementation-plan.md#python-consumer-integration-priority--2026-10-09). ADR-001 and ADR-003 are accepted: Truss owns the tested embeddable Python implementation and does not wait for a Rust Truss core. CONTRACT-004/007/010/011/012 and the shared authorization design govern behavior. The [original consumer requirements](../04-build/evidence/consumer-python-requirements-2026-10-08.md) supply R1–R10.
 
 ## Owner delivery decision — 2026-10-09
 
@@ -1802,7 +1802,7 @@ before consumer effects; then run the complete release conjunction.
 
 | Requirement | Required output and implementation slice | Outstanding selection versus execution |
 | --- | --- | --- |
-| R1 Python route | ADR-003 owner decision, named package home and corresponding ADR-001 amendment | Owner decision pending; do not accept either ADR by inference |
+| R1 Python route | ADR-003 owner decision, named package home and corresponding ADR-001 amendment | Decision closed: ADR-003 accepted; ADR-001 explicitly amended; Truss repository/package home named. This closes the route decision only, not a delivered engine |
 | R2 shared corpus | Versioned data manifest, setup/calls/expected/error/journal/alias artifacts and native two-way interchange runner; PY-07/B-015 | Shared case/operation/identity grammar proposals are authored; exact admitted fixture/procedure/observer profiles and full corpus artifacts remain to author; actual TypeScript/Python runs then required |
 | R3 installation | Stable compatible layout, exact DDL digest, installer/check plus explicit consumer deployment invocation; CH-01 and LM-01–06 | Stable release tuple and managed target selection open; native install/migration evidence not yet qualified |
 | R4 membership | Security-owned person membership and enforced read/write boundary; PY-03 | Shared authorization ABI/profile belongs to security workstream; native writer/reader/outsider/no-identity cases required |
@@ -2236,3 +2236,71 @@ Record tool/config/model/source revisions, complete command, explored bounds and
 unknown/error outcomes. Recheck after affected source, contract, assumptions or
 configuration changes. Native all-path integration and deployment assumptions
 still require running-system verification even after a model passes.
+
+
+## Consumer requirement sequencing reconciliation
+
+The original consumer discovery document is retained verbatim as historical input.
+Its R1 route decision is now closed by accepted ADR-003 and ADR-001's explicit
+amendment; its remaining outcomes require the actual evidence in the table above.
+The accelerated queue does not narrow R8 to direct key/edge lookup or remove R6
+dry-run, atomic/per-item provenance imports, preconditions or retry/position semantics.
+
+P2 implements the R8 matrix alongside first catalog/apply/import operations:
+indexed equality, logical relationship predicates, capped alias expansion,
+business-key keyset paging and one-property COUNT GROUP BY have their own native
+plans, exact decoding and finite scan/statement/result bounds. Weft owns parsed
+input/parameterized compiler admission; direct storage-ID paging is not a substitute
+for business-key ordering, and incident-edge enumeration is not an arbitrary
+logical predicate. Required unsupported semantics stay explicit refusals while
+the owner integration is unfinished; they cannot count as an R8 pass. If the
+parsed-input/mapping/index/resource prerequisite cannot land in the target window,
+reforecast the milestone rather than dropping the consumer shape.
+
+P2 also includes same-plan dry-run/real-apply violation comparison under actual
+caller transaction ownership, with no persisted request/journal/data after caller
+rollback; atomic group preconditions; atomic/per-item bulk outcomes and origin
+provenance; and exact numeric/time/JSON round trips. R4/R5 apply to all these reads,
+mutations, imports and catalog enumeration, not only one successful operation.
+P3 adds durable repeat/reached/feed/restart cases, with current authority on replay
+disclosure and original retention/position semantics. The R7 minimum floor remains
+its already selected original receipt profile, not a new process option.
+
+R2 gets published executable versioned preview cases/runner alongside the first
+installed slice. Its complete corpus and TypeScript/Python interchange remain full
+release gates. R3 stable layout/Lakebase installation and R10 versioned publication
+remain independently unclosed by local/private wheels or a source commit pin.
+A limited preview can be useful development evidence, but **consumer-ready** requires
+all R1–R10 outcomes and the declared target tuple. No isolated grouped-count
+compiler test, two origin captures or AST dependency pass closes that conjunction.
+
+
+### Revised original consumer inputs — 2026-10-09
+
+The [frozen revised requirements](../04-build/evidence/consumer-revision-2026-10-09/requirements.md)
+now close R1 and accept source-installation/epoch-aware positions, confirmed commit
+and whole-transaction durable application. R7 explicitly requires Invalid for both
+an unissued token and malformed token; false remains an available not-yet-reached
+answer. The revised corpus has41 cases/45 query steps and two Invalid reached
+expectations. Preserve the distinction in Truss's own corpus and native replay/
+reached resolver; local token syntax/locator decoding cannot establish issuance.
+No-op groups still require original repeat/token reconstruction and feed coverage.
+
+The [revision checker](../../../scripts/check-consumer-revision.py) compares both
+new owner-authored models with the independently retained original/named proposals.
+It observes35 authored core Record/Field names and no other semantic model change
+under its scoped JSON comparison, preserving key/relationship selectors. Both
+match the prior named proposal semantically. Original bytes are preserved and
+hashed separately; this is not byte identity with the old proposal or compiler
+execution. The source-authored naming prerequisite is now satisfied for these
+new exact inputs, replacing the earlier nameless-source observation only for
+this revision. No inferred dotted-ID/DDD name repair is needed.
+
+[Receipt](../04-build/evidence/design-audit/consumer-revision-2026-10-09.json) and
+snapshot pin the actual new sources. Old frontend receipts/90 named-proposal
+outcomes remain historical and cannot be relabeled as compiler qualification of
+these bytes. Rebuild and rerun the owner frontend/full adopted compiler with the
+new source pins, then map original compiler results/descriptors and native cases.
+Five relationship-predicate query steps previously refused name resolution remain
+separate expected checks, not silently repaired SQL. Weft still owns the parsed
+input/compile boundary; consumer source changes add no Truss compiler/resolver.
