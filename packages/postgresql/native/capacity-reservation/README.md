@@ -66,3 +66,11 @@ verifies stored-row sizes, exact8MiB/one-over boundaries and malformed length
 refusals without transferring large carriers. It depends on the original codec
 column validator. Complete protected delta derivation, retained parity, native
 work/overhead and installer registration remain required before ledger binding.
+
+`inventory.sql` supplies a private complete retained-row/byte parity verifier.
+It takes head then ledger exclusion and scans all operation/touch rows across
+transactions/phases, refusing RLS/inheritance and comparing original framed sizes
+with retained counters. The14-check native receipt establishes administrative
+membership/parity controls and rollback restoration. Original protected writers,
+registered objects/resource profile and bounded native work remain prerequisites;
+this verifier is not yet composed with protected event/finalizer producers.

@@ -1113,3 +1113,46 @@ Next bind complete OLD/NEW membership and size deltas to the protected producer,
 then independently check all retained members and ledger totals under original
 exclusion. Full reservation/installer qualification and acceptance promotion
 remain false; all seven mandatory protected bodies remain required.
+
+## Complete retained-inventory parity component — 2026-10-10
+
+[The private native verifier](../../../packages/postgresql/native/capacity-reservation/inventory.sql)
+now enumerates every retained operation and touch row and compares complete framed
+row counts/bytes with the singleton ledger. It acquires original head FOR SHARE
+then ledger FOR UPDATE, checks complete supplied installation/resource bytes and
+uses the original length-only row wrappers. There is no current-xid, phase,
+ordinal, caller-selected subset or LIMIT filter. Per-member8MiB and aggregate
+65536-row/512MiB bounds refuse before accumulating beyond the candidate limits.
+RLS/FORCE RLS, nonordinary relations and inheritance are explicit refusals;
+complete column profiles are checked even when a row family is empty.
+
+[The14-check PostgreSQL16.15 receipt](evidence/design-audit/capacity-inventory-native.json)
+uses independent Python frame totals for an empty installation and three rows
+across three synthetic xids, finalized/unfinished operations and a touch member.
+It detects unaccounted members, growth, row-count mismatch and removed-member
+mismatch, verifies native rollback restoration, refuses RLS even for superuser,
+checks PUBLIC execute denial and refuses an unexpected column in an empty family.
+The initial fixture used dirty generation0 and correctly hit the original CHECK;
+it was corrected to1 without altering native constraints. The fresh corrected
+run passed. Administrative cleanup/recount is a test control, not public cleanup.
+Full65536-row/512MiB execution, inheritance refusal and native contention/work/
+cancellation remain unqualified by this receipt.
+
+[UMF's pinned source capture](evidence/design-audit/capacity-inventory-source.json)
+preserves/reloads/exports the original CREATE/REVOKE statements exactly; the native
+checker executes the owner export. Partial declaration extraction remains zero
+declarations/two unhandled statements, complete=false. No physical routine identity
+or installed dependency inventory is conferred by archive correspondence.
+
+Every protected writer must participate in the same original exclusion before
+changing inventory. The lock cannot contain an administrative bypass, and the
+caller must enter before lower locks or already hold the original head/ledger
+custody. Exact installed objects/dependencies/ACL, authenticated resource-profile
+adoption and counter conversion remain requirements. Supplied profile equality
+alone is not profile authority. Framed-size parity cannot detect a same-size
+meaning/content substitution, establish issuer/security/finalizer authority or
+prove native storage overhead. Next compose this verifier with protected OLD/NEW
+delta derivation and actual guard/finalizer membership. All seven mandatory bodies,
+complete resource/security installation and ready publication remain required;
+full native reservation/installer qualification remain false, with no acceptance
+criterion promoted.

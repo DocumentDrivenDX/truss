@@ -1,0 +1,144 @@
+{
+  "scope": "Complete native operation/touch framed-size parity under administrative fixtures; not protected source/authority or installed resource qualification",
+  "serverVersion": "16.15",
+  "observations": [
+    {
+      "id": "empty-complete-inventory",
+      "expected": [
+        [
+          0,
+          0
+        ]
+      ],
+      "observed": [
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "id": "foreign-resource",
+      "expected": "55000",
+      "observed": "55000"
+    },
+    {
+      "id": "unaccounted-finalized-foreign-xid",
+      "expected": "55000",
+      "observed": "55000"
+    },
+    {
+      "id": "finalized-foreign-xid-included",
+      "expected": [
+        [
+          1,
+          225
+        ]
+      ],
+      "observed": [
+        [
+          1,
+          225
+        ]
+      ]
+    },
+    {
+      "id": "unfinished-foreign-xid-not-skipped",
+      "expected": "55000",
+      "observed": "55000"
+    },
+    {
+      "id": "all-phases-all-xids-both-families",
+      "expected": [
+        [
+          3,
+          586
+        ]
+      ],
+      "observed": [
+        [
+          3,
+          586
+        ]
+      ]
+    },
+    {
+      "id": "growth-byte-mismatch",
+      "expected": "55000",
+      "observed": "55000"
+    },
+    {
+      "id": "rollback-restores-full-parity",
+      "expected": [
+        [
+          3,
+          586
+        ]
+      ],
+      "observed": [
+        [
+          3,
+          586
+        ]
+      ]
+    },
+    {
+      "id": "row-count-mismatch",
+      "expected": "55000",
+      "observed": "55000"
+    },
+    {
+      "id": "removed-member-mismatch",
+      "expected": "55000",
+      "observed": "55000"
+    },
+    {
+      "id": "administrative-cleanup-recount",
+      "expected": [
+        [
+          2,
+          432
+        ]
+      ],
+      "observed": [
+        [
+          2,
+          432
+        ]
+      ]
+    },
+    {
+      "id": "rls-refused-even-superuser",
+      "expected": "55000",
+      "observed": "55000"
+    },
+    {
+      "id": "public-execute-revoked",
+      "expected": false,
+      "observed": false
+    },
+    {
+      "id": "unmapped-empty-family-column",
+      "expected": "55000",
+      "observed": "55000"
+    }
+  ],
+  "sourceSha256": {
+    "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f",
+    "docs/helix/04-build/evidence/design-audit/custody-codec-source.owner-export.sql": "5e40bdee7ec68277b34266cd60cfd3fca4ada24b417cccf5c041dd44dd56aa1d",
+    "docs/helix/04-build/evidence/design-audit/custody-size-source.owner-export.sql": "9e053ca758888ce7b37ee2f460346c32a97a9386ab88297cd4486c70dea711d5",
+    "docs/helix/04-build/evidence/design-audit/capacity-inventory-source.owner-export.sql": "7e76e9309f3923574259190613551352930abbe7efb991662ae9a25672c8836b",
+    "packages/postgresql/native/capacity-reservation/inventory.sql": "5434543bf157633469e5dd41d68126934667c912df64f915131ce1bc617847fe"
+  },
+  "producerSha256": "6ea1e645ea97880313b8fca37d75e348a9aaba9d357dfc6caaa5b2ffdc6de0d3",
+  "installerReady": false,
+  "nativeFullReservationQualified": false,
+  "acceptanceCasesPromoted": [],
+  "limitations": [
+    "All protected writers must participate in original head/ledger exclusion; administrative bypass not contained",
+    "Original installed identities/dependencies/roles/resource-profile adoption remain external",
+    "Size parity is not byte-content, source meaning, issuer/security/finalizer authority",
+    "No native work/cancellation/full65536-row or512MiB qualification",
+    "Administrative markers and rows do not establish accepted profiles or public cleanup"
+  ]
+}
