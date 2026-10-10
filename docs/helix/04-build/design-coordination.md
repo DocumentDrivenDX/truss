@@ -1381,3 +1381,28 @@ Do not apply Databricks SQL/profile/CLI to Truss PostgreSQL or replace its adopt
 f05f2df/compile-sql0.2 tuple. This supersedes the earlier design-only state for
 this separate upstream candidate while retaining the same Truss adoption gate.
 No security chat message was sent and no incomplete owner API was adopted.
+
+
+### Separate Weft Paths-Keys assembly source — 2026-10-10
+
+Authorized fetch observes origin/main6a42631, while UMF remains322b193.
+[Immutable source/review correspondence](evidence/design-audit/weft-paths-keys-assembly-source-review.json)
+checks five actual source/test files against two independent review pin sets.
+The assembler has a separate closed Paths-Keys profile with fixed original
+compiler3a, producer-H and historical530 byte identities. Its local verifier
+retains74 protocol cases (39 compiled/35 blocked),48 capability coverage and8
+transport controls as owner evidence; Truss does not rerun them here.
+
+Assembly-source approval is explicitly source-only: no new actual package
+assembly/output/public-index admission or native execution is qualified by that
+review. Producer/compiler/historical identities cannot be relabeled as one
+source commit. Reviewed child ownership/cancellation and failed-output withholding
+are shared tooling inputs, not original Truss database settlement authority.
+Future compiler adoption still requires the exact produced package/binary,
+registered target/obligations and original host authority/transport/publication
+closure. Keep the adopted Truss f05f2df/compile-sql0.2 tuple unchanged.
+
+A fresh security-owner read remains systemError with the same failed latest turn
+and no live handle or new interface. The exact prepared cross-chat request is
+still unsent pending explicit destination/payload approval. No cross-chat message
+or partial security API adoption occurred.

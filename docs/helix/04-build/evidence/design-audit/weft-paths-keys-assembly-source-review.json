@@ -1,0 +1,69 @@
+{
+  "scope": "Immutable published source/review correspondence for separate Weft Paths-Keys assembly and producer ownership; no assembly/test rerun/package/native qualification",
+  "weftCommit": "6a42631f1e0e68796747e666e8043e9e4b91e8aa",
+  "umfOriginMain": "322b193cef7c940d07b741860cf0170272628868",
+  "reviews": [
+    {
+      "path": "docs/helix/04-build/evidence/paths-keys-assembly-source-20261010/source-c-review.json",
+      "sha256": "d739bb925f00c0b14d00c44e23bf67725d6dd2da5e54cb9bb23a8004eaca282f",
+      "decision": "approved-source-only"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/paths-keys-process-ownership-review-20261010/source-e-review.json",
+      "sha256": "270245d42c94dc98c73f28cb70517f73246d037b06368596a29f61e40a05f586",
+      "decision": "APPROVE exact two-file producer E ownership correction"
+    }
+  ],
+  "sourceFiles": [
+    {
+      "bytes": 23157,
+      "path": "scripts/distribution/assemble-paths-distribution.py",
+      "sha256": "623e1c174e98e6415f86010784a0fd61e53c7f2a368f0a555d2bc36b1d8a6159"
+    },
+    {
+      "bytes": 18716,
+      "path": "scripts/distribution/paths_keys_distribution.py",
+      "sha256": "5e981a454bbfbc31b797559dd6d4c4ee67d0114fc5922ff7d437c63a13f8a2c0"
+    },
+    {
+      "bytes": 9976,
+      "path": "tests/distribution-paths-assembly/test_paths_keys_assembly.py",
+      "sha256": "5718b6a61e5bae2ec7f854024e0b13044720dc887848f6ccf36afd2e4f949f17"
+    },
+    {
+      "bytes": 35371,
+      "path": "scripts/distribution/check-paths-cli.py",
+      "sha256": "77517097fe5c5c3b27f90433c505c36514e409896beaa3d473f1937542eb75a5"
+    },
+    {
+      "bytes": 19330,
+      "path": "tests/distribution-paths-corpus/test_paths_keys_corpus.py",
+      "sha256": "faf660bd2e9742c5ea6a6df1b011ecf17f109e09ff09560abbf84111fcdf9cbf"
+    }
+  ],
+  "ownerCorrespondence": {
+    "actualReceipt": "d5f586b09499d8a099d4b270ab49f03e797dbd9e9ca38ec1bc8034aa0dbf5aa0",
+    "blocked": 35,
+    "compiled": 39,
+    "compiledSource": "3a2a79ccc19d636f20d31116662d61365c1b4ff7",
+    "coverage": 48,
+    "historicalCasesNotReplayed": true,
+    "historicalNamespaceCasesRetained": 463,
+    "metadataProbe": "Separate resource-bound build producer, not represented as Git3a-authored source.",
+    "producerH": "77517097fe5c5c3b27f90433c505c36514e409896beaa3d473f1937542eb75a5",
+    "protocolCases": 74,
+    "publicSchemas": 20,
+    "selectedSourceBytes": 16706409,
+    "selectedSourceFilesIndependentlyRead": 92,
+    "transportControls": 8,
+    "wholeReceiptAndCandidatePin": "Fixed digests bind already independently accepted complete bytes; local structural verifier is not a new semantic oracle."
+  },
+  "ownerLimitations": [
+    "This approves three frozen source/test files plus exact two-line CI delta.",
+    "No actual candidate assembly, package output/schema validity, public index admission, installation, compiler replay or native execution was performed in this review.",
+    "Actual assembly and resulting package require separate root command and output review.",
+    "No hermetic rebuild, full environment closure, hostile-principal filesystem fence or broader platform qualification."
+  ],
+  "trussCompilerChanged": false,
+  "newPackageAdopted": false
+}

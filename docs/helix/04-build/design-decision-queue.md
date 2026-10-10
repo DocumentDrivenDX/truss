@@ -1172,3 +1172,26 @@ profile or wheel artifact identity. Independently verify original payloads; the
 constraint cannot authenticate bytes or admit native authority. The public extra
 and lifecycle support scope remain unchanged. Corrected default publication and
 complete installer/engine gates still require their full selected profile.
+
+
+## Complete-operation critical path after component qualification
+
+The corrected runtime now has fresh-source build, packaging, clean private offline
+resolution and installed132-test evidence. The Python archive component has actual
+native21 correspondence. These remove named infrastructure/component gaps but
+do not close the following ordered joint exits. Stop expanding redundant probes
+when the next missing artifact is a complete composition deliverable.
+
+| Exit | Required next deliverable | Current dependency |
+| --- | --- | --- |
+| PA01–PA04 | Four original protected submissions with authenticated connecting person, exact native role/ACL/dependency and original context/authority/cut | Security owner's closed contract is absent; stopped chat, no live wait; explicit prepared-message approval remains pending |
+| PA05 | All seven complete native bodies and RF01–RF06/observer/application/deferred/journal/feed/settlement composition on one installed profile | Truss-owned bodies/bindings remain unimplemented;49 native fields missing; original owner protocol must be consumed rather than invented |
+| PKG-01/02/08 | Independently complete release membership and actual fresh install/observer outside checkout, including late failure/unknown outcome | Exact complete profile and qualified observer/settlement required; archive/initializer probes are component inputs |
+| First Python preview | Catalog install/accept/apply/import/key/edge reads with R4/R5, followed by retry receipts/feed | Same complete installed profile and native/publication evidence; no API promotion from private test counts |
+| M1–M5 | Actual supported populated source/target/recipe plus full preservation, failure and reconcile corpus | Preparation proceeds alongside installation; no admitted source/required physical target transition yet |
+| Default/runtime release | Published reproducible delivery tuple with original package/native profile and consumer instructions | Clean private candidate exists; public pin still permits16.2, and platform/complete-engine qualification remains separate |
+
+Weft6a42631 adds separately reviewed Paths-Keys assembly source, not a newly
+adopted Truss PostgreSQL realization. Its next produced-package review remains
+upstream-owned. UMF metadata/DDL semantics and the existing browser/numeric
+adoption remain unchanged. No new traversal or pool product decision is needed.
