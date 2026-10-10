@@ -613,3 +613,29 @@ or protected migration service. Failed inserts may consume nontransactional
 sequence values; unchanged row count is not evidence of zero allocator work or
 rewound identity. Complete migration atomicity, artifact admission and recovery
 remain the existing M1–M5 requirements.
+
+
+## Development commit barrier replacement is an installation effect
+
+The current `packages/postgresql/native/operation-commit-barrier.sql` declares
+`runtime_operation_commit_barrier()` and its ALWAYS deferred constraint trigger
+on row_home_operation. Its body unconditionally raises55000 because the complete
+finalizer is absent. This is a deliberate development fail-closed component,
+not a supported runtime finalizer or an installed-ready guard.
+
+The complete installer composition must explicitly inventory its selected fate:
+replace it with the original qualified full finalizer, or retire the development
+routine/trigger through an admitted exact replacement whose unavoidable completion
+coverage is independently established. Do not silently omit/drop/disable it or
+mark readiness because its name, timing and signature match. Retain exact before/
+after source identities, event/dependency/grant coverage and atomic replacement
+order in generated source/inventory. Removing the development barrier without
+complete substitute coverage is not a runtime-unblocking fix.
+
+This requirement supplements the five missing canonical handler bodies and two
+scope validators. The replacement must include full original row/non-row, journal,
+feed and operation completion proof rather than accepting a phase flag. Independently
+exercise a valid completed operation commit, unfinished and early-immediate refusal,
+savepoint rollback, unrelated caller work and lost settlement on the same selected
+installation/security/issuer tuple. The current artifact is not qualified by
+storage projection checks or lifecycle startup tests.

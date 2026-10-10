@@ -933,3 +933,14 @@ A connection URI, `truss_installation=not_checked`, valid source projection,
 successful server restart or matching module hashes must never pass the complete
 US-045 bootstrap gate. Unsupported selected tuples return one refusal before
 dependent effects, without a retry loop or starting a different database runtime.
+
+
+IDO-01 also installs the original development `runtime_operation_commit_barrier`
+under otherwise correct names/timing/signatures. Its unconditional55000 body must
+not qualify runtime readiness. Require independently expected successful complete
+operation commit plus negative unfinished/early-immediate checks through the same
+selected finalizer composition. A mere presence/hash capture or a fixture that
+always rolls back cannot pass this test. Omit, disable or drop the barrier without
+complete inventoried replacement coverage and require readiness refusal. Any
+qualified replacement/retirement preserves exact source/native dependency and
+effective privilege correspondence atomically. This extension remains not_run.
