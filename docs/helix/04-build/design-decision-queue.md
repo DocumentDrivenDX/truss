@@ -924,3 +924,21 @@ application finalization and deferred closure. It corrects the recent RF04/commi
 attribution: root reachability/acyclicity is RF03 before protected sealing; the
 deferred check cannot manufacture a seal. It records independently expected
 native negatives and the remaining owner interfaces without selecting a fake body.
+
+
+## RF02 visibility counterexample — 2026-10-10
+
+[Native70](evidence/design-audit/row-image-visibility-native.json) demonstrates
+that the original INVOKER typed collector can return a valid six-image tree
+from an eight-image canonical value when fixture RLS hides its final sequence
+node and decimal payload. Actual SELECT completion, tree and scalar-shape
+checks pass. The independently original hidden images remain in the receipt;
+complete scope is not qualified. This is an administrative role/policy fixture,
+not security-owner policy or an adopted blanket EXECUTE grant.
+
+The [native execution packet](row-finalization-native-execution-handoff.md#actual-rls-valid-prefix-counterexample)
+now requires independent complete integrity visibility before RF02/sealing,
+separate from consumer disclosure. Visible-row counts and valid framing/shape
+cannot authorize full replacement, journaling or absence. Exact role/RLS/current
+authority/cut qualification remains a joint owner/Truss exit; all seven native
+semantic bodies remain missing. Existing69/67 producers and receipts are unchanged.

@@ -78,3 +78,33 @@ verifier. The corrected private pgserver16.15 tuple remains unpublished; Aurora
 and Lakebase require their own exact installed qualification. Complete migration
 source/target qualification and preservation/recovery preparation runs alongside
 installation, not as a prerequisite for first usable Python operations.
+
+
+## Actual RLS valid-prefix counterexample
+
+[Native70](evidence/design-audit/row-image-visibility-native.json) installs two
+explicit fixture SELECT policies on original node/scalar tables. A separate
+connecting role has schema/table rights and fixture-only helper EXECUTE. The
+policies hide node614 and its decimal payload from state501. The administrator's
+original snapshot contains8 images; the reader's actual repeatable-read capture
+contains6 images with original native descriptor/completion. Capture framing,
+physical tree validation and scalar carrier shape all pass. The omitted sequence
+member was last, so visible ordinals remain contiguous. The receipt retains the
+two exact hidden original images and confirms completeScopeQualified=false.
+The existing nested/cycle/cascade restoration checks also pass.
+
+RF02 must therefore consume original complete-scope integrity observation under
+the qualified native role/security profile, independently of caller disclosure.
+Count/byte preflight over visible rows and SELECT completion prove only that
+returned set. Even a valid visible tree can omit canonical members. No host
+visible result may become full replacement, journal image or seal authority from
+these checks alone. Full scope cannot be inferred from root existence, remaining
+contiguous ordinals or caller claims that the SELECT succeeded.
+
+Qualification must exercise RLS-enabled and selected FORCE-RLS/role profiles,
+hidden last/interior members and complete absent-state observation under the
+original policy/cut. The owner must supply authenticated-person/current-authority
+and integrity/disclosure separation; Truss binds actual native roles/dependencies
+and same-transaction custody. Do not grant blanket helper EXECUTE or disable RLS
+for application reads as a fix. This probe's broad grants/policies are solely
+fixture inputs, not an adopted security resolver or R4/R5 implementation.
