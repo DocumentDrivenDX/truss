@@ -87,7 +87,7 @@ class TouchOperationCorrespondence:
 
 
 def check_touch_operation_correspondence(touches, installation, actual_xid, profile, layout,
-                                         rows, maximum_touches, maximum_rows, maximum_bytes):
+                                         rows, maximum_touches, maximum_rows, maximum_bytes, maximum_contributors):
     """Decode all supplied operations once, including when no touch exists.
 
     Profile/layout are independently supplied projections, not authenticated
@@ -102,6 +102,17 @@ def check_touch_operation_correspondence(touches, installation, actual_xid, prof
             or type(maximum_touches) is not int or not 0<=maximum_touches<=9007199254740991
             or type(touches) not in (tuple,list) or len(touches)>maximum_touches):
         raise ValueError('Original touch cohort/profile required')
+    if type(maximum_contributors) is not int or not 0<=maximum_contributors<=9007199254740991:
+        raise ValueError('Original contributor allowance required')
+    # Bound the combined expansion before decoding the operation registry.
+    # This is a logical entry allowance, not whole allocator/work qualification.
+    remaining=maximum_contributors
+    for touch in touches:
+        if (type(touch) is not RegistryTouch or type(touch.custody) is not CustodyBody
+                or type(touch.custody.operations) is not tuple
+                or len(touch.custody.operations)>remaining):
+            raise ValueError('Original contributor allowance exceeded')
+        remaining-=len(touch.custody.operations)
     cohort, index = _decode_cohort(installation, actual_xid, profile, layout,
                                   rows, maximum_rows, maximum_bytes)
     output=[];seen=set()

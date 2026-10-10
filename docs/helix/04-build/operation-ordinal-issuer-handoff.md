@@ -1455,3 +1455,21 @@ profile. Syntax/row/byte ceilings do not account for repeated per-manifest match
 work or temporary copies. The new composition is private, performs no DML and
 changes no installed-wheel/public API or seven-body readiness claim. Earlier
 source/native checkpoints remain historical to their exact pinned module bytes.
+
+### Aggregate contributor expansion preflight (2026-10-10)
+
+The shared touch/operation matcher now requires explicit `maximum_contributors`
+in addition to touch/operation-row/byte allowances. It charges every original
+manifest entry across all touches before operation context/group decoding,
+refusing an exhausted or invalid Boolean/float/negative allowance. This prevents
+separate per-touch limits from admitting an unbounded combined expansion.
+No contributor prefix is published and no allowance is reset per touch. Empty
+touches with allowance0 still decode the complete operation cohort.
+
+`python-touch-contributor-bound-source.json` pins112 passing source tests. The
+new independent boundary test accepts exactly2 entries for one touch/exactly4
+for two owner kinds, refuses combined3 and malformed limits before operation
+decoding, and retains the empty-touch cohort behavior. This is a logical count
+preflight; nested JSON, byte comparisons/hex copies, native/host allocations,
+time/deadline and original shared account still require full qualification.
+It changes a private component signature only, not public APIs or body gates.

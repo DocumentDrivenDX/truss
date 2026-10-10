@@ -13,7 +13,7 @@ def prepared():
 
 
 def check(body,rows,touches,**options):
-    args=dict(maximum_touches=10,maximum_rows=10,maximum_bytes=100000);args.update(options)
+    args=dict(maximum_touches=10,maximum_rows=10,maximum_bytes=100000,maximum_contributors=4096);args.update(options)
     return check_touch_operation_correspondence(touches,'fixture','123',body.profile,body.layout,rows,**args)
 
 class TouchOperationCorrespondenceTests(unittest.TestCase):
@@ -50,3 +50,17 @@ class TouchOperationCorrespondenceTests(unittest.TestCase):
         result=check(body,rows,touches)
         self.assertEqual(result.touches[0][0].cells[7],'1')
         self.assertEqual(len([o for o in result.cohort if o.cells[3]!='application_finalized']),2)
+
+    def test_aggregate_contributor_budget_refuses_before_operation_decoding(self):
+        from dataclasses import replace
+        from unittest.mock import patch
+        body,rows,touches=prepared()
+        self.assertEqual(len(check(body,rows,touches,maximum_contributors=2).touches),1)
+        second=replace(touches[0],cells=('123','edge',*touches[0].cells[2:]))
+        self.assertEqual(len(check(body,rows,(*touches,second),maximum_contributors=4).touches),2)
+        for limit in (3,0,True,1.0,-1):
+            with patch('truss._row_registry_correspondence._decode_cohort') as decode:
+                with self.subTest(limit=limit),self.assertRaises(ValueError):
+                    check(body,rows,(*touches,second),maximum_contributors=limit)
+                decode.assert_not_called()
+        self.assertEqual(len(check(body,rows,(),maximum_contributors=0).cohort),3)

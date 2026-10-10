@@ -1706,3 +1706,9 @@ original phases are preserved. The missing integration now begins with actual
 protected same-cut captures, semantic owner-codec/current authority and full
 accounting, followed by complete native validation/finalization. Private
 structural correspondence is not a public operation or readiness gate.
+
+The [aggregate contributor preflight](evidence/design-audit/python-touch-contributor-bound-source.json)
+passes112 source tests and adds a required combined manifest-entry allowance
+checked before operation decoding. This closes the count-expansion gap in the
+private matcher, while whole resource/copy/work/deadline, native cut and authority
+qualification remain open. No full-resource or readiness claim is promoted.
