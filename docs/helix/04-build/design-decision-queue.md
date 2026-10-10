@@ -1027,3 +1027,11 @@ This is fixture-role/component evidence, not the actual public status API,
 complete registered release, selected effective-rights/dependency/security profile
 or installed qualification. Original Archive9 producer/evidence remain unchanged;
 complete PKG-01/02/08 and populated migration gates remain open.
+
+
+The [independent observer execution packet](installation-observer-execution-handoff.md)
+consolidates original input/collection/freshness order and the complete installed
+acceptance ladder. It preserves the existing public result variants: a complete
+qualified mismatch is verify drift; unavailable/incomplete collection yields
+observation_unavailable without partial payload. Component integrity terminology
+does not create a new public result type.
