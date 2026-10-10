@@ -2157,11 +2157,12 @@ an API, supply a native producer or change the accepted ADR-008 embedding-host t
 boundary. Truss engineering owns the component and correspondence; native authority
 and security integration remain with their existing owners.
 
-Chosen current level: **precise specification with author semantic review**,
-not executable formal analysis or deductive proof. The whole original
+Chosen current level: **precise specification with author semantic review plus
+the finite abstract component exploration below**, not implementation refinement
+or deductive proof. The whole original
 reserve/bind/submit/confirm/admit/native protocol remains an affected slice for
-later bounded analysis and integrated qualification. No analyzer is selected or
-passed here. Pure numeric conveniences, browser rendering and unrelated catalog
+later bounded analysis and integrated qualification. The selected component
+explorer does not qualify that full protocol. Pure numeric conveniences, browser rendering and unrelated catalog
 metadata are outside this temporal slice, with no analysis obligation from it.
 
 ### State and initial conditions
@@ -2250,10 +2251,10 @@ identities and failure/finally paths against actual source and named tests. The
 post-gate close/native race is deliberately retained as a correspondence gap, not
 hidden by modeling verification+dispatch as one atomic action. Source-bound
 component execution evidence belongs in the test-plan checkpoint. This is a
-reviewed precise specification only; no state-space exploration result is inferred
+historically reviewed precise specification only; no state-space exploration result is inferred
 from tests or prose.
 
-Before bounded executable analysis, choose an established analyzer and finite
+For the full protocol's later bounded analysis, choose an established analyzer and finite
 bounds for issuer/epoch count, confirmations, capacity, concurrent callers and
 failure points, with an explicit abstraction argument. Model the gate-check and
 native admission separately, including close/cancel/control-loss between them.
@@ -2265,6 +2266,48 @@ unknown/error outcomes. Recheck after affected source, contract, assumptions or
 configuration changes. Native all-path integration and deployment assumptions
 still require running-system verification even after a model passes.
 
+
+### Bounded component analysis — 2026-10-10
+
+The [owned standard-library BFS model](../04-build/evidence/design-audit/python_custody_model.py)
+uses the HELIX reference's small explicit-state exploration approach. The
+[analysis receipt](../04-build/evidence/design-audit/python-custody-bounded-model-controls.json)
+pins tool/model/source digests, Python3.11 runtime, exact command and configuration.
+One original issuer has ordinal values0/1 and two original confirmation/ticket
+atoms. Six abstract control phases keep verification, the local close gate,
+callback invocation and a representative native-effect window separate. Original
+identity/retained-instance and lock atomicity are assumptions, not synthesized
+native authority. A100000-state ceiling makes any cutoff incomplete.
+
+The baseline completes906 reachable states/6224 transitions. Reachable witnesses
+include an effect, close/failure after effect and both original tickets dispatched.
+Six broken variants detect ordinal rewind while open, mutation after issuer
+close, permission restoration, copied-token acceptance, failure remaining open
+and bypassed close gate, with counterexample traces retained. The model checks
+bounded PY-ORD-001/002 and PY-ADM-001–004 safety abstractions. PY-ADM-002 here checks
+retention/monotonic consumption in the two-ticket domain; arbitrary capacity,
+type/constructor validation and larger confirmation populations remain outside
+this analysis. Existing implementation tests retain those separate obligations.
+
+The deliberately false local-close-is-native-fence implication has this reachable
+trace: register, consume, verify, check open gate, close registry, dispatch,
+callback effect. That is the known correspondence gap, not a new native pass or
+proof that an admitted native port would allow it. Full PY-NATIVE-001, account/
+driver/security integration, connection registry/epoch reuse, deferred Python
+object semantics, crash durability and all liveness/fairness/timing guarantees
+remain excluded. No source-imported transition system or refinement proof is
+claimed; actual implementations may have behaviors omitted by the abstraction.
+
+The [first run](../04-build/evidence/design-audit/python-custody-bounded-model.json)
+retains a harness-expectation failure: rewind after close first violated
+PY-ORD-002 rather than the expected PY-ORD-001. Its
+[exact original model source](../04-build/evidence/design-audit/python_custody_model.initial.py)
+matches the retained digest. The later model separates open/closed rewind and
+adds one negative control per modeled safety property. Neither receipt is an
+independent review. Truss author review covers source lock/phase correspondence;
+independent review and full integrated native regression remain required. Recheck
+affected model/source/contract/assumption changes; do not transfer this result to
+larger domains or the seven complete composition boundaries.
 
 ## Consumer requirement sequencing reconciliation
 

@@ -1021,12 +1021,22 @@ The test plan maps those properties to the existing two ordinal/six admission
 methods; [source-bound execution](evidence/design-audit/python-formal-correspondence.json)
 passes all eight with warnings treated as errors. The component-level assurance
 is author-reviewed precise specification plus implementation tests, not bounded
-formal analysis or proof. No analyzer/model/configuration has been selected.
+formal analysis or proof. At that historical checkpoint no analyzer/model/configuration had been selected.
+
+The [later bounded model](evidence/design-audit/python-custody-bounded-model-controls.json)
+now explores906 states/6224 transitions for one issuer, two ordinal values and two
+confirmation tickets, with six detected broken variants and a retained unfenced
+close/native-effect counterexample. Tool/configuration/source pins and exclusions
+are in the owning Python design. This is author-reviewed abstract component
+analysis, not implementation refinement, native authority, liveness or complete
+protocol verification. Original driver/account/security integration and independent
+review remain required; a failed initial harness expectation and exact initial
+model source are preserved separately.
 
 The review makes the post-verification close gate/native-dispatch gap explicit:
 local closure cannot fence native effects by itself. PY-NATIVE-001 still needs
-original native producer/account/arbitration/security integration and a resolved
-embedding-host trust assumption. Preserve separate gate/dispatch/native-effect
+original native producer/account/arbitration/security integration under the accepted
+ADR-008 embedding-host trust boundary. Preserve separate gate/dispatch/native-effect
 transitions in the later bounded model, with rewind/restored-permission/copied-token
 and unfenced-effect negative controls. This checkpoint does not substitute another
 component receipt for the required P0 integrated native admission experiment.

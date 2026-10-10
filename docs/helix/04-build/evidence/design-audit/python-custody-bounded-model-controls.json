@@ -1,0 +1,147 @@
+{
+  "scope": "Author-reviewed finite abstract component model; no implementation refinement, native authority or liveness proof",
+  "tool": "Truss standard-library explicit-state BFS/0.1",
+  "python": "3.11.17 (main, Oct  3 2026, 00:54:14) [Clang 22.1.3 ]",
+  "command": [
+    "/private/tmp/truss-pgserver-corrected-test-env/bin/python",
+    "/Users/erik/Projects/truss/docs/helix/04-build/evidence/design-audit/python_custody_model.py",
+    "python-custody-bounded-model-controls.json"
+  ],
+  "configuration": {
+    "issuers": 1,
+    "ordinalMaximum": 1,
+    "confirmationCapacity": 2,
+    "stateCeiling": 100000,
+    "search": "complete reachable-state BFS"
+  },
+  "modelSha256": "0c2c282b602c6a510a20f0ef743d08455d2de94d11dec633e068f4d85d973d5b",
+  "sourceSha256": {
+    "packages/python/src/truss/_operation_ordinal.py": "10d4717462ff14c7524ed793db0ac7b94f56e1d6b88158081a4f300981193977",
+    "packages/python/src/truss/_operation_admission.py": "f96462208c14230670370d0b12f9b5d38ef1c20861175bcab8777c2c687dbb30"
+  },
+  "properties": [
+    "PY-ORD-001",
+    "PY-ORD-002",
+    "PY-ADM-001",
+    "PY-ADM-002",
+    "PY-ADM-003",
+    "PY-ADM-004"
+  ],
+  "positive": {
+    "status": "completed_bounded_check",
+    "states": 906,
+    "transitions": 6224,
+    "seconds": 0.010272084036841989,
+    "nonVacuity": [
+      "failure-or-close-after-effect",
+      "native-effect",
+      "two-original-tickets-dispatched"
+    ]
+  },
+  "negativeControls": {
+    "rewind": {
+      "status": "violation",
+      "property": "PY-ORD-002",
+      "trace": [
+        "issue",
+        "close-issuer",
+        "rollback"
+      ],
+      "states": 25,
+      "transitions": 54,
+      "seconds": 0.00010470801498740911
+    },
+    "rewind-open": {
+      "status": "violation",
+      "property": "PY-ORD-001",
+      "trace": [
+        "issue",
+        "rollback",
+        "issue"
+      ],
+      "states": 28,
+      "transitions": 60,
+      "seconds": 0.00010587496217340231
+    },
+    "restore-permission": {
+      "status": "violation",
+      "property": "PY-ADM-002",
+      "trace": [
+        "register-0",
+        "begin-0",
+        "escaped-failure"
+      ],
+      "states": 38,
+      "transitions": 114,
+      "seconds": 0.00018258299678564072
+    },
+    "copied-ticket": {
+      "status": "violation",
+      "property": "PY-ADM-001",
+      "trace": [
+        "accept-copied-ticket"
+      ],
+      "states": 4,
+      "transitions": 7,
+      "seconds": 1.0707997716963291e-05
+    },
+    "failure-stays-open": {
+      "status": "violation",
+      "property": "PY-ADM-003",
+      "trace": [
+        "register-0",
+        "begin-0",
+        "escaped-failure"
+      ],
+      "states": 38,
+      "transitions": 114,
+      "seconds": 0.00017962499987334013
+    },
+    "bypass-close-gate": {
+      "status": "violation",
+      "property": "PY-ADM-004",
+      "trace": [
+        "register-0",
+        "begin-0",
+        "close-registry",
+        "verify-success",
+        "check-open-gate"
+      ],
+      "states": 129,
+      "transitions": 525,
+      "seconds": 0.0008164170430973172
+    }
+  },
+  "localCloseFenceCounterexample": {
+    "status": "violation",
+    "property": "LOCAL-CLOSE-IS-NATIVE-FENCE (expected false implication)",
+    "trace": [
+      "register-0",
+      "begin-0",
+      "verify-success",
+      "check-open-gate",
+      "close-registry",
+      "dispatch",
+      "callback-effect"
+    ],
+    "states": 244,
+    "transitions": 1251,
+    "seconds": 0.0021314590121619403
+  },
+  "expectedAnalysisOutcomesObserved": true,
+  "implementationRefinementProven": false,
+  "nativeQualified": false,
+  "review": {
+    "reviewer": "Truss author-agent",
+    "independentReview": "not performed"
+  },
+  "excluded": [
+    "liveness/fairness/timing",
+    "PY-ADM-005 Python deferred-object semantics",
+    "full PY-NATIVE-001 authority",
+    "account/driver/security integration",
+    "connection registry/epochs",
+    "process crash and durable recovery",
+    "larger/unbounded state domains"
+  ]
+}
