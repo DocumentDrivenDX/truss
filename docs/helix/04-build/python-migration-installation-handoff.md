@@ -332,3 +332,17 @@ unknown obligations and suppressed host failure. The earlier nine-module wheel
 receipt remains historical. This delivery includes no installer or migration
 implementation and proves no original security/driver authority, native execution,
 clean local-extra resolution, or complete committed engine interchange.
+
+
+The subsequent [current-wheel local-extra receipt](evidence/design-audit/python-current-wheel-local-extra.json)
+closes the clean declared local-extra resolution gap for macOS arm64/Python3.11.
+Pip resolves the wheel's pinned pgserver0.1.4, fasteners0.20, platformdirs4.12.4
+and psutil7.2.2 using published cached wheels in the same initially fresh environment.
+The complete existing34-test Python component suite passes against the installed
+ten-module wheel outside the checkout, with warnings treated as errors. Four tests
+exercise actual PostgreSQL16.2 lifecycle, retained commit/restart, cross-process
+custody refusal, independent servers and explicit cleanup-failure recovery.
+Other tests retain their pure/synthetic component scope. Earlier base-wheel
+receipts intentionally describe the environment before this extra installation.
+This is no cross-platform/process-crash, full installation, migration-execution
+or protected-engine qualification.

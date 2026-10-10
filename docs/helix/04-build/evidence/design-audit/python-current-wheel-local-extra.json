@@ -1,0 +1,116 @@
+{
+  "scope": "Fresh current Python wheel local-extra resolution and complete existing component suite; not complete Truss engine qualification",
+  "python": "3.11.17 (main, Oct  3 2026, 00:54:14) [Clang 22.1.3 ]",
+  "platform": "macOS-27.0.1-arm64-arm-64bit",
+  "machine": "arm64",
+  "wheelSha256": "f680536ed512e8fc2edba76116d0366d52a2044548d1a34a2826e1788d0cbfec",
+  "loadedPackage": "/private/tmp/truss-python-coordinator-env/lib/python3.11/site-packages/truss",
+  "dependencies": {
+    "truss-toolkit": "0.0.1.dev0",
+    "pgserver": "0.1.4",
+    "fasteners": "0.20",
+    "platformdirs": "4.12.4",
+    "psutil": "7.2.2",
+    "weft-sql": "0.1.0"
+  },
+  "installedModules": [
+    {
+      "path": "__init__.py",
+      "sha256": "e9d7aacb2f5a5da077ffc24500422876892c3f68a7f595f059fd4189f25a83b5"
+    },
+    {
+      "path": "_acceptance_json.py",
+      "sha256": "fba890deb660bf461e6bcf4eeef0c0704962f0c1814d879c9509e2f994842f77"
+    },
+    {
+      "path": "_operation_ordinal.py",
+      "sha256": "9be8b93fbdaa7595e8330b9e8edd3d048fbff25b1b670c1587647ef1908ddcd3"
+    },
+    {
+      "path": "_query_execution.py",
+      "sha256": "8209768fe1f78b6234bae24545a221beca6b2ff60f22d9f3be501834604342e7"
+    },
+    {
+      "path": "_receipt_position.py",
+      "sha256": "e7c42049947c4bda44c0ac9e62e23b73143c6129f07f9ee889ef186364f19eba"
+    },
+    {
+      "path": "local_runtime.py",
+      "sha256": "e0f983625af50cf61a6bea8f79134723de97263e5f553581cf0b15892f001ea5"
+    },
+    {
+      "path": "migration_planning.py",
+      "sha256": "12fabf2bd14a6af133f70488e704ff7a7fe8aded3158695655ba26acfb69fcce"
+    },
+    {
+      "path": "numeric.py",
+      "sha256": "4833d54fda887fa70171511761d28ea75a0dc22aa89a50c3eae2a88f2b972d18"
+    },
+    {
+      "path": "timestamp.py",
+      "sha256": "b08dbf2a9c48754282f05429a58b66515c75a815f6e1282d3c485248f762120c"
+    },
+    {
+      "path": "weft.py",
+      "sha256": "1b4720589a66c5d6a922ec9b7894d4b602b4cfe17764c71f4a4c1a9404792ded"
+    }
+  ],
+  "testSources": [
+    {
+      "path": "packages/python/tests/test_acceptance_json.py",
+      "sha256": "fdef3f104a89070ac6377a08af3970f351b4c8994916758db5469f3542c90eb2"
+    },
+    {
+      "path": "packages/python/tests/test_exact_numeric.py",
+      "sha256": "1b7753e6692cd19575e401612056159dae06df6c2769589800ce0429a165c458"
+    },
+    {
+      "path": "packages/python/tests/test_exact_timestamp.py",
+      "sha256": "8d9d1c2364d474d98f1ab63ad586a8c3c11148ff12950e94bef424f1e997379f"
+    },
+    {
+      "path": "packages/python/tests/test_local_runtime.py",
+      "sha256": "6a6128f5380aeb9ba8646edd7e1b6339cf71cdf3c72590d3367ab2e9879563a0"
+    },
+    {
+      "path": "packages/python/tests/test_migration_planning.py",
+      "sha256": "f967bffffefc22e62378e8410f19c5f5ddd6b84895c53c0a9fccb0c65388e8d6"
+    },
+    {
+      "path": "packages/python/tests/test_operation_ordinal.py",
+      "sha256": "98b6d693e61d81f59e731e9ee1b35ac7610d29d3a178cd5af52cfa3d04a0a1b0"
+    },
+    {
+      "path": "packages/python/tests/test_query_execution.py",
+      "sha256": "9c922c0657d372377d44188e8c8f2e45270ce5ae9a9f5fc9719c025152e7eacf"
+    },
+    {
+      "path": "packages/python/tests/test_receipt_position.py",
+      "sha256": "deb2f95c0dc04bb6f615f680aadcf88bc7d707e0dabebb407f2d4212af4068a7"
+    },
+    {
+      "path": "packages/python/tests/test_weft.py",
+      "sha256": "412bea67991482f02bd49e408224016e242723279211ec5097dfdad6786df61e"
+    }
+  ],
+  "command": "PYTHONDONTWRITEBYTECODE=1 /private/tmp/truss-python-coordinator-env/bin/python -W error -m unittest discover -s /Users/erik/Projects/truss/packages/python/tests -v",
+  "workingDirectory": "/private/tmp",
+  "exitCode": 0,
+  "tests": 34,
+  "reportedElapsedSeconds": "48.832",
+  "result": "OK",
+  "localExtraResolvedFromDeclaredWheelMetadata": true,
+  "freshEnvironment": true,
+  "dependencyAcquisition": "pip resolved declared pinned extra; cached published wheels used",
+  "postgresVersionObservedByLifecycleTests": "16.2",
+  "nativeLifecycleTests": 4,
+  "completeInstallationQualified": false,
+  "migrationExecutionQualified": false,
+  "completeEngineQualified": false,
+  "limitations": [
+    "macOS arm64 Python3.11 only",
+    "No cross-platform or process-crash qualification",
+    "Other tests exercise pure or synthetic components, not protected database execution",
+    "No published consumer distribution or complete TypeScript/Python committed interchange"
+  ]
+}
