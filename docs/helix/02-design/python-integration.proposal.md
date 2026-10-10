@@ -2330,3 +2330,15 @@ capture is disabled; run metadata hashes input/harness/output and records toolch
 versions. Assess refuses absent or mismatched original run evidence. Every original
 archive file is checked; prepared harness paths cannot overwrite an existing file.
 The deadline bounds this fixture run only, not production query resource budgets.
+
+
+### Revised corpus native assertion coverage
+
+The [native-additions test plan](../03-test/revised-consumer-native-gaps.md) maps
+seven actual revised consumer cases to their missing native observations and
+existing group/import/transaction authorities. The dry-run case does not itself
+observe journal/request/deferred validation or caller ownership, and atomic action
+batch coverage cannot qualify atomic import. Full corpus adds separate atomic/
+per-item import and deferred-only dry-run violations while retaining original
+semantic indices/provenance and non-refunded issuer/account custody. This is
+reviewed required coverage, not executed native tests or a consumer API change.

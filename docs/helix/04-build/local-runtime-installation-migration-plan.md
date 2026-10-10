@@ -1167,3 +1167,15 @@ never-issued. Safe invalid_token projection remains security-owned; outer
 execution uncertainty retains original recovery. Private locator decoding and
 wire-shape tests cannot satisfy these native classifications. P3 implements the
 extended RV controls under the original resolver, with no hidden connection/wait.
+
+
+### Consumer dry-run/import native coverage
+
+The revised corpus's seven action/import cases now have an explicit native
+observation handoff. Supplement them in P2/shared corpus with actual caller rollback,
+full deferred validation, private journal/request/receipt absence and distinct
+atomic-versus-per-item import schedules. Existing action-batch success/refusal does
+not prove atomic import; visible row counts cannot prove full native containment.
+Retain ID/ordinal/resource non-refund and original uncertain recovery semantics.
+The new test plan links exact original case IDs, without marking any as executed
+Truss conformance or changing the consumer's source files.
