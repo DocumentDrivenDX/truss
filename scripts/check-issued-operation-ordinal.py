@@ -14,9 +14,22 @@ import pgserver
 root = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(root / 'packages/python/src'))
 from truss._operation_ordinal import OperationOrdinalIssuer
+family = sys.argv[1] if len(sys.argv) == 2 else 'base'
+assert family in ('base', 'asserted', 'epoch', 'configuration')
+filename = {'base':'operation-admission.sql','asserted':'operation-asserted-origin-admission.sql','epoch':'operation-epoch-context-admission.sql','configuration':'operation-configuration-context-admission.sql'}[family]
+function = {'base':'runtime_admit_operation','asserted':'runtime_admit_operation_with_asserted_origin','epoch':'runtime_admit_operation_with_epoch_context','configuration':'runtime_admit_operation_with_configuration_context'}[family]
 paths = ['docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql',
-         'packages/postgresql/native/issued-operation-admission/operation-admission.sql',
+         'packages/postgresql/native/issued-operation-admission/' + filename,
          'packages/python/src/truss/_operation_ordinal.py']
+
+extras = []
+if family in ('epoch', 'configuration'):
+    extras.append('packages/postgresql/native/source-epoch-lock.sql')
+    if family == 'configuration':
+        extras.append('docs/helix/04-build/evidence/operation-configuration-storage.owner-export.sql')
+    extras.append('docs/helix/04-build/evidence/design-audit/pgserver-populated-guard-fixture.sql')
+paths += extras
+
 originals = [(root / p).read_bytes() for p in paths]
 assert importlib.metadata.version('pgserver') == '0.1.4+truss.pg16.15'
 psql = Path(str(importlib.resources.files('pgserver'))) / 'pginstall/bin/psql'
@@ -45,14 +58,31 @@ with tempfile.TemporaryDirectory(prefix='truss-issued-ordinal-') as directory:
                     errors.seek(0)
                     raise RuntimeError(errors.read())
                 return json.loads(line)
+            tail = ''
+            if family != 'base':
+                tail += ",convert_to('original asserted fixture','UTF8'),convert_to('original capture profile fixture','UTF8')"
+            if family in ('epoch', 'configuration'):
+                tail += ",'guard-fixture','guard-fixture-epoch','guard-fixture-incarnation'"
+            if family == 'configuration':
+                tail += ",convert_to('configuration admission fixture','UTF8')"
             def admit(issued):
                 assert issued.outcome == 'issued'
-                send("SELECT json_build_object('writerXid',writer_xid,'ordinal',ordinal) FROM truss.runtime_admit_operation(" +
-                     issued.ordinal + ", 'mutation',decode('01','hex'),decode('02','hex'),decode('03','hex'),decode('04','hex'),decode('05','hex'),decode('06','hex'));" )
+                send("SELECT json_build_object('writerXid',writer_xid,'ordinal',ordinal,'contextHex',context_hex,'context',convert_from(decode(context_hex,'hex'),'UTF8')::jsonb) FROM truss." + function + "(" +
+                     issued.ordinal + ", 'mutation',decode('01','hex'),decode('02','hex'),decode('03','hex'),decode('04','hex'),decode('05','hex'),decode('06','hex')" + tail + ");" )
                 actual = observe()
                 assert actual['ordinal'] == issued.ordinal
                 return actual
-            send('BEGIN;\n' + originals[0].decode() + ';\n' + originals[1].decode() + '\n')
+            setup = originals[0].decode() + ';\n'
+            for path in extras:
+                if path.endswith('pgserver-populated-guard-fixture.sql'):
+                    setup += (root / path).read_text().split('INSERT INTO truss.row_home_operation')[0]
+                else:
+                    setup += (root / path).read_text() + ';\n'
+            if family in ('epoch', 'configuration'):
+                setup += "INSERT INTO truss.source_epoch_current VALUES (1,'guard-fixture','guard-fixture-epoch');"
+            if family == 'configuration':
+                setup += "INSERT INTO truss.installation_admission (head_id,installation_id_utf8,source_epoch_utf8,configuration_generation,key_reuse,journal_mode,configuration_bytes,selected_binding_bytes,installed_inventory_bytes) VALUES (1,convert_to('guard-fixture','UTF8'),convert_to('guard-fixture-epoch','UTF8'),7,'forbid','engine',decode('0001ff','hex'),convert_to('binding fixture','UTF8'),convert_to('inventory fixture','UTF8'));"
+            send('BEGIN;\n' + setup + ';\n' + originals[1].decode() + '\n')
             issued_first = issuer.reserve(custody)
             send('SAVEPOINT operation_probe;')
             first = admit(issued_first)
@@ -63,6 +93,18 @@ with tempfile.TemporaryDirectory(prefix='truss-issued-ordinal-') as directory:
             second = admit(issued_second)
             assert first['writerXid'] == second['writerXid']
             assert [first['ordinal'], second['ordinal']] == ['0', '1']
+            for observation in (first, second):
+                context = observation['context']
+                assert context['xid'] == observation['writerXid'] and context['ordinal'] == observation['ordinal']
+                if family != 'base':
+                    assert bytes.fromhex(context['assertedOriginUtf8Hex']) == b'original asserted fixture'
+                    assert bytes.fromhex(context['assertedOriginCaptureProfileHex']) == b'original capture profile fixture'
+                if family in ('epoch', 'configuration'):
+                    assert context['installationId'] == 'guard-fixture' and context['sourceEpoch'] == 'guard-fixture-epoch'
+                    assert context['targetIncarnation'] == 'guard-fixture-incarnation'
+                    assert bytes.fromhex(context['sourceEpochProfileHex']) == b'fixture-profile'
+                    assert bytes.fromhex(context['sourceEpochEvidenceHex']) == b'fixture-evidence'
+
             send('ROLLBACK;')
             process.stdin.close()
             assert process.wait(timeout=30) == 0
@@ -77,14 +119,14 @@ with tempfile.TemporaryDirectory(prefix='truss-issued-ordinal-') as directory:
                 process.kill()
                 process.wait(timeout=5)
         server.cleanup()
-receipt = {'scope': 'Base admission with actual source Python counter and native savepoint rollback only; synthetic artifact inputs, administrative local-trust fixture, no original driver/security/resource/finalizer qualification',
-           'pgserver': importlib.metadata.version('pgserver'), 'serverVersion': version,
+receipt = {'scope': 'Selected admission family with actual source Python counter and native savepoint rollback only; synthetic artifact inputs, administrative local-trust fixture, no original driver/security/resource/finalizer qualification',
+           'family': family, 'pgserver': importlib.metadata.version('pgserver'), 'serverVersion': version,
            'observations': [first, second], 'rollbackRegistryRows': 0, 'rollbackRemovedNamespace': True,
            'sources': [{'path': p, 'sha256': hashlib.sha256(b).hexdigest()} for p, b in zip(paths, originals)],
            'producerSha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
            'psqlSha256': hashlib.sha256(psql.read_bytes()).hexdigest(),
            'completeDriverQualified': False, 'allFourFamiliesQualified': False, 'readyInstallation': False}
-destination = root / 'docs/helix/04-build/evidence/design-audit/issued-operation-ordinal-native.json'
+destination = root / ('docs/helix/04-build/evidence/design-audit/issued-operation-ordinal-' + family + '-native.json')
 with destination.open('x') as stream:
     stream.write(json.dumps(receipt, indent=2) + '\n')
-print(json.dumps({'ordinals': ['0', '1'], 'sameNativeTransaction': True, 'readyInstallation': False}))
+print(json.dumps({'family': family, 'ordinals': ['0', '1'], 'sameNativeTransaction': True, 'readyInstallation': False}))
