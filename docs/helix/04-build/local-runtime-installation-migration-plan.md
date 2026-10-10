@@ -1213,3 +1213,25 @@ resource-reader result, current candidate inventory or a recomputed local pin.
 The [PKG schedules](../03-test/migration-inspection-contract-walkthrough.proposal.md#clean-installed-package-qualification--py-07)
 retain actual wheel/sdist and native execution exits. The shipped pgserver default
 and populated migration gates remain unchanged.
+
+
+### Installed host byte-account prerequisite checkpoint
+
+The [new installed-wheel receipt](evidence/design-audit/python-byte-account-installed-suite.json)
+passes48 tests and matches all13 current module payloads against original wheel
+and source bytes outside checkout. The private `BytePermitAccount` supplies
+original identity permits/allocations, atomic reserve/drawdown, nonrefundable spent
+allocation, qualified producer release/termination, retained unknown custody and
+cumulative ledger-record bounds. It is available for host bookkeeping integration;
+it is not a complete native account or proof of actual Python heap containment.
+The reused environment remains corrected private pgserver0.1.4+truss.pg16.15 on
+macOS arm64/Python3.11; no published default pin or managed-target claim changes.
+
+Next implement the reader's actual bounded read/decode/hash/retain adapter against
+this original account, with independent precharged allocation/work bounds and
+trusted release/termination observations. Reader construction stays inert. A
+reader failure closes ordinary account admission as applicable and preserves
+original permit/allocation ownership until confirmed release; returning an error
+or deleting a local reference cannot refund the unresolved charge. Use the existing
+altered-package controls and installed-package gates. Still require full native
+routine/security/grant/inventory composition before public installer readiness.

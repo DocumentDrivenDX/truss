@@ -58,7 +58,8 @@ security-owner handoff remain implementation gates. Do not substitute caller
 ordinal strings, seal flags, dummy guards or profile-shaped metadata for them.
 
 HELIX0.15.4 adoption now has linked scope and qualification work: Architecture's
-Python AST gate passes51 current imports with nine real-checker controls;
+Python AST gate now passes53 current imports after explicit private byte-account
+module mapping; the earlier51-import receipt retains nine real-checker controls;
 TypeScript5.9.3 inventory observes12 cross-adapter private imports needing ownership
 remediation, not an enforced dependency pass. The process configuration contract
 and CFG-01–12 plan distinguish host injection from native configuration admission.
@@ -67,8 +68,11 @@ capture/export, without qualifying an actual bridge/receiver. Python ordinal/
 admission formal specification maps stable properties to ten passing component
 methods, with precise author review only; executable formal analysis and native
 correspondence remain open. Entry links are in the HELIX README and runtime plan. The
-[installed shared-registry suite](evidence/design-audit/python-shared-registry-installed-suite.json)
-passes44 tests with12 module payloads matched against source/wheel/installation.
+[latest installed byte-account suite](evidence/design-audit/python-byte-account-installed-suite.json)
+passes48 tests with13 module payloads matched against source/wheel/installation.
+The earlier44-test/12-module receipt remains historical. The private host byte
+account has original scalar arithmetic evidence; actual allocator/native/work/
+deadline accounting and its resource-reader integration remain unqualified.
 The [issuer handoff](operation-ordinal-issuer-handoff.md#shared-registry-across-four-native-families)
 now retains all four administrative native shared-registry rollback/refusal
 schedules. These receipts qualify those components only; they do not close the
