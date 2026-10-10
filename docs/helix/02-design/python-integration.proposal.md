@@ -2693,3 +2693,18 @@ infer a resource-reader regression from this observation. Next improve bounded
 failure-output/owned cleanup observability and diagnose the native lifecycle run
 before qualifying the full current wheel. Complete installed release resources,
 accounting and native installation gates remain open.
+
+
+### Full installed reader suite diagnostic follow-up
+
+The [new original run](../04-build/evidence/design-audit/python-resource-reader-full-suite-diagnostic.json)
+passes all58 tests with15 source/wheel/installed module payloads matched. It uses
+the same180-second deadline and reused corrected local environment. The preceding
+timeout remains historical; no cause, old-process cleanup or cross-platform
+qualification is inferred from the later pass. The checker now writes a distinct
+non-pass failure receipt with original stdout/stderr (including byte-valued
+TimeoutExpired buffers), command, source/wheel/module/dependency identities and
+explicit unconfirmed native cleanup. Existing receipt paths still refuse overwrite.
+The successful run exercises normal verification only, not an injected timeout
+writer control. Public installation, complete release resources and full account/
+authority/native composition remain separate gates.

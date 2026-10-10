@@ -34,9 +34,26 @@ dependencies = {n:importlib.metadata.version(n) for n in ['truss-toolkit','pgser
 for name,version in {'pgserver':'0.1.4+truss.pg16.15' if corrected else '0.1.4','fasteners':'0.20','platformdirs':'4.12.4','psutil':'7.2.2'}.items():
  if dependencies[name] != version: raise RuntimeError('Local dependency drift: '+name)
 command = [sys.executable,'-W','error','-m','unittest','discover','-s',str(root/'packages/python/tests'),'-v']
-result = subprocess.run(command,cwd=Path(sys.prefix),capture_output=True,text=True,timeout=180)
+def save_failure(status, stdout, stderr, returncode=None):
+ def captured(value):
+  return value.decode('utf-8', errors='replace') if isinstance(value, bytes) else (value or '')
+ failure = {'scope':'Installed suite failure observation; no pass or native cleanup claim',
+  'status':status,'timeoutSeconds':180,'returncode':returncode,'command':command,
+  'stdout':captured(stdout),'stderr':captured(stderr),'expectedTests':58,
+  'modules':modules,'dependencies':dependencies,'loadedPackage':str(loaded),
+  'wheelSha256':hashlib.sha256(wheel.read_bytes()).hexdigest(),
+  'producerSha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+  'testSources':[{'path':str(p.relative_to(root)),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in sorted((root/'packages/python/tests').glob('test_*.py'))],
+  'completeEngineQualified':False,'nativeCleanupConfirmed':False}
+ with receipt_path.open('x') as output: output.write(json.dumps(failure,indent=2)+'\n')
+try:
+ result = subprocess.run(command,cwd=Path(sys.prefix),capture_output=True,text=True,timeout=180)
+except subprocess.TimeoutExpired as error:
+ save_failure('timeout', error.stdout, error.stderr)
+ raise SystemExit('Installed suite timed out; original partial output retained in '+filename)
 if result.returncode or 'Ran 58 tests' not in result.stderr or not result.stderr.rstrip().endswith('OK'):
- raise RuntimeError(result.stdout+result.stderr)
+ save_failure('failed', result.stdout, result.stderr, result.returncode)
+ raise SystemExit('Installed suite failed; original output retained in '+filename)
 receipt = {'scope':'Installed current wheel full existing component suite; four native lifecycle tests plus synthetic/pure controls',
  'wheelSha256':hashlib.sha256(wheel.read_bytes()).hexdigest(),'python':sys.version,
  'loadedPackage':str(loaded),'modules':modules,'dependencies':dependencies,

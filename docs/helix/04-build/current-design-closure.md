@@ -58,8 +58,8 @@ security-owner handoff remain implementation gates. Do not substitute caller
 ordinal strings, seal flags, dummy guards or profile-shaped metadata for them.
 
 HELIX0.15.4 adoption now has linked scope and qualification work: Architecture's
-Python AST gate now passes53 current imports after explicit private byte-account
-module mapping; the earlier51-import receipt retains nine real-checker controls;
+Python AST gate now passes61 current imports after explicit private account,
+resource capture/index and directory-resolver module mapping; the earlier51-import receipt retains nine real-checker controls;
 TypeScript5.9.3 inventory observes12 cross-adapter private imports needing ownership
 remediation, not an enforced dependency pass. The process configuration contract
 and CFG-01–12 plan distinguish host injection from native configuration admission.
@@ -68,11 +68,15 @@ capture/export, without qualifying an actual bridge/receiver. Python ordinal/
 admission formal specification maps stable properties to ten passing component
 methods, with precise author review only; executable formal analysis and native
 correspondence remain open. Entry links are in the HELIX README and runtime plan. The
-[latest installed byte-account suite](evidence/design-audit/python-byte-account-installed-suite.json)
-passes48 tests with13 module payloads matched against source/wheel/installation.
-The earlier44-test/12-module receipt remains historical. The private host byte
-account has original scalar arithmetic evidence; actual allocator/native/work/
-deadline accounting and its resource-reader integration remain unqualified.
+[latest installed resource-reader suite](evidence/design-audit/python-resource-reader-full-suite-diagnostic.json)
+passes58 tests with15 module payloads matched against source/wheel/installation.
+Earlier48-test/13-module and44-test/12-module receipts remain historical. The
+preceding full-suite run timed out at180 seconds without retained partial output;
+its cause and cleanup remain unverified. The new diagnostic run passed without
+extending that deadline. Future failure/timeout receipts preserve original output.
+The private host byte account and composed directory reader have scoped evidence;
+actual allocator/native/work/deadline accounting and complete installation remain
+unqualified.
 The [issuer handoff](operation-ordinal-issuer-handoff.md#shared-registry-across-four-native-families)
 now retains all four administrative native shared-registry rollback/refusal
 schedules. These receipts qualify those components only; they do not close the
