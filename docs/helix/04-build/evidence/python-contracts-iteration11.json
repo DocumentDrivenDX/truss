@@ -1,0 +1,41 @@
+{
+  "iteration": 11,
+  "scope": "Private cooperative PG16.15 installed admission inventory and scoped correspondence",
+  "review": "Astra Ultra plan and completed iteration; final approval recorded in conversation",
+  "wheelSha256": "c3b81fd4cf2df7dce40a02cd163ac510af6602b542fc7c608ac3a8a6e84e212b",
+  "nativeReceipt": "design-audit/installed-inventory-iteration11-final-native.json",
+  "nativeAssertions": 31,
+  "retainedInventories": 21,
+  "regressionSuite": {
+    "tests": 269,
+    "passed": true,
+    "wheel": "Final wheel c3b81fd4cf2df7dce40a02cd163ac510af6602b542fc7c608ac3a8a6e84e212b",
+    "logSha256": "e35f99b8517eab636995c74bbfd782a11e50c45e821eb402c295045673890552"
+  },
+  "finalWheelPacketTests": {
+    "tests": 7,
+    "passed": true,
+    "includesForeignEqualityGuards": true
+  },
+  "exactPackagedOwnerAssets": true,
+  "moduleBoundaryImports": 190,
+  "publicExportsChanged": false,
+  "PA01Complete": false,
+  "installerReady": false,
+  "remaining": [
+    "Protected capture and seven semantic operation bodies",
+    "Production cut, original producer and freshness",
+    "Full static/dynamic/shared dependency and role-path closure"
+  ],
+  "securitySync": "Assess security control support: protected routine bodies remain absent; compiler payload-specific duties in progress",
+  "astraIndependentReview": {
+    "planApproved": true,
+    "sourceApproved": true,
+    "nativeAssertions": 31,
+    "packetTests": 7,
+    "receiptSha256": "16b3f77a665c0dbae6fc9cdf000bd4cfef51fdb2053771e27499ec36ce0ba0ce",
+    "finalWheelApproved": true,
+    "identicalModules": 43
+  },
+  "nativeReceiptSha256": "d45073eb8528d9ed2966b1b53e60b8680f8b8556116f3a00592470be9b8b1ba9"
+}

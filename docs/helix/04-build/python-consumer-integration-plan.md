@@ -267,3 +267,42 @@ commit confirmation is not part of this slice; scope reports claiming committed
 or commit-unknown disposition refuse consistency under this selected subset.
 Original report data and opaque deferred payload bytes remain untouched. Review
 runtime/static negatives and installed wheel evidence before merging to main.
+
+## PA01 installed inventory component — Astra Ultra review
+
+After the import contract delivery, return to installed execution prerequisites.
+Implement one reusable private collector/reconciler for all routines discovered
+in the selected Truss namespace, the seven original declarations (four admission families, the epoch helper and
+two catalog high-water functions)
+and six source-authored relation homes. Package exact owner-export catalog SQL
+and its pinned manifest. Retain native bodies, argument/result identities,
+owner/namespace/language OIDs, settings and original NULL-versus-empty ACL,
+grantor/grant-option and effective positive/negative privilege observations.
+Reconcile complete selected membership in both directions, including unexpected
+overloads. Use the same installed collector in native ordinary-role denial and
+inherited/PUBLIC/table/column/schema drift tests.
+
+The selected compatibility experiment is PG16.15 using the supported subset of
+PG17 observation proposals. Require the explicit original pg_catalog,pg_temp
+resolution context before using their unqualified casts. Do not mutate host
+transaction/session settings from the collector. Retained row/text admission is
+not pre-ingress or total-memory qualification. Multiple catalog queries keep
+production cut/freshness unresolved; the harness separately controls all fixture
+administration. Static string-bodied/dynamic references, external wrappers,
+shared/SET-role routes, guards/defaults/policies/types and protected owner capture
+remain explicit gaps. Scoped correspondence is not PA01 completion, protected
+admission, installation readiness or a public capability.
+
+Iteration 11 implements this private component. The original installed snapshot
+exposed the absent configuration home; the harness then composes its original
+owner export. A separately captured original native comparison baseline pins
+rendering and raw ACL provenance without proving authority or freshness. The
+reconciler bounds both packets, rejects malformed native identities and foreign
+comparison objects, checks joins and complete definitions, and detects widened
+PUBLIC/grant-option access even when effective rights stay unchanged. Transactional
+fixture mutations restore the exact original catalog state. See
+[evidence](evidence/python-contracts-iteration11.json) and its native receipt.
+This remains a cooperative private administrative tool; it adds no public runtime
+operation and does not close PA01 or installer readiness. Next work remains
+protected capture/writer composition with the security owner, then the first
+catalog/apply/read workflow under the original host transaction.
