@@ -1892,3 +1892,10 @@ epoch/configuration authority or ordinary successful admission. Dependency
 EXECUTE and data authority are distinct; broad grants are not a protected route.
 No epoch marker is initialized from caller labels, no invoker guard is weakened
 and no public readiness/semantic-body gate changes.
+
+The [PA01 direct source dependency map](operation-ordinal-issuer-handoff.md#direct-admission-dependency-map-for-pa01-2026-10-10)
+now identifies every admission family's selected direct native homes/effects and
+epoch helper boundary, with actor/asserted/configuration distinctions preserved.
+It guides actual installed identity/effective-right/indirect closure work and
+keeps unavailable owner subject/cut/diagnostic semantics separate. This source
+review does not qualify a complete dependency collector or production grants.

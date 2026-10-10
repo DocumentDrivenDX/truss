@@ -1591,3 +1591,40 @@ epoch/configuration authority or ordinary successful admission. Dependency
 EXECUTE and data authority are distinct; broad grants are not a protected route.
 No epoch marker is initialized from caller labels, no invoker guard is weakened
 and no public readiness/semantic-body gate changes.
+
+### Direct admission dependency map for PA01 (2026-10-10)
+
+The following is a source-reviewed direct boundary map for the existing invoker
+prototypes, not a complete parsed/transitive native closure or privilege grant
+plan. Native identity/body correspondence is retained separately by the39-case
+receipt; joint epoch helper/ordinary denial by the53-case receipt.
+
+| Existing entry | Direct selected native dependencies and effects | Original context boundary |
+| --- | --- | --- |
+| Base issued admission | schema_head lock/read; complete current-xid row_home_operation conflict reads and original row INSERT | Original session/acting role at INVOKER boundary; host ordinal supplied through existing custody. |
+| Asserted-origin issued admission | Base homes/effects plus retained asserted bytes and capture-profile bytes | Asserted origin remains distinct from original authenticated actor; opaque bytes do not authenticate origin. |
+| Epoch-context issued admission | runtime_lock_source_epoch before head/registry admission; then base homes/effects with retained epoch artifacts | Original actor guard precedes helper invocation; selected expected epoch labels do not grant transition authority. |
+| Configuration-context issued admission | Epoch helper; schema_head lock/read; installation_admission size/full-row reads; original row_home_operation and operation_configuration INSERTs | Original configuration/profile/capsule is retained separately; current subject/authority and installed config meaning remain externally admitted. |
+| runtime_lock_source_epoch | source_epoch_current singleton FOR SHARE; source_epoch_registry matching original row/evidence read | Separate original invoker guard, bounded expected labels and exact evidence digest correspondence. It does not issue an epoch or initialize copied marker state. |
+
+PG role/session/backend/transaction observations, pg_locks checks, hashing,
+encoding and native types are additional original system dependencies. Preserve
+their exact engine/version/role/configuration meanings in the native closure;
+the table above is not an exhaustive dependency collector. Actual role grants
+needed for row locks and indirect invocations must be independently observed,
+not inferred from an ACL word list or function-name match.
+
+The protected replacement must reconcile this original direct source map with
+actual installed routine/relation/type/trigger identities, effective invocation
+and data/DDL rights, full declared dynamic/indirect dependencies and independently
+observed denial/effects. Retain original person before any privileged writer,
+then bind the owner-issued subject/attempt/connection/current-cut contract.
+Native registry/data access belongs behind that admitted writer; direct consumer
+grants cannot substitute for capture. All current guards and family-specific
+original carriers stay intact until that distinct profile is qualified.
+
+Truss owns native dependency realization and original driver custody. The security
+owner supplies subject/current-authority, exclusion/freshness and diagnostic
+privacy meaning; UMF supplies admitted metadata/value/DDL semantics. Missing
+owner publication remains a named integration dependency, not permission to
+create an alternate resolver or reinterpret the current invoker contexts.
