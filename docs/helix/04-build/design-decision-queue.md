@@ -1058,3 +1058,31 @@ unchanged. Driver subclass instrumentation qualifies this finite harness, not
 a public receive/account/settlement adapter. Original complete release membership,
 observer authority/current cut, whole resource accounting and public verifier
 remain absent; no installation/readiness claim is promoted.
+
+
+## Reproducible corrected native recipe materialization
+
+`scripts/materialize-corrected-pgserver-recipe.py` now reconstructs the exact
+selected Makefile from the original pinned upstream git blob and the recorded
+replacement list. It refuses source-revision/original-recipe/selected-hash drift
+and an existing output directory. It does not change the source checkout, build,
+package, install or publish a server. [Materialization evidence](evidence/design-audit/pgserver-corrected-recipe-materialization.json)
+records exact upstream/candidate/input/producer hashes; the delivered
+[recipe bytes](evidence/design-audit/pgserver-corrected-native.Makefile) match the
+previous actual corrected build checkout exactly.
+
+Use a fresh original checkout at3b227607, materialize into a new directory, then
+place only these verified selected bytes at its pgbuild/Makefile. Obtain and
+verify the original PostgreSQL16.15 source archive against the registered hash
+before build. Execute the recorded `make -C pgbuild postgres` target with the
+pinned toolchain and build dependencies; never infer `all` as the selected target
+(the upstream recipe also contains a pgvector target). Then use the existing
+corrected packager, compare original wheel/source/native payloads, install in a
+fresh environment and run native caller-reset/issuer/engine qualification.
+
+This closes reproducible recipe generation, not reproducible native binary
+builds, platform coverage or default delivery. macOS arm64/Python3.11 remains the
+only private candidate tuple evidenced; Linux and managed targets stay open.
+The private candidate version/wheel remains unpublished, and no dependency or
+public supported-runtime claim changes. The prior input/build/package/native
+receipts retain their original scopes.
