@@ -1,0 +1,492 @@
+bun test v1.4.2 (43848b5a7)
+
+tests/catalog-extension-inventory.test.ts:
+(pass) repeated extension identity retains distinct original scopes and escaped source pointers [38.52ms]
+(pass) original archive bytes and incomplete payload meaning survive without fragment substitution [5.93ms]
+(pass) report wrappers retain each occurrence and complete original artifact without asserting meaning [3.15ms]
+
+tests/catalog-execution-report-custody.test.ts:
+(pass) unissued execution report candidates refuse before any native query [0.22ms]
+
+tests/umf-field-assertion-producer.test.ts:
+(pass) owner separates interpreted facets from unknown source members [9.18ms]
+(pass) kind, availability and cardinality retain independent original meanings [10.16ms]
+(pass) upgraded source cannot borrow the original field assertion result profile [14.51ms]
+
+tests/catalog-transition-correspondence.test.ts:
+(pass) complete source and interpretation target correspond independently [4.13ms]
+(pass) restored original does not admit a later edited target [0.13ms]
+(pass) every original source occurrence remains exact including unknown content [0.11ms]
+
+tests/catalog-core-assertion-identities.test.ts:
+(pass) original pointer identities retain partial meanings without inventing missing facets or enforcement [0.45ms]
+(pass) cloned observation collections cannot issue source identities [0.03ms]
+(pass) authored key and relationship IDs remain qualified by original occurrence pointers [33.29ms]
+(pass) original 0.8 schema properties keep authored pointers and legacy API failures explicit [12.15ms]
+
+tests/decode-budget.test.ts:
+(pass) individually valid fields exhaust shared budget before second materialization [0.58ms]
+(pass) shared node cap and immutable snapshots [0.05ms]
+(pass) routine custody and projections consume one caller-owned ledger [0.12ms]
+
+tests/acceptance-json.test.ts:
+(pass) empty object [0.27ms]
+(pass) null boolean string array [0.04ms]
+(pass) legal whitespace [0.03ms]
+(pass) inert prototype name [0.02ms]
+(pass) valid escaped surrogate pair [0.10ms]
+(pass) distinct normalization forms [0.02ms]
+(pass) escaped equivalent duplicate [0.11ms]
+(pass) unpaired high surrogate [0.01ms]
+(pass) unpaired low surrogate
+(pass) overlong utf8 [0.03ms]
+(pass) surrogate utf8 [0.01ms]
+(pass) out of range utf8
+(pass) outer number
+(pass) trailing data
+(pass) trailing comma
+(pass) bom
+(pass) comment [0.04ms]
+(pass) opaque numeric artifact base64 [0.02ms]
+(pass) complete original input fixture preserves all native and converted custody [0.34ms]
+(pass) selected depth and container limits refuse before an over-limit output [2.44ms]
+(pass) raw byte and cumulative duplicate-name work are conjunctive ceilings [1.79ms]
+(pass) exact node ceiling counts containers and every scalar occurrence [22.10ms]
+
+tests/catalog-report-document-basis.test.ts:
+(pass) document basis preserves partial original observation without making complete report [0.50ms]
+(pass) omitted and extra native archive observations refuse [0.10ms]
+(pass) native identity revision digest and ordinal substitutions refuse [0.09ms]
+(pass) missing or noncanonical native generation cannot be guessed [0.06ms]
+
+tests/composed-report-handoff.test.ts:
+(pass) explicit composed codec preserves nineteen fields and full original bytes [8.46ms]
+(pass) baseline and composed versions cannot silently substitute for each other [2.69ms]
+(pass) rebind-only selected event version and exact owner-local key shape remain closed [0.79ms]
+(pass) codec scope cannot establish completeness or native transition meaning [3.65ms]
+(pass) every selected field is mandatory and unknown claims refuse [2.97ms]
+(pass) prepared byte custody survives caller mutation and rejects oversized wire [1.20ms]
+
+tests/catalog-endpoint-intent-basis.test.ts:
+(pass) complete original carrier collects dependency and endpoint occurrences without claiming interpretation [8.88ms]
+(pass) pending intent preserves absence without inventing a source [9.23ms]
+(pass) incidental supplied target cannot replace declared dependency [4.79ms]
+(pass) duplicate dependency intent or endpoint lineage and reversed bounds refuse [29.19ms]
+(pass) all occurrences include dependency pending and association work in one bound [17.23ms]
+(pass) copied preparation and malformed required carrier cannot borrow basis [13.22ms]
+(pass) ordering includes every original independent document and preserves original object custody [21.67ms]
+(pass) reciprocal original declarations form one complete deterministic component [9.71ms]
+(pass) ordering refuses changed revision and insufficient full-set bounds [21.76ms]
+(pass) selected endpoints resolve owning original Records and exact key names [5.88ms]
+(pass) non-Record endpoint and foreign key claims cannot resolve by incidental ownership [17.71ms]
+(pass) pending definitions and pending keys retain explicit unresolved meaning [11.59ms]
+(pass) a same-name key on another Record or document cannot satisfy the target [8.54ms]
+(pass) complete endpoint and association inventory refuses a late unresolved selected Record [8.57ms]
+(pass) ambiguous authored key names refuse in original UMF validation before correspondence [0.89ms]
+
+tests/engine-executor.test.ts:
+(pass) engine commit, exact cells and ended handle refusal [2.84ms]
+(pass) original callback exception follows confirmed rollback [0.15ms]
+(pass) unknown commit retains quarantined resource and never rolls back or releases [0.08ms]
+(pass) foreign adapter handle and unsupported adoption never touch native ports [0.06ms]
+(pass) invalid carrier domains refuse before native execution [0.29ms]
+(pass) native retry SQLSTATE cannot be cleared by a savepoint [0.19ms]
+(pass) confirmed commit rejection returns classified outcome after release [0.09ms]
+(pass) released savepoint refusal preserves the valid outer transaction [0.12ms]
+
+tests/operation-registry.test.ts:
+(pass) original registry row preserves exact numeric and byte carriers [0.32ms]
+(pass) foreign/duplicate/unassigned identities and malformed phases refuse [0.29ms]
+
+tests/pg-wire.test.ts:
+(pass) original command count text beyond host precision remains exact [0.49ms]
+(pass) raw data preserves NULL/empty/binary distinctions and frame boundaries [0.11ms]
+(pass) fragmented original frame forwards once only after full admission [0.27ms]
+(pass) oversized header refuses before body allocation or forwarding and remains closed [0.16ms]
+(pass) invalid text row refuses before forwarding to original parser [0.11ms]
+(pass) query completion requires original command then ready and matching SELECT rows [0.13ms]
+(pass) error response retains ordered fields and ends only on original ready [0.13ms]
+(pass) notice is retained without replacing original command completion [0.07ms]
+(pass) unnamed extended response requires parse/bind before no-data completion [0.08ms]
+(pass) matching command cannot conceal wrong original transaction status [0.07ms]
+
+tests/security-graph-source-lowering.test.ts:
+(pass) candidate association lowering carries local source validity and same-row field test [0.60ms]
+(pass) copied source or source metadata accessor cannot enter lowering [0.18ms]
+
+tests/canonical-report-handoff.test.ts:
+(pass) all seventeen report fields reach the native codec carrier without accepted authority [3.35ms]
+(pass) each missing complete-report field and extra acceptance claims refuse [1.95ms]
+(pass) numeric counts and projected assertion scope cannot become complete report codec input [0.36ms]
+(pass) shape-valid source and effect forgeries remain visibly codec-only [0.70ms]
+(pass) pinned 0.1 codec refuses proposed or guessed report versions without conversion [1.04ms]
+
+tests/layout-migration-corpus.test.ts:
+(pass) shared migration planning: declared-upgrade [2.67ms]
+(pass) shared migration planning: no-synthesized-intermediate-route [0.09ms]
+(pass) shared migration planning: at-target-is-metadata-only [0.08ms]
+(pass) shared migration planning: source-hash-mismatch [0.06ms]
+(pass) shared migration planning: foreign-document-family [0.05ms]
+(pass) shared migration planning: unregistered-target [0.06ms]
+(pass) shared migration planning: no-guessed-downgrade [0.05ms]
+(pass) shared migration planning: nontransactional-refusal [0.05ms]
+(pass) shared migration planning: broken-chain [0.19ms]
+(pass) shared migration planning: ambiguous-route [0.09ms]
+(pass) shared migration planning: duplicate-wire-member [0.06ms]
+(pass) shared migration planning: closed-members [0.09ms]
+(pass) shared migration planning: numeric-node [0.01ms]
+(pass) shared migration planning: unselected-invalid-direction [0.08ms]
+(pass) shared migration planning: exact-large-version-components [0.09ms]
+(pass) shared migration planning: declared-complete-downgrade [0.10ms]
+(pass) shared migration planning: contradictory-recipe [0.05ms]
+(pass) shared migration planning: contradictory-procedure [0.04ms]
+(pass) shared migration planning: contradictory-procedure-at-target [0.05ms]
+(pass) shared migration planning: contradictory-recipe-unselected [0.05ms]
+(pass) shared migration planning: identical-recipe-reuse [0.06ms]
+(pass) shared migration planning: distinct-procedure-versions [0.06ms]
+(pass) shared migration planning: separate-artifact-roles [0.08ms]
+
+tests/artifacts.test.ts:
+(pass) original opaque UMF and unknown numeric meaning stay exact across asynchronous snapshot [0.56ms]
+(pass) original digest/canonical encoding and complete shared byte bounds refuse before success [0.18ms]
+
+tests/security-candidate-endpoint.test.ts:
+(pass) actual original mixed endpoint [{"documentId":"domain","moduleId":"m","elementId":"Ownership"},"resource"] [0.81ms]
+(pass) actual original mixed endpoint [{"documentId":"domain","moduleId":"m","relationshipId":"WorksOn"},"staff"] [0.23ms]
+(pass) actual original mixed endpoint [{"documentId":"domain","moduleId":"m","relationshipId":"WorksOn"},"project"] [0.16ms]
+(pass) actual original mixed endpoint [{"documentId":"domain","moduleId":"m","elementId":"Ownership"},"project"] [0.19ms]
+(pass) ordered compound member and column carriers stay ordered [0.14ms]
+(pass) reflection refuses accessors without invoking them [0.02ms]
+(pass) Unicode scalar limits preserve supplementary characters [1.09ms]
+(pass) deep copied snapshots survive mutations of original inputs [0.06ms]
+(pass) dense array and native UTF8 column boundaries [0.68ms]
+(pass) nested data and array accessors refuse without invocation [0.07ms]
+
+tests/inert-assembly.test.ts:
+(pass) construction and selection preserve unverified status without touching injected native ports [0.64ms]
+(pass) invalid configuration and accessor metadata refuse before host calls or getter execution [0.07ms]
+(pass) source mutation cannot alter held configuration; incompatible recovery and unsupported assembly profiles refuse [0.18ms]
+
+tests/relationship-planning-ratio.test.ts:
+(pass) two-times threshold is inclusive and one exact unit above fails [0.79ms]
+(pass) nearest-rank p95 uses the 950th ordered value without mutating samples [0.36ms]
+(pass) missing, incomparable and below-resolution baselines cannot pass [0.39ms]
+(pass) sparse arrays refuse instead of skipping missing observations [0.39ms]
+
+tests/native-vector.test.ts:
+(pass) original independent CONTRACT-008 vectors [0.22ms]
+(pass) bounded exact parsing and immutable original spelling [0.22ms]
+
+tests/catalog-endpoint-source-references.test.ts:
+(pass) original local and mutual supplied selections retain actual source bytes rather than transitioned bytes [6.82ms]
+(pass) reconstructed preparation cannot borrow original source custody [3.17ms]
+(pass) wrong document revision reference and containing context refuse without latest fallback [2.34ms]
+(pass) duplicate opaque inventory references refuse even with otherwise valid original sources [2.50ms]
+(pass) explicit occurrence bounds and copied projections preserve repeated references and caller isolation [6.28ms]
+
+tests/native-array.test.ts:
+(pass) all original independent array vectors [2.56ms]
+(pass) escaping, complete shape, original scalar and budgets [0.25ms]
+
+tests/security-graph-source.test.ts:
+(pass) opaque edges explicitly omit association record and property fields [0.12ms]
+(pass) source issuance survives caller mutation and refuses copied source [0.07ms]
+(pass) metadata accessors never execute [0.03ms]
+(pass) custom collection iterators never execute [0.03ms]
+(pass) native metadata identifiers retain exact domain limits [0.08ms]
+(pass) unsupported domains, conflicting aliases and hidden metadata refuse [0.16ms]
+(pass) sparse or excessive candidate fields refuse [0.09ms]
+(pass) array proxy cannot grow captured length or invoke a length getter [0.11ms]
+(pass) endpoint keys refuse unissued sources and malformed exact namespace metadata [0.23ms]
+(pass) endpoint validity checks original typed object existence and live record metadata [0.06ms]
+(pass) endpoint key metadata is captured without accessor execution [0.03ms]
+
+tests/conformance-observation-coverage.test.ts:
+(pass) complete coverage permits ordering differences [0.22ms]
+(pass) empty expectations do not prove an empty native inventory [0.03ms]
+(pass) extra observations and duplicates cannot replace required checks [0.05ms]
+(pass) surface, step and boundary all participate in coverage [0.06ms]
+(pass) explicitly admitted no-observation procedure has empty coverage [0.02ms]
+(pass) performance evidence cannot be omitted or replaced by behavioral evidence [0.09ms]
+
+tests/acceptance-input-inspector.test.ts:
+(pass) complete original wire and all converted artifact bytes survive inspection [0.80ms]
+(pass) missing conversion source [0.30ms]
+(pass) damaged source digest [0.30ms]
+(pass) noncanonical identical artifact [0.13ms]
+(pass) duplicate original document [0.23ms]
+(pass) host number [2.57ms]
+(pass) documents-only input cannot become complete original admission [0.14ms]
+(pass) concurrently shared raw custody cannot enter inspection [0.06ms]
+
+tests/catalog-input-preparation.test.ts:
+(pass) real owner validates original ordered UMF sources with reversible interpretation [3.51ms]
+(pass) foreign original interpretation profile cannot borrow validation [0.25ms]
+(pass) archive document identity must equal original owner source [1.19ms]
+(pass) shape-only original {} source does not become accepted UMF [0.41ms]
+(pass) native archive carrier has exact five original fields without interpretation substitution [6.58ms]
+(pass) source declaration extraction preserves original owner and Field references [3.16ms]
+(pass) configured original registry refuses unregistered synthetic root profiles [14.62ms]
+(pass) absent binding derives complete default json homes from original members [3.50ms]
+(pass) present binding cannot be silently replaced with default homes [3.74ms]
+(pass) embedded duplicate source members refuse before owner interpretation [0.26ms]
+(pass) reconstructed preparations cannot enter home, extension, report or native staging helpers [32.62ms]
+(pass) new-only staging cannot silently ignore declared transforms [2.29ms]
+(pass) UMF report basis never invents a supported-subset artifact for unregistered preparation [17.64ms]
+(pass) UMF report basis preserves actual original version and registered bytes without a support claim [21.64ms]
+
+tests/operation-ordinal-issuer.test.ts:
+(pass) rollback-does-not-reuse [0.21ms]
+(pass) finite-exhaustion-does-not-wrap
+(pass) unknown-control-closes-admission [0.01ms]
+(pass) cancellation-closes-admission
+(pass) wrong-custody-consumes-nothing
+(pass) ended-epoch-cannot-resume
+(pass) native maximum and exact argument types [0.04ms]
+
+tests/report-response-json-candidate.test.ts:
+(pass) frozen complete report response boundary preserves nineteen fields and request refusal [33.05ms]
+(pass) numeric nodes, duplicate keys and Unicode refusals remain [0.24ms]
+(pass) logical work exhaustion refuses distinct long keys below byte and member caps [4.11ms]
+(pass) complete response schema integration refuses every missing field and retains copied bytes [540.77ms]
+
+tests/module-policy-overhead.test.ts:
+(pass) exact threshold passes every original block without float conversion [1.21ms]
+(pass) one nanosecond over fails even with a passing pooled mean [0.72ms]
+(pass) negative differences are retained and results frozen [0.79ms]
+(pass) missing samples, extra fields and invalid exact durations invalidate [0.48ms]
+
+tests/security-graph-locator.test.ts:
+(pass) candidate exact graph key resolution @covers US-056-AC2 > joins full native typed owner without treating locator as business key [0.34ms]
+(pass) candidate exact graph key resolution @covers US-056-AC2 > selects full namespace and bytes in exact type/key definition [0.17ms]
+(pass) candidate exact graph key resolution @covers US-056-AC2 > refuses missing materialization and unresolved typed owners [0.12ms]
+(pass) candidate exact graph key resolution @covers US-056-AC2 > refuses ambiguous full key ownership and duplicate storage/owner rows [0.09ms]
+(pass) candidate exact graph key resolution @covers US-056-AC2 > refuses malformed exact byte and native key carriers [0.16ms]
+(pass) candidate exact graph key resolution @covers US-056-AC2 > retains exact native byte limits and refuses one byte over on either side [7.16ms]
+(pass) candidate exact graph key resolution @covers US-056-AC2 > accepts 4096 complete bucket rows and rejects 4097 [11.23ms]
+(pass) candidate exact graph key resolution @covers US-056-AC2 > bounds aggregate native key bytes before returning a selected match [41.84ms]
+(pass) candidate exact graph key resolution @covers US-056-AC2 > refuses caller bucket iterators/accessors without executing them [0.12ms]
+(pass) candidate declared relationship projection @covers US-056-AC2 > selects exact relationship and retains independently declared foreign edges [0.31ms]
+(pass) candidate declared relationship projection @covers US-056-AC2 > declared empty association is empty; missing selection is refusal [0.03ms]
+(pass) candidate declared relationship projection @covers US-056-AC2 > refuses undeclared edge relationship and reversed endpoint roles [0.08ms]
+(pass) candidate declared relationship projection @covers US-056-AC2 > declared alternative endpoint types are preserved independently [0.03ms]
+(pass) candidate declared relationship projection @covers US-056-AC2 > refuses duplicate, missing and malformed declarations [0.06ms]
+(pass) candidate declared relationship projection @covers US-056-AC2 > refuses declaration iterators and accessors without invoking them [0.03ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > bounds dense original rows at exactly 4096 objects and edges [9.28ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses custom collection iterators without invoking them [0.07ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses sparse, accessor and extended collection carriers [2.72ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > normalizes absent input and rejects top-level accessors [0.23ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > retains exact large IDs and distinguishes equal IDs in different types [0.11ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > preserves directional roles rather than sorting endpoints [0.03ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > accepts signed native limits without rounding [0.02ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses malformed or overflowing object ID -0 [0.04ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses malformed or overflowing object ID 01
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses malformed or overflowing object ID +1
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses malformed or overflowing object ID 1.0
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses malformed or overflowing object ID 1e3
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses malformed or overflowing object ID  1
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses malformed or overflowing object ID 9223372036854775808
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses malformed or overflowing object ID -9223372036854775809
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses malformed or overflowing object ID 1 [0.02ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses malformed or overflowing object ID 1
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses malformed or overflowing object ID null
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses invalid endpoint type 2147483648 [0.03ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses invalid endpoint type -2147483649
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses invalid endpoint type 1
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses invalid endpoint type null
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses unresolved typed endpoint despite a matching bare ID [0.02ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses duplicate objects and duplicate edge IDs [0.04ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > distinct edges with identical endpoints remain distinct [0.09ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > separate relationship IDs remain distinct [0.03ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > rejects accessors without invoking them [0.04ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > rejects extra meaning and oversized collections [0.07ms]
+
+tests/umf-value-runtime.test.ts:
+(pass) original current-core Field producer retains exact validity and completeness [6.89ms]
+(pass) original current-core tuple encoder preserves ordered exact source and mathematical encoding [10.10ms]
+
+tests/catalog-document-order.test.ts:
+(pass) cycle_then_dependent [0.93ms]
+(pass) newly_ready_precedes_old_ready [1.92ms]
+(pass) shared_dependency [0.63ms]
+(pass) utf8_not_utf16 [0.06ms]
+(pass) normalization_and_prefix [0.27ms]
+(pass) emit_complete_component [0.14ms]
+(pass) duplicate_identity [0.02ms]
+(pass) missing_dependency
+(pass) bounds charge duplicate edges; exact UTF-8 refuses malformed identity [0.09ms]
+(pass) long chain uses checked work stacks and dependency-first output [8.69ms]
+(pass) oversized node and edge identities refuse before scanning or hashing their content [0.20ms]
+
+tests/layout-migration-plan.test.ts:
+(pass) explicit inert layout migration plans > preserves original declared recipe order and exact source/target [0.32ms]
+(pass) explicit inert layout migration plans > does not synthesize a route from compatible intermediate steps [0.10ms]
+(pass) explicit inert layout migration plans > at-target metadata issues no steps and claims no installation authority [0.07ms]
+(pass) explicit inert layout migration plans > refuses changed source fingerprints and foreign layout family [0.12ms]
+(pass) explicit inert layout migration plans > refuses duplicate routes and broken ordered chains [0.11ms]
+(pass) explicit inert layout migration plans > downgrades require an explicit complete reverse route [0.15ms]
+(pass) explicit inert layout migration plans > refuses nontransactional routes in the default planner profile [0.05ms]
+(pass) explicit inert layout migration plans > version components never round through JavaScript numbers [0.06ms]
+(pass) explicit inert layout migration plans > closed wire rejects duplicate members, numbers, extras and unbounded bytes [0.17ms]
+(pass) explicit inert layout migration plans > route direction must be an exact string even for unselected or at-target routes [1.01ms]
+(pass) explicit inert layout migration plans > direct target text observes the finite byte bound before version selection [0.36ms]
+
+tests/conformance-diagnostic-multiset.test.ts:
+(pass) order is informative while duplicate multiplicity remains normative [0.10ms]
+(pass) root and empty member paths remain different
+(pass) equal paths cannot merge different sources, profiles or stages [0.02ms]
+(pass) severity, code and escaped pointer content cannot be rewritten [0.01ms]
+
+tests/catalog-report-preparation.test.ts:
+(pass) composition preserves original partial interpretation and extensions without accepted claim [2.80ms]
+(pass) mixed native observation tuple and missing/extra count rows refuse [0.77ms]
+(pass) count grammar bounds columns and new-only retirement are explicit [0.73ms]
+(pass) forged preparation refuses before issuing native reads [0.19ms]
+(pass) composed validation evidence preserves diagnostics at both source and reversible target bases [0.36ms]
+(pass) original 0.8 validation does not invent a transition or duplicate a target-basis diagnostic scan [0.70ms]
+(pass) new-only report preparation cannot ignore a declared transform registration [0.70ms]
+(pass) report profile binds original registered bytes and refuses substitution before native observation [38.84ms]
+(pass) combined report check refuses unissued execution custody before profile resolution or native I/O [3.26ms]
+(pass) complete wire corresponds to ten issued producer fields while other fixture fields remain untrusted [4.56ms]
+(pass) native ingress absence does not admit injected loss or transform registration [12.97ms]
+(pass) changed source effect and diagnostic fields refuse before native recheck [28.21ms]
+(pass) copied report basis and stale native cut cannot supply correspondence [7.23ms]
+(pass) native actor basis retains original bytes and rejects inconsistent result carriers [2.88ms]
+(pass) report correspondence refuses omitted, duplicated or substituted original extension artifacts [73.50ms]
+(pass) execution report comparison refuses copied/unissued candidate before parsing or native I/O [0.55ms]
+
+tests/routine-carriers.test.ts:
+(pass) routine carriers preserve original opaque row and compare text semantics [2.03ms]
+(pass) mismatched original projections and vector bounds refuse [0.25ms]
+
+tests/source-json-preflight.test.ts:
+(pass) source numerical lexemes remain opaque even beyond JavaScript precision and range [1.06ms]
+(pass) strict numeric grammar rejects incomplete and non-JSON spellings [0.16ms]
+(pass) duplicate decoded names and malformed Unicode cannot reach the owner parser [0.09ms]
+(pass) source preflight retains structural bounds for numeric-heavy documents [0.53ms]
+
+tests/security-candidate-condition.test.ts:
+(pass) actual mixed compiler condition retains outer Project correlation [1.98ms]
+(pass) source negation retains three valued quantifier SQL [0.66ms]
+(pass) unknown profiles and substituted endpoint mappings refuse [4.24ms]
+(pass) lexical slot collisions refuse and unsupported terms do not disappear [0.44ms]
+(pass) array method substitution cannot turn False into True [0.04ms]
+(pass) packet, nested scan, identity and array getters never run [0.31ms]
+(pass) unused ambiguous endpoint declarations refuse eagerly [0.26ms]
+(pass) same nominal compound Key cannot cross ordered components [0.48ms]
+(pass) original Record Key metadata and all intrinsic mappings are checked [0.87ms]
+(pass) supplied falsy intrinsic carriers are never omissions [0.13ms]
+(pass) shared homes require disjoint compatible typed selectors [0.97ms]
+(pass) selector bounds and malformed unused carriers refuse eagerly [2.24ms]
+(pass) scalar channels retain field ownership, context separation and exact text equality [1.18ms]
+(pass) record scalar fields remain on the bound witness; opaque scalar access refuses [1.16ms]
+(pass) scalar declarations cannot contradict Key carriers or qualified field domains [0.66ms]
+(pass) numeric constants normalize exactly without value-number conversion [0.59ms]
+(pass) binary constants retain exact octets and empty value [0.18ms]
+(pass) native validity guards enclose negation and successful disjunctions [0.17ms]
+(pass) rule fold retains all matching effects and unknown precedence [3.55ms]
+(pass) splitting a qualified-field domain contradiction across rules refuses [0.21ms]
+(pass) disclosure SQL applies protected defaults and withhold before mask conflicts [1.62ms]
+(pass) disclosure SQL preserves ordered fields beyond the PostgreSQL function argument limit [2.84ms]
+(pass) issued opaque sources preserve local validity outside negation and successful siblings [0.49ms]
+(pass) copied graph SQL and home accessors cannot enter candidate condition lowering [0.21ms]
+(pass) native population identity survives keyed and property projection wrappers [0.22ms]
+
+tests/umf-source-numeric-admission.test.ts:
+(pass) pinned owner refuses precision loss or unsupported numeric source: 9007199254740993 [0.38ms]
+(pass) pinned owner refuses precision loss or unsupported numeric source: 0.12345678901234567890123456789 [0.29ms]
+(pass) pinned owner refuses precision loss or unsupported numeric source: 1e9999 [0.21ms]
+(pass) pinned owner refuses precision loss or unsupported numeric source: 1e-9999 [0.14ms]
+(pass) pinned owner refuses precision loss or unsupported numeric source: -0 [0.08ms]
+(pass) pinned owner admits interoperable numeric source without changing its decimal value: 0.1 [0.47ms]
+(pass) pinned owner admits interoperable numeric source without changing its decimal value: 9007199254740991 [0.30ms]
+(pass) pinned owner admits interoperable numeric source without changing its decimal value: 1e2 [0.28ms]
+(pass) unknown exact numeric carrier stays opaque and retains its string payload [0.34ms]
+
+tests/acceptance-profiles.test.ts:
+(pass) every complete input profile occurrence resolves to original bytes by role [0.37ms]
+(pass) changed hash and borrowed role cannot use same-name registration [0.10ms]
+(pass) original registration snapshots cannot be changed after startup [0.07ms]
+(pass) duplicate and hash-mismatched registration refuse startup [0.08ms]
+(pass) borrowed resolver method cannot impersonate original startup byte custody [0.13ms]
+(pass) report profile resolves in its own role and cannot borrow acceptance bytes [0.12ms]
+(pass) report startup bytes are frozen independently and duplicate report registrations refuse [0.04ms]
+
+tests/trigger-arguments.test.ts:
+(pass) all twelve independent original trigger argument vectors [0.38ms]
+(pass) exact encoding and allocation controls [0.19ms]
+
+tests/umf-declaration-producer.test.ts:
+(pass) original authored keys are inspected through owner API with source pointer and unverified provenance [0.67ms]
+(pass) relationship meaning is version scoped and cannot borrow upgraded envelope semantics [1.67ms]
+(pass) schema properties use explicit reversible target and preserve complete owner diagnostic observations [0.29ms]
+(pass) prepared original sources collect owner observations with independent version basis and exact evidence [20.09ms]
+(pass) unavailable original 0.8 relationship inspection remains explicit and preserves owner failure [28.12ms]
+(pass) Field owner observations retain separate bundle evidence and original basis [22.93ms]
+(pass) complete owner observation coverage detects omission, replacement and changed evidence [26.58ms]
+(pass) full observation occurrence coverage cannot turn unavailable 0.8 APIs into available meaning [22.07ms]
+(pass) self-consistent reconstructed evidence and byte-identical input cannot borrow collection custody [42.89ms]
+(pass) collection cannot issue observations from copied or substituted owner callbacks [15.62ms]
+(pass) loaded owner callbacks cannot give a reconstructed preparation original observation custody [15.59ms]
+
+tests/umf-numeric-runtime.test.ts:
+(pass) original UMF number convenience requires lossless value correspondence [1.42ms]
+(pass) original UMF exact carriers retain spelling and require exact output conversion [0.39ms]
+(pass) original current-core Field validation remains authoritative for numeric convenience [22.10ms]
+(pass) numeric registration cannot substitute for current-core value registration [0.49ms]
+
+tests/query-journal.test.ts:
+(pass) retains exact request, original frame and outcome across journal reconstruction [100.78ms]
+(pass) bounded inspection retains incomplete/unknown originals without granting replay authority [100.45ms]
+
+tests/asserted-origin-map.test.ts:
+(pass) asserted origin candidate mapping > preserves exact numeric-looking strings, tagged authored objects, null and sequence [0.75ms]
+(pass) asserted origin candidate mapping > orders unsigned UTF8 keys and preserves NUL/prototype names [0.09ms]
+(pass) asserted origin candidate mapping > refuses numbers, duplicates and invalid role text [0.07ms]
+
+tests/catalog-declarations.test.ts:
+(pass) equal Field IDs preserve declaring module, independent key order and unknown content [0.16ms]
+(pass) key component cannot substitute equal unowned Field ID in another module [0.14ms]
+(pass) missing original Field correspondence is explicit [0.05ms]
+
+tests/umf-runtime.test.ts:
+(pass) original UMF source and verified reversible transition retained [5.01ms]
+
+tests/canonical-wire-tree.test.ts:
+(pass) original source spelling and scalar UTF-8 remain separate from canonical codec carrier [0.22ms]
+(pass) empty containers and inert prototype/member names preserve native member arrays [0.08ms]
+(pass) outer numeric nodes duplicate decoded names and malformed Unicode never reach native codec [0.05ms]
+(pass) native task ceiling is checked before carrier construction [2.27ms]
+(pass) shared backing cannot impersonate original immutable source custody [0.03ms]
+(pass) preflight exact ASCII length covers scalar encodings and nested empty containers [0.08ms]
+
+tests/weft/query.test.ts:
+(pass) actual pinned Rust compiler compiles count and retains original artifact [90.02ms]
+(pass) binding and model byte substitution refuse before compiler invocation [1.11ms]
+(pass) actual compiler rejects unavailable layout/profile without executing SQL [24.14ms]
+(pass) unknown obligations refuse before any native acquisition [48.98ms]
+(pass) foreign plan and source parameter injection fail without SQL [80.96ms]
+(pass) host checks precede SQL; publication recheck failure releases no result [100.39ms]
+(pass) real queries exercise exact numeric, whole record, presence and logical-key parameters [327.06ms]
+(pass) owner binding serializer refuses fixture catalog and altered embedded artifact [1.03ms]
+(pass) unsupported aggregate filter is an explicit compiler refusal, never host rewrite [23.07ms]
+(pass) dispose refuses retained plans and new compiler calls [53.12ms]
+(pass) dispose during compilation prevents plan publication [0.66ms]
+(pass) registered compiler and host functions cannot be replaced after construction [106.47ms]
+(pass) disposal during a native check stops data SQL without settling host transaction [100.85ms]
+(pass) disposal during host settlement withholds its buffered result [107.00ms]
+(pass) new positional metadata cannot enter an old-profile plan or acquire native context [207.68ms]
+
+tests/weft-probe/protocol.test.ts:
+(pass) exact text frames and native OID25 Bind are retained without numeric decoding [6.02ms]
+(pass) native SELECT count mismatch closes original connection [1.31ms]
+(pass) password authentication refuses without credentials or fallback [0.77ms]
+(pass) malformed protocol order refuses: Bind before Parse [0.87ms]
+(pass) malformed protocol order refuses: nonempty Parse completion [0.61ms]
+(pass) malformed protocol order refuses: duplicate Parse completion [0.54ms]
+(pass) malformed protocol order refuses: command before description [0.65ms]
+
+ 384 pass
+ 0 fail
+ 2176 expect() calls
+Ran 384 tests across 51 files. [9.11s]

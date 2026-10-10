@@ -2818,6 +2818,10 @@ installed by this package. Continue the selected required native composition
 and public schema/mutation/feed paths; the full end-to-end goal remains open.
 
 
+## Security component main integration — 2026-10-10
+
+The private candidate PostgreSQL condition, disclosure, graph locator/source, endpoint and key components are integrated against main42c2458c. Tests now use local imports and a commit-pinned UMF formal fixture. The focused replay passes 91 tests/386 assertions; the configured broader Bun replay passes 384 tests/2,176 assertions. `bun run typecheck:security` checks these private modules explicitly. The retained [checkpoint](evidence/security-main-integration/checkpoint.json) records source/log hashes, the two configuration/sandbox failed attempts, and the scoped Astra ultra review. No package/public export or protected ordinary admission is added. Native execution, installed role/dependency closure, original subject authority, final publication and the original security acceptance cases remain open.
+
 ## Python consumer integration priority
 
-The [Python consumer integration plan](python-consumer-integration-plan.md) sequences the missing public surface into PY-C01–PY-C10. Start contract/result mapping, host executor and original UMF input preparation now; prioritize real accepted installation → grouped mutation/replay → reads → committed feed/ordinary-role durable ACK. Reuse that protected runtime for import and receipt visibility. Capability declarations and lifecycle exports are not completion. Preserve the full existing corpus, migration and managed-profile scope; the first commerce scenario narrows input only.
+The [Python consumer integration plan](python-consumer-integration-plan.md) sequences the missing public surface into PY-C01–PY-C10. Start contract/result mapping, host executor and original UMF input preparation now; prioritize real accepted installation → grouped mutation/replay → reads → committed feed/ordinary-role durable ACK. Reuse that protected runtime for import and receipt visibility. The security components described above are inputs to this work, not satisfaction of its protected-admission gates. Capability declarations and lifecycle exports are not completion. Preserve the full existing corpus, migration and managed-profile scope; the first commerce scenario narrows input only.

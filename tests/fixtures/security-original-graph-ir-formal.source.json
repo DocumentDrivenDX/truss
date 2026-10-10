@@ -1,0 +1,7 @@
+{
+  "repository": "https://github.com/DocumentDrivenDX/umf",
+  "revision": "cd4cc93769925d11b8480a0c2be4f009a4c737ac",
+  "path": "docs/helix/04-build/evidence/security/original-graph-ir-formal.json",
+  "sha256": "8ec2858927480588285e9fd7e0b8d045af64e0bf459ad08f5641286e44301b3f",
+  "scope": "Preserved component fixture; no fresh proof or protected backend acceptance claimed."
+}
