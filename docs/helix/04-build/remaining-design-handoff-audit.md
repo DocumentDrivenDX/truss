@@ -13,7 +13,7 @@ key/edge reads, mutation, journal/feed and migration APIs remain unreleased.
 
 | Composition now present | Evidence and remaining boundary |
 | --- | --- |
-| Complete typed state/node/scalar OLD images and owner attribution | Actual cascade images match retained prestate. Protected original event/prestate producer, admitted owner codec and current authority remain missing. |
+| Complete typed state/node/scalar OLD images and owner attribution | [Bounded native prestate30](evidence/design-audit/row-image-prestate-native.json) supplies exact original bytes to actual cascade attribution and confirms rollback restoration. Protected scope/coherent cut, original event authority, admitted owner codec and current authority remain missing. |
 | Operation proof invalidation for actual row/key/reservation events | [Cascade21](evidence/design-audit/row-event-generation-native.json), key/reservation10 and [ordered refusal12](evidence/design-audit/key-event-atomic-generation-native.json). Partial generation components do not realize the complete observer or held guard/capacity admission. |
 | Touch create/seal/advance/reset and native point/cohort reads | [Cohort29](evidence/design-audit/touch-cohort-decode-final-native.json) retains27 controls. Full finite administrative rows decode; protected complete visibility/coherent cut/absence authority remain external. |
 | Every touch manifest against one complete operation cohort | Source checks retain noncontributors and validate an empty touch set. Independent original native same-cut capture and semantic owner/current-authority correspondence remain missing. |

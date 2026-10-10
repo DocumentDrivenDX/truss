@@ -1666,3 +1666,40 @@ whole-account exhaustion; prove late failure restores all native effects and
 retains original recovery custody. Unsupported owner/property codec/profile
 meaning refuses before business effects. These schedules remain not_run for
 the replacement; the earlier finite cascade/image experiments are inputs only.
+
+
+## Bounded typed prestate component — 2026-10-10
+
+The private `row-image/prestate.sql` producer now captures a selected state's
+complete state/node/scalar native images through the existing original codecs.
+Three typed size helpers measure the same column lengths as those codecs; a
+row-count preflight and aggregate byte-length preflight precede whole-record
+encoding. Invalid bounds refuse with22023, unavailable state with55000 and
+insufficient row/byte allowance with54000. Counts and lengths are checked again
+against returned images. No prefix or generic JSON carrier is returned.
+
+[UMF source evidence](evidence/design-audit/row-image-prestate-source.json)
+retains all eight CREATE/REVOKE statements as explicit unhandled native
+statements, with exact source archive, JSON reload and owner export. It does
+not claim complete DDL declaration coverage. The original native source,
+serialized UMF artifact and owner export remain separately pinned.
+
+[PostgreSQL16.15 evidence](evidence/design-audit/row-image-prestate-native.json)
+passes30 finite checks: independently expected full image bytes for object and
+edge homes, exact row/byte budgets, six exhausted-budget refusals, four invalid
+or unavailable captures, all six actual cascade OLD images and Python owner
+attributions after live parents vanish, missing/conflicting retained-parent
+refusals, and exact original images after savepoint rollback. The administrative
+fixture uses three rows per state and string scalars; this does not cover all
+nested trees or exact scalar carriers. Existing codec evidence stays separate.
+
+This component accepts an administrative selected-state input, not an admitted
+protected scope. Its multiple internal reads require an externally established
+coherent cut; matching counts/lengths cannot establish content coherence.
+Original operation/actor/current authority, held guards and complete private
+role/dependency closure remain external. Native length measurement serializes
+one numeric cell; this is not a whole work/copy/detoast/deadline account proof.
+Owner/property/catalog original semantics are not captured by these row images.
+The earlier generic JSON prestate producer remains separate, and its full
+protected replacement schedules remain not_run. No seven-body binding,
+installerReady flag or ordinary-consumer API is promoted by this component.
