@@ -1,0 +1,1722 @@
+{
+  "scope": "Declared story/design/test reference structure only; no semantic adequacy, implementation or native verdict",
+  "stories": 45,
+  "criteria": 167,
+  "errors": [],
+  "sources": [
+    {
+      "path": "docs/helix/01-frame/user-stories/US-001-accept-a-umf-revision-as-a-whole.md",
+      "sha256": "d42c1e5b76444c5212ff4c0a878263b264ab260577a057968d83b152ab2f604c"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-001-accept-a-umf-revision-as-a-whole.md",
+      "sha256": "b4f2c4162c68b1e199f88294fa04014985d941da4e0f44a21b71a5f9475b2877"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-001-accept-a-umf-revision-as-a-whole.md",
+      "sha256": "872a678ac038cb23353ab58de77bcef8b19017d208d043ce00a3f894e306faca"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-002-import-documents-that-depend-on-each-other.md",
+      "sha256": "71cb3c16c9e595192c0d71f2093affba78852a535d914f636563299bccdf3541"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-002-import-documents-that-depend-on-each-other.md",
+      "sha256": "ba1d6795ac224da644e5405e929b3c9912ff05be4cc18c49b8e09a72aded8e3c"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-002-import-documents-that-depend-on-each-other.md",
+      "sha256": "41ee80f75ffe31488f735574772958666907dfd54f7440e12471679ba5be5343"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-003-decide-what-happens-to-an-unknown-entity-type.md",
+      "sha256": "8d3a8c47f4814bcd59e3551fe6dff3bc7524925bc3798612c47e4167bce69fed"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-003-decide-what-happens-to-an-unknown-entity-type.md",
+      "sha256": "147af3e223007bbf831f6fdaded8568ec958e6c99021a82bca11c88ba5a836ee"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-003-decide-what-happens-to-an-unknown-entity-type.md",
+      "sha256": "25517dd3de0758d7e28457dfeb8ee5c1bed834ea5f763d1b7416ccdd544a7f4e"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-004-keep-identifiers-stable-across-revisions.md",
+      "sha256": "b1cd8e8e427a3e92f8a8e5bb1f5f24e953759ee871ba41b893d5f6178b82d443"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-004-keep-identifiers-stable-across-revisions.md",
+      "sha256": "bb4fd6cfafcfb4b680d96ac7f5128307f6af452bfdbdf01e95eb48990d520e56"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-004-keep-identifiers-stable-across-revisions.md",
+      "sha256": "72c3a760c004420b66747b92cab50367eb649ff670cf4b6a98261aec4f510271"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-005-see-every-violator-before-a-tightening-is-accepted.md",
+      "sha256": "467bbee17f6bddc79718ffeaabe12ced1720669997fee0c3deb2a9a9b4136bd9"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-005-see-every-violator-before-a-tightening-is-accepted.md",
+      "sha256": "635d2912077d8f6ed6044a44829cd814f7c67aaeee2c8dc2cd062dd644bad3da"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-005-see-every-violator-before-a-tightening-is-accepted.md",
+      "sha256": "e9180727353c55f5a6b38b22b6c42bebc97585dba7103197fe3048ffe36d3c56"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-006-add-a-type-without-ddl.md",
+      "sha256": "f167952340b6d0798488a2bd4beaf5e1622bab9fd2cd368b6574f16de747a8c8"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-006-add-a-type-without-ddl.md",
+      "sha256": "0e44cfd39f4306b5986e4a5254458c86d8b15b0bde1dfbd031288f8830d71065"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-006-add-a-type-without-ddl.md",
+      "sha256": "863a0e78a22970de96254b3783af57a1c2af40f3e8aca2cff3430230c30e6e96"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-007-store-and-read-objects-and-edges-exactly.md",
+      "sha256": "da51bb2e5b81ea49255ce4b98ce640e3d7322cbf978346889ec18c596c6211f3"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-007-store-and-read-objects-and-edges-exactly.md",
+      "sha256": "b19f9eb36490f622cfa2c4926c3090d7fb02c3bcec94b6b211220fa470f0382c"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-007-store-and-read-objects-and-edges-exactly.md",
+      "sha256": "6a0fdc7180ca35facdd13b27a5f1c9b42544b5feb8053f2b2734361743cacfdb"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-008-keep-what-the-schema-does-not-define.md",
+      "sha256": "ff10b76349b5bae084448b0acea09757ea2794d10b5c3467344c3fedf0623c1c"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-008-keep-what-the-schema-does-not-define.md",
+      "sha256": "6e5bba27d4c38cfdac417435c08d56fad53f590c03567014afb2bc9a322cde41"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-008-keep-what-the-schema-does-not-define.md",
+      "sha256": "4f6b5e97ed86cd45652636c1e07a55e52980cf3b9498740de0b937bdfa5659a8"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-009-find-an-object-by-its-key.md",
+      "sha256": "8644ae0ba5efd9658153e67f7ffe85f72061b00b1be28bfae4d6d938013c28ed"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-009-find-an-object-by-its-key.md",
+      "sha256": "3ed8187523730e51835ed5c1cad62c65a5823044f3ebe9bdf44f1987cd755725"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-009-find-an-object-by-its-key.md",
+      "sha256": "5c65ad7cbfaa61ae074c146eb21b6e78b2f6139b7abad7477df9472358189428"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-010-refuse-bad-edges-and-protect-connected-objects.md",
+      "sha256": "c4a703a40ca4f8d75a97f57e31e2240b979b5ce9ab6de56e71f184a5a7be6b39"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-010-refuse-bad-edges-and-protect-connected-objects.md",
+      "sha256": "28d7e20d91856deed010edad6650d0c32a1ed16825ca6c2dbf3bed4aba21eefd"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-010-refuse-bad-edges-and-protect-connected-objects.md",
+      "sha256": "039bc86ea67bd0e4b9a3a598a9316e32eb151d9cd1c003c9577ed45ee121ad88"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-011-limit-an-edges-multiplicity.md",
+      "sha256": "7a4cbb6129408b3ae9c87a640fd788abae507d3d8e713da0abc9ff0dfe59654e"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-011-limit-an-edges-multiplicity.md",
+      "sha256": "4ca990ad358069ea0e83330de1ed2a5812f0066052136de3b14a7ec42d3ef7b6"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-011-limit-an-edges-multiplicity.md",
+      "sha256": "d02aa6b4ee97a316c65c3a028d8bbd82e2e4ea8db337c14fdcd4170bb7e4254e"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-012-write-with-one-protocol-and-report-every-violation.md",
+      "sha256": "dacc6367c4d8b10187094a5bf5a8a5af5381fa3d37635a24451e3b30da9849ef"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-012-write-with-one-protocol-and-report-every-violation.md",
+      "sha256": "b69570bfce6a4707a22ee654e81be5a533126a19d6a7ea6222f211f7c9e6ce49"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-012-write-with-one-protocol-and-report-every-violation.md",
+      "sha256": "2d1600377fcfe8a6d3ce558a23a65c78b03b82c3c96793858f7bb48b62cc0042"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-013-refuse-a-write-against-a-stale-catalog.md",
+      "sha256": "86e3d4ee32f55310c7ef0ce4a5f7d1338631d539d14bec5020d425fa4ae6fd81"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-013-refuse-a-write-against-a-stale-catalog.md",
+      "sha256": "508ed5c6124b0de5df4ec9666de6586c01e8ebe13ca7154733c5fe78ed9bf5e0"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-013-refuse-a-write-against-a-stale-catalog.md",
+      "sha256": "a8881acb61a094be8df694be05fbe15db50d28de0447b8d1e69a0e391a1319cb"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-014-keep-cross-row-rules-honest.md",
+      "sha256": "8877f279733b9ac9d3502771a5f07271bd7a7034bc86f7c9019b37a49d712f1a"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-014-keep-cross-row-rules-honest.md",
+      "sha256": "83a7b2b14c104499f83c02cde8ee6999c62c2db27a47408737d1fc01f987801b"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-014-keep-cross-row-rules-honest.md",
+      "sha256": "73506d5c6de95d2c66250d36f20eb7f16c80d246aa26758af20a8f49ae1eed95"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-015-journal-every-change-atomically.md",
+      "sha256": "ea53eb7ff161f901cc34c304e5832dbfb9ba7a3b2409b14bb9f5d3739ebe59dc"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-015-journal-every-change-atomically-with-its-origin.md",
+      "sha256": "6f174b5b4ff9c8c5a5ff1d35ed9a0d82bc346c14e5590a60666549c7e8d9983c"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-015-journal-every-change-atomically-with-its-origin.md",
+      "sha256": "591b13724e9f49c0b20e3610605907b1cf7e3e5ea328e55571739eff04d05b7d"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-016-journal-plain-sql-changes-too.md",
+      "sha256": "5aac46f1d4b0f8b76211b82ae0ab52f4f624871fc38bc58cbd386e906f945e90"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-016-journal-plain-sql-changes-too.md",
+      "sha256": "6545ed719ce0c9d5653cfac7538d14c8415a4f57549cf6baa6a00cbc9abf864c"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-016-journal-plain-sql-changes-too.md",
+      "sha256": "eb2db53ebbcac69124b4b144f01ccab71e3c8086a514579b74458d2a63e76ce6"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-017-read-the-journal-incrementally-without-missing-a-change.md",
+      "sha256": "854dd8e82a9c08f817ac0f6fc26e59d2ffc0dec21212e90edb76348aaa2bf885"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-017-read-the-journal-incrementally-without-missing-a-change.md",
+      "sha256": "437f9b44d92ac33d21d17e25c15d9c22f1a0e140afc27eafaacc61dcfd2b3269"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-017-read-the-journal-incrementally-without-missing-a-change.md",
+      "sha256": "dbeab208dd39c6858460d0d69bf4fb742fd7295464ccd6d190387683855c7ece"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-018-reconstruct-a-record-as-of-a-version.md",
+      "sha256": "32dd185f39c695fd7b6e5732cded3dcd355cc5ef95345e8c88061c18f6be4555"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-018-reconstruct-a-record-as-of-a-version.md",
+      "sha256": "4d9d827fe89d9e2364e4a90c100abd83d11b822c2eca003138630dc6ed997ee3"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-018-reconstruct-a-record-as-of-a-version.md",
+      "sha256": "7233a1ac81c2ff6d64138ec90650385c999ca5ec8b05c7dc36439acf00352721"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-019-trim-the-journal-by-dropping-partitions.md",
+      "sha256": "cf3670097a6c702eb8fc3aa8047d48d54eb2c99efa14101a3b773888e7c81feb"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-019-trim-the-journal-by-dropping-partitions.md",
+      "sha256": "69acfcbce5795c9e66aaf870bad883c569542a36e2dc553278db0671f71bc018"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-019-trim-the-journal-by-dropping-partitions.md",
+      "sha256": "8c51e8c340f0b005dff5bdd099ac21699f1ad7124757a52a7a081263c719ecc9"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-020-read-an-object-by-id-or-key.md",
+      "sha256": "49feafab1f73270d359482e3d4b0cd3c3050ff898537660246f30a38ce998d44"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-020-read-an-object-by-identifier-or-key.md",
+      "sha256": "fab2d0609fcd268adb5deac0b1413b27e725115d38bf11db83eb39d40482845b"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-020-read-an-object-by-identifier-or-key.md",
+      "sha256": "0de2a9835961dc541ad63f9c89abc39d6500c2445426f9a3df8bafa3948552f9"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-021-list-a-types-objects-in-pages.md",
+      "sha256": "886d8d16a14536254b9d1e689600a3854181df61bcec901ac79e5b9f2be05746"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-021-list-a-types-objects-in-pages.md",
+      "sha256": "d8715cf23bc1d5fa65d8e58de487f549b1d9339f9cf531f7cda2a09ff9e43bb8"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-021-list-a-types-objects-in-pages.md",
+      "sha256": "d92638738dab3e953c206813d74de47b50146769263ea8184f38f81667d25a3c"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-022-list-an-objects-edges-bounded.md",
+      "sha256": "f40b89f5a85bfde15abeb42c2f0476cba168a093b54d1e07ef72aa03ea010aed"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-022-list-an-objects-edges-bounded.md",
+      "sha256": "c89ec2db85c7aabd05329b93f9126da4e728cfc0041b037c59d7735a708052fd"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-022-list-an-objects-edges-bounded.md",
+      "sha256": "a1b21b25e50842bdb33941c09cc7378dbe9a8c184e38ec75bcc6d5b11b37d132"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-023-traverse-one-to-three-hops.md",
+      "sha256": "d5faa0e4761daf3127746ab18670acc81dc0738e34534e5c39b5d0a0369451f0"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-023-traverse-one-to-three-hops.md",
+      "sha256": "7dc20334945300e42d0324f6559d5e0796250340a9661edf01daf8b6ef703fcb"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-023-traverse-one-to-three-hops.md",
+      "sha256": "c205330104b3e9699a8db0d535202560c4beab97bd5b0158b2c3ca5612d2c78e"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-024-enumerate-the-types-of-the-catalog.md",
+      "sha256": "43f7f20c73974b9e2ddaf003e728eed3ab6debca4d3e71f694b1977100e12b44"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-024-enumerate-the-types-of-the-catalog.md",
+      "sha256": "260b71999a476a90e16bb3609639f17fbf9d63a6873fba8f85a1cf6c949fd622"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-024-enumerate-the-types-of-the-catalog.md",
+      "sha256": "3797a78c25272e8534fecb07510cf8231f9a0020703e2bc4b870f80eb1320cd0"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-025-report-the-enforcement-layer-of-every-assertion.md",
+      "sha256": "ca5bbc621b10aca1c3ab37dcaa80b230a3411583852cb95ccc9b459f91190605"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-025-report-the-enforcement-layer-of-every-assertion.md",
+      "sha256": "f8fc7d64a62988434b79816d89e0d2e48e4ea94473ef94300eca6f94a7949802"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-025-report-the-enforcement-layer-of-every-assertion.md",
+      "sha256": "d522ed245ea1b4c69cf01c99734851bb9dfc5d7c167013bcce4640cf22b45684"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-026-back-every-support-claim-with-evidence.md",
+      "sha256": "eb310c86ab445df719dc49fcb3d998a78d8829be5fa7ad6466c967975575af73"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-026-back-every-support-claim-with-evidence.md",
+      "sha256": "adcd98ceb75f5148085eda414588e6e88db3173cf0ea984f1c17902243eca80f"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-026-back-every-support-claim-with-evidence.md",
+      "sha256": "6cc772a1a47465647e7aabaf942e0813317a53b35d4f6af1f2c70a97f7212427"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-027-build-an-implementation-from-the-contracts.md",
+      "sha256": "ea7d1cbcac5f029281425f949172b35c67dd8f02877b9288fb06fdeeb28b3a10"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-027-build-an-implementation-from-the-contracts.md",
+      "sha256": "0442ac48ad9af14dd6eb8342385536b6b9d60b81bfafddcfdffb82ff5589a29e"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-027-build-an-implementation-from-the-contracts.md",
+      "sha256": "48185a190c2b87be5b0f9e1f3b60cc87460b49d7be6fa18476e6ffac437b2283"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-028-pass-the-corpus-and-the-interchange-check.md",
+      "sha256": "edc5624a729ba2dbabc16db87ec1c47036062e3a7be9a4ea63975ab1f7c12adf"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-028-pass-the-corpus-and-the-interchange-check.md",
+      "sha256": "0407f2365d823eda0a1c71e1aa5bcc2d3bb9586832a8834b6cd17acea4d616ed"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-028-pass-the-corpus-and-the-interchange-check.md",
+      "sha256": "9a53a514e2e8a9f095888ed3da98586fc439ee220ac025c7fcf0e829b743dc92"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-029-declare-the-layout-version-and-check-the-ddl.md",
+      "sha256": "1f4be244dfe8a412de3866fe49822e72eb14b0dcf78aad2607cfe8938c5bd073"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-029-declare-the-layout-version-and-check-the-ddl-on-every-version.md",
+      "sha256": "4be0dc1a16f8f6b306ccabfea375c76f59cacf8163ffb51d2ad2a8ebfad14a37"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-029-declare-the-layout-version-and-check-the-ddl-on-every-version.md",
+      "sha256": "9dd94c26a2fb39a1a6fb0fbf4c162a555076252f796f6dab048305b32db41b38"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-030-extend-the-layout-from-a-host.md",
+      "sha256": "cede669a73726d07cc174f226b8d87a5998f025d9f25d88615eb2ce5c71add10"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-030-extend-the-layout-from-a-host.md",
+      "sha256": "3f4f1edc5a86425a13bb669e52bc3ee4d8942ad796d7b927ea7079858bee414d"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-030-extend-the-layout-from-a-host.md",
+      "sha256": "3d919e46cf6bd873663973f52744c639c86cc3be443cc0b00fa6af60a5d380a1"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-031-govern-writes-by-role-grants.md",
+      "sha256": "0fed239710947adba4247a4c6506c316e69ea6be55b0cd37a593933a9f19c764"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-031-govern-writes-by-role-grants.md",
+      "sha256": "565ccddc60a5058f5fd056d9ea601cc29df3d059b85fbcf5f82cf16a3996dba1"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-031-govern-writes-by-role-grants.md",
+      "sha256": "0e706ffc933411a0e4e3a652d770aa8a8f443cff1bc8538fc0417d84a755eb37"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-032-work-behind-a-transaction-mode-pooler.md",
+      "sha256": "bd58e54a5027816c3d36b4f35512f508e56277088de5269415c220a2e40ea985"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-032-work-behind-a-transaction-mode-pooler.md",
+      "sha256": "24e6d2ef3c9a281c70952e06d4a31426a70b6c892abb2790466e72fdfd00e0c9"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-032-work-behind-a-transaction-mode-pooler.md",
+      "sha256": "9a2ddedfecde969e890fdf90feac3a8aa738c7815a993265652e60f2d90d18a2"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-033-run-the-layout-on-an-embedded-postgres.md",
+      "sha256": "08e565c609fbe81f904acc3cf76aa7cd9f3f14dff79ea1d4a94a637170495a77"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-033-run-the-layout-on-an-embedded-postgres.md",
+      "sha256": "1132e1e6afff98fe861d644470ac28499df99088f14befd8c42b62ce97634d43"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-033-run-the-layout-on-an-embedded-postgres.md",
+      "sha256": "ee11943bb9ee848b38e3d0dbe7f3f472abb80c4a820c4b946586d2a18bdcebd6"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-034-repeat-an-import-and-change-nothing.md",
+      "sha256": "432c85621813ce4b3e4c99fd8e8edd17706960998dc7b2b3a221de1f28d4cfe7"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-034-repeat-an-import-and-change-nothing.md",
+      "sha256": "404aea2e726bf7cdf4b7e7afcc3f4baf98194a3e31fc6c375648f2b5eb7dc42d"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-034-repeat-an-import-and-change-nothing.md",
+      "sha256": "07eed70010ecaa24edcaee61db03f050037afd8780a92ed81d75f067e0e1ae54"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-035-keep-the-source-facts-of-an-imported-record.md",
+      "sha256": "23289b73273bcbcb8cc2ebd61da5a49d4eb2ef5ee26253ff7db83e8346cfee4e"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-035-keep-the-source-facts-of-an-imported-record.md",
+      "sha256": "ad5731d685ed1dfa6f074dafc1b18a30e5ed3482920506a43cf0aeaf741c339c"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-035-keep-the-source-facts-of-an-imported-record.md",
+      "sha256": "88eb025241d28435a007f411d65debdf4ec6717378ffb214a1d42186ab1c88de"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-036-record-who-accepted-a-revision.md",
+      "sha256": "58e16587da1b9050c61033063dc72cb6f21528caec1bc5d03fb0760b4af7c6f7"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-036-record-who-accepted-a-revision.md",
+      "sha256": "f68b500e3ef3190c6f02264a5fc1acb2c0063435958c2e11cd77111788ea5b58"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-036-record-who-accepted-a-revision.md",
+      "sha256": "b072bbec1c625ed6acd20a72d0b3101e560d180a60a43d1163a2e73b6b288e6f"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-037-give-roles-access-to-modules-only.md",
+      "sha256": "1962bbf6e1df62123c73b0fa034c6e6c732113d89038c8a3aabec3dffaa1348e"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-037-give-roles-access-to-modules-only.md",
+      "sha256": "291436fbb7c6048f306277412ca3afd381ab0646fbbf536658ed3dca97ff59f6"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-037-give-roles-access-to-modules-only.md",
+      "sha256": "0ac4027219c8ba0483b4130c608f66e0fe63cc11bda7b241fb36dc84d2b9ac92"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-038-link-modules-and-see-the-link-only-with-both.md",
+      "sha256": "6cea90e3fd8a2073c35acf3c3f0d109ead413749e8a7a91fcc08fd7bc9b09357"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-038-link-modules-and-see-the-link-only-with-both.md",
+      "sha256": "6f4122f9829e02099e1dd6800f7fb7b547aeb95216fc3f75d8a1cfcda7d80f71"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-038-link-modules-and-see-the-link-only-with-both.md",
+      "sha256": "7abffe2b9fb4bd252cfcf17aaf2833104bd3867b8d62f7eab222357169b684e1"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-039-read-umf-the-same-way-as-the-reference.md",
+      "sha256": "5d335b6945b02779928742b6dbc6cb5a3ae4ae924153e7ed4bc5fb54a9dd6cbe"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-039-read-umf-the-same-way-as-the-reference.md",
+      "sha256": "ee2793724b42bc71dfc5e5281b297f40864d9ae18aa8cdbac21768c81109e627"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-039-read-umf-the-same-way-as-the-reference.md",
+      "sha256": "f394458f3613ac763ed776f64d5b9acda2b54b9a1854fd321219d33f53a9e4e8"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-040-apply-operations-as-one-atomic-group.md",
+      "sha256": "67dd1d82c082dbc810d6a2c8d2680c62a321775d93456eca71a09b34bbc8a9c9"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-040-apply-operations-as-one-atomic-group.md",
+      "sha256": "5904cd046c758d2fbfeee7e0c530187f012f7b09b26ce9f2a7c9dc60ca56ae92"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-040-apply-operations-as-one-atomic-group.md",
+      "sha256": "848db8141b71ee656746d6e2b8e3e07d3bc9a78e6559586c9bbb8ceb8a13293d"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-041-publish-the-journal-without-losing-or-reordering-a-change.md",
+      "sha256": "ccd8c6b718623d62b1a505a4c9a9afe36643ce829604a69a82ff0d3c812642bb"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-041-publish-the-journal-without-losing-or-reordering-a-change.md",
+      "sha256": "5a977cd0ee2e19a2537601a017317c6f65cb5bfb6b65531510234b0df7155d16"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-041-publish-the-journal-without-losing-or-reordering-a-change.md",
+      "sha256": "8d0bb405d8eee2cbd2145a003f42f62d6d41e2a0acf7089e114441eeb8ed395f"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-042-read-how-far-behind-a-downstream-copy-is.md",
+      "sha256": "fd97545af6ceccb25dec1c9aa94505d0fe97ba879c8f95fd7cd7a0ffaa0eb97a"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-042-read-how-far-behind-a-downstream-copy-is.md",
+      "sha256": "2b36eb214a7741a71f0d23a7b612e4c147e4f95d72a7bc40784c5ef4c80ab36e"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-042-read-how-far-behind-a-downstream-copy-is.md",
+      "sha256": "3253d56d85f89a2a32b11a36ab1bb182e1f4cc799bc34661f94628f367521b04"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-043-make-a-group-safe-to-repeat.md",
+      "sha256": "38429945a17d36a38e12087158068f0b52176cf2ab9ba0e614239e3ba3ca3269"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-043-make-a-group-safe-to-repeat.md",
+      "sha256": "98fe69a5fddf9b42ac49824e9be44e65d27c7be150d92509b7a6a17917b5c6e6"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-043-make-a-group-safe-to-repeat.md",
+      "sha256": "7fadd7f4f630dbb9a48042a0e5161a72901c1bb7801203a9635cf74d31797474"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-044-run-a-change-in-a-transaction-and-roll-it-back.md",
+      "sha256": "3d256389d4174f99286ac69ae0ad835b10482ff52c8daa6ae9b5f16a2de488b5"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-044-run-a-change-in-a-transaction-and-roll-it-back.md",
+      "sha256": "539477aee3355ca950c98fb2e9b030d879be1d8c7dee9b1d13fd0400917fb75e"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-044-run-a-change-in-a-transaction-and-roll-it-back.md",
+      "sha256": "e1800a36b47606090de074629afb41c17515cd759ff2dc820d9f5ab0185d15e6"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-045-bootstrap-the-internal-layout-from-umf.md",
+      "sha256": "b271409bf91e0c32ed8bd8dd46f47e68dde7a745e050a3eca331e4eba8747280"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-045-bootstrap-the-internal-layout-from-umf.md",
+      "sha256": "183b1a53792c1dadfb443e92b61a56cb779861462e5f8fdc7d830f6f4f3975ac"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-045-bootstrap-the-internal-layout-from-umf.md",
+      "sha256": "dbd2871bcbb7559e388e45dc2ab545c59fccd9044d4e83a865f69bef47baef2a"
+    }
+  ],
+  "allocations": [
+    {
+      "criterion": "US-001-AC1",
+      "scenario": "`valid_two_document_set_has_one_revision_and_exact_report`",
+      "expected": "Revision 1 contains expected catalog elements, exact UMF versions/subset and independently hashed document bytes",
+      "layer": "Native integration",
+      "testInputs": "`tests/catalog/accept.test.ts`; valid independent documents"
+    },
+    {
+      "criterion": "US-001-AC2",
+      "scenario": "`all_invalid_document_diagnostics_leave_no_revision`",
+      "expected": "Every available violation in every document is reported; no head/catalog/data/journal/origin/report candidate persists",
+      "layer": "Native integration",
+      "testInputs": "Same file; multiple invalid documents and late failure"
+    },
+    {
+      "criterion": "US-001-AC3",
+      "scenario": "`report_covers_independent_assertion_inventory`",
+      "expected": "Every authored assertion has exact source identity and honest enforcement layer, including unknown/residual content",
+      "layer": "Contract",
+      "testInputs": "Same file; independent expected inventory and qualified profile"
+    },
+    {
+      "criterion": "US-002-AC1",
+      "scenario": "`valid_dependency_package_orders_sales_before_orders`",
+      "expected": "Either submission order records sales then orders and resolves endpoint through qualified owning identity",
+      "layer": "Native integration",
+      "testInputs": "`tests/catalog/dependencies.test.ts`; future upstream-valid pinned package"
+    },
+    {
+      "criterion": "US-002-AC2",
+      "scenario": "`valid_mutual_dependency_component_accepts_in_byte_order`",
+      "expected": "Upstream-valid mutual dependency accepts atomically with component members in exact identifier byte order",
+      "layer": "Native integration",
+      "testInputs": "Same file; upstream cycle-policy gate"
+    },
+    {
+      "criterion": "US-002-AC3",
+      "scenario": "`submission_permutations_have_identical_recorded_order`",
+      "expected": "All tested permutations produce identical ord and phased catalog result",
+      "layer": "Native integration",
+      "testInputs": "Same file; valid independent and future dependent sets"
+    },
+    {
+      "criterion": "US-003-AC1",
+      "scenario": "`default_reject_names_every_unknown_endpoint`",
+      "expected": "Valid unresolved input rejects with each qualified endpoint/relationship and no persisted effects",
+      "layer": "Native integration",
+      "testInputs": "`tests/catalog/unknown.test.ts`; future fully admitted endpoint-intent representation"
+    },
+    {
+      "criterion": "US-003-AC2",
+      "scenario": "`provisional_type_has_no_fields_and_stays_reported`",
+      "expected": "Stable provisional type/no properties or keys, derived relationship and repeated unresolved report entries",
+      "layer": "Native integration",
+      "testInputs": "Same file; several relationships sharing exact unknown identity"
+    },
+    {
+      "criterion": "US-003-AC3",
+      "scenario": "`skip_omits_whole_relationship_and_records_source_loss`",
+      "expected": "No partial relationship/endpoints persist; exact source-qualified loss appears",
+      "layer": "Native integration",
+      "testInputs": "Same file; selected skip policy"
+    },
+    {
+      "criterion": "US-003-AC4",
+      "scenario": "`authoritative_definition_preserves_provisional_identifier`",
+      "expected": "Later exact owning definition clears flag/provenance and preserves type_id/since_rev atomically",
+      "layer": "Native integration",
+      "testInputs": "Same file; later pinned definition and retained data"
+    },
+    {
+      "criterion": "US-004-AC1",
+      "scenario": "`unchanged_lineage_preserves_all_catalog_identifiers`",
+      "expected": "Type/property/key/relationship ids and key_num remain stable across supported rename/reordering revisions",
+      "layer": "Native integration",
+      "testInputs": "`tests/catalog/identity.test.ts`; independent prior id inventory"
+    },
+    {
+      "criterion": "US-004-AC2",
+      "scenario": "`new_property_never_reuses_retired_identifier`",
+      "expected": "Retired row/history remains and new property id differs from every committed historical property id",
+      "layer": "Native integration",
+      "testInputs": "Same file; retire/add and concurrent acceptance controls"
+    },
+    {
+      "criterion": "US-004-AC3",
+      "scenario": "`same_bytes_same_acceptance_context_returns_existing_revision`",
+      "expected": "Repeated same bytes/context produce no new revision/head/history/origin/journal effects",
+      "layer": "Native integration",
+      "testInputs": "Same file; frozen binding/policy/validator profile"
+    },
+    {
+      "criterion": "US-005-AC1",
+      "scenario": "`tightening_lists_all_three_and_large_violator_sets`",
+      "expected": "Complete typed/path violation set returned; candidate has no persisted effects and hidden rows cannot evade scan",
+      "layer": "Native integration",
+      "testInputs": "`tests/catalog/tightening.test.ts`; 3 plus multi-page fixtures"
+    },
+    {
+      "criterion": "US-005-AC2",
+      "scenario": "`tightening_accepts_only_after_complete_clean_scan`",
+      "expected": "All checks complete with zero violators before new definitions/head commit",
+      "layer": "Native integration",
+      "testInputs": "Same file; corrected data and scan-failure control"
+    },
+    {
+      "criterion": "US-005-AC3",
+      "scenario": "`total_transform_commits_values_history_and_each_change_journal`",
+      "expected": "Independently expected exact transformed values/derived keys commit with definition history and one journal entry per actual changed value",
+      "layer": "Native integration",
+      "testInputs": "`tests/catalog/transforms.test.ts`; qualified deterministic profile"
+    },
+    {
+      "criterion": "US-005-AC4",
+      "scenario": "`type_change_without_transform_rejects_atomically`",
+      "expected": "Missing transform refuses even if current sample values appear convertible, leaving all state unchanged",
+      "layer": "Native integration",
+      "testInputs": "Same file; type/cardinality changes"
+    },
+    {
+      "criterion": "US-006-AC1",
+      "scenario": "`type_property_relationship_addition_has_no_ddl`",
+      "expected": "Complete physical inventory identical and trace contains no transient per-type DDL; catalog rows added correctly",
+      "layer": "Native integration",
+      "testInputs": "`tests/catalog/no-ddl.test.ts`; no-index-binding fixture"
+    },
+    {
+      "criterion": "US-006-AC2",
+      "scenario": "`sixteen_continuous_writers_only_wait_on_head`",
+      "expected": "Admitted workload completes without failure; observed acceptance overlap shows catalog-head wait and preserves every write",
+      "layer": "Native concurrency",
+      "testInputs": "`tests/concurrency/catalog-writers.test.ts`; 16 connections/barriers"
+    },
+    {
+      "criterion": "US-006-AC3",
+      "scenario": "`matched_type_addition_scale_meets_declared_comparison`",
+      "expected": "10 versus 1,000 existing types satisfies predeclared end-to-end time statistic/ratio with raw samples",
+      "layer": "Performance integration",
+      "testInputs": "`tests/performance/catalog-scale.test.ts`; matched candidates/data"
+    },
+    {
+      "criterion": "US-007-AC1",
+      "scenario": "`native_value_corpus_is_exact`",
+      "expected": "Every accepted corpus value returns the expected exact typed representation, including decimal spelling, offset and large integer; compare independently stored text and public result",
+      "layer": "Native integration",
+      "testInputs": "`tests/values/native.test.ts`; accepted catalog and each adapter/target profile"
+    },
+    {
+      "criterion": "US-007-AC2",
+      "scenario": "`absent_and_explicit_null_survive`",
+      "expected": "One property absent and another explicit null remain distinct in native map membership and public decoding for objects/edge properties",
+      "layer": "Native integration",
+      "testInputs": "Same file; independently seeded null/absence fixture"
+    },
+    {
+      "criterion": "US-007-AC3",
+      "scenario": "`nul_string_is_refused_with_rule`",
+      "expected": "Top-level/nested U+0000 input is rejected with rule and path before effects; object/key/journal state unchanged",
+      "layer": "Contract",
+      "testInputs": "`tests/values/codec.test.ts`; typed recursive fixtures and refusal report"
+    },
+    {
+      "criterion": "US-007-AC4",
+      "scenario": "`shared_ids_never_repeat`",
+      "expected": "Concurrent object/edge allocations are distinct; deletes and rolled-back reservations do not make later allocations reuse those IDs",
+      "layer": "Native integration",
+      "testInputs": "`tests/values/native.test.ts`; independent connections, barriers, recorded reservations"
+    },
+    {
+      "criterion": "US-008-AC1",
+      "scenario": "`unknown_name_and_value_survive`",
+      "expected": "Native retained map has original authored name and exact recursive content; report names the retained entry",
+      "layer": "Native integration",
+      "testInputs": "`tests/retained/native.test.ts`; Order with undeclared giftWrap and nested exact-value fixture"
+    },
+    {
+      "criterion": "US-008-AC2",
+      "scenario": "`three_retained_values_rebind_atomically`",
+      "expected": "Defining revision moves three matching entries to their property home, yields exactly three rebind journal events and lists all three; unmatched content stays retained",
+      "layer": "Native integration",
+      "testInputs": "Same file; three Orders plus one unmatched retained name"
+    },
+    {
+      "criterion": "US-008-AC3",
+      "scenario": "`import_corpus_recovers_every_value`",
+      "expected": "Independent recovery from defined/retained homes matches all accepted source values; no missing name, presence or numeric content",
+      "layer": "Native integration",
+      "testInputs": "Same file; committed corpus and independent expected recovery"
+    },
+    {
+      "criterion": "US-009-AC1",
+      "scenario": "`duplicate_customer_key_is_atomic`",
+      "expected": "Second create conflicts; first remains; second object/key/journal effects are absent; raw duplicate key-row SQL also fails",
+      "layer": "Native integration",
+      "testInputs": "`tests/keys/native.test.ts`; accepted Customer key, two independent clients"
+    },
+    {
+      "criterion": "US-009-AC2",
+      "scenario": "`decimal_key_lexemes_compare_equal`",
+      "expected": "`1.0` and `1.00` derive the same key bytes; second native insert conflicts without changing original stored value",
+      "layer": "Native integration",
+      "testInputs": "Same file; independently expected canonical `1`"
+    },
+    {
+      "criterion": "US-009-AC3",
+      "scenario": "`offset_distinct_keys_remain_distinct`",
+      "expected": "Same instant authored as `Z` and `+02:00` creates two distinct canonical rows; each lookup retrieves its own object",
+      "layer": "Native integration",
+      "testInputs": "Same file; explicit RFC3339 equivalent-instant fixture"
+    },
+    {
+      "criterion": "US-009-AC4",
+      "scenario": "`absent_component_has_no_key_row`",
+      "expected": "Missing composite component produces no key row; object persists and report identifies missing component",
+      "layer": "Native integration",
+      "testInputs": "Same file; two-component key with one absent property"
+    },
+    {
+      "criterion": "US-010-AC1",
+      "scenario": "`wrong_endpoint_type_is_native_refusal`",
+      "expected": "Customer-to-OrderLine insert fails through engine and plain SQL, including forged Order discriminator on Customer ID; no row/journal effect",
+      "layer": "Native integration",
+      "testInputs": "`tests/edges/integrity.test.ts`; accepted endpoint catalog and ordinary writer"
+    },
+    {
+      "criterion": "US-010-AC2",
+      "scenario": "`missing_endpoint_is_native_refusal`",
+      "expected": "Nonexistent source or target fails native FK and leaves no edge",
+      "layer": "Native integration",
+      "testInputs": "Same file; reserved nonexistent IDs"
+    },
+    {
+      "criterion": "US-010-AC3",
+      "scenario": "`connected_object_cannot_be_deleted`",
+      "expected": "Source and target delete each fail through plain SQL/engine while edge exists; object and edge remain",
+      "layer": "Native integration",
+      "testInputs": "Same file; independent clients and committed connected rows"
+    },
+    {
+      "criterion": "US-010-AC4",
+      "scenario": "`edge_first_delete_releases_object`",
+      "expected": "Delete edge then object succeeds; neither remains and selected journal mode records effects once",
+      "layer": "Native integration",
+      "testInputs": "Same file; unowned relationship"
+    },
+    {
+      "criterion": "US-011-AC1",
+      "scenario": "`native_max_one_cannot_omit_marker`",
+      "expected": "Engine and raw SQL second edge fail; two concurrent contenders commit at most one; forged/omitted marker cannot evade guard",
+      "layer": "Native integration",
+      "testInputs": "`tests/edges/multiplicity.test.ts`; ordinary writer with versioned guard"
+    },
+    {
+      "criterion": "US-011-AC2",
+      "scenario": "`delete_releases_limit_once`",
+      "expected": "Delete first edge removes its marker atomically; replacement succeeds; no stale marker or duplicate journal effects",
+      "layer": "Native integration",
+      "testInputs": "Same file; source and target limit variants"
+    },
+    {
+      "criterion": "US-011-AC3",
+      "scenario": "`relationship_count_planning_ratio`",
+      "expected": "Controlled 1,000-relationship planning time is within 2\u00d7 the 10-relationship baseline with raw distributions retained",
+      "layer": "Native performance integration",
+      "testInputs": "`tests/benchmarks/relationship-planning.ts`; same server/data/query/settings"
+    },
+    {
+      "criterion": "US-011-AC4",
+      "scenario": "`parent_lock_serializes_max_three`",
+      "expected": "Competing engine writes under the parent lock commit no fourth edge; refused call leaves rows/journal unchanged",
+      "layer": "Native integration",
+      "testInputs": "`tests/edges/multiplicity.test.ts`; barriers and three-edge state"
+    },
+    {
+      "criterion": "US-012-AC1",
+      "scenario": "`two_independent_violations_leave_no_effect`",
+      "expected": "Both rule/path diagnostics appear; canonical/derived/journal rows stay unchanged",
+      "layer": "Native integration",
+      "testInputs": "`tests/mutations/protocol.test.ts`; accepted catalog, independent invalid properties"
+    },
+    {
+      "criterion": "US-012-AC2",
+      "scenario": "`stale_expected_version_is_refused`",
+      "expected": "Defined conflict kind; stored row/version/journal unchanged, including otherwise-no-op request",
+      "layer": "Native integration",
+      "testInputs": "Same file; stored v3 and expected v2"
+    },
+    {
+      "criterion": "US-012-AC3",
+      "scenario": "`exact_noop_does_not_advance`",
+      "expected": "No changed rows, derived effects or journal events; version unchanged",
+      "layer": "Native integration",
+      "testInputs": "Same file; exact presence/value fixtures"
+    },
+    {
+      "criterion": "US-012-AC4",
+      "scenario": "`failure_inventory_matches_retry_contract`",
+      "expected": "Each finalized contract failure maps to its expected kind/scope/retry advice; fatal/unknown commit does not trigger blind retry",
+      "layer": "Contract",
+      "testInputs": "`tests/mutations/failures.test.ts`; contract-derived inventory and named native/transport fault supplements"
+    },
+    {
+      "criterion": "US-013-AC1",
+      "scenario": "`rc_old_pin_refused_before_graph_effects`",
+      "expected": "Acceptance commits after old unlocked observation but before writer head lock; writer observes new head/refuses old pin; graph/journal unchanged",
+      "layer": "Native integration",
+      "testInputs": "`tests/catalog/races.test.ts`; independent clients/barriers"
+    },
+    {
+      "criterion": "US-013-AC2",
+      "scenario": "`rr_old_snapshot_requires_whole_retry`",
+      "expected": "Establish old snapshot, commit acceptance elsewhere, then locking head check produces native serialization/retry and no committed effects",
+      "layer": "Native integration",
+      "testInputs": "Same file; explicit REPEATABLE READ"
+    },
+    {
+      "criterion": "US-013-AC3",
+      "scenario": "`continuous_writers_admission_is_bounded`",
+      "expected": "Sixteen continuous writers coexist with completed acceptance and observed lock timeout; optional qualified queue wait meets 50 ms under declared boundary/load profile",
+      "layer": "Native performance integration",
+      "testInputs": "`tests/benchmarks/catalog-admission.ts`; shared queue contract required"
+    },
+    {
+      "criterion": "US-013-AC4",
+      "scenario": "`second_acceptance_validates_new_head`",
+      "expected": "Concurrent proposals serialize; second uses first committed head, accepting or refusing according to updated validity; no revision collision",
+      "layer": "Native integration",
+      "testInputs": "`tests/catalog/races.test.ts`; compatible and incompatible proposals"
+    },
+    {
+      "criterion": "US-014-AC1",
+      "scenario": "`two_removals_preserve_minimum`",
+      "expected": "Two competing removals commit at most one; final native participation is at least one and refused effects/journals are absent",
+      "layer": "Native integration",
+      "testInputs": "`tests/mutations/cross-row.test.ts`; two clients, two lines, barriers/post-lock reads"
+    },
+    {
+      "criterion": "US-014-AC2",
+      "scenario": "`trigger_alone_is_not_database_guarantee`",
+      "expected": "Deferred-trigger-only READ COMMITTED profile is not classified database-enforced; unverified/bypass limits remain explicit",
+      "layer": "Contract",
+      "testInputs": "`tests/reports/enforcement.test.ts`; independently authored profile/evidence fixture"
+    },
+    {
+      "criterion": "US-014-AC3",
+      "scenario": "`parent_lock_is_engine_classification`",
+      "expected": "Qualified parent-lock path reports engine enforcement, not unavoidable database enforcement",
+      "layer": "Contract",
+      "testInputs": "Same file; exact rule/profile evidence identity"
+    },
+    {
+      "criterion": "US-015-AC1",
+      "scenario": "`two_properties_share_version_and_origin`",
+      "expected": "Exactly two expected old/new property events share entity/version/transaction/revision and actor a/role w",
+      "layer": "Native integration",
+      "testInputs": "`tests/journal/atomic.test.ts`; independently authored diff fixture"
+    },
+    {
+      "criterion": "US-015-AC2",
+      "scenario": "`caller_cannot_forge_database_role`",
+      "expected": "Caller role field cannot change trusted stored role; definer execution retains qualified acting-role identity",
+      "layer": "Native integration",
+      "testInputs": "Same file; ordinary writer and definer fixture"
+    },
+    {
+      "criterion": "US-015-AC3",
+      "scenario": "`journal_failure_rolls_back_canonical_effects`",
+      "expected": "Real journal failure after canonical work leaves object/derived/journal state unchanged",
+      "layer": "Native integration",
+      "testInputs": "Same file; missing partition or faulting journal path"
+    },
+    {
+      "criterion": "US-015-AC4",
+      "scenario": "`operation_envelopes_retain_complete_state`",
+      "expected": "Create/update/delete payloads match finalized independent envelopes, including edge identity and presence semantics",
+      "layer": "Native integration",
+      "testInputs": "Same file; object and edge lifecycle fixtures"
+    },
+    {
+      "criterion": "US-016-AC1",
+      "scenario": "`raw_sql_is_journaled_in_trigger_mode`",
+      "expected": "Raw insert/update/delete creates exact expected events and version/time effects; journal failure rolls back canonical work",
+      "layer": "Native integration",
+      "testInputs": "`tests/journal/modes.test.ts`; ordinary writer and qualified triggers"
+    },
+    {
+      "criterion": "US-016-AC2",
+      "scenario": "`engine_does_not_duplicate_trigger_writer`",
+      "expected": "Engine mutation causes exactly one event set and one version increment; no-op remains unchanged",
+      "layer": "Native integration",
+      "testInputs": "Same file; trigger-mode engine executor"
+    },
+    {
+      "criterion": "US-016-AC3",
+      "scenario": "`engine_mode_reports_raw_sql_gap`",
+      "expected": "Raw SQL emits no journal event in engine mode; report explicitly describes bypass gap",
+      "layer": "Native integration",
+      "testInputs": "Same file; independent canonical/journal observer and report fixture"
+    },
+    {
+      "criterion": "US-017-AC1",
+      "scenario": "`open_old_xid_withholds_new_commit`",
+      "expected": "B committed after A assigned older xid remains absent while A is open; observed safe boundary excludes it",
+      "layer": "Native integration",
+      "testInputs": "`tests/journal/watermark.test.ts`; three clients and explicit barriers"
+    },
+    {
+      "criterion": "US-017-AC2",
+      "scenario": "`late_commit_releases_ordered_rows`",
+      "expected": "After A commits, A/B rows return in exact xid/seq order without missing events or duplicated continuation",
+      "layer": "Native integration",
+      "testInputs": "Same file; independently expected positions"
+    },
+    {
+      "criterion": "US-017-AC3",
+      "scenario": "`ahead_position_waits_for_safe_boundary`",
+      "expected": "Position ahead of safe boundary yields no rows; subsequent reads return only eligible rows after boundary advances",
+      "layer": "Native integration",
+      "testInputs": "Same file; controlled position/boundary fixture"
+    },
+    {
+      "criterion": "US-018-AC1",
+      "scenario": "`version_two_matches_independent_state`",
+      "expected": "Four-version record reconstructs v2 exactly from create and applicable events, with absence/null retained",
+      "layer": "Native integration",
+      "testInputs": "`tests/history/reconstruct.test.ts`; independently authored expected states"
+    },
+    {
+      "criterion": "US-018-AC2",
+      "scenario": "`old_definition_not_current_definition`",
+      "expected": "Earlier version uses its recorded definition after in-place catalog meaning changes",
+      "layer": "Native integration",
+      "testInputs": "Same file; qualified old/new definitions and schema_change"
+    },
+    {
+      "criterion": "US-018-AC3",
+      "scenario": "`unwritten_version_returns_empty`",
+      "expected": "Proven never-written v9 yields empty history without error; missing retained prerequisites are tested separately",
+      "layer": "Native integration",
+      "testInputs": "Same file; complete retained history through v4"
+    },
+    {
+      "criterion": "US-019-AC1",
+      "scenario": "`event_routes_to_exact_partition`",
+      "expected": "Actual native tableoid and range match expected partition at interior/boundary times",
+      "layer": "Native integration",
+      "testInputs": "`tests/journal/retention.test.ts`; explicit month/timezone fixtures"
+    },
+    {
+      "criterion": "US-019-AC2",
+      "scenario": "`missing_range_rolls_back_change`",
+      "expected": "Native check violation from uncovered journal time leaves canonical/derived/journal effects absent",
+      "layer": "Native integration",
+      "testInputs": "Same file; disposable uncovered range"
+    },
+    {
+      "criterion": "US-019-AC3",
+      "scenario": "`writer_cannot_edit_audit_rows`",
+      "expected": "Every qualified recognized writer cannot UPDATE/DELETE/TRUNCATE through parent or direct child; protection cannot be disabled",
+      "layer": "Native integration",
+      "testInputs": "Same file; finalized writer/admin role matrix"
+    },
+    {
+      "criterion": "US-019-AC4",
+      "scenario": "`eligible_drop_preserves_other_months`",
+      "expected": "Eligible old partition removed; neighbor row/content/catalog digests unchanged and retained horizon updated",
+      "layer": "Native integration",
+      "testInputs": "Same file; disposable partitions and finalized eligibility profile"
+    },
+    {
+      "criterion": "US-020-AC1",
+      "scenario": "`id_lookup_preserves_written_revision`",
+      "expected": "Exact properties/version/last-written revision returned; newer read-context catalog pin does not overwrite record revision",
+      "layer": "Native integration",
+      "testInputs": "`tests/reads/lookup.test.ts`; record followed by nonmutating revision"
+    },
+    {
+      "criterion": "US-020-AC2",
+      "scenario": "`key_lookup_returns_holder`",
+      "expected": "Independently expected canonical scalar key retrieves exact holding object under qualified role",
+      "layer": "Native integration",
+      "testInputs": "Same file; Customer account-code fixture"
+    },
+    {
+      "criterion": "US-020-AC3",
+      "scenario": "`complete_composite_key_finds_object`",
+      "expected": "Ordered complete components map to expected canonical bytes and retrieve correct object",
+      "layer": "Native integration",
+      "testInputs": "Same file; escaped two-component fixture"
+    },
+    {
+      "criterion": "US-020-AC4",
+      "scenario": "`incomplete_key_refuses`",
+      "expected": "Missing component yields defined invalid-request outcome before storage access; no null/absence substitution",
+      "layer": "Contract",
+      "testInputs": "`tests/reads/lookup.test.ts`; pure request-validation fixture"
+    },
+    {
+      "criterion": "US-021-AC1",
+      "scenario": "`three_pages_have_exact_continuations`",
+      "expected": "120 Customers produce 50/50/20 exact nonrepeated IDs; only first two continuations indicate more",
+      "layer": "Native integration",
+      "testInputs": "`tests/reads/list.test.ts`; independently ordered IDs and one read-context profile"
+    },
+    {
+      "criterion": "US-021-AC2",
+      "scenario": "`missing_limit_refuses`",
+      "expected": "Omitted limit yields defined refusal before execution",
+      "layer": "Contract",
+      "testInputs": "Same file; pure request fixture"
+    },
+    {
+      "criterion": "US-021-AC3",
+      "scenario": "`deployment_max_is_enforced`",
+      "expected": "Above-max limit refuses without clamping or unbounded query",
+      "layer": "Contract",
+      "testInputs": "Same file; pinned explicit max and boundary requests"
+    },
+    {
+      "criterion": "US-021-AC4",
+      "scenario": "`type_count_page_cost_ratio`",
+      "expected": "Controlled small-type page cost at 1,000 types remains within 2\u00d7 the 10-type baseline",
+      "layer": "Native performance integration",
+      "testInputs": "`tests/benchmarks/type-listing.ts`; preregistered sampling/statistic"
+    },
+    {
+      "criterion": "US-022-AC1",
+      "scenario": "`edge_page_has_exact_bound_and_more`",
+      "expected": "250 eligible edges return exactly 100 and a valid continuation; final page has none",
+      "layer": "Native integration",
+      "testInputs": "`tests/reads/edges.test.ts`; independent ID fixture"
+    },
+    {
+      "criterion": "US-022-AC2",
+      "scenario": "`ordered_edges_put_unset_last`",
+      "expected": "Set keys follow qualified comparator; ties use stable ID; unset keys follow all set keys",
+      "layer": "Native integration",
+      "testInputs": "Same file; tied/Unicode/boundary order fixture"
+    },
+    {
+      "criterion": "US-022-AC3",
+      "scenario": "`direction_filters_authored_endpoints`",
+      "expected": "In/out returns only respective typed endpoints, including self-edge once per requested direction",
+      "layer": "Native integration",
+      "testInputs": "Same file; mixed-direction and wrong-type fixtures"
+    },
+    {
+      "criterion": "US-023-AC1",
+      "scenario": "`one_hop_p95_matches_baseline_ratio`",
+      "expected": "Equivalent one-hop results and Truss p95 at most 2\u00d7 independent hand-designed baseline",
+      "layer": "Native performance integration",
+      "testInputs": "`tests/benchmarks/traversal.ts`; pinned corpus/selectivity/limits"
+    },
+    {
+      "criterion": "US-023-AC2",
+      "scenario": "`two_three_hop_p95_matches_baseline_ratio`",
+      "expected": "Equivalent two/three-hop results, each p95 at most 2\u00d7 respective baseline",
+      "layer": "Native performance integration",
+      "testInputs": "Same file; filtered and high-degree corpus strata"
+    },
+    {
+      "criterion": "US-023-AC3",
+      "scenario": "`type_count_traversal_planning_ratio`",
+      "expected": "Equivalent one-hop planning at 1,000 types within 2\u00d7 10-type metadata baseline",
+      "layer": "Native performance integration",
+      "testInputs": "Same file; data/query/settings held constant"
+    },
+    {
+      "criterion": "US-024-AC1",
+      "scenario": "`complete_catalog_matches_inventory`",
+      "expected": "All 1,000 types plus every expected property/key/endpoint/flag appear under one revision",
+      "layer": "Native integration",
+      "testInputs": "`tests/catalog/enumerate.test.ts`; independent manifest"
+    },
+    {
+      "criterion": "US-024-AC2",
+      "scenario": "`concurrent_acceptance_never_mixes_view`",
+      "expected": "Acceptance between component reads yields exactly old or new inventory, never a hybrid",
+      "layer": "Native integration",
+      "testInputs": "Same file; two clients/barriers and distinct manifests"
+    },
+    {
+      "criterion": "US-024-AC3",
+      "scenario": "`hundred_call_p95_meets_proposed_target`",
+      "expected": "100 sequential complete enumerations produce retained distribution and p95 at most proposed 20 ms",
+      "layer": "Native performance integration",
+      "testInputs": "`tests/benchmarks/catalog-enumeration.ts`; pinned measurement boundary"
+    },
+    {
+      "criterion": "US-025-AC1",
+      "scenario": "`every_assertion_has_qualified_status`",
+      "expected": "Independent sales assertion inventory matches every rule identity/status with no omission",
+      "layer": "Contract",
+      "testInputs": "`tests/reports/enforcement.test.ts`; authored matrix and profile"
+    },
+    {
+      "criterion": "US-025-AC2",
+      "scenario": "`authored_key_cannot_be_bypassed`",
+      "expected": "Plain SQL duplicate key properties cannot evade database guarantee by omitting/forging derived rows; report matches proved scope",
+      "layer": "Native integration",
+      "testInputs": "`tests/enforcement/bypass.test.ts`; finalized unavoidable guard/role contract"
+    },
+    {
+      "criterion": "US-025-AC3",
+      "scenario": "`engine_only_never_becomes_database`",
+      "expected": "Engine rule stays engine classification even with a declared but unqualified trigger",
+      "layer": "Contract",
+      "testInputs": "`tests/reports/enforcement.test.ts`; independent path/evidence fixtures"
+    },
+    {
+      "criterion": "US-025-AC4",
+      "scenario": "`opaque_text_is_retained_and_none`",
+      "expected": "Opaque rule remains recoverable with stable source identity and none status",
+      "layer": "Contract",
+      "testInputs": "Same file; unknown text assertion fixture"
+    },
+    {
+      "criterion": "US-026-AC1",
+      "scenario": "`statement_names_exact_versions_and_evidence`",
+      "expected": "PostgreSQL/UMF version/subset and required procedure/results links appear with exact source/contract profile",
+      "layer": "Contract",
+      "testInputs": "`tests/evidence/support.test.ts`; independent valid receipt"
+    },
+    {
+      "criterion": "US-026-AC2",
+      "scenario": "`missing_target_is_unverified`",
+      "expected": "Unrun target produces unverified statement without inferred pass from nearby versions",
+      "layer": "Contract",
+      "testInputs": "Same file; absent target matrix entry"
+    },
+    {
+      "criterion": "US-026-AC3",
+      "scenario": "`new_contract_requires_new_run`",
+      "expected": "Changed contract digest makes old run stale; regenerated matching run becomes current while preserving old evidence/failures",
+      "layer": "Contract",
+      "testInputs": "Same file; two contract digests/run receipts"
+    },
+    {
+      "criterion": "US-027-AC1",
+      "scenario": "`contract_only_operation_walkthrough`",
+      "expected": "Independent reviewer derives operation behavior/error/state obligations without reference code; missing decisions fail readiness",
+      "layer": "Contract review",
+      "testInputs": "`tests/conformance/contract-walkthrough.md`; recorded evidence and unresolved findings"
+    },
+    {
+      "criterion": "US-027-AC2",
+      "scenario": "`case_requires_all_normative_expectations`",
+      "expected": "Setup/operations/results/state/journal/report required; SQL marked informative; missing section refuses",
+      "layer": "Contract",
+      "testInputs": "`tests/conformance/corpus.test.ts`; independent valid/corrupt cases"
+    },
+    {
+      "criterion": "US-027-AC3",
+      "scenario": "`alias_comparison_ignores_only_allocations`",
+      "expected": "Different opaque ID allocations compare equal; wrong endpoint/alias relationship still fails",
+      "layer": "Contract",
+      "testInputs": "Same file; two allocator permutations and deliberate identity defect"
+    },
+    {
+      "criterion": "US-028-AC1",
+      "scenario": "`required_corpus_pass_is_complete`",
+      "expected": "Every required normative observation matches; exact versions/digests reported; missing/skipped required case prevents pass",
+      "layer": "Contract",
+      "testInputs": "`tests/conformance/interchange.test.ts`; independent manifest/results"
+    },
+    {
+      "criterion": "US-028-AC2",
+      "scenario": "`independent_implementations_cross_read`",
+      "expected": "A-write/B-read and reverse match independent state/journal expectations on actual shared layout",
+      "layer": "Native integration",
+      "testInputs": "Same file; two genuinely independent implementations and disposable database"
+    },
+    {
+      "criterion": "US-028-AC3",
+      "scenario": "`divergence_retains_evidence_and_attribution`",
+      "expected": "Deliberate mismatch retains both outputs/oracle and reviewed implementation/contract attribution; unresolved attribution is explicit",
+      "layer": "Contract",
+      "testInputs": "Same file; known adapter defect and known fixture defect"
+    },
+    {
+      "criterion": "US-029-AC1",
+      "scenario": "`incompatible_major_never_starts_writer`",
+      "expected": "Installed mismatched major refuses before any canonical/derived/journal or namespace change",
+      "layer": "Native integration",
+      "testInputs": "`tests/layout/compatibility.test.ts`; marker and sentinel fixture"
+    },
+    {
+      "criterion": "US-029-AC2",
+      "scenario": "`every_claimed_target_passes_layout_check`",
+      "expected": "Baseline/generated DDL and independent check pass on each advertised exact server target; missing target remains unverified",
+      "layer": "Native integration",
+      "testInputs": "Same file; isolated native matrix"
+    },
+    {
+      "criterion": "US-029-AC3",
+      "scenario": "`probe_manifest_covers_required_behavior`",
+      "expected": "Keys/endpoints/deletion/exact values/partition behavior/no-default checks detect deliberately corrupted fixtures",
+      "layer": "Native integration",
+      "testInputs": "Same file; independent probes and corruption witnesses"
+    },
+    {
+      "criterion": "US-030-AC1",
+      "scenario": "`host_extension_preserves_required_corpus`",
+      "expected": "Trusted ledger/function/role/trigger profile preserves all selected normative corpus outcomes and atomic host effects",
+      "layer": "Native integration",
+      "testInputs": "`tests/host/extensions.test.ts`; disposable extension profile"
+    },
+    {
+      "criterion": "US-030-AC2",
+      "scenario": "`forced_rls_covers_direct_and_joined_reads`",
+      "expected": "Ordinary roles see only policy-allowed object/key/edge state through every qualified read path",
+      "layer": "Native integration",
+      "testInputs": "Same file; explicit role/path matrix"
+    },
+    {
+      "criterion": "US-030-AC3",
+      "scenario": "`canonical_layout_alteration_is_detected`",
+      "expected": "Add/drop/alter column or constraint causes contract/layout mismatch; no automatic repair",
+      "layer": "Native integration",
+      "testInputs": "Same file; independent inventory and isolated corruptions"
+    },
+    {
+      "criterion": "US-031-AC1",
+      "scenario": "`powerless_connector_cannot_write`",
+      "expected": "Direct/inherited write attempt fails and leaves canonical/journal effects absent",
+      "layer": "Native integration",
+      "testInputs": "`tests/host/roles.test.ts`; explicit connector/membership grants"
+    },
+    {
+      "criterion": "US-031-AC2",
+      "scenario": "`local_writer_role_commits_and_is_audited`",
+      "expected": "Authorized local w role writes; journal trusted db_role is w despite forged origin or definer owner",
+      "layer": "Native integration",
+      "testInputs": "Same file; writer/definer profile"
+    },
+    {
+      "criterion": "US-031-AC3",
+      "scenario": "`next_transaction_has_no_leaked_role`",
+      "expected": "Same connection's next transaction is powerless after commit/rollback; unauthorized role selection refuses",
+      "layer": "Native integration",
+      "testInputs": "Same file; reused connection and separately qualified pooler"
+    },
+    {
+      "criterion": "US-032-AC1",
+      "scenario": "`pooler_corpus_has_no_session_dependency`",
+      "expected": "Complete selected corpus passes with backend rotation between transactions and no role/origin leakage to another borrower",
+      "layer": "Native integration",
+      "testInputs": "`tests/host/pooler.test.ts`; real transaction-mode pooler"
+    },
+    {
+      "criterion": "US-032-AC2",
+      "scenario": "`unprepared_profile_preserves_corpus_results`",
+      "expected": "Prepared-disabled corpus matches independent expectations and reports unprepared mode; injection-like parameters remain data",
+      "layer": "Native integration",
+      "testInputs": "Same file; explicit disabled preparation"
+    },
+    {
+      "criterion": "US-032-AC3",
+      "scenario": "`paired_point_reads_meet_incremental_cost_bound`",
+      "expected": "At 1,000 types, agreed paired-cost statistic is at most 0.05 ms; raw samples/configuration accompany verdict",
+      "layer": "Performance integration",
+      "testInputs": "`tests/performance/unprepared.test.ts`; matched plans/data and agreed statistic"
+    },
+    {
+      "criterion": "US-033-AC1",
+      "scenario": "`fresh_embedded_bundle_installs_and_checks`",
+      "expected": "Exact generated DDL installs and independent inventory/behavior check passes without separately provisioned server",
+      "layer": "Native integration",
+      "testInputs": "`tests/host/embedded.test.ts`; owned fresh local instance"
+    },
+    {
+      "criterion": "US-033-AC2",
+      "scenario": "`identical_bundle_has_same_semantic_objects_on_server`",
+      "expected": "Same bundle bytes produce equivalent complete required inventory on embedded and server targets; missing constraint/function is detected",
+      "layer": "Native integration",
+      "testInputs": "Same file; external disposable test server and independent comparator"
+    },
+    {
+      "criterion": "US-033-AC3",
+      "scenario": "`parallel_embedded_runs_remain_isolated`",
+      "expected": "Two concurrent instances have distinct state/paths; each excludes the other's sentinels and one teardown leaves the other usable",
+      "layer": "Native integration",
+      "testInputs": "Same file; separate owned processes/data/socket directories"
+    },
+    {
+      "criterion": "US-034-AC1",
+      "scenario": "`second_load_skips_all_existing_identities`",
+      "expected": "First load creates 51; second load id reports 51 skipped with identical rows/versions/journal/source facts",
+      "layer": "Native integration",
+      "testInputs": "`tests/import/replay.test.ts`; keyed objects and relationships"
+    },
+    {
+      "criterion": "US-034-AC2",
+      "scenario": "`repeat_import_preserves_user_correction`",
+      "expected": "Corrected payload/version remain unchanged by original source repeat",
+      "layer": "Native integration",
+      "testInputs": "Same file; user edit between loads"
+    },
+    {
+      "criterion": "US-034-AC3",
+      "scenario": "`forbid_tombstone_prevents_object_resurrection`",
+      "expected": "Deleted object remains absent, key remains reserved and repeat skips without new journal effects",
+      "layer": "Native integration",
+      "testInputs": "Same file; forbid profile"
+    },
+    {
+      "criterion": "US-034-AC4",
+      "scenario": "`deleted_imported_edge_remains_reserved`",
+      "expected": "Same relationship/endpoints remain absent after repeat, with durable edge reservation",
+      "layer": "Native integration",
+      "testInputs": "Same file; live endpoints, deleted imported edge"
+    },
+    {
+      "criterion": "US-034-AC5",
+      "scenario": "`keyless_type_import_rejects_without_effects`",
+      "expected": "Specific no-primary-key rejection has no canonical/source/journal/reservation effects",
+      "layer": "Native integration",
+      "testInputs": "Same file; accepted keyless type"
+    },
+    {
+      "criterion": "US-034-AC6",
+      "scenario": "`allow_recreates_object_without_erasing_tombstone`",
+      "expected": "Reused absent key creates a new object and original tombstone remains",
+      "layer": "Native integration",
+      "testInputs": "Same file; allow profile"
+    },
+    {
+      "criterion": "US-035-AC1",
+      "scenario": "`source_lookup_returns_original_load_author_time`",
+      "expected": "Imported record returns load id, seed-author and exact source time while journal identifies a different operator",
+      "layer": "Native integration",
+      "testInputs": "`tests/import/source.test.ts`; object and edge fixtures"
+    },
+    {
+      "criterion": "US-035-AC2",
+      "scenario": "`missing_source_author_stays_absent`",
+      "expected": "Missing author remains absent despite operator/role origin; unknown source members survive the qualified carrier",
+      "layer": "Native integration",
+      "testInputs": "Same file; absent author and extension content"
+    },
+    {
+      "criterion": "US-035-AC3",
+      "scenario": "`edit_and_repeat_load_do_not_rewrite_provenance`",
+      "expected": "Later edit and skipped repeat leave source row/load id unchanged",
+      "layer": "Native integration",
+      "testInputs": "Same file; independently captured source row"
+    },
+    {
+      "criterion": "US-035-AC4",
+      "scenario": "`direct_create_has_no_source_row`",
+      "expected": "Direct-created visible record has no provenance and no synthesized source facts",
+      "layer": "Native integration",
+      "testInputs": "Same file; direct create and authorized lookup"
+    },
+    {
+      "criterion": "US-036-AC1",
+      "scenario": "`accepted_revision_returns_actor_role_reason`",
+      "expected": "Authorized lookup returns actor a, actual role w, reason and qualified extension facts on accepted revision",
+      "layer": "Native integration",
+      "testInputs": "`tests/catalog/origin.test.ts`; accepted revision under explicit role"
+    },
+    {
+      "criterion": "US-036-AC2",
+      "scenario": "`caller_role_spoof_cannot_replace_database_role`",
+      "expected": "Forged db_role is ignored; trusted acting role survives qualified definer execution",
+      "layer": "Native integration",
+      "testInputs": "Same file; distinct caller/owner/forged roles"
+    },
+    {
+      "criterion": "US-036-AC3",
+      "scenario": "`rejected_acceptance_has_no_origin_row`",
+      "expected": "Rejected set produces no schema_rev/origin/head/catalog/data/journal changes",
+      "layer": "Native integration",
+      "testInputs": "Same file; violation and late-failure fixtures"
+    },
+    {
+      "criterion": "US-036-AC4",
+      "scenario": "`native_revision_origin_shape_guard_refuses_nonobjects`",
+      "expected": "Direct native insertion of array/scalar/SQL NULL origin fails constraint with no persisted row",
+      "layer": "Native integration",
+      "testInputs": "Same file; disposable qualified insert principal"
+    },
+    {
+      "criterion": "US-037-AC1",
+      "scenario": "`sales_writer_reads_exact_authorized_sets`",
+      "expected": "Only authorized objects/edges/keys/journal/tombstones/catalog appear through direct SQL; source lookup obeys policy",
+      "layer": "Native integration",
+      "testInputs": "protected relation matrix"
+    },
+    {
+      "criterion": "US-037-AC2",
+      "scenario": "`cross_module_write_cannot_change_billing`",
+      "expected": "Unauthorized INSERT/UPDATE/DELETE has no effects and returns qualified refusal/hidden-row outcome",
+      "layer": "Native integration",
+      "testInputs": "cross-module native writes"
+    },
+    {
+      "criterion": "US-037-AC3",
+      "scenario": "`module_reader_cannot_mutate`",
+      "expected": "Reader cannot mutate canonical/derived/audit data under declared grants/policies",
+      "layer": "Native integration",
+      "testInputs": "reader role matrix"
+    },
+    {
+      "criterion": "US-037-AC4",
+      "scenario": "`unassigned_role_reads_empty_sets`",
+      "expected": "SELECT-capable no-module principal sees no protected rows",
+      "layer": "Native integration",
+      "testInputs": "granted SELECT with no module assignment"
+    },
+    {
+      "criterion": "US-037-AC5",
+      "scenario": "`non_superuser_definer_uses_acting_role`",
+      "expected": "Definer reads preserve caller module view despite a different owner role",
+      "layer": "Native integration",
+      "testInputs": "FORCE RLS, fixed search path and local role"
+    },
+    {
+      "criterion": "US-037-AC6",
+      "scenario": "`paired_policy_read_cost_meets_bound`",
+      "expected": "At 1,000 types/10 modules incremental agreed policy statistic is at most 0.01 ms",
+      "layer": "Performance integration",
+      "testInputs": "matched reads with role already set"
+    },
+    {
+      "criterion": "US-038-AC1",
+      "scenario": "`relationship_retains_billing_declaring_module`",
+      "expected": "Valid cross-module relationship accepts and rel_def ownership is billing with sales source type",
+      "layer": "Native integration",
+      "testInputs": "`tests/host/cross-module-edges.test.ts`; pinned valid model"
+    },
+    {
+      "criterion": "US-038-AC2",
+      "scenario": "`sales_only_role_cannot_observe_cross_module_edge`",
+      "expected": "Direct/list/inverse/id reads omit edge and expose no target through declared read paths",
+      "layer": "Native integration",
+      "testInputs": "Same file; sales-only role"
+    },
+    {
+      "criterion": "US-038-AC3",
+      "scenario": "`authorized_intersection_role_sees_edge`",
+      "expected": "Role reading relationship and both endpoints sees exactly expected edge/endpoints",
+      "layer": "Native integration",
+      "testInputs": "Same file; dual-module and three-module fixtures"
+    },
+    {
+      "criterion": "US-038-AC4",
+      "scenario": "`relationship_writer_without_source_read_cannot_create`",
+      "expected": "Native edge creation refuses with no edge/marker/journal/source effects",
+      "layer": "Native integration",
+      "testInputs": "Same file; billing writer lacking sales read"
+    },
+    {
+      "criterion": "US-039-AC1",
+      "scenario": "`supported_reference_valid_cases_accept`",
+      "expected": "Every required supported valid case accepts, including warning-only input retaining warnings",
+      "layer": "Contract",
+      "testInputs": "`tests/conformance/umf-parity.test.ts`; frozen valid cases"
+    },
+    {
+      "criterion": "US-039-AC2",
+      "scenario": "`invalid_cases_match_diagnostic_multiset`",
+      "expected": "Rejected cases match every severity/code/path with multiplicity; dropped/extra/wrong-path diagnostics fail",
+      "layer": "Contract",
+      "testInputs": "Same file; independently authored invalid conditions and pinned reference receipt"
+    },
+    {
+      "criterion": "US-039-AC3",
+      "scenario": "`valid_unsupported_selected_semantics_refuse_explicitly`",
+      "expected": "Valid but unsupported selected feature produces Truss support refusal without silent acceptance or rewritten validity",
+      "layer": "Contract",
+      "testInputs": "Same file; declared subset and supported/unsupported controls"
+    },
+    {
+      "criterion": "US-039-AC4",
+      "scenario": "`version_scoped_manifest_cannot_reuse_stale_pass`",
+      "expected": "Cases name target versions; receipt reports only complete passed version/subset scopes and blocks stale/missing pins",
+      "layer": "Contract",
+      "testInputs": "Same file; two immutable version manifests"
+    },
+    {
+      "criterion": "US-040-AC1",
+      "scenario": "`valid_alias_group_has_ordered_results_and_one_origin`",
+      "expected": "All effects commit together; result order matches input and journal shares xid/origin with exact version progression",
+      "layer": "Native integration",
+      "testInputs": "`tests/mutation/groups.test.ts`; parent/child/edge aliases"
+    },
+    {
+      "criterion": "US-040-AC2",
+      "scenario": "`invalid_third_operation_rolls_back_entire_group`",
+      "expected": "Error names index 2/inner kind; no canonical/key/marker/journal/tombstone/receipt effects survive",
+      "layer": "Native integration",
+      "testInputs": "Same file; preflight and persistence-failure variants"
+    },
+    {
+      "criterion": "US-040-AC3",
+      "scenario": "`opposed_order_groups_acquire_same_sorted_lock_order`",
+      "expected": "Both request-free groups complete without PostgreSQL deadlock, retaining their own result order",
+      "layer": "Native concurrency",
+      "testInputs": "Same file; independent initially empty transactions and explicit barriers"
+    },
+    {
+      "criterion": "US-040-AC4",
+      "scenario": "`catalog_acceptance_and_group_have_serialized_legal_schedules`",
+      "expected": "Acceptance-first makes old-revision group refuse; group-first blocks acceptance while original catalog custody remains; earlier host-savepoint rollback invalidates removed pending work",
+      "layer": "Native concurrency",
+      "testInputs": "Same file; observed lock acquisition/acceptance barriers"
+    },
+    {
+      "criterion": "US-041-AC1",
+      "scenario": "`forward_scan_orders_each_committed_change_below_watermark`",
+      "expected": "Forward scan emits each committed row once in position order below same-snapshot watermark; held/rolled-back rows do not escape",
+      "layer": "Native concurrency",
+      "testInputs": "open older transaction and independent connections"
+    },
+    {
+      "criterion": "US-041-AC2",
+      "scenario": "`delete_envelope_contains_complete_prior_record`",
+      "expected": "Delete carries independently expected typed prior object/edge including required properties and identities",
+      "layer": "Native integration",
+      "testInputs": "created/edited/deleted fixtures"
+    },
+    {
+      "criterion": "US-041-AC3",
+      "scenario": "`revision_precedes_every_dependent_change`",
+      "expected": "Required revision documents arrive before dependent changes, including revision-only acceptance and page boundaries",
+      "layer": "Native integration",
+      "testInputs": "multiple revisions and small pages"
+    },
+    {
+      "criterion": "US-041-AC4",
+      "scenario": "`crash_replay_has_same_order_and_idempotent_effects`",
+      "expected": "Earlier-position replay returns same immutable envelopes/order; apply crash/ack races cause no duplicate downstream effects",
+      "layer": "Native integration",
+      "testInputs": "independent replica with durable dedup"
+    },
+    {
+      "criterion": "US-041-AC5",
+      "scenario": "`retention_cannot_drop_consumer_unapplied_partition`",
+      "expected": "Registered consumer protects all required rows past P despite concurrent acknowledgment/retention",
+      "layer": "Native concurrency",
+      "testInputs": "consumer position and partition race barriers"
+    },
+    {
+      "criterion": "US-041-AC6",
+      "scenario": "`unsupported_revision_stops_without_acknowledging_dependents`",
+      "expected": "Consumer reports unsupported exact UMF version and stops before dependent changes or checkpoint advance",
+      "layer": "Contract",
+      "testInputs": "versioned feed fixtures"
+    },
+    {
+      "criterion": "US-042-AC1",
+      "scenario": "`durable_apply_advances_checkpoint_and_update_time`",
+      "expected": "Successful durable apply advances position/time atomically; failed apply does not acknowledge",
+      "layer": "Native integration",
+      "testInputs": "`tests/feed/freshness.test.ts`; independent replica/consumer"
+    },
+    {
+      "criterion": "US-042-AC2",
+      "scenario": "`lag_uses_earliest_unapplied_publishable_write`",
+      "expected": "Lag equals observation time minus minimum eligible unapplied at, not newest write or heartbeat",
+      "layer": "Native integration",
+      "testInputs": "Same file; known native timestamps/checkpoint"
+    },
+    {
+      "criterion": "US-042-AC3",
+      "scenario": "`held_committed_changes_are_separate_from_publishable_lag`",
+      "expected": "Older open transaction holds later committed changes; held state is separate and clears after blocker ends",
+      "layer": "Native concurrency",
+      "testInputs": "Same file; explicit transaction/watermark barriers"
+    },
+    {
+      "criterion": "US-042-AC4",
+      "scenario": "`copy_statement_names_actual_durable_position`",
+      "expected": "Published copy descriptor names its applied position and scope/epoch, never speculative source head",
+      "layer": "Contract",
+      "testInputs": "Same file; independently expected replica descriptor"
+    },
+    {
+      "criterion": "US-043-AC1",
+      "scenario": "`replay_returns_every_original_ordered_result`",
+      "expected": "Same verified inputs return exact original mixed changed/no-op results without new effects, despite later record changes",
+      "layer": "Native integration",
+      "testInputs": "`tests/mutation/replay.test.ts`; complete selected receipt protocol"
+    },
+    {
+      "criterion": "US-043-AC2",
+      "scenario": "`concurrent_duplicate_applies_once_and_waiter_replays`",
+      "expected": "Both requests return same original results; native effects occur once after winner commit",
+      "layer": "Native concurrency",
+      "testInputs": "Same file; separate connections and lock/commit barriers"
+    },
+    {
+      "criterion": "US-043-AC3",
+      "scenario": "`changed_inputs_or_forged_hash_conflict_without_effects`",
+      "expected": "Changed canonical inputs cannot reuse identity by sending same claimed hash; conflict has no graph/receipt mutation",
+      "layer": "Native integration",
+      "testInputs": "Same file; effect-relevant input changes"
+    },
+    {
+      "criterion": "US-043-AC4",
+      "scenario": "`retained_receipt_replays_after_24_hours`",
+      "expected": "Complete original results replay after at least 24 hours across partition/retention boundaries",
+      "layer": "Native integration",
+      "testInputs": "Same file; controlled receipt age and retention fixtures"
+    },
+    {
+      "criterion": "US-044-AC1",
+      "scenario": "`adopted_scope_reads_pending_group_effects`",
+      "expected": "Same transaction sees complete group effects and pending result; independent observer sees no uncommitted graph",
+      "layer": "Native integration",
+      "testInputs": "`tests/host/caller-transaction.test.ts`; host and observer connections"
+    },
+    {
+      "criterion": "US-044-AC2",
+      "scenario": "`host_rollback_removes_effects_and_releases_locks`",
+      "expected": "All graph/derived/audit/source/request effects disappear and waiting transaction obtains locks after rollback",
+      "layer": "Native concurrency",
+      "testInputs": "Same file; selected receipt profile and lock barriers"
+    },
+    {
+      "criterion": "US-044-AC3",
+      "scenario": "`host_commit_has_single_group_origin_and_journal`",
+      "expected": "Committed effects match independent engine-owned expectation with one origin and no duplicate journaling",
+      "layer": "Native integration",
+      "testInputs": "Same file; qualified engine/trigger profiles separately"
+    },
+    {
+      "criterion": "US-044-AC4",
+      "scenario": "`truss_never_ends_or_releases_adopted_transaction`",
+      "expected": "Earlier host sentinel survives operation failure; success remains pending until host action and connection stays owned",
+      "layer": "Native integration",
+      "testInputs": "Same file; native transaction-state and statement-trace observation"
+    },
+    {
+      "criterion": "US-045-AC1",
+      "scenario": "`same_pins_same_bootstrap`",
+      "expected": "Two exports produce byte-equal SQL and ordered coverage reports",
+      "layer": "Contract",
+      "testInputs": "`tests/bootstrap/model.test.ts`; committed native model and fixed profile"
+    },
+    {
+      "criterion": "US-045-AC2",
+      "scenario": "`generated_matches_independent_baseline`",
+      "expected": "Generated/baseline namespaces, tables, columns/defaults, keys/FKs/actions, indexes, sequences, functions/policies/grants, initial rows and probe outcomes match",
+      "layer": "Native integration",
+      "testInputs": "`tests/bootstrap/native.test.ts`; two isolated databases per selected version"
+    },
+    {
+      "criterion": "US-045-AC3",
+      "scenario": "`missing_required_sequence_blocks`",
+      "expected": "Remove journal-sequence coverage; report identifies omission and returns no installable candidate",
+      "layer": "Contract",
+      "testInputs": "`tests/bootstrap/model.test.ts`; explicit inventory corruption"
+    },
+    {
+      "criterion": "US-045-AC4",
+      "scenario": "`edited_tree_not_archived_source`",
+      "expected": "A changed native default/comment appears in regenerated SQL while archived source remains exact; no stale-source fallback",
+      "layer": "Contract",
+      "testInputs": "`tests/bootstrap/model.test.ts`; copied AST edit through UMF API"
+    },
+    {
+      "criterion": "US-045-AC5",
+      "scenario": "`existing_namespace_is_untouched`",
+      "expected": "Incompatible marker/objects cause refusal; catalog digest and existing data stay unchanged",
+      "layer": "Native integration",
+      "testInputs": "`tests/bootstrap/native.test.ts`; preexisting sentinel data/table"
+    }
+  ],
+  "producerSha256": "48004b3824ed2544fd852ea537303b8ad8a74b8b1adad3d4d1d71da3ed3df04f",
+  "designClosureProven": false,
+  "nativeExecuted": false
+}

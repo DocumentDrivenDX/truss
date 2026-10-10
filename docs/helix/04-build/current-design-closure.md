@@ -19,6 +19,15 @@ ddx:
 
 ## Updated composition checkpoint — 2026-10-10
 
+Fresh fetch now identifies UMF main322b193 and Weft mainb8867c9, superseding the
+older locally retained Weft refs below. The [committed participation review](evidence/design-audit/weft-b8867c9-participation-review.json)
+records Databricks distinct-neighbor degree guards with occurrence-preserving
+read bags. TD/STP-011 distinguish these from Truss's existing occurrence caps;
+their equivalent native UMF mapping remains unqualified. The review separately
+records workspace and committed UMF contract bytes, which differ; normative
+comparison uses the committed source. No published package, Truss PostgreSQL
+lowering or adopted f05f2df compiler changes from this upstream review.
+
 The [installed Python wheel](evidence/design-audit/python-accounted-core-installed-suite.json)
 now passes70 tests with17 exact source/wheel/installed module payloads. This
 supersedes the61/16 package checkpoint below. The private receive path now shares

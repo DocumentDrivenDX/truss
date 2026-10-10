@@ -167,3 +167,35 @@ The [six parser boundary fixtures](../../04-build/evidence/design-audit/native-c
 ### OC06 feed omission integration controls
 
 Under a selected complete feed-producing profile, finalize original operation custody while deliberately omitting all feed registration for a required graph, revision-only and administrative effect. Raw COMMIT must refuse through original required-effect dispatch, despite no feed-table trigger event. Independently prove complete expected originals and unchanged guard-side counters/ordinals/hash bytes before/after early checks. Test a genuine no-required-fact operation and require no fabricated member/manifest. An admitted producer with neither operation custody nor a separate qualified native scheduler fails profile qualification. Exercise immediate timing at an incomplete operation/feed boundary: confirmed refusal preserves earlier caller work and original constraint mode; unknown containment follows recovery. No guard repairs missing membership or borrows another validator's success flag. These schedules remain planned and do not close native body/privilege/coverage prerequisites.
+
+
+### Distinct participation compatibility controls
+
+The [four independent cases](../../04-build/evidence/design-audit/weft-b8867c9-participation-review.json)
+separate occurrence caps from owning UMF participation. These are arithmetic
+expectations, not native executions or admitted test fixtures. Bind actual typed
+Record/relationship/revision identities and the complete chosen writer/marker/
+read profile before running the following schedules:
+
+- Two separately identified edges from one source to one target: neighbor degree
+  is one, occurrence count and related result bag are two. The existing explicit
+  max-one occurrence cap refuses; a distinct-neighbor max-one assertion alone
+  must not refuse because of the second parallel occurrence.
+- Two edges to different targets: neighbor degree is two, so max-one participation
+  refuses without partial graph/marker/history effects. Concurrent contenders
+  require the same independently expected final state under original exclusion.
+- Delete one of two parallel occurrences: degree remains one and the remaining
+  occurrence retains its original identity. Delete the last separately and require
+  degree zero; minimum-one validation then refuses under its admitted final-state
+  procedure. Never infer a free distinct-neighbor slot from deleting one edge.
+- Empty owners remain in minimum checks. Inverse checks preserve authored forward
+  source/target orientation. Hidden siblings still contribute to private integrity
+  without leaking their identity/count through public diagnostics.
+
+Also test same projected key bytes on distinct typed Record identities, changed
+relationship/revision definitions, malformed endpoint provenance and marker
+omission through ordinary bypass paths. Unsupported or incomplete identity/scope
+refuses. Verify RELATED_KEYS ordering, duplicate bag entries and exact lookahead
+independently of participation guards. No old occurrence-cap receipt or new
+Databricks compiler test qualifies these Truss native schedules; all remain
+not_run pending the separately reconciled native mapping.

@@ -103,3 +103,37 @@ STP-011 now supplies seven concrete native final-state schedules with independen
 | Complete transaction commitment | OC05–OC07 and EL08–EL12 original operation generations/current union, including finalized earlier operations | No unfinished survivors, complete current row/non-row/capacity correspondence and actual host commit/rollback/unknown outcome. A partial index excludes finalized rows and cannot be the commit collector. |
 
 The prior 23-statement/142-identity source candidate remains preserved; the 24-statement variant is a separate unadopted choice with exact retained-source delta evidence. Do not infer any guarantee in this table from another row's pass, source object counts or a startup index-name check. These profiles must compose with host constraint timing and original savepoint/cancellation rules, with no missing earlier exclusion acquired inside an observer.
+
+### Owning UMF participation versus Truss occurrence caps
+
+The [fresh upstream review](../../04-build/evidence/design-audit/weft-b8867c9-participation-review.json)
+records UMF main322b193 and Weft mainb8867c9. UMF's committed relationship contract
+counts distinct associated endpoint Record instances. Weft's new Databricks
+degree guards deduplicate source/target pairs while preserving edge occurrence
+bags in result SQL. No Truss PostgreSQL lowering changes in that upstream range,
+and Truss's adopted f05f2df compiler is unchanged.
+
+US-011's existing second/fourth-edge refusal and marker correspondence describe
+an occurrence cap. They must not be advertised as equivalent enforcement of an
+owning UMF participation assertion: two edges to the same target give two
+occurrences but one associated Record. Keep the existing occurrence-cap meaning
+and its evidence separately named. A separately explicit cap may coexist with
+participation, but cannot be silently inferred from the UMF assertion or hide
+the stronger restriction in a fidelity report.
+
+Before admitting UMF participation on Truss, select and version the distinct
+typed-neighbor native mapping, complete writer/marker/catalog-change algorithms,
+locking/accounting and independent tests. Distinct endpoint pairs are admissible
+only after exact relationship/revision scope, typed original Record identity,
+endpoint existence and complete integrity visibility are established; display
+keys or projected tuples are not Record identity. Minimum checks include owners
+with zero neighbors. Deleting one parallel occurrence preserves participation
+while another survives; deleting the last removes it. Degree deduplication must
+never deduplicate read bags, edge IDs, ordering or exact lookahead/truncation.
+
+The current edge-marker profile cannot qualify that distinct-neighbor mapping
+merely by changing a count query. Its full expected marker multiset and bypass/
+concurrency/deletion procedures require reconciliation first. Until then refuse
+the unqualified equivalent mapping rather than changing existing guards or
+adopting the Databricks realization as PostgreSQL evidence. This is a concrete
+shared semantic integration gap, not a new traversal or edge-cap product vote.

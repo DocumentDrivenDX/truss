@@ -2,7 +2,7 @@
 
 ## Current structural and implementation frontier — 2026-10-10
 
-The [fresh full allocation check](evidence/design-audit/current-story-allocation-after-identity-reconciliation.json)
+The [fresh full allocation check](evidence/design-audit/current-story-allocation-after-participation-review.json)
 passes45 stories and167 criteria with zero structural errors against all current
 registered US/TD/STP source hashes. It supersedes older structural source-freshness
 and allocation observations below; it does not establish semantic adequacy,
@@ -37,6 +37,17 @@ Its native implementation, independent release membership and required rights
 remain outputs before PKG-02/08. Security-owner requirements derivation is reviewed
 as uncommitted source only; no compiler/backend pin changes or parallel policy
 walker are authorized by that observation.
+
+Fresh upstream fetch retains UMF322b193 and advances Weft to b8867c9. The
+[participation review](evidence/design-audit/weft-b8867c9-participation-review.json)
+finds distinct associated-Record degree semantics and preserved occurrence bags.
+Truss's current occurrence-cap marker is not equivalent UMF participation
+enforcement. TD/STP-011 now retain separate meanings and concrete parallel-edge,
+deletion, inverse, hidden-sibling and zero-owner controls. Reconcile that native
+mapping before claiming owning UMF participation; do not change existing guards
+or the adopted compiler pin from this Databricks-only source change. The fresh
+full allocation check above includes both updated primary documents and retains
+all45 stories/167 criteria without semantic or native completion claims.
 
 Continue the existing P0/P1 composition: original bounded driver/account integration,
 minimum exact current security-owner packet, complete native callable/trigger/grant
