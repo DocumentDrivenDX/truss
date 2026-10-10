@@ -8,15 +8,15 @@ frontier is in the [installation/runtime plan](../../04-build/local-runtime-inst
 
 | Boundary | Current integration input and remaining qualification |
 | --- | --- |
-| Local server | pgserver0.1.4, observed PostgreSQL16.2 on macOS arm64/Python3.11. Retained restart and lifecycle refusal components are tested. No Truss installation occurs on startup. Other platforms/builds remain unqualified. |
+| Local server | Selected integration target is the private pgserver0.1.4+truss.pg16.15 wheel on macOS27 arm64/Python3.11. Corrected role-reset and lifecycle components are tested. Published local-extra still pins0.1.4/16.2 and cannot qualify R4/R5; corrected reproducible public delivery remains required. Startup performs no Truss DDL. Other platforms/builds remain unqualified. |
 | Python delivery | Experimental truss-toolkit0.0.1.dev0 wheel: local lifecycle, admitted exact-value host views and declared-metadata migration planning. Full acceptance/query/mutation/feed/administrative APIs remain unfinished. Wheel component receipts do not establish complete engine delivery. |
 | Connection | Host supplies a PostgreSQL connection. Truss retains physical-session and transaction affinity; host owns pooling. Application operations use caller-owned transactions; explicit migration apply owns a dedicated administrative transaction and refuses an already-active caller transaction before effects. |
-| Driver | Existing original pg8000 instance receiver and fresh local control-frame/failure probes are candidate evidence. Actual account/control reservations, issuer binding, savepoint authority, cancellation and unknown-COMMIT settlement remain unqualified. TypeScript driver qualification remains separate. |
+| Driver | Synchronous pg8000 1.31.5 is the selected first Python integration target. Actual16.15 control-frame, callback-failure and server-rejection probes pass their scoped independent observations. Pre-ingress allocation/copy accounting, original control/adoption/issuer authority, cancellation and unknown-COMMIT settlement remain unqualified. TypeScript driver qualification remains separate. |
 | Complete layout | Source-epoch0.16 review model plus original migration and policy-generation adjuncts:50 table structures have local native correspondence. Full canonical handlers, scope validators, qualified grants, initializer, preservation and publication remain unfinished. Never publish a ready marker from structural checks. |
 | UMF | Consume original core/native metadata and reusable DDL generation. Core structural projection0.6 supplies site schema inspection. JavaScript numeric adapter reuse and Python already-admitted host conversions have distinct scope; neither permits a grammar fork. |
-| Weft | Commit f05f2df09e9c2494ac8c6d703dfe38413dbc4181 owns lowering. Its qualified17.9 fixture registration cannot qualify16.2 or this complete layout. Obtain an exact separately registered/native-tested local tuple before compiled execution; refuse mismatched obligations before integrity/user SQL. |
+| Weft | Commit f05f2df09e9c2494ac8c6d703dfe38413dbc4181 owns lowering. Its qualified17.9 fixture registration cannot qualify the local16.15 target or this complete layout. Obtain an exact separately registered/native-tested local tuple before compiled execution; refuse mismatched obligations before integrity/user SQL. |
 | Security | Consume the original owner's authorization/source/assertion-inventory/report-support/publication composition. Current inventory correspondence work is in progress; no candidate object or fabricated backend classification supplies enforcement or authority. |
-| Resource profile | Local16.2 lacks transaction_timeout. Do not equate statement/lock timeouts or finite host work with whole-transaction containment. Original shared accounting, native bounds and driver cancellation/settlement must qualify each dependent capability. |
+| Resource profile | The selected local16.15 target still lacks transaction_timeout. Do not equate statement/lock timeouts or finite host work with whole-transaction containment. Original shared accounting, native bounds and driver cancellation/settlement must qualify each dependent capability. |
 | Migration | Shared TypeScript/Python planner selects only declared routes. Select a complete populated M1 source/target route and implement status/verify/apply/reconcile under original artifact, exclusion, recovery and settlement custody. No automatic startup upgrades or retry loops. |
 | Portability | Aurora and Lakebase require independent complete tuple qualification. The managed-extension availability condition remains in force; local success cannot supply managed evidence. |
 
@@ -25,7 +25,7 @@ frontier is in the [installation/runtime plan](../../04-build/local-runtime-inst
 Correct the original operation issuer integration before canonical observation:
 reserve original control/account capacity, permanently consume the ordinal,
 confirm the operation savepoint, then admit through native original issuer
-verification. All four surviving-row-derived allocator families require correction.
+verification. All four corrected host-issued candidates now have scoped native rollback/refusal, complete-cell and distinct-transaction issuer observations on16.15. Legacy surviving-row-derived overloads must be excluded from the complete installer; the original driver/account/authority composition remains unqualified.
 Actual rollback must burn the consumed ordinal; unknown completion closes admission
 without replay and retains recovery custody. Counter-only tests do not meet this exit.
 
