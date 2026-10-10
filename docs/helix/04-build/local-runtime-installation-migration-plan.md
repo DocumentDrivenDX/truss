@@ -1506,3 +1506,25 @@ Keep reserved cleanup capacity and complete savepoint handle invalidation in
 CH-02/05's original control/account work. Four-family admission must test actual
 native rejection through the corrected path, not catch an exception inside a
 synthetic DO block that leaves the outer transaction apparently healthy.
+
+
+### Shared savepoint lifetime and upstream adapter continuation
+
+The [issuer lifetime handoff](operation-ordinal-issuer-handoff.md#shared-original-issuer-and-savepoint-lifetime)
+now corrects per-facade issuer restart and ancestor/descendant lifetime before
+four-family admission. Fourteen actual native lifetime observations pass; fifteen
+control and nine error-recovery regressions pass under their separate scopes.
+Compatible facades share original physical-connection issuer/account/control
+custody and registered namespaces. Unknown work cannot reopen through a new
+facade. Full reusable connection, cleanup capacity and installed authority remain
+qualification outputs.
+
+Fresh upstream observation keeps UMF main322b193 and advances Weft to e004b58.
+The [Python owner-adapter handoff](../02-design/python-integration.proposal.md#official-umf-python-document-machinery-current-owner-source-handoff)
+adds official tagged `umf-core` structural/preservation machinery to PY-01/A1/A2
+without substituting its unchecked semantics for native acceptance. Its exact
+wheel/resource/account controls are adapter implementation work, not another
+product decision or a reason to wait for full Python parity before P1. The
+explicit Weft path runtime is a distinct Rust candidate namespace; no Python
+bridge or Truss backend adoption follows. Preserve the complete original tuple
+when the security owner's eventual matching/lowering API is ready.

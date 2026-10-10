@@ -769,3 +769,29 @@ pass on16.15; the original six-observation failure and source bytes remain intac
 Cleanup reservation/containment, ancestor lifetime, interrupted error completion,
 all four admission contexts and current security composition still precede
 installation readiness. No public operation or story criterion is promoted.
+
+
+### Shared original lifetime and current owner interfaces
+
+The [current lifetime receipt](evidence/design-audit/pg8000-savepoint-lifetime-native.json)
+closes two concrete candidate defects: compatible facade construction no longer
+restarts the original issuer, and ancestor rollback invalidates later registered
+handles before SQL. Unknown ancestor/descendant attempts remain retained under
+shared closed admission. Fourteen native lifetime controls, fifteen original
+control regressions and nine native-error recovery observations pass separately
+on16.15. The [issuer handoff](operation-ordinal-issuer-handoff.md#shared-original-issuer-and-savepoint-lifetime)
+retains full cleanup/resource/host-stack/connection-reuse and installation gates.
+
+The fresh [Weft source review](evidence/design-audit/weft-e004b58-explicit-path-runtime-review.json)
+now observes a committed explicit0.4 Rust path compiler/runtime, superseding the
+private-only f3208b2 checkpoint for that surface. Its Databricks candidate has no
+Truss/PostgreSQL/Python adoption. A shared compile0.4 label cannot identify its
+SQL0.4/Backend03 route versus the security owner's working SQL0.2 route. Consume
+an exact compatible owner tuple rather than inventing cross-route dispatch.
+
+The [UMF tagged Python source review](evidence/design-audit/umf-python-0.8.2-source-review.json)
+adds an original reusable structural/preservation adapter input to the Python
+plan. Package0.8.2, source version attribute0.8.0 and document core version are
+separate identities. Original unchecked facet/Key/Relationship/literal semantics
+remain explicit; no installed/publication/full-acceptance claim is made. Neither
+review changes the frozen Truss compiler,45-story/167-criterion scope or readiness.

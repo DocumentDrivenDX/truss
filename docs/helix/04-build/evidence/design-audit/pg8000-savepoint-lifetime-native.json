@@ -1,0 +1,149 @@
+{
+  "scope": "Actual native ancestor rollback, shared physical-connection issuer and registered participant namespaces with retained unknown descendants; administrative fixture only",
+  "serverVersion": "16.15",
+  "driverCoreSha256": "cac1e50502901bcea3ddab588e0350149dd8fd771156ae1c531a2a04b3925e26",
+  "observations": [
+    {
+      "id": "shared-physical-transaction-issuer",
+      "expected": [
+        "0",
+        "1"
+      ],
+      "observed": [
+        "0",
+        "1"
+      ]
+    },
+    {
+      "id": "distinct-registered-participant-names",
+      "expected": [
+        "truss_sp_00000000000000000000000000000000_1",
+        "truss_sp_00000000000000000000000000000001_2"
+      ],
+      "observed": [
+        "truss_sp_00000000000000000000000000000000_1",
+        "truss_sp_00000000000000000000000000000001_2"
+      ]
+    },
+    {
+      "id": "shared-original-attempt-inventory",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "ancestor-rollback-preserves-caller-work",
+      "expected": [
+        [
+          "37"
+        ]
+      ],
+      "observed": [
+        [
+          "37"
+        ]
+      ]
+    },
+    {
+      "id": "cross-participant-descendant-invalidated",
+      "expected": [
+        "rolled_back",
+        "invalidated_by_ancestor_rollback"
+      ],
+      "observed": [
+        "rolled_back",
+        "invalidated_by_ancestor_rollback"
+      ]
+    },
+    {
+      "id": "shared-issuer-not-rewound-after-ancestor-rollback",
+      "expected": "2",
+      "observed": "2"
+    },
+    {
+      "id": "invalidated-descendant-no-native-submission",
+      "expected": 45,
+      "observed": 45
+    },
+    {
+      "id": "foreign-account-no-native-submission",
+      "expected": 5,
+      "observed": 5
+    },
+    {
+      "id": "original-account-unchanged-by-foreign-construction",
+      "expected": [
+        2695,
+        0,
+        2695,
+        false
+      ],
+      "observed": [
+        2695,
+        0,
+        2695,
+        false
+      ]
+    },
+    {
+      "id": "foreign-account-unspent",
+      "expected": [
+        0,
+        0,
+        0,
+        false
+      ],
+      "observed": [
+        0,
+        0,
+        0,
+        false
+      ]
+    },
+    {
+      "id": "uncertain-ancestor-and-descendant-retained",
+      "expected": [
+        "rollback_unknown",
+        "ancestor_rollback_unknown"
+      ],
+      "observed": [
+        "rollback_unknown",
+        "ancestor_rollback_unknown"
+      ]
+    },
+    {
+      "id": "peer-facade-cannot-reopen-unknown-custody",
+      "expected": 23,
+      "observed": 23
+    },
+    {
+      "id": "unknown-original-account-closed",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "unknown-rollback-is-not-native-termination",
+      "expected": "idle in transaction",
+      "observed": "idle in transaction"
+    }
+  ],
+  "sourceSha256": {
+    "check_pg8000_savepoint_lifetime_native.py": "0fabae84d7e24974d1a2b5791ec6fc1dbd1b8219ad21ff4b1f39f4311ed294c4",
+    "pg8000_original_control_candidate.py": "b61f7e68e63cffaca29978a53f1c6365c0e2873a9cc95879c200905a2690842d",
+    "pg8000_instance_candidate.py": "0e3a6fb3860e9f2315711cc44957e841f54640c18214955f57c87a3c6fd437de",
+    "pg8000_accounted_instance_candidate.py": "ad4415635d2643dbd8cb48b34c85621444f9240334d9b5f020b726a0b226ee68"
+  },
+  "installedModuleSha256": {
+    "_operation_ordinal.py": "10d4717462ff14c7524ed793db0ac7b94f56e1d6b88158081a4f300981193977",
+    "_resource_account.py": "6a10966e502c16a3ab8972bba34a999ca675fdb7a59e5c3ac93a7c713b6468f1",
+    "_accounted_receive.py": "f1f6bc7d84d3cbdc4ba93ddb514d68898f60c99358c7cb2a719701139d674e78"
+  },
+  "driverPortQualified": false,
+  "limitations": [
+    "Host exclusively owns original connection and honors reserved namespaces",
+    "One adopted native epoch per candidate connection; full reuse not qualified",
+    "No native operation admission/security/ready installer",
+    "No complete accounting or earmarked cleanup capacity",
+    "Post-command handoff injection is not arbitrary network loss",
+    "No cancellation, commit_unknown or reconciliation qualification"
+  ]
+}

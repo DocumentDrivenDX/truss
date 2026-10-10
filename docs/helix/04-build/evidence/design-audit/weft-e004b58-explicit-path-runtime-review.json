@@ -1,0 +1,88 @@
+{
+  "scope": "Read-only original committed source review; no compilation/native or bridge tests rerun",
+  "commit": "e004b586bb70bf67d60456d3729672e9a4cb7af4",
+  "previousObservedCommit": "f3208b216f2020e978090777b8234773ecccb230",
+  "sourcePins": {
+    "crates/weft-core/src/compile.rs": {
+      "byteLength": 12411,
+      "sha256": "0a41ab3b2db8f206c3d80c6e634fa4fa68dffa1c92bc2c9091f25a4ff109fdc5"
+    },
+    "crates/weft-core/src/compile04.rs": {
+      "byteLength": 17708,
+      "sha256": "2c82da3f60c20776284ff97b4844e976edd4b8c12d5be016ec4a323ebc7196ac"
+    },
+    "crates/weft-core/src/backend03.rs": {
+      "byteLength": 6841,
+      "sha256": "fcfa161b4381d5938dc7e96d9b0a13be9d68b4177a2e5cba3d2811a7c2f4d242"
+    },
+    "crates/weft-core/src/backend03_registry.rs": {
+      "byteLength": 10845,
+      "sha256": "9841bb1d9ce3a59effc6255fbecc3194388d256a4fa3697812e6ff6fb1c6ce8a"
+    },
+    "crates/weft-core/src/backend03_emission.rs": {
+      "byteLength": 30159,
+      "sha256": "ed0aee08f93d01d1dfc19fdee465f7f50b91681377889b617aefec98afa34bf1"
+    },
+    "crates/weft-core/src/path_application_resolve.rs": {
+      "byteLength": 26438,
+      "sha256": "b1d4cbe51d4b0cb300e51d0a91c9cae9a7388c45c7768dc283b187bf94d7ee37"
+    },
+    "crates/weft-databricks/src/paths.rs": {
+      "byteLength": 8024,
+      "sha256": "93c7a8734bc3561032a80cc545f789d673a04338937b69a4d232d5982df90db5"
+    },
+    "crates/weft-databricks/src/candidate/path_lowering.rs": {
+      "byteLength": 36101,
+      "sha256": "5ae68c0a03075b767d0b0fe77edce32c8d33e88af749ea9ca3ed8c85049c43b2"
+    },
+    "crates/weft-databricks/tests/paths.rs": {
+      "byteLength": 15569,
+      "sha256": "aa4bbc681cd6b8078f195f39ca381618224a5506920fe900ac72c0be50ef7088"
+    },
+    "crates/weft-runtime/src/paths.rs": {
+      "byteLength": 3040,
+      "sha256": "3a83f24b8b273f4de06c45a3557b6c0bb363468db7a610556db754d11fa7721c"
+    },
+    "crates/weft-runtime/src/lib.rs": {
+      "byteLength": 21229,
+      "sha256": "2e7b455f977c57ceb2d6202b72d0d33058b23d96f13a9d6eadf2effd28de6b8b"
+    },
+    "crates/weft-runtime/Cargo.toml": {
+      "byteLength": 1283,
+      "sha256": "c7bab54df2c123a03edb91527e674fc4034c2ca0f80d0aac0d60923d7663d870"
+    },
+    "crates/weft-python/src/lib.rs": {
+      "byteLength": 687,
+      "sha256": "4a348481922988a364ab280b6f3fb4fae1a9940afa447e4282f4a704b6905366"
+    },
+    "crates/weft-wasm/src/lib.rs": {
+      "byteLength": 389,
+      "sha256": "0afb607c939e226ab1f55494ff68e6e58ca0f1c806a3095a03ac527ab7855ee3"
+    }
+  },
+  "observedPublicPathEntry": "weft_core::compile::v04::Compiler",
+  "observedRuntimeEntry": "weft_runtime::paths::compile_json",
+  "runtimeFeature": "ashlar-databricks-paths",
+  "pathTuple": {
+    "compile": "weft-compile/0.4.0",
+    "language": "weft-sql/0.4.0",
+    "backendInterface": "weft-backend/0.3.0",
+    "backendId": "ashlar.databricks.paths",
+    "backendVersion": "0.4.0-paths-candidate",
+    "target": "spark4-delta4-paths-candidate"
+  },
+  "pythonBridgeSource": "Still calls ordinary weft_runtime::compile_json; explicit paths entry is not exposed here",
+  "workingSecurityObservation": {
+    "path": "/Users/erik/Projects/weft/crates/weft-core/src/compile.rs",
+    "byteLength": 15750,
+    "sha256": "6f23265ac68dbbf5240d05285e3128c460ae50053140a880eb058d7272b72585",
+    "compile": "weft-compile/0.4.0",
+    "language": "weft-sql/0.2.0",
+    "status": "uncommitted owner work, not adopted; a shared compile-version string does not identify either ABI"
+  },
+  "trussAdoptedCompiler": "f05f2df09e9c2494ac8c6d703dfe38413dbc4181",
+  "nativeQualified": false,
+  "trussPathLoweringAdopted": false,
+  "acceptanceCasesPromoted": [],
+  "integrationExit": "Original complete entrypoint/language/backend/security/binding/result/account tuple; no version-only dispatch, automatic fallback or local parser; PostgreSQL and Python path/native/publication qualification remain required"
+}

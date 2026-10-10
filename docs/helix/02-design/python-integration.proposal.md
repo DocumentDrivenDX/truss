@@ -3064,3 +3064,65 @@ qualification remain necessary. This is no general hostile-Python sandbox claim.
 The [installed map control](../04-build/evidence/design-audit/python-query-map-installed-suite.json)
 passes71 tests/17 module correspondences and64 allowed imports. Wheel SHA256 is
 75843c83e91181984bbc7e90a46508ab27cb235cd04805cee16b2fef4e60d374.
+
+
+### Official UMF Python document machinery: current owner source handoff
+
+The [tagged-source review](../04-build/evidence/design-audit/umf-python-0.8.2-source-review.json)
+pins twelve original files at `python-v0.8.2`/953aa38. Distribution `umf-core`
+declares0.8.2 and imports as `umf`; its source `__version__` is0.8.0. Package
+identity therefore comes from actual installed distribution metadata and original
+wheel/resource pins. The document's `umf` member selects core schema identity;
+none of these identities may silently substitute for another. No public-index
+availability, installed Truss dependency or owner test replay is inferred here.
+
+For PY-01/A1 and the structural part of A2, use the owner `Document`,
+`read_document`, `validate_document`, canonical schema resources and explicit
+`Registry`/`Extension` machinery instead of a second Python core schema or semantic
+walker. Preserve original document bytes and their digest separately from model
+serialization; absent/null, unknown content and exact string numeric carriers
+must survive owner admission. Consumer-owned extension callbacks are explicitly
+registered exact owner/consumer profiles; documents cannot load code or schemas.
+
+The first Python adapter implementation must pin the selected wheel and complete
+schema inventory, verify source/wheel/resource correspondence, and admit finite
+input/parse/model/copy/diagnostic capacity before owner calls. Keep this optional
+integration behind its explicit adapter boundary, with no automatic installation
+or transitive CLI/runtime dependency. Shared finite operation accounting still
+applies; the owner's local parser constants do not prove Truss's enclosing budget.
+
+Original controls must cover source whitespace/byte identity, absent versus null,
+unknown extension/version preservation, copied model mutation, malformed source,
+exact integer/decimal string tokens versus unsafe untagged numbers, and relevant
+facets/keys/relationships/literal constraints yielding original
+SEMANTICS_UNCHECKED diagnostics. Complete diagnostics cannot be truncated to make
+a success fit. Python's qualified identity/reference/structural subset is useful;
+it does not supply complete Record values, Key/Relationship meanings, per-assertion
+enforcement or native acceptance. Keep those A2 producers with UMF's original
+selected capabilities and the existing Truss binding/native composition. A
+validate_document valid/complete flag cannot replace that inventory. UMF's existing
+SQL-generation ownership and the first installed bundle path remain unchanged;
+full Python semantic parity is not a new P1 prerequisite.
+
+### Explicit Weft path namespace and security tuple separation
+
+The [committed path review](../04-build/evidence/design-audit/weft-e004b58-explicit-path-runtime-review.json)
+advances the observed owner frontier to e004b58. The earlier private-only0.4
+checkpoint is superseded for this exact surface: Rust now exposes
+`weft_core::compile::v04::Compiler` and feature-selected
+`weft_runtime::paths::compile_json`, using compile/language0.4 and Backend03. Its
+registered implementation is the Ashlar/Databricks paths candidate. The Python
+bridge still calls ordinary `weft_runtime::compile_json`; Truss/PostgreSQL path
+lowering, native behavior and Python embedding are not supplied by this change.
+Retain the adopted f05f2df build and its existing compile/SQL0.2 contract.
+
+The security owner's separately observed working route also uses compile0.4,
+but with SQL0.2 and a security factory. It remains uncommitted/unadopted. Future
+Truss composition must select the original entrypoint, compile/language pair,
+backend interface/ID/version, storage/binding and security profile together. A
+compile-version string alone cannot dispatch between these routes or authorize
+falling back to an ordinary emitter. Require the owner to provide the eventual
+compatible complete embedding tuple; Truss must not implement a competing parser,
+capability matcher or policy resolver. Exact two-hop SQL bags still do not select
+the pending separate direct traversal behavior. This owner progress does not
+change the original consumer/native/current-authority/publication gates.

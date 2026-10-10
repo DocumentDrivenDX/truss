@@ -9,7 +9,6 @@ from truss._operation_ordinal import OperationOrdinalRegistry
 from pg8000_instance_candidate import RawConnection
 from pg8000.core import CoreConnection
 from pg8000.exceptions import DatabaseError
-from pg8000_accounted_instance_candidate import AccountedFrameFile
 
 
 class OriginalControlConnection(RawConnection):
@@ -21,12 +20,6 @@ class OriginalControlConnection(RawConnection):
         self._boundary_generation = 0
         self._registered_rollback_sql = None
         self._abort_custody = None
-        self._control_lock = Lock()
-        self._control_closed = False
-        self._operation_binding = None
-        self._namespace_next = 0
-        self._confirmed_savepoints = {}
-        self._control_attempts = {}
         super().__init__(*args, **kwargs)
 
     def handle_COMMAND_COMPLETE(self, data, context):
@@ -80,7 +73,6 @@ class OriginalControlConnection(RawConnection):
 class ConfirmedSavepoint:
     ordinal: str
     actual_xid: str
-    native_name: str
 
 
 def _frame(kind, body):
@@ -98,59 +90,26 @@ class OriginalControlProducer:
     def __init__(self, connection, account, producer, maximum_ordinal=9223372036854775807):
         if type(connection) is not OriginalControlConnection:
             raise ValueError('Original control connection required')
-        if (type(connection._sock) is not AccountedFrameFile
-                or connection._sock.account is not account
-                or connection._sock.producer is not producer):
-            raise ValueError('Original connection/account producer affinity required')
-        if type(maximum_ordinal) is not int or not 0 <= maximum_ordinal <= 9223372036854775807:
-            raise ValueError('Original exact ordinal profile required')
         self._connection, self._account, self._producer = connection, account, producer
-        self._registry = None
-        self._tickets = connection._confirmed_savepoints
-        self._attempts = connection._control_attempts
+        self._transaction = object()
+        self._registry = OperationOrdinalRegistry(producer, connection, 1, maximum_ordinal)
+        self._issuer = self._registry.bind(producer, connection, self._transaction)
+        self._tickets = {}
+        self._attempts = {}
         self._closed = False
-        self._lock = connection._control_lock
-        if not self._lock.acquire(blocking=False):
-            raise ValueError('Original control invocation active')
+        self._lock = Lock()
         try:
-            if connection._control_closed or connection._ready_status != b'T':
-                raise ValueError('Original usable control lifetime required')
-            binding = connection._operation_binding
-            if binding is None:
-                self._xid = self._observe_xid()
-                if self._xid is None:
-                    raise ValueError('Original assigned transaction required')
-                self._boundary_generation = connection._boundary_generation
-                self._transaction = object()
-                self._registry = OperationOrdinalRegistry(producer, connection, 1, maximum_ordinal)
-                self._issuer = self._registry.bind(producer, connection, self._transaction)
-                connection._operation_binding = (self._xid, self._boundary_generation,
-                    maximum_ordinal, self._transaction, self._registry, self._issuer)
-            else:
-                if binding[1] != connection._boundary_generation or binding[2] != maximum_ordinal:
-                    raise ValueError('Original transaction/profile binding changed')
-                (self._xid, self._boundary_generation, _, self._transaction,
-                    self._registry, self._issuer) = binding
-            if connection._namespace_next > 340282366920938463463374607431768211455:
-                raise ValueError('Original participant namespace exhausted')
-            # Shared physical-connection participant registry; never random names
-            # or a fresh per-facade issuer. Host honors this reserved namespace.
-            self._namespace = f'{connection._namespace_next:032x}'
-            connection._namespace_next += 1
+            self._xid = self._observe_xid()
+            if self._xid is None:
+                raise ValueError('Original assigned transaction required')
+            self._boundary_generation = connection._boundary_generation
         except BaseException:
             self._close()
             raise
-        finally:
-            self._lock.release()
 
     def _close(self):
         self._closed = True
-        self._connection._control_closed = True
-        binding = self._connection._operation_binding
-        if binding is not None:
-            binding[4].close(self._producer)
-        elif self._registry is not None:
-            self._registry.close(self._producer)
+        self._registry.close(self._producer)
         self._account.close(self._producer)
         # Quarantine admission only; no rollback/termination inferred here.
 
@@ -204,7 +163,7 @@ class OriginalControlProducer:
         if not self._lock.acquire(blocking=False):
             raise ValueError('Original control invocation active')
         try:
-            if self._closed or self._connection._control_closed:
+            if self._closed:
                 raise ValueError('Original control producer closed')
             if (self._connection._boundary_generation != self._boundary_generation
                     or self._connection._ready_status != b'T'):
@@ -212,13 +171,12 @@ class OriginalControlProducer:
             if self._observe_xid() != self._xid:
                 raise ValueError('Original transaction changed')
             # Reserve outgoing savepoint capacity before irreversible issuance.
-            permit = self._account.reserve(self._producer, len('SAVEPOINT truss_sp_' + self._namespace + '_9223372036854775808'))
+            permit = self._account.reserve(self._producer, len('SAVEPOINT truss_original_9223372036854775807'))
             issued = self._issuer.reserve(self._transaction)
             if issued.outcome != 'issued':
                 self._account.terminate(self._producer, permit)
                 raise ValueError('Original ordinal exhausted')
-            native_name = 'truss_sp_' + self._namespace + '_' + str(int(issued.ordinal) + 1)
-            sql = 'SAVEPOINT ' + native_name
+            sql = 'SAVEPOINT truss_original_' + issued.ordinal
             # Retain original attempt before any control submission can escape.
             attempt = [issued.ordinal, self._xid, sql, 'issued']
             self._attempts[issued.ordinal] = attempt
@@ -232,8 +190,8 @@ class OriginalControlProducer:
             if self._observe_xid() != self._xid:
                 raise ValueError('Original transaction changed after savepoint')
             attempt[3] = 'confirmed'
-            ticket = ConfirmedSavepoint(issued.ordinal, self._xid, native_name)
-            self._tickets[id(ticket)] = [ticket, False, native_name, issued.ordinal]
+            ticket = ConfirmedSavepoint(issued.ordinal, self._xid)
+            self._tickets[id(ticket)] = [ticket, False]
             return ticket
         except BaseException:
             if 'attempt' in locals() and attempt[3] == 'submission_pending':
@@ -248,7 +206,7 @@ class OriginalControlProducer:
             raise ValueError('Original control invocation active')
         try:
             entry = self._tickets.get(id(ticket))
-            if self._closed or self._connection._control_closed or entry is None or entry[0] is not ticket or entry[1]:
+            if self._closed or entry is None or entry[0] is not ticket or entry[1]:
                 raise ValueError('Original unconsumed savepoint required')
             entry[1] = True
             if self._connection._boundary_generation != self._boundary_generation:
@@ -261,26 +219,18 @@ class OriginalControlProducer:
                 # No identity/restoration/release SQL into the aborted transaction.
             elif state != b'T' or self._observe_xid() != self._xid:
                 raise ValueError('Original transaction unavailable or changed')
-            ordinal, native_name = entry[3], entry[2]
-            attempt = self._attempts[ordinal]
+            attempt = self._attempts[ticket.ordinal]
             attempt[3] = 'rollback_pending'
-            self._control('ROLLBACK TO SAVEPOINT ' + native_name, b'ROLLBACK')
+            self._control('ROLLBACK TO SAVEPOINT truss_original_' + ticket.ordinal, b'ROLLBACK')
             if self._observe_xid() != self._xid:
                 raise ValueError('Original transaction changed after rollback-to')
-            for descendant in self._tickets.values():
-                if not descendant[1] and int(descendant[3]) > int(ordinal):
-                    descendant[1] = True
-                    self._attempts[descendant[3]][3] = 'invalidated_by_ancestor_rollback'
-            self._control('RELEASE SAVEPOINT ' + native_name, b'RELEASE')
+            self._control('RELEASE SAVEPOINT truss_original_' + ticket.ordinal, b'RELEASE')
             if self._observe_xid() != self._xid:
                 raise ValueError('Original transaction changed after rollback')
             attempt[3] = 'rolled_back'
         except BaseException:
             if 'attempt' in locals() and attempt[3] == 'rollback_pending':
                 attempt[3] = 'rollback_unknown'
-                for descendant in self._tickets.values():
-                    if not descendant[1] and int(descendant[3]) > int(ordinal):
-                        self._attempts[descendant[3]][3] = 'ancestor_rollback_unknown'
             self._close()
             raise
         finally:

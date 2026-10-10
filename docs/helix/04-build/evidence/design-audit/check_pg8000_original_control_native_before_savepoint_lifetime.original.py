@@ -60,7 +60,7 @@ with tempfile.TemporaryDirectory(prefix='truss-original-control-') as directory:
         expect('same-actual-transaction', True, first.actual_xid == second.actual_xid)
         expect('rolled-back-attempt-retained', ['0','rolled_back','1','confirmed'], [port.retained_attempts(producer)[0][0],port.retained_attempts(producer)[0][3],port.retained_attempts(producer)[1][0],port.retained_attempts(producer)[1][3]])
         before = len(connection.original_controls)
-        forged = ConfirmedSavepoint(second.ordinal, second.actual_xid, second.native_name)
+        forged = ConfirmedSavepoint(second.ordinal, second.actual_xid)
         try: port.rollback_savepoint(forged)
         except ValueError: pass
         else: raise ValueError('Copied confirmation admitted')
@@ -114,7 +114,7 @@ with tempfile.TemporaryDirectory(prefix='truss-original-control-') as directory:
         expect('uncertain-control-no-retry', before, len(connection.original_controls))
         expect('uncertain-control-closes-account', True, account.snapshot(producer)[3])
         retained = port.retained_attempts(producer)
-        expect('unknown-original-attempt-retained', [('0',port._xid,'SAVEPOINT truss_sp_'+'0'*32+'_1','completion_unknown')], list(retained))
+        expect('unknown-original-attempt-retained', [('0',port._xid,'SAVEPOINT truss_original_0','completion_unknown')], list(retained))
         # Observe actual backend state separately; quarantine is not termination.
         pid = int.from_bytes(connection._backend_key_data[:4], 'big') if type(connection._backend_key_data) is bytes and len(connection._backend_key_data) == 8 else None
         # Original pid comes from the actual socket's backend key, not a caller field.

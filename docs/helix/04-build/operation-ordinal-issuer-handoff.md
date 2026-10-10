@@ -539,3 +539,49 @@ controls, actual four-family admission, security authority and native recovery
 remain required. The current bookkeeping account cannot manufacture an earmarked
 cleanup lane after normal capacity is exhausted. Preserve that profile gap rather
 than advertising the candidate as a released executor.
+
+
+### Shared original issuer and savepoint lifetime
+
+The preceding producer still created a fresh registry on facade construction.
+The current candidate binds the registry, actual transaction token, invocation
+lock, attempt inventory and handle inventory to the original connection. A second
+compatible facade reuses that same issuer rather than restarting at0. Actual
+connection-file/account/producer affinity must match before construction can
+submit SQL. Exact ordinal-profile mismatch or changed native epoch cannot create
+a replacement binding. The candidate retains one adopted epoch per connection;
+full connection reuse remains a later qualification output.
+
+The same connection owns a cumulative participant namespace registry. Names now
+follow CONTRACT-007's `truss_sp_` +32 lowercase hex namespace + `_` + positive
+canonical counter recipe. The positive counter is the issued operation ordinal
+plus1; original operation ordinals remain0-based bigint text. Compatible facade
+construction consumes distinct namespaces while sharing the nonrewinding issuer.
+The trusted host must honor this reserved namespace; predictable names are neither
+authorization nor a guarantee against arbitrary host SQL.
+
+After independently confirmed rollback-to and restored original xid, later live
+handles across all registered participants become invalidated before release.
+Their original records remain retained. Unknown ancestor rollback keeps target
+rollback_unknown and affected live descendants ancestor_rollback_unknown; shared
+admission closes rather than treating either as a confirmed invalidation or
+allowing another facade to resume. Actual original names/ordinals are retained
+in producer custody, not selected again from mutable caller handle fields.
+
+The [lifetime receipt](evidence/design-audit/pg8000-savepoint-lifetime-native.json)
+passes fourteen native observations on16.15: shared ordinals0/1, distinct exact
+participant names, shared inventory, caller sentinel7 after ancestor rollback,
+cross-participant descendant invalidation, next ordinal2, expired-handle refusal
+without SQL, foreign-account refusal without spending either account, and unknown
+ancestor/descendant custody with no peer resumption and an independently live
+backend. [Control regression](evidence/design-audit/pg8000-original-control-shared-lifetime-native.json)
+passes fifteen cases and [native error recovery](evidence/design-audit/pg8000-aborted-control-shared-lifetime-native.json)
+passes nine separately scoped cases. Earlier original producer/checker bytes are
+archived with matching historical pins.
+
+This corrects shared-issuer and descendant-lifetime defects before four-family
+admission. Generic explicit rollback-only/release-only public handles, complete
+host stack/depth observation, pre-reserved cleanup and bounded full native work/
+containment remain required. The candidate's combined rollback-and-release helper
+does not implement the complete public SavepointHandle protocol or publish driver
+readiness. Current security and complete installed routine/inventory gates remain.
