@@ -313,3 +313,22 @@ shared planner cases and eighteen original wire cases. Both module origins resol
 to the separately installed wheel. Installation used --no-deps in an existing
 private environment; it does not qualify clean dependency resolution or delivered
 original recipes. Independent corpus inputs remain external test expectations.
+
+
+## Current coordinator wheel delivery
+
+The [ten-module delivery receipt](evidence/design-audit/python-weft-coordinator-wheel-component.json)
+now covers the current package including the private query coordinator, superseding
+source-only delivery status for that component. A new Python3.11 environment outside
+the checkout installs only the built Truss base wheel and frozen original Weft
+wheel, with no dependency resolution or local extra. Every delivered Python module
+matches its installed payload and current source. Five Rust compiler outcomes and
+five invalid transport refusals retain their existing component scope.
+
+The [installed coordinator controls](evidence/design-audit/python-coordinator-installed-controls.json)
+run all eleven synthetic-host tests against that exact installed coordinator,
+including asynchronous check/cleanup rejection, disposal, reentrancy, drift,
+unknown obligations and suppressed host failure. The earlier nine-module wheel
+receipt remains historical. This delivery includes no installer or migration
+implementation and proves no original security/driver authority, native execution,
+clean local-extra resolution, or complete committed engine interchange.

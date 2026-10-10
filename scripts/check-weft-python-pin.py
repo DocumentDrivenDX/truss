@@ -135,7 +135,9 @@ receipt = {
  'trussWheelDelivery':truss_delivery,
  'producerSha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
 }
-receipt_name = 'python-weft-wheel-component.json' if truss_delivery else 'weft-python-f05f2df-component.json'
+receipt_name = ('python-weft-coordinator-wheel-component.json'
+ if truss_delivery and 'truss/_query_execution.py' in members else
+ 'python-weft-wheel-component.json' if truss_delivery else 'weft-python-f05f2df-component.json')
 (root / 'docs/helix/04-build/evidence/design-audit' / receipt_name).write_text(
  json.dumps(receipt,indent=2)+'\n')
 print(json.dumps({'revision':revision,'cases':len(cases),'transportRefusals':5,
