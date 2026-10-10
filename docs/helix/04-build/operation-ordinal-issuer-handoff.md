@@ -297,3 +297,15 @@ and native verification remains required; the four SQL allocator corrections are
 still outstanding. The source change adds a twelfth package module; earlier
 installed eleven-module/36-test receipts remain historical until rebuilding and
 running the expanded41-test suite.
+
+
+## Issued-ordinal native candidates
+
+The separate `packages/postgresql/native/issued-operation-admission/` sources now
+add the host-issued bigint to all four original families together, preserving
+their capture paths and unfinished-operation checks. Native state rejects invalid
+negative/null or conflicting surviving ordinals; original host custody supplies
+nonreuse after rollback. Legacy sources remain historical; a complete selected
+installer must exclude executable legacy allocator overloads. Native execution
+and actual Python/driver binding are not yet qualified. Run the original rollback/
+prior-finalized/epoch/configuration/uncertain controls on corrected16.15 next.
