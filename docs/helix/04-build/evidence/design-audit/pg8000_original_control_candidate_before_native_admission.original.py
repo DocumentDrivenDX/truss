@@ -247,12 +247,6 @@ class OriginalControlProducer:
         if not self._lock.acquire(blocking=False):
             raise ValueError('Original control invocation active')
         try:
-            self._rollback_savepoint_locked(ticket)
-        finally:
-            self._lock.release()
-
-    def _rollback_savepoint_locked(self, ticket):
-        try:
             entry = self._tickets.get(id(ticket))
             if self._closed or self._connection._control_closed or entry is None or entry[0] is not ticket or entry[1]:
                 raise ValueError('Original unconsumed savepoint required')
@@ -289,3 +283,5 @@ class OriginalControlProducer:
                         self._attempts[descendant[3]][3] = 'ancestor_rollback_unknown'
             self._close()
             raise
+        finally:
+            self._lock.release()

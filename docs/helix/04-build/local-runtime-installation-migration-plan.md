@@ -1528,3 +1528,38 @@ product decision or a reason to wait for full Python parity before P1. The
 explicit Weft path runtime is a distinct Rust candidate namespace; no Python
 bridge or Truss backend adoption follows. Preserve the complete original tuple
 when the security owner's eventual matching/lowering API is ready.
+
+
+## Original four-family admission composition — 2026-10-10
+
+The private original-driver admission candidate now connects confirmed native
+savepoints to the installed one-use admission custody on the same physical
+connection. All facades share the issuer, confirmation inventory and admission
+custody; admission requires the latest live boundary. Payload reservation precedes
+SQL encoding, and original native context cells remain authoritative.
+
+[The native receipt](evidence/design-audit/pg8000-four-family-original-admission-native.json)
+records 92 observations on PostgreSQL16.15 across base, asserted-origin,
+source-epoch and configuration admission. Each family verifies complete original
+context and registry cells, refuses confirmation reuse before further SQL,
+rolls back admitted registry/configuration rows, and contains an actual SQLSTATE
+22023 rejection by rolling back first from ReadyForQuery E. The next operation
+uses ordinal2 after rolled-back ordinals0 and1; earlier caller data and the
+original transaction ID survive. There is no automatic retry. The original
+DatabaseError is retained; successful local containment does not classify a
+business refusal or establish complete healthy-scope authority.
+
+The shared locked rollback helper also passes the
+[14-observation lifetime regression](evidence/design-audit/pg8000-savepoint-lifetime-after-admission-native.json)
+and [nine-observation abort-recovery regression](evidence/design-audit/pg8000-aborted-control-after-admission-native.json).
+The before-admission original control source is archived alongside the candidate
+so prior receipts retain their exact producer bytes.
+
+This is administrative local evidence using six synthetic artifact byte strings.
+It does not qualify their meaning, ordinary-person isolation/origin, current
+security, the complete allocator/native-work and pre-reserved cleanup profile,
+seven native bodies, finalization, commit cohorts, journal/feed/receipts or ready
+publication. Driver qualification and installer readiness remain false; no
+acceptance criteria are promoted. The next implementation composition must add
+original artifact/authority admission and the protected native guard inventory
+before exposing an installed mutation API.
