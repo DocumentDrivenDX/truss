@@ -374,3 +374,62 @@ helper and two catalog high-water helpers; they are not those semantic bodies.
 Installer readiness, PA01/PA02 completion and full backend acceptance remain open.
 
 The original candidate installed wheel passes302 tests; the [suite receipt](evidence/design-audit/role-paths-installed-suite.json) retains test-source pins and terminal output.
+
+## PY-C02 original control ledger and bounded detachment — next planned work
+
+The next transport implementation must retain every native call and simple-query
+Context from entry through response admission and exact handback. Attach the
+original control ledger before adoption/profile-observation or lifecycle SQL;
+reserve its descriptors and bounded receive/decode custody before submission.
+The existing selected text-operation frame gate supplies reusable ingress and
+Context custody, but its semantic cleanup/completion rules cannot substitute for
+a host-control producer. A successful savepoint remains in the original live
+transaction's custody; an unnamed or named resource created by this scope needs
+its own confirmed release. The selected completed simple-query utility path leaves no resumable
+statement/portal obligation; it still uses a native internal portal and can
+destroy a preexisting unnamed statement/portal. The resource-free entry subset
+must be qualified rather than inferring preservation from restored metadata.
+
+Qualify original driver methods, dispatch, UTF8/text decoders and original host
+resource baseline at entry and after gate detachment. Preserve the original
+connection Context, dispatch, socket and method ownership; clear only this
+scope's owned result/error references. Verify every admitted original native
+call, port/executor publication and generation/savepoint transfer before handback.
+A fault during installation, capture, detachment or publication retains the
+original token/ledger and closes further admission. Recovery inspection reports
+retained facts without replay or release permission. Pre-admission cancellation
+submits no SQL; active cancellation never invents containment or rollback.
+
+This control producer shares original executor/physical exclusion and does not
+fabricate an E06 semantic lease during adoption. Public promotion requires its
+actual qualification and selected host recovery profile. Protected PA02–PA05
+bodies are a separate graph-operation gate, not a reason to postpone independent
+transport work. ReferenceAssembly remains the separately governed inert
+configuration, capability selection and recovery boundary; the partial native
+host adapter must not take that name or declare those capabilities installed.
+
+## PY-C02 snapshot-neutral profile refusal — Astra Ultra iteration 13
+
+Astra's native counterexample found that the original SELECT profile probe pins
+a repeatable-read or serializable snapshot even when adoption refuses. Prioritize
+that correctness fix before composing the planned control ledger. The claimed
+port performs only fixed SHOW transaction_isolation and SHOW
+transaction_read_only prechecks. Retain both original calls, values, claim, token,
+generation and ordered revisions. A complete actual mismatch can refund only
+that unchanged original claim through distinct SHOW-only refusal evidence, which
+contains no authenticated person/role/xid. Matching checks continue the original
+full SELECT producer; SHOW-only evidence cannot publish a usable handle.
+Disagreement in that later SELECT or an intervening call stays unresolved, since
+SELECT may already have changed snapshot state. No unknown observation is
+refundable. Test independent-connection visibility after refusal for both stronger
+isolations and both mismatched isolation/access profiles, safe same-generation
+adoption afterward, duplicate no-SQL refusal, second-SHOW loss and terminal
+refusal reply loss. This fix does not release public adoption or qualify C02.
+
+Iteration 13 implements the snapshot-refusal correction and extracts the existing
+resource-free original driver predicate with an AST-identical body. The final
+installed wheel passes 301 tests, including 22 adoption scenarios and four
+independent-connection visibility subcases. Its 45 modules and six packaged owner
+assets match source exactly. See [iteration 13 evidence](evidence/python-contracts-iteration13.json).
+The planned composed control ledger above remains unfinished; this corrective
+iteration does not promote the public adapter or complete C02.

@@ -15,6 +15,27 @@ class _Capture:
     native: object = None
     reservation_failed: bool = False
     probe_revision: int | None = None
+    profile_checks: tuple = ()
+
+
+@dataclass(eq=False)
+class _ProfileCheck:
+    revision: int
+    setting: str
+    call: object = None
+    value: str | None = None
+
+
+@dataclass(frozen=True, eq=False)
+class _ProfileRefusalObservation:
+    claim: object
+    checks: tuple
+    observation: object
+    port: object
+    generation: object
+    token: object
+    call: object
+    revision: int
 
 
 @dataclass(frozen=True, eq=False)
@@ -94,6 +115,64 @@ def _corresponds(claim, native):
             and claim.capture.native is native)
 
 
+def profile_precheck(claim, port):
+    """SHOW-only mismatch checks preserve a not-yet-acquired host snapshot.
+
+    These records carry no authenticated actor, role or xid authority. Matching
+    settings still require the original full observation before handle publication.
+    """
+    from ._native_pg8000 import NativeBoundaryRefusal
+    b = port._tracker._boundary
+    expected = (claim.success.value.isolation, claim.success.value.access_mode)
+    if claim.capture.profile_checks:
+        raise NativeBoundaryRefusal('Original profile precheck already submitted')
+    for setting in ('transaction_isolation', 'transaction_read_only'):
+        with b._lock:
+            root = _current(claim)
+            if (root.current.phase != 'observing' or claim.port is not port
+                    or claim.token is not b._operation or claim.generation is not port._tracker._state.generation
+                    or claim.capture.profile_checks and claim.capture.profile_checks[-1].revision != b._revision):
+                raise NativeBoundaryRefusal('Original profile precheck correspondence lost')
+            check = _ProfileCheck(b._revision + 1, setting)
+            claim.capture.profile_checks = (*claim.capture.profile_checks, check)
+        def capture(call, rows):
+            check.call = call
+            if (not call.capture_complete or call.final_status != b'T'
+                    or call.original_control is not None or call.original_resource is not None
+                    or tuple(e.payload for e in call.events if e.code == b'C') != (b'SHOW\0',)
+                    or call.revision != check.revision or type(rows) is not list
+                    or len(rows) != 1 or type(rows[0]) is not list or len(rows[0]) != 1
+                    or type(rows[0][0]) is not str):
+                raise NativeBoundaryRefusal('Original neutral profile observation unavailable')
+            check.value = rows[0][0]
+        def settled(call, rows):
+            check.call = call
+        try:
+            b._call(lambda: b._connection.run('SHOW '+setting), claim.token,
+                    on_settled=settled, on_complete=capture)
+        finally:
+            if check.call is None and b.last_call is not None and b.last_call.revision == check.revision:
+                check.call = b.last_call
+    checks = claim.capture.profile_checks
+    isolation, readonly = (c.value for c in checks)
+    if isolation not in ('read committed','repeatable read','serializable') or readonly not in ('on','off'):
+        raise NativeBoundaryRefusal('Original profile unsupported')
+    actual = (isolation.replace(' ','_'), 'read_only' if readonly == 'on' else 'read_write')
+    if actual == expected:
+        return None
+    with b._lock:
+        if (checks[-1].call is not b.last_call or checks[-1].revision != b._revision
+                or claim.generation is not port._tracker._state.generation):
+            raise NativeBoundaryRefusal('Original profile refusal revision lost')
+        observation = TransactionObservation(port._tracker._identity, claim.generation.identity,
+                                             actual[0], actual[1], 'active')
+        native = _ProfileRefusalObservation(claim, checks, observation, port, claim.generation, claim.token,
+                                            checks[-1].call, checks[-1].revision)
+        claim.capture.probe_revision = native.revision
+        capture_original(claim, port, native)
+        return observation
+
+
 def start_probe(claim, port):
     """One exact adoption probe capability consumed at native call admission."""
     from ._native_pg8000 import NativeBoundaryRefusal
@@ -101,7 +180,8 @@ def start_probe(claim, port):
         raise NativeBoundaryRefusal('Original adoption probe capability required')
     root = _current(claim)
     if (root.current.phase != 'observing' or claim.capture.probe_revision is not None or
-            claim.token is not port._token or claim.generation is not port._tracker._state.generation):
+            claim.token is not port._token or claim.generation is not port._tracker._state.generation
+            or claim.capture.profile_checks and claim.capture.profile_checks[-1].revision != port._tracker._boundary._revision):
         raise NativeBoundaryRefusal('Original adoption probe unavailable or already consumed')
     claim.capture.probe_revision = port._tracker._boundary._revision + 1
 
@@ -181,6 +261,15 @@ def adopt(executor, port, *, isolation, access_mode):
                     type(observed) is not TransactionObservation or native.port is not port or
                     native.generation is not claim.generation or native.token is not claim.token):
                 raise NativeBoundaryRefusal('Original observation producer correspondence unavailable')
+            mismatch = observed.isolation != isolation or observed.access_mode != access_mode
+            if type(native) is _ProfileRefusalObservation and not mismatch:
+                raise NativeBoundaryRefusal('SHOW-only evidence cannot publish adoption')
+            if type(native) is not _ProfileRefusalObservation:
+                checks = claim.capture.profile_checks
+                checked = (checks[0].value.replace(' ', '_'),
+                           'read_only' if checks[1].value == 'on' else 'read_write')
+                if checked != (observed.isolation, observed.access_mode):
+                    raise NativeBoundaryRefusal('Original checked profile changed')
             # Retain original completed evidence before checking whether a later
             # coordinated call has invalidated its admission revision.
             custody.observation = observed
