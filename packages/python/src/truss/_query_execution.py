@@ -17,6 +17,11 @@ class QueryPlan:
 
 
 def _synchronous(value):
+    if inspect.isgenerator(value):
+        value.close()
+        raise CompileRefusal('execution_obligation', 'Deferred original callback body is unavailable')
+    if inspect.isasyncgen(value):
+        raise CompileRefusal('execution_obligation', 'Synchronous original host callback required')
     if inspect.isawaitable(value):
         if inspect.iscoroutine(value):
             value.close()

@@ -2989,3 +2989,22 @@ Python boundary checks pass64 imports. This is a real account component fix;
 full native metering, authority and installed Truss operations remain unqualified.
 Earlier wheel/model receipts retain their original source scope and are not
 silently relabeled evidence for the revised component.
+
+
+### Synchronous query callback-body correction — 2026-10-10
+
+The private query seam now rejects returned generators and async generators
+alongside awaitables. A returned synchronous generator is closed before refusal,
+so a retained generator cannot later run its deferred check body after failed
+query admission. The independent control retains that original generator,
+observes context cleanup with zero SQL/deferred-body execution, then proves its
+frame is closed and resumption stops. Async-generator refusal does not claim
+synchronous cleanup/termination of an already active asynchronous producer.
+Original native lifetime/recovery remains owned by the admitted host profile.
+
+The [installed suite](../04-build/evidence/design-audit/python-query-generator-installed-suite.json)
+passes71 tests with17 matching source/wheel/installed modules;11 query-seam tests
+and64 allowed imports pass. Wheel SHA256 is
+9305f343b4347072b423d88511d5166927492a53c1ab811b05dfc838cd6cbdfe.
+This corrects callback completion handling, not native authority, allocation or
+publication qualification. The earlier byte-account wheel remains historical.

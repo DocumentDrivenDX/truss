@@ -133,6 +133,23 @@ class QueryExecutionTests(unittest.TestCase):
             self.assertEqual(error.exception.code,'execution_obligation')
             self.assertEqual(events,['enter','verify','cleanup'])
 
+        deferred = []
+        def body():
+            events.append('deferred body ran')
+            yield None
+        def deferred_check(*_):
+            value = body()
+            deferred.append(value)
+            return value
+        events=[];host=self.host(events)
+        host.handlers={'fixture':SimpleNamespace(accepts=lambda *_:True,check=deferred_check)}
+        engine,plan=coordinator(host,[{'owner':'host','id':'fixture'}])
+        with self.assertRaises(CompileRefusal):engine.execute(plan)
+        self.assertEqual(events,['enter','verify','cleanup'])
+        self.assertIsNone(deferred[0].gi_frame)
+        with self.assertRaises(StopIteration):next(deferred[0])
+        self.assertEqual(events,['enter','verify','cleanup'])
+
     def test_async_context_verification_cannot_permit_sql(self):
         events=[]
         async def verify(*_):events.append('should never run')
