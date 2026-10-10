@@ -2379,3 +2379,13 @@ and pinned runtime. Before any owner-version update, replay the selected numeric
 registration and contextual Field controls against the complete new dependency
 tuple, including original diagnostic/refusal correspondence and native/driver
 checks where claimed. Do not implement competing conversion semantics in Truss.
+
+
+The [numeric dependency replay](../04-build/evidence/design-audit/umf-numeric-dependency-replay.json)
+now runs the unchanged owner test file on isolated committed 953aa38c source:
+four test groups and 77 assertions pass on Bun1.4.2. Contextual Field checks,
+exact number/bigint conversion/refusal, spelling preservation and JSON/YAML carriers
+are included. Cached dependencies were reused; this is not a clean dependency
+resolution, browser/native test or complete resource/account qualification. Initial
+partial-archive setup lacked imported schema resources; the final run adds only
+unchanged required resources from the same commit. Truss's runtime pin is unchanged.

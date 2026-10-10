@@ -1,0 +1,18 @@
+{
+  "scope": "Owner numeric test replay on isolated committed source with cached dependencies; no browser/native/Truss adoption",
+  "revision": "953aa38c4be0748664d79633596be08cb47d2b41",
+  "sourceDirectory": "/private/tmp/truss-umf-numeric-replay-ozvs43ci",
+  "dependencyDirectory": "/Users/erik/Projects/umf/node_modules",
+  "command": [
+    "bun",
+    "test",
+    "tests/core/javascript-numeric.test.ts"
+  ],
+  "exitCode": 0,
+  "output": "bun test v1.4.2 (43848b5a7)\n\ntests/core/javascript-numeric.test.ts:\n(pass) safe integer admission and bigint boundaries [12.13ms]\n(pass) decimal admission uses exact binary value rather than shortest spelling [0.20ms]\n(pass) constructor retains spelling and refuses malformed and over-limit input [0.39ms]\n(pass) declared decimals, exclusions, unknown qualifiers and JSON/YAML carriers [13.46ms]\n\n 4 pass\n 0 fail\n 77 expect() calls\nRan 4 tests across 1 file. [4.95s]\n",
+  "testSha256": "6f898c3731b59c0080f2279c71cbc862a3e1decbacd262c2631ca4a5955cc9a2",
+  "bunVersion": "1.4.2",
+  "setupRepair": "Initial partial archive lacked spec and two native/tablespec JSON imports; added original resources from the same exact revision",
+  "runtimeAdopted": false,
+  "nativeQualified": false
+}
