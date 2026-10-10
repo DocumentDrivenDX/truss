@@ -4,6 +4,7 @@ import importlib.metadata
 import json
 from pathlib import Path
 import socket
+import sys
 import tempfile
 from urllib.parse import urlparse,parse_qs
 import pg8000.core
@@ -15,7 +16,14 @@ ROOT=HERE.parents[4]
 CORE_SHA='cac1e50502901bcea3ddab588e0350149dd8fd771156ae1c531a2a04b3925e26'
 if importlib.metadata.version('pg8000')!='1.31.5' or hashlib.sha256(Path(pg8000.core.__file__).read_bytes()).hexdigest()!=CORE_SHA:
  raise SystemExit('Pinned original driver required')
-if importlib.metadata.version('pgserver')!='0.1.4':raise SystemExit('Pinned pgserver required')
+corrected = len(sys.argv)==3 and sys.argv[1]=='--corrected-pgserver'
+if len(sys.argv)!=1 and not corrected: raise SystemExit('usage: check_pg8000_local_control_native.py [--corrected-pgserver NEW_RECEIPT_FILENAME]')
+receipt_name = sys.argv[2] if corrected else 'pg8000-local-control-native.json'
+if Path(receipt_name).name!=receipt_name or not receipt_name.endswith('.json'): raise SystemExit('Receipt basename required')
+destination=HERE/receipt_name
+if destination.exists(): raise SystemExit('Refusing to replace original receipt')
+pgserver_version='0.1.4+truss.pg16.15' if corrected else '0.1.4'
+if importlib.metadata.version('pgserver')!=pgserver_version:raise SystemExit('Pinned pgserver required')
 
 class ControlConnection(RawConnection):
  def __init__(self,*args,**kwargs):
@@ -51,13 +59,14 @@ with tempfile.TemporaryDirectory(prefix='truss-python-control-') as directory:
               {'cycle':str(index),'kind':'Z','hex':(b'Z'+(5).to_bytes(4,'big')+state).hex()}]
     if observed!=expected:raise ValueError('Independent original control-frame mismatch')
    version=connection.parameter_statuses.get('server_version')
+   if corrected and not version.startswith('16.15'): raise ValueError('Corrected native version required')
   finally:connection.close()
  finally:server.cleanup()
 receipt={'scope':'Five fixed local control submissions with original command/ready frames captured at instance handlers; no original issuer/account/permit, savepoint authority or unknown-outcome qualification',
- 'pgserver':'0.1.4','serverVersion':version,'driver':'pg8000 1.31.5','driverCoreSha256':CORE_SHA,
+ 'pgserver':pgserver_version,'serverVersion':version,'driver':'pg8000 1.31.5','driverCoreSha256':CORE_SHA,
  'controls':[s for s,_,_ in controls],'frames':connection.control_frames,
  'independentExpectedControlFrames':10,'driverPortQualified':False,
  'sourceSha256':{p:hashlib.sha256((HERE/p).read_bytes()).hexdigest() for p in [Path(__file__).name,'pg8000_instance_candidate.py','python_pg_receive_candidate.py','python_pg_frame_candidate.py']},
  'limitations':['Local trust only; no TLS/current-person admission','Probe cycle labels are not original issuer authority','No lost-response/cancellation/cleanup evidence','No pre-ingress/account or native preservation qualification']}
-(HERE/'pg8000-local-control-native.json').write_text(json.dumps(receipt,indent=2)+'\n')
+with destination.open('x') as output: output.write(json.dumps(receipt,indent=2)+'\n')
 print(json.dumps({'controls':5,'originalExpectedFrames':10,'serverVersion':version,'driverPortQualified':False}))

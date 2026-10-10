@@ -187,3 +187,24 @@ reserves and original possible effects. Qualify exact-at/one-over, fragmented
 reads, parser exception, retained-view lifetime and cancellation using independent
 allocation/dispatch observations. Source inspection and the private scalar byte
 ledger do not execute or qualify these integration schedules.
+
+
+### Corrected local control-frame compatibility
+
+The [corrected control receipt](../../04-build/evidence/design-audit/pg8000-corrected-local-control-native.json)
+executes the original five control statements through pg8000 1.31.5's frozen
+instance seam on actual PostgreSQL16.15. All ten independently expected original
+CommandComplete/ReadyForQuery frames match. This supersedes reliance on16.2
+only for this control-frame compatibility observation, not role/reset/RLS,
+original issuer/account or unknown-outcome support.
+
+The checker now takes --corrected-pgserver plus a fresh receipt basename, verifies
+the actual corrected native version and refuses to replace any existing receipt.
+Historical16.2 evidence remains intact. This run uses the corrected test Python
+environment and appends the existing pg8000-runtime environment's site-packages
+for pinned driver/dependency access; it is not clean dependency resolution or a
+built Truss driver package. Execute through the retained checker with its evidence
+directory on the import path. The runtime tuple, source hashes and original frame
+bytes are retained; driverPortQualified remains false. Pre-ingress/account and
+original adoption/permission/cancellation/settlement integration still precede
+public driver support.
