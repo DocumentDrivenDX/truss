@@ -59,3 +59,10 @@ and exports all eight CREATE/REVOKE statements; declaration coverage is incomple
 See the installation plan's “Complete-row custody accounting codec” section for
 its grammar, counter-conversion obligation and remaining native work/overhead
 and protected-producer gaps. This codec is not yet bound to ledger transfers.
+
+`custody-size.sql` supplies three private length-only functions using the same
+complete column profile and frame-size formula. The24-check native receipt
+verifies stored-row sizes, exact8MiB/one-over boundaries and malformed length
+refusals without transferring large carriers. It depends on the original codec
+column validator. Complete protected delta derivation, retained parity, native
+work/overhead and installer registration remain required before ledger binding.

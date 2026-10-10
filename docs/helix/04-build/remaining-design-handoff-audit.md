@@ -1079,3 +1079,37 @@ current original driver frame ceiling is1MiB. A native length-only accounting pa
 or a separately qualified bounded transport is needed before composition. All
 four codec functions revoke PUBLIC EXECUTE. Complete native reservation,
 protected guards, installer readiness and acceptance promotion remain false.
+
+## Length-only native custody accounting — 2026-10-10
+
+[Three private size functions](../../../packages/postgresql/native/capacity-reservation/custody-size.sql)
+now calculate the candidate complete-frame size without constructing a frame or
+returning original carriers to the host. The operation/touch wrappers share the
+original codec column validator and measure every original field; their helper
+accepts only the complete ordered nullable nonnegative length array. Arithmetic
+uses bigint before addition, preserves all framing overhead and refuses above
+8MiB. This does not make supplied length arrays authoritative: the protected
+producer must call the original complete-row wrappers and bind their dependencies,
+physical identities, owners and exact private ACL before use.
+
+[The24-check PostgreSQL16.15 receipt](evidence/design-audit/custody-size-native.json)
+compares complete stored operation/touch sizes with an independent Python frame
+oracle, preserves the earlier frame controls, and adds exact8MiB length-only
+boundaries, negative/max-integer/malformed length refusals, an actual stored row
+at8MiB and its one-byte-over refusal, changed-column refusal and all three PUBLIC
+execute denials. Large carriers are built natively; only integer size leaves the
+server. The initial test run exposed ambiguous text-array bind inference; the
+checker now casts the bound length explicitly to integer. The corrected fresh
+isolated run passed; no implementation fallback or limit reduction was added.
+
+[UMF source capture](evidence/design-audit/custody-size-source.json) retains/reloads/
+exports all six CREATE/REVOKE statements exactly and executes that owner export.
+Declaration extraction remains incomplete (zero declarations/six unhandled).
+The original codec, accounting and sizing receipts retain separate pinned scopes.
+The length-only path removes the need to transport or construct a complete frame
+for size calculation; it does not prove composite argument allocation, detoasting,
+native work/cancellation, physical storage overhead or complete retained parity.
+Next bind complete OLD/NEW membership and size deltas to the protected producer,
+then independently check all retained members and ledger totals under original
+exclusion. Full reservation/installer qualification and acceptance promotion
+remain false; all seven mandatory protected bodies remain required.

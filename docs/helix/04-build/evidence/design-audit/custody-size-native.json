@@ -1,0 +1,150 @@
+{
+  "scope": "Native complete fixed-row byte sizing against independent Python oracle; synthetic administrative rows, not accepted semantic data or complete inventory/account proof",
+  "serverVersion": "16.15",
+  "observations": [
+    {
+      "id": "complete-operation-size",
+      "expected": 258,
+      "observed": 258
+    },
+    {
+      "id": "complete-touch-size",
+      "expected": 237,
+      "observed": 237
+    },
+    {
+      "id": "null-versus-empty-and-nonutf8",
+      "expected": "74727573732e637573746f64792e6f7065726174696f6e2f302e3100001000000000000000000001000000000000000001000000000000000400ffc3a901000000000000000400ffc3a901000000000000000400ffc3a901000000000000000400ffc3a901000000000000000400ffc3a901000000000000000400ffc3a901000000000000000400ffc3a901000000000000000400ffc3a901000000000000000400ffc3a901000000000000000400ffc3a901000000000000000400ffc3a901000000000000000400ffc3a901000000000000000400ffc3a901000000000000000400ffc3a9",
+      "observed": "74727573732e637573746f64792e6f7065726174696f6e2f302e3100001000000000000000000001000000000000000001000000000000000400ffc3a901000000000000000400ffc3a901000000000000000400ffc3a901000000000000000400ffc3a901000000000000000400ffc3a901000000000000000400ffc3a901000000000000000400ffc3a901000000000000000400ffc3a901000000000000000400ffc3a901000000000000000400ffc3a901000000000000000400ffc3a901000000000000000400ffc3a901000000000000000400ffc3a901000000000000000400ffc3a9"
+    },
+    {
+      "id": "exact8MiB-native-framing",
+      "expected": [
+        8388608,
+        "ababcd77a793cbab68255df2a34977eb3fefc87a48cd7e439991cc15cd2497ef"
+      ],
+      "observed": [
+        8388608,
+        "ababcd77a793cbab68255df2a34977eb3fefc87a48cd7e439991cc15cd2497ef"
+      ]
+    },
+    {
+      "id": "one-over8MiB",
+      "expected": "54000",
+      "observed": "54000"
+    },
+    {
+      "id": "missing-cell",
+      "expected": "22023",
+      "observed": "22023"
+    },
+    {
+      "id": "multidimensional-cells",
+      "expected": "22023",
+      "observed": "22023"
+    },
+    {
+      "id": "foreign-array-origin",
+      "expected": "22023",
+      "observed": "22023"
+    },
+    {
+      "id": "unknown-kind",
+      "expected": "22023",
+      "observed": "22023"
+    },
+    {
+      "id": "absent-operation-row",
+      "expected": "22023",
+      "observed": "22023"
+    },
+    {
+      "id": "absent-touch-row",
+      "expected": "22023",
+      "observed": "22023"
+    },
+    {
+      "id": "length-only-exact8MiB",
+      "expected": 8388608,
+      "observed": 8388608
+    },
+    {
+      "id": "length-only-one-over",
+      "expected": "54000",
+      "observed": "54000"
+    },
+    {
+      "id": "negative-length",
+      "expected": "22023",
+      "observed": "22023"
+    },
+    {
+      "id": "max-int-length-no-overflow",
+      "expected": "54000",
+      "observed": "54000"
+    },
+    {
+      "id": "missing-length",
+      "expected": "22023",
+      "observed": "22023"
+    },
+    {
+      "id": "multidimensional-lengths",
+      "expected": "22023",
+      "observed": "22023"
+    },
+    {
+      "id": "foreign-length-origin",
+      "expected": "22023",
+      "observed": "22023"
+    },
+    {
+      "id": "actual-stored-row-exact8MiB-size",
+      "expected": 8388608,
+      "observed": 8388608
+    },
+    {
+      "id": "actual-stored-row-one-over",
+      "expected": "54000",
+      "observed": "54000"
+    },
+    {
+      "id": "private-execute-truss.custody_size_original(text,integer[])",
+      "expected": false,
+      "observed": false
+    },
+    {
+      "id": "private-execute-truss.custody_operation_size_original(truss.row_home_operation)",
+      "expected": false,
+      "observed": false
+    },
+    {
+      "id": "private-execute-truss.custody_touch_size_original(truss.row_home_touch)",
+      "expected": false,
+      "observed": false
+    },
+    {
+      "id": "unmapped-native-column",
+      "expected": "55000",
+      "observed": "55000"
+    }
+  ],
+  "sourceSha256": {
+    "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f",
+    "docs/helix/04-build/evidence/design-audit/custody-codec-source.owner-export.sql": "5e40bdee7ec68277b34266cd60cfd3fca4ada24b417cccf5c041dd44dd56aa1d",
+    "docs/helix/04-build/evidence/design-audit/custody-size-source.owner-export.sql": "9e053ca758888ce7b37ee2f460346c32a97a9386ab88297cd4486c70dea711d5",
+    "packages/postgresql/native/capacity-reservation/custody-codec.sql": "7e998e2f3d5213503143b4b61af4a92e1e0a2d37912f9516bf2f14cdb98b5daa",
+    "packages/postgresql/native/capacity-reservation/custody-size.sql": "956fd70051216d9c05ec8c8e13a961979ea85618b44fea39d5d5ea1d99996fa8"
+  },
+  "producerSha256": "8fec5d38a6b24cd499d69ec13e1f7835dacf1847320ff45f3e78f1d914b55bbd",
+  "installerReady": false,
+  "nativeFullReservationQualified": false,
+  "acceptanceCasesPromoted": [],
+  "limitations": [
+    "No full original source/security/issuer/event/retained inventory or physical storage overhead proof",
+    "Framing bytes include all native cell representations and explicit overhead; not tuple/index/WAL size",
+    "8MiB tests observe only internal length/hash or length-only scalar, not qualified8MiB driver transport",
+    "No complete native argument allocation/repeated-copy/work/cancellation budget qualification",
+    "Administrative negative IDs/opaque carriers are codec images, not admitted graph values"
+  ]
+}
