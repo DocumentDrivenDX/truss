@@ -37,6 +37,9 @@ class HostExecutor:
         self._ordinal = 0
         self._arbitration_service = None
         self._arbitration_registration_lock = Lock()
+        self._lifecycle_lock = Lock()
+        self._native_claims = ()
+        self._native_claim_limit = 4096
 
     @staticmethod
     def _error(code, message):
@@ -48,6 +51,10 @@ class HostExecutor:
             return self._error('invalid_transaction', 'Executor disposed')
         if isolation not in ('read_committed', 'repeatable_read', 'serializable') or access_mode not in ('read_only', 'read_write'):
             return self._error('invalid_transaction', 'Unsupported requested transaction profile')
+        from ._native_transactions import NativeTransactionPort
+        if type(port) is NativeTransactionPort:
+            from ._native_adoption import adopt
+            return adopt(self, port, isolation=isolation, access_mode=access_mode)
         try:
             observed = port.observe()
         except Exception:
@@ -88,6 +95,10 @@ class HostExecutor:
     def _admission(self, handle, allow_failed=False):
         a = self._original_custody(handle)
         if self._closed or a is None or not a.usable:
+            return None
+        published = getattr(a.port, '_adoption_is_published', None)
+        if callable(published) and not published(a):
+            a.usable = False
             return None
         try:
             observed = a.port.observe()
@@ -167,4 +178,5 @@ class HostExecutor:
 
     def dispose(self) -> None:
         """Close admission; retain original custody, including unresolved commands."""
-        self._closed = True
+        with self._lifecycle_lock:
+            self._closed = True

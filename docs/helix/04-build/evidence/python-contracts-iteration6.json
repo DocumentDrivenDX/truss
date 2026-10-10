@@ -1,0 +1,54 @@
+{
+  "iteration": "Shared original-generation native adoption claim",
+  "reviewer": {
+    "model": "gpt-6-astra",
+    "reasoningEffort": "ultra",
+    "task": "/root/astra_plan_review",
+    "disposition": "Approved private component; no remaining blockers",
+    "independentEvidence": "All 19 native adoption tests passed independently",
+    "fixedFindings": [
+      "Exact adoption probe revision rather than ambient observation",
+      "Original observation retained after later same-port probe",
+      "Known published outcomes reconcile lost replies",
+      "Stable issuer and executor custody across failed publication, disposal and GC"
+    ]
+  },
+  "sourceSha256": {
+    "packages/python/src/truss/_native_adoption.py": "6c4e83acb5455ba89ca9b09ce7e0dc0394cab20e1c6807accb64705e830c45cc",
+    "packages/python/src/truss/_native_transactions.py": "1e4828a9800912dca82a116461959e4acc0649f1702289887238c2695c70fb7c",
+    "packages/python/src/truss/_native_pg8000.py": "764305ec882e7cb8bca4146b0316959a9e4feabfbf4adcd7f825fc657fc648b8",
+    "packages/python/src/truss/_host_execution.py": "6d6e97197df5cfa7aa76c1c0c062b90cbf467e9f1c3ca4c313a53ab631ee7866",
+    "packages/python/tests/test_native_adoption.py": "a103ff3fc7ff8d360a6dfe7c2bf5df38c67212c49f24bf1506bad19099ce6c2b"
+  },
+  "nativeProfile": {
+    "driver": "pg8000 1.31.5 native",
+    "python": "3.11.17",
+    "postgresql": "16.15",
+    "runtime": "pgserver 0.1.4+truss.pg16.15 corrected candidate"
+  },
+  "fullSourceSuite": {
+    "tests": 202,
+    "result": "passed",
+    "logSha256": "e4073805e9515cf25a6043bf5680a0b2f16494c963a0d43c1befcb12ee0d3f1a"
+  },
+  "finalInstalledTests": {
+    "tests": 70,
+    "result": "passed",
+    "nativeTests": 45,
+    "sourceInstalledByteMatchingModules": 35,
+    "cwd": "/private/tmp",
+    "logSha256": "2741f8a4105aae19cd9bd3b2f2b99d2474d798293b7210414a7f22a53d476922",
+    "scope": "Installed wheel with source fixtures and existing dependencies; not clean distribution or public consumer workflow"
+  },
+  "wheelSha256": "564b606e18f5d6deab95b0798d4dd5981de2e81c6b430466d62c5bd344bbea4b",
+  "scope": "Private cooperative original-generation adoption across executors. Administrative native tests; not public adoption, protected authority or full heap qualification.",
+  "remainingGates": [
+    "Shared arbitration and original native/resource ledger integration",
+    "Containment/recovery and verified operation completion",
+    "Complete selected resource profile qualification",
+    "Public ReferenceAssembly and capabilities; accepted catalog-to-feed workflow"
+  ],
+  "ownerAlignment": {
+    "securityOwner": "Association semantics committed; backend obligation mappings underway. No new protected authority contract adopted."
+  }
+}

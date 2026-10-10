@@ -374,6 +374,12 @@ composition, not public adoption, protected capability admission or completed
 arbitration/resource verification.
 The original issuer now reserves monotone canonical positive uint64 epochs before
 fresh BEGIN/chain submission, burns uncertain reservations, and refuses exhaustion
-before SQL. Repeated BEGIN preserves its active epoch even at exhaustion. Atomic
-original-generation adoption claims across separate executor objects remain a
-required shared-arbitration integration gate.
+before SQL. Repeated BEGIN preserves its active epoch even at exhaustion. The private `_native_adoption` component now reserves original-generation claims
+across separate executors before observation SQL. Exact probe and call revision
+correspondence prevent unrelated observations from supplying adoption evidence.
+Competing claims refuse before SQL; uncertainty retains original custody, while
+known profile mismatch permits an exact refund. Already published outcomes
+reconcile lost replies. Custody survives executor disposal and garbage collection.
+Retention bounds cover claim counts, not total heap usage. Shared arbitration,
+native resource-ledger verification and containment/recovery remain required
+before exposing public host adoption.

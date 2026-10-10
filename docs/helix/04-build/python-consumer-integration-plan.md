@@ -164,6 +164,15 @@ inferred from these administrative native component tests. See
 The native issuer reserves canonical positive uint64 epochs monotonically under
 its original boundary lock before fresh BEGIN/chain submission. Failed or
 uncertain reservations never rewind. Repeated BEGIN preserves the existing epoch;
-exhaustion refuses fresh/chain controls before native effects. Cross-executor
-adoption still needs an atomic original-generation claim before observation;
-the current executor-local duplicate check does not qualify that shared gate.
+exhaustion refuses fresh/chain controls before native effects. Iteration 6 now supplies the atomic original-generation claim before observation
+across separate executors. The claim captures only its exact native adoption
+probe and requires unchanged call revision through final publication. Competing
+claims refuse before SQL. Known profile mismatch refunds that exact claim;
+uncertain publication retains original custody across disposal and garbage
+collection. Lost replies reconcile already published success or known refusal.
+Count bounds refuse before SQL; they do not qualify total heap usage.
+
+Astra Ultra independently passed all 19 adoption tests and approved this private
+iteration. See [evidence/python-contracts-iteration6.json](evidence/python-contracts-iteration6.json).
+C02 remains open for shared arbitration/native resource-ledger integration and
+containment/recovery qualification before public adoption.

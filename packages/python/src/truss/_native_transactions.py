@@ -17,6 +17,20 @@ from ._native_pg8000 import NativeBoundary, NativeBoundaryRefusal
 class _Generation:
     identity: str
     ended: bool = False
+    adoption: object = None
+
+
+@dataclass(frozen=True)
+class _NativeObservation:
+    observation: TransactionObservation
+    port: object
+    generation: _Generation
+    token: object
+    call: object
+    revision: int
+    person: str
+    role: str
+    xid: str | None
 
 
 @dataclass(frozen=True, eq=False)
@@ -42,9 +56,13 @@ class _Control:
 
 
 class NativeTransactions:
-    def __init__(self, boundary, *, savepoint_limit=256):
+    def __init__(self, boundary, *, savepoint_limit=256, adoption_limit=256):
         if type(boundary) is not NativeBoundary or type(savepoint_limit) is not int or savepoint_limit < 1:
             raise ValueError('Original boundary and positive exact limit required')
+        if type(adoption_limit) is not int or adoption_limit < 1:
+            raise ValueError('Positive exact adoption retention limit required')
+        self._adoption_limit = adoption_limit
+        self._adoption_custody = ()
         self._boundary = boundary
         self._identity = uuid4().hex
         self._state = _State()
@@ -197,6 +215,7 @@ class NativeTransactionPort:
         self._tracker, self._generation, self._token = tracker, generation, token
         self._savepoints = {}
         self._last_observation = None
+        self._last_native_observation = None
 
     def bind_operation(self, token):
         with self._tracker._boundary._lock:
@@ -218,6 +237,12 @@ class NativeTransactionPort:
             return self._tracker._live(self._savepoints.get(name))
 
     def observe(self):
+        return self._observe()
+
+    def _observe_for_adoption(self, claim):
+        return self._observe(claim)
+
+    def _observe(self, claim=None):
         t = self._tracker
         with t._boundary._lock:
             self._require_scope()
@@ -235,20 +260,35 @@ class NativeTransactionPort:
                 if t._cached is None or t._cached.transaction_identity != state.generation.identity:
                     raise NativeBoundaryRefusal('Original cleanup observation unavailable')
                 return replace(t._cached, state='failed')
-        rows = t._boundary.run("SELECT pg_catalog.current_setting('transaction_isolation'), pg_catalog.current_setting('transaction_read_only'), session_user::pg_catalog.text, current_user::pg_catalog.text, pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text", token=self._token)
-        if len(rows) != 1 or len(rows[0]) != 5:
-            raise NativeBoundaryRefusal('Actual transaction observation unavailable')
-        isolation, readonly, person, role, xid = rows[0]
-        if isolation not in ('read committed', 'repeatable read', 'serializable') or readonly not in ('on', 'off'):
-            raise NativeBoundaryRefusal('Actual profile unsupported')
-        observation = TransactionObservation(t._identity, state.generation.identity, isolation.replace(' ', '_'), 'read_only' if readonly == 'on' else 'read_write', 'active')
-        self.person, self.role, self.xid = person, role, xid
-        with t._boundary._lock:
-            if state.generation is not t._state.generation or t._state.status != b'T':
-                raise NativeBoundaryRefusal('Original generation changed during observation')
+        completed = []
+        def capture(call, rows):
+            if not call.capture_complete or call.final_status != b'T' or state.generation is not t._state.generation:
+                raise NativeBoundaryRefusal('Original native observation unsettled')
+            if len(rows) != 1 or len(rows[0]) != 5:
+                raise NativeBoundaryRefusal('Actual transaction observation unavailable')
+            isolation, readonly, person, role, xid = rows[0]
+            if isolation not in ('read committed', 'repeatable read', 'serializable') or readonly not in ('on', 'off'):
+                raise NativeBoundaryRefusal('Actual profile unsupported')
+            observation = TransactionObservation(t._identity, state.generation.identity, isolation.replace(' ', '_'), 'read_only' if readonly == 'on' else 'read_write', 'active')
+            record = _NativeObservation(observation, self, state.generation, self._token, call, call.revision, person, role, xid)
+            completed.append(record)
+            self.person, self.role, self.xid = person, role, xid
             t._cached = observation
             self._last_observation = observation
-        return observation
+            self._last_native_observation = record
+            from ._native_adoption import capture_original
+            if claim is not None:
+                capture_original(claim, self, record)
+        sql = "SELECT pg_catalog.current_setting('transaction_isolation'), pg_catalog.current_setting('transaction_read_only'), session_user::pg_catalog.text, current_user::pg_catalog.text, pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text"
+        from ._native_adoption import start_probe
+        preflight = (lambda: start_probe(claim, self)) if claim is not None else None
+        t._boundary._call(lambda: t._boundary._connection.run(sql), self._token, on_complete=capture, preflight=preflight)
+        return completed[0].observation
+
+    def _adoption_is_published(self, adoption):
+        from ._native_adoption import is_published
+        with self._tracker._boundary._lock:
+            return is_published(self._generation, adoption)
 
     def control(self, sql):
         with self._tracker._boundary._lock:
