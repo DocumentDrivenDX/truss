@@ -2,11 +2,11 @@
 
 ## Current execution frontier — 2026-10-10
 
-The current [Python source checkpoint](evidence/design-audit/python-resource-registration-preflight-source.json)
-passes114 tests. A [fresh separately installed wheel](evidence/design-audit/python-boundary-gated-installed-suite.json)
-also passes114 tests, including the resource registration preflight, with all25
+The current [Python source checkpoint](evidence/design-audit/python-capture-receive-source.json)
+passes119 tests. A [fresh separately installed wheel](evidence/design-audit/python-capture-receive-installed-suite.json)
+also passes119 tests, including resource registration and native capture receive, with all26
 modules matching original source/wheel/installed bytes. Build/install/import/test
-logs are retained alongside the receipt. The earlier112-test wheel remains
+logs are retained alongside the receipt. The earlier114/112-test wheels remain
 historical evidence rather than the current distribution checkpoint.
 The71-test installed wheel below is historical. Public
 Python exports remain local-runtime lifecycle only. Catalog install/apply/import,
@@ -2009,3 +2009,13 @@ checks unchanged checker/source/test membership. The real negative control refus
 an unmapped nested module before staging/build/install/test. Complete installation
 inventory/native security and published release automation remain separate gates;
 this is not a setuptools-wide or protected-engine support claim.
+
+
+[Capture receive native62](evidence/design-audit/row-image-capture-receive-native.json)
+now carries actual descriptor/completion and immutable original typed-image cells
+through the private Python receive boundary before nested cascade attribution.
+Current source and fresh installed-wheel suites pass119 with26 matching modules;
+102 mapped import edges and16 actual boundary controls pass. Result framing and
+input-cell limits do not prove complete selected scope, original capture origin,
+current authority or whole receive/work/account lifetime. The substitution
+counterexample remains an explicit PA05 prerequisite, not closed by this decoder.

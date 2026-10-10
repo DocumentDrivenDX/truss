@@ -1816,3 +1816,33 @@ composition. The attribution component remains private and intentionally does
 not consult live parents or implement current authorization. No complete row-
 touch/body/corpus acceptance follows from64 component observations; original
 capture/context/scope and owner/property codec qualification remain unfinished.
+
+
+## Python original capture receive boundary — 2026-10-10
+
+The private `_row_image_capture` decoder retains immutable original kind/bytea
+rows and decoded images together after checking exact image_kind/original_image
+column names, SELECT completion/count, row shape, supported kinds and complete
+aggregate input-cell byte/count bounds. All input cells preflight before any
+image decoder; mismatched kind/frame, duplicate image identity and conflicting
+node/state associations refuse. Mutable bytearray payloads are not retained.
+Containers can subsequently change without changing captured originals.
+
+[Source119](evidence/design-audit/python-capture-receive-source.json) includes
+five new receive tests alongside the full existing suite. [Native62](evidence/design-audit/row-image-capture-receive-native.json)
+uses original pg8000 descriptors (text25/bytea17) and captured native completion
+tag bytes before decode; it does not fabricate completion from len(rows).
+Both actual state captures flow through this decoder, retain21 total original
+images, and supply the existing nested cascade/rollback attribution checks.
+Driver subclassing is qualification-harness instrumentation, not an adopted
+receive/account/settlement port. Full original source/descriptor/wire-profile
+admission, pre-ingress driver accounting and actual transport lifetime stay open.
+
+A completed SELECT describes the returned result, not its independently required
+scope. Even an empty decoded result cannot prove an absent selected state.
+The decoder does not authenticate retained-state origin or close the previously
+reproduced substitution counterexample. Complete original producer/context/scope/
+cut/authority correspondence is still required before semantic contribution or
+publication. This introduces no public export, policy resolver or SQL compiler.
+The explicit26-module/102-edge map retains driver-free decoding;16 real boundary
+controls include private-capture export and driver refusal.

@@ -1,0 +1,743 @@
+{
+  "scope": "Fresh separately installed wheel complete existing Python component suite; not protected engine release",
+  "stage": "/private/tmp/truss-fresh-wheel-uh7bokiw",
+  "wheel": "/private/tmp/truss-fresh-wheel-uh7bokiw/wheel/truss_toolkit-0.0.1.dev0-py3-none-any.whl",
+  "installed": "/private/tmp/truss-fresh-wheel-uh7bokiw/installed",
+  "wheelSha256": "03cd96fa92c60512a0ea156b0366a1c482ba5d2bd8c2f9217a70a4c29dd8f66d",
+  "python": "3.11.17 (main, Oct  3 2026, 00:54:14) [Clang 22.1.3 ]",
+  "testsPassed": 119,
+  "loadedPackage": "/private/tmp/truss-fresh-wheel-uh7bokiw/installed/truss/__init__.py",
+  "exports": [
+    "LocalPostgres",
+    "LocalRuntimeError",
+    "RuntimeInfo"
+  ],
+  "modules": [
+    {
+      "path": "truss/__init__.py",
+      "sha256": "e9d7aacb2f5a5da077ffc24500422876892c3f68a7f595f059fd4189f25a83b5"
+    },
+    {
+      "path": "truss/_acceptance_json.py",
+      "sha256": "303638af137138a796542aa5425985d147e510a23639fca9b2d6221966337a01"
+    },
+    {
+      "path": "truss/_accounted_receive.py",
+      "sha256": "f1f6bc7d84d3cbdc4ba93ddb514d68898f60c99358c7cb2a719701139d674e78"
+    },
+    {
+      "path": "truss/_directory_resources.py",
+      "sha256": "1c3bff1ec23e9d241b710188223539adfdf896a31601c6ce5d46f46d2bc0ab48"
+    },
+    {
+      "path": "truss/_installation_resources.py",
+      "sha256": "abaab39777891125da2f522cd2a0f3a6702896a05464cf344eddbc2acff08759"
+    },
+    {
+      "path": "truss/_operation_admission.py",
+      "sha256": "f96462208c14230670370d0b12f9b5d38ef1c20861175bcab8777c2c687dbb30"
+    },
+    {
+      "path": "truss/_operation_ordinal.py",
+      "sha256": "10d4717462ff14c7524ed793db0ac7b94f56e1d6b88158081a4f300981193977"
+    },
+    {
+      "path": "truss/_operation_registry.py",
+      "sha256": "7e74c34c9b0a874af8e7c0c743357aff2c848cc4c8ae3ed2404542ce18ec667d"
+    },
+    {
+      "path": "truss/_query_execution.py",
+      "sha256": "9cf9d08a45f0b31ef1621c9bed47eb879715771583dd467ecb57b8278115b0aa"
+    },
+    {
+      "path": "truss/_receipt_position.py",
+      "sha256": "e7c42049947c4bda44c0ac9e62e23b73143c6129f07f9ee889ef186364f19eba"
+    },
+    {
+      "path": "truss/_resource_account.py",
+      "sha256": "6a10966e502c16a3ab8972bba34a999ca675fdb7a59e5c3ac93a7c713b6468f1"
+    },
+    {
+      "path": "truss/_row_event_attribution.py",
+      "sha256": "5ef265df339899cde5fba9e3f229d0709671f29ecb15ebf54bbeced7e8b9181b"
+    },
+    {
+      "path": "truss/_row_group_custody.py",
+      "sha256": "b39f7f4e17243d846fc60b3fff02807d168a93c23adf793a8be4fcd2abf3dcdd"
+    },
+    {
+      "path": "truss/_row_image.py",
+      "sha256": "0c793edbd8c45e440511ffbd2ac7e344c47be80f85ee28bf0164ce6e1f073df9"
+    },
+    {
+      "path": "truss/_row_image_capture.py",
+      "sha256": "377bb631b3dd939436dc89c50b6ca4f188a99e5352e8a18d8f6a30037f593125"
+    },
+    {
+      "path": "truss/_row_operation_address.py",
+      "sha256": "51af38dbda5c94f8a3ca8c92af3abef1f9919d1d44f6ae1c872c609b747eaf08"
+    },
+    {
+      "path": "truss/_row_operation_context.py",
+      "sha256": "aeaa86163233a597c554f977d3c82badcbf8290a336e47b5e1ff8c64c66794ca"
+    },
+    {
+      "path": "truss/_row_operation_custody.py",
+      "sha256": "1783d3bccfae06526f3be9149622e7f4ae9afd0cd833a7905e7a8b27300a0445"
+    },
+    {
+      "path": "truss/_row_registry_correspondence.py",
+      "sha256": "f0229b5032aa1801dba1cf85ddf0d6be84a087baf1f51c9482475a5b1e6c2282"
+    },
+    {
+      "path": "truss/_row_touch_registry.py",
+      "sha256": "332c37d656bbf825ab119422714330277d9988eef280fc6f72fff26e2d5e778b"
+    },
+    {
+      "path": "truss/cli.py",
+      "sha256": "6a6b3fb751a73b7d338f531d514ec3e4b94c7fb58d4fe80351ff630a7cc7df37"
+    },
+    {
+      "path": "truss/local_runtime.py",
+      "sha256": "1a837b5575c2f8b08e2b699256a90d971ed7e2112d40bccc7c197b92ad6023a9"
+    },
+    {
+      "path": "truss/migration_planning.py",
+      "sha256": "1523a466555ab7b4075f501edd0570f9465c67a67558d2733b5c06984571c3a6"
+    },
+    {
+      "path": "truss/numeric.py",
+      "sha256": "4833d54fda887fa70171511761d28ea75a0dc22aa89a50c3eae2a88f2b972d18"
+    },
+    {
+      "path": "truss/timestamp.py",
+      "sha256": "b08dbf2a9c48754282f05429a58b66515c75a815f6e1282d3c485248f762120c"
+    },
+    {
+      "path": "truss/weft.py",
+      "sha256": "331af0ce6b2f974f7d8ba69c1da90825dfa92c7e57a06cec5aed90a3ec4cd3be"
+    }
+  ],
+  "sourceTestSha256": {
+    "packages/python/tests/test_acceptance_json.py": "fdef3f104a89070ac6377a08af3970f351b4c8994916758db5469f3542c90eb2",
+    "packages/python/tests/test_accounted_receive.py": "076cd45bae4ed12fd594aabad9674bbb5a2663cffcf865d76ff56c19954289f5",
+    "packages/python/tests/test_directory_resources.py": "928878bb47c12c90ee9f98033dda36e9838cce80c0de83c5e3ee25140494f7d4",
+    "packages/python/tests/test_exact_numeric.py": "1b7753e6692cd19575e401612056159dae06df6c2769589800ce0429a165c458",
+    "packages/python/tests/test_exact_timestamp.py": "8d9d1c2364d474d98f1ab63ad586a8c3c11148ff12950e94bef424f1e997379f",
+    "packages/python/tests/test_installation_resources.py": "24a7baca8b7034360a01982dd09c6b88818f9518ac922ef73e5000f93f3703ee",
+    "packages/python/tests/test_local_runtime.py": "9c690fa7be8839eca9d95663e3af2dae1289ba01909adbdf693e5a5dc7a176f5",
+    "packages/python/tests/test_migration_planning.py": "f967bffffefc22e62378e8410f19c5f5ddd6b84895c53c0a9fccb0c65388e8d6",
+    "packages/python/tests/test_operation_admission.py": "50ed2a3ebbd82e02f7e1a055ba66d38db347ec8c27965052d3cecfe68b1f98b7",
+    "packages/python/tests/test_operation_ordinal.py": "a5fa4ede8f756767c7916e9e4cfba35496c43114247d82ebea914f186af3293a",
+    "packages/python/tests/test_operation_registry.py": "bb210a0e1ca1428ece5b63fbdae0a02ff09ad9807e0f6400c04da73e8e995db3",
+    "packages/python/tests/test_query_execution.py": "403759cc37ae7c1b5b0bdf025bed23e4eaa84fc0715ce362c605ffe4edc30ed0",
+    "packages/python/tests/test_receipt_position.py": "deb2f95c0dc04bb6f615f680aadcf88bc7d707e0dabebb407f2d4212af4068a7",
+    "packages/python/tests/test_resource_account.py": "c74ad5271cca163249e65dad15cfdbfb3ba2ff75bf42462f6fbf72aa5eba09b2",
+    "packages/python/tests/test_resource_registration_preflight.py": "5f7ca57e291ba76645c37a7405005db81a0b30b2f3f034c6d6bd18706ded7ba1",
+    "packages/python/tests/test_row_event_attribution.py": "3b1492a678b12f182c546511c455ed1df951c92fd23473e1b5cb8582f50b45ac",
+    "packages/python/tests/test_row_group_custody.py": "91c9ff5078d4f6e18414227487f6991db44785433c3761d481727c08d06aa0a3",
+    "packages/python/tests/test_row_image.py": "306a88711bcd722d8fb5777aaa6e6f3e59c554ad6803d5a320ac9eb60e256c05",
+    "packages/python/tests/test_row_image_capture.py": "625cd53420fe2540a31fd4a9ffa662d341497a970bbbae04187abfdb26511d9a",
+    "packages/python/tests/test_row_operation_address.py": "71a468e516a3c3bdd257b9e1abc7cd18ffee114e1af889a425780aad61bd43ec",
+    "packages/python/tests/test_row_operation_context.py": "f59a659d5afa1d543060c0ef4653ab946249c183f67e258c11ae18257615b35a",
+    "packages/python/tests/test_row_operation_custody.py": "10384de66272d5dcfe296aa5387b463995cf4a8f3036ec7e116636076bece853",
+    "packages/python/tests/test_row_operation_json.py": "c99efd63b0a78b35bc8c7d9de0565bb2b5bd30244e1babf88550ecb5cceb910f",
+    "packages/python/tests/test_row_registry_correspondence.py": "842dca68f100f06ea000075258ea4bb1652029bdfa5dc62b599ceba42dfd6c22",
+    "packages/python/tests/test_row_touch_registry.py": "9d46552a61b1dd3426be78152b410f575b7d272b086334074fa9afda8389cc83",
+    "packages/python/tests/test_touch_operation_correspondence.py": "fad338c7887d88294a4668b5d6e25612d993df1c7b1fd27d730df76626846031",
+    "packages/python/tests/test_weft.py": "7ff2541d371c16c8d8d84b573f20a7961c4cbb2f5d434db3ce45d207e83d7591"
+  },
+  "sourcePackagingSha256": "e9d7bc6f562394cde73f0508c0157704fd102c421c0b4477fa2924a4f61d9067",
+  "moduleBoundary": {
+    "command": [
+      "/private/tmp/truss-pgserver-corrected-test-env/bin/python",
+      "/Users/erik/Projects/truss/scripts/check-module-boundaries.py",
+      "--json"
+    ],
+    "checkerSha256": "1cebd8a3d0139b27758a6e325a6d6220bb7424ed1811c25aabb17e8cfba1eb95",
+    "result": {
+      "edgeCount": 102,
+      "edges": [
+        {
+          "line": 2,
+          "source": "__init__",
+          "target": "truss.local_runtime"
+        },
+        {
+          "line": 6,
+          "source": "_acceptance_json",
+          "target": "json"
+        },
+        {
+          "line": 8,
+          "source": "_accounted_receive",
+          "target": "struct"
+        },
+        {
+          "line": 9,
+          "source": "_accounted_receive",
+          "target": "threading"
+        },
+        {
+          "line": 10,
+          "source": "_accounted_receive",
+          "target": "truss._resource_account"
+        },
+        {
+          "line": 2,
+          "source": "_directory_resources",
+          "target": "os"
+        },
+        {
+          "line": 3,
+          "source": "_directory_resources",
+          "target": "stat"
+        },
+        {
+          "line": 4,
+          "source": "_directory_resources",
+          "target": "threading"
+        },
+        {
+          "line": 5,
+          "source": "_directory_resources",
+          "target": "truss._installation_resources"
+        },
+        {
+          "line": 6,
+          "source": "_installation_resources",
+          "target": "dataclasses"
+        },
+        {
+          "line": 7,
+          "source": "_installation_resources",
+          "target": "hashlib"
+        },
+        {
+          "line": 8,
+          "source": "_installation_resources",
+          "target": "truss._resource_account"
+        },
+        {
+          "line": 69,
+          "source": "_installation_resources",
+          "target": "json"
+        },
+        {
+          "line": 7,
+          "source": "_operation_admission",
+          "target": "dataclasses"
+        },
+        {
+          "line": 8,
+          "source": "_operation_admission",
+          "target": "inspect"
+        },
+        {
+          "line": 9,
+          "source": "_operation_admission",
+          "target": "threading"
+        },
+        {
+          "line": 6,
+          "source": "_operation_ordinal",
+          "target": "dataclasses"
+        },
+        {
+          "line": 7,
+          "source": "_operation_ordinal",
+          "target": "threading"
+        },
+        {
+          "line": 6,
+          "source": "_query_execution",
+          "target": "dataclasses"
+        },
+        {
+          "line": 7,
+          "source": "_query_execution",
+          "target": "inspect"
+        },
+        {
+          "line": 8,
+          "source": "_query_execution",
+          "target": "threading"
+        },
+        {
+          "line": 9,
+          "source": "_query_execution",
+          "target": "types"
+        },
+        {
+          "line": 10,
+          "source": "_query_execution",
+          "target": "weakref"
+        },
+        {
+          "line": 11,
+          "source": "_query_execution",
+          "target": "truss.weft"
+        },
+        {
+          "line": 2,
+          "source": "_receipt_position",
+          "target": "base64"
+        },
+        {
+          "line": 3,
+          "source": "_receipt_position",
+          "target": "binascii"
+        },
+        {
+          "line": 4,
+          "source": "_receipt_position",
+          "target": "dataclasses"
+        },
+        {
+          "line": 5,
+          "source": "_receipt_position",
+          "target": "json"
+        },
+        {
+          "line": 6,
+          "source": "_receipt_position",
+          "target": "re"
+        },
+        {
+          "line": 7,
+          "source": "_receipt_position",
+          "target": "truss._acceptance_json"
+        },
+        {
+          "line": 6,
+          "source": "_resource_account",
+          "target": "dataclasses"
+        },
+        {
+          "line": 7,
+          "source": "_resource_account",
+          "target": "threading"
+        },
+        {
+          "line": 2,
+          "source": "_row_event_attribution",
+          "target": "dataclasses"
+        },
+        {
+          "line": 3,
+          "source": "_row_event_attribution",
+          "target": "struct"
+        },
+        {
+          "line": 4,
+          "source": "_row_event_attribution",
+          "target": "truss._row_image"
+        },
+        {
+          "line": 2,
+          "source": "_row_group_custody",
+          "target": "dataclasses"
+        },
+        {
+          "line": 3,
+          "source": "_row_group_custody",
+          "target": "truss._acceptance_json"
+        },
+        {
+          "line": 4,
+          "source": "_row_group_custody",
+          "target": "truss._row_operation_address"
+        },
+        {
+          "line": 5,
+          "source": "_row_group_custody",
+          "target": "truss._row_operation_custody"
+        },
+        {
+          "line": 2,
+          "source": "_row_image",
+          "target": "dataclasses"
+        },
+        {
+          "line": 3,
+          "source": "_row_image",
+          "target": "struct"
+        },
+        {
+          "line": 2,
+          "source": "_row_image_capture",
+          "target": "dataclasses"
+        },
+        {
+          "line": 3,
+          "source": "_row_image_capture",
+          "target": "truss._row_image"
+        },
+        {
+          "line": 4,
+          "source": "_row_image_capture",
+          "target": "truss._row_event_attribution"
+        },
+        {
+          "line": 2,
+          "source": "_row_operation_address",
+          "target": "dataclasses"
+        },
+        {
+          "line": 3,
+          "source": "_row_operation_address",
+          "target": "json"
+        },
+        {
+          "line": 4,
+          "source": "_row_operation_address",
+          "target": "truss._acceptance_json"
+        },
+        {
+          "line": 5,
+          "source": "_row_operation_address",
+          "target": "truss._row_operation_custody"
+        },
+        {
+          "line": 2,
+          "source": "_row_operation_context",
+          "target": "dataclasses"
+        },
+        {
+          "line": 3,
+          "source": "_row_operation_context",
+          "target": "truss._acceptance_json"
+        },
+        {
+          "line": 4,
+          "source": "_row_operation_context",
+          "target": "truss._row_operation_address"
+        },
+        {
+          "line": 5,
+          "source": "_row_operation_context",
+          "target": "truss._row_operation_custody"
+        },
+        {
+          "line": 6,
+          "source": "_row_operation_context",
+          "target": "truss._row_group_custody"
+        },
+        {
+          "line": 2,
+          "source": "_row_operation_custody",
+          "target": "base64"
+        },
+        {
+          "line": 3,
+          "source": "_row_operation_custody",
+          "target": "dataclasses"
+        },
+        {
+          "line": 4,
+          "source": "_row_operation_custody",
+          "target": "hashlib"
+        },
+        {
+          "line": 5,
+          "source": "_row_operation_custody",
+          "target": "re"
+        },
+        {
+          "line": 6,
+          "source": "_row_operation_custody",
+          "target": "truss._acceptance_json"
+        },
+        {
+          "line": 2,
+          "source": "_row_registry_correspondence",
+          "target": "dataclasses"
+        },
+        {
+          "line": 3,
+          "source": "_row_registry_correspondence",
+          "target": "truss._operation_registry"
+        },
+        {
+          "line": 4,
+          "source": "_row_registry_correspondence",
+          "target": "truss._row_operation_address"
+        },
+        {
+          "line": 5,
+          "source": "_row_registry_correspondence",
+          "target": "truss._row_operation_context"
+        },
+        {
+          "line": 6,
+          "source": "_row_registry_correspondence",
+          "target": "truss._row_group_custody"
+        },
+        {
+          "line": 7,
+          "source": "_row_registry_correspondence",
+          "target": "truss._row_operation_custody"
+        },
+        {
+          "line": 99,
+          "source": "_row_registry_correspondence",
+          "target": "truss._row_touch_registry"
+        },
+        {
+          "line": 100,
+          "source": "_row_registry_correspondence",
+          "target": "truss._row_operation_custody"
+        },
+        {
+          "line": 2,
+          "source": "_row_touch_registry",
+          "target": "dataclasses"
+        },
+        {
+          "line": 3,
+          "source": "_row_touch_registry",
+          "target": "truss._operation_registry"
+        },
+        {
+          "line": 4,
+          "source": "_row_touch_registry",
+          "target": "truss._row_operation_address"
+        },
+        {
+          "line": 5,
+          "source": "_row_touch_registry",
+          "target": "truss._row_operation_custody"
+        },
+        {
+          "line": 2,
+          "source": "cli",
+          "target": "argparse"
+        },
+        {
+          "line": 3,
+          "source": "cli",
+          "target": "json"
+        },
+        {
+          "line": 4,
+          "source": "cli",
+          "target": "pathlib"
+        },
+        {
+          "line": 5,
+          "source": "cli",
+          "target": "signal"
+        },
+        {
+          "line": 6,
+          "source": "cli",
+          "target": "threading"
+        },
+        {
+          "line": 20,
+          "source": "cli",
+          "target": "truss"
+        },
+        {
+          "line": 2,
+          "source": "local_runtime",
+          "target": "dataclasses"
+        },
+        {
+          "line": 3,
+          "source": "local_runtime",
+          "target": "importlib.metadata"
+        },
+        {
+          "line": 4,
+          "source": "local_runtime",
+          "target": "importlib.resources"
+        },
+        {
+          "line": 5,
+          "source": "local_runtime",
+          "target": "pathlib"
+        },
+        {
+          "line": 6,
+          "source": "local_runtime",
+          "target": "subprocess"
+        },
+        {
+          "line": 7,
+          "source": "local_runtime",
+          "target": "threading"
+        },
+        {
+          "line": 58,
+          "source": "local_runtime",
+          "target": "pgserver"
+        },
+        {
+          "line": 59,
+          "source": "local_runtime",
+          "target": "fasteners"
+        },
+        {
+          "line": 2,
+          "source": "migration_planning",
+          "target": "dataclasses"
+        },
+        {
+          "line": 3,
+          "source": "migration_planning",
+          "target": "re"
+        },
+        {
+          "line": 4,
+          "source": "migration_planning",
+          "target": "typing"
+        },
+        {
+          "line": 5,
+          "source": "migration_planning",
+          "target": "truss._acceptance_json"
+        },
+        {
+          "line": 8,
+          "source": "numeric",
+          "target": "dataclasses"
+        },
+        {
+          "line": 9,
+          "source": "numeric",
+          "target": "decimal"
+        },
+        {
+          "line": 6,
+          "source": "timestamp",
+          "target": "dataclasses"
+        },
+        {
+          "line": 7,
+          "source": "timestamp",
+          "target": "datetime"
+        },
+        {
+          "line": 8,
+          "source": "timestamp",
+          "target": "re"
+        },
+        {
+          "line": 10,
+          "source": "timestamp",
+          "target": "truss.numeric"
+        },
+        {
+          "line": 6,
+          "source": "weft",
+          "target": "dataclasses"
+        },
+        {
+          "line": 7,
+          "source": "weft",
+          "target": "decimal"
+        },
+        {
+          "line": 8,
+          "source": "weft",
+          "target": "hashlib"
+        },
+        {
+          "line": 9,
+          "source": "weft",
+          "target": "inspect"
+        },
+        {
+          "line": 10,
+          "source": "weft",
+          "target": "json"
+        },
+        {
+          "line": 11,
+          "source": "weft",
+          "target": "threading"
+        },
+        {
+          "line": 12,
+          "source": "weft",
+          "target": "types"
+        },
+        {
+          "line": 13,
+          "source": "weft",
+          "target": "typing"
+        }
+      ],
+      "errors": [],
+      "passed": true,
+      "scope": "python-only",
+      "unqualified": [
+        "TypeScript imports",
+        "native SQL dependencies",
+        "reflection/indirect dynamic execution",
+        "runtime private-object visibility"
+      ]
+    },
+    "beforeBuild": true,
+    "sourceTestMembershipUnchanged": true
+  },
+  "commands": [
+    [
+      "/private/tmp/truss-pgserver-corrected-test-env/bin/python",
+      "-m",
+      "pip",
+      "wheel",
+      "--no-deps",
+      "--no-build-isolation",
+      "--wheel-dir",
+      "/private/tmp/truss-fresh-wheel-uh7bokiw/wheel",
+      "/private/tmp/truss-fresh-wheel-uh7bokiw/source"
+    ],
+    [
+      "/private/tmp/truss-pgserver-corrected-test-env/bin/python",
+      "-m",
+      "pip",
+      "install",
+      "--no-deps",
+      "--no-compile",
+      "--target",
+      "/private/tmp/truss-fresh-wheel-uh7bokiw/installed",
+      "/private/tmp/truss-fresh-wheel-uh7bokiw/wheel/truss_toolkit-0.0.1.dev0-py3-none-any.whl"
+    ],
+    [
+      "/private/tmp/truss-pgserver-corrected-test-env/bin/python",
+      "-c",
+      "import json,truss;print(json.dumps({\"loaded\":truss.__file__,\"exports\":truss.__all__}))"
+    ],
+    [
+      "/private/tmp/truss-pgserver-corrected-test-env/bin/python",
+      "-W",
+      "error",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "/Users/erik/Projects/truss/packages/python/tests",
+      "-v"
+    ]
+  ],
+  "logs": {
+    "build.log": "58ee37aa5ce29b4d44b68804ed184058ce46335adb21d7a39bd4ff516e460e47",
+    "install.log": "0e570614d99816e0f2f0c6e70c1bcc7861e0f168c7d69b7a742f967976c7273c",
+    "import.log": "f9c1d0398f84b52b872924289da2459b67678551279e1952f0154a51a9514ac0",
+    "tests.log": "7f1f6e4c9a6e1e96928b461e629f4453fa5ccbaec15d9a10274fe82f66042c89"
+  },
+  "producerSha256": "85e912e3f78897748eafa41d06f47967a0e80471047fcb89e8b11c65b1571b31",
+  "sourceWheelInstalledBytesExact": true,
+  "published": false,
+  "completeEngineQualified": false,
+  "installationQualified": false,
+  "migrationExecutionQualified": false,
+  "limitations": [
+    "Local corrected pgserver environment, not published default or managed profile",
+    "Source tests use checked-in external fixture files; not hermetic dependency closure",
+    "Public exports remain local runtime lifecycle only",
+    "Private component checks do not prove protected mutation/query/journal/feed or installation APIs"
+  ]
+}

@@ -644,3 +644,12 @@ external setuptools invocation or future release workflow already invokes it,
 nor qualify native dependency closure, runtime privacy or the protected engine.
 The release pipeline must invoke this same verifier/gate rather than rebuilding
 a test-only dependency checker or excluding new source from the release map.
+
+
+[Current capture-receive installed checkpoint](evidence/design-audit/python-capture-receive-installed-suite.json)
+now passes119 tests from a fresh26-module wheel with exact source/wheel/installed
+bytes and the real102-edge boundary gate. It includes the five new private
+receive tests and preserves lifecycle-only public exports. Earlier114/112 wheels
+remain historical evidence. Complete original capture/context/current authority,
+qualified pre-ingress/settlement driver, native installation and public consumer
+operations remain required; package parity does not supply those facts.
