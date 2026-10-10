@@ -332,3 +332,43 @@ host resubmission is a separately counted attempt with fresh original admission,
 nonreused ordinal and unchanged request idempotency rules. This test extension is
 not_run pending the full driver/issuer/guard composition; synthetic no-retry
 callbacks alone cannot pass it.
+
+
+## OC02 versus OC06: complete native registry selection
+
+Supplement existing US-044 rollback/lifetime coverage using CONTRACT-001's
+original two-statement registry observation and the selected writer/observer/
+commit profile. This is a native integration schedule, not a new public selector
+or a structural-decoder acceptance verdict. Setup must establish the actual
+physical connection/transaction/cut, complete statement descriptors/termination,
+original issuer/account and current security context before interpreting rows.
+Author independently expected complete surviving operation and effect inventories.
+No fixture may insert a forged accepted operation or finalize a row to bypass a
+missing protected producer.
+
+| Original native state/action | Observer OC02 expectation | Commit OC06 expectation / independent observation |
+| --- | --- | --- |
+| No assigned xid; no admitted operation | Refuse unregistered graph effects; observing must not assign xid. | Cannot turn unassigned identity into an authenticated operation/commit scope. Ordinary untouched host transaction behavior stays with its actual selected profile. |
+| Assigned xid, empty complete registry | Refuse original effect attribution. | Empty registry is not proof of absent required graph/feed effects or settled reservations; independently establish all applicable original obligations. |
+| One unfinished operation plus earlier finalized operations | Select the one unfinished operation only after complete original context/authority checks. | Refuse until every surviving operation is finalized and complete obligations/reservations agree; retain earlier rows/results. |
+| Two unfinished operations | Refuse ambiguity without newest/max-ordinal selection. | Refuse unfinished scope; no automatic deletion, finalization or helper retry to force uniqueness. |
+| Multiple finalized operations; zero unfinished | Refuse any new effect attributed to an already finalized ordinal. | Validate all surviving operations and full current union, not an empty unfinished subset. Omitted earlier operation/contribution or unresolved reservation refuses. |
+| A finalized, then B legally changes the same owner and finalizes | A cannot authorize new effects; B retains fresh original identity/custody. | Validate current graph against complete current obligations while retaining A's immutable earlier result. Do not require A's old candidate to equal the later final graph. |
+| Host rolls back A's original savepoint, then admits B | A's retained host capture refuses; B uses a freshly issued ordinal under the same original shared issuer. | Collect only actual surviving native membership, while original rollback/capture invalidation and resource settlement remain independently required. Row absence cannot confirm an unknown rollback. |
+
+For every state preserve complete original sixteen-column rows, including phases
+and explicit nullable generations/result bytes. Independently observe actual native
+xid, all surviving identities and graph/journal/feed/capacity state before/after.
+Use actual registered fault/containment paths for missing/ambiguous/foreign state;
+raw administrative mutation is a separately labeled tamper control, never valid
+positive setup. A returned SELECT row count cannot authenticate descriptor/cycle
+completion, native scope completeness or original principal membership.
+
+Repeat with early immediate constraints, savepoint release/rollback, foreign
+transaction capture, late dirty-generation change and repeated deferred firing.
+All real repeated collection/comparison work remains charged. Confirmed refusal
+preserves caller-owned earlier work; uncertain native termination retains the
+original attempt and prevents reuse. Do not filter finalized history, fabricate
+empty results, cache old context or count structural decoder success as current
+operation or commit authority. These cases remain not_run until the complete
+registered driver/account/security/native body composition is available.
