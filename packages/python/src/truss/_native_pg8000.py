@@ -43,6 +43,14 @@ class _Ownership:
     completed: tuple = ()
 
 
+@dataclass(eq=False)
+class _OperationRelease:
+    owner: object
+    token: object
+    before: object
+    after: object
+    published: bool = False
+
 class NativeBoundary:
     def __init__(self, connection, *, event_bytes=65536, event_count=256, prepared_limit=256):
         from pg8000.native import Connection
@@ -157,18 +165,38 @@ class NativeBoundary:
             return original(data, context)
         return capture
 
-    def acquire_operation(self):
+    def acquire_operation(self, *, original_token=None):
+        if original_token is not None and type(original_token) is not object:
+            raise NativeBoundaryRefusal('Original preallocated scope token required')
         with self._lock:
             if self._quarantined or self._calling or self._operation is not None:
                 raise NativeBoundaryRefusal('Native boundary unavailable or busy')
-            self._operation = object()
+            self._operation = object() if original_token is None else original_token
             return self._operation
 
-    def release_operation(self, token):
+    def reserve_operation_release(self, token):
+        with self._lock:
+            if token is not self._operation or token is None or self._calling or self._quarantined or self._operation_ledger is not None or self._pending_operation_ledger is not None:
+                raise NativeBoundaryRefusal('Original scope release reservation unavailable')
+            return _OperationRelease(self,token,self._ownership,replace(self._ownership,operation=None))
+
+    def release_operation(self, token, *, original_release=None):
         with self._lock:
             if token is not self._operation or token is None or self._calling or self._quarantined or self._operation_ledger is not None or self._pending_operation_ledger is not None:
                 raise NativeBoundaryRefusal('Original operation cannot be released')
-            self._operation = None
+            if original_release is None:
+                self._operation=None
+                return
+            if (type(original_release) is not _OperationRelease or original_release.owner is not self
+                or original_release.token is not token or original_release.before is not self._ownership
+                or original_release.after.operation is not None or original_release.published):
+                raise NativeBoundaryRefusal('Original release transition correspondence unavailable')
+            try:
+                self._publish_ownership(original_release.after)
+            except BaseException:
+                if self._ownership is original_release.after: original_release.published=True
+                raise
+            original_release.published=True
 
     def _call(self, invoke, token=None, *, closing=False, preflight=None, lifecycle=None, on_complete=None, resource=None, on_settled=None, cleanup=None):
         with self._lock:

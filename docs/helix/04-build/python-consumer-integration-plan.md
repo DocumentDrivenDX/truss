@@ -306,3 +306,40 @@ This remains a cooperative private administrative tool; it adds no public runtim
 operation and does not close PA01 or installer readiness. Next work remains
 protected capture/writer composition with the security owner, then the first
 catalog/apply/read workflow under the original host transaction.
+
+## PY-C02 automatic original host-call scope — Astra Ultra iteration 12
+
+Compose a private synchronous host-session facade over the original native
+boundary/tracker, executor and exactly one existing arbitration service. Hold the
+physical guard through complete adoption/savepoint calls and Python publication;
+reserve retained descriptors before submission. Preallocate savepoint handle,
+replacement map and response custody for create/rollback/release. A lost reply
+after exact publication can reconcile the original result; an uncertain native
+or publication window retains its original token and closes admission.
+
+Explicit host BEGIN/COMMIT/ROLLBACK remains caller-owned. Preserve actual native
+COMMIT, ROLLBACK (including failed-transaction COMMIT), deferred-constraint abort
+and unacknowledged sent COMMIT distinctly. Disposal must not end the caller
+transaction. Test sequential reuse, multiple facades sharing the original domain,
+busy/capacity refusal, failed-state restoration, allocation/publication faults,
+BaseException and disposal during admitted publication in an installed wheel.
+
+This does not create an E06 lease or completion by registration. A confirmed live
+executor savepoint transfers into original transaction custody; it cannot claim
+that all semantic-operation savepoints were released. Public adoption/factory
+promotion still requires its control-specific original completion/resource
+producer, qualified cancellation/recovery and assembled-operation admission.
+Protected capabilities separately need the original PA02–PA05 owner composition.
+Keep exports closed until those gates have authoritative passing evidence.
+
+Iteration 12 delivers the private facade, preallocated native/port/executor
+publication and settlement custody, and nonblocking shared executor map admission.
+The final installed wheel passes 298 tests, including 29 native scope scenarios;
+44 Python modules and six packaged owner assets match source byte for byte.
+Actual COMMIT/ROLLBACK command acknowledgements remain known if Ready is lost,
+with quarantined handback and original exclusion/generation retained. Error-based
+settlement classifications still require complete matching Ready. Independent
+connections verify persisted and discarded rows after the real native tag fault.
+See [iteration 12 evidence](evidence/python-contracts-iteration12.json).
+The public C02/E06 and protected owner gates above remain open; prioritize their
+completion before promoting the facade or declaring the consumer workflow ready.

@@ -3,7 +3,7 @@
 Unit-test ports provide component evidence only. Never advertise these handles
 as admitted protected transactions or expose this executor as a public capability.
 """
-from dataclasses import replace
+from dataclasses import dataclass, replace
 from uuid import uuid4
 from threading import Lock
 from ._host_contracts import TransactionHandle, _Adoption
@@ -13,12 +13,24 @@ class SavepointHandle:
     def __init__(self, issuer, key):
         self._issuer, self._key = issuer, key
 
+@dataclass(eq=False)
+class _SavepointPublication:
+    handle: object
+    transaction: object
+    candidate: dict
+    ordinal: int
+    success: object
+    phase: str = 'prepared'
+
 class HostExecutor:
     """One synchronous executor over explicit trusted ports; no connection pool."""
     def __init__(self):
         self._issuer = object()
         self._transactions = {}
         self._savepoints = {}
+        self._savepoint_publications = ()
+        self._savepoint_publication_limit = 4096
+        self._savepoint_publication_lock = Lock()
         self._closed = False
         self._ordinal = 0
         self._arbitration_service = None
@@ -120,19 +132,66 @@ class HostExecutor:
         return Ok(None)
 
     def savepoint(self, transaction: TransactionHandle) -> Outcome[SavepointHandle]:
+        if not self._savepoint_publication_lock.acquire(blocking=False):
+            return self._error('execution_obligation','Original executor savepoint publication busy')
+        try:
+            return self._savepoint(transaction)
+        finally:
+            self._savepoint_publication_lock.release()
+
+    def _savepoint(self, transaction: TransactionHandle) -> Outcome[SavepointHandle]:
         a = self._admission(transaction)
         if a is None:
             return self._admission_error(transaction)
+        if len(self._savepoint_publications)>=self._savepoint_publication_limit:
+            return self._error('execution_obligation', 'Savepoint publication retention exhausted')
+        preflight=getattr(a.port,'_preflight_control',None)
+        if callable(preflight) and not preflight('savepoint'):
+            return self._error('execution_obligation','Original native savepoint capacity unavailable')
         key = 'truss_' + uuid4().hex
-        result = self._command(a, 'SAVEPOINT ' + key)
-        if isinstance(result, Error):
-            return result
         handle = SavepointHandle(self._issuer, key)
-        self._savepoints[key] = (handle, transaction, self._ordinal)
+        candidate = dict(self._savepoints)
+        candidate[key] = (handle, transaction, self._ordinal)
+        success = Ok(handle)
+        publication = _SavepointPublication(handle,transaction,candidate,self._ordinal,success)
+        # All handle/map/success custody exists before the first SAVEPOINT.
+        self._savepoint_publications = (*self._savepoint_publications,publication)
         self._ordinal += 1
-        return Ok(handle)
+        try:
+            result = self._command(a, 'SAVEPOINT ' + key)
+        except BaseException:
+            publication.phase = 'unresolved'
+            a.usable = False
+            raise
+        if isinstance(result, Error):
+            publication.phase = 'unresolved'
+            return result
+        try:
+            self._publish_savepoint_map(candidate)
+        except Exception:
+            if self._savepoints is not candidate:
+                publication.phase = 'unresolved'
+                a.usable = False
+                return self._error('transaction_unusable', 'Original savepoint publication unresolved')
+        except BaseException:
+            publication.phase = 'unresolved'
+            a.usable = False
+            raise
+        publication.phase = 'published'
+        return success
+
+    def _publish_savepoint_map(self, candidate):
+        self._savepoints = candidate
 
     def _savepoint_command(self, transaction, savepoint, rollback):
+        if not self._savepoint_publication_lock.acquire(blocking=False):
+            return self._error('execution_obligation','Original executor savepoint publication busy')
+        try:
+            return self._savepoint_command_locked(transaction,savepoint,rollback)
+        finally:
+            self._savepoint_publication_lock.release()
+
+    def _savepoint_command_locked(self, transaction, savepoint, rollback):
         a = self._admission(transaction, allow_failed=rollback)
         if a is None:
             return self._admission_error(transaction)
@@ -149,12 +208,32 @@ class HostExecutor:
                 return self._error('transaction_unusable', 'Original savepoint observation unavailable')
             if not live:
                 return self._error('invalid_transaction', 'Original native savepoint absent or shadowed')
-        result = self._command(a, ('ROLLBACK TO SAVEPOINT ' if rollback else 'RELEASE SAVEPOINT ') + savepoint._key)
-        if isinstance(result, Ok):
-            for key, candidate in list(self._savepoints.items()):
-                if candidate[1] is transaction and (candidate[2] > entry[2] or (not rollback and key == savepoint._key)):
-                    del self._savepoints[key]
-        return result
+        if len(self._savepoint_publications)>=self._savepoint_publication_limit:
+            return self._error('execution_obligation','Savepoint publication retention exhausted')
+        preflight=getattr(a.port,'_preflight_control',None)
+        if callable(preflight) and not preflight('rollback_to' if rollback else 'release'):
+            return self._error('execution_obligation','Original native control capacity unavailable')
+        candidate={key:item for key,item in self._savepoints.items()
+                   if not (item[1] is transaction and (item[2]>entry[2] or (not rollback and key==savepoint._key)))}
+        success=Ok(None)
+        publication=_SavepointPublication(savepoint,transaction,candidate,entry[2],success)
+        self._savepoint_publications=(*self._savepoint_publications,publication)
+        try:
+            result=self._command(a,('ROLLBACK TO SAVEPOINT ' if rollback else 'RELEASE SAVEPOINT ')+savepoint._key)
+            if isinstance(result,Error):
+                publication.phase='unresolved'
+                return result
+            try:
+                self._publish_savepoint_map(candidate)
+            except Exception:
+                if self._savepoints is not candidate: raise
+            publication.phase='published'
+            return success
+        except BaseException as error:
+            publication.phase='unresolved'
+            a.usable=False
+            if not isinstance(error,Exception): raise
+            return self._error('transaction_unusable','Original savepoint publication unresolved')
 
     def rollback_to_savepoint(self, transaction, savepoint) -> Outcome[None]:
         return self._savepoint_command(transaction, savepoint, True)

@@ -17,6 +17,7 @@ ALLOWED = {
     'groups': {'dataclasses', 'typing', 'truss.contracts', 'truss.execution'},
     'imports': {'dataclasses', 'typing', 'truss.contracts', 'truss.execution'},
     '_installed_admission_inventory': {'dataclasses', 'hashlib', 'json', 'importlib.resources', 'typing'},
+    '_host_session': {'dataclasses', 'threading', 'truss._host_execution', 'truss._native_transactions', 'truss._native_arbitration', 'truss._native_pg8000', 'truss.execution'},
     '_host_contracts': {'dataclasses', 'truss.execution'},
     '_host_execution': {'dataclasses', 'threading', 'truss._host_contracts', 'truss._native_adoption', 'truss._native_transactions', 'truss.execution', 'uuid'},
     '_native_adoption': {'dataclasses', 'truss._host_contracts', 'truss._native_pg8000', 'truss.execution', 'uuid'},

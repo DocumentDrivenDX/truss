@@ -1,0 +1,80 @@
+{
+  "iteration": 12,
+  "scope": "Private synchronous cooperative original host-call scopes and savepoint publication custody",
+  "baseCommit": "4536b40f",
+  "review": "Astra Ultra approved plan, completed source and final installed artifact; approval recorded in conversation",
+  "wheelSha256": "749b51369a3456ceaaa65a51d24836c294de5ab9e701e96212f7eb8edf56d906",
+  "regressionSuite": {
+    "tests": 298,
+    "passed": true,
+    "installedWheelOutsideCheckout": true,
+    "seconds": 35.67,
+    "logSha256": "6c47c55f995c78d4be952e8b228df2f1fc6703cb2cb669da65454f45b9a02a4f"
+  },
+  "focusedNativeSuite": {
+    "tests": 29,
+    "passed": true,
+    "seconds": 2.376,
+    "logSha256": "ef0001103c5818c175286225c72ac1a3b1ab18dd614cf293ef07dd61539ab8e5"
+  },
+  "runtime": {
+    "python": "3.11.17",
+    "postgres": "16.15",
+    "pgserver": "0.1.4+truss.pg16.15",
+    "pg8000": "1.31.5"
+  },
+  "identicalSourceWheelInstalledModules": 44,
+  "identicalPackagedOwnerAssets": 6,
+  "moduleBoundaryImports": 197,
+  "publicExportsChanged": false,
+  "C02Complete": false,
+  "E06Qualified": false,
+  "installerReady": false,
+  "scenarios": [
+    "Original host BEGIN/adoption/savepoint/rollback/release/COMMIT and sequential epochs",
+    "Failed-transaction COMMIT produces actual ROLLBACK; deferred constraint abort carries SQLSTATE",
+    "Preallocated native/port/executor publications and settlement envelopes; allocation faults retain original custody",
+    "Lost acquisition/release replies; exact historical handback survives a later host call or facade",
+    "Two physical boundaries sharing one executor cannot lose each other\u2019s savepoint maps",
+    "Busy and session-capacity refusals precede SQL; native control-capacity refusal submits no savepoint/control, may follow profile observation SQL, and preserves prior custody",
+    "BaseException and disposal during admitted publication retain unresolved custody",
+    "Actual native COMMIT and ROLLBACK command tags captured before injected missing Ready; independent connection proves committed or discarded rows; original generation and guard remain retained"
+  ],
+  "settlementQualification": {
+    "commandTags": "One exact original non-chained COMMIT\u0000 or ROLLBACK\u0000, matching original control kind and generation; known outcome does not imply Ready or reusable connection",
+    "errorDerivedOutcomes": "Require complete matching Ready",
+    "primarySources": [
+      "https://raw.githubusercontent.com/postgres/postgres/REL_16_15/src/backend/tcop/postgres.c",
+      "https://raw.githubusercontent.com/postgres/postgres/REL_16_15/src/backend/tcop/utility.c"
+    ]
+  },
+  "remaining": [
+    "Control-specific original completion/resource producer and cancellation/recovery qualification before public adoption",
+    "Assembled E06 admission; registration is not a lease or completion",
+    "Protected PA02-PA05 owner capture and writer composition",
+    "Public ReferenceAssembly and first real catalog/apply/read workflow"
+  ],
+  "limitations": [
+    "Trusted cooperative host only; arbitrary raw aliases or hostile hosts are not qualified",
+    "Synchronous native transport controls only; no public graph/mutation/import/readiness operation added",
+    "Fault injection proves selected native publication windows, not total allocation or cancellation coverage"
+  ],
+  "sourceSha256": {
+    "packages/python/src/truss/_host_session.py": "504b6e2d6acc048ae5daf20a8785315480ccda6fd054fea339f0e381fb66a760",
+    "packages/python/src/truss/_host_execution.py": "2c5ebedfe467cdcaaba8a01dd32113a5dae644256301fc5f1e3b2656114c1137",
+    "packages/python/src/truss/_native_pg8000.py": "4cf0efaf089602e79d175ca9ea0fbf879cf526ed825c07d670f231eee54a57a1",
+    "packages/python/src/truss/_native_transactions.py": "71cdd51fbf7e1463fa3421d6e265ecce20aa3db960fc29916eefe151d38968fe",
+    "packages/python/tests/test_host_session.py": "cdca964787c647804d443b096d903a2c184ad15ee29020ff1de0978e654ef2f8",
+    "scripts/check-module-boundaries.py": "8ce1152818dd26e7648416f61b3b3dc50b5685e8035c3fe778f838de4459aac0"
+  },
+  "securitySync": "Assess security control support remains active: Astra reviewed binding tests and formal replay; JSON typing/cardinality and count/preflight guard qualification refinements underway. No newly qualified protected owner capture/writer adopted.",
+  "astraIndependentReview": {
+    "planApproved": true,
+    "sourceApproved": true,
+    "finalWheelApproved": true,
+    "focusedNativeTests": 29,
+    "verifiedFullSuiteTests": 298,
+    "identicalModules": 44,
+    "identicalOwnerAssets": 6
+  }
+}

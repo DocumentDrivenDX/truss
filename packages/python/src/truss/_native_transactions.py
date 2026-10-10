@@ -143,7 +143,7 @@ class NativeTransactions:
                 keep = index + (1 if control.kind == 'rollback_to' else 0)
                 self._state = replace(state, status=b'T', savepoints=state.savepoints[:keep])
 
-    def _control(self, kind, sql, *, token=None, savepoint=None, chain=False, cleanup=None):
+    def _control(self, kind, sql, *, token=None, savepoint=None, chain=False, cleanup=None, prepared_savepoint=None):
         with self._boundary._lock:
             state = self._state
             if kind in ('commit', 'rollback') and state.generation is None:
@@ -151,7 +151,11 @@ class NativeTransactions:
             if kind == 'savepoint':
                 if state.status != b'T' or len(state.savepoints) >= self._limit:
                     raise NativeBoundaryRefusal('Savepoint unavailable or capacity exhausted')
-                savepoint = _Savepoint(savepoint, state.generation)
+                if prepared_savepoint is None:
+                    savepoint = _Savepoint(savepoint, state.generation)
+                elif (type(prepared_savepoint) is _Savepoint and prepared_savepoint.generation is state.generation and prepared_savepoint.name==savepoint):
+                    savepoint = prepared_savepoint
+                else: raise NativeBoundaryRefusal('Original preallocated savepoint required')
             if kind in ('rollback_to', 'release') and not self._live(savepoint):
                 raise NativeBoundaryRefusal('Original savepoint absent or shadowed')
             candidate = None
@@ -210,12 +214,21 @@ class NativeTransactions:
             return NativeTransactionPort(self, self._state.generation, token)
 
 
+@dataclass(eq=False)
+class _PortControl:
+    kind: str
+    native_call: object = None
+    phase: str = 'prepared'
+
 class NativeTransactionPort:
     def __init__(self, tracker, generation, token):
         self._tracker, self._generation, self._token = tracker, generation, token
         self._savepoints = {}
         self._last_observation = None
         self._last_native_observation = None
+        self._pending_savepoint = None
+        self._control_records = ()
+        self._last_control = None
 
     def bind_operation(self, token):
         with self._tracker._boundary._lock:
@@ -290,6 +303,16 @@ class NativeTransactionPort:
         with self._tracker._boundary._lock:
             return is_published(self._generation, adoption)
 
+    def _preflight_control(self, kind):
+        with self._tracker._boundary._lock:
+            self._require_scope()
+            if len(self._control_records)>=4096: return False
+            if kind=='savepoint' and (self._tracker._state.status!=b'T' or len(self._tracker._state.savepoints)>=self._tracker._limit): return False
+            return True
+
+    def _publish_savepoint_map(self, candidate):
+        self._savepoints = candidate
+
     def control(self, sql):
         with self._tracker._boundary._lock:
             self._require_scope()
@@ -299,9 +322,32 @@ class NativeTransactionPort:
         if match is None: raise NativeBoundaryRefusal('Only exact executor savepoint controls accepted')
         kind, name = match.groups()
         t = self._tracker
-        if kind == 'SAVEPOINT':
-            self._savepoints[name] = t.savepoint(name, token=self._token)
-        else:
-            handle = self._savepoints.get(name)
-            if kind == 'ROLLBACK TO SAVEPOINT': t.rollback_to(handle, token=self._token)
-            else: t.release(handle, token=self._token)
+        if len(self._control_records)>=4096: raise NativeBoundaryRefusal('Original control retention exhausted')
+        record=_PortControl(kind)
+        self._control_records=(*self._control_records,record)
+        self._last_control=record
+        before=t._boundary.last_call
+        try:
+            if kind=='SAVEPOINT':
+                original=_Savepoint(name,t._state.generation)
+                candidate=dict(self._savepoints)
+                candidate[name]=original
+                self._pending_savepoint=(original,candidate)
+                t._control('savepoint','SAVEPOINT '+t._name(name),token=self._token,
+                           savepoint=name,prepared_savepoint=original)
+                record.native_call=t._boundary.last_call
+                try:
+                    self._publish_savepoint_map(candidate)
+                except Exception:
+                    if self._savepoints is not candidate: raise
+                self._pending_savepoint=None
+            else:
+                handle=self._savepoints.get(name)
+                if kind=='ROLLBACK TO SAVEPOINT': t.rollback_to(handle,token=self._token)
+                else: t.release(handle,token=self._token)
+                record.native_call=t._boundary.last_call
+            record.phase='published'
+        except BaseException:
+            if t._boundary.last_call is not before: record.native_call=t._boundary.last_call
+            record.phase='unresolved'
+            raise
