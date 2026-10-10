@@ -1781,3 +1781,38 @@ bytes are administrative inputs. Complete original owner/property/catalog codecs
 authority/scope/driver exclusion, full accounting and publication remain external.
 Earlier30/36/39-check fixtures and receipts remain unchanged; no seven-body
 binding, corpus verdict or public API is promoted.
+
+
+## Retained-state origin correspondence counterexample — 2026-10-10
+
+[Native64](evidence/design-audit/row-image-nested-correspondence-native.json)
+retains the preceding60 real nested cascade checks and adds exact missing-node,
+duplicate-state and changed-scalar-source-byte refusals. Each checks the intended
+reason, so a count/byte allowance failure cannot stand in for correspondence.
+
+The fourth new control reproduces a material limitation: with the actual native
+OLD scalar unchanged, replacing only its retained state's object-owner bytes
+projects owner200 instead of the native original owner100. This is an altered
+host projection, not a native row, admitted capture or permission bypass. Its
+complete state bytes do not match the original captured state. It demonstrates
+that `_row_event_attribution` is event-local attribution over independently
+admitted originals, not authentication of the state/cohort origin. A valid typed
+image and matching scalar bytes cannot grant scope or contribution authority.
+
+The next protected prestate composition must retain the complete original capture
+alongside its existing original operation-context/prestate artifact custody:
+actual registered producer/descriptor/completion, original physical connection/
+transaction and operation ordinal/context, exact admitted native relation/profile,
+complete selected owner/property scope, snapshot/exclusion/freshness and charged
+resource lifetime. Verify these facts and full retained capture bytes before
+passing decoded images to attribution. Preserve originals through all events and
+rollback; reject an altered state even when the event image itself still matches.
+Do not manufacture authority by hashing a replacement, accepting caller scope
+labels or adding a caller-supplied authenticated flag. Reuse existing original
+context/artifact and security-owner contracts rather than inventing a new resolver.
+
+This counterexample is a required negative scenario for PA05's original producer
+composition. The attribution component remains private and intentionally does
+not consult live parents or implement current authorization. No complete row-
+touch/body/corpus acceptance follows from64 component observations; original
+capture/context/scope and owner/property codec qualification remain unfinished.

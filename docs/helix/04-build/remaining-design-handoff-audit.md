@@ -1981,3 +1981,14 @@ decimal token, timestamp text/instant and binary/opaque bytes. This closes the
 finite simple-root/string-only capture coverage gap; independently admitted
 logical owner/property/catalog interpretation, complete protected prestate,
 whole-account and semantic observer/publication qualification remain missing.
+
+
+[Retained correspondence64](evidence/design-audit/row-image-nested-correspondence-native.json)
+now verifies missing-node/duplicate-state/changed-scalar original refusals and
+reproduces a substituted retained-state owner projection with unchanged native
+OLD scalar bytes. This changes PA05's next required evidence: complete original
+capture/context/scope correspondence must close before event-local attribution;
+matching the event's bytes alone cannot establish the retained parent's origin.
+The control is a corrupted host projection, not an admitted native capture or
+an ordinary-role permission bypass. No additional live-parent lookup or competing
+security policy is introduced.
