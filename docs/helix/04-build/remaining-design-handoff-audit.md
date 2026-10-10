@@ -4,13 +4,15 @@
 
 The [current local deployment target](../02-design/contracts/reference-local-deployment.proposal.md)
 now supersedes the historical17.11/older-layout/TypeScript-only assumptions with
-the owner-selected pgserver/Python direction and observed16.2 component tuple.
+the owner-selected pgserver/Python direction. The original16.2 component tuple
+is historical and cannot qualify R4/R5; the private corrected16.15 candidate is
+the next integration target, with complete native admission still unqualified.
 Python ownership, document qualification, refusal without automatic retries and
 host connection ownership are settled. Traversal necessity remains engineering
 review rather than a blocking product vote. The complete default installation,
 populated migration route and coherent driver/security/resource/compiler profile
 remain implementation/adoption work. In particular, Weft's17.9 fixture registration
-cannot qualify the16.2 runtime. Current security-owner inventory correspondence
+cannot qualify the corrected local runtime. Current security-owner inventory correspondence
 work remains separate from backend support-profile admission; neither is adopted
 from an in-progress chat. Built Python planner/decoder evidence closes only those
 packaged components, not original administrative observation or execution.
@@ -86,7 +88,12 @@ for these inspected surfaces. Original driver, settlement, report-accounting,
 identity/native enforcement and independent full-state observations remain
 implementation exits; these planned cases have not been run.
 
-Use this order for the next implementation cycle, while retaining every
+The accelerated P0–P4 queue in the [installation plan](local-runtime-installation-migration-plan.md#accelerated-capability-queue--owner-direction-2026-10-09)
+is authoritative for delivery: fresh install/verify and bootstrap reconciliation
+precede usable Python operations; complete populated migration is P4. The table
+below retains component dependencies, not a mandate to finish M1 before Python.
+
+Use that delivery queue while retaining every
 B-001–B-015 deliverable and all 45 stories/167 criteria. This sequence does not
 turn partial runtime evidence into design completion or remove unresolved owner
 decisions from the governing queue.
@@ -110,13 +117,13 @@ reference corpus; these consumer inputs supplement it.
 
 | Next output | Known source basis and unresolved adoption |
 | --- | --- |
-| Explicit consumer query naming | Both original models lack core Record/Field names required by Weft. The exact [name proposal](../03-test/consumer-explicit-names.proposal.json) is UMF-valid and preserves other JSON content/key correspondence. Consumer source adoption or an owner-admitted projection is still required; runtime preparation must not insert names silently |
+| Explicit consumer query naming | The frozen2026-10-09 revision supplies35 authored core names. The [revision receipt](evidence/design-audit/consumer-revision-2026-10-09.json) preserves original source/model bytes and semantic comparison; the old name proposal remains historical. Fresh revised frontend observations resolve80/90 steps; five relationship-predicate steps on each model still refuse. No native execution or public parsed-input ABI is qualified |
 | Core relationship identity binding | Actual UMF selection and Weft source resolve core endpoint key ID `identity`, distinct from display name `Identity`. That source question is closed at inspected scope; original native/key/codec and selected compiler binding remain open |
 | Complete vocabulary/action support disposition | Existing DDD registration validates both originals and rejects malformed identities. Placement/actions remain uninterpreted; retain complete content/diagnostics and specify support disposition. The host action-to-group adapter requires exact qualification, without a Truss action DSL or ACL fork |
 | Parsed/paged/count query admission | Consumer parser excludes ORDER BY/LIMIT while Weft bounded grouped count requires them. Ordinary relationship equality also needs explicit mapping to owner relationship predicates. Consume the owner parsed-input ABI or an explicitly agreed interim route; no local SQL append/reparse workaround |
 | Whole-entity host projection | Original alias.* expects relationship and attribution enrichment beyond authored Record members. Map explicit projections under one native/security cut. The consumer relationship list bound is 100; define per-list to query-level truncation correspondence and separately admit aggregate/column bounds |
 | Original consumer conformance adapter | Map all 41 original cases through registered operations/fixtures and complete observers. Fake passes, partial row assertions and covers labels cannot replace full Truss state/journal/report/receipt/settlement evidence or C7 interchange |
-| Reached-result compatibility | The original invalid/unissued-token case expects false without qualified comparison evidence. Resolve the [specific consumer mismatch](conformance-runtime-handoff.md#consumer-reached-result-compatibility-gap) with its source owner; preserve Truss refusal/unavailable and valid exclusion/inclusion distinctions |
+| Reached-result compatibility | The frozen2026-10-09 requirements now require Invalid for malformed/unissued tokens and accept epoch/commit-aware positions. That source mismatch is closed; the [receipt-position design](../02-design/receipt-position-and-reached.proposal.md) preserves invalid/unavailable versus qualified false/true. Native issuance, snapshot comparison, retention and safe security projection remain required |
 | Independent required-capability assessment | Seven original read expectations can change to Unsupported from the candidate descriptor; filtered runs can omit applicable cases. Freeze required capabilities/cases independently, retain original host verdicts and assess complete authority/replica execution separately as [specified in C2/C4](conformance-runtime-handoff.md#consumer-runner-pass-versus-required-capability-qualification) |
 
 These are concrete engineering/shared-owner inputs rather than new product votes.
@@ -586,8 +593,9 @@ production, installed authority, full operation allocations or committed databas
 interchange. Those decisive exits and the existing package/profile selections
 remain open rather than being relabeled complete by codec observations.
 
-A fresh byte comparison confirms the original consumer requirements still equal
-the captured 2026-10-08 artifact. R5's explicit mismatched-supplied-actor refusal
+At this historical checkpoint the consumer requirements matched the captured
+2026-10-08 artifact. The separately frozen2026-10-09 revision now supersedes
+that source-currentness claim; neither snapshot is silently overwritten. R5's explicit mismatched-supplied-actor refusal
 is now retained as its own PY-03/04 negative case, alongside authenticated native
 actor and preserved action-extension positives. Mere actor/metadata separation
 cannot replace that required refusal. Exact claim surface and origin admission
