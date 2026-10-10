@@ -3,10 +3,11 @@
 ## Current execution frontier — 2026-10-10
 
 The current [Python source checkpoint](evidence/design-audit/python-resource-registration-preflight-source.json)
-passes114 tests. The [current fresh installed wheel](evidence/design-audit/python-current-touch-installed-suite.json)
-passes112 tests with all25 modules matching its pinned source/wheel/installed bytes.
-It predates the new resource registration preflight; current114 source is not yet
-a replacement installed-wheel checkpoint.
+passes114 tests. A [fresh separately installed wheel](evidence/design-audit/python-current-resource-installed-suite.json)
+also passes114 tests, including the resource registration preflight, with all25
+modules matching original source/wheel/installed bytes. Build/install/import/test
+logs are retained alongside the receipt. The earlier112-test wheel remains
+historical evidence rather than the current distribution checkpoint.
 The71-test installed wheel below is historical. Public
 Python exports remain local-runtime lifecycle only. Catalog install/apply/import,
 key/edge reads, mutation, journal/feed and migration APIs remain unreleased.

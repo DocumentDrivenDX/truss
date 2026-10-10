@@ -551,3 +551,25 @@ independent source/target/archive/marker facts. Restart a separate process for
 the same original recovery reference; test both authorized resolution and opaque
 observation_unavailable without a recipe replay. These schedules remain not_run;
 component planner/registry tests do not qualify settlement classification.
+
+
+## Current fresh distribution checkpoint — 2026-10-10
+
+[Fresh installed evidence](evidence/design-audit/python-current-resource-installed-suite.json)
+now covers all114 current component tests and all25 Python modules. The new
+`scripts/check-python-fresh-wheel.py` copies only the original pyproject and
+module sources into a fresh external build directory, builds one wheel without
+resolving dependencies, installs into a separate target, checks full module
+membership and exact source/wheel/installed bytes, verifies the loaded package
+path, and runs the complete existing suite under warnings-as-errors. Source and
+test file bytes are checked again after execution; a completed receipt cannot
+be overwritten. Original build/install/import/test logs are retained beside the
+receipt. The distribution remains0.0.1.dev0; its exact digest distinguishes this
+checkpoint from prior wheels.
+
+This closes the112-versus114 installed evidence gap. It does not publish the
+corrected pgserver runtime, establish dependency/hermetic fixture closure,
+complete the installed native inventory observer or qualify protected ordinary
+consumer APIs. Public exports remain LocalPostgres, LocalRuntimeError and
+RuntimeInfo. Continue PA01–PA05, PKG02/08 and populated migration gates under
+the existing acceptance sequence; no criterion is promoted by wheel parity.
