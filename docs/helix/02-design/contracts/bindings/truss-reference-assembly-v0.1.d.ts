@@ -64,6 +64,8 @@ export type AssemblyConstructionResult = {
   readonly status: 'error';
   readonly code: 'invalid_configuration' | 'unsupported_profile' | 'incompatible_selection';
   readonly path?: string;
+  /** Release-bound safe construction profile, independent of rejected config.
+   * Never inferred from an unvalidated assembly pin or a caller exporter. */
   readonly diagnosticProfile: ProfilePin;
 };
 /** Synchronous, inert construction; invalid configuration fails before I/O. */

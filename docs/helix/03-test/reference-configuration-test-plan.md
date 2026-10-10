@@ -51,3 +51,24 @@ separate, narrower evidence; reuse them only where the actual mapped behavior is
 unchanged. Conditional formal analysis applies to native admission/account
 properties through their owning designs; configuration parsing itself has no
 new temporal-analysis obligation.
+
+### Original construction error and captured-view controls
+
+For CFG-04/06/07 use the existing assembly result grammar and the release-bound
+construction diagnostic profile. Reject malformed/unknown assembly pins before
+any service lookup or effect, but retain that original safe diagnostic pin.
+Inject synthetic sensitive text as an unknown key as well as a rejected value;
+the key must not appear in path, exception text, repr, fingerprint or any sink.
+Require only a known owning-container path, with no arbitrary host stringification.
+An invalid diagnostic-profile declaration cannot become the error's authority.
+Missing or altered release diagnostic artifact must fail the package gate rather
+than trigger runtime discovery, file loading or a fabricated diagnostic pin.
+
+For CFG-01/02/08/11 retain original executor/service identities, mutate caller
+option dictionaries/lists after successful construction, and require unchanged
+captured profile pins, capability order, recovery/replay selection and account
+custody. Do not serialize those handles into test evidence. Exercise supplied
+null versus absent requestReplay, incompatible retention/services, and changed
+hash with equal profile name/version. All failures return once before I/O;
+construction or handle selection cannot observe native readiness. These are
+additional mapped controls, not new case IDs or already executed CFG verdicts.

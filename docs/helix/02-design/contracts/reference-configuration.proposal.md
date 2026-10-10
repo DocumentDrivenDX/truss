@@ -106,3 +106,61 @@ No case is reported passed here. Existing runtime/component tests cover narrower
 facts and cannot qualify a loader/reference composition that is not implemented.
 
 Execution and evidence requirements are in the [configuration test plan](../../03-test/reference-configuration-test-plan.md).
+
+## Existing assembly binding: deterministic construction sequence
+
+Implement against the existing
+[ReferenceAssemblyConfiguration](bindings/truss-reference-assembly-v0.1.d.ts),
+not a parallel universal configuration wire. Its closed keys are interfaceVersion,
+assemblyId, assemblyProfile, recovery, optional requestReplay, databaseIdentity,
+schema and capabilities. ProfilePin and CapabilitySelection keep their existing
+exact fields/meaning. No counting-mode, credential, connection URI or independent
+resource/retry allowance is added to that option view.
+
+1. Admit the supported typed container and closed key/type/presence grammar without
+   coercion, environment reads or invoking arbitrary host properties/repr methods.
+   Preserve optional absence; a supplied null is not absent. Reject duplicate
+   declarations at the owning input layer before constructing a dictionary that
+   could overwrite them. Embedded typed injection does not require a text loader.
+2. Validate complete exact profile pins, nonempty capability selection and every
+   original release/adapter/layout/value/policy combination against the already
+   admitted in-memory registration. Exact pin equality includes identity, version
+   and hash. Family/name matching cannot infer executable support. Retain the
+   existing invalid_configuration, unsupported_profile and incompatible_selection
+   distinctions; no fallback, truncation or native readiness query is permitted.
+3. Check recovery retention and optional replay/feed service requirements against
+   the selected capability inventory, preserving the original executor/services
+   by identity. An option pin cannot register a foreign service or synthesize a
+   restart-durable recovery producer. Missing services refuse before I/O.
+4. Copy/freeze only validated owned option data and capability ordering. Keep
+   borrowed host references original, unstringified and subject to their existing
+   lifetime/registration rules. Later mutation of the input containers cannot
+   change the captured selection, add a capability or refund an account.
+5. Return the inert assembly handle. Actual readiness, original transaction,
+   counting interpretation, authority and native configuration admission still
+   occur at their governed operation boundaries. Construction starts no SQL,
+   worker, migration, directory or exporter request.
+
+### Original construction diagnostics
+
+AssemblyConstructionResult requires diagnosticProfile even when assemblyProfile
+or the rest of configuration is invalid. Bind the safe construction-diagnostic
+profile as a release-owned original artifact in the exact build before exposing
+the factory. Its immutable pin/meaning is available without reading a file,
+calling a host service or parsing caller-supplied diagnostic configuration inside
+construction. Packaging checks must verify that artifact and its complete
+code/path grammar. An absent/unverified construction profile is an incomplete
+release, not permission to invent a pin from the rejected options.
+
+This profile authorizes only the existing safe construction error envelope;
+it grants no native diagnostic disclosure, current-person authority, readiness
+or support claim. Do not take diagnosticProfile from an unvalidated assembly pin,
+serialize the rejected configuration or fall back to a user-provided exporter.
+Error paths use only known schema segments and bounded original indexes. An
+unknown key's literal text is not a safe path: report its owning known container
+instead. Rejected values, unknown key spellings, credentials and arbitrary host
+type/repr strings must not enter the error, fingerprint or diagnostic sinks.
+
+The concrete factory and release-bound diagnostic artifact remain implementation
+outputs. These steps close construction/error ordering without claiming CFG
+passes or adding a configuration loader/public engine export.
