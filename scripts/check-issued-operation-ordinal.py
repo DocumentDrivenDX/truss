@@ -14,7 +14,14 @@ import pgserver
 root = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(root / 'packages/python/src'))
 from truss._operation_ordinal import OperationOrdinalIssuer
-family = sys.argv[1] if len(sys.argv) == 2 else 'base'
+family = sys.argv[1] if len(sys.argv) >= 2 else 'base'
+assert len(sys.argv) <= 3
+receipt_name = sys.argv[2] if len(sys.argv) == 3 else 'issued-operation-ordinal-' + family + '-native.json'
+assert Path(receipt_name).name == receipt_name and receipt_name.endswith('.json')
+destination = root / 'docs/helix/04-build/evidence/design-audit' / receipt_name
+if destination.exists():
+    raise SystemExit('refusing to replace an existing receipt')
+configurations = []
 assert family in ('base', 'asserted', 'epoch', 'configuration')
 filename = {'base':'operation-admission.sql','asserted':'operation-asserted-origin-admission.sql','epoch':'operation-epoch-context-admission.sql','configuration':'operation-configuration-context-admission.sql'}[family]
 function = {'base':'runtime_admit_operation','asserted':'runtime_admit_operation_with_asserted_origin','epoch':'runtime_admit_operation_with_epoch_context','configuration':'runtime_admit_operation_with_configuration_context'}[family]
@@ -71,6 +78,18 @@ with tempfile.TemporaryDirectory(prefix='truss-issued-ordinal-') as directory:
                      issued.ordinal + ", 'mutation',decode('01','hex'),decode('02','hex'),decode('03','hex'),decode('04','hex'),decode('05','hex'),decode('06','hex')" + tail + ");" )
                 actual = observe()
                 assert actual['ordinal'] == issued.ordinal
+                if family == 'configuration':
+                    send("SELECT json_build_object('ordinal',operation_ordinal::text,'configurationGeneration',configuration_generation::text,'keyReuse',key_reuse,'journalMode',journal_mode,'contextDigest',encode(original_context_sha256,'hex'),'profileHex',encode(admission_profile_bytes,'hex'),'configurationHex',encode(configuration_bytes,'hex'),'bindingHex',encode(selected_binding_bytes,'hex'),'inventoryHex',encode(installed_inventory_bytes,'hex')) FROM truss.operation_configuration;")
+                    configuration = observe()
+                    assert configuration['ordinal'] == issued.ordinal
+                    assert configuration['configurationGeneration'] == '7'
+                    assert configuration['keyReuse'] == 'forbid' and configuration['journalMode'] == 'engine'
+                    for key, expected in [('profileHex', b'configuration admission fixture'),
+                                          ('configurationHex', bytes.fromhex('0001ff')),
+                                          ('bindingHex', b'binding fixture'), ('inventoryHex', b'inventory fixture')]:
+                        assert bytes.fromhex(configuration[key]) == expected
+                    assert configuration['contextDigest'] == hashlib.sha256(bytes.fromhex(actual['contextHex'])).hexdigest()
+                    configurations.append(configuration)
                 return actual
             setup = originals[0].decode() + ';\n'
             for path in extras:
@@ -88,6 +107,9 @@ with tempfile.TemporaryDirectory(prefix='truss-issued-ordinal-') as directory:
             first = admit(issued_first)
             send("ROLLBACK TO SAVEPOINT operation_probe; SELECT json_build_object('surviving',count(*)) FROM truss.row_home_operation;")
             assert observe() == {'surviving': 0}
+            if family == 'configuration':
+                send("SELECT json_build_object('survivingConfigurations',count(*)) FROM truss.operation_configuration;")
+                assert observe() == {'survivingConfigurations': 0}
             issued_second = issuer.reserve(custody)
             send('SAVEPOINT operation_second;')
             second = admit(issued_second)
@@ -121,12 +143,11 @@ with tempfile.TemporaryDirectory(prefix='truss-issued-ordinal-') as directory:
         server.cleanup()
 receipt = {'scope': 'Selected admission family with actual source Python counter and native savepoint rollback only; synthetic artifact inputs, administrative local-trust fixture, no original driver/security/resource/finalizer qualification',
            'family': family, 'pgserver': importlib.metadata.version('pgserver'), 'serverVersion': version,
-           'observations': [first, second], 'rollbackRegistryRows': 0, 'rollbackRemovedNamespace': True,
+           'observations': [first, second], 'configurationObservations': configurations, 'rollbackRegistryRows': 0, 'rollbackRemovedNamespace': True,
            'sources': [{'path': p, 'sha256': hashlib.sha256(b).hexdigest()} for p, b in zip(paths, originals)],
            'producerSha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
            'psqlSha256': hashlib.sha256(psql.read_bytes()).hexdigest(),
            'completeDriverQualified': False, 'allFourFamiliesQualified': False, 'readyInstallation': False}
-destination = root / ('docs/helix/04-build/evidence/design-audit/issued-operation-ordinal-' + family + '-native.json')
 with destination.open('x') as stream:
     stream.write(json.dumps(receipt, indent=2) + '\n')
 print(json.dumps({'family': family, 'ordinals': ['0', '1'], 'sameNativeTransaction': True, 'readyInstallation': False}))
