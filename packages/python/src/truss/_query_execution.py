@@ -29,6 +29,13 @@ def _synchronous(value):
     return value
 
 
+def _deferred_callable(callback):
+    return any(check(candidate)
+               for candidate in (callback, getattr(callback, '__call__', None))
+               for check in (inspect.iscoroutinefunction, inspect.isasyncgenfunction,
+                             inspect.isgeneratorfunction))
+
+
 def _completed_check(value):
     if _synchronous(value) is not None:
         raise CompileRefusal('execution_obligation', 'Original check must complete or raise')
@@ -38,7 +45,7 @@ class _SynchronousContext:
     def __init__(self, manager):
         self._enter = manager.__enter__
         self._exit = manager.__exit__
-        if any(inspect.iscoroutinefunction(f) or inspect.isasyncgenfunction(f)
+        if any(not callable(f) or _deferred_callable(f)
                for f in (self._enter,self._exit)):
             raise CompileRefusal('execution_obligation', 'Synchronous original context lifecycle required')
 
@@ -86,7 +93,7 @@ class QueryCoordinator:
             key:(handler.accepts,handler.check) for key,handler in host.handlers.items()
         }) if host is not None else MappingProxyType({})
         callbacks = [self._context,self._decode] + [f for pair in self._handlers.values() for f in pair]
-        if any(inspect.iscoroutinefunction(f) or inspect.isasyncgenfunction(f) for f in callbacks if f is not None):
+        if any(not callable(f) or _deferred_callable(f) for f in callbacks if f is not None):
             raise CompileRefusal('execution_obligation', 'Synchronous original host functions required')
         self._plans = WeakValueDictionary()
         self._disposed = False

@@ -3008,3 +3008,16 @@ and64 allowed imports pass. Wheel SHA256 is
 9305f343b4347072b423d88511d5166927492a53c1ab811b05dfc838cd6cbdfe.
 This corrects callback completion handling, not native authority, allocation or
 publication qualification. The earlier byte-account wheel remains historical.
+
+
+Declared generator functions and callable objects with coroutine/generator/
+async-generator __call__ now refuse synchronous query construction, as do
+non-callable supplied ports. Context lifecycle inspection applies the same
+classification before entry. Independent controls observe zero acquired contexts
+and zero callback-body execution. Dynamic wrappers remain governed by runtime
+returned-object refusal, not a claim that introspection proves callback behavior.
+The [installed port-control receipt](../04-build/evidence/design-audit/python-query-port-installed-suite.json)
+passes71 tests/17 matching modules and64 allowed imports; wheel SHA256 is
+8878e258541e6019e673384f8fc6c23e8543f9222c149f6f3b7a844d721255c5.
+The bounded custody model's original ordinal/admission source pins are unchanged;
+query/deferred-object and byte-account semantics remain outside that model.

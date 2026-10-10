@@ -125,6 +125,21 @@ class QueryExecutionTests(unittest.TestCase):
         host.handlers={'fixture':SimpleNamespace(accepts=lambda *_:True,check=pending)}
         with self.assertRaises(CompileRefusal):coordinator(host)
         self.assertEqual(events,[])
+        def declared_generator(*_):
+            events.append('declared generator ran')
+            yield None
+        class AsyncCallable:
+            async def __call__(self, *_):
+                events.append('async callable ran')
+        class GeneratorCallable:
+            def __call__(self, *_):
+                events.append('generator callable ran')
+                yield None
+        for check in (declared_generator, AsyncCallable(), GeneratorCallable(), 1):
+            events=[];host=self.host(events)
+            host.handlers={'fixture':SimpleNamespace(accepts=lambda *_:True,check=check)}
+            with self.assertRaises(CompileRefusal):coordinator(host)
+            self.assertEqual(events,[])
         for check in [lambda *_:pending(),lambda *_:False,lambda *_:True]:
             events=[];host=self.host(events)
             host.handlers={'fixture':SimpleNamespace(accepts=lambda *_:True,check=check)}
