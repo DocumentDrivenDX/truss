@@ -1,0 +1,34 @@
+{
+  "schema": "truss-weft-committed-path-foundation-review/0.1",
+  "weftCommittedRef": "f3208b216f2020e978090777b8234773ecccb230",
+  "umfCommittedRef": "322b193cef7c940d07b741860cf0170272628868",
+  "previousObservedWeftRef": "e810335788eacf351f6f86c3f63dba8832724fcb",
+  "adoptedTrussWeftRef": "f05f2df09e9c2494ac8c6d703dfe38413dbc4181",
+  "sourceDigests": {
+    "crates/weft-core/src/lib.rs": "0ff0d1e4f0fbec64512ae3dc97ffade989b21a8bc44889df6c7f7502ee7af0e0",
+    "crates/weft-core/src/compile.rs": "5975e7c955d9634a1404819cc381a6b1e3f30f88c30a4b8a309f1ef70a6d1882",
+    "crates/weft-core/src/path_syntax.rs": "87e8e0183f95b708151bc9f62c515c063879aba78b815296927da1a6846f9e96",
+    "crates/weft-core/src/path_query.rs": "0d8993b9668d28658d56fafbeae09951fd35eb8abdd93f2b0bbe1478b1f1b5ec",
+    "crates/weft-core/src/path_ir.rs": "29356f9c690f2c4815c7a457c9bb33ea189ea8578597e3d3d006a7fe9774797f",
+    "crates/weft-core/src/path_resolve.rs": "1fffaf46129c0451eaf72fe3d832a0147d6a8db650211c059a0f2aebb77026e6",
+    "docs/helix/02-design/contracts/CONTRACT-005-authored-two-hop-paths.md": "82f94c9eefb01f1cf99eed7810f2420176a574383354bb7cb8390ce4236453d9"
+  },
+  "committedChanges": [
+    "f3208b2 Resolve authored two-hop paths through original catalog identities",
+    "474503c Parse full authored path queries through shared legacy segments",
+    "54c9cfc Add schema-checked typed two-hop plan foundation",
+    "b9f49b0 Add isolated authored two-hop syntax parser",
+    "6916363 Define closed two-hop plan result and obligation schemas",
+    "3e11633 Add closed 0.4 request envelope and version-boundary controls"
+  ],
+  "observations": [
+    "Committed closed0.4 request/plan/result/manifest schemas and version-boundary controls",
+    "Private two-hop fragment and full-query parsing reuse shared legacy query segments",
+    "Private resolution uses original Catalog and complete original Record pins; second hop resolves from the first terminal, not visible name coincidence",
+    "Public compile transport registers Request01/02/03; private path modules are not public embedding APIs",
+    "No public0.4 backend lowering, Python bridge activation, native Truss result/account/security qualification inferred"
+  ],
+  "execution": "Source review only; no Rust/native rerun",
+  "trussAbiAdopted": false,
+  "directTraversalChoiceSelected": false
+}

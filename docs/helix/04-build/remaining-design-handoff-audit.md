@@ -64,6 +64,17 @@ The frozen Truss compiler remains f05f2df. Direct unique-terminal/path-local-cyc
 semantics remain a pending owner choice; the SQL path-bag proposal cannot select
 that behavior implicitly.
 
+The next fresh committed-source observation advances Weft to f3208b2 while
+UMF remains322b193. The [path-foundation review](evidence/design-audit/weft-f3208b2-path-foundation-review.json)
+pins original committed parser/query/IR/resolver and public compile sources.
+Closed0.4 schemas, private parsing and exact Catalog identity resolution now
+exist. Public compile admission remains0.1–0.3; private modules and source tests
+do not provide a public0.4 embedding ABI, lowering or native Truss execution.
+Keep adopted f05f2df and all existing direct/compiled semantic distinctions.
+The next owner exit is complete public query resolution/backend/host composition,
+not reimplementing the new syntax parser in Truss. No upstream tests were rerun
+or story/acceptance cases promoted by this source review.
+
 ### Recent handoffs allocated to the existing execution queue
 
 These inputs refine existing work packages. They create no separate release lane,
