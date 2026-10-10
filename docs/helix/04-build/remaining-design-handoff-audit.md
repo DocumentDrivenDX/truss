@@ -1807,3 +1807,10 @@ indirect callable coverage. Protected coherent-cut/freshness, effective DDL
 rights/exclusions and complete independent installation observer remain missing.
 A cached marker, version or proof generation cannot override trigger drift.
 No public readiness or seven-body acceptance gate changes.
+
+The [installation observer coverage matrix](../03-test/migration-inspection-contract-walkthrough.proposal.md#installation-observer-implementation-coverage--2026-10-10)
+now maps each required drift/unavailable/freshness control to the actual finite
+native evidence and missing complete observer outputs. All full observer and
+PKG-02/08 installed acceptance schedules remain not_run. Implementation order
+starts with independently complete release membership, observation rights and
+the owner-admitted cut, rather than treating helper probe success as an installer.

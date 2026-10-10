@@ -209,3 +209,29 @@ obtain a fresh complete match without reusing the earlier result. These observer
 controls and all PKG-02/08 installed schedules remain not_run. Exact release
 membership, observer implementation and security cut/rights are required
 integration outputs, not invented test identities.
+
+### Installation observer implementation coverage — 2026-10-10
+
+The complete independent observer controls above remain not_run. The following
+component evidence now informs their implementation without changing that status.
+Keep a component-probe verdict distinct from the eventual protected complete
+`match`/`drift`/`observation_unavailable` verdict.
+
+| Required control | Existing bounded experiment | Remaining complete observer acceptance |
+| --- | --- | --- |
+| Unexpected managed object | [Callable79](../04-build/evidence/design-audit/private-callable-drift-native.json) detects one added routine by exact namespace membership. | Independently registered full release membership across every managed object kind; both comparison directions under the admitted cut. An extra routine alone does not cover extra tables/constraints/indexes/roles. |
+| Body changes with stable signature/version | Callable79 checks changed original definition with unchanged native OID/signature and exact restoration. | Compare independently expected full callable definitions/attributes/dependencies; include semantic behavior and all public/private/admin paths. Comment-byte drift is not semantic correctness evidence. |
+| Required trigger disabled | [Trigger25](../04-build/evidence/design-audit/generation-trigger-drift-native.json) observes modeD and an actual scalar write retaining stale proofs, then restores exact inventory/value. | Complete parent/partition/event/deferral/argument/firing coverage and effective DDL exclusions; publication must close on drift or lost freshness. |
+| Effective grant changed | Callable79 includes inherited-role and PUBLIC EXECUTE additions/removal. | Complete effective rights and role membership, including data, schema, role administration, DDL, inherited paths and bypass modes. Direct ACL lists alone are insufficient. |
+| Initializer/archive removed | Current wheel evidence verifies exact module delivery; it does not execute this observer control. | Independently expected complete selected release resource membership and bytes, closed handles/lifetime/accounting, missing-item drift and restored fresh match. |
+| Observation right revoked | Not implemented by these administrative probes. | Required right failure yields observation_unavailable with no partial correspondence payload; never classify hidden objects as absent/matching. |
+| Configuration/authority changes during collection | No protected coherent cut established by these probes. | Consume owner-admitted exclusions/cut, final freshness check and single refusal; retain original recovery state without retries or inferred settlement. |
+
+Next observer implementation order: independently freeze complete expected
+release resources and native membership; qualify read-only observation rights
+and owner-admitted coherent cut; collect complete original bounded native/resource
+inventories; compare exact identities/bytes/attributes in both directions; perform
+final freshness check; publish only the qualified observer verdict. The separate
+installer/migration executor retains mutation/settlement/recovery ownership.
+Source membership or a version marker cannot substitute for missing seven
+semantic bodies, owner subject/current authority or complete native closure.
