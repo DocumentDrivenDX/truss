@@ -16,7 +16,7 @@ if not (package / 'truss' / 'py.typed').is_file():
     raise SystemExit('Missing installed typing marker')
 fixtures = root / 'packages/python/tests/typing'
 env = dict(os.environ, MYPYPATH=str(package))
-for name, negative in [('group_consumer.py', False), ('group_consumer_invalid.py', True)]:
+for name, negative in [('group_consumer.py', False), ('group_consumer_invalid.py', True), ('import_consumer.py', False), ('import_consumer_invalid.py', True)]:
     path = fixtures / name
     result = subprocess.run([sys.executable, '-m', 'mypy', '--strict', '--follow-imports=silent', str(path)], env=env, cwd='/private/tmp', text=True, capture_output=True)
     errors = {int(n) for n in re.findall(r':(\d+): error:', result.stdout)}

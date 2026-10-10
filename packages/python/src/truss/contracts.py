@@ -147,3 +147,36 @@ __all__ = [
     'RecordField', 'RecordValue', 'OpaqueValue', 'ExactValue', 'AbsentPresence',
     'PresentValue', 'Presence', 'CapabilityFamily', 'CapabilitySelection',
 ]
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class ReadTypeReference(_Carrier):
+    type_id: str
+    definition_pin: str
+    owner: QualifiedOwner
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class ObjectKeyComponent(_Carrier):
+    property_id: str
+    definition_pin: str
+    value: ExactValue
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class ObjectKeySelection(_Carrier):
+    type: ReadTypeReference
+    key_number: str
+    key_definition_pin: str
+    key_encoding_profile: ProfilePin
+    components: tuple[ObjectKeyComponent, *tuple[ObjectKeyComponent, ...]]
+    operation: Literal['object_key'] = field(default='object_key', init=False)
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class SelectedMutationConfiguration(_Carrier):
+    source_epoch: str
+    installation_id: str
+    generation: str
+    key_reuse: Literal['forbid', 'allow']
+    journal_mode: Literal['engine', 'trigger']
+    configuration_profile: ProfilePin
+    installed_producer_inventory_sha256: str
+
+__all__ += ['ReadTypeReference', 'ObjectKeyComponent', 'ObjectKeySelection', 'SelectedMutationConfiguration']

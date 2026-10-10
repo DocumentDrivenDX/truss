@@ -23,7 +23,7 @@ ddx:
 
 # Python consumer integration: first real workflow
 
-The consumer needs host-supplied PostgreSQL transactions, accepted UMF registration, catalog inspection, exact reads, grouped writes, imports, receipt visibility and status. Current Python public exports provide local-server lifecycle only. TypeScript capability declarations describe intended contracts, not implemented Python behavior. The next release must provide a tested embeddable Python implementation, rather than merely translating interfaces or emitting administrative fixture identities.
+The consumer needs host-supplied PostgreSQL transactions, accepted UMF registration, catalog inspection, exact reads, grouped writes, imports, receipt visibility and status. Current Python exports provide local-server lifecycle, execution outcomes and draft group/import contracts with local report consistency; callable graph capabilities remain unbuilt. TypeScript capability declarations describe intended contracts, not implemented Python behavior. The next release must provide a tested embeddable Python implementation, rather than merely translating interfaces or emitting administrative fixture identities.
 
 Prioritize this plan ahead of more isolated component probes. It narrows the first test input to a synthetic commerce catalog, not the required authority, durability, exact-value or recovery behavior. Full corpus, broader schema coverage, managed deployment profiles and migrations remain required follow-on exits in the existing implementation plan.
 
@@ -247,3 +247,23 @@ original registered profile/service admission and a packaged release-owned safe
 construction diagnostic artifact; an unverified readiness label is no substitute.
 PA01–PA05 and C04–C07 remain the operational critical path. No callable protected
 engine capability or assembly factory follows from these public data contracts.
+
+## PY-C01 import contracts and consistency — Astra Ultra review
+
+The next iteration implements the complete import input/report/execution-result
+carrier closure from the original versioned bindings, including document-qualified
+object-key identity and selected mutation configuration. It retains indexed
+progress, all five batch dispositions and all nine counts. Resource-limited
+results require interrupted reports; scope/engine report specialization receives
+explicit runtime checks as well as static typing. The callable import Protocol
+and transaction-options/cancellation closure remain subsequent C01 work.
+
+A public pure report-consistency check uses explicit finite reduced limits and
+expected input count. It checks canonical exact indices/counts, ordered outcomes,
+complete disjoint coverage, batch correspondence, independently derived counters
+and execution-compatible dispositions. It returns fixed local validation reasons,
+never execution results, admission evidence or proof of native durability. Host
+commit confirmation is not part of this slice; scope reports claiming committed
+or commit-unknown disposition refuse consistency under this selected subset.
+Original report data and opaque deferred payload bytes remain untouched. Review
+runtime/static negatives and installed wheel evidence before merging to main.

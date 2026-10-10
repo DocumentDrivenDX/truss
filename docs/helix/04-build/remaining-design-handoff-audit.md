@@ -9,7 +9,7 @@ modules matching original source/wheel/installed bytes. Build/install/import/tes
 logs are retained alongside the receipt. The earlier114/112-test wheels remain
 historical evidence rather than the current distribution checkpoint.
 The71-test installed wheel below is historical. Public
-Python exports remain local-runtime lifecycle only. Catalog install/apply/import,
+Python exports now include local-runtime lifecycle, execution outcomes and draft group/import carriers with local report consistency; see [group contracts](python-group-contracts.md) and [import contracts](python-import-contracts.md). Catalog install/apply/import,
 key/edge reads, mutation, journal/feed and migration APIs remain unreleased.
 
 | Composition now present | Evidence and remaining boundary |

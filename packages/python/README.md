@@ -435,3 +435,11 @@ carriers and synchronous `GroupCapability` Protocol, including request-free
 return narrowing. The package includes `py.typed`; these modules provide types
 and shape checks, not a callable mutation provider or an adoption factory. See
 [the consumer mapping and limits](../../docs/helix/04-build/python-group-contracts.md).
+
+## Draft import contracts
+
+`truss.imports` preserves exact indexed partial progress, pending/unknown batch
+durability and the full import result union. Its bounded local consistency check
+rejects duplicate indices, incorrect batch membership, invented counters and
+execution-incompatible dispositions. It does not execute imports or prove
+commit/rollback. See [the import mapping and limits](../../docs/helix/04-build/python-import-contracts.md).

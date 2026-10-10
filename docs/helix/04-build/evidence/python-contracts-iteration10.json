@@ -1,0 +1,81 @@
+{
+  "iteration": "PY-C01 import carriers and bounded local report consistency",
+  "reviewer": {
+    "model": "gpt-6-astra",
+    "reasoningEffort": "ultra",
+    "planDisposition": "Approved complete import carrier closure and bounded report consistency; next executable work PA01 installed identity/ACL/dependencies",
+    "sourceDisposition": "Approved fixed expected primitive guards and resource classification; independent26 runtime and exact20 negative typing cases passed",
+    "artifactDisposition": "Approved; independently verified all source/binding/log hashes, all42 matching source/wheel/installed modules and py.typed, 26 installed tests from outside checkout, exact20 negative typing cases and final262 full-suite log"
+  },
+  "sourceSha256": {
+    "packages/python/src/truss/contracts.py": "a5a71937709f3a8704de9e33b87e8aadcb743ea9adcdeea8037a7d76b069bdbd",
+    "packages/python/src/truss/imports.py": "22c151c516770c2284a386659c0884e666ae4780eaf7aa7920c0a8e8d2787592",
+    "packages/python/tests/test_import_contracts.py": "1e8a870c06f6cd139e4ca4d79e644bb7883c522cd5ee9aee698db36b1dc3fa6e",
+    "packages/python/tests/typing/import_consumer.py": "156b7221c3900c14d43fb86bbdd6fac03cf4fd98c8197b67a366db3ec44df6a2",
+    "packages/python/tests/typing/import_consumer_invalid.py": "0357f5c99ca78580f792b2689224c60408b108c41a7aa9ebd6cf4f3e077179d4",
+    "scripts/check-python-contract-types.py": "7f9df72fb38b9c771f985a8966f98d9e5c0482cd9d1e9ba042f9bb47113ecd31",
+    "scripts/check-module-boundaries.py": "62938c1e4101d0deecc96102e8ba4b53ab2199c85ed85604d39d926994a7f3fe",
+    "docs/helix/04-build/python-import-contracts.md": "5d7913cead04fa05eac9edfa0bc280a4e339451ba1dcdbd530457c439fb401ab"
+  },
+  "bindingSha256": {
+    "truss-import-capability-v0.1.d.ts": "457200c63b98445eeb205583af7659f9897aa39524c8dc2e058be4e4eeaabf13",
+    "truss-import-input-v0.1.d.ts": "e8a774a71740791f718a66cbf60bc1ec0a4eb5a710fd738045c8f903cf81354b",
+    "truss-import-report-v0.1.d.ts": "b23514f406e746c40f030c6d52da23a5da269068b41cf4954e317e8dd50ac5bc",
+    "truss-mutation-configuration-v0.1.d.ts": "0852e0500acef9bdaa2fd5b61cec471a8f80383cebb8ab27902984f3627a3f2b",
+    "truss-direct-read-v0.1.d.ts": "ce1eea86ac412b7b688589dbdf9ff95c14c84e3b86ded7056e96d6a54af42cfe"
+  },
+  "fullSourceSuite": {
+    "tests": 262,
+    "result": "passed",
+    "log": "/private/tmp/truss-iteration10-final-full-tests.log"
+  },
+  "installedSelectedSuite": {
+    "tests": 26,
+    "importTests": 11,
+    "publicGroupTests": 6,
+    "hostLifetimeTests": 9,
+    "result": "passed",
+    "scope": "Source test fixtures against separately installed byte-identical final wheel; no native import execution qualification",
+    "log": "/private/tmp/truss-iteration10-final-installed-tests.log"
+  },
+  "typing": {
+    "mypy": "1.18.2",
+    "strictSourceFiles": 4,
+    "positiveErrors": 0,
+    "importNegativeErrors": 10,
+    "groupNegativeErrors": 10,
+    "installedMarker": "py.typed",
+    "unionCoverage": "All four execution, four record and five batch discriminants"
+  },
+  "sourceWheelInstalledMatchingModules": 42,
+  "wheel": "/private/tmp/truss-iteration10-final-wheel/truss_toolkit-0.0.1.dev0-py3-none-any.whl",
+  "wheelSha256": "75991853405d430273871b89be556c4dc6e775d34d3a8d22378d1c8080bb7290",
+  "installed": "/private/tmp/truss-iteration10-final-installed",
+  "logSha256": {
+    "/private/tmp/truss-iteration10-final-full-tests.log": "82c014171bf89ea357939480f645a596c932cb8c13919df56fa61ddeb77f318d",
+    "/private/tmp/truss-iteration10-final-installed-tests.log": "14f6ff9ccc2f6bba00693032f7ff0820ef32d30113f1bee9f73c0a8ee87f4e02",
+    "/private/tmp/truss-iteration10-final-source-typing.log": "71144743c83babea384888a735db0c4daba3d4d7b7942b6839984bd5c21b52bb",
+    "/private/tmp/truss-iteration10-final-typing.log": "5b6ab9d65674276ff5818679051a8ed5f6b26344ede5ca60fe88d6a408681cf2",
+    "/private/tmp/truss-iteration10-final-controls.json": "4f66603b8f5aec1688d667fe52aaf36496cb403d871ae92e440e00a0abe5e64e"
+  },
+  "importBoundary": {
+    "imports": 185,
+    "controls": 16,
+    "passed": true
+  },
+  "fixedReviewFindings": [
+    "Exact primitive expected inputs before traversal/equality",
+    "Reduced decimal budget yields resource rather than invalid",
+    "Explicit runtime erased generic execution specialization",
+    "Interrupted resource-limited rejects attempted-unknown/uncertain batches"
+  ],
+  "scope": "Immutable original input/report/execution-result carriers and local bounded partition/count/ownership consistency; no admission or native durability evidence",
+  "notEstablished": [
+    "Callable import capability/provider",
+    "Original source/native evidence correspondence or digest validation",
+    "Full-load success, actual containment, authenticated disclosure",
+    "Complete installed ReferenceAssembly, native semantic bodies and full consumer workflow"
+  ],
+  "ownerAlignment": "Security owner reports reviewed deployment-duty catalog committed in its main; payload-specific applicability work continues. No unfinished runtime contract adopted. PA01 independently allowed identity/owner/ACL/dependency inventory is next.",
+  "completeExternalInterface": false
+}
